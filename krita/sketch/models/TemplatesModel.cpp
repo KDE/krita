@@ -178,4 +178,3 @@ void TemplatesModel::populate()
     }
 }
 
-#include "TemplatesModel.moc"

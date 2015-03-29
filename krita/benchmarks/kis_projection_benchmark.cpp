@@ -60,4 +60,3 @@ void KisProjectionBenchmark::benchmarkLoading()
 
 
 QTEST_KDEMAIN(KisProjectionBenchmark, GUI)
-#include "kis_projection_benchmark.moc"

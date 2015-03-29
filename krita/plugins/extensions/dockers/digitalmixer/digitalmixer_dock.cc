@@ -159,4 +159,3 @@ void DigitalMixerDock::canvasResourceChanged(int key, const QVariant& v)
     m_tellCanvas = true;
 }
 
-#include "digitalmixer_dock.moc"

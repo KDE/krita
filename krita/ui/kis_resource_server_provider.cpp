@@ -117,4 +117,3 @@ void KisResourceServerProvider::brushBlacklistCleanup()
 }
 
 
-#include "kis_resource_server_provider.moc"

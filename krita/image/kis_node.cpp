@@ -504,4 +504,3 @@ void KisNode::setDirty(const QRect & rect)
     }
 }
 
-#include "kis_node.moc"

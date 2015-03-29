@@ -191,4 +191,3 @@ void KisStrokeTest::testCancelStrokeCase6()
 }
 
 QTEST_KDEMAIN(KisStrokeTest, NoGUI)
-#include "kis_stroke_test.moc"

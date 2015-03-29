@@ -128,4 +128,3 @@ KisImportCatcher::~KisImportCatcher()
     delete m_d;
 }
 
-#include "kis_import_catcher.moc"

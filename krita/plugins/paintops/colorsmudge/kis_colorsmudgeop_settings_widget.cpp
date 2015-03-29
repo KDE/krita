@@ -71,4 +71,3 @@ KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() cons
 }
 
 
-#include "kis_colorsmudgeop_settings_widget.moc"

@@ -139,4 +139,3 @@ void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
     }
 }
 
-#include "PaletteColorsModel.moc"

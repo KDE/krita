@@ -48,4 +48,3 @@ void KisRecordedActionTest::testCreation()
 
 
 QTEST_KDEMAIN(KisRecordedActionTest, GUI)
-#include "kis_recorded_action_test.moc"

@@ -58,4 +58,3 @@ void DlgHistogram::okClicked()
     accept();
 }
 
-#include "dlg_histogram.moc"

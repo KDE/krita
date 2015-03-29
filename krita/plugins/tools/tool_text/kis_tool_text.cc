@@ -178,4 +178,3 @@ void KisToolText::slotActivateTextTool()
 }
 
 
-#include "kis_tool_text.moc"

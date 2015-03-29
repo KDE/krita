@@ -219,4 +219,3 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
-#include "kis_tool_select_contiguous.moc"

@@ -244,4 +244,3 @@ MainWindow::~MainWindow()
     delete d;
 }
 
-#include "MainWindow.moc"

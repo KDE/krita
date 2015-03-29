@@ -152,5 +152,4 @@ int main(int argc, char **argv)
     return app.exec();
 }
 
-#include "kis_random_generator_demo.moc"
 // kate: hl C++; indent-width 4; replace-tabs on;

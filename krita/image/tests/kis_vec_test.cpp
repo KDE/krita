@@ -45,4 +45,3 @@ void KisVecTest::testVec3D()
 
 
 QTEST_KDEMAIN(KisVecTest, NoGUI)
-#include "kis_vec_test.moc"

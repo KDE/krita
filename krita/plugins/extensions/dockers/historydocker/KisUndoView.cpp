@@ -387,6 +387,5 @@ void KisUndoView::setStackN(int value)
     cfg.setStackN(value);
 }
 
-#include "KisUndoView.moc"
 
 #endif // QT_NO_UNDOVIEW

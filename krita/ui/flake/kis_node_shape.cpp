@@ -147,4 +147,3 @@ bool KisNodeShape::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
     return false;
 }
 
-#include "kis_node_shape.moc"

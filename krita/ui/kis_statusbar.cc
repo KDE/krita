@@ -230,4 +230,3 @@ KisProgressWidget* KisStatusBar::progress()
 }
 
 
-#include "kis_statusbar.moc"

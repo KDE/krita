@@ -161,4 +161,3 @@ void KisBrushServer::slotRemoveBlacklistedResources()
     m_brushServer->removeBlackListedFiles();
 }
 
-#include "kis_brush_server.moc"

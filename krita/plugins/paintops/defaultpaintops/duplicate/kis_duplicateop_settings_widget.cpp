@@ -62,4 +62,3 @@ KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
     return config;
 }
 
-#include "kis_duplicateop_settings_widget.moc"

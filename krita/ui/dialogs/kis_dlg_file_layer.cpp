@@ -91,4 +91,3 @@ QString KisDlgFileLayer::fileName() const
     return path;
 }
 
-#include "kis_dlg_file_layer.moc"

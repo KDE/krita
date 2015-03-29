@@ -305,4 +305,3 @@ int FiltersCategoryModel::filterIndexForConfig(int categoryIndex, QObject* filte
     return -1;
 }
 
-#include "FiltersCategoryModel.moc"

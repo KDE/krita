@@ -114,4 +114,3 @@ QObject* PaletteModel::colorSet() const
     return d->currentSet;
 }
 
-#include "PaletteModel.moc"

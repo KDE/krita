@@ -83,4 +83,3 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     notifyModified();
 }
 
-#include "kis_tool_rectangle.moc"

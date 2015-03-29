@@ -111,5 +111,4 @@ void KisNodeModelTest::testSubstituteRootNode()
 
 QTEST_KDEMAIN(KisNodeModelTest, GUI)
 
-#include "kis_node_model_test.moc"
 

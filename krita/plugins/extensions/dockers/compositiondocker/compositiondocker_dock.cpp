@@ -291,4 +291,3 @@ void CompositionDockerDock::renameComposition()
 }
 
 
-#include "compositiondocker_dock.moc"

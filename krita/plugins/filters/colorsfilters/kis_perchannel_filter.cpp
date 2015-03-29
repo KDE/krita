@@ -502,4 +502,3 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     return t;
 }
 
-#include "kis_perchannel_filter.moc"

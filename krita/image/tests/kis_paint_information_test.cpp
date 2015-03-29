@@ -57,4 +57,3 @@ void KisPaintInformationTest::testSerialisation()
 
 
 QTEST_KDEMAIN(KisPaintInformationTest, GUI)
-#include "kis_paint_information_test.moc"

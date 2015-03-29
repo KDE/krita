@@ -327,4 +327,3 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 }
 
 
-#include "palettedocker_dock.moc"

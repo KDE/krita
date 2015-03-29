@@ -804,5 +804,4 @@ void KisTiledDataManagerTest::stressTest()
 }
 
 QTEST_KDEMAIN(KisTiledDataManagerTest, NoGUI)
-#include "kis_tiled_data_manager_test.moc"
 

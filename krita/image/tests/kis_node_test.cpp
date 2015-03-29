@@ -454,6 +454,5 @@ void KisNodeTest::graphStressTest() {
 }
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)
-#include "kis_node_test.moc"
 
 

@@ -202,4 +202,3 @@ void KisGmicBenchmarks::testConversion()
 
 QTEST_KDEMAIN(KisGmicBenchmarks, GUI)
 
-#include "kis_gmic_benchmarks.moc"

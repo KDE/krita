@@ -103,4 +103,3 @@ void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
     config->setProperty("y-radius", m_growValue);
 }
 
-#include "dlg_grow_selection.moc"

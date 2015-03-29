@@ -103,4 +103,3 @@ void WdgBorderSelection::getConfiguration(KisOperationConfiguration* config)
     config->setProperty("y-radius", m_width);
 }
 
-#include "dlg_border_selection.moc"

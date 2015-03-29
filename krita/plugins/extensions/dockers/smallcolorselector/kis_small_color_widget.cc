@@ -256,4 +256,3 @@ void KisSmallColorWidget::selectColorAt(int _x, int _y)
     }
 }
 
-#include "kis_small_color_widget.moc"

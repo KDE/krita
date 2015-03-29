@@ -113,5 +113,4 @@ void KisPatternChooser::setGrayscalePreview(bool grayscale)
     m_itemChooser->setGrayscalePreview(grayscale);
 }
 
-#include "kis_pattern_chooser.moc"
 

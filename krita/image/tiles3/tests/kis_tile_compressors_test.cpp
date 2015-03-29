@@ -180,5 +180,4 @@ void KisTileCompressorsTest::testLowLevelRoundTripIncompressible2()
 
 
 QTEST_KDEMAIN(KisTileCompressorsTest, NoGUI)
-#include "kis_tile_compressors_test.moc"
 

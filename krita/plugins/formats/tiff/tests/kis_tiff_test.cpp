@@ -113,4 +113,3 @@ void KisTiffTest::testRoundTripRGBF16()
 
 QTEST_KDEMAIN(KisTiffTest, GUI)
 
-#include "kis_tiff_test.moc"

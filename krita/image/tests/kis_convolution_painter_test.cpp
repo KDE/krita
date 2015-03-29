@@ -438,4 +438,3 @@ void KisConvolutionPainterTest::testGaussianDetailsFFTW()
 }
 
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)
-#include "kis_convolution_painter_test.moc"

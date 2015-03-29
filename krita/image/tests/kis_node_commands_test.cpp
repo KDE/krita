@@ -27,4 +27,3 @@ void KisNodeCommandsTest::testCreation()
 
 
 QTEST_KDEMAIN(KisNodeCommandsTest, GUI)
-#include "kis_node_commands_test.moc"

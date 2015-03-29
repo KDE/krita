@@ -256,4 +256,3 @@ QRectF KisToolPolylineBase::dragBoundingRect()
     return rect;
 }
 
-#include "kis_tool_polyline_base.moc"

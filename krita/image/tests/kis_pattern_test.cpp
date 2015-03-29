@@ -69,4 +69,3 @@ void KoPatternTest::testRoundTripMd5()
 
 
 QTEST_KDEMAIN(KoPatternTest, GUI)
-#include "kis_pattern_test.moc"

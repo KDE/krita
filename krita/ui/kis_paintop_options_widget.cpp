@@ -210,4 +210,3 @@ void KisPaintOpOptionsWidget::slotEntryChecked(const QModelIndex &index)
 
 
 
-#include "kis_paintop_options_widget.moc"

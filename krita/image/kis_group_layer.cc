@@ -303,4 +303,3 @@ void KisGroupLayer::setY(qint32 y)
     }
 }
 
-#include "kis_group_layer.moc"

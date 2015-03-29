@@ -98,4 +98,3 @@ void TasksetModel::clear()
     reset();
 }
 
-#include "tasksetmodel.moc"

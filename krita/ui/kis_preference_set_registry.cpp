@@ -34,4 +34,3 @@ KisPreferenceSetRegistry * KisPreferenceSetRegistry ::instance()
     return s_instance;
 }
 
-#include "kis_preference_set_registry.moc"

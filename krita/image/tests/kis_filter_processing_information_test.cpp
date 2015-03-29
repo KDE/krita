@@ -35,4 +35,3 @@ void KisProcessingInformationTest::testCreation()
 
 
 QTEST_KDEMAIN(KisProcessingInformationTest, GUI)
-#include "kis_filter_processing_information_test.moc"

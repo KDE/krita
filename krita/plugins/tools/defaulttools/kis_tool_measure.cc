@@ -218,4 +218,3 @@ QRectF KisToolMeasure::boundingRect()
     return bound.normalized();
 }
 
-#include "kis_tool_measure.moc"

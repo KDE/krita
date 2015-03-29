@@ -612,4 +612,3 @@ QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
     return path;
 }
 
-#include "kis_tool_paint.moc"

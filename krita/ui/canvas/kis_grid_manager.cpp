@@ -225,4 +225,3 @@ void KisGridManager::fastConfig64x64()
 }
 
 
-#include "kis_grid_manager.moc"

@@ -109,4 +109,3 @@ void KisNodeGraphListenerTest::testSequenceNumber()
 }
 
 QTEST_KDEMAIN(KisNodeGraphListenerTest, NoGUI)
-#include "kis_node_graph_listener_test.moc"

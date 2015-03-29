@@ -290,4 +290,3 @@ void KisToolFill::slotSetFeather(int feather)
     m_feather = feather;
     m_configGroup.writeEntry("featherAmount", feather);
 }
-#include "kis_tool_fill.moc"

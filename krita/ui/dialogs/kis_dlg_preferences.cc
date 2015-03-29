@@ -931,4 +931,3 @@ bool KisDlgPreferences::editPreferences()
     return baccept;
 }
 
-#include "kis_dlg_preferences.moc"

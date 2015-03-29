@@ -85,4 +85,3 @@ void DlgShearImage::okClicked()
     accept();
 }
 
-#include "dlg_shearimage.moc"

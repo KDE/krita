@@ -565,4 +565,3 @@ void LutDockerDock::clearLut()
     updateDisplaySettings();
 }
 
-#include "lutdocker_dock.moc"

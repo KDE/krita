@@ -1605,5 +1605,4 @@ void KisImage::notifyNodeCollpasedChanged()
 }
 
 
-#include "kis_image.moc"
 

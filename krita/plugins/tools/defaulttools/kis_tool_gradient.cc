@@ -293,5 +293,4 @@ void KisToolGradient::slotSetAntiAliasThreshold(qreal value)
     m_configGroup.writeEntry("antialiasThreshold", value);
 }
 
-#include "kis_tool_gradient.moc"
 

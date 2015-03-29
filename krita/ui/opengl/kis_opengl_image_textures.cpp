@@ -517,7 +517,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
                                                      profile);
 }
 
-#include "kis_opengl_image_textures.moc"
 
 #endif // HAVE_OPENGL
 

@@ -377,4 +377,3 @@ QSize KisClipboard::clipSize() const
     }
 }
 
-#include "kis_clipboard.moc"

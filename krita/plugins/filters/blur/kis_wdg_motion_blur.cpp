@@ -94,4 +94,3 @@ void KisWdgMotionBlur::angleDialChanged(int v)
     m_widget->blurAngleSlider->setValue(absoluteValue);
 }
 
-#include "kis_wdg_motion_blur.moc"

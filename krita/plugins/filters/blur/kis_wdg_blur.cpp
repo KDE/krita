@@ -116,4 +116,3 @@ void KisWdgBlur::spinBoxHalfHeightChanged(int v)
     emit sigConfigurationItemChanged();
 }
 
-#include "kis_wdg_blur.moc"

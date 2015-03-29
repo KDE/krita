@@ -94,5 +94,4 @@ void KisCmbIDList::slotIDHighlighted(int i)
 
 }
 
-#include "kis_cmb_idlist.moc"
 

@@ -78,4 +78,3 @@ void PSDColorModeBlockTest::testLoadingIndexed()
 
 QTEST_KDEMAIN(PSDColorModeBlockTest, GUI)
 
-#include "psd_colormode_block_test.moc"

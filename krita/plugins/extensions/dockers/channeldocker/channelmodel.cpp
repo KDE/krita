@@ -139,4 +139,3 @@ void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
     slotLayerActivated(m_currentLayer);
 }
 
-#include "channelmodel.moc"

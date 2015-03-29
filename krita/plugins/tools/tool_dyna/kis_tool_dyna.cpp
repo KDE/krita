@@ -342,4 +342,3 @@ void KisToolDyna::slotSetAngle(qreal angle)
 }
 
 
-#include "kis_tool_dyna.moc"

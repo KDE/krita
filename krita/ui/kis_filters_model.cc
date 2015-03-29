@@ -189,4 +189,3 @@ Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
 }
 
 
-#include "kis_filters_model.moc"

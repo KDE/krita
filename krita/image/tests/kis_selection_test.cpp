@@ -336,6 +336,5 @@ void KisSelectionTest::testOutlineGeneration()
 }
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI)
-#include "kis_selection_test.moc"
 
 

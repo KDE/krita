@@ -116,4 +116,3 @@ void PaletteModel::setColorSet(KoColorSet* colorSet)
     reset();
 }
 
-#include "palettemodel.moc"

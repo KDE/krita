@@ -334,4 +334,3 @@ void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
     if (!KisAlgebra2D::intersectLineRect(verticalAxis, viewport)) verticalAxis = QLineF();
 }
 
-#include "kis_mirror_axis.moc"

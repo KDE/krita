@@ -678,4 +678,3 @@ void KisDropshadow::separate_alpha(quint8 *buf, qint32 width, qint32 bytes)
     }
 }
 
-#include "kis_dropshadow.moc"

@@ -916,4 +916,3 @@ KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration()
 }
 
 
-#include "kis_canvas2.moc"

@@ -136,4 +136,3 @@ void ColorSliderDock::layerChanged(const KisNodeSP node)
 
 
 
-#include "kis_color_slider_dock.moc"

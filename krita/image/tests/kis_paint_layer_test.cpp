@@ -102,4 +102,3 @@ void KisPaintLayerTest::testProjection()
 
 
 QTEST_KDEMAIN(KisPaintLayerTest, GUI)
-#include "kis_paint_layer_test.moc"

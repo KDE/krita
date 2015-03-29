@@ -57,5 +57,4 @@ KisPropertiesConfiguration* KisWdgColor::configuration() const
     return config;
 }
 
-#include "kis_wdg_color.moc"
 

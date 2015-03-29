@@ -49,5 +49,4 @@ void KImageFrame::paintEvent(QPaintEvent*)
     p.end();
 }
 
-#include "kimageframe.moc"
 // kate: hl C++; indent-width 4; replace-tabs on;

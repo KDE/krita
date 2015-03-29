@@ -98,4 +98,3 @@ void KisEntryEditor::valueEdited()
     emit valueHasBeenEdited();
 }
 
-#include "kis_entry_editor.moc"

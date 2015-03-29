@@ -346,4 +346,3 @@ QSizeF KisAutoBrushWidget::brushSize() const
 }
 
 
-#include "kis_auto_brush_widget.moc"

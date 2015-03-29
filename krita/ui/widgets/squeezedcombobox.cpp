@@ -162,4 +162,3 @@ QString SqueezedComboBox::itemHighlighted()
     return m_originalItems[curItem];
 }
 
-#include "squeezedcombobox.moc"

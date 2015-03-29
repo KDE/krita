@@ -246,4 +246,3 @@ void KisColorSpaceSelector::buttonUpdate()
    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
 }
 
-#include "kis_color_space_selector.moc"

@@ -61,4 +61,3 @@ void KisBookmarkedConfigurationManagerTest::testCreation()
 
 
 QTEST_KDEMAIN(KisBookmarkedConfigurationManagerTest, GUI)
-#include "kis_bookmarked_configuration_manager_test.moc"

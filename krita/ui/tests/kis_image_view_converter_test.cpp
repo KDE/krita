@@ -105,4 +105,3 @@ void KisImageViewConverterTest::testZoom()
 }
 
 QTEST_KDEMAIN(KisImageViewConverterTest, NoGUI)
-#include "kis_image_view_converter_test.moc"

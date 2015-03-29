@@ -131,4 +131,3 @@ void KisDlgImageProperties::setAnnotation(const QString &type)
     }
 }
 
-#include "kis_dlg_image_properties.moc"

@@ -189,4 +189,3 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
 }
 
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
-#include "kis_kra_saver_test.moc"

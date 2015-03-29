@@ -278,5 +278,4 @@ void KisFilterTree::activateFilter(QModelIndex idx)
     emit activated(idx);
 }
 
-#include "kis_filter_selector_widget.moc"
 

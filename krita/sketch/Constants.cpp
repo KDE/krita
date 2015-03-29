@@ -109,4 +109,3 @@ bool Constants::isLandscape() const
 	return true;
 }
 
-#include "Constants.moc"

@@ -369,4 +369,3 @@ void KisPaintOpPresetsPopup::updateViewSettings()
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
 }
 
-#include "kis_paintop_presets_popup.moc"

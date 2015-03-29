@@ -102,4 +102,3 @@ void WdgFeatherSelection::getConfiguration(KisOperationConfiguration* config)
     config->setProperty("radius", m_radius);
 }
 
-#include "dlg_feather_selection.moc"

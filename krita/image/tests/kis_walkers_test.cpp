@@ -1224,5 +1224,4 @@ void KisWalkersTest::testGraphStructureChecksum()
 }
 
 QTEST_KDEMAIN(KisWalkersTest, NoGUI)
-#include "kis_walkers_test.moc"
 

@@ -490,5 +490,4 @@ int jp2Converter::getFileFormat(const KUrl& uri) const
     return -1;
 }
 
-#include "jp2_converter.moc"
 

@@ -106,4 +106,3 @@ void KisMacroPlayer::run()
 
 }
 
-#include "kis_macro_player.moc"

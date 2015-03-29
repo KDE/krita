@@ -263,4 +263,3 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     notifyModified();
 }
 
-#include "kis_tool_shape.moc"

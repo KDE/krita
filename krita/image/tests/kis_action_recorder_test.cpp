@@ -108,4 +108,3 @@ void KisActionRecorderTest::testFiles()
 
 
 QTEST_KDEMAIN(KisActionRecorderTest, GUI)
-#include "kis_action_recorder_test.moc"

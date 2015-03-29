@@ -820,4 +820,3 @@ void KisToolCrop::drawDecorationLine(QPainter *p, DecorationLine *decorLine, con
 
     p->drawLine(start, end);
 }
-#include "kis_tool_crop.moc"

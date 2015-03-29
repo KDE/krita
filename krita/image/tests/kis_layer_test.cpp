@@ -315,5 +315,4 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
 
 
 QTEST_KDEMAIN(KisLayerTest, NoGUI)
-#include "kis_layer_test.moc"
 

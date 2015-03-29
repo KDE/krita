@@ -37,4 +37,3 @@ void KisResourceServerProviderTest::testFetchResource()
 
 
 QTEST_KDEMAIN(KisResourceServerProviderTest, GUI)
-#include "kis_resource_server_provider_test.moc"

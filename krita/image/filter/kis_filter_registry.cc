@@ -79,4 +79,3 @@ KisFilterConfiguration* KisFilterRegistry::cloneConfiguration(KisFilterConfigura
     return newkfc;
 }
 
-#include "kis_filter_registry.moc"

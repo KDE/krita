@@ -270,5 +270,4 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
 
 
 QTEST_KDEMAIN(KisCoordinatesConverterTest, GUI)
-#include "kis_coordinates_converter_test.moc"
 

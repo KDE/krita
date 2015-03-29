@@ -614,4 +614,3 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     return parentCommand;
 }
 
-#include "kis_shape_layer.moc"

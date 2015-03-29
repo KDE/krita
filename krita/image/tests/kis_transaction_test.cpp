@@ -165,6 +165,5 @@ void KisTransactionTest::testDeviceMove()
 }
 
 QTEST_KDEMAIN(KisTransactionTest, GUI)
-#include "kis_transaction_test.moc"
 
 

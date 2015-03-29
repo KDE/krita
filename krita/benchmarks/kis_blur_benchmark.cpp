@@ -89,4 +89,3 @@ void KisBlurBenchmark::benchmarkFilter()
 
 
 QTEST_KDEMAIN(KisBlurBenchmark, GUI)
-#include "kis_blur_benchmark.moc"

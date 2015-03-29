@@ -41,4 +41,3 @@ QIcon KisEffectMask::icon() const
     return koIcon("bookmarks");
 }
 
-#include "kis_effect_mask.moc"

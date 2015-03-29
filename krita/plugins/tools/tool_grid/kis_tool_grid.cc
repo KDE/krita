@@ -174,4 +174,3 @@ void KisToolGrid::keyPressEvent(QKeyEvent* event)
     KoToolBase::keyPressEvent(event);
 }
 
-#include "kis_tool_grid.moc"

@@ -420,5 +420,4 @@ QWidget * KisToolBrush::createOptionWidget()
     return optionsWidget;
 }
 
-#include "kis_tool_brush.moc"
 

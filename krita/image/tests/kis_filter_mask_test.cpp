@@ -123,4 +123,3 @@ void KisFilterMaskTest::testProjectionSelected()
 }
 
 QTEST_KDEMAIN(KisFilterMaskTest, GUI)
-#include "kis_filter_mask_test.moc"

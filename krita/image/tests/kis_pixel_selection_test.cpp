@@ -379,5 +379,4 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
 }
 
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)
-#include "kis_pixel_selection_test.moc"
 

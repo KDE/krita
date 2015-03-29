@@ -248,4 +248,3 @@ QBitArray KisDlgLayerProperties::getChannelFlags() const
     return flags;
 }
 
-#include "kis_dlg_layer_properties.moc"

@@ -245,4 +245,3 @@ void TasksetDockerDock::resourceSelected(KoResource* resource)
     }
 }
 
-#include "tasksetdocker_dock.moc"

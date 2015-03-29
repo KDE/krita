@@ -43,4 +43,3 @@ void KisRecordedFilterActionTest::testCreation()
 
 
 QTEST_KDEMAIN(KisRecordedFilterActionTest, GUI)
-#include "kis_recorded_filter_action_test.moc"

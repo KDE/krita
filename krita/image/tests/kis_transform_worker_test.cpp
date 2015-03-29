@@ -995,4 +995,3 @@ void KisTransformWorkerTest::testPartialProcessing()
 }
 
 QTEST_KDEMAIN(KisTransformWorkerTest, GUI)
-#include "kis_transform_worker_test.moc"

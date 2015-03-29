@@ -239,4 +239,3 @@ void KisToolRectangleBase::updateArea() {
     emit rectangleChanged(bound);
 }
 
-#include "kis_tool_rectangle_base.moc"

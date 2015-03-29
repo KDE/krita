@@ -754,5 +754,4 @@ bool KisTool::selectionEditable()
 }
 
 
-#include "kis_tool.moc"
 

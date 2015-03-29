@@ -158,5 +158,4 @@ bool KisDoubleWidget::hasTracking() const
     return m_slider->hasTracking();
 }
 
-#include "kis_double_widget.moc"
 

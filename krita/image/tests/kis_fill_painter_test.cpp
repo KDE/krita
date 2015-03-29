@@ -151,4 +151,3 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
 
 
 QTEST_KDEMAIN(KisFillPainterTest, GUI)
-#include "kis_fill_painter_test.moc"

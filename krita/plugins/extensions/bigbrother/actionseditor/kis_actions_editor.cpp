@@ -195,4 +195,3 @@ void KisActionsEditor::slotBtnLower()
     slotActionActivated(m_form->actionsList->currentIndex());
 }
 
-#include "kis_actions_editor.moc"

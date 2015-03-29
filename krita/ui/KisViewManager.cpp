@@ -1284,4 +1284,3 @@ void KisViewManager::setShowFloatingMessage(bool show)
 }
 
 
-#include "KisViewManager.moc"

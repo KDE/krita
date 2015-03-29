@@ -289,4 +289,3 @@ void KisZoomManager::showGuides(bool toggle)
 }
 
 
-#include "kis_zoom_manager.moc"

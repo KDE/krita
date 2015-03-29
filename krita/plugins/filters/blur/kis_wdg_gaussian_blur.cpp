@@ -117,4 +117,3 @@ void KisWdgGaussianBlur::aspectLockChanged(bool v)
     }
 }
 
-#include "kis_wdg_gaussian_blur.moc"

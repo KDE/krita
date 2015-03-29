@@ -74,4 +74,3 @@ void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
     }
 }
 
-#include "presetdocker_dock.moc"

@@ -103,4 +103,3 @@ void KisMaskGeneratorTest::testSquareSerialisation()
 }
 
 QTEST_KDEMAIN(KisMaskGeneratorTest, GUI)
-#include "kis_mask_generator_test.moc"

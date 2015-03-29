@@ -489,4 +489,3 @@ void DlgImageSize::updatePrintResolutionUIValue(double value)
     m_page->printResolution->blockSignals(false);
 }
 
-#include "dlg_imagesize.moc"

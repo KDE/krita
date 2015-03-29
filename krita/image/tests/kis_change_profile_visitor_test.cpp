@@ -33,4 +33,3 @@ void KisChangeProfileVisitorTest::testCreation()
 
 
 QTEST_KDEMAIN(KisChangeProfileVisitorTest, GUI)
-#include "kis_change_profile_visitor_test.moc"

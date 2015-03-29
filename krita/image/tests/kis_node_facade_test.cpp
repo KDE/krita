@@ -364,4 +364,3 @@ void KisNodeFacadeTest::testMove()
 }
 
 QTEST_KDEMAIN(KisNodeFacadeTest, NoGUI)
-#include "kis_node_facade_test.moc"

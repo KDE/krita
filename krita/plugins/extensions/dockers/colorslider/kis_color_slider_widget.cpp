@@ -449,4 +449,3 @@ void KisColorSliderWidget::toneUpdate(int l, int type)
     emit(toneUpdated(l, type));
 }
 
-#include "kis_color_slider_widget.moc"

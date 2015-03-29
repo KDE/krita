@@ -147,5 +147,4 @@ void KisMemoryPoolTest::benchmarkAlloc()
 
 
 QTEST_KDEMAIN(KisMemoryPoolTest, NoGUI)
-#include "kis_memory_pool_test.moc"
 

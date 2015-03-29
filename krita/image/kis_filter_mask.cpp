@@ -175,4 +175,3 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
     return filter->neededRect(rect, filterConfig.data());
 }
 
-#include "kis_filter_mask.moc"

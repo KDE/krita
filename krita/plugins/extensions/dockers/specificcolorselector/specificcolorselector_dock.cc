@@ -96,4 +96,3 @@ void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 }
 
 
-#include "specificcolorselector_dock.moc"

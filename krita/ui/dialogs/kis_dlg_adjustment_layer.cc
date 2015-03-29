@@ -113,4 +113,3 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
     m_node->setDirty();
 }
 
-#include "kis_dlg_adjustment_layer.moc"

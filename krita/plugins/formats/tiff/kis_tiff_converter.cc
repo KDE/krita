@@ -663,4 +663,3 @@ void KisTIFFConverter::cancel()
     m_stop = true;
 }
 
-#include "kis_tiff_converter.moc"

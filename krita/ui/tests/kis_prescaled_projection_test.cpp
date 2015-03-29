@@ -472,5 +472,4 @@ void KisPrescaledProjectionTest::testQtScaling()
 
 QTEST_KDEMAIN(KisPrescaledProjectionTest, GUI)
 
-#include "kis_prescaled_projection_test.moc"
 

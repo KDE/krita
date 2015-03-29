@@ -472,4 +472,3 @@ void KisCustomImageWidget::switchPortraitLandscape()
         bnPortrait->setChecked(true);
 }
 
-#include "kis_custom_image_widget.moc"

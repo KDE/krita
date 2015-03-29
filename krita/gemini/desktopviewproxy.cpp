@@ -238,4 +238,3 @@ void DesktopViewProxy::updateKeyBindings()
     }
 }
 
-#include "desktopviewproxy.moc"

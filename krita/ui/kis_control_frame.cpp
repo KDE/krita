@@ -204,5 +204,4 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
         view->resourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
 }
 
-#include "kis_control_frame.moc"
 

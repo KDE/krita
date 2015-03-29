@@ -272,4 +272,3 @@ void KisCustomBrushWidget::setImage(KisImageWSP image)
 }
 
 
-#include "kis_custom_brush_widget.moc"

@@ -1232,5 +1232,4 @@ void KisNodeManager::slotSplitAlphaSaveMerged()
 }
 
 
-#include "kis_node_manager.moc"
 

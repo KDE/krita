@@ -78,4 +78,3 @@ KisPropertiesConfiguration* KisMultiBoolFilterWidget::configuration() const
     return config;
 }
 
-#include "kis_multi_bool_filter_widget.moc"

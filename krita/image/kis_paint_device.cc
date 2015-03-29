@@ -1175,4 +1175,3 @@ KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
     return new MemoryReleaseObject();
 }
 
-#include "kis_paint_device.moc"

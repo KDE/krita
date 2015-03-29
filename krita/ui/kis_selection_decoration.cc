@@ -199,5 +199,4 @@ void KisSelectionDecoration::setVisible(bool v)
     selectionChanged();
 }
 
-#include "kis_selection_decoration.moc"
 

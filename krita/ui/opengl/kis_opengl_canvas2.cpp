@@ -675,5 +675,4 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
 }
 
 
-#include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

@@ -292,4 +292,3 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
 }
 
 QTEST_KDEMAIN(KisFilterSelectionsBenchmark, GUI)
-#include "kis_filter_selections_benchmark.moc"

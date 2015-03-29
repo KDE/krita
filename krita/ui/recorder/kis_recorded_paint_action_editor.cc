@@ -174,4 +174,3 @@ bool KisRecordedPaintActionEditorFactory::canEdit(const KisRecordedAction* actio
     return dynamic_cast<const KisRecordedPaintAction*>(action);
 }
 
-#include "kis_recorded_paint_action_editor.moc"

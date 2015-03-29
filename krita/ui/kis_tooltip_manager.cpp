@@ -97,4 +97,3 @@ void KisTooltipManager::captureToolip()
 }
 
 
-#include "kis_tooltip_manager.moc"

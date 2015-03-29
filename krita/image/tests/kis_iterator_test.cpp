@@ -484,4 +484,3 @@ void KisIteratorTest::stressTest()
 }
 
 QTEST_KDEMAIN(KisIteratorTest, NoGUI)
-#include "kis_iterator_test.moc"

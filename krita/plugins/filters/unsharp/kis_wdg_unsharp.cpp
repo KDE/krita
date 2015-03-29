@@ -64,4 +64,3 @@ KisPropertiesConfiguration* KisWdgUnsharp::configuration() const
 }
 
 
-#include "kis_wdg_unsharp.moc"

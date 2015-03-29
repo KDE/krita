@@ -604,4 +604,3 @@ bool KisSelectionManager::showSelectionAsMask() const
     return false;
 }
 
-#include "kis_selection_manager.moc"

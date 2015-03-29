@@ -142,5 +142,4 @@ bool KisPaintOpOption::isLocked ()const
 }
 
 
-#include "kis_paintop_option.moc"
 

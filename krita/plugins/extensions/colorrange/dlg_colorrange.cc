@@ -334,4 +334,3 @@ void DlgColorRange::slotDeselectClicked()
 }
 
 
-#include "dlg_colorrange.moc"

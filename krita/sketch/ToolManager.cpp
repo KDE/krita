@@ -92,4 +92,3 @@ void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
     emit currentToolChanged();
 }
 
-#include "ToolManager.moc"

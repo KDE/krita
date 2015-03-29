@@ -1167,5 +1167,4 @@ void KisPNGConverter::progress(png_structp png_ptr, png_uint_32 row_number, int 
 }
 
 
-#include "kis_png_converter.moc"
 

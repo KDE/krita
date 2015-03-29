@@ -656,4 +656,3 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     return result;
 }
 
-#include "kis_node_model.moc"

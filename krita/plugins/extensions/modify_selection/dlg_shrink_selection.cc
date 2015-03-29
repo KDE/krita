@@ -104,4 +104,3 @@ void WdgShrinkSelection::getConfiguration(KisOperationConfiguration* config)
     config->setProperty("edgeLock", !ckbShrinkFromImageBorder->isChecked());
 }
 
-#include "dlg_shrink_selection.moc"

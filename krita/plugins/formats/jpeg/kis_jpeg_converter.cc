@@ -729,5 +729,4 @@ void KisJPEGConverter::cancel()
     m_stop = true;
 }
 
-#include "kis_jpeg_converter.moc"
 

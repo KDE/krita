@@ -76,4 +76,3 @@ void KisMaskGeneratorBenchmark::benchmarkSquare()
 }
 
 QTEST_KDEMAIN(KisMaskGeneratorBenchmark, GUI)
-#include "kis_mask_generator_benchmark.moc"

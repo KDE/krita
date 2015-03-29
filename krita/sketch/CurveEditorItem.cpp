@@ -137,4 +137,3 @@ void CurveEditorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     d->repaint();
 }
 
-#include "CurveEditorItem.moc"

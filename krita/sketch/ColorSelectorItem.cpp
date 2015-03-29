@@ -336,4 +336,3 @@ void ColorSelectorItem::repaint()
     d->repaint();
 }
 
-#include "ColorSelectorItem.moc"

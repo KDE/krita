@@ -36,4 +36,3 @@ void KisXCFTest::testFiles()
 }
 QTEST_KDEMAIN(KisXCFTest, GUI)
 
-#include "kis_xcf_test.moc"

@@ -91,4 +91,3 @@ void KisMultipliersDoubleSliderSpinBox::setExponentRatio(qreal dbl)
     d->form.sliderSpinBox->setExponentRatio(dbl);
 }
 
-#include "kis_multipliers_double_slider_spinbox.moc"

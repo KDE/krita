@@ -223,4 +223,3 @@ void KisGradientSliderWidget::slotRemoveSegment()
     repaint();
 }
 
-#include "kis_gradient_slider_widget.moc"

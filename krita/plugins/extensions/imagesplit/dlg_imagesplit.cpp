@@ -109,4 +109,3 @@ void DlgImagesplit::applyClicked()
     accept();
 }
 
-#include "dlg_imagesplit.moc"

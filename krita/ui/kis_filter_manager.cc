@@ -19,7 +19,6 @@
 
 #include "kis_filter_manager.h"
 
-#include "kis_filter_manager.moc"
 
 #include <QHash>
 #include <QSignalMapper>

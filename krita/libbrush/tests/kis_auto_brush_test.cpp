@@ -173,4 +173,3 @@ void KisAutoBrushTest::testCopyMasking()
 
 
 QTEST_KDEMAIN(KisAutoBrushTest, GUI)
-#include "kis_auto_brush_test.moc"

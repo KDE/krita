@@ -1090,4 +1090,3 @@ void KisToolTransform::setTranslateX(double translation)
     m_optionsWidget->slotSetTranslateX(translation);
 }
 
-#include "kis_tool_transform.moc"

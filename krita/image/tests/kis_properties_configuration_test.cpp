@@ -97,4 +97,3 @@ void KisPropertiesConfigurationTest::testNotSavedValues()
 
 QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)
 
-#include "kis_properties_configuration_test.moc"

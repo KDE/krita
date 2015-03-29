@@ -191,4 +191,3 @@ void KisPDFImportWidget::slotAspectChanged(bool keep)
     }
 }
 
-#include "kis_pdf_import_widget.moc"

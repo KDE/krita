@@ -391,4 +391,3 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
     }
 }
 
-#include "kis_tool_perspectivegrid.moc"

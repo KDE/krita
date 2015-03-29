@@ -238,4 +238,3 @@ void KisFilterTest::testBlurFilterApplicationRect()
 
 
 QTEST_KDEMAIN(KisFilterTest, GUI)
-#include "kis_filter_test.moc"

@@ -168,4 +168,3 @@ void KisCubicCurveTest::testTransfer()
 }
 
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)
-#include "kis_cubic_curve_test.moc"

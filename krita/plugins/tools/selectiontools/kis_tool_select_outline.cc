@@ -178,5 +178,4 @@ void KisToolSelectOutline::deactivate()
     KisToolSelectBase::deactivate();
 }
 
-#include "kis_tool_select_outline.moc"
 

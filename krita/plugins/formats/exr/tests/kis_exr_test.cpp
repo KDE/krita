@@ -98,5 +98,4 @@ void KisExrTest::testRoundTrip()
 
 QTEST_KDEMAIN(KisExrTest, GUI)
 
-#include "kis_exr_test.moc"
 

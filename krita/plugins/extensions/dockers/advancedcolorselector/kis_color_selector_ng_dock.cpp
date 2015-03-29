@@ -47,4 +47,3 @@ void KisColorSelectorNgDock::unsetCanvas()
     m_colorSelectorNgWidget->unsetCanvas();
 }
 
-#include "kis_color_selector_ng_dock.moc"

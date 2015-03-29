@@ -211,4 +211,3 @@ void KisImageManager::slotImageColor()
 }
 
 
-#include "kis_image_manager.moc"

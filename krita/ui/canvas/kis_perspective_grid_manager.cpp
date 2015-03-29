@@ -125,4 +125,3 @@ KisPerspectiveGridDecoration* KisPerspectiveGridManager::decoration()
 }
 
 
-#include "kis_perspective_grid_manager.moc"

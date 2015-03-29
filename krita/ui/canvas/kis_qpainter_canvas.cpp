@@ -189,4 +189,3 @@ bool KisQPainterCanvas::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
-#include "kis_qpainter_canvas.moc"

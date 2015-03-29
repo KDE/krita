@@ -290,5 +290,4 @@ void KisLocklessStackTest::stressTestClear()
 }
 
 QTEST_KDEMAIN(KisLocklessStackTest, NoGUI)
-#include "kis_lockless_stack_test.moc"
 

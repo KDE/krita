@@ -94,4 +94,3 @@ void KisDynamicSensorFade::fromXML(const QDomElement& e)
     m_length = e.attribute("length", QString::number(DEFAULT_LENGTH)).toInt();
 }
 
-#include "kis_dynamic_sensor_fade.moc"

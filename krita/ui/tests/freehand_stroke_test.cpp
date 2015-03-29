@@ -154,4 +154,3 @@ void FreehandStrokeTest::testMixDullCompositioning()
 }
 
 QTEST_KDEMAIN(FreehandStrokeTest, GUI)
-#include "freehand_stroke_test.moc"

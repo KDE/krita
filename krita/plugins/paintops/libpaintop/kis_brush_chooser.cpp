@@ -305,4 +305,3 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 }
 
 
-#include "kis_brush_chooser.moc"

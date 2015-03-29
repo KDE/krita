@@ -143,4 +143,3 @@ void KisDlgAdjLayerProps::slotConfigChanged()
 }
 
 
-#include "kis_dlg_adj_layer_props.moc"

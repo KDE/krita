@@ -88,4 +88,3 @@ void PSDHeaderTest::testRoundTripping()
 
 QTEST_KDEMAIN(PSDHeaderTest, GUI)
 
-#include "psd_header_test.moc"

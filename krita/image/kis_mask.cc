@@ -341,4 +341,3 @@ void KisMask::testingInitSelection(const QRect &rect)
     m_d->selection->setParentNode(this);
 }
 
-#include "kis_mask.moc"

@@ -168,4 +168,3 @@ KoUnit KisShapeLayerCanvas::unit() const
     return KoUnit(KoUnit::Point);
 }
 
-#include "kis_shape_layer_canvas.moc"

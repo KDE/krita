@@ -797,4 +797,3 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
 
 QTEST_KDEMAIN(KisGmicTests, NoGUI)
 
-#include "kis_gmic_tests.moc"

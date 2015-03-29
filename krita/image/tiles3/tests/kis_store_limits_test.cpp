@@ -47,5 +47,4 @@ void KisStoreLimitsTest::testLimits()
 }
 
 QTEST_KDEMAIN(KisStoreLimitsTest, NoGUI)
-#include "kis_store_limits_test.moc"
 

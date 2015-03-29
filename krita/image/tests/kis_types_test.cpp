@@ -23,4 +23,3 @@
 
 
 QTEST_KDEMAIN(KisTypesTest, GUI)
-#include "kis_types_test.moc"

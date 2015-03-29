@@ -174,4 +174,3 @@ void KisAutogradient::paramChanged()
     emit activatedResource(m_autogradientResource);
 }
 
-#include "kis_autogradient.moc"

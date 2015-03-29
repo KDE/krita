@@ -24,6 +24,7 @@
 #include "krita_export.h"
 
 #include <QPointer>
+#include <QPrinter>
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>

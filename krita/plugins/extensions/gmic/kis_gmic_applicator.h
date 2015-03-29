@@ -23,6 +23,7 @@
 
 #include <kis_types.h>
 #include <QThread>
+#include <QMutex>
 
 class KisProcessingApplicator;
 
@@ -55,6 +56,7 @@ private:
     bool m_applicatorStrokeEnded;
     float * m_progress;
     bool * m_cancel;
+    QSharedPointer<QMutex> m_mutex;
 };
 
 #endif

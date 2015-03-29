@@ -33,6 +33,7 @@
 
 KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false),m_progress(0),m_cancel(0)
 {
+    m_mutex = QSharedPointer<QMutex>(new QMutex());
 }
 
 KisGmicApplicator::~KisGmicApplicator()
@@ -89,6 +90,7 @@ void KisGmicApplicator::preview()
     // apply gmic filters to provided layers
     const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
     KisGmicCommand * gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
+    gmicCommand->setMutex(m_mutex);
     connect(gmicCommand, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
 
     m_progress = gmicCommand->progressPtr();
@@ -105,11 +107,16 @@ void KisGmicApplicator::preview()
 
 void KisGmicApplicator::cancel()
 {
+    dbgPlugins << "Lock!";
+    m_mutex->lock();
+
     if (m_cancel)
     {
         dbgPlugins << "Cancel gmic script";
         *m_cancel = true;
     }
+    dbgPlugins << "Unlock!";
+    m_mutex->unlock();
 
     if (m_applicator)
     {
@@ -155,6 +162,7 @@ void KisGmicApplicator::finish()
 
 float KisGmicApplicator::getProgress() const
 {
+    QMutexLocker locker(m_mutex.data());
     if (m_progress)
     {
         return *m_progress;

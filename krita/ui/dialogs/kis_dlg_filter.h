@@ -48,16 +48,22 @@ protected Q_SLOTS:
 
     void createMask();
 
-    void previewCheckBoxChange(int state);
+    void pushButtonPreviewToggled(bool state);
 
     void filterSelectionChanged();
 
     virtual void resizeEvent(QResizeEvent* );
 
+public Q_SLOTS:
+    void adjustSize();
+
 private:
     void startApplyingFilter(KisSafeFilterConfigurationSP config);
     void setDialogTitle(KisFilterSP f);
     void updatePreview();
+
+private slots:
+    void slotFilterWidgetSizeChanged();
 
 private:
     struct Private;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,8 +117,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
             typeName.remove(0, 1);
         }
 
-        const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;
-        if (!typeDefs.contains(typeName))
+        if (!Parameter::isTypeDefined(typeName))
         {
             dbgPlugins << "Unknown type" << typeName << line;
         }
@@ -245,55 +244,55 @@ bool Command::processParameter(const QStringList& block)
             typeDefinition.remove(0,1);
         }
 
-        if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FLOAT_P]))
+        if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::FLOAT_P]))
         {
             parameter = new FloatParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::INT_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::INT_P]))
         {
             parameter = new IntParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::SEPARATOR_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::SEPARATOR_P]))
         {
             parameter = new SeparatorParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CHOICE_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::CHOICE_P]))
         {
             parameter = new ChoiceParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::TEXT_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::TEXT_P]))
         {
             parameter = new TextParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::NOTE_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::NOTE_P]))
         {
             parameter = new NoteParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::LINK_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::LINK_P]))
         {
             parameter = new LinkParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BOOL_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::BOOL_P]))
         {
             parameter = new BoolParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::COLOR_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::COLOR_P]))
         {
             parameter = new ColorParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FOLDER_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::FOLDER_P]))
         {
             parameter = new FolderParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FILE_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::FILE_P]))
         {
             parameter = new FileParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CONST_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::CONST_P]))
         {
             parameter = new ConstParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BUTTON_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::BUTTON_P]))
         {
             parameter = new ButtonParameter(paramName, showPreviewOnChange);
         }

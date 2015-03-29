@@ -145,6 +145,7 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
         Command * commandItem = dynamic_cast<Command *>(item);
         if (commandItem)
         {
+            //TODO: fix memory leak by using QScopedPointer
             KisGmicFilterSetting * settings = new KisGmicFilterSetting;
             commandItem->writeConfiguration(settings);
 

@@ -32,7 +32,7 @@ KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer<
     m_images(images),
     m_customCommands(customCommands),
     m_firstRedo(true),
-    m_progress(new float(-1)),
+    m_progress(new float(-1.0f)),
     m_cancel(new bool(false)),
     m_isSuccessfullyDone(false)
 {
@@ -40,8 +40,23 @@ KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer<
 
 KisGmicCommand::~KisGmicCommand()
 {
+    dbgPlugins << "Destructor: " << this;
+    if (m_mutex)
+    {
+        dbgPlugins << "Lock!";
+        m_mutex->lock();
+    }
+
     delete m_cancel;
     delete m_progress;
+    m_cancel = 0;
+    m_progress = 0;
+
+    if (m_mutex)
+    {
+        dbgPlugins << "Unlock!";
+        m_mutex->unlock();
+    }
 }
 
 

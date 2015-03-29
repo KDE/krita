@@ -340,26 +340,20 @@ if(NOT MARBLE_FOUND)
     set(MARBLE_INCLUDE_DIR "")
 else()
     set(CAN_USE_MARBLE TRUE)
-endif()
-if( MARBLE_FOUND )
-    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
-        set(MARBLE_FOUND FALSE)
-    else()
-        add_definitions( -DCAN_USE_MARBLE )
-        ##
-        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-        ## with commit ea177ca. This is for compatibility with older versions.
-        ##
-        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-        if( MARBLECONTROLBOX_H )
-        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-            if( SETMARBLEWIDGET )
-                add_definitions(-DHAVE_SETMARBLEWIDGET)
-            endif()
-        else()
-            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+    if( MARBLECONTROLBOX_H )
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif()
+    else()
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif()
 endif()
 macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")

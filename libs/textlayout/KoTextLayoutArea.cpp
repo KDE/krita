@@ -1339,6 +1339,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     layout->endLayout();
     setVirginPage(false);
     cursor->lineTextStart = -1; //set lineTextStart to -1 and returning true indicate new block
+    block.setLineCount(layout->lineCount());
     return true;
 }
 

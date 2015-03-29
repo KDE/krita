@@ -241,6 +241,9 @@ if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
     )
 endif()
 
+# override the kf5 plugin installdir
+set(PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
+
 
  ###########################
 ############################
@@ -977,7 +980,6 @@ calligra_drop_unbuildable_products()
 if(SHOULD_BUILD_FEATURE_RDF)
    add_definitions( -DSHOULD_BUILD_RDF )
 endif()
-
 
  ###################
 ####################

@@ -172,7 +172,7 @@ include(FeatureSummary)
 find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      GuiAddons I18n ItemModels ItemViews
                                      WidgetsAddons ThreadWeaver
-                                     Completion IconThemes 
+                                     Completion IconThemes Sonnet
                                      Parts
                                      XmlGui Kross Wallet
                                      Emoticons ConfigWidgets KDELibs4Support

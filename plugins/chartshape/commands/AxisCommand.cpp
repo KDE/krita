@@ -27,7 +27,7 @@
 #include "Axis.h"
 
 using namespace KoChart;
-using namespace KDChart;
+using namespace KChart;
 
 
 AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)

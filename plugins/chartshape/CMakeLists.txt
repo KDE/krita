@@ -19,7 +19,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
 
 set (chartshape_LIB_SRCS
     kochart_global.cpp
-    KDChartConvertions.cpp
+    KChartConvertions.cpp
     Axis.cpp
     DataSet.cpp
     CellRegion.cpp
@@ -30,7 +30,7 @@ set (chartshape_LIB_SRCS
     PlotArea.cpp
     TableSource.cpp
     ChartProxyModel.cpp
-    KDChartModel.cpp
+    KChartModel.cpp
     Surface.cpp
     ChartDocument.cpp
     ChartPart.cpp

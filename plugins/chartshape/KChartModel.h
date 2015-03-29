@@ -36,7 +36,7 @@ namespace KoChart {
 
 /**
  * Takes a list of DataSet's and compiles them into a
- * QAbstractItemModel for use with KDChart.
+ * QAbstractItemModel for use with KChart.
  *
  * Data sets in this model are aligned column-wise. Each column
  * occupies dimension() columns. For example, for an X/Y chart,
@@ -56,7 +56,7 @@ namespace KoChart {
  */
 
  /**
-  * Note on data directions in KDChart's models:
+  * Note on data directions in KChart's models:
   *
   * For circular (polar) charts, items shown in the legend should not be the
   * data set labels, but the category labels instead. For example, a pie chart
@@ -64,21 +64,21 @@ namespace KoChart {
   * ignored). Obviously showing the title of the data set wouldn't be very useful
   * in the legend. So the categories are shown instead.
   *
-  * Since KDChart extracts the legend items from horizontal header data (the headers
+  * Since KChart extracts the legend items from horizontal header data (the headers
   * in each column) data sets have to be inserted row-wise instead of column-wise for
-  * these charts. To do so, KDChartModel::setDataDirection(Qt::Horizontal) is used.
+  * these charts. To do so, KChartModel::setDataDirection(Qt::Horizontal) is used.
   *
   * In all other cases, we show the data set labels in the legend. Therefore we insert
   * data sets column-wise, which is done by calling setDataDirection(Qt::Vertical).
   */
 
-class KDChartModel : public QAbstractItemModel
+class KChartModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit KDChartModel(PlotArea *plotArea, QObject *parent = 0);
-    ~KDChartModel();
+    explicit KChartModel(PlotArea *plotArea, QObject *parent = 0);
+    ~KChartModel();
 
     enum DataRole {
         XDataRole,
@@ -98,7 +98,7 @@ public:
      * if the data direction is Qt::Vertical, a data set occupies one
      * column (in case only one data dimension is being used).
      *
-     * See "Note on data directions in KDChart's models" above.
+     * See "Note on data directions in KChart's models" above.
      */
     void setDataDirection(Qt::Orientation direction);
     /**

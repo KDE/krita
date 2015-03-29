@@ -129,16 +129,16 @@ public:
     void saveOdf(KoShapeSavingContext &context);
     void saveOdfGrid(KoShapeSavingContext &context, OdfGridClass gridClass);
 
-    // KDChart stuff
-    KDChart::CartesianAxis *kdAxis() const;
-    KDChart::AbstractCoordinatePlane *kdPlane() const;
+    // KChart stuff
+    KChart::CartesianAxis *kdAxis() const;
+    KChart::AbstractCoordinatePlane *kdPlane() const;
     
     void plotAreaChartTypeChanged(ChartType chartType);
     void plotAreaChartSubTypeChanged(ChartSubtype chartSubType);
     void plotAreaIsVerticalChanged();
 
-    void registerKdAxis(KDChart::CartesianAxis *axis);
-    void deregisterKdAxis(KDChart::CartesianAxis *axis);
+    void registerKdAxis(KChart::CartesianAxis *axis);
+    void deregisterKdAxis(KChart::CartesianAxis *axis);
     
     void update() const;
     void requestRepaint() const;

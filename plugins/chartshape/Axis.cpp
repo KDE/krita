@@ -46,34 +46,34 @@
 #include <KoTextDocumentLayout.h>
 #include <KoOdfNumberStyles.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartLegend>
-#include <KDChartCartesianAxis>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartRadarCoordinatePlane>
-#include <KDChartGridAttributes>
-#include <KDChartBarDiagram>
-#include <KDChartLineDiagram>
-#include <KDChartPieDiagram>
-#include <KDChartPlotter>
-#include <KDChartStockDiagram>
-#include <KDChartRingDiagram>
-#include <KDChartRadarDiagram>
-#include <KDChartBarAttributes>
-#include <KDChartPieAttributes>
-#include <KDChartThreeDBarAttributes>
-#include <KDChartThreeDPieAttributes>
-#include <KDChartThreeDLineAttributes>
-#include <KDChartBackgroundAttributes>
-#include <KDChartRulerAttributes>
+// KChart
+#include <KChartChart>
+#include <KChartLegend>
+#include <KChartCartesianAxis>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartRadarCoordinatePlane>
+#include <KChartGridAttributes>
+#include <KChartBarDiagram>
+#include <KChartLineDiagram>
+#include <KChartPieDiagram>
+#include <KChartPlotter>
+#include <KChartStockDiagram>
+#include <KChartRingDiagram>
+#include <KChartRadarDiagram>
+#include <KChartBarAttributes>
+#include <KChartPieAttributes>
+#include <KChartThreeDBarAttributes>
+#include <KChartThreeDPieAttributes>
+#include <KChartThreeDLineAttributes>
+#include <KChartBackgroundAttributes>
+#include <KChartRulerAttributes>
 
 // KoChart
 #include "PlotArea.h"
-#include "KDChartModel.h"
+#include "KChartModel.h"
 #include "DataSet.h"
 #include "Legend.h"
-#include "KDChartConvertions.h"
+#include "KChartConvertions.h"
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 #include "ChartLayout.h"
@@ -94,11 +94,11 @@ public:
     /// and have the layout find out about our position when it changes.
     void updatePosition();
 
-    void registerDiagram(KDChart::AbstractDiagram *diagram);
-    void deregisterDiagram(KDChart::AbstractDiagram *diagram);
+    void registerDiagram(KChart::AbstractDiagram *diagram);
+    void deregisterDiagram(KChart::AbstractDiagram *diagram);
 
-    KDChart::AbstractDiagram *getDiagramAndCreateIfNeeded(ChartType chartType);
-    KDChart::AbstractDiagram *getDiagram(ChartType chartType);
+    KChart::AbstractDiagram *getDiagramAndCreateIfNeeded(ChartType chartType);
+    KChart::AbstractDiagram *getDiagram(ChartType chartType);
     void deleteDiagram(ChartType chartType);
 
     void createBarDiagram();
@@ -145,21 +145,21 @@ public:
     /// TODO: Save to ODF
     QFont font;
 
-    KDChart::CartesianAxis            *const kdAxis;
-    KDChart::CartesianCoordinatePlane *kdPlane;
-    KDChart::PolarCoordinatePlane     *kdPolarPlane;
-    KDChart::RadarCoordinatePlane     *kdRadarPlane;
+    KChart::CartesianAxis            *const kdAxis;
+    KChart::CartesianCoordinatePlane *kdPlane;
+    KChart::PolarCoordinatePlane     *kdPolarPlane;
+    KChart::RadarCoordinatePlane     *kdRadarPlane;
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 
-    KDChart::BarDiagram   *kdBarDiagram;
-    KDChart::LineDiagram  *kdLineDiagram;
-    KDChart::LineDiagram  *kdAreaDiagram;
-    KDChart::PieDiagram   *kdCircleDiagram;
-    KDChart::RingDiagram  *kdRingDiagram;
-    KDChart::RadarDiagram *kdRadarDiagram;
-    KDChart::Plotter      *kdScatterDiagram;
-    KDChart::StockDiagram *kdStockDiagram;
-    KDChart::Plotter      *kdBubbleDiagram;
+    KChart::BarDiagram   *kdBarDiagram;
+    KChart::LineDiagram  *kdLineDiagram;
+    KChart::LineDiagram  *kdAreaDiagram;
+    KChart::PieDiagram   *kdCircleDiagram;
+    KChart::RingDiagram  *kdRingDiagram;
+    KChart::RadarDiagram *kdRadarDiagram;
+    KChart::Plotter      *kdScatterDiagram;
+    KChart::StockDiagram *kdStockDiagram;
+    KChart::Plotter      *kdBubbleDiagram;
     // FIXME BUG: Somehow we need to visualize something for these
     //            missing chart types.  We have some alternatives:
     //            1. Show an empty area
@@ -170,13 +170,13 @@ public:
     // NOTE: Whatever we do, we should always store the data so that
     //       it can be saved back into the file for a perfect
     //       roundtrip.
-    KDChart::BarDiagram   *kdSurfaceDiagram;
-    KDChart::BarDiagram   *kdGanttDiagram;
+    KChart::BarDiagram   *kdSurfaceDiagram;
+    KChart::BarDiagram   *kdGanttDiagram;
 
     ChartType     plotAreaChartType;
     ChartSubtype  plotAreaChartSubType;
 
-    // If KDChart::LineDiagram::centerDataPoints() property is set to true,
+    // If KChart::LineDiagram::centerDataPoints() property is set to true,
     // the data points drawn in a line (i.e., also an area) diagram start at
     // an offset of 0.5, that is, in the middle of a column in the diagram.
     // Set flag to true if at least one dataset is attached to this axis
@@ -196,10 +196,10 @@ public:
     bool isVisible;
 };
 
-class CartesianAxis : public KDChart::CartesianAxis
+class CartesianAxis : public KChart::CartesianAxis
 {
 public:
-    CartesianAxis(KoChart::Axis *_axis) : KDChart::CartesianAxis(), axis(_axis) {}
+    CartesianAxis(KoChart::Axis *_axis) : KChart::CartesianAxis(), axis(_axis) {}
     virtual ~CartesianAxis() {}
     virtual const QString customizedLabel(const QString& label) const {
         if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
@@ -262,7 +262,7 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
     title = 0;
     titleData = 0;
 
-    KDChart::RulerAttributes attr = kdAxis->rulerAttributes();
+    KChart::RulerAttributes attr = kdAxis->rulerAttributes();
     attr.setShowRulerLine(true);
     kdAxis->setRulerAttributes(attr);
 }
@@ -291,9 +291,9 @@ Axis::Private::~Private()
         dataSet->setAttachedAxis(0);
 }
 
-void Axis::Private::registerDiagram(KDChart::AbstractDiagram *diagram)
+void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
 {
-    KDChartModel *model = new KDChartModel(plotArea);
+    KChartModel *model = new KChartModel(plotArea);
     diagram->setModel(model);
 
     QObject::connect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
@@ -309,9 +309,9 @@ void Axis::Private::registerDiagram(KDChart::AbstractDiagram *diagram)
                      plotArea, SLOT(plotAreaUpdate()));
 }
 
-void Axis::Private::deregisterDiagram(KDChart::AbstractDiagram *diagram)
+void Axis::Private::deregisterDiagram(KChart::AbstractDiagram *diagram)
 {
-    KDChartModel *model = dynamic_cast<KDChartModel*>(diagram->model());
+    KChartModel *model = dynamic_cast<KChartModel*>(diagram->model());
     Q_ASSERT(model);
 
     QObject::disconnect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
@@ -329,9 +329,9 @@ void Axis::Private::deregisterDiagram(KDChart::AbstractDiagram *diagram)
     delete model;
 }
 
-KDChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType chartType)
+KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType chartType)
 {
-    KDChart::AbstractDiagram *diagram = 0;
+    KChart::AbstractDiagram *diagram = 0;
 
     switch (chartType) {
     case BarChartType:
@@ -400,9 +400,9 @@ KDChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType c
 }
 
 /**
- * Returns currently used internal KDChart diagram for the specified chart type
+ * Returns currently used internal KChart diagram for the specified chart type
  */
-KDChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
+KChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
 {
     switch (chartType) {
         case BarChartType:
@@ -439,42 +439,42 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
 
 void Axis::Private::deleteDiagram(ChartType chartType)
 {
-    KDChart::AbstractDiagram **diagram = 0;
+    KChart::AbstractDiagram **diagram = 0;
 
     switch (chartType) {
     case BarChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdBarDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdBarDiagram;
         break;
     case LineChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdLineDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdLineDiagram;
         break;
     case AreaChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdAreaDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdAreaDiagram;
         break;
     case CircleChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdCircleDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdCircleDiagram;
         break;
     case RingChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdRingDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdRingDiagram;
         break;
     case RadarChartType:
     case FilledRadarChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdRadarDiagram;
         break;
     case ScatterChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdScatterDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdScatterDiagram;
         break;
     case StockChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdStockDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdStockDiagram;
         break;
     case BubbleChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdBubbleDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdBubbleDiagram;
         break;
     case SurfaceChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdSurfaceDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdSurfaceDiagram;
         break;
     case GanttChartType:
-        diagram = (KDChart::AbstractDiagram**)&kdGanttDiagram;
+        diagram = (KChart::AbstractDiagram**)&kdGanttDiagram;
         break;
     case LastChartType:
         Q_ASSERT("There is no diagram with type LastChartType");
@@ -497,9 +497,9 @@ void Axis::Private::createBarDiagram()
 {
     Q_ASSERT(kdBarDiagram == 0);
 
-    kdBarDiagram = new KDChart::BarDiagram(plotArea->kdChart(), kdPlane);
+    kdBarDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdBarDiagram);
-    // By 'vertical', KDChart means the orientation of a chart's bars,
+    // By 'vertical', KChart means the orientation of a chart's bars,
     // not the orientation of the x axis.
     kdBarDiagram->setOrientation(plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
     kdBarDiagram->setPen(QPen(Qt::black, 0.0));
@@ -507,9 +507,9 @@ void Axis::Private::createBarDiagram()
     kdBarDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
-        kdBarDiagram->setType(KDChart::BarDiagram::Stacked);
+        kdBarDiagram->setType(KChart::BarDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype) {
-        kdBarDiagram->setType(KDChart::BarDiagram::Percent);
+        kdBarDiagram->setType(KChart::BarDiagram::Percent);
         kdBarDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
     }
 
@@ -528,7 +528,7 @@ void Axis::Private::createBarDiagram()
     q->setGapBetweenSets(100);
 
     // Propagate existing settings
-    KDChart::ThreeDBarAttributes attributes(kdBarDiagram->threeDBarAttributes());
+    KChart::ThreeDBarAttributes attributes(kdBarDiagram->threeDBarAttributes());
     attributes.setEnabled(plotArea->isThreeD());
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdBarDiagram->setThreeDBarAttributes(attributes);
@@ -540,15 +540,15 @@ void Axis::Private::createLineDiagram()
 {
     Q_ASSERT(kdLineDiagram == 0);
 
-    kdLineDiagram = new KDChart::LineDiagram(plotArea->kdChart(), kdPlane);
+    kdLineDiagram = new KChart::LineDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdLineDiagram);
 
     kdLineDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
-        kdLineDiagram->setType(KDChart::LineDiagram::Stacked);
+        kdLineDiagram->setType(KChart::LineDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype)
-        kdLineDiagram->setType(KDChart::LineDiagram::Percent);
+        kdLineDiagram->setType(KChart::LineDiagram::Percent);
 
     if (isVisible)
         kdLineDiagram->addAxis(kdAxis);
@@ -562,13 +562,13 @@ void Axis::Private::createLineDiagram()
     }
 
     // Propagate existing settings
-    KDChart::ThreeDLineAttributes attributes(kdLineDiagram->threeDLineAttributes());
+    KChart::ThreeDLineAttributes attributes(kdLineDiagram->threeDLineAttributes());
     attributes.setEnabled(plotArea->isThreeD());
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdLineDiagram->setThreeDLineAttributes(attributes);
 
-    KDChart::LineAttributes lineAttr = kdLineDiagram->lineAttributes();
-    lineAttr.setMissingValuesPolicy(KDChart::LineAttributes::MissingValuesHideSegments);
+    KChart::LineAttributes lineAttr = kdLineDiagram->lineAttributes();
+    lineAttr.setMissingValuesPolicy(KChart::LineAttributes::MissingValuesHideSegments);
     kdLineDiagram->setLineAttributes(lineAttr);
 
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdLineDiagram);
@@ -578,9 +578,9 @@ void Axis::Private::createAreaDiagram()
 {
     Q_ASSERT(kdAreaDiagram == 0);
 
-    kdAreaDiagram = new KDChart::LineDiagram(plotArea->kdChart(), kdPlane);
+    kdAreaDiagram = new KChart::LineDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdAreaDiagram);
-    KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
+    KChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
     // Draw the area under the lines. This makes this diagram an area chart.
     attr.setDisplayArea(true);
     kdAreaDiagram->setLineAttributes(attr);
@@ -592,10 +592,10 @@ void Axis::Private::createAreaDiagram()
     kdAreaDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
-        kdAreaDiagram->setType(KDChart::LineDiagram::Stacked);
+        kdAreaDiagram->setType(KChart::LineDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype)
     {
-        kdAreaDiagram->setType(KDChart::LineDiagram::Percent);
+        kdAreaDiagram->setType(KChart::LineDiagram::Percent);
         kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
 
@@ -611,7 +611,7 @@ void Axis::Private::createAreaDiagram()
     }
 
     // Propagate existing settings
-    KDChart::ThreeDLineAttributes attributes(kdAreaDiagram->threeDLineAttributes());
+    KChart::ThreeDLineAttributes attributes(kdAreaDiagram->threeDLineAttributes());
     attributes.setEnabled(plotArea->isThreeD());
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdAreaDiagram->setThreeDLineAttributes(attributes);
@@ -623,9 +623,9 @@ void Axis::Private::createCircleDiagram()
 {
     Q_ASSERT(kdCircleDiagram == 0);
 
-    kdCircleDiagram = new KDChart::PieDiagram(plotArea->kdChart(), kdPolarPlane);
+    kdCircleDiagram = new KChart::PieDiagram(plotArea->kdChart(), kdPolarPlane);
     registerDiagram(kdCircleDiagram);
-    KDChartModel *model = dynamic_cast<KDChartModel*>(kdCircleDiagram->model());
+    KChartModel *model = dynamic_cast<KChartModel*>(kdCircleDiagram->model());
     Q_ASSERT(model);
     model->setDataDirection(Qt::Horizontal);
 
@@ -633,13 +633,13 @@ void Axis::Private::createCircleDiagram()
     kdPolarPlane->addDiagram(kdCircleDiagram);
 
     // Propagate existing settings
-    KDChart::ThreeDPieAttributes attributes(kdCircleDiagram->threeDPieAttributes());
+    KChart::ThreeDPieAttributes attributes(kdCircleDiagram->threeDPieAttributes());
     attributes.setEnabled(plotArea->isThreeD());
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdCircleDiagram->setThreeDPieAttributes(attributes);
 
     // Initialize with default values that are specified in PlotArea
-    // Note: KDChart takes an int here, though ODF defines the offset to be a double.
+    // Note: KChart takes an int here, though ODF defines the offset to be a double.
     kdPolarPlane->setStartPosition((int)plotArea->pieAngleOffset());
 }
 
@@ -647,9 +647,9 @@ void Axis::Private::createRingDiagram()
 {
     Q_ASSERT(kdRingDiagram == 0);
 
-    kdRingDiagram = new KDChart::RingDiagram(plotArea->kdChart(), kdPolarPlane);
+    kdRingDiagram = new KChart::RingDiagram(plotArea->kdChart(), kdPolarPlane);
     registerDiagram(kdRingDiagram);
-    KDChartModel *model = dynamic_cast<KDChartModel*>(kdRingDiagram->model());
+    KChartModel *model = dynamic_cast<KChartModel*>(kdRingDiagram->model());
     Q_ASSERT(model);
     model->setDataDirection(Qt::Horizontal);
 
@@ -657,13 +657,13 @@ void Axis::Private::createRingDiagram()
     kdPolarPlane->addDiagram(kdRingDiagram);
 
     // Propagate existing settings
-    KDChart::ThreeDPieAttributes attributes(kdRingDiagram->threeDPieAttributes());
+    KChart::ThreeDPieAttributes attributes(kdRingDiagram->threeDPieAttributes());
     attributes.setEnabled(plotArea->isThreeD());
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdRingDiagram->setThreeDPieAttributes(attributes);
 
     // Initialize with default values that are specified in PlotArea
-    // Note: KDChart takes an int here, though ODF defines the offset to be a double.
+    // Note: KChart takes an int here, though ODF defines the offset to be a double.
     kdPolarPlane->setStartPosition((int)plotArea->pieAngleOffset());
 }
 
@@ -674,7 +674,7 @@ void Axis::Private::createRadarDiagram(bool filled)
     //kdRadarDiagramModel->setDataDimensions(2);
     //kdRadarDiagramModel->setDataDirection(Qt::Horizontal);
 
-    kdRadarDiagram = new KDChart::RadarDiagram(plotArea->kdChart(), kdRadarPlane);
+    kdRadarDiagram = new KChart::RadarDiagram(plotArea->kdChart(), kdRadarPlane);
     registerDiagram(kdRadarDiagram);
     kdRadarDiagram->setCloseDatasets(true);
 
@@ -686,11 +686,11 @@ void Axis::Private::createRadarDiagram(bool filled)
         kdRadarDiagram->setFillAlpha(0.4);
     }
 
-#if 0  // Stacked and Percent not supported by KDChart.
+#if 0  // Stacked and Percent not supported by KChart.
     if (plotAreaChartSubType == StackedChartSubtype)
-        kdRadarDiagram->setType(KDChart::PolarDiagram::Stacked);
+        kdRadarDiagram->setType(KChart::PolarDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype)
-        kdRadarDiagram->setType(KDChart::PolarDiagram::Percent);
+        kdRadarDiagram->setType(KChart::PolarDiagram::Percent);
 #endif
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdRadarDiagram);
     kdRadarPlane->addDiagram(kdRadarDiagram);
@@ -701,10 +701,10 @@ void Axis::Private::createScatterDiagram()
     Q_ASSERT(kdScatterDiagram == 0);
     Q_ASSERT(plotArea);
 
-    kdScatterDiagram = new KDChart::Plotter(plotArea->kdChart(), kdPlane);
+    kdScatterDiagram = new KChart::Plotter(plotArea->kdChart(), kdPlane);
     registerDiagram(kdScatterDiagram);
 
-    KDChartModel *model = dynamic_cast<KDChartModel*>(kdScatterDiagram->model());
+    KChartModel *model = dynamic_cast<KChartModel*>(kdScatterDiagram->model());
     Q_ASSERT(model);
     model->setDataDimensions(2);
 
@@ -722,7 +722,7 @@ void Axis::Private::createScatterDiagram()
     }
 
     // Propagate existing settings
-    KDChart::ThreeDLineAttributes attributes(kdScatterDiagram->threeDLineAttributes());
+    KChart::ThreeDLineAttributes attributes(kdScatterDiagram->threeDLineAttributes());
     attributes.setEnabled(plotArea->isThreeD());
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdScatterDiagram->setThreeDLineAttributes(attributes);
@@ -734,18 +734,18 @@ void Axis::Private::createStockDiagram()
 {
     Q_ASSERT(kdStockDiagram == 0);
 
-    kdStockDiagram = new KDChart::StockDiagram(plotArea->kdChart(), kdPlane);
+    kdStockDiagram = new KChart::StockDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdStockDiagram);
 
-    KDChartModel *model = dynamic_cast<KDChartModel*>(kdStockDiagram->model());
+    KChartModel *model = dynamic_cast<KChartModel*>(kdStockDiagram->model());
     Q_ASSERT(model);
     model->setDataDimensions(3);
 
-#if 0  // Stacked and Percent not supported by KDChart.
+#if 0  // Stacked and Percent not supported by KChart.
     if (plotAreaChartSubType == StackedChartSubtype)
-        kdStockDiagram->setType(KDChart::StockDiagram::Stacked);
+        kdStockDiagram->setType(KChart::StockDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype)
-        kdStockDiagram->setType(KDChart::StockDiagram::Percent);
+        kdStockDiagram->setType(KChart::StockDiagram::Percent);
 #endif
 
     if (isVisible)
@@ -768,10 +768,10 @@ void Axis::Private::createBubbleDiagram()
     Q_ASSERT(kdBubbleDiagram == 0);
     Q_ASSERT(plotArea);
 
-    kdBubbleDiagram = new KDChart::Plotter(plotArea->kdChart(), kdPlane);
+    kdBubbleDiagram = new KChart::Plotter(plotArea->kdChart(), kdPlane);
     registerDiagram(kdBubbleDiagram);
 
-    KDChartModel *model = dynamic_cast<KDChartModel*>(kdBubbleDiagram->model());
+    KChartModel *model = dynamic_cast<KChartModel*>(kdBubbleDiagram->model());
     Q_ASSERT(model);
     model->setDataDimensions(2);
 
@@ -784,7 +784,7 @@ void Axis::Private::createBubbleDiagram()
     }
 
      // disable the connecting line
-    KDChart::LineAttributes la = kdBubbleDiagram->lineAttributes();
+    KChart::LineAttributes la = kdBubbleDiagram->lineAttributes();
     la.setVisible(false);
     kdBubbleDiagram->setLineAttributes(la);
 
@@ -795,9 +795,9 @@ void Axis::Private::createSurfaceDiagram()
 {
     Q_ASSERT(!kdSurfaceDiagram);
 
-    // This is a so far a by KDChart unsupported chart type.
+    // This is a so far a by KChart unsupported chart type.
     // Fall back to bar diagram for now.
-    kdSurfaceDiagram = new KDChart::BarDiagram(plotArea->kdChart(), kdPlane);
+    kdSurfaceDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdSurfaceDiagram);
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdSurfaceDiagram);
     kdPlane->addDiagram(kdSurfaceDiagram);
@@ -805,12 +805,12 @@ void Axis::Private::createSurfaceDiagram()
 
 void Axis::Private::createGanttDiagram()
 {
-    // This is a so far a by KDChart unsupported chart type (through KDGantt got merged into KDChart with 2.3)
+    // This is a so far a by KChart unsupported chart type (through KDGantt got merged into KChart with 2.3)
     Q_ASSERT(!kdGanttDiagram);
 
-    // This is a so far a by KDChart unsupported chart type.
+    // This is a so far a by KChart unsupported chart type.
     // Fall back to bar diagram for now.
-    kdGanttDiagram = new KDChart::BarDiagram(plotArea->kdChart(), kdPlane);
+    kdGanttDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdGanttDiagram);
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdGanttDiagram);
     kdPlane->addDiagram(kdGanttDiagram);
@@ -844,7 +844,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     parent->addAxis(this);
 
     d->plotArea = parent;
-    KDChart::BackgroundAttributes batt(d->kdAxis->backgroundAttributes());
+    KChart::BackgroundAttributes batt(d->kdAxis->backgroundAttributes());
     batt.setBrush(QBrush(Qt::white));
     d->kdAxis->setBackgroundAttributes(batt);
     d->kdPlane = parent->kdCartesianPlane(this);
@@ -957,9 +957,9 @@ bool Axis::attachDataSet(DataSet *dataSet)
         if (chartType == LastChartType)
             chartType = d->plotAreaChartType;
 
-        KDChart::AbstractDiagram *diagram = d->getDiagramAndCreateIfNeeded(chartType);
+        KChart::AbstractDiagram *diagram = d->getDiagramAndCreateIfNeeded(chartType);
         Q_ASSERT(diagram);
-        KDChartModel *model = dynamic_cast<KDChartModel*>(diagram->model());
+        KChartModel *model = dynamic_cast<KChartModel*>(diagram->model());
         Q_ASSERT(model);
 
         model->addDataSet(dataSet);
@@ -983,9 +983,9 @@ bool Axis::detachDataSet(DataSet *dataSet, bool silent)
         if (chartType == LastChartType)
             chartType = d->plotAreaChartType;
 
-        KDChart::AbstractDiagram *oldDiagram = d->getDiagram(chartType);
+        KChart::AbstractDiagram *oldDiagram = d->getDiagram(chartType);
         Q_ASSERT(oldDiagram);
-        KDChartModel *oldModel = dynamic_cast<KDChartModel*>(oldDiagram->model());
+        KChartModel *oldModel = dynamic_cast<KChartModel*>(oldDiagram->model());
         Q_ASSERT(oldModel);
 
         const int rowCount = oldModel->dataDirection() == Qt::Vertical
@@ -1032,8 +1032,8 @@ void Axis::setMajorInterval(qreal interval)
     } else
         d->useAutomaticMajorInterval = true;
 
-    // KDChart
-    KDChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
+    // KChart
+    KChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
     attributes.setGridStepWidth(interval);
     d->kdPlane->setGridAttributes(orientation(), attributes);
 
@@ -1075,8 +1075,8 @@ void Axis::setMinorIntervalDivisor(int divisor)
     } else
         d->useAutomaticMinorInterval = true;
 
-    // KDChart
-    KDChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
+    // KChart
+    KChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
     attributes.setGridSubStepWidth((divisor != 0) ? (d->majorInterval / divisor) : 0.0);
     d->kdPlane->setGridAttributes(orientation(), attributes);
 
@@ -1136,7 +1136,7 @@ bool Axis::showOuterMajorTicks() const
 void Axis::setShowInnerMinorTicks(bool showTicks)
 {
     d->showInnerMinorTicks = showTicks;
-    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    KChart::RulerAttributes attr = kdAxis()->rulerAttributes();
     attr.setShowMinorTickMarks(d->showInnerMinorTicks || d->showOuterMinorTicks);
     kdAxis()->setRulerAttributes(attr);
 }
@@ -1144,7 +1144,7 @@ void Axis::setShowInnerMinorTicks(bool showTicks)
 void Axis::setShowOuterMinorTicks(bool showTicks)
 {
     d->showOuterMinorTicks = showTicks;
-    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    KChart::RulerAttributes attr = kdAxis()->rulerAttributes();
     attr.setShowMinorTickMarks(d->showInnerMinorTicks || d->showOuterMinorTicks);
     kdAxis()->setRulerAttributes(attr);
 }
@@ -1152,7 +1152,7 @@ void Axis::setShowOuterMinorTicks(bool showTicks)
 void Axis::setShowInnerMajorTicks(bool showTicks)
 {
     d->showInnerMajorTicks = showTicks;
-    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    KChart::RulerAttributes attr = kdAxis()->rulerAttributes();
     attr.setShowMajorTickMarks(d->showInnerMajorTicks || d->showOuterMajorTicks);
     kdAxis()->setRulerAttributes(attr);
 }
@@ -1160,7 +1160,7 @@ void Axis::setShowInnerMajorTicks(bool showTicks)
 void Axis::setShowOuterMajorTicks(bool showTicks)
 {
     d->showOuterMajorTicks = showTicks;
-    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    KChart::RulerAttributes attr = kdAxis()->rulerAttributes();
     attr.setShowMajorTickMarks(d->showInnerMajorTicks || d->showOuterMajorTicks);
     kdAxis()->setRulerAttributes(attr);
 }
@@ -1173,8 +1173,8 @@ void Axis::setScalingLogarithmic(bool logarithmicScaling)
         return;
 
     d->kdPlane->setAxesCalcModeY(d->logarithmicScaling
-                                  ? KDChart::AbstractCoordinatePlane::Logarithmic
-                                  : KDChart::AbstractCoordinatePlane::Linear);
+                                  ? KChart::AbstractCoordinatePlane::Logarithmic
+                                  : KChart::AbstractCoordinatePlane::Linear);
     d->kdPlane->layoutPlanes();
 
     requestRepaint();
@@ -1194,8 +1194,8 @@ void Axis::setShowMajorGrid(bool showGrid)
 {
     d->showMajorGrid = showGrid;
 
-    // KDChart
-    KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes(orientation());
+    // KChart
+    KChart::GridAttributes  attributes = d->kdPlane->gridAttributes(orientation());
     attributes.setGridVisible(d->showMajorGrid);
     d->kdPlane->setGridAttributes(orientation(), attributes);
 
@@ -1215,8 +1215,8 @@ void Axis::setShowMinorGrid(bool showGrid)
 {
     d->showMinorGrid = showGrid;
 
-    // KDChart
-    KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes(orientation());
+    // KChart
+    KChart::GridAttributes  attributes = d->kdPlane->gridAttributes(orientation());
     attributes.setSubGridVisible(d->showMinorGrid);
     d->kdPlane->setGridAttributes(orientation(), attributes);
 
@@ -1236,7 +1236,7 @@ void Axis::setShowLabels(bool show)
 {
     d->showLabels = show;
 
-    KDChart::TextAttributes textAttr = d->kdAxis->textAttributes();
+    KChart::TextAttributes textAttr = d->kdAxis->textAttributes();
     textAttr.setVisible(show);
     d->kdAxis->setTextAttributes(textAttr);
 }
@@ -1310,9 +1310,9 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
                         qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
 
-                        if (kdAxis()->position() == KDChart::CartesianAxis::Left)
+                        if (kdAxis()->position() == KChart::CartesianAxis::Left)
                             rotationAngle = 90 + rotationAngle;
-                        else if (kdAxis()->position() == KDChart::CartesianAxis::Right)
+                        else if (kdAxis()->position() == KChart::CartesianAxis::Right)
                             rotationAngle = -90 + rotationAngle;
                         d->title->rotate(rotationAngle);
                     }
@@ -1490,8 +1490,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             else if (unitString == "in")
                 fontSize = INCH_TO_POINT(fontSize);
             if (ok) {
-                KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
-                tatt.setFontSize(KDChart::Measure(fontSize, KDChartEnums::MeasureCalculationModeAbsolute));
+                KChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                tatt.setFontSize(KChart::Measure(fontSize, KChartEnums::MeasureCalculationModeAbsolute));
                 kdAxis()->setTextAttributes(tatt);
             }
         }
@@ -1500,7 +1500,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             QColor color(fontColorString);
             if (color.isValid())
             {
-                KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                KChart::TextAttributes tatt =  kdAxis()->textAttributes();
                 QPen pen = tatt.pen();
                 pen.setColor(color);
                 tatt.setPen(pen);
@@ -1511,7 +1511,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));
     }
 
-    KDChart::GridAttributes gridAttr = d->kdPlane->gridAttributes(orientation());
+    KChart::GridAttributes gridAttr = d->kdPlane->gridAttributes(orientation());
     gridAttr.setGridVisible(d->showMajorGrid);
     gridAttr.setSubGridVisible(d->showMinorGrid);
     if (gridPen.style() != Qt::NoPen)
@@ -1540,14 +1540,14 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
     if (subGridPen.style() != Qt::NoPen)
         gridAttr.setSubGridPen(subGridPen);
     d->kdRadarPlane->setGlobalGridAttributes(gridAttr);
-    KDChart::TextAttributes ta(d->kdRadarPlane->textAttributes());
+    KChart::TextAttributes ta(d->kdRadarPlane->textAttributes());
     ta.setVisible(helper->categoryRegionSpecifiedInXAxis);
     ta.setFont(font());
     ta.setFontSize(50);
     d->kdRadarPlane->setTextAttributes(ta);
 
     if (reverseAxis) {
-        KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(kdPlane());
+        KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane*>(kdPlane());
         if (plane) {
             if (orientation() == Qt::Horizontal)
                 plane->setHorizontalRangeReversed(reverseAxis);
@@ -1593,7 +1593,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     KoGenStyle axisStyle(KoGenStyle::ChartAutoStyle, "chart");
     axisStyle.addProperty("chart:logarithmic", scalingIsLogarithmic());
 
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(kdPlane());
+    KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane*>(kdPlane());
     bool reverseAxis = false;
     if (plane) {
         if (orientation() == Qt::Horizontal)
@@ -1629,7 +1629,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
 
     //axisStyle.addPropertyPt("chart:origin", origin);
 
-    KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+    KChart::TextAttributes tatt =  kdAxis()->textAttributes();
     QPen pen = tatt.pen();
     axisStyle.addProperty("fo:font-color", pen.color().name(), KoGenStyle::TextType);
     axisStyle.addProperty("fo:font-family", tatt.font().family(), KoGenStyle::TextType);
@@ -1723,7 +1723,7 @@ void Axis::saveOdfGrid(KoShapeSavingContext &context, OdfGridClass gridClass)
 
     KoGenStyle gridStyle(KoGenStyle::GraphicAutoStyle, "chart");
 
-    KDChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
+    KChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
     QPen gridPen = (gridClass == OdfMinorGrid ? attributes.subGridPen() : attributes.gridPen());
     KoOdfGraphicStyles::saveOdfStrokeStyle(gridStyle, mainStyles, gridPen);
 
@@ -1754,12 +1754,12 @@ void Axis::update() const
     d->plotArea->parent()->requestRepaint();
 }
 
-KDChart::CartesianAxis *Axis::kdAxis() const
+KChart::CartesianAxis *Axis::kdAxis() const
 {
     return d->kdAxis;
 }
 
-KDChart::AbstractCoordinatePlane *Axis::kdPlane() const
+KChart::AbstractCoordinatePlane *Axis::kdPlane() const
 {
     return d->kdPlane;
 }
@@ -1789,9 +1789,9 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
     } else if (newChartType == FilledRadarChartType && oldChartType == RadarChartType) {
         d->kdRadarDiagram->setFillAlpha(0.4);
     } else {
-        KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
+        KChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
 
-        KDChartModel *newModel = dynamic_cast<KDChartModel*>(newDiagram->model());
+        KChartModel *newModel = dynamic_cast<KChartModel*>(newDiagram->model());
         // FIXME: This causes a crash on unimplemented types. We should
         //        handle that in some other way.
         Q_ASSERT(newModel);
@@ -1803,11 +1803,11 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
             //}
         }
 
-        KDChart::AbstractDiagram *oldDiagram = d->getDiagram(oldChartType);
+        KChart::AbstractDiagram *oldDiagram = d->getDiagram(oldChartType);
         Q_ASSERT(oldDiagram);
         // We need to know the old model so that we can remove the data sets
         // from the old model that we added to the new model.
-        KDChartModel *oldModel = dynamic_cast<KDChartModel*>(oldDiagram->model());
+        KChartModel *oldModel = dynamic_cast<KChartModel*>(oldDiagram->model());
         Q_ASSERT(oldModel);
 
         foreach (DataSet *dataSet, d->dataSets) {
@@ -1852,64 +1852,64 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
     switch (d->plotAreaChartType) {
     case BarChartType:
         if (d->kdBarDiagram) {
-            KDChart::BarDiagram::BarType type;
+            KChart::BarDiagram::BarType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KDChart::BarDiagram::Stacked; break;
+                type = KChart::BarDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::BarDiagram::Percent;
+                type = KChart::BarDiagram::Percent;
                 d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
                 break;
             default:
-                type = KDChart::BarDiagram::Normal;
+                type = KChart::BarDiagram::Normal;
             }
             d->kdBarDiagram->setType(type);
         }
         break;
     case LineChartType:
         if (d->kdLineDiagram) {
-            KDChart::LineDiagram::LineType type;
+            KChart::LineDiagram::LineType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KDChart::LineDiagram::Stacked; break;
+                type = KChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::LineDiagram::Percent;
+                type = KChart::LineDiagram::Percent;
                 d->kdLineDiagram->setUnitSuffix("%", Qt::Vertical);
                 break;
             default:
-                type = KDChart::LineDiagram::Normal;
+                type = KChart::LineDiagram::Normal;
             }
             d->kdLineDiagram->setType(type);
         }
         break;
     case AreaChartType:
         if (d->kdAreaDiagram) {
-            KDChart::LineDiagram::LineType type;
+            KChart::LineDiagram::LineType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KDChart::LineDiagram::Stacked; break;
+                type = KChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::LineDiagram::Percent;
+                type = KChart::LineDiagram::Percent;
                 d->kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
                 break;
             default:
-                type = KDChart::LineDiagram::Normal;
+                type = KChart::LineDiagram::Normal;
             }
             d->kdAreaDiagram->setType(type);
         }
         break;
     case RadarChartType:
     case FilledRadarChartType:
-#if 0 // FIXME: Stacked and Percent not supported by KDChart
+#if 0 // FIXME: Stacked and Percent not supported by KChart
         if (d->kdRadarDiagram) {
-            KDChart::PolarDiagram::PolarType type;
+            KChart::PolarDiagram::PolarType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KDChart::PolarDiagram::Stacked; break;
+                type = KChart::PolarDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::PolarDiagram::Percent; break;
+                type = KChart::PolarDiagram::Percent; break;
             default:
-                type = KDChart::PolarDiagram::Normal;
+                type = KChart::PolarDiagram::Normal;
             }
             d->kdRadarDiagram->setType(type);
         }
@@ -1917,16 +1917,16 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
         break;
     case StockChartType:
         if (d->kdStockDiagram) {
-            KDChart::StockDiagram::Type type;
+            KChart::StockDiagram::Type type;
             switch (subType) {
 #if 0
             case CandlestickChartSubtype:
-                type = KDChart::StockDiagram::Candlestick; break;
+                type = KChart::StockDiagram::Candlestick; break;
             case OpenHighLowCloseChartSubtype:
-                type = KDChart::StockDiagram::OpenHighLowClose; break;
+                type = KChart::StockDiagram::OpenHighLowClose; break;
 #endif
             default:
-                type = KDChart::StockDiagram::HighLowClose;
+                type = KChart::StockDiagram::HighLowClose;
             }
             d->kdStockDiagram->setType(type);
         }
@@ -1962,8 +1962,8 @@ void Axis::Private::updatePosition()
     else if (position == EndPosition)
         title->rotate(90 - title->rotation());
 
-    // KDChart
-    kdAxis->setPosition(PositionToKDChartAxisPosition(position));
+    // KChart
+    kdAxis->setPosition(PositionToKChartAxisPosition(position));
     ChartLayout *layout = plotArea->parent()->layout();
     layout->setPosition(title, position);
     layout->layout();
@@ -1971,7 +1971,7 @@ void Axis::Private::updatePosition()
     q->requestRepaint();
 }
 
-void Axis::registerKdAxis(KDChart::CartesianAxis *axis)
+void Axis::registerKdAxis(KChart::CartesianAxis *axis)
 {
     if (d->kdBarDiagram)
         d->kdBarDiagram->addAxis(axis);
@@ -1988,7 +1988,7 @@ void Axis::registerKdAxis(KDChart::CartesianAxis *axis)
     // FIXME: Add all diagrams here
 }
 
-void Axis::deregisterKdAxis(KDChart::CartesianAxis *axis)
+void Axis::deregisterKdAxis(KChart::CartesianAxis *axis)
 {
     if (d->kdBarDiagram)
         d->kdBarDiagram->takeAxis(axis);
@@ -2009,9 +2009,9 @@ void Axis::setThreeD(bool threeD)
 {
     // FIXME: Setting KD Chart attributes does not belong here. They should be
     // determined dynamically somehow.
-    // KDChart
+    // KChart
     if (d->kdBarDiagram) {
-        KDChart::ThreeDBarAttributes attributes(d->kdBarDiagram->threeDBarAttributes());
+        KChart::ThreeDBarAttributes attributes(d->kdBarDiagram->threeDBarAttributes());
         attributes.setEnabled(threeD);
         attributes.setDepth(15.0);
         attributes.setThreeDBrushEnabled(threeD);
@@ -2019,7 +2019,7 @@ void Axis::setThreeD(bool threeD)
     }
 
     if (d->kdLineDiagram) {
-        KDChart::ThreeDLineAttributes attributes(d->kdLineDiagram->threeDLineAttributes());
+        KChart::ThreeDLineAttributes attributes(d->kdLineDiagram->threeDLineAttributes());
         attributes.setEnabled(threeD);
         attributes.setDepth(15.0);
         attributes.setThreeDBrushEnabled(threeD);
@@ -2027,7 +2027,7 @@ void Axis::setThreeD(bool threeD)
     }
 
     if (d->kdAreaDiagram) {
-        KDChart::ThreeDLineAttributes attributes(d->kdAreaDiagram->threeDLineAttributes());
+        KChart::ThreeDLineAttributes attributes(d->kdAreaDiagram->threeDLineAttributes());
         attributes.setEnabled(threeD);
         attributes.setDepth(15.0);
         attributes.setThreeDBrushEnabled(threeD);
@@ -2035,7 +2035,7 @@ void Axis::setThreeD(bool threeD)
     }
 
     if (d->kdCircleDiagram) {
-        KDChart::ThreeDPieAttributes attributes(d->kdCircleDiagram->threeDPieAttributes());
+        KChart::ThreeDPieAttributes attributes(d->kdCircleDiagram->threeDPieAttributes());
         attributes.setEnabled(threeD);
         attributes.setDepth(15.0);
         attributes.setThreeDBrushEnabled(threeD);
@@ -2043,14 +2043,14 @@ void Axis::setThreeD(bool threeD)
     }
 
     if (d->kdRingDiagram) {
-        KDChart::ThreeDPieAttributes attributes(d->kdRingDiagram->threeDPieAttributes());
+        KChart::ThreeDPieAttributes attributes(d->kdRingDiagram->threeDPieAttributes());
         attributes.setEnabled(threeD);
         attributes.setDepth(15.0);
         attributes.setThreeDBrushEnabled(threeD);
         d->kdRingDiagram->setThreeDPieAttributes(attributes);
     }
 
-    // The following types don't support 3D, at least not in KDChart:
+    // The following types don't support 3D, at least not in KChart:
     // scatter, radar, stock, bubble, surface, gantt
 
     requestRepaint();
@@ -2070,12 +2070,12 @@ void Axis::layoutPlanes()
 
 void Axis::setGapBetweenBars(int percent)
 {
-    // This method is also used to override KDChart's default attributes.
+    // This method is also used to override KChart's default attributes.
     // Do not just return and do nothing if value doesn't differ from stored one.
     d->gapBetweenBars = percent;
 
     if (d->kdBarDiagram) {
-        KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
+        KChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setBarGapFactor((float)percent / 100.0);
         d->kdBarDiagram->setBarAttributes(attributes);
     }
@@ -2085,12 +2085,12 @@ void Axis::setGapBetweenBars(int percent)
 
 void Axis::setGapBetweenSets(int percent)
 {
-    // This method is also used to override KDChart's default attributes.
+    // This method is also used to override KChart's default attributes.
     // Do not just return and do nothing if value doesn't differ from stored one.
     d->gapBetweenSets = percent;
 
     if (d->kdBarDiagram) {
-        KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
+        KChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setGroupGapFactor((float)percent / 100.0);
         d->kdBarDiagram->setBarAttributes(attributes);
     }
@@ -2102,7 +2102,7 @@ void Axis::setPieAngleOffset(qreal angle)
 {
     // only set if we already have a diagram else the value will be picked up on creating the diagram
     if (d->kdPolarPlane->diagram()) {
-        // KDChart takes an int here, though ODF defines it to be a double.
+        // KChart takes an int here, though ODF defines it to be a double.
         d->kdPolarPlane->setStartPosition((int)angle);
 
         requestRepaint();
@@ -2119,8 +2119,8 @@ void Axis::setFont(const QFont &font)
     // Save the font for later retrieval
     d->font = font;
 
-    // Set the KDChart axis to use this font as well.
-    KDChart::TextAttributes attr = d->kdAxis->textAttributes();
+    // Set the KChart axis to use this font as well.
+    KChart::TextAttributes attr = d->kdAxis->textAttributes();
     attr.setFont(font);
     d->kdAxis->setTextAttributes(attr);
 }
@@ -2134,9 +2134,9 @@ void Axis::setFontSize(qreal size)
 {
     d->font.setPointSizeF(size);
 
-    // KDChart
-    KDChart::TextAttributes attributes = d->kdAxis->textAttributes();
-    attributes.setFontSize(KDChart::Measure(size, KDChartEnums::MeasureCalculationModeAbsolute));
+    // KChart
+    KChart::TextAttributes attributes = d->kdAxis->textAttributes();
+    attributes.setFontSize(KChart::Measure(size, KChartEnums::MeasureCalculationModeAbsolute));
     d->kdAxis->setTextAttributes(attributes);
 }
 

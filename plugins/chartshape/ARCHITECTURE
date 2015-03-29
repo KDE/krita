@@ -13,7 +13,6 @@ Subdirectories
 
 dialogs/        various dialogs for the chart tool
 commands/       undo/redo commands
-kdchart/        the chart drawing engine from KDAB.
 tests/          test code -- run it by 'make tests' in the build dir
 
 
@@ -57,9 +56,9 @@ CellRegion              a region in e.g. a spreadsheet where a dataset
 Data classes
 ------------
 
-KDChartModel            Takes a list of DataSet's and compiles them
-                        into a QAbstractItemModel for use with KDChart. 
-KDChartConversions      Conversions between odf concepts and KDChart
+KChartModel            Takes a list of DataSet's and compiles them
+                        into a QAbstractItemModel for use with KChart.
+KChartConversions      Conversions between odf concepts and KChart
                         concepts
 
 ChartProxyModel         Factory for DataSets and decoration of a
@@ -121,44 +120,43 @@ standard.  This means that a chart can actually be its own standalone
 document with the file extension .odc. Everything that has to do with
 the chart document is collected into the class ChartDocument.
 
-The actual rendering of the chart parts is done with the KDChart
-engine from KDAB. This component is licensed under GPL (used here) and
-a commercial license. KDChart can render most chart types in ODF with
+The actual rendering of the chart parts is done with the KChart
+engine from KDE. KChart can render most chart types in ODF with
 the exception of 3D type charts. Surface charts are not handled at
 all, and 3D variants of 2D charts (bar, line, etc) are shown with
 simple extrusions and not real perspective 3D. 3D only types, like
-cylinder, cone, etc are not handled at all. Nevertheless, KDChart is
+cylinder, cone, etc are not handled at all. Nevertheless, KChart is
 quite capable and works well in general.
 
 
-ODF and KDChart
+ODF and KChart
 ---------------
 
 As described above, there are a number of classes which directly
 represent entities in the ODF chart standard. These are Axis, Legend,
 PlotArea, Surface, DataSet, and CellRegion. All these classes load and
 save their internal data to the ODF xml tree and also manage their
-respective counterparts from KDChart, so for instance the Axis class
-handles all settings and data of the KDChartAxis classes (different
+respective counterparts from KChart, so for instance the Axis class
+handles all settings and data of the KChartAxis classes (different
 ones for Cartesian and Circular axes).
 
 Unfortunately there is not a perfect 1-to-1 relationship between the
-concepts in ODF charts and KDChart so there is some complexity in the
+concepts in ODF charts and KChart so there is some complexity in the
 mapping between them.  See below for more details.
 
 
-KDChart concepts
+KChart concepts
 ================
 
 Objects
 -------
 
-KDChart is a library of classes that are used to show a chart and also
-offers some interaction with them. All the classes are in the KDChart
+KChart is a library of classes that are used to show a chart and also
+offers some interaction with them. All the classes are in the KChart
 namespace but in the description below we shall forego the namespace
 prefix in the interest of clarity.
 
-The main class in KDChart is _Chart_. This class manages the rest of
+The main class in KChart is _Chart_. This class manages the rest of
 the classes and represents the canvas on which the chart parts are
 painted. On this Chart there can be zero or more _Diagrams_, each of
 which is what we in daily talk call a 'chart'.  There is one type of
@@ -182,9 +180,9 @@ diagrams, thereby creating a shared axis.
 
 In addition to diagrams there are other types of visible objects on
 the Chart: Legends, Headers, Footers, or custom elements that inherit
-KDChart::Area. 
+KChart::Area. 
 
-A KDChart::Chart is a QWidget, as are many other KDChart objects. The
+A KChart::Chart is a QWidget, as are many other KChart objects. The
 Legend is the only object that can be placed outside this widget
 according to the documentation.
 
@@ -192,7 +190,7 @@ according to the documentation.
 Styling
 -------
 
-Each type of object (Diagram, Axis, etc) in KDChart has a set of
+Each type of object (Diagram, Axis, etc) in KChart has a set of
 attributes associated with it, much like ODF styles.  These are all
 named after the object they describe, e.g. BarAttributes,
 RulerAttributes, etc.
@@ -204,7 +202,7 @@ change some of them, and put them back into the object.
 Data
 ----
 
-KDChart uses the Qt4 model/view paradigm. A class that inherits
+KChart uses the Qt4 model/view paradigm. A class that inherits
 AbstractDiagram is at the same time a QAbstractItemView and takes a
 QAbstractItemModel as its data input.
 
@@ -213,18 +211,18 @@ data in that is presented in the chart with some styling coming from
 the datasets, e.g. color, marker, etc.
 
 
-Mapping ODF concepts to KDChart classes
+Mapping ODF concepts to KChart classes
 =======================================
 
-The main KDChart::Chart instance is owned by PlotArea. PlotArea also
+The main KChart::Chart instance is owned by PlotArea. PlotArea also
 holds 2 cartesian coordinate plane, one polar and one radar
 plane. Third, it holds a list of Diagrams, one per diagram type that
 was ever used(?).
 
-The KDChart::Chart can show headers, footers, axis labels and other
+The KChart::Chart can show headers, footers, axis labels and other
 text items. The chart shape does not use this but instead uses
 standard text shapes for them. There are several reasons for this:
- - The KDChart items are not interactively editable and styleable
+ - The KChart items are not interactively editable and styleable
  - They cannot be easily moved around
  - The loading and saving of them would be much more difficult,
    especially if rich text is used.
@@ -233,11 +231,11 @@ diagrams and axes; all other areas are shown outside the Chart, but
 inside the ChartShape.
 
 Each class that represents an ODF type (Axis, Legend, etc) also has
-ownership of the corresponding KDChart type. Some exceptions exist
+ownership of the corresponding KChart type. Some exceptions exist
 (FIXME: Check this in more detail).
 
 The class ChartProxyModel connects the ODF Datasets and numeric data
-with KDChart. It takes the numeric input and rearranges it in the
+with KChart. It takes the numeric input and rearranges it in the
 order that is necessary for each chart type.
 
 

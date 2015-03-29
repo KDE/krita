@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "TestKDChartModel.h"
+#include "TestKChartModel.h"
 
 #include <QObject>
 #include <QAbstractItemModel>
@@ -30,7 +30,7 @@
 using namespace KoChart;
 
 
-TestKDChartModel::TestKDChartModel()
+TestKChartModel::TestKChartModel()
     : m_model(0)
     , m_testModel(0)
     , m_source()
@@ -38,7 +38,7 @@ TestKDChartModel::TestKDChartModel()
 {
 }
 
-void TestKDChartModel::initTestCase()
+void TestKChartModel::initTestCase()
 {
     m_table = m_source.add("Table1", &m_itemModel);
 
@@ -86,19 +86,19 @@ void TestKDChartModel::initTestCase()
     m_itemModel.setData(m_itemModel.index(2, 10), 6.3);
 }
 
-void TestKDChartModel::init()
+void TestKChartModel::init()
 {
-    m_model = new KDChartModel(0);
+    m_model = new KChartModel(0);
     m_testModel = new ModelObserver(m_model);
 }
 
-void TestKDChartModel::cleanup()
+void TestKChartModel::cleanup()
 {
     delete m_model;
     delete m_testModel;
 }
 
-void TestKDChartModel::testDataSetInsertion()
+void TestKChartModel::testDataSetInsertion()
 {
     DataSet dataSet1(0);
     DataSet dataSet2(1);
@@ -110,7 +110,7 @@ void TestKDChartModel::testDataSetInsertion()
     QCOMPARE(m_testModel->m_numCols, m_model->columnCount());
 }
 
-void TestKDChartModel::testDataSetInsertionAndRemoval()
+void TestKChartModel::testDataSetInsertionAndRemoval()
 {
     DataSet dataSet1(0);
     DataSet dataSet2(1);
@@ -136,7 +136,7 @@ void TestKDChartModel::testDataSetInsertionAndRemoval()
     QCOMPARE(m_model->columnCount(), 2);
 }
 
-void TestKDChartModel::testData()
+void TestKChartModel::testData()
 {
     DataSet dataSet1(0);
     DataSet dataSet2(1);
@@ -199,7 +199,7 @@ void TestKDChartModel::testData()
     QCOMPARE(m_model->data(m_model->index(9, 1)), QVariant(6.3));
 }
 
-void TestKDChartModel::testDataChanges()
+void TestKChartModel::testDataChanges()
 {
     DataSet dataSet1(0);
     DataSet dataSet2(1);
@@ -248,7 +248,7 @@ void TestKDChartModel::testDataChanges()
     QCOMPARE(m_testModel->m_lastDataChange.bottomRight, m_model->index(8, 1));
 }
 
-void TestKDChartModel::testDataChangesWithTwoDimensions()
+void TestKChartModel::testDataChangesWithTwoDimensions()
 {
     DataSet dataSet1(0);
     DataSet dataSet2(1);
@@ -301,4 +301,4 @@ void TestKDChartModel::testDataChangesWithTwoDimensions()
     QCOMPARE(m_testModel->m_lastDataChange.bottomRight, m_model->index(9, 3));
 }
 
-QTEST_MAIN(TestKDChartModel)
+QTEST_MAIN(TestKChartModel)

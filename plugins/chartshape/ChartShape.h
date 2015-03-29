@@ -58,8 +58,8 @@ class KoOdfStylesReader;
 class KoOdfLoadingContext;
 
 
-// FIXME: Remove all mentions of KDChart from the public API.
-namespace KDChart {
+// FIXME: Remove all mentions of KChart from the public API.
+namespace KChart {
     class Chart;
     class Legend;
     class CartesianAxis;

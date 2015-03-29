@@ -20,30 +20,30 @@
 
 
 // Own
-#include "KDChartConvertions.h"
+#include "KChartConvertions.h"
 
-// KDChart
-#include <KDChartEnums>
-#include <KDChartCartesianAxis>
+// KChart
+#include <KChartEnums>
+#include <KChartCartesianAxis>
 
 
 namespace KoChart {
 
-KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position)
+KChart::CartesianAxis::Position PositionToKChartAxisPosition(Position position)
 {
     switch (position) {
     case BottomPosition:
-        return KDChart::CartesianAxis::Bottom;
+        return KChart::CartesianAxis::Bottom;
     case TopPosition:
-        return KDChart::CartesianAxis::Top;
+        return KChart::CartesianAxis::Top;
     case EndPosition:
-        return KDChart::CartesianAxis::Right;
+        return KChart::CartesianAxis::Right;
     case StartPosition:
-        return KDChart::CartesianAxis::Left;
+        return KChart::CartesianAxis::Left;
     }
     
-    Q_ASSERT("Unknown KDChart::CartesianAxis::Position!");
-    return KDChart::CartesianAxis::Bottom;
+    Q_ASSERT("Unknown KChart::CartesianAxis::Position!");
+    return KChart::CartesianAxis::Bottom;
 }
 
 // Used to save e.g. legend-position attribute to ODF. Do not change these strings.
@@ -76,65 +76,65 @@ QString PositionToString(Position position)
     return QString();
 }
 
-KDChartEnums::PositionValue PositionToKDChartPositionValue(Position position)
+KChartEnums::PositionValue PositionToKChartPositionValue(Position position)
 {
     switch (position) {
     case StartPosition:
-        return KDChartEnums::PositionWest;
+        return KChartEnums::PositionWest;
     case TopPosition:
-        return KDChartEnums::PositionNorth;
+        return KChartEnums::PositionNorth;
     case BottomPosition:
-        return KDChartEnums::PositionSouth;
+        return KChartEnums::PositionSouth;
     case TopStartPosition:
-        return KDChartEnums::PositionNorthWest;
+        return KChartEnums::PositionNorthWest;
     case BottomStartPosition:
-        return KDChartEnums::PositionSouthWest;
+        return KChartEnums::PositionSouthWest;
     case TopEndPosition:
-        return KDChartEnums::PositionNorthEast;
+        return KChartEnums::PositionNorthEast;
     case BottomEndPosition:
-        return KDChartEnums::PositionSouthEast;
+        return KChartEnums::PositionSouthEast;
     case EndPosition:
-        return KDChartEnums::PositionEast;
+        return KChartEnums::PositionEast;
     case CenterPosition:
-        return KDChartEnums::PositionCenter;
+        return KChartEnums::PositionCenter;
     case FloatingPosition:
-        return KDChartEnums::PositionFloating;
+        return KChartEnums::PositionFloating;
     }
     
     Q_ASSERT("Unknown Position!");
-    return KDChartEnums::PositionEast;
+    return KChartEnums::PositionEast;
 }
 
-Position KDChartPositionValueToPosition(KDChartEnums::PositionValue position)
+Position KChartPositionValueToPosition(KChartEnums::PositionValue position)
 {
     switch (position) {
-    case KDChartEnums::PositionNorthWest:
+    case KChartEnums::PositionNorthWest:
         return TopStartPosition;
-    case KDChartEnums::PositionNorth:
+    case KChartEnums::PositionNorth:
         return TopPosition;
-    case KDChartEnums::PositionNorthEast:
+    case KChartEnums::PositionNorthEast:
         return TopEndPosition;
-    case KDChartEnums::PositionEast:
+    case KChartEnums::PositionEast:
         return EndPosition;
-    case KDChartEnums::PositionSouthEast:
+    case KChartEnums::PositionSouthEast:
         return BottomEndPosition;
-    case KDChartEnums::PositionSouth:
+    case KChartEnums::PositionSouth:
         return BottomPosition;
-    case KDChartEnums::PositionSouthWest:
+    case KChartEnums::PositionSouthWest:
         return BottomStartPosition;
-    case KDChartEnums::PositionWest:
+    case KChartEnums::PositionWest:
         return StartPosition;
-    case KDChartEnums::PositionCenter:
+    case KChartEnums::PositionCenter:
         return CenterPosition;
-    case KDChartEnums::PositionFloating:
+    case KChartEnums::PositionFloating:
         return FloatingPosition;
         
     // These are unsupported values
-    case KDChartEnums::PositionUnknown:
+    case KChartEnums::PositionUnknown:
         return FloatingPosition;
     }
     
-    Q_ASSERT("Unknown KDChartEnums::PositionValue!");
+    Q_ASSERT("Unknown KChartEnums::PositionValue!");
     return FloatingPosition;
 }
 
@@ -146,7 +146,7 @@ Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion)
     case HighLegendExpansion:
         return Qt::Vertical;
         
-    // KDChart doesn't allow a balanced expansion
+    // KChart doesn't allow a balanced expansion
     case BalancedLegendExpansion:
         return Qt::Vertical;
     }

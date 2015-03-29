@@ -41,18 +41,18 @@
 #include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartPosition>
-#include <KDChartCartesianAxis>
-#include <KDChartGridAttributes>
-#include <KDChartPieAttributes>
-#include <KDChartAbstractCartesianDiagram>
-#include <KDChartLegend>
-#include <KDChartDataValueAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartMarkerAttributes>
-#include <KDChartMeasure>
+// KChart
+#include <KChartChart>
+#include <KChartPosition>
+#include <KChartCartesianAxis>
+#include <KChartGridAttributes>
+#include <KChartPieAttributes>
+#include <KChartAbstractCartesianDiagram>
+#include <KChartLegend>
+#include <KChartDataValueAttributes>
+#include <KChartTextAttributes>
+#include <KChartMarkerAttributes>
+#include <KChartMeasure>
 
 // KoChart
 #include "ChartProxyModel.h"
@@ -188,8 +188,8 @@ public:
     QButtonGroup         *positionButtonGroup;
     int                   lastHorizontalAlignment;
     int                   lastVerticalAlignment;
-    KDChart::Position     fixedPosition;
-    KDChart::Position     lastFixedPosition;
+    KChart::Position     fixedPosition;
+    KChart::Position     lastFixedPosition;
 
     int                   selectedDataSet;
     int                   selectedDataSet_CellRegionDialog;
@@ -223,8 +223,8 @@ ChartConfigWidget::Private::Private(QWidget *parent)
 {
     lastHorizontalAlignment = 1; // Qt::AlignCenter
     lastVerticalAlignment   = 1; // Qt::AlignCenter
-    fixedPosition           = KDChart::Position::East;
-    lastFixedPosition       = KDChart::Position::East;
+    fixedPosition           = KChart::Position::East;
+    lastFixedPosition       = KChart::Position::East;
     selectedDataSet = 0;
     shape = 0;
     tableSource = 0;
@@ -609,8 +609,8 @@ void ChartConfigWidget::open(KoShape* shape)
 //    d->isExternalDataSource = (spreadSheetModel != 0 && tableModel == 0);
 
     // Update the axis titles
-    //d->ui.xAxisTitle->setText(((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText());
-    //d->ui.yAxisTitle->setText(((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText());
+    //d->ui.xAxisTitle->setText(((KChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText());
+    //d->ui.yAxisTitle->setText(((KChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText());
 
     // Update the legend title
     //d->ui.legendTitle->setText(d->shape->legend()->title());
@@ -1322,11 +1322,11 @@ void ChartConfigWidget::setLegendShowTitle(bool show)
 void ChartConfigWidget::setLegendAlignment(int boxEntryIndex)
 {
     Q_UNUSED(boxEntryIndex);
-    if (   d->fixedPosition == KDChart::Position::North
-        || d->fixedPosition == KDChart::Position::South) {
+    if (   d->fixedPosition == KChart::Position::North
+        || d->fixedPosition == KChart::Position::South) {
         //d->lastHorizontalAlignment = d->ui.alignment->currentIndex();
-     } else if (   d->fixedPosition == KDChart::Position::East
-                || d->fixedPosition == KDChart::Position::West) {
+     } else if (   d->fixedPosition == KChart::Position::East
+                || d->fixedPosition == KChart::Position::West) {
         //d->lastVerticalAlignment = d->ui.alignment->currentIndex();
     }
     //emit legendAlignmentChanged((Qt::Alignment) (d->ui.alignment->itemData(boxEntryIndex).toInt()));
@@ -1344,8 +1344,8 @@ void ChartConfigWidget::updateFixedPosition(Position position)
 {
     Q_UNUSED(position);
 /*
-    if (   position == KDChart::Position::North
-        || position == KDChart::Position::South) {
+    if (   position == KChart::Position::North
+        || position == KChart::Position::South) {
         d->ui.alignment->setEnabled(true);
         d->ui.alignment->setItemText(0, i18n("Left"));
         d->ui.alignment->setItemData(0, Qt::AlignLeft);
@@ -1353,8 +1353,8 @@ void ChartConfigWidget::updateFixedPosition(Position position)
         d->ui.alignment->setItemText(2, i18n("Right"));
         d->ui.alignment->setItemData(2, Qt::AlignRight);
         // Set the alignment to the one last used for horizontal legend alignment
-        if (   d->lastFixedPosition != KDChart::Position::North
-            && d->lastFixedPosition != KDChart::Position::South) {
+        if (   d->lastFixedPosition != KChart::Position::North
+            && d->lastFixedPosition != KChart::Position::South) {
             // Make sure that the combobox gets updated. Since we changed the values of the entries,
             // same index doesn't mean same value, though it will think so. Solution: Select no entry first
             d->ui.alignment->blockSignals(true);
@@ -1363,8 +1363,8 @@ void ChartConfigWidget::updateFixedPosition(Position position)
 
             d->ui.alignment->setCurrentIndex(d->lastHorizontalAlignment);
         }
-    } else if (   position == KDChart::Position::East
-                || position == KDChart::Position::West) {
+    } else if (   position == KChart::Position::East
+                || position == KChart::Position::West) {
         d->ui.alignment->setEnabled(true);
         d->ui.alignment->setItemText(0, i18n("Top"));
         d->ui.alignment->setItemData(0, Qt::AlignTop);
@@ -1372,8 +1372,8 @@ void ChartConfigWidget::updateFixedPosition(Position position)
         d->ui.alignment->setItemText(2, i18n("Bottom"));
         d->ui.alignment->setItemData(2, Qt::AlignBottom);
         // Set the alignment to the one last used for vertical legend alignment
-        if (   d->lastFixedPosition != KDChart::Position::East
-             && d->lastFixedPosition != KDChart::Position::West) {
+        if (   d->lastFixedPosition != KChart::Position::East
+             && d->lastFixedPosition != KChart::Position::West) {
             // Make sure that the combobox gets updated. Since we changed the values of the entries,
             // same index doesn't mean same value, though it will think so. Solution: Select no entry first
             d->ui.alignment->blockSignals(true);

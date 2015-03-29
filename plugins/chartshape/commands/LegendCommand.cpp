@@ -27,7 +27,7 @@
 #include "Legend.h"
 
 using namespace KoChart;
-using namespace KDChart;
+using namespace KChart;
 
 
 LegendCommand::LegendCommand(KoChart::Legend* legend)

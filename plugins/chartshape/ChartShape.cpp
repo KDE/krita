@@ -39,27 +39,27 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartAbstractDiagram>
-#include <KDChartCartesianAxis>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPolarCoordinatePlane>
-#include "KDChartConvertions.h"
+// KChart
+#include <KChartChart>
+#include <KChartAbstractDiagram>
+#include <KChartCartesianAxis>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartPolarCoordinatePlane>
+#include "KChartConvertions.h"
 // Attribute Classes
-#include <KDChartDataValueAttributes>
-#include <KDChartGridAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartMarkerAttributes>
-#include <KDChartThreeDPieAttributes>
-#include <KDChartThreeDBarAttributes>
-#include <KDChartThreeDLineAttributes>
+#include <KChartDataValueAttributes>
+#include <KChartGridAttributes>
+#include <KChartTextAttributes>
+#include <KChartMarkerAttributes>
+#include <KChartThreeDPieAttributes>
+#include <KChartThreeDBarAttributes>
+#include <KChartThreeDLineAttributes>
 // Diagram Classes
-#include <KDChartBarDiagram>
-#include <KDChartPieDiagram>
-#include <KDChartLineDiagram>
-#include <KDChartRingDiagram>
-#include <KDChartPolarDiagram>
+#include <KChartBarDiagram>
+#include <KChartPieDiagram>
+#include <KChartLineDiagram>
+#include <KChartRingDiagram>
+#include <KChartPolarDiagram>
 
 // Calligra
 #include <KoShapeLoadingContext.h>
@@ -263,7 +263,7 @@ public:
     PlotArea  *plotArea;
 
     // Data
-    ChartProxyModel     *proxyModel;	 /// What's presented to KDChart
+    ChartProxyModel     *proxyModel;	 /// What's presented to KChart
     QAbstractItemModel  *internalModel;
     TableSource          tableSource;
     SingleModelHelper   *internalModelHelper;

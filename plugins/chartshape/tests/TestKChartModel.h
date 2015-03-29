@@ -24,18 +24,18 @@
 #include <QtTest>
 #include <QStandardItemModel>
 
-#include "KDChartModel.h"
+#include "KChartModel.h"
 #include "ModelObserver.h"
 #include "TableSource.h"
 
 using namespace KoChart;
 
-class TestKDChartModel : public QObject
+class TestKChartModel : public QObject
 {
     Q_OBJECT
 
 public:
-    TestKDChartModel();
+    TestKChartModel();
 
 private Q_SLOTS:
     void init();
@@ -49,7 +49,7 @@ private Q_SLOTS:
     void testDataChangesWithTwoDimensions();
 
 private:
-    KDChartModel *m_model;
+    KChartModel *m_model;
     ModelObserver *m_testModel;
 
     // These are all only dummies, but we need them for valid CellRegions

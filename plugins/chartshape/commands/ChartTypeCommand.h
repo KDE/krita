@@ -29,7 +29,7 @@
 
 
 #if 0
-namespace KDChart
+namespace KChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;
@@ -77,13 +77,13 @@ public:
 
 private:
     ChartShape                        *m_chart;
-    //KDChart::Chart                    *m_chart;
+    //KChart::Chart                    *m_chart;
     ChartType                       m_oldType;
     ChartType                       m_newType;
     ChartSubtype                    m_oldSubtype;
     ChartSubtype                    m_newSubtype;
-    //KDChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
-    //KDChart::AbstractDiagram          *m_oldDiagram;
+    //KChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
+    //KChart::AbstractDiagram          *m_oldDiagram;
 };
 
 } // namespace KoChart

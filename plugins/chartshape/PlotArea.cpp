@@ -47,28 +47,28 @@
 #include <KoViewConverter.h>
 #include <KoShapeBackground.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartCartesianAxis>
-#include <KDChartAbstractDiagram>
+// KChart
+#include <KChartChart>
+#include <KChartCartesianAxis>
+#include <KChartAbstractDiagram>
 
-#include <KDChartAbstractCartesianDiagram>
-#include <KDChartBarAttributes>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPolarCoordinatePlane>
-#include <KDChartRadarCoordinatePlane>
+#include <KChartAbstractCartesianDiagram>
+#include <KChartBarAttributes>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartPolarCoordinatePlane>
+#include <KChartRadarCoordinatePlane>
 // Attribute Classes
-#include <KDChartFrameAttributes>
-#include <KDChartDataValueAttributes>
-#include <KDChartGridAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartMarkerAttributes>
+#include <KChartFrameAttributes>
+#include <KChartDataValueAttributes>
+#include <KChartGridAttributes>
+#include <KChartTextAttributes>
+#include <KChartMarkerAttributes>
 // Diagram Classes
-#include <KDChartBarDiagram>
-#include <KDChartPieDiagram>
-#include <KDChartLineDiagram>
-#include <KDChartRingDiagram>
-#include <KDChartPolarDiagram>
+#include <KChartBarDiagram>
+#include <KChartPieDiagram>
+#include <KChartLineDiagram>
+#include <KChartRingDiagram>
+#include <KChartPolarDiagram>
 
 // KoChart
 #include "Legend.h"
@@ -84,7 +84,7 @@ using namespace KoChart;
 const int MAX_PIXMAP_SIZE = 1000;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
-typedef QList<KDChart::AbstractCoordinatePlane*> CoordinatePlaneList;
+typedef QList<KChart::AbstractCoordinatePlane*> CoordinatePlaneList;
 
 class PlotArea::Private
 {
@@ -136,14 +136,14 @@ public:
     // The embedded KD Chart
 
     // The KD Chart parts
-    KDChart::Chart                    *const kdChart;
-    KDChart::CartesianCoordinatePlane *const kdCartesianPlanePrimary;
-    KDChart::CartesianCoordinatePlane *const kdCartesianPlaneSecondary;
-    KDChart::PolarCoordinatePlane     *const kdPolarPlane;
-    KDChart::RadarCoordinatePlane     *const kdRadarPlane;
-    QList<KDChart::AbstractDiagram*>   kdDiagrams;
+    KChart::Chart                    *const kdChart;
+    KChart::CartesianCoordinatePlane *const kdCartesianPlanePrimary;
+    KChart::CartesianCoordinatePlane *const kdCartesianPlaneSecondary;
+    KChart::PolarCoordinatePlane     *const kdPolarPlane;
+    KChart::RadarCoordinatePlane     *const kdRadarPlane;
+    QList<KChart::AbstractDiagram*>   kdDiagrams;
 
-    // Caching: We can rerender faster if we cache KDChart's output
+    // Caching: We can rerender faster if we cache KChart's output
     QImage   image;
     bool     paintPixmap;
     QPointF  lastZoomLevel;
@@ -170,19 +170,19 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     // very top (and then going counter-clockwise).
     , pieAngleOffset(90.0)
     // KD Chart stuff
-    , kdChart(new KDChart::Chart())
-    , kdCartesianPlanePrimary(new KDChart::CartesianCoordinatePlane(kdChart))
-    , kdCartesianPlaneSecondary(new KDChart::CartesianCoordinatePlane(kdChart))
-    , kdPolarPlane(new KDChart::PolarCoordinatePlane(kdChart))
-    , kdRadarPlane(new KDChart::RadarCoordinatePlane(kdChart))
+    , kdChart(new KChart::Chart())
+    , kdCartesianPlanePrimary(new KChart::CartesianCoordinatePlane(kdChart))
+    , kdCartesianPlaneSecondary(new KChart::CartesianCoordinatePlane(kdChart))
+    , kdPolarPlane(new KChart::PolarCoordinatePlane(kdChart))
+    , kdRadarPlane(new KChart::RadarCoordinatePlane(kdChart))
     // Cache
     , paintPixmap(true)
     , pixmapRepaintRequested(true)
 {
     // --- Prepare Primary Cartesian Coordinate Plane ---
-    KDChart::GridAttributes gridAttributes;
+    KChart::GridAttributes gridAttributes;
     gridAttributes.setGridVisible(false);
-    gridAttributes.setGridGranularitySequence(KDChartEnums::GranularitySequence_10_50);
+    gridAttributes.setGridGranularitySequence(KChartEnums::GranularitySequence_10_50);
     kdCartesianPlanePrimary->setGlobalGridAttributes(gridAttributes);
     // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
     // between axes and plot area frame.
@@ -193,12 +193,12 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     kdCartesianPlaneSecondary->setDrawingAreaMargins(0, 0, 0, 0);
 
     // --- Prepare Polar Coordinate Plane ---
-    KDChart::GridAttributes polarGridAttributes;
+    KChart::GridAttributes polarGridAttributes;
     polarGridAttributes.setGridVisible(false);
     kdPolarPlane->setGlobalGridAttributes(polarGridAttributes);
 
     // --- Prepare Radar Coordinate Plane ---
-    KDChart::GridAttributes radarGridAttributes;
+    KChart::GridAttributes radarGridAttributes;
     polarGridAttributes.setGridVisible(true);
     kdRadarPlane->setGlobalGridAttributes(radarGridAttributes);
 
@@ -283,7 +283,7 @@ void PlotArea::plotAreaInit()
     d->kdChart->replaceCoordinatePlane(d->kdCartesianPlanePrimary);
     d->kdCartesianPlaneSecondary->setReferenceCoordinatePlane(d->kdCartesianPlanePrimary);
 
-    KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
+    KChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible(false);
     d->kdChart->setFrameAttributes(attr);
 
@@ -548,10 +548,10 @@ void PlotArea::setChartType(ChartType type)
     // removing a plane that's not in the chart is not a problem.
     planesToRemove << d->kdCartesianPlaneSecondary << d->kdCartesianPlanePrimary
                    << d->kdPolarPlane << d->kdRadarPlane;
-    foreach(KDChart::AbstractCoordinatePlane *plane, planesToRemove)
+    foreach(KChart::AbstractCoordinatePlane *plane, planesToRemove)
         d->kdChart->takeCoordinatePlane(plane);
     CoordinatePlaneList newPlanes = d->coordinatePlanesForChartType(type);
-    foreach(KDChart::AbstractCoordinatePlane *plane, newPlanes)
+    foreach(KChart::AbstractCoordinatePlane *plane, newPlanes)
         d->kdChart->addCoordinatePlane(plane);
     Q_ASSERT(d->kdChart->coordinatePlanes() == newPlanes);
 
@@ -752,7 +752,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
 
                 // stroke-color
                 const QString strokeColor = styleStack.property(KoXmlNS::svg, "stroke-color");
-                // FIXME: There seem to be no way to set this for the StockChart in KDChart. :-/
+                // FIXME: There seem to be no way to set this for the StockChart in KChart. :-/
                 //QPen(QColor(strokeColor));
 
                 // FIXME: svg:stroke-width
@@ -991,7 +991,7 @@ ChartShape *PlotArea::parent() const
     return d->shape;
 }
 
-KDChart::CartesianCoordinatePlane *PlotArea::kdCartesianPlane(Axis *axis) const
+KChart::CartesianCoordinatePlane *PlotArea::kdCartesianPlane(Axis *axis) const
 {
     if (axis) {
         Q_ASSERT(d->axes.contains(axis));
@@ -1003,22 +1003,22 @@ KDChart::CartesianCoordinatePlane *PlotArea::kdCartesianPlane(Axis *axis) const
     return d->kdCartesianPlanePrimary;
 }
 
-KDChart::PolarCoordinatePlane *PlotArea::kdPolarPlane() const
+KChart::PolarCoordinatePlane *PlotArea::kdPolarPlane() const
 {
     return d->kdPolarPlane;
 }
 
-KDChart::RadarCoordinatePlane *PlotArea::kdRadarPlane() const
+KChart::RadarCoordinatePlane *PlotArea::kdRadarPlane() const
 {
     return d->kdRadarPlane;
 }
 
-KDChart::Chart *PlotArea::kdChart() const
+KChart::Chart *PlotArea::kdChart() const
 {
     return d->kdChart;
 }
 
-bool PlotArea::registerKdDiagram(KDChart::AbstractDiagram *diagram)
+bool PlotArea::registerKdDiagram(KChart::AbstractDiagram *diagram)
 {
     if (d->kdDiagrams.contains(diagram))
         return false;
@@ -1027,7 +1027,7 @@ bool PlotArea::registerKdDiagram(KDChart::AbstractDiagram *diagram)
     return true;
 }
 
-bool PlotArea::deregisterKdDiagram(KDChart::AbstractDiagram *diagram)
+bool PlotArea::deregisterKdDiagram(KChart::AbstractDiagram *diagram)
 {
     if (!d->kdDiagrams.contains(diagram))
         return false;
@@ -1130,13 +1130,13 @@ void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShap
     }*/
     painter.setRenderHint(QPainter::Antialiasing, false);
 
-    // KDChart thinks in pixels, Calligra in pt
+    // KChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx(painter);
 
     // Only paint the actual chart if there is a certain minimal size,
     // because otherwise kdchart will crash.
     QRect kdchartRect = ScreenConversions::scaleFromPtToPx(paintRect);
-    // Turn off clipping so that border (or "frame") drawn by KDChart::Chart
+    // Turn off clipping so that border (or "frame") drawn by KChart::Chart
     // is not not cut off.
     painter.setClipping(false);
     if (kdchartRect.width() > 10 && kdchartRect.height() > 10) {

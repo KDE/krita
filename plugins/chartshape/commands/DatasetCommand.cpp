@@ -27,7 +27,7 @@
 #include "DataSet.h"
 
 using namespace KoChart;
-using namespace KDChart;
+using namespace KChart;
 
 
 DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart)

@@ -28,7 +28,7 @@
 
 
 #if 0
-namespace KDChart
+namespace KChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;

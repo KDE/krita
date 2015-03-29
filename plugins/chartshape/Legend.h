@@ -79,7 +79,7 @@ public:
     bool loadOdf(const KoXmlElement &legendElement, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context) const;
 
-    KDChart::Legend *kdLegend() const;
+    KChart::Legend *kdLegend() const;
 
     void rebuild();
     using KoShape::update;

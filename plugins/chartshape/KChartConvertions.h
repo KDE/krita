@@ -22,9 +22,9 @@
 #define KCHART_KDCHARTCONVERTIONS_H
 
 
-// KDChart
-#include <KDChartEnums>
-#include <KDChartCartesianAxis>
+// KChart
+#include <KChartEnums>
+#include <KChartCartesianAxis>
 
 // KoChart
 #include "kochart_global.h"
@@ -33,11 +33,11 @@
 namespace KoChart
 {
 
-extern KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position);
+extern KChart::CartesianAxis::Position PositionToKChartAxisPosition(Position position);
 
 extern QString PositionToString(Position position);
-extern KDChartEnums::PositionValue PositionToKDChartPositionValue(Position position);
-extern Position KDChartPositionValueToPosition(KDChartEnums::PositionValue position);
+extern KChartEnums::PositionValue PositionToKChartPositionValue(Position position);
+extern Position KChartPositionValueToPosition(KChartEnums::PositionValue position);
 
 extern Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion);
 extern LegendExpansion QtOrientationToLegendExpansion(Qt::Orientation orientation);

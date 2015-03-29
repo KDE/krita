@@ -28,7 +28,7 @@
 class KoTextEditingPlugin::Private
 {
 public:
-    QHash<QString, KAction*> actionCollection;
+    QHash<QString, QAction*> actionCollection;
 };
 
 KoTextEditingPlugin::KoTextEditingPlugin()
@@ -72,7 +72,7 @@ QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPositi
     return block.text();
 }
 
-void KoTextEditingPlugin::addAction(const QString &name, KAction *action)
+void KoTextEditingPlugin::addAction(const QString &name, QAction *action)
 {
     d->actionCollection.insert(name, action);
 }
@@ -105,7 +105,7 @@ void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPositio
     }
 }
 
-QHash<QString, KAction*> KoTextEditingPlugin::actions() const
+QHash<QString, QAction*> KoTextEditingPlugin::actions() const
 {
     return d->actionCollection;
 }

@@ -1,5 +1,5 @@
-#include <kapplication.h>
-#include <kcmdlineargs.h>
+
+
 #include <kaboutdata.h>
 
 #include "kis_random_generator_demo.h"
@@ -7,6 +7,10 @@
 
 #include <ctime>
 #include <cstdlib>
+#include <QApplication>
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QCommandLineParser>
 
 //BEGIN Noise
 Noise::Noise(int wx, int wy) : _wx(wx), _wy(wy),
@@ -138,14 +142,13 @@ void KisRandomGeneratorDemo::updateNoise()
 
 int main(int argc, char **argv)
 {
-    KAboutData about("kis_random_generator_demo", 0, ki18n("kis_random_generator_demo"), "0.2",
-                     ki18n("Krita Random Generator demo/test application"),
-                     KAboutData::License_GPL, ki18n("Copyright 2009 Matthew Woehlke"));
-    about.addAuthor( ki18n("Matthew Woehlke"), KLocalizedString(), "mw_triad@users.sourceforge.net" );
-    KCmdLineArgs::init(argc, argv, &about);
-    KApplication app;
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    Q_UNUSED(args);
+    KAboutData about("kis_random_generator_demo", i18n("kis_random_generator_demo"), "0.2",
+                     i18n("Krita Random Generator demo/test application"),
+                     KAboutLicense::GPL_V2, i18n("Copyright 2009 Matthew Woehlke"));
+    about.addAuthor( i18n("Matthew Woehlke"), QString(), "mw_triad@users.sourceforge.net" );
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(about);
+
 
     KisRandomGeneratorDemo *demo = new KisRandomGeneratorDemo;
     demo->show();

@@ -20,6 +20,9 @@
 
 #include "kis_color_space_selector.h"
 
+#include <kglobal.h>
+#include <kurl.h>
+
 #include <KoFileDialog.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

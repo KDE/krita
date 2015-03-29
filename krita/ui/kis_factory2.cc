@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <kis_debug.h>
 
@@ -67,19 +68,19 @@ KAboutData* KisFactory::aboutData()
 const KComponentData &KisFactory::componentData()
 {
     if (!s_componentData) {
-        s_componentData = new KComponentData(aboutData());
+        s_componentData = 0;//new KComponentData(aboutData());
         Q_CHECK_PTR(s_componentData);
-        s_componentData->dirs()->addResourceType("krita_template", "data", "krita/templates");
+        KGlobal::dirs()->addResourceType("krita_template", "data", "krita/templates");
 
         // for cursors
-        s_componentData->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+        KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
 
         // for images in the paintop box
-        s_componentData->dirs()->addResourceType("kis_images", "data", "krita/images/");
+        KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
 
-        s_componentData->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
+        KGlobal::dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
 
-        s_componentData->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
+        KGlobal::dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

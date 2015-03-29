@@ -38,6 +38,7 @@
 
 #include <klocale.h>
 #include <kio/netaccess.h>
+#include <kurl.h>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>

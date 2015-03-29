@@ -42,6 +42,7 @@
 #include <QTransform>
 
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include "KoToolProxy.h"
 

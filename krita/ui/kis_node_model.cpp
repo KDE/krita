@@ -389,7 +389,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
-        return belongsToIsolatedGroup(node) ? QVariant() : Qt::gray;
+        return belongsToIsolatedGroup(node) ? QVariant() : QVariant( QColor(Qt::gray));
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
     case ProgressRole: {

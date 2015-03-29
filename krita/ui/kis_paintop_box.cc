@@ -35,6 +35,8 @@
 
 #include <kactioncollection.h>
 #include <kacceleratormanager.h>
+#include <kshortcut.h>
+#include <kglobal.h>
 
 #include <KoIcon.h>
 #include <KoColorSpace.h>
@@ -410,7 +412,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
     if (pixmapName.isEmpty())
         return QPixmap();
 
-    return QPixmap(KisFactory::componentData().dirs()->findResource("kis_images", pixmapName));
+    return QPixmap(KGlobal::dirs()->findResource("kis_images", pixmapName));
 }
 
 KoID KisPaintopBox::currentPaintop()
@@ -472,7 +474,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+    QString pixFilename = KGlobal::dirs()->findResource("kis_images", paintOp->pixmap());
 
     m_settingsWidget->setIcon(QIcon(pixFilename));
     m_resourceProvider->setPaintOpPreset(preset);

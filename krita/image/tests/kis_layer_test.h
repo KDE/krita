@@ -24,6 +24,7 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
+#include "kis_image.h"
 
 class TestLayer : public KisLayer
 {

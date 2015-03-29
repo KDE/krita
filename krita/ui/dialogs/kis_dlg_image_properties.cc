@@ -29,6 +29,7 @@
 #include <QTextEdit>
 
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"

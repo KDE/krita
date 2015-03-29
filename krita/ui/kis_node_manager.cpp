@@ -23,6 +23,7 @@
 
 #include <kactioncollection.h>
 #include <kmimetype.h>
+#include <kshortcut.h>
 
 #include <KoIcon.h>
 #include <KoProperties.h>

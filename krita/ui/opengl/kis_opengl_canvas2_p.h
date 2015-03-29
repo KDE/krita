@@ -172,24 +172,29 @@ namespace VSyncWorkaround {
                 dlclose(handle);
             }
         }
-        if (!procAddress) {
-
-            QLibrary lib(::qt_gl_library_name());
-            //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
-            procAddress = lib.resolve(procName);
-        }
+        // QT5TODO
+//         if (!procAddress) {
+// 
+//             QLibrary lib(::qt_gl_library_name());
+//             //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+//             procAddress = lib.resolve(procName);
+//         }
 
         return procAddress;
     }
 
+
     bool tryDisableVSync(QWidget *widget) {
         bool result = false;
+
+// // QT5TODO
+#if 0
         bool triedDisable = false;
         QX11Info info = widget->x11Info();
         Display *dpy = info.display();
         WId wid = widget->winId();
 
-        QGLExtensionMatcher extensions(glXQueryExtensionsString(dpy, info.screen()));
+        QGLExtensionMatcher extensions(glXQueryExtensionsString(dpy, info.appScreen()));
 
         if (extensions.match("GLX_EXT_swap_control")) {
             typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
@@ -244,7 +249,7 @@ namespace VSyncWorkaround {
             qCritical() << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
             qCritical();
         }
-
+#endif
         return result;
     }
 }

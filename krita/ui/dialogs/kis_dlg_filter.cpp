@@ -20,6 +20,8 @@
 
 #include "kis_dlg_filter.h"
 
+#include <kglobal.h>
+
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_filter_mask.h>

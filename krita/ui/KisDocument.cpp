@@ -486,11 +486,7 @@ public:
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
-#if KDE_IS_VERSION(4,4,0)
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
-#else
             const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
-#endif
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
                 openLocalFile();
@@ -694,7 +690,7 @@ bool KisDocument::saveFile()
 
     if (backupFile()) {
         if (url().isLocalFile())
-            KSaveFile::backupFile(url().toLocalFile(), d->backupPath);
+            KBackup::backupFile(url().toLocalFile(), d->backupPath);
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),

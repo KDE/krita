@@ -429,7 +429,7 @@ else()
 endif ()
 
 if(HAVE_OPENGL)
-    target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})
+    target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL Qt5::X11Extras ${OPENEXR_LIBRARIES})
 
     # activate workaround for the VSync disable
     if(NOT WIN32)

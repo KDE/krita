@@ -705,10 +705,10 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     : KPageDialog(parent)
 {
     Q_UNUSED(name);
-    setCaption(i18n("Preferences"));
-    setButtons(Ok | Cancel | Help | Default);
-    setDefaultButton(Ok);
-    showButtonSeparator(true);
+//     setCaption(i18n("Preferences"));
+//     setButtons(Ok | Cancel | Help | Default);
+//     setDefaultButton(Ok);
+//     showButtonSeparator(true);
     setFaceType(KPageDialog::List);
 
     // General

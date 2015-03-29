@@ -32,6 +32,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include <KoIcon.h>
 #include <KoColorSpaceRegistry.h>

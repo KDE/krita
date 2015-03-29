@@ -23,6 +23,7 @@
 
 #include <KoColor.h>
 #include <KoColorPopupAction.h>
+#include <kglobal.h>
 
 #include "recorder/kis_recorded_paint_action.h"
 #include <kis_paintop_preset.h>
@@ -70,7 +71,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
         QPixmap pm;
         if (!pixmapName.isEmpty()) {
-            QString fname = KisFactory::componentData().dirs()->findResource("kis_images", pixmapName);
+            QString fname = KGlobal::dirs()->findResource("kis_images", pixmapName);
             pm = QPixmap(fname);
         }
 

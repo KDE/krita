@@ -26,6 +26,7 @@
 #include "kis_node_visitor.h"
 #include "kis_paint_device.h"
 #include "kis_merge_walker.h"
+#include "kis_image.h"
 
 class TestLayer : public KisLayer
 {

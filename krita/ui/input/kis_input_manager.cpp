@@ -461,11 +461,12 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
             new QTabletEvent(event->type(),
                              event->pos(),
                              event->globalPos(),
-                         #ifdef Q_WS_X11
-                             multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
-                         #else
-                             event->hiResGlobalPos(),
-                         #endif
+// QT5PORT
+//                          #ifdef Q_WS_X11
+//                              multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
+//                          #else
+//                              event->hiResGlobalPos(),
+//                          #endif
                              event->device(),
                              event->pointerType(),
                              event->pressure(),
@@ -481,7 +482,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
 {
     delete lastTouchEvent;
-    lastTouchEvent = new QTouchEvent(event->type(), event->deviceType(), event->modifiers(), event->touchPointStates(), event->touchPoints());
+    lastTouchEvent = new QTouchEvent(event->type(), event->device(), event->modifiers(), event->touchPointStates(), event->touchPoints());
 }
 
 void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type /*type*/)

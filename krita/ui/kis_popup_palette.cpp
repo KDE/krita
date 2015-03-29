@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QQueue>
 #include <QMenu>
+#include <QWhatsThis>
 #include <math.h>
 #include "kis_signal_compressor.h"
 

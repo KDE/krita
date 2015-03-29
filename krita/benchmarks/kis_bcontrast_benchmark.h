@@ -23,6 +23,7 @@
 
 #include <kis_types.h>
 #include <QtTest>
+#include <kis_paint_device.h>
 
 class KisPaintDevice;
 class KoColorSpace;

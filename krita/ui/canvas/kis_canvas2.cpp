@@ -64,9 +64,9 @@
 #include "KisView.h"
 #include "kis_canvas_controller.h"
 
+#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
-#ifdef HAVE_OPENGL
 #include <QGLFormat>
 #endif
 

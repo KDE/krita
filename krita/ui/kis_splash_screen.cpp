@@ -34,6 +34,8 @@
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
+#include <k4aboutdata.h>
+#include <kicon.h>
 
 #include <kis_factory2.h>
 

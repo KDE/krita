@@ -24,6 +24,8 @@
 
 #include <QMessageBox>
 
+#include <kurl.h>
+
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>

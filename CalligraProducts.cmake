@@ -123,7 +123,7 @@ calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" REQUIRES LIB_CALL
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)

@@ -151,6 +151,29 @@ KoStyleManager::KoStyleManager(QObject *parent)
         d->defaultBibEntriesStyleId.append(style->styleId());
     }
 
+    KoParagraphStyle *style = new KoParagraphStyle();
+    style->setName("Footnote");
+    setParent(d->defaultParagraphStyle);
+    add(style);
+    style = new KoParagraphStyle();
+    style->setName("Endnote");
+    setParent(d->defaultParagraphStyle);
+    add(style);
+    KoCharacterStyle *cStyle = new KoCharacterStyle();
+    cStyle->setName("Footnote anchor");
+    cStyle->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    add(cStyle);
+    cStyle = new KoCharacterStyle();
+    cStyle->setName("Footnote Symbol");
+    add(cStyle);
+    cStyle = new KoCharacterStyle();
+    cStyle->setName("Endnote anchor");
+    cStyle->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    add(cStyle);
+    cStyle = new KoCharacterStyle();
+    cStyle->setName("Endnote Symbol");
+    add(cStyle);
+
     d->footNotesConfiguration = 0;
     d->endNotesConfiguration = 0;
     d->bibliographyConfiguration = 0;
@@ -924,20 +947,12 @@ KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfigurat
 {
     if (noteClass == KoOdfNotesConfiguration::Endnote) {
         if (!d->endNotesConfiguration) {
-            d->endNotesConfiguration = new KoOdfNotesConfiguration();
-            d->endNotesConfiguration->setNoteClass(noteClass);
-            KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
-            numFormat->setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
-            d->endNotesConfiguration->setNumberFormat(*numFormat);
+            d->endNotesConfiguration = new KoOdfNotesConfiguration(noteClass);
         }
         return d->endNotesConfiguration;
     } else if (noteClass == KoOdfNotesConfiguration::Footnote) {
         if (!d->footNotesConfiguration) {
-            d->footNotesConfiguration = new KoOdfNotesConfiguration();
-            d->footNotesConfiguration->setNoteClass(noteClass);
-            KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
-            numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
-            d->footNotesConfiguration->setNumberFormat(*numFormat);
+            d->footNotesConfiguration = new KoOdfNotesConfiguration(noteClass);
         }
         return d->footNotesConfiguration;
     } else {

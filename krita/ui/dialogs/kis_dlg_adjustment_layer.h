@@ -60,13 +60,15 @@ public:
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 
-protected Q_SLOTS:
+public Q_SLOTS:
+    void adjustSize();
 
+protected Q_SLOTS:
     void slotNameChanged(const QString &);
     void slotConfigChanged();
+    void slotFilterWidgetSizeChanged();
 
 private:
-
     KisNodeSP m_node;
     KisNodeFilterInterface *m_nodeFilterInterface;
     Ui::WdgFilterNodeCreation wdgFilterNodeCreation;

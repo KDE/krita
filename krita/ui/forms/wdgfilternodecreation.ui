@@ -2,21 +2,7 @@
 <ui version="4.0">
  <class>WdgFilterNodeCreation</class>
  <widget class="QWidget" name="WdgFilterNodeCreation">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>456</width>
-    <height>328</height>
-   </rect>
-  </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
-   <property name="spacing">
-    <number>8</number>
-   </property>
-   <property name="bottomMargin">
-    <number>9</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -53,6 +39,27 @@
    </item>
    <item>
     <widget class="KisFilterSelectorWidget" name="filterSelector" native="true"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="filterGalleryToggle">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

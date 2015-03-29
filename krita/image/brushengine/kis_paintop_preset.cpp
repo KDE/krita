@@ -91,7 +91,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 }
 void KisPaintOpPreset::setPresetDirty(bool value)
 {
-    m_d->dirtyPreset = value;    
+    m_d->dirtyPreset = value;
 }
 bool KisPaintOpPreset::isPresetDirty() const
 {
@@ -174,9 +174,14 @@ bool KisPaintOpPreset::load()
         resourceStore->close();
     }
     else {
-        dev = new QFile(filename());
 
-        if (dev->size() == 0) return false;
+        dev = new QFile(filename());
+        if (dev->size() == 0)
+        {
+            delete dev;
+            return false;
+        }
+
         if (!dev->open(QIODevice::ReadOnly)) {
             warnKrita << "Can't open file " << filename();
             delete dev;
@@ -185,6 +190,8 @@ bool KisPaintOpPreset::load()
     }
 
     bool res = loadFromDevice(dev);
+    delete dev;
+
     setValid(res);
     setPresetDirty(false);
     return res;

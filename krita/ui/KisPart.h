@@ -181,6 +181,8 @@ Q_SIGNALS:
 
 public:
 
+    static KisInputManager *currentInputManager();
+
     //------------------ view management ------------------
 
     /**

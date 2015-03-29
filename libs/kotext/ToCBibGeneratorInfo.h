@@ -115,7 +115,7 @@ class KOTEXT_EXPORT TocEntryTemplate
 {
 public:
     TocEntryTemplate();
-    TocEntryTemplate(const TocEntryTemplate &entryTemplate);
+    TocEntryTemplate(const TocEntryTemplate &other);
     void saveOdf(KoXmlWriter * writer) const;
 
     int outlineLevel;
@@ -172,6 +172,8 @@ public:
 class KOTEXT_EXPORT BibliographyEntryTemplate
 {
 public:
+    BibliographyEntryTemplate();
+    BibliographyEntryTemplate(const BibliographyEntryTemplate &other);
     void saveOdf(KoXmlWriter * writer) const;
 
     QString styleName;

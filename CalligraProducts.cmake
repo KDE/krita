@@ -125,7 +125,7 @@ calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin"  REQUIRES LIB_CAL
 calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" UNPORTED  REQUIRES FEATURE_RDF LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)

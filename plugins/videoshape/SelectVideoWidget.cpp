@@ -21,6 +21,7 @@
 #include "SelectVideoWidget.h"
 
 #include <klocale.h>
+#include <kurl.h>
 
 #include <kfilewidget.h>
 #include <Phonon/BackendCapabilities>

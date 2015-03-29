@@ -32,6 +32,7 @@
 #include <KoViewConverter.h>
 
 #include <kdialog.h>
+#include <kurl.h>
 
 #include <QPointer>
 #include <QPainter>

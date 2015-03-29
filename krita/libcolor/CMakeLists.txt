@@ -3,7 +3,7 @@ if (UNIX AND NOT APPLE)
     set(kritacolor_LIB_SRCS kis_color_manager.h linux/kis_color_manager.cpp)
     set(kritacolor_EXTRA_LIBRARIES kritacolord)
 else ()
-    set(kritacolor_LIB_SRCS kis_color_manager_dummy.cpp)
+    set(kritacolor_LIB_SRCS dummy/kis_color_manager.cpp)
 endif () 
 
 kde4_add_library(kritacolor SHARED ${kritacolor_LIB_SRCS} )

@@ -56,5 +56,3 @@ KisColorManager *KisColorManager::instance()
     K_GLOBAL_STATIC(KisColorManager, s_instance);
     return s_instance;
 }
-
-#include "kis_color_manager.moc"

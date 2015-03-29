@@ -89,7 +89,7 @@ public:
             (ExtraEventType) type() == TabletReleaseEx ? TabletRelease :
             QEvent::None;
 
-        return QTabletEvent(t, pos(), globalPos(), hiResGlobalPos(),
+        return QTabletEvent(t, pos(), globalPos(),
                             device(), pointerType(),
                             pressure(), xTilt(), yTilt(), tangentialPressure(),
                             rotation(), z(), modifiers(), uniqueId());

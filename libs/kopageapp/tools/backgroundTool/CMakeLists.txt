@@ -27,4 +27,8 @@ install(FILES
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
 
-ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+ecm_install_icons( ICONS
+    22-actions-backgroundtool.png
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME oxygen
+)

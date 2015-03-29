@@ -186,11 +186,13 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     kdCartesianPlanePrimary->setGlobalGridAttributes(gridAttributes);
     // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
     // between axes and plot area frame.
-    kdCartesianPlanePrimary->setDrawingAreaMargins(0, 0, 0, 0);
+// QT5TODO: what happened to this in latest KChart 2.6.0?
+//     kdCartesianPlanePrimary->setDrawingAreaMargins(0, 0, 0, 0);
 
     // --- Prepare Secondary Cartesian Coordinate Plane ---
     kdCartesianPlaneSecondary->setGlobalGridAttributes(gridAttributes);
-    kdCartesianPlaneSecondary->setDrawingAreaMargins(0, 0, 0, 0);
+// QT5TODO: what happened to this in latest KChart 2.6.0?
+//     kdCartesianPlaneSecondary->setDrawingAreaMargins(0, 0, 0, 0);
 
     // --- Prepare Polar Coordinate Plane ---
     KChart::GridAttributes polarGridAttributes;

@@ -17,11 +17,11 @@ kde4_add_unit_test( TestKChartModel TESTNAME kchart-TestKChartModel ${TestKChart
 kde4_add_unit_test( TestTableSource TESTNAME kchart-TestTableSource ${TestTableSource_test_SRCS} )
 kde4_add_unit_test( TestCellRegion TESTNAME kchart-TestCellRegion ${TestCellRegion_test_SRCS} )
 #FIXME: Too many dependencies in DataSet, there should be no need to link to flake and the entire chart shape here
-target_link_libraries( TestProxyModel ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} chartshapecore )
-target_link_libraries( TestDataSet ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} chartshapecore )
-target_link_libraries( TestKChartModel ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY} chartshapecore )
-target_link_libraries( TestTableSource ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} chartshapecore )
-target_link_libraries( TestCellRegion ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} chartshapecore)
+target_link_libraries( TestProxyModel chartshapecore Qt5::Test )
+target_link_libraries( TestDataSet chartshapecore Qt5::Test )
+target_link_libraries( TestKChartModel chartshapecore flake Qt5::Test )
+target_link_libraries( TestTableSource chartshapecore Qt5::Test )
+target_link_libraries( TestCellRegion chartshapecore Qt5::Test )
 
 add_subdirectory( odf )
 

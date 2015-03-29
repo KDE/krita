@@ -456,7 +456,7 @@ QModelIndex KChartModel::index(int row, int column,
         return QModelIndex();
     }
 
-    return createIndex(row, column, 0);
+    return createIndex(row, column, static_cast<quintptr>(0));
 }
 
 QModelIndex KChartModel::parent(const QModelIndex &index) const

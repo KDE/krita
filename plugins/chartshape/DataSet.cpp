@@ -267,7 +267,8 @@ KChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     // Don't show markers unless we turn them on
     ma.setVisible(false);
     // The marker size is specified in pixels, but scaled by the painter's zoom level
-    ma.setMarkerSizeMode(KChart::MarkerAttributes::AbsoluteSizeScaled);
+// QT5TODO: what happened to this in latest KChart 2.6.0?
+//     ma.setMarkerSizeMode(KChart::MarkerAttributes::AbsoluteSizeScaled);
     return ma;
 }
 
@@ -714,7 +715,8 @@ QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
         QPainter *painter = new QPainter(markerPixmap);
         KChart::MarkerAttributes matt;
         matt.setMarkerStyle(odf2kdMarker(markerStyle));
-        KChart::AbstractDiagram::paintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+// QT5TODO: this should be normal API
+//         KChart::AbstractDiagram::paintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
         QIcon markerIcon = QIcon(*markerPixmap);
         return markerIcon;
     }
@@ -819,7 +821,8 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
             // Whereas the maximum size is relative to 1/4 * min(dw, dh),
             // with dw, dh being the width and height of the diagram
             bubbleWidth *= 0.25;
-            ma.setMarkerSizeMode(KChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
+// QT5TODO: what happened to this in latest KChart 2.6.0?
+//             ma.setMarkerSizeMode(KChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
             ma.setMarkerSize(QSizeF(bubbleWidth, bubbleWidth));
         }
         ma.setVisible(true);

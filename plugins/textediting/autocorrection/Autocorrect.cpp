@@ -26,6 +26,7 @@
 #include <QDomDocument>
 
 #include <klocale.h>
+#include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kcalendarsystem.h>
 #include <kstandarddirs.h>

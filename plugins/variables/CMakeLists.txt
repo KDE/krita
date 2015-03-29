@@ -29,9 +29,8 @@ ki18n_wrap_ui( textvariables_SRCS
 )
 
 add_library(calligra_textinlineobject_variables MODULE ${textvariables_SRCS})
+kcoreaddons_desktop_to_json(calligra_textinlineobject_variables calligra_textinlineobject_variables.desktop)
 
 target_link_libraries(calligra_textinlineobject_variables kotext kotextlayout)
 
 install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_textinlineobject_variables.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

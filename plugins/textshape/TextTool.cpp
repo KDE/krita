@@ -172,8 +172,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         connect(plugin, SIGNAL(startMacro(const QString &)),
                 this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-        QHash<QString, KAction*> actions = plugin->actions();
-        QHash<QString, KAction*>::iterator i = actions.begin();
+        QHash<QString, QAction*> actions = plugin->actions();
+        QHash<QString, QAction*>::iterator i = actions.begin();
         while (i != actions.end()) {
             addAction(i.key(), i.value());
             ++i;
@@ -1111,8 +1111,8 @@ TextEditingPluginContainer *TextTool::textEditingPluginContainer()
             connect(plugin, SIGNAL(startMacro(const QString &)),
                     this, SLOT(startMacro(const QString &)));
             connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-            QHash<QString, KAction*> actions = plugin->actions();
-            QHash<QString, KAction*>::iterator i = actions.begin();
+            QHash<QString, QAction*> actions = plugin->actions();
+            QHash<QString, QAction*>::iterator i = actions.begin();
             while (i != actions.end()) {
                 addAction(i.key(), i.value());
                 ++i;

@@ -16,11 +16,11 @@ set (threedshape_LIB_SRCS
 )
 
 add_library(calligra_shape_threed MODULE ${threedshape_LIB_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_threed calligra_shape_threed.desktop)
 
 target_link_libraries(calligra_shape_threed flake    ${KDE4_KFILE_LIBRARY})
 install(TARGETS calligra_shape_threed DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES calligra_shape_threed.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

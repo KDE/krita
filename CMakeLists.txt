@@ -172,7 +172,7 @@ include(FeatureSummary)
 find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      GuiAddons I18n ItemModels ItemViews
                                      WidgetsAddons ThreadWeaver
-                                     Completion IconThemes 
+                                     Completion IconThemes Sonnet
                                      Parts
                                      XmlGui Kross Wallet
                                      Emoticons ConfigWidgets KDELibs4Support
@@ -240,6 +240,9 @@ if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
         -DQT_USE_FAST_OPERATOR_PLUS
     )
 endif()
+
+# override the kf5 plugin installdir
+set(PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
 
 
  ###########################
@@ -368,8 +371,10 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 ##
 ## Test for soprano
 ##
-macro_optional_find_package(Soprano)
-macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
+# QT5TODO: find Qt5 version of Soprano
+# macro_optional_find_package(Soprano)
+set(Soprano_FOUND FALSE)
+macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 endif()
@@ -385,26 +390,20 @@ if(NOT MARBLE_FOUND)
     set(MARBLE_INCLUDE_DIR "")
 else()
     set(CAN_USE_MARBLE TRUE)
-endif()
-if( MARBLE_FOUND )
-    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
-        set(MARBLE_FOUND FALSE)
-    else()
-        add_definitions( -DCAN_USE_MARBLE )
-        ##
-        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-        ## with commit ea177ca. This is for compatibility with older versions.
-        ##
-        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-        if( MARBLECONTROLBOX_H )
-        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-            if( SETMARBLEWIDGET )
-                add_definitions(-DHAVE_SETMARBLEWIDGET)
-            endif()
-        else()
-            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+    if( MARBLECONTROLBOX_H )
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif()
+    else()
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif()
 endif()
 macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
@@ -983,7 +982,6 @@ calligra_drop_unbuildable_products()
 if(SHOULD_BUILD_FEATURE_RDF)
    add_definitions( -DSHOULD_BUILD_RDF )
 endif()
-
 
  ###################
 ####################

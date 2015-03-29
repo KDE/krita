@@ -79,8 +79,8 @@ void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number Erro
     kError(31000) << "Lcms2 error: " << ErrorCode << Text;
 }
 
-K_PLUGIN_FACTORY(LcmsEnginePluginFactory, registerPlugin<LcmsEnginePlugin>();)
-K_EXPORT_PLUGIN(LcmsEnginePluginFactory("calligra"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
+                           registerPlugin<LcmsEnginePlugin>();)
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

@@ -12,9 +12,8 @@ set(spellcheck_SRCS
 )
 
 add_library(calligra_textediting_spellcheck MODULE ${spellcheck_SRCS})
+kcoreaddons_desktop_to_json(calligra_textediting_spellcheck calligra_textediting_spellcheck.desktop)
 
-target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout)
+target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout KF5::SonnetCore KF5::SonnetUi)
 
 install(TARGETS calligra_textediting_spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_textediting_spellcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

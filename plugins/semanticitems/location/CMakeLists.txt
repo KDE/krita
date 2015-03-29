@@ -30,7 +30,6 @@ target_link_libraries(calligra_semanticitem_location LINK_INTERFACE_LIBRARIES  $
 endif()
 
 target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS})
-
+kcoreaddons_desktop_to_json(calligra_semanticitem_location calligra_semanticitem_location.desktop)
 
 install(TARGETS calligra_semanticitem_location  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES   calligra_semanticitem_location.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

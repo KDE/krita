@@ -50,11 +50,6 @@ ki18n_wrap_ui(defaulttools_SRCS
 )
 
 add_library(calligra_tool_defaults MODULE ${defaulttools_SRCS})
+kcoreaddons_desktop_to_json(calligra_tool_defaults calligra_tool_defaults.desktop)
 target_link_libraries(calligra_tool_defaults flake kowidgets)
 install(TARGETS calligra_tool_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_tool_defaults.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

@@ -344,6 +344,7 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(i18n("DzymatoR,"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("edomaur"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Edward Coughlan"), i18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(i18n("Edward Dubovic"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Eeku Koponen"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Egor Nelyubov"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Eike Hein"), i18n("Krita 2.9 Kickstarter Backer"));
@@ -451,6 +452,7 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(i18n("Kpowgames"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Krasi Mirchev"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Kresimir Kis"), i18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(i18n("Kwatch"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Lani Aung"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("Lars Lawrenz"), i18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(i18n("LAS,"), i18n("Krita 2.9 Kickstarter Backer"));

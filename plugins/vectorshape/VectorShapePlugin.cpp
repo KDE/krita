@@ -34,8 +34,8 @@
 #include "VectorShapeFactory.h"
 
 
-K_PLUGIN_FACTORY(VectorShapePluginFactory, registerPlugin<VectorShapePlugin>();)
-K_EXPORT_PLUGIN(VectorShapePluginFactory("calligra_shape_vector"))
+K_PLUGIN_FACTORY_WITH_JSON(VectorShapePluginFactory, "calligra_shape_vector.json",
+                 registerPlugin<VectorShapePlugin>();)
 
 VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
     : QObject(parent)

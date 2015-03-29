@@ -204,7 +204,7 @@ calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with s
 calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended with support for WORDPERFECT" UNPORTED REQUIRES OKULAR_GENERATOR_ODT FILTER_WORDPERFECT_TO_ODT)
 
 # developer utils
-calligra_define_product(APP_DEVTOOLS "Tools for developers" UNPORTED)
+calligra_define_product(APP_DEVTOOLS "Tools for developers")
 calligra_define_product(APP_CSTESTER "cstester" UNPORTED  REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
 
 

@@ -3,7 +3,6 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
   <interface name='org.freedesktop.ColorManager.Sensor'>
-  <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="<type>"/>
     <doc:doc>
       <doc:description>
         <doc:para>
@@ -151,7 +150,6 @@
     <!--***********************************************************-->
     <property name='Options' type='a{sv}' access='read'>
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
-      <annotation name="com.trolltech.QtDBus.QtTypeName" value="QVariantMap"/>
       <doc:doc>
         <doc:description>
           <doc:para>
@@ -168,7 +166,6 @@
     <!--***********************************************************-->
     <property name='Metadata' type='a{ss}' access='read'>
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
-      <annotation name="com.trolltech.QtDBus.QtTypeName" value="CdStringMap"/>
       <doc:doc>
         <doc:description>
           <doc:para>
@@ -267,9 +264,8 @@
           </doc:para>
         </doc:description>
       </doc:doc>
-      <arg type='a{sv}' name='values' direction='in'>
-        <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+      <annotation name='org.qtproject.QtDBus.QtTypeName.In0' value='QVariantMap'/>
+      <arg name='values' type='a{sv}' direction='in'>
         <doc:doc>
           <doc:summary>
             <doc:para>

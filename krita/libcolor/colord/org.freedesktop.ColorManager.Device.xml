@@ -3,7 +3,6 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
   <interface name='org.freedesktop.ColorManager.Device'>
-  <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="<type>"/>
     <doc:doc>
       <doc:description>
         <doc:para>
@@ -189,10 +188,6 @@
             If the enabled state is changed then this is reflected for
             all users and persistent across reboots.
           </doc:para>
-          <doc:para>
-            If a device is not enabled then no profiles can be added or
-            removed and the default cannot be changed.
-          </doc:para>
         </doc:description>
       </doc:doc>
     </property>
@@ -224,7 +219,6 @@
     <!--***********************************************************-->
     <property name='Metadata' type='a{ss}' access='read'>
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
-      <annotation name="com.trolltech.QtDBus.QtTypeName" value="CdStringMap"/>
       <doc:doc>
         <doc:description>
           <doc:para>
@@ -364,7 +358,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              The profile ID that has already been added to the device.
+              The profile path that has already been added to the device.
             </doc:para>
           </doc:summary>
         </doc:doc>
@@ -384,7 +378,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              The profile ID that has already been added to the device.
+              The profile path that has already been added to the device.
             </doc:para>
           </doc:summary>
         </doc:doc>

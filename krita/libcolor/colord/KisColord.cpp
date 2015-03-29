@@ -19,8 +19,6 @@
 
 #include "KisColord.h"
 
-#include <QMap>
-
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -129,9 +127,8 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
             break;
         }
     }
-    if (dev) {
-        if (dev->profiles.size() > 0) {
-
+    if (dev->profiles.size() > 0) {
+        if (dev) {
             if (dev->profiles.size() < p) {
                 profile = dev->profiles[p];
             }

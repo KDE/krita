@@ -3,7 +3,6 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
   <interface name='org.freedesktop.ColorManager.Profile'>
-  <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="<type>"/>
     <doc:doc>
       <doc:description>
         <doc:para>
@@ -37,7 +36,6 @@
     <!--***********************************************************-->
     <property name='Metadata' type='a{ss}' access='read'>
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
-      <annotation name="com.trolltech.QtDBus.QtTypeName" value="CdStringMap"/>
       <doc:doc>
         <doc:description>
           <doc:para>

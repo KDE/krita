@@ -108,7 +108,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             }
             if (!json.isEmpty()) {
                 QJsonObject pluginData = json.value("KPlugin").toObject();
-                if (pluginData.value("ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
+                if (!pluginData.value("ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
                     continue;
                 }
 

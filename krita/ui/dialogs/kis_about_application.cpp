@@ -135,7 +135,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
                            "to trial or educational versions of commercial software that will forbid your work in commercial situations.</p>"
                            "<br/><hr/><pre>");
 
-    license.append(aboutData->license());
+    license.append(aboutData->licenses().first().text());
     license.append("</pre></body></html>");
     lblLicense->setText(license);
 

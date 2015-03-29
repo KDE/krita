@@ -24,6 +24,7 @@
 // KDE
 #include <kdebug.h>
 #include <kfilewidget.h>
+#include <kurl.h>
 #include <KIO/Job>
 // Qt
 #include <QVBoxLayout>

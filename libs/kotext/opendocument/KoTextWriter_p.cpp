@@ -154,7 +154,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         if (cursor.currentTable() && cursor.currentTable() != currentTable) {
             // Call the code to save the table....
-            saveTable(cursor.currentTable(), listStyles);
+            saveTable(cursor.currentTable(), listStyles, from, to);
             // We skip to the end of the table.
             block = cursor.currentTable()->lastCursorPosition().block();
             block = block.next();
@@ -720,7 +720,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     closeTagRegion();
 }
 
-void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
+void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles, int from, int to)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(table);
     int numberHeadingRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
@@ -772,11 +772,21 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
     openTagRegion(KoTextWriter::Private::Table, tableTagInformation);
 
-    for (int c = 0 ; c < table->columns() ; c++) {
+    int firstColumn = 0;
+    int lastColumn = table->columns() -1;
+    int firstRow = 0;
+    int lastRow = table->rows() -1;
+    if (to != -1 && from >= table->firstPosition() && to <= table->lastPosition()) {
+        firstColumn = table->cellAt(from).column();
+        firstRow = table->cellAt(from).row();
+        lastColumn = table->cellAt(to).column();
+        lastRow = table->cellAt(to).row();
+    }
+    for (int c = firstColumn ; c <= lastColumn; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;
 
-        for (; repetition < (table->columns() - c) ; repetition++)
+        for (; repetition <= (lastColumn - c) ; repetition++)
         {
             if (columnStyle != tcarManager.columnStyle(c + repetition + 1))
                 break;
@@ -798,7 +808,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     if (numberHeadingRows)
         writer->startElement("table:table-header-rows");
 
-    for (int r = 0 ; r < table->rows() ; r++) {
+    // TODO make work for copying part of table that has header rows - copy header rows additionally or not ?
+    for (int r = firstRow; r <= lastRow; r++) {
         TagInformation tableRowInformation;
         tableRowInformation.setTagName("table:table-row");
         KoTableRowStyle rowStyle = tcarManager.rowStyle(r);
@@ -809,7 +820,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         }
         openTagRegion(KoTextWriter::Private::TableRow, tableRowInformation);
 
-        for (int c = 0 ; c < table->columns() ; c++) {
+        for (int c = firstColumn; c <= lastColumn; c++) {
             QTextTableCell cell = table->cellAt(r, c);
 
             TagInformation tableCellInformation;

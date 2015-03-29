@@ -114,8 +114,8 @@ void KisPart::Private::loadActions()
 {
     actionCollection = new KActionCollection(part, KGlobal::mainComponent());
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_actions", "data", "krita/actions/");
-    QStringList actionDefinitions = KGlobal::mainComponent().dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+    KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
+    QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     foreach(const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;

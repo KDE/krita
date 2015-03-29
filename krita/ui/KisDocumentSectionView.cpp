@@ -451,5 +451,4 @@ void KisDocumentSectionView::setDraggingFlag(bool flag)
     m_draggingFlag = flag;
 }
 
-#include <KisDocumentSectionPropertyAction_p.moc>
 #include <KisDocumentSectionView.moc>

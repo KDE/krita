@@ -193,7 +193,7 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+    QStringList profiles = KGlobal::dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
 
     QMap<QString, QList<ProfileEntry> > profileEntries;
@@ -314,8 +314,8 @@ void KisInputProfileManager::saveProfiles()
 
 void KisInputProfileManager::resetAll()
 {
-    QString kdeHome = KGlobal::mainComponent().dirs()->localkdedir();
-    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+    QString kdeHome = KGlobal::dirs()->localkdedir();
+    QStringList profiles = KGlobal::dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
     foreach(const QString &profile, profiles) {
         if(profile.contains(kdeHome)) {

@@ -97,7 +97,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 {
     Q_ASSERT(view != 0);
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
+    KGlobal::dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
 
     setObjectName(name);
     KisConfig cfg;
@@ -500,7 +500,7 @@ KoID KisPaintopBox::defaultPaintOp()
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString defaultName = paintOp.id() + ".kpp";
-    QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
+    QString path = KGlobal::dirs()->findResource("kis_defaultpresets", defaultName);
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 

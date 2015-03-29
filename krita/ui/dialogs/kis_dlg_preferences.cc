@@ -302,7 +302,7 @@ void ColorSettingsTab::installProfile()
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
 
-    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
+    QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);

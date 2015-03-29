@@ -279,8 +279,8 @@ set(einspline_SRCS
 
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage  koodf pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage  koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

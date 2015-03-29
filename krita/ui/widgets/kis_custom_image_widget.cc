@@ -383,7 +383,7 @@ void KisCustomImageWidget::saveAsPredefined()
     if (fileName.isEmpty()) {
         return;
     }
-    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("data");
+    QString saveLocation = KGlobal::dirs()->saveLocation("data");
     QString appName = KGlobal::mainComponent().componentName();
 
     QDir d;

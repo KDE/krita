@@ -94,7 +94,7 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     addAction("gmic", action);
 
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
-    m_blacklistPath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
+    m_blacklistPath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
 
     dbgPlugins << "<features>";
@@ -159,10 +159,10 @@ void KisGmicPlugin::setupDefinitionPaths()
     // if we don't have updateXXXX.gmic for current version, prepend standard gmic_def.gmic
     int gmicVersion = gmic_version;
     QString updateFileName = "update" + QString::number(gmicVersion) + ".gmic";
-    QString updatedGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", updateFileName);
+    QString updatedGmicDefinitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", updateFileName);
     if (updatedGmicDefinitionFilePath.isEmpty())
     {
-        QString standardGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
+        QString standardGmicDefinitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
         m_definitionFilePaths.prepend(standardGmicDefinitionFilePath);
     }
     else

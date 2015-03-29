@@ -19,6 +19,8 @@
 
 #include "KisColord.h"
 
+#include <QMap>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>

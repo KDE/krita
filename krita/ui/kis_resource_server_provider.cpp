@@ -52,10 +52,10 @@ KisResourceServerProvider::KisResourceServerProvider()
 
     KisBrushServer *brushServer = KisBrushServer::instance();
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
+    KGlobal::dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
+    KGlobal::dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
+    KGlobal::dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
     
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {

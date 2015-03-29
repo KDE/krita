@@ -979,5 +979,4 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
 }
 
 
-#include <KisView_p.moc>
 #include <KisView.moc>

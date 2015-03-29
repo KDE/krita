@@ -20,6 +20,7 @@
 #define __KIS_ASSERT_EXCEPTION_H
 
 #include <QtCore>
+#include <QtConcurrent>
 #include <stdexcept>
 
 
@@ -31,7 +32,7 @@ public:
     {
     }
 
-    Exception* clone() const { return new KisAssertException(*this); }
+    QtConcurrent::Exception* clone() const { return new KisAssertException(*this); }
     void raise() const { throw *this; }
 };
 

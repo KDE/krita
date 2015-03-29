@@ -36,6 +36,6 @@ set_source_files_properties(${COLORD_SENSOR_INTERFACE_XML} PROPERTIES CLASSNAME 
 qt5_add_dbus_interface(kritacolord_SRCS ${COLORD_SENSOR_INTERFACE_XML} CdSensorInterface)
 
 add_library(kritacolord SHARED ${kritacolord_SRCS})
-target_link_libraries(kritacolord )
+target_link_libraries(kritacolord Qt5::Core Qt5::DBus ${KDE4_KDEUI_LIBS})
 
 install(TARGETS kritacolord DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -51,10 +51,10 @@ SchemaRegistry::SchemaRegistry()
     : d(new Private)
 {
 
-    KGlobal::mainComponent().dirs()->addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
+    KGlobal::dirs()->addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
 
     QStringList schemasFilenames;
-    schemasFilenames += KGlobal::mainComponent().dirs()->findAllResources("metadata_schema", "*.schema");
+    schemasFilenames += KGlobal::dirs()->findAllResources("metadata_schema", "*.schema");
 
     foreach(const QString& fileName, schemasFilenames) {
         Schema* schema = new Schema();

@@ -75,8 +75,8 @@ void KisGmicTests::initTestCase()
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
 
     QString standardSettings("gmic_def.gmic");
-    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings);
-    m_blacklistFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings + ".blacklist");
+    QString definitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", standardSettings);
+    m_blacklistFilePath = KGlobal::dirs()->findResource("gmic_definitions", standardSettings + ".blacklist");
 
     QStringList filePaths;
     filePaths << definitionFilePath;
@@ -679,7 +679,7 @@ void KisGmicTests::testFilterOnlySelection()
 
 void KisGmicTests::testLoadingGmicCommands()
 {
-    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", "gmic_def.gmic");
+    QString definitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", "gmic_def.gmic");
     QByteArray data = KisGmicParser::extractGmicCommandsOnly(definitionFilePath);
     QVERIFY(data.size() > 0);
 }

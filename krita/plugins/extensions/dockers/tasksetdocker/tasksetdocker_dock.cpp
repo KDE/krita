@@ -99,7 +99,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     chooserButton->setIcon(koIcon("document-multiple"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
+    KGlobal::dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");
     if (!QFileInfo(m_rserver->saveLocation()).exists()) {
         QDir().mkpath(m_rserver->saveLocation());

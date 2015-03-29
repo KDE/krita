@@ -18,15 +18,13 @@ set ( VectorShape_SRCS
 #)
 
 add_library(calligra_shape_vector MODULE ${VectorShape_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_vector calligra_shape_vector.desktop)
 
 target_link_libraries(calligra_shape_vector flake kovectorimage ${KDE4_KFILE_LIBRARY})
 
 install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
-
-install( FILES calligra_shape_vector.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
 if (SHARED_MIME_INFO_FOUND)
     install(FILES calligra_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})

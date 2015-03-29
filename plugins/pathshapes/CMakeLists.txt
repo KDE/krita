@@ -38,9 +38,8 @@ ki18n_wrap_ui(pathshapes_PART_SRCS
     spiral/SpiralShapeConfigWidget.ui
 )
 add_library(calligra_shape_paths MODULE ${pathshapes_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_paths calligra_shape_paths.desktop)
 
 target_link_libraries(calligra_shape_paths flake kowidgets)
 
 install(TARGETS calligra_shape_paths  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_shape_paths.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

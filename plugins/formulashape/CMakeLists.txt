@@ -107,13 +107,13 @@ ki18n_wrap_ui( formulashape_PART_SRCS
 )
 
 add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
 
 target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES calligra_shape_formular.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 

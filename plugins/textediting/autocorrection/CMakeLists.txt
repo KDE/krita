@@ -16,9 +16,8 @@ ki18n_wrap_ui( autocorrect_SRCS
 )
 
 add_library(calligra_textediting_autocorrect MODULE ${autocorrect_SRCS})
+kcoreaddons_desktop_to_json(calligra_textediting_autocorrect calligra_textediting_autocorrect.desktop)
 
 target_link_libraries(calligra_textediting_autocorrect kowidgets)
 
 install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_textediting_autocorrect.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

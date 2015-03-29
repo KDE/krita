@@ -16,11 +16,11 @@ ki18n_wrap_ui(pivottables_SRCS
    pivotoptions.ui)
 
 add_library(sheetspivottables MODULE ${pivottables_SRCS})
+kcoreaddons_desktop_to_json(sheetspivottables sheetspivottables.desktop)
 
 target_link_libraries(sheetspivottables calligrasheetscommon)
 
 install(TARGETS sheetspivottables DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  pivottables.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
-install( FILES  sheetspivottables.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

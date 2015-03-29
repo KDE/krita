@@ -36,8 +36,8 @@
 
 using namespace Calligra::Sheets;
 
- K_PLUGIN_FACTORY(PivotPluginFactory, registerPlugin<PivotPlugin>();)
- K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables"))
+ K_PLUGIN_FACTORY_WITH_JSON(PivotPluginFactory, "sheetspivottables.json",
+                            registerPlugin<PivotPlugin>();)
 
 PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
  : QObject(parent)

@@ -85,7 +85,8 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         foreach(QPluginLoader *loader, offers) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
-            const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
+            json = json.value("KPlugin").toObject();
+            const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
                 qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;

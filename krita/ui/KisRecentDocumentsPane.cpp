@@ -27,6 +27,8 @@
 #include <kcomponentdata.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
+#include <kconfiggroup.h>
+#include <kurl.h>
 
 #include <KoIcon.h>
 

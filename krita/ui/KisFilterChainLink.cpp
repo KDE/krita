@@ -128,20 +128,20 @@ namespace CalligraFilter {
             if (signal.methodType() != QMetaMethod::Signal)
                 continue;
             // ### untested (QMetaMethod::signature())
-            if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
+            if (strncmp(signal.methodSignature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
                 int receiverMethodCount = child->methodCount();
                 for (int j = 0; j < receiverMethodCount; ++j) {
                     QMetaMethod slot = child->method(j);
                     if (slot.methodType() != QMetaMethod::Slot)
                         continue;
-                    if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
-                        if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
+                    if (strncmp(slot.methodSignature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
+                        if (strcmp(signal.methodSignature() + SIGNAL_PREFIX_LEN, slot.methodSignature() + SLOT_PREFIX_LEN) == 0) {
                             QByteArray signalString;
                             signalString.setNum(QSIGNAL_CODE);
-                            signalString += signal.signature();
+                            signalString += signal.methodSignature();
                             QByteArray slotString;
                             slotString.setNum(QSLOT_CODE);
-                            slotString += slot.signature();
+                            slotString += slot.methodSignature();
                             QObject::connect(sender, signalString, receiver, slotString);
                         }
                     }

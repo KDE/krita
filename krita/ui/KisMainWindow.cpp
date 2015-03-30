@@ -81,6 +81,8 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
+#include <kguiitem.h>
+#include <k4aboutdata.h>
 
 #include <KoConfig.h>
 #include "KoDockFactoryBase.h"
@@ -276,7 +278,8 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-    setComponentData(KisFactory::componentData());
+//     QT5PORT
+//     setComponentData(KisFactory::componentData());
     KGlobal::setActiveComponent(KisFactory::componentData());
 
     d->viewManager = new KisViewManager(this, actionCollection());
@@ -353,14 +356,14 @@ KisMainWindow::KisMainWindow()
 
     setAutoSaveSettings(KisFactory::componentName(), false);
 
-    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig());
 
     subWindowActivated();
     updateWindowMenu();
 
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        d->helpMenu = new KHelpMenu( this, KisFactory::aboutData(), false, actionCollection() );
+        d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
@@ -1051,7 +1054,8 @@ void KisMainWindow::saveWindowSettings()
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KisMainWindow::saveWindowSettings";
-        saveWindowSize(config->group("MainWindow"));
+        KConfigGroup group = config->group("MainWindow");
+        saveWindowSize(group);
         config->sync();
         d->windowSizeDirty = false;
     }
@@ -1382,7 +1386,8 @@ void KisMainWindow::slotConfigureKeys()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
+    KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+    saveMainWindowSettings(group);
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1416,7 +1421,8 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
+            KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+            saveMainWindowSettings(group);
         }
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
@@ -1784,13 +1790,13 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::updateWindowMenu()
 {
-    KMenu *menu = d->windowMenu->menu();
+    QMenu *menu = d->windowMenu->menu();
     menu->clear();
 
     menu->addAction(d->newWindow);
     menu->addAction(d->documentMenu);
 
-    KMenu *docMenu = d->documentMenu->menu();
+    QMenu *docMenu = d->documentMenu->menu();
     docMenu->clear();
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
@@ -1978,7 +1984,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
         // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
         KMimeType::Ptr mime = KMimeType::mimeType(d->activeView->document()->outputMimeType());
         if (mime) {
-            QString extension = mime->property("X-KDE-NativeExtension").toString();
+            QString extension = mime->mainExtension();
 
             if (title.endsWith(extension))
                 title.chop(extension.length());
@@ -1987,7 +1993,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 
     if (title.isEmpty()) {
         // #139905
-        title = i18n("%1 unsaved document (%2)", KisFactory::aboutData()->programName(),
+        title = i18n("%1 unsaved document (%2)", KisFactory::componentData().aboutData()->programName(),
                      KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
     }
     printer.setDocName(title);

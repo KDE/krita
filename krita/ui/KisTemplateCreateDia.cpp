@@ -57,6 +57,8 @@
 #include <kio/job.h>
 #include <kcomponentdata.h>
 #include <kis_factory2.h>
+#include <kurl.h>
+#include <k4aboutdata.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -180,7 +182,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const char *templateType, const KComp
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts", KisFactory::aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts", KisFactory::componentData().aboutData()->programName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);
@@ -282,7 +284,7 @@ void KisTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
+    QString dir=KGlobal::dirs()->saveLocation(d->m_tree->templateType());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -443,7 +445,7 @@ void KisTemplateCreateDia::slotAddGroup() {
         QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
+    QString dir= KGlobal::dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;
     KisTemplateGroup *newGroup=new KisTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);

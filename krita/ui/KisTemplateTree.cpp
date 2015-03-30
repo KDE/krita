@@ -23,10 +23,12 @@
 #include <QImage>
 #include <QPixmap>
 #include <QPrinter>
+#include <QUrl>
 
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 #include <kcomponentdata.h>
 #include <ksavefile.h>
@@ -63,7 +65,7 @@ void KisTemplateTree::readTemplateTree()
 
 void KisTemplateTree::writeTemplateTree()
 {
-    QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
+    QString localDir = KGlobal::dirs()->saveLocation(m_templateType);
 
     foreach (KisTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
@@ -84,7 +86,7 @@ void KisTemplateTree::writeTemplateTree()
                 //kDebug( 30003 ) <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
                     //kDebug( 30003 ) <<"local only";
-                    KIO::NetAccess::del(group->dirs().first(), 0);
+                    KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
                     //kDebug( 30003 ) <<"removing:" << group->dirs().first();
                 } else {
                     //kDebug( 30003 ) <<"global";
@@ -140,7 +142,7 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 void KisTemplateTree::readGroups()
 {
 
-    QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
+    QStringList dirs = KGlobal::dirs()->resourceDirs(m_templateType);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);

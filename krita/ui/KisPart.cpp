@@ -56,6 +56,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kshortcutsdialog.h>
+#include <kshortcut.h>
 
 #include <QDialog>
 #include <QGraphicsScene>
@@ -112,7 +113,8 @@ public:
 
 void KisPart::Private::loadActions()
 {
-    actionCollection = new KActionCollection(part, KGlobal::mainComponent());
+    // QT5PORT
+    actionCollection = new KActionCollection(part, KGlobal::mainComponent().componentName());
 
     KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
     QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
@@ -445,10 +447,11 @@ void KisPart::configureShortcuts()
     }
 
     KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
-    dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
+    // QT5PORT
+//     dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
     dlg.addCollection(d->actionCollection);
-    dlg.setButtonText(KDialog::User1, i18n("Print"));
-    dlg.setButtonIcon(KDialog::User1, KIcon("document-print"));
+//     dlg.setButtonText(KDialog::User1, i18n("Print"));
+//     dlg.setButtonIcon(KDialog::User1, KIcon("document-print"));
     dlg.configure();
 
     foreach(KisMainWindow *mainWindow, d->mainWindows) {

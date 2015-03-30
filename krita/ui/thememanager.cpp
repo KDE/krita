@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-
+#include "thememanager.h"
 // Qt includes
 
 #include <QStringList>
@@ -53,6 +53,7 @@
 #include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
+#include <kaction.h>
 
 // Calligra
 #include <KoIcon.h>

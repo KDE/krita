@@ -2184,4 +2184,4 @@ void KisMainWindow::showDockerTitleBars(bool show)
 }
 
 
-#include <KisMainWindow.moc>
+#include <moc_KisMainWindow.cpp>

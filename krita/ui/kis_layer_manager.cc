@@ -903,4 +903,4 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 }
 
-
+#include "moc_kis_layer_manager.cpp"

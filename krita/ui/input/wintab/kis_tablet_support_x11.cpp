@@ -30,6 +30,7 @@
 #include "wacom-properties.h"
 
 #include <input/kis_tablet_debugger.h>
+#include <X11/extensions/XInput.h>
 
 
 /**

@@ -2620,5 +2620,5 @@ KisUndoStore* KisDocument::createUndoStore()
     return new KisDocumentUndoStore(this);
 }
 
-#include <KisDocument.moc>
+#include <moc_KisDocument.cpp>
 

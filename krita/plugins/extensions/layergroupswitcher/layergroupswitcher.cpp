@@ -128,3 +128,5 @@ void LayerGroupSwitcher::moveIntoPreviousGroup()
     }
     image->refreshGraph();
 }
+
+#include "layergroupswitcher.moc"

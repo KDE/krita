@@ -161,6 +161,14 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         KisLsUtils::adjustRange(selection, d.noiseNeedRect, shadow->range());
     }
 
+    const psd_layer_effects_inner_glow *iglow = 0;
+    if ((iglow =
+         dynamic_cast<const psd_layer_effects_inner_glow *>(shadow)) &&
+        iglow->source() == psd_glow_center) {
+
+        selection->invert();
+    }
+
     /**
      * Contour correction
      */

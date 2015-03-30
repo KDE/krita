@@ -540,10 +540,21 @@ class LIBKISPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_g
 class LIBKISPSD_EXPORT psd_layer_effects_inner_glow : public psd_layer_effects_glow_common
 {
 public:
-    psd_layer_effects_inner_glow() {
+    psd_layer_effects_inner_glow()
+        : m_source(psd_glow_edge) {
         setInvertsSelection(true);
         setEdgeHidden(false);
     }
+
+    psd_glow_source source() const {
+        return m_source;
+    }
+    void setSource(psd_glow_source value) {
+        m_source = value;
+    }
+
+private:
+    psd_glow_source m_source;
 };
 
 struct psd_layer_effects_satin : public psd_layer_effects_shadow_base

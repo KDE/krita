@@ -188,7 +188,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="lblSource">
            <property name="text">
             <string>&amp;Source:</string>
            </property>
@@ -197,28 +197,8 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="cmbSource">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <item>
-            <property name="text">
-             <string>Center</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Edge</string>
-            </property>
-           </item>
-          </widget>
-         </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="lblChoke">
            <property name="text">
             <string>&amp;Choke:</string>
            </property>
@@ -267,6 +247,26 @@
            <property name="maximum" stdset="0">
             <number>250</number>
            </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="cmbSource">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <item>
+            <property name="text">
+             <string>Center</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Edge</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

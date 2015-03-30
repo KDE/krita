@@ -32,7 +32,6 @@
 #include "ui_wdgdropshadow.h"
 #include "ui_WdgGradientOverlay.h"
 #include "ui_wdgInnerGlow.h"
-#include "ui_wdgOuterGlow.h"
 #include "ui_WdgPatternOverlay.h"
 #include "ui_WdgSatin.h"
 #include "ui_WdgStroke.h"
@@ -154,29 +153,22 @@ private:
 class InnerGlow : public QWidget {
     Q_OBJECT
 public:
-    InnerGlow(QWidget *parent);
-    void setInnerGlow(const psd_layer_effects_inner_glow *innerGlow);
-    void fetchInnerGlow(psd_layer_effects_inner_glow *innerGlow) const;
+    enum Mode {
+        InnerGlowMode = 0,
+        OuterGlowMode
+    };
+
+public:
+    InnerGlow(Mode mode, QWidget *parent);
+    void setConfig(const psd_layer_effects_glow_common *innerGlow);
+    void fetchConfig(psd_layer_effects_glow_common *innerGlow) const;
 
 Q_SIGNALS:
     void configChanged();
 
 private:
     Ui::WdgInnerGlow ui;
-};
-
-class OuterGlow : public QWidget {
-    Q_OBJECT
-public:
-    OuterGlow(QWidget *parent);
-    void setOuterGlow(const psd_layer_effects_outer_glow *outerGlow);
-    void fetchOuterGlow(psd_layer_effects_outer_glow *outerGlow) const;
-
-Q_SIGNALS:
-    void configChanged();
-
-private:
-    Ui::WdgOuterGlow ui;
+    Mode m_mode;
 };
 
 class PatternOverlay : public QWidget {
@@ -277,7 +269,7 @@ private:
     GradientOverlay *m_gradientOverlay;
     InnerGlow *m_innerGlow;
     DropShadow *m_innerShadow;
-    OuterGlow *m_outerGlow;
+    InnerGlow *m_outerGlow;
     PatternOverlay * m_patternOverlay;
     Satin *m_satin;
     Stroke *m_stroke;

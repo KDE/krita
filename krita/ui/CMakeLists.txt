@@ -421,7 +421,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     layerstyles/WdgGradientOverlay.ui
     layerstyles/wdgInnerGlow.ui
     layerstyles/wdglayerstyles.ui
-    layerstyles/wdgOuterGlow.ui
     layerstyles/WdgPatternOverlay.ui
     layerstyles/WdgSatin.ui
     layerstyles/WdgStroke.ui

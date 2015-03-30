@@ -233,6 +233,10 @@ void KisLayerStyleProjectionPlaneTest::testGlowInnerGradient()
     style->innerGlow()->setFillType(psd_fill_gradient);
 
     test(style, "glow_inner_grad");
+
+    style->innerGlow()->setFillType(psd_fill_solid_color);
+    style->innerGlow()->setSource(psd_glow_center);
+    test(style, "glow_inner_grad_center");
 }
 
 #include <KoCompositeOpRegistry.h>

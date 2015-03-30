@@ -592,6 +592,8 @@ namespace KisLsUtils
             gc.end();
 
         } else if (config->fillType() == psd_fill_gradient) {
+            KIS_ASSERT_RECOVER_RETURN(config->gradient());
+
             KisPaintDeviceSP overlayDevice =
                 new KisPaintDevice(dstDevice->colorSpace());
 

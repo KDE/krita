@@ -150,10 +150,11 @@ calligra_set_productset(${PRODUCTSET})
 #########################
 ########################
 
-find_package(ECM 1.1.0 REQUIRED NOMODULE)
+find_package(ECM 1.7.0 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
+include(ECMAddAppIcon)
 include(ECMSetupVersion)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
@@ -162,7 +163,7 @@ include(ECMMarkAsTest)
 
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
-include (CheckFunctionExists)
+include(CheckFunctionExists)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)

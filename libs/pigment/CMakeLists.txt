@@ -8,12 +8,7 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-if (HAVE_VC)
-    # put KDELibs4Support include directories before aany include directory that might be same with KDELibs4 include directory to avoid compiler picking KDELibs4 headers
-    include_directories("/usr/include/KF5/KDELibs4Support/" "/usr/include/qt/" "/usr/include/qt/QtCore" "/usr/include/qt/QtGui" "/usr/include/qt/QtXml" ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
-else()
-    include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
-endif()
+include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -128,11 +123,6 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 endif()
 
 add_library(pigmentcms SHARED ${pigmentcms_SRCS})
-
-if (HAVE_VC)
-    target_link_libraries(pigmentcms KF5::KDELibs4Support)
-    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::KDELibs4Support)
-endif()
 
 target_link_libraries(
     pigmentcms

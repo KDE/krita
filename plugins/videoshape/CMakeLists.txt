@@ -1,13 +1,5 @@
 include_directories(
     ${FLAKE_INCLUDES}
-)
-
-# The next line is a workaround for a issue wherein FindPhononInternal.cmake would change the value of CMAKE_AUTOMOC
-# and cause build error "CMake Error: Attempt to add a custom rule to output ...."
-set(CMAKE_AUTOMOC_TEMP ${CMAKE_AUTOMOC})
-find_package(Phonon4Qt5 NO_MODULE)
-set(CMAKE_AUTOMOC ${CMAKE_AUTOMOC_TEMP})
-include_directories(
     ${PHONON_INCLUDES}
 )
 
@@ -45,7 +37,6 @@ add_library(calligra_shape_video MODULE ${videoshape_LIB_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_video calligra_shape_video.desktop)
 
 target_link_libraries(calligra_shape_video flake
-    ${KDE4_KFILE_LIBRARY}
     ${PHONON_LIBS}
 )
 

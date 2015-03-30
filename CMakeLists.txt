@@ -186,7 +186,7 @@ if(KF5_Activities_FOUND)
 endif()
 
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test Concurrent)
-find_package(Qt5 5.2.0 COMPONENTS WebKit DBus Declarative X11Extras)
+find_package(Qt5 5.2.0 COMPONENTS WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
@@ -557,6 +557,11 @@ if(QT_QTWEBKIT_FOUND)
 endif()
 
 ##
+## Test for Qt WebKitWidgets
+##
+macro_log_feature(Qt5WebKitWidgets_FOUND "Qt WebkitWidgets" "QWidgets module for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for Stage")
+
+##
 ## Test endianess
 ##
 include (TestBigEndian)
@@ -828,6 +833,10 @@ calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_STAGE
+    Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS

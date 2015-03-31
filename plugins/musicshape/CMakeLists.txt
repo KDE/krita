@@ -96,7 +96,3 @@ kcoreaddons_desktop_to_json(calligra_shape_music calligra_shape_music.desktop)
 
 target_link_libraries(calligra_shape_music flake Qt5::Svg)
 install(TARGETS calligra_shape_music DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

@@ -118,3 +118,5 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.end();
 
 }
+
+#include "patterngenerator.moc"

@@ -100,3 +100,5 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
         gc.end();
     }
 }
+
+#include "colorgenerator.moc"

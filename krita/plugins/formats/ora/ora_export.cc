@@ -21,6 +21,8 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
+#include <kurl.h>
+
 #include <QMessageBox>
 
 #include <KisFilterChain.h>

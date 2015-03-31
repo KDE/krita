@@ -34,6 +34,7 @@
 #include <QVector>
 
 #include <klocale.h>
+#include <kglobal.h>
 #include <QMessageBox>
 
 #include "kis_layer.h"

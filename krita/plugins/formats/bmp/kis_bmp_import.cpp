@@ -26,6 +26,7 @@
 #include <kio/netaccess.h>
 
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>

@@ -304,4 +304,5 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     m_slSize->setValue(newWidth);
 }
 
+#include "moc_kis_brush_chooser.cpp"
 

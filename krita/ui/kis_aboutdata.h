@@ -19,8 +19,8 @@
 #ifndef KIS_ABOUT_DATA_H_
 #define KIS_ABOUT_DATA_H_
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 
-KAboutData *newKritaAboutData();
+K4AboutData *newKritaAboutData();
 
 #endif // KIS_ABOUT_DATA_H_

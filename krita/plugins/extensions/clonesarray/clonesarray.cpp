@@ -60,3 +60,5 @@ void ClonesArray::slotCreateClonesArray()
 
     delete dialog;
 }
+
+#include "moc_clonesarrr

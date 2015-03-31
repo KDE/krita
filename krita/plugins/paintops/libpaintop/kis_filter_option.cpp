@@ -187,3 +187,6 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
     }
 }
 
+#include "moc_kis_filter_option.cpp"
+
+

@@ -345,4 +345,4 @@ QSizeF KisAutoBrushWidget::brushSize() const
     return QSizeF(inputRadius->value(), inputRadius->value() * inputRatio->value());
 }
 
-
+#include "moc_kis_auto_brush_widget.cpp"

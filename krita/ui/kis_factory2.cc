@@ -40,7 +40,7 @@
 #include "KisPart.h"
 
 
-KAboutData* KisFactory::s_aboutData = 0;
+K4AboutData* KisFactory::s_aboutData = 0;
 KComponentData* KisFactory::s_componentData = 0;
 
 KisFactory::KisFactory()
@@ -57,7 +57,7 @@ KisFactory::~KisFactory()
 }
 
 
-KAboutData* KisFactory::aboutData()
+K4AboutData* KisFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newKritaAboutData();
@@ -68,7 +68,7 @@ KAboutData* KisFactory::aboutData()
 const KComponentData &KisFactory::componentData()
 {
     if (!s_componentData) {
-        s_componentData = 0;//new KComponentData(aboutData());
+        s_componentData = new KComponentData(aboutData());
         Q_CHECK_PTR(s_componentData);
         KGlobal::dirs()->addResourceType("krita_template", "data", "krita/templates");
 

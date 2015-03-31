@@ -84,7 +84,7 @@ extern "C" int main(int argc, char **argv)
     int state;
     KisFactory factory;
     Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
-    KAboutData *aboutData = KisFactory::aboutData();
+    K4AboutData *aboutData = KisFactory::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 

@@ -34,6 +34,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kglobal.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>

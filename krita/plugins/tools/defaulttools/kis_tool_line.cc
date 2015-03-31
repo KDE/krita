@@ -27,6 +27,8 @@
 
 #include <QPushButton>
 
+#include <kglobal.h>
+
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>

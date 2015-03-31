@@ -24,6 +24,7 @@
 #include <QDoubleSpinBox>
 
 #include <klocale.h>
+#include <kglobal.h>
 
 #include "KoPointerEvent.h"
 

@@ -21,7 +21,7 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR})
 
-add_subdirectory( tests )
+#add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
@@ -413,10 +413,12 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 	forms/wdg_url_requester.ui
 )
 
-add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui Qt5::Declarative
-                              ${X11_X11_LIB}
+QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
+
+add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
+
+target_link_libraries(kritaui ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})

@@ -29,6 +29,7 @@
 #include <recorder/kis_recorded_action_creator_factory.h>
 #include <recorder/kis_recorded_action_creator.h>
 
+#include <kdialog.h>
 #include <KoIcon.h>
 
 #include <QMessageBox>

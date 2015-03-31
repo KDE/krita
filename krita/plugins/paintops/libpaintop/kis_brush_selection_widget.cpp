@@ -383,3 +383,4 @@ void KisBrushSelectionWidget::setDeltaValue(double value)
 
 }
 
+#include "moc_kis_brush_selection_widget.cpp"

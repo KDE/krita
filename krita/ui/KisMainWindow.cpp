@@ -1942,8 +1942,9 @@ void KisMainWindow::showErrorAndDie()
 
 void KisMainWindow::showAboutApplication()
 {
-    KisAboutApplication dlg(KisFactory::aboutData(), this);
-    dlg.exec();
+// QT5PORT
+//     KisAboutApplication dlg(KisFactory::aboutData(), this);
+//     dlg.exec();
 }
 
 QPointer<KisView>KisMainWindow::activeKisView()

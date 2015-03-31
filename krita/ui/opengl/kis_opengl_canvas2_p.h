@@ -46,7 +46,8 @@
 #define GL_NUM_EXTENSIONS 0x821D
 #endif
 
-extern const QString qt_gl_library_name();
+//QT5PORT
+//extern const QString qt_gl_library_name();
 
 namespace VSyncWorkaround {
 
@@ -152,9 +153,10 @@ namespace VSyncWorkaround {
                 }
                 if (!glXGetProcAddressARB)
                 {
-                    QLibrary lib(::qt_gl_library_name());
-                    //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
-                    glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
+                    //QT5PORT
+//                     QLibrary lib(::qt_gl_library_name());
+//                     //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+//                     glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
                 }
             }
         }

@@ -167,3 +167,5 @@ void KisClipboardBrushWidget::slotSaveBrush()
         m_rServerAdapter->addResource(resource);
     }
 }
+
+#include "moc_kis_clipboard_brush_widget.cpp"

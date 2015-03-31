@@ -19,7 +19,7 @@
 #ifndef __KIS_BRUSHOP_TEST_H
 #define __KIS_BRUSHOP_TEST_H
 
-#include <QtTest>
+#include <QTest>
 
 class KisBrushOpTest : public QObject
 {

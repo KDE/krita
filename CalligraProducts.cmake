@@ -160,7 +160,7 @@ calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter" UNPORTED  REQUIRES
 calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_KPR_TO_ODP "KPresenter to ODP filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_PPT_TO_ODP "PPT to OPD filter"  REQUIRES LIB_MSO LIB_CALLIGRA)
-calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" UNPORTED  REQUIRES LIB_KOMSOOXML LIB_KOODF2 LIB_CALLIGRA)
+calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter"  REQUIRES LIB_KOMSOOXML LIB_KOODF2 LIB_CALLIGRA)
 
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter" UNPORTED  REQUIRES LIB_MSO LIB_KOMSOOXML LIB_CALLIGRA)

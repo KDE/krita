@@ -41,6 +41,7 @@
 class QListWidgetItem;
 class KisPSDLayerStyle;
 class KisSignalCompressor;
+class KisCanvasResourceProvider;
 
 
 class Contour : public QWidget {
@@ -135,7 +136,7 @@ private:
 class GradientOverlay : public QWidget {
     Q_OBJECT
 public:
-    GradientOverlay(QWidget *parent);
+    GradientOverlay(KisCanvasResourceProvider *resourceProvider, QWidget *parent);
     void setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient);
     void fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const;
 
@@ -148,6 +149,7 @@ Q_SIGNALS:
 
 private:
     Ui::WdgGradientOverlay ui;
+    KisCanvasResourceProvider *m_resourceProvider;
 };
 
 class InnerGlow : public QWidget {
@@ -159,7 +161,7 @@ public:
     };
 
 public:
-    InnerGlow(Mode mode, QWidget *parent);
+    InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWidget *parent);
     void setConfig(const psd_layer_effects_glow_common *innerGlow);
     void fetchConfig(psd_layer_effects_glow_common *innerGlow) const;
 
@@ -169,6 +171,7 @@ Q_SIGNALS:
 private:
     Ui::WdgInnerGlow ui;
     Mode m_mode;
+    KisCanvasResourceProvider *m_resourceProvider;
 };
 
 class PatternOverlay : public QWidget {
@@ -206,7 +209,7 @@ private:
 class Stroke : public QWidget {
     Q_OBJECT
 public:
-    Stroke(QWidget *parent);
+    Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent);
     void setStroke(const psd_layer_effects_stroke *stroke);
     void fetchStroke(psd_layer_effects_stroke *stroke) const;
 
@@ -219,6 +222,7 @@ Q_SIGNALS:
 
 private:
     Ui::WdgStroke ui;
+    KisCanvasResourceProvider *m_resourceProvider;
 };
 
 class StylesSelector : public QWidget {
@@ -238,7 +242,7 @@ class KisDlgLayerStyle : public KDialog
 {
     Q_OBJECT
 public:
-    explicit KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *parent = 0);
+    explicit KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent = 0);
     ~KisDlgLayerStyle();
 
 signals:

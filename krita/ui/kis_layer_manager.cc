@@ -939,7 +939,7 @@ void KisLayerManager::layerStyle()
         oldStyle = toQShared(new KisPSDLayerStyle());
     }
 
-    KisDlgLayerStyle dlg(oldStyle->clone());
+    KisDlgLayerStyle dlg(oldStyle->clone(), m_view->resourceProvider());
 
     boost::function<void ()> updateCall(boost::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);

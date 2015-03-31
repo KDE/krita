@@ -38,10 +38,19 @@
 
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
+#include "kis_canvas_resource_provider.h"
 
 
+KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
+                                      KisCanvasResourceProvider *resourceProvider)
+{
+    if (!gradient) {
+        gradient = resourceProvider->currentGradient();
+    }
+    return gradient;
+}
 
-KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *parent)
+KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     : KDialog(parent)
     , m_layerStyle(layerStyle)
     , m_initialLayerStyle(layerStyle->clone())
@@ -75,11 +84,11 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     wdgLayerStyles.stylesStack->addWidget(m_innerShadow);
     connect(m_innerShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-    m_outerGlow = new InnerGlow(InnerGlow::OuterGlowMode, this);
+    m_outerGlow = new InnerGlow(InnerGlow::OuterGlowMode, resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_outerGlow);
     connect(m_outerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-    m_innerGlow = new InnerGlow(InnerGlow::InnerGlowMode, this);
+    m_innerGlow = new InnerGlow(InnerGlow::InnerGlowMode, resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_innerGlow);
     connect(m_innerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
@@ -101,7 +110,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     wdgLayerStyles.stylesStack->addWidget(m_colorOverlay);
     connect(m_colorOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-    m_gradientOverlay = new GradientOverlay(this);
+    m_gradientOverlay = new GradientOverlay(resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_gradientOverlay);
     connect(m_gradientOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
@@ -109,7 +118,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     wdgLayerStyles.stylesStack->addWidget(m_patternOverlay);
     connect(m_patternOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-    m_stroke = new Stroke(this);
+    m_stroke = new Stroke(resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_stroke);
     connect(m_stroke, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
@@ -627,8 +636,9 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 /***** Gradient Overlay *********************************************/
 /********************************************************************/
 
-GradientOverlay::GradientOverlay(QWidget *parent)
-    : QWidget(parent)
+GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
+    : QWidget(parent),
+      m_resourceProvider(resourceProvider)
 {
     ui.setupUi(this);
 
@@ -652,29 +662,34 @@ GradientOverlay::GradientOverlay(QWidget *parent)
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
 
-void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient)
+void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *config)
 {
-    ui.cmbCompositeOp->selectCompositeOp(KoID(gradient->blendMode()));
-    ui.intOpacity->setValue(gradient->opacity());
-    ui.cmbGradient->setGradient(gradient->gradient());
-    ui.chkReverse->setChecked(gradient->antiAliased());
-    ui.cmbStyle->setCurrentIndex((int)gradient->style());
-    ui.chkAlignWithLayer->setCheckable(gradient->alignWithLayer());
-    ui.dialAngle->setValue(gradient->angle());
-    ui.intAngle->setValue(gradient->angle());
-    ui.intScale->setValue(gradient->scale());
+    ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
+    ui.intOpacity->setValue(config->opacity());
+
+    KoAbstractGradient *gradient = fetchGradientLazy(config->gradient(), m_resourceProvider);
+    if (gradient) {
+        ui.cmbGradient->setGradient(gradient);
+    }
+
+    ui.chkReverse->setChecked(config->antiAliased());
+    ui.cmbStyle->setCurrentIndex((int)config->style());
+    ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
+    ui.dialAngle->setValue(config->angle());
+    ui.intAngle->setValue(config->angle());
+    ui.intScale->setValue(config->scale());
 }
 
-void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const
+void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *config) const
 {
-    gradient->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
-    gradient->setOpacity(ui.intOpacity->value());
-    gradient->setGradient(ui.cmbGradient->gradient());
-    gradient->setReverse(ui.chkReverse->isChecked());
-    gradient->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
-    gradient->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
-    gradient->setAngle(ui.dialAngle->value());
-    gradient->setScale(ui.intScale->value());
+    config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    config->setOpacity(ui.intOpacity->value());
+    config->setGradient(ui.cmbGradient->gradient());
+    config->setReverse(ui.chkReverse->isChecked());
+    config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
+    config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    config->setAngle(ui.dialAngle->value());
+    config->setScale(ui.intScale->value());
 }
 
 void GradientOverlay::slotDialAngleChanged(int value)
@@ -693,9 +708,10 @@ void GradientOverlay::slotIntAngleChanged(int value)
 /***** Innner Glow      *********************************************/
 /********************************************************************/
 
-InnerGlow::InnerGlow(Mode mode, QWidget *parent)
+InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     : QWidget(parent),
-      m_mode(mode)
+      m_mode(mode),
+      m_resourceProvider(resourceProvider)
 {
     ui.setupUi(this);
 
@@ -753,7 +769,11 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.radioColor->setChecked(config->fillType() == psd_fill_solid_color);
     ui.bnColor->setColor(config->color());
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
-    ui.cmbGradient->setGradient(config->gradient());
+
+    KoAbstractGradient *gradient = fetchGradientLazy(config->gradient(), m_resourceProvider);
+    if (gradient) {
+        ui.cmbGradient->setGradient(gradient);
+    }
 
     ui.cmbTechnique->setCurrentIndex((int)config->technique());
     ui.intChoke->setValue(config->spread());
@@ -790,7 +810,6 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
 
     config->setColor(ui.bnColor->color());
     config->setGradient(ui.cmbGradient->gradient());
-
     config->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     config->setSpread(ui.intChoke->value());
     config->setSize(ui.intSize->value());
@@ -943,8 +962,9 @@ void Satin::fetchSatin(psd_layer_effects_satin *satin) const
 /***** Stroke           *********************************************/
 /********************************************************************/
 
-Stroke::Stroke(QWidget *parent)
-    : QWidget(parent)
+Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
+    : QWidget(parent),
+      m_resourceProvider(resourceProvider)
 {
     ui.setupUi(this);
 
@@ -1007,7 +1027,11 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 
     ui.bnColor->setColor(stroke->color());
 
-    ui.cmbGradient->setGradient(stroke->gradient());
+    KoAbstractGradient *gradient = fetchGradientLazy(stroke->gradient(), m_resourceProvider);
+    if (gradient) {
+        ui.cmbGradient->setGradient(gradient);
+    }
+
     ui.chkReverse->setChecked(stroke->antiAliased());
     ui.cmbStyle->setCurrentIndex((int)stroke->style());
     ui.chkAlignWithLayer->setCheckable(stroke->alignWithLayer());

@@ -592,7 +592,10 @@ namespace KisLsUtils
             gc.end();
 
         } else if (config->fillType() == psd_fill_gradient) {
-            KIS_ASSERT_RECOVER_RETURN(config->gradient());
+            if (!config->gradient()) {
+                qWarning() << "KisLsUtils::applyFinalSelection: Gradient object is null! Skipping...";
+                return;
+            }
 
             KisPaintDeviceSP overlayDevice =
                 new KisPaintDevice(dstDevice->colorSpace());

@@ -6,6 +6,7 @@ ki18n_wrap_ui(KRITA_PALETTEDOCKER_PART_SRCS
 )
 
 add_library(kritapalettedocker MODULE ${KRITA_PALETTEDOCKER_PART_SRCS})
+kcoreaddons_desktop_to_json(kritapalettedocker krita_palettedocker.desktop)
 
 target_link_libraries(kritapalettedocker kritaui)
 

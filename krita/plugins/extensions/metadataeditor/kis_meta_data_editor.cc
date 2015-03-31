@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include <KoIcon.h>
 #include <kis_debug.h>

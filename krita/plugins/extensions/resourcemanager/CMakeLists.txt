@@ -14,6 +14,7 @@ ki18n_wrap_ui(kritaresourcemanager_PART_SRCS
 )
 
 add_library(kritaresourcemanager MODULE ${kritaresourcemanager_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaresourcemanager kritaresourcemanager.desktop)
 
 target_link_libraries(kritaresourcemanager kowidgets kritaui kritalibpaintop)
 

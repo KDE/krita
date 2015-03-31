@@ -11,6 +11,7 @@ ki18n_wrap_ui(kritaimagesplit_PART_SRCS
 add_library(kritaimagesplit MODULE ${kritaimagesplit_PART_SRCS})
 
 target_link_libraries(kritaimagesplit kritaui)
+kcoreaddons_desktop_to_json(kritaimagesplit kritaimagesplit.desktop)
 
 install(TARGETS kritaimagesplit  DESTINATION ${PLUGIN_INSTALL_DIR})
 

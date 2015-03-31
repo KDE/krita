@@ -32,6 +32,7 @@ ki18n_wrap_ui(KRITA_COLORSELECTORNG_PART_SRCS
 )
 
 add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacolorselectorng krita_colorselectorng.desktop)
 
 target_link_libraries(kritacolorselectorng kritaui)
 

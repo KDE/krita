@@ -8,6 +8,7 @@ set(kritaartisticcolorselector_PART_SRCS
 
 ki18n_wrap_ui(kritaartisticcolorselector_PART_SRCS forms/wdgArtisticColorSelector.ui forms/wdgColorPreferencesPopup.ui)
 add_library(kritaartisticcolorselector MODULE ${kritaartisticcolorselector_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaartisticcolorselector krita_artisticcolorselector.desktop)
 
 target_link_libraries(kritaartisticcolorselector kritaui)
 

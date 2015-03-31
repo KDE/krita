@@ -9,6 +9,7 @@ ki18n_wrap_ui(kritalayersplit_PART_SRCS
     )
 
 add_library(kritalayersplit MODULE ${kritalayersplit_PART_SRCS})
+kcoreaddons_desktop_to_json(kritalayersplit kritalayersplit.desktop)
 
 target_link_libraries(kritalayersplit kritaui)
 

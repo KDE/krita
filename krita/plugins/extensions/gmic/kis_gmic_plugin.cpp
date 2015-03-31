@@ -67,7 +67,7 @@
 #include <kis_gmic_small_applicator.h>
 #include "gmic.h"
 
-K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
 K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 
 const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";

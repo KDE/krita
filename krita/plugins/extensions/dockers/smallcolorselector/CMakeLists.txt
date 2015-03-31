@@ -4,6 +4,7 @@ set(KRITA_smallCOLORSELECTOR_PART_SRCS smallcolorselector.cc smallcolorselector_
 # ki18n_wrap_ui(kritasmallcolorselector_PART_SRCS myuifile.ui )
 
 add_library(kritasmallcolorselector MODULE ${KRITA_smallCOLORSELECTOR_PART_SRCS})
+kcoreaddons_desktop_to_json(kritasmallcolorselector krita_smallcolorselector.desktop)
 
 target_link_libraries(kritasmallcolorselector kritaui)
 

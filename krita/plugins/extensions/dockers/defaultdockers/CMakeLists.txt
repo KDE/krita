@@ -14,6 +14,7 @@ ki18n_wrap_ui(kritadefaultdockers_PART_SRCS
 
 
 add_library(kritadefaultdockers MODULE ${kritadefaultdockers_PART_SRCS} ${kritadefaultdockers_PART_HEADERS})
+kcoreaddons_desktop_to_json(kritadefaultdockers kritadefaultdockers.desktop)
 
 target_link_libraries(kritadefaultdockers kritaui)
 

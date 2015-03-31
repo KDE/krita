@@ -9,6 +9,7 @@ ki18n_wrap_ui(kritabigbrother_PART_SRCS
         actionseditor/wdgactionseditor.ui )
 
 add_library(kritabigbrother MODULE ${kritabigbrother_PART_SRCS})
+kcoreaddons_desktop_to_json(kritabigbrother kritabigbrother.desktop)
 
 target_link_libraries(kritabigbrother kritaui)
 

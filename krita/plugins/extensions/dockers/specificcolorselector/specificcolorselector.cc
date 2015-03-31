@@ -37,8 +37,7 @@
 
 #include "specificcolorselector_dock.h"
 
-K_PLUGIN_FACTORY(SpecificColorSelectorPluginFactory, registerPlugin<SpecificColorSelectorPlugin>();)
-K_EXPORT_PLUGIN(SpecificColorSelectorPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(SpecificColorSelectorPluginFactory, "krita_specificcolorselector.json", registerPlugin<SpecificColorSelectorPlugin>();)
 
 class SpecificColorSelectorDockFactory : public KoDockFactoryBase
 {
@@ -80,4 +79,4 @@ SpecificColorSelectorPlugin::~SpecificColorSelectorPlugin()
 {
 }
 
-#include "specificcolorselector.moc"
+#include "moc_specificcolorselector.cpp"

@@ -1,7 +1,7 @@
 add_subdirectory( assistants )
 #add_subdirectory( filters )
 add_subdirectory( tools )
-#add_subdirectory( extensions )
+add_subdirectory( extensions )
 #add_subdirectory( generators )
 add_subdirectory( paintops )
 #add_subdirectory( formats )

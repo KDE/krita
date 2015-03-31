@@ -39,8 +39,7 @@
 #include "dlg_offsetimage.h"
 #include "kis_offset_processing_visitor.h"
 
-K_PLUGIN_FACTORY(OffsetImageFactory, registerPlugin<OffsetImage>();)
-K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(OffsetImageFactory, "kritaoffsetimage.json", registerPlugin<OffsetImage>();)
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
@@ -144,4 +143,4 @@ QRect OffsetImage::offsetWrapRect()
 
 
 
-#include "offsetimage.moc"
+#include "moc_offsetimage.cpp"

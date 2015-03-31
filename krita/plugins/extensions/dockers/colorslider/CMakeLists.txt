@@ -11,6 +11,7 @@ set(kritacolorslider_PART_SRCS
 # ki18n_wrap_ui(kritaspecificcolorselector_PART_SRCS myuifile.ui )
 
 add_library(kritacolorslider MODULE ${kritacolorslider_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacolorslider krita_colorslider.desktop)
 
 target_link_libraries(kritacolorslider kritaui ${OPENEXR_LIBRARIES})
 

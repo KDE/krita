@@ -27,6 +27,7 @@
 #include <QComboBox>
 #include <QColor>
 
+#include <kglobal.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <knuminput.h>

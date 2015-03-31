@@ -43,8 +43,7 @@
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
 
-K_PLUGIN_FACTORY(KisSeparateChannelsPluginFactory, registerPlugin<KisSeparateChannelsPlugin>();)
-K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisSeparateChannelsPluginFactory, "kritaseparatechannels.json", registerPlugin<KisSeparateChannelsPlugin>();)
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)

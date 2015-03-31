@@ -3,6 +3,7 @@ set(kritalayergroupswitcher_PART_SRCS
 )
 
 add_library(kritalayergroupswitcher MODULE ${kritalayergroupswitcher_PART_SRCS})
+kcoreaddons_desktop_to_json(kritalayergroupswitcher kritalayergroupswitcher.desktop)
 
 target_link_libraries(kritalayergroupswitcher kritaui)
 

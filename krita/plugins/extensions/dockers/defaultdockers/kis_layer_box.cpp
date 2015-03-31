@@ -780,3 +780,5 @@ void KisLayerBox::updateThumbnail()
     m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
 }
 
+#include "moc_kis_layer_box.cpp"
+

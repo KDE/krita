@@ -4,6 +4,7 @@ set(kritaoffsetimage_PART_SRCS offsetimage.cpp dlg_offsetimage.cpp kis_offset_pr
 
 ki18n_wrap_ui(kritaoffsetimage_PART_SRCS wdg_offsetimage.ui )
 add_library(kritaoffsetimage MODULE ${kritaoffsetimage_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaoffsetimage kritaoffsetimage.desktop)
 
 target_link_libraries(kritaoffsetimage kritaui)
 install(TARGETS kritaoffsetimage  DESTINATION ${PLUGIN_INSTALL_DIR})

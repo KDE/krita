@@ -29,8 +29,7 @@
 
 #include "dlg_clonesarray.h"
 
-K_PLUGIN_FACTORY(ClonesArrayFactory, registerPlugin<ClonesArray>();)
-K_EXPORT_PLUGIN(ClonesArrayFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ClonesArrayFactory, "kritaclonesarray.json", registerPlugin<ClonesArray>();)
 
 ClonesArray::ClonesArray(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
@@ -61,4 +60,4 @@ void ClonesArray::slotCreateClonesArray()
     delete dialog;
 }
 
-#include "moc_clonesarrr
+#include "moc_clonesarray.cpp"

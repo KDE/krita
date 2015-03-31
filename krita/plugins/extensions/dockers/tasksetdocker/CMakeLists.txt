@@ -5,6 +5,7 @@ ki18n_wrap_ui(KRITA_TASKSETDOCKER_PART_SRCS
     wdgtasksetdocker.ui
 )
 add_library(kritatasksetdocker MODULE ${KRITA_TASKSETDOCKER_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatasksetdocker krita_tasksetdocker.desktop)
 
 target_link_libraries(kritatasksetdocker kritaui)
 

@@ -55,7 +55,7 @@ KoPluginLoader* KoPluginLoader::instance()
     return s_instance;
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config)
+void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner)
 {
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
@@ -125,7 +125,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QString> whiteList;
     foreach(QPluginLoader *loader, serviceNames) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
-        QObject *plugin = factory->create<QObject>(0, QVariantList());
+        QObject *plugin = factory->create<QObject>(owner, QVariantList());
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();

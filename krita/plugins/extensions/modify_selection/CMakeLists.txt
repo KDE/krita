@@ -18,7 +18,7 @@ ki18n_wrap_ui(kritamodifyselection_PART_SRCS
     )
 
 add_library(kritamodifyselection MODULE ${kritamodifyselection_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritamodifyselection kritamodifyselection.desktop)
 
 
 target_link_libraries(kritamodifyselection kritaui)

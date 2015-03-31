@@ -95,4 +95,4 @@ void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
     m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
 
-
+#include "moc_specificcolorselector_dock.cpp"

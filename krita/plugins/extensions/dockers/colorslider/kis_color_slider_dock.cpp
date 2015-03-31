@@ -132,7 +132,7 @@ void ColorSliderDock::layerChanged(const KisNodeSP node)
     m_colorSliders->setColor(m_view->resourceProvider()->fgColor());
 }
 
-
+#include "moc_kis_color_slider_dock.cpp"
 
 
 

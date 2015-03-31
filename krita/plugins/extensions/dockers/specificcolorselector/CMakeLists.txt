@@ -4,6 +4,7 @@ set(KRITA_SPECIFICCOLORSELECTOR_PART_SRCS specificcolorselector.cc specificcolor
 # ki18n_wrap_ui(kritaspecificcolorselector_PART_SRCS myuifile.ui )
 
 add_library(kritaspecificcolorselector MODULE ${KRITA_SPECIFICCOLORSELECTOR_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaspecificcolorselector krita_specificcolorselector.desktop)
 
 target_link_libraries(kritaspecificcolorselector kritaui ${OPENEXR_LIBRARIES})
 

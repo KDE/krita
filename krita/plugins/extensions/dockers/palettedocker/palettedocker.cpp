@@ -34,8 +34,7 @@
 #include "palettedocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(PaletteDockerPluginFactory, registerPlugin<PaletteDockerPlugin>();)
-K_EXPORT_PLUGIN(PaletteDockerPluginFactory( "krita" ) )
+K_PLUGIN_FACTORY_WITH_JSON(PaletteDockerPluginFactory, "krita_palettedocker.json", registerPlugin<PaletteDockerPlugin>();)
 
 class PaletteDockerDockFactory : public KoDockFactoryBase {
 public:

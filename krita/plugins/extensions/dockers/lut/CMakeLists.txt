@@ -14,6 +14,8 @@ ki18n_wrap_ui(KRITA_LUTDOCKER_PART_SRCS
 )
 
 add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_PART_SRCS})
+kcoreaddons_desktop_to_json(kritalutdocker krita_lutdocker.desktop)
+
 target_link_libraries(kritalutdocker kritaui ${OCIO_LIBRARIES})
 
 if(HAVE_OPENGL)

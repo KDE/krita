@@ -356,7 +356,7 @@ KisMainWindow::KisMainWindow()
 
     setAutoSaveSettings(KisFactory::componentName(), false);
 
-    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig());
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), viewManager());
 
     subWindowActivated();
     updateWindowMenu();

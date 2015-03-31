@@ -37,8 +37,7 @@
 #include "patterndocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(PatternDockerPluginFactory, registerPlugin<PatternDockerPlugin>();)
-K_EXPORT_PLUGIN(PatternDockerPluginFactory( "krita" ) )
+K_PLUGIN_FACTORY_WITH_JSON(PatternDockerPluginFactory, "krita_patterndocker.json", registerPlugin<PatternDockerPlugin>();)
 
 class PatternDockerDockFactory : public KoDockFactoryBase {
 public:

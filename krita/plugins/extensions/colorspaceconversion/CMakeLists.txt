@@ -5,7 +5,7 @@ set(kritacolorspaceconversion_PART_SRCS colorspaceconversion.cc dlg_colorspaceco
 ki18n_wrap_ui(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
 
 add_library(kritacolorspaceconversion MODULE ${kritacolorspaceconversion_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritacolorspaceconversion kritacolorspaceconversion.desktop)
 
 
 target_link_libraries(kritacolorspaceconversion kritaui)

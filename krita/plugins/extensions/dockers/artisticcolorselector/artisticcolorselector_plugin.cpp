@@ -23,8 +23,7 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(PaletteDockPluginFactory, registerPlugin<ArtisticColorSelectorPlugin>();)
-K_EXPORT_PLUGIN(PaletteDockPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(PaletteDockPluginFactory, "kritaartisticcolorselector.json", registerPlugin<ArtisticColorSelectorPlugin>();)
 
 class ArtisticColorSelectorDockFactory: public KoDockFactoryBase
 {

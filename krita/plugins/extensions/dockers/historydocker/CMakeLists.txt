@@ -12,6 +12,7 @@ set(kritahistorydocker_PART_SRCS
 )
 
 add_library(kritahistorydocker MODULE ${kritahistorydocker_PART_SRCS})
+kcoreaddons_desktop_to_json(kritahistorydocker kritahistorydocker.desktop)
 
 target_link_libraries(kritahistorydocker kritaimage kritaui)
 

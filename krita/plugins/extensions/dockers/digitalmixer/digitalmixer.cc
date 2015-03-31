@@ -37,8 +37,7 @@
 #include "digitalmixer_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(DigitalMixerPluginFactory, registerPlugin<DigitalMixerPlugin>();)
-K_EXPORT_PLUGIN(DigitalMixerPluginFactory( "krita" ) )
+K_PLUGIN_FACTORY_WITH_JSON(DigitalMixerPluginFactory, "krita_digitalmixer.json", registerPlugin<DigitalMixerPlugin>();)
 
 class DigitalMixerDockFactory : public KoDockFactoryBase {
 public:

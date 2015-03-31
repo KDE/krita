@@ -18,11 +18,13 @@
 #ifndef KOXMLRESOURCEBUNDLEMANIFEST_H
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
+#include <QString>
 #include <QPair>
 #include <QMap>
 #include <QMultiMap>
 #include "krita_export.h"
 
+class QIODevice;
 
 class  ResourceBundleManifest
 {

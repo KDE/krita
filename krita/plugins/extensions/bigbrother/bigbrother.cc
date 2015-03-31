@@ -54,8 +54,7 @@
 #include <QApplication>
 
 
-K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
-K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(BigBrotherPluginFactory, "kritabigbrother.json", registerPlugin<BigBrotherPlugin>();)
 
 class RecordedActionSaveContext : public KisRecordedActionSaveContext {
     public:

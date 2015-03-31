@@ -8,6 +8,7 @@ ki18n_wrap_ui(kritametadataeditor_PART_SRCS
 )
 
 add_library(kritametadataeditor MODULE ${kritametadataeditor_PART_SRCS})
+kcoreaddons_desktop_to_json(kritametadataeditor kritametadataeditor.desktop)
 
 target_link_libraries(kritametadataeditor kritaui )
 

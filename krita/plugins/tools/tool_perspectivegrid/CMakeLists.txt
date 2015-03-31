@@ -6,7 +6,7 @@ set(kritatoolperspectivegrid_PART_SRCS
     )
 
 add_library(kritatoolperspectivegrid MODULE ${kritatoolperspectivegrid_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritatoolperspectivegrid kritatoolperspectivegrid.desktop)
 
 
 target_link_libraries(kritatoolperspectivegrid kritaui)

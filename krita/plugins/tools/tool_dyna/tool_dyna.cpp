@@ -38,8 +38,7 @@
 
 #include "kis_tool_dyna.h"
 
-K_PLUGIN_FACTORY(ToolDynaFactory, registerPlugin<ToolDyna>();)
-K_EXPORT_PLUGIN(ToolDynaFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ToolDynaFactory, "kritatooldyna.json", registerPlugin<ToolDyna>();)
 
 
 ToolDyna::ToolDyna(QObject *parent, const QVariantList &)

@@ -7,7 +7,7 @@ set(kritatoolpolygon_PART_SRCS
 
 
 add_library(kritatoolpolygon MODULE ${kritatoolpolygon_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritatoolpolygon kritatoolpolygon.desktop)
 
 
 target_link_libraries(kritatoolpolygon kritaui)

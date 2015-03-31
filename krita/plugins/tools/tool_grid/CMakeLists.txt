@@ -6,7 +6,7 @@ set(kritatoolgrid_PART_SRCS
     )
 
 add_library(kritatoolgrid MODULE ${kritatoolgrid_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritatoolgrid kritatoolgrid.desktop)
 
 
 target_link_libraries(kritatoolgrid kritaui)

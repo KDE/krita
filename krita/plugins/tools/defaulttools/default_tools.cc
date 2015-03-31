@@ -42,8 +42,7 @@
 #include "kis_tool_move.h"
 #include "kis_tool_pencil.h"
 
-K_PLUGIN_FACTORY(DefaultToolsFactory, registerPlugin<DefaultTools>();)
-K_EXPORT_PLUGIN(DefaultToolsFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritadefaulttools.json", registerPlugin<DefaultTools>();)
 
 
 DefaultTools::DefaultTools(QObject *parent, const QVariantList &)

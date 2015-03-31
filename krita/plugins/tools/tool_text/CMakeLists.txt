@@ -10,7 +10,7 @@ set(kritatooltext_PART_SRCS
 ki18n_wrap_ui(kritatooltext_PART_SRCS wdgtextoptions.ui)
 
 add_library(kritatooltext MODULE ${kritatooltext_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritatooltext kritatooltext.desktop)
 
 
 target_link_libraries(kritatooltext kritaui)

@@ -25,6 +25,7 @@ set(kritadefaulttools_PART_SRCS
 ki18n_wrap_ui(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 
 add_library(kritadefaulttools MODULE ${kritadefaulttools_PART_SRCS})
+kcoreaddons_desktop_to_json(kritadefaulttools kritadefaulttools.desktop)
 
 target_link_libraries(kritadefaulttools kritaui basicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})

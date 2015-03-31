@@ -26,6 +26,7 @@ set(kritatooltransform_PART_SRCS
 ki18n_wrap_ui(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
 add_library(kritatooltransform MODULE ${kritatooltransform_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatooltransform kritatooltransform.desktop)
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")

@@ -29,8 +29,7 @@
 #include "ParallelRulerAssistant.h"
 //#include "mesh_assistant.h"
 
-K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
-K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(RulerAssistantToolFactory, "kritarulerassistanttool.json", registerPlugin<RulerAssistantToolPlugin>();)
 
 
 RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVariantList &)

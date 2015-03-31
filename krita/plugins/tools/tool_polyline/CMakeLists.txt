@@ -7,7 +7,7 @@ set(kritatoolpolyline_PART_SRCS
 
 
 add_library(kritatoolpolyline MODULE ${kritatoolpolyline_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritatoolpolyline kritatoolpolyline.desktop)
 
 
 target_link_libraries(kritatoolpolyline kritaui)

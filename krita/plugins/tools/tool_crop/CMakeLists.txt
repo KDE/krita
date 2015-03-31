@@ -11,6 +11,7 @@ set(kritatoolcrop_PART_SRCS
 ki18n_wrap_ui(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
 
 add_library(kritatoolcrop MODULE ${kritatoolcrop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatoolcrop kritatoolcrop.desktop)
 
 
 

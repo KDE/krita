@@ -289,7 +289,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
-    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
@@ -1333,7 +1333,7 @@ void KoMainWindow::slotFileOpen()
     (void) openDocument(url);
 }
 
-void KoMainWindow::slotFileOpenRecent(const KUrl & url)
+void KoMainWindow::slotFileOpenRecent(const QUrl & url)
 {
     // Create a copy, because the original KUrl in the map of recent files in
     // KRecentFilesAction may get deleted.

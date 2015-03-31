@@ -1144,7 +1144,7 @@ void KisMainWindow::slotFileOpen()
     }
 }
 
-void KisMainWindow::slotFileOpenRecent(const KUrl & url)
+void KisMainWindow::slotFileOpenRecent(const QUrl & url)
 {
     // Create a copy, because the original KUrl in the map of recent files in
     // KRecentFilesAction may get deleted.
@@ -2007,7 +2007,7 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
 
-    d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     KSharedConfigPtr configPtr = KisFactory::componentData().config();
     d->recentFiles->loadEntries(configPtr->group("RecentFiles"));

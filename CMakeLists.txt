@@ -956,6 +956,7 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
 calligra_drop_product_on_bad_condition( PART_QTQUICK
     USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
+    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_GEMINI

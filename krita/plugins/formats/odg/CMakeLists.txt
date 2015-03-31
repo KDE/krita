@@ -13,7 +13,7 @@ add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
 target_link_libraries(kritaodgimport kritaui ${PNG_LIBRARIES} )
 
-install(TARGETS kritaodgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaodgimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  krita_odg_import.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_odg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

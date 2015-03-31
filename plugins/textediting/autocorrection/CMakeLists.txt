@@ -20,4 +20,4 @@ kcoreaddons_desktop_to_json(calligra_textediting_autocorrect calligra_texteditin
 
 target_link_libraries(calligra_textediting_autocorrect kowidgets)
 
-install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_autocorrect DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

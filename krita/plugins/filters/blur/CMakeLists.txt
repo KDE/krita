@@ -25,7 +25,7 @@ add_library(kritablurfilter MODULE ${kritablurfilter_PART_SRCS})
 
 target_link_libraries(kritablurfilter kritaui)
 
-install(TARGETS kritablurfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritablurfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

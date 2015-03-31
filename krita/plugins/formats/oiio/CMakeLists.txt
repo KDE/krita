@@ -8,7 +8,7 @@ add_library(kritaoiioexport MODULE ${kritaoiioexport_PART_SRCS})
 
 target_link_libraries(kritaoiioexport kritaui ${OIIO_LIBRARIES})
 
-install(TARGETS kritaoiioexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoiioexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  krita_oiio_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_oiio.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
@@ -23,7 +23,7 @@ add_library(kritaoiioimport MODULE ${kritaoiioimport_PART_SRCS})
 
 target_link_libraries(kritaoiioimport kritaui ${OIIO_LIBRARIES})
 
-install(TARGETS kritaoiioimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoiioimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  krita_oiio_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_oiio.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

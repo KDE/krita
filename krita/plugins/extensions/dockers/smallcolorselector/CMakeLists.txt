@@ -8,7 +8,7 @@ kcoreaddons_desktop_to_json(kritasmallcolorselector krita_smallcolorselector.des
 
 target_link_libraries(kritasmallcolorselector kritaui)
 
-install(TARGETS kritasmallcolorselector  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritasmallcolorselector  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

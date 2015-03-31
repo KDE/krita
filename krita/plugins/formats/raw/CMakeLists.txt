@@ -20,7 +20,7 @@ include_directories( ${KDCRAW_INCLUDE_DIR} )
 
 target_link_libraries(krita_raw_import kritaui  KF5::KDcraw)
 
-install(TARGETS krita_raw_import  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krita_raw_import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

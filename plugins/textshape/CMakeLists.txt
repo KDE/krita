@@ -180,7 +180,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 
-install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

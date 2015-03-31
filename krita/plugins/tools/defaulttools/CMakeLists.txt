@@ -30,7 +30,7 @@ kcoreaddons_desktop_to_json(kritadefaulttools kritadefaulttools.desktop)
 target_link_libraries(kritadefaulttools kritaui basicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})
 
-install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaulttools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -18,7 +18,7 @@ kcoreaddons_desktop_to_json(kritadefaultdockers kritadefaultdockers.desktop)
 
 target_link_libraries(kritadefaultdockers kritaui)
 
-install(TARGETS kritadefaultdockers  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaultdockers  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  kritadefaultdockers.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

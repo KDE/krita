@@ -8,7 +8,7 @@ add_library(kritaexample MODULE ${kritaexample_PART_SRCS})
 
 target_link_libraries(kritaexample kritaui)
 
-install(TARGETS kritaexample  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexample  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

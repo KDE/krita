@@ -16,7 +16,7 @@ add_library(kritanoisefilter MODULE ${kritanoisefilter_PART_SRCS})
 
 target_link_libraries(kritanoisefilter kritaui)
 
-install(TARGETS kritanoisefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritanoisefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

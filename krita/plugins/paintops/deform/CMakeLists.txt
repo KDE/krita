@@ -14,7 +14,7 @@ kcoreaddons_desktop_to_json(kritadeformpaintop kritadeformpaintop.desktop)
 
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 
-install(TARGETS kritadeformpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadeformpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

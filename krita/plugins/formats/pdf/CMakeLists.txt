@@ -13,7 +13,7 @@ add_library(kritapdfimport MODULE ${kritapdfimport_PART_SRCS})
 
 target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY} )
 
-install(TARGETS kritapdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapdfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_pdf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

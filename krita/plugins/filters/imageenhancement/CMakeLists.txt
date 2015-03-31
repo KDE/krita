@@ -13,7 +13,7 @@ add_library(kritaimageenhancement MODULE ${kritaimageenhancement_PART_SRCS})
 
 target_link_libraries(kritaimageenhancement kritaui)
 
-install(TARGETS kritaimageenhancement  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimageenhancement  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

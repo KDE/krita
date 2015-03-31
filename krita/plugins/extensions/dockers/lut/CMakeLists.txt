@@ -29,7 +29,7 @@ if(HAVE_OPENGL)
 endif()
 
 
-install(TARGETS kritalutdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritalutdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

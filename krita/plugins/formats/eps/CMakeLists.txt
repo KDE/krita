@@ -16,7 +16,7 @@ add_library(kritaepsimport MODULE ${kritaepsimport_PART_SRCS})
 
 target_link_libraries(kritaepsimport kritaui eps ${EXIV2_LIBRARIES} )
 
-install(TARGETS kritaepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaepsimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -31,7 +31,7 @@ add_library(kritaepsexport MODULE ${kritaepsexport_PART_SRCS})
 
 target_link_libraries(kritaepsexport kritaui eps ${EXIV2_LIBRARIES} )
 
-install(TARGETS kritaepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaepsexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -16,7 +16,7 @@ add_library(kritaunsharpfilter MODULE ${kritaunsharpfilter_PART_SRCS})
 
 target_link_libraries(kritaunsharpfilter kritaui)
 
-install(TARGETS kritaunsharpfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaunsharpfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

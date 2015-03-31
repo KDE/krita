@@ -7,7 +7,7 @@ add_library(kritaoffsetimage MODULE ${kritaoffsetimage_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaoffsetimage kritaoffsetimage.desktop)
 
 target_link_libraries(kritaoffsetimage kritaui)
-install(TARGETS kritaoffsetimage  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoffsetimage  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

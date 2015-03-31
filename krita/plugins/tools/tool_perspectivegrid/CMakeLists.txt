@@ -11,7 +11,7 @@ kcoreaddons_desktop_to_json(kritatoolperspectivegrid kritatoolperspectivegrid.de
 
 target_link_libraries(kritatoolperspectivegrid kritaui)
 
-install(TARGETS kritatoolperspectivegrid  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolperspectivegrid  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

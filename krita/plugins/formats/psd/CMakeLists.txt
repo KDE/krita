@@ -32,7 +32,7 @@ else ()
 	target_link_libraries(kritapsdimport kritaui )
 endif ()
 
-install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -49,7 +49,7 @@ if (WIN32)
 else ()	
     target_link_libraries(kritapsdexport kritaui )
 endif ()	
-install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES krita_psd_import.desktop 
                krita_psd_export.desktop  

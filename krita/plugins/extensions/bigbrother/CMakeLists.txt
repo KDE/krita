@@ -13,7 +13,7 @@ kcoreaddons_desktop_to_json(kritabigbrother kritabigbrother.desktop)
 
 target_link_libraries(kritabigbrother kritaui)
 
-install(TARGETS kritabigbrother  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritabigbrother  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

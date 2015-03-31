@@ -13,7 +13,7 @@ add_library(kritacolorgenerator MODULE ${kritacolorgenerator_PART_SRCS})
 
 target_link_libraries(kritacolorgenerator kritaui)
 
-install(TARGETS kritacolorgenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorgenerator  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

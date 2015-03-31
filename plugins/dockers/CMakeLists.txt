@@ -26,4 +26,4 @@ kcoreaddons_desktop_to_json(calligra_docker_defaults calligra_docker_defaults.de
 
 target_link_libraries(calligra_docker_defaults kowidgets)
 
-install(TARGETS calligra_docker_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_docker_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

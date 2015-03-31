@@ -16,7 +16,7 @@ add_library(kritajp2import MODULE ${kritajp2import_PART_SRCS})
 
 target_link_libraries(kritajp2import kritaui ${OPENJPEG_LIBRARIES} )
 
-install(TARGETS kritajp2import  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajp2import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -32,7 +32,7 @@ add_library(kritajp2export MODULE ${kritajp2export_PART_SRCS})
 
 target_link_libraries(kritajp2export kritaui ${OPENJPEG_LIBRARIES} )
 
-install(TARGETS kritajp2export  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajp2export  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

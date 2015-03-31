@@ -10,7 +10,7 @@ add_library(kritaclonesarray MODULE ${kritaclonesarray_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaclonesarray kritaclonesarray.desktop)
 
 target_link_libraries(kritaclonesarray kritaui)
-install(TARGETS kritaclonesarray  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaclonesarray  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

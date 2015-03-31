@@ -8,7 +8,7 @@ kcoreaddons_desktop_to_json(kritaspecificcolorselector krita_specificcolorselect
 
 target_link_libraries(kritaspecificcolorselector kritaui ${OPENEXR_LIBRARIES})
 
-install(TARGETS kritaspecificcolorselector  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaspecificcolorselector  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

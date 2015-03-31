@@ -36,7 +36,7 @@ target_link_libraries(calligra_shape_template flake    ${KDE4_KFILE_LIBRARY})
 #Template: Possibly you need to link with komain too.
 #target_link_libraries(templateshape komain flake    ${KDE4_KFILE_LIBRARY})
 
-install(TARGETS calligra_shape_template DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_template DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

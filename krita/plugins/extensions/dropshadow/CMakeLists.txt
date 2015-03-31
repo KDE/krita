@@ -10,7 +10,7 @@ kcoreaddons_desktop_to_json(kritadropshadow kritadropshadow.desktop)
 
 target_link_libraries(kritadropshadow kritaui)
 
-install(TARGETS kritadropshadow  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadropshadow  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

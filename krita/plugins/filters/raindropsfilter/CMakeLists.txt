@@ -8,7 +8,7 @@ add_library(kritaraindropsfilter MODULE ${kritaraindropsfilter_PART_SRCS})
 
 target_link_libraries(kritaraindropsfilter kritaui)
 
-install(TARGETS kritaraindropsfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaraindropsfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

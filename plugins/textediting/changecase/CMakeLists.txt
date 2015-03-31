@@ -13,4 +13,4 @@ kcoreaddons_desktop_to_json(calligra_textediting_changecase calligra_textediting
 
 target_link_libraries(calligra_textediting_changecase kotext)
 
-install(TARGETS calligra_textediting_changecase DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_changecase DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

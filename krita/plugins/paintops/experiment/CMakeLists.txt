@@ -13,7 +13,7 @@ kcoreaddons_desktop_to_json(kritaexperimentpaintop kritaexperimentpaintop.deskto
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 
-install(TARGETS kritaexperimentpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexperimentpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

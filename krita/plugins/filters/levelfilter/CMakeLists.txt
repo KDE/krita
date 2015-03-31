@@ -13,7 +13,7 @@ add_library(kritalevelfilter MODULE ${kritalevelfilter_PART_SRCS})
 
 target_link_libraries(kritalevelfilter kritaui)
 
-install(TARGETS kritalevelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritalevelfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

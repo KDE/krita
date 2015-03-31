@@ -10,7 +10,7 @@ kcoreaddons_desktop_to_json(kritacolorrange kritacolorrange.desktop)
 
 target_link_libraries(kritacolorrange kritaui)
 
-install(TARGETS kritacolorrange  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorrange  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

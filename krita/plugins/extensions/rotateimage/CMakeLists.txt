@@ -16,7 +16,7 @@ kcoreaddons_desktop_to_json(kritarotateimage kritarotateimage.desktop)
 
 target_link_libraries(kritarotateimage kritaui)
 
-install(TARGETS kritarotateimage  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritarotateimage  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

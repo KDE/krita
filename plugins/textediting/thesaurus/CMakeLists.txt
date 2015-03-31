@@ -17,7 +17,7 @@ kcoreaddons_desktop_to_json(calligra_textediting_thesaurus calligra_textediting_
 
 target_link_libraries(calligra_textediting_thesaurus kotext)
 
-install(TARGETS calligra_textediting_thesaurus  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_thesaurus  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

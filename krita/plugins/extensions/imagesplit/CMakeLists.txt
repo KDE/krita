@@ -13,7 +13,7 @@ add_library(kritaimagesplit MODULE ${kritaimagesplit_PART_SRCS})
 target_link_libraries(kritaimagesplit kritaui)
 kcoreaddons_desktop_to_json(kritaimagesplit kritaimagesplit.desktop)
 
-install(TARGETS kritaimagesplit  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimagesplit  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  imagesplit.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritaimagesplit.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

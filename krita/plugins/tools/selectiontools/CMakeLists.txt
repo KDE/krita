@@ -16,7 +16,7 @@ kcoreaddons_desktop_to_json(kritaselectiontools kritaselectiontools.desktop)
 
 target_link_libraries(kritaselectiontools kritaui basicflakes)
 
-install(TARGETS kritaselectiontools  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaselectiontools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

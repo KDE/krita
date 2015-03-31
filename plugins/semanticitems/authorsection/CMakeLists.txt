@@ -16,4 +16,4 @@ kcoreaddons_desktop_to_json(calligra_semanticitem_authorsection calligra_semanti
 
 target_link_libraries(calligra_semanticitem_authorsection   ${KORDF_LIBS})
 
-install(TARGETS calligra_semanticitem_authorsection  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_semanticitem_authorsection  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

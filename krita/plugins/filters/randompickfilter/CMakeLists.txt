@@ -16,7 +16,7 @@ add_library(kritarandompickfilter MODULE ${kritarandompickfilter_PART_SRCS})
 
 target_link_libraries(kritarandompickfilter kritaui)
 
-install(TARGETS kritarandompickfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritarandompickfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

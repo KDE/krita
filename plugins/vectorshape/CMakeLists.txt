@@ -22,7 +22,7 @@ kcoreaddons_desktop_to_json(calligra_shape_vector calligra_shape_vector.desktop)
 
 target_link_libraries(calligra_shape_vector flake kovectorimage Qt5::Svg)
 
-install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

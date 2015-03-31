@@ -5,5 +5,5 @@ ki18n_wrap_ui(INDEXCOLORS_SOURCE kiswdgindexcolors.ui)
 add_library(kritaindexcolors MODULE ${INDEXCOLORS_SOURCE})
 target_link_libraries(kritaindexcolors kritaui)
 
-install(TARGETS kritaindexcolors          DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaindexcolors          DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES   kritaindexcolors.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -15,7 +15,7 @@ kcoreaddons_desktop_to_json(kritacolorslider krita_colorslider.desktop)
 
 target_link_libraries(kritacolorslider kritaui ${OPENEXR_LIBRARIES})
 
-install(TARGETS kritacolorslider  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorslider  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

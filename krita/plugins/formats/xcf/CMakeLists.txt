@@ -25,7 +25,7 @@ target_link_libraries(kritaxcfimport kritaui )
 if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
 else ()
-    install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+    install(TARGETS kritaxcfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 endif ()
 
 ########### install files ###############

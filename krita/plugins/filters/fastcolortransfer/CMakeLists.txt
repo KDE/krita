@@ -16,7 +16,7 @@ add_library(kritafastcolortransferfilter MODULE ${kritafastcolortransferfilter_P
 
 target_link_libraries(kritafastcolortransferfilter kritaui)
 
-install(TARGETS kritafastcolortransferfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritafastcolortransferfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

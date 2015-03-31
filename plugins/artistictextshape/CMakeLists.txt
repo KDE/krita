@@ -41,4 +41,4 @@ kcoreaddons_desktop_to_json(calligra_shape_artistictext calligra_shape_artistict
 
 target_link_libraries(calligra_shape_artistictext flake)
 
-install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS calligra_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

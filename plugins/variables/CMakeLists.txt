@@ -33,4 +33,4 @@ kcoreaddons_desktop_to_json(calligra_textinlineobject_variables calligra_textinl
 
 target_link_libraries(calligra_textinlineobject_variables kotext kotextlayout)
 
-install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textinlineobject_variables DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

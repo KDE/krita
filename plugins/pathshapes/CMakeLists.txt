@@ -42,4 +42,4 @@ kcoreaddons_desktop_to_json(calligra_shape_paths calligra_shape_paths.desktop)
 
 target_link_libraries(calligra_shape_paths flake kowidgets)
 
-install(TARGETS calligra_shape_paths  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_paths  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

@@ -10,7 +10,7 @@ kcoreaddons_desktop_to_json(kritashearimage kritashearimage.desktop)
 
 target_link_libraries(kritashearimage kritaui)
 
-install(TARGETS kritashearimage  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritashearimage  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

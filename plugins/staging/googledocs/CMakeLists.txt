@@ -27,7 +27,7 @@ add_library(calligragoogledocs MODULE ${calligragoogledocs_PART_SRCS})
 
 target_link_libraries(calligragoogledocs ${QT_LIBRARIES} komain )
 
-install(TARGETS calligragoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligragoogledocs  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

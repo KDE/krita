@@ -113,7 +113,7 @@ target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_formular  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 

@@ -13,7 +13,7 @@ add_library(kritapatterngenerator MODULE ${kritapatterngenerator_PART_SRCS})
 
 target_link_libraries(kritapatterngenerator kritaui)
 
-install(TARGETS kritapatterngenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapatterngenerator  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

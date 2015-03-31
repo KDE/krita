@@ -16,7 +16,7 @@ add_library(kritawavefilter MODULE ${kritawavefilter_PART_SRCS})
 
 target_link_libraries(kritawavefilter kritaui)
 
-install(TARGETS kritawavefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritawavefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

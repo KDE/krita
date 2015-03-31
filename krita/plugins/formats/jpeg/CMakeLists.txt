@@ -30,7 +30,7 @@ else()
     target_link_libraries(kritajpegimport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 endif()
 
-install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajpegimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -49,7 +49,7 @@ else()
     target_link_libraries(kritajpegexport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 endif()
 
-install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajpegexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

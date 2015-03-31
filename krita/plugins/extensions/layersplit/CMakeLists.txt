@@ -13,7 +13,7 @@ kcoreaddons_desktop_to_json(kritalayersplit kritalayersplit.desktop)
 
 target_link_libraries(kritalayersplit kritaui)
 
-install(TARGETS kritalayersplit  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritalayersplit  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  layersplit.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritalayersplit.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

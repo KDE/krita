@@ -11,7 +11,7 @@ add_library(kritaphongbumpmap MODULE ${kritaphongbumpmap_PART_SRCS})
 
 target_link_libraries(kritaphongbumpmap kritaui)
 
-install(TARGETS kritaphongbumpmap  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaphongbumpmap  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

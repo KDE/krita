@@ -12,7 +12,7 @@ kcoreaddons_desktop_to_json(kritatoolpolygon kritatoolpolygon.desktop)
 
 target_link_libraries(kritatoolpolygon kritaui)
 
-install(TARGETS kritatoolpolygon  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolpolygon  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

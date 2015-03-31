@@ -20,7 +20,7 @@ add_library(kritaimagesize MODULE ${kritaimagesize_PART_SRCS})
 
 target_link_libraries(kritaimagesize kritaui)
 
-install(TARGETS kritaimagesize  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimagesize  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

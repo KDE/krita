@@ -10,7 +10,7 @@ add_library(kritaheightmapimport MODULE ${kritaheightmapimport_PART_SRCS})
 
 target_link_libraries(kritaheightmapimport kritaui )
 
-install(TARGETS kritaheightmapimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaheightmapimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -24,7 +24,7 @@ add_library(kritaheightmapexport MODULE ${kritaheightmapexport_PART_SRCS})
 
 target_link_libraries(kritaheightmapexport kritaui  )
 
-install(TARGETS kritaheightmapexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaheightmapexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

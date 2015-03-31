@@ -242,8 +242,8 @@ if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
     )
 endif()
 
-# override the kf5 plugin installdir
-set(PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
+# set custom calligra plugin installdir
+set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
 
 
  ###########################

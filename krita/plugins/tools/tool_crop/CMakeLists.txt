@@ -17,7 +17,7 @@ kcoreaddons_desktop_to_json(kritatoolcrop kritatoolcrop.desktop)
 
 target_link_libraries(kritatoolcrop kritaui)
 
-install(TARGETS kritatoolcrop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolcrop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

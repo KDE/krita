@@ -12,7 +12,7 @@ kcoreaddons_desktop_to_json(kritametadataeditor kritametadataeditor.desktop)
 
 target_link_libraries(kritametadataeditor kritaui )
 
-install(TARGETS kritametadataeditor  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritametadataeditor  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

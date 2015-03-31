@@ -22,7 +22,7 @@ add_library(kritatiffimport MODULE ${kritatiffimport_PART_SRCS})
 
 target_link_libraries(kritatiffimport kritaui ${TIFF_LIBRARIES})
 
-install(TARGETS kritatiffimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatiffimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -41,7 +41,7 @@ add_library(kritatiffexport MODULE ${kritatiffexport_PART_SRCS})
 
 target_link_libraries(kritatiffexport kritaui ${TIFF_LIBRARIES})
 
-install(TARGETS kritatiffexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatiffexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############

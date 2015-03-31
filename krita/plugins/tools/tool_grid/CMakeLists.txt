@@ -11,7 +11,7 @@ kcoreaddons_desktop_to_json(kritatoolgrid kritatoolgrid.desktop)
 
 target_link_libraries(kritatoolgrid kritaui)
 
-install(TARGETS kritatoolgrid  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolgrid  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

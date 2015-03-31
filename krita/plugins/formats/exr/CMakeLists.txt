@@ -21,7 +21,7 @@ add_library(kritaexrimport MODULE ${kritaexrimport_PART_SRCS})
 
 target_link_libraries(kritaexrimport kritaui ${OPENEXR_LIBRARIES} )
 
-install(TARGETS kritaexrimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexrimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -37,7 +37,7 @@ add_library(kritaexrexport MODULE ${kritaexrexport_PART_SRCS})
 
 target_link_libraries(kritaexrexport kritaui ${OPENEXR_LIBRARIES} )
 
-install(TARGETS kritaexrexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexrexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

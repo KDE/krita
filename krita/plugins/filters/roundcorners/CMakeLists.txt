@@ -6,7 +6,7 @@ add_library(kritaroundcornersfilter MODULE ${kritaroundcornersfilter_PART_SRCS})
 
 target_link_libraries(kritaroundcornersfilter kritaui)
 
-install(TARGETS kritaroundcornersfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaroundcornersfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

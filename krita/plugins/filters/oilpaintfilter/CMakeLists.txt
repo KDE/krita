@@ -8,7 +8,7 @@ add_library(kritaoilpaintfilter MODULE ${kritaoilpaintfilter_PART_SRCS})
 
 target_link_libraries(kritaoilpaintfilter kritaui)
 
-install(TARGETS kritaoilpaintfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoilpaintfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ target_link_libraries(
     kopageapp
 )
 
-install(TARGETS kopabackgroundtool  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kopabackgroundtool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

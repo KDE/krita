@@ -20,7 +20,7 @@ kcoreaddons_desktop_to_json(kritarulerassistanttool kritarulerassistanttool.desk
 
 target_link_libraries(kritarulerassistanttool kritaui flake   )
 
-install(TARGETS kritarulerassistanttool  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritarulerassistanttool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

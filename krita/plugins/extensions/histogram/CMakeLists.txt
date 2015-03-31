@@ -10,7 +10,7 @@ kcoreaddons_desktop_to_json(kritahistogram kritahistogram.desktop)
 
 target_link_libraries(kritahistogram kritaui)
 
-install(TARGETS kritahistogram  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritahistogram  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

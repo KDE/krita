@@ -18,7 +18,7 @@ add_library(kritaextensioncolorsfilters MODULE ${kritaextensioncolorsfilters_PAR
 
 target_link_libraries(kritaextensioncolorsfilters kritaui)
 
-install(TARGETS kritaextensioncolorsfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaextensioncolorsfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

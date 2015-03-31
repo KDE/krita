@@ -36,7 +36,7 @@ kcoreaddons_desktop_to_json(kritacolorselectorng krita_colorselectorng.desktop)
 
 target_link_libraries(kritacolorselectorng kritaui)
 
-install(TARGETS kritacolorselectorng  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorselectorng  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

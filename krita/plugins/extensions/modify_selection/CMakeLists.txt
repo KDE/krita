@@ -23,7 +23,7 @@ kcoreaddons_desktop_to_json(kritamodifyselection kritamodifyselection.desktop)
 
 target_link_libraries(kritamodifyselection kritaui)
 
-install(TARGETS kritamodifyselection  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritamodifyselection  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

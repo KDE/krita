@@ -15,7 +15,7 @@ add_library(krita_colorspaces_extensions MODULE ${extensions_plugin_PART_SRCS} )
 
 target_link_libraries(krita_colorspaces_extensions pigmentcms ${OPENEXR_LIBRARIES})
 
-install( TARGETS krita_colorspaces_extensions DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS krita_colorspaces_extensions DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 

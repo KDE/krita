@@ -10,7 +10,7 @@ kcoreaddons_desktop_to_json(kritacolorspaceconversion kritacolorspaceconversion.
 
 target_link_libraries(kritacolorspaceconversion kritaui)
 
-install(TARGETS kritacolorspaceconversion  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorspaceconversion  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

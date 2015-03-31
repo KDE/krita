@@ -18,7 +18,7 @@ kcoreaddons_desktop_to_json(kritahairypaintop kritahairypaintop.desktop)
 
 target_link_libraries(kritahairypaintop kritalibpaintop)
 
-install(TARGETS kritahairypaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritahairypaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

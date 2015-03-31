@@ -14,7 +14,7 @@ add_library(kritasobelfilter MODULE ${kritasobelfilter_PART_SRCS})
 
 target_link_libraries(kritasobelfilter kritaui)
 
-install(TARGETS kritasobelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritasobelfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

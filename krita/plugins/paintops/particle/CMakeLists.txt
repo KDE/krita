@@ -14,7 +14,7 @@ kcoreaddons_desktop_to_json(kritaparticlepaintop kritaparticlepaintop.desktop)
 
 target_link_libraries(kritaparticlepaintop kritalibpaintop)
 
-install(TARGETS kritaparticlepaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaparticlepaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -14,7 +14,7 @@ add_library(kritaoraimport MODULE ${kritaoraimport_PART_SRCS})
 
 target_link_libraries(kritaoraimport kritaui )
 
-install(TARGETS kritaoraimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoraimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -28,7 +28,7 @@ add_library(kritaoraexport MODULE ${kritaoraexport_PART_SRCS})
 
 target_link_libraries(kritaoraexport kritaui )
 
-install(TARGETS kritaoraexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoraexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

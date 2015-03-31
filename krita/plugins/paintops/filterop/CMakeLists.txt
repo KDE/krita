@@ -11,7 +11,7 @@ kcoreaddons_desktop_to_json(kritafilterop kritafilterop.desktop)
 
 target_link_libraries(kritafilterop kritalibpaintop)
 
-install(TARGETS kritafilterop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritafilterop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

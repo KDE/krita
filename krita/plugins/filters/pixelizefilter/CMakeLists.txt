@@ -8,7 +8,7 @@ add_library(kritapixelizefilter MODULE ${kritapixelizefilter_PART_SRCS})
 
 target_link_libraries(kritapixelizefilter kritaui)
 
-install(TARGETS kritapixelizefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapixelizefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -24,4 +24,4 @@ target_link_libraries(keximigrate_spreadsheet
     Predicate
 )
 
-install(TARGETS keximigrate_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

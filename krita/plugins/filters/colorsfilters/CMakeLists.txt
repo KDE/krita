@@ -23,7 +23,7 @@ add_library(kritacolorsfilters MODULE ${kritacolorsfilters_PART_SRCS})
 
 target_link_libraries(kritacolorsfilters kritaui)
 
-install(TARGETS kritacolorsfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorsfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

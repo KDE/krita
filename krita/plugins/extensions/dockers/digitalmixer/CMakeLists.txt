@@ -8,7 +8,7 @@ kcoreaddons_desktop_to_json(kritadigitalmixer krita_digitalmixer.desktop)
 
 target_link_libraries(kritadigitalmixer kritaui)
 
-install(TARGETS kritadigitalmixer  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadigitalmixer  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

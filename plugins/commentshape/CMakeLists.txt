@@ -18,4 +18,4 @@ kcoreaddons_desktop_to_json(calligra_shape_comment calligra_shape_comment.deskto
 
 target_link_libraries(calligra_shape_comment kotextlayout)
 
-install(TARGETS calligra_shape_comment DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_comment DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

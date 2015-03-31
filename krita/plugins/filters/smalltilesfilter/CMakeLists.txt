@@ -8,7 +8,7 @@ add_library(kritasmalltilesfilter MODULE ${kritasmalltilesfilter_PART_SRCS})
 
 target_link_libraries(kritasmalltilesfilter kritaui)
 
-install(TARGETS kritasmalltilesfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritasmalltilesfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

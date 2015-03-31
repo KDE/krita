@@ -10,7 +10,7 @@ add_library(kritaqmlexport MODULE ${kritaqmlexport_PART_SRCS})
 
 target_link_libraries(kritaqmlexport kritaui )
 
-install(TARGETS kritaqmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaqmlexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

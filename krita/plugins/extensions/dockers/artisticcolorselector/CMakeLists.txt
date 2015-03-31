@@ -12,5 +12,5 @@ kcoreaddons_desktop_to_json(kritaartisticcolorselector krita_artisticcolorselect
 
 target_link_libraries(kritaartisticcolorselector kritaui)
 
-install(TARGETS kritaartisticcolorselector DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaartisticcolorselector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES krita_artisticcolorselector.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

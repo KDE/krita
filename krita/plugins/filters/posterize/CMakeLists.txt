@@ -8,7 +8,7 @@ add_library(kritaposterize MODULE ${kritaposterize_PART_SRCS})
 
 target_link_libraries(kritaposterize kritaui)
 
-install(TARGETS kritaposterize  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaposterize  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

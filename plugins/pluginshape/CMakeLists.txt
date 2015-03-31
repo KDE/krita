@@ -13,4 +13,4 @@ kcoreaddons_desktop_to_json(calligra_shape_plugin calligra_shape_plugin.desktop)
 
 target_link_libraries(calligra_shape_plugin komain
   )
-install(TARGETS calligra_shape_plugin DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_plugin DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

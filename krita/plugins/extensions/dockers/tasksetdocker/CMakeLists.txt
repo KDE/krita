@@ -9,7 +9,7 @@ kcoreaddons_desktop_to_json(kritatasksetdocker krita_tasksetdocker.desktop)
 
 target_link_libraries(kritatasksetdocker kritaui)
 
-install(TARGETS kritatasksetdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatasksetdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

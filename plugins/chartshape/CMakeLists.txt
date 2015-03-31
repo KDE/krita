@@ -80,4 +80,4 @@ add_library(calligra_shape_chart MODULE ChartShapeFactory.cpp )
 kcoreaddons_desktop_to_json(calligra_shape_chart calligra_shape_chart.desktop)
 
 target_link_libraries(calligra_shape_chart chartshapecore KChart flake)
-install(TARGETS calligra_shape_chart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_chart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

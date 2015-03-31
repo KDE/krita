@@ -75,3 +75,5 @@ bool MusicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &
     Q_UNUSED(context);
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra.org/music" );
 }
+
+#include "MusicShapeFactory.moc"

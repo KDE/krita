@@ -19,6 +19,8 @@
 #include "AbstractMusicAction.h"
 #include "../SimpleEntryTool.h"
 
+#include <kicon.h>
+
 #include <QPainter>
 
 AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool)

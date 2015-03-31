@@ -27,6 +27,7 @@
 #include <kfiledialog.h>
 #include <kinputdialog.h>
 #include <kaction.h>
+#include <kurl.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>

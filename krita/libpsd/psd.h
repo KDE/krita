@@ -512,6 +512,7 @@ public:
         setKnocksOut(true);
         setDistance(0);
         setBlendMode(COMPOSITE_LINEAR_DODGE);
+        setColor(Qt::white);
     }
 
     using psd_layer_effects_shadow_base::setBlendMode;

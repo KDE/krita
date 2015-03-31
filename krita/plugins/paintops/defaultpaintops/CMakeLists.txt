@@ -23,6 +23,7 @@ add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_PART_SRCS})
 
 
 target_link_libraries(kritadefaultpaintops kritalibpaintop)
+kcoreaddons_desktop_to_json(kritadefaultpaintops kritadefaultpaintops.desktop)
 
 install(TARGETS kritadefaultpaintops  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -48,6 +48,8 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
     const QRect tMaskRect(50, 50, 20, 20);
     const QRect partialSelectionRect(90, 50, 20, 20);
 
+    const QRect updateRect1(10, 10, 50, 100);
+    const QRect updateRect2(60, 10, 50, 100);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "styles test");
@@ -115,7 +117,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         const QRect changeRect = plane.changeRect(partialSelectionRect, KisLayer::N_FILTHY);
         projection->clear(changeRect);
 
-        qDebug() << ppVar(rFillRect) << ppVar(changeRect);
+        qDebug() << ppVar(partialSelectionRect) << ppVar(changeRect);
 
         plane.recalculate(changeRect, layer);
 
@@ -125,6 +127,41 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         plane.apply(&painter, changeRect);
 
         KIS_DUMP_DEVICE_2(projection, imageRect, "08P_apply_partial", testName);
+    }
+
+    // half updates
+    transparencyMask->setVisible(false);
+
+    {
+        const QRect changeRect = plane.changeRect(updateRect1, KisLayer::N_FILTHY);
+        projection->clear(changeRect);
+
+        qDebug() << ppVar(updateRect1) << ppVar(changeRect);
+
+        plane.recalculate(changeRect, layer);
+
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "09L_recalculate_half1", testName);
+
+        KisPainter painter(projection);
+        plane.apply(&painter, changeRect);
+
+        KIS_DUMP_DEVICE_2(projection, imageRect, "10P_apply_half1", testName);
+    }
+
+    {
+        const QRect changeRect = plane.changeRect(updateRect2, KisLayer::N_FILTHY);
+        projection->clear(changeRect);
+
+        qDebug() << ppVar(updateRect2) << ppVar(changeRect);
+
+        plane.recalculate(changeRect, layer);
+
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "09L_recalculate_half1", testName);
+
+        KisPainter painter(projection);
+        plane.apply(&painter, changeRect);
+
+        KIS_DUMP_DEVICE_2(projection, imageRect, "10P_apply_half2", testName);
     }
 }
 

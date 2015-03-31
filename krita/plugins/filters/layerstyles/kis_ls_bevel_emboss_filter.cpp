@@ -193,7 +193,7 @@ struct BevelEmbossRectCalculator
         applyBumpmapRect = applyGlossContourRect;
         applyContourRect = applyBumpmapRect;
         applyTextureRect = applyContourRect;
-        applyBevelRect = applyTextureRect;
+        applyBevelRect = calcBevelNeedRect(applyTextureRect, config);
         initialFetchRect = kisGrowRect(applyBevelRect, 1);
     }
 
@@ -208,6 +208,7 @@ struct BevelEmbossRectCalculator
         QRect changeRect = applyRect;
         changeRect = KisLsUtils::growRectFromRadius(changeRect, config->soften());
         changeRect = kisGrowRect(changeRect, 1); // bumpmap method
+        changeRect = calcBevelNeedRect(applyRect, config);
         return changeRect;
     }
 
@@ -246,6 +247,13 @@ private:
             qWarning() << "WARNING: Stroke Emboss style is not implemented yet!";
             return applyRect;
         }
+
+        return kisGrowRect(applyRect, limitingGrowSize);
+    }
+
+    QRect calcBevelNeedRect(const QRect &applyRect, const psd_layer_effects_bevel_emboss *config) {
+        const int size = config->size();
+        int limitingGrowSize = size;
 
         return kisGrowRect(applyRect, limitingGrowSize);
     }

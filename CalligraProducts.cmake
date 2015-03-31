@@ -132,7 +132,7 @@ calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Callig
 
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivot tables"  STAGING UNPORTED  REQUIRES PART_SHEETS)
 
 # Sheets filters

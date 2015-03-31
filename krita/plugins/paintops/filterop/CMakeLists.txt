@@ -7,6 +7,7 @@ set(kritafilterop_PART_SRCS
 
 
 add_library(kritafilterop MODULE ${kritafilterop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritafilterop kritafilterop.desktop)
 
 target_link_libraries(kritafilterop kritalibpaintop)
 

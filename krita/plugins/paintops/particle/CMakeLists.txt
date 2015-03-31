@@ -10,7 +10,7 @@ set(kritaparticlepaintop_PART_SRCS
 ki18n_wrap_ui(kritaparticlepaintop_PART_SRCS wdgparticleoptions.ui )
 
 add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaparticlepaintop kritaparticlepaintop.desktop)
 
 target_link_libraries(kritaparticlepaintop kritalibpaintop)
 

@@ -9,7 +9,7 @@ set(kritaexperimentpaintop_PART_SRCS
 ki18n_wrap_ui(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
 
 add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaexperimentpaintop kritaexperimentpaintop.desktop)
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 

@@ -10,6 +10,7 @@ set(kritadeformpaintop_PART_SRCS
 ki18n_wrap_ui(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )
 
 add_library(kritadeformpaintop MODULE ${kritadeformpaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritadeformpaintop kritadeformpaintop.desktop)
 
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 

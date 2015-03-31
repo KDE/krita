@@ -13,7 +13,7 @@ set(kritaspraypaintop_PART_SRCS
 ki18n_wrap_ui(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
 
 add_library(kritaspraypaintop MODULE ${kritaspraypaintop_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaspraypaintop kritaspraypaintop.desktop)
 
 target_link_libraries(kritaspraypaintop kritalibpaintop)
 

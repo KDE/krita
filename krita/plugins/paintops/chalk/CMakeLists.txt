@@ -10,7 +10,7 @@ set(kritachalkpaintop_PART_SRCS
 ki18n_wrap_ui(kritachalkpaintop_PART_SRCS wdgchalkoptions.ui )
 
 add_library(kritachalkpaintop MODULE ${kritachalkpaintop_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritachalkpaintop kritachalkpaintop.desktop)
 
 target_link_libraries(kritachalkpaintop kritalibpaintop)
 

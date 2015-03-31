@@ -12,6 +12,7 @@ set(kritacurvepaintop_PART_SRCS
 ki18n_wrap_ui(kritacurvepaintop_PART_SRCS wdgcurveoptions.ui )
 
 add_library(kritacurvepaintop MODULE ${kritacurvepaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacurvepaintop kritacurvepaintop.desktop)
 
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 

@@ -11,7 +11,7 @@ set(kritagridpaintop_PART_SRCS
 ki18n_wrap_ui(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
 add_library(kritagridpaintop MODULE ${kritagridpaintop_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritagridpaintop kritagridpaintop.desktop)
 
 target_link_libraries(kritagridpaintop kritalibpaintop)
 

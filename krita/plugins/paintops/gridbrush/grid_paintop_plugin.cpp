@@ -29,8 +29,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(GridPaintOpPluginFactory, registerPlugin<GridPaintOpPlugin>();)
-K_EXPORT_PLUGIN(GridPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(GridPaintOpPluginFactory, "kritagridpaintop.json", registerPlugin<GridPaintOpPlugin>();)
 
 
 GridPaintOpPlugin::GridPaintOpPlugin(QObject *parent, const QVariantList &)

@@ -11,7 +11,7 @@ set(kritadynapaintop_PART_SRCS
 ki18n_wrap_ui(kritadynapaintop_PART_SRCS wdgdynaoptions.ui )
 
 add_library(kritadynapaintop MODULE ${kritadynapaintop_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritadynapaintop kritadynapaintop.desktop)
 
 target_link_libraries(kritadynapaintop kritalibpaintop)
 

@@ -32,8 +32,7 @@
 #include "kis_hairy_paintop_settings.h"
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(HairyPaintOpPluginFactory, registerPlugin<HairyPaintOpPlugin>();)
-K_EXPORT_PLUGIN(HairyPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(HairyPaintOpPluginFactory, "kritahairypaintop.json", registerPlugin<HairyPaintOpPlugin>();)
 
 
 HairyPaintOpPlugin::HairyPaintOpPlugin(QObject *parent, const QVariantList &)

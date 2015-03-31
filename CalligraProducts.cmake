@@ -82,7 +82,7 @@ calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLI
 
 # parts
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA PLUGIN_TEXTSHAPE)
-calligra_define_product(PART_STAGE "Stage engine" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
+calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(PART_SHEETS "Sheets engine" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" UNPORTED  REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
 

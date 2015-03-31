@@ -318,7 +318,7 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ## Test for Phonon4Qt5
 ##
 find_package(Phonon4Qt5)
-macro_log_feature(Phonon4Qt5_FOUND "Phonon4Qt5" "Abstraction lib for multimedia applications" "http://www.kde.org/" FALSE "" "Required by Stage and Videoshape plugin")
+macro_log_feature(Phonon4Qt5_FOUND "Phonon4Qt5" "Abstraction lib for multimedia applications" "http://www.kde.org/" FALSE "" "Required by Stage event actions and Videoshape plugin")
 
 ##
 ## Test for KF5CalendarCore
@@ -843,7 +843,6 @@ calligra_drop_product_on_bad_condition( FEATURE_RDF
 
 calligra_drop_product_on_bad_condition( PART_STAGE
     Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
-    Phonon4Qt5_FOUND "Phonon4Qt5 devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS

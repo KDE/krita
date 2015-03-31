@@ -161,6 +161,7 @@ set(kritagmic_PART_SRCS
 )
 add_library(kritagmic MODULE ${kritagmic_PART_SRCS})
 target_link_libraries(kritagmic kritaui gmic Qt5::Xml ${ZLIB_LIBRARIES})
+kcoreaddons_desktop_to_json(kritagmic kritagmic.desktop)
 
 # gmicparser for debugging purposes
 

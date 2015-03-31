@@ -43,3 +43,6 @@ BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QVariantList &)
 BlurFilterPlugin::~BlurFilterPlugin()
 {
 }
+
+#include "blur.moc"
+

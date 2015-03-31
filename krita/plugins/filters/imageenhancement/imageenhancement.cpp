@@ -52,3 +52,4 @@ KritaImageEnhancement::~KritaImageEnhancement()
 {
 }
 
+#include "imageenhancement.moc"

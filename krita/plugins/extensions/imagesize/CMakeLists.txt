@@ -15,7 +15,7 @@ ki18n_wrap_ui(kritaimagesize_PART_SRCS
     )
 
 add_library(kritaimagesize MODULE ${kritaimagesize_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaimagesize kritaimagesize.desktop)
 
 
 target_link_libraries(kritaimagesize kritaui)

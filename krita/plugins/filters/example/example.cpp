@@ -63,3 +63,4 @@ KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace*
     return cs->createInvertTransformation();
 }
 
+#include "example.moc"

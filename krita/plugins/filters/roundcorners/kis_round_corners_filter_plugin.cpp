@@ -40,3 +40,4 @@ KisRoundCornersFilterPlugin::~KisRoundCornersFilterPlugin()
 {
 }
 
+#include "kis_round_corners_filter_plugin.moc"

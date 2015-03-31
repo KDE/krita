@@ -39,3 +39,5 @@ KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QVaria
 KisRainDropsFilterPlugin::~KisRainDropsFilterPlugin()
 {
 }
+
+#include "kis_raindrops_filter_plugin.moc"

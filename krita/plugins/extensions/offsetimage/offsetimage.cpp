@@ -143,4 +143,4 @@ QRect OffsetImage::offsetWrapRect()
 
 
 
-#include "moc_offsetimage.cpp"
+#include "offsetimage.moc"

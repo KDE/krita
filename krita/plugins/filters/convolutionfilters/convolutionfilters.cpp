@@ -239,3 +239,5 @@ KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
+
+#include "convolutionfilters.moc"

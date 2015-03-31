@@ -155,4 +155,4 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     return KisImportExportFilter::OK;
 }
 
-
+#include "kis_odg_import.moc"

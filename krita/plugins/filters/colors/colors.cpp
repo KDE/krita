@@ -41,3 +41,5 @@ KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList
 KritaExtensionsColors::~KritaExtensionsColors()
 {
 }
+
+#include "colors.moc"

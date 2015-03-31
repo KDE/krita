@@ -38,3 +38,5 @@ UnsharpPlugin::UnsharpPlugin(QObject *parent, const QVariantList &)
 UnsharpPlugin::~UnsharpPlugin()
 {
 }
+
+#include "unsharp.moc"

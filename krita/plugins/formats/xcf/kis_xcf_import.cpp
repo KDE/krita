@@ -26,6 +26,7 @@
 #include <qendian.h>
 
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <kio/netaccess.h>
 
@@ -316,3 +317,5 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
     doc->setCurrentImage(image);
     return KisImportExportFilter::OK;
 }
+
+#include "kis_xcf_import.moc"

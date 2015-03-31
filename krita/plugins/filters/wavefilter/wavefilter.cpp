@@ -174,3 +174,5 @@ QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration*
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     return rect.adjusted(-horizontalamplitude, -verticalamplitude, horizontalamplitude, verticalamplitude);
 }
+
+#include "wavefilter.moc"

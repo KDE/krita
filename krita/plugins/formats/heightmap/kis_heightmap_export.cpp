@@ -169,3 +169,5 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     f.close();
     return KisImportExportFilter::OK;
 }
+
+#include "kis_heightmap_export.moc"

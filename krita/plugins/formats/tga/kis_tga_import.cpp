@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <kio/netaccess.h>
+#include <kurl.h>
 
 #include <kpluginfactory.h>
 

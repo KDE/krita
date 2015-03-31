@@ -151,3 +151,5 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     delete [] interm;
 }
 
+#include "noisefilter.moc"
+

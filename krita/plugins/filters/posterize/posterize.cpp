@@ -107,3 +107,5 @@ void KisPosterizeColorTransformation::transform(const quint8* src, quint8* dst, 
         dst += m_psize;
     }
 }
+
+#include "posterize.moc"

@@ -39,3 +39,4 @@ KisSmallTilesFilterPlugin::~KisSmallTilesFilterPlugin()
 {
 }
 
+#include "kis_small_tiles_filter_plugin.moc"

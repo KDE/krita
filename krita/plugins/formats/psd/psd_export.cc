@@ -22,6 +22,7 @@
 
 #include <kpluginfactory.h>
 #include <QMessageBox>
+#include <kurl.h>
 
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>

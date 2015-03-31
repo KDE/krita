@@ -38,3 +38,5 @@ LevelFilter::LevelFilter(QObject *parent, const QVariantList &)
 LevelFilter::~LevelFilter()
 {
 }
+
+#include "levelfilter.moc"

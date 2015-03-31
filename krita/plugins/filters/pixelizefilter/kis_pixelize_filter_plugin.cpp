@@ -42,3 +42,6 @@ KisPixelizeFilterPlugin::~KisPixelizeFilterPlugin()
 {
 }
 
+#include "kis_pixelize_filter_plugin.moc"
+
+

@@ -141,3 +141,5 @@ void KisIndexColorTransformation::transform(const quint8* src, quint8* dst, qint
         dst += m_psize;
     }
 }
+
+#include "indexcolors.moc"

@@ -27,6 +27,7 @@
 #include <kpluginfactory.h>
 
 #include <kio/netaccess.h>
+#include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KisFilterChain.h>
@@ -348,3 +349,5 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
     doc->setCurrentImage(image);
     return KisImportExportFilter::OK;
 }
+
+#include "kis_ppm_import.moc"

@@ -27,6 +27,8 @@
 #include <QCursor>
 
 #include <kpluginfactory.h>
+#include <kurl.h>
+#include <kdialog.h>
 
 #include <KisImportExportManager.h>
 #include <KoColorSpaceRegistry.h>
@@ -199,3 +201,4 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     return KisImportExportFilter::OK;
 }
 
+#include "kis_heightmap_import.moc"

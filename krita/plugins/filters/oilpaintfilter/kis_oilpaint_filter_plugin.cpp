@@ -39,3 +39,4 @@ KisOilPaintFilterPlugin::~KisOilPaintFilterPlugin()
 {
 }
 
+#include "kis_oilpaint_filter_plugin.moc"

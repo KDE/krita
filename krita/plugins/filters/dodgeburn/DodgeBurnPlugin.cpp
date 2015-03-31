@@ -35,3 +35,5 @@ DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QVariantList &)
 DodgeBurnPlugin::~DodgeBurnPlugin()
 {
 }
+
+#include "DodgeBurnPlugin.moc"

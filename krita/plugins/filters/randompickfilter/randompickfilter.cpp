@@ -151,3 +151,5 @@ QRect KisFilterRandomPick::neededRect(const QRect& rect, const KisFilterConfigur
     int windowsize = ceil((config && config->getProperty("windowsize", value)) ? value.toDouble() : 2.5);
     return rect.adjusted(-windowsize, -windowsize, windowsize, windowsize);
 }
+
+#include "randompickfilter.moc"

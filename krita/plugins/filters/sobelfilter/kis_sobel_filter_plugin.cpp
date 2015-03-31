@@ -39,3 +39,4 @@ KisSobelFilterPlugin::~KisSobelFilterPlugin()
 {
 }
 
+#include "kis_sobel_filter_plugin.moc"

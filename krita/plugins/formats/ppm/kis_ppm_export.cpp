@@ -289,3 +289,5 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     fp.close();
     return KisImportExportFilter::OK;
 }
+
+#include "kis_ppm_export.moc"

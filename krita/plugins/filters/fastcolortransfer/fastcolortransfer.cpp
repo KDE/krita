@@ -172,3 +172,5 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
 
     }
 }
+
+#include "fastcolortransfer.moc"

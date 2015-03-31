@@ -42,8 +42,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_action.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(ImageSizeFactory, registerPlugin<ImageSize>();)
-K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ImageSizeFactory, "kritaimagesize.json", registerPlugin<ImageSize>();)
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)

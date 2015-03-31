@@ -178,3 +178,5 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     delete[] transfer;
     delete adj;
 }
+
+#include "colorsfilters.moc"

@@ -37,3 +37,5 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QVariantList
 KisEmbossFilterPlugin::~KisEmbossFilterPlugin()
 {
 }
+
+#include "kis_emboss_filter_plugin.moc"

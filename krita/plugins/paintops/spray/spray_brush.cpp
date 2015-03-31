@@ -236,6 +236,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 params["s"] = (m_colorProperties->saturation / 100.0) * drand48();
                 params["v"] = (m_colorProperties->value / 100.0) * drand48();
                 m_transfo->setParameters(params);
+                m_transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
+                m_transfo->setParameter(4, false);//sets the colorize to false.
                 m_transfo->transform(m_inkColor.data(), m_inkColor.data() , 1);
             }
 
@@ -248,6 +250,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             if (!m_colorProperties->colorPerParticle) {
                 shouldColor = false;
             }
+
             m_painter->setPaintColor(m_inkColor);
         }
 
@@ -349,6 +352,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 m_brush->mask(m_fixedDab, m_inkColor, particleScale, particleScale, -rotationZ, info, xFraction, yFraction);
             }
             m_painter->bltFixed(QPoint(ix, iy), m_fixedDab, m_fixedDab->bounds());
+        }
+        if (m_colorProperties->colorPerParticle){
+            m_inkColor=color;//reset color//
         }
     }
     // recover from jittering of color,

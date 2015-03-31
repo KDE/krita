@@ -194,7 +194,7 @@ calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter" UNP
 
 # meta apps
 calligra_define_product(APP_ACTIVE "Calligra Active app" UNPORTED  REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
-calligra_define_product(APP_CALLIGRA "General Calligra app starter" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(APP_CALLIGRA "General Calligra app starter"  REQUIRES LIB_CALLIGRA)
 
 # more extras
 calligra_define_product(OKULAR_GENERATOR_PPT "Plugin for Okular extended with support for PPT" UNPORTED  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPT_TO_ODP)

@@ -407,7 +407,7 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setStyle((psd_bevel_style)ui.cmbStyle->currentIndex());
     bevelAndEmboss->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     bevelAndEmboss->setDepth(ui.intDepth->value());
-    bevelAndEmboss->setDepth((psd_direction)ui.cmbDirection->currentIndex());
+    bevelAndEmboss->setDirection((psd_direction)ui.cmbDirection->currentIndex());
     bevelAndEmboss->setSize(ui.intSize->value());
     bevelAndEmboss->setSoften(ui.intSoften->value());
 

@@ -127,7 +127,7 @@ target_link_libraries(kritasketchlib
     ${GLEW_LIBRARIES}
 )
 
-include(GNU#installDirs)
+include(GNUInstallDirs)
 
 #install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
 #install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})

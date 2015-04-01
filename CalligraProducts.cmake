@@ -154,7 +154,7 @@ calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter" UNPORT
 
 # Flow filters
 calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter" REQUIRES LIB_CALLIGRA)
 
 # Stage filters
 calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter" UNPORTED  REQUIRES LIB_CALLIGRA)

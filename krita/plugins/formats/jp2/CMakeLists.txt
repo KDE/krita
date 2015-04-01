@@ -11,7 +11,7 @@ set(kritajp2import_PART_SRCS
     )
 
 add_library(kritajp2import MODULE ${kritajp2import_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritajp2import krita_jp2_import.desktop)
 
 
 target_link_libraries(kritajp2import kritaui ${OPENJPEG_LIBRARIES} )
@@ -28,6 +28,7 @@ set(kritajp2export_PART_SRCS
 ki18n_wrap_ui(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
 
 add_library(kritajp2export MODULE ${kritajp2export_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajp2export krita_jp2_export.desktop)
 
 
 target_link_libraries(kritajp2export kritaui ${OPENJPEG_LIBRARIES} )

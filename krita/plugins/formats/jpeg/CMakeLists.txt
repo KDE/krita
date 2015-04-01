@@ -23,6 +23,7 @@ set(kritajpegimport_PART_SRCS
     )
 
 add_library(kritajpegimport MODULE ${kritajpegimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajpegimport krita_jpeg_import.desktop)
 
 if(LCMS2_FOUND)
     target_link_libraries(kritajpegimport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
@@ -42,6 +43,7 @@ set(kritajpegexport_PART_SRCS
 ki18n_wrap_ui(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
 add_library(kritajpegexport MODULE ${kritajpegexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajpegexport krita_jpeg_export.desktop)
 
 if(LCMS2_FOUND)
     target_link_libraries(kritajpegexport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )

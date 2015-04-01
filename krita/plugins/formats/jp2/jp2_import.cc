@@ -28,8 +28,7 @@
 
 #include "jp2_converter.h"
 
-K_PLUGIN_FACTORY(ImportFactory, registerPlugin<jp2Import>();)
-K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_jp2_import.json", registerPlugin<jp2Import>();)
 
 jp2Import::jp2Import(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

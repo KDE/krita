@@ -35,6 +35,7 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
+#include <kurl.h>
 
 #include <kio/netaccess.h>
 

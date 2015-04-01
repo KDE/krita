@@ -26,6 +26,7 @@
 #include <QMessageBox>
 
 #include <kio/netaccess.h>
+#include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>

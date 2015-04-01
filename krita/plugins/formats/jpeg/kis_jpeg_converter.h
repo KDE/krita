@@ -27,6 +27,7 @@ extern "C" {
 }
 
 #include <QVector>
+#include <QColor>
 
 #include <kio/job.h>
 
@@ -35,6 +36,8 @@ extern "C" {
 #include "kis_types.h"
 #include "kis_annotation.h"
 class KisDocument;
+
+class KUrl;
 
 namespace KisMetaData
 {

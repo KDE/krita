@@ -28,6 +28,7 @@
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
+#include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>

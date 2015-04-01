@@ -40,6 +40,7 @@ extern "C" {
 
 #include <QMessageBox>
 #include <klocale.h>
+#include <kurl.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>

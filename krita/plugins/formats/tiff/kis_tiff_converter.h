@@ -34,6 +34,8 @@
 #include "kis_annotation.h"
 class KisDocument;
 
+class KUrl;
+
 /**
  * Image import/export plugins can use these results to report about success or failure.
  */

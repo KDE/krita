@@ -24,6 +24,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KoColorSpaceConstants.h>
 #include <KisFilterChain.h>

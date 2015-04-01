@@ -23,6 +23,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>

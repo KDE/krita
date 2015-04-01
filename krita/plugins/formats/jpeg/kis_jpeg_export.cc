@@ -28,6 +28,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>

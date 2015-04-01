@@ -50,8 +50,7 @@
 
 #include "ui_kis_wdg_options_heightmap.h"
 
-K_PLUGIN_FACTORY(HeightMapImportFactory, registerPlugin<KisHeightMapImport>();)
-K_EXPORT_PLUGIN(HeightMapImportFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(HeightMapImportFactory, "krita_heightmap_import.json", registerPlugin<KisHeightMapImport>();)
 
 KisHeightMapImport::KisHeightMapImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

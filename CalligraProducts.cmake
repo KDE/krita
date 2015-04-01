@@ -92,7 +92,7 @@ calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" UNPORTED  REQUIRES PART_SHEETS)
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)" UNPORTED  REQUIRES PART_WORDS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(APP_KRITA "Krita app (for Desktop)" UNPORTED REQUIRES LIB_CALLIGRA)
+calligra_define_product(APP_KRITA "Krita app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)

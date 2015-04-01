@@ -41,8 +41,7 @@
 #include <kis_group_layer.h>
 
 
-K_PLUGIN_FACTORY(KisBMPImportFactory, registerPlugin<KisBMPImport>();)
-K_EXPORT_PLUGIN(KisBMPImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KisBMPImportFactory, "krita_bmp_import.json", registerPlugin<KisBMPImport>();)
 
 KisBMPImport::KisBMPImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

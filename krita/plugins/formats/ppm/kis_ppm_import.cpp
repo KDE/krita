@@ -45,8 +45,7 @@
 #include <KoColorModelStandardIds.h>
 #include "kis_iterator_ng.h"
 
-K_PLUGIN_FACTORY(PPMImportFactory, registerPlugin<KisPPMImport>();)
-K_EXPORT_PLUGIN(PPMImportFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(PPMImportFactory, "krita_ppm_import.json", registerPlugin<KisPPMImport>();)
 
 KisPPMImport::KisPPMImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

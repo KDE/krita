@@ -32,8 +32,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 
-K_PLUGIN_FACTORY(KisBMPExportFactory, registerPlugin<KisBMPExport>();)
-K_EXPORT_PLUGIN(KisBMPExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KisBMPExportFactory, "krita_bmp_export.json", registerPlugin<KisBMPExport>();)
 
 KisBMPExport::KisBMPExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

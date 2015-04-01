@@ -31,8 +31,7 @@
 
 #include "kis_png_converter.h"
 
-K_PLUGIN_FACTORY(PNGImportFactory, registerPlugin<KisPNGImport>();)
-K_EXPORT_PLUGIN(PNGImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(PNGImportFactory, "krita_png_import.json", registerPlugin<KisPNGImport>();)
 
 KisPNGImport::KisPNGImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

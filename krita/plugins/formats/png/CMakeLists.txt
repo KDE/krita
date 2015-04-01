@@ -7,7 +7,7 @@ set(kritapngimport_PART_SRCS
     )
 
 add_library(kritapngimport MODULE ${kritapngimport_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritapngimport krita_png_import.desktop)
 
 
 include_directories(${PNG_INCLUDE_DIR})
@@ -26,7 +26,7 @@ set(kritapngexport_PART_SRCS
 ki18n_wrap_ui(kritapngexport_PART_SRCS kis_wdg_options_png.ui )
 
 add_library(kritapngexport MODULE ${kritapngexport_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritapngexport krita_png_export.desktop)
 
 
 target_link_libraries(kritapngexport kritaui ${PNG_LIBRARIES})

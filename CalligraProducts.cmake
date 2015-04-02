@@ -190,7 +190,7 @@ calligra_define_product(FILTER_KARBON_TO_SVG "Karbon SVG export filter" UNPORTED
 calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter" UNPORTED  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter" UNPORTED  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter" UNPORTED  REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)
-calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter" UNPORTED  REQUIRES APP_KARBON)
+calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter"  REQUIRES APP_KARBON)
 
 # meta apps
 calligra_define_product(APP_ACTIVE "Calligra Active app" UNPORTED  REQUIRES PART_SHEETS PART_STAGE PART_WORDS)

@@ -153,7 +153,7 @@ calligra_define_product(FILTER_SHEETS_TO_HTML "Sheets HTML export filter" UNPORT
 calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 
 # Flow filters
-calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter" REQUIRES LIB_CALLIGRA)
 
 # Stage filters

@@ -63,7 +63,7 @@ public:
     QWidget* getWidget(const QString& id) const;
     
     template<class TWidget>
-    TWidget* addWidget(const QString& id, const QString& label) {
+    TWidget* addWidget(const QString& id, const QString& label = "") {
         TWidget* widget = new TWidget();
         addWidget(id, label, widget);
         return widget;

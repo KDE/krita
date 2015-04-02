@@ -370,6 +370,9 @@ public:
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+    bool sliderLabels() const;
+    void setSliderLabels(bool enabled);
+
     QString currentInputProfile() const;
     void setCurrentInputProfile(const QString& name);
 

@@ -46,6 +46,7 @@ public:
     qreal slowFactor;
     qreal shiftPercent;
     bool shiftMode;
+    QString prefix;
     QString suffix;
     qreal exponentRatio;
     int value;
@@ -305,9 +306,12 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
-    QFontMetrics fm(font());
+    QFont ft(font());
+    // The plastique style uses bold font in progressbars
+    ft.setBold(true);
+    QFontMetrics fm(ft);
     //We need at least 50 pixels or things start to look bad
-    int w = qMax(fm.width(QString::number(d->maximum)), 50);
+    int w = qMax(fm.width(d->prefix + QString::number(d->maximum) + d->suffix)+qRound(0.2*logicalDpiX()), 50);
     QSize hint(w, d->edit->sizeHint().height() + 3);
 
     //Getting the size of the buttons is a pain as the calcs require a rect
@@ -380,7 +384,7 @@ QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
     qreal dValues = (d->maximum - minDbl);
 
     progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1.0 / d->exponentRatio) + minDbl;
-    progressOpts.text = valueString() + d->suffix;
+    progressOpts.text = d->prefix + valueString() + d->suffix;
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = !(d->edit->isVisible());
 
@@ -445,6 +449,12 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     }
     //Return the value
     return int(realvalue);
+}
+
+void KisAbstractSliderSpinBox::setPrefix(const QString& prefix)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->prefix = prefix;
 }
 
 void KisAbstractSliderSpinBox::setSuffix(const QString& suffix)

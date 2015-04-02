@@ -45,6 +45,7 @@ public:
     void showEdit();
     void hideEdit();
 
+    void setPrefix(const QString& prefix);
     void setSuffix(const QString& suffix);
 
     void setExponentRatio(qreal dbl);

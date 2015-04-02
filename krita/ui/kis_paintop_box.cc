@@ -175,40 +175,58 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     vMirrorButton->setDefaultAction(m_vMirrorAction);
     m_viewManager->actionCollection()->addAction("vmirror_action", m_vMirrorAction);
 
+    const bool sliderLabels = cfg.sliderLabels();
+    int sliderWidth;
+
+    if (sliderLabels) {
+        sliderWidth = 150 * logicalDpiX() / 96;
+    }
+    else {
+        sliderWidth = 120 * logicalDpiX() / 96;
+    }
 
     for (int i = 0; i < 3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
-        KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
-        KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
-        KisDoubleSliderSpinBox* slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size"   , i18n("Size:"));
+        KisDoubleSliderSpinBox* slOpacity;
+        KisDoubleSliderSpinBox* slFlow;
+        KisDoubleSliderSpinBox* slSize;
+        if (sliderLabels) {
+            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
+            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
+            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
+            slOpacity->setPrefix(QString("%1  ").arg(i18n("Opacity:")));
+            slFlow->setPrefix(QString("%1  ").arg(i18n("Flow:")));
+            slSize->setPrefix(QString("%1  ").arg(i18n("Size:")));
+        }
+        else {
+            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
+            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow", i18n("Flow:"));
+            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
+        }
 
         slOpacity->setRange(0.0, 1.0, 2);
         slOpacity->setValue(1.0);
         slOpacity->setSingleStep(0.05);
-        slOpacity->setMinimumWidth(120);
+        slOpacity->setMinimumWidth(sliderWidth);
 
         slFlow->setRange(0.0, 1.0, 2);
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
-        slFlow->setMinimumWidth(120);
+        slFlow->setMinimumWidth(sliderWidth);
 
         slSize->setRange(0, 1000, 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setMinimumWidth(120);
+        slSize->setMinimumWidth(sliderWidth);
         slSize->setSuffix(" px");
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
 
-
-    QLabel* labelMode = new QLabel(i18n("Mode: "), this);
-    labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-
     m_cmbCompositeOp = new KisCompositeOpComboBox();
-    m_cmbCompositeOp->setFixedHeight(30);
+    m_cmbCompositeOp->setFixedHeight(32);
     foreach(KAction * a, m_cmbCompositeOp->blendmodeActions()) {
         m_viewManager->actionCollection()->addAction(a->text(), a);
     }
@@ -231,12 +249,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     QWidget* compositeActions = new QWidget(this);
     QHBoxLayout* compositeLayout = new QHBoxLayout(compositeActions);
-    compositeLayout->addWidget(labelMode);
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
 
-    compositeLayout->setContentsMargins(8, 0, 0, 0);
+    compositeLayout->setContentsMargins(3, 0, 0, 0);
 
     compositeLayout->addWidget(m_reloadButton);
 

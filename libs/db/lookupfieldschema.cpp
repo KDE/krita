@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -625,13 +625,13 @@ void LookupFieldSchema::setVisibleColumns(const QList<uint>& list)
     d->visibleColumns = list;
 }
 
-int LookupFieldSchema::visibleColumn(uint fieldsCount) const
+int LookupFieldSchema::visibleColumn(uint index) const
 {
-    if (d->visibleColumns.count() == 1)
-        return (d->visibleColumns.first() < fieldsCount) ? (int)d->visibleColumns.first() : -1;
-    if (d->visibleColumns.isEmpty())
+    //kDebug() << "d->visibleColumns.first()" << d->visibleColumns.first() << "index" << index;
+    if (index >= d->visibleColumns.count()) {
         return -1;
-    return fieldsCount - 1;
+    }
+    return index;
 }
 
 QList<int> LookupFieldSchema::columnWidths() const

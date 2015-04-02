@@ -121,41 +121,27 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
 
     QTextCursor fromcursor(fromblock);
 
-    QTextTable *currentTable = fromcursor.currentTable();
     QTextList *currentList = fromcursor.currentList();
 
-    // NOTE even better would be if we create a new table/list out of multiple selected
-    // tablecells/listitems that contain only the selected cells/items. But following
-    // at least enables copying a whole list/table while still being able to copy/paste
-    // only parts of the text within a list/table (see also bug 275990).
-    if (currentTable || currentList) {
+    // NOTE even better would be if we create a new list out of multiple selected
+    // listitems that contain only the selected items. But following
+    // at least enables copying a whole list while still being able to copy/paste
+    // only parts of the text within a list (see also bug 275990).
+    // NOTE this has been fixed for tables now, and it looks like the list code is seriously wrong
+    // not just like the table code was, but more fundamentally as lists in qt is an orthogonal concept
+    if (currentList) {
         if (from == 0 && to < 0) {
             // save everything means also save current table and list
-            currentTable = 0;
             currentList = 0;
         } else {
-            QTextCursor tocursor(toblock);
-            //fromcursor.setPosition(from, QTextCursor::KeepAnchor);
-            tocursor.setPosition(to, QTextCursor::KeepAnchor);
+            QTextCursor toCursor(toblock);
+            toCursor.setPosition(to, QTextCursor::KeepAnchor);
 
             if (!fromcursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor)) {
                 fromcursor = QTextCursor();
             }
-            if (!tocursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor)) {
-                tocursor = QTextCursor();
-            }
-
-            // save the whole table if all cells are selected
-            if (currentTable) {
-                QTextTableCell fromcell = currentTable->cellAt(from);
-                QTextTableCell tocell = currentTable->cellAt(to);
-                if ((fromcursor.isNull() || fromcursor.currentTable() != currentTable) &&
-                    (tocursor.isNull() || tocursor.currentTable() != currentTable) &&
-                    fromcell.column() == 0 && fromcell.row() == 0 &&
-                    tocell.column() == currentTable->columns()-1 && tocell.row() == currentTable->rows()-1
-                ) {
-                    currentTable = 0;
-                }
+            if (!toCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor)) {
+                toCursor = QTextCursor();
             }
 
             // save the whole list if all list-items are selected
@@ -163,7 +149,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
                 int fromindex = currentList->itemNumber(fromblock);
                 int toindex = currentList->itemNumber(toblock);
                 if ((fromcursor.isNull() || fromcursor.currentList() != currentList) &&
-                    (tocursor.isNull() || tocursor.currentList() != currentList) &&
+                    (toCursor.isNull() || toCursor.currentList() != currentList) &&
                     fromindex <= 0 && (toindex < 0 || toindex == currentList->count()-1)
                 ) {
                     currentList = 0;
@@ -175,5 +161,5 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
     d->globalFrom = from;
     d->globalTo = to;
-    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, currentTable, currentList);
+    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, 0, currentList);
 }

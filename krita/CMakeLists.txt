@@ -170,5 +170,5 @@ install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
     add_subdirectory(sketch)
-#    add_subdirectory(gemini)
+    add_subdirectory(gemini)
 endif ()

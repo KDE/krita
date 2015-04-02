@@ -18,5 +18,5 @@ set (threedshape_LIB_SRCS
 add_library(calligra_shape_threed MODULE ${threedshape_LIB_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_threed calligra_shape_threed.desktop)
 
-target_link_libraries(calligra_shape_threed flake    ${KDE4_KFILE_LIBRARY})
+target_link_libraries(calligra_shape_threed flake)
 install(TARGETS calligra_shape_threed DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

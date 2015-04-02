@@ -32,9 +32,9 @@ set (templateshape_LIB_SRCS
 add_library(calligra_shape_template MODULE ${templateshape_LIB_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_template calligra_shape_template.desktop)
 
-target_link_libraries(calligra_shape_template flake    ${KDE4_KFILE_LIBRARY})
+target_link_libraries(calligra_shape_template flake)
 #Template: Possibly you need to link with komain too.
-#target_link_libraries(templateshape komain flake    ${KDE4_KFILE_LIBRARY})
+#target_link_libraries(templateshape komain flake)
 
 install(TARGETS calligra_shape_template DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

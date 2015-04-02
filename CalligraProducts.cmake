@@ -184,7 +184,7 @@ calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter" UNPORTED  
 calligra_define_product(FILTER_EPS_TO_SVG_AI "EPS to SVG/AI filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_XFIG_TO_ODG "XFig to ODG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_PDF_TO_SVG "PDF to SVG filter" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(FILTER_WPG_TO_SVG "WPG to SVG filter" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(FILTER_WPG_TO_SVG "WPG to SVG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_KARBON_TO_IMAGE "Karbon image export filter" UNPORTED  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_KARBON_TO_SVG "Karbon SVG export filter" UNPORTED  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter" UNPORTED  REQUIRES APP_KARBON)

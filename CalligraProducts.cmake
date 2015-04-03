@@ -89,7 +89,7 @@ calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra comp
 # apps
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
 calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE)
-calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" UNPORTED  REQUIRES PART_SHEETS)
+calligra_define_product(APP_SHEETS "Sheets app (for Desktop)"  REQUIRES PART_SHEETS)
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)" UNPORTED  REQUIRES PART_WORDS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" REQUIRES LIB_CALLIGRA)

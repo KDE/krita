@@ -92,7 +92,7 @@ public:
         : q(qq)
         , allowClose(true)
         , sketchView(0)
-        , desktopView(0)
+        , desktopWindow(0)
         , currentView(0)
         , desktopCursorStyle(CURSOR_STYLE_OUTLINE)
         , slateMode(false)
@@ -121,15 +121,15 @@ public:
     MainWindow* q;
     bool allowClose;
     SketchDeclarativeView* sketchView;
-    KisMainWindow* desktopView;
+    KisMainWindow* desktopWindow;
     QObject* currentView;
     enumCursorStyle desktopCursorStyle;
 
     bool slateMode;
     bool docked;
     QString currentSketchPage;
-    KisViewManager* sketchKisView;
-    KisViewManager* desktopKisView;
+    KisView* sketchKisView;
+    KisView* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
     bool forceFullScreen;
@@ -210,16 +210,16 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory::componentData());
+        desktopWindow = new KisMainWindow();
 
-        toSketch = new KAction(desktopView);
+        toSketch = new KAction(desktopWindow);
         toSketch->setEnabled(false);
         toSketch->setText(tr("Switch to Sketch"));
         toSketch->setIcon(QIcon::fromTheme("system-reboot"));
         toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
         //connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
-        desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
+        desktopWindow->actionCollection()->addAction("SwitchToSketchView", toSketch);
         switcher = new QToolButton();
         switcher->setEnabled(false);
         switcher->setText(tr("Switch to Sketch"));
@@ -227,11 +227,11 @@ public:
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToSketch()));
-        desktopView->menuBar()->setCornerWidget(switcher);
+        desktopWindow->menuBar()->setCornerWidget(switcher);
 
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
-        desktopViewProxy = new DesktopViewProxy(q, desktopView);
+        desktopViewProxy = new DesktopViewProxy(q, desktopWindow);
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
     }
@@ -324,16 +324,16 @@ void MainWindow::switchToSketch()
     KisViewManager* view = 0;
 
     KisConfig cfg;
-    if (d->desktopView && centralWidget() == d->desktopView) {
+    if (d->desktopWindow && centralWidget() == d->desktopWindow) {
         d->desktopCursorStyle = cfg.cursorStyle();
-        view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
+        view = qobject_cast<KisViewManager*>(d->desktopWindow->activeView());
 
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
         ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->sketchView, d->syncObject);
         QApplication::sendEvent(view, &aboutToSwitchEvent);
 
-        d->desktopView->setParent(0);
+        d->desktopWindow->setParent(0);
     }
 
     setCentralWidget(d->sketchView);
@@ -356,7 +356,7 @@ void MainWindow::sketchChange()
     if (centralWidget() != d->sketchView || !d->syncObject)
         return;
 
-    if (d->desktopView)
+    if (d->desktopWindow)
     {
         if (!d->sketchKisView || !d->sketchView->canvasWidget())
         {
@@ -364,7 +364,7 @@ void MainWindow::sketchChange()
             return;
         }
         qApp->processEvents();
-        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
+        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopWindow->activeView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
@@ -390,8 +390,8 @@ void MainWindow::switchToDesktop(bool justLoaded)
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
     KisViewManager* view = 0;
-    if (d->desktopView) {
-        view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
+    if (d->desktopWindow) {
+        view = qobject_cast<KisViewManager*>(d->desktopWindow->activeView());
     }
 
     //Notify the view we are switching away from that we are about to switch away from it
@@ -403,7 +403,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
     if (d->currentSketchPage == "MainPage")
     {
         d->sketchView->setParent(0);
-        setCentralWidget(d->desktopView);
+        setCentralWidget(d->desktopWindow);
     }
 
     if (!d->forceFullScreen) {
@@ -433,14 +433,14 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
-    if (d->desktopView && centralWidget() == d->desktopView) {
-        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
+    if (d->desktopWindow && centralWidget() == d->desktopWindow) {
+        KisView* view = qobject_cast<KisView*>(d->desktopWindow->activeView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
-        view->canvasControllerWidget()->setFocus();
+        view->canvasController()->setFocus();
         view->setFocus();
         QPoint center = view->rect().center();
-        view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        view->canvasController()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
@@ -450,7 +450,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
         QPoint center = d->sketchKisView->rect().center();
-        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        d->sketchKisView->canvasController()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
@@ -462,28 +462,30 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 
 void MainWindow::documentChanged()
 {
-    if (d->desktopView) {
-        d->desktopView->setNoCleanup(true);
-        d->desktopView->deleteLater();
-        d->desktopView = 0;
+    if (d->desktopWindow) {
+        d->desktopWindow->setNoCleanup(true);
+        d->desktopWindow->deleteLater();
+        d->desktopWindow = 0;
     }
     d->initDesktopView();
-    d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
+    //d->desktopWindow->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    d->desktopKisView = qobject_cast<KisViewManager*>(d->desktopView->rootView());
-    d->desktopKisView->setQtMainWindow(d->desktopView);
+    d->desktopKisView = qobject_cast<KisView*>(d->desktopWindow->activeView());
+    //d->desktopKisView->setQtMainWindow(d->desktopWindow);
 
     // Define new actions here
 
-    KXMLGUIFactory* factory = d->desktopKisView->factory();
-    factory->removeClient(d->desktopKisView);
-    factory->addClient(d->desktopKisView);
+    KXMLGUIFactory* factory = d->desktopWindow->factory();
+    factory->removeClient(d->desktopWindow);
+    factory->addClient(d->desktopWindow);
 
     d->desktopViewProxy->documentChanged();
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
-    connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(resourceChanged(int, const QVariant&)));
+    if (d->desktopKisView && d->desktopKisView->canvasBase() && d->desktopKisView->canvasBase()->resourceManager()) {
+        connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                    this, SLOT(resourceChanged(int, const QVariant&)));
+    }
     if (!d->forceSketch && !d->slateMode)
         switchToDesktop(true);
 }
@@ -565,7 +567,6 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->sketchKisView != 0) {
         KisPaintOpPresetSP clone = preset;
-        clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
     }
 }
@@ -574,12 +575,11 @@ void MainWindow::resourceChangedSketch(int key, const QVariant& v)
 {
     Q_UNUSED(key);
 
-    if(centralWidget() == d->desktopView)
+    if(centralWidget() == d->desktopWindow)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->desktopKisView != 0) {
         KisPaintOpPresetSP clone = preset;
-        clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
     }
 }
@@ -597,10 +597,10 @@ void MainWindow::setSketchKisView(QObject* newView)
     }
     if (d->sketchKisView != newView)
     {
-        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
+        d->sketchKisView = qobject_cast<KisView*>(newView);
         if(d->sketchKisView) {
             d->sketchView->addActions(d->sketchKisView->actions());
-            d->sketchKisView->setQtMainWindow(this);
+//            d->sketchKisView->setQtMainWindow(this);
             connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
             connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChangedSketch(int, const QVariant&)));
@@ -617,24 +617,24 @@ void MainWindow::minimize()
 
 void MainWindow::closeWindow()
 {
-    if (d->desktopView) {
+    if (d->desktopWindow) {
         // This situation shouldn't occur, but protecting potentially dangerous call
-        d->desktopView->setNoCleanup(true);
+        d->desktopWindow->setNoCleanup(true);
     }
 
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
     //So instead just completely quit the application, since we are using a single window anyway.
     DocumentManager::instance()->closeDocument();
-    DocumentManager::instance()->part()->deleteLater();
+
     qApp->processEvents();
     QApplication::instance()->quit();
 }
 
 bool MainWindow::Private::queryClose()
 {
-    if (desktopView) {
+    if (desktopWindow) {
         // This situation shouldn't occur, but protecting potentially dangerous call
-        desktopView->setNoCleanup(true);
+        desktopWindow->setNoCleanup(true);
     }
     if (DocumentManager::instance()->document() == 0)
         return true;
@@ -680,7 +680,7 @@ bool MainWindow::Private::queryClose()
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if (centralWidget() == d->desktopView)
+    if (centralWidget() == d->desktopWindow)
     {
         if (DocumentManager::instance()->document()->isLoading()) {
             event->ignore();
@@ -691,10 +691,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
     if (d->allowClose)
     {
-        if (d->desktopView)
+        if (d->desktopWindow)
         {
-            d->desktopView->setNoCleanup(true);
-            d->desktopView->close();
+            d->desktopWindow->setNoCleanup(true);
+            d->desktopWindow->close();
         }
         event->accept();
     }

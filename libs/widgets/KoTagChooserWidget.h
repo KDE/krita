@@ -48,6 +48,7 @@ public:
     void addReadOnlyItem(QString tagName);
     void clear();
     void setUndeletionCandidate(const QString &tag);
+    void showTagToolButton(bool show);
 
 Q_SIGNALS:
     void newTagRequested(const QString &tagname);

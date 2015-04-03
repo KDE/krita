@@ -51,11 +51,11 @@ class DesktopViewProxy::Private
 public:
     Private(MainWindow* mainWindow, KisMainWindow* desktopView)
         : mainWindow(mainWindow)
-        , desktopView(desktopView)
+        , desktopWindow(desktopView)
         , isImporting(false)
     {}
     MainWindow* mainWindow;
-    KisMainWindow* desktopView;
+    KisMainWindow* desktopWindow;
     bool isImporting;
 };
 
@@ -66,41 +66,41 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KisMainWindow* parent
     Q_ASSERT(parent); // "There MUST be a KisMainWindow assigned, otherwise everything will blow up");
 
     // Hide this one... as it doesn't work at all well and release happens :P
-    QAction* closeAction = d->desktopView->actionCollection()->action("file_close");
+    QAction* closeAction = d->desktopWindow->actionCollection()->action("file_close");
     closeAction->setVisible(false);
 
     // Concept is simple - simply steal all the actions we require to work differently, and reconnect them to local functions
-    QAction* newAction = d->desktopView->actionCollection()->action("file_new");
-    newAction->disconnect(d->desktopView);
+    QAction* newAction = d->desktopWindow->actionCollection()->action("file_new");
+    newAction->disconnect(d->desktopWindow);
     connect(newAction, SIGNAL(triggered(bool)), this, SLOT(fileNew()));
-    QAction* openAction = d->desktopView->actionCollection()->action("file_open");
-    openAction->disconnect(d->desktopView);
+    QAction* openAction = d->desktopWindow->actionCollection()->action("file_open");
+    openAction->disconnect(d->desktopWindow);
     connect(openAction, SIGNAL(triggered(bool)), this, SLOT(fileOpen()));
-    QAction* saveAction = d->desktopView->actionCollection()->action("file_save");
-    saveAction->disconnect(d->desktopView);
+    QAction* saveAction = d->desktopWindow->actionCollection()->action("file_save");
+    saveAction->disconnect(d->desktopWindow);
     connect(saveAction, SIGNAL(triggered(bool)), this, SLOT(fileSave()));
-    QAction* saveasAction = d->desktopView->actionCollection()->action("file_save_as");
-    saveasAction->disconnect(d->desktopView);
+    QAction* saveasAction = d->desktopWindow->actionCollection()->action("file_save_as");
+    saveasAction->disconnect(d->desktopWindow);
     connect(saveasAction, SIGNAL(triggered(bool)), this, SLOT(fileSaveAs()));
-    QAction* reloadAction = d->desktopView->actionCollection()->action("file_reload_file");
-    reloadAction->disconnect(d->desktopView);
+    QAction* reloadAction = d->desktopWindow->actionCollection()->action("file_reload_file");
+    reloadAction->disconnect(d->desktopWindow);
     connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
-    QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
+    QAction* loadExistingAsNewAction = d->desktopWindow->actionCollection()->action("file_import_file");
     //Hide the "Load existing as new" action. It serves little purpose and currently
     //does the same as open. We cannot just remove it from the action collection though
     //since that causes a crash in KisMainWindow.
     loadExistingAsNewAction->setVisible(false);
 
     // Recent files need a touch more work, as they aren't simply an action.
-    KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
-    recent->disconnect(d->desktopView);
+    KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopWindow->actionCollection()->action("file_open_recent"));
+    recent->disconnect(d->desktopWindow);
     connect(recent, SIGNAL(urlSelected(QUrl)), this, SLOT(slotFileOpenRecent(QUrl)));
     recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
 
-    connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
+    connect(d->desktopWindow, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
 
-    connect(d->desktopView, SIGNAL(keyBindingsChanged()), this, SLOT(updateKeyBindings()));
+    connect(d->desktopWindow, SIGNAL(keyBindingsChanged()), this, SLOT(updateKeyBindings()));
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -122,7 +122,7 @@ void DesktopViewProxy::fileOpen()
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
 
-    KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
+    KoFileDialog dialog(d->desktopWindow, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(mimeFilter);
@@ -137,7 +137,7 @@ void DesktopViewProxy::fileOpen()
 void DesktopViewProxy::fileSave()
 {
     if(DocumentManager::instance()->isTemporaryFile()) {
-        if(d->desktopView->saveDocument(true)) {
+        if(d->desktopWindow->saveDocument(d->desktopWindow->activeView()->document(), true)) {
             DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->setTemporaryFile(false);
@@ -151,7 +151,7 @@ void DesktopViewProxy::fileSave()
 
 bool DesktopViewProxy::fileSaveAs()
 {
-    if(d->desktopView->saveDocument(true)) {
+    if(d->desktopWindow->saveDocument(d->desktopWindow->activeView()->document(), true)) {
         DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->setTemporaryFile(false);
@@ -192,9 +192,9 @@ void DesktopViewProxy::slotFileOpenRecent(const QUrl& url)
  */
 void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)
 {
-    KisViewManager* kisView = qobject_cast<KisViewManager*>(d->desktopView->rootView());
+    KisViewManager *kisViewManager = qobject_cast<KisViewManager*>(d->desktopWindow->activeView());
     if(toggled) {
-        kisView->showJustTheCanvas(toggled);
+        kisViewManager->showJustTheCanvas(toggled);
     }
     else {
         KisConfig cfg;
@@ -205,7 +205,7 @@ void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)
             cfg.setHideTitlebarFullscreen(false);
         }
 
-        kisView->showJustTheCanvas(toggled);
+        kisViewManager->showJustTheCanvas(toggled);
 
         if (fullScreen) {
             cfg.setHideTitlebarFullscreen(hideTitlebar);
@@ -217,17 +217,16 @@ void DesktopViewProxy::documentChanged()
 {
     // Remove existing linking for toggling canvas, in order
     // to over-ride the window state behaviour
-    KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
-    QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
-    toggleJustTheCanvasAction->disconnect(view);
+    QAction* toggleJustTheCanvasAction = d->desktopWindow->actionCollection()->action("view_show_just_the_canvas");
+    toggleJustTheCanvasAction->disconnect(d->desktopWindow);
     connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
 }
 
 void DesktopViewProxy::updateKeyBindings()
 {
-    KisViewManager* view = qobject_cast<KisViewManager*>(d->mainWindow->sketchKisView());
-    foreach(QAction* action, d->desktopView->actions()) {
-        QAction* otherAction = view->action(action->objectName().toLatin1());
+    KisView* view = qobject_cast<KisView*>(d->mainWindow->sketchKisView());
+    foreach(QAction* action, d->desktopWindow->actions()) {
+        QAction* otherAction = d->desktopWindow->action(action->objectName().toLatin1());
         if(otherAction) {
             otherAction->setShortcut(action->shortcut());
         }

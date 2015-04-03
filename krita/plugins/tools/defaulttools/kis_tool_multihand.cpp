@@ -48,8 +48,8 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_transformMode(SYMMETRY),
       m_angle(0),
       m_handsCount(6),
-      m_mirrorVertically(true),
-      m_mirrorHorizontally(true),
+      m_mirrorVertically(false),
+      m_mirrorHorizontally(false),
       m_showAxes(false),
       m_translateRadius(100),
       m_setupAxesFlag(false)

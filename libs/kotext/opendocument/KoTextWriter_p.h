@@ -135,7 +135,7 @@ private:
     QString saveTableCellStyle(const QTextTableCellFormat &cellFormat, int columnNumber, const QString &tableStyleName);
 
     void saveParagraph(const QTextBlock &block, int from, int to);
-    void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
+    void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles, int from, int to);
     QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
     void saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc);
     void saveBibliography(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock bib);

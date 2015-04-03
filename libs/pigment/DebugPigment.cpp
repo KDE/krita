@@ -15,20 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _DEBUG_PIGMENT_H_
-#define _DEBUG_PIGMENT_H_
 
-#include <QDebug>
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(PIGMENT_log)
+#include "pigment_debug.h"
+Q_LOGGING_CATEGORY(PIGMENT_log, "log_pigment")
 
 
-#define dbgPigment qCDebug(PIGMENT_log)
-#define dbgPigmentCCS dbgPigment
-#define dbgPigmentCSRegistry dbgPigment
-#define dbgPigmentCS dbgPigment
-
-#define warnPigment qCWarning(PIGMENT_log)
-#define errorPigment qCCritical(PIGMENT_log)
-
-#endif

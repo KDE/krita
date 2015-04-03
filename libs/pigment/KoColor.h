@@ -159,7 +159,7 @@ public:
     static QString toQString(const KoColor &color);
 
 #ifndef NODEBUG
-    /// use kDebug calls to print internal info
+    /// use qDebug calls to print internal info
     void dump() const;
 #endif
 

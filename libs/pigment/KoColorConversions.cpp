@@ -528,7 +528,7 @@ void HSIToRGB(const qreal h,const qreal s, const qreal i, qreal *red, qreal *gre
 	b=0.0;
 	}
 
-	//qDebug()<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
+	//dbgPigment<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
 	if (r>1.0){r=1.0;}
 	if (g>1.0){g=1.0;}
 	if (b>1.0){b=1.0;}
@@ -739,7 +739,7 @@ void HSYToRGB(const qreal h,const qreal s, const qreal y, qreal *red, qreal *gre
 	b=0.0;
 	}
 
-	//qDebug()<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
+	//dbgPigment<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
 	if (r>1.0){r=1.0;}
 	if (g>1.0){g=1.0;}
 	if (b>1.0){b=1.0;}

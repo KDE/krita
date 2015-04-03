@@ -37,7 +37,7 @@
 #include <QBuffer>
 #include <QTextStream>
 
-#include <kdebug.h>
+#include <DebugPigment.h>
 #include <klocale.h>
 
 namespace

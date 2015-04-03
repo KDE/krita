@@ -44,5 +44,5 @@ template<>
 KoReportCurrentArch::ReturnType
 KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
 {
-    qDebug() << "Legacy integer arithmetics implementation";
+    dbgPigment << "Legacy integer arithmetics implementation";
 }

@@ -24,7 +24,7 @@
 #include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("graphs")) {
-        // Don't change those lines to use qDebug derivatives, they need to be outputed
+        // Don't change those lines to use dbgPigment derivatives, they need to be outputed
         // to stdout not stderr.
         std::cout << "full : show all the connection on the graph" << std::endl;
         std::cout << "bestpath : show the best path for a given transformation" << std::endl;

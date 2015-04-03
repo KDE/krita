@@ -9,7 +9,10 @@ if (WIN32)
 endif ()
 
 if (HAVE_VC)
-    # put KDELibs4Support include directories before aany include directory that might be same with KDELibs4 include directory to avoid compiler picking KDELibs4 headers
+    message(".>>>>>>>>>>>>" ${KDE4_INCLUDES})
+    #set(SPLIT_INCLUDES list(APPEND _flags "$<$<BOOL:${KDE4_INCLUDES}>:-I$<JOIN:${KDE4_INCLUDES}, -I>>"))
+    #message(">>>>>>>>>>>>>>>>>>>>>>>>>>>" << ${SPLIT_INCLUDES})
+    # put KDELibs4Support include directories before any include directory that might be same with KDELibs4 include directory to avoid compiler picking KDELibs4 headers
     include_directories(${KDE4_INCLUDES} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS} ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
 else()
     include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
@@ -38,6 +41,7 @@ add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
 set(pigmentcms_SRCS
+    DebugPigment.cpp
     KoBasicHistogramProducers.cpp
     KoColor.cpp
     KoColorDisplayRendererInterface.cpp

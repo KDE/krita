@@ -176,6 +176,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Completion IconThemes Sonnet
                                      Parts
                                      XmlGui Kross Wallet
+                                     NotifyConfig
                                      Emoticons ConfigWidgets KDELibs4Support
     OPTIONAL_COMPONENTS
         Activities

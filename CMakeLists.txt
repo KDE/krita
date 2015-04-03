@@ -186,7 +186,7 @@ if(KF5_Activities_FOUND)
 endif()
 
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test Concurrent)
-find_package(Qt5 5.2.0 COMPONENTS WebKit WebKitWidgets DBus Declarative X11Extras)
+find_package(Qt5 5.2.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
@@ -558,6 +558,14 @@ if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
 else()
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif()
+
+##
+## Test for Qt WebKitWidgets
+##
+macro_log_feature(Qt5Sql_FOUND "Qt Sql"
+                  "Qt SQL module."
+                  "http://qt.io" FALSE ""
+                  "Optional for Sheets database connection")
 
 ##
 ## Test for Qt Webkit

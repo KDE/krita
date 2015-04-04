@@ -137,7 +137,7 @@ calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivo
 
 # Sheets filters
 calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter"  REQUIRES LIB_KOMSOOXML PART_SHEETS)
-calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter" UNPORTED  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
+calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter"  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_SHEETS_TO_XLS "Sheets XLS export filter" UNPORTED  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_CSV_TO_SHEETS "Sheets CSV import filter" UNPORTED  REQUIRES PART_SHEETS)
 calligra_define_product(FILTER_SHEETS_TO_CSV "Sheets CSV export filter" UNPORTED  REQUIRES PART_SHEETS)

@@ -150,7 +150,7 @@ calligra_define_product(FILTER_SHEETS_TO_OPENCALC "Sheets OpenOffice.org Calc ex
 calligra_define_product(FILTER_QUATTROPRO_TO_SHEETS "Sheets Quattro Pro import filter" UNPORTED  REQUIRES PART_SHEETS)
 calligra_define_product(FILTER_HTML_TO_ODS "HTML to ODS filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_SHEETS_TO_HTML "Sheets HTML export filter"  REQUIRES PART_SHEETS)
-calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter"  REQUIRES LIB_CALLIGRA)
 
 # Flow filters
 calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  REQUIRES LIB_CALLIGRA)

@@ -11,7 +11,7 @@ ki18n_wrap_ui(kritafastcolortransferfilter_PART_SRCS
     )
 
 add_library(kritafastcolortransferfilter MODULE ${kritafastcolortransferfilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritafastcolortransferfilter kritafastcolortransfer.desktop)
 
 
 target_link_libraries(kritafastcolortransferfilter kritaui)

@@ -39,8 +39,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 
-K_PLUGIN_FACTORY(PosterizeFactory, registerPlugin<Posterize>();)
-K_EXPORT_PLUGIN(PosterizeFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(PosterizeFactory, "kritaposterize.json", registerPlugin<Posterize>();)
 
 Posterize::Posterize(QObject *parent, const QVariantList &)
     : QObject(parent)

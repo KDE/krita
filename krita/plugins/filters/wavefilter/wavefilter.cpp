@@ -45,8 +45,7 @@
 #include "ui_wdgwaveoptions.h"
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(KritaWaveFilterFactory, registerPlugin<KritaWaveFilter>();)
-K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaWaveFilterFactory, "kritawavefilter.json", registerPlugin<KritaWaveFilter>();)
 
 class KisWaveCurve
 {

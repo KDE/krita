@@ -11,7 +11,7 @@ ki18n_wrap_ui(kritanoisefilter_PART_SRCS
     )
 
 add_library(kritanoisefilter MODULE ${kritanoisefilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritanoisefilter kritanoisefilter.desktop)
 
 
 target_link_libraries(kritanoisefilter kritaui)

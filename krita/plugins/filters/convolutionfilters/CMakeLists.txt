@@ -5,7 +5,7 @@ set(kritaconvolutionfilters_PART_SRCS
 
 
 add_library(kritaconvolutionfilters MODULE ${kritaconvolutionfilters_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaconvolutionfilters kritaconvolutionfilters.desktop)
 
 
 target_link_libraries(kritaconvolutionfilters kritaui)

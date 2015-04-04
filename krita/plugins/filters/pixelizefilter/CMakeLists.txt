@@ -3,7 +3,7 @@ set(kritapixelizefilter_PART_SRCS kis_pixelize_filter_plugin.cpp kis_pixelize_fi
 
 
 add_library(kritapixelizefilter MODULE ${kritapixelizefilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritapixelizefilter kritapixelizefilter.desktop)
 
 
 target_link_libraries(kritapixelizefilter kritaui)

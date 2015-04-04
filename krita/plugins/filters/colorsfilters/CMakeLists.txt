@@ -18,6 +18,7 @@ ki18n_wrap_ui(kritacolorsfilters_PART_SRCS
 )
 
 add_library(kritacolorsfilters MODULE ${kritacolorsfilters_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacolorsfilters kritacolorsfilter.desktop)
 
 
 

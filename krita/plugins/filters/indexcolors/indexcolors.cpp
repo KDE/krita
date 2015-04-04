@@ -33,8 +33,7 @@
 #include "kiswdgindexcolors.h"
 #include "palettegeneratorconfig.h"
 
-K_PLUGIN_FACTORY(IndexColorsFactory, registerPlugin<IndexColors>();)
-K_EXPORT_PLUGIN(IndexColorsFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(IndexColorsFactory, "kritaindexcolors.json", registerPlugin<IndexColors>();)
 
 IndexColors::IndexColors(QObject *parent, const QVariantList &)
     : QObject(parent)

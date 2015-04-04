@@ -11,7 +11,7 @@ ki18n_wrap_ui(kritarandompickfilter_PART_SRCS
     )
 
 add_library(kritarandompickfilter MODULE ${kritarandompickfilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritarandompickfilter kritarandompickfilter.desktop)
 
 
 target_link_libraries(kritarandompickfilter kritaui)

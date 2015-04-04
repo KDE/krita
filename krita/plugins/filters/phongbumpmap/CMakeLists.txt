@@ -8,6 +8,7 @@ set(kritaphongbumpmap_PART_SRCS
 ki18n_wrap_ui(kritaphongbumpmap_PART_SRCS wdgphongbumpmap.ui)
 
 add_library(kritaphongbumpmap MODULE ${kritaphongbumpmap_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaphongbumpmap kritaphongbumpmapfilter.desktop)
 
 target_link_libraries(kritaphongbumpmap kritaui)
 

@@ -36,8 +36,7 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 
-K_PLUGIN_FACTORY(KritaExampleFactory, registerPlugin<KritaExample>();)
-K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaExampleFactory, "kritaexample.json", registerPlugin<KritaExample>();)
 
 KritaExample::KritaExample(QObject *parent, const QVariantList &)
         : QObject(parent)

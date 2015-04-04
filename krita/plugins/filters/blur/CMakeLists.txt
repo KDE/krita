@@ -20,7 +20,7 @@ ki18n_wrap_ui(kritablurfilter_PART_SRCS
     )
 
 add_library(kritablurfilter MODULE ${kritablurfilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritablurfilter kritablurfilter.desktop)
 
 
 target_link_libraries(kritablurfilter kritaui)

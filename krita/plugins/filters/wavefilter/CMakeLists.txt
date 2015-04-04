@@ -11,7 +11,7 @@ ki18n_wrap_ui(kritawavefilter_PART_SRCS
     )
 
 add_library(kritawavefilter MODULE ${kritawavefilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritawavefilter kritawavefilter.desktop)
 
 
 target_link_libraries(kritawavefilter kritaui)

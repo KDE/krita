@@ -22,8 +22,7 @@
 #include <kpluginfactory.h>
 #include <filter/kis_filter_registry.h>
 
-K_PLUGIN_FACTORY (KisPhongBumpmapFactory, registerPlugin<KisPhongBumpmapPlugin>();)
-K_EXPORT_PLUGIN (KisPhongBumpmapFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisPhongBumpmapFactory, "kritaphongbumpmapfilter.json", registerPlugin<KisPhongBumpmapPlugin>();)
 
 KisPhongBumpmapPlugin::KisPhongBumpmapPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

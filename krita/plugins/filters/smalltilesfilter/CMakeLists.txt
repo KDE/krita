@@ -3,7 +3,7 @@ set(kritasmalltilesfilter_PART_SRCS kis_small_tiles_filter_plugin.cpp kis_small_
 
 
 add_library(kritasmalltilesfilter MODULE ${kritasmalltilesfilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritasmalltilesfilter kritasmalltilesfilter.desktop)
 
 
 target_link_libraries(kritasmalltilesfilter kritaui)

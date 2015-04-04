@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritalevelfilter_PART_SRCS
     )
 
 add_library(kritalevelfilter MODULE ${kritalevelfilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritalevelfilter kritalevelfilter.desktop)
 
 
 target_link_libraries(kritalevelfilter kritaui)

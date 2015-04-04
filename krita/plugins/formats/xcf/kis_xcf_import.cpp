@@ -62,8 +62,7 @@ extern "C" {
 #define GET_ALPHA(x) (x >> ALPHA_SHIFT)
 }
 
-K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
-K_EXPORT_PLUGIN(XCFImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(XCFImportFactory, "krita_xcf_import.json", registerPlugin<KisXCFImport>();)
 
 KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

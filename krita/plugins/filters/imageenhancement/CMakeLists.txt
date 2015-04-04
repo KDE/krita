@@ -8,7 +8,7 @@ set(kritaimageenhancement_PART_SRCS
     )
 
 add_library(kritaimageenhancement MODULE ${kritaimageenhancement_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaimageenhancement kritaimageenhancement.desktop)
 
 
 target_link_libraries(kritaimageenhancement kritaui)

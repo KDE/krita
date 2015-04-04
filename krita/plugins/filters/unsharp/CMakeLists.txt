@@ -11,7 +11,7 @@ ki18n_wrap_ui(kritaunsharpfilter_PART_SRCS
     )
 
 add_library(kritaunsharpfilter MODULE ${kritaunsharpfilter_PART_SRCS})
-
+kcoreaddons_desktop_to_json(kritaunsharpfilter kritaunsharpfilter.desktop)
 
 
 target_link_libraries(kritaunsharpfilter kritaui)

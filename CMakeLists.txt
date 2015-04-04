@@ -181,6 +181,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
     OPTIONAL_COMPONENTS
         Activities
         Declarative
+        KHtml
 )
 if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
@@ -937,6 +938,7 @@ calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
+    KF5_KHtml_FOUND "KF5KHtml devel not found"
 )
 
 calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML

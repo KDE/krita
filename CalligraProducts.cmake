@@ -136,7 +136,7 @@ calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES 
 calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivot tables"  STAGING UNPORTED  REQUIRES PART_SHEETS)
 
 # Sheets filters
-calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter" UNPORTED  REQUIRES LIB_KOMSOOXML PART_SHEETS)
+calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter"  REQUIRES LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter" UNPORTED  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_SHEETS_TO_XLS "Sheets XLS export filter" UNPORTED  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_CSV_TO_SHEETS "Sheets CSV import filter" UNPORTED  REQUIRES PART_SHEETS)

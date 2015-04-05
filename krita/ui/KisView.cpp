@@ -187,7 +187,7 @@ public:
             return m_widget;
         }
 
-        void ensureItemShown(KStatusBar * sb) {
+        void ensureItemShown(QStatusBar * sb) {
             Q_ASSERT(m_widget);
             if (!m_connected) {
                 if (m_permanent)
@@ -201,7 +201,7 @@ public:
                 m_connected = true;
             }
         }
-        void ensureItemHidden(KStatusBar * sb) {
+        void ensureItemHidden(QStatusBar * sb) {
             if (m_connected) {
                 m_hidden = m_widget->isHidden();
                 sb->removeWidget(m_widget);
@@ -236,14 +236,13 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->undo = new KisUndoStackAction(d->document->undoStack(), KisUndoStackAction::UNDO);
     d->redo = new KisUndoStackAction(d->document->undoStack(), KisUndoStackAction::RED0);
 
-//     QT5PORT
-//     KStatusBar * sb = statusBar();
-//     if (sb) { // No statusbar in e.g. konqueror
-//         connect(d->document, SIGNAL(statusBarMessage(const QString&)),
-//                 this, SLOT(slotActionStatusText(const QString&)));
-//         connect(d->document, SIGNAL(clearStatusBarMessage()),
-//                 this, SLOT(slotClearStatusText()));
-//     }
+    QStatusBar * sb = statusBar();
+    if (sb) { // No statusbar in e.g. konqueror
+        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
+                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(clearStatusBarMessage()),
+                this, SLOT(slotClearStatusText()));
+    }
 
     d->viewConverter = new KisCoordinatesConverter();
 
@@ -512,14 +511,13 @@ void KisView::setDocument(KisDocument *document)
 {
     d->document->disconnect(this);
     d->document = document;
-// QT5PORT
-//     KStatusBar *sb = statusBar();
-//     if (sb) { // No statusbar in e.g. konqueror
-//         connect(d->document, SIGNAL(statusBarMessage(const QString&)),
-//                 this, SLOT(slotActionStatusText(const QString&)));
-//         connect(d->document, SIGNAL(clearStatusBarMessage()),
-//                 this, SLOT(slotClearStatusText()));
-//     }
+    QStatusBar *sb = statusBar();
+    if (sb) { // No statusbar in e.g. konqueror
+        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
+                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(clearStatusBarMessage()),
+                this, SLOT(slotClearStatusText()));
+    }
 }
 
 void KisView::setDocumentDeleted()
@@ -530,30 +528,28 @@ void KisView::setDocumentDeleted()
 void KisView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     Private::StatusBarItem item(widget, stretch, permanent);
-// QT5PORT
-    //     KStatusBar * sb = statusBar();
-//     if (sb) {
-//         item.ensureItemShown(sb);
-//     }
-//     d->statusBarItems.append(item);
+    QStatusBar * sb = statusBar();
+    if (sb) {
+        item.ensureItemShown(sb);
+    }
+    d->statusBarItems.append(item);
 }
 
 void KisView::removeStatusBarItem(QWidget *widget)
 {
-//     QT5PORT
-//     KStatusBar *sb = statusBar();
-// 
-//     int itemCount = d->statusBarItems.count();
-//     for (int i = itemCount-1; i >= 0; --i) {
-//         Private::StatusBarItem &sbItem = d->statusBarItems[i];
-//         if (sbItem.widget() == widget) {
-//             if (sb) {
-//                 sbItem.ensureItemHidden(sb);
-//             }
-//             d->statusBarItems.removeOne(sbItem);
-//             break;
-//         }
-//     }
+    QStatusBar *sb = statusBar();
+
+    int itemCount = d->statusBarItems.count();
+    for (int i = itemCount-1; i >= 0; --i) {
+        Private::StatusBarItem &sbItem = d->statusBarItems[i];
+        if (sbItem.widget() == widget) {
+            if (sb) {
+                sbItem.ensureItemHidden(sb);
+            }
+            d->statusBarItems.removeOne(sbItem);
+            break;
+        }
+    }
 }
 
 
@@ -585,18 +581,16 @@ QStatusBar * KisView::statusBar() const
 
 void KisView::slotActionStatusText(const QString &text)
 {
-//     QT5PORT
-//     KStatusBar *sb = statusBar();
-//     if (sb)
-//         sb->showMessage(text);
+    QStatusBar *sb = statusBar();
+    if (sb)
+        sb->showMessage(text);
 }
 
 void KisView::slotClearStatusText()
 {
-//     QT5PORT
-//     KStatusBar *sb = statusBar();
-//     if (sb)
-//         sb->clearMessage();
+    QStatusBar *sb = statusBar();
+    if (sb)
+        sb->clearMessage();
 }
 
 QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)

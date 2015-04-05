@@ -158,7 +158,7 @@ public:
         return m_widget;
     }
 
-    void ensureItemShown(KStatusBar * sb) {
+    void ensureItemShown(QStatusBar * sb) {
         Q_ASSERT(m_widget);
         if (!m_connected) {
             if (m_permanent)
@@ -172,7 +172,7 @@ public:
             m_connected = true;
         }
     }
-    void ensureItemHidden(KStatusBar * sb) {
+    void ensureItemHidden(QStatusBar * sb) {
         if (m_connected) {
             m_hidden = m_widget->isHidden();
             sb->removeWidget(m_widget);
@@ -523,30 +523,28 @@ void KisViewManager::addStatusBarItem(QWidget * widget, int stretch, bool perman
     if (!mainWindow()) return;
 
     StatusBarItem item(widget, stretch, permanent);
-//     QT5PORT
-//     KStatusBar * sb = mainWindow()->statusBar();
-//     if (sb) {
-//         item.ensureItemShown(sb);
-//     }
+    QStatusBar * sb = mainWindow()->statusBar();
+    if (sb) {
+        item.ensureItemShown(sb);
+    }
     d->statusBarItems.append(item);
 }
 
 void KisViewManager::removeStatusBarItem(QWidget * widget)
 {
-//     QT5PORT
-//     KStatusBar *sb = mainWindow()->statusBar();
-// 
-//     int itemCount = d->statusBarItems.count();
-//     for (int i = itemCount-1; i >= 0; --i) {
-//         StatusBarItem &sbItem = d->statusBarItems[i];
-//         if (sbItem.widget() == widget) {
-//             if (sb) {
-//                 sbItem.ensureItemHidden(sb);
-//             }
-//             d->statusBarItems.removeOne(sbItem);
-//             break;
-//         }
-//     }
+    QStatusBar *sb = mainWindow()->statusBar();
+
+    int itemCount = d->statusBarItems.count();
+    for (int i = itemCount-1; i >= 0; --i) {
+        StatusBarItem &sbItem = d->statusBarItems[i];
+        if (sbItem.widget() == widget) {
+            if (sb) {
+                sbItem.ensureItemHidden(sb);
+            }
+            d->statusBarItems.removeOne(sbItem);
+            break;
+        }
+    }
 }
 
 KisPaintopBox* KisViewManager::paintOpBox() const

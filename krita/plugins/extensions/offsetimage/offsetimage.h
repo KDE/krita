@@ -23,6 +23,7 @@
 
 #include <kis_view_plugin.h>
 #include <kis_types.h>
+#include <kis_node.h>
 
 class KUndo2MagicString;
 
@@ -34,7 +35,7 @@ public:
     OffsetImage(QObject *parent, const QVariantList &);
     virtual ~OffsetImage();
 
-private Q_SLOTS:
+public Q_SLOTS:
 
     void slotOffsetImage();
     void slotOffsetLayer();

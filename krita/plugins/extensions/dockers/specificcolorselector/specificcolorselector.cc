@@ -79,4 +79,4 @@ SpecificColorSelectorPlugin::~SpecificColorSelectorPlugin()
 {
 }
 
-#include "moc_specificcolorselector.cpp"
+#include "specificcolorselector.moc"

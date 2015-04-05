@@ -43,8 +43,7 @@
 
 #include <tga.h>
 
-K_PLUGIN_FACTORY(KisTGAImportFactory, registerPlugin<KisTGAImport>();)
-K_EXPORT_PLUGIN(KisTGAImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KisTGAImportFactory, "krita_tga_import.json", registerPlugin<KisTGAImport>();)
 
 KisTGAImport::KisTGAImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

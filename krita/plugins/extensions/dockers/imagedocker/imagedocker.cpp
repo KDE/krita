@@ -57,3 +57,5 @@ ImageDockerPlugin::ImageDockerPlugin(QObject* parent, const QVariantList&):
 {
     KoDockRegistry::instance()->add(new ImageDockerDockFactory());
 }
+
+#include "imagedocker.moc"

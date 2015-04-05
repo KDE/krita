@@ -26,6 +26,8 @@ set(kritapsdimport_PART_SRCS
 )
 
 add_library(kritapsdimport MODULE ${kritapsdimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritapsdimport krita_psd_import.desktop)
+
 if (WIN32)
 	target_link_libraries(kritapsdimport kritaui ${WIN32_PLATFORM_NET_LIBS})
 else ()
@@ -43,6 +45,7 @@ set(kritapsdexport_PART_SRCS
 )
 
 add_library(kritapsdexport MODULE ${kritapsdexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritapsdexport krita_psd_export.desktop)
 
 if (WIN32)
     target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS})

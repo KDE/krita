@@ -6,6 +6,7 @@ set(kritaodgimport_PART_SRCS
     )
 
 add_library(kritaodgimport MODULE ${kritaodgimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaodgimport krita_odg_import.desktop)
 
 include_directories(${PNG_INCLUDE_DIR})
 

@@ -5,6 +5,7 @@ set(kritatgaexport_PART_SRCS
 ki18n_wrap_ui(kritatgaexport_PART_SRCS )
 
 add_library(kritatgaexport MODULE ${kritatgaexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatgaexport krita_tga_export.desktop)
 
 target_link_libraries(kritatgaexport kritaui)
 
@@ -18,6 +19,7 @@ set(kritatgaimport_PART_SRCS
 ki18n_wrap_ui(kritatgaimport_PART_SRCS )
 
 add_library(kritatgaimport MODULE ${kritatgaimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatgaimport krita_tga_import.desktop)
 
 target_link_libraries(kritatgaimport kritaui)
 

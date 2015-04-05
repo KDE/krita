@@ -79,4 +79,4 @@ ColorSliderPlugin::~ColorSliderPlugin()
 {
 }
 
-#include "moc_kis_color_slider.cpp"
+#include "kis_color_slider.moc"

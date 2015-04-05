@@ -175,7 +175,7 @@ calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter" UNPORTED  REQUIRES
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter" REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter" REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)
 calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter" REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)
-calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter" UNPORTED  REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_CALLIGRA)
+calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter" REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_CALLIGRA)
 
 # Plan filters
 calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter" UNPORTED  REQUIRES APP_PLAN)

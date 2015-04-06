@@ -414,6 +414,7 @@ KisMainWindow::KisMainWindow()
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
 
+    applyToolBarLayout();
 
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
@@ -1391,6 +1392,7 @@ void KisMainWindow::slotConfigureToolbars()
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotNewToolbarConfig()
@@ -1405,6 +1407,7 @@ void KisMainWindow::slotNewToolbarConfig()
         return;
 
     plugActionList("toolbarlist", d->toolbarList);
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
@@ -2126,6 +2129,13 @@ void KisMainWindow::createActions()
         d->expandingSpacers[i]->setDefaultWidget(new QWidget(this));
         d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
+    }
+}
+
+void KisMainWindow::applyToolBarLayout()
+{
+    Q_FOREACH (KToolBar *toolBar, toolBars()) {
+        toolBar->layout()->setSpacing(4);
     }
 }
 

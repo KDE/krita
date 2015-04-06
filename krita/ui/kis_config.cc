@@ -1224,6 +1224,16 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+bool KisConfig::sliderLabels() const
+{
+    return m_cfg.readEntry("sliderLabels", true);
+}
+
+void KisConfig::setSliderLabels(bool enabled)
+{
+    m_cfg.writeEntry("sliderLabels", enabled);
+}
+
 QString KisConfig::currentInputProfile() const
 {
     return m_cfg.readEntry("currentInputProfile", QString());

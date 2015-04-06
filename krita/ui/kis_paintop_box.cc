@@ -240,11 +240,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
     baseLayout->addWidget(m_paintopWidget);
+    baseLayout->setSpacing(4);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
+    m_layout->setSpacing(4);
     m_layout->setContentsMargins(0, 0, 0, 0);
 
     QWidget* compositeActions = new QWidget(this);
@@ -253,7 +255,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
 
-    compositeLayout->setContentsMargins(3, 0, 0, 0);
+    compositeLayout->setSpacing(4);
+    compositeLayout->setContentsMargins(0, 0, 0, 0);
 
     compositeLayout->addWidget(m_reloadButton);
 
@@ -297,6 +300,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(hMirrorButton);
     mirrorLayout->addWidget(vMirrorButton);
+    mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
     action = new KAction(i18n("Mirror"), this);
     view->actionCollection()->addAction("mirror_actions", action);

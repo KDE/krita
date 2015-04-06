@@ -205,7 +205,7 @@ void KoColor::fromQColor(const QColor& c) const
 #ifndef NDEBUG
 void KoColor::dump() const
 {
-    dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
+    dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id() <<"";
     QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();

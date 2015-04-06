@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "pigment_debug.h"
+#include "DebugPigment.h"
 Q_LOGGING_CATEGORY(PIGMENT_log, "log_pigment")
 
 

@@ -632,7 +632,9 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         if (!preset) {
             preset = rserver->resourceByName("Basic_tip_default");
         }
-        setCurrentPaintop(preset->paintOp(), preset);
+        if (preset) {
+            setCurrentPaintop(preset->paintOp(), preset);
+        }
     }
     else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);

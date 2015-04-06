@@ -20,8 +20,9 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(PIGMENT_log)
+#include <pigment_export.h>
 
+extern const PIGMENTCMS_EXPORT QLoggingCategory &PIGMENT_log();
 
 #define dbgPigment qCDebug(PIGMENT_log)
 #define dbgPigmentCCS dbgPigment

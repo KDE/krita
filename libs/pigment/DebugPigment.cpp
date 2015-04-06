@@ -17,6 +17,10 @@
  */
 
 #include "DebugPigment.h"
-Q_LOGGING_CATEGORY(PIGMENT_log, "log_pigment")
+const QLoggingCategory &PIGMENT_log() \
+{
+    static const QLoggingCategory category("log_pigment");
+    return category;
+}
 
 

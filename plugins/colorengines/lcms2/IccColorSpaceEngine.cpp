@@ -26,7 +26,7 @@
 
 #include "LcmsColorSpace.h"
 
-#include "DebugPigment.h"
+#include "QDebug"
 
 // -- KoLcmsColorConversionTransformation --
 
@@ -190,7 +190,7 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
             depthType = BYTES_SH(0);
         }
         else {
-            dbgPigmentCS << "Unknow bit depth";
+            qWarning() << "Unknow bit depth";
             return 0;
         }
         // Compute the model part of the type
@@ -216,7 +216,7 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
         } else if (modelId == YCbCrAColorModelID.id()) {
             modelType = (COLORSPACE_SH(PT_YCbCr) | EXTRA_SH(1) | CHANNELS_SH(3));
         } else {
-            warnPigment << "Cannot convert colorspace to lcms modeltype";
+            qWarning() << "Cannot convert colorspace to lcms modeltype";
             return 0;
         }
         return depthType | modelType;

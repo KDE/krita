@@ -32,7 +32,7 @@
 #include <QFile>
 #include <QSharedPointer>
 
-#include "DebugPigment.h"
+#include "QDebug"
 #include "LcmsColorProfileContainer.h"
 
 #include "lcms2.h"
@@ -167,7 +167,7 @@ bool IccColorProfile::load()
     if (init()) {
         return true;
     }
-    warnPigment << "Failed to load profile from " << fileName();
+    qWarning() << "Failed to load profile from " << fileName();
     return false;
 }
 

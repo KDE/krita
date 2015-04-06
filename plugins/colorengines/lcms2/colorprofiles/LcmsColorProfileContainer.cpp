@@ -27,7 +27,7 @@
 #include <cfloat>
 #include <cmath>
 
-#include "DebugPigment.h"
+#include <QDebug>
 
 class LcmsColorProfileContainer::Private
 {
@@ -71,7 +71,7 @@ QByteArray LcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE p
     if (rawData.size() >= (int)bytesNeeded) {
         cmsSaveProfileToMem(profile, rawData.data(), &bytesNeeded); // fill buffer
     } else {
-        errorPigment << "Couldn't resize the profile buffer, system is probably running out of memory.";
+        qWarning() << "Couldn't resize the profile buffer, system is probably running out of memory.";
         rawData.resize(0);
     }
     return rawData;
@@ -100,7 +100,7 @@ bool LcmsColorProfileContainer::init()
 
 #ifndef NDEBUG
     if (d->data->rawData().size() == 4096) {
-        warnPigment << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
+        qWarning() << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
     }
 #endif
 
@@ -125,17 +125,6 @@ bool LcmsColorProfileContainer::init()
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
                 || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
                      cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT) );
-
-        dbgPigment << "Loaded ICC Profile"
-                   << "\n\tSignature:" << d->colorSpaceSignature
-                   << "\n\tDevice class:" << d->deviceClass
-                   << "\n\tDescription:" << d->productDescription
-                   << "\n\tValid:" << d->valid
-                   << "\n\tName:" << d->name
-                   << "\n\tManufacturer:" << d->manufacturer
-                   << "\n\tSuitable for output:" << d->suitableForOutput
-                   << "\n\tClass" << QString::number(profile_class, 0, 16);
-
         return true;
     }
 

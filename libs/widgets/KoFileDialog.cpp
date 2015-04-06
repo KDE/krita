@@ -64,7 +64,7 @@ public:
         // KDE, which gives working Qt dialogs.
         //
         // Only show the GTK dialog in Gnome, where people deserve it
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
         if (qgetenv("KDE_FULL_SESSION").size() > 0) {
             useStaticForNative = true;
         }

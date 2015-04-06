@@ -35,7 +35,7 @@
  * \see bug 330492
  */
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 #define HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 #endif
 

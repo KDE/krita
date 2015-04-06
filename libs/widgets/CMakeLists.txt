@@ -103,6 +103,11 @@ else()
     target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 endif ()
 
+if(X11_FOUND)
+    target_link_libraries(kowidgets Qt5::X11Extras ${X11_LIBRARIES})
+endif()
+
+
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils )
 
 set_target_properties(kowidgets PROPERTIES

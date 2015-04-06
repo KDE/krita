@@ -21,7 +21,7 @@
 #include <QDebug>
 #include <QApplication>
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 
 #include <QX11Info>
 #include <X11/X.h>
@@ -35,23 +35,23 @@ struct KeyMapping {
     Qt::Key qtKey;
 };
 
-#endif /* Q_WS_X11 */
+#endif /* HAVE_X11 */
 
 struct KisExtendedModifiersMapper::Private
 {
     Private();
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 
     QVector<KeyMapping> mapping;
     char keysState[32];
 
     bool checkKeyCodePressedX11(KeyCode key);
     bool checkKeySymPressedX11(KeySym sym);
-#endif /* Q_WS_X11 */
+#endif /* HAVE_X11 */
 };
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 
 KisExtendedModifiersMapper::Private::Private()
 {
@@ -104,13 +104,13 @@ bool KisExtendedModifiersMapper::Private::checkKeySymPressedX11(KeySym sym)
     return key != 0 ? checkKeyCodePressedX11(key) : false;
 }
 
-#else /* Q_WS_X11 */
+#else /* HAVE_X11 */
 
 KisExtendedModifiersMapper::Private::Private()
 {
 }
 
-#endif /* Q_WS_X11 */
+#endif /* HAVE_X11 */
 
 
 KisExtendedModifiersMapper::KisExtendedModifiersMapper()
@@ -127,7 +127,7 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 {
     ExtendedModifiers modifiers;
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 
     foreach (const KeyMapping &map, m_d->mapping) {
         if (m_d->checkKeySymPressedX11(map.x11KeySym)) {
@@ -135,7 +135,7 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
         }
     }
 
-#else /* Q_WS_X11 */
+#else /* HAVE_X11 */
 
     Qt::KeyboardModifiers standardModifiers = queryStandardModifiers();
 
@@ -155,7 +155,7 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
         modifiers << Qt::Key_Meta;
     }
 
-#endif /* Q_WS_X11 */
+#endif /* HAVE_X11 */
 
     return modifiers;
 }

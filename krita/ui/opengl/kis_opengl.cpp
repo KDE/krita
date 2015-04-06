@@ -146,7 +146,7 @@ void KisOpenGL::createContext()
     QString renderer((const char*)glGetString(GL_RENDERER));
 
     bool isOnX11 = false;
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     isOnX11 = true;
 #endif
 

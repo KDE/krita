@@ -52,7 +52,7 @@
 #ifdef USE_BREAKPAD
     #include "kis_crash_handler.h"
 #endif
-#elif defined Q_WS_X11
+#elif defined HAVE_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #if QT_VERSION < 0x040800
 // needed for XInitThreads()
@@ -65,7 +65,7 @@ extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     if (runningInKDE) {
         qputenv("QT_NO_GLIB", "1");
     }
@@ -105,7 +105,7 @@ extern "C" int main(int argc, char **argv)
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
-#if defined Q_WS_X11
+#if defined HAVE_X11
 #if QT_VERSION >= 0x040800
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
     // do their own X11 stuff in their own threads
@@ -137,11 +137,13 @@ extern "C" int main(int argc, char **argv)
     }
 
 #if defined Q_OS_WIN
-    KisTabletSupportWin::init();
-    app.setEventFilter(&KisTabletSupportWin::eventFilter);
-#elif defined Q_WS_X11
-    KisTabletSupportX11::init();
-    app.setEventFilter(&KisTabletSupportX11::eventFilter);
+    KisTabletSupportWin tabletSupportWin;
+    tabletSupportWin.init();
+    app.installNativeEventFilter(&tabletSupportWin);
+#elif defined HAVE_X11
+    KisTabletSupportX11 tabletSupportX11;
+    tabletSupportX11.init();
+    app.installNativeEventFilter(&tabletSupportX11);
 #endif
 
 

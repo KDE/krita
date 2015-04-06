@@ -228,7 +228,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
 // XXX: no color management integration on Windows or OSX yet
-#ifndef Q_WS_X11
+#ifndef HAVE_X11
     m_page->chkUseSystemMonitorProfile->setVisible(false);
 #endif
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());

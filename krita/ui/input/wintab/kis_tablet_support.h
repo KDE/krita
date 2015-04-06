@@ -28,7 +28,7 @@
 #include <QMap>
 #include <QTabletEvent>
 
-#ifdef Q_OS_UNIX
+#ifdef HAVE_X11
 #include "kis_config.h"
 #include <algorithm>
 #include <X11/extensions/XInput.h>
@@ -46,19 +46,19 @@ struct QTabletDeviceData
     int maxTanPressure;
     int minX, maxX, minY, maxY, minZ, maxZ;
     int sysOrgX, sysOrgY, sysExtX, sysExtY;
-#ifdef Q_OS_UNIX // on windows the scale is fixed (and hardcoded)
+#ifdef HAVE_X11 // on windows the scale is fixed (and hardcoded)
     int minRotation;
     int maxRotation;
-#endif /* Q_WS_X11 */
+#endif /* HAVE_X11 */
     inline QPointF scaleCoord(int coordX, int coordY, int outOriginX, int outExtentX,
                               int outOriginY, int outExtentY) const;
 #endif
 
-#if defined(Q_OS_UNIX) || (defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA))
+#if defined(HAVE_X11) || (defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA))
     QPointer<QWidget> widgetToGetPress;
 #endif
 
-#ifdef Q_OS_UNIX
+#ifdef HAVE_X11
     int deviceType;
     enum {
         TOTAL_XINPUT_EVENTS = 64
@@ -90,7 +90,7 @@ struct QTabletDeviceData
     QMap<quint8, quint8> buttonsMap;
 #endif
 
-#ifdef Q_OS_UNIX
+#ifdef HAVE_X11
     bool isTouchWacomTablet;
 
     /**
@@ -188,7 +188,7 @@ struct QTabletDeviceData
     };
 
     SavedAxesData savedAxesData;
-#endif /* Q_WS_X11 */
+#endif /* HAVE_X11 */
 };
 
 static inline int sign(int x)

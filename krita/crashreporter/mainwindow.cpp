@@ -123,7 +123,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
     restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/krita.exe \"";
 #endif
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/krita \"";
 #endif
 
@@ -315,7 +315,7 @@ void MainWindow::startUpload()
 
     fields << Field("Platform", platform.toLatin1());
 #endif
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     fields << Field("Platform", "Linux/X11");
 #endif
 #ifdef Q_WS_MAC

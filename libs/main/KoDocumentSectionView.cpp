@@ -39,7 +39,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 #define DRAG_WHILE_DRAG_WORKAROUND
 #endif
 

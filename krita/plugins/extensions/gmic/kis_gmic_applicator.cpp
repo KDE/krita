@@ -20,7 +20,6 @@
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
 
-
 #include "kis_gmic_command.h"
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_image.h"

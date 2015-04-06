@@ -199,6 +199,9 @@ if (USEOPENGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
 
+
+
+
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
@@ -222,8 +225,19 @@ endif ()
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
+find_package(X11)
+if(X11_FOUND)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+                 X11Extras
+    )
+    set(HAVE_X11 TRUE)
+    add_definitions(-DHAVE_X11)
+else()
+    set(HAVE_X11 FALSE)
+endif()
+
+# only with this definition will the FOO_TEST_EXPORT macro do something
 if(KDE4_BUILD_TESTS)
-    # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif()
 

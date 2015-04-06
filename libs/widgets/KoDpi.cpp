@@ -22,7 +22,7 @@
 #include "KoDpi.h"
 
 #include <QFontInfo>
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 #include <QX11Info>
 #else
 #include <QApplication>
@@ -42,7 +42,7 @@ KoDpi::KoDpi()
     // Another way to get the DPI of the display would be QPaintDeviceMetrics,
     // but we have no widget here (and moving this to KoView wouldn't allow
     // using this from the document easily).
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     m_dpiX = QX11Info::appDpiX();
     m_dpiY = QX11Info::appDpiY();
 #else

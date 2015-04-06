@@ -763,7 +763,7 @@ void evdevEventsActivationWorkaround(WId window)
     }
 }
 
-bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
+bool KisTabletSupportX11::nativeEventFilter(const QByteArray &/*eventType*/, void *ev, long * /*unused_on_X11*/)
 {
     XEvent *event = static_cast<XEvent*>(ev);
 

@@ -74,7 +74,7 @@ public:
         , ignoreQtCursorEvents(false)
         , disableTouchOnCanvas(false)
         , touchHasBlockedPressEvents(false)
-    #ifdef Q_WS_X11
+    #ifdef HAVE_X11
         , hiResEventsWorkaroundCoeff(1.0, 1.0)
     #endif
         , lastTabletEvent(0)
@@ -120,7 +120,7 @@ public:
     bool touchHasBlockedPressEvents;
 
     KisShortcutMatcher matcher;
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     QPointF hiResEventsWorkaroundCoeff;
 #endif
     QTabletEvent *lastTabletEvent;
@@ -432,7 +432,7 @@ bool KisInputManager::Private::tryHidePopupPalette()
     return false;
 }
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 inline QPointF dividePoints(const QPointF &pt1, const QPointF &pt2) {
     return QPointF(pt1.x() / pt2.x(), pt1.y() / pt2.y());
 }
@@ -446,7 +446,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 {
     delete lastTabletEvent;
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     /**
      * There is a bug in Qt-x11 when working in 2 tablets + 2 monitors
      * setup. The hiResGlobalPos() value gets scaled wrongly somehow.
@@ -467,7 +467,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
                              event->pos(),
                              event->globalPos(),
 // QT5PORT
-//                          #ifdef Q_WS_X11
+//                          #ifdef HAVE_X11
 //                              multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
 //                          #else
 //                              event->hiResGlobalPos(),

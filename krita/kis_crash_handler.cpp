@@ -71,7 +71,7 @@
 #include <windows.h>
 #include <iostream>
 #include <client/windows/handler/exception_handler.h>
-#elif defined Q_WS_X11
+#elif defined HAVE_X11
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -148,7 +148,7 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
     } else if (pid == 0) {
         execl(CRASH_REPORTER_BINARY, CRASH_REPORTER_BINARY, dumpPath, minidumpID, (char*)0);
     }
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     abort();
 #endif
     return true;

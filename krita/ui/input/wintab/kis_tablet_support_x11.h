@@ -20,13 +20,13 @@
 #define __KIS_TABLET_SUPPORT_X11_H
 
 #include <krita_export.h>
+#include <QAbstractNativeEventFilter>
 
-
-class KRITAUI_EXPORT KisTabletSupportX11
+class KRITAUI_EXPORT KisTabletSupportX11 : public QAbstractNativeEventFilter
 {
 public:
     static void init();
-    static bool eventFilter(void *message, long *result);
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 };
 
 #endif /* __KIS_TABLET_SUPPORT_X11_H */

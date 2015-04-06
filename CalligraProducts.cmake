@@ -103,7 +103,7 @@ calligra_define_product(DOC "Calligra Documentations" UNPORTED)
 
 # extras
 calligra_define_product(APP_CONVERTER "Format converter for commandline" REQUIRES LIB_CALLIGRA)
-calligra_define_product(FILEMANAGER_PROPERTIES "Plugin for the KDE file properties dialog" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(FILEMANAGER_PROPERTIES "Plugin for the KDE file properties dialog"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILEMANAGER_THUMBNAIL "Plugins for KDE filesystem thumbnailing"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILEMANAGER_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action" UNPORTED)
 calligra_define_product(FILEMANAGER_TEMPLATES "File templates for filemanager")

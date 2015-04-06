@@ -46,6 +46,7 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
     
     m_popup->setFrameStyle(QFrame::Panel|QFrame::Raised);
     m_arrowButton->setFixedWidth(m_arrowButton->sizeHint().height()/2);
+    m_arrowButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     m_arrowButton->setAutoRaise(true);
     updateArrowIcon();
     

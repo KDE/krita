@@ -45,6 +45,7 @@ public:
     void showEdit();
     void hideEdit();
 
+    void setPrefix(const QString& prefix);
     void setSuffix(const QString& suffix);
 
     void setExponentRatio(qreal dbl);
@@ -79,6 +80,12 @@ protected Q_SLOTS:
     void editLostFocus();
 protected:
     KisAbstractSliderSpinBoxPrivate* const d_ptr;
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
+    void paint(QPainter& painter);
+    void paintPlastique(QPainter& painter);
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox

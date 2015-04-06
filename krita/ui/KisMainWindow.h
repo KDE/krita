@@ -433,6 +433,8 @@ private:
 
     void createActions();
 
+    void applyToolBarLayout();
+
 private slots:
     void initializeGeometry();
 

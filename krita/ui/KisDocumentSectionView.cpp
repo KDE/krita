@@ -226,7 +226,7 @@ void KisDocumentSectionView::currentChanged(const QModelIndex &current, const QM
     }
 }
 
-void KisDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void KisDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &/*roles*/)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {

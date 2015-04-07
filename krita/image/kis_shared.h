@@ -32,13 +32,13 @@ protected:
     ~KisShared();
 public:
     int refCount() {
-        return _ref;
+        return _ref.load();
     }
     bool ref() {
         return _ref.ref();
     }
     bool deref() {
-        Q_ASSERT(_ref > 0);
+        Q_ASSERT(_ref.load() > 0);
         return _ref.deref();
     }
 

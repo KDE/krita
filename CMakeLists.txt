@@ -611,8 +611,8 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 ##
 ## Test for Okular
 ##
-macro_optional_find_package(Okular)
-macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
+macro_optional_find_package(Okular 0.22.60)
+macro_log_feature(OKULAR_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
 
 ##
 ## Test for librevenge

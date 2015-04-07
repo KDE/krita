@@ -52,6 +52,7 @@ bool KoShapeStrokeModel::deref()
 
 int KoShapeStrokeModel::useCount() const
 {
-    return d->refCount;
+    return d->refCount.load();
+
 }
 

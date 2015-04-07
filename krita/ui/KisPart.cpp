@@ -113,7 +113,7 @@ public:
 
 void KisPart::Private::loadActions()
 {
-    // QT5PORT
+    // QT5TODO
     actionCollection = new KActionCollection(part, KGlobal::mainComponent().componentName());
 
     KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
@@ -447,7 +447,7 @@ void KisPart::configureShortcuts()
     }
 
     KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
-    // QT5PORT
+    // QT5TODO
 //     dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
     dlg.addCollection(d->actionCollection);
 //     dlg.setButtonText(KDialog::User1, i18n("Print"));

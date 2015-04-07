@@ -522,7 +522,7 @@ void DlgCanvasSize::updateYOffsetUIValue(double value)
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-//     QT5PORT
+//     QT5TODO
 //     m_anchorIcons[NORTH_WEST] =  koIcon("arrow_north_west");
 //     m_anchorIcons[NORTH] = koIcon("arrow_north");
 //     m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");

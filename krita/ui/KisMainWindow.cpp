@@ -278,7 +278,7 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-//     QT5PORT
+//     QT5TODO
 //     setComponentData(KisFactory::componentData());
     KGlobal::setActiveComponent(KisFactory::componentData());
 
@@ -1945,7 +1945,7 @@ void KisMainWindow::showErrorAndDie()
 
 void KisMainWindow::showAboutApplication()
 {
-// QT5PORT
+// QT5TODO
 //     KisAboutApplication dlg(KisFactory::aboutData(), this);
 //     dlg.exec();
 }

@@ -466,7 +466,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
             new QTabletEvent(event->type(),
                              event->pos(),
                              event->globalPos(),
-// QT5PORT
+// QT5TODO
 //                          #ifdef HAVE_X11
 //                              multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
 //                          #else

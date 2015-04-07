@@ -197,8 +197,8 @@ calligra_define_product(APP_ACTIVE "Calligra Active app" UNPORTED  REQUIRES PART
 calligra_define_product(APP_CALLIGRA "General Calligra app starter"  REQUIRES LIB_CALLIGRA)
 
 # more extras
-calligra_define_product(OKULAR_GENERATOR_PPT "Plugin for Okular extended with support for PPT" UNPORTED  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPT_TO_ODP)
-calligra_define_product(OKULAR_GENERATOR_PPTX "Plugin for Okular extended with support for PPTX" UNPORTED  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPTX_TO_ODP)
+calligra_define_product(OKULAR_GENERATOR_PPT "Plugin for Okular extended with support for PPT"  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPT_TO_ODP)
+calligra_define_product(OKULAR_GENERATOR_PPTX "Plugin for Okular extended with support for PPTX"  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC"  REQUIRES OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
 calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX"  REQUIRES OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
 calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended with support for WORDPERFECT"  REQUIRES OKULAR_GENERATOR_ODT FILTER_WORDPERFECT_TO_ODT)

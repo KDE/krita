@@ -25,9 +25,6 @@
 #include <QPaintDevice>
 #include <QFont>
 #include <QFontInfo>
-#ifdef HAVE_X11
-#include <QX11Info>
-#endif
 
 #include <kdebug.h>
 #include <kconfiggroup.h>

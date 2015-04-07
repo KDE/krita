@@ -405,7 +405,7 @@ QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
 
     cursorImage.load(filename);
 \
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     // cursor width must be multiple of 16 on Windows
     int bitmapWidth = qCeil(cursorImage.width() / 16.0) * 16; 
     if (hotspotX < 0) {

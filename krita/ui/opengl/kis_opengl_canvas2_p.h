@@ -256,7 +256,7 @@ namespace VSyncWorkaround {
     }
 }
 
-#elif defined Q_WS_WIN
+#elif defined Q_OS_WIN
 
 #include <GL/wglew.h>
 namespace VSyncWorkaround {
@@ -284,7 +284,7 @@ namespace VSyncWorkaround {
     }
 }
 
-#else  // !defined Q_OS_LINUX && !defined Q_WS_WIN
+#else  // !defined Q_OS_LINUX && !defined Q_OS_WIN
 
 namespace VSyncWorkaround {
     bool tryDisableVSync(QWidget *) {

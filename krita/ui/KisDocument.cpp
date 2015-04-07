@@ -1793,7 +1793,7 @@ void KisDocument::setModified(bool mod)
 QString KisDocument::prettyPathOrUrl() const
 {
     QString _url( url().pathOrUrl() );
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (url().isLocalFile()) {
         _url = QDir::convertSeparators(_url);
     }

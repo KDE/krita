@@ -74,7 +74,7 @@ struct QTabletDeviceData
     int xinput_button_release;
     int xinput_proximity_in;
     int xinput_proximity_out;
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     qint64 llId;
     int currentDevice;
     int currentPointerType;
@@ -86,7 +86,7 @@ struct QTabletDeviceData
 #endif
 
     // Added by Krita
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QMap<quint8, quint8> buttonsMap;
 #endif
 

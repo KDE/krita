@@ -191,7 +191,7 @@ void KisToolMultihand::initTransformations()
          * TODO: currently, the seed is the same for all the
          * strokes
          */
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         srand(0);
 #else
         srand48(0);

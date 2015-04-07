@@ -1795,7 +1795,7 @@ QString KisDocument::prettyPathOrUrl() const
     QString _url( url().pathOrUrl() );
 #ifdef Q_OS_WIN
     if (url().isLocalFile()) {
-        _url = QDir::convertSeparators(_url);
+        _url = QDir::toNativeSeparators(_url);
     }
 #endif
     return _url;

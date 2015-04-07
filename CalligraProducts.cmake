@@ -108,7 +108,7 @@ calligra_define_product(FILEMANAGER_THUMBNAIL "Plugins for KDE filesystem thumbn
 calligra_define_product(FILEMANAGER_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULAR_GENERATOR_ODP "Plugin for Okular adding support for ODP" UNPORTED  REQUIRES PART_STAGE)
-calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT" UNPORTED  REQUIRES PART_WORDS)
+calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT"  REQUIRES PART_WORDS)
 
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  REQUIRES LIB_CALLIGRA)

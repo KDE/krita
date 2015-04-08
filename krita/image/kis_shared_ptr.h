@@ -462,7 +462,7 @@ private:
             weakReference->fetchAndAddOrdered(-WEAK_REF) <= WEAK_REF) {
 
             // sanity check:
-            Q_ASSERT((int)*weakReference->load() == 0);
+            Q_ASSERT((int)weakReference->load() == 0);
 
             delete weakReference;
             weakReference = 0;

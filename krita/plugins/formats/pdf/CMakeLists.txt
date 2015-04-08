@@ -8,8 +8,7 @@ set(kritapdfimport_PART_SRCS kis_pdf_import.cpp kis_pdf_import_widget.cpp )
 ki18n_wrap_ui(kritapdfimport_PART_SRCS pdfimportwidgetbase.ui )
 
 add_library(kritapdfimport MODULE ${kritapdfimport_PART_SRCS})
-
-
+kcoreaddons_desktop_to_json(kritapdfimport krita_pdf_import.desktop)
 
 target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY} )
 

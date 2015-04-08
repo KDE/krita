@@ -176,8 +176,6 @@ void KoToolBox::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
-    painter.setBrush(palette().shadow());
-
     const QList<Section*> sections = d->sections.values();
     QList<Section*>::const_iterator iterator = sections.begin();
     int halfSpacing = layout()->spacing();
@@ -192,7 +190,7 @@ void KoToolBox::paintEvent(QPaintEvent *)
         if (section->separators() & Section::SeparatorTop) {
             int y = section->y() - halfSpacing;
             styleoption.state = QStyle::State_None;
-            styleoption.rect = QRect(section->x(), y, section->width(), 2);
+            styleoption.rect = QRect(section->x(), y-1, section->width(), 2);
 
             style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &styleoption, &painter);
         }
@@ -200,7 +198,7 @@ void KoToolBox::paintEvent(QPaintEvent *)
         if (section->separators() & Section::SeparatorLeft) {
             int x = section->x() - halfSpacing;
             styleoption.state = QStyle::State_Horizontal;
-            styleoption.rect = QRect(x, section->y(), 2, section->height());
+            styleoption.rect = QRect(x-1, section->y(), 2, section->height());
 
             style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &styleoption, &painter);
         }

@@ -186,7 +186,7 @@ calligra_define_product(FILTER_XFIG_TO_ODG "XFig to ODG filter"  REQUIRES LIB_CA
 calligra_define_product(FILTER_PDF_TO_SVG "PDF to SVG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_WPG_TO_SVG "WPG to SVG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_KARBON_TO_IMAGE "Karbon image export filter" UNPORTED  REQUIRES APP_KARBON)
-calligra_define_product(FILTER_KARBON_TO_SVG "Karbon SVG export filter" UNPORTED  REQUIRES APP_KARBON)
+calligra_define_product(FILTER_KARBON_TO_SVG "Karbon SVG export filter"  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter" UNPORTED  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter" REQUIRES APP_KARBON)
 calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter" REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)

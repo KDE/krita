@@ -13,6 +13,12 @@ set(kritalayerstylesfilter_PART_SRCS
     kis_layer_style_filter_environment.cpp
     kis_layer_style_filter_projection_plane.cpp
     kis_layer_style_projection_plane.cpp
+    kis_asl_reader.cpp
+    kis_asl_xml_parser.cpp
+    kis_asl_object_catcher.cpp
+    kis_asl_callback_object_catcher.cpp
+    kis_asl_xml_writer.cpp
+    kis_asl_writer.cpp
     )
 
 # kde4_add_ui_files(kritalayerstylesfilter_PART_SRCS

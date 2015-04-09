@@ -66,8 +66,9 @@ public: // QAbstractItemModel
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private slots:
-    void slotEndInsertDummy(KisNodeDummy *dummy);
-    void slotBeginRemoveDummy(KisNodeDummy *dummy);
+    // Base class has these slots. Renamed with "2" to avoid hiding them
+    void slotEndInsertDummy2(KisNodeDummy *dummy);
+    void slotBeginRemoveDummy2(KisNodeDummy *dummy);
 
     void slotKeyframeAboutToBeAdded(KisKeyframe *keyframe);
     void slotKeyframeAdded(KisKeyframe *keyframe);

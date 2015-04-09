@@ -57,8 +57,8 @@ void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, 
 
     if (newDummiesFacade) {
         connectAllChannels(dummiesFacade()->rootDummy(), true);
-        connect(dummiesFacade(), SIGNAL(sigEndInsertDummy(KisNodeDummy*)), SLOT(slotEndInsertDummy(KisNodeDummy*)));
-        connect(dummiesFacade(), SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)), SLOT(slotBeginRemoveDummy(KisNodeDummy*)));
+        connect(dummiesFacade(), SIGNAL(sigEndInsertDummy(KisNodeDummy*)), SLOT(slotEndInsertDummy2(KisNodeDummy*)));
+        connect(dummiesFacade(), SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)), SLOT(slotBeginRemoveDummy2(KisNodeDummy*)));
     }
 }
 
@@ -243,13 +243,13 @@ Qt::ItemFlags KisTimelineModel::flags(const QModelIndex &index) const
     }
 }
 
-void KisTimelineModel::slotEndInsertDummy(KisNodeDummy *dummy)
+void KisTimelineModel::slotEndInsertDummy2(KisNodeDummy *dummy)
 {
     KisNodeSP node = dummy->node();
     connectChannels(node->keyframes(), true);
 }
 
-void KisTimelineModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
+void KisTimelineModel::slotBeginRemoveDummy2(KisNodeDummy *dummy)
 {
     KisNodeSP node = dummy->node();
     connectChannels(node->keyframes(), true);

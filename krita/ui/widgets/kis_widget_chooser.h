@@ -81,11 +81,15 @@ private:
     void     removeWidget(const QString& id);
     QLayout* createPopupLayout();
     QLayout* createLayout();
-    QIcon    arrowIcon();
+    void     updateArrowIcon();
     
 protected Q_SLOTS:
     void slotButtonPressed();
     void slotWidgetChoosen(int index);
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
 
 private:
     int           m_chooserid;

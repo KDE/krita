@@ -591,7 +591,9 @@ void KisInputManager::slotFocusOnEnter(bool value)
     d->focusOnEnter = value;
 
     if (d->focusOnEnter && d->containsPointer) {
-        d->canvas->canvasWidget()->setFocus();
+        if (d->canvas) {
+            d->canvas->canvasWidget()->setFocus();
+        }
     }
 }
 

@@ -45,9 +45,10 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
     m_arrowButton = new QToolButton();
     
     m_popup->setFrameStyle(QFrame::Panel|QFrame::Raised);
-    m_arrowButton->setIcon(arrowIcon());
     m_arrowButton->setFixedWidth(m_arrowButton->sizeHint().height()/2);
+    m_arrowButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     m_arrowButton->setAutoRaise(true);
+    updateArrowIcon();
     
     connect(m_arrowButton, SIGNAL(clicked(bool)), SLOT(slotButtonPressed()));
 }
@@ -57,7 +58,7 @@ KisWidgetChooser::~KisWidgetChooser()
     delete m_buttons;
 }
 
-QIcon KisWidgetChooser::arrowIcon()
+void KisWidgetChooser::updateArrowIcon()
 {
     QImage image(16, 16, QImage::Format_ARGB32);
     image.fill(0);
@@ -68,13 +69,13 @@ QIcon KisWidgetChooser::arrowIcon()
     option.rect    = image.rect();
     option.palette = palette();
     option.state   = QStyle::State_Enabled;
-    option.palette.setBrush(QPalette::ButtonText, Qt::black); // Force color to black
-    
-    painter.setBrush(Qt::black);
-    painter.setPen(Qt::black);
+    option.palette.setBrush(QPalette::ButtonText, option.palette.text());
+
+    painter.setBrush(option.palette.text().color());
+    painter.setPen(option.palette.text().color());
     painter.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
     
-    return QIcon(QPixmap::fromImage(image));
+    m_arrowButton->setIcon(QIcon(QPixmap::fromImage(image)));
 }
 
 void KisWidgetChooser::addWidget(const QString& id, const QString& label, QWidget* widget)
@@ -253,4 +254,17 @@ void KisWidgetChooser::slotWidgetChoosen(int index)
 {
     chooseWidget(m_widgets[index].id);
     m_popup->hide();
+}
+
+
+void KisWidgetChooser::changeEvent(QEvent *e)
+{
+    QFrame::changeEvent(e);
+
+    switch (e->type()) {
+    case QEvent::StyleChange:
+    case QEvent::PaletteChange:
+        updateArrowIcon();
+        break;
+    }
 }

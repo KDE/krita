@@ -157,7 +157,7 @@ kde4_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
 
-if (Q_WS_MAC)
+if (APPLE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")

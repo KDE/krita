@@ -17,6 +17,8 @@
  */
 #include "psd_utils.h"
 
+#include <QtEndian>
+
 #include <QIODevice>
 #include <QString>
 #include <QDebug>
@@ -49,6 +51,16 @@ bool psdwrite(QIODevice* io, quint32 v)
     quint32 val = htonl(v);
     int written = io->write((char*)&val, 4);
     return written == 4;
+}
+
+bool psdwrite(QIODevice* io, double v)
+{
+    double val;
+    *((qint64*)&val) = qToBigEndian<qint64>(*((qint64*)&v));
+
+    quint64 write = io->write((char*)&val, 8);
+    if (write != 8) return false;
+    return true;
 }
 
 bool psdpad(QIODevice* io, quint32 padding)
@@ -176,7 +188,18 @@ bool psdread(QIODevice* io, quint64* v)
     quint64 val;
     quint64 read = io->read((char*)&val, 8);
     if (read != 8) return false;
-    *v = ntohl(val);
+
+    *v = qFromBigEndian<qint64>((quint8*)&val);
+    return true;
+}
+
+bool psdread(QIODevice* io, double* v)
+{
+    double val;
+    quint64 read = io->read((char*)&val, 8);
+    if (read != 8) return false;
+
+    *((qint64*)v) = qFromBigEndian<qint64>((quint8*)&val);
     return true;
 }
 
@@ -241,13 +264,18 @@ bool psdread_unicodestring(QIODevice *io, QString &s)
     if (!psdread(io, &stringlen)) {
         return false;
     }
+
     for (uint i = 0; i < stringlen; ++i) {
         quint16 ch;
         if (!psdread(io, &ch)) {
             return false;
         }
-        QChar uch(ch);
-        s.append(uch);
+
+        if (ch != 0) {
+            QChar uch(ch);
+            s.append(uch);
+        }
     }
+
     return true;
 }

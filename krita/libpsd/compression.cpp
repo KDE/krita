@@ -228,7 +228,7 @@ QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compr
         b.append(bytes);
 
         // and let's hope that this is sufficient...
-        return qUncompress(bytes);
+        return qUncompress(b);
     }
     default:
         qFatal("Cannot uncompress layer data: invalid compression type");

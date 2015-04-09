@@ -181,7 +181,7 @@ calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter" REQUIRES LIB
 calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter" UNPORTED  REQUIRES APP_PLAN)
 
 # Karbon filters
-calligra_define_product(FILTER_EPS_TO_SVG_AI "EPS to SVG/AI filter" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(FILTER_EPS_TO_SVG_AI "EPS to SVG/AI filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_XFIG_TO_ODG "XFig to ODG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_PDF_TO_SVG "PDF to SVG filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_WPG_TO_SVG "WPG to SVG filter"  REQUIRES LIB_CALLIGRA)

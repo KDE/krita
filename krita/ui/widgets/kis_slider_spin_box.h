@@ -86,6 +86,7 @@ protected:
     virtual void changeEvent(QEvent *e);
     void paint(QPainter& painter);
     void paintPlastique(QPainter& painter);
+    void paintBreeze(QPainter& painter);
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox

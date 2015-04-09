@@ -2127,8 +2127,13 @@ void KisMainWindow::createActions()
 
 void KisMainWindow::applyToolBarLayout()
 {
+    const bool isPlastiqueStyle = style()->objectName() == "plastique";
+
     Q_FOREACH (KToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
+        if (isPlastiqueStyle) {
+            toolBar->setContentsMargins(0, 0, 0, 2);
+        }
     }
 }
 

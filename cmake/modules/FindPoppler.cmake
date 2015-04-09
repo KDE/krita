@@ -38,6 +38,9 @@ if(NOT _poppler_version_bad)
   find_library(POPPLER_LIBRARY poppler-qt5
                HINTS ${_pc_poppler_LIBRARY_DIRS}
   )
+  find_library(POPPLER_CORE_LIBRARY poppler
+               HINTS ${_pc_poppler_LIBRARY_DIRS}
+  )
 
   find_path(POPPLER_INCLUDE_DIR poppler-qt5.h
             HINTS ${_pc_poppler_INCLUDE_DIRS}
@@ -58,7 +61,7 @@ if (POPPLER_FOUND)
   include(CheckCXXSourceCompiles)
 
   set(CMAKE_REQUIRED_INCLUDES ${POPPLER_INCLUDE_DIR} ${QT_INCLUDE_DIR})
-  set(CMAKE_REQUIRED_LIBRARIES ${POPPLER_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY})
+  set(CMAKE_REQUIRED_LIBRARIES ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY})
 
 check_cxx_source_compiles("
 #include <poppler-qt5.h>

@@ -10,11 +10,11 @@ endif()
 
 if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
     cmake_policy(SET CMP0022 OLD)
-    cmake_policy(SET CMP0046 OLD)
 endif()
 
 if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
-    cmake_policy(SET CMP0026 OLD)
+    cmake_policy(SET CMP0026 OLD) 
+    cmake_policy(SET CMP0046 OLD)
 endif()
 
 

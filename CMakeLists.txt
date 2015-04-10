@@ -25,11 +25,11 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9.2")
+set(CALLIGRA_VERSION_STRING "3.0 Pre-Alpha")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 2)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-#set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
@@ -44,6 +44,10 @@ message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
 # this makes it easy to advance it when the next Calligra release comes
 if(CALLIGRA_VERSION_MAJOR EQUAL 2)
     math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 5")
+    if(NOT DEFINED CALLIGRA_STABLE)
+        # bump some more because it is in fact unstable 3.0 so has to be larger than for any 2.9.x
+        math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR} + 1")
+    endif()
 else()
     # let's make sure we won't forget to update the "5"
     message(FATAL_ERROR "Reminder: please update offset == 5 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")

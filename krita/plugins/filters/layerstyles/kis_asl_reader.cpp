@@ -32,6 +32,7 @@
 #include "compression.h"
 #include "kis_offset_on_exit_verifier.h"
 
+#include "kis_asl_writer_utils.h"
 
 namespace Private {
 
@@ -39,19 +40,6 @@ namespace Private {
  * Default value for variabled read from a file
  */
 #define GARBAGE_VALUE_MARK 999
-
-/**
- * Align the pointer \p pos by alignment. Grow the pointer
- * if needed.
- *
- * \return the lowest integer not smaller than \p pos that divides by
- *         alignment
- */
-inline qint64 alignOffsetCeil(qint64 pos, qint64 alignment)
-{
-    qint64 mask = alignment - 1;
-    return (pos + mask) & ~mask;
-}
 
 
 /**
@@ -495,7 +483,7 @@ qint64 readPattern(QIODevice *device,
     SAFE_READ_EX(device, patternSize);
 
     // patterns are always aligned by 4 bytes
-    patternSize = alignOffsetCeil(patternSize, 4);
+    patternSize = KisAslWriterUtils::alignOffsetCeil(patternSize, 4);
 
     SETUP_OFFSET_VERIFIER(patternEndVerifier, device, patternSize, 0);
 

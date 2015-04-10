@@ -157,7 +157,7 @@ void KisAslCallbackObjectCatcher::addCurve(const QString &path, const QString &n
     }
 }
 
-void KisAslCallbackObjectCatcher::addPattern(const QString &path, KoPattern *value) {
+void KisAslCallbackObjectCatcher::addPattern(const QString &path, const KoPattern *value) {
     passToCallback(path, m_d->mapPattern, value);
 }
 

@@ -33,7 +33,7 @@ typedef boost::function<void (bool)> ASLCallbackBoolean;
 typedef boost::function<void (const QColor &)> ASLCallbackColor;
 typedef boost::function<void (const QPointF &)> ASLCallbackPoint;
 typedef boost::function<void (const QString &, const QVector<QPointF> &)> ASLCallbackCurve;
-typedef boost::function<void (KoPattern *)> ASLCallbackPattern;
+typedef boost::function<void (const KoPattern *)> ASLCallbackPattern;
 
 
 class KRITAIMAGE_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
@@ -51,7 +51,7 @@ public:
     void addColor(const QString &path, const QColor &value);
     void addPoint(const QString &path, const QPointF &value);
     void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
-    void addPattern(const QString &path, KoPattern *pattern);
+    void addPattern(const QString &path, const KoPattern *pattern);
 
     void subscribeDouble(const QString &path, ASLCallbackDouble callback);
     void subscribeInteger(const QString &path, ASLCallbackInteger callback);

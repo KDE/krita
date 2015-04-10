@@ -96,7 +96,7 @@ public:
         qWarning() << "XML (ASL): failed to parse curve object" << path << name;
     }
 
-    void addPattern(const QString &path, KoPattern *pattern) {
+    void addPattern(const QString &path, const KoPattern *pattern) {
         qWarning() << "XML (ASL): failed to parse curve object" << path << pattern;
     }
 

@@ -21,8 +21,13 @@
 #include <QDomDocument>
 #include <QColor>
 #include <QPointF>
+#include <QUuid>
+#include <QBuffer>
+
+#include "KoPattern.h"
 
 #include "kis_dom_utils.h"
+#include "kis_asl_writer_utils.h"
 
 struct KisAslXmlWriter::Private
 {
@@ -222,4 +227,29 @@ void KisAslXmlWriter::writeCurve(const QString &key, const QString &name, const 
     leaveDescriptor();
 }
 
+void KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
+{
+    enterDescriptor(key, "", "KisPattern");
+
+    writeText("Nm  ", pattern->name());
+
+    writeText("Idnt", KisAslWriterUtils::getPatternUuidLazy(pattern));
+
+    // Write pattern data
+
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    pattern->saveToDevice(&buffer);
+
+    QDomCDATASection dataSection = m_d->document.createCDATASection(qCompress(buffer.buffer()).toBase64());
+
+    QDomElement dataElement = m_d->document.createElement("node");
+    dataElement.setAttribute("type", "KisPatternData");
+    dataElement.setAttribute("key", "Data");
+    dataElement.appendChild(dataSection);
+
+    m_d->currentElement.appendChild(dataElement);
+
+    leaveDescriptor();
+}
 

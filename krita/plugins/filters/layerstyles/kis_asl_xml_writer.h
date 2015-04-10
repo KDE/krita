@@ -24,11 +24,11 @@
 
 #include "krita_export.h"
 
-
 class QString;
 class QColor;
 class QPointF;
 class QDomDocument;
+class KoPattern;
 
 
 class KRITAIMAGE_EXPORT KisAslXmlWriter
@@ -54,6 +54,7 @@ public:
     void writeColor(const QString &key, const QColor &value);
     void writePoint(const QString &key, const QPointF &value);
     void writeCurve(const QString &key, const QString &name, const QVector<QPointF> &points);
+    void writePattern(const QString &key, const KoPattern *pattern);
 
 private:
     struct Private;

@@ -85,7 +85,7 @@ struct CallbackVerifier {
         m_numCallsHappened++;
     }
 
-    void setPattern(KoPattern *pattern) {
+    void setPattern(const KoPattern *pattern) {
         qDebug() << ppVar(pattern->name());
         qDebug() << ppVar(pattern->filename());
 
@@ -128,6 +128,15 @@ void KisAslParserTest::testWithCallbacks()
 void KisAslParserTest::testASLXMLWriter()
 {
     KisAslXmlWriter w;
+
+    QImage testImage(QSize(16, 16), QImage::Format_ARGB32);
+    KoPattern testPattern1(testImage, "Some very nice name ;)", "");
+    KoPattern testPattern2(testImage, "Another very nice name ;P", "");
+
+    w.enterList("Patterns");
+    w.writePattern("", &testPattern1);
+    w.writePattern("", &testPattern2);
+    w.leaveList();
 
     w.enterDescriptor("", "", "null");
     w.writeText("Nm  ", "www.designpanoply.com - Freebie 5");
@@ -181,6 +190,7 @@ void KisAslParserTest::testASLXMLWriter()
 
 void KisAslParserTest::testASLWriter()
 {
+    //QString srcFileName(TestUtil::fetchDataFileLazy("testset/freebie_with_pattern.asl"));
     QString srcFileName(TestUtil::fetchDataFileLazy("freebie.asl"));
 
     QDomDocument srcDoc;

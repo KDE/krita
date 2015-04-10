@@ -70,7 +70,7 @@ void KisAslObjectCatcher::addCurve(const QString &path, const QString &name, con
     qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "curve" << name << ppVar(points.size());
 }
 
-void KisAslObjectCatcher::addPattern(const QString &path, KoPattern *value)
+void KisAslObjectCatcher::addPattern(const QString &path, const KoPattern *value)
 {
     qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "pattern" << value;
 }

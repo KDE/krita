@@ -502,7 +502,11 @@ bool KisConfig::useOpenGL() const
     if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
         //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+#ifdef Q_WS_MAC
+        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+#else
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+#endif
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini

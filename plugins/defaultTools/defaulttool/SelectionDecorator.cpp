@@ -28,7 +28,9 @@
 
 #define HANDLE_DISTANCE 10
 
+#if 0
 K_GLOBAL_STATIC(QImage, s_rotateCursor)
+#endif
 
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
@@ -40,9 +42,11 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 , m_handleRadius( 3 )
 , m_lineWidth( 1 )
 {
+#if 0
     if(s_rotateCursor == 0) {
         s_rotateCursor->load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
     }
+#endif
 }
 
 void SelectionDecorator::setSelection(KoSelection *selection) {

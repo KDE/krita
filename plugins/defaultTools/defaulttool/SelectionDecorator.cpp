@@ -41,7 +41,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 , m_lineWidth( 1 )
 {
     if(s_rotateCursor == 0) {
-        s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
+        s_rotateCursor->load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
     }
 }
 

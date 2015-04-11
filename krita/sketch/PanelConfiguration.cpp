@@ -99,7 +99,7 @@ void PanelConfiguration::restore()
 
 void PanelConfiguration::save()
 {
-    QString configFile = KGlobal::dirs()->locateLocal("config", "kritasketchpanelsrc");
+    QString configFile = KStandardDirs::locateLocal("config", "kritasketchpanelsrc");
     QSettings panelConfig(configFile, QSettings::IniFormat);
 
     panelConfig.beginWriteArray("Panels");

@@ -26,11 +26,9 @@
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItemV4>
 #include <QApplication>
-#include <QPushButton>
+#include <QTransform>
+
 #include <KoIcon.h>
-#include <KPushButton>
-
-
 
 KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObject *parent)
     : QStyledItemDelegate(parent),
@@ -98,14 +96,15 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     triangle.push_back(QPointF( 0.2,-0.2));
     triangle.push_back(QPointF( 0.0, 0.2));
 
-    painter->translate(x + size/2, y + size/2);
-    painter->scale(size, size);
+    QTransform transform;
+    transform.translate(x + size/2, y + size/2);
+    transform.scale(size, size);
 
     if(rotate)
-        painter->rotate(-90);
+        transform.rotate(-90);
 
     QPalette palette = QApplication::palette();
     painter->setBrush(palette.buttonText());
-    painter->drawPolygon(triangle);
+    painter->drawPolygon(transform.map(triangle));
 }
 

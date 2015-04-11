@@ -63,7 +63,7 @@ KService::Ptr KisDocumentEntry::service() const {
  * @return TRUE if the service pointer is null
  */
 bool KisDocumentEntry::isEmpty() const {
-    return m_service == 0;
+    return !m_service;
 }
 
 /**
@@ -99,7 +99,7 @@ KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString & mimetype)
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
-            if (KServiceType::serviceType(mimetype) == 0) {
+            if (!KServiceType::serviceType(mimetype)) {
                 kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
                 kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {

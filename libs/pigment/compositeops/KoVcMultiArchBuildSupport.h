@@ -25,7 +25,7 @@
 #ifdef HAVE_VC
 
 #if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wundef"
+
 #pragma GCC diagnostic ignored "-Wlocal-type-template-args"
 #endif
 

@@ -135,7 +135,8 @@ namespace CalligraFilter {
                     if (slot.methodType() != QMetaMethod::Slot)
                         continue;
                     if (strncmp(slot.methodSignature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
-                        if (strcmp(signal.methodSignature() + SIGNAL_PREFIX_LEN, slot.methodSignature() + SLOT_PREFIX_LEN) == 0) {
+                        if (strcmp(signal.methodSignature().constData() + SIGNAL_PREFIX_LEN,
+                                   slot.methodSignature().constData() + SLOT_PREFIX_LEN) == 0) {
                             QByteArray signalString;
                             signalString.setNum(QSIGNAL_CODE);
                             signalString += signal.methodSignature();

@@ -49,7 +49,7 @@ if(FFTW3_FOUND)
 endif()
 
 if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR})
+  include_directories(${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)

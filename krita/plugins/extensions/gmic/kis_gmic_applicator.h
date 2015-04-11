@@ -22,8 +22,9 @@
 #include <kundo2magicstring.h>
 
 #include <kis_types.h>
+#include <kis_gmic_data.h>
+
 #include <QThread>
-#include <QMutex>
 
 class KisProcessingApplicator;
 
@@ -54,9 +55,10 @@ private:
     QString m_gmicCommand;
     QByteArray m_customCommands;
     bool m_applicatorStrokeEnded;
-    float * m_progress;
-    bool * m_cancel;
-    QSharedPointer<QMutex> m_mutex;
+    KisGmicDataSP m_gmicData;
+
+
+
 };
 
 #endif

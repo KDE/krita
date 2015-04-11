@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,39 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_gmic_data.h"
 
-#ifndef KIS_GMIC_PROGRESS_MANAGER
-#define KIS_GMIC_PROGRESS_MANAGER
+const float KisGmicData::INVALID_PROGRESS_VALUE = -2.0f;
 
-#include <QObject>
-#include <QTimer>
-
-#include <KoUpdater.h>
-#include <kis_types.h>
-
-class KisViewManager;
-class QTimer;
-
-class KisGmicProgressManager : public QObject
+KisGmicData::KisGmicData():m_progress(INVALID_PROGRESS_VALUE),m_cancel(false)
 {
-    Q_OBJECT
-public:
-    KisGmicProgressManager(KisViewManager * viewManager);
-    virtual ~KisGmicProgressManager();
+}
 
-    void initProgress();
-    void updateProgress(float progress);
-    void finishProgress();
-    bool inProgress();
+KisGmicData::~KisGmicData()
+{
+}
 
-Q_SIGNALS:
-    void sigProgress();
-
-private:
-    QTimer m_progressTimer;
-    KoProgressUpdater * m_progressUpdater;
-    KoUpdaterPtr m_updater;
-    quint32 m_progressPulseRequest;
-};
-
-#endif
+void KisGmicData::reset()
+{
+    m_progress = INVALID_PROGRESS_VALUE;
+    m_cancel = false;
+}

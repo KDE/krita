@@ -25,6 +25,9 @@
 
 #include <QPainter>
 #include <QTimer>
+#include <QStyleOption>
+
+#define ARROWSIZE 5
 
 struct KoColorSlider::Private
 {
@@ -143,6 +146,44 @@ KoColor KoColorSlider::currentColor() const
     weights[0] = 255 - weights[1];
     mixOp->mixColors(colors, weights, 2, c.data());
     return c;
+}
+
+void KoColorSlider::drawArrow(QPainter *painter, const QPoint &pos)
+{
+    painter->setPen(palette().text().color());
+    painter->setBrush(palette().text());
+
+    QStyleOption o;
+    o.initFrom(this);
+    o.state &= ~QStyle::State_MouseOver;
+
+    if ( orientation() == Qt::Vertical ) {
+        o.rect = QRect( pos.x(), pos.y() - ARROWSIZE / 2,
+                        ARROWSIZE, ARROWSIZE );
+    } else {
+        o.rect = QRect( pos.x() - ARROWSIZE / 2, pos.y(),
+                        ARROWSIZE, ARROWSIZE );
+    }
+
+    QStyle::PrimitiveElement arrowPE;
+    switch (arrowDirection()) {
+    case Qt::UpArrow:
+        arrowPE = QStyle::PE_IndicatorArrowUp;
+        break;
+    case Qt::DownArrow:
+        arrowPE = QStyle::PE_IndicatorArrowDown;
+        break;
+    case Qt::RightArrow:
+        arrowPE = QStyle::PE_IndicatorArrowRight;
+        break;
+    case Qt::LeftArrow:
+    default:
+        arrowPE = QStyle::PE_IndicatorArrowLeft;
+        break;
+    }
+
+    style()->drawPrimitive(arrowPE, &o, painter, this);
+
 }
 
 #include <KoColorSlider.moc>

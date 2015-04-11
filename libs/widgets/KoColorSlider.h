@@ -42,6 +42,7 @@ public:
     KoColor currentColor() const;
 protected:
     virtual void drawContents( QPainter* );
+    virtual void drawArrow(QPainter *painter, const QPoint &pos);
 
 protected:
     struct Private;

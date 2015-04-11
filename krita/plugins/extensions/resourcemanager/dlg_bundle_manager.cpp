@@ -70,6 +70,7 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
 
     refreshListData();
 
+    m_ui->bnEditBundle->hide(); // this bunde editor is pretty broken. we can delete this line once fixed
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
 
     connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));

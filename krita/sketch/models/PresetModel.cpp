@@ -36,7 +36,7 @@ public:
     Private()
         : view(0)
     {
-         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();;
+         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     }
 
     KisPaintOpPresetResourceServer * rserver;

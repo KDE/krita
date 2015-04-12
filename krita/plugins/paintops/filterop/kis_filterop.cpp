@@ -86,7 +86,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
         return 1.0;
     }
 
-    KisBrushSP brush = m_brush;;
+    KisBrushSP brush = m_brush;
     if (!brush) return 1.0;
 
     if (! brush->canPaintFor(info))

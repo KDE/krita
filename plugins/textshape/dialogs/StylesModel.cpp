@@ -308,7 +308,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
     for ( ; begin != m_styleList.end(); ++begin) {
-        KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);;
+        KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);
         if (!s && m_draftParStyleList.contains(*begin))
             s = m_draftParStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
@@ -367,7 +367,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
         ++index;
     }
     for ( ; begin != m_styleList.end(); ++begin) {
-        KoCharacterStyle *s = m_styleManager->characterStyle(*begin);;
+        KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
         if (!s && m_draftCharStyleList.contains(*begin))
             s = m_draftCharStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync

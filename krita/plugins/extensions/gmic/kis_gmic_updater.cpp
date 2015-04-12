@@ -74,7 +74,7 @@ void KisGmicUpdater::finishedDownload(QNetworkReply*reply)
     dbgPlugins << reply->url() << " finished";
 
     QString path = KGlobal::dirs()->saveLocation("gmic_definitions");
-    QString fileName = reply->url().path().split("/").last();;
+    QString fileName = reply->url().path().split("/").last();
 
     QByteArray data = reply->readAll();
 

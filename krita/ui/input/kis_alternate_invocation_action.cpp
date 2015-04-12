@@ -108,7 +108,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);;
+    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
 
     m_d->savedAction = shortcutToToolAction(shortcut);
 

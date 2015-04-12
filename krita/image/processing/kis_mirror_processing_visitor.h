@@ -32,7 +32,7 @@ private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
 
-    QRect m_bounds;;
+    QRect m_bounds;
     Qt::Orientation m_orientation;
 };
 

@@ -499,7 +499,7 @@ Soprano::Statement KoDocumentRdf::toStatement(KoTextInlineRdf *inlineRdf) const
     RDEBUG << "subj:"  << subj;
     RDEBUG << " pred:" << pred;
     RDEBUG << " obj:"  << obj;
-    return Soprano::Statement(subj, pred, obj, inlineRdfContext());;
+    return Soprano::Statement(subj, pred, obj, inlineRdfContext());
 }
 
 void KoDocumentRdf::addStatements(QSharedPointer<Soprano::Model> model, const QString &xmlid)

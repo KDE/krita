@@ -652,7 +652,7 @@ void KisToolTransformConfigWidget::resetRotationCenterButtons()
 
 bool KisToolTransformConfigWidget::workRecursively() const
 {
-    return chkWorkRecursively->isChecked();;
+    return chkWorkRecursively->isChecked();
 }
 
 void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)

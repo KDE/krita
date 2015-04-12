@@ -2656,12 +2656,12 @@ CImg<unsigned int> gmic::selection2cimg(const char *const string, const unsigned
       iind1 = (int)cimg::round(ind1*((int)indice_max-1)/100)-(ind1<0?1:0);
     } else if (std::sscanf(item,"%f%%-%f%c",&ind0,&ind1,&end)==2) {
       // Sequence between a percent and an indice.
-      iind0 = (int)cimg::round(ind0*((int)indice_max-1)/100)-(ind0<0?1:0);;
+      iind0 = (int)cimg::round(ind0*((int)indice_max-1)/100)-(ind0<0?1:0);
       iind1 = (int)cimg::round(ind1);
     } else if (std::sscanf(item,"%f-%f%c%c",&ind0,&ind1,&sep,&end)==3 && sep=='%') {
       // Sequence between an indice and a percent.
       iind0 = (int)cimg::round(ind0);
-      iind1 = (int)cimg::round(ind1*((int)indice_max-1)/100)-(ind1<0?1:0);;
+      iind1 = (int)cimg::round(ind1*((int)indice_max-1)/100)-(ind1<0?1:0);
     } else error("Command '%s': Invalid %s %c%s%c.",
                  command,stype,ctypel,string,ctyper);
 

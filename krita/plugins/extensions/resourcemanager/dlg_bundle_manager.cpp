@@ -137,12 +137,12 @@ void DlgBundleManager::accept()
                 
                     feedback = i18n("Couldn't add bundle to resource server");
                     bundleFeedback.setText(feedback);
-                    bundleFeedback.exec();;
+                    bundleFeedback.exec();
                 }
                 if(!bundleServer->removeFromBlacklist(bundle)){
                     feedback = i18n("Couldn't remove bundle from blacklist");
                     bundleFeedback.setText(feedback);
-                    bundleFeedback.exec();;
+                    bundleFeedback.exec();
                 }
             }
             else {
@@ -153,7 +153,7 @@ void DlgBundleManager::accept()
         else{
         QString feedback = i18n("Bundle doesn't exist!");
         bundleFeedback.setText(feedback);
-        bundleFeedback.exec();;
+        bundleFeedback.exec();
         
         }
     }

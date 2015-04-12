@@ -74,7 +74,7 @@ KoReportDesignerItemImage::KoReportDesignerItemImage(QDomNode & element, KoRepor
 KoReportDesignerItemImage* KoReportDesignerItemImage::clone()
 {
     QDomDocument d;
-    QDomElement e = d.createElement("clone");;
+    QDomElement e = d.createElement("clone");
     QDomNode n;
     buildXML(d, e);
     n = e.firstChild();

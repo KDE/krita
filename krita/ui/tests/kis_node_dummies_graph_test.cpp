@@ -193,7 +193,7 @@ void KisNodeDummiesGraphTest::testRemoveBranch()
 void KisNodeDummiesGraphTest::testReverseTraversing()
 {
     QString forwardGraph = collectGraphPattern(m_rootDummy);
-    QString reverseGraph = collectGraphPatternReverse(m_rootDummy);;
+    QString reverseGraph = collectGraphPatternReverse(m_rootDummy);
 
     QCOMPARE(reverseGraph, forwardGraph);
 }

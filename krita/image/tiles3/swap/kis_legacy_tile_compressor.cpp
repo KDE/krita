@@ -103,7 +103,7 @@ bool KisLegacyTileCompressor::decompressTileData(quint8 *buffer,
 
 qint32 KisLegacyTileCompressor::tileDataBufferSize(KisTileData *tileData)
 {
-    return TILE_DATA_SIZE(tileData->pixelSize());;
+    return TILE_DATA_SIZE(tileData->pixelSize());
 }
 
 inline qint32 KisLegacyTileCompressor::maxHeaderLength()

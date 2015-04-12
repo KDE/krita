@@ -851,7 +851,7 @@ QString ButtonParameter::value() const
 
 QString ButtonParameter::toString()
 {
-    return QString("%1;%2;").arg(m_name).arg(m_value);;
+    return QString("%1;%2;").arg(m_name).arg(m_value);
 }
 
 void ButtonParameter::initValue(bool value)

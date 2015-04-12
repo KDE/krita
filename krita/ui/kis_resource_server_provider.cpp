@@ -43,7 +43,7 @@
 
 #include <kis_brush_server.h>
 
-typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 
@@ -73,7 +73,7 @@ KisResourceServerProvider::KisResourceServerProvider()
         m_paintOpPresetThread->barrier();
     }
 
-    m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
+    m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>("kis_workspaces", "*.kws");
     if (!QFileInfo(m_workspaceServer->saveLocation()).exists()) {
         QDir().mkpath(m_workspaceServer->saveLocation());
     }
@@ -83,7 +83,7 @@ KisResourceServerProvider::KisResourceServerProvider()
         m_workspaceThread->barrier();
     }
 
-    m_layerStyleCollectionServer = new KoResourceServer<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
+    m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
     if (!QFileInfo(m_layerStyleCollectionServer->saveLocation()).exists()) {
         QDir().mkpath(m_layerStyleCollectionServer->saveLocation());
     }

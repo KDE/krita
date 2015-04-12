@@ -60,6 +60,10 @@ public:
 
     virtual ~CachedGradient() {}
 
+    KoAbstractGradient* clone() const {
+        return new CachedGradient(m_subject, m_max + 1, m_colorSpace);
+    }
+
     /**
     * Creates a QGradient from the gradient.
     * The resulting QGradient might differ from original gradient

@@ -105,11 +105,12 @@ protected:
     /// call this when the contents of the resource change so the md5 needs to be recalculated
     void setMD5(const QByteArray &md5);
 
+protected:
+    KoResource(const KoResource &rhs);
+
 private:
     /// save the resource as XML to the given document with the given element as root
     virtual void toXML(QDomDocument& doc, QDomElement& element) const;
-
-    Q_DISABLE_COPY(KoResource)
 
 private:
     struct Private;

@@ -149,7 +149,7 @@ template <class T>
 void cloneAndSetResource(const T *resource,
                          boost::function<void (T*)> setResource)
 {
-    setResource(const_cast<T *>(resource)/*->clone()*/);
+    setResource(const_cast<T *>(resource)->clone());
 }
 
 inline QString _prepaddr(const QString &addr) {

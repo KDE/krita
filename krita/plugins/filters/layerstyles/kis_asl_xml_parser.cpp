@@ -468,11 +468,6 @@ bool tryParseDescriptor(const QDomElement &el,
         }
 
         catcher.addGradient(path, gradient.data());
-
-
-        //FIXME: add clone method and fix leaks!
-        gradient.take();
-
     } else {
         retval = false;
     }

@@ -47,6 +47,11 @@ KoResource::~KoResource()
     delete d;
 }
 
+KoResource::KoResource(const KoResource &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
 QImage KoResource::image() const
 {
     return d->image;

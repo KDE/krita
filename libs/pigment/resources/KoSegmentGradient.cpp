@@ -61,6 +61,11 @@ KoSegmentGradient::~KoSegmentGradient()
     }
 }
 
+KoAbstractGradient* KoSegmentGradient::clone() const
+{
+    return new KoSegmentGradient(*this);
+}
+
 bool KoSegmentGradient::load()
 {
     QFile file(filename());

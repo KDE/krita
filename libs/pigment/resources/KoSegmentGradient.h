@@ -263,6 +263,8 @@ public:
     explicit KoSegmentGradient(const QString &file);
     virtual ~KoSegmentGradient();
 
+    KoAbstractGradient* clone() const;
+
     /// reimplemented
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);

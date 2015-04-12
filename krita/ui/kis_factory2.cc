@@ -85,9 +85,6 @@ const KComponentData &KisFactory::componentData()
         KIconLoader::global()->addAppDir("calligra");
 
         KGlobal::locale()->insertCatalog(s_componentData->catalogName());
-        // install 'instancename'data resource type
-        KGlobal::dirs()->addResourceType(QString(s_componentData->componentName() + "data").toUtf8(), "data", s_componentData->componentName());
-
     }
 
     return *s_componentData;

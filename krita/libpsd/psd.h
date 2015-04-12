@@ -944,13 +944,8 @@ protected:
         m_gradientYOffset = qRound(pt.y());
     }
 
-    // FIXME: deprecate the separate calls
-    void setGradientXOffset(int value) {
-        m_gradientXOffset = value;
-    }
-
-    void setGradientYOffset(int value) {
-        m_gradientYOffset = value;
+    QPointF gradientOffset() const {
+        return QPointF(m_gradientXOffset, m_gradientYOffset);
     }
 
     void setPattern(KoPattern *value) {
@@ -962,13 +957,8 @@ protected:
         m_verticalPhase = phase.y();
     }
 
-    // FIXME: deprecate the separate calls
-    void setHorizontalPhase(int value) {
-        m_horizontalPhase = value;
-    }
-
-    void setVerticalPhase(int value) {
-        m_verticalPhase = value;
+    QPointF patternPhase() const {
+        return QPointF(m_horizontalPhase, m_verticalPhase);
     }
 
 private:
@@ -1027,10 +1017,7 @@ struct psd_layer_effects_gradient_overlay : public psd_layer_effects_overlay_bas
     using psd_layer_effects_overlay_base::setStyle;
 
     using psd_layer_effects_overlay_base::setGradientOffset;
-
-    // FIXME: please deprecate
-    using psd_layer_effects_overlay_base::setGradientXOffset;
-    using psd_layer_effects_overlay_base::setGradientYOffset;
+    using psd_layer_effects_overlay_base::gradientOffset;
 };
 
 struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
@@ -1049,10 +1036,7 @@ struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
     using psd_layer_effects_overlay_base::setPattern;
 
     using psd_layer_effects_overlay_base::setPatternPhase;
-
-    // FIXME: deprecate!
-    using psd_layer_effects_overlay_base::setHorizontalPhase;
-    using psd_layer_effects_overlay_base::setVerticalPhase;
+    using psd_layer_effects_overlay_base::patternPhase;
 
 private:
     int m_scale;
@@ -1094,16 +1078,12 @@ struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base
     using psd_layer_effects_overlay_base::setStyle;
 
     using psd_layer_effects_overlay_base::setGradientOffset;
-    // FIXME: deprecate
-    using psd_layer_effects_overlay_base::setGradientXOffset;
-    using psd_layer_effects_overlay_base::setGradientYOffset;
+    using psd_layer_effects_overlay_base::gradientOffset;
 
     using psd_layer_effects_overlay_base::setPattern;
 
     using psd_layer_effects_overlay_base::setPatternPhase;
-    // FIXME: deprecate
-    using psd_layer_effects_overlay_base::setHorizontalPhase;
-    using psd_layer_effects_overlay_base::setVerticalPhase;
+    using psd_layer_effects_overlay_base::patternPhase;
 
     psd_stroke_position position() const {
         return m_position;

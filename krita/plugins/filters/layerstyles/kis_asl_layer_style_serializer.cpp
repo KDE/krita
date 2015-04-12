@@ -31,6 +31,7 @@
 #include "psd.h"
 #include "kis_global.h"
 #include "kis_psd_layer_style.h"
+#include "kis_embedded_pattern_manager.h"
 
 #include "kis_asl_reader.h"
 #include "kis_asl_xml_parser.h"
@@ -196,31 +197,13 @@ inline QString _prepaddr(const QString &addr) {
         c.subscribePatternRef(_prepaddr(addr), boost::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
     }
 
-
-// FIXME: share with KisEmbeddedPatternManager
-inline KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
-    KoPattern *pattern = 0;
-
-    if (!md5.isEmpty()) {
-        foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
-            KoPattern *pat = dynamic_cast<KoPattern *>(res);
-            if (pat && pat->valid() && pat->md5() == md5) {
-                pattern = pat;
-                break;
-            }
-        }
-    }
-
-    return pattern;
-}
-
 void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern) {
     QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
 
     if (m_patternsStore.contains(uuid)) {
         qWarning() << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[uuid]->name());
     } else {
-        KoPattern *patternToAdd = tryFetchPatternByMd5(pattern->md5());
+        KoPattern *patternToAdd = KisEmbeddedPatternManager::tryFetchPatternByMd5(pattern->md5());
 
         if (!patternToAdd) {
             patternToAdd = pattern->clone();

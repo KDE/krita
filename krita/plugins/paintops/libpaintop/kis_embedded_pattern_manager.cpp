@@ -28,22 +28,6 @@
 
 
 struct KisEmbeddedPatternManager::Private {
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
-        KoPattern *pattern = 0;
-
-        if (!md5.isEmpty()) {
-            foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
-                KoPattern *pat = dynamic_cast<KoPattern *>(res);
-                if (pat && pat->valid() && pat->md5() == md5) {
-                    pattern = pat;
-                    break;
-                }
-            }
-        }
-
-        return pattern;
-    }
-
     static KoPattern* tryLoadEmbeddedPattern(const KisPropertiesConfiguration* setting) {
         KoPattern *pattern = 0;
 
@@ -66,6 +50,22 @@ struct KisEmbeddedPatternManager::Private {
         return pattern;
     }
 };
+
+KoPattern* KisEmbeddedPatternManager::tryFetchPatternByMd5(const QByteArray &md5) {
+    KoPattern *pattern = 0;
+
+    if (!md5.isEmpty()) {
+        foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
+            KoPattern *pat = dynamic_cast<KoPattern *>(res);
+            if (pat && pat->valid() && pat->md5() == md5) {
+                pattern = pat;
+                break;
+            }
+        }
+    }
+
+    return pattern;
+}
 
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern)
 {
@@ -102,12 +102,12 @@ KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCon
     KoPattern *pattern = 0;
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
-    pattern = Private::tryFetchPatternByMd5(md5);
+    pattern = tryFetchPatternByMd5(md5);
 
     if (!pattern) {
         pattern = Private::tryLoadEmbeddedPattern(setting);
         if (pattern) {
-            KoPattern *existingPattern = Private::tryFetchPatternByMd5(pattern->md5());
+            KoPattern *existingPattern = tryFetchPatternByMd5(pattern->md5());
             if (existingPattern) {
                 delete pattern;
                 pattern = existingPattern;

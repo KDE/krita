@@ -34,6 +34,8 @@ typedef boost::function<void (const QColor &)> ASLCallbackColor;
 typedef boost::function<void (const QPointF &)> ASLCallbackPoint;
 typedef boost::function<void (const QString &, const QVector<QPointF> &)> ASLCallbackCurve;
 typedef boost::function<void (const KoPattern *)> ASLCallbackPattern;
+typedef boost::function<void (const QString &, const QString &)> ASLCallbackPatternRef;
+typedef boost::function<void (const KoAbstractGradient *)> ASLCallbackGradient;
 
 
 class KRITAIMAGE_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
@@ -52,6 +54,8 @@ public:
     void addPoint(const QString &path, const QPointF &value);
     void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
     void addPattern(const QString &path, const KoPattern *pattern);
+    void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
+    void addGradient(const QString &path, const KoAbstractGradient *gradient);
 
     void subscribeDouble(const QString &path, ASLCallbackDouble callback);
     void subscribeInteger(const QString &path, ASLCallbackInteger callback);
@@ -63,6 +67,8 @@ public:
     void subscribePoint(const QString &path, ASLCallbackPoint callback);
     void subscribeCurve(const QString &path, ASLCallbackCurve callback);
     void subscribePattern(const QString &path, ASLCallbackPattern callback);
+    void subscribePatternRef(const QString &path, ASLCallbackPatternRef callback);
+    void subscribeGradient(const QString &path, ASLCallbackGradient callback);
 
 private:
     struct Private;

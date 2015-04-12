@@ -35,44 +35,54 @@ KisAslObjectCatcher::~KisAslObjectCatcher()
 }
 
 void KisAslObjectCatcher::addDouble(const QString &path, double value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "double" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "double" << value;
 }
 
 void KisAslObjectCatcher::addInteger(const QString &path, int value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "int" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "int" << value;
 }
 
 void KisAslObjectCatcher::addEnum(const QString &path, const QString &typeId, const QString &value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "enum" << ppVar(typeId) << ppVar(value);
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "enum" << ppVar(typeId) << ppVar(value);
 }
 
 void KisAslObjectCatcher::addUnitFloat(const QString &path, const QString &unit, double value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "unitfloat" << ppVar(unit) << ppVar(value);
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "unitfloat" << ppVar(unit) << ppVar(value);
 }
 
 void KisAslObjectCatcher::addText(const QString &path, const QString &value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "text" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "text" << value;
 }
 
 void KisAslObjectCatcher::addBoolean(const QString &path, bool value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "bool" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "bool" << value;
 }
 
 void KisAslObjectCatcher::addColor(const QString &path, const QColor &value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "color" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "color" << value;
 }
 
 void KisAslObjectCatcher::addPoint(const QString &path, const QPointF &value) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "point" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "point" << value;
 }
 
 void KisAslObjectCatcher::addCurve(const QString &path, const QString &name, const QVector<QPointF> &points) {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "curve" << name << ppVar(points.size());
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "curve" << name << ppVar(points.size());
 }
 
 void KisAslObjectCatcher::addPattern(const QString &path, const KoPattern *value)
 {
-    qDebug() <<  (m_arrayMode ? "[A]" : "[ ]") << path << "pattern" << value;
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "pattern" << value;
+}
+
+void KisAslObjectCatcher::addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName)
+{
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "pattern-ref" << ppVar(patternUuid) << ppVar(patternName);
+}
+
+void KisAslObjectCatcher::addGradient(const QString &path, const KoAbstractGradient *value)
+{
+    qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "gradient" << value;
 }
 
 void KisAslObjectCatcher::setArrayMode(bool value) {

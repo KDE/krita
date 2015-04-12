@@ -21,6 +21,8 @@ set(kritalayerstylesfilter_PART_SRCS
     kis_asl_writer_utils.cpp
     kis_asl_patterns_writer.cpp
     kis_asl_writer.cpp
+
+    kis_asl_layer_style_serializer.cpp
     )
 
 # kde4_add_ui_files(kritalayerstylesfilter_PART_SRCS

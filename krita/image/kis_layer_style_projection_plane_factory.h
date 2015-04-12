@@ -21,31 +21,11 @@
 
 class KisAbstractProjectionPlane;
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-
-#include <QScopedPointer>
 #include "krita_export.h"
 #include "kis_types.h"
 
+#include "kis_external_factory_base.h"
+typedef KisExternalFactoryBase<KisAbstractProjectionPlaneSP, KisLayer *> KisLayerStyleProjectionPlaneFactory;
 
-class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlaneFactory
-{
-public:
-    typedef boost::function<KisAbstractProjectionPlaneSP (KisLayer *)> Factory;
-
-public:
-    KisLayerStyleProjectionPlaneFactory();
-    ~KisLayerStyleProjectionPlaneFactory();
-
-    void setFactory(Factory factory);
-    KisAbstractProjectionPlaneSP create(KisLayer *layer) const;
-
-    static KisLayerStyleProjectionPlaneFactory* instance();
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
-};
 
 #endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H */

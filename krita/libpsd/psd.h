@@ -286,7 +286,7 @@ public:
         return m_nativeColor;
     }
 
-    quint8 opacity() const {
+    qint32 opacity() const {
         return m_opacity;
     }
 
@@ -372,7 +372,7 @@ protected:
         m_nativeColor = value;
     }
 
-    void setOpacity(quint8 value) {
+    void setOpacity(qint32 value) {
         m_opacity = value;
     }
 
@@ -396,7 +396,7 @@ protected:
         m_size = value;
     }
 
-    void setContourLookupTable(quint8* value) {
+    void setContourLookupTable(const quint8* value) {
         memcpy(m_contourLookupTable, value, PSD_LOOKUP_TABLE_SIZE * sizeof(quint8));
     }
 
@@ -452,7 +452,7 @@ private:
     QString m_blendMode; // already in Krita format!
     QColor m_color;
     QColor m_nativeColor;
-    quint8 m_opacity; // Opacity as a percent (0...100)
+    qint32 m_opacity; // Opacity as a percent (0...100)
     qint32 m_angle; // Angle in degrees
     bool m_useGlobalLight; // Use this angle in all of the layer effects
     qint32 m_distance; // Distance in pixels
@@ -698,7 +698,7 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         return m_glossContourLookupTable;
     }
 
-    void setGlossContourLookupTable(quint8 *value) {
+    void setGlossContourLookupTable(const quint8 *value) {
         memcpy(m_glossContourLookupTable, value, PSD_LOOKUP_TABLE_SIZE * sizeof(quint8));
     }
 
@@ -724,10 +724,10 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_highlightColor = value;
     }
 
-    quint8 highlightOpacity() const {
+    qint32 highlightOpacity() const {
         return m_highlightOpacity;
     }
-    void setHighlightOpacity(quint8 value) {
+    void setHighlightOpacity(qint32 value) {
         m_highlightOpacity = value;
     }
 
@@ -746,10 +746,10 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_shadowColor = value;
     }
 
-    quint8 shadowOpacity() const {
+    qint32 shadowOpacity() const {
         return m_shadowOpacity;
     }
-    void setShadowOpacity(quint8 value) {
+    void setShadowOpacity(qint32 value) {
         m_shadowOpacity = value;
     }
 
@@ -812,6 +812,11 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureAlignWithLayer = value;
     }
 
+    void setTexturePhase(const QPointF &phase) {
+        m_textureHorizontalPhase = phase.x();
+        m_textureVerticalPhase = phase.y();
+    }
+
     int textureHorizontalPhase() const {
         return m_textureHorizontalPhase;
     }
@@ -841,11 +846,11 @@ private:
 
     QString m_highlightBlendMode; // already in Krita format
     QColor m_highlightColor;
-    quint8 m_highlightOpacity; // Hightlight opacity as a percent
+    qint32 m_highlightOpacity; // Hightlight opacity as a percent
 
     QString m_shadowBlendMode; // already in Krita format
     QColor m_shadowColor;
-    quint8 m_shadowOpacity; // Shadow opacity as a percent
+    qint32 m_shadowOpacity; // Shadow opacity as a percent
 
     bool m_contourEnabled;
     int m_contourRange;
@@ -934,6 +939,12 @@ protected:
         m_style = value;
     }
 
+    void setGradientOffset(const QPointF &pt) {
+        m_gradientXOffset = qRound(pt.x());
+        m_gradientYOffset = qRound(pt.y());
+    }
+
+    // FIXME: deprecate the separate calls
     void setGradientXOffset(int value) {
         m_gradientXOffset = value;
     }
@@ -946,6 +957,12 @@ protected:
         m_pattern = value;
     }
 
+    void setPatternPhase(const QPointF &phase) {
+        m_horizontalPhase = phase.x();
+        m_verticalPhase = phase.y();
+    }
+
+    // FIXME: deprecate the separate calls
     void setHorizontalPhase(int value) {
         m_horizontalPhase = value;
     }
@@ -1008,6 +1025,10 @@ struct psd_layer_effects_gradient_overlay : public psd_layer_effects_overlay_bas
     using psd_layer_effects_overlay_base::setScale;
     using psd_layer_effects_overlay_base::setAlignWithLayer;
     using psd_layer_effects_overlay_base::setStyle;
+
+    using psd_layer_effects_overlay_base::setGradientOffset;
+
+    // FIXME: please deprecate
     using psd_layer_effects_overlay_base::setGradientXOffset;
     using psd_layer_effects_overlay_base::setGradientYOffset;
 };
@@ -1026,6 +1047,10 @@ struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
     using psd_layer_effects_overlay_base::setAlignWithLayer;
 
     using psd_layer_effects_overlay_base::setPattern;
+
+    using psd_layer_effects_overlay_base::setPatternPhase;
+
+    // FIXME: deprecate!
     using psd_layer_effects_overlay_base::setHorizontalPhase;
     using psd_layer_effects_overlay_base::setVerticalPhase;
 
@@ -1067,10 +1092,16 @@ struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base
     using psd_layer_effects_overlay_base::setScale;
     using psd_layer_effects_overlay_base::setAlignWithLayer;
     using psd_layer_effects_overlay_base::setStyle;
+
+    using psd_layer_effects_overlay_base::setGradientOffset;
+    // FIXME: deprecate
     using psd_layer_effects_overlay_base::setGradientXOffset;
     using psd_layer_effects_overlay_base::setGradientYOffset;
 
     using psd_layer_effects_overlay_base::setPattern;
+
+    using psd_layer_effects_overlay_base::setPatternPhase;
+    // FIXME: deprecate
     using psd_layer_effects_overlay_base::setHorizontalPhase;
     using psd_layer_effects_overlay_base::setVerticalPhase;
 

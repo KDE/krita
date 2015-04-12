@@ -61,6 +61,8 @@ typedef QHash<QString, ASLCallbackColor> MapHashColor;
 typedef QHash<QString, ASLCallbackPoint> MapHashPoint;
 typedef QHash<QString, ASLCallbackCurve> MapHashCurve;
 typedef QHash<QString, ASLCallbackPattern> MapHashPattern;
+typedef QHash<QString, ASLCallbackPatternRef> MapHashPatternRef;
+typedef QHash<QString, ASLCallbackGradient> MapHashGradient;
 
 struct KisAslCallbackObjectCatcher::Private
 {
@@ -74,6 +76,8 @@ struct KisAslCallbackObjectCatcher::Private
     MapHashPoint mapPoint;
     MapHashCurve mapCurve;
     MapHashPattern mapPattern;
+    MapHashPatternRef mapPatternRef;
+    MapHashGradient mapGradient;
 };
 
 
@@ -157,8 +161,22 @@ void KisAslCallbackObjectCatcher::addCurve(const QString &path, const QString &n
     }
 }
 
-void KisAslCallbackObjectCatcher::addPattern(const QString &path, const KoPattern *value) {
+void KisAslCallbackObjectCatcher::addPattern(const QString &path, const KoPattern *value)
+{
     passToCallback(path, m_d->mapPattern, value);
+}
+
+void KisAslCallbackObjectCatcher::addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName)
+{
+    MapHashPatternRef::const_iterator it = m_d->mapPatternRef.find(path);
+    if (it != m_d->mapPatternRef.constEnd()) {
+        (*it)(patternUuid, patternName);
+    }
+}
+
+void KisAslCallbackObjectCatcher::addGradient(const QString &path, const KoAbstractGradient *value)
+{
+    passToCallback(path, m_d->mapGradient, value);
 }
 
 /*****************************************************************/
@@ -213,4 +231,14 @@ void KisAslCallbackObjectCatcher::subscribeCurve(const QString &path, ASLCallbac
 void KisAslCallbackObjectCatcher::subscribePattern(const QString &path, ASLCallbackPattern callback)
 {
     m_d->mapPattern.insert(path, callback);
+}
+
+void KisAslCallbackObjectCatcher::subscribePatternRef(const QString &path, ASLCallbackPatternRef callback)
+{
+    m_d->mapPatternRef.insert(path, callback);
+}
+
+void KisAslCallbackObjectCatcher::subscribeGradient(const QString &path, ASLCallbackGradient callback)
+{
+    m_d->mapGradient.insert(path, callback);
 }

@@ -425,7 +425,7 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setAntiAliased(m_contour->ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setContourRange(m_contour->ui.intRange->value());
 
-    bevelAndEmboss->setTexturePattern((KoPattern*)m_texture->ui.patternChooser->currentResource());
+    bevelAndEmboss->setTexturePattern(static_cast<KoPattern*>(m_texture->ui.patternChooser->currentResource()));
     bevelAndEmboss->setTextureScale(m_texture->ui.intScale->value());
     bevelAndEmboss->setTextureDepth(m_texture->ui.intDepth->value());
     bevelAndEmboss->setTextureInvert(m_texture->ui.chkInvert->isChecked());
@@ -867,7 +867,7 @@ void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *patt
 {
     pattern->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     pattern->setOpacity(ui.intOpacity->value());
-    pattern->setPattern((KoPattern*)ui.patternChooser->currentResource());
+    pattern->setPattern(static_cast<KoPattern*>(ui.patternChooser->currentResource()));
     pattern->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     pattern->setScale(ui.intScale->value());
 }
@@ -1063,7 +1063,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setAngle(ui.dialAngle->value());
     stroke->setScale(ui.intScale->value());
 
-    stroke->setPattern((KoPattern*)ui.patternChooser->currentResource());
+    stroke->setPattern(static_cast<KoPattern*>(ui.patternChooser->currentResource()));
     stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     stroke->setScale(ui.intScale->value());
 }

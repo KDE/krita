@@ -30,6 +30,9 @@
 #include <QColor>
 #include <QHash>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoSegmentGradient.h>
+
 #include "kis_dom_utils.h"
 
 #include "kis_debug.h"
@@ -49,38 +52,12 @@ void parseElement(const QDomElement &el,
 class CurveObjectCatcher : public KisAslObjectCatcher
 {
 public:
-    void addDouble(const QString &path, double value) {
-        qWarning() << "XML (ASL): failed to parse curve object" << path << value;
-    }
-
-    void addInteger(const QString &path, int value) {
-        qWarning() << "XML (ASL): failed to parse curve object" << path << value;
-    }
-
-    void addEnum(const QString &path, const QString &typeId, const QString &value) {
-        Q_UNUSED(typeId);
-        qWarning() << "XML (ASL): failed to parse curve object" << path << value;
-    }
-
-    void addUnitFloat(const QString &path, const QString &unit, double value) {
-        Q_UNUSED(unit);
-        qWarning() << "XML (ASL): failed to parse curve object" << path << value;
-    }
-
     void addText(const QString &path, const QString &value) {
         if (path == "/Nm  ") {
             m_name = value;
         } else {
             qWarning() << "XML (ASL): failed to parse curve object" << path << value;
         }
-    }
-
-    void addBoolean(const QString &path, bool value) {
-        qWarning() << "XML (ASL): failed to parse curve object" << path << value;
-    }
-
-    void addColor(const QString &path, const QColor &value) {
-        qWarning() << "XML (ASL): failed to parse curve object" << path << value;
     }
 
     void addPoint(const QString &path, const QPointF &value) {
@@ -91,19 +68,153 @@ public:
         m_points.append(value);
     }
 
-    void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points) {
-        Q_UNUSED(points);
-        qWarning() << "XML (ASL): failed to parse curve object" << path << name;
-    }
-
-    void addPattern(const QString &path, const KoPattern *pattern) {
-        qWarning() << "XML (ASL): failed to parse curve object" << path << pattern;
-    }
-
 public:
     QVector<QPointF> m_points;
     QString m_name;
 };
+
+QColor parseRGBColorObject(QDomElement parent)
+{
+    QColor color(Qt::black);
+
+    QDomNode child = parent.firstChild();
+    while (!child.isNull()) {
+        QDomElement childEl = child.toElement();
+
+        QString type = childEl.attribute("type", "<unknown>");
+        QString key = childEl.attribute("key", "");
+
+        if (type != "Double") {
+            qWarning() << "Unknown color component type:" << ppVar(type) << ppVar(key);
+            return Qt::red;
+        }
+
+        double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "0"));
+
+        if (key == "Rd  ") {
+            color.setRed(value);
+        } else if (key == "Grn ") {
+            color.setGreen(value);
+        } else if (key == "Bl  ") {
+            color.setBlue(value);
+        } else {
+            qWarning() << "Unknown color key value:" << ppVar(key);
+            return Qt::red;
+        }
+
+        child = child.nextSibling();
+    }
+
+    return color;
+}
+
+void parseColorStopsList(QDomElement parent,
+                         QVector<qreal> &startLocations,
+                         QVector<qreal> &middleOffsets,
+                         QVector<QColor> &colors)
+{
+    QDomNode child = parent.firstChild();
+    while (!child.isNull()) {
+        QDomElement childEl = child.toElement();
+
+        QString type = childEl.attribute("type", "<unknown>");
+        QString key = childEl.attribute("key", "");
+        QString classId = childEl.attribute("classId", "");
+
+        if (type == "Descriptor" && classId == "Clrt") {
+
+            // sorry for naming...
+            QDomNode child = childEl.firstChild();
+            while (!child.isNull()) {
+                QDomElement childEl = child.toElement();
+
+                QString type = childEl.attribute("type", "<unknown>");
+                QString key = childEl.attribute("key", "");
+                QString classId = childEl.attribute("classId", "");
+
+                if (type == "Integer" && key == "Lctn") {
+                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    startLocations.append(qreal(value) / 4096.0);
+
+                } else if (type == "Integer" && key == "Mdpn") {
+                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    middleOffsets.append(qreal(value) / 100.0);
+
+                } else if (type == "Descriptor" && key == "Clr ") {
+                    colors.append(parseRGBColorObject(childEl));
+
+                } else if (type == "Enum" && key == "Type") {
+                    QString typeId = childEl.attribute("typeId", "");
+
+                    if (typeId != "Clry") {
+                        qWarning() << "WARNING: Invalid typeId of a greadient stop type" << typeId;
+                    }
+
+                    QString value = childEl.attribute("value", "");
+                    if (value == "BckC" || value == "FrgC") {
+                        qWarning() << "WARNING: Using foreground/background colors in ASL gradients is not yet supported";
+                    }
+                }
+
+                child = child.nextSibling();
+            }
+        } else {
+            qWarning() << "WARNING: Unrecognized object in color stops list" << ppVar(type) << ppVar(key) << ppVar(classId);
+        }
+
+        child = child.nextSibling();
+    }
+}
+
+void parseTransparencyStopsList(QDomElement parent,
+                                QVector<qreal> &startLocations,
+                                QVector<qreal> &middleOffsets,
+                                QVector<qreal> &transparencies)
+{
+    QDomNode child = parent.firstChild();
+    while (!child.isNull()) {
+        QDomElement childEl = child.toElement();
+
+        QString type = childEl.attribute("type", "<unknown>");
+        QString key = childEl.attribute("key", "");
+        QString classId = childEl.attribute("classId", "");
+
+        if (type == "Descriptor" && classId == "TrnS") {
+
+            // sorry for naming again...
+            QDomNode child = childEl.firstChild();
+            while (!child.isNull()) {
+                QDomElement childEl = child.toElement();
+
+                QString type = childEl.attribute("type", "<unknown>");
+                QString key = childEl.attribute("key", "");
+
+                if (type == "Integer" && key == "Lctn") {
+                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    startLocations.append(qreal(value) / 4096.0);
+                } else if (type == "Integer" && key == "Mdpn") {
+                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    middleOffsets.append(qreal(value) / 100.0);
+                } else if (type == "UnitFloat" && key == "Opct") {
+                    QString unit = childEl.attribute("unit", "");
+                    if (unit != "#Prc") {
+                        qWarning() << "WARNING: Invalid unit of a greadient stop transparency" << unit;
+                    }
+
+                    qreal value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "100"));
+                    transparencies.append(value / 100.0);
+                }
+
+                child = child.nextSibling();
+            }
+
+        } else {
+            qWarning() << "WARNING: Unrecognized object in transparency stops list" << ppVar(type) << ppVar(key) << ppVar(classId);
+        }
+
+        child = child.nextSibling();
+    }
+}
 
 inline QString buildPath(const QString &parent, const QString &key) {
     return parent + "/" + key;
@@ -117,37 +228,7 @@ bool tryParseDescriptor(const QDomElement &el,
     bool retval = true;
 
     if (classId == "RGBC") {
-        QColor color(Qt::black);
-
-        QDomNode child = el.firstChild();
-        while (!child.isNull()) {
-            QDomElement childEl = child.toElement();
-
-            QString type = childEl.attribute("type", "<unknown>");
-            QString key = childEl.attribute("key", "");
-
-            if (type != "Double") {
-                qWarning() << "Unknown color component type:" << ppVar(type) << ppVar(key) << ppVar(path);
-                return false;
-            }
-
-            double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "0"));
-
-            if (key == "Rd  ") {
-                color.setRed(value);
-            } else if (key == "Grn ") {
-                color.setGreen(value);
-            } else if (key == "Bl  ") {
-                color.setBlue(value);
-            } else {
-                qWarning() << "Unknown color key value:" << ppVar(key) << ppVar(path);
-                return false;
-            }
-
-            child = child.nextSibling();
-        }
-
-        catcher.addColor(path, color);
+        catcher.addColor(path, parseRGBColorObject(el));
 
     } else if (classId == "ShpC") {
         CurveObjectCatcher curveCatcher;
@@ -199,6 +280,40 @@ bool tryParseDescriptor(const QDomElement &el,
         }
 
         catcher.addPoint(path, point);
+
+    } else if (classId == "Pnt ") {
+        QPointF point;
+
+        QDomNode child = el.firstChild();
+        while (!child.isNull()) {
+            QDomElement childEl = child.toElement();
+
+            QString type = childEl.attribute("type", "<unknown>");
+            QString key = childEl.attribute("key", "");
+            QString unit = childEl.attribute("unit", "");
+
+
+            if (type != "Double" && !(type == "UnitFloat" && unit == "#Prc")) {
+                qWarning() << "Unknown point component type:"  << ppVar(unit) << ppVar(type) << ppVar(key) << ppVar(path);
+                return false;
+            }
+
+            double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "0"));
+
+            if (key == "Hrzn") {
+                point.setX(value);
+            } else if (key == "Vrtc") {
+                point.setY(value);
+            } else {
+                qWarning() << "Unknown point key value:" << ppVar(key) << ppVar(path);
+                return false;
+            }
+
+            child = child.nextSibling();
+        }
+
+        catcher.addPoint(path, point);
+
     } else if (classId == "KisPattern") {
         QByteArray patternData;
         QString patternUuid;
@@ -252,6 +367,111 @@ bool tryParseDescriptor(const QDomElement &el,
         } else {
             qWarning() << "WARNING: failed to load KisPattern XML section!" << ppVar(patternUuid);
         }
+
+    } else if (classId == "Ptrn") { // reference to an existing pattern
+        QString patternUuid;
+        QString patternName;
+
+        QDomNode child = el.firstChild();
+        while (!child.isNull()) {
+            QDomElement childEl = child.toElement();
+
+            QString type = childEl.attribute("type", "<unknown>");
+            QString key = childEl.attribute("key", "");
+
+            if (type == "Text" && key == "Idnt") {
+                patternUuid = childEl.attribute("value", "");
+            } else if (type == "Text" && key == "Nm  ") {
+                patternName = childEl.attribute("value", "");
+            } else {
+                qWarning() << "WARNING: unrecognized pattern-ref section key:"  << ppVar(type) << ppVar(key);
+            }
+
+            child = child.nextSibling();
+        }
+
+        catcher.addPatternRef(path, patternUuid, patternName);
+
+    } else if (classId == "Grdn") {
+        QString gradientName;
+        qreal gradientSmoothness = 100.0;
+
+        QVector<qreal> startLocations;
+        QVector<qreal> middleOffsets;
+        QVector<QColor> colors;
+
+        QVector<qreal> transpStartLocations;
+        QVector<qreal> transpMiddleOffsets;
+        QVector<qreal> transparencies;
+
+
+        QDomNode child = el.firstChild();
+        while (!child.isNull()) {
+            QDomElement childEl = child.toElement();
+
+            QString type = childEl.attribute("type", "<unknown>");
+            QString key = childEl.attribute("key", "");
+
+            if (type == "Text" && key == "Nm  ") {
+                gradientName = childEl.attribute("value", "");
+            } else if (type == "Enum" && key == "GrdF") {
+                QString typeId = childEl.attribute("typeId", "");
+                QString value = childEl.attribute("value", "");
+
+                if (typeId != "GrdF" || value != "CstS") {
+                    qWarning() << "WARNING: Unsupported gradient type (porbably, noise-based):" << value;
+                    return true;
+                }
+            } else if (type == "Double" && key == "Intr") {
+                double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "4096"));
+                gradientSmoothness = 100.0 * value / 4096.0;
+            } else if (type == "List" && key == "Clrs") {
+                parseColorStopsList(childEl, startLocations, middleOffsets, colors);
+            } else if (type == "List" && key == "Trns") {
+                parseTransparencyStopsList(childEl, transpStartLocations, transpMiddleOffsets, transparencies);
+            }
+
+            child = child.nextSibling();
+        }
+
+        if (colors.size() < 2) {
+            qWarning() << "WARNING: ASL gradient has too few stops" << ppVar(colors.size());
+        }
+
+        if (colors.size() != transparencies.size()) {
+            qWarning() << "WARNING: ASL gradient has inconsistent number of transparency stops. Dropping transparency..." << ppVar(colors.size()) << ppVar(transparencies.size());
+            transparencies.resize(colors.size());
+            for (int i = 0; i < colors.size(); i++) {
+                transparencies[i] = 1.0;
+            }
+        }
+
+        QString fileName = gradientName + ".ggr";
+        QScopedPointer<KoSegmentGradient> gradient(new KoSegmentGradient(fileName));
+        Q_UNUSED(gradientSmoothness);
+        gradient->setName(gradientName);
+
+        for (int i = 1; i < colors.size(); i++) {
+            QColor startColor = colors[i-1];
+            QColor endColor = colors[i];
+            startColor.setAlphaF(transparencies[i-1]);
+            endColor.setAlphaF(transparencies[i]);
+
+            qreal start = startLocations[i-1];
+            qreal end = startLocations[i];
+            qreal middle = start + middleOffsets[i-1] * (end - start);
+
+            gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
+                                    start, middle, end,
+                                    startColor,
+                                    endColor);
+        }
+
+        catcher.addGradient(path, gradient.data());
+
+
+        //FIXME: add clone method and fix leaks!
+        gradient.take();
 
     } else {
         retval = false;

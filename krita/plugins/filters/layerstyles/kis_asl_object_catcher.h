@@ -26,6 +26,7 @@ class QString;
 class QColor;
 class QPointF;
 class KoPattern;
+class KoAbstractGradient;
 
 
 class KRITAIMAGE_EXPORT KisAslObjectCatcher
@@ -44,6 +45,8 @@ public:
     virtual void addPoint(const QString &path, const QPointF &value);
     virtual void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
     virtual void addPattern(const QString &path, const KoPattern *pattern);
+    virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
+    virtual void addGradient(const QString &path, const KoAbstractGradient *gradient);
 
     void setArrayMode(bool value);
 protected:

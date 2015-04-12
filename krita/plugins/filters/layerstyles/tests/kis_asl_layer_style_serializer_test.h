@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_EMBEDDED_PATTERN_MANAGER_H
-#define __KIS_EMBEDDED_PATTERN_MANAGER_H
+#ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
+#define __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
 
-#include <krita_export.h>
+#include <QtTest/QtTest>
 
-class KoPattern;
-class KisPropertiesConfiguration;
-
-
-class PAINTOP_EXPORT KisEmbeddedPatternManager
+class KisAslLayerStyleSerializerTest : public QObject
 {
-public:
-    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
-    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
-
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5);
-
-private:
-    struct Private;
+    Q_OBJECT
+private slots:
+    void test();
 };
 
-#endif /* __KIS_EMBEDDED_PATTERN_MANAGER_H */
+#endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_EMBEDDED_PATTERN_MANAGER_H
-#define __KIS_EMBEDDED_PATTERN_MANAGER_H
+#ifndef __KIS_LAYER_STYLE_SERIALIZER_H
+#define __KIS_LAYER_STYLE_SERIALIZER_H
 
-#include <krita_export.h>
+class QIODevice;
 
-class KoPattern;
-class KisPropertiesConfiguration;
+#include "krita_export.h"
 
+#include "kis_external_factory_base.h"
 
-class PAINTOP_EXPORT KisEmbeddedPatternManager
-{
-public:
-    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
-    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
-
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5);
-
-private:
-    struct Private;
+struct KRITAIMAGE_EXPORT KisLayerStyleSerializer {
+    virtual ~KisLayerStyleSerializer() {}
+    virtual void saveToDevice(QIODevice *device) = 0;
+    virtual void readFromDevice(QIODevice *device) = 0;
 };
 
-#endif /* __KIS_EMBEDDED_PATTERN_MANAGER_H */
+typedef QSharedPointer<KisLayerStyleSerializer> KisLayerStyleSerializerSP;
+
+typedef KisExternalFactoryBase<KisLayerStyleSerializerSP, KisPSDLayerStyle*> KisLayerStyleSerializerFactory;
+
+#endif /* __KIS_LAYER_STYLE_SERIALIZER_H */

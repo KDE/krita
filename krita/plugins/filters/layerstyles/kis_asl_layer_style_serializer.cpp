@@ -149,7 +149,8 @@ template <class T>
 void cloneAndSetResource(const T *resource,
                          boost::function<void (T*)> setResource)
 {
-    setResource(const_cast<T *>(resource)->clone());
+    T *newResource = resource->clone();
+    setResource(newResource);
 }
 
 inline QString _prepaddr(const QString &addr) {
@@ -269,12 +270,13 @@ private:
 
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
 {
+    m_style->clear();
+
     psd_layer_effects_context *context = m_style->context();
     context->global_angle = 0;
     context->keep_original = 0;
 
     KisAslCallbackObjectCatcher c;
-
     c.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
 
     psd_layer_effects_drop_shadow *dropShadow = m_style->dropShadow();

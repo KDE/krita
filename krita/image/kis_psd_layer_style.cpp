@@ -124,6 +124,11 @@ KisPSDLayerStyleSP KisPSDLayerStyle::clone() const
     return toQShared(new KisPSDLayerStyle(*this));
 }
 
+void KisPSDLayerStyle::clear()
+{
+    *d = Private();
+}
+
 bool KisPSDLayerStyle::isEmpty() const
 {
     return !(d->drop_shadow.effectEnabled() ||

@@ -49,6 +49,8 @@ public:
 
     KisPSDLayerStyleSP clone() const;
 
+    void clear();
+
     QString name() const;
 
     /**

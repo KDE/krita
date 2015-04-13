@@ -25,7 +25,14 @@ class KisAbstractProjectionPlane;
 #include "kis_types.h"
 
 #include "kis_external_factory_base.h"
-typedef KisExternalFactoryBase<KisAbstractProjectionPlaneSP, KisLayer *> KisLayerStyleProjectionPlaneFactory;
+
+class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlaneFactory
+    : public KisExternalFactoryBase<KisAbstractProjectionPlaneSP, KisLayer *,
+                                    KisLayerStyleProjectionPlaneFactory>
+{
+public:
+    static KisLayerStyleProjectionPlaneFactory *instance();
+};
 
 
 #endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H */

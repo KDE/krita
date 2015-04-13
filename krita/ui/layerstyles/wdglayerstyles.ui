@@ -137,6 +137,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="btnLoadStyle">
+       <property name="text">
+        <string>Load Style...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCheckBox" name="chkPreview">
        <property name="text">
         <string>Pre&amp;view</string>

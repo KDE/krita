@@ -29,12 +29,11 @@
 #include "krita_export.h"
 
 
-template <class FactoryObject, typename FactoryParam>
+template <class FactoryObject, typename FactoryParam, class FactoryClass>
 class KRITAIMAGE_EXPORT KisExternalFactoryBase
 {
 public:
     typedef boost::function<FactoryObject (FactoryParam)> Factory;
-    typedef KisExternalFactoryBase<FactoryObject, FactoryParam> ThisClass;
 
 public:
     void setFactory(Factory factory) {
@@ -43,11 +42,16 @@ public:
     }
 
     FactoryObject create(FactoryParam param) const {
+        KIS_ASSERT_RECOVER(m_factory) {
+            return FactoryObject();
+        }
+
         return m_factory(param);
     }
 
-    static ThisClass* instance() {
-        K_GLOBAL_STATIC(ThisClass , s_instance);
+protected:
+    static FactoryClass* instanceImpl() {
+        K_GLOBAL_STATIC(FactoryClass , s_instance);
         return s_instance;
     }
 

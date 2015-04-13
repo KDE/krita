@@ -40,6 +40,9 @@
 #include "kis_signal_compressor.h"
 #include "kis_canvas_resource_provider.h"
 
+#include <KoFileDialog.h>
+#include "kis_layer_style_serializer.h"
+
 
 KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
                                       KisCanvasResourceProvider *resourceProvider)
@@ -132,6 +135,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
 
     setStyle(layerStyle);
 
+    connect(wdgLayerStyles.btnLoadStyle, SIGNAL(clicked()), SLOT(slotLoadStyle()));
+
     connect(this, SIGNAL(accepted()), SLOT(slotNotifyOnAccept()));
     connect(this, SIGNAL(rejected()), SLOT(slotNotifyOnReject()));
 }
@@ -154,6 +159,33 @@ void KisDlgLayerStyle::slotNotifyOnReject()
 
     m_configChangedCompressor->stop();
     emit configChanged();
+}
+
+void KisDlgLayerStyle::slotLoadStyle()
+{
+    QString filename; // default value?
+
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/layerstyle");
+    dialog.setCaption(i18n("Select ASL file"));
+    //dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
+    filename = dialog.url();
+
+    QFile file(filename);
+    if (file.exists()) {
+        file.open(QIODevice::ReadOnly);
+
+        KisLayerStyleSerializerSP serializer;
+
+        serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
+        KIS_ASSERT_RECOVER_RETURN(serializer);
+
+        serializer->readFromDevice(&file);
+
+        setStyle(m_layerStyle);
+        m_configChangedCompressor->stop();
+        emit configChanged();
+    }
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)

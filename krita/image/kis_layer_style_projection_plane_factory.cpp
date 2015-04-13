@@ -16,29 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLE_SERIALIZER_H
-#define __KIS_LAYER_STYLE_SERIALIZER_H
+#include "kis_layer_style_projection_plane_factory.h"
 
-class QIODevice;
-
-#include "krita_export.h"
-
-#include "kis_external_factory_base.h"
-
-struct KRITAIMAGE_EXPORT KisLayerStyleSerializer {
-    virtual ~KisLayerStyleSerializer() {}
-    virtual void saveToDevice(QIODevice *device) = 0;
-    virtual void readFromDevice(QIODevice *device) = 0;
-};
-
-typedef QSharedPointer<KisLayerStyleSerializer> KisLayerStyleSerializerSP;
-
-class KRITAIMAGE_EXPORT KisLayerStyleSerializerFactory
-    : public KisExternalFactoryBase<KisLayerStyleSerializerSP, KisPSDLayerStyle*,
-                                    KisLayerStyleSerializerFactory>
+KisLayerStyleProjectionPlaneFactory *KisLayerStyleProjectionPlaneFactory::instance()
 {
-public:
-    static KisLayerStyleSerializerFactory* instance();
-};
-
-#endif /* __KIS_LAYER_STYLE_SERIALIZER_H */
+    return instanceImpl();
+}

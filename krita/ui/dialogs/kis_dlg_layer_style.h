@@ -245,6 +245,8 @@ public:
     explicit KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent = 0);
     ~KisDlgLayerStyle();
 
+    KisPSDLayerStyleSP style() const;
+
 signals:
     void configChanged();
 
@@ -256,7 +258,8 @@ public slots:
 
     // Sets all the widgets to the contents of the given style
     void setStyle(KisPSDLayerStyleSP style);
-    KisPSDLayerStyleSP style() const;
+
+    void slotLoadStyle();
 
 private:
 

@@ -232,26 +232,6 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
 }
 
 template <class T>
-inline void adjustFillTypeNoPattern(T *config)
-{
-    if (config->gradient()) {
-        config->setFillType(psd_fill_gradient);
-    } else {
-        config->setFillType(psd_fill_solid_color);
-    }
-}
-
-template <class T>
-inline void adjustFillTypeWithPattern(T *config)
-{
-    if (config->pattern()) {
-        config->setFillType(psd_fill_pattern);
-    } else {
-        adjustFillTypeNoPattern(config);
-    }
-}
-
-template <class T>
 struct CorrectFillTypeOnExitNoPattern
 {
     CorrectFillTypeOnExitNoPattern(T *config) : m_config(config) {}

@@ -79,8 +79,6 @@ const KComponentData &KisFactory::componentData()
 
         s_componentData->dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
 
-        s_componentData->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
-
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 

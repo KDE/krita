@@ -20,8 +20,8 @@
 #ifndef VIDEOTHUMBNAILER_H
 #define VIDEOTHUMBNAILER_H
 
-#include <Phonon/MediaObject>
-#include <Phonon/Global>
+#include <phonon/MediaObject>
+#include <phonon/Global>
 #include <phonon/experimental/videodataoutput2.h>
 
 #include <QObject>

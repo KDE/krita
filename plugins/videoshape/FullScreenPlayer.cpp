@@ -27,8 +27,8 @@
 #include <phonon/videowidget.h>
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
-#include <Phonon/VolumeSlider>
-#include <Phonon/SeekSlider>
+#include <phonon/VolumeSlider>
+#include <phonon/SeekSlider>
 
 #include <QUrl>
 #include <QVBoxLayout>

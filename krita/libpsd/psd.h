@@ -817,6 +817,10 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureVerticalPhase = phase.y();
     }
 
+    QPointF texturePhase() const {
+        return QPointF(m_textureHorizontalPhase, m_textureVerticalPhase);
+    }
+
     int textureHorizontalPhase() const {
         return m_textureHorizontalPhase;
     }

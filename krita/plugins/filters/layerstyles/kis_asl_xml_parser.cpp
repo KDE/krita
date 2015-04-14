@@ -462,7 +462,7 @@ bool tryParseDescriptor(const QDomElement &el,
             qreal middle = start + middleOffsets[i-1] * (end - start);
 
             gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
-                                    start, middle, end,
+                                    start, end, middle,
                                     startColor,
                                     endColor);
         }

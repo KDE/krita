@@ -25,6 +25,7 @@
 
 #include <KoResourceServerProvider.h>
 #include <KoAbstractGradient.h>
+#include <KoSegmentGradient.h>
 #include <KoPattern.h>
 
 
@@ -38,6 +39,8 @@
 #include "kis_asl_callback_object_catcher.h"
 #include "kis_asl_writer_utils.h"
 
+#include "kis_asl_xml_writer.h"
+#include "kis_asl_writer.h"
 
 
 KisAslLayerStyleSerializer::KisAslLayerStyleSerializer(KisPSDLayerStyle *style)
@@ -55,9 +58,585 @@ KisLayerStyleSerializerSP KisAslLayerStyleSerializer::factoryObject(KisPSDLayerS
     return toQShared(new KisAslLayerStyleSerializer(style));
 }
 
+QString compositeOpToBlendMode(const QString &compositeOp)
+{
+    QString mode = "Nrml";
+
+    if (compositeOp == COMPOSITE_OVER) {
+        mode = "Nrml";
+    } else if (compositeOp == COMPOSITE_DISSOLVE) {
+        mode = "Dslv";
+    } else if (compositeOp == COMPOSITE_DARKEN) {
+        mode = "Drkn";
+    } else if (compositeOp == COMPOSITE_MULT) {
+        mode = "Mltp";
+    } else if (compositeOp == COMPOSITE_BURN) {
+        mode = "CBrn";
+    } else if (compositeOp == COMPOSITE_LINEAR_BURN) {
+        mode = "linearBurn";
+    } else if (compositeOp == COMPOSITE_DARKER_COLOR) {
+        mode = "darkerColor";
+    } else if (compositeOp == COMPOSITE_LIGHTEN) {
+        mode = "Lghn";
+    } else if (compositeOp == COMPOSITE_SCREEN) {
+        mode = "Scrn";
+    } else if (compositeOp == COMPOSITE_DODGE) {
+        mode = "CDdg";
+    } else if (compositeOp == COMPOSITE_LINEAR_DODGE) {
+        mode = "linearDodge";
+    } else if (compositeOp == COMPOSITE_LIGHTER_COLOR) {
+        mode = "lighterColor";
+    } else if (compositeOp == COMPOSITE_OVERLAY) {
+        mode = "Ovrl";
+    } else if (compositeOp == COMPOSITE_SOFT_LIGHT_PHOTOSHOP) {
+        mode = "SftL";
+    } else if (compositeOp == COMPOSITE_HARD_LIGHT) {
+        mode = "HrdL";
+    } else if (compositeOp == COMPOSITE_VIVID_LIGHT) {
+        mode = "vividLight";
+    } else if (compositeOp == COMPOSITE_LINEAR_LIGHT) {
+        mode = "linearLight";
+    } else if (compositeOp == COMPOSITE_PIN_LIGHT) {
+        mode = "pinLight";
+    } else if (compositeOp == COMPOSITE_HARD_MIX) {
+        mode = "hardMix";
+    } else if (compositeOp == COMPOSITE_DIFF) {
+        mode = "Dfrn";
+    } else if (compositeOp == COMPOSITE_EXCLUSION) {
+        mode = "Xclu";
+    } else if (compositeOp == COMPOSITE_SUBTRACT) {
+        mode = "Sbtr";
+    } else if (compositeOp == COMPOSITE_DIVIDE) {
+        mode = "divide";
+    } else if (compositeOp == COMPOSITE_HUE) {
+        mode = "H   ";
+    } else if (compositeOp == COMPOSITE_SATURATION) {
+        mode = "Strt";
+    } else if (compositeOp == COMPOSITE_COLOR) {
+        mode = "Clr ";
+    } else if (compositeOp == COMPOSITE_LUMINIZE) {
+        mode = "Lmns";
+    } else {
+        qDebug() << "Unknown composite op:" << mode << "Returning \"Nrml\"!";
+    }
+
+    return mode;
+}
+
+QString techniqueToString(psd_technique_type technique, const QString &typeId)
+{
+    QString result = "SfBL";
+
+    switch (technique) {
+    case psd_technique_softer:
+        result = "SfBL";
+        break;
+    case psd_technique_precise:
+        result = "PrBL";
+        break;
+    case psd_technique_slope_limit:
+        result = "Slmt";
+        break;
+    }
+
+    if (typeId == "BETE" && technique == psd_technique_slope_limit) {
+        qWarning() << "WARNING: techniqueToString: invalid technique type!" << ppVar(technique) << ppVar(typeId);
+    }
+
+    return result;
+}
+
+QString bevelStyleToString(psd_bevel_style style)
+{
+    QString result = "OtrB";
+
+    switch (style) {
+    case psd_bevel_outer_bevel:
+        result = "OtrB";
+        break;
+    case psd_bevel_inner_bevel:
+        result = "InrB";
+        break;
+    case psd_bevel_emboss:
+        result = "Embs";
+        break;
+    case psd_bevel_pillow_emboss:
+        result = "PlEb";
+        break;
+    case psd_bevel_stroke_emboss:
+        result = "strokeEmboss";
+        break;
+    }
+
+    return result;
+}
+
+QString gradientTypeToString(psd_gradient_style style)
+{
+    QString result = "Lnr ";
+
+    switch (style) {
+    case psd_gradient_style_linear:
+        result = "Lnr ";
+        break;
+    case psd_gradient_style_radial:
+        result = "Rdl ";
+        break;
+    case psd_gradient_style_angle:
+        result = "Angl";
+        break;
+    case psd_gradient_style_reflected:
+        result = "Rflc";
+        break;
+    case psd_gradient_style_diamond:
+        result = "Dmnd";
+        break;
+    }
+
+    return result;
+}
+
+QString strokePositionToString(psd_stroke_position position)
+{
+    QString result = "OutF";
+
+    switch (position) {
+    case psd_stroke_outside:
+        result = "OutF";
+        break;
+    case psd_stroke_inside:
+        result = "InsF";
+        break;
+    case psd_stroke_center:
+        result = "CtrF";
+        break;
+    }
+
+    return result;
+}
+
+QString strokeFillTypeToString(psd_fill_type position)
+{
+    QString result = "SClr";
+
+    switch (position) {
+    case psd_fill_solid_color:
+        result = "SClr";
+        break;
+    case psd_fill_gradient:
+        result = "GrFl";
+        break;
+    case psd_fill_pattern:
+        result = "Ptrn";
+        break;
+    }
+
+    return result;
+}
+
+void KisAslLayerStyleSerializer::refillPatternsStore(KisPSDLayerStyle *style)
+{
+    m_patternsStore.clear();
+
+    QVector <KoPattern*> allPatterns;
+    allPatterns << style->patternOverlay()->pattern();
+    allPatterns << style->stroke()->pattern();
+    allPatterns << style->bevelAndEmboss()->texturePattern();
+
+    foreach (KoPattern *pattern, allPatterns) {
+        if (!pattern) continue;
+
+        QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
+        if (!m_patternsStore.contains(uuid)) {
+            m_patternsStore.insert(uuid, pattern);
+        }
+    }
+}
+
 void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 {
+    refillPatternsStore(m_style);
 
+    KisAslXmlWriter w;
+
+    if (!m_patternsStore.isEmpty()) {
+        w.enterList("Patterns");
+
+        QHash<QString, KoPattern*>::const_iterator it = m_patternsStore.constBegin();
+        QHash<QString, KoPattern*>::const_iterator end = m_patternsStore.constEnd();
+
+        for (; it != end; ++it) {
+            w.writePattern("", it.value());
+        }
+
+        w.leaveList();
+    }
+
+    w.enterDescriptor("", "", "null");
+    w.writeText("Nm  ", m_style->name());
+    w.writeText("Idnt", m_style->uuid());
+    w.leaveDescriptor();
+
+    w.enterDescriptor("", "", "Styl");
+
+    w.enterDescriptor("documentMode", "", "documentMode");
+    w.leaveDescriptor();
+
+    w.enterDescriptor("Lefx", "", "Lefx");
+
+    w.writeUnitFloat("Scl ", "#Prc", 100);
+    w.writeBoolean("masterFXSwitch", true);
+
+
+    // Drop Shadow
+    const psd_layer_effects_drop_shadow *dropShadow = m_style->dropShadow();
+    if (dropShadow->effectEnabled()) {
+        w.enterDescriptor("DrSh", "", "DrSh");
+
+        w.writeBoolean("enab", dropShadow->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(dropShadow->blendMode()));
+        w.writeColor("Clr ", dropShadow->color());
+
+        w.writeUnitFloat("Opct", "#Prc", dropShadow->opacity());
+        w.writeBoolean("uglg", dropShadow->useGlobalLight());
+        w.writeUnitFloat("lagl", "#Ang", dropShadow->angle());
+        w.writeUnitFloat("Dstn", "#Pxl", dropShadow->distance());
+        w.writeUnitFloat("Ckmt", "#Pxl", dropShadow->spread());
+        w.writeUnitFloat("blur", "#Pxl", dropShadow->size());
+        w.writeUnitFloat("Nose", "#Prc", dropShadow->noise());
+
+        w.writeBoolean("AntA", dropShadow->antiAliased());
+
+        // FIXME: save curves
+        w.writeCurve("TrnS",
+                     "Linear",
+                     QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+        w.writeBoolean("layerConceals", dropShadow->knocksOut());
+        w.leaveDescriptor();
+    }
+
+    // Inner Shadow
+    const psd_layer_effects_inner_shadow *innerShadow = m_style->innerShadow();
+    if (innerShadow->effectEnabled()) {
+        w.enterDescriptor("IrSh", "", "IrSh");
+
+        w.writeBoolean("enab", innerShadow->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(innerShadow->blendMode()));
+        w.writeColor("Clr ", innerShadow->color());
+
+        w.writeUnitFloat("Opct", "#Prc", innerShadow->opacity());
+        w.writeBoolean("uglg", innerShadow->useGlobalLight());
+        w.writeUnitFloat("lagl", "#Ang", innerShadow->angle());
+        w.writeUnitFloat("Dstn", "#Pxl", innerShadow->distance());
+        w.writeUnitFloat("Ckmt", "#Pxl", innerShadow->spread());
+        w.writeUnitFloat("blur", "#Pxl", innerShadow->size());
+        w.writeUnitFloat("Nose", "#Prc", innerShadow->noise());
+
+        w.writeBoolean("AntA", innerShadow->antiAliased());
+
+        // FIXME: save curves
+        w.writeCurve("TrnS",
+                     "Linear",
+                     QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+        w.leaveDescriptor();
+    }
+
+    // Outer Glow
+    const psd_layer_effects_outer_glow *outerGlow = m_style->outerGlow();
+    if (outerGlow->effectEnabled()) {
+        w.enterDescriptor("OrGl", "", "OrGl");
+
+        w.writeBoolean("enab", outerGlow->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(outerGlow->blendMode()));
+
+
+        if (outerGlow->gradient()) {
+            KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(outerGlow->gradient());
+
+            if (segmentGradient) {
+                w.writeGradient("Grad", segmentGradient);
+            } else {
+                qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                w.writeColor("Clr ", outerGlow->color());
+            }
+
+        } else {
+            w.writeColor("Clr ", outerGlow->color());
+        }
+
+        w.writeUnitFloat("Opct", "#Prc", outerGlow->opacity());
+
+        w.writeEnum("GlwT", "BETE", techniqueToString(outerGlow->technique(), "BETE"));
+
+        w.writeUnitFloat("Ckmt", "#Pxl", outerGlow->spread());
+        w.writeUnitFloat("blur", "#Pxl", outerGlow->size());
+        w.writeUnitFloat("Nose", "#Prc", outerGlow->noise());
+
+        w.writeUnitFloat("ShdN", "#Prc", outerGlow->jitter());
+
+        w.writeBoolean("AntA", outerGlow->antiAliased());
+
+        // FIXME: save curves
+        w.writeCurve("TrnS",
+                     "Linear",
+                     QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+        w.writeUnitFloat("Inpr", "#Prc", outerGlow->range());
+
+        w.leaveDescriptor();
+    }
+
+    // Inner Glow
+    const psd_layer_effects_inner_glow *innerGlow = m_style->innerGlow();
+    if (innerGlow->effectEnabled()) {
+        w.enterDescriptor("IrGl", "", "IrGl");
+
+        w.writeBoolean("enab", innerGlow->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(innerGlow->blendMode()));
+
+
+        if (innerGlow->gradient()) {
+            KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(innerGlow->gradient());
+
+            if (segmentGradient) {
+                w.writeGradient("Grad", segmentGradient);
+            } else {
+                qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                w.writeColor("Clr ", innerGlow->color());
+            }
+
+        } else {
+            w.writeColor("Clr ", innerGlow->color());
+        }
+
+        w.writeUnitFloat("Opct", "#Prc", innerGlow->opacity());
+
+        w.writeEnum("GlwT", "BETE", techniqueToString(innerGlow->technique(), "BETE"));
+
+        w.writeUnitFloat("Ckmt", "#Pxl", innerGlow->spread());
+        w.writeUnitFloat("blur", "#Pxl", innerGlow->size());
+
+        // NOTE: order is swapped in ASL!
+        w.writeUnitFloat("ShdN", "#Prc", innerGlow->jitter());
+        w.writeUnitFloat("Nose", "#Prc", innerGlow->noise());
+
+        w.writeBoolean("AntA", innerGlow->antiAliased());
+
+        w.writeEnum("glwS", "IGSr", innerGlow->source() == psd_glow_center ? "SrcC" : "SrcE");
+
+        // FIXME: save curves
+        w.writeCurve("TrnS",
+                     "Linear",
+                     QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+        w.writeUnitFloat("Inpr", "#Prc", innerGlow->range());
+
+        w.leaveDescriptor();
+    }
+
+    // Bevel and Emboss
+    const psd_layer_effects_bevel_emboss *bevelAndEmboss = m_style->bevelAndEmboss();
+    if (bevelAndEmboss->effectEnabled()) {
+        w.enterDescriptor("ebbl", "", "ebbl");
+
+        w.writeBoolean("enab", bevelAndEmboss->effectEnabled());
+
+        w.writeEnum("hglM", "BlnM", compositeOpToBlendMode(bevelAndEmboss->highlightBlendMode()));
+        w.writeColor("hglC", bevelAndEmboss->highlightColor());
+        w.writeUnitFloat("hglO", "#Prc", bevelAndEmboss->highlightOpacity());
+
+        w.writeEnum("sdwM", "BlnM", compositeOpToBlendMode(bevelAndEmboss->shadowBlendMode()));
+        w.writeColor("sdwC", bevelAndEmboss->shadowColor());
+        w.writeUnitFloat("sdwO", "#Prc", bevelAndEmboss->shadowOpacity());
+
+        w.writeEnum("bvlT", "bvlT", techniqueToString(bevelAndEmboss->technique(), "bvlT"));
+        w.writeEnum("bvlS", "BESl", bevelStyleToString(bevelAndEmboss->style()));
+
+        w.writeBoolean("uglg", bevelAndEmboss->useGlobalLight());
+        w.writeUnitFloat("lagl", "#Ang", bevelAndEmboss->angle());
+        w.writeUnitFloat("Lald", "#Ang", bevelAndEmboss->altitude());
+
+        w.writeUnitFloat("srgR", "#Prc", bevelAndEmboss->depth());
+        w.writeUnitFloat("blur", "#Pxl", bevelAndEmboss->size());
+        w.writeEnum("bvlD", "BESs", bevelAndEmboss->direction() == psd_direction_up ? "In  " : "Out ");
+
+        // FIXME: save curves
+        w.writeCurve("TrnS",
+                     "Linear",
+                     QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+        w.writeBoolean("antialiasGloss", bevelAndEmboss->glossAntiAliased());
+
+        w.writeUnitFloat("Sftn", "#Pxl", bevelAndEmboss->soften());
+
+        if (bevelAndEmboss->contourEnabled()) {
+            w.writeBoolean("useShape", bevelAndEmboss->contourEnabled());
+
+            // FIXME: save curves
+            w.writeCurve("MpgS",
+                         "Linear",
+                         QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+            w.writeBoolean("AntA", bevelAndEmboss->antiAliased());
+            w.writeUnitFloat("Inpr", "#Prc", bevelAndEmboss->contourRange());
+        }
+
+        w.writeBoolean("useTexture", bevelAndEmboss->textureEnabled());
+
+        if (bevelAndEmboss->textureEnabled()) {
+            w.writeBoolean("InvT", bevelAndEmboss->textureInvert());
+            w.writeBoolean("Algn", bevelAndEmboss->textureAlignWithLayer());
+            w.writeUnitFloat("Scl ", "#Prc", bevelAndEmboss->textureScale());
+            w.writeUnitFloat("textureDepth ", "#Prc", bevelAndEmboss->textureDepth());
+            w.writePatternRef("Ptrn", bevelAndEmboss->texturePattern());
+            w.writePhasePoint("phase", bevelAndEmboss->texturePhase());
+        }
+
+        w.leaveDescriptor();
+    }
+
+    // Satin
+    const psd_layer_effects_satin *satin = m_style->satin();
+    if (satin->effectEnabled()) {
+        w.enterDescriptor("ChFX", "", "ChFX");
+
+        w.writeBoolean("enab", satin->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(satin->blendMode()));
+        w.writeColor("Clr ", satin->color());
+
+        w.writeBoolean("AntA", satin->antiAliased());
+        w.writeBoolean("Invr", satin->invert());
+        w.writeUnitFloat("Opct", "#Prc", satin->opacity());
+        w.writeUnitFloat("lagl", "#Ang", satin->angle());
+        w.writeUnitFloat("Dstn", "#Pxl", satin->distance());
+        w.writeUnitFloat("blur", "#Pxl", satin->size());
+
+        // FIXME: save curves
+        w.writeCurve("MpgS",
+                     "Linear",
+                     QVector<QPointF>() << QPointF() << QPointF(255, 255));
+
+        w.leaveDescriptor();
+    }
+
+    const psd_layer_effects_color_overlay *colorOverlay = m_style->colorOverlay();
+    if (colorOverlay->effectEnabled()) {
+        w.enterDescriptor("SoFi", "", "SoFi");
+
+        w.writeBoolean("enab", colorOverlay->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(colorOverlay->blendMode()));
+        w.writeUnitFloat("Opct", "#Prc", colorOverlay->opacity());
+        w.writeColor("Clr ", colorOverlay->color());
+
+        w.leaveDescriptor();
+    }
+
+    // Gradient Overlay
+    const psd_layer_effects_gradient_overlay *gradientOverlay = m_style->gradientOverlay();
+    KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(gradientOverlay->gradient());
+    if (!segmentGradient) {
+        qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first! Gradient Overlay style is skipped!";
+    }
+
+    if (gradientOverlay->effectEnabled() && segmentGradient) {
+        w.enterDescriptor("GrFl", "", "GrFl");
+
+        w.writeBoolean("enab", gradientOverlay->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(gradientOverlay->blendMode()));
+        w.writeUnitFloat("Opct", "#Prc", gradientOverlay->opacity());
+
+        w.writeGradient("Grad", segmentGradient);
+
+        w.writeUnitFloat("Angl", "#Ang", gradientOverlay->angle());
+
+        w.writeEnum("Type", "GrdT", gradientTypeToString(gradientOverlay->style()));
+
+        w.writeBoolean("Rvrs", gradientOverlay->reverse());
+        w.writeBoolean("Algn", gradientOverlay->alignWithLayer());
+        w.writeUnitFloat("Scl ", "#Prc", gradientOverlay->scale());
+
+        w.writeOffsetPoint("Ofst", gradientOverlay->gradientOffset());
+
+        // FIXME: Krita doesn't support dithering
+        w.writeBoolean("Dthr", true/*gradientOverlay->dither()*/);
+
+        w.leaveDescriptor();
+    }
+
+    // Pattern Overlay
+    const psd_layer_effects_pattern_overlay *patternOverlay = m_style->patternOverlay();
+    if (patternOverlay->effectEnabled()) {
+        w.enterDescriptor("patternFill", "", "patternFill");
+
+        w.writeBoolean("enab", patternOverlay->effectEnabled());
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(patternOverlay->blendMode()));
+        w.writeUnitFloat("Opct", "#Prc", patternOverlay->opacity());
+
+        w.writePatternRef("Ptrn", patternOverlay->pattern());
+
+        w.writeUnitFloat("Scl ", "#Prc", patternOverlay->scale());
+        w.writeBoolean("Algn", patternOverlay->alignWithLayer());
+        w.writePhasePoint("phase", patternOverlay->patternPhase());
+
+        w.leaveDescriptor();
+    }
+
+    const psd_layer_effects_stroke *stroke = m_style->stroke();
+    if (stroke->effectEnabled()) {
+        w.enterDescriptor("FrFX", "", "FrFX");
+
+        w.writeBoolean("enab", stroke->effectEnabled());
+
+        w.writeEnum("Styl", "FStl", strokePositionToString(stroke->position()));
+        w.writeEnum("PntT", "FrFl", strokeFillTypeToString(stroke->fillType()));
+
+        w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(stroke->blendMode()));
+        w.writeUnitFloat("Opct", "#Prc", stroke->opacity());
+
+        w.writeUnitFloat("Sz  ", "#Pxl", stroke->size());
+
+        if (stroke->fillType() == psd_fill_solid_color) {
+            w.writeColor("Clr ", stroke->color());
+        } else if (stroke->fillType() == psd_fill_gradient) {
+            KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(stroke->gradient());
+
+            if (segmentGradient) {
+                w.writeGradient("Grad", segmentGradient);
+            } else {
+                qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                w.writeColor("Clr ", stroke->color());
+            }
+
+            w.writeUnitFloat("Angl", "#Ang", stroke->angle());
+            w.writeEnum("Type", "GrdT", gradientTypeToString(stroke->style()));
+
+            w.writeBoolean("Rvrs", stroke->reverse());
+            w.writeUnitFloat("Scl ", "#Prc", stroke->scale());
+            w.writeBoolean("Algn", stroke->alignWithLayer());
+            w.writeOffsetPoint("Ofst", stroke->gradientOffset());
+
+            // FIXME: Krita doesn't support dithering
+            w.writeBoolean("Dthr", true/*stroke->dither()*/);
+
+        } else if (stroke->fillType() == psd_fill_pattern) {
+            w.writePatternRef("Ptrn", stroke->pattern());
+            w.writeUnitFloat("Scl ", "#Prc", stroke->scale());
+            w.writeBoolean("Lnkd", stroke->alignWithLayer());
+            w.writePhasePoint("phase", stroke->patternPhase());
+        }
+
+        w.leaveDescriptor();
+    }
+
+    w.leaveDescriptor();
+    w.leaveDescriptor();
+
+    qDebug() << ppVar(w.document().toString());
+
+    KisAslWriter writer;
+    writer.writeFile(device, w.document());
 }
 
 void convertAndSetBlendMode(const QString &mode,
@@ -157,6 +736,7 @@ inline QString _prepaddr(const QString &addr) {
     return QString("/Styl/Lefx") + addr;
 }
 
+#define CONN_TEXT_RADDR(addr, method, object, type) c.subscribeText(addr, boost::bind(&type::method, object, _1))
 #define CONN_COLOR(addr, method, object, type) c.subscribeColor(_prepaddr(addr), boost::bind(&type::method, object, _1))
 #define CONN_UNITF(addr, unit, method, object, type) c.subscribeUnitFloat(_prepaddr(addr), unit, boost::bind(&type::method, object, _1))
 #define CONN_BOOL(addr, method, object, type) c.subscribeBoolean(_prepaddr(addr), boost::bind(&type::method, object, _1))
@@ -278,6 +858,9 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
 
     KisAslCallbackObjectCatcher c;
     c.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+
+    CONN_TEXT_RADDR("/null/Nm  ", setName, m_style, KisPSDLayerStyle);
+    CONN_TEXT_RADDR("/null/Idnt", setUuid, m_style, KisPSDLayerStyle);
 
     psd_layer_effects_drop_shadow *dropShadow = m_style->dropShadow();
 
@@ -525,7 +1108,7 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     KisAslReader reader;
     QDomDocument doc = reader.readFile(device);
 
-    qDebug() << ppVar(doc.toString());
+    //qDebug() << ppVar(doc.toString());
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;

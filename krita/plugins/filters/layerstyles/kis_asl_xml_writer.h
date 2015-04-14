@@ -29,6 +29,7 @@ class QColor;
 class QPointF;
 class QDomDocument;
 class KoPattern;
+class KoSegmentGradient;
 
 
 class KRITAIMAGE_EXPORT KisAslXmlWriter
@@ -53,8 +54,12 @@ public:
     void writeBoolean(const QString &key, bool value);
     void writeColor(const QString &key, const QColor &value);
     void writePoint(const QString &key, const QPointF &value);
+    void writePhasePoint(const QString &key, const QPointF &value);
+    void writeOffsetPoint(const QString &key, const QPointF &value);
     void writeCurve(const QString &key, const QString &name, const QVector<QPointF> &points);
     void writePattern(const QString &key, const KoPattern *pattern);
+    void writePatternRef(const QString &key, const KoPattern *pattern);
+    void writeGradient(const QString &key, const KoSegmentGradient *gradient);
 
 private:
     struct Private;

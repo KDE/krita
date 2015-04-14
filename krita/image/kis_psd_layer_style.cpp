@@ -18,6 +18,7 @@
 #include "kis_psd_layer_style.h"
 
 #include <QIODevice>
+#include <QUuid>
 
 #include <psd.h>
 #include <psd_utils.h>
@@ -77,6 +78,7 @@ struct KisPSDLayerStyle::Private
     }
 
     QString name;
+    QString uuid;
     quint16 version;
     quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
     bool visible; // common state info, visible: always true
@@ -146,6 +148,25 @@ bool KisPSDLayerStyle::isEmpty() const
 QString KisPSDLayerStyle::name() const
 {
     return d->name;
+}
+
+void KisPSDLayerStyle::setName(const QString &value)
+{
+    d->name = value;
+}
+
+QString KisPSDLayerStyle::uuid() const
+{
+    if (d->uuid.isEmpty()) {
+        d->uuid = QUuid::createUuid().toString().mid(1, 36);
+    }
+
+    return d->uuid;
+}
+
+void KisPSDLayerStyle::setUuid(const QString &value) const
+{
+    d->uuid = value;
 }
 
 const psd_layer_effects_context* KisPSDLayerStyle::context() const

@@ -24,7 +24,10 @@
 #include <QUuid>
 #include <QBuffer>
 
-#include "KoPattern.h"
+#include <KoPattern.h>
+#include <KoSegmentGradient.h>
+
+#include <cfloat>
 
 #include "kis_dom_utils.h"
 #include "kis_asl_writer_utils.h"
@@ -171,6 +174,7 @@ void KisAslXmlWriter::writeText(const QString &key, const QString &value)
         el.setAttribute("key", key);
     }
 
+    el.setAttribute("type", "Text");
     el.setAttribute("value", value);
 
     m_d->currentElement.appendChild(el);
@@ -207,6 +211,26 @@ void KisAslXmlWriter::writePoint(const QString &key, const QPointF &value)
 
     writeDouble("Hrzn", value.x());
     writeDouble("Vrtc", value.y());
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writePhasePoint(const QString &key, const QPointF &value)
+{
+    enterDescriptor(key, "", "Pnt ");
+
+    writeDouble("Hrzn", value.x());
+    writeDouble("Vrtc", value.y());
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writeOffsetPoint(const QString &key, const QPointF &value)
+{
+    enterDescriptor(key, "", "Pnt ");
+
+    writeUnitFloat("Hrzn", "#Prc", value.x());
+    writeUnitFloat("Vrtc", "#Prc", value.y());
 
     leaveDescriptor();
 }
@@ -249,6 +273,90 @@ void KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
     dataElement.appendChild(dataSection);
 
     m_d->currentElement.appendChild(dataElement);
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writePatternRef(const QString &key, const KoPattern *pattern)
+{
+    enterDescriptor(key, "", "Ptrn");
+
+    writeText("Nm  ", pattern->name());
+    writeText("Idnt", KisAslWriterUtils::getPatternUuidLazy(pattern));
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writeGradient(const QString &key, const KoSegmentGradient *gradient)
+{
+    enterDescriptor(key, "Gradient", "Grdn");
+
+    writeText("Nm  ", gradient->name());
+    writeEnum("GrdF", "GrdF", "CstS");
+    writeDouble("Intr", 4096);
+
+    const QList<KoGradientSegment *>&segments = gradient->segments();
+
+    QVector<QColor> colors;
+    QVector<qreal> transparencies;
+    QVector<qreal> positions;
+    QVector<qreal> middleOffsets;
+
+    foreach (const KoGradientSegment *seg, segments) {
+        const qreal start = seg->startOffset();
+        const qreal end = seg->endOffset();
+        const qreal mid = (end - start) > DBL_EPSILON ? (seg->middleOffset() - start) / (end - start) : 0.5;
+
+        QColor color = seg->startColor().toQColor();
+        qreal transparency = color.alphaF();
+        color.setAlphaF(1.0);
+
+        colors << color;
+        transparencies << transparency;
+        positions << start;
+        middleOffsets << mid;
+    }
+
+    // last segment
+    {
+        const KoGradientSegment *lastSeg = segments.last();
+
+        QColor color = lastSeg->endColor().toQColor();
+        qreal transparency = color.alphaF();
+        color.setAlphaF(1.0);
+
+        colors << color;
+        transparencies << transparency;
+        positions << lastSeg->endOffset();
+        middleOffsets << 0.5;
+    }
+
+    enterList("Clrs");
+
+    for (int i = 0; i < colors.size(); i++) {
+        enterDescriptor("", "", "Clrt");
+
+        writeColor("Clr ", colors[i]);
+        writeEnum("Type", "Clry", "UsrS"); // NOTE: we do not support BG/FG color tags
+        writeInteger("Lctn", positions[i] * 4096.0);
+        writeInteger("Mdpn", middleOffsets[i] * 100.0);
+
+        leaveDescriptor();
+    };
+
+    leaveList();
+
+    enterList("Trns");
+
+    for (int i = 0; i < colors.size(); i++) {
+        enterDescriptor("", "", "TrnS");
+        writeUnitFloat("Opct", "#Prc", transparencies[i] * 100.0);
+        writeInteger("Lctn", positions[i] * 4096.0);
+        writeInteger("Mdpn", middleOffsets[i] * 100.0);
+        leaveDescriptor();
+    };
+
+    leaveList();
 
     leaveDescriptor();
 }

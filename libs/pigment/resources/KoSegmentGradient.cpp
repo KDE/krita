@@ -61,6 +61,14 @@ KoSegmentGradient::~KoSegmentGradient()
     }
 }
 
+KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
+    : KoAbstractGradient(rhs)
+{
+    foreach(KoGradientSegment *segment, rhs.m_segments) {
+        pushSegment(new KoGradientSegment(*segment));
+    }
+}
+
 KoAbstractGradient* KoSegmentGradient::clone() const
 {
     return new KoSegmentGradient(*this);
@@ -900,4 +908,9 @@ bool KoSegmentGradient::removeSegmentPossible() const
     if (m_segments.count() < 2)
         return false;
     return true;
+}
+
+const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
+{
+    return m_segments;
 }

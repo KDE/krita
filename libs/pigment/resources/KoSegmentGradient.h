@@ -401,7 +401,12 @@ public:
      * @return true if it's possible to remove an segment
      */
     bool removeSegmentPossible() const;
+
+    const QList<KoGradientSegment *>& segments() const;
+
 protected:
+
+    KoSegmentGradient(const KoSegmentGradient &rhs);
 
     virtual QByteArray generateMD5() const;
 

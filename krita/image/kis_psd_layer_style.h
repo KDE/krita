@@ -52,6 +52,10 @@ public:
     void clear();
 
     QString name() const;
+    void setName(const QString &value);
+
+    QString uuid() const;
+    void setUuid(const QString &value) const;
 
     /**
      * \return true if all the styles are disabled

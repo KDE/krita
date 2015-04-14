@@ -20,6 +20,8 @@
 
 #include <qtest_kde.h>
 
+#include <QDomDocument>
+
 #include <KoCompositeOpRegistry.h>
 #include <KoAbstractGradient.h>
 #include <KoPattern.h>
@@ -28,10 +30,12 @@
 #include "testutil.h"
 #include "kis_psd_layer_style.h"
 #include "../kis_asl_layer_style_serializer.h"
+#include "../kis_asl_reader.h"
+
 
 #define CMP(object, method, value) QCOMPARE(style->object()->method(), value)
 
-void KisAslLayerStyleSerializerTest::test()
+void KisAslLayerStyleSerializerTest::testReading()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
 
@@ -180,6 +184,62 @@ void KisAslLayerStyleSerializerTest::test()
     CMP(patternOverlay, pattern()->name, QString("$$$/Presets/Patterns/Patterns_pat/Bubbles=Bubbles"));
     CMP(patternOverlay, pattern()->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f.pat"));
 
+}
+
+void KisAslLayerStyleSerializerTest::testWriting()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+
+    QByteArray refXMLDoc;
+
+    {
+        KisAslLayerStyleSerializer s(style.data());
+
+        QString srcFileName(TestUtil::fetchDataFileLazy("test_all_and_pattern.asl"));
+        QFile aslFile(srcFileName);
+        aslFile.open(QIODevice::ReadOnly);
+        s.readFromDevice(&aslFile);
+
+        {
+            aslFile.seek(0);
+
+            KisAslReader reader;
+            QDomDocument doc = reader.readFile(&aslFile);
+            refXMLDoc = doc.toByteArray();
+        }
+    }
+
+    // now we have an initialized KisPSDLayerStyle object
+    {
+        KisAslLayerStyleSerializer s(style.data());
+        QFile dstFile("test_written.asl");
+        dstFile.open(QIODevice::WriteOnly);
+        s.saveToDevice(&dstFile);
+        dstFile.close();
+    }
+
+    QByteArray resultXMLDoc;
+
+    {
+        QFile resultFile("test_written.asl");
+        resultFile.open(QIODevice::ReadOnly);
+
+        KisAslReader reader;
+        QDomDocument doc = reader.readFile(&resultFile);
+        resultXMLDoc = doc.toByteArray();
+    }
+
+    QFile refXMLFile("save_round_trip_src.xml");
+    refXMLFile.open(QIODevice::WriteOnly);
+    refXMLFile.write(refXMLDoc);
+    refXMLFile.close();
+
+    QFile resultXMLFile("save_round_trip_dst.xml");
+    resultXMLFile.open(QIODevice::WriteOnly);
+    resultXMLFile.write(resultXMLDoc);
+    resultXMLFile.close();
+
+    QCOMPARE(resultXMLDoc, refXMLDoc);
 }
 
 QTEST_KDEMAIN(KisAslLayerStyleSerializerTest, GUI)

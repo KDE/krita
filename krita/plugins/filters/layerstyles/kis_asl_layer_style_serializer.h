@@ -45,6 +45,8 @@ private:
                              const QString &patternName,
                              boost::function<void (KoPattern *)> setPattern);
 
+    void refillPatternsStore(KisPSDLayerStyle *style);
+
 private:
     KisPSDLayerStyle *m_style;
     QHash<QString, KoPattern*> m_patternsStore;

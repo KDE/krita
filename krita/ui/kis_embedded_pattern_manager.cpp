@@ -51,6 +51,23 @@ struct KisEmbeddedPatternManager::Private {
     }
 };
 
+KoAbstractGradient* KisEmbeddedPatternManager::tryFetchGradientByMd5(const QByteArray &md5) {
+    KoAbstractGradient *gradient = 0;
+
+    if (!md5.isEmpty()) {
+        foreach(KoResource * res, KoResourceServerProvider::instance()->gradientServer()->resources()) {
+            KoAbstractGradient *grad = dynamic_cast<KoAbstractGradient *>(res);
+
+            if (grad && grad->valid() && grad->md5() == md5) {
+                gradient = grad;
+                break;
+            }
+        }
+    }
+
+    return gradient;
+}
+
 KoPattern* KisEmbeddedPatternManager::tryFetchPatternByMd5(const QByteArray &md5) {
     KoPattern *pattern = 0;
 

@@ -467,6 +467,8 @@ bool tryParseDescriptor(const QDomElement &el,
                                     endColor);
         }
 
+        gradient->setValid(true);
+
         catcher.addGradient(path, gradient.data());
     } else {
         retval = false;

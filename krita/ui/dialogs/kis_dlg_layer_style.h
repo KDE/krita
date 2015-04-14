@@ -260,6 +260,7 @@ public slots:
     void setStyle(KisPSDLayerStyleSP style);
 
     void slotLoadStyle();
+    void slotSaveStyle();
 
 private:
 

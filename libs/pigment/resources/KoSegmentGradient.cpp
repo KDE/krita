@@ -30,6 +30,8 @@
 #include <QFile>
 #include <QCryptographicHash>
 #include <QByteArray>
+#include <QBuffer>
+
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
@@ -273,15 +275,17 @@ QString KoSegmentGradient::defaultFileExtension() const
 
 QByteArray KoSegmentGradient::generateMD5() const
 {
-    QFile f(filename());
-    if (f.exists()) {
-        QByteArray ba = f.readAll();
-        if (!ba.isEmpty()) {
-            QCryptographicHash md5(QCryptographicHash::Md5);
-            md5.addData(ba);
-            return md5.result();
-        }
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    saveToDevice(&buffer);
+    QByteArray ba = buffer.buffer();
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
     }
+
     return QByteArray();
 }
 

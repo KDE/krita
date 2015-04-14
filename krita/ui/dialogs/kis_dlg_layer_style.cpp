@@ -136,6 +136,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     setStyle(layerStyle);
 
     connect(wdgLayerStyles.btnLoadStyle, SIGNAL(clicked()), SLOT(slotLoadStyle()));
+    connect(wdgLayerStyles.btnSaveStyle, SIGNAL(clicked()), SLOT(slotSaveStyle()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotNotifyOnAccept()));
     connect(this, SIGNAL(rejected()), SLOT(slotNotifyOnReject()));
@@ -186,6 +187,29 @@ void KisDlgLayerStyle::slotLoadStyle()
         m_configChangedCompressor->stop();
         emit configChanged();
     }
+}
+
+void KisDlgLayerStyle::slotSaveStyle()
+{
+    QString filename; // default value?
+
+    KoFileDialog dialog(this, KoFileDialog::SaveFile, "krita/layerstyle");
+    dialog.setCaption(i18n("Select ASL file"));
+    //dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
+    filename = dialog.url();
+
+    qDebug() << ppVar(filename);
+
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+
+    KisLayerStyleSerializerSP serializer;
+
+    serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
+    KIS_ASSERT_RECOVER_RETURN(serializer);
+
+    serializer->saveToDevice(&file);
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)

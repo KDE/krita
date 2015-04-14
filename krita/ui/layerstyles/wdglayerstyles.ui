@@ -139,7 +139,14 @@
      <item>
       <widget class="QPushButton" name="btnLoadStyle">
        <property name="text">
-        <string>Load Style...</string>
+        <string>&amp;Load Style...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSaveStyle">
+       <property name="text">
+        <string>&amp;Save Style...</string>
        </property>
       </widget>
      </item>

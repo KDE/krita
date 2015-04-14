@@ -239,9 +239,21 @@ void KisAslLayerStyleSerializer::refillPatternsStore(KisPSDLayerStyle *style)
     m_patternsStore.clear();
 
     QVector <KoPattern*> allPatterns;
-    allPatterns << style->patternOverlay()->pattern();
-    allPatterns << style->stroke()->pattern();
-    allPatterns << style->bevelAndEmboss()->texturePattern();
+    if (style->patternOverlay()->effectEnabled()) {
+        allPatterns << style->patternOverlay()->pattern();
+    }
+
+    if (style->stroke()->effectEnabled() &&
+        style->stroke()->fillType() == psd_fill_pattern) {
+
+        allPatterns << style->stroke()->pattern();
+    }
+
+    if(style->bevelAndEmboss()->effectEnabled() &&
+       style->bevelAndEmboss()->textureEnabled()) {
+
+        allPatterns << style->bevelAndEmboss()->texturePattern();
+    }
 
     foreach (KoPattern *pattern, allPatterns) {
         if (!pattern) continue;
@@ -352,13 +364,13 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(outerGlow->blendMode()));
 
 
-        if (outerGlow->gradient()) {
+        if (outerGlow->fillType() == psd_fill_gradient && outerGlow->gradient()) {
             KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(outerGlow->gradient());
 
             if (segmentGradient) {
                 w.writeGradient("Grad", segmentGradient);
             } else {
-                qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                qWarning() << "WARNING: OG: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
                 w.writeColor("Clr ", outerGlow->color());
             }
 
@@ -397,13 +409,13 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(innerGlow->blendMode()));
 
 
-        if (innerGlow->gradient()) {
+        if (innerGlow->fillType() == psd_fill_gradient && innerGlow->gradient()) {
             KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(innerGlow->gradient());
 
             if (segmentGradient) {
                 w.writeGradient("Grad", segmentGradient);
             } else {
-                qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                qWarning() << "WARNING: IG: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
                 w.writeColor("Clr ", innerGlow->color());
             }
 
@@ -728,7 +740,15 @@ template <class T>
 void cloneAndSetResource(const T *resource,
                          boost::function<void (T*)> setResource)
 {
-    T *newResource = resource->clone();
+    QByteArray md5 = resource->md5();
+    T *newResource = KisEmbeddedPatternManager::tryFetchGradientByMd5(md5);
+
+    if (!newResource) {
+        newResource = resource->clone();
+        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
+        server->addResource(newResource, false);
+    }
+
     setResource(newResource);
 }
 

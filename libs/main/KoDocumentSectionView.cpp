@@ -220,8 +220,9 @@ void KoDocumentSectionView::currentChanged(const QModelIndex &current, const QMo
     }
 }
 
-void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
+    Q_UNUSED(roles);
     QTreeView::dataChanged(topLeft, bottomRight);
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {

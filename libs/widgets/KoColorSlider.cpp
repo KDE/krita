@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QStyleOption>
 
-#define ARROWSIZE 5
+#define ARROWSIZE 8
 
 struct KoColorSlider::Private
 {

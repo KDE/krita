@@ -167,7 +167,7 @@ void KisTile::lockForRead() const
 }
 
 
-#define lazyCopying() (m_tileData->m_usersCount.load() > 1)
+#define lazyCopying() (m_tileData->m_usersCount>1)
 
 void KisTile::lockForWrite()
 {

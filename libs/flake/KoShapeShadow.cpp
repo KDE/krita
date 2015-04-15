@@ -354,6 +354,5 @@ bool KoShapeShadow::deref()
 
 int KoShapeShadow::useCount() const
 {
-    return d->refCount.load();
-
+    return d->refCount;
 }

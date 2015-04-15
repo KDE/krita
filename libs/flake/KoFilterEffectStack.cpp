@@ -120,8 +120,7 @@ bool KoFilterEffectStack::deref()
 
 int KoFilterEffectStack::useCount() const
 {
-    return d->refCount.load();
-
+    return d->refCount;
 }
 
 void KoFilterEffectStack::save(KoXmlWriter &writer, const QString &filterId)

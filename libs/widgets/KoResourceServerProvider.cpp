@@ -238,13 +238,13 @@ KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer(bool block)
 
 KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer(bool block)
 {
-    if (block) d->patternThread->barrier();
+    if (block) d->gradientThread->barrier();
     return d->gradientServer;
 }
 
 KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer(bool block)
 {
-    if (block) d->patternThread->barrier();
+    if (block) d->paletteThread->barrier();
     return d->paletteServer;
 }
 

@@ -102,6 +102,10 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     label.append(notesConfig->numberFormat().suffix());
     QPaintDevice *pd = documentLayout()->paintDevice();
     QTextCharFormat format = cursor->it.currentBlock().charFormat();
+    KoCharacterStyle *style = documentLayout()->styleManager()->characterStyle(notesConfig->citationTextStyle());
+    if (style) {
+        style->applyStyle(format);
+    }
     QFont font(format.font(), pd);
     d->textLayout = new QTextLayout(label, font, pd);
     QList<QTextLayout::FormatRange> layouts;
@@ -109,7 +113,6 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     range.start = 0;
     range.length = label.length();
     range.format = format;
-    range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     layouts.append(range);
     d->textLayout->setAdditionalFormats(layouts);
 

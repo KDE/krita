@@ -153,6 +153,7 @@ set(kritagmic_PART_SRCS
     kis_export_gmic_processing_visitor.cpp
     kis_gmic_applicator.cpp
     kis_gmic_command.cpp
+    kis_gmic_data.cpp
     kis_gmic_synchronize_layers_command.cpp
     kis_import_gmic_processing_visitor.cpp
     kis_gmic_progress_manager.cpp

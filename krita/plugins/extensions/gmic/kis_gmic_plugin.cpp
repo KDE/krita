@@ -440,7 +440,7 @@ void KisGmicPlugin::slotUpdateProgress()
             dbgPlugins << "WARNING: small applicator already deleted!!!";
             return;
         }
-        progress = m_smallApplicator->getProgress();
+        progress = m_smallApplicator->progress();
     }
     else
     {

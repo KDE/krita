@@ -53,8 +53,7 @@ void NotesConfigurationDialog::footnoteSetup()
     m_notesConfig = KoTextDocument(m_document).styleManager()
                                 ->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     if (!m_notesConfig) {
-        m_notesConfig = new KoOdfNotesConfiguration();
-        m_notesConfig->setNoteClass(KoOdfNotesConfiguration::Footnote);
+        m_notesConfig = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Footnote);
     }
     widget.prefixLineEdit->setText(m_notesConfig->numberFormat().prefix());
     widget.suffixLineEdit->setText(m_notesConfig->numberFormat().suffix());
@@ -109,8 +108,7 @@ void NotesConfigurationDialog::endnoteSetup()
     m_notesConfig = KoTextDocument(m_document).styleManager()
                                     ->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     if (!m_notesConfig) {
-        m_notesConfig = new KoOdfNotesConfiguration();
-        m_notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
+        m_notesConfig = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
     widget.prefixLineEdit->setText(m_notesConfig->numberFormat().prefix());
     widget.suffixLineEdit->setText(m_notesConfig->numberFormat().suffix());

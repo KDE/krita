@@ -78,17 +78,12 @@ const KComponentData &KisFactory::componentData()
         // for images in the paintop box
         KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
 
-        KGlobal::dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
-
-        KGlobal::dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
+        KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 
         KGlobal::locale()->insertCatalog(s_componentData->catalogName());
-        // install 'instancename'data resource type
-        KGlobal::dirs()->addResourceType(QString(s_componentData->componentName() + "data").toUtf8(), "data", s_componentData->componentName());
-
     }
 
     return *s_componentData;

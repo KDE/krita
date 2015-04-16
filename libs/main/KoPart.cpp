@@ -389,9 +389,6 @@ void KoPart::setComponentData(const KComponentData &componentData)
     d->m_componentData = componentData;
 
     KGlobal::locale()->insertCatalog(componentData.catalogName());
-    // install 'instancename'data resource type
-    KGlobal::dirs()->addResourceType(QString(componentData.componentName() + "data").toUtf8(),
-                                     "data", componentData.componentName());
 }
 
 

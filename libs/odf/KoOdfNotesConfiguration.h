@@ -56,7 +56,16 @@ class KOODF_EXPORT KoOdfNotesConfiguration : public QObject
     Q_OBJECT
 public:
 
-    KoOdfNotesConfiguration();
+    /**
+     * Note class
+     * The note class attribute determines which note elements this notes configuration applies to.
+     */
+    enum NoteClass {
+        Footnote,
+        Endnote
+    };
+
+    KoOdfNotesConfiguration(NoteClass noteClass);
     ~KoOdfNotesConfiguration();
     KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other);
     KoOdfNotesConfiguration &operator=(const KoOdfNotesConfiguration &other);
@@ -72,18 +81,8 @@ public:
      */
     void saveOdf(KoXmlWriter * writer) const;
 
-    /**
-     * Note class
-     * The note class attribute determines which note elements this notes configuration applies to.
-     */
-    enum NoteClass {
-        Footnote,
-        Endnote,
-        Unknown
-    };
 
     NoteClass noteClass() const;
-    void setNoteClass(NoteClass noteClass);
 
     /**
      * Citation Text Style

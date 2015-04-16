@@ -28,6 +28,7 @@
 #include <KoTextDocument.h>
 #include <KoText.h>
 #include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 #include <kdebug.h>
 #include <writeodf/writeodftext.h>
 #include <writeodf/writeodfoffice.h>
@@ -76,13 +77,33 @@ KoInlineNote::~KoInlineNote()
 
 void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 {
+    d->document = motherFrame->document();
+
     // We create our own subframe
 
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
     d->textFrame = cursor.insertFrame(format);
-    d->document = motherFrame->document();
+
+    // Now let's make sure it has the right paragraph
+    KoOdfNotesConfiguration *notesConfig = 0;
+    if (d->type == KoInlineNote::Footnote) {
+        notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    } else if (d->type == KoInlineNote::Endnote) {
+        notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    }
+
+    KoParagraphStyle *style = KoTextDocument(d->document).styleManager()->paragraphStyle(notesConfig->defaultNoteParagraphStyle());
+    if (style) {
+        QTextBlock block = cursor.block();
+        QTextBlockFormat bf;
+        QTextCharFormat cf;
+        style->applyStyle(bf);
+        style->KoCharacterStyle::applyStyle(cf);
+        cursor.setBlockFormat(bf);
+        cursor.setBlockCharFormat(cf);
+    }
 }
 
 void KoInlineNote::setLabel(const QString &text)
@@ -137,9 +158,7 @@ void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocume
 {
     Q_UNUSED(document);
     Q_UNUSED(format);
-    if (d->posInDocument == -1) {
-        qDebug() << "undo";
-    }
+
     d->posInDocument = posInDocument;
 }
 
@@ -160,13 +179,26 @@ void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject &obje
     }
 }
 
-void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
+void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &originalFormat)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
 
     if (d->label.isEmpty())
         return;
+
+    QTextCharFormat format = originalFormat;
+    KoOdfNotesConfiguration *notesConfig = 0;
+    if (d->type == KoInlineNote::Footnote) {
+        notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    } else if (d->type == KoInlineNote::Endnote) {
+        notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    }
+    KoCharacterStyle *style = KoTextDocument(d->document).styleManager()->characterStyle(notesConfig->citationBodyTextStyle());
+    if (style) {
+        style->applyStyle(format);
+    }
+
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
@@ -175,7 +207,6 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     range.start = 0;
     range.length = d->label.length();
     range.format = format;
-    range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 

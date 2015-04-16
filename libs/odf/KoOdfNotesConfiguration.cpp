@@ -40,13 +40,25 @@ public:
 
 };
 
-KoOdfNotesConfiguration::KoOdfNotesConfiguration()
+KoOdfNotesConfiguration::KoOdfNotesConfiguration(NoteClass noteClass)
     : d(new Private())
 {
-    d->noteClass = Unknown;
+    d->noteClass = noteClass;
     d->startValue = 1;
     d->numberingScheme = BeginAtDocument;
     d->footnotesPosition = Page;
+
+    if (noteClass == KoOdfNotesConfiguration::Footnote) {
+        d->numberFormat.setFormatSpecification(KoOdfNumberDefinition::Numeric);
+        d->defaultNoteParagraphStyle = "Footnote";
+        d->citationTextStyle = "Footnote Symbol";
+        d->citationBodyTextStyle = "Footnote anchor";
+    } else {
+        d->numberFormat.setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
+        d->defaultNoteParagraphStyle = "Endnote";
+        d->citationTextStyle = "Endnote Symbol";
+        d->citationBodyTextStyle = "Endnote anchor";
+    }
 }
 
 KoOdfNotesConfiguration::~KoOdfNotesConfiguration()
@@ -91,21 +103,11 @@ KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConf
 
 void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 {
-
-    QString noteClass = element.attributeNS(KoXmlNS::text, "note-class", "footnote");
-
-    if (noteClass == "footnote") {
-        d->noteClass = Footnote;
-    }
-    else if (noteClass == "endnote") {
-        d->noteClass = Endnote;
-    }
-
-    d->citationTextStyle = element.attributeNS(KoXmlNS::text, "citation-style-name", QString());
-    d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", QString());
-    d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", QString());
-    d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", QString());
-    d->startValue = qMax(1, element.attributeNS(KoXmlNS::text, "start-value").toInt());
+    d->citationTextStyle = element.attributeNS(KoXmlNS::text, "citation-style-name", d->citationTextStyle);
+    d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", d->citationBodyTextStyle);
+    d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", d->defaultNoteParagraphStyle);
+    d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", d->masterPageName);
+    d->startValue = qMax(1, element.attributeNS(KoXmlNS::text, "start-value", QString::number(d->startValue)).toInt());
 
     d->numberFormat.loadOdf(element);
 
@@ -206,11 +208,6 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
 KoOdfNotesConfiguration::NoteClass KoOdfNotesConfiguration::noteClass() const
 {
     return d->noteClass;
-}
-
-void KoOdfNotesConfiguration::setNoteClass(NoteClass noteClass)
-{
-    d->noteClass = noteClass;
 }
 
 

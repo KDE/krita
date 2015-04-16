@@ -81,7 +81,7 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray> > *dstPlanes, 
 
     for (int i = 0; i < 3; i++) {
         const int srcRowOffset = 2 - i;
-        const int srcStep = 3;
+        const int srcStep = 4;
         const int dstStep = 1;
 
         for (int row = 0; row < image.height(); row++) {

@@ -35,7 +35,7 @@ public:
 
     ~Section();
 
-public slots:
+public Q_SLOTS:
     /**Returns the background color of the section*/
     QColor backgroundColor();
 

@@ -58,18 +58,14 @@
 
 #define CHECK_MODE_SANITY_OR_RETURN(_mode) if (mode() != _mode) { WARN_WRONG_MODE(mode()); return; }
 
-class KActionCollection;
 class KoCanvasBase;
 class KoPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
-class KisPainter;
 class QPainter;
 class QPainterPath;
 class QPolygonF;
 class KisRecordedPaintAction;
-
-enum PaintMode { XOR_MODE, BW_MODE };
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape";         // Geometric shapes like ellipses and lines
@@ -202,7 +198,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
@@ -258,10 +254,6 @@ protected:
 
     virtual QWidget* createOptionWidget();
 
-    inline void setOutlineStyle(PaintMode mode) {
-        m_outlinePaintMode = mode;
-    }
-
 protected:
     KisImageWSP image() const;
     QCursor cursor() const;
@@ -308,7 +300,7 @@ protected:
     virtual ToolMode mode() const;
 
 
-protected slots:
+protected Q_SLOTS:
     /**
      * Called whenever the configuration settings change.
      */
@@ -339,12 +331,11 @@ protected slots:
      */
     virtual void requestStrokeEnd();
 
-private slots:
+private Q_SLOTS:
     void slotToggleFgBg();
     void slotResetFgBg();
 
 private:
-    PaintMode m_outlinePaintMode;
     ToolMode m_mode;
 
     struct Private;

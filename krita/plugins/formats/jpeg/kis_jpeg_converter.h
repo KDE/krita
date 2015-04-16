@@ -35,7 +35,6 @@ extern "C" {
 #include "kis_types.h"
 #include "kis_annotation.h"
 class KisDocument;
-class KisExifInfo;
 
 namespace KisMetaData
 {
@@ -94,7 +93,7 @@ public:
     /** Retrieve the constructed image
     */
     KisImageWSP image();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);

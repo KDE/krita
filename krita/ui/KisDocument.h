@@ -54,16 +54,13 @@ class KoShapeBasedDocumentBase;
 class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
-class KoOdfWriteStore;
 class KoDocumentInfo;
 class KoProgressUpdater;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
 
-class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
-class KisViewManager;
 class KisPart;
 
 class KisPart;
@@ -562,7 +559,7 @@ public:
      */
     void setProfileReferenceTime(const QTime& referenceTime);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
@@ -581,7 +578,7 @@ public slots:
      */
     virtual void endMacro();
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the unit is changed by setUnit().
@@ -714,17 +711,17 @@ public:
 
     virtual bool saveAs( const KUrl &url );
 
-public slots:
+public Q_SLOTS:
 
     virtual bool save();
     bool waitSaveComplete();
 
-signals:
+Q_SIGNALS:
 
     void completed();
     void canceled(const QString &);
 
-private slots:
+private Q_SLOTS:
 
     void setImageModified();
 

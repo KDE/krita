@@ -298,7 +298,7 @@ void KisConfig::setUseEraserBrushSize(bool value)
 
 QColor KisConfig::getMDIBackgroundColor() const
 {
-    QColor col(200, 200, 200);
+    QColor col(77, 77, 77);
     return m_cfg.readEntry("mdiBackgroundColor", col);
 }
 
@@ -1222,6 +1222,16 @@ QString KisConfig::toolbarSlider(int sliderNumber)
 void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
 {
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
+}
+
+bool KisConfig::sliderLabels() const
+{
+    return m_cfg.readEntry("sliderLabels", true);
+}
+
+void KisConfig::setSliderLabels(bool enabled)
+{
+    m_cfg.writeEntry("sliderLabels", enabled);
 }
 
 QString KisConfig::currentInputProfile() const

@@ -35,7 +35,7 @@ public:
     explicit KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = 0);
     QStringList recoverableFiles();
 
-public slots:
+public Q_SLOTS:
 
     void toggleFileItem(bool toggle);
 

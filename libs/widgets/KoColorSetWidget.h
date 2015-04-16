@@ -69,7 +69,7 @@ public:
 protected:
     virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted every time the color changes (by calling setColor() or

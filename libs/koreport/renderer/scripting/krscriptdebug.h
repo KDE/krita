@@ -31,7 +31,7 @@ public:
 
     ~KRScriptDebug();
 
-public slots:
+public Q_SLOTS:
     void print(const QString&);
     void message(const QString &, const QString&);
 

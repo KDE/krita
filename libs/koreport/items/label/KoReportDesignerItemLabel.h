@@ -44,7 +44,7 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual KoReportDesignerItemLabel* clone();
     
-public slots:
+public Q_SLOTS:
     virtual void enterInlineEditingMode();
     virtual void exitInlineEditingMode();
     
@@ -57,7 +57,7 @@ private:
     QRectF getTextRect() const;
     BoundedTextItem *m_inlineEdit;
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 };

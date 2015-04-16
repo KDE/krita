@@ -48,13 +48,13 @@ public:
     void showUnitchooser(bool on);
     void setUnit(const KoUnit &unit);
 
-signals:
+Q_SIGNALS:
     void unitChanged(const KoUnit &unit);
 
-public slots:
+public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
 
-protected slots:
+protected Q_SLOTS:
     void accept();
     void reject();
 

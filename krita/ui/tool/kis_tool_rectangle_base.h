@@ -27,10 +27,10 @@ class KRITAUI_EXPORT KisToolRectangleBase : public KisToolShape
 {
 Q_OBJECT
 
-signals:
+Q_SIGNALS:
     void rectangleChanged(const QRectF &newRect);
     
-public slots:
+public Q_SLOTS:
     void constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height);
     
 public:

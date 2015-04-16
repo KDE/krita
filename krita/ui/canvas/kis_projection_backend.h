@@ -22,7 +22,6 @@
 #include "kis_update_info.h"
 
 class KoColorProfile;
-class UpdateInformation;
 class KisImagePatch;
 class KisDisplayFilter;
 

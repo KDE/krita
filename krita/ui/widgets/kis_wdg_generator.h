@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <kis_types.h>
 
-class QListWidgetItem;
 class KisFilterConfiguration;
 class KisViewManager;
 
@@ -53,7 +52,7 @@ public:
     KisFilterConfiguration * configuration();
 
 
-private slots:
+private Q_SLOTS:
 
     void slotGeneratorActivated(int);
 

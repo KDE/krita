@@ -37,7 +37,7 @@ public:
     void setCurrentColorDepth(const KoID& id);
     void setCurrentProfile(const QString& name);
     void setCurrentColorSpace(const KoColorSpace* colorSpace);
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted when a new color space is selected.
      * @param valid indicates if the color space can be used
@@ -45,7 +45,7 @@ signals:
     void selectionChanged(bool valid);
     /// This signal is emitted, when a new color space is selected, that can be used (eg is valid)
     void colorSpaceChanged(const KoColorSpace*);
-private slots:
+private Q_SLOTS:
     void fillCmbDepths(const KoID& idd);
     void fillCmbProfiles();
     void colorSpaceChanged();

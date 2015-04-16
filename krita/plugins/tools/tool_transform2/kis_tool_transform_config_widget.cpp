@@ -123,6 +123,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     scaleXBox->setValue(100.0);
     scaleYBox->setValue(100.0);
 
+    m_scaleRatio = 1.0;
 
     aXBox->setSuffix(QChar(Qt::Key_degree));
     aYBox->setSuffix(QChar(Qt::Key_degree));
@@ -819,16 +820,19 @@ void KisToolTransformConfigWidget::slotSetScaleX(int value)
 {
     if (m_uiSlotsBlocked) return;
 
-    qDebug() << "setting scale x";
-
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setScaleX(value / 100.);
 
-    if (config->keepAspectRatio() &&
-        !qFuzzyCompare(config->scaleX(), config->scaleY())) {
+    if (config->keepAspectRatio()) {
 
         blockNotifications();
-        scaleYBox->setValue(sign(scaleYBox->value()) * value);
+         int calculatedValue = int( value/ m_scaleRatio );
+
+        scaleYBox->blockSignals(true);
+        scaleYBox->setValue(calculatedValue);
+        config->setScaleY(calculatedValue / 100.);
+        scaleYBox->blockSignals(false);
+
         unblockNotifications();
     }
 
@@ -843,11 +847,13 @@ void KisToolTransformConfigWidget::slotSetScaleY(int value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setScaleY(value / 100.);
 
-    if (config->keepAspectRatio() &&
-        !qFuzzyCompare(config->scaleX(), config->scaleY())) {
-
+    if (config->keepAspectRatio()) {
         blockNotifications();
-        scaleXBox->setValue(sign(scaleXBox->value()) * value);
+        int calculatedValue = int(m_scaleRatio * value);
+        scaleXBox->blockSignals(true);
+        scaleXBox->setValue(calculatedValue);
+        config->setScaleX(calculatedValue / 100.);
+        scaleXBox->blockSignals(false);
         unblockNotifications();
     }
 
@@ -967,15 +973,11 @@ void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
     config->setKeepAspectRatio(value);
 
     if (value) {
-        if (qAbs(scaleXBox->value()) > qAbs(scaleYBox->value())) {
-            blockNotifications();
-            scaleYBox->setValue(sign(scaleYBox->value()) * scaleXBox->value());
-            unblockNotifications();
-        } else {
-            blockNotifications();
-            scaleXBox->setValue(sign(scaleXBox->value()) * scaleYBox->value());
-            unblockNotifications();
-        }
+       blockNotifications();
+       int tmpXScaleBox = scaleXBox->value();
+       int tmpYScaleBox = scaleYBox->value();
+       m_scaleRatio = (tmpXScaleBox / (double) tmpYScaleBox);
+       unblockNotifications();
     }
 
     notifyConfigChanged();

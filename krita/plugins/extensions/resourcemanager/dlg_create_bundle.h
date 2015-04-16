@@ -52,7 +52,7 @@ public:
     QStringList selectedPalettes() const { return m_selectedPalettes; }
     QStringList selectedWorkspaces() const { return m_selectedWorkspaces; }
 
-private slots:
+private Q_SLOTS:
 
     void accept();
     void selectSaveLocation();

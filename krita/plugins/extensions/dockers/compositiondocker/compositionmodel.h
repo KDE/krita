@@ -23,7 +23,6 @@
 #include <kis_types.h>
 #include <kis_layer_composition.h>
 
-class QAction;
 class CompositionModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -41,7 +40,7 @@ public:
     KisLayerComposition* compositionFromIndex(const QModelIndex& index);
     void setCompositions(QList<KisLayerComposition*> compositions);
     
-// public slots:
+// public Q_SLOTS:
 //     void clear();
 private:
     QList<KisLayerComposition*> m_compositions;

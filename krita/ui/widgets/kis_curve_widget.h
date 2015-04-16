@@ -95,7 +95,7 @@ public:
      */
     bool pointSelected() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted whenever a control point has changed position.
@@ -106,7 +106,7 @@ signals:
      */
     void pointSelectedChanged();
 
-protected slots:
+protected Q_SLOTS:
     void inOutChanged(int);
 
 

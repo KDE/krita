@@ -65,6 +65,7 @@ public:
     QCompleter* tagCompleter;
 
     KoResourceModelBase* model;
+    bool allowTagModification;
 };
 
 void KoResourceTaggingManager::showTaggingBar(bool showSearchBar, bool showOpBar)
@@ -232,9 +233,15 @@ void KoResourceTaggingManager::updateTaggedResourceView()
 
 void KoResourceTaggingManager::tagChooserIndexChanged(const QString& lineEditText)
 {
+
     if (!d->tagChooser->selectedTagIsReadOnly()) {
         d->currentTag = lineEditText;
-        d->tagFilter->allowSave(true);
+
+        // The current Tag group is not intrinsically read only.
+        // However, only allow saving if we are actually allowed to modify the group.
+        d->tagFilter->allowSave(allowTagModification());
+
+        // Filtering is enabled in all cases to correctly show the resources for the Tag.
         d->model->enableResourceFiltering(true);
     } else {
         d->model->enableResourceFiltering(false);
@@ -269,7 +276,7 @@ void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineE
 
 void KoResourceTaggingManager::tagSaveButtonPressed()
 {
-    if (!d->tagChooser->selectedTagIsReadOnly()) {
+    if (!d->tagChooser->selectedTagIsReadOnly() && allowTagModification()) {
         QList<KoResource*> newResources = d->model->currentlyVisibleResources();
         foreach(KoResource * oldRes, d->originalResources) {
             if (!newResources.contains(oldRes))
@@ -288,7 +295,7 @@ void KoResourceTaggingManager::contextMenuRequested(KoResource* resource, const 
 {
     /* no visible tag chooser usually means no intended tag interaction,
      * context menu makes no sense then either */
-    if (!resource || !d->tagChooser->isVisible())
+    if (!resource || !d->tagChooser->isVisible() || !allowTagModification())
         return;
 
     KoResourceItemChooserContextMenu menu(resource,
@@ -314,6 +321,17 @@ void KoResourceTaggingManager::contextMenuRequested(KoResource* currentResource,
     }
 }
 
+void KoResourceTaggingManager::allowTagModification(bool set)
+{
+    d->allowTagModification = set;
+    d->tagChooser->showTagToolButton(set);
+}
+
+bool KoResourceTaggingManager::allowTagModification()
+{
+    return d->allowTagModification;
+}
+
 KoTagChooserWidget* KoResourceTaggingManager::tagChooserWidget()
 {
     return d->tagChooser;
@@ -335,6 +353,7 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, Q
     d->tagChooser->addItems(d->model->tagNamesList());
 
     d->tagFilter = new KoTagFilterWidget(parent);
+    d->allowTagModification = true;
 
     connect(d->tagChooser, SIGNAL(tagChosen(QString)),
             this, SLOT(tagChooserIndexChanged(QString)));

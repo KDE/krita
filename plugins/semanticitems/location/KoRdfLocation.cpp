@@ -20,7 +20,6 @@
 
 #include "KoRdfLocation.h"
 #include "KoRdfLocationEditWidget.h"
-#include "KoRdfSemanticItem_p.h"
 #include "KoDocumentRdf.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfLocationTreeWidgetItem.h"
@@ -39,14 +38,14 @@
 
 using namespace Soprano;
 
-KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(m_rdf, parent)
+KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfSemanticItem(parent, rdf)
 {
     m_isGeo84 = true;
 }
 
-KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84)
-    : KoRdfSemanticItem(m_rdf, it, parent)
+KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it, bool isGeo84)
+    : KoRdfSemanticItem(parent, rdf, it)
 {
     m_linkSubject = it.binding("geo");
     m_dlong = KoTextRdfCore::optionalBindingAsString(it, "long", "0").toDouble();

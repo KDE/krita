@@ -138,7 +138,7 @@ public:
     ///Notify that the workspace is loaded and settings can be read
     void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
 
-public slots:
+public Q_SLOTS:
 
     void slotSetFGColor(const KoColor& c);
     void slotSetBGColor(const KoColor& c);
@@ -165,11 +165,11 @@ public slots:
     // is not visible
     void slotResetEnableFGChange(bool);
 
-private slots:
+private Q_SLOTS:
 
     void slotCanvasResourceChanged(int key, const QVariant & res);
 
-signals:
+Q_SIGNALS:
 
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);

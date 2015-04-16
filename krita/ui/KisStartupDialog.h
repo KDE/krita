@@ -13,9 +13,9 @@ class KisStartupDialog : public QDialog
 public:
     explicit KisStartupDialog(QWidget *parent = 0);
     
-signals:
+Q_SIGNALS:
     
-public slots:
+public Q_SLOTS:
     
 };
 

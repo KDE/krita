@@ -22,6 +22,11 @@
 
 #include <QHeaderView>
 #include <QTreeView>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QLayout>
 
 #include "ui_wdgfilterselector.h"
 
@@ -62,9 +67,11 @@ struct KisFilterSelectorWidget::Private {
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
     KisViewManager *view;
+    bool showFilterGallery;
 };
 
-KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
+KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
+    : d(new Private)
 {
     Q_UNUSED(parent);
     setObjectName("KisFilterSelectorWidget");
@@ -74,11 +81,14 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->currentFilter = 0;
     d->filtersModel = 0;
     d->view = 0;
+    d->showFilterGallery = true;
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
     d->widgetLayout->setContentsMargins(0,0,0,0);
     d->widgetLayout->setHorizontalSpacing(0);
+
+    showFilterGallery(false);
 
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
@@ -86,13 +96,6 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),
             SLOT(slotBookmarkedFilterConfigurationSelected(int)));
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
-
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
-    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
-
-
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -138,22 +141,19 @@ void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _pai
 
 void KisFilterSelectorWidget::showFilterGallery(bool visible)
 {
-    QList<int> sizes;
-    int currentCentralWidgetWidth = d->currentCentralWidget ? d->currentCentralWidget->width() : 0;
-    if (visible) {
-        d->uiFilterSelector.filtersSelector->setMidLineWidth(200);
-        sizes << d->uiFilterSelector.filtersSelector->sizeHint().width() << currentCentralWidgetWidth;
-
-    } else {
-        d->uiFilterSelector.filtersSelector->setMidLineWidth(0);
-        sizes << 0 << currentCentralWidgetWidth;
+    if (d->showFilterGallery == visible) {
+        return;
     }
-    d->uiFilterSelector.splitter->setSizes(sizes);
+
+    d->showFilterGallery = visible;
+    update();
+    emit sigFilterGalleryToggled(visible);
+    emit sigSizeChanged();
 }
 
 bool KisFilterSelectorWidget::isFilterGalleryVisible() const
 {
-    return d->uiFilterSelector.splitter->sizes()[0] > 0;
+    return d->showFilterGallery;
 }
 
 KisFilterSP KisFilterSelectorWidget::currentFilter() const
@@ -180,17 +180,28 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
 
     if (!widget) { // No widget, so display a label instead
+        d->uiFilterSelector.comboBoxPresets->setEnabled(false);
+        d->uiFilterSelector.pushButtonEditPressets->setEnabled(false);
+
         d->currentFilterConfigurationWidget = 0;
-        d->currentCentralWidget = new QLabel(i18n("No configuration option."),
+        d->currentCentralWidget = new QLabel(i18n("No configuration options"),
                                              d->uiFilterSelector.centralWidgetHolder);
+        d->uiFilterSelector.scrollArea->setMinimumSize(d->currentCentralWidget->sizeHint());
+        qobject_cast<QLabel*>(d->currentCentralWidget)->setAlignment(Qt::AlignCenter);
     } else {
+        d->uiFilterSelector.comboBoxPresets->setEnabled(true);
+        d->uiFilterSelector.pushButtonEditPressets->setEnabled(true);
+
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
+        widget->layout()->setContentsMargins(0,0,0,0);
         d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
         d->currentFilter->defaultConfiguration(d->paintDevice));
         d->currentFilterConfigurationWidget->blockSignals(false);
+        d->uiFilterSelector.scrollArea->setContentsMargins(0,0,0,0);
+        d->uiFilterSelector.scrollArea->setMinimumWidth(widget->sizeHint().width() + 18);
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }
 
@@ -202,7 +213,8 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     // Add the widget to the layout
     d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
-    showFilterGallery(isFilterGalleryVisible());
+
+    update();
 }
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
@@ -246,6 +258,27 @@ void KisFilterSelectorWidget::editConfigurations()
     editor.exec();
 }
 
+void KisFilterSelectorWidget::update()
+{
+    d->uiFilterSelector.filtersSelector->setVisible(d->showFilterGallery);
+    if (d->showFilterGallery) {
+        setMinimumWidth(qMax(sizeHint().width(), 700));
+        d->uiFilterSelector.scrollArea->setMinimumHeight(400);
+        setMinimumHeight(d->uiFilterSelector.widget->sizeHint().height());
+        if (d->currentFilter) {
+            bool v = d->uiFilterSelector.filtersSelector->blockSignals(true);
+            d->uiFilterSelector.filtersSelector->setCurrentIndex(d->filtersModel->indexForFilter(d->currentFilter->id()));
+            d->uiFilterSelector.filtersSelector->blockSignals(v);
+        }
+    }
+    else {
+        if (d->currentCentralWidget) {
+            d->uiFilterSelector.scrollArea->setMinimumHeight(qMin(400, d->currentCentralWidget->sizeHint().height()));
+        }
+        setMinimumSize(d->uiFilterSelector.widget->sizeHint());
+    }
+}
+
 KisFilterConfiguration* KisFilterSelectorWidget::configuration()
 {
     if (d->currentFilterConfigurationWidget) {
@@ -276,5 +309,12 @@ void KisFilterTree::activateFilter(QModelIndex idx)
     emit activated(idx);
 }
 
-#include "kis_filter_selector_widget.moc"
+void KisFilterSelectorWidget::setVisible(bool visible)
+{
+    QWidget::setVisible(visible);
+    if (visible) {
+        update();
+    }
+}
 
+#include "kis_filter_selector_widget.moc"

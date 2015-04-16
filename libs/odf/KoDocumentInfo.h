@@ -34,7 +34,6 @@ class QDomDocument;
 class QDomElement;
 class KoStore;
 class KoXmlWriter;
-class KoPartAdaptor;
 
 /**
  * @short The class containing all meta information about a document
@@ -222,7 +221,7 @@ private:
     /** The original meta:generator of the document */
     QString m_generator;
 
-signals:
+Q_SIGNALS:
     void infoUpdated(const QString &info, const QString &data);
 };
 

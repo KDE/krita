@@ -37,7 +37,7 @@ public:
     explicit KoContextBarButton(const QString &iconName, QWidget *parent = 0);
     ~KoContextBarButton();
 
-public slots:
+public Q_SLOTS:
     void setFadingValue(int value);
 
 protected:

@@ -33,7 +33,7 @@ class FixedDateFormat : public QWidget
 public:
     explicit FixedDateFormat(DateVariable *variable);
 
-private slots:
+private Q_SLOTS:
     void customClicked(int state);
     void listClicked(QListWidgetItem *item);
     void offsetChanged(int offset);

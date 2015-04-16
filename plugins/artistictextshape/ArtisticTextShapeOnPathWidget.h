@@ -36,10 +36,10 @@ public:
     explicit ArtisticTextShapeOnPathWidget(ArtisticTextTool *tool, QWidget *parent = 0);
     ~ArtisticTextShapeOnPathWidget();
 
-public slots:
+public Q_SLOTS:
     void updateWidget();
 
-signals:
+Q_SIGNALS:
     /// triggered whenever the start offset has changed
     void offsetChanged(int);
 

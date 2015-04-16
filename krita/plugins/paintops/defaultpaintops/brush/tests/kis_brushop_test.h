@@ -19,12 +19,12 @@
 #ifndef __KIS_BRUSHOP_TEST_H
 #define __KIS_BRUSHOP_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBrushOpTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testRotationMirroring();
     void testRotationMirroringDrawingAngle();
     void testMagicSeven();

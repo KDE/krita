@@ -56,7 +56,7 @@ public:
     bool isChildLocked(const KoShape *child) const;
     void setShapeSelection(KisShapeSelection* selection);
 
-private slots:
+private Q_SLOTS:
     void requestUpdate(const QRect &updateRect);
     void startUpdateJob();
 

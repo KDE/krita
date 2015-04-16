@@ -28,7 +28,6 @@
 #include <QStringList>
 #include <QList>
 
-class KUrl;
 
 /**
  * Wrapper around QFileDialog providing native file dialogs
@@ -120,7 +119,7 @@ public:
 
     QString selectedMimeType() const;
 
-private slots:
+private Q_SLOTS:
 
     void filterSelected(const QString &filter);
 

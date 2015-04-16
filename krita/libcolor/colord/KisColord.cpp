@@ -127,8 +127,9 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
             break;
         }
     }
-    if (dev->profiles.size() > 0) {
-        if (dev) {
+    if (dev) {
+        if (dev->profiles.size() > 0) {
+
             if (dev->profiles.size() < p) {
                 profile = dev->profiles[p];
             }

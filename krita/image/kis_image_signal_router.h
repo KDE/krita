@@ -114,10 +114,10 @@ public:
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
 
-private slots:
+private Q_SLOTS:
     void slotNotification(KisImageSignalType type);
 
-signals:
+Q_SIGNALS:
 
     void sigNotification(KisImageSignalType type);
 

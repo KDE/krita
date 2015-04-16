@@ -40,6 +40,7 @@
 #include <QPixmap>
 #include <QList>
 #include <QVector>
+#include <QLabel>
 
 #include <kis_debug.h>
 #include <kmenu.h>
@@ -120,6 +121,8 @@ KisLayerBox::KisLayerBox()
         , m_canvas(0)
         , m_wdgLayerBox(new Ui_WdgLayerBox)
 {
+    KisConfig cfg;
+
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     QWidget* mainWidget = new QWidget(this);
@@ -222,6 +225,10 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
 
+    if (cfg.sliderLabels()) {
+        m_wdgLayerBox->opacityLabel->hide();
+        m_wdgLayerBox->doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
+    }
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
     m_wdgLayerBox->doubleOpacity->setSuffix("%");
 
@@ -261,7 +268,6 @@ KisLayerBox::KisLayerBox()
     connect(showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
     m_actions.append(showGlobalSelectionMask);
 
-    KisConfig cfg;
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_wdgLayerBox->listLayers->setModel(m_nodeModel);
@@ -367,9 +373,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
         m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
-        m_wdgLayerBox->listLayers->scrollToBottom();
-
-
+        m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");

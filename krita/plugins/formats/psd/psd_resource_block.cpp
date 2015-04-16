@@ -80,7 +80,7 @@ bool PSDResourceBlock::read(QIODevice* io)
     m_description = PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier);
 
     data = io->read(dataSize);
-    if (data.size() != dataSize) {
+    if (data.size() != (int)dataSize) {
         error = QString("Could not read data for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;
     }
@@ -300,7 +300,7 @@ bool PSDResourceBlock::valid()
         error = QString("Unknown ID: %1").arg(identifier);
         return false;
     }
-    if (data.size() != dataSize) {
+    if (data.size() != (int)dataSize) {
         error = QString("Needed %1 bytes, got %2 bytes of data").arg(dataSize).arg(data.length());
         return false;
     }

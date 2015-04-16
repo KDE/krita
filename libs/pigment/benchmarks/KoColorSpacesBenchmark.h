@@ -26,7 +26,7 @@ class KoColorSpacesBenchmark : public QObject
     Q_OBJECT
 private:
     void createRowsColumns();
-private slots:
+private Q_SLOTS:
     void benchmarkAlpha_data();
     void benchmarkAlpha();
     void benchmarkAlpha2_data();

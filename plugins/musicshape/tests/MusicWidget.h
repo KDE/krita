@@ -55,7 +55,7 @@ public:
      * Gets the scale at which the music is painted in this widget.
      */
     qreal scale() const;
-public slots:
+public Q_SLOTS:
     /**
      * Call this method when the contents of the sheet have changed in such a way that a re-engraving
      * of the music is required. This is done automatically if the widget changes size or scale.

@@ -31,7 +31,7 @@ set( musiccore_SRCS
     core/MusicXmlReader.cpp
 )
 
-SET (musicshape_LIB_SRCS
+set (musicshape_LIB_SRCS
     MusicShape.cpp
     MusicShapeFactory.cpp
     MusicTool.cpp

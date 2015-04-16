@@ -35,11 +35,11 @@ public:
     KisDelayedActionIntegerInput(QWidget * parent, const QString & name);
     void cancelDelayedSignal();
 
-private slots:
+private Q_SLOTS:
     void slotValueChanged();
     void slotTimeToUpdate();
 
-signals:
+Q_SIGNALS:
     void valueChangedDelayed(int value);
 
 private:

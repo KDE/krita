@@ -32,7 +32,7 @@ public:
     Histogram(QObject *parent, const QVariantList &);
     virtual ~Histogram();
 
-private slots:
+private Q_SLOTS:
     void slotActivated();
 };
 

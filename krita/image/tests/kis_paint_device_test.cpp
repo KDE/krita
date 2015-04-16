@@ -1218,7 +1218,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
     QImage result = dst->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QImage ref = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
 
-    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName));
+    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName, 1));
 }
 
 void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()

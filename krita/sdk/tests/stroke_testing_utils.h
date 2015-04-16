@@ -47,6 +47,7 @@ namespace utils {
         void benchmark();
 
         void setNumIterations(int value);
+        void setBaseFuzziness(int value);
 
     protected:
         KisStrokeId strokeId() {
@@ -99,6 +100,7 @@ namespace utils {
         QSize m_imageSize;
         QString m_presetFilename;
         int m_numIterations;
+        int m_baseFuzziness;
     };
 }
 

@@ -49,11 +49,11 @@ public:
 
     void setCursor(const QCursor &cursor);
 
-public slots:
+public Q_SLOTS:
 
     void slotSetDocumentOffset(const QPoint &offset) { setDocumentOffset(offset); }
 
-signals:
+Q_SIGNALS:
     void documentSize(const QSize &size);
 
     /**

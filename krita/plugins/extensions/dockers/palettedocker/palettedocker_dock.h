@@ -34,7 +34,6 @@ class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class ColorSetChooser;
 class PaletteModel;
-class KisCanvas2;
 class Ui_WdgPaletteDock;
 
 class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet> {
@@ -57,7 +56,7 @@ public: // KoResourceServerObserver
     virtual void syncTagAddition(const QString&) {}
     virtual void syncTagRemoval(const QString&) {}
 
-private slots:
+private Q_SLOTS:
     void addColorForeground();
     void addColor();
     void removeColor();

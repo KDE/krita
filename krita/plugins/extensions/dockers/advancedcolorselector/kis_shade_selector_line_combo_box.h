@@ -38,7 +38,7 @@ public:
 protected:
     void resizeEvent(QResizeEvent *e);
 
-public slots:
+public Q_SLOTS:
     void setConfiguration(const QString& stri);
     void updateSettings();
     void setGradient(bool);

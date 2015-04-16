@@ -29,7 +29,7 @@ class TestKoTableColumnAndRowStyleManager : public QObject
 public:
     TestKoTableColumnAndRowStyleManager() {}
 
-private slots:
+private Q_SLOTS:
     // basic testing of the columns insertion and removal
     void testColumns();
     // basic testing of the rows insertion and removal

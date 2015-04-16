@@ -30,6 +30,7 @@
 #include <marble/MarbleWidget.h>
 #include <QMap>
 #include "MapRenderer.h"
+#include <marble/MapThemeManager.h>
 
 class OROImage;
 class OROPicture;
@@ -63,6 +64,7 @@ public:
     qreal longtitude() const;
     qreal latitude() const;
     int zoom() const;
+    QString themeId() const;
 
     QSize size() const;
     OROPicture* oroImage();
@@ -74,7 +76,7 @@ protected:
     KoProperty::Property* m_latitudeProperty;
     KoProperty::Property* m_longitudeProperty;
     KoProperty::Property* m_zoomProperty;
-//     KoProperty::Property* m_mapThemeIdProperty;
+    KoProperty::Property* m_themeProperty;
 
     void setMode(const QString&);
     void setInlineImageData(QByteArray, const QString& = QString());
@@ -91,6 +93,7 @@ protected:
     QPointF m_offset;
     OROPicture * m_oroPicture;
     MapRenderer m_mapRenderer;
+    Marble::MapThemeManager m_themeManager;
 
 private:
     virtual void createProperties();

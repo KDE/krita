@@ -29,7 +29,6 @@
 // Qt
 #include <QMimeData>
 
-
 KoEventSemanticItemFactory::KoEventSemanticItemFactory()
   : KoRdfSemanticItemFactoryBase("Event")
 {
@@ -45,7 +44,7 @@ QString KoEventSemanticItemFactory::classDisplayName() const
     return i18nc("displayname of the semantic item type Event", "Event");
 }
 
-void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -72,7 +71,7 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &
         m->executeQuery(sparqlQuery,
                         Soprano::Query::QueryLanguageSparql);
 
-    QList<hKoRdfSemanticItem> oldSemanticItems = semanticItems;
+    QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
     // uniqfilter is needed because soprano is not honouring
     // the DISTINCT sparql keyword
     QSet<QString> uniqfilter;
@@ -83,10 +82,10 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &
         }
         uniqfilter += name;
 
-        hKoRdfSemanticItem newSemanticItem(new KoRdfCalendarEvent(0, rdf, it));
+        hKoRdfBasicSemanticItem newSemanticItem(new KoRdfCalendarEvent(0, rdf, it));
 
         const QString newSemanticItemLinkingSubject = newSemanticItem->linkingSubject().toString();
-        foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+        foreach (hKoRdfBasicSemanticItem semItem, oldSemanticItems) {
             if (newSemanticItemLinkingSubject == semItem->linkingSubject().toString()) {
                 oldSemanticItems.removeAll(semItem);
                 newSemanticItem = 0;
@@ -99,14 +98,14 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &
         }
     }
 
-    foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+    foreach (hKoRdfBasicSemanticItem semItem, oldSemanticItems) {
         semanticItems.removeAll(semItem);
     }
 }
 
-hKoRdfSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
-    return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
+    return hKoRdfBasicSemanticItem(new KoRdfCalendarEvent(parent, rdf));
 }
 
 bool KoEventSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
@@ -114,7 +113,7 @@ bool KoEventSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeDa
     return mimeData->hasFormat(QLatin1String("text/calendar"));
 }
 
-hKoRdfSemanticItem KoEventSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
+hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
                                                                             KoCanvasBase *host,
                                                                             const KoDocumentRdf *rdf,
                                                                             QObject *parent) const
@@ -123,4 +122,9 @@ hKoRdfSemanticItem KoEventSemanticItemFactory::createSemanticItemFromMimeData(co
     hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
     semanticItem->importFromData(ba, rdf, host);
     return semanticItem;
+}
+
+bool KoEventSemanticItemFactory::isBasic() const
+{
+    return false;
 }

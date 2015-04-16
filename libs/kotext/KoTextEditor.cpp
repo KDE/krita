@@ -444,7 +444,8 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
             if (d->caret.selectionEnd() <= table->lastPosition()) {
                 return;
             }
-        } if (subFrame) {
+        } else if (subFrame) {
+            recursivelyVisitSelection(subFrame->begin(), visitor);
         } else {
             // TODO build up the section stack
 

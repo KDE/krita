@@ -49,7 +49,7 @@ public:
 
     static KisBrushServer* instance();
 
-public slots:
+public Q_SLOTS:
     void slotRemoveBlacklistedResources();
 
 private:

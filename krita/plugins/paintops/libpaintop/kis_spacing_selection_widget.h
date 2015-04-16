@@ -36,7 +36,7 @@ public:
     bool autoSpacingActive() const;
     qreal autoSpacingCoeff() const;
 
-signals:
+Q_SIGNALS:
     void sigSpacingChanged();
 
 private:

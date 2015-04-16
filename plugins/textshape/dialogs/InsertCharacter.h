@@ -28,10 +28,10 @@ class InsertCharacter : public QDockWidget
 public:
     explicit InsertCharacter(QWidget *parent);
 
-signals:
+Q_SIGNALS:
     void insertCharacter(const QString &character);
 
-private slots:
+private Q_SLOTS:
     void insertCharacter();
 
 private:

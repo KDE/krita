@@ -67,7 +67,7 @@ public:
     void select(QRectF & rect);
     void remove(QRectF & rect);
 
-public slots:
+public Q_SLOTS:
     void selectInsertTool();
     void selectSelectTool();
     void selectRemoveTool();
@@ -111,7 +111,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
-private slots:
+private Q_SLOTS:
     void about();
 
 private:

@@ -32,7 +32,7 @@
      <item row="1" column="0" colspan="2">
       <widget class="QCheckBox" name="chkSeparateGroupLayers">
        <property name="text">
-        <string>Put every layer in its own, separate group layer.</string>
+        <string>Put every layer in its own, separate group layer</string>
        </property>
       </widget>
      </item>

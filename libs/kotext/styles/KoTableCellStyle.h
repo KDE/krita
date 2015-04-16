@@ -38,7 +38,6 @@ class QTextTableCell;
 class QRectF;
 class KoStyleStack;
 class KoGenStyle;
-class KoGenStyles;
 class KoParagraphStyle;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
@@ -340,7 +339,7 @@ public:
 
     KoBorder::BorderData getEdge(KoBorder::BorderSide side) const;
     KoBorder::BorderStyle getBorderStyle(KoBorder::BorderSide side) const;
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
 
 protected:

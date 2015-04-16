@@ -20,7 +20,6 @@
 
 #include "kis_color_selector_base.h"
 
-class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;
@@ -96,11 +95,11 @@ public:
     Configuration configuration() const;
     void setColor(const KoColor &color);
 
-public slots:
+public Q_SLOTS:
     void reset();
     void updateSettings();
 
-signals:
+Q_SIGNALS:
     void settingsButtonClicked();
 
 protected:

@@ -66,11 +66,14 @@ void KisKraLoaderTest::testLoading()
     delete doc;
 }
 
-
-
-void KisKraLoaderTest::testObligeSingleChild()
+void testObligeSingleChildImpl(bool transpDefaultPixel)
 {
-    QString fileName = TestUtil::fetchDataFileLazy("single_layer_no_channel_flags.kra");
+
+    QString id = !transpDefaultPixel ?
+        "single_layer_no_channel_flags_nontransp_def_pixel.kra" :
+        "single_layer_no_channel_flags_transp_def_pixel.kra";
+
+    QString fileName = TestUtil::fetchDataFileLazy(id);
 
     KisDocument *doc = KisPart::instance()->createDocument();
     doc->loadNativeFormat(fileName);
@@ -85,9 +88,24 @@ void KisKraLoaderTest::testObligeSingleChild()
     QVERIFY(child);
 
     QCOMPARE(root->original(), root->projection());
-    QCOMPARE(root->original(), child->projection());
+
+    if (transpDefaultPixel) {
+        QCOMPARE(root->original(), child->projection());
+    } else {
+        QVERIFY(root->original() != child->projection());
+    }
 
     delete doc;
+}
+
+void KisKraLoaderTest::testObligeSingleChild()
+{
+    testObligeSingleChildImpl(true);
+}
+
+void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
+{
+    testObligeSingleChildImpl(false);
 }
 
 

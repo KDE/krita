@@ -11,6 +11,9 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="verticalSpacing">
+    <number>1</number>
+   </property>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="hbox2">
      <property name="leftMargin">
@@ -122,12 +125,6 @@
        </property>
        <property name="toolTip">
         <string>Duplicate layer or mask</string>
-       </property>
-       <property name="statusTip">
-        <string>Duplicate layer or mask</string>
-       </property>
-       <property name="whatsThis">
-        <string>Duplicate the currently selected layer or mask</string>
        </property>
        <property name="text">
         <string>...</string>

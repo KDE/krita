@@ -28,7 +28,7 @@ class KisCubicCurveTest : public QObject
     Q_OBJECT
 public:
     KisCubicCurveTest();
-private slots:
+private Q_SLOTS:
 
     void testCreation();
     void testCopy();

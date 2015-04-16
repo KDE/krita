@@ -55,7 +55,7 @@ public:
 
     QButtonGroup m_intentButtonGroup;
 
-public slots:
+public Q_SLOTS:
     void selectionChanged(bool);
     void okClicked();
 };

@@ -19,7 +19,6 @@
 
 #include "KoRdfFoaF.h"
 #include "KoDocumentRdf.h"
-#include "KoRdfSemanticItem_p.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfFoaFTreeWidgetItem.h"
 #include <QUuid>
@@ -40,13 +39,13 @@
 using namespace Soprano;
 
 
-KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(m_rdf, parent)
+KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfSemanticItem(parent, rdf)
 {
 }
 
-KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
-    : KoRdfSemanticItem(m_rdf, it, parent)
+KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
+    : KoRdfSemanticItem(parent, rdf, it)
 {
     m_uri      = it.binding("person").toString();
     m_name     = it.binding("name").toString();

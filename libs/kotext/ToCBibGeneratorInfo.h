@@ -25,10 +25,6 @@
 const int INVALID_OUTLINE_LEVEL = 0;
 
 class KoXmlWriter;
-class BibliographyGenerator;
-class ToCGenerator;
-class KoBibliographyInfo;
-class KoTableOfContentsGeneratorInfo;
 
 class KOTEXT_EXPORT IndexEntry
 {
@@ -119,7 +115,7 @@ class KOTEXT_EXPORT TocEntryTemplate
 {
 public:
     TocEntryTemplate();
-    TocEntryTemplate(const TocEntryTemplate &entryTemplate);
+    TocEntryTemplate(const TocEntryTemplate &other);
     void saveOdf(KoXmlWriter * writer) const;
 
     int outlineLevel;
@@ -176,6 +172,8 @@ public:
 class KOTEXT_EXPORT BibliographyEntryTemplate
 {
 public:
+    BibliographyEntryTemplate();
+    BibliographyEntryTemplate(const BibliographyEntryTemplate &other);
     void saveOdf(KoXmlWriter * writer) const;
 
     QString styleName;

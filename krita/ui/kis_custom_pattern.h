@@ -47,11 +47,11 @@ public:
     KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view);
     virtual ~KisCustomPattern();
 
-signals:
+Q_SIGNALS:
     void activatedResource(KoResource *);
     void addPattern(KoPattern*);
 
-private slots:
+private Q_SLOTS:
     void slotAddPredefined();
     void slotUsePattern();
     void slotUpdateCurrentPattern();

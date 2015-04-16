@@ -45,9 +45,11 @@ public:
     QStringList availableTags() const;
     QString currentTag();
     void contextMenuRequested(KoResource* currentResource, QPoint pos);
+    void allowTagModification( bool set );
+    bool allowTagModification();
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
-private slots:
+private Q_SLOTS:
     void undeleteTag(const QString& tagToUndelete);
     void purgeTagUndeleteList();
     void contextCreateNewTag(KoResource* resource, const QString& tag);

@@ -49,7 +49,7 @@ public:
      */
     virtual ~KoColorPopupAction();
 
-public slots:
+public Q_SLOTS:
     /// Sets a new color to be displayed
     void setCurrentColor( const QColor &color );
 
@@ -65,7 +65,7 @@ public slots:
     /// update the icon - only needed if you resize the iconsize in the widget that shows the action
     void updateIcon();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted every time the color changes (by calling setColor() or
      * by user interaction.
@@ -73,7 +73,7 @@ signals:
      */
     void colorChanged(const KoColor &color);
 
-private slots:
+private Q_SLOTS:
     void emitColorChanged();
     void colorWasSelected(const KoColor &color, bool final);
     void colorWasEdited( const QColor &color );

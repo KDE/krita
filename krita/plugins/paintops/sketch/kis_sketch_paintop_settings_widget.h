@@ -26,7 +26,6 @@
 
 class KisPaintActionTypeOption;
 class KisSketchOpOption;
-class KisPressureOpacityOption;
 
 class KisSketchPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {

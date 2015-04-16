@@ -84,6 +84,8 @@ public:
         , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
         , testingAcceptCompressedTabletEvents(false)
         , testingCompressBrushEvents(false)
+        , focusOnEnter(true)
+        , containsPointer(true)
     {
         KisConfig cfg;
         disableTouchOnCanvas = cfg.disableTouchOnCanvas();
@@ -142,6 +144,9 @@ public:
 
     class CanvasSwitcher;
     QPointer<CanvasSwitcher> canvasSwitcher;
+
+    bool focusOnEnter;
+    bool containsPointer;
 };
 
 template <class Event, bool useBlocking>
@@ -576,6 +581,21 @@ void KisInputManager::stopIgnoringEvents()
     stop_ignore_cursor_events();
 }
 
+void KisInputManager::slotFocusOnEnter(bool value)
+{
+    if (d->focusOnEnter == value) {
+        return;
+    }
+
+    d->focusOnEnter = value;
+
+    if (d->focusOnEnter && d->containsPointer) {
+        if (d->canvas) {
+            d->canvas->canvasWidget()->setFocus();
+        }
+    }
+}
+
 #if defined (__clang__)
 #pragma GCC diagnostic ignored "-Wswitch"
 #endif
@@ -718,10 +738,13 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     }
     case QEvent::Enter:
         d->debugEvent<QEvent, false>(event);
+        d->containsPointer = true;
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
         //Ensure we have focus so we get key events.
-        d->canvas->canvasWidget()->setFocus();
+        if (d->focusOnEnter) {
+            d->canvas->canvasWidget()->setFocus();
+        }
         stop_ignore_cursor_events();
         touch_stop_block_press_events();
 
@@ -729,6 +752,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     case QEvent::Leave:
         d->debugEvent<QEvent, false>(event);
+        d->containsPointer = false;
         /**
          * We won't get a TabletProximityLeave event when the tablet
          * is hovering above some other widget, so restore cursor

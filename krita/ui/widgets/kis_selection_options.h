@@ -56,7 +56,7 @@ public:
     void disableSelectionModeOption();
     void setAction(int);
 
-signals:
+Q_SIGNALS:
     void actionChanged(int);
     void modeChanged(int);
 

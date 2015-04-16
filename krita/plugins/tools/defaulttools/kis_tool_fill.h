@@ -30,12 +30,8 @@
 
 
 
-class KisPainter;
-class KisFillPainter;
 class QWidget;
-class QLabel;
 class QCheckBox;
-class QComboBox;
 class KisSliderSpinBox;
 class KoCanvasBase;
 
@@ -54,7 +50,7 @@ public:
 
     virtual QWidget * createOptionWidget();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);

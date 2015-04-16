@@ -38,7 +38,7 @@ class TestDataSet : public QObject
 public:
     TestDataSet();
     
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     // Tests DataSet::*Data() methods

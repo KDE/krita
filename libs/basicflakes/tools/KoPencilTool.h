@@ -61,7 +61,7 @@ protected:
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 
-private slots:
+private Q_SLOTS:
     void selectMode(int mode);
     void setOptimize(int state);
     void setDelta(double delta);

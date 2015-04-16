@@ -26,7 +26,6 @@
 #include "kis_experiment_paintop_settings.h"
 #include "kis_experimentop_option.h"
 
-class KisFixedPainter;
 class QPointF;
 class KisPainter;
 

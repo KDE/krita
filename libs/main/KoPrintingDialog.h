@@ -88,7 +88,7 @@ public:
      */
     QPrinter &printer();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * @see KoPrintJob::startPrinting

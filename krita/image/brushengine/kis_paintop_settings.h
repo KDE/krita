@@ -30,8 +30,6 @@
 #include "kis_paint_information.h"
 
 
-class KoPointerEvent;
-class KoViewConverter;
 class KisPaintOpSettingsWidget;
 
 /**

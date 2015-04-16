@@ -43,7 +43,7 @@ public:
     virtual QString name() = 0;
     virtual QString header() = 0;
     virtual KIcon icon() = 0;
-public slots:
+public Q_SLOTS:
     virtual void savePreferences() const = 0;
     virtual void loadPreferences() = 0;
     virtual void loadDefaultPreferences() = 0;

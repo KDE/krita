@@ -71,6 +71,9 @@ private:
     void drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private Q_SLOTS:
+    void slotOnCloseEditor();
 };
 
 #endif

@@ -168,7 +168,6 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
 {
     if (!generator) return;
     KisGeneratorSP g = KisGeneratorRegistry::instance()->value(generator->name());
-    if (!generator) return;
     if (!device()) return;
     if (w < 1) return;
     if (h < 1) return;

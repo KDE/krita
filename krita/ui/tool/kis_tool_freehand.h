@@ -32,7 +32,6 @@
 class KoPointerEvent;
 class KoCanvasBase;
 
-class KisPainter;
 
 
 class KisPaintingInformationBuilder;
@@ -52,7 +51,7 @@ public:
     virtual ~KisToolFreehand();
     virtual int flags() const;
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
@@ -87,7 +86,7 @@ protected:
     KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
 
-protected slots:
+protected Q_SLOTS:
 
     void explicitUpdateOutline();
     virtual void resetCursorStyle();

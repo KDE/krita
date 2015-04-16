@@ -87,7 +87,7 @@ public:
     /// Creates a command which applies all changes to the opened shape
     virtual KUndo2Command * createCommand();
 
-signals:
+Q_SIGNALS:
     /// is emitted after one of the config options has changed
     void propertyChanged();
 

@@ -146,7 +146,7 @@ public:
      * Remove a staff element from this bar. If deleteElement is true, the element is not only removed but also deleted.
      */
     void removeStaffElement(StaffElement* element, bool deleteElement = true);
-public slots:
+public Q_SLOTS:
     /**
      * Sets the top-left corner of the bounding box of this bar. If setPrefix is true, the position of the prefix is also set relative
      * to the position of the bar.
@@ -159,7 +159,7 @@ public slots:
      * @param size the new size of the bar
      */
     void setSize(qreal size);
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted when the position of the bar is changed.
      */

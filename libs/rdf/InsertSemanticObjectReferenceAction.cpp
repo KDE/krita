@@ -67,7 +67,6 @@ void InsertSemanticObjectReferenceAction::activated()
     if (dialog.exec() == KPageDialog::Accepted && tree->currentItem()) {
         QTreeWidgetItem *item = tree->currentItem();
         if (KoRdfSemanticTreeWidgetItem *ditem = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(item)) {
-
             kDebug(30015) << "InsertSemanticObjectReferenceAction::activated... item:" << item;
             ditem->insert(m_canvas);
         }

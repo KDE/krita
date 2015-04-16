@@ -38,7 +38,7 @@ private:
     bool applyFilter(const KoColorSpace * cs,  KisFilterSP f);
     bool testFilter(KisFilterSP f);
 
-private slots:
+private Q_SLOTS:
 
     void testCrashFilters();
 };

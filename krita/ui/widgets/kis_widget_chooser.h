@@ -24,8 +24,6 @@
 #include <QIcon>
 #include <QFrame>
 
-class QGridLayout;
-class QHBoxLayout;
 class QToolButton;
 class QLabel;
 class QButtonGroup;
@@ -65,7 +63,7 @@ public:
     QWidget* getWidget(const QString& id) const;
     
     template<class TWidget>
-    TWidget* addWidget(const QString& id, const QString& label) {
+    TWidget* addWidget(const QString& id, const QString& label = "") {
         TWidget* widget = new TWidget();
         addWidget(id, label, widget);
         return widget;
@@ -75,7 +73,7 @@ public:
     TWidget* getWidget(const QString& id) const {
         return dynamic_cast<TWidget*>(getWidget(id));
     }
-public slots:
+public Q_SLOTS:
 
     void showPopupWidget();
     
@@ -83,11 +81,15 @@ private:
     void     removeWidget(const QString& id);
     QLayout* createPopupLayout();
     QLayout* createLayout();
-    QIcon    arrowIcon();
+    void     updateArrowIcon();
     
-protected slots:
+protected Q_SLOTS:
     void slotButtonPressed();
     void slotWidgetChoosen(int index);
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
 
 private:
     int           m_chooserid;

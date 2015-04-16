@@ -32,7 +32,7 @@ class TestShapeGroupCommand : public QObject
 public:
     TestShapeGroupCommand();
     ~TestShapeGroupCommand();
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
     void testToplevelGroup();

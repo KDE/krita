@@ -50,7 +50,7 @@ public:
     KoPAViewBase * view() const;
 
     void addOptionWidget(QWidget *widget);
-public slots:
+public Q_SLOTS:
     void slotActivePageChanged();
 
 protected:

@@ -48,6 +48,8 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_gradient_slider.h>
 #include "kis_embedded_pattern_manager.h"
+#include "kis_algebra_2d.h"
+
 #include <time.h>
 
 class KisTextureOptionWidget : public QWidget
@@ -266,7 +268,7 @@ void KisTextureProperties::recalculateMask()
     if (!qFuzzyCompare(scale, 0.0)) {
         QTransform tf;
         tf.scale(scale, scale);
-        QRect rc = tf.mapRect(mask.rect());
+        QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 #if QT_VERSION >= 0x040700

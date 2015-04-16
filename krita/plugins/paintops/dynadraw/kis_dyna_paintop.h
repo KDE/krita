@@ -27,7 +27,6 @@
 
 #include "kis_dyna_paintop_settings.h"
 
-class QPointF;
 class KisPainter;
 
 class KisDynaPaintOp : public KisPaintOp

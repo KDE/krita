@@ -61,46 +61,59 @@ class KoTextInlineRdf::Private
 {
 public:
     Private(const QTextDocument *doc, const QTextBlock &b)
-            : block(b)
-            , document(doc)
+        : block(b)
+        , document(doc)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, KoBookmark *b)
-            : document(doc)
-            , bookmark(b)
+        : document(doc)
+        , bookmark(b)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, KoAnnotation *b)
-            : document(doc)
-            , annotation(b)
+        : document(doc)
+        , annotation(b)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, KoTextMeta *b)
-            : document(doc)
-            , kotextmeta(b)
+        : document(doc)
+        , kotextmeta(b)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, const QTextTableCell &c)
-            : document(doc)
-            , cell(c)
+        : document(doc)
+        , cell(c)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
+    Private(const QTextDocument *doc, KoSection *s)
+        : document(doc)
+        , section(s)
+    {
+        isObjectAttributeUsed = false;
+        sopranoObjectType = LiteralNode;
+    }
+
+
     QString id; // original xml:id
+
+    //FIXME: design like this seems inapropriate, maybe
+    // making Interface from KoTextInlineRdf will be better.
+    // Just my thoughts.
 
     // where we might get the object value from
     QTextBlock block;
@@ -110,6 +123,7 @@ public:
     QWeakPointer<KoBookmark> bookmark;
     QWeakPointer<KoAnnotation> annotation;
     QWeakPointer<KoTextMeta> kotextmeta;
+    KoSection *section;
     QTextTableCell cell;
 
     QString subject;
@@ -124,32 +138,38 @@ public:
 };
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b)
-        : QObject(const_cast<QTextDocument*>(doc))
-        , d(new Private(doc, b))
+    : QObject(const_cast<QTextDocument*>(doc))
+    , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b)
-        : QObject(const_cast<QTextDocument*>(doc))
-        , d(new Private(doc, b))
+    : QObject(const_cast<QTextDocument*>(doc))
+    , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b)
-        : QObject(const_cast<QTextDocument*>(doc))
-        , d(new Private(doc, b))
+    : QObject(const_cast<QTextDocument*>(doc))
+    , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b)
-        : QObject(const_cast<QTextDocument*>(doc))
-        , d(new Private(doc, b))
+    : QObject(const_cast<QTextDocument*>(doc))
+    , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b)
-        : QObject(const_cast<QTextDocument*>(doc))
-        ,  d(new Private(doc, b))
+    : QObject(const_cast<QTextDocument*>(doc))
+    , d(new Private(doc, b))
+{
+}
+
+KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoSection *s)
+    : QObject(const_cast<QTextDocument*>(doc))
+    , d(new Private(doc, s))
 {
 }
 
@@ -247,6 +267,11 @@ QPair<int, int>  KoTextInlineRdf::findExtent() const
         QTextCursor e = d->cell.lastCursorPosition();
         return QPair<int, int>(b.position(), e.position());
     }
+
+    if (d->section) {
+        return d->section->bounds();
+    }
+
     return QPair<int, int>(0, 0);
 }
 
@@ -307,33 +332,27 @@ KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(const QTextFormat &tf)
         return 0;
     }
     QVariant v = tf.property(KoCharacterStyle::InlineRdf);
-    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
-    if (inlineRdf) {
-        return inlineRdf;
-    }
-    return 0;
+    return v.value<KoTextInlineRdf *>();
 }
 
 KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(QTextCursor &cursor)
 {
     QTextCharFormat cf = cursor.charFormat();
-    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
-    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
-    if (inlineRdf) {
-        return inlineRdf;
+    if (!cf.hasProperty(KoCharacterStyle::InlineRdf)) {
+        return 0;
     }
-    return 0;
+    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
+    return v.value<KoTextInlineRdf *>();
 }
 
 KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(KoTextEditor *handler)
 {
     QTextCharFormat cf = handler->charFormat();
-    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
-    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
-    if (inlineRdf) {
-        return inlineRdf;
+    if (!cf.hasProperty(KoCharacterStyle::InlineRdf)) {
+        return 0;
     }
-    return 0;
+    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
+    return v.value<KoTextInlineRdf *>();
 }
 
 void KoTextInlineRdf::attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor)

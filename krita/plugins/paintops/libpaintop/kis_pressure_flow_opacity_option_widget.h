@@ -25,8 +25,6 @@
 
 class KisDoubleSliderSpinBox;
 class KisCurveOptionWidget;
-class QStackedWidget;
-class QButtonGroup;
 
 class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
 {
@@ -37,7 +35,7 @@ public:
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
     void slotSliderValueChanged();
 
 private:

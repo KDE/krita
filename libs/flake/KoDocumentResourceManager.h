@@ -248,7 +248,7 @@ enum DocumentResource {
     KoShapeController *shapeController() const;
     void setShapeController(KoShapeController *shapeController);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted every time a resource is set that is either
      * new or different from the previous set value.

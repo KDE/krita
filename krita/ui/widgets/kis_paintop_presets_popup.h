@@ -29,7 +29,6 @@
 
 class QString;
 class KisPaintOpPreset;
-class KisPropertiesConfiguration;
 class KisCanvasResourceProvider;
 class KoResource;
 
@@ -78,14 +77,14 @@ protected:
     void hideEvent(QHideEvent *);
     void showEvent(QShowEvent *);
 
-public slots:
+public Q_SLOTS:
     void slotWatchPresetNameLineEdit();
     void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
 
-signals:
+Q_SIGNALS:
     void savePresetClicked();
     void defaultPresetClicked();
     void paintopActivated(const QString& presetName);
@@ -96,7 +95,7 @@ signals:
     
     void sizeChanged();
 
-private slots:
+private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
 

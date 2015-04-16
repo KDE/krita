@@ -39,7 +39,7 @@ public:
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
     
-private slots:
+private Q_SLOTS:
     void selectionChanged();
     void addWidgetForShape( KoShape * shape );
     void shapePropertyChanged();

@@ -23,6 +23,7 @@
 
 #include <kis_types.h>
 #include <QThread>
+#include <QMutex>
 
 class KisProcessingApplicator;
 
@@ -41,7 +42,7 @@ public:
 
     float getProgress() const;
 
-signals:
+Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
@@ -55,6 +56,7 @@ private:
     bool m_applicatorStrokeEnded;
     float * m_progress;
     bool * m_cancel;
+    QSharedPointer<QMutex> m_mutex;
 };
 
 #endif

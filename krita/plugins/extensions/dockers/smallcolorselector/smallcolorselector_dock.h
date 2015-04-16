@@ -32,7 +32,7 @@ public:
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); }
-public slots:
+public Q_SLOTS:
     void colorChangedProxy(const QColor&);
     void canvasResourceChanged(int, const QVariant&);
 private:

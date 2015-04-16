@@ -23,8 +23,8 @@
 #ifndef CALLIGRAMOBILE_FILESYSTEMMODEL_H
 #define CALLIGRAMOBILE_FILESYSTEMMODEL_H
 
-#include <QtDeclarative/QDeclarativeParserStatus>
-#include <QtDeclarative/QtDeclarative>
+#include <QDeclarativeParserStatus>
+#include <QtDeclarative>
 
 #include <QAbstractListModel>
 

@@ -28,13 +28,7 @@
 #include <KoColor.h>
 
 class QString;
-class QStringList;
-class QToolButton;
-class QPoint;
-class KoID;
 class KisPaintopBox;
-class KisPaletteManager;
-class KisViewManager;
 class KisPaintOpPreset;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >
@@ -76,7 +70,7 @@ public:
      */
     void setBlockUpdates(bool block);
 
-signals:
+Q_SIGNALS:
 
     void sigSetFGColor(const KoColor& c);
     void sigSetBGColor(const KoColor& c);
@@ -96,7 +90,7 @@ signals:
 
     void hidePalettes();
 
-public slots:
+public Q_SLOTS:
 
     void slotChangeActivePaintop(int);
 
@@ -110,7 +104,7 @@ public slots:
 
     void slotSetBGColor(const KoColor c);
 
-private slots:
+private Q_SLOTS:
     void updateFavoritePresets();
 
 private:

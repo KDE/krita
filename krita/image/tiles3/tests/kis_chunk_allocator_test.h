@@ -29,7 +29,7 @@ private:
 qreal measureFragmentation(qint32 transactions, qint32 chunksAlloc,
                            qint32 chunksFree, bool printDetails);
 
-private slots:
+private Q_SLOTS:
     void testOperations();
     void testFragmentation();
 };

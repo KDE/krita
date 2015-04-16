@@ -26,7 +26,7 @@ class KisImagePipeBrush;
 class KisImagePipeBrushTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testLoading();
     void testChangingBrushes();
     void testSimpleDabApplication();

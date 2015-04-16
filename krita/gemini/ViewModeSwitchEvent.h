@@ -30,7 +30,6 @@
 #include <kis_paintop_preset.h>
 #include <kis_smoothing_options.h>
 
-class KisViewManager;
 struct ViewModeSynchronisationObject {
     ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 

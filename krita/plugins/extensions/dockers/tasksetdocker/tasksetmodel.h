@@ -40,7 +40,7 @@ public:
     QAction* actionFromIndex(const QModelIndex& index);
     QVector<QAction*> actions();
 
-public slots:
+public Q_SLOTS:
     void clear();
 private:
     QVector<QAction*> m_actions;

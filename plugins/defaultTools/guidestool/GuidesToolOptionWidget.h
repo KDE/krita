@@ -56,13 +56,13 @@ public:
     /// Sets the unit to be displayed
     void setUnit(const KoUnit &unit);
 
-signals:
+Q_SIGNALS:
     /// Emitted whenever a specific guide line was selected
     void guideLineSelected(Qt::Orientation orientation, int index);
     /// Emitted whenever a guide line with the given orientation has changed
     void guideLinesChanged(Qt::Orientation orientation);
 
-private slots:
+private Q_SLOTS:
     void updateList(int orientation);
     void updatePosition(int index);
     void positionChanged(qreal position);

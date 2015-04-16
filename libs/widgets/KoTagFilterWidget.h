@@ -37,10 +37,10 @@ public:
     virtual ~KoTagFilterWidget();
     void allowSave(bool allow);
     void clear();
-signals:
+Q_SIGNALS:
     void filterTextChanged(const QString &filterText);
     void saveButtonClicked();
-private slots:
+private Q_SLOTS:
     void onTextChanged(const QString &lineEditText);
     void onSaveButtonClicked();
 private:

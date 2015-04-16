@@ -40,15 +40,15 @@ public:
     explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
     ~SimpleTableOfContentsWidget();
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     void prepareTemplateMenu();
     void pixmapReady(int templateId);
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
 
-private slots:
+private Q_SLOTS:
     void applyTemplate(int templateId);
     void insertCustomToC();
     

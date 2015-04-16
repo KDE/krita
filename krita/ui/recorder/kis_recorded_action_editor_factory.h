@@ -23,7 +23,6 @@
 
 class QWidget;
 class KisRecordedAction;
-class QString;
 
 /**
  * This class allow to create widget that can edit a @ref KisRecordedAction

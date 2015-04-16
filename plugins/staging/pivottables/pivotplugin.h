@@ -30,7 +30,7 @@ public:
     PivotPlugin(QObject *parent, const QVariantList &);
     virtual ~PivotPlugin();
 
-private slots:
+private Q_SLOTS:
     void pivot();
 };
 

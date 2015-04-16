@@ -122,7 +122,7 @@ public:
         return 1.0 / m_texturesInfo.width;
     }
 
-public slots:
+public Q_SLOTS:
 
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
 

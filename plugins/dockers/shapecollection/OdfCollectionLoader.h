@@ -50,7 +50,7 @@ class OdfCollectionLoader : public QObject
         void loadNativeFile(const QString& path);
         QString findMimeTypeByUrl(const KUrl& url);
 
-    protected slots:
+    protected Q_SLOTS:
         void loadShape();
 
     private:
@@ -65,7 +65,7 @@ class OdfCollectionLoader : public QObject
         QString m_path;
         QStringList m_fileList;
 
-    signals:
+    Q_SIGNALS:
         /**
          * Emitted when the loading failed
          * @param reason Reason the loading failed.

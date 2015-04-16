@@ -14,7 +14,7 @@ public:
     explicit SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent = 0);
     //virtual ~SimpleAnnotationWidget();
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
 
 private:

@@ -130,10 +130,12 @@ KisDocument* createCompleteDocument()
     KisFilterConfiguration* kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     Q_ASSERT(kfc);
     KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
+    kfc = 0; // kfc cannot be shared!
 
     KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image);
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     KisAdjustmentLayerSP adjustmentLayer2 = new KisAdjustmentLayer(image, "adjustmentLayer2", kfc, vectorSelection);
+    kfc = 0; // kfc cannot be shared!
 
     image->addNode(paintLayer1);
     image->addNode(group1);
@@ -160,13 +162,21 @@ KisDocument* createCompleteDocument()
 
     KisFilterMaskSP filterMask1 = new KisFilterMask();
     filterMask1->setName("filterMask1");
+
+    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     filterMask1->setFilter(kfc);
+    kfc = 0; // kfc cannot be shared!
+
     filterMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(filterMask1, paintLayer1);
 
     KisFilterMaskSP filterMask2 = new KisFilterMask();
     filterMask2->setName("filterMask2");
+
+    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     filterMask2->setFilter(kfc);
+    kfc = 0; // kfc cannot be shared!
+
     filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image));
     image->addNode(filterMask2, paintLayer2);
 

@@ -25,7 +25,7 @@ class TestPathShape : public QObject
 
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void close();
     void moveTo();
     void normalize();

@@ -1171,13 +1171,10 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
-void KisImage::setDefaultProjectionColor(KoColor color)
+void KisImage::setDefaultProjectionColor(const KoColor &color)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
-
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    color.convertTo(original->colorSpace());
-    original->setDefaultPixel(color.data());
+    m_d->rootLayer->setDefaultProjectionColor(color);
 }
 
 KoColor KisImage::defaultProjectionColor() const
@@ -1186,9 +1183,7 @@ KoColor KisImage::defaultProjectionColor() const
         return KoColor(Qt::transparent, m_d->colorSpace);
     }
 
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    KoColor color(original->defaultPixel(), original->colorSpace());
-    return color;
+    return m_d->rootLayer->defaultProjectionColor();
 }
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)

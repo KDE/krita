@@ -35,10 +35,10 @@ public:
     explicit ContextMenuExistingTagAction( KoResource * resource, QString tag, QObject* parent = 0);
     ~ContextMenuExistingTagAction();
 
-signals:
+Q_SIGNALS:
     void triggered(KoResource * resource, QString tag);
 
-protected slots:
+protected Q_SLOTS:
     void onTriggered();
 
 private:
@@ -63,10 +63,10 @@ public:
     void setText(const QString& text);
     void setVisible(bool showAction);
 
-    signals:
+    Q_SIGNALS:
     void triggered(const QString &tag);
 
-protected slots:
+protected Q_SLOTS:
     void onTriggered(const QString& text);
 
 private:
@@ -82,10 +82,10 @@ public:
     explicit NewTagAction (KoResource* resource, QMenu* parent);
     ~NewTagAction();
 
-    signals:
+    Q_SIGNALS:
     void triggered(KoResource * resource, const QString &tag);
 
-protected slots:
+protected Q_SLOTS:
     void onTriggered(const QString& tagName);
 
 private:
@@ -105,7 +105,7 @@ public:
     );
     virtual ~KoResourceItemChooserContextMenu();
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource should be added to an existing tag.
     void resourceTagAdditionRequested(KoResource* resource, const QString& tag);
     /// Emitted when a resource should be removed from an existing tag.

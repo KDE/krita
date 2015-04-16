@@ -26,7 +26,6 @@
 #include <QPointF>
 #include <QPainterPath>
 
-class KoCanvasBase;
 class KoCreateShapesTool;
 
 /**

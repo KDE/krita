@@ -24,7 +24,7 @@
 class TestControlPointMoveCommand : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void redoUndoControlPoint1();
     void redoUndoControlPoint1Smooth();
     void redoUndoControlPoint1Symmetric();

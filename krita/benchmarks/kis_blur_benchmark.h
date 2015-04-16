@@ -35,7 +35,7 @@ private:
     KisPaintDeviceSP m_device;
     KoColor m_color;
     
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     

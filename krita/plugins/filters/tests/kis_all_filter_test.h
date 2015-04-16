@@ -25,7 +25,7 @@ class KisAllFilterTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 
     void testAllFilters();
     void testAllFiltersNoTransaction();

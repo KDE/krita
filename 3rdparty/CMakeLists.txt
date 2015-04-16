@@ -1,16 +1,16 @@
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-variable)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 if (SHOULD_BUILD_LIB_KDGANTT)
     add_subdirectory(kdgantt)
-endif (SHOULD_BUILD_LIB_KDGANTT)
+endif ()
 
 if (SHOULD_BUILD_LIB_KDCHART)
     add_subdirectory(kdchart)
-endif (SHOULD_BUILD_LIB_KDCHART)
+endif ()
 
 if (WIN32 AND USE_BREAKPAD)
     add_subdirectory(google-breakpad)
-endif (WIN32 AND USE_BREAKPAD)
+endif ()
 

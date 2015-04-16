@@ -47,7 +47,7 @@ public:
     KoView *view() const;
     virtual KoDocument *doc() = 0;
 
-public slots:
+public Q_SLOTS:
 
     /** Return the \a KoApplicationAdaptor object. */
     virtual QObject *application();

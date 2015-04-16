@@ -26,10 +26,8 @@
 #include <QStringList>
 #include <kis_threaded_text_rendering_workaround.h>
 
-class KoColorSpace;
 class KisPainter;
 class KisPaintOp;
-class KoInputDevice;
 class QWidget;
 class KisPaintOpSettingsWidget;
 

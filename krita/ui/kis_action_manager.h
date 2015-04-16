@@ -28,7 +28,6 @@
 
 #include "kstandardaction.h"
 
-class KActionCollection;
 class KisViewManager;
 class KisAction;
 class KisOperationUIFactory;

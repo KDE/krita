@@ -57,11 +57,11 @@ public:
     /** When we don't want edit icon for our items in combo */
     void showEditIcon(bool show);
 
-public slots:
+public Q_SLOTS:
     /** This slot needs to be called if the preview in the main area needs to be updated for some reason */
     void slotUpdatePreview();
 
-signals:
+Q_SIGNALS:
     /** This is emitted when a selection is made (programatically or by user interaction). It is
       * to be noted that this signal is also emitted when an item is selected again.
       * @param index: the index of the selected item. */
@@ -87,7 +87,7 @@ signals:
       * This is currently disabled */
     void deleteStyle(int index);
 
-private slots:
+private Q_SLOTS:
     void slotDeleteStyle(QModelIndex);
     void slotShowDia(QModelIndex);
     void slotSelectionChanged(int index);

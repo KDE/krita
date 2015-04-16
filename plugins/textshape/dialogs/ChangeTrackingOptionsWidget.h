@@ -28,16 +28,16 @@ class ChangeTrackingOptionsWidget : public QWidget
     public:
         explicit ChangeTrackingOptionsWidget(TextTool *tool,QWidget *parent = 0);
 
-    private slots:
+    private Q_SLOTS:
         void recordChangesChanged(int isChecked);
         void showChangesChanged(int isChecked);
         void configureSettingsPressed();
 
-    public slots:
+    public Q_SLOTS:
         void toggleShowChanges(bool on);
         void toggleRecordChanges(bool on);
     
-    signals:
+    Q_SIGNALS:
         void doneWithFocus();
 
     private:

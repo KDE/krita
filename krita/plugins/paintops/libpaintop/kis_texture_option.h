@@ -42,12 +42,12 @@ public:
     explicit KisTextureOption(QObject *parent = 0);
     virtual ~KisTextureOption();
 
-public slots:
+public Q_SLOTS:
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
 
     void resetGUI(KoResource*); /// called when a new pattern is selected
 

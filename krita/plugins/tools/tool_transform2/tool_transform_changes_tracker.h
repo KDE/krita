@@ -43,7 +43,7 @@ public:
 
     bool isEmpty() const;
 
-signals:
+Q_SIGNALS:
     void sigConfigChanged();
 
 private:

@@ -28,7 +28,6 @@
 
 class KoCanvasBase;
 class KoToolBox;
-class QTimer;
 
 class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -42,7 +41,7 @@ public:
     virtual QString observerName() { return "KoToolBoxDocker"; }
 
 
-protected slots:
+protected Q_SLOTS:
     void updateToolBoxOrientation(Qt::DockWidgetArea area);
     void updateFloating(bool);
 

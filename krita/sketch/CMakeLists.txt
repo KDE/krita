@@ -3,8 +3,8 @@ if (WIN32)
 
     if (ENABLE_SKETCH_STARTUP_MAGIC)
         add_definitions(-DSKETCH_ENABLE_STARTUP_MAGIC)
-    endif (ENABLE_SKETCH_STARTUP_MAGIC)
-endif (WIN32)
+    endif ()
+endif ()
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
@@ -103,9 +103,9 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
-else (WIN32)
+else ()
     kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
-endif (WIN32)
+endif ()
 
 # Krita Sketch library with shared things needed in both plugin and application
 # =============================================================================
@@ -129,8 +129,8 @@ target_link_libraries(kritasketchlib
 
 include(GNUInstallDirs)
 
-install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
+#install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # Krita Sketch application
@@ -149,10 +149,10 @@ target_link_libraries(kritasketch
 )
 
 #install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
-install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
-install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
+#install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+#install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 # Sketch Qt Quick components
 # =============================================================================
@@ -171,22 +171,22 @@ target_link_libraries(kritasketchplugin
     kritasketchlib
 )
 
-install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
-install(FILES
-                  qmldir
-                  qml/HelpPage.qml
-                  qml/KritaSketchBase.qml
-                  qml/MainPage.qml
-                  qml/OpenImagePage.qml
-                  qml/SaveImagePage.qml
-                  qml/SettingsPage.qml
-                  qml/WelcomePage.qml
-                  qml/CustomImagePage.qml
-                                    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
-install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+#install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
+#install(FILES
+#                  qmldir
+#                  qml/HelpPage.qml
+#                  qml/KritaSketchBase.qml
+#                  qml/MainPage.qml
+#                  qml/OpenImagePage.qml
+#                  qml/SaveImagePage.qml
+#                  qml/SettingsPage.qml
+#                  qml/WelcomePage.qml
+#                  qml/CustomImagePage.qml
+#                                    DESTINATION ${CMAKE_#install_LIBDIR}/calligra/imports/org/krita/sketch)
+#install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+#install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+#install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 
-install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 add_subdirectory(icon)

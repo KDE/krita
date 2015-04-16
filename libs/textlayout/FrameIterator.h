@@ -22,8 +22,6 @@
 #include <QTextFrame>
 
 class TableIterator;
-class KoTextLayoutRootArea;
-class KoTextLayoutTableArea;
 class QTextTableCell;
 class QTextTable;
 

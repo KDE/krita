@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,6 +65,9 @@ public:
     virtual void reset() { };
 
     static Parameter::ParameterType nameToType(const QString &typeName);
+    static bool isTypeDefined(const QString &typeName);
+    QString typeName() const;
+
 
 protected:
     // strips parameter type (int, note, etc.) and enclosing brackets
@@ -73,31 +76,15 @@ protected:
     QStringList getValues(const QString& typeDefinition);
     static QString stripQuotes(const QString& str);
     static QString addQuotes(const QString& str);
+
+
+    static QMap<Parameter::ParameterType, QString> initMap();
+
+public:
+    static const QMap<Parameter::ParameterType, QString> PARAMETER_NAMES;
+    static const QList<QString> PARAMETER_NAMES_STRINGS;
+
 };
-
-static QMap<Parameter::ParameterType, QString> initMap()
-{
-    QMap<Parameter::ParameterType, QString> map;
-    map.insert(Parameter::FLOAT_P,"float");
-    map.insert(Parameter::INT_P, "int");
-    map.insert(Parameter::BOOL_P, "bool");
-    map.insert(Parameter::CHOICE_P, "choice");
-    map.insert(Parameter::TEXT_P, "text");
-    map.insert(Parameter::FILE_P, "file");
-    map.insert(Parameter::FOLDER_P, "folder");
-    map.insert(Parameter::COLOR_P, "color");
-    map.insert(Parameter::NOTE_P, "note");
-    map.insert(Parameter::LINK_P, "link");
-    map.insert(Parameter::SEPARATOR_P, "separator");
-    map.insert(Parameter::CONST_P,"const");
-    map.insert(Parameter::BUTTON_P,"button");
-    return map;
-}
-
-static const QMap<Parameter::ParameterType, QString> PARAMETER_NAMES = initMap();
-
-static const QList<QString> PARAMETER_NAMES_STRINGS = PARAMETER_NAMES.values();
-
 
 class FloatParameter : public Parameter
 {

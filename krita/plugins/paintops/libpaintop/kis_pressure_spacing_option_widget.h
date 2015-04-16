@@ -22,8 +22,6 @@
 
 #include "kis_curve_option_widget.h"
 
-class KisSliderSpinBox;
-class KisDoubleSliderSpinBox;
 
 
 class PAINTOP_EXPORT KisPressureSpacingOptionWidget : public KisCurveOptionWidget
@@ -33,7 +31,7 @@ class PAINTOP_EXPORT KisPressureSpacingOptionWidget : public KisCurveOptionWidge
 public:
     KisPressureSpacingOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void setIsotropicSpacing(int isotropic);
 };
 

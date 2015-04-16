@@ -27,7 +27,6 @@
 #include <kis_image.h>
 
 class KisFilterOption;
-class KisPressureSizeOption;
 
 class KisFilterOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {

@@ -61,7 +61,7 @@ public:
         m_canvas = 0; // Intentionally not disabled if there's no canvas
     }
     
-private slots:
+private Q_SLOTS:
     void slotItemDoubleClicked(const QModelIndex& index);
     void slotBackButtonClicked();
     void slotUpButtonClicked();
@@ -82,6 +82,7 @@ protected:
 
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    void showEvent(QShowEvent *);
 private:
     void addCurrentPathToHistory();
     void updatePath(const QString& path);
@@ -97,7 +98,7 @@ private:
     ImageFilter*           m_proxyModel;
     ImageListModel*        m_imgListModel;
     QStringList            m_history;
-    ImageStripScene*       m_thumbModel;
+    ImageStripScene*       m_imageStripScene;
     ImageDockerUI*         m_ui;
     PopupWidgetUI*         m_popupUi;
     QMap<qint64,ImageInfo> m_imgInfoMap;

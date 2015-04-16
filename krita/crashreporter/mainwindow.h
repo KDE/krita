@@ -31,10 +31,10 @@ public:
     MainWindow(const QString &dumpPath, const QString &id, QWidget *parent = 0);
     virtual ~MainWindow();
 
-public slots:
+public Q_SLOTS:
     void restart();
 
-private slots:
+private Q_SLOTS:
     void close();
     void startUpload();
     void uploadDone(QNetworkReply *reply);

@@ -33,10 +33,10 @@ public:
     Imagesplit(QObject *parent, const QVariantList &);
     virtual ~Imagesplit();
 
-private slots:
+private Q_SLOTS:
 
     void slotImagesplit();
-    void saveAsImage(QRect ,QString, KUrl);
+    void saveAsImage(QRect , QString, KUrl);
 };
 
 #endif // IMAGESPLIT_H

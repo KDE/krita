@@ -27,7 +27,6 @@
 #include <KoIcon.h>
 
 class KoCanvasBase;
-class KoShapeStroke;
 class KisToolSelectPath;
 
 

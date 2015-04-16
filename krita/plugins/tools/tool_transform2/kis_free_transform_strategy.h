@@ -28,10 +28,8 @@ class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
 class QCursor;
-class QImage;
 
 class KisFreeTransformStrategy : public KisSimplifiedActionPolicyStrategy
 {
@@ -56,7 +54,7 @@ public:
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
     void requestResetRotationCenterButtons();
     void requestShowImageTooBig(bool value);

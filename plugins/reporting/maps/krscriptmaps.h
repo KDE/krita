@@ -38,7 +38,7 @@ public:
     explicit Maps(KoReportItemMaps *);
 
     ~Maps();
-public slots:
+public Q_SLOTS:
 
 
     /**

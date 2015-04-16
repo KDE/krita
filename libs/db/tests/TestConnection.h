@@ -20,7 +20,7 @@
 #ifndef CALLIGRADB_TESTCONNECTION_H
 #define CALLIGRADB_TESTCONNECTION_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <db/connection.h>
 #include <db/drivermanager.h>
 

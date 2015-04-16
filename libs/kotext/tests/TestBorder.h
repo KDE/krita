@@ -29,7 +29,7 @@ class TestBorder : public QObject
 public:
     TestBorder() {}
 
-private slots:
+private Q_SLOTS:
     void testBorder();
 
 };

@@ -2,7 +2,7 @@
 
 include_directories( ${SQLITE_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( -D__KEXIDB__= )
+add_definitions( -D__KEXIDB__= )
 
 ########### next target ###############
 

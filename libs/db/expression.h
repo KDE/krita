@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    Design based on nexp.h : Parser module of Python-like language
    (C) 2001 Jarosław Staniek, MIMUW (www.mimuw.edu.pl)
@@ -46,7 +46,8 @@ namespace KexiDB
 #define KexiDBExpr_Function 8
 #define KexiDBExpr_Aggregation 9
 #define KexiDBExpr_TableList 10
-#define KexiDBExpr_QueryParameter 11
+#define KexiDBExpr_ArgumentList 11
+#define KexiDBExpr_QueryParameter 12
 
 //! Custom tokens are not used in parser but used as extension in expression classes.
 //#define KEXIDB_CUSTOM_TOKEN 0x1000
@@ -86,6 +87,31 @@ public:
     }
 
     virtual Field::Type type();
+
+    //! \return true if type of this object belong to a group of text types.
+    //! A covenience method.
+    //! \see type()
+    bool isTextType();
+
+    //! \return true if type of this object belong to a group of integer types.
+    //! A covenience method.
+    //! \see type()
+    bool isIntegerType();
+
+    //! \return true if type of this object belong to a group of numeric types.
+    //! A covenience method.
+    //! \see type()
+    bool isNumericType();
+
+    //! \return true if type of this object belong to a group of floating-point numeric types.
+    //! A covenience method.
+    //! \see type()
+    bool isFPNumericType();
+
+    //! \return true if type of this object belong to a group of time, date and date/time types.
+    //! A covenience method.
+    //! \see type()
+    bool isDateTimeType();
 
     BaseExpr* parent() const {
         return m_par;
@@ -152,6 +178,10 @@ public:
     //! \return a deep copy of this object.
     virtual NArgExpr* copy() const;
     virtual Field::Type type();
+    //! \return true if any argument is invalid.
+    bool containsInvalidArgument();
+    //! \return true if any argument is NULL.
+    bool containsNullArgument();
     void add(BaseExpr *expr);
     void prepend(BaseExpr *expr);
     BaseExpr *arg(int n);
@@ -314,7 +344,7 @@ public:
 class CALLIGRADB_EXPORT FunctionExpr : public BaseExpr
 {
 public:
-    explicit FunctionExpr(const QString &_name, NArgExpr *args_ = 0);
+    explicit FunctionExpr(const QString &name, NArgExpr *args = 0);
     FunctionExpr(const FunctionExpr& expr);
     virtual ~FunctionExpr();
     //! \return a deep copy of this object.

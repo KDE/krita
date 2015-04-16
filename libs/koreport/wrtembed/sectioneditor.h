@@ -43,7 +43,7 @@ public:
 public:
     void init(KoReportDesigner *rd);
 
-private slots:
+private Q_SLOTS:
     void cbReportHeader_toggled(bool yes);
     void cbReportFooter_toggled(bool yes);
     void cbHeadFirst_toggled(bool yes);

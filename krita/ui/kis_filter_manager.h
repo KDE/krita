@@ -25,7 +25,6 @@
 #include <kis_types.h>
 
 class KisViewManager;
-class KisDocument;
 class KActionCollection;
 class KisActionManager;
 class KisView;
@@ -52,7 +51,7 @@ public:
     void cancel();
     bool isStrokeRunning() const;
 
-private slots:
+private Q_SLOTS:
 
     void insertFilter(const QString &name);
     void showFilterDialog(const QString &filterId);

@@ -39,7 +39,7 @@ QString observerName() { return "KoModeBoxDocker"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     /// Called when the docker changes area
     void locationChanged(Qt::DockWidgetArea area);
 

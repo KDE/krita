@@ -63,7 +63,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
     for (int i = 0; i < parameters.size();i++)
     {
         Parameter * p = parameters.at(i);
-        dbgPlugins << "Processing: " << qPrintable(PARAMETER_NAMES[p->m_type]) << " " << qPrintable(p->toString());
+        dbgPlugins << "Processing: " << qPrintable(p->typeName()) << " " << qPrintable(p->toString());
         switch (p->m_type)
         {
             case Parameter::INT_P:
@@ -444,7 +444,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             }
 
             default:{
-                dbgPlugins << "IGNORING : " << qPrintable(PARAMETER_NAMES[p->m_type]);
+                dbgPlugins << "IGNORING : " << qPrintable(p->typeName());
                 break;
             }
 

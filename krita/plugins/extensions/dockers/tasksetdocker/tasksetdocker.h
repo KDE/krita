@@ -21,7 +21,6 @@
 #include <QObject>
 #include <QVariant>
 
-class KisViewManager;
 
 /**
  * Docker showing the channels of the current layer

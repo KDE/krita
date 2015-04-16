@@ -34,7 +34,6 @@
 
 #include <KoToolManager.h>
 
-class QToolButton;
 class KoCanvasControllerWidget;
 class KoCanvasController;
 class KoCanvasBase;
@@ -88,7 +87,7 @@ public:
      * @param area the new location area
      */
     void locationChanged(Qt::DockWidgetArea area);
-public slots:
+public Q_SLOTS:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active tool.
      * If the id does not resolve to a visible heading, this call is ignored.
@@ -112,7 +111,7 @@ public slots:
     void setCanvas(KoCanvasBase *canvas);
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.

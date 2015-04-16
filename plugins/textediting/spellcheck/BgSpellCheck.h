@@ -44,13 +44,13 @@ protected:
     /// reimplemented
     virtual QString fetchMoreText();
 
-public slots:
+public Q_SLOTS:
     void setDefaultLanguage(const QString &language);
 
-private slots:
+private Q_SLOTS:
     void foundMisspelling(const QString &word, int start);
 
-signals:
+Q_SIGNALS:
     void misspelledWord(const QString &word, int startPosition, bool misspelled);
 
 private:

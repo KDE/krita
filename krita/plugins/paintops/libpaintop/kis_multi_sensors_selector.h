@@ -39,11 +39,11 @@ public:
     void setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve);
     void reload();
 
-private slots:
+private Q_SLOTS:
 
     void sensorActivated(const QModelIndex& index);
 
-signals:
+Q_SIGNALS:
 
     void sensorChanged(KisDynamicSensorSP sensor);
 

@@ -23,7 +23,6 @@
 #include "KoColor.h"
 
 class KoColor;
-class KisCanvas2;
 
 
 class KisColorPatches : public KisColorSelectorBase
@@ -33,7 +32,7 @@ public:
     explicit KisColorPatches(QString configPrefix, QWidget *parent = 0);
     enum Direction { Horizontal, Vertical };
 
-public slots:
+public Q_SLOTS:
     void updateSettings();
 
 protected:

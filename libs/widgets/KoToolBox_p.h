@@ -31,7 +31,6 @@
 
 class QToolButton;
 class KoCanvasController;
-class KoCanvasBase;
 class KoShapeLayer;
 
 /**
@@ -70,7 +69,7 @@ public:
      */
     void addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId=-1);
 
-public slots:
+public Q_SLOTS:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active button.
      * If the id does not resolve to a visible button, this call is ignored.
@@ -95,7 +94,7 @@ public slots:
 
     void setFloating(bool v);
 
-private slots:
+private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.

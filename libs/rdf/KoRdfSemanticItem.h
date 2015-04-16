@@ -22,20 +22,14 @@
 
 #include "kordf_export.h"
 
-#include "RdfForward.h"
-#include "KoSemanticStylesheet.h"
-// Soprano
-#include <Soprano/Soprano>
+#include <KoRdfBasicSemanticItem.h>
+#include <KoSemanticStylesheet.h>
 // Qt
-#include <QSharedData>
-#include <QExplicitlySharedDataPointer>
-#include <QSharedPointer>
 #include <QMimeData>
 
 class KoCanvasBase;
 class KDateTime;
 class QTreeWidgetItem;
-
 
 /**
  * @short Base class for C++ objects which represent Rdf at a higher level.
@@ -54,74 +48,19 @@ class QTreeWidgetItem;
  * @see KoDocumentRdf
  *
  */
-class KORDF_EXPORT KoRdfSemanticItem : public QObject, public QSharedData
+class KORDF_EXPORT KoRdfSemanticItem : public KoRdfBasicSemanticItem
 {
     Q_OBJECT
 
 public:
-
     explicit KoRdfSemanticItem(QObject *parent);
-    KoRdfSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
-    KoRdfSemanticItem(const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, QObject *parent);
+    KoRdfSemanticItem(QObject *parent, const KoDocumentRdf *rdf);
+    KoRdfSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfSemanticItem();
 
+    static QList<hKoRdfSemanticItem> fromList(const QList< hKoRdfBasicSemanticItem > &lst);
 
 protected:
-
-    /**
-     * Create a bnode with a uuid
-     */
-    Soprano::Node createNewUUIDNode() const;
-
-public:
-    /**
-     * For an item like a contact, event, location, if there is a
-     * subject, common#idref xml:id triple that can be used to link
-     * into the document content, return that subject node here for
-     * the common base class methods to use.
-     *
-     * For example, in the FOAF vocabulary the ?person node from the
-     * SPARQL query fragment below will be the linkingSubject()
-     * ?person rdf:type foaf:Person
-     */
-    virtual Soprano::Node linkingSubject() const;
-
-protected:
-
-    /**
-     * Return the graph context that contains this SematicItem's Rdf
-     * statements. Used by the updateTriple()s to remove and add
-     * updated information. The default is the manifest.rdf file.
-     */
-    virtual Soprano::Node context() const;
-
-    /**
-     * When a subclass wants to update a triple in the Rdf store
-     * to reflect a change, for example, the phone number of a
-     * contact, it should call here to set toModify = newValue.
-     *
-     * This is done both in the C++ objects and the Rdf model.
-     * The Rdf will be changed from
-     * linkingSubject() predString toModify
-     * to
-     * linkingSubject() predString newValue
-     *
-     * Note that rounding errors and other serialization issues that
-     * crop up are handled by these methods, so you should try very
-     * hard not to directly update the Soprano::Model outside these
-     * methods.
-     */
-    void updateTriple(QString &toModify, const QString &newValue, const QString &predString);
-    void updateTriple(KDateTime &toModify, const KDateTime &newValue, const QString &predString);
-    void updateTriple(double &toModify, double newValue, const QString &predString, const Soprano::Node &explicitLinkingSubject);
-
-    /**
-     * Ensure the Rdf Type of the linkingSubject is what you want
-     * After this method, the Rdf will have the following:
-     * linkingSubject() rdf:type type
-     */
-    void setRdfType(const QString &type);
-
     /**
      * The importFromData() method can use this method to finish an
      * import. Text is also inserted into the document to show the
@@ -143,46 +82,6 @@ protected:
     virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
 
 public:
-
-    /**
-     * The document Rdf object that this semantic item is associated with.
-     */
-    const KoDocumentRdf *documentRdf() const;
-
-    /**
-     * A Semantic Item can appear multiple times in a document. For
-     * example, the person Frodo can be referenced 20 times in a short
-     * book review. This method gives all the xmlid values where the
-     * semantic item is referenced in the document.
-     *
-     * The list of xmlid values can in turn be used by
-     * KoDocumentRdf::findExtent() and findStatements() to inspect or
-     * perform actions at the various places the semanitc item appears
-     * in the document.
-     */
-    QStringList xmlIdList() const;
-
-    /**
-     * Create a QWidget that can edit the SemanticItem. Note that the
-     * widget will show the data and allow editing of it for the
-     * SemanticItem, but to make changes permenant, the
-     * updateFromEditorData() method must be used. A typical senario
-     * is to add the widget from createEditor to a dialog and when the
-     * user affirms the dialog call updateFromEditorData() to update
-     * the document.
-     *
-     * @see updateFromEditorData()
-     */
-    virtual QWidget *createEditor(QWidget *parent) = 0;
-
-    /**
-     * Update the SemanticItem from the edited dialog that was created using
-     * createEditor.
-     *
-     * @see createEditor()
-     */
-    virtual void updateFromEditorData() = 0;
-
     /**
      * Create a QTreeWidgetItem to display this SemanticItem. This
      * method should be used if you want to present a QTree of
@@ -239,15 +138,11 @@ public:
     virtual QString name() const = 0;
 
     /**
-     * Name of the subclass as would be contained in classNames()
-     */
-    virtual QString className() const = 0;
-
-    /**
      * Get the system semantic stylesheets that are supported for this
      * particular semantic item subclass.
      */
     virtual QList<hKoSemanticStylesheet> stylesheets() const = 0;
+
     /**
      * Get the user created/editable semantic stylesheets that are
      * supported for this particular semantic item subclass.
@@ -309,6 +204,7 @@ public:
      * @see saveUserStylesheets()
      */
     void loadUserStylesheets(QSharedPointer<Soprano::Model> model);
+
     /**
      * Save the user stylesheets to the Rdf model given.
      *
@@ -333,42 +229,12 @@ protected:
      */
     hKoSemanticStylesheet createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const;
 
-protected slots:
+protected Q_SLOTS:
     /**
      * In case the stylesheets move to using a QMap<String,sheet> or
      * we want to know when a stylesheet has been renamed.
      */
     void onUserStylesheetRenamed(hKoSemanticStylesheet ss, const QString &oldName, const QString &newName);
-
-private:
-    /**
-     * The updateTriple() methods all call remove() then add() to
-     * perform their work. These lower level functions accept
-     * Soprano::LiteralValues to remove/add. Note that corner cases
-     * like "double" values are explicitly handled by these methods.
-     * For example, at times a double will undergo some rounding
-     * during serialization, so you can not just call
-     * Soprano::Model.removeStatement() because you have to take
-     * rounding errors into account for the value you are intending to
-     * remove.
-     */
-    void updateTriple_remove(const Soprano::LiteralValue &toModify,
-                             const QString &predString,
-                             const Soprano::Node& explicitLinkingSubject);
-
-    /**
-     * After updateTriple() calls remove() it can set toModify to the
-     * new value and call this method to add the new value to the Rdf
-     * store.
-     */
-    void updateTriple_add(const Soprano::LiteralValue &toModify,
-                          const QString &predString,
-                          const Soprano::Node &explicitLinkingSubject);
-
-protected:
-
-    const KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
-    Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 };
 
-#endif
+#endif //__rdf_KoRdfSemanticItem_h__

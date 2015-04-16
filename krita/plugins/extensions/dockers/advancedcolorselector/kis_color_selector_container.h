@@ -38,11 +38,11 @@ public:
 
     enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
 
-signals:
+Q_SIGNALS:
     void openSettings();
     void settingsChanged();
 
-protected slots:
+protected Q_SLOTS:
     void updateSettings();
     void reactOnLayerChange();
 

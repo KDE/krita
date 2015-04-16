@@ -20,7 +20,7 @@
 #ifndef LAYERTHUMBPROVIDER_H
 #define LAYERTHUMBPROVIDER_H
 
-#include <QtDeclarative/QDeclarativeImageProvider>
+#include <QDeclarativeImageProvider>
 
 class LayerModel;
 

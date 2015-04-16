@@ -40,7 +40,7 @@ public:
 
     void setImageCollection(KoImageCollection *imageCollection);
 
-protected slots:
+protected Q_SLOTS:
     void styleChanged(bool state = true);
 
     void slotApply();

@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QVariant>
 
-class KisColorSelectorSettings;
 
 /**
  * Template of view plugin

@@ -60,7 +60,7 @@ public:
      */
     static void deferSignal(int delay, TrivialFunction function);
 
-private slots:
+private Q_SLOTS:
     void timeout();
 
 private:

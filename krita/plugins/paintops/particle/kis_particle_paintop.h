@@ -25,7 +25,6 @@
 #include "kis_particle_paintop_settings.h"
 #include "particle_brush.h"
 
-class QPointF;
 class KisPainter;
 class KisPaintInformation;
 

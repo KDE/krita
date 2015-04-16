@@ -56,7 +56,7 @@ public:
         }
     }
 
-private slots:
+private Q_SLOTS:
     void onTriggered(QAction *action)
     {
         m_document->setUnit(KoUnit::fromListForUi(action->data().toInt(), m_listOptions));

@@ -24,7 +24,6 @@
 #include <kdialog.h>
 #include <kicon.h>
 
-class KisFilterStrategy;
 
 #include "ui_wdg_canvassize.h"
 
@@ -56,7 +55,7 @@ public:
     qint32 xOffset();
     qint32 yOffset();
 
-private slots:
+private Q_SLOTS:
     void slotAspectChanged(bool keep);
     void slotAnchorButtonClicked(int id);
 

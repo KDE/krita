@@ -20,7 +20,6 @@
 
 #include <QDomDocument>
 #include <QFile>
-#include <QUiLoader>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -54,6 +53,10 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
     QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
+    QMap<QString, QWidget*> widgets;
+    widgets["dublincore.ui"] = new WdgDublinCore(this);
+    widgets["exif.ui"] = new WdgExif(this);
+
     foreach(const QString & file, files) {
 
         QFile xmlFile(file);
@@ -75,16 +78,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         const QString iconName = rootElement.attribute("icon");
         if (uiFileName == "") continue;
 
-        // Read the ui file
-        QUiLoader loader;
-        QFile uiFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor/" + uiFileName));
-        uiFile.open(QFile::ReadOnly);
-        QWidget *widget = dynamic_cast<QWidget*>(loader.load(&uiFile, this));
-        if (widget == 0) {
-            dbgPlugins << "Failed to load ui file" << uiFileName;
-            continue;
-        }
-        uiFile.close();
+        QWidget *widget = widgets[uiFileName];
 
         QDomNodeList list = rootElement.childNodes();
         const int size = list.size();

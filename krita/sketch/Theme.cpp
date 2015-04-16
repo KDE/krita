@@ -19,17 +19,17 @@
 
 #include "Theme.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QDir>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
-#include <QtGui/QFontDatabase>
-#include <QtGui/QApplication>
-#include <QtGui/QWidget>
-#include <QtDeclarative/QDeclarativeComponent>
+#include <QStringList>
+#include <QUrl>
+#include <QDebug>
+#include <QFile>
+#include <QDir>
+#include <QColor>
+#include <QFont>
+#include <QFontDatabase>
+#include <QApplication>
+#include <QWidget>
+#include <QDeclarativeComponent>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

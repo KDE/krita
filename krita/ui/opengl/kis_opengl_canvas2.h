@@ -33,7 +33,6 @@
 #include "krita_export.h"
 
 class QWidget;
-class QGLFramebufferObject;
 class QPaintEvent;
 class KisCanvas2;
 
@@ -75,7 +74,7 @@ public:
 
 
 
-private slots:
+private Q_SLOTS:
     void slotConfigChanged();
 
 

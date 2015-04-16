@@ -24,8 +24,6 @@
 #include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
 
-class KisDocument;
-class KoID;
 
 /**
  * The 'New image from clipboard' widget in the Krita startup widget.
@@ -43,7 +41,7 @@ public:
     KisImageFromClipboard(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     virtual ~KisImageFromClipboard();
 
-private slots:
+private Q_SLOTS:
     void createImage();
     void clipboardDataChanged();
     

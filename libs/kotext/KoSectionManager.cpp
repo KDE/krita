@@ -93,7 +93,7 @@ KoSection *KoSectionManager::sectionAtPosition(int pos)
     int smallest = INT_MAX; //smallest in size section will be the deepest
     QHash<QString, KoSection *>::iterator it = d->sectionNames().begin();
     for (; it != d->sectionNames().end(); it++) {
-        if (it.value()->bounds().first > pos || it.value()->bounds().second < pos) {
+        if (it.value()->bounds().first > pos || it.value()->bounds().second <= pos) {
             continue;
         }
 

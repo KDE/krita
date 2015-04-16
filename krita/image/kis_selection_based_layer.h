@@ -28,7 +28,6 @@
 #include <krita_export.h>
 #include "kis_node_filter_interface.h"
 
-class KisNodeVisitor;
 class KisFilterConfiguration;
 
 /**
@@ -165,7 +164,7 @@ protected:
 
     QRect cropChangeRectBySelection(const QRect &rect) const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * gets this layer. Overriddes function in

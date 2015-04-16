@@ -33,26 +33,27 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_tile_data_swapper.cpp
 )
 add_subdirectory( tiles3 )
-endif(USE_TILESYSTEM EQUAL 3)
+endif()
 
 option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" OFF)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
-                     
+include_directories(
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    3rdparty
 )
 
 if(FFTW3_FOUND)
   include_directories(${FFTW3_INCLUDE_DIRS})
-endif(FFTW3_FOUND)
+endif()
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-else(HAVE_VC)
+else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-endif(HAVE_VC)
+endif()
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
@@ -268,12 +269,12 @@ set(kritaimage_LIB_SRCS
 )
 
 set(einspline_SRCS
-   bsplines/einspline/bspline_create.cpp
-   bsplines/einspline/bspline_data.cpp
-   bsplines/einspline/multi_bspline_create.cpp
-   bsplines/einspline/nubasis.cpp
-   bsplines/einspline/nubspline_create.cpp
-   bsplines/einspline/nugrid.cpp
+   3rdparty/einspline/bspline_create.cpp
+   3rdparty/einspline/bspline_data.cpp
+   3rdparty/einspline/multi_bspline_create.cpp
+   3rdparty/einspline/nubasis.cpp
+   3rdparty/einspline/nubspline_create.cpp
+   3rdparty/einspline/nugrid.cpp
 )
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
@@ -288,21 +289,21 @@ message("DEBUG_BOOST_SYSTEM_LIBRARY = " ${Boost_SYSTEM_LIBRARY})
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
-endif(OPENEXR_FOUND)
+endif()
 
 if(FFTW3_FOUND)
   target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
-endif(FFTW3_FOUND)
+endif()
 
 if(HAVE_VC)
   target_link_libraries(kritaimage  ${Vc_LIBRARIES})
-endif(HAVE_VC)
+endif()
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
-else (NOT GSL_FOUND)
+else ()
   target_link_libraries(kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-endif (NOT GSL_FOUND)
+endif ()
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

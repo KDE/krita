@@ -43,7 +43,7 @@ public:
 
     virtual ~KoViewAdaptor();
 
-public slots: // METHODS
+public Q_SLOTS: // METHODS
     Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();
 
 protected:

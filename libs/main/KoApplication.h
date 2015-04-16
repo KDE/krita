@@ -107,7 +107,7 @@ public:
      */
     static KoApplication* koApplication();
 
-signals:
+Q_SIGNALS:
 
     /// KoPart needs to be able to emit document signals from here. These
     /// signals are used for the dbus interface of stage, see commit

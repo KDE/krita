@@ -2,11 +2,11 @@ project(pigmentcms)
 
 # we have to repeat platform specifics from top-level
 if (WIN32)
-include_directories(${CMAKE_SOURCE_DIR}/winquirks)
-add_definitions(-D_USE_MATH_DEFINES)
-add_definitions(-DNOMINMAX)
-set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
-endif (WIN32)
+    include_directories(${CMAKE_SOURCE_DIR}/winquirks)
+    add_definitions(-D_USE_MATH_DEFINES)
+    add_definitions(-DNOMINMAX)
+    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
+endif ()
 
 include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
 
@@ -16,7 +16,7 @@ if(OPENEXR_FOUND)
     include_directories(${OPENEXR_INCLUDE_DIR})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
-endif(OPENEXR_FOUND)
+endif()
 
 set(LINK_VC_LIB)
 
@@ -27,7 +27,7 @@ if(HAVE_VC)
 
     message("Following objects are generated from the per-arch lib")
     message(${__per_arch_factory_objs})
-endif(HAVE_VC)
+endif()
 
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
@@ -120,7 +120,7 @@ set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
-endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+endif()
 
 kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
 

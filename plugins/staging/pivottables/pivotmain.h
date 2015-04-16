@@ -40,7 +40,7 @@ class PivotMain : public KDialog
       Sheet* filter();
       ~PivotMain();
 
-    private slots:
+    private Q_SLOTS:
 	  
       //void on_Options_clicked();
 

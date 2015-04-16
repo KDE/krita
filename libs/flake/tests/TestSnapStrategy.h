@@ -25,7 +25,7 @@
 class TestSnapStrategy : public QObject
 {
     Q_OBJECT
-  private slots:
+  private Q_SLOTS:
     //tests
     /**
      * This method is for testing the function snap in OrthogonalSnapStrategy - function is located in KoSnapStrategy.h

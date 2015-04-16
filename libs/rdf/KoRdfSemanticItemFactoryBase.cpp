@@ -21,7 +21,6 @@
 
 #include "KoRdfSemanticItemFactoryBase.h"
 
-
 class KoRdfSemanticItemFactoryBase::Private
 {
 public:

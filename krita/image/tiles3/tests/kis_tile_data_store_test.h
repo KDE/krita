@@ -26,7 +26,7 @@ class KisTileDataStoreTest : public QObject
 
 private:
 
-private slots:
+private Q_SLOTS:
     void testClockIterator();
     void testLeaks();
     void testSwapping();

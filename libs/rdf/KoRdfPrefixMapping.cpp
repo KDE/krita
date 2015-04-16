@@ -46,8 +46,8 @@ public:
 KoRdfPrefixMapping::KoRdfPrefixMapping(KoDocumentRdf *rdf)
     : d (new KoRdfPrefixMappingPrivate(rdf))
 {
-    insert("pkg", "http://docs.oasis-open.org/opendocument/meta/package/common#");
-    insert("odf", "http://docs.oasis-open.org/opendocument/meta/package/odf#");
+    insert("pkg", "http://docs.oasis-open.org/ns/office/1.2/meta/pkg#");
+    insert("odf", "http://docs.oasis-open.org/ns/office/1.2/meta/odf#");
     insert("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
     insert("xhtml", "http://www.w3.org/1999/xhtml");
     insert("xsd", "http://www.w3.org/2001/XMLSchema");
@@ -55,7 +55,7 @@ KoRdfPrefixMapping::KoRdfPrefixMapping(KoDocumentRdf *rdf)
     insert("foaf", "http://xmlns.com/foaf/0.1/");
     insert("geo84", "http://www.w3.org/2003/01/geo/wgs84_pos#");
     insert("dcterms", "http://dublincore.org/documents/dcmi-terms/#");
-    insert("cite", "http://docs.oasis-open.org/prototype/opendocument/citation#");
+    insert("cite", "http://docs.oasis-open.org/prototype/opendocument/citation#"); //FIXME: haven't found this in 1.2 specs
     insert("cal", "http://www.w3.org/2002/12/cal/icaltzd#");
 }
 

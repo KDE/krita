@@ -62,7 +62,7 @@ public:
      */
     bool isValidNewName(const QString &name);
 
-public slots:
+public Q_SLOTS:
     /**
      * Call this to recalc all sections information
      * @param needModel place @c true to it if you need model to use in GUI and @c false otherwise

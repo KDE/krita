@@ -28,8 +28,6 @@
 
 class KoResourceLoaderThread;
 class TasksetModel;
-class QListView;
-class QThread;
 class KisCanvas2;
 
 class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgTasksetDocker {
@@ -41,7 +39,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     
-private slots:
+private Q_SLOTS:
     void actionTriggered(QAction* action);
     void activated (const QModelIndex& index);
     void recordClicked();

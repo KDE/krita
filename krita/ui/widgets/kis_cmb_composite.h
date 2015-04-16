@@ -60,7 +60,7 @@ public:
 
     QList<KAction*> blendmodeActions();
 
-private slots:
+private Q_SLOTS:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
     void slotEntryChecked(const QModelIndex& index);
 

@@ -55,10 +55,27 @@
 #include "kis_shape_selection.h"
 #include "kis_dom_utils.h"
 
-
-
-
 using namespace KRA;
+
+QString expandEncodedDirectory(const QString& _intern)
+{
+    QString intern = _intern;
+
+    QString result;
+    int pos;
+    while ((pos = intern.indexOf('/')) != -1) {
+        if (QChar(intern.at(0)).isDigit())
+            result += "part";
+        result += intern.left(pos + 1);   // copy numbers (or "pictures") + "/"
+        intern = intern.mid(pos + 1);   // remove the dir we just processed
+    }
+
+    if (!intern.isEmpty() && QChar(intern.at(0)).isDigit())
+        result += "part";
+    result += intern;
+    return result;
+}
+
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
                                      KoStore *store,
@@ -72,6 +89,14 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
     m_image = image;
     m_store = store;
     m_name = name;
+    m_store->pushDirectory();
+    if (!m_store->enterDirectory(m_name)) {
+        dbgFile << "Could not enter directory" << m_name << ", probably an old-style file with 'part' added.";
+        m_name = expandEncodedDirectory(m_name);
+    }
+    else {
+        m_store->popDirectory();
+    }
     m_syntaxVersion = syntaxVersion;
 }
 

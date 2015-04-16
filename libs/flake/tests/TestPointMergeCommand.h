@@ -25,7 +25,7 @@
 class TestPointMergeCommand : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void closeSingleLinePath();
     void closeSingleCurvePath();
     void connectLineSubpaths();

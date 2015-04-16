@@ -105,7 +105,7 @@ public:
 
     void setChannelFlags(const QBitArray & channelFlags);
     
-public slots:
+public Q_SLOTS:
     /**
      * gets this AdjustmentLayer. Overrides function in
      * KisIndirectPaintingSupport

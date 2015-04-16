@@ -240,6 +240,8 @@ public:
     KisAction *toggleDockers;
     KisAction *toggleDockerTitleBars;
 
+    KisAction *expandingSpacers[2];
+
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
     KActionMenu *documentMenu;
@@ -305,7 +307,7 @@ KisMainWindow::KisMainWindow()
 
     actionCollection()->addAssociatedWidget(this);
 
-    initializeGeometry();
+    QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
     ToolDockerFactory toolDockerFactory;
     d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
@@ -409,6 +411,7 @@ KisMainWindow::KisMainWindow()
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
 
+    applyToolBarLayout();
 
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
@@ -1167,6 +1170,30 @@ int KisMainWindow::viewCount() const
     return d->mdiArea->subWindowList().size();
 }
 
+bool KisMainWindow::restoreWorkspace(const QByteArray &state)
+{
+    QByteArray oldState = saveState();
+
+    // needed because otherwise the layout isn't correctly restored in some situations
+    foreach(QDockWidget *docker, dockWidgets()) {
+        docker->hide();
+    }
+
+    bool success = QMainWindow::restoreState(state);
+
+    if (!success) {
+        QMainWindow::restoreState(oldState);
+        return false;
+    }
+
+    return success;
+}
+
+KisViewManager *KisMainWindow::viewManager() const
+{
+    return d->viewManager;
+}
+
 void KisMainWindow::slotDocumentInfo()
 {
     if (!d->activeView->document())
@@ -1360,6 +1387,7 @@ void KisMainWindow::slotConfigureToolbars()
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotNewToolbarConfig()
@@ -1374,6 +1402,7 @@ void KisMainWindow::slotNewToolbarConfig()
         return;
 
     plugActionList("toolbarlist", d->toolbarList);
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
@@ -2087,6 +2116,25 @@ void KisMainWindow::createActions()
     actionManager->addAction("file_close", d->close);
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
+
+    for (int i = 0; i < 2; i++) {
+        d->expandingSpacers[i] = new KisAction(i18n("Expanding Spacer"));
+        d->expandingSpacers[i]->setDefaultWidget(new QWidget(this));
+        d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
+    }
+}
+
+void KisMainWindow::applyToolBarLayout()
+{
+    const bool isPlastiqueStyle = style()->objectName() == "plastique";
+
+    Q_FOREACH (KToolBar *toolBar, toolBars()) {
+        toolBar->layout()->setSpacing(4);
+        if (isPlastiqueStyle) {
+            toolBar->setContentsMargins(0, 0, 0, 2);
+        }
+    }
 }
 
 void KisMainWindow::initializeGeometry()
@@ -2101,7 +2149,6 @@ void KisMainWindow::initializeGeometry()
             QRect desk = QApplication::desktop()->availableGeometry(scnum);
             // if the desktop is virtual then use virtual screen size
             if (QApplication::desktop()->isVirtualDesktop()) {
-                desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
                 desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
             }
 
@@ -2130,7 +2177,7 @@ void KisMainWindow::initializeGeometry()
             setGeometry(geometry().x(), geometry().y(), w, h);
         }
     }
-    restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

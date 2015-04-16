@@ -29,7 +29,6 @@
 #include <kis_types.h>
 #include "krita_export.h"
 
-class KisPart;
 class KisDocument;
 class KisMainWindow;
 class KisPrintJob;
@@ -43,7 +42,6 @@ class KisCoordinatesConverter;
 class KisInputManager;
 
 class KoZoomController;
-class KoZoomManager;
 class KoZoomController;
 struct KoPageLayout;
 class KoCanvasResourceManager;
@@ -54,7 +52,6 @@ class KAction;
 class KActionCollection;
 
 // Qt classes
-class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;
@@ -75,7 +72,9 @@ public:
      * Creates a new view for the document.
      */
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
- ~KisView();
+    ~KisView();
+
+    bool shown() const;
 
     KAction *undoAction() const;
     KAction *redoAction() const;
@@ -151,7 +150,7 @@ public:
     /**
      * Return the zoomController for this view.
      */
-     KoZoomController *zoomController() const;
+    KoZoomController *zoomController() const;
 
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
@@ -204,7 +203,7 @@ public:
     /// the global selection.
     KisSelectionSP selection();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
@@ -220,7 +219,7 @@ public slots:
 
     bool queryClose();
 
-signals:
+Q_SIGNALS:
     // From KisImage
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
@@ -230,21 +229,25 @@ signals:
 protected:
 
     // QWidget overrides
-     void dragEnterEvent(QDragEnterEvent * event);
-     void dropEvent(QDropEvent * event);
-     bool event( QEvent* event );
-     void closeEvent(QCloseEvent *event);
-
+    void dragEnterEvent(QDragEnterEvent * event);
+    void dropEvent(QDropEvent * event);
+    bool event( QEvent* event );
+    void closeEvent(QCloseEvent *event);
+    void showEvent(QShowEvent *event);
     /**
      * Generate a name for this view.
      */
     QString newObjectName();
 
-public slots:
+public Q_SLOTS:
     void slotLoadingFinished();
     void slotSavingFinished();
     void slotImageResolutionChanged();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
+private Q_SLOTS:
+
+    void setShown();
 
 private:
 

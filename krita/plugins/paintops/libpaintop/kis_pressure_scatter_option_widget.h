@@ -22,7 +22,6 @@
 
 #include "kis_curve_option_widget.h"
 
-class KisDoubleSliderSpinBox;
 
 class QCheckBox;
 
@@ -35,7 +34,7 @@ public:
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
     void xAxisEnabled(bool enable);
     void yAxisEnabled(bool enable);
 

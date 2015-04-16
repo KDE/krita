@@ -19,12 +19,12 @@
 #ifndef __TEST_SAVE_LOAD_TRANSFORM_ARGS_H
 #define __TEST_SAVE_LOAD_TRANSFORM_ARGS_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestSaveLoadTransformArgs : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testFreeTransform();
     void testWarp();
     void testLiquify();

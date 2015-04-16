@@ -27,7 +27,6 @@
 
 class KisDocument;
 class KisDocument;
-class KoID;
 
 enum CustomImageWidgetType { CUSTOM_DOCUMENT, NEW_IMG_FROM_CB };
 
@@ -58,7 +57,7 @@ public:
     KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     virtual ~KisCustomImageWidget();
     
-private slots:
+private Q_SLOTS:
     void widthUnitChanged(int index);
     void widthChanged(double value);
     void heightUnitChanged(int index);
@@ -74,7 +73,7 @@ private slots:
     void createImage();
     void switchPortraitLandscape();
 
-signals:
+Q_SIGNALS:
     /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'
     void documentSelected(KisDocument*);
 

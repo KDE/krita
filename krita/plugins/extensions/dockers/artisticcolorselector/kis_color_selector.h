@@ -29,7 +29,6 @@
 
 class QPainter;
 class QPainter;
-class QPolygonF;
 
 class KisColorSelector: public QWidget
 {
@@ -86,7 +85,7 @@ public:
     bool           isSaturationInverted() const { return m_inverseSaturation; }
     bool           islightRelative     () const { return m_relativeLight;     }
     
-signals:
+Q_SIGNALS:
     void sigFgColorChanged(const KisColor& color);
     void sigBgColorChanged(const KisColor& color);
     

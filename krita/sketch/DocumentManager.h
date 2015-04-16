@@ -20,7 +20,7 @@
 #define DOCUMENTMANAGER_H
 
 #include <QObject>
-#include <QtCore/QVariantMap>
+#include <QVariantMap>
 
 #include "krita_sketch_export.h"
 

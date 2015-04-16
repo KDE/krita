@@ -41,7 +41,7 @@ public:
      * Set an resource server adapter that the widget will observe.
      */
     void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter);
-public slots:
+public Q_SLOTS:
     void slotSetItem(KoResource * resource);
     void slotAdapterResourceChanged(KoResource * resource);
 

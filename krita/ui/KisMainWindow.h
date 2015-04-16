@@ -38,14 +38,12 @@ struct KoPageLayout;
 class KoCanvasResourceManager;
 
 class KisDocument;
-class KisPart;
 class KisView;
 class KisPrintJob;
 class KoDockFactoryBase;
-class KRecentFilesAction;
 class QDockWidget;
-class KisViewManager;
 class KisView;
+class KisViewManager;
 
 
 // Calligra class but not in main module
@@ -142,7 +140,16 @@ public:
 
     int viewCount() const;
 
-signals:
+    /**
+     * A wrapper around restoreState
+     * @param state the saved state
+     * @return TRUE on success
+     */
+    bool restoreWorkspace(const QByteArray &state);
+
+    KisViewManager *viewManager() const;
+
+Q_SIGNALS:
 
     /**
      * This signal is emitted if the document has been saved successfully.
@@ -164,7 +171,7 @@ signals:
     /// This signal is emitted when the shortcut key configuration has changed
     void keyBindingsChanged();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Slot for eMailing the document using KMail
@@ -234,7 +241,7 @@ public slots:
     void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
 
 
-private slots:
+private Q_SLOTS:
     /**
      * Save the list of recent files.
      */
@@ -426,6 +433,9 @@ private:
 
     void createActions();
 
+    void applyToolBarLayout();
+
+private slots:
     void initializeGeometry();
 
 private:

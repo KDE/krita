@@ -131,7 +131,7 @@ public:
      * Retrieve the constructed image
      */
     KisImageWSP image();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     void progress(png_structp png_ptr, png_uint_32 row_number, int pass);

@@ -36,7 +36,7 @@ public:
     explicit NotesConfigurationDialog(QTextDocument *doc, bool footnoteMode, QWidget *parent = 0);
     Ui::NotesConfigurationDialog widget;
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     /**
      * sets up the footnote's default configuration in the dialog box

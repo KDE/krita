@@ -1,12 +1,12 @@
 project(breakpad-client)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
+cmake_minimum_required(VERSION 2.6.0)
 
 set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 message(STATUS ${CMAKE_SYSTEM_PROCESSOR})
 
-INCLUDE_DIRECTORIES(
+include_directories(
 	src/
 )
 
@@ -19,7 +19,7 @@ if (UNIX)
 		src/common/convert_UTF.c
 		src/common/string_conversion.cc
 	)
-endif(UNIX)
+endif()
 
 if (WIN32) 
 	SET(SOURCES  ${SOURCES}
@@ -33,11 +33,11 @@ if (WIN32)
 	ADD_DEFINITIONS(/GL /D "WIN32" /D "WIN32_LEAN_AND_MEAN" /D "_UNICODE" /D "UNICODE" /EHsc )
 	#INCLUDE_DIRECTORIES(c:/progra~1/micros~1.0/vc/atlmfc)
 	SET(EXTRA_LIBS ole32)
-endif (WIN32)
+endif ()
 
 if (UNIX)
 	if (APPLE) 
-        INCLUDE_DIRECTORIES(/Developer/Headers/FlatCarbon)
+        include_directories(/Developer/Headers/FlatCarbon)
 		FIND_LIBRARY(COCOA_LIBRARY COCOA)
 		MARK_AS_ADVANCED(COCOA_LIBRARY)
 		SET(EXTRA_LIBS crypto ${COCOA_LIBRARY})
@@ -58,7 +58,7 @@ if (UNIX)
 			src/common/mac/macho_walker.cc
 			src/common/mac/string_utilities.cc
 		)
-	else (APPLE)
+	else ()
 		SET(SOURCES  ${SOURCES}
 			src/client/linux/handler/exception_handler.cc
 			src/client/linux/handler/linux_thread.cc
@@ -69,14 +69,14 @@ if (UNIX)
 			src/common/linux/http_upload.cc
 			src/common/md5.c
 		   )
-	endif (APPLE)
-endif (UNIX)
+	endif ()
+endif ()
 
 add_library(breakpad ${SOURCES})
 
-IF(UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE)
 	SET_TARGET_PROPERTIES( breakpad PROPERTIES COMPILE_FLAGS -fPIC)
-ENDIF(UNIX AND NOT APPLE)
+endif()
 
 target_link_libraries(breakpad ${EXTRA_LIBS}) 
 install(TARGETS breakpad DESTINATION lib${LIB_SUFFIX})

@@ -79,10 +79,10 @@ public:
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
 
-protected slots:
+protected Q_SLOTS:
     void slotResizeBarDragged(int delta);
 
-private slots:
+private Q_SLOTS:
     void slotPageOptionsChanged(KoProperty::Set &);
     void slotSceneClicked();
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
@@ -107,7 +107,7 @@ class ReportResizeBar : public QFrame
 public:
     explicit ReportResizeBar(QWidget * parent = 0, Qt::WFlags f = 0);
 
-signals:
+Q_SIGNALS:
     void barDragged(int delta);
 
 protected:
@@ -121,7 +121,7 @@ public:
     explicit ReportSectionTitle(QWidget *parent = 0);
     ~ReportSectionTitle();
 
-signals:
+Q_SIGNALS:
     void clicked();
 
 protected:

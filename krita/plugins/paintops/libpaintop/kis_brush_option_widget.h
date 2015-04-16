@@ -60,7 +60,7 @@ public:
 
     bool presetIsValid();
 
-private slots:
+private Q_SLOTS:
     void brushChanged();
 
 private:

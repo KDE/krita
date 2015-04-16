@@ -88,10 +88,10 @@ public:
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
 
-public slots:
+public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
 
-private slots:
+private Q_SLOTS:
     void stackChanged();
     void stackDestroyed(QObject *obj);
     void setStackCurrentIndex(const QModelIndex &index);

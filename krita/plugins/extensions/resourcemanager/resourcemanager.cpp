@@ -159,7 +159,7 @@ void ResourceManager::slotImport()
 
     QStringList nameFilters = filterToTypeMap.keys();
 
-    dlg.setNameFilters(nameFilters, nameFilters.first());
+    dlg.setNameFilters(nameFilters, nameFilters[13]);  // start with resource bundle as default type (filterToTypeMap is alphabetized)
 
     QStringList resources = dlg.urls();
     QString resourceType = dlg.selectedNameFilter();

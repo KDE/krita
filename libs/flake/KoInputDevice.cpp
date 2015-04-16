@@ -100,6 +100,14 @@ KoInputDevice & KoInputDevice::operator=(const KoInputDevice & other)
 }
 
 // static
+KoInputDevice KoInputDevice::invalid()
+{
+    KoInputDevice id(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer);
+    return id;
+}
+
+
+
 KoInputDevice KoInputDevice::mouse()
 {
     KoInputDevice id;

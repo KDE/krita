@@ -5,8 +5,6 @@
 #include <QtTest>
 
 class QTextDocument;
-class KoTextEditor;
-class TextTool;
 
 class TestChangeTrackedDelete : public QObject
 {
@@ -19,7 +17,7 @@ private:
     void insertSampleList(QTextDocument *documet);
     void insertSampleTable(QTextDocument *document);
 
-private slots:
+private Q_SLOTS:
     void testDeletePreviousChar();
     void testDeleteNextChar();
     void testDeleteSelection();

@@ -86,7 +86,10 @@ KisZoomManager::~KisZoomManager()
 {
     KisConfig cfg;
     cfg.setShowRulers(m_horizontalRuler->isVisible());
-    delete m_zoomActionWidget;
+
+    if (m_zoomActionWidget && !m_zoomActionWidget->parent()) {
+        delete m_zoomActionWidget;
+    }
 }
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
@@ -224,7 +227,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     qreal humanZoom = zoom * 100.0;
 
 // XXX: KOMVC -- this is very irritating in MDI mode
-    if (m_view->viewManager()) {
+    if (m_view->shown() && m_view->viewManager()) {
         m_view->viewManager()->
                 showFloatingMessage(
                     i18nc("floating message about zoom", "Zoom: %1 \%",

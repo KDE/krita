@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QTreeView>
+#include <QHeaderView>
 #include <QDebug>
 #include <QResizeEvent>
 #include <QSize>
@@ -48,29 +49,55 @@ public:
     void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfiguration* configuration();
-    void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;
     KisFilterSP currentFilter() const;
-protected slots:
+public Q_SLOTS:
+    void setVisible(bool visible);
+    void showFilterGallery(bool visible);
+protected Q_SLOTS:
     void slotBookmarkedFilterConfigurationSelected(int);
     void setFilterIndex(const QModelIndex&);
     void editConfigurations();
-signals:
+    void update();
+Q_SIGNALS:
     void configurationChanged();
+    void sigFilterGalleryToggled(bool visible);
+    void sigSizeChanged();
 private:
     struct Private;
     Private* const d;
 };
 
 
-class KisFilterTree: public QTreeView {
+class KisFilterTree: public QTreeView
+{
+    Q_OBJECT
 
 public:
 
-    KisFilterTree(QWidget *parent) : QTreeView(parent) {}
+    KisFilterTree(QWidget *parent) : QTreeView(parent) {
+        connect(this, SIGNAL(expanded(QModelIndex)), this, SLOT(update_scroll_area(QModelIndex)));
+        connect(this, SIGNAL(collapsed(QModelIndex)), this, SLOT(update_scroll_area(QModelIndex)));
+    }
 
     void setFilterModel(QAbstractItemModel * model);
     void activateFilter(QModelIndex idx);
+
+    QSize minimumSizeHint() const
+    {
+        return QSize(200, QTreeView::sizeHint().height());
+    }
+
+    QSize sizeHint() const
+    {
+        return QSize(header()->width(), QTreeView::sizeHint().height());
+    }
+
+    void setModel(QAbstractItemModel *model)
+    {
+        QTreeView::setModel(model);
+        header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    }
 
 protected:
 
@@ -78,10 +105,12 @@ protected:
     {
         if (event->size().width() > 10) {
             setModel(m_model);
+
         }
         else {
             setModel(0);
         }
+        QTreeView::resizeEvent(event);
     }
 
     void showEvent(QShowEvent * event)
@@ -94,6 +123,12 @@ protected:
     {
         setModel(0);
         QTreeView::hideEvent(event);
+    }
+
+private slots:
+    void update_scroll_area(const QModelIndex& i)
+    {
+        resizeColumnToContents(i.column());
     }
 
 private:

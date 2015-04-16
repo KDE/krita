@@ -42,10 +42,10 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
-public slots:
+public Q_SLOTS:
     void updateSettings();
 
-protected slots:
+protected Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant& v);
 
 protected:

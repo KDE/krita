@@ -32,7 +32,7 @@ public:
 public:
     void notifyTransformationChanged();
 
-public slots:
+public Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant &resource);
 
 private:

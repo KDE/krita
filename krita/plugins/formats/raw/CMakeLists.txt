@@ -2,7 +2,7 @@
 
 if(OPENEXR_FOUND)
 	include_directories(${OPENEXR_INCLUDE_DIR})
-endif(OPENEXR_FOUND)
+endif()
 
 
 ########### next target ###############

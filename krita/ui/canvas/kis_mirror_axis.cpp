@@ -26,8 +26,8 @@
     #include <GL/glew.h>
 #endif
 
-#include <QtGui/QPainter>
-#include <QtGui/QToolButton>
+#include <QPainter>
+#include <QToolButton>
 #include <QApplication>
 #include <QPaintEngine>
 

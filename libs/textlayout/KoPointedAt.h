@@ -27,7 +27,6 @@
 #include <QPointF>
 
 class KoBookmark;
-class QTextDocument;
 class QTextTable;
 class KoInlineTextObjectManager;
 class KoTextRangeManager;

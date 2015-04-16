@@ -35,8 +35,8 @@
 #include "kis_paint_layer.h"
 #include "kis_iterator_ng.h"
 
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/version.h>
+#include <kdcraw/kdcraw.h>
+#include <libkdcraw_version.h>
 
 using namespace KDcrawIface;
 

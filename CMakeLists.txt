@@ -193,15 +193,15 @@ if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test Concurrent)
-find_package(Qt5 5.2.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test Concurrent)
+find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
 if (USEOPENGL)
-    find_package(Qt5 5.2.0 REQUIRED OpenGL)
+    find_package(Qt5 5.3.0 REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
 

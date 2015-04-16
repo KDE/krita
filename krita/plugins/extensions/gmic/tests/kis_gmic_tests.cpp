@@ -91,7 +91,7 @@ void KisGmicTests::initTestCase()
 
     m_gmicImage.assign(m_qimage.width(),m_qimage.height(),1,4); // rgba
 
-    KisGmicSimpleConvertor::convertFromQImage(m_qimage, m_gmicImage);;
+    KisGmicSimpleConvertor::convertFromQImage(m_qimage, m_gmicImage);
 
     m_images.assign(1);
 

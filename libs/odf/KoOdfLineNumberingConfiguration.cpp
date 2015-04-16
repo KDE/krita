@@ -124,7 +124,7 @@ void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
                 KoXmlElement nodeElement = node.toElement();
                 if(nodeElement.localName() == "linenumber-separator") {
                     d->separator = nodeElement.text();
-                    d->separatorIncrement = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "increment", "10"));;
+                    d->separatorIncrement = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "increment", "10"));
                     break;
                 }
             }

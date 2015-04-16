@@ -877,7 +877,7 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
 
 void Autocorrect::writeAutocorrectXmlEntry()
 {
-    const QString fname = KGlobal::dirs()->locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    const QString fname = KStandardDirs::locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     QFile file(fname);
     if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
         qDebug()<<"We can't save in file :"<<fname;

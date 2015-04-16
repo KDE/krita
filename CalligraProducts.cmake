@@ -141,7 +141,6 @@ calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Callig
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivot tables"  STAGING  REQUIRES PART_SHEETS)
 
 # Sheets filters
 calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter"  REQUIRES LIB_KOMSOOXML PART_SHEETS)
@@ -499,7 +498,6 @@ calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
         PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
-        PLUGIN_SHEETS_PIVOTTABLES
         PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
         PLUGIN_VARIABLES

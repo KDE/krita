@@ -12,6 +12,13 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
     cmake_policy(SET CMP0022 OLD)
 endif()
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
+    cmake_policy(SET CMP0026 OLD) 
+    cmake_policy(SET CMP0046 OLD)
+endif()
+
+
+
  ######################
 #######################
 ## Constants defines ##
@@ -113,6 +120,7 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
 # get the special macros
 include(CalligraProductSetMacros)
+include(MacroJPEG)
 
 # get the definitions of products, features and product sets
 include(CalligraProducts.cmake)

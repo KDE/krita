@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Marijn Kruisselbrink <mkruisselbrink@kde.org>
+ *  Copyright (c) 2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,22 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PIVOTPLUGIN_H
-#define PIVOTPLUGIN_H
+#include "kis_gmic_data.h"
 
-#include <kxmlguiclient.h>
-#include <QObject>
-#include <QVariantList>
+const float KisGmicData::INVALID_PROGRESS_VALUE = -2.0f;
 
-class PivotPlugin : public QObject, public KXMLGUIClient
+KisGmicData::KisGmicData():m_progress(INVALID_PROGRESS_VALUE),m_cancel(false)
 {
-    Q_OBJECT
-public:
-    PivotPlugin(QObject *parent, const QVariantList &);
-    virtual ~PivotPlugin();
+}
 
-private Q_SLOTS:
-    void pivot();
-};
+KisGmicData::~KisGmicData()
+{
+}
 
-#endif
+void KisGmicData::reset()
+{
+    m_progress = INVALID_PROGRESS_VALUE;
+    m_cancel = false;
+}

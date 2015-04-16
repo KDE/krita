@@ -27,13 +27,12 @@
 #include <QTimer>
 #include <QTime>
 
-KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands):
+KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, KisGmicDataSP data, const QByteArray &customCommands):
     m_gmicCommandString(gmicCommandString),
     m_images(images),
+    m_data(data),
     m_customCommands(customCommands),
     m_firstRedo(true),
-    m_progress(new float(-1.0f)),
-    m_cancel(new bool(false)),
     m_isSuccessfullyDone(false)
 {
 }
@@ -41,22 +40,6 @@ KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer<
 KisGmicCommand::~KisGmicCommand()
 {
     dbgPlugins << "Destructor: " << this;
-    if (m_mutex)
-    {
-        dbgPlugins << "Lock!";
-        m_mutex->lock();
-    }
-
-    delete m_cancel;
-    delete m_progress;
-    m_cancel = 0;
-    m_progress = 0;
-
-    if (m_mutex)
-    {
-        dbgPlugins << "Unlock!";
-        m_mutex->unlock();
-    }
 }
 
 
@@ -85,9 +68,10 @@ void KisGmicCommand::redo()
 
         QTime timer;
         timer.start();
+
         try
         {
-            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, include_default_commands, m_progress, m_cancel);
+            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands.constData(), include_default_commands, &m_data->progressPtr(), &m_data->cancelPtr());
         }
         catch (gmic_exception &e)
         {
@@ -114,15 +98,6 @@ void KisGmicCommand::redo()
     }
 }
 
-float*KisGmicCommand::progressPtr()
-{
-    return m_progress;
-}
-
-bool * KisGmicCommand::cancelPtr()
-{
-    return m_cancel;
-}
 
 QString KisGmicCommand::gmicDimensionString(const gmic_image<float>& img)
 {

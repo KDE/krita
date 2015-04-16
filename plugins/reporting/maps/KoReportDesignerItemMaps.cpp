@@ -76,7 +76,7 @@ KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportD
 KoReportDesignerItemMaps* KoReportDesignerItemMaps::clone()
 {
     QDomDocument d;
-    QDomElement e = d.createElement("clone");;
+    QDomElement e = d.createElement("clone");
     QDomNode n;
     buildXML(d, e);
     n = e.firstChild();

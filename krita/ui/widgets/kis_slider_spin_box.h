@@ -50,6 +50,10 @@ public:
 
     void setExponentRatio(qreal dbl);
 
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSize() const;
+
 protected:
     virtual void paintEvent(QPaintEvent* e);
     virtual void mousePressEvent(QMouseEvent* e);
@@ -59,9 +63,6 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
-
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
 
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;

@@ -77,6 +77,7 @@ protected Q_SLOTS:
     void cleanPreviewChanges();
     void kickTimer();
     void updatePreview();
+    void adjustSize();
 
 private:
 

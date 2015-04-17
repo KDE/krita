@@ -251,13 +251,14 @@ void KisAslXmlWriter::writeCurve(const QString &key, const QString &name, const 
     leaveDescriptor();
 }
 
-void KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
+QString KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
 {
     enterDescriptor(key, "", "KisPattern");
 
     writeText("Nm  ", pattern->name());
 
-    writeText("Idnt", KisAslWriterUtils::getPatternUuidLazy(pattern));
+    QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
+    writeText("Idnt", uuid);
 
     // Write pattern data
 
@@ -275,14 +276,16 @@ void KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
     m_d->currentElement.appendChild(dataElement);
 
     leaveDescriptor();
+
+    return uuid;
 }
 
-void KisAslXmlWriter::writePatternRef(const QString &key, const KoPattern *pattern)
+void KisAslXmlWriter::writePatternRef(const QString &key, const KoPattern *pattern, const QString &uuid)
 {
     enterDescriptor(key, "", "Ptrn");
 
     writeText("Nm  ", pattern->name());
-    writeText("Idnt", KisAslWriterUtils::getPatternUuidLazy(pattern));
+    writeText("Idnt", uuid);
 
     leaveDescriptor();
 }

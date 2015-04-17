@@ -57,8 +57,8 @@ public:
     void writePhasePoint(const QString &key, const QPointF &value);
     void writeOffsetPoint(const QString &key, const QPointF &value);
     void writeCurve(const QString &key, const QString &name, const QVector<QPointF> &points);
-    void writePattern(const QString &key, const KoPattern *pattern);
-    void writePatternRef(const QString &key, const KoPattern *pattern);
+    QString writePattern(const QString &key, const KoPattern *pattern);
+    void writePatternRef(const QString &key, const KoPattern *pattern, const QString &uuid);
     void writeGradient(const QString &key, const KoSegmentGradient *gradient);
 
 private:

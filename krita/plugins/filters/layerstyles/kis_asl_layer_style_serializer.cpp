@@ -234,11 +234,10 @@ QString strokeFillTypeToString(psd_fill_type position)
     return result;
 }
 
-void KisAslLayerStyleSerializer::refillPatternsStore(KisPSDLayerStyle *style)
+QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style)
 {
-    m_patternsStore.clear();
-
     QVector <KoPattern*> allPatterns;
+
     if (style->patternOverlay()->effectEnabled()) {
         allPatterns << style->patternOverlay()->pattern();
     }
@@ -255,30 +254,36 @@ void KisAslLayerStyleSerializer::refillPatternsStore(KisPSDLayerStyle *style)
         allPatterns << style->bevelAndEmboss()->texturePattern();
     }
 
-    foreach (KoPattern *pattern, allPatterns) {
-        if (!pattern) continue;
+    return allPatterns;
+}
 
-        QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
-        if (!m_patternsStore.contains(uuid)) {
-            m_patternsStore.insert(uuid, pattern);
-        }
+QString fetchPatternUuidSafe(KoPattern *pattern, QHash<KoPattern*, QString> patternToUuid)
+{
+    if (patternToUuid.contains(pattern)) {
+        return patternToUuid[pattern];
+    } else {
+        qWarning() << "WARNING: the pattern is not present in the Uuid map!";
+        return "invalid-uuid";
     }
 }
 
+
 void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 {
-    refillPatternsStore(m_style);
+    QVector<KoPattern*> allPatterns = fetchAllPatterns(m_style);
+
+    QHash<KoPattern*, QString> patternToUuidMap;
 
     KisAslXmlWriter w;
 
-    if (!m_patternsStore.isEmpty()) {
+    if (!allPatterns.isEmpty()) {
         w.enterList("Patterns");
 
-        QHash<QString, KoPattern*>::const_iterator it = m_patternsStore.constBegin();
-        QHash<QString, KoPattern*>::const_iterator end = m_patternsStore.constEnd();
-
-        for (; it != end; ++it) {
-            w.writePattern("", it.value());
+        foreach (KoPattern *pattern, allPatterns) {
+            if (!patternToUuidMap.contains(pattern)) {
+                QString uuid = w.writePattern("", pattern);
+                patternToUuidMap.insert(pattern, uuid);
+            }
         }
 
         w.leaveList();
@@ -502,7 +507,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
             w.writeBoolean("Algn", bevelAndEmboss->textureAlignWithLayer());
             w.writeUnitFloat("Scl ", "#Prc", bevelAndEmboss->textureScale());
             w.writeUnitFloat("textureDepth ", "#Prc", bevelAndEmboss->textureDepth());
-            w.writePatternRef("Ptrn", bevelAndEmboss->texturePattern());
+            w.writePatternRef("Ptrn", bevelAndEmboss->texturePattern(), fetchPatternUuidSafe(bevelAndEmboss->texturePattern(), patternToUuidMap));
             w.writePhasePoint("phase", bevelAndEmboss->texturePhase());
         }
 
@@ -586,7 +591,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(patternOverlay->blendMode()));
         w.writeUnitFloat("Opct", "#Prc", patternOverlay->opacity());
 
-        w.writePatternRef("Ptrn", patternOverlay->pattern());
+        w.writePatternRef("Ptrn", patternOverlay->pattern(), fetchPatternUuidSafe(patternOverlay->pattern(), patternToUuidMap));
 
         w.writeUnitFloat("Scl ", "#Prc", patternOverlay->scale());
         w.writeBoolean("Algn", patternOverlay->alignWithLayer());
@@ -633,7 +638,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
             w.writeBoolean("Dthr", true/*stroke->dither()*/);
 
         } else if (stroke->fillType() == psd_fill_pattern) {
-            w.writePatternRef("Ptrn", stroke->pattern());
+            w.writePatternRef("Ptrn", stroke->pattern(), fetchPatternUuidSafe(stroke->pattern(), patternToUuidMap));
             w.writeUnitFloat("Scl ", "#Prc", stroke->scale());
             w.writeBoolean("Lnkd", stroke->alignWithLayer());
             w.writePhasePoint("phase", stroke->patternPhase());
@@ -644,8 +649,6 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
     w.leaveDescriptor();
     w.leaveDescriptor();
-
-    qDebug() << ppVar(w.document().toString());
 
     KisAslWriter writer;
     writer.writeFile(device, w.document());
@@ -736,12 +739,11 @@ void convertAndSetEnum(const QString &value,
     setMappedValue(map[value]);
 }
 
-template <class T>
-void cloneAndSetResource(const T *resource,
-                         boost::function<void (T*)> setResource)
+void cloneAndSetGradient(const KoAbstractGradient *resource,
+                         boost::function<void (KoAbstractGradient*)> setResource)
 {
     QByteArray md5 = resource->md5();
-    T *newResource = KisEmbeddedPatternManager::tryFetchGradientByMd5(md5);
+    KoAbstractGradient *newResource = KisEmbeddedPatternManager::tryFetchGradientByMd5(md5);
 
     if (!newResource) {
         newResource = resource->clone();
@@ -788,7 +790,7 @@ inline QString _prepaddr(const QString &addr) {
     {                                                                  \
         boost::function<void (KoAbstractGradient*)> setter =    \
             boost::bind(&type::method, object, _1);                    \
-        c.subscribeGradient(_prepaddr(addr), boost::bind(cloneAndSetResource<KoAbstractGradient>, _1, setter)); \
+        c.subscribeGradient(_prepaddr(addr), boost::bind(cloneAndSetGradient, _1, setter)); \
     }
 
 #define CONN_PATTERN(addr, method, object, type)                       \

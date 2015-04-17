@@ -242,4 +242,45 @@ void KisAslLayerStyleSerializerTest::testWriting()
     QCOMPARE(resultXMLDoc, refXMLDoc);
 }
 
+#include <KoResourceServerProvider.h>
+
+
+void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+
+    KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
+    QList<KoPattern*> sortedResources = server->sortedResources();
+
+    KoPattern *pattern = sortedResources.first();
+    Q_ASSERT(pattern);
+
+    qDebug() << ppVar(pattern->name());
+    qDebug() << ppVar(pattern->filename());
+
+    style->patternOverlay()->setEffectEnabled(true);
+    style->patternOverlay()->setPattern(pattern);
+
+    {
+        KisAslLayerStyleSerializer s(style.data());
+        QFile dstFile("test_written_pattern_only.asl");
+        dstFile.open(QIODevice::WriteOnly);
+        s.saveToDevice(&dstFile);
+        dstFile.close();
+    }
+/*
+    QByteArray resultXMLDoc;
+
+    {
+        QFile resultFile("test_written.asl");
+        resultFile.open(QIODevice::ReadOnly);
+
+        KisAslReader reader;
+        QDomDocument doc = reader.readFile(&resultFile);
+        resultXMLDoc = doc.toByteArray();
+    }
+*/
+
+}
+
 QTEST_KDEMAIN(KisAslLayerStyleSerializerTest, GUI)

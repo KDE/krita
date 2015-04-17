@@ -27,6 +27,7 @@ class KisAslLayerStyleSerializerTest : public QObject
 private slots:
     void testReading();
     void testWriting();
+    void testWritingGlobalPatterns();
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H */

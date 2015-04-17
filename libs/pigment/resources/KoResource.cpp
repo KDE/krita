@@ -113,12 +113,6 @@ void KoResource::setValid(bool valid)
     d->valid = valid;
 }
 
-void KoResource::toXML(QDomDocument& /*doc*/, QDomElement& element) const
-{
-    element.setAttribute("name", name());
-    element.setAttribute("filename", filename());
-}
-
 bool KoResource::removable() const
 {
     return d->removable;

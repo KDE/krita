@@ -109,10 +109,6 @@ protected:
     KoResource(const KoResource &rhs);
 
 private:
-    /// save the resource as XML to the given document with the given element as root
-    virtual void toXML(QDomDocument& doc, QDomElement& element) const;
-
-private:
     struct Private;
     Private* const d;
 };

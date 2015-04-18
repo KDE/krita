@@ -114,6 +114,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_mdiColor->setColor(cfg.getMDIBackgroundColor());
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
+    m_chkCompressKra->setChecked(cfg.compressKra());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
@@ -138,6 +139,7 @@ void GeneralTab::setDefault()
     m_mdiColor->setColor(QColor(220, 220, 220));
     m_backgroundimage->setText("");
     m_chkCanvasMessages->setChecked(false);
+    m_chkCompressKra->setChecked(false);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -184,6 +186,11 @@ int GeneralTab::favoritePresets()
 bool GeneralTab::showCanvasMessages()
 {
     return m_chkCanvasMessages->isChecked();
+}
+
+bool GeneralTab::compressKra()
+{
+    return m_chkCompressKra->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -838,6 +845,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
+        cfg.setCompressKra(dialog->m_general->compressKra());
         KisPart *part = KisPart::instance();
         if (part) {
             foreach(QPointer<KisDocument> doc, part->documents()) {

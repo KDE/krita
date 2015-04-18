@@ -51,6 +51,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
 
+#include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
@@ -246,7 +247,9 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
 {
     // Layer data
-    m_store->setCompressionEnabled(false);
+    KisConfig cfg;
+    m_store->setCompressionEnabled(cfg.compressKra());
+
     if (m_store->open(location)) {
         if (!device->write(*m_writer)) {
             device->disconnect();

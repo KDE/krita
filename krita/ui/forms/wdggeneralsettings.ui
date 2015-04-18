@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>628</width>
-    <height>375</height>
+    <height>396</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -245,14 +245,14 @@
        <property name="text">
         <string/>
        </property>
-       <property name="color">
+       <property name="color" stdset="0">
         <color>
          <red>0</red>
          <green>0</green>
          <blue>0</blue>
         </color>
        </property>
-       <property name="defaultColor">
+       <property name="defaultColor" stdset="0">
         <color>
          <red>0</red>
          <green>0</green>
@@ -272,6 +272,13 @@
       <widget class="QCheckBox" name="m_chkCanvasMessages">
        <property name="text">
         <string>Show on-canvas popup messages</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QCheckBox" name="m_chkCompressKra">
+       <property name="text">
+        <string>Compress .kra files more (slows loading/saving)</string>
        </property>
       </widget>
      </item>

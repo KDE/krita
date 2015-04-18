@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocale.h>
 #include <qtest_kde.h>
-#include "../compression.h"
+#include "../../../../libpsd/compression.h"
 #include <QByteArray>
 #include <QBuffer>
 #include <QDataStream>

@@ -333,7 +333,7 @@ KoColorConversionTransformation::Intent
 KisDisplayColorConverter::renderingIntent()
 {
     KisConfig cfg;
-    return (KoColorConversionTransformation::Intent)cfg.renderIntent();
+    return (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
 }
 
 KoColorConversionTransformation::ConversionFlags

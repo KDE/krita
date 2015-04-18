@@ -26,7 +26,7 @@
 
 
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
-        : KisPopupButton(parent)
+    : KisPopupButton(parent)
 {
     setObjectName(name);
     m_resource = 0;

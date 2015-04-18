@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QColor>
 
-PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
+PSDColorModeBlock::PSDColorModeBlock(psd_color_mode colormode)
     : blocksize(0)
     , colormode(colormode)
 {
@@ -42,6 +42,7 @@ bool PSDColorModeBlock::read(QIODevice* io)
             return true;
         }
     }
+
     if (colormode == Indexed && blocksize != 768) {
         error = QString("Indexed mode, but block size is %1.").arg(blocksize);
         return false;

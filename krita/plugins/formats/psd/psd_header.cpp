@@ -66,7 +66,7 @@ bool PSDHeader::read(QIODevice* device)
     memcpy(&channelDepth, header.channelDepth, 2);
     channelDepth = ntohs(channelDepth);
     memcpy(&colormode, header.colormode, 2);
-    colormode = (PSDColorMode)ntohs((quint16)colormode);
+    colormode = (psd_color_mode)ntohs((quint16)colormode);
 
     return valid();
 }

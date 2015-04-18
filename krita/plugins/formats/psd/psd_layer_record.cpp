@@ -38,7 +38,7 @@
 #include <KoColorSpaceTraits.h>
 
 // Just for pretty debug messages
-QString channelIdToChannelType(int channelId, PSDColorMode colormode)
+QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 {
     switch(channelId) {
     case -3:
@@ -171,6 +171,7 @@ PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
     , layerName("UNINITIALIZED")
     , m_header(header)
 {
+    infoBlocks.m_header = header;
 }
 
 bool PSDLayerRecord::read(QIODevice* io)
@@ -261,16 +262,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
     }
 
-    QByteArray b;
-    b = io->read(4);
-    if(b.size() != 4 || QString(b) != "8BIM") {
-        error = QString("Could not read blend mode signature for layer. Got %1.")
-                .arg(QString(b));
-        return false;
-    }
-    dbgFile << "reading blend mode at pos" << io->pos();
-    blendModeKey = QString(io->read(4));
-    if (blendModeKey.size() != 4) {
+    if (!psd_read_blendmode(io, blendModeKey)) {
         error = QString("Could not read blend mode key. Got: %1").arg(blendModeKey);
         return false;
     }
@@ -441,82 +433,15 @@ bool PSDLayerRecord::read(QIODevice* io)
         layerName = io->read(layerNameLength);
         dbgFile << "\tlayer name" << layerName << io->pos();
 
-        QStringList longBlocks;
-        if (m_header.version > 1) {
-            longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
+        if (!infoBlocks.read(io)) {
+            error = infoBlocks.error;
+            return false;
         }
 
-        while (!io->atEnd()) {
-
-            // read all the additional layer info 8BIM blocks
-            QByteArray b;
-            b = io->peek(4);
-            if(b.size() != 4 || QString(b) != "8BIM") {
-                break;
-            }
-            else {
-                io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
-            }
-
-            QString key(io->read(4));
-            if (key.size() != 4) {
-                error = "Could not read key for additional layer info block";
-                return false;
-            }
-            dbgFile << "found info block with key" << key;
-
-            if (infoBlocks.contains(key)) {
-                error = QString("Duplicate layer info block with key %1").arg(key);
-                return false;
-            }
-
-            quint64 size;
-            if (longBlocks.contains(key)) {
-                psdread(io, &size);
-            }
-            else {
-                quint32 _size;
-                psdread(io, &_size);
-                size = _size;
-            }
-
-            LayerInfoBlock* infoBlock = new LayerInfoBlock();
-            infoBlock->data = io->read(size);
-            if (infoBlock->data.size() != (qint64)size) {
-                error = QString("Could not read full info block for key %1 for layer %2").arg(key).arg(layerName);
-                return false;
-            }
-
-            dbgFile << "\tRead layer info block" << key << "for size" << infoBlock->data.size();
-
-            // get the unicode layer name
-            if (key == "luni") {
-                QBuffer buf(&infoBlock->data);
-                buf.open(QBuffer::ReadOnly);
-
-                quint32 stringlen;
-                if (!psdread(&buf, &stringlen)) {
-                    error = "Could not read string length for luni block";
-                    return false;
-                }
-                QString unicodeLayerName;
-
-                for (uint i = 0; i < stringlen; ++i) {
-                    quint16 ch;
-                    psdread(&buf, &ch);
-                    QChar uch(ch);
-                    unicodeLayerName.append(uch);
-                }
-
-                dbgFile << "unicodeLayerName" << unicodeLayerName;
-                if (!unicodeLayerName.isEmpty()) {
-                    layerName = unicodeLayerName;
-                }
-            }
-
-
-            infoBlocks[key] = infoBlock;
+        if (infoBlocks.keys.contains("luni") && !infoBlocks.unicodeLayerName.isEmpty()) {
+            layerName = infoBlocks.unicodeLayerName;
         }
+
     }
 
     return valid();

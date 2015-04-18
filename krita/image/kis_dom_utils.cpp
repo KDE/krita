@@ -25,54 +25,6 @@
 
 namespace KisDomUtils {
 
-inline int stringToInt(const QString &str) {
-    bool ok = false;
-    int value = 0;
-
-    QLocale c(QLocale::German);
-
-    value = str.toInt(&ok);
-    if (!ok) {
-        value = c.toInt(str, &ok);
-    }
-
-    if (!ok) {
-        qWarning() << "WARNING: KisDomUtils::stringToInt failed:" << ppVar(str);
-        value = 0;
-    }
-
-    return value;
-}
-
-inline double stringToDouble(const QString &str) {
-    bool ok = false;
-    double value = 0;
-
-    QLocale c(QLocale::German);
-
-    /**
-     * A special workaround to handle ','/'.' decimal point
-     * in different locales. Added for backward compatibility,
-     * because we used to save qreals directly using
-     *
-     * e.setAttribute("w", (qreal)value),
-     *
-     * which did local-aware conversion.
-     */
-
-    value = str.toDouble(&ok);
-    if (!ok) {
-        value = c.toDouble(str, &ok);
-    }
-
-    if (!ok) {
-        qWarning() << "WARNING: KisDomUtils::stringToDouble failed:" << ppVar(str);
-        value = 0;
-    }
-
-    return value;
-}
-
 void saveValue(QDomElement *parent, const QString &tag, const QSize &size)
 {
     QDomDocument doc = parent->ownerDocument();
@@ -179,14 +131,14 @@ namespace Private {
 bool loadValue(const QDomElement &e, float *v)
 {
     if (!Private::checkType(e, "value")) return false;
-    *v = stringToDouble(e.attribute("value", "0"));
+    *v = Private::stringToDouble(e.attribute("value", "0"));
     return true;
 }
 
 bool loadValue(const QDomElement &e, double *v)
 {
     if (!Private::checkType(e, "value")) return false;
-    *v = stringToDouble(e.attribute("value", "0"));
+    *v = Private::stringToDouble(e.attribute("value", "0"));
     return true;
 }
 
@@ -194,8 +146,8 @@ bool loadValue(const QDomElement &e, QSize *size)
 {
     if (!Private::checkType(e, "size")) return false;
 
-    size->setWidth(stringToInt(e.attribute("w", "0")));
-    size->setHeight(stringToInt(e.attribute("h", "0")));
+    size->setWidth(Private::stringToInt(e.attribute("w", "0")));
+    size->setHeight(Private::stringToInt(e.attribute("h", "0")));
 
     return true;
 }
@@ -204,10 +156,10 @@ bool loadValue(const QDomElement &e, QRect *rc)
 {
     if (!Private::checkType(e, "rect")) return false;
 
-    rc->setX(stringToInt(e.attribute("x", "0")));
-    rc->setY(stringToInt(e.attribute("y", "0")));
-    rc->setWidth(stringToInt(e.attribute("w", "0")));
-    rc->setHeight(stringToInt(e.attribute("h", "0")));
+    rc->setX(Private::stringToInt(e.attribute("x", "0")));
+    rc->setY(Private::stringToInt(e.attribute("y", "0")));
+    rc->setWidth(Private::stringToInt(e.attribute("w", "0")));
+    rc->setHeight(Private::stringToInt(e.attribute("h", "0")));
 
     return true;
 }
@@ -216,8 +168,8 @@ bool loadValue(const QDomElement &e, QPointF *pt)
 {
     if (!Private::checkType(e, "pointf")) return false;
 
-    pt->setX(stringToDouble(e.attribute("x", "0")));
-    pt->setY(stringToDouble(e.attribute("y", "0")));
+    pt->setX(Private::stringToDouble(e.attribute("x", "0")));
+    pt->setY(Private::stringToDouble(e.attribute("y", "0")));
 
     return true;
 }
@@ -226,9 +178,9 @@ bool loadValue(const QDomElement &e, QVector3D *pt)
 {
     if (!Private::checkType(e, "vector3d")) return false;
 
-    pt->setX(stringToDouble(e.attribute("x", "0")));
-    pt->setY(stringToDouble(e.attribute("y", "0")));
-    pt->setZ(stringToDouble(e.attribute("z", "0")));
+    pt->setX(Private::stringToDouble(e.attribute("x", "0")));
+    pt->setY(Private::stringToDouble(e.attribute("y", "0")));
+    pt->setZ(Private::stringToDouble(e.attribute("z", "0")));
 
     return true;
 }
@@ -237,17 +189,17 @@ bool loadValue(const QDomElement &e, QTransform *t)
 {
     if (!Private::checkType(e, "transform")) return false;
 
-    qreal m11 = stringToDouble(e.attribute("m11", "1.0"));
-    qreal m12 = stringToDouble(e.attribute("m12", "0.0"));
-    qreal m13 = stringToDouble(e.attribute("m13", "0.0"));
+    qreal m11 = Private::stringToDouble(e.attribute("m11", "1.0"));
+    qreal m12 = Private::stringToDouble(e.attribute("m12", "0.0"));
+    qreal m13 = Private::stringToDouble(e.attribute("m13", "0.0"));
 
-    qreal m21 = stringToDouble(e.attribute("m21", "0.0"));
-    qreal m22 = stringToDouble(e.attribute("m22", "1.0"));
-    qreal m23 = stringToDouble(e.attribute("m23", "0.0"));
+    qreal m21 = Private::stringToDouble(e.attribute("m21", "0.0"));
+    qreal m22 = Private::stringToDouble(e.attribute("m22", "1.0"));
+    qreal m23 = Private::stringToDouble(e.attribute("m23", "0.0"));
 
-    qreal m31 = stringToDouble(e.attribute("m31", "0.0"));
-    qreal m32 = stringToDouble(e.attribute("m32", "0.0"));
-    qreal m33 = stringToDouble(e.attribute("m33", "1.0"));
+    qreal m31 = Private::stringToDouble(e.attribute("m31", "0.0"));
+    qreal m32 = Private::stringToDouble(e.attribute("m32", "0.0"));
+    qreal m33 = Private::stringToDouble(e.attribute("m33", "1.0"));
 
     t->setMatrix(
         m11, m12, m13,

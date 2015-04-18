@@ -55,7 +55,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_useOcio(false)
 {
     KisConfig cfg;
-    m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+    m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
 
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;

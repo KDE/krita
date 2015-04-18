@@ -27,7 +27,7 @@ class PSDResourceBlock;
 /**
  * loads all the resource sections
  */
-class PSDResourceSection
+class PSDImageResourceSection
 {
 
 public:
@@ -141,8 +141,8 @@ public:
     };
 
 
-    PSDResourceSection();
-    ~PSDResourceSection();
+    PSDImageResourceSection();
+    ~PSDImageResourceSection();
 
     bool read(QIODevice* io);
     bool write(QIODevice* io);
@@ -151,6 +151,7 @@ public:
     static QString idToString(PSDResourceID id);
 
     QMap<PSDResourceID, PSDResourceBlock*> resources;
+
 
     QString error;
 };

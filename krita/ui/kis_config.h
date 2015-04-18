@@ -39,59 +39,43 @@ public:
     KisConfig();
     ~KisConfig();
 
-    bool disableTouchOnCanvas() const;
+    bool disableTouchOnCanvas(bool defaultValue = false) const;
     void setDisableTouchOnCanvas(bool value) const;
 
-    bool useProjections() const;
+    bool useProjections(bool defaultValue = false) const;
     void setUseProjections(bool useProj) const;
 
-    bool undoEnabled() const;
+    bool undoEnabled(bool defaultValue = false) const;
     void setUndoEnabled(bool undo) const;
 
-    int undoStackLimit() const;
+    int undoStackLimit(bool defaultValue = false) const;
     void setUndoStackLimit(int limit) const;
 
-    bool useCumulativeUndoRedo();
+    bool useCumulativeUndoRedo(bool defaultValue = false) const;
     void setCumulativeUndoRedo(bool value);
 
-    double stackT1();
+    double stackT1(bool defaultValue = false) const;
     void setStackT1(int T1);
 
-    double stackT2();
+    double stackT2(bool defaultValue = false) const;
     void setStackT2(int T2);
 
-    int stackN();
+    int stackN(bool defaultValue = false) const;
     void setStackN(int N);
 
-
-    qint32 defImageWidth() const;
+    qint32 defImageWidth(bool defaultValue = false) const;
     void defImageWidth(qint32 width) const;
 
-    qint32 defImageHeight() const;
+    qint32 defImageHeight(bool defaultValue = false) const;
     void defImageHeight(qint32 height) const;
 
-    double defImageResolution() const;
+    double defImageResolution(bool defaultValue = false) const;
     void defImageResolution(double res) const;
-
-    bool defAutoFrameBreakEnabled() const;
-    void defAutoFrameBreakEnabled(bool state) const;
-
-    bool defOnionSkinningEnabled() const;
-    void defOnionSkinningEnabled(bool state) const;
-
-    int defFps() const;
-    void defFps(int value) const;
-
-    int defLocalPlaybackRange() const;
-    void defLocalPlaybackRange(int value) const;
-
-    bool defLoopingEnabled() const;
-    void defLoopingEnabled(bool state) const;
 
     /**
      * @return the id of the default color model used for creating new images.
      */
-    QString defColorModel() const;
+    QString defColorModel(bool defaultValue = false) const;
     /**
      * set the id of the default color model used for creating new images.
      */
@@ -100,7 +84,7 @@ public:
     /**
      * @return the id of the default color depth used for creating new images.
      */
-    QString defaultColorDepth() const;
+    QString defaultColorDepth(bool defaultValue = false) const;
     /**
      * set the id of the default color depth used for creating new images.
      */
@@ -109,21 +93,20 @@ public:
     /**
      * @return the id of the default color profile used for creating new images.
      */
-    QString defColorProfile() const;
+    QString defColorProfile(bool defaultValue = false) const;
     /**
      * set the id of the default color profile used for creating new images.
      */
     void defColorProfile(const QString & depth) const;
 
-    enumCursorStyle cursorStyle() const;
-    enumCursorStyle getDefaultCursorStyle() const;
+    enumCursorStyle cursorStyle(bool defaultCursorStyle = false) const;
     void setCursorStyle(enumCursorStyle style) const;
 
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
     void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;
 
-    QString monitorForScreen(int screen, const QString &defaultMonitor) const;
+    QString monitorForScreen(int screen, const QString &defaultMonitor, bool defaultValue = true) const;
     void setMonitorForScreen(int screen, const QString& monitor);
 
     /// Get the actual profile to be used for the given screen, which is
@@ -131,215 +114,209 @@ public:
     /// the custom monitor profile set by the user, depending on the configuration
     const KoColorProfile *displayProfile(int screen) const;
 
-    QString workingColorSpace() const;
+    QString workingColorSpace(bool defaultValue = false) const;
     void setWorkingColorSpace(const QString & workingColorSpace) const;
 
-    QString importProfile() const;
+    QString importProfile(bool defaultValue = false) const;
     void setImportProfile(const QString & importProfile) const;
 
-    QString printerColorSpace() const;
+    QString printerColorSpace(bool defaultValue = false) const;
     void setPrinterColorSpace(const QString & printerColorSpace) const;
 
-    QString printerProfile() const;
+    QString printerProfile(bool defaultValue = false) const;
     void setPrinterProfile(const QString & printerProfile) const;
 
-    bool useBlackPointCompensation() const;
+    bool useBlackPointCompensation(bool defaultValue = false) const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation) const;
 
-    bool allowLCMSOptimization() const;
+    bool allowLCMSOptimization(bool defaultValue = false) const;
     void setAllowLCMSOptimization(bool allowLCMSOptimization);
 
-    bool showRulers() const;
+    bool showRulers(bool defaultValue = false) const;
     void setShowRulers(bool rulers) const;
 
-    qint32 pasteBehaviour() const;
+    qint32 pasteBehaviour(bool defaultValue = false) const;
     void setPasteBehaviour(qint32 behaviour) const;
 
-    qint32 renderIntent() const;
-    void setRenderIntent(qint32 renderIntent) const;
+    qint32 monitorRenderIntent(bool defaultValue = false) const;
+    void setRenderIntent(qint32 monitorRenderIntent) const;
 
-    bool useOpenGL() const;
+    bool useOpenGL(bool defaultValue = false) const;
     void setUseOpenGL(bool useOpenGL) const;
 
-    int openGLFilteringMode() const;
+    int openGLFilteringMode(bool defaultValue = false) const;
     void setOpenGLFilteringMode(int filteringMode);
 
-    bool useOpenGLTextureBuffer() const;
+    bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
-    bool disableDoubleBuffering() const;
+    bool disableDoubleBuffering(bool defaultValue = false) const;
     void setDisableDoubleBuffering(bool disableDoubleBuffering);
 
-    bool disableVSync() const;
+    bool disableVSync(bool defaultValue = false) const;
     void setDisableVSync(bool disableVSync);
 
-    bool showAdvancedOpenGLSettings() const;
+    bool showAdvancedOpenGLSettings(bool defaultValue = false) const;
 
-    bool forceOpenGLFenceWorkaround() const;
+    bool forceOpenGLFenceWorkaround(bool defaultValue = false) const;
 
-    int numMipmapLevels() const;
-    int openGLTextureSize() const;
+    int numMipmapLevels(bool defaultValue = false) const;
+    int openGLTextureSize(bool defaultValue = false) const;
     int textureOverlapBorder() const;
 
-    qint32 maxNumberOfThreads();
+    qint32 maxNumberOfThreads(bool defaultValue = false) const;
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 
     /// Maximum tiles in memory (this is a guideline, not absolute)
-    qint32 maxTilesInMem() const;
+    qint32 maxTilesInMem(bool defaultValue = false) const;
     void setMaxTilesInMem(qint32 tiles) const;
 
-    quint32 getGridMainStyle() const;
+    quint32 getGridMainStyle(bool defaultValue = false) const;
     void setGridMainStyle(quint32 v) const;
 
-    quint32 getGridSubdivisionStyle() const;
+    quint32 getGridSubdivisionStyle(bool defaultValue = false) const;
     void setGridSubdivisionStyle(quint32 v) const;
 
-    QColor getGridMainColor() const;
+    QColor getGridMainColor(bool defaultValue = false) const;
     void setGridMainColor(const QColor & v) const;
 
-    QColor getGridSubdivisionColor() const;
+    QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
 
-    quint32 getGridHSpacing() const;
+    quint32 getGridHSpacing(bool defaultValue = false) const;
     void setGridHSpacing(quint32 v) const;
 
-    quint32 getGridVSpacing() const;
+    quint32 getGridVSpacing(bool defaultValue = false) const;
     void setGridVSpacing(quint32 v) const;
 
-    bool getGridSpacingAspect() const;
+    bool getGridSpacingAspect(bool defaultValue = false) const;
     void setGridSpacingAspect(bool v) const;
 
-    quint32 getGridSubdivisions() const;
+    quint32 getGridSubdivisions(bool defaultValue = false) const;
     void setGridSubdivisions(quint32 v) const;
 
-    quint32 getGridOffsetX() const;
+    quint32 getGridOffsetX(bool defaultValue = false) const;
     void setGridOffsetX(quint32 v) const;
 
-    quint32 getGridOffsetY() const;
+    quint32 getGridOffsetY(bool defaultValue = false) const;
     void setGridOffsetY(quint32 v) const;
 
-    bool getGridOffsetAspect() const;
+    bool getGridOffsetAspect(bool defaultValue = false) const;
     void setGridOffsetAspect(bool v) const;
 
-    qint32 checkSize() const;
+    qint32 checkSize(bool defaultValue = false) const;
     void setCheckSize(qint32 checkSize) const;
 
-    bool scrollCheckers() const;
+    bool scrollCheckers(bool defaultValue = false) const;
     void setScrollingCheckers(bool scollCheckers) const;
 
-    QColor checkersColor1() const;
+    QColor checkersColor1(bool defaultValue = false) const;
     void setCheckersColor1(const QColor & v) const;
 
-    QColor checkersColor2() const;
+    QColor checkersColor2(bool defaultValue = false) const;
     void setCheckersColor2(const QColor & v) const;
 
-    QColor canvasBorderColor() const;
+    QColor canvasBorderColor(bool defaultValue = false) const;
     void setCanvasBorderColor(const QColor &color) const;
 
-    bool hideScrollbars() const;
+    bool hideScrollbars(bool defaultValue = false) const;
     void setHideScrollbars(bool value) const;
 
-    bool antialiasCurves() const;
+    bool antialiasCurves(bool defaultValue = false) const;
     void setAntialiasCurves(bool v) const;
 
-    QColor selectionOverlayMaskColor() const;
+    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
     void setSelectionOverlayMaskColor(const QColor &color);
 
-    bool antialiasSelectionOutline() const;
+    bool antialiasSelectionOutline(bool defaultValue = false) const;
     void setAntialiasSelectionOutline(bool v) const;
 
-    bool showRootLayer() const;
+    bool showRootLayer(bool defaultValue = false) const;
     void setShowRootLayer(bool showRootLayer) const;
 
-    bool showGlobalSelection() const;
+    bool showGlobalSelection(bool defaultValue = false) const;
     void setShowGlobalSelection(bool showGlobalSelection) const;
 
-    bool showOutlineWhilePainting() const;
+    bool showOutlineWhilePainting(bool defaultValue = false) const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
-    bool hideSplashScreen() const;
+    bool hideSplashScreen(bool defaultValue = false) const;
     void setHideSplashScreen(bool hideSplashScreen) const;
 
-    qreal outlineSizeMinimum() const;
+    qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 
-    int autoSaveInterval() const;
+    int autoSaveInterval(bool defaultValue = false) const;
     void setAutoSaveInterval(int seconds) const;
 
-    bool backupFile() const;
+    bool backupFile(bool defaultValue = false) const;
     void setBackupFile(bool backupFile) const;
 
-    bool showFilterGallery() const;
+    bool showFilterGallery(bool defaultValue = false) const;
     void setShowFilterGallery(bool showFilterGallery) const;
 
-    bool showFilterGalleryLayerMaskDialog() const;
+    bool showFilterGalleryLayerMaskDialog(bool defaultValue = false) const;
     void setShowFilterGalleryLayerMaskDialog(bool showFilterGallery) const;
 
-    QString defaultPainterlyColorModelId() const;
-    void setDefaultPainterlyColorModelId(const QString& def) const;
-
-    QString defaultPainterlyColorDepthId() const;
-    void setDefaultPainterlyColorDepthId(const QString& def) const;
-
     // OPENGL_SUCCESS, TRY_OPENGL, OPENGL_NOT_TRIED, OPENGL_FAILED
-    QString canvasState() const;
+    QString canvasState(bool defaultValue = false) const;
     void setCanvasState(const QString& state) const;
 
-    bool paintopPopupDetached() const;
+    bool paintopPopupDetached(bool defaultValue = false) const;
     void setPaintopPopupDetached(bool detached) const;
 
-    QString pressureTabletCurve() const;
+    QString pressureTabletCurve(bool defaultValue = false) const;
     void setPressureTabletCurve(const QString& curveString) const;
 
-    qreal vastScrolling() const;
+    qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
 
-    int presetChooserViewMode() const;
+    int presetChooserViewMode(bool defaultValue = false) const;
     void setPresetChooserViewMode(const int mode) const;
 
-    bool firstRun() const;
+    bool firstRun(bool defaultValue = false) const;
     void setFirstRun(const bool firstRun) const;
 
-    bool clicklessSpacePan() const;
+    bool clicklessSpacePan(bool defaultValue = false) const;
     void setClicklessSpacePan(const bool toggle) const;
 
-    int horizontalSplitLines() const;
+    int horizontalSplitLines(bool defaultValue = false) const;
     void setHorizontalSplitLines(const int numberLines) const;
 
-    int verticalSplitLines() const;
+    int verticalSplitLines(bool defaultValue = false) const;
     void setVerticalSplitLines(const int numberLines) const;
 
-    int hideDockersFullscreen() const;
-    void setHideDockersFullscreen(const int value) const;
+    bool hideDockersFullscreen(bool defaultValue = false) const;
+    void setHideDockersFullscreen(const bool value) const;
 
-    bool showDockerTitleBars() const;
+    bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
 
-    int hideMenuFullscreen() const;
-    void setHideMenuFullscreen(const int value) const;
+    bool hideMenuFullscreen(bool defaultValue = false) const;
+    void setHideMenuFullscreen(const bool value) const;
 
-    int hideScrollbarsFullscreen() const;
-    void setHideScrollbarsFullscreen(const int value) const;
+    bool hideScrollbarsFullscreen(bool defaultValue = false) const;
+    void setHideScrollbarsFullscreen(const bool value) const;
 
-    int hideStatusbarFullscreen() const;
-    void setHideStatusbarFullscreen(const int value) const;
+    bool hideStatusbarFullscreen(bool defaultValue = false) const;
+    void setHideStatusbarFullscreen(const bool value) const;
 
-    int hideTitlebarFullscreen() const;
-    void setHideTitlebarFullscreen(const int value) const;
+    bool hideTitlebarFullscreen(bool defaultValue = false) const;
+    void setHideTitlebarFullscreen(const bool value) const;
 
-    int hideToolbarFullscreen() const;
-    void setHideToolbarFullscreen(const int value) const;
+    bool hideToolbarFullscreen(bool defaultValue = false) const;
+    void setHideToolbarFullscreen(const bool value) const;
 
-    QStringList favoriteCompositeOps() const;
+    QStringList favoriteCompositeOps(bool defaultValue = false) const;
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 
-    QString exportConfiguration(const QString &filterId) const;
+    QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
     void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const;
 
-    bool useOcio() const;
+    bool useOcio(bool defaultValue = false) const;
     void setUseOcio(bool useOCIO) const;
 
-    int favoritePresets() const;
+    int favoritePresets(bool defaultValue = false) const;
     void setFavoritePresets(const int value);
 
 
@@ -349,55 +326,55 @@ public:
         OCIO_ENVIRONMENT
     };
 
-    OcioColorManagementMode ocioColorManagementMode() const;
+    OcioColorManagementMode ocioColorManagementMode(bool defaultValue = false) const;
     void setOcioColorManagementMode(OcioColorManagementMode mode) const;
 
-    QString ocioConfigurationPath() const;
+    QString ocioConfigurationPath(bool defaultValue = false) const;
     void setOcioConfigurationPath(const QString &path) const;
 
-    QString ocioLutPath() const;
+    QString ocioLutPath(bool defaultValue = false) const;
     void setOcioLutPath(const QString &path) const;
 
-    int ocioLutEdgeSize() const;
+    int ocioLutEdgeSize(bool defaultValue = false) const;
     void setOcioLutEdgeSize(int value);
 
-    bool ocioLockColorVisualRepresentation() const;
+    bool ocioLockColorVisualRepresentation(bool defaultValue = false) const;
     void setOcioLockColorVisualRepresentation(bool value);
 
-    bool useSystemMonitorProfile() const;
+    bool useSystemMonitorProfile(bool defaultValue = false) const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
 
-    QString defaultPalette() const;
+    QString defaultPalette(bool defaultValue = false) const;
     void setDefaultPalette(const QString& name) const;
 
-    QString toolbarSlider(int sliderNumber);
+    QString toolbarSlider(int sliderNumber, bool defaultValue = false) const;
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
-    bool sliderLabels() const;
+    bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);
 
-    QString currentInputProfile() const;
+    QString currentInputProfile(bool defaultValue = false) const;
     void setCurrentInputProfile(const QString& name);
 
-    bool presetStripVisible() const;
+    bool presetStripVisible(bool defaultValue = false) const;
     void setPresetStripVisible(bool visible);
 
-    bool scratchpadVisible() const;
+    bool scratchpadVisible(bool defaultValue = false) const;
     void setScratchpadVisible(bool visible);
 
-    bool showSingleChannelAsColor() const;
+    bool showSingleChannelAsColor(bool defaultValue = false) const;
     void setShowSingleChannelAsColor(bool asColor);
 
-    bool hidePopups() const;
+    bool hidePopups(bool defaultValue = false) const;
     void setHidePopups(bool hidepopups);
 
-    int numDefaultLayers() const;
+    int numDefaultLayers(bool defaultValue = false) const;
     void setNumDefaultLayers(int num);
 
-    quint8 defaultBackgroundOpacity() const;
+    quint8 defaultBackgroundOpacity(bool defaultValue = false) const;
     void setDefaultBackgroundOpacity(quint8 value);
 
-    QColor defaultBackgroundColor() const;
+    QColor defaultBackgroundColor(bool defaultValue = false) const;
     void setDefaultBackgroundColor(QColor value);
 
     enum BackgroundStyle {
@@ -405,71 +382,71 @@ public:
         PROJECTION = 1
     };
 
-    BackgroundStyle defaultBackgroundStyle() const;
+    BackgroundStyle defaultBackgroundStyle(bool defaultValue = false) const;
     void setDefaultBackgroundStyle(BackgroundStyle value);
     
-    int lineSmoothingType() const;
+    int lineSmoothingType(bool defaultValue = false) const;
     void setLineSmoothingType(int value);
 
-    qreal lineSmoothingDistance() const;
+    qreal lineSmoothingDistance(bool defaultValue = false) const;
     void setLineSmoothingDistance(qreal value);
 
-    qreal lineSmoothingTailAggressiveness() const;
+    qreal lineSmoothingTailAggressiveness(bool defaultValue = false) const;
     void setLineSmoothingTailAggressiveness(qreal value);
 
-    bool lineSmoothingSmoothPressure() const;
+    bool lineSmoothingSmoothPressure(bool defaultValue = false) const;
     void setLineSmoothingSmoothPressure(bool value);
 
-    bool lineSmoothingScalableDistance() const;
+    bool lineSmoothingScalableDistance(bool defaultValue = false) const;
     void setLineSmoothingScalableDistance(bool value);
 
-    qreal lineSmoothingDelayDistance() const;
+    qreal lineSmoothingDelayDistance(bool defaultValue = false) const;
     void setLineSmoothingDelayDistance(qreal value);
 
-    bool lineSmoothingUseDelayDistance() const;
+    bool lineSmoothingUseDelayDistance(bool defaultValue = false) const;
     void setLineSmoothingUseDelayDistance(bool value);
 
-    bool lineSmoothingFinishStabilizedCurve() const;
+    bool lineSmoothingFinishStabilizedCurve(bool defaultValue = false) const;
     void setLineSmoothingFinishStabilizedCurve(bool value);
 
-    bool lineSmoothingStabilizeSensors() const;
+    bool lineSmoothingStabilizeSensors(bool defaultValue = false) const;
     void setLineSmoothingStabilizeSensors(bool value);
 
-    int paletteDockerPaletteViewSectionSize() const;
+    int paletteDockerPaletteViewSectionSize(bool defaultValue = false) const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
 
-    int tabletEventsDelay() const;
+    int tabletEventsDelay(bool defaultValue = false) const;
     void setTabletEventsDelay(int value);
 
-    bool testingAcceptCompressedTabletEvents() const;
+    bool testingAcceptCompressedTabletEvents(bool defaultValue = false) const;
     void setTestingAcceptCompressedTabletEvents(bool value);
 
-    bool testingCompressBrushEvents() const;
+    bool testingCompressBrushEvents(bool defaultValue = false) const;
     void setTestingCompressBrushEvents(bool value);
 
-    const KoColorSpace* customColorSelectorColorSpace() const;
+    const KoColorSpace* customColorSelectorColorSpace(bool defaultValue = false) const;
     void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
 
-    bool useDirtyPresets() const;
+    bool useDirtyPresets(bool defaultValue = false) const;
     void setUseDirtyPresets(bool value);
 
-    bool useEraserBrushSize() const;
+    bool useEraserBrushSize(bool defaultValue = false) const;
     void setUseEraserBrushSize(bool value);    
 
-    QColor getMDIBackgroundColor() const;
+    QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
 
-    QString getMDIBackgroundImage() const;
+    QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;
 
-    bool useVerboseOpenGLDebugOutput() const;
+    bool useVerboseOpenGLDebugOutput(bool defaultValue = false) const;
 
-    int workaroundX11SmoothPressureSteps() const;
+    int workaroundX11SmoothPressureSteps(bool defaultValue = false) const;
 
-    bool showCanvasMessages() const;
+    bool showCanvasMessages(bool defaultValue = false) const;
     void setShowCanvasMessages(bool show);
 
-    bool compressKra() const;
+    bool compressKra(bool defaultValue = false) const;
     void setCompressKra(bool compress);
 
     template<class T>
@@ -491,6 +468,8 @@ public:
     QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
         return m_cfg.readEntry(name, defaultValue);
     }
+
+
 
 private:
     KisConfig(const KisConfig&);

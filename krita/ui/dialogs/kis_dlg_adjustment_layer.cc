@@ -42,6 +42,7 @@
 #include <kis_config.h>
 #include "KisViewManager.h"
 
+
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisNodeFilterInterface* nfi,
                                              KisPaintDeviceSP paintDevice,

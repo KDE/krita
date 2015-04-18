@@ -95,9 +95,7 @@ void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceS
         qWarning() << ppVar(t);
     }
 
-    KisPainter gc(dst);
-    gc.setCompositeOp(COMPOSITE_COPY);
-    gc.bitBlt(dstTopLeft, src, rc);
+    KisPainter::copyAreaOptimized(dstTopLeft, src, dst, rc);
 }
 
 QString KisDumbTransformMaskParams::id() const

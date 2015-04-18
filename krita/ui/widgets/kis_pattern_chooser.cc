@@ -43,8 +43,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
-    m_itemChooser->showPreview(true);
+    m_itemChooser = new KoResourceItemChooser(adapter, this, true);
     m_itemChooser->setPreviewTiled(true);
     m_itemChooser->setPreviewOrientation(Qt::Horizontal);
     QString knsrcFile = "kritapatterns.knsrc";

@@ -46,8 +46,6 @@
 #include <QProgressBar>
 #include <QSignalMapper>
 #include <QTabBar>
-#include <QDebug>
-#include <QTime>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -280,23 +278,12 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-//     QT5TODO
-//     setComponentData(KisFactory::componentData());
-    QTime t;
-    t.start();
+//    setComponentData(KisFactory::componentData());
 
-// 
     KGlobal::setActiveComponent(KisFactory::componentData());
 
-    qDebug() << "KisMainWindow() 1" << t.elapsed();
-
     d->viewManager = new KisViewManager(this, actionCollection());
-
-    qDebug() << "KisMainWindow() 2" << t.elapsed();
-
     d->themeManager = new Digikam::ThemeManager(this);
-
-    qDebug() << "KisMainWindow() 3" << t.elapsed();
 
     setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
@@ -314,16 +301,12 @@ KisMainWindow::KisMainWindow()
 #endif
 #endif
 
-    qDebug() << "KisMainWindow() 4" << t.elapsed();
-
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
     connect(this, SIGNAL(documentSaved()), d->viewManager, SLOT(slotDocumentSaved()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
-
-    qDebug() << "KisMainWindow() 5" << t.elapsed();
 
     actionCollection()->addAssociatedWidget(this);
 
@@ -332,30 +315,19 @@ KisMainWindow::KisMainWindow()
     ToolDockerFactory toolDockerFactory;
     d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
 
-    qDebug() << "KisMainWindow() 6" << t.elapsed();
-
     KoToolBoxFactory toolBoxFactory;
     createDockWidget(&toolBoxFactory);
 
-    qDebug() << "KisMainWindow() 7" << t.elapsed();
-
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-
-        qDebug() << "KisMainWindow() 8" << docker << t.elapsed();
-
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         createDockWidget(factory);
     }
-
-    qDebug() << "KisMainWindow() 9" << t.elapsed();
 
     foreach (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
             wdg->setVisible(true);
         }
     }
-
-    qDebug() << "KisMainWindow() 10" << t.elapsed();
 
     foreach(KoCanvasObserverBase* observer, canvasObservers()) {
         observer->setObservedCanvas(0);
@@ -365,8 +337,6 @@ KisMainWindow::KisMainWindow()
         }
     }
 
-    qDebug() << "KisMainWindow() 11" << t.elapsed();
-
     d->mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
@@ -375,38 +345,22 @@ KisMainWindow::KisMainWindow()
     d->mdiArea->setTabsClosable(true);
 #endif /* QT_VERSION >= 0x040800 */
 
-    qDebug() << "KisMainWindow() 12" << t.elapsed();
-
     setCentralWidget(d->mdiArea);
     d->mdiArea->show();
-
-    qDebug() << "KisMainWindow() 13" << t.elapsed();
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
     connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
-    qDebug() << "KisMainWindow() 14" << t.elapsed();
-
     createActions();
-
-    qDebug() << "KisMainWindow() 15" << t.elapsed();
 
     setAutoSaveSettings(KisFactory::componentName(), false);
 
-    qDebug() << "KisMainWindow() 16" << t.elapsed();
-
     KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), viewManager());
 
-    qDebug() << "KisMainWindow() 17" << t.elapsed();
-
     subWindowActivated();
-
-    qDebug() << "KisMainWindow() 18" << t.elapsed();
-
     updateWindowMenu();
 
-    qDebug() << "KisMainWindow() 19" << t.elapsed();
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
         d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
@@ -427,11 +381,7 @@ KisMainWindow::KisMainWindow()
     }
 #endif
 
-    qDebug() << "KisMainWindow() 20" << t.elapsed();
-
     configChanged();
-
-    qDebug() << "KisMainWindow() 21" << t.elapsed();
 
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
@@ -440,11 +390,7 @@ KisMainWindow::KisMainWindow()
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
     setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
 
-    qDebug() << "KisMainWindow() 22" << t.elapsed();
-
     guiFactory()->addClient(this);
-
-    qDebug() << "KisMainWindow() 23" << t.elapsed();
 
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
@@ -465,13 +411,8 @@ KisMainWindow::KisMainWindow()
         } else
             kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
     }
-
-    qDebug() << "KisMainWindow() 24" << t.elapsed();
-
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
-
-    qDebug() << "KisMainWindow() 25" << t.elapsed();
 
     applyToolBarLayout();
 
@@ -479,8 +420,6 @@ KisMainWindow::KisMainWindow()
     d->viewManager->updateIcons();
 
     QTimer::singleShot(1000, this, SLOT(checkSanity()));
-
-    qDebug() << "KisMainWindow() 26" << t.elapsed();
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)

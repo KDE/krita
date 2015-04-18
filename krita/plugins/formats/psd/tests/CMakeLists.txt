@@ -28,6 +28,7 @@ kde4_add_unit_test(compression_test TESTNAME krita-psd-compression_test  ${compr
 target_link_libraries(compression_test ${KDE4_KDEUI_LIBS} Qt5::Test)
 
 ########### next target ###############
-#set(kis_psd_test_SRCS kis_psd_test.cpp )
-#kde4_add_unit_test(kis_psd_test TESTNAME krita-plugins-formats-psd_test ${kis_psd_test_SRCS})
-#target_link_libraries(kis_psd_test  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)
+set(kis_psd_test_SRCS kis_psd_test.cpp )
+kde4_add_unit_test(kis_psd_test TESTNAME krita-plugins-formats-psd_test ${kis_psd_test_SRCS})
+target_link_libraries(kis_psd_test  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)
+

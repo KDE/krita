@@ -27,7 +27,7 @@ class KisFullRefreshWalker : public KisRefreshSubtreeWalker, public KisMergeWalk
 {
 public:
     KisFullRefreshWalker(QRect cropRect)
-        : m_firstRun(true)
+        : KisMergeWalker(NO_FILTHY), m_firstRun(true)
     {
         setCropRect(cropRect);
     }
@@ -69,14 +69,12 @@ public:
              * true in case of full refresh walker, because all the
              * children of the dirty node are dirty as well, that is
              * why we shouldn't rely on usual registerChangeRect()
-             * mechanism for this node. Actually, node->changeRect()
-             * may not be valid in case its masks have been changes.
-             * That is why we just unite the changeRects of all its
-             * children here.
+             * mechanism for this node. That is why we just unite the
+             * changeRects of all its children here.
              */
 
-            if(node == startNode()) {
-                KisRefreshSubtreeWalker::calculateChangeRect(node, changeRect());
+            if(node == startNode() && node->parent()) {
+                KisRefreshSubtreeWalker::calculateChangeRect(node, requestedRect());
             }
             else {
                 KisMergeWalker::registerChangeRect(node, position);

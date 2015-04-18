@@ -80,7 +80,7 @@ void KisAslObjectCatcher::addPatternRef(const QString &path, const QString &patt
     qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "pattern-ref" << ppVar(patternUuid) << ppVar(patternName);
 }
 
-void KisAslObjectCatcher::addGradient(const QString &path, const KoAbstractGradient *value)
+void KisAslObjectCatcher::addGradient(const QString &path, KoAbstractGradientSP value)
 {
     qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "gradient" << value;
 }

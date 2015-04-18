@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,36 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DOCUMENTLISTWINDOW_H
-#define DOCUMENTLISTWINDOW_H
+#ifndef __KIS_EMBEDDED_PATTERN_MANAGER_H
+#define __KIS_EMBEDDED_PATTERN_MANAGER_H
 
-#include <QDialog>
+#include <krita_export.h>
 
-#include "ui_documentlist.h"
+class KoPattern;
+class KoAbstractGradient;
+class KisPropertiesConfiguration;
 
-class GoogleDocumentService;
-class GoogleDocument;
-class GoogleDocumentList;
 
-class DocumentListWindow : public QDialog
+class KRITAUI_EXPORT KisEmbeddedPatternManager
 {
-    Q_OBJECT
-
 public:
-    DocumentListWindow(GoogleDocumentService *service, GoogleDocumentList *gList);
-    ~DocumentListWindow();
-    QString currentDocument();
-
-public Q_SLOTS:
-    void hideDialog();
-
-private Q_SLOTS:
-    void getClickedDocument(const QModelIndex & index);
-    void fetchDocument();
+    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
+    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
 
 private:
-    Ui_ListDialog *m_docListDialog;
-    GoogleDocumentService *m_gService;
+    struct Private;
 };
 
-#endif // DOCUMENTLISTWINDOW_H
+#endif /* __KIS_EMBEDDED_PATTERN_MANAGER_H */

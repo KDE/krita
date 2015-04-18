@@ -24,24 +24,6 @@
 #include <krita_export.h>
 #include "kis_psd_layer_style.h"
 
-
-class KRITAUI_EXPORT KisPSDLayerStyleResource : public KoResource
-{
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
-
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice *dev) const;
-
-    virtual QString defaultFileExtension() const;
-
-    KisPSDLayerStyle layerStyle() const;
-
-protected:
-    virtual QByteArray generateMD5() const;
-
-};
-
 /**
  * @brief The KisPSDLayerStyleResource class represents an ASL file type resource.
  */

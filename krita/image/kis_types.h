@@ -236,6 +236,9 @@ typedef QWeakPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneWSP;
 class KisPSDLayerStyle;
 typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
 
+class KoAbstractGradient;
+typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
+
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>

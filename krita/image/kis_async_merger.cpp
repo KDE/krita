@@ -103,9 +103,7 @@ public:
              * filter inside. Then the layer has work as a pass-through
              * node. Just copy the merged data to the layer's original.
              */
-            KisPainter gc(originalDevice);
-            gc.setCompositeOp(COMPOSITE_COPY);
-            gc.bitBlt(applyRect.topLeft(), m_projection, applyRect);
+            KisPainter::copyAreaOptimized(applyRect.topLeft(), m_projection, originalDevice, applyRect);
             return true;
         }
 
@@ -327,9 +325,7 @@ void KisAsyncMerger::writeProjection(KisNodeSP topmostNode, bool useTempProjecti
     if (!m_currentProjection) return;
 
     if(m_currentProjection != m_finalProjection) {
-        KisPainter gc(m_finalProjection);
-        gc.setCompositeOp(m_finalProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc.bitBlt(rect.topLeft(), m_currentProjection, rect);
+        KisPainter::copyAreaOptimized(rect.topLeft(), m_currentProjection, m_finalProjection, rect);
     }
     DEBUG_NODE_ACTION("Writing projection", "", topmostNode->parent(), rect);
 }
@@ -342,7 +338,7 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
     KisPainter gc(m_currentProjection);
     layer->projectionPlane()->apply(&gc, rect);
 
-    DEBUG_NODE_ACTION("Compositing projection", "", layer, needRect);
+    DEBUG_NODE_ACTION("Compositing projection", "", layer, rect);
     return true;
 }
 

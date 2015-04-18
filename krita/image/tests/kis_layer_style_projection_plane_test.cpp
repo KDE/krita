@@ -214,10 +214,10 @@ void KisLayerStyleProjectionPlaneTest::testGlowGradient()
     testGradient.setColorAt(0.5, Qt::green);
     testGradient.setColorAt(1.0, Qt::black);
     testGradient.setSpread(QGradient::ReflectSpread);
-    QScopedPointer<KoStopGradient> gradient(
+    QSharedPointer<KoStopGradient> gradient(
         KoStopGradient::fromQGradient(&testGradient));
 
-    style->outerGlow()->setGradient(gradient.data());
+    style->outerGlow()->setGradient(gradient);
     style->outerGlow()->setFillType(psd_fill_gradient);
 
     test(style, "glow_outer_grad");
@@ -238,10 +238,10 @@ void KisLayerStyleProjectionPlaneTest::testGlowGradientJitter()
     testGradient.setColorAt(0.5, Qt::green);
     testGradient.setColorAt(1.0, Qt::black);
     testGradient.setSpread(QGradient::ReflectSpread);
-    QScopedPointer<KoStopGradient> gradient(
+    QSharedPointer<KoStopGradient> gradient(
         KoStopGradient::fromQGradient(&testGradient));
 
-    style->outerGlow()->setGradient(gradient.data());
+    style->outerGlow()->setGradient(gradient);
     style->outerGlow()->setFillType(psd_fill_gradient);
     style->outerGlow()->setJitter(20);
 
@@ -263,10 +263,10 @@ void KisLayerStyleProjectionPlaneTest::testGlowInnerGradient()
     testGradient.setColorAt(0.5, Qt::green);
     testGradient.setColorAt(1.0, Qt::black);
     testGradient.setSpread(QGradient::ReflectSpread);
-    QScopedPointer<KoStopGradient> gradient(
+    QSharedPointer<KoStopGradient> gradient(
         KoStopGradient::fromQGradient(&testGradient));
 
-    style->innerGlow()->setGradient(gradient.data());
+    style->innerGlow()->setGradient(gradient);
     style->innerGlow()->setFillType(psd_fill_gradient);
 
     test(style, "glow_inner_grad");
@@ -319,10 +319,10 @@ void KisLayerStyleProjectionPlaneTest::testGradientOverlay()
     testGradient.setColorAt(0.5, Qt::green);
     testGradient.setColorAt(1.0, Qt::black);
     testGradient.setSpread(QGradient::ReflectSpread);
-    QScopedPointer<KoStopGradient> gradient(
+    QSharedPointer<KoStopGradient> gradient(
         KoStopGradient::fromQGradient(&testGradient));
 
-    style->gradientOverlay()->setGradient(gradient.data());
+    style->gradientOverlay()->setGradient(gradient);
 
     test(style, "grad_overlay");
 }
@@ -383,10 +383,10 @@ void KisLayerStyleProjectionPlaneTest::testStroke()
     testGradient.setColorAt(0.5, Qt::green);
     testGradient.setColorAt(1.0, Qt::black);
     testGradient.setSpread(QGradient::ReflectSpread);
-    QScopedPointer<KoStopGradient> gradient(
+    QSharedPointer<KoStopGradient> gradient(
         KoStopGradient::fromQGradient(&testGradient));
 
-    style->stroke()->setGradient(gradient.data());
+    style->stroke()->setGradient(gradient);
     style->stroke()->setFillType(psd_fill_gradient);
 
     test(style, "stroke_grad");

@@ -131,7 +131,6 @@ calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" UNPORTED  
 calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
 
 # staging plugins
-calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
 
 # Sheets filters

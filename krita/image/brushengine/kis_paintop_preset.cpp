@@ -169,8 +169,6 @@ bool KisPaintOpPreset::load()
         ba = resourceStore->device()->readAll();
         dev = new QBuffer(&ba);
 
-        qDebug() << "Going to load" << fn << "size" << ba.size();
-
         resourceStore->close();
     }
     else {
@@ -206,7 +204,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
     QString version = reader.text("version");
     QString preset = reader.text("preset");
 
-    dbgImage << version << preset;
+    dbgImage << version;
 
     if (version != "2.2") {
         return false;

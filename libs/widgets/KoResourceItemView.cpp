@@ -40,6 +40,8 @@ void KoResourceItemView::resizeEvent( QResizeEvent * event )
 {
     QTableView::resizeEvent(event);
     updateView();
+
+    emit sigSizeChanged();
 }
 
 bool KoResourceItemView::viewportEvent( QEvent * event )

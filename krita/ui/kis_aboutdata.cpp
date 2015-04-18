@@ -293,6 +293,7 @@ K4AboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Camelworks"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Carlos Andrés Moscoso"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Carlos Mazon"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("Cédric Archambault"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Champagnie"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Charles Prescott Collins IV"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Charles Stanhope,"), ki18n("Krita 2.9 Kickstarter Backer"));

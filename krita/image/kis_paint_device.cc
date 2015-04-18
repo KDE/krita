@@ -323,13 +323,23 @@ void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
 void KisPaintDevice::makeCloneFrom(KisPaintDeviceSP src, const QRect &rect)
 {
     prepareClone(src);
-    fastBitBlt(src, rect);
+
+     // we guarantee that *this is totally empty, so copy pixels that
+    // are areally present on the source image only
+    const QRect optimizedRect = rect & src->extent();
+
+    fastBitBlt(src, optimizedRect);
 }
 
 void KisPaintDevice::makeCloneFromRough(KisPaintDeviceSP src, const QRect &minimalRect)
 {
     prepareClone(src);
-    fastBitBltRough(src, minimalRect);
+
+    // we guarantee that *this is totally empty, so copy pixels that
+    // are areally present on the source image only
+    const QRect optimizedRect = minimalRect & src->extent();
+
+    fastBitBltRough(src, optimizedRect);
 }
 
 void KisPaintDevice::setDirty()

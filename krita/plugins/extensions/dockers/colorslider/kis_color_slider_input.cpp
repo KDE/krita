@@ -78,7 +78,6 @@ void KisColorSliderInput::init()
     }
     
     QLabel* m_label = new QLabel(i18n("%1:", m_name), this);
-    m_label->setMinimumWidth(60);
     m_layout->addWidget(m_label);
 
     m_hsvSlider = new KisHSVSlider(Qt::Horizontal, this, m_displayRenderer, m_canvas);

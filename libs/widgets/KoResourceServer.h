@@ -73,6 +73,7 @@ public:
     virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
+    virtual QStringList queryResources(const QString &query) const = 0;
     QString type() const { return m_type; }
 
     /**
@@ -141,7 +142,7 @@ public:
     {
         m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
-        m_tagStore = new KoResourceTagStore(this, type, extensions);
+        m_tagStore = new KoResourceTagStore(this);
     }
 
     virtual ~KoResourceServer()
@@ -487,12 +488,6 @@ public:
         writeBlackListFile();
     }
 
-    /// the below functions helps to access tagObject functions
-    QStringList assignedTagsList( KoResource* resource ) const
-    {
-        return m_tagStore->assignedTagsList(resource);
-    }
-
     QStringList tagNamesList() const
     {
         return m_tagStore->tagNamesList();
@@ -540,11 +535,15 @@ public:
         }
     }
 
-    KoResourceTagStore * tagObject() const
+    QStringList queryResources(const QString &query) const
     {
-        return m_tagStore;
+        return m_tagStore->searchTag(query);
     }
 
+    QStringList assignedTagsList(KoResource* resource) const
+    {
+        return m_tagStore->assignedTagsList(resource);
+    }
 
 
     /**
@@ -663,6 +662,7 @@ protected:
         metastream << doc.toByteArray();
         f.close();
     }
+
 protected:
 
     KoResource* byMd5(const QByteArray &md5) const
@@ -673,14 +673,6 @@ protected:
     KoResource* byFileName(const QString &fileName) const
     {
         return Policy::toResourcePointer(resourceByFilename(fileName));
-    }
-
-
-    /// Destory the tag storage, only call this directly before deleting the sever and if the automatic
-    /// delete should not be used.
-    void destroyTagStorage() {
-        delete m_tagStore;
-        m_tagStore = 0;
     }
 
 private:

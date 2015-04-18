@@ -50,6 +50,7 @@ public:
 
 protected:
     KisMergeWalker() : m_flags(DEFAULT) {}
+    KisMergeWalker(Flags flags) : m_flags(flags) {}
 
     /**
      * Begins visiting nodes starting with @startWith.

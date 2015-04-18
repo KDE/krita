@@ -167,15 +167,15 @@ public:
         return m_cloneNotifications;
     }
 
-    inline const QRect& accessRect() const {
+    inline QRect accessRect() const {
         return m_resultAccessRect;
     }
 
-    inline const QRect& changeRect() const {
+    inline QRect changeRect() const {
         return m_resultChangeRect;
     }
 
-    inline const QRect& uncroppedChangeRect() const {
+    inline QRect uncroppedChangeRect() const {
         return m_resultUncroppedChangeRect;
     }
 
@@ -191,7 +191,7 @@ public:
         return m_startNode;
     }
 
-    inline const QRect& requestedRect() const {
+    inline QRect requestedRect() const {
         return m_requestedRect;
     }
 

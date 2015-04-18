@@ -73,7 +73,7 @@ protected:
             nextNode = currentNode->nextSibling();
 
             if(isLayer(currentNode)) {
-                tempRect = calculateChangeRect(currentNode, tempRect);
+                tempRect |= calculateChangeRect(currentNode, requestedRect);
 
                 if(!changeRectVaries)
                     changeRectVaries = tempRect != requestedRect;
@@ -96,13 +96,26 @@ protected:
     }
 
     void startTrip(KisNodeSP startWith) {
-        calculateChangeRect(startWith, requestedRect());
+        setExplicitChangeRect(startWith, requestedRect(), false);
 
         if(startWith == startNode()) {
-            NodePosition pos = N_EXTRA | calculateNodePosition(startWith);
-            registerNeedRect(startWith, pos);
-        }
+            KisNodeSP extraUpdateNode = startWith;
 
+            if (isMask(startWith)) {
+                /**
+                 * When the mask is the root of the update, update
+                 * its parent projection using N_EXTRA method.
+                 *
+                 * This special update is necessary because the following
+                 * wolker will work in N_ABOVE_FILTHY mode only
+                 */
+
+                extraUpdateNode = startWith->parent();
+            }
+
+            NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateNode);
+            registerNeedRect(extraUpdateNode, pos);
+        }
 
         KisNodeSP currentNode = startWith->lastChild();
         while(currentNode) {

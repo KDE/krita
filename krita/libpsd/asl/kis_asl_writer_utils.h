@@ -34,7 +34,7 @@ namespace KisAslWriterUtils {
 /**
  * Exception that is emitted when any write error appear.
  */
-struct ASLWriteException : public std::runtime_error
+struct LIBKISPSD_EXPORT ASLWriteException : public std::runtime_error
 {
     ASLWriteException(const QString &msg)
         : std::runtime_error(msg.toAscii().data())

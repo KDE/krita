@@ -115,11 +115,10 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 {
     lockTemporaryTarget();
 
-    KisPainter gc(projection);
-    gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, rect);
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 
     if (hasTemporaryTarget()) {
+        KisPainter gc(projection);
         setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }

@@ -513,7 +513,7 @@ KisNode::PositionToFilthy calculatePositionToFilthy(KisNodeSP nodeInQuestion,
 }
 
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
-                           const KisPaintDeviceSP destination,
+                           KisPaintDeviceSP destination,
                            const QRect &requestedRect,
                            KisNodeSP filthyNode,
                            KisNodeSP lastNode) const
@@ -594,9 +594,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             }
             Q_ASSERT(applyRects.isEmpty());
 
-            KisPainter gc2(destination);
-            gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-            gc2.bitBlt(changeRect.topLeft(), tempDevice, changeRect);
+            KisPainter::copyAreaOptimized(changeRect.topLeft(), tempDevice, destination, changeRect);
         }
     }
 
@@ -663,9 +661,7 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
                                         KisPaintDeviceSP projection,
                                         const QRect& rect) const
 {
-    KisPainter gc(projection);
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, rect);
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 }
 
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const

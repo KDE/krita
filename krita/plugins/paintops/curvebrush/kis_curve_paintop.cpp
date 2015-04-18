@@ -50,7 +50,7 @@ KisCurvePaintOp::~KisCurvePaintOp()
 KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
-    return 1.0;
+    return KisSpacingInformation(1.0);
 }
 
 

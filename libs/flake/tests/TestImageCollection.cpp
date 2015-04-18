@@ -74,7 +74,7 @@ void TestImageCollection::testGetImageImage()
 void TestImageCollection::testGetExternalImage()
 {
     KoImageCollection collection;
-    QUrl url(KDESRCDIR "/logo-calligra.png");
+    QUrl url = QUrl::fromLocalFile(KDESRCDIR "/logo-calligra.png");
     KoImageData *id1 = collection.createExternalImageData(url);
     QCOMPARE(id1->suffix(), QString("png"));
     QCOMPARE(id1->hasCachedImage(), false);
@@ -84,7 +84,7 @@ void TestImageCollection::testGetExternalImage()
     KoImageData *id3 = collection.createExternalImageData(url);
     QCOMPARE(id1->key(), id3->key());
     QCOMPARE(id1->priv(), id3->priv());
-    KUrl url2(KDESRCDIR "/logo-kpresenter.png");
+    QUrl url2 = QUrl::fromLocalFile(KDESRCDIR "/logo-kpresenter.png");
     KoImageData *id4 = collection.createExternalImageData(url2);
     QCOMPARE(id4->hasCachedImage(), false);
     QVERIFY(id1->key() != id4->key());
@@ -202,7 +202,7 @@ void TestImageCollection::testPreload1()
 void TestImageCollection::testPreload2()
 {
     KoImageData data;
-    QUrl url(KDESRCDIR "/logo-calligra.png");
+    QUrl url = QUrl::fromLocalFile(KDESRCDIR "/logo-calligra.png");
     data.setExternalImage(url);
 
     QCOMPARE(data.hasCachedImage(), false);

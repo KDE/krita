@@ -222,6 +222,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
 
+    void pageUpdated(KoPAPageBase* page);
     void viewSnapToGrid(bool snap);
     void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );

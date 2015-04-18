@@ -787,6 +787,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
         QString suggestedFilename = suggestedURL.fileName();
+
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
@@ -819,8 +820,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
-        dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+        if (isExporting() && !d->lastExportUrl.isEmpty()) {
+            dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
+        }
+        else {
+            dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
+        }
         dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
         KUrl newURL = dialog.url();
 
@@ -866,7 +871,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                qDebug() << "save to directory: " << newURL.url();
+                //qDebug() << "save to directory: " << newURL.url();
             }
             else if (specialOutputFlag == KisDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');

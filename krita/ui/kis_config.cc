@@ -1488,6 +1488,16 @@ void KisConfig::setShowCanvasMessages(bool show)
     m_cfg.writeEntry("showOnCanvasMessages", show);
 }
 
+bool KisConfig::compressKra() const
+{
+    return m_cfg.readEntry("compressLayersInKra", false);
+}
+
+void KisConfig::setCompressKra(bool compress)
+{
+    m_cfg.writeEntry("compressLayersInKra", compress);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
 {
     const KoColorSpace *cs = 0;

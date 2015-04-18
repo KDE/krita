@@ -469,6 +469,9 @@ public:
     bool showCanvasMessages() const;
     void setShowCanvasMessages(bool show);
 
+    bool compressKra() const;
+    void setCompressKra(bool compress);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

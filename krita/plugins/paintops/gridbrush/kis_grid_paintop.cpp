@@ -86,7 +86,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     time.start();
 #endif
 
-    if (!painter()) return m_spacing;
+    if (!painter()) return KisSpacingInformation(m_spacing);
     m_dab->clear();
 
     int gridWidth = m_properties.gridWidth * m_properties.scale;
@@ -238,7 +238,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
-    return m_spacing;
+    return KisSpacingInformation(m_spacing);
 }
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)

@@ -91,14 +91,14 @@ KisDuplicateOp::~KisDuplicateOp()
 
 KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()->device()) return 1.0;
+    if (!painter()->device()) return KisSpacingInformation(1.0);
 
     KisBrushSP brush = m_brush;
     if (!brush)
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     if (!brush->canPaintFor(info))
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     if (!m_duplicateStartIsSet) {
         m_duplicateStartIsSet = true;
@@ -129,7 +129,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
                              info, 1.0,
                              &dstRect);
 
-    if (dstRect.isEmpty()) return 1.0;
+    if (dstRect.isEmpty()) return KisSpacingInformation(1.0);
 
 
     QPoint srcPoint;
@@ -156,18 +156,15 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
         QRect r = QRect(0, 0, m_image->width(), m_image->height());
 
-#if 1
         if (subGridStart) {
             startM = KisPerspectiveMath::computeMatrixTransfoFromPerspective(r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
         }
-#endif
-#if 1
+
         // Second look for the grid corresponding to the end point
         KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
         if (subGridEnd) {
             endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }
-#endif
 
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
@@ -176,6 +173,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
         KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
+
         //Action
         do {
             QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);

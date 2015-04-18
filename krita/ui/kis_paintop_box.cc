@@ -207,13 +207,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slOpacity->setRange(0.0, 1.0, 2);
         slOpacity->setValue(1.0);
         slOpacity->setSingleStep(0.05);
-        slOpacity->setMinimumWidth(sliderWidth);
+        slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
         slOpacity->setFixedHeight(32);
 
         slFlow->setRange(0.0, 1.0, 2);
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
-        slFlow->setMinimumWidth(sliderWidth);
+        slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
         slFlow->setFixedHeight(32);
 
         slSize->setRange(0, 1000, 2);
@@ -221,9 +221,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setMinimumWidth(sliderWidth);
-        slSize->setFixedHeight(32);
         slSize->setSuffix(" px");
+        slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
+        slSize->setFixedHeight(32);
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }

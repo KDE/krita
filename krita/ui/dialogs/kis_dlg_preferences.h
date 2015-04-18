@@ -73,6 +73,7 @@ public:
     int mdiMode();
     int favoritePresets();
     bool showCanvasMessages();
+    bool compressKra();
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();

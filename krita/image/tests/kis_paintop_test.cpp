@@ -32,12 +32,8 @@ public:
     }
 
     KisSpacingInformation paintAt(const KisPaintInformation&) {
-        return 0.0;
+        return KisSpacingInformation(0.0);
     }
-    qreal spacing(qreal&, qreal&, qreal, qreal) const {
-        return 0.5;
-    }
-
 
 };
 

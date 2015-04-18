@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2010 Justin Noel <justin@ics.com>
  * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -455,29 +456,33 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     // Some styles use bold font in progressbars
     ft.setBold(true);
     QFontMetrics fm(ft);
-    //We need at least 50 pixels or things start to look bad
-    int w = qMax(fm.width(d->prefix + QString::number(d->maximum) + d->suffix)+qRound(0.2*logicalDpiX()), 50);
-    QSize hint(w, d->edit->sizeHint().height() + 7);
+    QSize hint(fm.boundingRect(d->prefix + QString::number(d->maximum) + d->suffix).size());
+    hint += QSize(4, 2);
 
-    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE) {
-        hint.setHeight(hint.height() - 6);
+    // almost all "modern" styles have a margin around controls
+    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK) {
+        hint += QSize(4, 6);
     }
 
-    //Getting the size of the buttons is a pain as the calcs require a rect
-    //that is "big enough". We run the calc twice to get the "smallest" buttons
-    //This code was inspired by QAbstractSpinBox
-    QSize extra(35, 6);
-    spinOpts.rect.setSize(hint + extra);
-    extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
-                                            QStyle::SC_SpinBoxEditField, this).size();
+    // The breeze style doesn't seem to need this
+    if (d->style != KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE) {
+        //Getting the size of the buttons is a pain as the calcs require a rect
+        //that is "big enough". We run the calc twice to get the "smallest" buttons
+        //This code was inspired by QAbstractSpinBox
+        QSize extra(35, 0);
+        spinOpts.rect.setSize(hint + extra);
+        extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
+                                                QStyle::SC_SpinBoxEditField, this).size();
 
-    spinOpts.rect.setSize(hint + extra);
-    extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
-                                            QStyle::SC_SpinBoxEditField, this).size();
-    hint += extra;
+        spinOpts.rect.setSize(hint + extra);
+        extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
+                                                QStyle::SC_SpinBoxEditField, this).size();
 
-    spinOpts.rect = rect();
-    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
+        hint += extra;
+    }
+
+    spinOpts.rect.setSize(hint);
+    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint)
             .expandedTo(QApplication::globalStrut());
 
 }
@@ -485,6 +490,11 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
 QSize KisAbstractSliderSpinBox::minimumSizeHint() const
 {
     return sizeHint();
+}
+
+QSize KisAbstractSliderSpinBox::minimumSize() const
+{
+    return QWidget::minimumSize().expandedTo(minimumSizeHint());
 }
 
 QStyleOptionSpinBox KisAbstractSliderSpinBox::spinBoxOptions() const

@@ -42,17 +42,18 @@
 #include "kis_layer.h"
 #include "kis_boundary.h"
 
-
-
 /**
  * The parasite info that gets loaded from the terribly documented gimp pipe brush parasite.
+ *
  * We only store data we actually use.
+ *
  * BC: How it seems the dimension stuff interacts with rank, selectionMode and the actual
  * selection of a brush to be drawn. So apparently you can have at most 4 'dimensions'.
  * Each dimension has a number of brushes, the rank. Each dimension has an associated selection
  * mode and placement mode (which we don't use). The selection mode says us in which way
  * which of the brushes or brush sets will be selected. In the case of a 1-dimensional pipe
  * brush it is easy.
+ *
  * However, when there are more dimensions it is a bit harder. You can according to the gimp
  * source maximally use 4 dimensions. When you want to select a brush, you first go to the
  * first dimension. Say it has a rank of 2. The code chooses one of the 2 according to the

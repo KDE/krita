@@ -330,7 +330,7 @@ void KoPAView::initGUI(KoPAFlags flags)
     connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeAdded(KoShape *)), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(updateCanvasSize()));
-    connect(d->doc, SIGNAL(update(KoPAPageBase*)), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(update(KoPAPageBase*)), this, SLOT(pageUpdated(KoPAPageBase*)));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
@@ -711,6 +711,16 @@ void KoPAView::reinitDocumentDocker()
 {
     if (mainWindow()) {
         d->documentStructureDocker->setActivePage( d->activePage );
+    }
+}
+
+void KoPAView::pageUpdated(KoPAPageBase* page)
+{
+    // if the page was updated its content e.g. master page has been changed. Therefore we need to
+    // set the page again to set the shapes of the new master page and get a repaint. Without this
+    // changing the master page does not update the page.
+    if (d->activePage == page) {
+        doUpdateActivePage(page);
     }
 }
 

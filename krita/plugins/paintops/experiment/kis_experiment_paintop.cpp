@@ -246,7 +246,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 KisSpacingInformation KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
-    return 1.0;
+    return KisSpacingInformation(1.0);
 }
 
 bool tryMergePoints(QPainterPath &path,

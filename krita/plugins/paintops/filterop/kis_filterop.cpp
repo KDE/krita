@@ -75,22 +75,22 @@ KisFilterOp::~KisFilterOp()
 KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
-        return 1.0;
+        return KisSpacingInformation(1.0);
     }
 
     if (!m_filter) {
-        return 1.0;
+        return KisSpacingInformation(1.0);
     }
 
     if (!source()) {
-        return 1.0;
+        return KisSpacingInformation(1.0);
     }
 
     KisBrushSP brush = m_brush;
-    if (!brush) return 1.0;
+    if (!brush) return KisSpacingInformation(1.0);
 
     if (! brush->canPaintFor(info))
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -109,7 +109,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
                              info, 1.0,
                              &dstRect);
 
-    if (dstRect.isEmpty()) return 1.0;
+    if (dstRect.isEmpty()) return KisSpacingInformation(1.0);
 
     QRect dabRect = dab->bounds();
 

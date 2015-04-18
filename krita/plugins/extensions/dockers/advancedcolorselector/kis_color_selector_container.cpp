@@ -129,7 +129,7 @@ void KisColorSelectorContainer::updateSettings()
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     m_shadeSelectorHideable = cfg.readEntry("shadeSelectorHideable", false);
     m_allowHorizontalLayout = cfg.readEntry("allowHorizontalLayout", true);
-    m_hideColorSelector = cfg.readEntry("hideColorSelector", true);
+    m_hideColorSelector = cfg.readEntry("hideColorSelector", false);
 
     QString type = cfg.readEntry("shadeSelectorType", "MyPaint");
 

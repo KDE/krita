@@ -20,7 +20,7 @@
 #define __KIS_ASL_OBJECT_CATCHER_H
 
 #include <QVector>
-#include "krita_export.h"
+#include "libkispsd_export.h"
 
 class QString;
 class QColor;
@@ -29,7 +29,7 @@ class KoPattern;
 class KoAbstractGradient;
 
 
-class KRITAIMAGE_EXPORT KisAslObjectCatcher
+class LIBKISPSD_EXPORT KisAslObjectCatcher
 {
 public:
     KisAslObjectCatcher();
@@ -47,6 +47,8 @@ public:
     virtual void addPattern(const QString &path, const KoPattern *pattern);
     virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
     virtual void addGradient(const QString &path, const KoAbstractGradient *gradient);
+
+    virtual void newStyleStarted();
 
     void setArrayMode(bool value);
 protected:

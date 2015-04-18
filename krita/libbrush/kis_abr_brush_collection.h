@@ -51,7 +51,7 @@ public:
     /// Construct brush to load filename later as brush
     KisAbrBrushCollection(const QString& filename);
 
-    virtual ~KisAbrBrushCollection() { qDebug() << "deleting" << filename(); }
+    virtual ~KisAbrBrushCollection() {}
 
     virtual bool load();
 

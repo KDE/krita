@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2003-2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -344,7 +345,7 @@ QWidget * KisToolPaint::createOptionWidget()
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
-    verticalLayout->setMargin(0);
+    verticalLayout->setContentsMargins(0,0,0,0);
     verticalLayout->setSpacing(1);
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -358,8 +359,8 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setColumnStretch(1, 1);
 
     verticalLayout->addLayout(m_optionsWidgetLayout);
+    m_optionsWidgetLayout->setContentsMargins(0,0,0,0);
     m_optionsWidgetLayout->setSpacing(1);
-    m_optionsWidgetLayout->setMargin(0);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
@@ -429,9 +430,6 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
     Q_ASSERT(m_optionsWidgetLayout != 0);
     if (label) {
-        if (QLabel *lbl = qobject_cast<QLabel*>(label)) {
-            lbl->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-        }
         m_optionsWidgetLayout->addWidget(label, m_optionsWidgetLayout->rowCount(), 0);
         m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount() - 1, 1);
     }

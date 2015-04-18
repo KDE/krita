@@ -14,13 +14,6 @@ macro_optional_find_package(TIFF)
 macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
 
 macro_optional_find_package(JPEG)
-if (JPEG_FOUND)
-    DETECT_JPEG()
-    if (JPEG_LIB_VERSION GREATER 70)
-        set(JPEG_FOUND FALSE)
-        message("Detected libpeg 8 or 9: this is NOT supported.")
-    endif()
-endif()
 macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
 
 macro_optional_find_package(KF5KDcraw)

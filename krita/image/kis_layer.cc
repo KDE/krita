@@ -47,7 +47,7 @@
 
 #include "kis_psd_layer_style.h"
 #include "kis_layer_projection_plane.h"
-#include "kis_layer_style_projection_plane_factory.h"
+#include "layerstyles/kis_layer_style_projection_plane.h"
 
 
 class KisSafeProjection {
@@ -143,12 +143,12 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
 
+        setName(rhs.name());
+        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
+
         if (rhs.m_d->layerStyle) {
             setLayerStyle(rhs.m_d->layerStyle->clone());
         }
-
-        setName(rhs.name());
-        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
     }
 }
 
@@ -193,7 +193,7 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
         m_d->layerStyle = layerStyle;
 
         KisAbstractProjectionPlaneSP plane = !layerStyle->isEmpty() ?
-            KisLayerStyleProjectionPlaneFactory::instance()->create(this) :
+            KisAbstractProjectionPlaneSP(new KisLayerStyleProjectionPlane(this)) :
             KisAbstractProjectionPlaneSP(0);
 
         m_d->layerStyleProjectionPlane = plane;

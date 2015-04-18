@@ -38,6 +38,7 @@ struct KisPSDLayerStyle::Private
 
     Private(const Private &rhs)
         : name(rhs.name),
+          uuid(rhs.uuid),
           version(rhs.version),
           effects_count(rhs.effects_count),
           visible(rhs.visible),
@@ -58,6 +59,7 @@ struct KisPSDLayerStyle::Private
     {
         if (this != &rhs) {
             name = rhs.name;
+            uuid = rhs.uuid;
             version = rhs.version;
             effects_count = rhs.effects_count;
             visible = rhs.visible;
@@ -78,7 +80,7 @@ struct KisPSDLayerStyle::Private
     }
 
     QString name;
-    QString uuid;
+    QUuid uuid;
     quint16 version;
     quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
     bool visible; // common state info, visible: always true
@@ -155,18 +157,28 @@ void KisPSDLayerStyle::setName(const QString &value)
     d->name = value;
 }
 
-QString KisPSDLayerStyle::uuid() const
+QUuid KisPSDLayerStyle::uuid() const
 {
-    if (d->uuid.isEmpty()) {
-        d->uuid = QUuid::createUuid().toString().mid(1, 36);
+    if (d->uuid.isNull()) {
+        d->uuid = QUuid::createUuid();
     }
 
     return d->uuid;
 }
 
-void KisPSDLayerStyle::setUuid(const QString &value) const
+void KisPSDLayerStyle::setUuid(const QUuid &value) const
 {
     d->uuid = value;
+}
+
+QString KisPSDLayerStyle::psdUuid() const
+{
+    return uuid().toString().mid(1, 36);
+}
+
+void KisPSDLayerStyle::setPsdUuid(const QString &value) const
+{
+    setUuid(QUuid(QString("{%1}").arg(value)));
 }
 
 const psd_layer_effects_context* KisPSDLayerStyle::context() const
@@ -277,25 +289,4 @@ psd_layer_effects_stroke* KisPSDLayerStyle::stroke()
 psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelAndEmboss()
 {
     return &d->bevel_emboss;
-}
-
-bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )
-{
-    Q_UNUSED(io);
-    return false;
-}
-
-KisPSDLayerStyle::StylesVector KisPSDLayerStyle::readASL(QIODevice *io)
-{
-    return StylesVector();
-}
-
-bool KisPSDLayerStyle::write(QIODevice *io) const
-{
-    return false;
-}
-
-bool KisPSDLayerStyle::read(QIODevice *io)
-{
-    return false;
 }

@@ -806,7 +806,9 @@ set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
 # Widgets depends on flake
 set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/widgets)
+                   ${CMAKE_BINARY_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgets
+                   ${CMAKE_BINARY_DIR}/libs/widgets)
 
 # BasicFlakes depends on flake, widgets
 set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}

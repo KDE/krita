@@ -1,4 +1,4 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+# set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 macro_add_unittest_definitions()
@@ -619,3 +619,15 @@ target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::T
 set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
 kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
 target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+
+########### next target ###############
+
+set(kis_layer_styles_test_SRCS kis_layer_styles_test.cpp )
+kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-plugins-kis_layer_styles_test  ${kis_layer_styles_test_SRCS})
+target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  kritaimage Qt5::Test)
+
+########### next target ###############
+
+set(kis_layer_style_projection_plane_test_SRCS kis_layer_style_projection_plane_test.cpp )
+kde4_add_unit_test(KisLayerStyleProjectionPlaneTest TESTNAME kritaimage-layer_style_projection_plane_test ${kis_layer_style_projection_plane_test_SRCS})
+target_link_libraries(KisLayerStyleProjectionPlaneTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)

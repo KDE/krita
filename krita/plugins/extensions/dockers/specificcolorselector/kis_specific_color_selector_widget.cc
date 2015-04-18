@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +47,8 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 {
 
     m_layout = new QVBoxLayout(this);
+    m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(1);
     m_updateAllowed = true;
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
 
@@ -57,6 +60,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
+
     m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
     m_layout->addWidget(m_chkShowColorSpaceSelector);
     m_layout->addWidget(m_colorspaceSelector);

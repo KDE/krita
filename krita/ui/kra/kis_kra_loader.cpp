@@ -33,6 +33,7 @@
 #include <KoFileDialog.h>
 #include <KisImportExportManager.h>
 
+
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator.h>
@@ -58,13 +59,15 @@
 #include <kis_transparency_mask.h>
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
+#include <kis_psd_layer_style.h>
+#include <kis_psd_layer_style_resource.h>
+#include "kis_resource_server_provider.h"
 
 #include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
-
 
 /*
 
@@ -337,6 +340,36 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     }
 
 
+    // layer styles
+    location = external ? QString() : uri;
+    location += m_d->imageName + LAYER_STYLES_PATH;
+    if (store->hasFile(location)) {
+        KisPSDLayerStyleCollectionResource *collection =
+            new KisPSDLayerStyleCollectionResource("Embedded Styles.asl");
+
+        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
+
+        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
+
+        store->open(location);
+        {
+            KoStoreDevice device(store);
+            device.open(QIODevice::ReadOnly);
+            collection->loadFromDevice(&device);
+        }
+        store->close();
+
+        if (collection->valid()) {
+            KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+            server->addResource(collection, false);
+
+            collection->assignAllLayerStyles(image->root());
+        } else {
+            qWarning() << "WARNING: Couldn't load layer styles library from .kra!";
+            delete collection;
+        }
+    }
+
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("title").isNull())
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("comment").isNull())
@@ -527,6 +560,18 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
+
+        if (element.hasAttribute(LAYER_STYLE_UUID)) {
+            QString uuidString = element.attribute(LAYER_STYLE_UUID);
+            QUuid uuid(uuidString);
+            if (!uuid.isNull()) {
+                KisPSDLayerStyleSP dumbLayerStyle(new KisPSDLayerStyle());
+                dumbLayerStyle->setUuid(uuid);
+                layer->setLayerStyle(dumbLayerStyle);
+            } else {
+                qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+            }
+        }
     }
 
     if (node->inherits("KisPaintLayer")) {

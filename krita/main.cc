@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QDate>
 #include <QDebug>
+#include <QTime>
 
 #include <kcmdlineargs.h>
 
@@ -65,11 +66,17 @@ extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
+    QTime t;
+    t.start();
+    int step = 0;
+
 #ifdef HAVE_X11
     if (runningInKDE) {
         qputenv("QT_NO_GLIB", "1");
     }
 #endif
+
+    qDebug() << "main" << ++step << t.elapsed();
 
 #ifdef USE_BREAKPAD
     qputenv("KDE_DEBUG", "1");
@@ -77,16 +84,24 @@ extern "C" int main(int argc, char **argv)
     Q_UNUSED(crashHandler);
 #endif
 
+    qDebug() << "main" << ++step << t.elapsed();
+
 #if defined Q_OS_WIN
     SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
 #endif
+
+    qDebug() << "main" << ++step << t.elapsed();
 
     int state;
     KisFactory factory;
     Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
     K4AboutData *aboutData = KisFactory::aboutData();
 
+    qDebug() << "main" << ++step << t.elapsed();
+
     KCmdLineArgs::init(argc, argv, aboutData);
+
+    qDebug() << "main" << ++step << t.elapsed();
 
     KCmdLineOptions options;
     options.add("print", ki18n("Only print and exit"));
@@ -98,7 +113,11 @@ extern "C" int main(int argc, char **argv)
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
 
+    qDebug() << "main" << ++step << t.elapsed();
+
     KCmdLineArgs::addCmdLineOptions(options);
+
+    qDebug() << "main" << ++step << t.elapsed();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita" +
@@ -116,8 +135,12 @@ extern "C" int main(int argc, char **argv)
 #endif
 #endif
 
+    qDebug() << "main" << ++step << t.elapsed();
+
     // first create the application so we can create a  pixmap
     KisApplication app(key);
+
+    qDebug() << "main" << ++step << t.elapsed();
 
     if (app.isRunning()) {
 
@@ -136,6 +159,8 @@ extern "C" int main(int argc, char **argv)
         }
     }
 
+    qDebug() << "main" << ++step << t.elapsed();
+
 #if defined Q_OS_WIN
     KisTabletSupportWin tabletSupportWin;
     tabletSupportWin.init();
@@ -146,6 +171,7 @@ extern "C" int main(int argc, char **argv)
     app.installNativeEventFilter(&tabletSupportX11);
 #endif
 
+    qDebug() << "main" << ++step << t.elapsed();
 
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting
@@ -166,9 +192,13 @@ extern "C" int main(int argc, char **argv)
     }
     app.setSplashScreen(splash);
 
+    qDebug() << "main" << ++step << t.elapsed();
+
     if (!app.start()) {
         return 1;
     }
+
+    qDebug() << "main" << ++step << t.elapsed();
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
@@ -177,6 +207,8 @@ extern "C" int main(int argc, char **argv)
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
                      &app, SLOT(fileOpenRequested(QString)));
 
+
+    qDebug() << "main" << ++step << t.elapsed();
 
     state = app.exec();
 

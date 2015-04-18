@@ -630,22 +630,27 @@ QDomDocument readFileImpl(QIODevice *device)
     quint32 numStyles = GARBAGE_VALUE_MARK;
     SAFE_READ_EX(device, numStyles);
 
-    quint32 bytesToRead = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, bytesToRead);
+    for (int i = 0; i < (int)numStyles; i++) {
 
-    {
-        quint32 stylesFormatVersion = GARBAGE_VALUE_MARK;
-        SAFE_READ_SIGNATURE_EX(device, stylesFormatVersion, 16);
+        quint32 bytesToRead = GARBAGE_VALUE_MARK;
+        SAFE_READ_EX(device, bytesToRead);
+
+        SETUP_OFFSET_VERIFIER(singleStyleSectionVerifier, device, bytesToRead, 0);
+
+        {
+            quint32 stylesFormatVersion = GARBAGE_VALUE_MARK;
+            SAFE_READ_SIGNATURE_EX(device, stylesFormatVersion, 16);
+        }
+
+        readDescriptor(device, "", &root, &doc);
+
+        {
+            quint32 stylesFormatVersion = GARBAGE_VALUE_MARK;
+            SAFE_READ_SIGNATURE_EX(device, stylesFormatVersion, 16);
+        }
+
+        readDescriptor(device, "", &root, &doc);
     }
-
-    readDescriptor(device, "", &root, &doc);
-
-    {
-        quint32 stylesFormatVersion = GARBAGE_VALUE_MARK;
-        SAFE_READ_SIGNATURE_EX(device, stylesFormatVersion, 16);
-    }
-
-    readDescriptor(device, "", &root, &doc);
 
     return doc;
 }

@@ -17,16 +17,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -198,7 +189,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KDoubleNumInput" name="doubleRatio" native="true">
+        <widget class="KDoubleNumInput" name="doubleRatio">
          <property name="toolTip">
           <string>Ratio</string>
          </property>
@@ -223,16 +214,7 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_3">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <item row="0" column="1">
@@ -307,6 +289,19 @@
         </property>
        </item>
       </widget>
+     </item>
+     <item row="3" column="1">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>

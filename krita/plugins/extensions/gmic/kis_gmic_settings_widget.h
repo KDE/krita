@@ -37,7 +37,7 @@ private:
 
 private:
     Command * m_commandDefinition;
-    QHash<void *, int> m_widgetToParameterIndexMapper;
+    QHash<QWidget *, int> m_widgetToParameterIndexMapper;
     QHash<Parameter *, QWidget *> m_parameterToWidgetMapper;
 
     Parameter * parameter(QObject * widget);

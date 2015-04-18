@@ -1,4 +1,5 @@
 macro_add_unittest_definitions()
+include_directories( ${OCIO_INCLUDE_DIR})
 
 ########### next target ###############
 

@@ -43,6 +43,7 @@ class KisPrintJob;
 class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
+class KisViewManager;
 
 
 // Calligra class but not in main module
@@ -145,6 +146,8 @@ public:
      * @return TRUE on success
      */
     bool restoreWorkspace(const QByteArray &state);
+
+    KisViewManager *viewManager() const;
 
 Q_SIGNALS:
 
@@ -317,6 +320,11 @@ private Q_SLOTS:
     void viewFullscreen(bool fullScreen);
 
     /**
+     * Toggle docker titlebars on/off.
+     */
+    void showDockerTitleBars(bool show);
+
+    /**
      * Reload file
      */
     void slotReloadFile();
@@ -425,6 +433,9 @@ private:
 
     void createActions();
 
+    void applyToolBarLayout();
+
+private slots:
     void initializeGeometry();
 
 private:

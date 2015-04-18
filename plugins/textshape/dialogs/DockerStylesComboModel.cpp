@@ -28,6 +28,8 @@
 
 #include <kdebug.h>
 
+#include "StylesModel.h"
+
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
     StylesFilteredModelBase(parent),
     m_styleManager(0)
@@ -107,31 +109,6 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
         return;
     }
     m_styleManager = sm;
-    m_usedStyles.clear();
-    m_usedStylesId.clear();
-
-    QVector<int> usedStyles;
-    if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
-        usedStyles = m_styleManager->usedCharacterStyles();
-    } else {
-        usedStyles = m_styleManager->usedParagraphStyles();
-    }
-    foreach(int i, usedStyles) {
-        if (!m_usedStylesId.contains(i)) {
-            QVector<int>::iterator begin = m_usedStyles.begin();
-            KoCharacterStyle *compareStyle = findStyle(i);
-            for ( ; begin != m_usedStyles.end(); ++begin) {
-                const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
-                if (styleId != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                    if (KStringHandler::naturalCompare(compareStyle->name(), findStyle(styleId)->name()) < 0) {
-                        break;
-                    }
-                }
-            }
-            m_usedStyles.insert(begin, m_sourceModel->indexOf(*compareStyle).row());
-            m_usedStylesId.append(i);
-        }
-    }
     createMapping();
 }
 
@@ -144,18 +121,6 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
     if (m_usedStylesId.contains(style->styleId())) {
         return; // Style already among used styles.
     }
-    QVector<int>::iterator begin = m_usedStyles.begin();
-    for ( ; begin != m_usedStyles.end(); ++begin) {
-        const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
-        if (styleId != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-            if (KStringHandler::naturalCompare(style->name(), findStyle(styleId)->name()) < 0) {
-                break;
-            }
-        }
-    }
-    m_usedStyles.insert(begin, sourceIndex.row());
-    m_usedStylesId.append(style->styleId());
-
     beginResetModel();
     createMapping();
     endResetModel();
@@ -171,41 +136,29 @@ void DockerStylesComboModel::createMapping()
     m_proxyToSource.clear();
     m_sourceToProxy.clear();
     m_unusedStyles.clear();
+    m_usedStyles.clear();
+    m_usedStylesId.clear();
 
-    //Handle the default characterStyle. If provided, the None virtual style is the first style of the model. Its internalId is -1
+    QVector<int> usedStyles;
     if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
-        if (m_sourceModel->index(0, 0, QModelIndex()).isValid() && m_sourceModel->index(0, 0, QModelIndex()).internalId() == -1) {
-            if (!m_usedStylesId.contains(-1)) {
-                m_usedStylesId.prepend(-1);
-                m_usedStyles.prepend(0);
-            }
-        }
+        usedStyles = m_styleManager->usedCharacterStyles();
+    } else {
+        usedStyles = m_styleManager->usedParagraphStyles();
     }
 
+    // The order of the styles is already correctly given by the source model.
+    // Therefor it is not needed to resort the styles again here. The source model 
+    // makes sure to have the NoneStyleId as first style and the styles after
+    // that are ordered by name.
     for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
         int id = (int)index.internalId();
-        if (!m_usedStylesId.contains(id)) {
-            KoCharacterStyle *style = findStyle(id);
-            if (!style) {
-                continue;
-            }
-            if (!m_unusedStyles.empty()) {
-                QVector<int>::iterator begin = m_unusedStyles.begin();
-                for ( ; begin != m_unusedStyles.end(); ++begin) {
-                    const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
-                    if (styleId == -1) {
-                        if (KStringHandler::naturalCompare(style->name(), findStyle(styleId)->name()) < 0) {
-                            break;
-                        }
-                    }
-                }
-                m_unusedStyles.insert(begin, i);
-            }
-            else {
-                m_unusedStyles.append(i);
-            }
-
+        if (id == StylesModel::NoneStyleId || usedStyles.contains(id)) {
+            m_usedStylesId.append(id);
+            m_usedStyles.append(i);
+        }
+        else {
+            m_unusedStyles.append(i);
         }
     }
     if (!m_usedStyles.isEmpty()) {

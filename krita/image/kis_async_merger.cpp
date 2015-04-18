@@ -48,6 +48,8 @@
 #include "kis_merge_walker.h"
 #include "kis_refresh_subtree_walker.h"
 
+#include "kis_abstract_projection_plane.h"
+
 
 //#define DEBUG_MERGER
 
@@ -222,7 +224,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
                                                      m_currentProjection,
                                                      walker.cropRect());
             currentNode->accept(originalVisitor);
-            currentNode->updateProjection(applyRect, currentNode);
+            currentNode->projectionPlane()->recalculate(applyRect, currentNode);
 
             continue;
         }
@@ -238,18 +240,18 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
             currentNode->accept(originalVisitor);
-            currentNode->updateProjection(applyRect, walker.startNode());
+            currentNode->projectionPlane()->recalculate(applyRect, walker.startNode());
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
             if(dependOnLowerNodes(currentNode)) {
                 currentNode->accept(originalVisitor);
-                currentNode->updateProjection(applyRect, currentNode);
+                currentNode->projectionPlane()->recalculate(applyRect, currentNode);
             }
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
-            currentNode->updateProjection(applyRect, walker.startNode());
+            currentNode->projectionPlane()->recalculate(applyRect, walker.startNode());
         }
         else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
             DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentNode, applyRect);
@@ -341,49 +343,8 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
     if (!m_currentProjection) return true;
     if (!layer->visible()) return true;
 
-    KisPaintDeviceSP device = layer->projection();
-    if (!device) return true;
-
-    QRect needRect = rect & device->extent();
-    if(needRect.isEmpty()) return true;
-
-    QBitArray channelFlags = layer->channelFlags();
-
-
-    // if the color spaces don't match we will have a problem with the channel flags
-    // because the channel flags from the source layer doesn't match with the colorspace of the projection device
-    // this leads to the situation that the wrong channels will be enabled/disabled
-    if(!channelFlags.isEmpty() && m_currentProjection->colorSpace() != device->colorSpace()) {
-        const KoColorSpace* src = device->colorSpace();
-        const KoColorSpace* dst = m_currentProjection->colorSpace();
-
-        bool alphaFlagIsSet        = (src->channelFlags(false,true) & channelFlags) == src->channelFlags(false,true);
-        bool allColorFlagsAreSet   = (src->channelFlags(true,false) & channelFlags) == src->channelFlags(true,false);
-        bool allColorFlagsAreUnset = (src->channelFlags(true,false) & channelFlags).count(true) == 0;
-
-        if(allColorFlagsAreSet) {
-            channelFlags = dst->channelFlags(true, alphaFlagIsSet);
-        }
-        else if(allColorFlagsAreUnset) {
-            channelFlags = dst->channelFlags(false, alphaFlagIsSet);
-        }
-        else {
-            //TODO: convert the cannel flags properly
-            //      for now just the alpha channel bit is copied and the other channels are left alone
-            for(quint32 i=0; i<dst->channelCount(); ++i) {
-                if(dst->channels()[i]->channelType() == KoChannelInfo::ALPHA) {
-                    channelFlags.setBit(i, alphaFlagIsSet);
-                    break;
-                }
-            }
-        }
-    }
     KisPainter gc(m_currentProjection);
-    gc.setChannelFlags(channelFlags);
-
-    gc.setCompositeOp(layer->compositeOp());
-    gc.setOpacity(layer->opacity());
-    gc.bitBlt(needRect.topLeft(), device, needRect);
+    layer->projectionPlane()->apply(&gc, rect);
 
     DEBUG_NODE_ACTION("Compositing projection", "", layer, needRect);
     return true;

@@ -45,6 +45,10 @@
 
 #include "kis_clone_layer.h"
 
+#include "kis_psd_layer_style.h"
+#include "kis_layer_projection_plane.h"
+#include "kis_layer_style_projection_plane_factory.h"
+
 
 class KisSafeProjection {
 public:
@@ -107,14 +111,16 @@ private:
 
 struct KisLayer::Private
 {
-
-public:
-
     KisImageWSP image;
     QBitArray channelFlags;
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
+
+    KisPSDLayerStyleSP layerStyle;
+    KisAbstractProjectionPlaneSP layerStyleProjectionPlane;
+
+    KisAbstractProjectionPlaneSP projectionPlane;
 };
 
 
@@ -126,6 +132,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     setOpacity(opacity);
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
+    m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -135,7 +142,13 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
+
+        if (rhs.m_d->layerStyle) {
+            setLayerStyle(rhs.m_d->layerStyle->clone());
+        }
+
         setName(rhs.name());
+        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
     }
 }
 
@@ -167,6 +180,27 @@ const KoCompositeOp * KisLayer::compositeOp() const
     if (!parentNode->colorSpace()) return 0;
     const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
+}
+
+KisPSDLayerStyleSP KisLayer::layerStyle() const
+{
+    return m_d->layerStyle;
+}
+
+void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
+{
+    if (layerStyle) {
+        m_d->layerStyle = layerStyle;
+
+        KisAbstractProjectionPlaneSP plane = !layerStyle->isEmpty() ?
+            KisLayerStyleProjectionPlaneFactory::instance()->create(this) :
+            KisAbstractProjectionPlaneSP(0);
+
+        m_d->layerStyleProjectionPlane = plane;
+    } else {
+        m_d->layerStyleProjectionPlane.clear();
+        m_d->layerStyle.clear();
+    }
 }
 
 KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
@@ -634,6 +668,16 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     gc.bitBlt(rect.topLeft(), original, rect);
 }
 
+KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
+{
+    return m_d->layerStyleProjectionPlane ?
+        m_d->layerStyleProjectionPlane : m_d->projectionPlane;
+}
+
+KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
+{
+    return m_d->projectionPlane;
+}
 
 KisPaintDeviceSP KisLayer::projection() const
 {

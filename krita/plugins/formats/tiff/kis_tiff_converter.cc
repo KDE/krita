@@ -54,6 +54,9 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
     if (color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK) {
         if (nbchannels == 0) nbchannels = 1;
         extrasamplescount = nbchannels - 1; // FIX the extrasamples count in case of
+        if (sampletype == SAMPLEFORMAT_IEEEFP) {
+          return QPair<QString, QString>();
+        }
         if (color_nb_bits <= 8) {
             destDepth = 8;
             return QPair<QString, QString>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id());

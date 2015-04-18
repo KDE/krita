@@ -46,6 +46,11 @@ KoStopGradient::~KoStopGradient()
 {
 }
 
+KoAbstractGradient* KoStopGradient::clone() const
+{
+    return new KoStopGradient(*this);
+}
+
 bool KoStopGradient::load()
 {
     QFile f(filename());

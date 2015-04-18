@@ -39,7 +39,7 @@ class DlgImagesplit: public KDialog
 
 public:
 
-    DlgImagesplit(KisViewManager* view,QString suffix,QStringList listMimeType);
+    DlgImagesplit(KisViewManager* view, QString suffix, QStringList listMimeType);
     ~DlgImagesplit();
     bool autoSave();
     int horizontalLines();

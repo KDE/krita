@@ -46,6 +46,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
+#include "kis_layer_projection_plane.h"
 
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
@@ -298,7 +299,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
     QPointF offset = alignedImageRect.topLeft();
 
-    m_paintLayer->updateProjection(alignedImageRect, m_paintLayer);
+    m_paintLayer->projectionPlane()->recalculate(alignedImageRect, m_paintLayer);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
     QImage image = projection->convertToQImage(m_displayProfile,

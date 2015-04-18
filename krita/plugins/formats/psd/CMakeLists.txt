@@ -6,8 +6,6 @@ configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 
 set(LIB_PSD_SRCS 
-    psd.cpp
-    psd_utils.cpp
     psd_header.cpp
     psd_colormode_block.cpp
     psd_resource_section.cpp
@@ -16,7 +14,6 @@ set(LIB_PSD_SRCS
     psd_layer_record.cpp
     psd_image_data.cpp
     psd_additional_layer_info_block.cpp
-    compression.cpp
 )
 
 set(kritapsdimport_PART_SRCS
@@ -27,9 +24,9 @@ set(kritapsdimport_PART_SRCS
 
 kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
 if (WIN32)
-	target_link_libraries(kritapsdimport kritaui ${WIN32_PLATFORM_NET_LIBS})
+	target_link_libraries(kritapsdimport kritaui libkispsd ${WIN32_PLATFORM_NET_LIBS})
 else ()
-	target_link_libraries(kritapsdimport kritaui )
+	target_link_libraries(kritapsdimport kritaui libkispsd )
 endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})

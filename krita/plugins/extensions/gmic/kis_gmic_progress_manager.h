@@ -17,17 +17,17 @@
  */
 
 
-#ifndef __KIS_PROGRESS_MANAGER__
-#define __KIS_PROGRESS_MANAGER__
+#ifndef KIS_GMIC_PROGRESS_MANAGER
+#define KIS_GMIC_PROGRESS_MANAGER
 
 #include <QObject>
+#include <QTimer>
+
 #include <KoUpdater.h>
 #include <kis_types.h>
 
 class KisViewManager;
 class QTimer;
-
-const int UPDATE_PROGRESS_TIMEOUT = 500;
 
 class KisGmicProgressManager : public QObject
 {
@@ -45,7 +45,7 @@ Q_SIGNALS:
     void sigProgress();
 
 private:
-    QTimer * m_progressTimer;
+    QTimer m_progressTimer;
     KoProgressUpdater * m_progressUpdater;
     KoUpdaterPtr m_updater;
     quint32 m_progressPulseRequest;

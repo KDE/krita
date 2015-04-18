@@ -27,8 +27,6 @@
 
 struct KisBaseNode::Private
 {
-public:
-
     QString compositeOp;
     KoProperties properties;
     bool systemLocked;

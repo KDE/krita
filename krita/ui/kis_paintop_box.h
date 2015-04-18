@@ -199,7 +199,11 @@ private:
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
             uniqueID = dev.uniqueTabletId();
-            pointer  = (dev.pointer() == QTabletEvent::UnknownPointer) ? QTabletEvent::Cursor : dev.pointer();
+            // Only the eraser is special, and we don't look at Cursor
+            pointer = QTabletEvent::Pen;
+            if (dev.pointer() == QTabletEvent::Eraser) {
+                pointer = QTabletEvent::Eraser;
+            }
         }
 
         bool operator == (const TabletToolID& id) const {

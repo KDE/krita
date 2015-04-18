@@ -31,10 +31,11 @@ class KoColor;
  */
 class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource
 {
-
 public:
     explicit KoAbstractGradient(const QString &filename);
     virtual ~KoAbstractGradient();
+
+    virtual KoAbstractGradient* clone() const = 0;
 
     virtual bool load() {
         return false;
@@ -77,6 +78,8 @@ public:
     QImage generatePreview(int width, int height) const;
 protected:
     virtual QByteArray generateMD5() const;
+
+    KoAbstractGradient(const KoAbstractGradient &rhs);
 
 private:
     struct Private;

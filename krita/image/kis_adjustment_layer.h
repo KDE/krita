@@ -100,11 +100,14 @@ public:
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
+    void setChannelFlags(const QBitArray & channelFlags);
+
+protected:
+    // override from KisLayer
     QRect incomingChangeRect(const QRect &rect) const;
+    // override from KisNode
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
-    void setChannelFlags(const QBitArray & channelFlags);
-    
 public Q_SLOTS:
     /**
      * gets this AdjustmentLayer. Overrides function in

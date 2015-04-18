@@ -54,7 +54,7 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
     // user-local
     KGlobal::mainComponent().dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
-    m_resourceBundleServer = new KoResourceServer<ResourceBundle>("kis_resourcebundles", "*.bundle");
+    m_resourceBundleServer = new KoResourceServerSimpleConstruction<ResourceBundle>("kis_resourcebundles", "*.bundle");
     if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
         QDir().mkpath(m_resourceBundleServer->saveLocation());
     }
@@ -159,7 +159,7 @@ void ResourceManager::slotImport()
 
     QStringList nameFilters = filterToTypeMap.keys();
 
-    dlg.setNameFilters(nameFilters, nameFilters.first());
+    dlg.setNameFilters(nameFilters, nameFilters[13]);  // start with resource bundle as default type (filterToTypeMap is alphabetized)
 
     QStringList resources = dlg.urls();
     QString resourceType = dlg.selectedNameFilter();

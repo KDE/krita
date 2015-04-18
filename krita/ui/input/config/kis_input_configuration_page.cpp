@@ -65,7 +65,7 @@ void KisInputConfigurationPage::revertChanges()
 
 void KisInputConfigurationPage::setDefaults()
 {
-    QDir profileDir(KGlobal::dirs()->saveLocation("appdata", "input/", false));
+    QDir profileDir(KGlobal::dirs()->saveLocation("data", "krita/input/", false));
 
     if (profileDir.exists()) {
 #if QT_VERSION >= 0x040700

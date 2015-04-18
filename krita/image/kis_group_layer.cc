@@ -218,7 +218,8 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
          child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
          child->compositeOpId() == COMPOSITE_COPY) &&
         child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace()) {
+        *child->projection()->colorSpace() == *colorSpace() &&
+        !child->layerStyle()) {
 
         quint8 defaultOpacity =
             m_d->paintDevice->colorSpace()->opacityU8(

@@ -88,6 +88,7 @@ set(KRITA_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/image
 
+    ${CMAKE_SOURCE_DIR}/krita/libpsd
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
@@ -126,6 +127,7 @@ if(HAVE_OPENGL)
     endif()
 endif()
 
+add_subdirectory( libpsd )
 add_subdirectory( image )
 add_subdirectory( libbrush )
 add_subdirectory( libcolor )
@@ -156,7 +158,7 @@ kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calli
 kde4_add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
 
-if (Q_WS_MAC)
+if (APPLE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")
@@ -170,5 +172,5 @@ install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
     add_subdirectory(sketch)
-#    add_subdirectory(gemini)
+    add_subdirectory(gemini)
 endif ()

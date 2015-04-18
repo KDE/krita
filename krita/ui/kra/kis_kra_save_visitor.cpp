@@ -51,6 +51,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
 
+#include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
@@ -89,6 +90,10 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
         m_store->enterDirectory(getLocation(layer, DOT_SHAPE_LAYER)) ;
         result = shapeLayer->saveLayer(m_store);
         m_store->popDirectory();
+    }
+    else if (KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer)) {
+        Q_UNUSED(fileLayer); // We don't save data for file layers, but we still want to save the masks.
+        result = true;
     }
     return result && visitAllInverse(layer);
 }
@@ -242,7 +247,9 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
 {
     // Layer data
-    m_store->setCompressionEnabled(false);
+    KisConfig cfg;
+    m_store->setCompressionEnabled(cfg.compressKra());
+
     if (m_store->open(location)) {
         if (!device->write(*m_writer)) {
             device->disconnect();

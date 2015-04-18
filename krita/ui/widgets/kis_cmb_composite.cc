@@ -67,6 +67,8 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     setSizeAdjustPolicy(AdjustToContents);
     m_view->setResizeMode(QListView::Adjust);
 
+    setToolTip(i18n("Blending Mode"));
+
     setModel(m_model);
     setView(m_view);
     setItemDelegate(new KisCategorizedItemDelegate(true, this));

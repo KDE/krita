@@ -45,9 +45,14 @@ public:
     void showEdit();
     void hideEdit();
 
+    void setPrefix(const QString& prefix);
     void setSuffix(const QString& suffix);
 
     void setExponentRatio(qreal dbl);
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSize() const;
 
 protected:
     virtual void paintEvent(QPaintEvent* e);
@@ -58,9 +63,6 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
-
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
 
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
@@ -79,6 +81,13 @@ protected Q_SLOTS:
     void editLostFocus();
 protected:
     KisAbstractSliderSpinBoxPrivate* const d_ptr;
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
+    void paint(QPainter& painter);
+    void paintPlastique(QPainter& painter);
+    void paintBreeze(QPainter& painter);
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox

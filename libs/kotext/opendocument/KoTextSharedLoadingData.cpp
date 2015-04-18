@@ -54,7 +54,9 @@ class KoTextSharedLoadingData::Private
 {
 public:
     Private()
-    : defaultCharacterStyle(0)
+    : footnotesConfiguration(KoOdfNotesConfiguration::Footnote)
+    , endnotesConfiguration(KoOdfNotesConfiguration::Endnote)
+    , defaultCharacterStyle(0)
     , defaultParagraphStyle(0)
     {}
     ~Private() {

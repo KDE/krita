@@ -92,7 +92,7 @@ KisSprayPaintOp::~KisSprayPaintOp()
 KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter() || !m_isPresetValid) {
-        return m_spacing;
+        return KisSpacingInformation(m_spacing);
     }
 
     if (!m_dab) {
@@ -124,5 +124,5 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    return m_spacing;
+    return KisSpacingInformation(m_spacing);
 }

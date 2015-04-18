@@ -35,6 +35,10 @@
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
 #include <kis_iterator_ng.h>
+#include "kis_layer_projection_plane.h"
+
+#include "kis_psd_layer_style.h"
+
 
 void KisPaintLayerTest::testProjection()
 {
@@ -59,7 +63,7 @@ void KisPaintLayerTest::testProjection()
     Q_ASSERT(layer->hasEffectMasks());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->updateProjection(qimage.rect(), layer);
+    layer->projectionPlane()->recalculate(qimage.rect(), layer);
 
     // Which also means that the projection is no longer the paint device
     QVERIFY(layer->paintDevice().data() != layer->projection().data());
@@ -68,7 +72,7 @@ void KisPaintLayerTest::testProjection()
     layer->setDirty(qimage.rect());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->updateProjection(qimage.rect(), layer);
+    layer->projectionPlane()->recalculate(qimage.rect(), layer);
 
     // Which also means that the projection is no longer the paint device
     QVERIFY(layer->paintDevice().data() != layer->projection().data());
@@ -78,7 +82,7 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->projection().data() != 0);
 
     // The selection is initially empty, so after an update, all pixels are still visible
-    layer->updateProjection(qimage.rect(), layer);
+    layer->projectionPlane()->recalculate(qimage.rect(), layer);
 
     // We've inverted the mask, so now nothing is seen
     KisSequentialConstIterator it(layer->projection(), qimage.rect());
@@ -98,6 +102,64 @@ void KisPaintLayerTest::testProjection()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
+}
+
+#include "filter/kis_filter_registry.h"
+
+void KisPaintLayerTest::testLayerStyles()
+{
+    /**
+     * FIXME: Right now the layer style plugin is stored in 'filters'
+     *        directory, so we need to load filters to get it registered
+     *        in the factory.
+     */
+    KisFilterRegistry::instance();
+
+    const QRect imageRect(0, 0, 200, 200);
+    const QRect rFillRect(10, 10, 100, 100);
+    const QRect tMaskRect(50, 50, 20, 20);
+    const QRect partialSelectionRect(90, 50, 20, 20);
+
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "styles test");
+
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
+    image->addNode(layer);
+
+    layer->paintDevice()->fill(rFillRect, KoColor(Qt::red, cs));
+
+    layer->setDirty();
+    image->waitForDone();
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", "dd");
+
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->dropShadow()->setNoise(30);
+    style->dropShadow()->setEffectEnabled(true);
+
+    layer->setLayerStyle(style);
+
+    layer->setDirty();
+    image->waitForDone();
+    KIS_DUMP_DEVICE_2(image->projection(), imageRect, "02P_styled", "dd");
+
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+
+    KisSelectionSP selection = new KisSelection();
+    selection->pixelSelection()->select(tMaskRect, OPACITY_OPAQUE_U8);
+    transparencyMask->setSelection(selection);
+    image->addNode(transparencyMask, layer);
+
+    layer->setDirty();
+    image->waitForDone();
+    KIS_DUMP_DEVICE_2(image->projection(), imageRect, "03P_styled", "dd");
+
+    selection->pixelSelection()->select(partialSelectionRect, OPACITY_OPAQUE_U8);
+    layer->setDirty(partialSelectionRect);
+
+    layer->setDirty();
+    image->waitForDone();
+    KIS_DUMP_DEVICE_2(image->projection(), imageRect, "04P_partial", "dd");
 }
 
 

@@ -30,7 +30,7 @@
 
 #include "compression.h"
 
-PSDLayerSection::PSDLayerSection(const PSDHeader& header)
+PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader& header)
     : m_header(header)
 {
     hasTransparency = false;
@@ -39,12 +39,12 @@ PSDLayerSection::PSDLayerSection(const PSDHeader& header)
     nLayers = 0;
 }
 
-PSDLayerSection::~PSDLayerSection()
+PSDLayerMaskSection::~PSDLayerMaskSection()
 {
     qDeleteAll(layers);
 }
 
-bool PSDLayerSection::read(QIODevice* io)
+bool PSDLayerMaskSection::read(QIODevice* io)
 {
     dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
 
@@ -267,7 +267,7 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
     dbgFile << layers.size();
 }
 
-bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
+bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
 
@@ -383,7 +383,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     return true;
 }
 
-bool PSDLayerSection::valid()
+bool PSDLayerMaskSection::valid()
 {
     if (layerInfoSize > 0) {
         if (nLayers <= 0) return false;

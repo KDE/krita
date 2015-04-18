@@ -72,10 +72,6 @@ public:
     KisPaintDeviceSP paintDevice() const;
     bool needProjection() const;
 
-    void copyOriginalToProjection(const KisPaintDeviceSP original,
-                                  KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
-
     QIcon icon() const;
     KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
@@ -90,8 +86,6 @@ public:
 
     /// Returns the exact bounds of where the actual data resides in this layer
     QRect exactBounds() const;
-
-    QRect accessRect(const QRect &rect, PositionToFilthy pos) const;
 
     bool accept(KisNodeVisitor &);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
@@ -119,6 +113,14 @@ public:
     QRect needRectOnSourceForMasks(const QRect &rc) const;
 
 protected:
+    // override from KisNode
+    QRect accessRect(const QRect &rect, PositionToFilthy pos) const;
+
+    // override from KisLayer
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
+
     void notifyParentVisibilityChanged(bool value);
     QRect outgoingChangeRect(const QRect &rect) const;
 private:

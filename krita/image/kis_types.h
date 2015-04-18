@@ -143,6 +143,9 @@ typedef QVector<QPoint> vKisSegments;
 class KisFilter;
 typedef KisSharedPtr<KisFilter> KisFilterSP;
 
+class KisLayerStyleFilter;
+typedef KisSharedPtr<KisLayerStyleFilter> KisLayerStyleFilterSP;
+
 class KisGenerator;
 typedef KisSharedPtr<KisGenerator> KisGeneratorSP;
 
@@ -229,6 +232,12 @@ typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
 
+class KisAbstractProjectionPlane;
+typedef QSharedPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneSP;
+typedef QWeakPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneWSP;
+
+class KisPSDLayerStyle;
+typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
 
 #include <QSharedPointer>
 #include <QWeakPointer>

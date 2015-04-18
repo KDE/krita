@@ -255,12 +255,13 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
     for (int i = 0; i < m_numIterations; i++) {
         modifyResourceManager(manager, image, i);
+
         KisPainter *painter = new KisPainter();
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
-                                 image->rootLayer()->firstChild(),
-                                 image->postExecutionUndoAdapter(),
-                                 manager);
+                                     image->rootLayer()->firstChild(),
+                                     image->postExecutionUndoAdapter(),
+                                     manager);
 
         if(externalLayer) {
             KisNodeSP externalNode = new KisPaintLayer(0, "extlyr", OPACITY_OPAQUE_U8, image->colorSpace());

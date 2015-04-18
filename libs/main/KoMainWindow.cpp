@@ -220,6 +220,7 @@ public:
     KAction *uncompressToDir;
 #endif
     KToggleAction *toggleDockers;
+    KToggleAction *toggleDockerTitleBars;
     KRecentFilesAction *recent;
 
     bool isImporting;
@@ -366,8 +367,14 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
-
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
+
+    d->toggleDockerTitleBars = new KToggleAction(i18nc("@action:inmenu", "Show Docker Titlebars"), this);
+    KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+    d->toggleDockerTitleBars->setChecked(configGroupInterface.readEntry("ShowDockerTitleBars", true));
+    d->toggleDockerTitleBars->setVisible(false);
+    actionCollection()->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
@@ -506,6 +513,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
             dockWidget->setVisible(false);
         }
 
+        d->toggleDockerTitleBars->setVisible(false);
         d->dockWidgetMenu->setVisible(false);
     }
 
@@ -519,6 +527,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     }
 
     if (doc) {
+        d->toggleDockerTitleBars->setVisible(true);
         d->dockWidgetMenu->setVisible(true);
         d->m_registeredPart = d->rootPart.data();
 
@@ -1860,6 +1869,11 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (titleBar && locked)
             titleBar->setLocked(true);
 
+        if (titleBar) {
+            KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+            titleBar->setVisible(configGroupInterface.readEntry("ShowDockerTitleBars", true));
+        }
+
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[ factory->id()];
@@ -2065,8 +2079,13 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);
 
+        KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+        const bool showDockerTitleBar = configGroupInterface.readEntry("ShowDockerTitleBars", true);
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+                if (wdg->titleBarWidget()) {
+                    wdg->titleBarWidget()->setVisible(showDockerTitleBar);
+                }
                 wdg->setVisible(true);
             }
         }
@@ -2113,7 +2132,17 @@ void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 
 }
 
+void KoMainWindow::showDockerTitleBars(bool show)
+{
+    foreach (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            dock->titleBarWidget()->setVisible(show);
+        }
+    }
 
+    KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+    configGroupInterface.writeEntry("ShowDockerTitleBars", show);
+}
 
 
 

@@ -63,7 +63,7 @@ public:
     QWidget* getWidget(const QString& id) const;
     
     template<class TWidget>
-    TWidget* addWidget(const QString& id, const QString& label) {
+    TWidget* addWidget(const QString& id, const QString& label = "") {
         TWidget* widget = new TWidget();
         addWidget(id, label, widget);
         return widget;
@@ -81,11 +81,15 @@ private:
     void     removeWidget(const QString& id);
     QLayout* createPopupLayout();
     QLayout* createLayout();
-    QIcon    arrowIcon();
+    void     updateArrowIcon();
     
 protected Q_SLOTS:
     void slotButtonPressed();
     void slotWidgetChoosen(int index);
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
 
 private:
     int           m_chooserid;

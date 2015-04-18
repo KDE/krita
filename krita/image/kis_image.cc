@@ -87,6 +87,8 @@
 
 #include "kis_projection_updates_filter.h"
 
+#include "kis_layer_projection_plane.h"
+
 
 // #define SANITY_CHECKS
 
@@ -901,7 +903,7 @@ QRect KisImage::realNodeExtent(KisNodeSP rootNode, QRect currentRect)
 
     // TODO: it would be better to count up changeRect inside
     // node's extent() method
-    currentRect |= rootNode->changeRect(rootNode->extent());
+    currentRect |= rootNode->projectionPlane()->changeRect(rootNode->extent());
 
     return currentRect;
 }

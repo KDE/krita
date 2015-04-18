@@ -45,8 +45,10 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
     m_arrowButton = new QToolButton();
     
     m_popup->setFrameStyle(QFrame::Panel|QFrame::Raised);
-    m_arrowButton->setIcon(arrowIcon());
+    m_arrowButton->setFixedWidth(m_arrowButton->sizeHint().height()/2);
+    m_arrowButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     m_arrowButton->setAutoRaise(true);
+    updateArrowIcon();
     
     connect(m_arrowButton, SIGNAL(clicked(bool)), SLOT(slotButtonPressed()));
 }
@@ -56,7 +58,7 @@ KisWidgetChooser::~KisWidgetChooser()
     delete m_buttons;
 }
 
-QIcon KisWidgetChooser::arrowIcon()
+void KisWidgetChooser::updateArrowIcon()
 {
     QImage image(16, 16, QImage::Format_ARGB32);
     image.fill(0);
@@ -67,13 +69,13 @@ QIcon KisWidgetChooser::arrowIcon()
     option.rect    = image.rect();
     option.palette = palette();
     option.state   = QStyle::State_Enabled;
-    option.palette.setBrush(QPalette::ButtonText, Qt::black); // Force color to black
-    
-    painter.setBrush(Qt::black);
-    painter.setPen(Qt::black);
+    option.palette.setBrush(QPalette::ButtonText, option.palette.text());
+
+    painter.setBrush(option.palette.text().color());
+    painter.setPen(option.palette.text().color());
     painter.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
     
-    return QIcon(QPixmap::fromImage(image));
+    m_arrowButton->setIcon(QIcon(QPixmap::fromImage(image)));
 }
 
 void KisWidgetChooser::addWidget(const QString& id, const QString& label, QWidget* widget)
@@ -84,7 +86,13 @@ void KisWidgetChooser::addWidget(const QString& id, const QString& label, QWidge
     }
     
     removeWidget(id);
-    m_widgets.push_back(Data(id, widget, new QLabel(label)));
+
+    if (label.isEmpty()) {
+        m_widgets.push_back(Data(id, widget, 0));
+    }
+    else {
+        m_widgets.push_back(Data(id, widget, new QLabel(label)));
+    }
     
     delete m_popup->layout();
     m_popup->setLayout(createPopupLayout());
@@ -97,12 +105,14 @@ void KisWidgetChooser::addWidget(const QString& id, const QString& label, QWidge
 QLayout* KisWidgetChooser::createLayout()
 {
     QHBoxLayout* layout = new QHBoxLayout();
-    layout->setContentsMargins(2, 0, 0, 0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     
     for(Iterator i=m_widgets.begin(); i!=m_widgets.end(); ++i) {
         if(i->choosen) {
-            layout->addWidget(i->label);
+            if (i->label) {
+                layout->addWidget(i->label);
+            }
             layout->addWidget(i->widget);
             break;
         }
@@ -117,8 +127,8 @@ QLayout* KisWidgetChooser::createPopupLayout()
     QGridLayout* layout = new QGridLayout();
     int          row    = 0;
     int          idx    = 0;
-    
-    layout->setContentsMargins(2, 0, 0, 0);
+
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     
     QButtonGroup*           group   = new QButtonGroup();
@@ -133,9 +143,15 @@ QLayout* KisWidgetChooser::createPopupLayout()
                 buttons.push_back(bn);
             }
             
-            layout->addWidget(i->label    , row, 0);
-            layout->addWidget(i->widget   , row, 1);
-            layout->addWidget(buttons[row], row, 2);
+            if (i->label) {
+                layout->addWidget(i->label    , row, 0);
+                layout->addWidget(i->widget   , row, 1);
+                layout->addWidget(buttons[row], row, 2);
+            }
+            else {
+                layout->addWidget(i->widget   , row, 0);
+                layout->addWidget(buttons[row], row, 1);
+            }
             group->addButton(buttons[row], idx);
             ++row;
         }
@@ -166,7 +182,9 @@ void KisWidgetChooser::removeWidget(const QString& id)
         }
         else delete QWidget::layout();
         
-        delete data->label;
+        if (data->label) {
+            delete data->label;
+        }
         delete data->widget;
         m_widgets.erase(data);
     }
@@ -210,7 +228,7 @@ QWidget* KisWidgetChooser::getWidget(const QString& id) const
 void KisWidgetChooser::showPopupWidget()
 {
     QSize popSize = m_popup->size();
-    QRect popupRect(QFrame::mapToGlobal(QPoint(0, QFrame::height())), popSize);
+    QRect popupRect(QFrame::mapToGlobal(QPoint(-1, QFrame::height())), popSize);
     
     // Get the available geometry of the screen which contains this KisPopupButton
     QRect screenRect = QApplication::desktop()->availableGeometry(this);
@@ -236,4 +254,17 @@ void KisWidgetChooser::slotWidgetChoosen(int index)
 {
     chooseWidget(m_widgets[index].id);
     m_popup->hide();
+}
+
+
+void KisWidgetChooser::changeEvent(QEvent *e)
+{
+    QFrame::changeEvent(e);
+
+    switch (e->type()) {
+    case QEvent::StyleChange:
+    case QEvent::PaletteChange:
+        updateArrowIcon();
+        break;
+    }
 }

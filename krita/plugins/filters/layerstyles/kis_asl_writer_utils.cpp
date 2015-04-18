@@ -1,0 +1,92 @@
+/*
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "kis_asl_writer_utils.h"
+
+#include <QUuid>
+#include "KoPattern.h"
+#include "kis_debug.h"
+
+
+namespace KisAslWriterUtils {
+
+void writeUnicodeString(const QString &value, QIODevice *device)
+{
+    quint32 len = value.length() + 1;
+    SAFE_WRITE_EX(device, len);
+
+    const quint16 *ptr = value.utf16();
+    for (quint32 i = 0; i < len; i++) {
+        SAFE_WRITE_EX(device, ptr[i]);
+    }
+}
+
+void writeVarString(const QString &value, QIODevice *device)
+{
+    quint32 lenTag = value.length() != 4 ? value.length() : 0;
+    SAFE_WRITE_EX(device, lenTag);
+
+    if (!device->write(value.toAscii().data(), value.length())) {
+        qWarning() << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
+        return;
+    }
+}
+
+void writePascalString(const QString &value, QIODevice *device)
+{
+    quint8 lenTag = value.length();
+    SAFE_WRITE_EX(device, lenTag);
+
+    if (!device->write(value.toAscii().data(), value.length())) {
+        qWarning() << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
+        return;
+    }
+}
+
+void writeFixedString(const QString &value, QIODevice *device)
+{
+    KIS_ASSERT_RECOVER_RETURN(value.length() == 4);
+
+    if (!device->write(value.toAscii().data(), value.length())) {
+        qWarning() << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
+        return;
+    }
+}
+
+    // Write UUID fetched from the file name or generate
+QString getPatternUuidLazy(const KoPattern *pattern)
+{
+    QUuid uuid;
+    QString patternFileName = pattern->filename();
+
+    if (patternFileName.endsWith(".pat", Qt::CaseInsensitive)) {
+        QString strUuid = patternFileName.left(patternFileName.size() - 4);
+
+        uuid = QUuid(strUuid);
+    }
+
+    if (uuid.isNull()) {
+        qWarning() << "WARNING: Saved pattern doesn't have a UUID, generating...";
+        qWarning() << ppVar(patternFileName) << ppVar(pattern->name());
+        uuid = QUuid::createUuid();
+    }
+
+    return uuid.toString().mid(1, 36);
+}
+
+}

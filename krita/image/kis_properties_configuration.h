@@ -102,6 +102,12 @@ public:
 
     virtual QVariant getProperty(const QString & name) const;
 
+    template <typename T>
+        T getPropertyLazy(const QString & name, const T &defaultValue) const {
+        QVariant value = getProperty(name);
+        return value.isValid() ? value.value<T>() : defaultValue;
+    }
+
     int getInt(const QString & name, int def = 0) const;
 
     double getDouble(const QString & name, double def = 0.0) const;

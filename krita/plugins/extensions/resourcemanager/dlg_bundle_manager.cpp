@@ -66,8 +66,28 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
     m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
 
-    KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
     m_actionManager = actionMgr;
+
+    refreshListData();
+
+    m_ui->bnEditBundle->hide(); // this bunde editor is pretty broken. we can delete this line once fixed
+    connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
+
+    connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
+    connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
+    connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
+
+}
+
+
+void DlgBundleManager::refreshListData()
+{
+    KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+
+    m_ui->listInactive->clear();
+    m_ui->listActive->clear();
+
 
     foreach(const QString &f, bundleServer->blackListedFiles()) {
         ResourceBundle *bundle = new ResourceBundle(f);
@@ -85,14 +105,6 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
         }
     }
     fillListWidget(m_activeBundles.values(), m_ui->listActive);
-
-    connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
-
-    connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
-    connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
-    connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
-
 }
 
 void DlgBundleManager::accept()
@@ -125,12 +137,12 @@ void DlgBundleManager::accept()
                 
                     feedback = i18n("Couldn't add bundle to resource server");
                     bundleFeedback.setText(feedback);
-                    bundleFeedback.exec();;
+                    bundleFeedback.exec();
                 }
                 if(!bundleServer->removeFromBlacklist(bundle)){
                     feedback = i18n("Couldn't remove bundle from blacklist");
                     bundleFeedback.setText(feedback);
-                    bundleFeedback.exec();;
+                    bundleFeedback.exec();
                 }
             }
             else {
@@ -141,7 +153,7 @@ void DlgBundleManager::accept()
         else{
         QString feedback = i18n("Bundle doesn't exist!");
         bundleFeedback.setText(feedback);
-        bundleFeedback.exec();;
+        bundleFeedback.exec();
         
         }
     }
@@ -312,6 +324,7 @@ void DlgBundleManager::slotImportResource() {
     {
         KisAction *action = m_actionManager->actionByName("import_resources");
         action->trigger();
+        refreshListData();
     }
 }
 

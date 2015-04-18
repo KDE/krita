@@ -93,6 +93,14 @@ void KisFillPainter::initFillPainter()
     m_threshold = 0;
 }
 
+void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
+{
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(device()->colorSpace());
+    fillDevice->setDefaultPixel(color.data());
+
+    bitBlt(rc.topLeft(), fillDevice, rc);
+}
+
 // 'regular' filling
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.

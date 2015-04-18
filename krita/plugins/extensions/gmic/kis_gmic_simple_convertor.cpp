@@ -386,6 +386,10 @@ void KisGmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
         dataY += rowsToWork;
         rowsRemaining -= rowsToWork;
     }
+
+    delete [] convertedTile;
+    delete gmicToDstPixelFormat;
+
 }
 
 
@@ -524,6 +528,7 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
     }
 
     delete [] dstTile;
+    delete pixelToGmicPixelFormat;
 
 }
 

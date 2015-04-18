@@ -63,7 +63,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
     for (int i = 0; i < parameters.size();i++)
     {
         Parameter * p = parameters.at(i);
-        dbgPlugins << "Processing: " << qPrintable(PARAMETER_NAMES[p->m_type]) << " " << qPrintable(p->toString());
+        dbgPlugins << "Processing: " << qPrintable(p->typeName()) << " " << qPrintable(p->toString());
         switch (p->m_type)
         {
             case Parameter::INT_P:
@@ -266,7 +266,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 #if KDE_IS_VERSION(4,5,0)
                     colorButton->setAlphaChannelEnabled(colorParam->m_hasAlpha);
 #endif
-                    m_widgetToParameterIndexMapper[colorParam] = i;
+                    m_widgetToParameterIndexMapper[colorButton] = i;
                     mapParameterWidget(colorParam, colorButton);
 
                     connect(colorButton, SIGNAL(changed(QColor)), this, SIGNAL(sigConfigurationItemChanged()));
@@ -444,7 +444,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             }
 
             default:{
-                dbgPlugins << "IGNORING : " << qPrintable(PARAMETER_NAMES[p->m_type]);
+                dbgPlugins << "IGNORING : " << qPrintable(p->typeName());
                 break;
             }
 
@@ -581,19 +581,21 @@ void KisGmicSettingsWidget::setTextValue()
 
 
 
-Parameter * KisGmicSettingsWidget::parameter(QObject* widget)
+Parameter * KisGmicSettingsWidget::parameter(QObject * widget)
 {
-    if (!widget)
+    QWidget *q = qobject_cast<QWidget*>(widget);
+    if (!q)
     {
         return 0;
     }
 
-    if (!m_widgetToParameterIndexMapper.contains(widget))
+    if (!m_widgetToParameterIndexMapper.contains(q))
     {
+        dbgPlugins << "Widget-to-parameter map does not contain " << q;
         return 0;
     }
 
-    int index = m_widgetToParameterIndexMapper[widget];
+    int index = m_widgetToParameterIndexMapper[q];
     Parameter * p = m_commandDefinition->m_parameters.at(index);
     return p;
 }

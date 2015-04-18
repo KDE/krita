@@ -105,8 +105,7 @@ bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
     scale *= m_brush->scale();
 
-    return scale * m_brush->width() < 0.01 ||
-           scale * m_brush->height() < 0.01;
+    return (scale * m_brush->width() < 0.01 || scale * m_brush->height() < 0.01);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation) const

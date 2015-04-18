@@ -114,6 +114,7 @@ public:
         , mirrorAxis(0)
         , actionCollection(0)
         , paintingAssistantsDecoration(0)
+        , shown(false)
     {
         tempActiveWidget = 0;
         documentDeleted = false;
@@ -154,6 +155,7 @@ public:
     KisMirrorAxis* mirrorAxis;
     KActionCollection* actionCollection;
     KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
+    bool shown;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -290,6 +292,9 @@ KisView::~KisView()
     KisPart::instance()->removeView(this);
     delete d;
 }
+
+void KisView::setShown() { d->shown = true; }
+bool KisView::shown() const { return d->shown; }
 
 void KisView::setViewManager(KisViewManager *view)
 {
@@ -759,6 +764,12 @@ void KisView::closeEvent(QCloseEvent *event)
 
     event->ignore();
 
+}
+
+void KisView::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    QTimer::singleShot(10000, this, SLOT(setShown()));
 }
 
 bool KisView::queryClose()

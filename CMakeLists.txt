@@ -12,6 +12,13 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
     cmake_policy(SET CMP0022 OLD)
 endif()
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
+    cmake_policy(SET CMP0026 OLD) 
+    cmake_policy(SET CMP0046 OLD)
+endif()
+
+
+
  ######################
 #######################
 ## Constants defines ##
@@ -20,10 +27,10 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9.1")
+set(CALLIGRA_VERSION_STRING "2.9.2")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 1)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_VERSION_RELEASE 2)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
@@ -113,6 +120,7 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
 # get the special macros
 include(CalligraProductSetMacros)
+include(MacroJPEG)
 
 # get the definitions of products, features and product sets
 include(CalligraProducts.cmake)
@@ -340,26 +348,20 @@ if(NOT MARBLE_FOUND)
     set(MARBLE_INCLUDE_DIR "")
 else()
     set(CAN_USE_MARBLE TRUE)
-endif()
-if( MARBLE_FOUND )
-    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
-        set(MARBLE_FOUND FALSE)
-    else()
-        add_definitions( -DCAN_USE_MARBLE )
-        ##
-        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-        ## with commit ea177ca. This is for compatibility with older versions.
-        ##
-        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-        if( MARBLECONTROLBOX_H )
-        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-            if( SETMARBLEWIDGET )
-                add_definitions(-DHAVE_SETMARBLEWIDGET)
-            endif()
-        else()
-            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+    if( MARBLECONTROLBOX_H )
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif()
+    else()
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif()
 endif()
 macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")

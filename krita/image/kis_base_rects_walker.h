@@ -24,6 +24,9 @@
 #include "kis_layer.h"
 #include "kis_mask.h"
 
+#include "kis_abstract_projection_plane.h"
+
+
 class KisBaseRectsWalker;
 typedef KisSharedPtr<KisBaseRectsWalker> KisBaseRectsWalkerSP;
 
@@ -289,8 +292,8 @@ protected:
         // We do not work with masks here. It is KisLayer's job.
         if(!isLayer(node)) return;
 
-        QRect currentChangeRect = node->changeRect(m_resultChangeRect,
-                                                   convertPositionToFilthy(position));
+        QRect currentChangeRect = node->projectionPlane()->changeRect(m_resultChangeRect,
+                                                                      convertPositionToFilthy(position));
         currentChangeRect = cropThisRect(currentChangeRect);
 
         if(!m_changeRectVaries)
@@ -298,8 +301,8 @@ protected:
 
         m_resultChangeRect = currentChangeRect;
 
-        m_resultUncroppedChangeRect = node->changeRect(m_resultUncroppedChangeRect,
-                                                       convertPositionToFilthy(position));
+        m_resultUncroppedChangeRect = node->projectionPlane()->changeRect(m_resultUncroppedChangeRect,
+                                                                          convertPositionToFilthy(position));
         registerCloneNotification(node, position);
     }
 
@@ -339,11 +342,11 @@ protected:
                 pushJob(node, position, m_lastNeedRect);
             //else /* Why push empty rect? */;
 
-            m_resultAccessRect |= node->accessRect(m_lastNeedRect,
-                                                   convertPositionToFilthy(position));
+            m_resultAccessRect |= node->projectionPlane()->accessRect(m_lastNeedRect,
+                                                                      convertPositionToFilthy(position));
 
-            m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                            convertPositionToFilthy(position));
+            m_lastNeedRect = node->projectionPlane()->needRect(m_lastNeedRect,
+                                                               convertPositionToFilthy(position));
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
         }
@@ -351,11 +354,11 @@ protected:
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
 
-                m_resultAccessRect |= node->accessRect(m_lastNeedRect,
-                                                       convertPositionToFilthy(position));
+                m_resultAccessRect |= node->projectionPlane()->accessRect(m_lastNeedRect,
+                                                                          convertPositionToFilthy(position));
 
-                m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                                convertPositionToFilthy(position));
+                m_lastNeedRect = node->projectionPlane()->needRect(m_lastNeedRect,
+                                                                   convertPositionToFilthy(position));
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
             }
         }
@@ -383,7 +386,7 @@ protected:
                      (!isMask(currentNode) || !currentNode->visible()));
 
             if(currentNode) {
-                QRect changeRect = currentNode->changeRect(m_resultChangeRect);
+                QRect changeRect = currentNode->projectionPlane()->changeRect(m_resultChangeRect);
                 m_changeRectVaries |= changeRect != m_resultChangeRect;
                 m_resultChangeRect = changeRect;
                 m_resultUncroppedChangeRect = changeRect;
@@ -401,11 +404,11 @@ protected:
         qint32 x, y, w, h;
         QRect tempRect;
 
-        tempRect = node->changeRect(requestedRect);
+        tempRect = node->projectionPlane()->changeRect(requestedRect);
         tempRect.getRect(&x, &y, &w, &h);
         checksum += -x - y + w + h;
 
-        tempRect = node->needRect(requestedRect);
+        tempRect = node->projectionPlane()->needRect(requestedRect);
         tempRect.getRect(&x, &y, &w, &h);
         checksum += -x - y + w + h;
 

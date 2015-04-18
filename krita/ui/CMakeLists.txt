@@ -62,6 +62,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_blacklist_cleanup.cpp
+    dialogs/kis_dlg_layer_style.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -91,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
+    kis_embedded_pattern_manager.cpp
     kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
@@ -186,6 +188,8 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
+    widgets/kis_cmb_contour.cpp
+    widgets/kis_cmb_gradient.cpp
     widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc
     widgets/kis_color_space_selector.cc
@@ -269,6 +273,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_psd_layer_style_resource.cpp
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
@@ -408,9 +413,24 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.ui
     input/config/kis_wheel_input_editor.ui
     input/config/kis_key_input_editor.ui
+
+    layerstyles/wdgBevelAndEmboss.ui
+    layerstyles/wdgblendingoptions.ui
+    layerstyles/WdgColorOverlay.ui
+    layerstyles/wdgContour.ui
+    layerstyles/wdgdropshadow.ui
+    layerstyles/WdgGradientOverlay.ui
+    layerstyles/wdgInnerGlow.ui
+    layerstyles/wdglayerstyles.ui
+    layerstyles/WdgPatternOverlay.ui
+    layerstyles/WdgSatin.ui
+    layerstyles/WdgStroke.ui
+    layerstyles/wdgstylesselector.ui
+    layerstyles/wdgTexture.ui
+
     wdgsplash.ui
-	input/wintab/kis_screen_size_choice_dialog.ui
-	forms/wdg_url_requester.ui
+    input/wintab/kis_screen_size_choice_dialog.ui
+    forms/wdg_url_requester.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

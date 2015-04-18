@@ -58,6 +58,7 @@ private:
     Ui::WdgDlgBundleManager *m_ui;
 
     void fillListWidget(QList<ResourceBundle*> bundles, QListWidget *w);
+    void refreshListData();
 
     QMap<QString, ResourceBundle*> m_blacklistedBundles;
     QMap<QString, ResourceBundle*> m_activeBundles;

@@ -41,8 +41,6 @@ public:
     virtual ~KisDeformPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
-    qreal spacing(qreal pressure) const;
-
 
 private:
 

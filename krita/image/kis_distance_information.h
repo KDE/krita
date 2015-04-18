@@ -33,21 +33,24 @@ class KisPaintInformation;
  */
 class KisSpacingInformation {
 public:
-    KisSpacingInformation()
-        : m_isIsotropic(true)
+    explicit KisSpacingInformation()
+        : m_spacing(0.0, 0.0)
+        , m_isIsotropic(true)
+        , m_rotation(0.0)
     {
     }
 
-    KisSpacingInformation(qreal isotropicSpacing)
-        : m_spacing(isotropicSpacing, isotropicSpacing),
-          m_isIsotropic(true)
+    explicit KisSpacingInformation(qreal isotropicSpacing)
+        : m_spacing(isotropicSpacing, isotropicSpacing)
+        , m_isIsotropic(true)
+        , m_rotation(0.0)
     {
     }
 
-KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
-        : m_spacing(anisotropicSpacing),
-          m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y()),
-          m_rotation(rotation)
+    explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
+        : m_spacing(anisotropicSpacing)
+        , m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y())
+        , m_rotation(rotation)
     {
     }
 

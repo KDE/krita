@@ -271,20 +271,19 @@ QByteArray compress(const QByteArray& input)
     unsigned char* out_data = (unsigned char*) output.data() + 5;
 
     unsigned int len = compress(in_data, in_len, out_data, out_len);
-    out_len = len;
 
     if ((len > out_len) || (len == 0)) {
         // output buffer is too small, likely because the data can't
         // be compressed. so here just copy without compression
-        out_len = in_len;
-        output.insert(5, input);
+        output.replace(5, output.size()-5, input);
 
         // flag must indicate "uncompressed block"
         output[4] = 0;
+    } else {
+        output.resize(len + 4 + 1);
     }
 
     // minimize memory
-    output.resize(out_len + 4 + 1);
     output.squeeze();
 
     return output;

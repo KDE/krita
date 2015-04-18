@@ -48,14 +48,7 @@
 
 namespace
 {
-const double IMAGE_DEFAULT_RESOLUTION = 100.0; // dpi
-const qint32 IMAGE_DEFAULT_WIDTH = 1600;
-const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
-const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
-const qint32 DEFAULT_MAX_TILES_MEM = 5000;
-
-static QMutex s_synchLocker;
-
+    static QMutex s_synchLocker;
 }
 
 KisConfig::KisConfig()
@@ -71,9 +64,9 @@ KisConfig::~KisConfig()
 }
 
 
-bool KisConfig::disableTouchOnCanvas() const
+bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
 {
-    return m_cfg.readEntry("disableTouchOnCanvas", false);
+    return (defaultValue ? false : m_cfg.readEntry("disableTouchOnCanvas", false));
 }
 
 void KisConfig::setDisableTouchOnCanvas(bool value) const
@@ -81,9 +74,9 @@ void KisConfig::setDisableTouchOnCanvas(bool value) const
     m_cfg.writeEntry("disableTouchOnCanvas", value);
 }
 
-bool KisConfig::useProjections() const
+bool KisConfig::useProjections(bool defaultValue) const
 {
-    return m_cfg.readEntry("useProjections", true);
+    return (defaultValue ? true : m_cfg.readEntry("useProjections", true));
 }
 
 void KisConfig::setUseProjections(bool useProj) const
@@ -91,9 +84,9 @@ void KisConfig::setUseProjections(bool useProj) const
     m_cfg.writeEntry("useProjections", useProj);
 }
 
-bool KisConfig::undoEnabled() const
+bool KisConfig::undoEnabled(bool defaultValue) const
 {
-    return m_cfg.readEntry("undoEnabled", true);
+    return (defaultValue ? true : m_cfg.readEntry("undoEnabled", true));
 }
 
 void KisConfig::setUndoEnabled(bool undo) const
@@ -101,18 +94,19 @@ void KisConfig::setUndoEnabled(bool undo) const
     m_cfg.writeEntry("undoEnabled", undo);
 }
 
-int KisConfig::undoStackLimit() const
+int KisConfig::undoStackLimit(bool defaultValue) const
 {
-    return m_cfg.readEntry("undoStackLimit", 30);
+    return (defaultValue ? 30 : m_cfg.readEntry("undoStackLimit", 30));
 }
 
 void KisConfig::setUndoStackLimit(int limit) const
 {
     m_cfg.writeEntry("undoStackLimit", limit);
 }
-bool KisConfig::useCumulativeUndoRedo()
+
+bool KisConfig::useCumulativeUndoRedo(bool defaultValue) const
 {
-    return m_cfg.readEntry("useCumulativeUndoRedo",false);
+    return (defaultValue ? false : m_cfg.readEntry("useCumulativeUndoRedo",false));
 }
 
 void KisConfig::setCumulativeUndoRedo(bool value)
@@ -120,9 +114,9 @@ void KisConfig::setCumulativeUndoRedo(bool value)
     m_cfg.writeEntry("useCumulativeUndoRedo", value);
 }
 
-double KisConfig::stackT1()
+double KisConfig::stackT1(bool defaultValue) const
 {
-     return m_cfg.readEntry("stackT1",5);
+     return (defaultValue ? 5 : m_cfg.readEntry("stackT1",5));
 }
 
 void KisConfig::setStackT1(int T1)
@@ -130,9 +124,9 @@ void KisConfig::setStackT1(int T1)
     m_cfg.writeEntry("stackT1", T1);
 }
 
-double KisConfig::stackT2()
+double KisConfig::stackT2(bool defaultValue) const
 {
-     return m_cfg.readEntry("stackT2",1);
+     return (defaultValue ? 1 : m_cfg.readEntry("stackT2",1));
 }
 
 void KisConfig::setStackT2(int T2)
@@ -140,9 +134,9 @@ void KisConfig::setStackT2(int T2)
     m_cfg.writeEntry("stackT2", T2);
 }
 
-int KisConfig::stackN()
+int KisConfig::stackN(bool defaultValue) const
 {
-    return m_cfg.readEntry("stackN",5);
+    return (defaultValue ? 5 : m_cfg.readEntry("stackN",5));
 }
 
 void KisConfig::setStackN(int N)
@@ -150,24 +144,25 @@ void KisConfig::setStackN(int N)
      m_cfg.writeEntry("stackN", N);
 }
 
-qint32 KisConfig::defImageWidth() const
+qint32 KisConfig::defImageWidth(bool defaultValue) const
 {
-    return m_cfg.readEntry("imageWidthDef", IMAGE_DEFAULT_WIDTH);
+    return (defaultValue ? 1600 : m_cfg.readEntry("imageWidthDef", 1600));
 }
 
-qint32 KisConfig::defImageHeight() const
+qint32 KisConfig::defImageHeight(bool defaultValue) const
 {
-    return m_cfg.readEntry("imageHeightDef", IMAGE_DEFAULT_HEIGHT);
+    return (defaultValue ? 1200 : m_cfg.readEntry("imageHeightDef", 1200));
 }
 
-double KisConfig::defImageResolution() const
+double KisConfig::defImageResolution(bool defaultValue) const
 {
-    return m_cfg.readEntry("imageResolutionDef", IMAGE_DEFAULT_RESOLUTION) / 72.0;
+    return (defaultValue ? 100.0 : m_cfg.readEntry("imageResolutionDef", 100.0)) / 72.0;
 }
 
-QString KisConfig::defColorModel() const
+QString KisConfig::defColorModel(bool defaultValue) const
 {
-    return m_cfg.readEntry("colorModelDef", KoColorSpaceRegistry::instance()->rgb8()->colorModelId().id());
+    return (defaultValue ? KoColorSpaceRegistry::instance()->rgb8()->colorModelId().id()
+                        : m_cfg.readEntry("colorModelDef", KoColorSpaceRegistry::instance()->rgb8()->colorModelId().id()));
 }
 
 void KisConfig::defColorModel(const QString & model) const
@@ -175,9 +170,10 @@ void KisConfig::defColorModel(const QString & model) const
     m_cfg.writeEntry("colorModelDef", model);
 }
 
-QString KisConfig::defaultColorDepth() const
+QString KisConfig::defaultColorDepth(bool defaultValue) const
 {
-    return m_cfg.readEntry("colorDepthDef", KoColorSpaceRegistry::instance()->rgb8()->colorDepthId().id());
+    return (defaultValue ? KoColorSpaceRegistry::instance()->rgb8()->colorDepthId().id()
+                        : m_cfg.readEntry("colorDepthDef", KoColorSpaceRegistry::instance()->rgb8()->colorDepthId().id()));
 }
 
 void KisConfig::setDefaultColorDepth(const QString & depth) const
@@ -185,9 +181,11 @@ void KisConfig::setDefaultColorDepth(const QString & depth) const
     m_cfg.writeEntry("colorDepthDef", depth);
 }
 
-QString KisConfig::defColorProfile() const
+QString KisConfig::defColorProfile(bool defaultValue) const
 {
-    return m_cfg.readEntry("colorProfileDef", KoColorSpaceRegistry::instance()->rgb8()->profile()->name());
+    return (defaultValue ? KoColorSpaceRegistry::instance()->rgb8()->profile()->name() :
+                           m_cfg.readEntry("colorProfileDef",
+                                           KoColorSpaceRegistry::instance()->rgb8()->profile()->name()));
 }
 
 void KisConfig::defColorProfile(const QString & profile) const
@@ -210,64 +208,11 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
-bool KisConfig::defAutoFrameBreakEnabled() const
+enumCursorStyle KisConfig::cursorStyle(bool defaultValue) const
 {
-    return m_cfg.readEntry("autoFrameBreakEnabled", false);
-}
-
-void KisConfig::defAutoFrameBreakEnabled(bool state) const
-{
-    m_cfg.writeEntry("autoFrameBreakEnabled", state);
-}
-
-bool KisConfig::defOnionSkinningEnabled() const
-{
-    return m_cfg.readEntry("onionSkinningEnabled", false);
-}
-
-void KisConfig::defOnionSkinningEnabled(bool state) const
-{
-    m_cfg.writeEntry("onionSkinningEnabled", state);
-}
-
-int KisConfig::defFps() const
-{
-    return m_cfg.readEntry("fps", 12);
-}
-
-void KisConfig::defFps(int value) const
-{
-    m_cfg.writeEntry("fps", value);
-}
-
-int KisConfig::defLocalPlaybackRange() const
-{
-    return m_cfg.readEntry("localPlaybackRange", 15);
-}
-
-void KisConfig::defLocalPlaybackRange(int value) const
-{
-    m_cfg.writeEntry("localPlaybackRange", value);
-}
-
-bool KisConfig::defLoopingEnabled() const
-{
-    return m_cfg.readEntry("loopingEnabled", true);
-}
-
-void KisConfig::defLoopingEnabled(bool state) const
-{
-    m_cfg.writeEntry("loopingEnabled", state);
-}
-
-enumCursorStyle KisConfig::cursorStyle() const
-{
-    return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));
-}
-
-enumCursorStyle KisConfig::getDefaultCursorStyle() const
-{
-    return DEFAULT_CURSOR_STYLE;
+    return (enumCursorStyle) (defaultValue ?
+                CURSOR_STYLE_OUTLINE :
+                m_cfg.readEntry("cursorStyleDef", int(CURSOR_STYLE_OUTLINE)));
 }
 
 void KisConfig::setCursorStyle(enumCursorStyle style) const
@@ -275,9 +220,9 @@ void KisConfig::setCursorStyle(enumCursorStyle style) const
     m_cfg.writeEntry("cursorStyleDef", (int)style);
 }
 
-bool KisConfig::useDirtyPresets() const
+bool KisConfig::useDirtyPresets(bool defaultValue) const
 {
-   return m_cfg.readEntry("useDirtyPresets",false);
+   return (defaultValue ? false : m_cfg.readEntry("useDirtyPresets",false));
 }
 void KisConfig::setUseDirtyPresets(bool value)
 {
@@ -285,9 +230,9 @@ void KisConfig::setUseDirtyPresets(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
-bool KisConfig::useEraserBrushSize() const
+bool KisConfig::useEraserBrushSize(bool defaultValue) const
 {
-   return m_cfg.readEntry("useEraserBrushSize",false);
+   return (defaultValue ? false : m_cfg.readEntry("useEraserBrushSize",false));
 }
 
 void KisConfig::setUseEraserBrushSize(bool value)
@@ -296,10 +241,10 @@ void KisConfig::setUseEraserBrushSize(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
-QColor KisConfig::getMDIBackgroundColor() const
+QColor KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {
     QColor col(77, 77, 77);
-    return m_cfg.readEntry("mdiBackgroundColor", col);
+    return (defaultValue ? col : m_cfg.readEntry("mdiBackgroundColor", col));
 }
 
 void KisConfig::setMDIBackgroundColor(const QColor &v) const
@@ -307,9 +252,9 @@ void KisConfig::setMDIBackgroundColor(const QColor &v) const
     m_cfg.writeEntry("mdiBackgroundColor", v);
 }
 
-QString KisConfig::getMDIBackgroundImage() const
+QString KisConfig::getMDIBackgroundImage(bool defaultValue) const
 {
-    return m_cfg.readEntry("mdiBackgroundImage", "");
+    return (defaultValue ? "" : m_cfg.readEntry("mdiBackgroundImage", ""));
 }
 
 void KisConfig::setMDIBackgroundImage(const QString &filename) const
@@ -324,9 +269,10 @@ QString KisConfig::monitorProfile(int screen) const
     return profile;
 }
 
-QString KisConfig::monitorForScreen(int screen, const QString &defaultMonitor) const
+QString KisConfig::monitorForScreen(int screen, const QString &defaultMonitor, bool defaultValue) const
 {
-    return m_cfg.readEntry(QString("monitor_for_screen_%1").arg(screen), defaultMonitor);
+    return (defaultValue ? defaultMonitor
+                         : m_cfg.readEntry(QString("monitor_for_screen_%1").arg(screen), defaultMonitor));
 }
 
 void KisConfig::setMonitorForScreen(int screen, const QString& monitor)
@@ -405,9 +351,9 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
     return profile;
 }
 
-QString KisConfig::workingColorSpace() const
+QString KisConfig::workingColorSpace(bool defaultValue) const
 {
-    return m_cfg.readEntry("workingColorSpace", "RGBA");
+    return (defaultValue ? "RGBA" : m_cfg.readEntry("workingColorSpace", "RGBA"));
 }
 
 void KisConfig::setWorkingColorSpace(const QString & workingColorSpace) const
@@ -415,10 +361,10 @@ void KisConfig::setWorkingColorSpace(const QString & workingColorSpace) const
     m_cfg.writeEntry("workingColorSpace", workingColorSpace);
 }
 
-QString KisConfig::printerColorSpace() const
+QString KisConfig::printerColorSpace(bool /*defaultValue*/) const
 {
     //TODO currently only rgb8 is supported
-    //return m_cfg.readEntry("printerColorSpace", "RGBA");
+    //return (defaultValue ? "RGBA" : m_cfg.readEntry("printerColorSpace", "RGBA"));
     return QString("RGBA");
 }
 
@@ -428,9 +374,9 @@ void KisConfig::setPrinterColorSpace(const QString & printerColorSpace) const
 }
 
 
-QString KisConfig::printerProfile() const
+QString KisConfig::printerProfile(bool defaultValue) const
 {
-    return m_cfg.readEntry("printerProfile", "");
+    return (defaultValue ? "" : m_cfg.readEntry("printerProfile", ""));
 }
 
 void KisConfig::setPrinterProfile(const QString & printerProfile) const
@@ -439,9 +385,9 @@ void KisConfig::setPrinterProfile(const QString & printerProfile) const
 }
 
 
-bool KisConfig::useBlackPointCompensation() const
+bool KisConfig::useBlackPointCompensation(bool defaultValue) const
 {
-    return m_cfg.readEntry("useBlackPointCompensation", true);
+    return (defaultValue ? true : m_cfg.readEntry("useBlackPointCompensation", true));
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation) const
@@ -449,9 +395,9 @@ void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation) con
     m_cfg.writeEntry("useBlackPointCompensation", useBlackPointCompensation);
 }
 
-bool KisConfig::allowLCMSOptimization() const
+bool KisConfig::allowLCMSOptimization(bool defaultValue) const
 {
-    return m_cfg.readEntry("allowLCMSOptimization", true);
+    return (defaultValue ? true : m_cfg.readEntry("allowLCMSOptimization", true));
 }
 
 void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
@@ -460,9 +406,9 @@ void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
 }
 
 
-bool KisConfig::showRulers() const
+bool KisConfig::showRulers(bool defaultValue) const
 {
-    return m_cfg.readEntry("showrulers", false);
+    return (defaultValue ? false : m_cfg.readEntry("showrulers", false));
 }
 
 void KisConfig::setShowRulers(bool rulers) const
@@ -471,9 +417,9 @@ void KisConfig::setShowRulers(bool rulers) const
 }
 
 
-qint32 KisConfig::pasteBehaviour() const
+qint32 KisConfig::pasteBehaviour(bool defaultValue) const
 {
-    return m_cfg.readEntry("pasteBehaviour", 2);
+    return (defaultValue ? 2 : m_cfg.readEntry("pasteBehaviour", 2));
 }
 
 void KisConfig::setPasteBehaviour(qint32 renderIntent) const
@@ -482,12 +428,12 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent) const
 }
 
 
-qint32 KisConfig::renderIntent() const
+qint32 KisConfig::monitorRenderIntent(bool defaultValue) const
 {
     qint32 intent = m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
     if (intent > 3) intent = 3;
     if (intent < 0) intent = 0;
-    return intent;
+    return (defaultValue ? INTENT_PERCEPTUAL : intent);
 }
 
 void KisConfig::setRenderIntent(qint32 renderIntent) const
@@ -497,9 +443,18 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
     m_cfg.writeEntry("renderIntent", renderIntent);
 }
 
-bool KisConfig::useOpenGL() const
+bool KisConfig::useOpenGL(bool defaultValue) const
 {
-    if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
+
+    if (qApp->applicationName() == "krita") {
+        if (defaultValue) {
+#ifdef Q_WS_MAC
+            return false;
+#else
+            return true;
+#endif
+        }
+
         //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
 #ifdef Q_WS_MAC
@@ -520,9 +475,9 @@ void KisConfig::setUseOpenGL(bool useOpenGL) const
     m_cfg.writeEntry("useOpenGL", useOpenGL);
 }
 
-int KisConfig::openGLFilteringMode() const
+int KisConfig::openGLFilteringMode(bool defaultValue) const
 {
-    return m_cfg.readEntry("OpenGLFilterMode", 3);
+    return (defaultValue ? 3 : m_cfg.readEntry("OpenGLFilterMode", 3));
 }
 
 void KisConfig::setOpenGLFilteringMode(int filteringMode)
@@ -530,9 +485,9 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
     m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
-bool KisConfig::useOpenGLTextureBuffer() const
+bool KisConfig::useOpenGLTextureBuffer(bool defaultValue) const
 {
-    return m_cfg.readEntry("useOpenGLTextureBuffer", true);
+    return (defaultValue ? true : m_cfg.readEntry("useOpenGLTextureBuffer", true));
 }
 
 void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
@@ -540,15 +495,15 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
     m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
-int KisConfig::openGLTextureSize() const
+int KisConfig::openGLTextureSize(bool defaultValue) const
 {
-    return m_cfg.readEntry("textureSize", 256);
+    return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));
 }
 
 
-bool KisConfig::disableDoubleBuffering() const
+bool KisConfig::disableDoubleBuffering(bool defaultValue) const
 {
-    return m_cfg.readEntry("disableDoubleBuffering", true);
+    return (defaultValue ? true : m_cfg.readEntry("disableDoubleBuffering", true));
 }
 
 void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
@@ -556,9 +511,9 @@ void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
     m_cfg.writeEntry("disableDoubleBuffering", disableDoubleBuffering);
 }
 
-bool KisConfig::disableVSync() const
+bool KisConfig::disableVSync(bool defaultValue) const
 {
-    return m_cfg.readEntry("disableVSync", true);
+    return (defaultValue ? true : m_cfg.readEntry("disableVSync", true));
 }
 
 void KisConfig::setDisableVSync(bool disableVSync)
@@ -566,19 +521,19 @@ void KisConfig::setDisableVSync(bool disableVSync)
     m_cfg.writeEntry("disableVSync", disableVSync);
 }
 
-bool KisConfig::showAdvancedOpenGLSettings() const
+bool KisConfig::showAdvancedOpenGLSettings(bool defaultValue) const
 {
-    return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
+    return (defaultValue ? false : m_cfg.readEntry("showAdvancedOpenGLSettings", false));
 }
 
-bool KisConfig::forceOpenGLFenceWorkaround() const
+bool KisConfig::forceOpenGLFenceWorkaround(bool defaultValue) const
 {
-    return m_cfg.readEntry("forceOpenGLFenceWorkaround", false);
+    return (defaultValue ? false : m_cfg.readEntry("forceOpenGLFenceWorkaround", false));
 }
 
-int KisConfig::numMipmapLevels() const
+int KisConfig::numMipmapLevels(bool defaultValue) const
 {
-    return m_cfg.readEntry("numMipmapLevels", 4);
+    return (defaultValue ? 4 : m_cfg.readEntry("numMipmapLevels", 4));
 }
 
 int KisConfig::textureOverlapBorder() const
@@ -586,9 +541,9 @@ int KisConfig::textureOverlapBorder() const
     return 1 << qMax(0, numMipmapLevels());
 }
 
-qint32 KisConfig::maxNumberOfThreads()
+qint32 KisConfig::maxNumberOfThreads(bool defaultValue) const
 {
-    return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());
+    return (defaultValue ? QThread::idealThreadCount() : m_cfg.readEntry("maxthreads", QThread::idealThreadCount()));
 }
 
 void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
@@ -596,9 +551,9 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
     m_cfg.writeEntry("maxthreads", maxThreads);
 }
 
-qint32 KisConfig::maxTilesInMem() const
+qint32 KisConfig::maxTilesInMem(bool defaultValue) const
 {
-    return m_cfg.readEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
+    return (defaultValue ? 5000 : m_cfg.readEntry("maxtilesinmem", 5000));
 }
 
 void KisConfig::setMaxTilesInMem(qint32 tiles) const
@@ -606,12 +561,12 @@ void KisConfig::setMaxTilesInMem(qint32 tiles) const
     m_cfg.writeEntry("maxtilesinmem", tiles);
 }
 
-quint32 KisConfig::getGridMainStyle() const
+quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
     quint32 v = m_cfg.readEntry("gridmainstyle", 0);
     if (v > 2)
         v = 2;
-    return v;
+    return (defaultValue ? 0 : v);
 }
 
 void KisConfig::setGridMainStyle(quint32 v) const
@@ -619,11 +574,11 @@ void KisConfig::setGridMainStyle(quint32 v) const
     m_cfg.writeEntry("gridmainstyle", v);
 }
 
-quint32 KisConfig::getGridSubdivisionStyle() const
+quint32 KisConfig::getGridSubdivisionStyle(bool defaultValue) const
 {
     quint32 v = m_cfg.readEntry("gridsubdivisionstyle", 1);
     if (v > 2) v = 2;
-    return v;
+    return (defaultValue ? 1 : v);
 }
 
 void KisConfig::setGridSubdivisionStyle(quint32 v) const
@@ -631,10 +586,10 @@ void KisConfig::setGridSubdivisionStyle(quint32 v) const
     m_cfg.writeEntry("gridsubdivisionstyle", v);
 }
 
-QColor KisConfig::getGridMainColor() const
+QColor KisConfig::getGridMainColor(bool defaultValue) const
 {
     QColor col(99, 99, 99);
-    return m_cfg.readEntry("gridmaincolor", col);
+    return (defaultValue ? col : m_cfg.readEntry("gridmaincolor", col));
 }
 
 void KisConfig::setGridMainColor(const QColor & v) const
@@ -642,10 +597,10 @@ void KisConfig::setGridMainColor(const QColor & v) const
     m_cfg.writeEntry("gridmaincolor", v);
 }
 
-QColor KisConfig::getGridSubdivisionColor() const
+QColor KisConfig::getGridSubdivisionColor(bool defaultValue) const
 {
     QColor col(150, 150, 150);
-    return m_cfg.readEntry("gridsubdivisioncolor", col);
+    return (defaultValue ? col : m_cfg.readEntry("gridsubdivisioncolor", col));
 }
 
 void KisConfig::setGridSubdivisionColor(const QColor & v) const
@@ -653,10 +608,10 @@ void KisConfig::setGridSubdivisionColor(const QColor & v) const
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
 
-quint32 KisConfig::getGridHSpacing() const
+quint32 KisConfig::getGridHSpacing(bool defaultValue) const
 {
     qint32 v = m_cfg.readEntry("gridhspacing", 10);
-    return (quint32)qMax(1, v);
+    return (defaultValue ? 10 : (quint32)qMax(1, v));
 }
 
 void KisConfig::setGridHSpacing(quint32 v) const
@@ -664,10 +619,10 @@ void KisConfig::setGridHSpacing(quint32 v) const
     m_cfg.writeEntry("gridhspacing", v);
 }
 
-quint32 KisConfig::getGridVSpacing() const
+quint32 KisConfig::getGridVSpacing(bool defaultValue) const
 {
     qint32 v = m_cfg.readEntry("gridvspacing", 10);
-    return (quint32)qMax(1, v);
+    return (defaultValue ? 10 : (quint32)qMax(1, v));
 }
 
 void KisConfig::setGridVSpacing(quint32 v) const
@@ -675,10 +630,9 @@ void KisConfig::setGridVSpacing(quint32 v) const
     m_cfg.writeEntry("gridvspacing", v);
 }
 
-bool KisConfig::getGridSpacingAspect() const
+bool KisConfig::getGridSpacingAspect(bool defaultValue) const
 {
-    bool v = m_cfg.readEntry("gridspacingaspect", false);
-    return v;
+    return (defaultValue ? false : m_cfg.readEntry("gridspacingaspect", false));
 }
 
 void KisConfig::setGridSpacingAspect(bool v) const
@@ -686,10 +640,10 @@ void KisConfig::setGridSpacingAspect(bool v) const
     m_cfg.writeEntry("gridspacingaspect", v);
 }
 
-quint32 KisConfig::getGridSubdivisions() const
+quint32 KisConfig::getGridSubdivisions(bool defaultValue) const
 {
     qint32 v = m_cfg.readEntry("gridsubsivisons", 2);
-    return (quint32)qMax(1, v);
+    return (defaultValue ? 2 : (quint32)qMax(1, v));
 }
 
 void KisConfig::setGridSubdivisions(quint32 v) const
@@ -697,10 +651,10 @@ void KisConfig::setGridSubdivisions(quint32 v) const
     m_cfg.writeEntry("gridsubsivisons", v);
 }
 
-quint32 KisConfig::getGridOffsetX() const
+quint32 KisConfig::getGridOffsetX(bool defaultValue) const
 {
     qint32 v = m_cfg.readEntry("gridoffsetx", 0);
-    return (quint32)qMax(0, v);
+    return (defaultValue ? 0 : (quint32)qMax(0, v));
 }
 
 void KisConfig::setGridOffsetX(quint32 v) const
@@ -708,10 +662,10 @@ void KisConfig::setGridOffsetX(quint32 v) const
     m_cfg.writeEntry("gridoffsetx", v);
 }
 
-quint32 KisConfig::getGridOffsetY() const
+quint32 KisConfig::getGridOffsetY(bool defaultValue) const
 {
     qint32 v = m_cfg.readEntry("gridoffsety", 0);
-    return (quint32)qMax(0, v);
+    return (defaultValue ? 0 : (quint32)qMax(0, v));
 }
 
 void KisConfig::setGridOffsetY(quint32 v) const
@@ -719,10 +673,9 @@ void KisConfig::setGridOffsetY(quint32 v) const
     m_cfg.writeEntry("gridoffsety", v);
 }
 
-bool KisConfig::getGridOffsetAspect() const
+bool KisConfig::getGridOffsetAspect(bool defaultValue) const
 {
-    bool v = m_cfg.readEntry("gridoffsetaspect", false);
-    return v;
+    return (defaultValue ? false : m_cfg.readEntry("gridoffsetaspect", false));
 }
 
 void KisConfig::setGridOffsetAspect(bool v) const
@@ -730,9 +683,9 @@ void KisConfig::setGridOffsetAspect(bool v) const
     m_cfg.writeEntry("gridoffsetaspect", v);
 }
 
-qint32 KisConfig::checkSize() const
+qint32 KisConfig::checkSize(bool defaultValue) const
 {
-    return m_cfg.readEntry("checksize", 32);
+    return (defaultValue ? 32 : m_cfg.readEntry("checksize", 32));
 }
 
 void KisConfig::setCheckSize(qint32 checksize) const
@@ -740,9 +693,9 @@ void KisConfig::setCheckSize(qint32 checksize) const
     m_cfg.writeEntry("checksize", checksize);
 }
 
-bool KisConfig::scrollCheckers() const
+bool KisConfig::scrollCheckers(bool defaultValue) const
 {
-    return m_cfg.readEntry("scrollingcheckers", false);
+    return (defaultValue ? false : m_cfg.readEntry("scrollingcheckers", false));
 }
 
 void KisConfig::setScrollingCheckers(bool sc) const
@@ -750,10 +703,10 @@ void KisConfig::setScrollingCheckers(bool sc) const
     m_cfg.writeEntry("scrollingcheckers", sc);
 }
 
-QColor KisConfig::canvasBorderColor() const
+QColor KisConfig::canvasBorderColor(bool defaultValue) const
 {
     QColor color(QColor(128,128,128));
-    return m_cfg.readEntry("canvasBorderColor", color);
+    return (defaultValue ? color : m_cfg.readEntry("canvasBorderColor", color));
 }
 
 void KisConfig::setCanvasBorderColor(const QColor& color) const
@@ -761,9 +714,9 @@ void KisConfig::setCanvasBorderColor(const QColor& color) const
     m_cfg.writeEntry("canvasBorderColor", color);
 }
 
-bool KisConfig::hideScrollbars() const
+bool KisConfig::hideScrollbars(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideScrollbars", false);
+    return (defaultValue ? false : m_cfg.readEntry("hideScrollbars", false));
 }
 
 void KisConfig::setHideScrollbars(bool value) const
@@ -772,10 +725,10 @@ void KisConfig::setHideScrollbars(bool value) const
 }
 
 
-QColor KisConfig::checkersColor1() const
+QColor KisConfig::checkersColor1(bool defaultValue) const
 {
     QColor col(220, 220, 220);
-    return m_cfg.readEntry("checkerscolor", col);
+    return (defaultValue ? col : m_cfg.readEntry("checkerscolor", col));
 }
 
 void KisConfig::setCheckersColor1(const QColor & v) const
@@ -783,9 +736,9 @@ void KisConfig::setCheckersColor1(const QColor & v) const
     m_cfg.writeEntry("checkerscolor", v);
 }
 
-QColor KisConfig::checkersColor2() const
+QColor KisConfig::checkersColor2(bool defaultValue) const
 {
-    return m_cfg.readEntry("checkerscolor2", QColor(Qt::white));
+    return (defaultValue ? QColor(Qt::white) : m_cfg.readEntry("checkerscolor2", QColor(Qt::white)));
 }
 
 void KisConfig::setCheckersColor2(const QColor & v) const
@@ -793,9 +746,9 @@ void KisConfig::setCheckersColor2(const QColor & v) const
     m_cfg.writeEntry("checkerscolor2", v);
 }
 
-bool KisConfig::antialiasCurves() const
+bool KisConfig::antialiasCurves(bool defaultValue) const
 {
-    return m_cfg.readEntry("antialiascurves", true);
+    return (defaultValue ? true : m_cfg.readEntry("antialiascurves", true));
 }
 
 void KisConfig::setAntialiasCurves(bool v) const
@@ -803,10 +756,10 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
-QColor KisConfig::selectionOverlayMaskColor() const
+QColor KisConfig::selectionOverlayMaskColor(bool defaultValue) const
 {
     QColor def(255, 0, 0, 220);
-    return m_cfg.readEntry("selectionOverlayMaskColor", def);
+    return (defaultValue ? def : m_cfg.readEntry("selectionOverlayMaskColor", def));
 }
 
 void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
@@ -814,9 +767,9 @@ void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
     m_cfg.writeEntry("selectionOverlayMaskColor", color);
 }
 
-bool KisConfig::antialiasSelectionOutline() const
+bool KisConfig::antialiasSelectionOutline(bool defaultValue) const
 {
-    return m_cfg.readEntry("AntialiasSelectionOutline", false);
+    return (defaultValue ? false : m_cfg.readEntry("AntialiasSelectionOutline", false));
 }
 
 void KisConfig::setAntialiasSelectionOutline(bool v) const
@@ -824,9 +777,9 @@ void KisConfig::setAntialiasSelectionOutline(bool v) const
     m_cfg.writeEntry("AntialiasSelectionOutline", v);
 }
 
-bool KisConfig::showRootLayer() const
+bool KisConfig::showRootLayer(bool defaultValue) const
 {
-    return m_cfg.readEntry("ShowRootLayer", false);
+    return (defaultValue ? false : m_cfg.readEntry("ShowRootLayer", false));
 }
 
 void KisConfig::setShowRootLayer(bool showRootLayer) const
@@ -834,9 +787,9 @@ void KisConfig::setShowRootLayer(bool showRootLayer) const
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
 }
 
-bool KisConfig::showGlobalSelection() const
+bool KisConfig::showGlobalSelection(bool defaultValue) const
 {
-    return m_cfg.readEntry("ShowGlobalSelection", false);
+    return (defaultValue ? false : m_cfg.readEntry("ShowGlobalSelection", false));
 }
 
 void KisConfig::setShowGlobalSelection(bool showGlobalSelection) const
@@ -844,9 +797,9 @@ void KisConfig::setShowGlobalSelection(bool showGlobalSelection) const
     m_cfg.writeEntry("ShowGlobalSelection", showGlobalSelection);
 }
 
-bool KisConfig::showOutlineWhilePainting() const
+bool KisConfig::showOutlineWhilePainting(bool defaultValue) const
 {
-    return m_cfg.readEntry("ShowOutlineWhilePainting", true);
+    return (defaultValue ? true : m_cfg.readEntry("ShowOutlineWhilePainting", true));
 }
 
 void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
@@ -854,10 +807,10 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
 }
 
-bool KisConfig::hideSplashScreen() const
+bool KisConfig::hideSplashScreen(bool defaultValue) const
 {
     KConfigGroup cfg(KGlobal::config(), "SplashScreen");
-    return cfg.readEntry("HideSplashAfterStartup", true);
+    return (defaultValue ? true : cfg.readEntry("HideSplashAfterStartup", true));
 }
 
 void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
@@ -866,9 +819,9 @@ void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
     cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
-qreal KisConfig::outlineSizeMinimum() const
+qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
 {
-    return m_cfg.readEntry("OutlineSizeMinimum", 1.0);
+    return (defaultValue ? 1.0 : m_cfg.readEntry("OutlineSizeMinimum", 1.0));
 }
 
 void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
@@ -876,9 +829,9 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
     m_cfg.writeEntry("OutlineSizeMinimum", outlineSizeMinimum);
 }
 
-int KisConfig::autoSaveInterval()  const
+int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave());
+    return (defaultValue ? KisDocument::defaultAutoSave() : m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave()));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -886,9 +839,9 @@ void KisConfig::setAutoSaveInterval(int seconds)  const
     return m_cfg.writeEntry("AutoSaveInterval", seconds);
 }
 
-bool KisConfig::backupFile() const
+bool KisConfig::backupFile(bool defaultValue) const
 {
-    return m_cfg.readEntry("CreateBackupFile", true);
+    return (defaultValue ? true : m_cfg.readEntry("CreateBackupFile", true));
 }
 
 void KisConfig::setBackupFile(bool backupFile) const
@@ -896,9 +849,9 @@ void KisConfig::setBackupFile(bool backupFile) const
     m_cfg.writeEntry("CreateBackupFile", backupFile);
 }
 
-bool KisConfig::showFilterGallery() const
+bool KisConfig::showFilterGallery(bool defaultValue) const
 {
-    return m_cfg.readEntry("showFilterGallery", false);
+    return (defaultValue ? false : m_cfg.readEntry("showFilterGallery", false));
 }
 
 void KisConfig::setShowFilterGallery(bool showFilterGallery) const
@@ -906,9 +859,9 @@ void KisConfig::setShowFilterGallery(bool showFilterGallery) const
     m_cfg.writeEntry("showFilterGallery", showFilterGallery);
 }
 
-bool KisConfig::showFilterGalleryLayerMaskDialog() const
+bool KisConfig::showFilterGalleryLayerMaskDialog(bool defaultValue) const
 {
-    return m_cfg.readEntry("showFilterGalleryLayerMaskDialog", true);
+    return (defaultValue ? true : m_cfg.readEntry("showFilterGalleryLayerMaskDialog", true));
 }
 
 void KisConfig::setShowFilterGalleryLayerMaskDialog(bool showFilterGallery) const
@@ -916,29 +869,9 @@ void KisConfig::setShowFilterGalleryLayerMaskDialog(bool showFilterGallery) cons
     m_cfg.writeEntry("setShowFilterGalleryLayerMaskDialog", showFilterGallery);
 }
 
-QString KisConfig::defaultPainterlyColorModelId() const
+QString KisConfig::canvasState(bool defaultValue) const
 {
-    return m_cfg.readEntry("defaultpainterlycolormodel", "KS6");
-}
-
-void KisConfig::setDefaultPainterlyColorModelId(const QString& def) const
-{
-    m_cfg.writeEntry("defaultpainterlycolormodel", def);
-}
-
-QString KisConfig::defaultPainterlyColorDepthId() const
-{
-    return m_cfg.readEntry("defaultpainterlycolordepth", "F32");
-}
-
-void KisConfig::setDefaultPainterlyColorDepthId(const QString& def) const
-{
-    m_cfg.writeEntry("defaultpainterlycolordepth", def);
-}
-
-QString KisConfig::canvasState() const
-{
-    return m_cfg.readEntry("canvasState", "OPENGL_NOT_TRIED");
+    return (defaultValue ? "OPENGL_NOT_TRIED" : m_cfg.readEntry("canvasState", "OPENGL_NOT_TRIED"));
 }
 
 void KisConfig::setCanvasState(const QString& state) const
@@ -953,9 +886,9 @@ void KisConfig::setCanvasState(const QString& state) const
     }
 }
 
-bool KisConfig::paintopPopupDetached() const
+bool KisConfig::paintopPopupDetached(bool defaultValue) const
 {
-    return m_cfg.readEntry("PaintopPopupDetached", false);
+    return (defaultValue ? false : m_cfg.readEntry("PaintopPopupDetached", false));
 }
 
 void KisConfig::setPaintopPopupDetached(bool detached) const
@@ -963,9 +896,9 @@ void KisConfig::setPaintopPopupDetached(bool detached) const
     m_cfg.writeEntry("PaintopPopupDetached", detached);
 }
 
-QString KisConfig::pressureTabletCurve() const
+QString KisConfig::pressureTabletCurve(bool defaultValue) const
 {
-    return m_cfg.readEntry("tabletPressureCurve","0,0;1,1;");
+    return (defaultValue ? "0,0;1,1" : m_cfg.readEntry("tabletPressureCurve","0,0;1,1;"));
 }
 
 void KisConfig::setPressureTabletCurve(const QString& curveString) const
@@ -973,9 +906,9 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
     m_cfg.writeEntry("tabletPressureCurve", curveString);
 }
 
-qreal KisConfig::vastScrolling() const
+qreal KisConfig::vastScrolling(bool defaultValue) const
 {
-    return m_cfg.readEntry("vastScrolling", 0.9);
+    return (defaultValue ? 0.9 : m_cfg.readEntry("vastScrolling", 0.9));
 }
 
 void KisConfig::setVastScrolling(const qreal factor) const
@@ -983,9 +916,9 @@ void KisConfig::setVastScrolling(const qreal factor) const
     m_cfg.writeEntry("vastScrolling", factor);
 }
 
-int KisConfig::presetChooserViewMode() const
+int KisConfig::presetChooserViewMode(bool defaultValue) const
 {
-    return m_cfg.readEntry("presetChooserViewMode", 0);
+    return (defaultValue ? 0 : m_cfg.readEntry("presetChooserViewMode", 0));
 }
 
 void KisConfig::setPresetChooserViewMode(const int mode) const
@@ -993,9 +926,9 @@ void KisConfig::setPresetChooserViewMode(const int mode) const
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
-bool KisConfig::firstRun() const
+bool KisConfig::firstRun(bool defaultValue) const
 {
-    return m_cfg.readEntry("firstRun", true);
+    return (defaultValue ? true : m_cfg.readEntry("firstRun", true));
 }
 
 void KisConfig::setFirstRun(const bool first) const
@@ -1003,18 +936,18 @@ void KisConfig::setFirstRun(const bool first) const
     m_cfg.writeEntry("firstRun", first);
 }
 
-int KisConfig::horizontalSplitLines() const
+int KisConfig::horizontalSplitLines(bool defaultValue) const
 {
-    return m_cfg.readEntry("horizontalSplitLines", 1);
+    return (defaultValue ? 1 : m_cfg.readEntry("horizontalSplitLines", 1));
 }
 void KisConfig::setHorizontalSplitLines(const int numberLines) const
 {
     m_cfg.writeEntry("horizontalSplitLines", numberLines);
 }
 
-int KisConfig::verticalSplitLines() const
+int KisConfig::verticalSplitLines(bool defaultValue) const
 {
-    return m_cfg.readEntry("verticalSplitLines", 1);
+    return (defaultValue ? 1 : m_cfg.readEntry("verticalSplitLines", 1));
 }
 
 void KisConfig::setVerticalSplitLines(const int numberLines) const
@@ -1022,9 +955,9 @@ void KisConfig::setVerticalSplitLines(const int numberLines) const
     m_cfg.writeEntry("verticalSplitLines", numberLines);
 }
 
-bool KisConfig::clicklessSpacePan() const
+bool KisConfig::clicklessSpacePan(bool defaultValue) const
 {
-    return m_cfg.readEntry("clicklessSpacePan", true);
+    return (defaultValue ? true : m_cfg.readEntry("clicklessSpacePan", true));
 }
 
 void KisConfig::setClicklessSpacePan(const bool toggle) const
@@ -1033,19 +966,19 @@ void KisConfig::setClicklessSpacePan(const bool toggle) const
 }
 
 
-int KisConfig::hideDockersFullscreen() const
+bool KisConfig::hideDockersFullscreen(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideDockersFullScreen", (int)Qt::Checked);
+    return (defaultValue ? true : m_cfg.readEntry("hideDockersFullScreen", true));
 }
 
-void KisConfig::setHideDockersFullscreen(const int value) const
+void KisConfig::setHideDockersFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideDockersFullScreen", value);
 }
 
-bool KisConfig::showDockerTitleBars() const
+bool KisConfig::showDockerTitleBars(bool defaultValue) const
 {
-    return m_cfg.readEntry("showDockerTitleBars", true);
+    return (defaultValue ? true : m_cfg.readEntry("showDockerTitleBars", true));
 }
 
 void KisConfig::setShowDockerTitleBars(const bool value) const
@@ -1053,59 +986,59 @@ void KisConfig::setShowDockerTitleBars(const bool value) const
     m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
-int KisConfig::hideMenuFullscreen() const
+bool KisConfig::hideMenuFullscreen(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideMenuFullScreen", (int)Qt::Checked);
+    return (defaultValue ? true: m_cfg.readEntry("hideMenuFullScreen", true));
 }
 
-void KisConfig::setHideMenuFullscreen(const int value) const
+void KisConfig::setHideMenuFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideMenuFullScreen", value);
 }
 
-int KisConfig::hideScrollbarsFullscreen() const
+bool KisConfig::hideScrollbarsFullscreen(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideScrollbarsFullScreen", (int)Qt::Checked);
+    return (defaultValue ? true : m_cfg.readEntry("hideScrollbarsFullScreen", true));
 }
 
-void KisConfig::setHideScrollbarsFullscreen(const int value) const
+void KisConfig::setHideScrollbarsFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideScrollbarsFullScreen", value);
 }
 
-int KisConfig::hideStatusbarFullscreen() const
+bool KisConfig::hideStatusbarFullscreen(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideStatusbarFullScreen", (int)Qt::Checked);
+    return (defaultValue ? true: m_cfg.readEntry("hideStatusbarFullScreen", true));
 }
 
-void KisConfig::setHideStatusbarFullscreen(const int value) const
+void KisConfig::setHideStatusbarFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideStatusbarFullScreen", value);
 }
 
-int KisConfig::hideTitlebarFullscreen() const
+bool KisConfig::hideTitlebarFullscreen(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideTitleBarFullscreen", (int)Qt::Checked);
+    return (defaultValue ? true : m_cfg.readEntry("hideTitleBarFullscreen", true));
 }
 
-void KisConfig::setHideTitlebarFullscreen(const int value) const
+void KisConfig::setHideTitlebarFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideTitleBarFullscreen", value);
 }
 
-int KisConfig::hideToolbarFullscreen() const
+bool KisConfig::hideToolbarFullscreen(bool defaultValue) const
 {
-    return m_cfg.readEntry("hideToolbarFullscreen", (int)Qt::Checked);
+    return (defaultValue ? true : m_cfg.readEntry("hideToolbarFullscreen", true));
 }
 
-void KisConfig::setHideToolbarFullscreen(const int value) const
+void KisConfig::setHideToolbarFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideToolbarFullscreen", value);
 }
 
-QStringList KisConfig::favoriteCompositeOps() const
+QStringList KisConfig::favoriteCompositeOps(bool defaultValue) const
 {
-    return m_cfg.readEntry("favoriteCompositeOps", QStringList());
+    return (defaultValue ? QStringList() : m_cfg.readEntry("favoriteCompositeOps", QStringList()));
 }
 
 void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps) const
@@ -1113,9 +1046,9 @@ void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps) const
     m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
 }
 
-QString KisConfig::exportConfiguration(const QString &filterId) const
+QString KisConfig::exportConfiguration(const QString &filterId, bool defaultValue) const
 {
-    return m_cfg.readEntry("ExportConfiguration-" + filterId, QString());
+    return (defaultValue ? QString() : m_cfg.readEntry("ExportConfiguration-" + filterId, QString()));
 }
 
 void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const
@@ -1125,10 +1058,10 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 
 }
 
-bool KisConfig::useOcio() const
+bool KisConfig::useOcio(bool defaultValue) const
 {
 #ifdef HAVE_OCIO
-    return m_cfg.readEntry("Krita/Ocio/UseOcio", false);
+    return (defaultValue ? false : m_cfg.readEntry("Krita/Ocio/UseOcio", false));
 #else
     return false;
 #endif
@@ -1139,9 +1072,9 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
-int KisConfig::favoritePresets() const
+int KisConfig::favoritePresets(bool defaultValue) const
 {
-    return m_cfg.readEntry("favoritePresets", 10);
+    return (defaultValue ? 10 : m_cfg.readEntry("favoritePresets", 10));
 }
 
 void KisConfig::setFavoritePresets(const int value)
@@ -1151,9 +1084,10 @@ void KisConfig::setFavoritePresets(const int value)
 
 
 KisConfig::OcioColorManagementMode
-KisConfig::ocioColorManagementMode() const
+KisConfig::ocioColorManagementMode(bool defaultValue) const
 {
-    return (OcioColorManagementMode) m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", (int) INTERNAL);
+    return (OcioColorManagementMode)(defaultValue ? INTERNAL
+                                                  : m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", (int) INTERNAL));
 }
 
 void KisConfig::setOcioColorManagementMode(OcioColorManagementMode mode) const
@@ -1161,9 +1095,9 @@ void KisConfig::setOcioColorManagementMode(OcioColorManagementMode mode) const
     m_cfg.writeEntry("Krita/Ocio/OcioColorManagementMode", (int) mode);
 }
 
-QString KisConfig::ocioConfigurationPath() const
+QString KisConfig::ocioConfigurationPath(bool defaultValue) const
 {
-    return m_cfg.readEntry("Krita/Ocio/OcioConfigPath", QString());
+    return (defaultValue ? QString() : m_cfg.readEntry("Krita/Ocio/OcioConfigPath", QString()));
 }
 
 void KisConfig::setOcioConfigurationPath(const QString &path) const
@@ -1171,9 +1105,9 @@ void KisConfig::setOcioConfigurationPath(const QString &path) const
     m_cfg.writeEntry("Krita/Ocio/OcioConfigPath", path);
 }
 
-QString KisConfig::ocioLutPath() const
+QString KisConfig::ocioLutPath(bool defaultValue) const
 {
-    return m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString());
+    return (defaultValue ? QString() : m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString()));
 }
 
 void KisConfig::setOcioLutPath(const QString &path) const
@@ -1181,9 +1115,9 @@ void KisConfig::setOcioLutPath(const QString &path) const
     m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
 }
 
-int KisConfig::ocioLutEdgeSize() const
+int KisConfig::ocioLutEdgeSize(bool defaultValue) const
 {
-    return m_cfg.readEntry("Krita/Ocio/LutEdgeSize", 64);
+    return (defaultValue ? 64 : m_cfg.readEntry("Krita/Ocio/LutEdgeSize", 64));
 }
 
 void KisConfig::setOcioLutEdgeSize(int value)
@@ -1191,9 +1125,9 @@ void KisConfig::setOcioLutEdgeSize(int value)
     m_cfg.writeEntry("Krita/Ocio/LutEdgeSize", value);
 }
 
-bool KisConfig::ocioLockColorVisualRepresentation() const
+bool KisConfig::ocioLockColorVisualRepresentation(bool defaultValue) const
 {
-    return m_cfg.readEntry("Krita/Ocio/OcioLockColorVisualRepresentation", false);
+    return (defaultValue ? false : m_cfg.readEntry("Krita/Ocio/OcioLockColorVisualRepresentation", false));
 }
 
 void KisConfig::setOcioLockColorVisualRepresentation(bool value)
@@ -1201,9 +1135,9 @@ void KisConfig::setOcioLockColorVisualRepresentation(bool value)
     m_cfg.writeEntry("Krita/Ocio/OcioLockColorVisualRepresentation", value);
 }
 
-QString KisConfig::defaultPalette() const
+QString KisConfig::defaultPalette(bool defaultValue) const
 {
-    return m_cfg.readEntry("defaultPalette", QString());
+    return (defaultValue ? QString() : m_cfg.readEntry("defaultPalette", QString()));
 }
 
 void KisConfig::setDefaultPalette(const QString& name) const
@@ -1211,7 +1145,7 @@ void KisConfig::setDefaultPalette(const QString& name) const
     m_cfg.writeEntry("defaultPalette", name);
 }
 
-QString KisConfig::toolbarSlider(int sliderNumber)
+QString KisConfig::toolbarSlider(int sliderNumber, bool defaultValue) const
 {
     QString def = "flow";
     if (sliderNumber == 1) {
@@ -1220,7 +1154,7 @@ QString KisConfig::toolbarSlider(int sliderNumber)
     if (sliderNumber == 2) {
         def = "size";
     }
-    return m_cfg.readEntry(QString("toolbarslider_%1").arg(sliderNumber), def);
+    return (defaultValue ? def : m_cfg.readEntry(QString("toolbarslider_%1").arg(sliderNumber), def));
 }
 
 void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
@@ -1228,9 +1162,9 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
-bool KisConfig::sliderLabels() const
+bool KisConfig::sliderLabels(bool defaultValue) const
 {
-    return m_cfg.readEntry("sliderLabels", true);
+    return (defaultValue ? true : m_cfg.readEntry("sliderLabels", true));
 }
 
 void KisConfig::setSliderLabels(bool enabled)
@@ -1238,9 +1172,9 @@ void KisConfig::setSliderLabels(bool enabled)
     m_cfg.writeEntry("sliderLabels", enabled);
 }
 
-QString KisConfig::currentInputProfile() const
+QString KisConfig::currentInputProfile(bool defaultValue) const
 {
-    return m_cfg.readEntry("currentInputProfile", QString());
+    return (defaultValue ? QString() : m_cfg.readEntry("currentInputProfile", QString()));
 }
 
 void KisConfig::setCurrentInputProfile(const QString& name)
@@ -1248,9 +1182,9 @@ void KisConfig::setCurrentInputProfile(const QString& name)
     m_cfg.writeEntry("currentInputProfile", name);
 }
 
-bool KisConfig::useSystemMonitorProfile() const
+bool KisConfig::useSystemMonitorProfile(bool defaultValue) const
 {
-    return m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false);
+    return (defaultValue ? false : m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false));
 }
 
 void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const
@@ -1258,9 +1192,9 @@ void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const
     m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
 }
 
-bool KisConfig::presetStripVisible() const
+bool KisConfig::presetStripVisible(bool defaultValue) const
 {
-    return m_cfg.readEntry("presetStripVisible", true);
+    return (defaultValue ? true : m_cfg.readEntry("presetStripVisible", true));
 }
 
 void KisConfig::setPresetStripVisible(bool visible)
@@ -1268,9 +1202,9 @@ void KisConfig::setPresetStripVisible(bool visible)
     m_cfg.writeEntry("presetStripVisible", visible);
 }
 
-bool KisConfig::scratchpadVisible() const
+bool KisConfig::scratchpadVisible(bool defaultValue) const
 {
-    return m_cfg.readEntry("scratchpadVisible", true);
+    return (defaultValue ? true : m_cfg.readEntry("scratchpadVisible", true));
 }
 
 void KisConfig::setScratchpadVisible(bool visible)
@@ -1278,10 +1212,9 @@ void KisConfig::setScratchpadVisible(bool visible)
     m_cfg.writeEntry("scratchpadVisible", visible);
 }
 
-
-bool KisConfig::showSingleChannelAsColor() const
+bool KisConfig::showSingleChannelAsColor(bool defaultValue) const
 {
-    return m_cfg.readEntry("showSingleChannelAsColor", false);
+    return (defaultValue ? false : m_cfg.readEntry("showSingleChannelAsColor", false));
 }
 
 void KisConfig::setShowSingleChannelAsColor(bool asColor)
@@ -1289,9 +1222,9 @@ void KisConfig::setShowSingleChannelAsColor(bool asColor)
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
 }
 
-bool KisConfig::hidePopups() const
+bool KisConfig::hidePopups(bool defaultValue) const
 {
-    return m_cfg.readEntry("hidePopups", false);
+    return (defaultValue ? false : m_cfg.readEntry("hidePopups", false));
 }
 
 void KisConfig::setHidePopups(bool hidepopups)
@@ -1299,9 +1232,9 @@ void KisConfig::setHidePopups(bool hidepopups)
     m_cfg.writeEntry("hidePopups", hidepopups);
 }
 
-int KisConfig::numDefaultLayers() const
+int KisConfig::numDefaultLayers(bool defaultValue) const
 {
-    return m_cfg.readEntry("NumberOfLayersForNewImage", 2);
+    return (defaultValue ? 2 : m_cfg.readEntry("NumberOfLayersForNewImage", 2));
 }
 
 void KisConfig::setNumDefaultLayers(int num)
@@ -1309,9 +1242,9 @@ void KisConfig::setNumDefaultLayers(int num)
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
 }
 
-quint8 KisConfig::defaultBackgroundOpacity() const
+quint8 KisConfig::defaultBackgroundOpacity(bool defaultValue) const
 {
-  return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
+  return (defaultValue ? (int)OPACITY_OPAQUE_U8 : m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8));
 }
 
 void KisConfig::setDefaultBackgroundOpacity(quint8 value)
@@ -1319,9 +1252,9 @@ void KisConfig::setDefaultBackgroundOpacity(quint8 value)
   m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
 }
 
-QColor KisConfig::defaultBackgroundColor() const
+QColor KisConfig::defaultBackgroundColor(bool defaultValue) const
 {
-  return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)); 
+  return (defaultValue ? QColor(Qt::white) : m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)));
 }
 
 void KisConfig::setDefaultBackgroundColor(QColor value) 
@@ -1329,9 +1262,9 @@ void KisConfig::setDefaultBackgroundColor(QColor value)
   m_cfg.writeEntry("BackgroundColorForNewImage", value);
 }
 
-KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
+KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle(bool defaultValue) const
 {
-  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
+  return (KisConfig::BackgroundStyle)(defaultValue ? LAYER : m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER));
 }
 
 void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
@@ -1339,9 +1272,9 @@ void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
   m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
 }
 
-int KisConfig::lineSmoothingType() const
+int KisConfig::lineSmoothingType(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingType", 1);
+    return (defaultValue ? 1 : m_cfg.readEntry("LineSmoothingType", 1));
 }
 
 void KisConfig::setLineSmoothingType(int value)
@@ -1349,9 +1282,9 @@ void KisConfig::setLineSmoothingType(int value)
     m_cfg.writeEntry("LineSmoothingType", value);
 }
 
-qreal KisConfig::lineSmoothingDistance() const
+qreal KisConfig::lineSmoothingDistance(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingDistance", 50.0);
+    return (defaultValue ? 50.0 : m_cfg.readEntry("LineSmoothingDistance", 50.0));
 }
 
 void KisConfig::setLineSmoothingDistance(qreal value)
@@ -1359,9 +1292,9 @@ void KisConfig::setLineSmoothingDistance(qreal value)
     m_cfg.writeEntry("LineSmoothingDistance", value);
 }
 
-qreal KisConfig::lineSmoothingTailAggressiveness() const
+qreal KisConfig::lineSmoothingTailAggressiveness(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingTailAggressiveness", 0.15);
+    return (defaultValue ? 0.15 : m_cfg.readEntry("LineSmoothingTailAggressiveness", 0.15));
 }
 
 void KisConfig::setLineSmoothingTailAggressiveness(qreal value)
@@ -1369,9 +1302,9 @@ void KisConfig::setLineSmoothingTailAggressiveness(qreal value)
     m_cfg.writeEntry("LineSmoothingTailAggressiveness", value);
 }
 
-bool KisConfig::lineSmoothingSmoothPressure() const
+bool KisConfig::lineSmoothingSmoothPressure(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingSmoothPressure", false);
+    return (defaultValue ? false : m_cfg.readEntry("LineSmoothingSmoothPressure", false));
 }
 
 void KisConfig::setLineSmoothingSmoothPressure(bool value)
@@ -1379,9 +1312,9 @@ void KisConfig::setLineSmoothingSmoothPressure(bool value)
     m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
 }
 
-bool KisConfig::lineSmoothingScalableDistance() const
+bool KisConfig::lineSmoothingScalableDistance(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingScalableDistance", true);
+    return (defaultValue ? true : m_cfg.readEntry("LineSmoothingScalableDistance", true));
 }
 
 void KisConfig::setLineSmoothingScalableDistance(bool value)
@@ -1389,9 +1322,9 @@ void KisConfig::setLineSmoothingScalableDistance(bool value)
     m_cfg.writeEntry("LineSmoothingScalableDistance", value);
 }
 
-qreal KisConfig::lineSmoothingDelayDistance() const
+qreal KisConfig::lineSmoothingDelayDistance(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingDelayDistance", 50.0);
+    return (defaultValue ? 50.0 : m_cfg.readEntry("LineSmoothingDelayDistance", 50.0));
 }
 
 void KisConfig::setLineSmoothingDelayDistance(qreal value)
@@ -1399,9 +1332,9 @@ void KisConfig::setLineSmoothingDelayDistance(qreal value)
     m_cfg.writeEntry("LineSmoothingDelayDistance", value);
 }
 
-bool KisConfig::lineSmoothingUseDelayDistance() const
+bool KisConfig::lineSmoothingUseDelayDistance(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingUseDelayDistance", true);
+    return (defaultValue ? true : m_cfg.readEntry("LineSmoothingUseDelayDistance", true));
 }
 
 void KisConfig::setLineSmoothingUseDelayDistance(bool value)
@@ -1409,9 +1342,9 @@ void KisConfig::setLineSmoothingUseDelayDistance(bool value)
     m_cfg.writeEntry("LineSmoothingUseDelayDistance", value);
 }
 
-bool KisConfig::lineSmoothingFinishStabilizedCurve() const
+bool KisConfig::lineSmoothingFinishStabilizedCurve(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingFinishStabilizedCurve", true);
+    return (defaultValue ? true : m_cfg.readEntry("LineSmoothingFinishStabilizedCurve", true));
 }
 
 void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
@@ -1419,9 +1352,9 @@ void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
     m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
 }
 
-bool KisConfig::lineSmoothingStabilizeSensors() const
+bool KisConfig::lineSmoothingStabilizeSensors(bool defaultValue) const
 {
-    return m_cfg.readEntry("LineSmoothingStabilizeSensors", true);
+    return (defaultValue ? true : m_cfg.readEntry("LineSmoothingStabilizeSensors", true));
 }
 
 void KisConfig::setLineSmoothingStabilizeSensors(bool value)
@@ -1429,9 +1362,9 @@ void KisConfig::setLineSmoothingStabilizeSensors(bool value)
     m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
 }
 
-int KisConfig::paletteDockerPaletteViewSectionSize() const
+int KisConfig::paletteDockerPaletteViewSectionSize(bool defaultValue) const
 {
-    return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
+    return (defaultValue ? 12 : m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12));
 }
 
 void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
@@ -1439,9 +1372,9 @@ void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
     m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
 }
 
-int KisConfig::tabletEventsDelay() const
+int KisConfig::tabletEventsDelay(bool defaultValue) const
 {
-    return m_cfg.readEntry("tabletEventsDelay", 10);
+    return (defaultValue ? 10 : m_cfg.readEntry("tabletEventsDelay", 10));
 }
 
 void KisConfig::setTabletEventsDelay(int value)
@@ -1449,9 +1382,9 @@ void KisConfig::setTabletEventsDelay(int value)
     m_cfg.writeEntry("tabletEventsDelay", value);
 }
 
-bool KisConfig::testingAcceptCompressedTabletEvents() const
+bool KisConfig::testingAcceptCompressedTabletEvents(bool defaultValue) const
 {
-    return m_cfg.readEntry("testingAcceptCompressedTabletEvents", false);
+    return (defaultValue ? false : m_cfg.readEntry("testingAcceptCompressedTabletEvents", false));
 }
 
 void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
@@ -1459,9 +1392,9 @@ void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
     m_cfg.writeEntry("testingAcceptCompressedTabletEvents", value);
 }
 
-bool KisConfig::testingCompressBrushEvents() const
+bool KisConfig::testingCompressBrushEvents(bool defaultValue) const
 {
-    return m_cfg.readEntry("testingCompressBrushEvents", false);
+    return (defaultValue ? false : m_cfg.readEntry("testingCompressBrushEvents", false));
 }
 
 void KisConfig::setTestingCompressBrushEvents(bool value)
@@ -1469,28 +1402,29 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
     m_cfg.writeEntry("testingCompressBrushEvents", value);
 }
 
-bool KisConfig::useVerboseOpenGLDebugOutput() const
+bool KisConfig::useVerboseOpenGLDebugOutput(bool defaultValue) const
 {
-    return m_cfg.readEntry("useVerboseOpenGLDebugOutput", false);
+    return (defaultValue ? false : m_cfg.readEntry("useVerboseOpenGLDebugOutput", false));
 }
 
-int KisConfig::workaroundX11SmoothPressureSteps() const
+int KisConfig::workaroundX11SmoothPressureSteps(bool defaultValue) const
 {
-    return m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0);
+    return (defaultValue ? 0 : m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0));
 }
 
-bool KisConfig::showCanvasMessages() const
+bool KisConfig::showCanvasMessages(bool defaultValue) const
 {
-    return m_cfg.readEntry("showOnCanvasMessages", true);
+    return (defaultValue ? true : m_cfg.readEntry("showOnCanvasMessages", true));
 }
+
 void KisConfig::setShowCanvasMessages(bool show)
 {
     m_cfg.writeEntry("showOnCanvasMessages", show);
 }
 
-bool KisConfig::compressKra() const
+bool KisConfig::compressKra(bool defaultValue) const
 {
-    return m_cfg.readEntry("compressLayersInKra", false);
+    return (defaultValue ? false : m_cfg.readEntry("compressLayersInKra", false));
 }
 
 void KisConfig::setCompressKra(bool compress)
@@ -1498,12 +1432,12 @@ void KisConfig::setCompressKra(bool compress)
     m_cfg.writeEntry("compressLayersInKra", compress);
 }
 
-const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
+const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const
 {
     const KoColorSpace *cs = 0;
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    if(cfg.readEntry("useCustomColorSpace", true)) {
+    if (defaultValue || cfg.readEntry("useCustomColorSpace", true)) {
         KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
         cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
                              cfg.readEntry("customColorSpaceDepthID", "U8"),

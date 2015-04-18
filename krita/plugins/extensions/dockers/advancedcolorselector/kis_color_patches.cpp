@@ -324,7 +324,7 @@ int KisColorPatches::heightOfAllPatches()
 int KisColorPatches::heightForWidth(int width) const
 {
     int numPatchesInARow = width / m_patchWidth;
-    int numRows = qMin((fieldCount() - 1), 1) / qMin(numPatchesInARow + 1, 1);
+    int numRows = qMax((fieldCount() - 1), 1) / qMax(numPatchesInARow + 1, 1);
     return numRows * m_patchHeight;
 }
 

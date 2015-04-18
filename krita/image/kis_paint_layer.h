@@ -81,10 +81,6 @@ public:
 
     bool needProjection() const;
 
-    void copyOriginalToProjection(const KisPaintDeviceSP original,
-                                  KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
-
     using KisLayer::setDirty;
     void setDirty(const QRect & rect);
 
@@ -145,7 +141,11 @@ public Q_SLOTS:
         return this;
     }
 
-
+protected:
+    // override from KisLayer
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
 private:
 
     struct Private;

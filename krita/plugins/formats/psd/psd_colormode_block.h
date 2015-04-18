@@ -28,14 +28,14 @@ class PSDColorModeBlock
 {
 public:
 
-    PSDColorModeBlock(PSDColorMode colormode);
+    PSDColorModeBlock(psd_color_mode colormode);
 
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
 
     quint32 blocksize;
-    PSDColorMode colormode;
+    psd_color_mode colormode;
     QByteArray data;
 
     QString error;

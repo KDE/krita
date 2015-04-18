@@ -52,5 +52,53 @@ void KisMemoryWindowTest::testWindow()
     QVERIFY(!memcmp(ptr, oddBuf, chunkLength));
 }
 
+void KisMemoryWindowTest::testTopReports()
+{
+
+    // default window size in 16 MiB
+    KisMemoryWindow memory(QString(QDir::currentPath()), DEFAULT_WINDOW_SIZE);
+
+    // write 1024 chunks 4 MiB each, hi-limit 4GiB
+
+    const quint8 oddValue = 0xee;
+    const qint64 chunkLength = 4 * MiB;
+
+    QScopedArrayPointer<quint8> writeBuffer(new quint8[chunkLength]);
+    memset(writeBuffer.data(), oddValue, chunkLength);
+
+    QScopedArrayPointer<quint8> readBuffer(new quint8[chunkLength]);
+
+    qint64 maxChunk = 0;
+
+    for (int i = 0; i < 1024; i++) {
+        {
+            int chunkIndex = qrand() % 1024;
+
+            qint64 chunkStart = chunkIndex * chunkLength;
+            maxChunk = qMax(chunkStart, maxChunk);
+
+            quint8 *ptr;
+            ptr = memory.getWriteChunkPtr(KisChunkData(chunkStart, chunkLength));
+            memcpy(ptr, writeBuffer.data(), chunkLength);
+
+            qDebug() << "Writing chunk at" << chunkStart / chunkLength << "MiB" << "max" << maxChunk / chunkLength;
+            QTest::qWait(250);
+        }
+
+        {
+            int chunkIndex = qrand() % 1024;
+
+            qint64 chunkStart = chunkIndex * chunkLength;
+
+            quint8 *ptr;
+            ptr = memory.getReadChunkPtr(KisChunkData(chunkStart, chunkLength));
+            memcpy(readBuffer.data(), ptr, chunkLength);
+
+            qDebug() << "Reading chunk at" << chunkStart / chunkLength << "MiB" << "max" << maxChunk / chunkLength;
+            QTest::qWait(250);
+        }
+    }
+}
+
 QTEST_KDEMAIN(KisMemoryWindowTest, NoGUI)
 

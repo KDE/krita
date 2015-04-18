@@ -17,7 +17,7 @@
    <item>
     <widget class="KTabWidget" name="tab_shadeSelector">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_general">
       <attribute name="title">
@@ -731,8 +731,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>377</width>
-               <height>176</height>
+               <width>104</width>
+               <height>28</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">

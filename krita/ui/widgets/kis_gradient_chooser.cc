@@ -98,9 +98,14 @@ KisGradientChooser::~KisGradientChooser()
 {
 }
 
-KoResource *  KisGradientChooser::currentResource()
+KoResource *KisGradientChooser::currentResource()
 {
     return m_itemChooser->currentResource();
+}
+
+void KisGradientChooser::setCurrentResource(KoResource *resource)
+{
+    m_itemChooser->setCurrentResource(resource);
 }
 
 void KisGradientChooser::setCurrentItem(int row, int column)

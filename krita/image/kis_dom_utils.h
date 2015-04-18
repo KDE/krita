@@ -26,6 +26,8 @@
 #include <QLocale>
 #include "klocale.h"
 #include "krita_export.h"
+#include "kis_debug.h"
+
 
 
 namespace KisDomUtils {
@@ -40,7 +42,53 @@ namespace KisDomUtils {
             return QString::number(value);
         }
 
+        inline int stringToInt(const QString &str) {
+            bool ok = false;
+            int value = 0;
 
+            QLocale c(QLocale::German);
+
+            value = str.toInt(&ok);
+            if (!ok) {
+                value = c.toInt(str, &ok);
+            }
+
+            if (!ok) {
+                qWarning() << "WARNING: KisDomUtils::stringToInt failed:" << ppVar(str);
+                value = 0;
+            }
+
+            return value;
+        }
+
+        inline double stringToDouble(const QString &str) {
+            bool ok = false;
+            double value = 0;
+
+            QLocale c(QLocale::German);
+
+            /**
+             * A special workaround to handle ','/'.' decimal point
+             * in different locales. Added for backward compatibility,
+             * because we used to save qreals directly using
+             *
+             * e.setAttribute("w", (qreal)value),
+             *
+             * which did local-aware conversion.
+             */
+
+            value = str.toDouble(&ok);
+            if (!ok) {
+                value = c.toDouble(str, &ok);
+            }
+
+            if (!ok) {
+                qWarning() << "WARNING: KisDomUtils::stringToDouble failed:" << ppVar(str);
+                value = 0;
+            }
+
+            return value;
+        }
     }
 
 /**

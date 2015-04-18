@@ -76,6 +76,14 @@ public:
                        qint32 width,
                        qint32 height);
 
+    // convenience overload
+    bool paintGradient(const QPointF& gradientVectorStart,
+                       const QPointF& gradientVectorEnd,
+                       enumGradientRepeat repeat,
+                       double antiAliasThreshold,
+                       bool reverseGradient,
+                       const QRect &applyRect);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

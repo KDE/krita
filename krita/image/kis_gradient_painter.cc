@@ -60,6 +60,10 @@ public:
 
     virtual ~CachedGradient() {}
 
+    KoAbstractGradient* clone() const {
+        return new CachedGradient(m_subject, m_max + 1, m_colorSpace);
+    }
+
     /**
     * Creates a QGradient from the gradient.
     * The resulting QGradient might differ from original gradient
@@ -603,11 +607,26 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 width,
                                        qint32 height)
 {
+    return paintGradient(gradientVectorStart,
+                         gradientVectorEnd,
+                         repeat,
+                         antiAliasThreshold,
+                         reverseGradient,
+                         QRect(startx, starty, width, height));
+}
+
+bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
+                                       const QPointF& gradientVectorEnd,
+                                       enumGradientRepeat repeat,
+                                       double antiAliasThreshold,
+                                       bool reverseGradient,
+                                       const QRect &applyRect)
+{
     Q_UNUSED(antiAliasThreshold);
 
     if (!gradient()) return false;
 
-    QRect requestedRect(startx, starty, width, height);
+    QRect requestedRect = applyRect;
 
     //If the device has a selection only iterate over that selection united with our area of interest
     if (selection()) {

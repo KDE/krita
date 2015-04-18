@@ -97,6 +97,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_node_move_command2.cpp
+   commands_new/kis_set_layer_style_command.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
@@ -176,6 +177,9 @@ set(kritaimage_LIB_SRCS
    kis_acyclic_signal_connector.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
+   kis_abstract_projection_plane.cpp
+   kis_layer_projection_plane.cpp
+   kis_mask_projection_plane.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
@@ -266,6 +270,10 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_path_paint_action.cpp
    recorder/kis_recorded_shape_paint_action.cpp
+
+   kis_psd_layer_style.cpp
+   kis_layer_style_serializer.cpp
+   kis_layer_style_projection_plane_factory.cpp
 )
 
 set(einspline_SRCS
@@ -279,8 +287,8 @@ set(einspline_SRCS
 
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage  koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

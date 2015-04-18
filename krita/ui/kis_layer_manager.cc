@@ -66,6 +66,7 @@
 #include <kis_painter.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_psd_layer_style.h>
 
 #include "KisView.h"
 #include "kis_config.h"
@@ -75,6 +76,7 @@
 #include "dialogs/kis_dlg_layer_properties.h"
 #include "dialogs/kis_dlg_generator_layer.h"
 #include "dialogs/kis_dlg_file_layer.h"
+#include "dialogs/kis_dlg_layer_style.h"
 #include "KisDocument.h"
 #include "kis_filter_manager.h"
 #include "kis_node_visitor.h"
@@ -96,6 +98,13 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "KisPart.h"
+
+#include "kis_signal_compressor_with_param.h"
+#include "kis_abstract_projection_plane.h"
+#include "commands_new/kis_set_layer_style_command.h"
+#include "kis_post_execution_undo_adapter.h"
+
+
 
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
@@ -239,6 +248,7 @@ KisLayerManager::KisLayerManager(KisViewManager * view)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
+    , m_layerStyle(0)
 {
 }
 
@@ -320,6 +330,13 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
+
+    m_layerStyle  = new KisAction(i18n("Layer Style..."), this);
+    m_layerStyle->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_layerStyle->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("layer_style", m_layerStyle);
+    connect(m_layerStyle, SIGNAL(triggered()), this, SLOT(layerStyle()));
+
 }
 
 void KisLayerManager::updateGUI()
@@ -480,8 +497,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         gc.setCompositeOp(COMPOSITE_COPY);
         QRect rc(srcDevice->extent());
         gc.bitBlt(rc.topLeft(), srcDevice, rc);
-    }
-    else {
+    } else {
         clone = new KisPaintDevice(*srcDevice);
     }
 
@@ -903,4 +919,40 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 }
 
-#include "moc_kis_layer_manager.cpp"
+void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
+{
+    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone());
+}
+
+void KisLayerManager::layerStyle()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
+    KisPSDLayerStyleSP oldStyle;
+    if (layer->layerStyle()) {
+        oldStyle = layer->layerStyle()->clone();
+    }
+    else {
+        oldStyle = toQShared(new KisPSDLayerStyle());
+    }
+
+    KisDlgLayerStyle dlg(oldStyle->clone(), m_view->resourceProvider());
+
+    boost::function<void ()> updateCall(boost::bind(updateLayerStyles, layer, &dlg));
+    SignalToFunctionProxy proxy(updateCall);
+    connect(&dlg, SIGNAL(configChanged()), &proxy, SLOT(start()));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        KisPSDLayerStyleSP newStyle = dlg.style();
+
+        KUndo2CommandSP command = toQShared(
+            new KisSetLayerStyleCommand(layer, oldStyle, newStyle));
+
+        image->postExecutionUndoAdapter()->addCommand(command);
+    }
+}
+

@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocale.h>
 #include <qtest_kde.h>
-#include "../psd_utils.h"
+#include "../../../../libpsd/psd_utils.h"
 #include <QByteArray>
 #include <QBuffer>
 

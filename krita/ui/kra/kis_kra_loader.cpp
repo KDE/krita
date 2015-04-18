@@ -796,6 +796,7 @@ KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP
 {
     Q_UNUSED(element);
     Q_UNUSED(parent);
+
     KisTransformMask* mask;
 
     /**

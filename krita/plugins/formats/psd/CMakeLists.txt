@@ -6,8 +6,6 @@ configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 
 set(LIB_PSD_SRCS 
-    psd.cpp
-    psd_utils.cpp
     psd_header.cpp
     psd_colormode_block.cpp
     psd_resource_section.cpp
@@ -16,7 +14,6 @@ set(LIB_PSD_SRCS
     psd_layer_record.cpp
     psd_image_data.cpp
     psd_additional_layer_info_block.cpp
-    compression.cpp
 )
 
 set(kritapsdimport_PART_SRCS
@@ -29,9 +26,9 @@ add_library(kritapsdimport MODULE ${kritapsdimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritapsdimport krita_psd_import.desktop)
 
 if (WIN32)
-	target_link_libraries(kritapsdimport kritaui ${WIN32_PLATFORM_NET_LIBS})
+	target_link_libraries(kritapsdimport kritaui libkispsd ${WIN32_PLATFORM_NET_LIBS})
 else ()
-	target_link_libraries(kritapsdimport kritaui )
+	target_link_libraries(kritapsdimport kritaui libkispsd )
 endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

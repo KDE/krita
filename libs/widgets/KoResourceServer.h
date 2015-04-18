@@ -559,7 +559,7 @@ public:
         return createdResources;
     }
 
-    virtual PointerType createResource( const QString & filename ) { return new T(filename); }
+    virtual PointerType createResource( const QString & filename ) = 0;
 
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<PointerType> sortedResources()
@@ -696,6 +696,20 @@ private:
     QStringList m_blackListFileNames;
     KoResourceTagStore* m_tagStore;
 
+};
+
+template <class T, class Policy = PointerStroragePolicy<T> >
+    class KoResourceServerSimpleConstruction : public KoResourceServer<T, Policy>
+{
+public:
+    KoResourceServerSimpleConstruction(const QString& type, const QString& extensions)
+: KoResourceServer<T, Policy>(type, extensions)
+    {
+    }
+
+typename KoResourceServer<T, Policy>::PointerType createResource( const QString & filename ) {
+        return new T(filename);
+    }
 };
 
 #endif // KORESOURCESERVER_H

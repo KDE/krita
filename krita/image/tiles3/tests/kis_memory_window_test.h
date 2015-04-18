@@ -28,6 +28,9 @@ class KisMemoryWindowTest : public QObject
 private Q_SLOTS:
     void testWindow();
 
+private:
+    // disabled since long-running
+    void testTopReports();
 };
 
 #endif /* KIS_MEMORY_WINDOW_TEST_H */

@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QList>
 
+#include "kis_adjustment_layer.h"
 #include "kis_types.h"
 #include "KisView.h"
 

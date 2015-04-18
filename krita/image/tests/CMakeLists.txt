@@ -612,7 +612,7 @@ target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Te
 
 set(kis_psd_layer_style_test_SRCS kis_psd_layer_style_test.cpp )
 kde4_add_unit_test(KisPSDLayerStyleTest TESTNAME krita-image-PSDLayerStyle-Test ${kis_psd_layer_style_test_SRCS})
-target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 

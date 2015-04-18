@@ -123,7 +123,7 @@ void KisInputProfileManager::removeProfile(const QString &name)
         d->profiles.remove(name);
 
         //Delete the settings file for the removed profile, if it exists
-        QDir userDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+        QDir userDir(KGlobal::dirs()->saveLocation("data", "krita/input/"));
 
         if (userDir.exists(d->profileFileName(name))) {
             userDir.remove(d->profileFileName(name));
@@ -193,8 +193,9 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KGlobal::dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+    QStringList profiles = KGlobal::dirs()->findAllResources("data", "krita/input/*", KStandardDirs::Recursive);
 
+    qDebug() << "profiles" << profiles;
 
     QMap<QString, QList<ProfileEntry> > profileEntries;
 
@@ -315,7 +316,7 @@ void KisInputProfileManager::saveProfiles()
 void KisInputProfileManager::resetAll()
 {
     QString kdeHome = KGlobal::dirs()->localkdedir();
-    QStringList profiles = KGlobal::dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+    QStringList profiles = KGlobal::dirs()->findAllResources("data", "krita/input/*", KStandardDirs::Recursive);
 
     foreach(const QString &profile, profiles) {
         if(profile.contains(kdeHome)) {

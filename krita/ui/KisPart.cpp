@@ -641,7 +641,10 @@ void KisPart::startCustomDocument(KisDocument* doc)
     d->startupWidget->hide();
 }
 
-
+KisInputManager* KisPart::currentInputManager()
+{
+    return instance()->currentMainwindow()->viewManager()->inputManager();
+}
 
 
 #include <KisPart.moc>

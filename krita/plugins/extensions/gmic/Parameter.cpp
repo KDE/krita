@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,28 @@
 #include <QDir>
 
 #include <kis_debug.h>
+
+QMap< Parameter::ParameterType, QString > Parameter::initMap()
+{
+    QMap<Parameter::ParameterType, QString> map;
+    map.insert(Parameter::FLOAT_P,"float");
+    map.insert(Parameter::INT_P, "int");
+    map.insert(Parameter::BOOL_P, "bool");
+    map.insert(Parameter::CHOICE_P, "choice");
+    map.insert(Parameter::TEXT_P, "text");
+    map.insert(Parameter::FILE_P, "file");
+    map.insert(Parameter::FOLDER_P, "folder");
+    map.insert(Parameter::COLOR_P, "color");
+    map.insert(Parameter::NOTE_P, "note");
+    map.insert(Parameter::LINK_P, "link");
+    map.insert(Parameter::SEPARATOR_P, "separator");
+    map.insert(Parameter::CONST_P,"const");
+    map.insert(Parameter::BUTTON_P,"button");
+    return map;
+}
+
+const QMap<Parameter::ParameterType, QString> Parameter::PARAMETER_NAMES = initMap();
+const QList<QString> Parameter::PARAMETER_NAMES_STRINGS = PARAMETER_NAMES.values();
 
 Parameter::Parameter(const QString& name, bool updatePreview)
     :m_name(name),
@@ -104,6 +126,19 @@ Parameter::ParameterType Parameter::nameToType(const QString& typeName)
     }
     return Parameter::INVALID_P;
 }
+
+QString Parameter::typeName() const
+{
+    Q_ASSERT(PARAMETER_NAMES.contains(m_type));
+    return PARAMETER_NAMES[m_type];
+}
+
+
+bool Parameter::isTypeDefined(const QString& typeName)
+{
+    return PARAMETER_NAMES_STRINGS.contains(typeName);
+}
+
 
 /**************************
     == FloatParameter ==
@@ -816,7 +851,7 @@ QString ButtonParameter::value() const
 
 QString ButtonParameter::toString()
 {
-    return QString("%1;%2;").arg(m_name).arg(m_value);;
+    return QString("%1;%2;").arg(m_name).arg(m_value);
 }
 
 void ButtonParameter::initValue(bool value)

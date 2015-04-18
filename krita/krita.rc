@@ -299,12 +299,11 @@
     <Action name="paintops"/>
     <Action name="paintop_options"/>
     <Action name="composite_actions"/>
-    <Separator/>
     <Action name="brushslider1"/>
     <Action name="brushslider2"/>
     <Separator/>
     <Action name="mirror_actions"/>
-    <Separator/>
+    <Action name="expanding_spacer_1"/>
     <Action name="workspaces"/>
   </ToolBar>
 </kpartgui>

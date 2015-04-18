@@ -65,7 +65,7 @@ void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
 {
     const QString format = element.attributeNS(KoXmlNS::style, "num-format", QString());
     if (format.isEmpty()) {
-        d->formatSpecification = Empty;
+        //do nothing fall back to what we had.
     }
     else if (format[0] == '1') {
         d->formatSpecification = Numeric;
@@ -123,10 +123,10 @@ void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
     }
 
     //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
-    d->prefix = element.attributeNS(KoXmlNS::style, "num-prefix", QString());
-    d->suffix = element.attributeNS(KoXmlNS::style, "num-suffix", QString());
+    d->prefix = element.attributeNS(KoXmlNS::style, "num-prefix", d->prefix);
+    d->suffix = element.attributeNS(KoXmlNS::style, "num-suffix", d->suffix);
 
-    d->letterSynchronization = (element.attributeNS(KoXmlNS::style, "num-letter-sync", "false") == "true");
+    d->letterSynchronization = (element.attributeNS(KoXmlNS::style, "num-letter-sync", d->letterSynchronization ? "true" : "false") == "true");
 }
 
 void KoOdfNumberDefinition::saveOdf(KoXmlWriter *writer) const

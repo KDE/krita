@@ -130,7 +130,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *v
 
     d->channelFlagsWidget->setChannelFlags(d->channelFlags);
 
-    setMinimumSize(d->page->sizeHint());
+    QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
 
     connect(&d->previewTimer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
@@ -161,6 +161,12 @@ void KisDlgLayerProperties::updatePreview()
         d->doc->setModified(true);
         d->layer->setDirty();
     }
+}
+
+void KisDlgLayerProperties::adjustSize()
+{
+    KDialog::adjustSize();
+    setMinimumSize(size());
 }
 
 

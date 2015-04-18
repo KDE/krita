@@ -47,7 +47,7 @@ PanelConfiguration::~PanelConfiguration()
 
 void PanelConfiguration::componentComplete()
 {
-    QString configFile = KGlobal::dirs()->locate("config", "kritasketchpanelsrc");
+    QString configFile = KStandardDirs::locate("config", "kritasketchpanelsrc");
     QSettings panelConfig(configFile, QSettings::IniFormat);
 
     int count = panelConfig.beginReadArray("Panels");
@@ -99,7 +99,7 @@ void PanelConfiguration::restore()
 
 void PanelConfiguration::save()
 {
-    QString configFile = KGlobal::dirs()->locateLocal("config", "kritasketchpanelsrc");
+    QString configFile = KStandardDirs::locateLocal("config", "kritasketchpanelsrc");
     QSettings panelConfig(configFile, QSettings::IniFormat);
 
     panelConfig.beginWriteArray("Panels");

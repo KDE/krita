@@ -23,6 +23,8 @@
 #include <QThread>
 #include <kis_types.h>
 
+#include "kis_gmic_data.h"
+
 #include <QSize>
 #include <QRect>
 
@@ -42,7 +44,7 @@ public:
                        const QByteArray& customCommands
                       );
 
-    float getProgress() const;
+    float progress() const;
     KisPaintDeviceSP preview();
 
 Q_SIGNALS:
@@ -62,9 +64,9 @@ private:
     KisNodeListSP m_layers;
     KisGmicFilterSetting * m_setting;
     QByteArray m_gmicCustomCommands;
-    float * m_progress;
     KisPaintDeviceSP m_preview;
     bool m_gmicFinishedSuccessfully;
+    KisGmicDataSP m_gmicData;
 };
 
 #endif

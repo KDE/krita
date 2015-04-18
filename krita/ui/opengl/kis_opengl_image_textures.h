@@ -114,7 +114,7 @@ public:
     }
 
     inline KisTextureTile* getTextureTile(int x, int y) {
-        return getTextureTileCR(xToCol(x), yToRow(y));;
+        return getTextureTileCR(xToCol(x), yToRow(y));
     }
 
     inline qreal texelSize() const {

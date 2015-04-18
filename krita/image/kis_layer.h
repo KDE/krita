@@ -104,7 +104,7 @@ public:
      * Return the fully rendered representation of this layer: its
      * data and its effect masks
      */
-    virtual KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP projection() const;
 
     /**
      * Return the layer data before the effect masks have had their go

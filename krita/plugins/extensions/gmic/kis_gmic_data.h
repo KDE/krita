@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_paintop_test.h"
+#ifndef KIS_GMIC_DATA
+#define KIS_GMIC_DATA
 
-#include <qtest_kde.h>
-#include "kis_paintop.h"
-#include "kis_painter.h"
-#include "kis_paint_device.h"
-
-class TestPaintOp : public KisPaintOp
+class KisGmicData
 {
 public:
+    KisGmicData();
+    ~KisGmicData();
 
-    TestPaintOp(KisPainter * gc)
-            : KisPaintOp(gc) {
-    }
+    float progress() const { return m_progress; }
+    bool isCancelled() const { return m_cancel; }
+    void setCancel(bool cancel) { m_cancel = cancel; }
 
-    KisSpacingInformation paintAt(const KisPaintInformation&) {
-        return KisSpacingInformation(0.0);
-    }
+    bool & cancelPtr() { return m_cancel; }
+    float & progressPtr() { return m_progress; }
 
+    void reset();
+
+    static const float INVALID_PROGRESS_VALUE;
+
+private:
+    float m_progress;
+    bool m_cancel;
 };
 
-void KisPaintopTest::testCreation()
-{
-    KisPainter p;
-    TestPaintOp test(&p);
-}
+#include <QSharedPointer>
 
+typedef QSharedPointer<KisGmicData> KisGmicDataSP;
 
-QTEST_KDEMAIN(KisPaintopTest, GUI)
-#include "kis_paintop_test.moc"
+#endif

@@ -441,7 +441,7 @@ void KisGmicPlugin::slotUpdateProgress()
             dbgPlugins << "WARNING: small applicator already deleted!!!";
             return;
         }
-        progress = m_smallApplicator->getProgress();
+        progress = m_smallApplicator->progress();
     }
     else
     {
@@ -567,7 +567,7 @@ QLatin1String KisGmicPlugin::valueToQString(KisGmicPlugin::Activity activity)
 {
     const QMetaObject & mo = KisGmicPlugin::staticMetaObject;
     QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Activity"));
-    return QLatin1String(me.valueToKey(activity));;
+    return QLatin1String(me.valueToKey(activity));
 }
 
 

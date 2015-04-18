@@ -132,8 +132,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;
 
     // Simple error catching
-    if (!painter()->device() || !brush || !brush->canPaintFor(info))
-        return 1.0;
+    if (!painter()->device() || !brush || !brush->canPaintFor(info)) {
+        return KisSpacingInformation(1.0);
+    }
 
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
@@ -156,24 +157,23 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
      *
      * Upon leaving the function:
      *   o m_maskDab stores the new mask
-     *   o m_maskBounds stroes the extents of the mask paint device
+     *   o m_maskBounds stores the extents of the mask paint device
      *   o m_dstDabRect stores the destination rect where the mask is going
      *     to be written to
      */
     updateMask(info, scale, rotation, scatteredPos);
 
     QPointF newCenterPos = QRectF(m_dstDabRect).center();
-    QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
-
-
     /**
      * Save the center of the current dab to know where to read the
      * data during the next pass. We do not save scatteredPos here,
-     * because it may slightly differ from the real center of the
-     * brush (due to some rounding effects), which will result in
+     * because it may differ slightly from the real center of the
+     * brush (due to rounding effects), which will result in a
      * really weird quality.
      */
-    m_lastPaintPos = QRectF(m_dstDabRect).center();
+    m_lastPaintPos = newCenterPos;
+
+    QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(scale, rotation,
@@ -184,13 +184,10 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         return spacingInfo;
     }
 
-
     // save the old opacity value and composite mode
-    quint8               oldOpacity = painter()->opacity();
-    QString              oldModeId = painter()->compositeOp()->id();
-    qreal                fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
-
-    KoColor color = painter()->paintColor();
+    quint8  oldOpacity = painter()->opacity();
+    QString oldCompositeOpId = painter()->compositeOp()->id();
+    qreal   fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
 
     if (m_image && m_overlayModeOption.isChecked()) {
         m_image->blockUpdates();
@@ -198,8 +195,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_image->unblockUpdates();
     }
     else {
-        // IMPORTANT: clear the temporary painting device to color black with zero opacity
-        //            it will only clear the extents of the brush
+        // IMPORTANT: clear the temporary painting device to color black with zero opacity:
+        //            it will only clear the extents of the brush.
         m_tempDev->clear(QRect(QPoint(), m_dstDabRect.size()));
     }
 
@@ -208,9 +205,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     } else {
         QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
-        if(m_smudgeRadiusOption.isChecked()) {
-            m_smudgeRadiusOption.apply(*m_smudgePainter, info,  m_dstDabRect.width(), pt.x(), pt.y(), painter()->device());
-            KoColor color2 =  m_smudgePainter->paintColor();
+        if (m_smudgeRadiusOption.isChecked()) {
+            m_smudgeRadiusOption.apply(*m_smudgePainter, info, m_dstDabRect.width(), pt.x(), pt.y(), painter()->device());
+            KoColor color2 = m_smudgePainter->paintColor();
             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color2);
 
         } else {
@@ -226,10 +223,10 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         }
     }
 
-    // if the user selected the color smudge option
+    // if the user selected the color smudge option,
     // we will mix some color into the temporary painting device (m_tempDev)
     if (m_colorRateOption.isChecked()) {
-        // this will apply the opacy (selected by the user) to copyPainter
+        // this will apply the opacity (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
         qreal maxColorRate = qMax<qreal>(1.0 - m_smudgeRateOption.getRate(), 0.2);
         m_colorRateOption.apply(*m_colorRatePainter, info, 0.0, maxColorRate, fpOpacity);
@@ -243,11 +240,10 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_colorRatePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
     }
 
-
-    // if color is disabled (only smudge) and "overlay mode is enabled
+    // if color is disabled (only smudge) and "overlay mode" is enabled
     // then first blit the region under the brush from the image projection
     // to the painting device to prevent a rapid build up of alpha value
-    // if the color to be smudged is semi transparent
+    // if the color to be smudged is semi transparent.
     if (m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
         painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->setOpacity(OPACITY_OPAQUE_U8);
@@ -264,14 +260,11 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
     painter()->setCompositeOp(COMPOSITE_COPY);
     painter()->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, m_maskDab, m_dstDabRect.width(), m_dstDabRect.height());
-    painter()->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab,
-                                    !m_dabCache->needSeparateOriginal());
+    painter()->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab, !m_dabCache->needSeparateOriginal());
 
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
-    painter()->setCompositeOp(oldModeId);
-
-
+    painter()->setCompositeOp(oldCompositeOpId);
 
     return spacingInfo;
 }

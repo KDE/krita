@@ -2622,10 +2622,12 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
         dab->mirror(true, false);
         bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
 
-    }else if (d->mirrorHorizontaly){
+    }
+    else if (d->mirrorHorizontaly){
         dab->mirror(true, false);
         bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-    }else if (d->mirrorVerticaly){
+    }
+    else if (d->mirrorVerticaly){
         dab->mirror(false, true);
         bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
     }

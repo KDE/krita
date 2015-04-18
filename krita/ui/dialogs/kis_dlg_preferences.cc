@@ -107,12 +107,14 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+    m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
     m_mdiColor->setColor(cfg.getMDIBackgroundColor());
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
+    m_chkCompressKra->setChecked(cfg.compressKra());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
@@ -130,12 +132,14 @@ void GeneralTab::setDefault()
     m_undoStackSize->setValue(30);
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
+    m_hideSplashScreen->setChecked(true);
     m_cmbMDIType->setCurrentIndex(1);
     m_chkRubberBand->setChecked(cfg.useOpenGL());
     m_favoritePresetsSpinBox->setValue(10);
     m_mdiColor->setColor(QColor(220, 220, 220));
     m_backgroundimage->setText("");
     m_chkCanvasMessages->setChecked(false);
+    m_chkCompressKra->setChecked(false);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -164,6 +168,10 @@ bool GeneralTab::showOutlineWhilePainting()
     return m_showOutlinePainting->isChecked();
 }
 
+bool GeneralTab::hideSplashScreen()
+{
+    return m_hideSplashScreen->isChecked();
+}
 
 int GeneralTab::mdiMode()
 {
@@ -178,6 +186,11 @@ int GeneralTab::favoritePresets()
 bool GeneralTab::showCanvasMessages()
 {
     return m_chkCanvasMessages->isChecked();
+}
+
+bool GeneralTab::compressKra()
+{
+    return m_chkCompressKra->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -825,12 +838,14 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
+        cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
         cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
+        cfg.setCompressKra(dialog->m_general->compressKra());
         KisPart *part = KisPart::instance();
         if (part) {
             foreach(QPointer<KisDocument> doc, part->documents()) {

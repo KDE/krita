@@ -105,7 +105,7 @@ void KisPaintOpSettings::setRandomOffset()
     srand(time(0));
     bool isRandomOffsetX = KisPropertiesConfiguration::getBool("Texture/Pattern/isRandomOffsetX");
     bool isRandomOffsetY = KisPropertiesConfiguration::getBool("Texture/Pattern/isRandomOffsetY");
-    int offsetX = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetX");;
+    int offsetX = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetX");
     int offsetY = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetY");
     if (KisPropertiesConfiguration::getBool("Texture/Pattern/Enabled")) {
         if (isRandomOffsetX) {

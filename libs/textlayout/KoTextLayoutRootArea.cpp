@@ -49,6 +49,12 @@ KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
 
 KoTextLayoutRootArea::~KoTextLayoutRootArea()
 {
+    if (d->shape)
+    {
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(d->shape->userData());
+        if (data)
+            data->setRootArea(0);
+    }
     delete d->nextStartOfArea;
     delete d->textpage;
     delete d;

@@ -544,7 +544,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
     // check if one of the planes is Null.
     Q_ASSERT(planes.size() == 4);
-    delete planes[2];
+    delete [] planes[2];
     planes[2] = 0;
     dev->writePlanarBytes(planes, 0, 0, 100, 100);
     dev->convertToQImage(0, 0, 0, 1000, 1000).save("planar_noR.png");
@@ -556,7 +556,11 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QCOMPARE(c1.blue(), 155);
     QCOMPARE(c1.alpha(), 100);
 
-    qDeleteAll(planes);
+    QVector<quint8*>::iterator i;
+    for (i = planes.begin(); i != planes.end(); ++i)
+    {
+        delete [] *i;
+    }
     swappedPlanes.clear();
 }
 
@@ -809,7 +813,7 @@ void checkReadWriteRoundTrip(KisPaintDeviceSP dev,
     QRect readRect(10, 10, 20, 20);
     int bufSize = rc.width() * rc.height() * dev->pixelSize();
 
-    QScopedPointer<quint8> buf1(new quint8[bufSize]);
+    QScopedArrayPointer<quint8> buf1(new quint8[bufSize]);
 
     deviceCopy->readBytes(buf1.data(), rc);
 
@@ -817,7 +821,7 @@ void checkReadWriteRoundTrip(KisPaintDeviceSP dev,
     QVERIFY(deviceCopy->extent().isEmpty());
 
 
-    QScopedPointer<quint8> buf2(new quint8[bufSize]);
+    QScopedArrayPointer<quint8> buf2(new quint8[bufSize]);
     deviceCopy->writeBytes(buf1.data(), rc);
     deviceCopy->readBytes(buf2.data(), rc);
 
@@ -840,7 +844,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
 
     {
         QRect readRect(10, 10, 20, 20);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -858,7 +862,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check weird case when the read rect is larger than wrap rect
         QRect readRect(10, 10, 30, 30);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -885,7 +889,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // even more large
         QRect readRect(10, 10, 40, 40);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -921,7 +925,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check if the wrap rect contains the read rect entirely
         QRect readRect(1, 1, 10, 10);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -936,7 +940,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check if the wrap happens only on vertical side of the rect
         QRect readRect(1, 1, 29, 10);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -954,7 +958,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check if the wrap happens only on horizontal side of the rect
         QRect readRect(1, 1, 10, 29);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);

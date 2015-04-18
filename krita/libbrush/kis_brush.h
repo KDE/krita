@@ -209,7 +209,7 @@ public:
      */
     virtual enumBrushType brushType() const;
 
-    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
+    QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
 
     /**
      * Returns true if this brush can return something useful for the info. This is used

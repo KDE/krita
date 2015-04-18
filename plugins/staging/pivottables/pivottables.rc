@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="sheetspivottables" version="1">
-<MenuBar>
-   <Menu name="Data"><text>&amp;Data</text>
-	<Action name="pivot"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

@@ -257,6 +257,9 @@ public:
     bool showOutlineWhilePainting() const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
+    bool hideSplashScreen() const;
+    void setHideSplashScreen(bool hideSplashScreen) const;
+
     qreal outlineSizeMinimum() const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 
@@ -370,6 +373,9 @@ public:
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+    bool sliderLabels() const;
+    void setSliderLabels(bool enabled);
+
     QString currentInputProfile() const;
     void setCurrentInputProfile(const QString& name);
 
@@ -462,6 +468,9 @@ public:
 
     bool showCanvasMessages() const;
     void setShowCanvasMessages(bool show);
+
+    bool compressKra() const;
+    void setCompressKra(bool compress);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

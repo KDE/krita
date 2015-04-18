@@ -25,6 +25,12 @@
 #include <QLayout>
 #include <QGridLayout>
 #include <QTimer>
+#include <QIcon>
+#include <QImage>
+#include <QPixmap>
+#include <KStandardDirs>
+#include <QPushButton>
+#include <QDialogButtonBox>
 
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"
@@ -51,12 +57,21 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     , m_layerName(layerName)
 {
     setCaption(caption);
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
+    setButtons(None);
 
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi(page);
     setMainWidget(page);
+
+    wdgFilterNodeCreation.filterGalleryToggle->setChecked(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
+    wdgFilterNodeCreation.filterGalleryToggle->setIcon(QPixmap(KGlobal::dirs()->findResource("data", "krita/pics/sidebaricon.png")));
+    wdgFilterNodeCreation.filterGalleryToggle->setMaximumWidth(wdgFilterNodeCreation.filterGalleryToggle->height());
+    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(sigFilterGalleryToggled(bool)), wdgFilterNodeCreation.filterGalleryToggle, SLOT(setChecked(bool)));
+    connect(wdgFilterNodeCreation.filterGalleryToggle, SIGNAL(toggled(bool)), wdgFilterNodeCreation.filterSelector, SLOT(showFilterGallery(bool)));
+    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(sigSizeChanged()), this, SLOT(slotFilterWidgetSizeChanged()));
+
+    connect(wdgFilterNodeCreation.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(wdgFilterNodeCreation.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     wdgFilterNodeCreation.filterSelector->setView(view);
     wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
@@ -112,6 +127,16 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
     }
 
     m_node->setDirty();
+}
+
+void KisDlgAdjustmentLayer::adjustSize()
+{
+    QWidget::adjustSize();
+}
+
+void KisDlgAdjustmentLayer::slotFilterWidgetSizeChanged()
+{
+    QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
 }
 
 #include "kis_dlg_adjustment_layer.moc"

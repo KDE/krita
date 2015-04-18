@@ -23,6 +23,8 @@
 #include "KisDocumentSectionModel.h"
 #include "KisDocumentSectionToolTip.h"
 #include "KisDocumentSectionView.h"
+#include "KisPart.h"
+#include "input/kis_input_manager.h"
 
 #include <QtDebug>
 #include <QApplication>
@@ -48,6 +50,11 @@ public:
     static const int margin = 1;
 };
 
+void KisDocumentSectionDelegate::slotOnCloseEditor()
+{
+    KisPart::currentInputManager()->slotFocusOnEnter(true);
+}
+
 KisDocumentSectionDelegate::KisDocumentSectionDelegate(KisDocumentSectionView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
     , d(new Private)
@@ -55,6 +62,8 @@ KisDocumentSectionDelegate::KisDocumentSectionDelegate(KisDocumentSectionView *v
     d->view = view;
     view->setItemDelegate(this);
     QApplication::instance()->installEventFilter(this);
+
+    connect(this, SIGNAL(closeEditor(QWidget*)), this, SLOT(slotOnCloseEditor()));
 }
 
 KisDocumentSectionDelegate::~KisDocumentSectionDelegate()
@@ -194,6 +203,7 @@ bool KisDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *
 
 QWidget *KisDocumentSectionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
+    KisPart::currentInputManager()->slotFocusOnEnter(false);
     d->edit = new QLineEdit(parent);
     d->edit->installEventFilter(const_cast<KisDocumentSectionDelegate*>(this)); //hack?
     return d->edit;

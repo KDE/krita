@@ -502,7 +502,11 @@ bool KisConfig::useOpenGL() const
     if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
         //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+#ifdef Q_WS_MAC
+        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+#else
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+#endif
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
@@ -848,6 +852,18 @@ bool KisConfig::showOutlineWhilePainting() const
 void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
 {
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
+}
+
+bool KisConfig::hideSplashScreen() const
+{
+    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    return cfg.readEntry("HideSplashAfterStartup", true);
+}
+
+void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
+{
+    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
 qreal KisConfig::outlineSizeMinimum() const
@@ -1212,6 +1228,16 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+bool KisConfig::sliderLabels() const
+{
+    return m_cfg.readEntry("sliderLabels", true);
+}
+
+void KisConfig::setSliderLabels(bool enabled)
+{
+    m_cfg.writeEntry("sliderLabels", enabled);
+}
+
 QString KisConfig::currentInputProfile() const
 {
     return m_cfg.readEntry("currentInputProfile", QString());
@@ -1460,6 +1486,16 @@ bool KisConfig::showCanvasMessages() const
 void KisConfig::setShowCanvasMessages(bool show)
 {
     m_cfg.writeEntry("showOnCanvasMessages", show);
+}
+
+bool KisConfig::compressKra() const
+{
+    return m_cfg.readEntry("compressLayersInKra", false);
+}
+
+void KisConfig::setCompressKra(bool compress)
+{
+    m_cfg.writeEntry("compressLayersInKra", compress);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const

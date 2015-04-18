@@ -96,15 +96,15 @@ KisBrushOp::~KisBrushOp()
 
 KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()->device()) return 1.0;
+    if (!painter()->device()) return KisSpacingInformation(1.0);
 
     KisBrushSP brush = m_brush;
     Q_ASSERT(brush);
     if (!brush)
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     if (!brush->canPaintFor(info))
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -123,7 +123,6 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                               brush->maskHeight(scale, rotation, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
-//    quint8 origFlow    = m_flowOption.apply(info);
 
     m_opacityOption.setFlow(m_flowOption.apply(info));
     m_opacityOption.apply(painter(), info);
@@ -158,7 +157,6 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                     dab,
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
-//    painter()->setFlow(origFlow);
 
     return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);

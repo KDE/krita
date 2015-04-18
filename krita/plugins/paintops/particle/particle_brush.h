@@ -47,9 +47,9 @@ public:
     ParticleBrush();
     ~ParticleBrush();
     void initParticles();
-    void draw(KisPaintDeviceSP dab, const KoColor& color, QPointF pos);
+    void draw(KisPaintDeviceSP dab, const KoColor& color, const QPointF &pos);
 
-    void setInitialPosition(QPointF pos);
+    void setInitialPosition(const QPointF &pos);
     void setProperties(KisParticleBrushProperties * properties) {
         m_properties = properties;
     }
@@ -57,7 +57,7 @@ public:
 private:
     /// paints wu particle, similar to spray version but you can turn on respecting opacity of the tool and add weight to opacity
     /// also the particle respects opacity in the destination pixel buffer
-    void paintParticle(KisRandomAccessorSP writeAccessor, const KoColorSpace *cs, QPointF pos, const KoColor& color, qreal weight, bool respectOpacity);
+    void paintParticle(KisRandomAccessorSP writeAccessor, const KoColorSpace *cs,const QPointF &pos, const KoColor& color, qreal weight, bool respectOpacity);
 
     QVector<QPointF> m_particlePos;
     QVector<QPointF> m_particleNextPos;

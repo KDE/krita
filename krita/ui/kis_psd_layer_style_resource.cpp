@@ -57,7 +57,7 @@ bool KisPSDLayerStyleCollectionResource::load()
 
 bool KisPSDLayerStyleCollectionResource::loadFromDevice(QIODevice *dev)
 {
-    m_layerStyles = KisPSDLayerStyle::readASL(dev);
+    //m_layerStyles = KisPSDLayerStyle::readASL(dev);
     return true;
 }
 
@@ -72,7 +72,7 @@ bool KisPSDLayerStyleCollectionResource::save()
 
 bool KisPSDLayerStyleCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    return KisPSDLayerStyle::writeASL(dev, m_layerStyles);
+    return false; //KisPSDLayerStyle::writeASL(dev, m_layerStyles);
 }
 
 QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
@@ -80,8 +80,7 @@ QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
     return QString(".asl");
 }
 
-KisPSDLayerStyleCollectionResource::StylesVector
-KisPSDLayerStyleCollectionResource::layerStyles() const
+QVector<KisPSDLayerStyleSP> KisPSDLayerStyleCollectionResource::layerStyles() const
 {
     return m_layerStyles;
 }

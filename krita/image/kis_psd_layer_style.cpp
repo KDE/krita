@@ -278,24 +278,3 @@ psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelAndEmboss()
 {
     return &d->bevel_emboss;
 }
-
-bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )
-{
-    Q_UNUSED(io);
-    return false;
-}
-
-KisPSDLayerStyle::StylesVector KisPSDLayerStyle::readASL(QIODevice *io)
-{
-    return StylesVector();
-}
-
-bool KisPSDLayerStyle::write(QIODevice *io) const
-{
-    return false;
-}
-
-bool KisPSDLayerStyle::read(QIODevice *io)
-{
-    return false;
-}

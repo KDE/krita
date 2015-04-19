@@ -264,6 +264,16 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
 
+    // sanitize the settings
+    bool hasTexture = m_d->settings->getBool("Texture/Pattern/Enabled");
+    if (!hasTexture) {
+        foreach(const QString & key, m_d->settings->getProperties().keys()) {
+            if (key.startsWith("Texture") && key != "Texture/Pattern/Enabled") {
+                m_d->settings->removeProperty(key);
+            }
+        }
+    }
+
     m_d->settings->toXML(doc, elt);
 }
 
@@ -294,7 +304,15 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     }
 
     settings->fromXML(presetElt);
-
+    // sanitize the settings
+    bool hasTexture = settings->getBool("Texture/Pattern/Enabled");
+    if (!hasTexture) {
+        foreach(const QString & key, settings->getProperties().keys()) {
+            if (key.startsWith("Texture") && key != "Texture/Pattern/Enabled") {
+                settings->removeProperty(key);
+            }
+        }
+    }
     setSettings(settings);
 
 }

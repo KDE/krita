@@ -86,6 +86,7 @@ private:
             foreach(KisAbrBrush * abrBrush, collection.brushes()) {
 //                abrBrush->setBrushTipImage(QImage());
                 brushes.append(abrBrush);
+                addTag(abrBrush, collection.name());
             }
         }
         else {

@@ -553,7 +553,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg;
-
+#ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
@@ -574,6 +574,11 @@ void DisplaySettingsTab::setDefault()
         cmbFilterMode->setEnabled(true);
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode(true));
     }
+#else
+    grpOpenGL->setEnabled(false);
+    grpOpenGL->setChecked(false);
+#endif
+
     chkMoving->setChecked(cfg.scrollCheckers(true));
     intCheckSize->setValue(cfg.checkSize(true));
     colorChecks1->setColor(cfg.checkersColor1(true));

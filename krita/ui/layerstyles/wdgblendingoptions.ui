@@ -264,7 +264,7 @@
          <item row="6" column="1">
           <widget class="QCheckBox" name="checkBox_10">
            <property name="toolTip">
-            <string>Use layer mask t hide layer and effects rather than shaping the layer and effects</string>
+            <string>Use layer mask to hide layer and effects rather than shaping the layer and effects</string>
            </property>
            <property name="text">
             <string>Layer Mask Hid&amp;es Effect</string>
@@ -274,7 +274,7 @@
          <item row="7" column="1">
           <widget class="QCheckBox" name="checkBox_11">
            <property name="toolTip">
-            <string>Use layer mask t hide layer and effects rather than shaping the layer and effects</string>
+            <string>Use layer mask to hide layer and effects rather than shaping the layer and effects</string>
            </property>
            <property name="text">
             <string>Vector Mask &amp;Hides Effect</string>

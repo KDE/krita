@@ -103,7 +103,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
-    return 0.5;
+    return KisSpacingInformation(0.5);
 }
 
 

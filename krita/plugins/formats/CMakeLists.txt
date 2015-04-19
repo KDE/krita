@@ -2,7 +2,7 @@ project(kritafilters)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
   add_definitions( -DCPU_32_BITS )
-endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+endif()
 
 macro_optional_find_package(PNG)
 macro_log_feature(PNG_FOUND "png" "Official PNG reference library" "http://www.libpng.org/pub/png/libpng.html" FALSE "" "Required by the Krita PNG filter")
@@ -14,6 +14,13 @@ macro_optional_find_package(TIFF)
 macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
 
 macro_optional_find_package(JPEG)
+if (JPEG_FOUND)
+    DETECT_JPEG()
+    if (JPEG_LIB_VERSION GREATER 70)
+        set(JPEG_FOUND FALSE)
+        message("Detected libpeg 8 or 9: this is NOT supported.")
+    endif()
+endif()
 macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
 
 macro_optional_find_package(Kdcraw)
@@ -24,31 +31,31 @@ macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image co
 
 if(KDCRAW_FOUND)
     add_subdirectory( raw )
-endif(KDCRAW_FOUND)
+endif()
 
 if(JPEG_FOUND AND HAVE_LCMS2)
 	add_subdirectory(jpeg)
-endif(JPEG_FOUND AND HAVE_LCMS2)
+endif()
 
 if(TIFF_FOUND)
 	add_subdirectory(tiff)
-endif(TIFF_FOUND)
+endif()
 
 if(PNG_FOUND)
     add_subdirectory(png)
-endif(PNG_FOUND)
+endif()
 
 if(OPENEXR_FOUND)
     add_subdirectory(exr)
-endif(OPENEXR_FOUND)
+endif()
 
 if(POPPLER_FOUND)
     add_subdirectory(pdf)
-endif(POPPLER_FOUND)
+endif()
 
 if(OPENJPEG_FOUND)
     add_subdirectory(jp2)
-endif(OPENJPEG_FOUND)
+endif()
 
 add_subdirectory(bmp)
 add_subdirectory(ora)
@@ -62,4 +69,4 @@ add_subdirectory(heightmap)
 
 #if(OIIO_FOUND)
 #    add_subdirectory(oiio)
-#endif(OIIO_FOUND)
+#endif()

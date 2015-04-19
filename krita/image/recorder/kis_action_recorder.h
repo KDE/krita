@@ -35,11 +35,11 @@ public:
     KisActionRecorder(QObject* parent = 0);
     ~KisActionRecorder();
 
-public slots:
+public Q_SLOTS:
 
     void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted each time an action is added to this recorder.
      */

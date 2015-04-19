@@ -24,17 +24,14 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class QAction;
 class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
 class KUndo2MagicString;
 
-class KisDocument;
 class KisFilterStrategy;
 class KisViewManager;
-class KisFilterConfiguration;
 class KisActionManager;
 class KisView;
 
@@ -54,7 +51,7 @@ public:
     
     void setView(QPointer<KisView>imageView);
 
-signals:
+Q_SIGNALS:
 
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
@@ -105,7 +102,7 @@ public:
     void setSelectedNodes(QList<KisNodeSP> nodes);
     QList<KisNodeSP> selectedNodes();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Explicitly activates \p node

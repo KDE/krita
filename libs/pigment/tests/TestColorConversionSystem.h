@@ -36,7 +36,7 @@ class TestColorConversionSystem : public QObject
     Q_OBJECT
 public:
     TestColorConversionSystem();
-private slots:
+private Q_SLOTS:
     void testConnections();
     void testGoodConnections();
 private:

@@ -27,7 +27,6 @@ class QSpinBox;
 class KoColorSet;
 class KLineEdit;
 class KoResourceItemChooser;
-class KisViewManager;
 class KoResource;
 
 class ColorSetChooser : public QWidget
@@ -37,10 +36,10 @@ public:
     ColorSetChooser(QWidget* parent = 0);
     virtual ~ColorSetChooser();
 
-signals:
+Q_SIGNALS:
     void paletteSelected(KoColorSet* colorSet);
 
-private slots:
+private Q_SLOTS:
     void resourceSelected(KoResource* resource);
     void slotSave();
 

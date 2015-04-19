@@ -28,7 +28,6 @@
 
 #include <krita_export.h>
 
-class KoAbstractGradient;
 
 /**
  *  XXX: Docs!
@@ -76,6 +75,14 @@ public:
                        qint32 starty,
                        qint32 width,
                        qint32 height);
+
+    // convenience overload
+    bool paintGradient(const QPointF& gradientVectorStart,
+                       const QPointF& gradientVectorEnd,
+                       enumGradientRepeat repeat,
+                       double antiAliasThreshold,
+                       bool reverseGradient,
+                       const QRect &applyRect);
 
 private:
     struct Private;

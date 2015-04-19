@@ -590,7 +590,7 @@ public:
      */
     void setProfileReferenceTime(const QTime& referenceTime);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
@@ -609,7 +609,7 @@ public slots:
      */
     virtual void endMacro();
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the unit is changed by setUnit().
@@ -738,17 +738,17 @@ public:
 
     virtual bool saveAs( const KUrl &url );
 
-public slots:
+public Q_SLOTS:
 
     virtual bool save();
     bool waitSaveComplete();
 
-signals:
+Q_SIGNALS:
 
     void completed();
     void canceled(const QString &);
 
-private slots:
+private Q_SLOTS:
 
     void slotAutoSave();
 

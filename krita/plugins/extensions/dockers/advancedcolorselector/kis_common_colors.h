@@ -34,7 +34,7 @@ public:
     void unsetCanvas() {}
     KisColorSelectorBase* createPopup() const;
 
-public slots:
+public Q_SLOTS:
     void setColors(QList<KoColor> colors);
     void updateSettings();
     void recalculate();

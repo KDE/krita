@@ -1,19 +1,21 @@
 add_subdirectory(tests)
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+set(XCFTOOLS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/xcftools")
+
+include_directories( ${XCFTOOLS_SOURCE_DIR} )
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 set(kritaxcfimport_PART_SRCS
     kis_xcf_import.cpp
-    xcf-general.c
-    utils.c
-    enums.c
-    pixels.c
-    scaletab.c
-    table.c
+    ${XCFTOOLS_SOURCE_DIR}/xcf-general.c
+    ${XCFTOOLS_SOURCE_DIR}/utils.c
+    ${XCFTOOLS_SOURCE_DIR}/enums.c
+    ${XCFTOOLS_SOURCE_DIR}/pixels.c
+    ${XCFTOOLS_SOURCE_DIR}/scaletab.c
+    ${XCFTOOLS_SOURCE_DIR}/table.c
     )
 
 kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})
@@ -22,9 +24,9 @@ target_link_libraries(kritaxcfimport kritaui )
 
 if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
+else ()
     install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
-endif (WIN32)
+endif ()
 
 ########### install files ###############
 

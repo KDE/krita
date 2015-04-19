@@ -25,7 +25,6 @@
 
 class QDomElement;
 
-class KoStore;
 
 class KisAdjustmentLayer;
 class KisUndoStore;

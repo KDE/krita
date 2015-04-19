@@ -37,7 +37,7 @@ private:
 
 private:
     Command * m_commandDefinition;
-    QHash<void *, int> m_widgetToParameterIndexMapper;
+    QHash<QWidget *, int> m_widgetToParameterIndexMapper;
     QHash<Parameter *, QWidget *> m_parameterToWidgetMapper;
 
     Parameter * parameter(QObject * widget);
@@ -47,7 +47,7 @@ private:
     void mapParameterWidget(Parameter * parameter, QWidget * widget);
 
 
-private slots:
+private Q_SLOTS:
     void setIntValue(int value);
     void setFloatValue(qreal value);
     void setBoolValue(bool value);

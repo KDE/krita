@@ -14,12 +14,12 @@ if(MARBLE_FOUND)
         KoRdfLocationEditWidgetMarble.ui
         KoRdfLocationViewWidgetMarble.ui
     )
-else(MARBLE_FOUND)
+else()
     kde4_add_ui_files( calligra_semanticitem_location_LIB_SRCS
         KoRdfLocationEditWidget.ui
         KoRdfLocationViewWidget.ui
     )
-endif(MARBLE_FOUND)
+endif()
 
 kde4_add_plugin(calligra_semanticitem_location ${calligra_semanticitem_location_LIB_SRCS})
 
@@ -27,7 +27,7 @@ if( MARBLE_FOUND )
 include_directories(${MARBLE_INCLUDE_DIR})
 target_link_libraries(calligra_semanticitem_location ${MARBLE_LIBRARIES})
 target_link_libraries(calligra_semanticitem_location LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
-endif( MARBLE_FOUND )
+endif()
 
 target_link_libraries(calligra_semanticitem_location ${KDE4_KDECORE_LIBS}  ${KORDF_LIBS})
 

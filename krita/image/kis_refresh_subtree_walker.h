@@ -85,7 +85,7 @@ protected:
             currentNode = nextNode;
         }
 
-        tempRect |= startWith->changeRect(requestedRect | childrenRect);
+        tempRect |= startWith->projectionPlane()->changeRect(requestedRect | childrenRect);
 
         if(!changeRectVaries)
             changeRectVaries = tempRect != requestedRect;

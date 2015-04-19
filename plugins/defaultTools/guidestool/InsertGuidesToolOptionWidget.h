@@ -43,10 +43,10 @@ public:
     explicit InsertGuidesToolOptionWidget(QWidget *parent = 0);
     ~InsertGuidesToolOptionWidget();
 
-signals:
+Q_SIGNALS:
     void createGuides(GuidesTransaction *transaction);
 
-private slots:
+private Q_SLOTS:
     void onCreateButtonClicked(bool checked);
 
 private:

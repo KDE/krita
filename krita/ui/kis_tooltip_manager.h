@@ -32,7 +32,7 @@ public:
 
     void record();
 
-private slots:
+private Q_SLOTS:
     void captureToolip();
 
 private:

@@ -36,7 +36,6 @@ class KisRecordingAdapter;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
-class KisPainter;
 
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
@@ -76,7 +75,7 @@ public:
                                 const KisPaintOpSettings *globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
 
-signals:
+Q_SIGNALS:
     /**
      * The signal is emitted when the outline should be updated
      * explicitly by the tool. Used by Stabilizer option, because it
@@ -153,7 +152,7 @@ private:
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
 
-private slots:
+private Q_SLOTS:
 
     void finishStroke();
     void doAirbrushing();

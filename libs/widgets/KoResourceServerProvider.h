@@ -47,7 +47,7 @@ public:
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
     ~KoResourceLoaderThread();
-public slots:
+public Q_SLOTS:
     /**
      * Checks whether the thread has finished loading and waits
      * until it is finished if necessary

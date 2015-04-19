@@ -80,7 +80,7 @@ public:
      */
     void setStylesModel(AbstractStylesModel *sourceModel);
 
-protected slots:
+protected Q_SLOTS:
     void modelAboutToBeReset();
     void modelReset();
     void rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);

@@ -45,13 +45,13 @@ public:
 
     KisFilterPreviewWidget * previewWidget();
 
-signals:
+Q_SIGNALS:
     void sigConfigurationChanged();
 
 private:
     void createMainLayout();
 
-private slots:
+private Q_SLOTS:
     void setIntputMode(int index);
     void setOutputMode(int index);
     void setPreviewMode(int index);

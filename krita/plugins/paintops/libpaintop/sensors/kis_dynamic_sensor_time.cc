@@ -24,7 +24,7 @@
 
 #include "kis_paint_information.h"
 
-KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(3 * 1000), m_periodic(true)
+KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0), m_length(3 * 1000), m_periodic(true), m_lastTime(0)
 {
     setMinimumLabel(i18n("0 s"));
     setLength(3);
@@ -32,17 +32,26 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
 
 qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
 {
-    m_time += pi.currentTime() - m_lastTime;
-    m_lastTime = pi.currentTime();
+    qreal curtime = pi.currentTime();
+
+    if (curtime >= m_lastTime) {
+        m_time += curtime - m_lastTime;
+    } else {
+        // safely handle the situation when currentTime() < m_lastTime
+        m_time = 0;
+    }
+
+    m_lastTime = curtime;
+
     if (m_time > m_length) {
         if (m_periodic) {
-            m_time = (int)fmod((float)m_time, (float)m_length);
+            m_time = m_time % m_length;
         }
         else {
             m_time = m_length;
         }
     }
-    return 1.0 - m_time / float(m_length);
+    return 1.0 - m_time / qreal(m_length);
 }
 
 void KisDynamicSensorTime::reset()

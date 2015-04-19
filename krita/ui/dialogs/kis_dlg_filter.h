@@ -25,7 +25,6 @@
 #include <kis_types.h>
 
 class KisFilter;
-class KisFilterConfiguration;
 class KisViewManager;
 class KisFilterManager;
 
@@ -42,23 +41,29 @@ public:
 
     void setFilter(KisFilterSP f);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotOnAccept();
     void slotOnReject();
 
     void createMask();
 
-    void previewCheckBoxChange(int state);
+    void pushButtonPreviewToggled(bool state);
 
     void filterSelectionChanged();
 
     virtual void resizeEvent(QResizeEvent* );
 
+public Q_SLOTS:
+    void adjustSize();
+
 private:
     void startApplyingFilter(KisSafeFilterConfigurationSP config);
     void setDialogTitle(KisFilterSP f);
     void updatePreview();
+
+private slots:
+    void slotFilterWidgetSizeChanged();
 
 private:
     struct Private;

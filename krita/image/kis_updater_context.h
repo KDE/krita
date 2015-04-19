@@ -109,12 +109,12 @@ public:
      */
     void unlock();
 
-signals:
+Q_SIGNALS:
     void sigContinueUpdate(const QRect& rc);
     void sigDoSomeUsefulWork();
     void sigSpareThreadAppeared();
 
-protected slots:
+protected Q_SLOTS:
     void slotJobFinished();
 
 protected:

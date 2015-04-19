@@ -26,7 +26,6 @@ class KisDoubleSliderSpinBox;
 class QLabel;
 class QCheckBox;
 
-class KisMultipliersDoubleSliderSpinBox;
 class KisDoubleSliderSpinBox;
 class KisSpacingSelectionWidget;
 class KoResourceItemChooser;
@@ -48,7 +47,7 @@ public:
     void setBrush(KisBrushSP _brush);
     void setBrushSize(qreal xPixels, qreal yPixels);
 
-private slots:
+private Q_SLOTS:
 
     void slotResetBrush();
     void slotSetItemSize(qreal);
@@ -58,7 +57,7 @@ private slots:
     void slotActivatedBrush(KoResource *);
     void update(KoResource *);
 
-signals:
+Q_SIGNALS:
 
     void sigBrushChanged();
 

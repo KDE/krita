@@ -109,7 +109,7 @@ public:
 
     void updateAccidentals(int fromBar = 0);
     void updateAccidentals(Bar* fromBar);
-public slots:
+public Q_SLOTS:
     /**
      * Set the spacing between this staff and the staff above it.
      *
@@ -130,7 +130,7 @@ public slots:
      * @param lineSpacing the new distance between two lines.
      */
     void setLineSpacing(qreal lineSpacing);
-signals:
+Q_SIGNALS:
     void spacingChanged(qreal spacing);
     void lineCountChanged(int lineCount);
     void lineSpacingChanged(qreal lineSpacing);

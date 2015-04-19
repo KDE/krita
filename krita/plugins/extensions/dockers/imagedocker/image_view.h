@@ -50,7 +50,7 @@ private:
     QRubberBand m_rubberBand;
     QRect       m_selection;
     
-signals:
+Q_SIGNALS:
     void sigImageClicked(const QPoint& pos);
     void sigRegionSelected(const QRect& rect);
 };
@@ -70,11 +70,11 @@ public:
     QPoint getScrollPos() const;
     qreal getScale() const;
     
-signals:
+Q_SIGNALS:
     void sigColorSelected(const QColor& color);
     void sigViewModeChanged(int viewMode, qreal scale);
     
-private slots:
+private Q_SLOTS:
     void slotImageClicked(const QPoint& pos);
     void slotRegionSelected(const QRect& rect);
     

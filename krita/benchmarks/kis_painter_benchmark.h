@@ -26,7 +26,6 @@
 #include <kis_types.h>
 
 
-class KisPaintDevice;
 class KoColorSpace;
 
 class KisPainterBenchmark : public QObject
@@ -37,7 +36,7 @@ private:
     KoColor m_color;
     QVector<QPointF> m_points;
     
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     

@@ -22,18 +22,15 @@
 
 #include <QObject>
 
-class QTextDocument;
 class KoTextEditor;
 class KoSection;
 class KoSectionEnd;
-class KoDocumentRdf;
-class QString;
 
 class TestKoTextEditor : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 
     void testInsertInlineObject();
     void testRemoveSelectedText();

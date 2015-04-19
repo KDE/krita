@@ -19,7 +19,6 @@
 #ifndef _KIS_EXIV2_H_
 #define _KIS_EXIV2_H_
 
-class QVariant;
 
 #include <metadata/kis_meta_data_value.h>
 #include <exiv2/value.hpp>

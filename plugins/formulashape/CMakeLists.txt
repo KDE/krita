@@ -3,8 +3,9 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-label)
     add_definitions(-Wno-sign-compare)
     add_definitions(-Wno-unused-function)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
+set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
@@ -96,10 +97,10 @@ set (formulashape_PART_SRCS
    ${formulashape_PART_SRCS}
    KoM2MMLForumulaTool.cpp
    # itexToMML files
-   itexToMML/lex.yy.c
-   itexToMML/y.tab.c
+   ${ITEXTOMML_SOURCE_DIR}/lex.yy.c
+   ${ITEXTOMML_SOURCE_DIR}/y.tab.c
 )
-endif (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+endif ()
 
 kde4_add_ui_files( formulashape_PART_SRCS
     FormulaToolWidget.ui

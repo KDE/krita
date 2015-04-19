@@ -90,7 +90,7 @@ public:
      * Returns the beatline of this element. This is an x position relative to the start of the element.
      */
     virtual qreal beatline() const;
-public slots:
+public Q_SLOTS:
     /**
      * Sets the x position of this musical element.
      */
@@ -100,7 +100,7 @@ public slots:
      * Sets the y position of this musical element.
      */
     void setY(qreal y);
-protected slots:
+protected Q_SLOTS:
     /**
      * Changes the duration of this musical element.
      *
@@ -123,7 +123,7 @@ protected slots:
     void setHeight(qreal height);
     
     void setBeatline(qreal beatline);
-signals:
+Q_SIGNALS:
     void xChanged(qreal x);
     void yChanged(qreal y);
     void lengthChanged(int length);

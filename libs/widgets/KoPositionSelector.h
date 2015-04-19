@@ -37,14 +37,14 @@ public:
     KoFlake::Position position() const;
     void setPosition(KoFlake::Position position);
 
-signals:
+Q_SIGNALS:
     void positionSelected(KoFlake::Position position);
 
 protected:
     /// reimplemented
     virtual void paintEvent (QPaintEvent *event);
 
-private slots:
+private Q_SLOTS:
     void positionChanged(int position);
 
 private:

@@ -34,7 +34,8 @@
 
 class QCheckBox;
 class QComboBox;
-class QGridLayout;
+
+class KActionCollection;
 
 class KoCanvasBase;
 class KisSliderSpinBox;
@@ -77,10 +78,10 @@ public:
 protected:
     KConfigGroup m_configGroup;
 
-protected slots:
+protected Q_SLOTS:
     virtual void resetCursorStyle();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
     void slotSetSmoothnessDistance(qreal distance);

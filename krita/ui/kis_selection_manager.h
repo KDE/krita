@@ -30,8 +30,6 @@
 class KisActionManager;
 class KisAction;
 class KAction;
-class KToggleAction;
-class KActionCollection;
 class KoViewConverter;
 
 class KisViewManager;
@@ -70,7 +68,7 @@ public:
 
     bool showSelectionAsMask() const;
 
-public slots:
+public Q_SLOTS:
 
     void updateGUI();
     void selectionChanged();
@@ -103,7 +101,7 @@ public slots:
 
     void slotToggleSelectionDecoration();
 
-signals:
+Q_SIGNALS:
     void currentSelectionChanged();
     void signalUpdateGUI();
     void displaySelectionChanged();

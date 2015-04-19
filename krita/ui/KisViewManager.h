@@ -37,7 +37,6 @@
 class KisAction;
 class QPoint;
 
-class KisPaintOpPreset;
 
 class KisCanvas2;
 class KisCanvasResourceProvider;
@@ -202,7 +201,7 @@ public:
     /// with a non-null value. To make it return shell() again, simply pass null to this function.
     void setQtMainWindow(QMainWindow* newMainWindow);
 
-public slots:
+public Q_SLOTS:
 
     void showJustTheCanvas(bool toggled);
     void setShowFloatingMessage(bool show);
@@ -218,11 +217,11 @@ public slots:
     void slotViewAdded(KisView *view);
     void slotViewRemoved(KisView *view);
 
-signals:
+Q_SIGNALS:
 
     void floatingMessageRequested(QString message, QString iconName);
 
-private slots:
+private Q_SLOTS:
 
     void slotBlacklistCleanup();
     void slotCreateTemplate();

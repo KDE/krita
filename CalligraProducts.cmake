@@ -141,7 +141,6 @@ calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Callig
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivot tables"  STAGING  REQUIRES PART_SHEETS)
 
 # Sheets filters
 calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter"  REQUIRES LIB_KOMSOOXML PART_SHEETS)
@@ -499,7 +498,6 @@ calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
         PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
-        PLUGIN_SHEETS_PIVOTTABLES
         PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
         PLUGIN_VARIABLES
@@ -616,7 +614,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYPRODUCT FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the product with the build flag of the product.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -624,7 +622,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYPRODUCT)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYPRODUCT)
+#    endif ()
 #
 # 5. Tag the product as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.
@@ -662,7 +660,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYFEATURE FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the feature with the build flag of the feature.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -670,7 +668,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYFEATURE)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYFEATURE)
+#    endif ()
 #
 # 5. Tag the feature as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.

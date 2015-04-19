@@ -49,7 +49,7 @@ public:
     /// destructor
     ~KoFind();
 
-signals:
+Q_SIGNALS:
     /**
      * @brief This signal is send when the current document has reached its end
      *

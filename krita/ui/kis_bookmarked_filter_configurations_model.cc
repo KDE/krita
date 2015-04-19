@@ -18,10 +18,6 @@
 
 #include "kis_bookmarked_filter_configurations_model.h"
 
-#include <QFutureWatcher>
-#include <QSignalMapper>
-#include <QtConcurrentRun>
-
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>

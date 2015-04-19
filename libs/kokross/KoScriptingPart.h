@@ -27,7 +27,6 @@
 
 #include <kxmlguiclient.h>
 
-class KDialog;
 class KoScriptingModule;
 namespace Kross {
     class Action;
@@ -71,7 +70,7 @@ public:
     */
     bool showExecuteScriptFile();
 
-protected slots:
+protected Q_SLOTS:
 
     /**
     * Show the modal "Execute Script File" dialog.

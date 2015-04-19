@@ -38,7 +38,7 @@ protected:
     void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
     bool eventFilter(QObject *obj, QEvent *event);
 
-public slots:
+public Q_SLOTS:
     void imagePositionChanged();
 
 private:

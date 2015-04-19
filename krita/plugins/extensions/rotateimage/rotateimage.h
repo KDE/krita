@@ -31,7 +31,7 @@ public:
     RotateImage(QObject *parent, const QVariantList &);
     virtual ~RotateImage();
 
-private slots:
+private Q_SLOTS:
 
     void slotRotateImage();
     void slotRotateImage90();

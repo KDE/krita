@@ -79,6 +79,19 @@ public:
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
+    /**
+     * A special method that changes the default color of the
+     * projection merged onto this group layer. Please note, that you
+     * cannot use original()->setDefaultPixel(), because original()
+     * device can be switched by tryOblidgeChild() mechanism randomly.
+     */
+    void setDefaultProjectionColor(KoColor color);
+
+    /**
+     * \see setDefaultProjectionColor()
+     */
+    KoColor defaultProjectionColor() const;
+
 protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;

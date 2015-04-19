@@ -34,7 +34,6 @@
 
 class KisPaintInformation;
 class KisDuplicateOpSettings;
-class KisDuplicateOpSettingsWidget;
 
 class QPointF;
 class KisPainter;

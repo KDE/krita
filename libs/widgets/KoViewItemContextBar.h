@@ -27,7 +27,6 @@
 #include <QModelIndex>
 
 class QAbstractItemView;
-class QItemSelection;
 class QToolButton;
 class QHBoxLayout;
 class QRect;
@@ -61,17 +60,17 @@ public:
     int preferredWidth();
     void setShowSelectionToggleButton(bool enabled);
 
-signals:
+Q_SIGNALS:
     /** Is emitted if the selection has been changed by the toggle button. */
     void selectionChanged();
 
-public slots:
+public Q_SLOTS:
     /** Hide context bar */
     void reset();
     void enableContextBar();
     void disableContextBar();
 
-private slots:
+private Q_SLOTS:
     void slotEntered(const QModelIndex &index);
     void slotViewportEntered();
     void setItemSelected();

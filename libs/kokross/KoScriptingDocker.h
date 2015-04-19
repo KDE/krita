@@ -93,7 +93,7 @@ public:
     */
     explicit KoScriptingDocker(QWidget *parent = 0);
 
-protected slots:
+protected Q_SLOTS:
 
     /**
     * This slow got called if the "Script Manager" toolbar-button
@@ -147,7 +147,7 @@ public:
     */
     virtual ~KoScriptingActionDocker();
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Returns the widget that should be displayed within this docker.
@@ -159,10 +159,10 @@ public slots:
     */
     void setWidget(QWidget* widget);
 
-signals:
+Q_SIGNALS:
     //void visibilityChanged(bool visible);
 
-private slots:
+private Q_SLOTS:
     void slotVisibilityChanged(bool visible);
 
 private:

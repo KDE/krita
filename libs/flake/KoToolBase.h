@@ -337,7 +337,7 @@ public:
       */
     bool isInTextMode() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * This method is called when this tool instance is activated.
@@ -388,7 +388,7 @@ public slots:
      */
     void setStatusText(const QString &statusText);
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted when this tool wants itself to be replaced by another tool.

@@ -37,7 +37,7 @@ public:
 
     void notifyForUndo();
 
-private slots:
+private Q_SLOTS:
     void contentsChange(int from, int charsRemoves, int charsAdded);
 
 private:

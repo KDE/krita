@@ -23,7 +23,6 @@
 #include <QMultiMap>
 #include "krita_export.h"
 
-class KoResource;
 
 class  ResourceBundleManifest
 {

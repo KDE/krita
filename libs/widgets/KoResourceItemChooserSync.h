@@ -45,7 +45,7 @@ public:
     /// @param length base length for the items, will be clamped if ouside range
     void setBaseLength(int length);
     
-signals:
+Q_SIGNALS:
     /// Signal is emitted when the base length is changed and will trigger and update in
     /// the resource item choosers
     void baseLenghtChanged(int length);

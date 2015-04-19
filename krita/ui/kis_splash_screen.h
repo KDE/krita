@@ -36,7 +36,7 @@ public:
 
     void show();
 
-private slots:
+private Q_SLOTS:
 
     void toggleShowAtStartup(bool toggle);
     void linkClicked(const QString &link);

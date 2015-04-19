@@ -81,7 +81,7 @@ public:
     void name(const QString &v);
     void templateString(const QString &v);
 
-signals:
+Q_SIGNALS:
     void nameChanging(hKoSemanticStylesheet, const QString &oldName, const QString &newName);
 };
 

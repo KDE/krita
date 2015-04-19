@@ -28,7 +28,7 @@ class KisGuiContextCommandDelegate : public QObject
 public:
     KisGuiContextCommandDelegate(QObject *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void executeCommand(KUndo2Command *command, bool undo);
 };
 

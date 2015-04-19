@@ -31,7 +31,7 @@ public:
     LayerGroupSwitcher(QObject *parent, const QVariantList &);
     virtual ~LayerGroupSwitcher();
 
-private slots:
+private Q_SLOTS:
 
     void moveIntoNextGroup();
     void moveIntoPreviousGroup();

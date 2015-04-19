@@ -44,7 +44,7 @@ public:
     KoSemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf);
     ~KoSemanticStylesheetsEditor();
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
     void currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void newStylesheet();

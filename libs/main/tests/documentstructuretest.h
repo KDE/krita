@@ -31,7 +31,7 @@ public:
     DocumentStructureTest();
     ~DocumentStructureTest();
 
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
     void initTestCase();

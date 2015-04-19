@@ -33,9 +33,9 @@ class KoOdfStylesReader::Private
 public:
 
     Private()
+        : globalFootnoteConfiguration(KoOdfNotesConfiguration::Footnote)
+        , globalEndnoteConfiguration(KoOdfNotesConfiguration::Endnote)
     {
-        globalFootnoteConfiguration.setNoteClass(KoOdfNotesConfiguration::Footnote);
-        globalEndnoteConfiguration.setNoteClass(KoOdfNotesConfiguration::Endnote);
     }
 
     QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement* > > customStyles;
@@ -60,7 +60,6 @@ public:
     // XXX: there can also be notes configuration objects _per_ section.
     KoOdfNotesConfiguration globalFootnoteConfiguration;
     KoOdfNotesConfiguration globalEndnoteConfiguration;
-    KoOdfNotesConfiguration defaultNoteConfiguration;
 
     KoOdfBibliographyConfiguration globalBibliographyConfiguration;
 
@@ -174,10 +173,8 @@ KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesCo
     case (KoOdfNotesConfiguration::Endnote):
         return d->globalEndnoteConfiguration;
     case (KoOdfNotesConfiguration::Footnote):
-        return d->globalFootnoteConfiguration;
     default:
-        d->defaultNoteConfiguration.setNoteClass(noteClass);
-        return d->defaultNoteConfiguration;
+        return d->globalFootnoteConfiguration;
     }
 }
 
@@ -299,27 +296,10 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
         d->dataFormats.insert(numberStyle.first, qMakePair(numberStyle.second, new KoXmlElement(e)));
     } else if (ns == KoXmlNS::text && localName == "notes-configuration") {
-        KoOdfNotesConfiguration notesConfiguration;
-        notesConfiguration.loadOdf(e);
-        if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Footnote) {
-            d->globalFootnoteConfiguration = notesConfiguration;
-            if (d->globalFootnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::Empty) {
-                KoOdfNumberDefinition numFormat;
-                numFormat.setFormatSpecification(KoOdfNumberDefinition::Numeric);
-                d->globalFootnoteConfiguration.setNumberFormat(numFormat);
-                d->globalFootnoteConfiguration.setStartValue(1);
-            }
-
-        }
-        else if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Endnote) {
-            d->globalEndnoteConfiguration = notesConfiguration;
-            if (d->globalEndnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::RomanLowerCase) {
-                KoOdfNumberDefinition numFormat;
-                numFormat.setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
-                d->globalEndnoteConfiguration.setNumberFormat(numFormat);
-                d->globalEndnoteConfiguration.setStartValue(1);
-            }
-
+        if (e.attributeNS(KoXmlNS::text, "note-class", "footnote") == "footnote") {
+            d->globalFootnoteConfiguration.loadOdf(e);
+        } else  {
+            d->globalEndnoteConfiguration.loadOdf(e);
         }
     } else if (ns == KoXmlNS::text && localName == "linenumbering-configuration") {
         d->lineNumberingConfiguration.loadOdf(e);

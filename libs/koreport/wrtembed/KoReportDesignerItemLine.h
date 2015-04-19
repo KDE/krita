@@ -61,7 +61,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

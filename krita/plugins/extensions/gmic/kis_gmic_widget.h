@@ -28,8 +28,6 @@
 
 class KisGmicUpdater;
 class QCloseEvent;
-class KisGmicInputOutputWidget;
-class QPushButton;
 
 class KisGmicWidget : public QWidget, public Ui::WdgGmic
 {
@@ -45,7 +43,7 @@ public:
     void createMainLayout();
     virtual void closeEvent(QCloseEvent* );
 
-signals:
+Q_SIGNALS:
     void sigFilterCurrentImage(KisGmicFilterSetting * setting); //TODO:const
     void sigPreviewFilterCommand(KisGmicFilterSetting * setting); //TODO:const
     void sigAcceptOnCanvasPreview();
@@ -54,7 +52,7 @@ signals:
     void sigClose();
     void sigRequestFinishAndClose();
 
-private slots:
+private Q_SLOTS:
     void slotSelectedFilterChanged(const QItemSelection & newSelection, const QItemSelection & oldSelection);
     // buttons
     void slotApplyClicked();

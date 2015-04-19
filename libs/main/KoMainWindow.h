@@ -168,7 +168,7 @@ public:
      */
     KoDockerManager * dockerManager() const;
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted if the document has been saved successfully.
      */
@@ -191,7 +191,7 @@ signals:
     /// This signal is emitted when the shortcut key configuration has changed
     void keyBindingsChanged();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Slot for eMailing the document using KMail
@@ -284,6 +284,11 @@ public slots:
      * Toggle full screen on/off.
      */
     void viewFullscreen(bool fullScreen);
+
+    /**
+     * Toggle docker titlebars on/off.
+     */
+    void showDockerTitleBars(bool show);
 
     /**
      * Reload file
@@ -387,7 +392,7 @@ private:
 
     KRecentFilesAction *recentAction() const;
 
-private slots:
+private Q_SLOTS:
     /**
      * Save the list of recent files.
      */
@@ -426,7 +431,7 @@ private:
      */
     virtual void setActivePart(KoPart *part, QWidget *widget);
 
-private slots:
+private Q_SLOTS:
 
     /**
      * @internal

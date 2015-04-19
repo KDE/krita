@@ -32,7 +32,7 @@ public:
     KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
-private slots:
+private Q_SLOTS:
     void on_alpha_toggled(bool checked);
 };
 

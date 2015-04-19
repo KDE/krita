@@ -25,7 +25,6 @@
 #include "kis_precision_option.h"
 #include "ui_wdgbrushchooser.h"
 
-class QTabWidget;
 class KisAutoBrushWidget;
 class KisBrushChooser;
 class KisTextBrushChooser;
@@ -33,7 +32,6 @@ class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisBrush;
 
-class KisViewManager;
 
 /**
  * Compound widget that collects all the various brush selection widgets.
@@ -71,12 +69,12 @@ public:
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();
 
-signals:
+Q_SIGNALS:
 
     void sigBrushChanged();
     void sigPrecisionChanged();
 
-private slots:
+private Q_SLOTS:
     void buttonClicked(int id);
     void precisionChanged(int value);
     void setAutoPrecisionEnabled(int value);

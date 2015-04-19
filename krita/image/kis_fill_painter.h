@@ -71,6 +71,14 @@ public:
     void eraseRect(const QRect& rc);
 
     /**
+     * Fill current selection of KisPainter with a specified \p color.
+     *
+     * The filling rect is limited by \p rc to allow multithreaded
+     * filling/processing.
+     */
+    void fillSelection(const QRect &rc, const KoColor &color);
+
+    /**
      * Fill a rectangle with a certain color.
      */
     void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c);

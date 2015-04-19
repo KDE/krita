@@ -65,7 +65,9 @@ void MapRenderer::renderJob(KoReportItemMaps* reportItemMaps)
 {
     m_currentJob = reportItemMaps;
     int zoom = m_currentJob->zoom();
-    myDebug() << this << m_currentJob << m_currentJob->latitude() << m_currentJob->longtitude() << zoom;
+    m_marble.setMapThemeId(m_currentJob->themeId());
+    //some themes enable overview map, and this must be disabled after theme switch.
+    m_marble.setShowOverviewMap(false);
     m_marble.setFixedSize(m_currentJob->size());
     m_marble.centerOn(m_currentJob->longtitude(), m_currentJob->latitude(), false);
     m_marble.setZoom(zoom);

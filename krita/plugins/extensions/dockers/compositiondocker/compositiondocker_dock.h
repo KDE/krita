@@ -24,7 +24,6 @@
 #include "ui_wdgcompositiondocker.h"
 
 class CompositionModel;
-class QListView;
 class KisCanvas2;
 class KisAction;
 
@@ -41,7 +40,7 @@ public:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     
-private slots:
+private Q_SLOTS:
     void activated (const QModelIndex& index);
     void deleteClicked();
     void saveClicked();

@@ -23,6 +23,16 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+/**
+ * KisFilterConfiguration does inherit neither KisShared or QSharedData
+ * so sometimes there might be problem with broken QSharedPointer counters.
+ * This macro activates debugging routines for such stuff.
+ *
+ * In the future, please either port the entire KisNodeFilterInterface
+ * into KisSafeFilterConfigurationSP or derive filter configuration
+ * interface from QSharedData to handle these cases.
+ */
+#define SANITY_CHECK_FILTER_CONFIGURATION_OWNER
 
 /**
  * A KisFilterConfiguration is the serializable representation of
@@ -105,6 +115,14 @@ public:
     virtual const KisCubicCurve& curve() const;
     virtual void setCurves(QList<KisCubicCurve> &curves);
     virtual const QList<KisCubicCurve>& curves() const;
+
+#ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
+private:
+    friend class KisNodeFilterInterface;
+    int sanityRefUsageCounter();
+    int sanityDerefUsageCounter();
+
+#endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */
 
 protected:
     void setVersion(qint32 version);

@@ -45,6 +45,7 @@ select_shape.png
 shade.png
 shear_horizontal.png
 shear_vertical.png
+sidebaricon.png
 tablet.png
 tool_screenshot.png
 transparency-disabled.png

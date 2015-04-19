@@ -98,7 +98,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
             configDir.remove("kritarc");
         }
         {
-            QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+            QDir inputDir(KGlobal::dirs()->saveLocation("data", "krita/input/"));
             foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
                 inputDir.remove(entry);
             }

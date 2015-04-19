@@ -50,13 +50,13 @@ public:
 
     static void draw(QPainter *p, const QRect &r, const QVariant &value,
                      const QString& text, bool threeState);
-signals:
+Q_SIGNALS:
     void commitData(QWidget* editor);
 
-public slots:
+public Q_SLOTS:
     void setValue(bool value);
 
-protected slots:
+protected Q_SLOTS:
     void  slotValueChanged(bool state);
 
 protected:
@@ -86,7 +86,7 @@ public:
     QVariant value() const;
     void setValue(const QVariant &value);
 
-signals:
+Q_SIGNALS:
     void commitData( QWidget * editor );
 };
 

@@ -78,10 +78,10 @@ public:
     */
     void setOperationID(const QString& id);
 
-signals:
+Q_SIGNALS:
     void sigEnableSlaves(bool value);
 
-private slots:
+private Q_SLOTS:
     void slotTriggered();
     void slotChanged();
 

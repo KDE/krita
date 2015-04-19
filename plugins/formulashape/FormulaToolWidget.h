@@ -47,7 +47,7 @@ public:
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool( KoFormulaTool* tool );
 
-public slots:
+public Q_SLOTS:
     void insertSymbol(QTableWidgetItem* item);
 
 private:

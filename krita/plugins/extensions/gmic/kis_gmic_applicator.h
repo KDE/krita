@@ -22,6 +22,8 @@
 #include <kundo2magicstring.h>
 
 #include <kis_types.h>
+#include <kis_gmic_data.h>
+
 #include <QThread>
 
 class KisProcessingApplicator;
@@ -41,7 +43,7 @@ public:
 
     float getProgress() const;
 
-signals:
+Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
@@ -53,8 +55,10 @@ private:
     QString m_gmicCommand;
     QByteArray m_customCommands;
     bool m_applicatorStrokeEnded;
-    float * m_progress;
-    bool * m_cancel;
+    KisGmicDataSP m_gmicData;
+
+
+
 };
 
 #endif

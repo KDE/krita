@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>628</width>
-    <height>375</height>
+    <height>396</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -54,7 +54,7 @@
      <item row="1" column="1">
       <widget class="QSpinBox" name="m_autosaveSpinBox">
        <property name="suffix">
-        <string> min</string>
+        <string notr="true"> min</string>
        </property>
        <property name="minimum">
         <number>1</number>
@@ -261,13 +261,24 @@
        </property>
       </widget>
      </item>
+     <item row="13" column="1">
+      <widget class="QCheckBox" name="m_hideSplashScreen">
+       <property name="text">
+        <string>Hide splash screen on startup</string>
+       </property>
+      </widget>
+     </item>
      <item row="9" column="1">
       <widget class="QCheckBox" name="m_chkCanvasMessages">
        <property name="text">
         <string>Show on-canvas popup messages</string>
        </property>
-       <property name="checked">
-        <bool>true</bool>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QCheckBox" name="m_chkCompressKra">
+       <property name="text">
+        <string>Compress .kra files more (slows loading/saving)</string>
        </property>
       </widget>
      </item>

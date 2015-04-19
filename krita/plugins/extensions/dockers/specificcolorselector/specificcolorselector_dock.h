@@ -37,7 +37,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     virtual void setMainWindow(KisViewManager* kisview);
-public slots:
+public Q_SLOTS:
     void layerChanged(const KisNodeSP);
 private:
     KisCanvas2 *m_canvas;

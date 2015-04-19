@@ -43,18 +43,18 @@ public:
     /// @return the model used in the document list
     QStandardItemModel* model() const;
 
-signals:
+Q_SIGNALS:
     /// Emitted when a file is requested to be opened
     void openUrl(const KUrl&);
 
     /// This is used to keep all splitters in different details panes synced
     void splitterResized(KisDetailsPane* sender, const QList<int>& sizes);
 
-public slots:
+public Q_SLOTS:
     /// This is used to keep all splitters in different details panes synced
     void resizeSplitter(KisDetailsPane* sender, const QList<int>& sizes);
 
-protected slots:
+protected Q_SLOTS:
     /// This is called when the selection in the listview changed
     virtual void selectionChanged(const QModelIndex& index) = 0;
     virtual void openFile();

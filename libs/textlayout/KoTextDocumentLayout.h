@@ -257,7 +257,7 @@ public:
      */
     void positionAnchorTextRanges(int pos, int length, const QTextDocument *effectiveDocument);
 
-signals:
+Q_SIGNALS:
     /**
      * Signal that is emitted during layouting to inform about the progress done so far.
      */
@@ -277,7 +277,7 @@ signals:
 
     void foundAnnotation(KoShape *annotationShape, const QPointF &refPosition);
 
-public slots:
+public Q_SLOTS:
     /**
      * Does the layout of the text.
      * This method will layout the text into sections, tables and textlines,
@@ -301,7 +301,7 @@ public slots:
      */
     void emitLayoutIsDirty();
 
-private slots:
+private Q_SLOTS:
     /// Called by \a scheduleLayout to start a \a layout run if not done already meanwhile.
     void executeScheduledLayout();
 

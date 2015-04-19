@@ -114,7 +114,7 @@ public:
     Voice* addVoice();
 
     int indexOfVoice(Voice* voice);
-public slots:
+public Q_SLOTS:
     /**
      * Change the name of this part.
      *
@@ -128,7 +128,7 @@ public slots:
      * @param shortName the new short name of the part
      */
     void setShortName(const QString& shortName);
-signals:
+Q_SIGNALS:
     void nameChanged(const QString& name);
     void shortNameChanged(const QString& shortName);
 private:

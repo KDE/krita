@@ -39,7 +39,7 @@ public:
     explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);
     ~PathToolOptionWidget();
 
-public slots:
+public Q_SLOTS:
     void setSelectionType(int type);
 
 private:

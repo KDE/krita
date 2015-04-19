@@ -107,7 +107,7 @@ qreal KoMarkerData::width(qreal penWidth) const
 
 void KoMarkerData::setWidth(qreal width, qreal penWidth)
 {
-    d->baseWidth = qMax(qreal(0.0), width - penWidth * ResizeFactor);;
+    d->baseWidth = qMax(qreal(0.0), width - penWidth * ResizeFactor);
 }
 
 KoMarkerData::MarkerPosition KoMarkerData::position() const

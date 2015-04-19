@@ -37,15 +37,15 @@ public:
     KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget();
     bool customColorSpaceUsed();
-public slots:
+public Q_SLOTS:
     void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
     void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);
-private slots:
+private Q_SLOTS:
     void update();
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
-signals:
+Q_SIGNALS:
     void colorChanged(const KoColor&);
     void updated();
 private:

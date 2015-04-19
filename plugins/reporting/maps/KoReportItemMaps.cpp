@@ -30,6 +30,7 @@
 
 
 
+
 #define myDebug() if (0) kDebug(44021)
 
 
@@ -42,9 +43,6 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     , m_oroPicture(0)
 {
     createProperties();
-    QDomNodeList nl = element.childNodes();
-    QString n;
-    QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
@@ -52,12 +50,11 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     m_latitudeProperty->setValue(element.toElement().attribute("report:latitude").toDouble());
     m_longitudeProperty->setValue(element.toElement().attribute("report:longitude").toDouble());
     m_zoomProperty->setValue(element.toElement().attribute("report:zoom").toInt());
+    QString themeId(element.toElement().attribute("report:theme"));
+    themeId = themeId.isEmpty() ? m_themeManager.mapThemeIds()[0] : themeId;
+    m_themeProperty->setValue(themeId);
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-    for (int i = 0; i < nl.count(); i++) {
-        node = nl.item(i);
-        n = node.nodeName();
-    }
 }
 
 
@@ -83,11 +80,22 @@ void KoReportItemMaps::createProperties()
     m_longitudeProperty->setOption("unit", "°");
 
     m_zoomProperty     = new KoProperty::Property("zoom", 1000, i18n("Zoom"), i18n("Zoom") );
+
+    QStringList mapThemIds(m_themeManager.mapThemeIds());
+    m_themeProperty = new KoProperty::Property("theme",
+                                                    mapThemIds,
+                                                    mapThemIds,
+                                                    mapThemIds[1]);
+    if (!mapThemIds.isEmpty()) {
+        m_themeProperty->setValue(mapThemIds[0], false);
+    }
+
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
     m_set->addProperty(m_latitudeProperty);
     m_set->addProperty(m_longitudeProperty);
     m_set->addProperty(m_zoomProperty);
+    m_set->addProperty(m_themeProperty);
 }
 
 
@@ -98,7 +106,6 @@ void KoReportItemMaps::setColumn(const QString &c)
 
 QString KoReportItemMaps::itemDataSource() const
 {
-    kDebug() << m_controlSource->value().toString();
     return m_controlSource->value().toString();
 }
 
@@ -112,7 +119,6 @@ int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const
 {
     Q_UNUSED(script)
     
-    myDebug() << this << "data:" << data;
     deserializeData(data);
     m_pageId = page;
     m_sectionId = section;
@@ -153,7 +159,6 @@ void KoReportItemMaps::deserializeData(const QVariant& serialized)
 
 void KoReportItemMaps::renderFinished()
 {
-    myDebug() << m_pageId << ", " << m_sectionId;
     emit finishedRendering();
 }
 
@@ -180,4 +185,9 @@ int KoReportItemMaps::zoom() const
 QSize KoReportItemMaps::size() const
 {
     return m_size.toScene().toSize();
+}
+
+QString KoReportItemMaps::themeId() const
+{
+    return m_themeProperty->value().toString();
 }

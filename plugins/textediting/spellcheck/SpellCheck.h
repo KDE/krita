@@ -77,10 +77,10 @@ public:
 
     void replaceWordBySuggestion(const QString &word, int startPosition,int lengthOfWord);
 
-public slots:
+public Q_SLOTS:
     void setDefaultLanguage(const QString &lang);
 
-private slots:
+private Q_SLOTS:
     void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);
     void finishedRun();
     void configureSpellCheck();

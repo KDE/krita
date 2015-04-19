@@ -25,7 +25,6 @@
 #include <kis_painter.h>
 #include <kis_paint_information.h>
 
-class KisPaintDevice;
 class KoColorSpace;
 
 const QString PRESET_FILE_NAME = "hairy-benchmark1.kpp";
@@ -63,7 +62,7 @@ private:
         inline void benchmarkLine(QString presetFileName);
         inline void benchmarkCircle(QString presetFileName);
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

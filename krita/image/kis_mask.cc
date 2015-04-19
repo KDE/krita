@@ -39,10 +39,15 @@
 #include "kis_layer.h"
 
 #include "kis_cached_paint_device.h"
+#include "kis_mask_projection_plane.h"
 
 
 struct KisMask::Private {
-    Private(KisMask *_q) : q(_q) {}
+    Private(KisMask *_q)
+        : q(_q),
+          projectionPlane(new KisMaskProjectionPlane(q))
+    {
+    }
 
     mutable KisSelectionSP selection;
     KisCachedPaintDevice paintDeviceCache;
@@ -57,6 +62,8 @@ struct KisMask::Private {
      * why we save it separately.
      */
     QScopedPointer<QPoint> deferredSelectionOffset;
+
+    KisAbstractProjectionPlaneSP projectionPlane;
 
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
@@ -188,6 +195,11 @@ KisPaintDeviceSP KisMask::original() const
 KisPaintDeviceSP KisMask::projection() const
 {
     return paintDevice();
+}
+
+KisAbstractProjectionPlaneSP KisMask::projectionPlane() const
+{
+    return m_d->projectionPlane;
 }
 
 void KisMask::setSelection(KisSelectionSP selection)

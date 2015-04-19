@@ -24,7 +24,6 @@
 #include <kpagedialog.h>
 
 class KoDocumentInfo;
-class KoDocumentRdfBase;
 class KPageWidgetItem;
 class KoPageWidgetItem;
 
@@ -73,11 +72,11 @@ public:
 
     void addPageItem(KoPageWidgetItem *item);
 
-public slots:
+public Q_SLOTS:
     /** Connected to the okClicked() signal */
     void slotApply();
 
-private slots:
+private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
     void slotResetMetaData();
     /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
@@ -85,7 +84,7 @@ private slots:
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
 
-signals:
+Q_SIGNALS:
     void saveRequested();
 
 private:

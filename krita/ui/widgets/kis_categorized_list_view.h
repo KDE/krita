@@ -35,14 +35,14 @@ public:
 
 
 
-signals:
+Q_SIGNALS:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
     void sigEntryChecked(const QModelIndex& index);
     void rightClickedMenuDropSettingsTriggered();
     void rightClickedMenuSaveSettingsTriggered();
 
 
-protected slots:
+protected Q_SLOTS:
     void slotIndexChanged(const QModelIndex& index);
     virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
     virtual void rowsInserted(const QModelIndex& parent, int start, int end);

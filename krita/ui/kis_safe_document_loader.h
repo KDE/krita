@@ -22,7 +22,6 @@
 #include <QObject>
 #include "kis_types.h"
 
-class KisDocument;
 
 
 class KisSafeDocumentLoader : public QObject
@@ -36,12 +35,12 @@ public:
     void setPath(const QString &path);
     void reloadImage();
 
-private slots:
+private Q_SLOTS:
     void fileChanged();
     void fileChangedCompressed(bool sync = false);
     void delayedLoadStart();
 
-signals:
+Q_SIGNALS:
     void loadingFinished(KisImageSP image);
 
 private:

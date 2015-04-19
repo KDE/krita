@@ -23,6 +23,8 @@
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColor.h>
+
 
 #include "kis_types.h"
 #include "kis_node_visitor.h"
@@ -216,7 +218,8 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
          child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
          child->compositeOpId() == COMPOSITE_COPY) &&
         child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace()) {
+        *child->projection()->colorSpace() == *colorSpace() &&
+        !child->layerStyle()) {
 
         quint8 defaultOpacity =
             m_d->paintDevice->colorSpace()->opacityU8(
@@ -247,6 +250,18 @@ KisPaintDeviceSP KisGroupLayer::original() const
     }
 
     return realOriginal;
+}
+
+void KisGroupLayer::setDefaultProjectionColor(KoColor color)
+{
+    color.convertTo(m_d->paintDevice->colorSpace());
+    m_d->paintDevice->setDefaultPixel(color.data());
+}
+
+KoColor KisGroupLayer::defaultProjectionColor() const
+{
+    KoColor color(m_d->paintDevice->defaultPixel(), m_d->paintDevice->colorSpace());
+    return color;
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

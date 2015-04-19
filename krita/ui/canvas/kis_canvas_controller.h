@@ -44,7 +44,7 @@ public:
 public:
     using KoCanvasController::documentSize;
 
-public slots:
+public Q_SLOTS:
     void mirrorCanvas(bool enable);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
@@ -52,7 +52,7 @@ public slots:
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
 
-signals:
+Q_SIGNALS:
     void documentSizeChanged();
 
 private:

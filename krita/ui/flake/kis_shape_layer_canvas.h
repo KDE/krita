@@ -64,9 +64,9 @@ public:
     virtual void updateInputMethodInfo() {}
     virtual void setCursor(const QCursor &) {}
 
-private slots:
+private Q_SLOTS:
     void repaint();
-signals:
+Q_SIGNALS:
     void forwardRepaint();
 private:
 

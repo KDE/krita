@@ -1,7 +1,7 @@
 # To hide all the warnings from embedded 3rd party software like kdchart
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-switch)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 
 add_subdirectory( tests )
@@ -17,7 +17,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
 
 ########### Chart shape Plugin library ###############
 
-SET (chartshape_LIB_SRCS
+set (chartshape_LIB_SRCS
     kchart_global.cpp
     KDChartConvertions.cpp
     Axis.cpp
@@ -70,10 +70,10 @@ target_link_libraries(chartshapecore ${KDCHART_LIBS} komain kotextlayout)
 if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
         set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-KPIC")
-    else("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+    else()
         set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
-    endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-endif(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+    endif()
+endif()
 
 
 kde4_add_plugin(calligra_shape_chart ChartShapeFactory.cpp )

@@ -49,7 +49,9 @@ public:
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
+    // Sets the m_maskDab _and m_maskDabRect
     void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint);
+
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:

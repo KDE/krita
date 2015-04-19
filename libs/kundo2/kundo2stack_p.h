@@ -49,7 +49,6 @@
 #include "kundo2stack.h"
 
 class KUndo2Command;
-class KUndo2Group;
 
 //
 //  W A R N I N G

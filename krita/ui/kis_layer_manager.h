@@ -26,10 +26,7 @@
 #include "KisView.h"
 
 class KAction;
-class QAction;
-class KActionCollection;
 
-class KisFilterStrategy;
 class KisViewManager;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
@@ -52,7 +49,7 @@ public:
     ~KisLayerManager();
     void setView(QPointer<KisView>view);
 
-signals:
+Q_SIGNALS:
 
     void sigLayerActivated(KisLayerSP layer);
 
@@ -76,7 +73,7 @@ private:
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
 
-private slots:
+private Q_SLOTS:
 
     void mergeLayer();
 
@@ -116,6 +113,8 @@ private slots:
 
     void addFileLayer(KisNodeSP activeNode);
 
+    void layerStyle();
+
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
     void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer);
@@ -132,6 +131,8 @@ private:
     KisAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
+
+    KisAction *m_layerStyle;
 };
 
 #endif

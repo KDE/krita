@@ -35,7 +35,7 @@ public:
     ColorSpaceConversion(QObject *parent, const QVariantList &);
     virtual ~ColorSpaceConversion();
 
-private slots:
+private Q_SLOTS:
 
     void slotImageColorSpaceConversion();
     void slotLayerColorSpaceConversion();

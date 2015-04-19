@@ -78,6 +78,7 @@
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
+#include "kis_layer_projection_plane.h"
 
 #include "kis_multi_paint_device.h"
 #include "kis_animation_frame_cache.h"
@@ -893,7 +894,7 @@ QRect KisImage::realNodeExtent(KisNodeSP rootNode, QRect currentRect)
 
     // TODO: it would be better to count up changeRect inside
     // node's extent() method
-    currentRect |= rootNode->changeRect(rootNode->extent());
+    currentRect |= rootNode->projectionPlane()->changeRect(rootNode->extent());
 
     return currentRect;
 }
@@ -1181,13 +1182,10 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
-void KisImage::setDefaultProjectionColor(KoColor color)
+void KisImage::setDefaultProjectionColor(const KoColor &color)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
-
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    color.convertTo(original->colorSpace());
-    original->setDefaultPixel(color.data());
+    m_d->rootLayer->setDefaultProjectionColor(color);
 }
 
 KoColor KisImage::defaultProjectionColor() const
@@ -1196,9 +1194,7 @@ KoColor KisImage::defaultProjectionColor() const
         return KoColor(Qt::transparent, m_d->colorSpace);
     }
 
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    KoColor color(original->defaultPixel(), original->colorSpace());
-    return color;
+    return m_d->rootLayer->defaultProjectionColor();
 }
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)

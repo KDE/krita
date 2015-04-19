@@ -23,7 +23,6 @@
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"
 
-class KisPart;
 
 
 /**
@@ -67,7 +66,7 @@ public:
     KUndo2Command* crop(const QRect & rect);
     KUndo2Command* transform(const QTransform &transform);
 
-public slots:
+public Q_SLOTS:
     void slotLoadingFinished(KisImageSP importedImage);
 
 private:

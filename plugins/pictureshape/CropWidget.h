@@ -49,7 +49,7 @@ public:
     void setKeepPictureProportion(bool keepProportion);
     void maximizeCroppedArea();
 
-signals:
+Q_SIGNALS:
     void sigCropRegionChanged(const QRectF&, bool undoLast);
 
 private:

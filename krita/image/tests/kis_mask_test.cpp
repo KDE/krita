@@ -74,7 +74,7 @@ void KisMaskTest::testSelection()
     QCOMPARE(mask->extent(), QRect(0,0,128,128));
     QCOMPARE(mask->exactBounds(), QRect(0,0,100,100));
 
-    mask->select(QRect(0,0,500,500), MAX_SELECTED);;
+    mask->select(QRect(0,0,500,500), MAX_SELECTED);
 
     QCOMPARE(mask->extent(), QRect(0,0,512,512));
     QCOMPARE(mask->exactBounds(), QRect(0,0,500,500));

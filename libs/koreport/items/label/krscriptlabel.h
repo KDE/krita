@@ -34,7 +34,7 @@ public:
 
     ~Label();
 
-public slots:
+public Q_SLOTS:
     QString caption();
     void setCaption(const QString&);
 

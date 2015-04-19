@@ -148,14 +148,14 @@ public:
     class Private;
     KoCanvasControllerWidget::Private *priv();
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
     void toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &widgets);
 
-private slots:
+private Q_SLOTS:
 
     /// Called by the horizontal scrollbar when its value changes
     void updateCanvasOffsetX();

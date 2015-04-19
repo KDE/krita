@@ -51,6 +51,12 @@ KoAbstractGradient::~KoAbstractGradient()
     delete d;
 }
 
+KoAbstractGradient::KoAbstractGradient(const KoAbstractGradient &rhs)
+    : KoResource(rhs)
+    , d(new Private(*rhs.d))
+{
+}
+
 void KoAbstractGradient::colorAt(KoColor&, qreal t) const
 {
     Q_UNUSED(t);

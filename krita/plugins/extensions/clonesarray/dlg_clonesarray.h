@@ -48,7 +48,7 @@ public:
     DlgClonesArray(KisViewManager *view, QWidget * parent = 0);
     ~DlgClonesArray();
 
-private slots:
+private Q_SLOTS:
     void okClicked();
     void applyClicked();
     void cancelClicked();

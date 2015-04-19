@@ -80,7 +80,7 @@ public:
      */
     virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const = 0;
 
-signals:
+Q_SIGNALS:
     void displayConfigurationChanged();
 
 private:

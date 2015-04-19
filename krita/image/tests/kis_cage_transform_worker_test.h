@@ -19,12 +19,12 @@
 #ifndef __KIS_CAGE_TRANSFORM_WORKER_TEST_H
 #define __KIS_CAGE_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisCageTransformWorkerTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testCageClockwise();
     void testCageClockwisePrepareOnly();
     void testCageClockwisePixePrecision4();

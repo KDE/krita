@@ -49,12 +49,12 @@ public:
     int black() const;
     int white() const;
 
-public slots:
+public Q_SLOTS:
     void slotModifyBlack(int);
     void slotModifyWhite(int);
     void slotModifyGamma(double);
 
-signals:
+Q_SIGNALS:
     void sigModifiedBlack(int);
     void sigModifiedWhite(int);
     void sigModifiedGamma(double);

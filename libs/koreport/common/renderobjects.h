@@ -87,7 +87,7 @@ protected:
     QList<OROSection*> m_sections;
     ReportPageOptions m_pageOptions;
     
-signals:
+Q_SIGNALS:
     void updated(int pageNo);
 };
 

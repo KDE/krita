@@ -98,19 +98,13 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     cur.setPosition(from);
     while (to == -1 || cur.position() <= to) {
         if (cur.block().position() >= from) { // Begin of the block is inside selection.
-            QList<QVariant> openList = cur.blockFormat()
-                .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, openList) {
-                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+            foreach (const KoSection *sec, KoSectionUtils::sectionStartings(cur.blockFormat())) {
                 sectionNamesStack.push_back(sec->name());
             }
         }
 
         if (to == -1 || cur.block().position() + cur.block().length() <= to) { // End of the block is inside selection.
-            QList<QVariant> closeList = cur.blockFormat()
-                .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, closeList) {
-                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+            foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(cur.blockFormat())) {
                 if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name()) {
                     sectionNamesStack.pop();
                     entireWithinSectionNames.insert(sec->name());
@@ -135,19 +129,14 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
 
         QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
-            QVariant v = format.property(KoParagraphStyle::SectionStartings);
-            QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
 
-            foreach (const QVariant &sv, sectionStarts) {
-                KoSection* section = static_cast<KoSection *>(sv.value<void*>());
-
-                // We are writing in only sections, that are completely inside selection.
-                if (entireWithinSectionNames.contains(section->name())) {
-                    section->saveOdf(context);
-                }
+        foreach (const KoSection *section, KoSectionUtils::sectionStartings(format)) {
+            // We are writing in only sections, that are completely inside selection.
+            if (entireWithinSectionNames.contains(section->name())) {
+                section->saveOdf(context);
             }
         }
+
         if (format.hasProperty(KoParagraphStyle::HiddenByTable)) {
             block = block.next();
             continue;
@@ -165,7 +154,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         if (cursor.currentTable() && cursor.currentTable() != currentTable) {
             // Call the code to save the table....
-            saveTable(cursor.currentTable(), listStyles);
+            saveTable(cursor.currentTable(), listStyles, from, to);
             // We skip to the end of the table.
             block = cursor.currentTable()->lastCursorPosition().block();
             block = block.next();
@@ -182,16 +171,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         saveParagraph(block, from, to);
 
-        if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
-            QVariant v = format.property(KoParagraphStyle::SectionEndings);
-            QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
-
-            foreach (QVariant sv, sectionEndings) {
-                KoSectionEnd *sectionEnd = static_cast<KoSectionEnd *>(sv.value<void *>());
-                // We are writing in only sections, that are completely inside selection.
-                if (entireWithinSectionNames.contains(sectionEnd->name())) {
-                    sectionEnd->saveOdf(context);
-                }
+        foreach (const KoSectionEnd *sectionEnd, KoSectionUtils::sectionEndings(format)) {
+            // We are writing in only sections, that are completely inside selection.
+            if (entireWithinSectionNames.contains(sectionEnd->name())) {
+                sectionEnd->saveOdf(context);
             }
         }
 
@@ -737,7 +720,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     closeTagRegion();
 }
 
-void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
+void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles, int from, int to)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(table);
     int numberHeadingRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
@@ -789,11 +772,21 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
     openTagRegion(KoTextWriter::Private::Table, tableTagInformation);
 
-    for (int c = 0 ; c < table->columns() ; c++) {
+    int firstColumn = 0;
+    int lastColumn = table->columns() -1;
+    int firstRow = 0;
+    int lastRow = table->rows() -1;
+    if (to != -1 && from >= table->firstPosition() && to <= table->lastPosition()) {
+        firstColumn = table->cellAt(from).column();
+        firstRow = table->cellAt(from).row();
+        lastColumn = table->cellAt(to).column();
+        lastRow = table->cellAt(to).row();
+    }
+    for (int c = firstColumn ; c <= lastColumn; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;
 
-        for (; repetition < (table->columns() - c) ; repetition++)
+        for (; repetition <= (lastColumn - c) ; repetition++)
         {
             if (columnStyle != tcarManager.columnStyle(c + repetition + 1))
                 break;
@@ -815,7 +808,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     if (numberHeadingRows)
         writer->startElement("table:table-header-rows");
 
-    for (int r = 0 ; r < table->rows() ; r++) {
+    // TODO make work for copying part of table that has header rows - copy header rows additionally or not ?
+    for (int r = firstRow; r <= lastRow; r++) {
         TagInformation tableRowInformation;
         tableRowInformation.setTagName("table:table-row");
         KoTableRowStyle rowStyle = tcarManager.rowStyle(r);
@@ -826,7 +820,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         }
         openTagRegion(KoTextWriter::Private::TableRow, tableRowInformation);
 
-        for (int c = 0 ; c < table->columns() ; c++) {
+        for (int c = firstColumn; c <= lastColumn; c++) {
             QTextTableCell cell = table->cellAt(r, c);
 
             TagInformation tableCellInformation;

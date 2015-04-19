@@ -111,10 +111,10 @@ void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,
                      imageRect.width(),
                      imageRect.height());
 
-    TestUtil::checkQImageExternal(dev->convertToQImage(0, imageRect),
-                                  "shaped_gradient",
-                                  "fill",
-                                  testName, 1, 1, 0);
+    QVERIFY(TestUtil::checkQImageExternal(dev->convertToQImage(0, imageRect),
+                                          "shaped_gradient",
+                                          "fill",
+                                          testName, 1, 1, 0));
 }
 
 void KisGradientPainterTest::testShapedGradientPainterRect()
@@ -327,8 +327,11 @@ void KisGradientPainterTest::testCachedStrategy()
     qDebug() << ppVar((min)(accum));
     qDebug() << ppVar((max)(accum));
 
+    qreal varError = variance(accum);
+    QVERIFY(varError < maxRelError);
+
     qreal maxError = qMax(qAbs((min)(accum)), qAbs((max)(accum)));
-    QVERIFY(maxError < maxRelError);
+    QVERIFY(maxError < 2 * maxRelError);
 }
 
 QTEST_KDEMAIN(KisGradientPainterTest, GUI)

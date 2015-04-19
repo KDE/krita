@@ -44,7 +44,7 @@ class ImageLoader: public QThread
         QAtomicInt isLoaded;
     };
     
-signals:
+Q_SIGNALS:
     void sigItemContentChanged(ImageItem* item);
     
 public:
@@ -64,7 +64,7 @@ public:
 
     virtual void run();
 
-public slots:
+public Q_SLOTS:
 
     void stopExecution();
 
@@ -102,14 +102,14 @@ public:
     ImageStripScene();
     ~ImageStripScene();
     bool setCurrentDirectory(const QString& path);
-    
-signals:
+    QString currentPath() { return m_path; }
+Q_SIGNALS:
     void sigImageActivated(const QString& path);
     
 private:
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     
-private slots:
+private Q_SLOTS:
     void slotItemContentChanged(ImageItem* item);
     
 private:
@@ -117,6 +117,7 @@ private:
     quint32 m_numItems;
     ImageLoader* m_loader;
     QMutex m_mutex;
+    QString m_path;
 };
 
 #endif // H_IMAGE_STRIP_SCENE_H_

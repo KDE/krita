@@ -86,7 +86,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     time.start();
 #endif
 
-    if (!painter()) return m_spacing;
+    if (!painter()) return KisSpacingInformation(m_spacing);
     m_dab->clear();
 
     int gridWidth = m_properties.gridWidth * m_properties.scale;
@@ -172,9 +172,10 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     params["h"] = (m_colorProperties.hue / 180.0) * drand48();
                     params["s"] = (m_colorProperties.saturation / 100.0) * drand48();
                     params["v"] = (m_colorProperties.value / 100.0) * drand48();
-
                     KoColorTransformation* transfo;
                     transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+                    transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
+                    transfo->setParameter(4, false);//sets the colorize to false.
                     transfo->transform(color.data(), color.data() , 1);
                 }
 
@@ -187,7 +188,6 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 if (!m_colorProperties.colorPerParticle) {
                     shouldColor = false;
                 }
-
                 m_painter->setPaintColor(color);
             }
 
@@ -219,6 +219,10 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 break;
             }
             }
+
+            if (m_colorProperties.colorPerParticle){
+                color=painter()->paintColor();//reset color//
+            }
         }
     }
 
@@ -234,7 +238,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
-    return m_spacing;
+    return KisSpacingInformation(m_spacing);
 }
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)

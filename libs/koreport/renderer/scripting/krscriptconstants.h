@@ -42,7 +42,7 @@ public:
     void setPageTotal(int t) {
         m_totalPages = t;
     };
-public slots:
+public Q_SLOTS:
     int PageNumber() {
         return m_currentPage;
     };

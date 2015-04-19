@@ -192,7 +192,7 @@ public:
      */
     bool isLoading() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Connected to dataChanged() signal of source models in TableSource.
      */
@@ -212,7 +212,7 @@ public slots:
      */
     void removeTable(Table *table);
 
-signals:
+Q_SIGNALS:
     void dataChanged();
 
 private:

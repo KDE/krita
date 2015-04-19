@@ -116,7 +116,7 @@ public:
 
     DeclarativeMimeData* mimeData() const;
 
-signals:
+Q_SIGNALS:
     void dragStarted(qreal startX, qreal startY);
     void delegateChanged();
     void sourceChanged();

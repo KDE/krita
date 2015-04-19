@@ -62,6 +62,7 @@ public:
     void setName(const QString& name);
     const QString& name() const;
 public:
+    const QVector<quint8> uint8Transfer(int size = 256) const;
     const QVector<quint16> uint16Transfer(int size = 256) const;
     const QVector<qreal> floatTransfer(int size = 256) const;
 public:

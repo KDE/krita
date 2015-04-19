@@ -31,7 +31,7 @@ public:
     ShearImage(QObject *parent, const QVariantList &);
     virtual ~ShearImage();
 
-private slots:
+private Q_SLOTS:
 
     void slotShearImage();
     void slotShearLayer();

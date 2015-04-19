@@ -25,7 +25,6 @@
 #include <KoIconToolTip.h>
 
 class QEvent;
-class KoResourceModel;
 class QModelIndex;
 
 /// The resource view
@@ -55,7 +54,7 @@ public:
 
     void updateView();
 
-signals:
+Q_SIGNALS:
 
     void currentResourceChanged(const QModelIndex &);
     void contextMenuRequested(const QPoint &);

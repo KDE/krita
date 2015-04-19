@@ -24,7 +24,6 @@
 
 class KisBookmarkedConfigurationsModel;
 class KisSerializableConfiguration;
-class QModelIndex;
 class QItemSelection;
 
 /**
@@ -42,7 +41,7 @@ public:
      */
     KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfiguration* currentConfig);
     ~KisBookmarkedConfigurationsEditor();
-private slots:
+private Q_SLOTS:
     void currentConfigChanged(const QItemSelection& selected, const QItemSelection&);
     void addCurrentConfiguration();
     void deleteConfiguration();

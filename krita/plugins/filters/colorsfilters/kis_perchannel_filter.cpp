@@ -498,7 +498,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
         transfers[i] = originalTransfers[i].constData();
     }
     KoColorTransformation* t = cs->createPerChannelAdjustment(transfers);
-    delete transfers;
+    delete [] transfers;
     return t;
 }
 

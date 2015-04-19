@@ -29,7 +29,7 @@ class KisLocklessStackTest : public QObject
 private:
     void runStressTest(KisAbstractIntStack &stack);
 
-private slots:
+private Q_SLOTS:
     void testOperations();
     void stressTestLockless();
     void stressTestQStack();

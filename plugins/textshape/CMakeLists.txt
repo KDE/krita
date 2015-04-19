@@ -4,9 +4,9 @@ project( textPlugin)
 if(NOT RELEASE_BUILD)
     set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
     add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
-else(NOT RELEASE_BUILD)
+else()
     set(BUILD_TEXTDOCUMENT_INSPECTOR FALSE)
-endif(NOT RELEASE_BUILD)
+endif()
 
 
 add_subdirectory( pics )
@@ -20,7 +20,7 @@ include_directories(
 
 ########### Flake Plugin library ###############
 
-SET ( textshape_SRCS
+set ( textshape_SRCS
     TextPlugin.cpp
     TextShape.cpp
     TextShapeFactory.cpp
@@ -118,14 +118,14 @@ SET ( textshape_SRCS
 )
 
 if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    SET ( textshape_SRCS
+    set ( textshape_SRCS
         ${textshape_SRCS}
         TextDocumentStructureModel.cpp
         TextDocumentInspectionDocker.cpp
         TextDocumentInspectionDockerFactory.cpp
         TextDocumentInspectionPlugin.cpp
     )
-endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+endif()
 
 
 kde4_add_ui_files(textshape_SRCS
@@ -175,7 +175,7 @@ kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets ${EXTRA_LIBS})
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 
 install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -190,4 +190,4 @@ if(BUILD_TEXTDOCUMENT_INSPECTOR)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
 
     install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+endif()

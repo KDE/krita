@@ -41,7 +41,7 @@ class KoDocumentSectionView::PropertyAction: public QAction
     int m_num;
     QPersistentModelIndex m_index;
 
-    signals:
+    Q_SIGNALS:
         void toggled( bool on, const QPersistentModelIndex &index, int property );
 
     public:
@@ -53,7 +53,7 @@ class KoDocumentSectionView::PropertyAction: public QAction
             setIcon( m_property.state.toBool() ? m_property.onIcon : m_property.offIcon );
         }
 
-    private slots:
+    private Q_SLOTS:
         void slotTriggered()
         {
             m_property.state = !m_property.state.toBool();

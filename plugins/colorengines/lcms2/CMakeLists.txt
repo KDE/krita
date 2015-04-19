@@ -3,7 +3,7 @@ project( lcmsengine )
 if(!WIN32)
 ## Only test if on non-Windows system
 	add_subdirectory(tests)
-endif(!WIN32)
+endif()
 
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
 
@@ -34,7 +34,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/xyz_f16
 )
-endif (HAVE_LCMS24 AND OPENEXR_FOUND)
+endif ()
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -42,10 +42,10 @@ if(OPENEXR_FOUND)
     include_directories(${OPENEXR_INCLUDE_DIR})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
-endif(OPENEXR_FOUND)
+endif()
 
 
-SET ( lcmsengine_SRCS
+set ( lcmsengine_SRCS
     colorspaces/cmyk_u8/CmykU8ColorSpace.cpp
     colorspaces/cmyk_u16/CmykU16ColorSpace.cpp
     colorspaces/cmyk_f32/CmykF32ColorSpace.cpp
@@ -83,7 +83,7 @@ if (HAVE_LCMS24 AND OPENEXR_FOUND)
         colorspaces/rgb_f16/RgbF16ColorSpace.cpp
         colorspaces/xyz_f16/XyzF16ColorSpace.cpp
     )
-endif (HAVE_LCMS24 AND OPENEXR_FOUND)
+endif ()
 
 
 

@@ -23,7 +23,6 @@
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
-class KoID;
 class KoColorSpace;
 class KoColor;
 class KoColorPopupAction;
@@ -51,7 +50,7 @@ public:
 
     const KoColorSpace * colorSpace();
 
-private slots:
+private Q_SLOTS:
 
     void setAnnotation(const QString& type);
     void setCurrentColor();

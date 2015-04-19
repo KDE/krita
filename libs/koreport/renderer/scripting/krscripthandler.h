@@ -47,7 +47,7 @@ public:
     void registerScriptObject(QObject*, const QString&);
     void trigger();
 
-public slots:
+public Q_SLOTS:
 
     void slotEnteredSection(KRSectionData*, OROPage*, QPointF);
     void slotEnteredGroup(const QString&, const QVariant&);
@@ -60,7 +60,7 @@ public slots:
     }
     void newPage();
 
-signals:
+Q_SIGNALS:
     void groupChanged(const QString& whereCondition);    
 
 private:

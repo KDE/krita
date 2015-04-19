@@ -4,9 +4,9 @@
 # warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-else (CMAKE_COMPILER_IS_GNUCXX)
+else ()
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
-endif (CMAKE_COMPILER_IS_GNUCXX)
+endif ()
 
 include_directories(
 
@@ -25,7 +25,7 @@ add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
-endif (APPLE)
+endif ()
 
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
@@ -63,6 +63,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_blacklist_cleanup.cpp
+    dialogs/kis_dlg_layer_style.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -92,6 +93,7 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
+    kis_embedded_pattern_manager.cpp
     kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
@@ -187,6 +189,8 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
+    widgets/kis_cmb_contour.cpp
+    widgets/kis_cmb_gradient.cpp
     widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc
     widgets/kis_color_space_selector.cc
@@ -270,6 +274,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_psd_layer_style_resource.cpp
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
@@ -331,7 +336,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
-endif(WIN32)
+endif()
 
 if(UNIX)
     set(kritaui_LIB_SRCS
@@ -345,15 +350,15 @@ if(UNIX)
             ${kritaui_LIB_SRCS}
             input/wintab/kis_tablet_support_x11.cpp
             )
-    endif(NOT APPLE)
-endif(UNIX)
+    endif()
+endif()
 
 if (APPLE)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             MacSupport.mm
         )
-endif (APPLE)
+endif ()
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
@@ -361,7 +366,7 @@ if(WIN32)
     #kde4_add_ui_files(
     #    input/wintab/kis_screen_size_choice_dialog.ui
     #)
-endif(WIN32)
+endif()
 
 
 
@@ -411,9 +416,24 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.ui
     input/config/kis_wheel_input_editor.ui
     input/config/kis_key_input_editor.ui
+
+    layerstyles/wdgBevelAndEmboss.ui
+    layerstyles/wdgblendingoptions.ui
+    layerstyles/WdgColorOverlay.ui
+    layerstyles/wdgContour.ui
+    layerstyles/wdgdropshadow.ui
+    layerstyles/WdgGradientOverlay.ui
+    layerstyles/wdgInnerGlow.ui
+    layerstyles/wdglayerstyles.ui
+    layerstyles/WdgPatternOverlay.ui
+    layerstyles/WdgSatin.ui
+    layerstyles/WdgStroke.ui
+    layerstyles/wdgstylesselector.ui
+    layerstyles/wdgTexture.ui
+
     wdgsplash.ui
-	input/wintab/kis_screen_size_choice_dialog.ui
-	forms/wdg_url_requester.ui
+    input/wintab/kis_screen_size_choice_dialog.ui
+    forms/wdg_url_requester.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
@@ -423,13 +443,13 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_Xinput_LIB})
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
-endif (APPLE)
+endif ()
 
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
-else(GHNS)
+else()
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
-endif (GHNS)
+endif ()
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
@@ -437,14 +457,14 @@ if(HAVE_OPENGL)
     # activate workaround for the VSync disable
     if(NOT WIN32)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS})
-    endif(NOT WIN32)
+    endif()
 
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
-    endif(HAVE_GLEW)
+    endif()
 
-endif(HAVE_OPENGL)
+endif()
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
 
@@ -457,7 +477,7 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
-endif (APPLE)
+endif ()
 
 install( FILES
     canvas/kis_canvas2.h

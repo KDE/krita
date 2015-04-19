@@ -19,7 +19,7 @@
 #ifndef FILTERSMODEL_H
 #define FILTERSMODEL_H
 
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 #include <kis_types.h>
 
 class FiltersModel : public QAbstractListModel

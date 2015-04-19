@@ -19,12 +19,12 @@
 #ifndef __KIS_BSPLINES_TEST_H
 #define __KIS_BSPLINES_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBSplinesTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void test1D();
     void testEmpty1D();
 

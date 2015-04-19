@@ -90,9 +90,7 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::PAINT_MODE);
 
     if(m_dragging && m_closeSnappingActivated) {
-        if (m_closeSnappingActivated) {
-            m_points.append(m_points.first());
-        }
+        m_points.append(m_points.first());
         endStroke();
     } else {
         m_dragging = true;

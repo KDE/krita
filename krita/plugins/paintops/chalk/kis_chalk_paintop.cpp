@@ -61,7 +61,7 @@ KisChalkPaintOp::~KisChalkPaintOp()
 
 KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return 1.0;
+    if (!painter()) return KisSpacingInformation(1.0);
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
@@ -83,5 +83,5 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-    return 1.0;
+    return KisSpacingInformation(1.0);
 }

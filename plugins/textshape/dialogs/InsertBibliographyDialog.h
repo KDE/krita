@@ -26,9 +26,7 @@
 
 #include <KoTextEditor.h>
 
-class KoInlineCite;
 class KoBibliographyInfo;
-class BibliographyEntryTemplate;
 class QListWidgetItem;
 
 class InsertBibliographyDialog : public QDialog
@@ -38,7 +36,7 @@ public:
     explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
     QString bibliographyType();
 
-public slots:
+public Q_SLOTS:
     void insert();
     void updateFields();
     void addField();

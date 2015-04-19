@@ -26,7 +26,6 @@
 #include "KisView.h"
 
 class KisViewManager;
-class KToggleAction;
 class KActionCollection;
 class KisMirrorAxis;
 
@@ -43,7 +42,7 @@ public:
 
     void setView(QPointer<KisView> imageView);
 
-private slots:
+private Q_SLOTS:
     void updateAction();
 
 private:

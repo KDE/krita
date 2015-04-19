@@ -75,7 +75,7 @@ public:
     // A callback for scratch pad default bounds
     QRect imageBounds() const;
 
-public slots:
+public Q_SLOTS:
     void fillDefault();
     void fillGradient();
     void fillBackground();
@@ -94,19 +94,19 @@ public slots:
      */
     void paintPresetImage();
 
-private slots:
+private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
     void setDisplayProfile(const KoColorProfile* colorProfile);
     void slotUpdateCanvas(const QRect &rect);
 
-signals:
+Q_SIGNALS:
     void colorSelected(const KoColor& color);
     void sigUpdateCanvas(const QRect &rect);
 
 protected:
     virtual void paintEvent ( QPaintEvent * event );
 
-public slots:
+public Q_SLOTS:
     void slotMousePress(KoPointerEvent *event);
     void slotMouseRelease(KoPointerEvent *event);
     void slotMouseMove(KoPointerEvent *event);

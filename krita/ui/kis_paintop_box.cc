@@ -77,7 +77,7 @@
 
 
 
-typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *name)
@@ -89,7 +89,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     , m_brushChooser(0)
     , m_viewManager(view)
     , m_previousNode(0)
-    , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
+    , m_currTabletToolID(KoInputDevice::invalid())
     , m_presetsEnabled(true)
     , m_blockUpdate(false)
     , m_dirtyPresetsEnabled(false)
@@ -175,40 +175,61 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     vMirrorButton->setDefaultAction(m_vMirrorAction);
     m_viewManager->actionCollection()->addAction("vmirror_action", m_vMirrorAction);
 
+    const bool sliderLabels = cfg.sliderLabels();
+    int sliderWidth;
+
+    if (sliderLabels) {
+        sliderWidth = 150 * logicalDpiX() / 96;
+    }
+    else {
+        sliderWidth = 120 * logicalDpiX() / 96;
+    }
 
     for (int i = 0; i < 3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
-        KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
-        KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
-        KisDoubleSliderSpinBox* slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size"   , i18n("Size:"));
+        KisDoubleSliderSpinBox* slOpacity;
+        KisDoubleSliderSpinBox* slFlow;
+        KisDoubleSliderSpinBox* slSize;
+        if (sliderLabels) {
+            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
+            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
+            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
+            slOpacity->setPrefix(QString("%1  ").arg(i18n("Opacity:")));
+            slFlow->setPrefix(QString("%1  ").arg(i18n("Flow:")));
+            slSize->setPrefix(QString("%1  ").arg(i18n("Size:")));
+        }
+        else {
+            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
+            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow", i18n("Flow:"));
+            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
+        }
 
         slOpacity->setRange(0.0, 1.0, 2);
         slOpacity->setValue(1.0);
         slOpacity->setSingleStep(0.05);
-        slOpacity->setMinimumWidth(120);
+        slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
+        slOpacity->setFixedHeight(32);
 
         slFlow->setRange(0.0, 1.0, 2);
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
-        slFlow->setMinimumWidth(120);
+        slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
+        slFlow->setFixedHeight(32);
 
         slSize->setRange(0, 1000, 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setMinimumWidth(120);
         slSize->setSuffix(" px");
+        slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
+        slSize->setFixedHeight(32);
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
 
-
-    QLabel* labelMode = new QLabel(i18n("Mode: "), this);
-    labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-
     m_cmbCompositeOp = new KisCompositeOpComboBox();
-    m_cmbCompositeOp->setFixedHeight(30);
+    m_cmbCompositeOp->setFixedHeight(32);
     foreach(KAction * a, m_cmbCompositeOp->blendmodeActions()) {
         m_viewManager->actionCollection()->addAction(a->text(), a);
     }
@@ -222,21 +243,23 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
     baseLayout->addWidget(m_paintopWidget);
+    baseLayout->setSpacing(4);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
+    m_layout->setSpacing(4);
     m_layout->setContentsMargins(0, 0, 0, 0);
 
     QWidget* compositeActions = new QWidget(this);
     QHBoxLayout* compositeLayout = new QHBoxLayout(compositeActions);
-    compositeLayout->addWidget(labelMode);
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
 
-    compositeLayout->setContentsMargins(8, 0, 0, 0);
+    compositeLayout->setSpacing(4);
+    compositeLayout->setContentsMargins(0, 0, 0, 0);
 
     compositeLayout->addWidget(m_reloadButton);
 
@@ -280,6 +303,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(hMirrorButton);
     mirrorLayout->addWidget(vMirrorButton);
+    mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
     action = new KAction(i18n("Mirror"), this);
     view->actionCollection()->addAction("mirror_actions", action);
@@ -357,10 +381,22 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
 
+    slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 }
 
 KisPaintopBox::~KisPaintopBox()
 {
+    KisConfig cfg;
+    QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
+    while (iter.hasNext()) {
+        iter.next();
+        if ((iter.key().pointer) == QTabletEvent::Eraser) {
+            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+        }
+        else {
+            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+        }
+    }
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
@@ -591,11 +627,23 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
-        KisPaintOpPresetSP preset =
-                m_resourceProvider->currentPreset()->clone();
-        m_resourceProvider->setPaintOpPreset(preset);
-        setCurrentPaintop(preset->paintOp(), preset);
-    } else {
+        KisConfig cfg;
+        KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        KisPaintOpPresetSP preset;
+        if (inputDevice.pointer() == QTabletEvent::Eraser) {
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_circle"));
+        }
+        else {
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
+        }
+        if (!preset) {
+            preset = rserver->resourceByName("Basic_tip_default");
+        }
+        if (preset) {
+            setCurrentPaintop(preset->paintOp(), preset);
+        }
+    }
+    else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
     }
 

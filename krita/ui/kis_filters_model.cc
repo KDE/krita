@@ -21,10 +21,7 @@
 
 #include "kis_filters_model.h"
 
-#include <QFutureWatcher>
 #include <QPixmap>
-#include <QSignalMapper>
-#include <QtConcurrentRun>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>

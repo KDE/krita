@@ -44,7 +44,7 @@ public:
 
     void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 
-private slots:
+private Q_SLOTS:
     void okClicked();
 
 private:

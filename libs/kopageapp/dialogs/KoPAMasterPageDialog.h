@@ -37,7 +37,7 @@ public:
 
     KoPAMasterPage *selectedMasterPage();
 
-private slots:
+private Q_SLOTS:
     void selectionChanged();
 
 private:

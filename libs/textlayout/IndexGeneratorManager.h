@@ -42,11 +42,11 @@ public:
 
     bool generate();
 
-public slots:
+public Q_SLOTS:
     void requestGeneration();
     void startDoneTimer();
 
-private slots:
+private Q_SLOTS:
     void layoutDone();
     void timeout();
 

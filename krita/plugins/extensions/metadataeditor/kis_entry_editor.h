@@ -35,10 +35,10 @@ class KisEntryEditor : public QObject
 public:
     KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex);
     ~KisEntryEditor();
-public slots:
+public Q_SLOTS:
     void valueEdited();
     void valueChanged();
-signals:
+Q_SIGNALS:
     void valueHasBeenEdited();
 private:
     Private* const d;

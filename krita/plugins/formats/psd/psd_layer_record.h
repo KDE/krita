@@ -36,6 +36,27 @@
 
 class QIODevice;
 
+enum psd_layer_type {
+    psd_layer_type_normal,
+    psd_layer_type_hidden,
+    psd_layer_type_folder,
+    psd_layer_type_solid_color,
+    psd_layer_type_gradient_fill,
+    psd_layer_type_pattern_fill,
+    psd_layer_type_levels,
+    psd_layer_type_curves,
+    psd_layer_type_brightness_contrast,
+    psd_layer_type_color_balance,
+    psd_layer_type_hue_saturation,
+    psd_layer_type_selective_color,
+    psd_layer_type_threshold,
+    psd_layer_type_invert,
+    psd_layer_type_posterize,
+    psd_layer_type_channel_mixer,
+    psd_layer_type_gradient_map,
+    psd_layer_type_photo_filter,
+};
+
 struct  ChannelInfo {
 
     ChannelInfo()
@@ -126,11 +147,7 @@ public:
 
     QString layerName; // pascal, not unicode!
 
-    struct LayerInfoBlock {
-        QByteArray data;
-    };
-
-    QMap<QString, LayerInfoBlock*> infoBlocks;
+    PsdAdditionalLayerInfoBlock infoBlocks;
 
 private:
 

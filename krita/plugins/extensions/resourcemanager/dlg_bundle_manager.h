@@ -39,7 +39,7 @@ class DlgBundleManager : public KDialog
 public:
     explicit DlgBundleManager(KisActionManager* actionMgr, QWidget *parent = 0);
 
-private slots:
+private Q_SLOTS:
 
     void accept();
     void addSelected();
@@ -58,6 +58,7 @@ private:
     Ui::WdgDlgBundleManager *m_ui;
 
     void fillListWidget(QList<ResourceBundle*> bundles, QListWidget *w);
+    void refreshListData();
 
     QMap<QString, ResourceBundle*> m_blacklistedBundles;
     QMap<QString, ResourceBundle*> m_activeBundles;

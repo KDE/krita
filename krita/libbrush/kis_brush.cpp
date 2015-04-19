@@ -160,8 +160,8 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->hasColor = rhs.d->hasColor;
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
-    d->autoSpacingActive = d->autoSpacingActive;
-    d->autoSpacingCoeff = d->autoSpacingCoeff;
+    d->autoSpacingActive = rhs.d->autoSpacingActive;
+    d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
     setFilename(rhs.filename());
     clearBrushPyramid();
     // don't copy the boundary, it will be regenerated -- see bug 291910
@@ -267,7 +267,7 @@ void KisBrush::setBrushTipImage(const QImage& image)
     d->brushTipImage = image;
 
     if (!image.isNull()) {
-        if (image.width() > 128 && image.width() > 128) {
+        if (image.width() > 128 || image.height() > 128) {
             KoResource::setImage(image.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         }
         else {

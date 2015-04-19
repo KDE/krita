@@ -207,7 +207,7 @@ public:
      */
     KoToolManager::Private *priv();
 
-public slots:
+public Q_SLOTS:
     /**
      * Request switching tool
      * @param id the id of the tool
@@ -236,7 +236,7 @@ public slots:
      */
     void switchBackRequested();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when a new tool was selected or became active.
      * @param canvas the currently active canvas.

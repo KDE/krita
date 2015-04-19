@@ -69,10 +69,12 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
+    bool hideSplashScreen();
     int mdiMode();
     int favoritePresets();
     bool showCanvasMessages();
-private slots:
+    bool compressKra();
+private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
 
@@ -98,7 +100,7 @@ public:
 
     ColorSettingsTab(QWidget *parent = 0, const char  *name = 0);
 
-private slots:
+private Q_SLOTS:
 
     void refillMonitorProfiles(const KoID & s);
     void refillPrintProfiles(const KoID & s);
@@ -192,7 +194,7 @@ public:
 
 public:
     void setDefault();
-protected slots:
+protected Q_SLOTS:
     void slotUseOpenGLToggled(bool isChecked);
 
 public:
@@ -222,7 +224,7 @@ public:
     GridSettingsTab(QWidget *parent);
 public:
     void setDefault();
-private slots:
+private Q_SLOTS:
     void linkSpacingToggled(bool);
     void spinBoxHSpacingChanged(int);
     void spinBoxVSpacingChanged(int);
@@ -290,7 +292,7 @@ protected:
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotDefault();
 

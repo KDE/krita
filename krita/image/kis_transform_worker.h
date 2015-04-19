@@ -29,7 +29,6 @@
 
 class KisPaintDevice;
 class KisFilterStrategy;
-class KisSelection;
 class QTransform;
 
 class KRITAIMAGE_EXPORT KisTransformWorker

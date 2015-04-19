@@ -72,7 +72,7 @@ KoCanvasBase::~KoCanvasBase()
 
 QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const
 {
-    return viewConverter()->viewToDocument(viewPoint - documentOrigin());;
+    return viewConverter()->viewToDocument(viewPoint - documentOrigin());
 }
 
 KoShapeController *KoCanvasBase::shapeController() const

@@ -41,7 +41,7 @@ public:
     void setModelData(QWidget *editor, QAbstractItemModel *model,
                       const QModelIndex &index) const;
 
-private slots:
+private Q_SLOTS:
     void emitCommitData();
 };
 

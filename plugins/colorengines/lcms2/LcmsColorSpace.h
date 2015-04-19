@@ -26,7 +26,6 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
-class qDebug;
 
 class KoLcmsInfo
 {

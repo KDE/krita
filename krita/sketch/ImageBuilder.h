@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QVariantMap>
 
-class KisDocument;
 class ImageBuilder : public QObject
 {
     Q_OBJECT

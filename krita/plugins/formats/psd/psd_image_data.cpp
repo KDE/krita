@@ -517,7 +517,7 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
             }
 
             dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-            it->nextPixel();;
+            it->nextPixel();
         }
 
     }
@@ -617,7 +617,7 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
             }
 
             dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-            it->nextPixel();;
+            it->nextPixel();
         }
 
     }

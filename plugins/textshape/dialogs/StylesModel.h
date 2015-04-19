@@ -53,6 +53,10 @@ class StylesModel : public AbstractStylesModel
     Q_OBJECT
 
 public:
+    enum CategoriesInternalIds {
+        NoneStyleId = -1
+    };
+
     explicit StylesModel(KoStyleManager *styleManager, AbstractStylesModel::Type modelType, QObject *parent = 0);
     ~StylesModel();
 
@@ -136,12 +140,12 @@ public:
     /** Returns the type of styles in the model */
     AbstractStylesModel::Type stylesType() const;
 
-private slots:
+private Q_SLOTS:
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
     void updateName(int styleId);
 
-public slots:
+public Q_SLOTS:
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
 

@@ -124,12 +124,12 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
     return manager;
 }
 
-
 utils::StrokeTester::StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFilename)
     : m_name(name),
       m_imageSize(imageSize),
       m_presetFilename(presetFilename),
-      m_numIterations(1)
+      m_numIterations(1),
+      m_baseFuzziness(1)
 {
 }
 
@@ -140,6 +140,11 @@ utils::StrokeTester::~StrokeTester()
 void utils::StrokeTester::setNumIterations(int value)
 {
     m_numIterations = value;
+}
+
+void utils::StrokeTester::setBaseFuzziness(int value)
+{
+    m_baseFuzziness = value;
 }
 
 void utils::StrokeTester::test()
@@ -190,7 +195,7 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
     refImage.load(referenceFile(testName));
 
     QPoint temp;
-    if(!TestUtil::compareQImages(temp, refImage, resultImage, 1, 1)) {
+    if(!TestUtil::compareQImages(temp, refImage, resultImage, m_baseFuzziness, m_baseFuzziness)) {
         refImage.save(dumpReferenceFile(testName));
         resultImage.save(resultFile(testName));
 
@@ -251,12 +256,13 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
     for (int i = 0; i < m_numIterations; i++) {
         modifyResourceManager(manager, image, i);
+
         KisPainter *painter = new KisPainter();
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
-                                 image->rootLayer()->firstChild(),
-                                 image->postExecutionUndoAdapter(),
-                                 manager);
+                                     image->rootLayer()->firstChild(),
+                                     image->postExecutionUndoAdapter(),
+                                     manager);
 
         if(externalLayer) {
             KisNodeSP externalNode = new KisPaintLayer(0, "extlyr", OPACITY_OPAQUE_U8, image->colorSpace());

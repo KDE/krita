@@ -207,7 +207,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, const QDomElement &data) : Q
 
     if (data.tagName() != "report:content") {
         // arg we got an xml file but not one i know of
-        kWarning() << "root element was not <report:content>";;
+        kWarning() << "root element was not <report:content>";
     }
     //kDebug() << data.text();
     deleteDetail();
@@ -830,15 +830,12 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
     bool itemsSelected = selectionCount() > 0;
     if (itemsSelected) {
         QAction *a = KStandardAction::cut(this, SLOT(slotEditCut()), &pop);
-        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
         pop.addAction(a);
         a = KStandardAction::copy(this, SLOT(slotEditCopy()), &pop);
-        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
         pop.addAction(a);
     }
     if (!m_sectionData->copy_list.isEmpty()) {
         QAction *a = KStandardAction::paste(this, SLOT(slotEditPaste()), &pop);
-        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
         pop.addAction(a);
     }
 
@@ -847,6 +844,7 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
         const KGuiItem del = KStandardGuiItem::del();
         QAction *a = new KAction(del.icon(), del.text(), &pop);
         a->setToolTip(del.toolTip());
+        a->setShortcut(QKeySequence(QKeySequence::Delete));
         connect(a, SIGNAL(activated()), SLOT(slotEditDelete()));
         pop.addAction(a);
     }
@@ -955,14 +953,15 @@ void KoReportDesigner::slotItem(const QString &entity)
 void KoReportDesigner::slotEditDelete()
 {
     QGraphicsItem * item = 0;
+    bool modified = false;
     while (selectionCount() > 0) {
         item = activeScene()->selectedItems()[0];
         if (item) {
-            setModified(true);
             QGraphicsScene * scene = item->scene();
             delete item;
             scene->update();
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
+            modified = true;
         }
     }
     activeScene()->selectedItems().clear();
@@ -975,6 +974,9 @@ void KoReportDesigner::slotEditDelete()
     //and remove it.
     m_sectionData->cut_list.clear();
     m_sectionData->copy_list.clear();
+    if (modified) {
+        setModified(true);
+    }
 }
 
 void KoReportDesigner::slotEditCut()
@@ -986,6 +988,7 @@ void KoReportDesigner::slotEditCut()
         m_sectionData->cut_list.clear();
 
         QGraphicsItem * item = activeScene()->selectedItems().first();
+        bool modified = false;
         if (item) {
             m_sectionData->copy_list.clear();
 
@@ -999,9 +1002,13 @@ void KoReportDesigner::slotEditCut()
                 QGraphicsItem *itm = activeScene()->selectedItems()[0];
                 activeScene()->removeItem(itm);
                 activeScene()->update();
+                modified = true;
             }
             m_sectionData->selected_x_offset = 10;
             m_sectionData->selected_y_offset = 10;
+        }
+        if (modified) {
+            setModified(true);
         }
     }
 }

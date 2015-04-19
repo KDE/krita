@@ -37,7 +37,7 @@ public:
     /// Returns of keeping aspect ratio is on or off
     bool keepAspectRatio() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Set the visual indicator to be locked or not.
      * This also emits the keepAspectRatioChanged if the value has changed.
@@ -45,7 +45,7 @@ public slots:
      */
     void setKeepAspectRatio(bool keep);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted every time the button changes value, either by user interaction or
      *  by programetically setting it.

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="65" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="66" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
@@ -184,6 +184,7 @@
       <Action name="merge_all_shape_layers"/>
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
+      <Action name="layer_style"/>
       <Separator/>
       <Action name="dropshadow"/>
     </Menu>
@@ -251,6 +252,7 @@
       <Merge name="StandardToolBarMenuHandler" />
       <Separator/>
       <Action name="view_toggledockers"/>
+      <Action name="view_toggledockertitlebars"/>
       <Action name="settings_dockers_menu"/>
       <Separator/>
       <Action name="theme_menu"/> 
@@ -297,12 +299,11 @@
     <Action name="paintops"/>
     <Action name="paintop_options"/>
     <Action name="composite_actions"/>
-    <Separator/>
     <Action name="brushslider1"/>
     <Action name="brushslider2"/>
     <Separator/>
     <Action name="mirror_actions"/>
-    <Separator/>
+    <Action name="expanding_spacer_1"/>
     <Action name="workspaces"/>
   </ToolBar>
 </kpartgui>

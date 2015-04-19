@@ -25,7 +25,7 @@
 class TestPathSegment : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void segmentAssign();
     void segmentCopy();
     void segmentDegree();

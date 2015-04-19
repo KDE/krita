@@ -93,7 +93,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
     //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
     if (Kross::Manager::self().property("configfile") == QVariant::Invalid) {
-        QString file = KGlobal::dirs()->locateLocal("appdata", "scripts/scripts.rc");
+        QString file = KStandardDirs::locateLocal("appdata", "scripts/scripts.rc");
         QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.rc");
         Kross::Manager::self().setProperty("configfile", file);
         Kross::Manager::self().setProperty("configfiles", files);

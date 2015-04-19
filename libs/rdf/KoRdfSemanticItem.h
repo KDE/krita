@@ -333,7 +333,7 @@ protected:
      */
     hKoSemanticStylesheet createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const;
 
-protected slots:
+protected Q_SLOTS:
     /**
      * In case the stylesheets move to using a QMap<String,sheet> or
      * we want to know when a stylesheet has been renamed.

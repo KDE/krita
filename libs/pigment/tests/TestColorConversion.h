@@ -6,7 +6,7 @@
 class TestColorConversion : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testRGBHSV();
     void testRGBHSL();
 };

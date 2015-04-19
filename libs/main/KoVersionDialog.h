@@ -36,7 +36,7 @@ public:
     KoVersionDialog(QWidget* parent, KoDocument *doc);
     ~KoVersionDialog();
 
-public slots:
+public Q_SLOTS:
     void slotRemove();
     void slotAdd();
     void slotOpen();

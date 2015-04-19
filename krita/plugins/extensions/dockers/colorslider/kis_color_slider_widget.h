@@ -39,11 +39,11 @@ public:
     ~KisColorSliderWidget();
 
     //bool customColorSpaceUsed();
-public slots:
+public Q_SLOTS:
     //void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);
     void slotConfigChanged();
-private slots:
+private Q_SLOTS:
     void update();
     void updateTimeout();
     void hueUpdate(int h);
@@ -52,7 +52,7 @@ private slots:
     void setSlidersVisible(QBitArray SlidersConfigArray);
     void setConfig();
     //void setCustomColorSpace(const KoColorSpace *);
-signals:
+Q_SIGNALS:
     void colorChanged(const KoColor&);
     void updated();
     void hueUpdated(int);

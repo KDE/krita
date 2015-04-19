@@ -2,7 +2,7 @@ include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
-SET (templateshape_LIB_SRCS
+set (templateshape_LIB_SRCS
     TemplateShapePlugin.cpp
     TemplateShapeFactory.cpp
     TemplateShape.cpp

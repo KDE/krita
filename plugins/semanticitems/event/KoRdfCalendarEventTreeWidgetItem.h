@@ -43,7 +43,7 @@ public:
     virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);
 
-public slots:
+public Q_SLOTS:
     void saveToKCal();
     void exportToFile();
 

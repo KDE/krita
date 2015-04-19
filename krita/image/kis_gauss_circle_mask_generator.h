@@ -24,8 +24,6 @@
 
 #include "kis_mask_generator.h"
 
-class QDomElement;
-class QDomDocument;
 
 /**
  * This mask generator uses a Gaussian-blurred circle

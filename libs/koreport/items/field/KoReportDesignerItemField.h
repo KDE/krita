@@ -50,7 +50,7 @@ private:
     void init(QGraphicsScene*, KoReportDesigner * d);
     QRect getTextRect() const;
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

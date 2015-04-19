@@ -24,7 +24,6 @@
 #include <kis_types.h>
 
 class KisViewManager;
-class KisDocument;
 class KUrl;
 
 /**
@@ -46,7 +45,7 @@ public:
     KisImportCatcher(const KUrl & url, KisViewManager* view, const QString &layerType);
     ~KisImportCatcher();
 
-private slots:
+private Q_SLOTS:
     void slotLoadingFinished();
 
 private:

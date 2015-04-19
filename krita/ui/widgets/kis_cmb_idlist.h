@@ -47,11 +47,11 @@ public:
 
     KoID currentItem() const;
 
-signals:
+Q_SIGNALS:
     void activated(const KoID &);
     void highlighted(const KoID &);
 
-private slots:
+private Q_SLOTS:
     void slotIDActivated(int i);
     void slotIDHighlighted(int i);
 

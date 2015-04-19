@@ -12,14 +12,14 @@ set(CMAKE_AUTOMOC ${CMAKE_AUTOMOC_TEMP})
 if(PHONON_FOUND_EXPERIMENTAL)
    set(SHOULD_BUILD_THUMBNAIL TRUE)
    add_definitions( -DSHOULD_BUILD_THUMBNAIL )
-else(PHONON_FOUND_EXPERIMENTAL)
+else()
     set(SHOULD_BUILD_THUMBNAIL FALSE)
-endif(PHONON_FOUND_EXPERIMENTAL)
+endif()
 
 
 ########### Flake Plugin library ###############
 
-SET (videoshape_LIB_SRCS
+set (videoshape_LIB_SRCS
     VideoData.cpp
     VideoCollection.cpp
     VideoShape.cpp
@@ -36,7 +36,7 @@ SET (videoshape_LIB_SRCS
 
 if(SHOULD_BUILD_THUMBNAIL)
     set(videoshape_LIB_SRCS ${videoshape_LIB_SRCS} VideoThumbnailer.cpp)
-endif(SHOULD_BUILD_THUMBNAIL)
+endif()
 
 kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 kde4_add_plugin(calligra_shape_video ${videoshape_LIB_SRCS})

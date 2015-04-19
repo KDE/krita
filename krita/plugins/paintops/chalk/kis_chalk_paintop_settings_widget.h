@@ -23,9 +23,7 @@
 
 #include "ui_wdgchalkoptions.h"
 
-class KisPaintActionTypeOption;
 class KisChalkOpOption;
-class KisPressureOpacityOption;
 
 class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {

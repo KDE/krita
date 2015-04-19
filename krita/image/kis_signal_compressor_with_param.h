@@ -24,6 +24,20 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
+/**
+ * A special class that converts a Qt signal into a boost::function
+ * call.
+ *
+ * Example:
+ *
+ * boost::function<void ()> destinationFunctionCall(boost::bind(someNiceFunc, firstParam, secondParam));
+ * SignalToFunctionProxy proxy(destinationFunctionCall);
+ * connect(srcObject, SIGNAL(sigSomethingChanged()), &proxy, SLOT(start()));
+ *
+ * Now every time sigSomethingChanged() is emitted, someNiceFunc is
+ * called. boost::bind allows us to call any method of any class without
+ * changing signature of the class or creating special wrappers.
+ */
 class KRITAIMAGE_EXPORT SignalToFunctionProxy : public QObject
 {
     Q_OBJECT
@@ -36,7 +50,7 @@ public:
     {
     }
 
-public slots:
+public Q_SLOTS:
     void start() {
         m_function();
     }

@@ -28,7 +28,7 @@ class KisFillPainterTest : public QObject
 private:
     void benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning);
 
-private slots:
+private Q_SLOTS:
 
     void testCreation();
     void benchmarkFillPainter();

@@ -420,7 +420,7 @@ public:
      * Sets the default color of the root layer projection. All the layers
      * will be merged on top of this very color
      */
-    void setDefaultProjectionColor(KoColor color);
+    void setDefaultProjectionColor(const KoColor &color);
 
     /**
      * \see setDefaultProjectionColor()
@@ -523,7 +523,7 @@ public:
     void stopIsolatedMode();
     KisNodeSP isolatedModeRoot() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      *  Emitted whenever an action has caused the image to be
@@ -663,7 +663,7 @@ signals:
      */
     void sigTimeChanged();
 
-public slots:
+public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
     void barrierLock();

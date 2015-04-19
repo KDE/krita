@@ -31,7 +31,7 @@ public:
     LayerSplit(QObject *parent, const QVariantList &);
     virtual ~LayerSplit();
 
-private slots:
+private Q_SLOTS:
 
     void slotLayerSplit();
 

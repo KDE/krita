@@ -38,7 +38,7 @@ public:
     }
 
     KisNodeSP findCloneLayer() {
-        return findNode(image->root(), "clone1");;
+        return findNode(image->root(), "clone1");
     }
 
     void activateCloneLayer() {
@@ -48,7 +48,7 @@ public:
     }
 
     KisNodeSP findBlurLayer() {
-        return findNode(image->root(), "blur1");;
+        return findNode(image->root(), "blur1");
     }
 
     void activateBlurLayer() {

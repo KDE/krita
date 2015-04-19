@@ -41,12 +41,12 @@ public:
 
     void renderPage(int page);
 
-public slots:
+public Q_SLOTS:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     
     void pageUpdated(int pageNo);
 
-private slots:
+private Q_SLOTS:
     void renderCurrentPage();
     
 private:

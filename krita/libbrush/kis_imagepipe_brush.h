@@ -27,7 +27,6 @@
 #include "kis_gbr_brush.h"
 #include "kis_global.h"
 
-class QImage;
 
 /**
  * Velocity won't be supported, atm Tilt isn't either,

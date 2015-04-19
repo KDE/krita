@@ -29,7 +29,6 @@
 #include "kis_grid_paintop_settings.h"
 
 
-class QPointF;
 class KisPainter;
 
 class KisGridProperties

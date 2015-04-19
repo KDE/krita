@@ -47,6 +47,11 @@ KoResource::~KoResource()
     delete d;
 }
 
+KoResource::KoResource(const KoResource &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
 QImage KoResource::image() const
 {
     return d->image;
@@ -106,12 +111,6 @@ bool KoResource::valid() const
 void KoResource::setValid(bool valid)
 {
     d->valid = valid;
-}
-
-void KoResource::toXML(QDomDocument& /*doc*/, QDomElement& element) const
-{
-    element.setAttribute("name", name());
-    element.setAttribute("filename", filename());
 }
 
 bool KoResource::removable() const

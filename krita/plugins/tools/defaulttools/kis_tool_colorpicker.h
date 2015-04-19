@@ -86,7 +86,7 @@ protected:
     void activate(ToolActivation activation, const QSet<KoShape*> &);
     void deactivate();
 
-public slots:
+public Q_SLOTS:
     void setToForeground(bool newValue);
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);

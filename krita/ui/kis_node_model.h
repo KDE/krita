@@ -53,7 +53,7 @@ public: // from QAbstractItemModel
 
     bool showGlobalSelection() const;
 
-public slots:
+public Q_SLOTS:
     void setShowGlobalSelection(bool value);
 
 public:
@@ -71,7 +71,7 @@ public:
     Qt::DropActions supportedDragActions() const;
     Qt::DropActions supportedDropActions() const;
 
-signals:
+Q_SIGNALS:
 
     void nodeActivated(KisNodeSP);
     void toggleIsolateActiveNode();
@@ -79,7 +79,7 @@ signals:
     void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
-private slots:
+private Q_SLOTS:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);

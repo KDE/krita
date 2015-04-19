@@ -49,7 +49,7 @@ namespace Marble{
             disconnect(&marble,SIGNAL(renderStatusChanged(RenderStatus)),this,SLOT(onRenderStatusChange(RenderStatus)));
             disconnect(&marble,SIGNAL(renderStateChanged(RenderState)),this,SLOT(onRenderStateChange(RenderState)));
         }
-    public slots:
+    public Q_SLOTS:
         void onRenderStatusChange(RenderStatus renderStatus){
             kDebug(44021) << "!!!!!!!!!!!!!!!!  STATUS change";
             emit renderStatusChanged(static_cast<int>(renderStatus));
@@ -58,7 +58,7 @@ namespace Marble{
             kDebug(44021) << "################  STATE change";
             emit renderStatusChanged(static_cast<int>(state.status()));
         };
-    signals:
+    Q_SIGNALS:
         void renderStatusChanged(int renderStatus);
     };
 }
@@ -71,9 +71,9 @@ public:
     MapRenderer(QObject* parent = 0);
     virtual ~MapRenderer();
     void renderJob(KoReportItemMaps* reportItemMaps);
-signals:
+Q_SIGNALS:
     void jobFinished();
-private slots:
+private Q_SLOTS:
     void onRenderStatusChange(int renderStatus);
     void downloadProgres(int active, int queued);
     void downloadFinished();

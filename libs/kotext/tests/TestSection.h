@@ -27,7 +27,7 @@ class TestSection : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testSection();
     void testLoadOdf();
     void testSaveOdf();

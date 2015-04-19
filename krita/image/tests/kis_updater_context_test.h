@@ -25,7 +25,7 @@ class KisUpdaterContextTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testJobInterference();
     void testSnapshot();
     void stressTestExclusiveJobs();

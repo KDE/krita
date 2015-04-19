@@ -145,7 +145,7 @@ public:
     /// reimplemented from KoToolSelection
     virtual bool hasSelection();
 
-signals:
+Q_SIGNALS:
     void selectionChanged();
 
 private:

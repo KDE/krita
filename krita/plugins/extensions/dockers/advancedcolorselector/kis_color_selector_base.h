@@ -24,7 +24,6 @@
 #include <kis_canvas2.h>
 #include "kis_acs_types.h"
 
-class QColor;
 class KoColor;
 class QTimer;
 class KoColorSpace;
@@ -57,7 +56,7 @@ public:
 
     virtual void setColor(const KoColor& color);
 
-public slots:
+public Q_SLOTS:
     /**
      * Flushes caches and redraws the selectors
      */
@@ -85,7 +84,7 @@ private:
     void commitColor(const KoColor& koColor, Acs::ColorRole role);
 
 
-protected slots:
+protected Q_SLOTS:
     void hidePopup();
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true

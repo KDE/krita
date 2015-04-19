@@ -39,7 +39,6 @@ class QPen;
 class KUndo2Command;
 class QRect;
 class QRectF;
-class QStringList;
 class QBitArray;
 class QPainterPath;
 
@@ -513,7 +512,12 @@ public:
 
     /**
      * Draw the path using the Pen
+     *
+     * if \p requestedRect is null, the entire path is painted
      */
+    void drawPainterPath(const QPainterPath& path, const QPen& pen, const QRect &requestedRect);
+
+    // convenience overload
     void drawPainterPath(const QPainterPath& path, const QPen& pen);
 
     /**

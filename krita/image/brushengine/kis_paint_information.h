@@ -29,7 +29,6 @@
 
 class QDomDocument;
 class QDomElement;
-class KisPaintOp;
 class KisDistanceInformation;
 
 /**
@@ -120,10 +119,13 @@ public:
     /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
     qreal yTilt() const;
 
+    /// XXX !!! :-| Please add dox!
     void overrideDrawingAngle(qreal angle);
 
+    /// XXX !!! :-| Please add dox!
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
 
+    /// XXX !!! :-| Please add dox!
     DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**

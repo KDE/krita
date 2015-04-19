@@ -51,7 +51,7 @@ protected:
     KisCurveOption* curveOption();
     QWidget* curveWidget();
 
-private slots:
+private Q_SLOTS:
 
     void transferCurve();
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);

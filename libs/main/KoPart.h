@@ -120,7 +120,7 @@ public:
 
     KoMainWindow *currentMainwindow() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * This slot loads an existing file and deletes the start up widget.
@@ -128,7 +128,7 @@ public slots:
      */
     virtual void openExistingFile(const KUrl& url);
 
-protected slots:
+protected Q_SLOTS:
 
     /**
      * This slot loads a template and deletes the start up widget.
@@ -136,7 +136,7 @@ protected slots:
      */
     virtual void openTemplate(const KUrl& url);
 
-private slots:
+private Q_SLOTS:
 
     void startCustomDocument();
 

@@ -21,24 +21,25 @@
 
 #include <KisViewManager.h>
 
-KisGmicProgressManager::KisGmicProgressManager(KisViewManager* viewManager):m_progressTimer(new QTimer()), m_progressPulseRequest(0)
+static const int UPDATE_PROGRESS_TIMEOUT = 500;
+
+KisGmicProgressManager::KisGmicProgressManager(KisViewManager* viewManager):m_progressPulseRequest(0)
 {
         m_progressUpdater = viewManager->createProgressUpdater(KoProgressUpdater::Unthreaded);
-        m_progressTimer->setInterval(UPDATE_PROGRESS_TIMEOUT);
-        connect(m_progressTimer, SIGNAL(timeout()), this, SIGNAL(sigProgress()));
+        m_progressTimer.setInterval(UPDATE_PROGRESS_TIMEOUT);
+        connect(&m_progressTimer, SIGNAL(timeout()), this, SIGNAL(sigProgress()));
 }
 
 KisGmicProgressManager::~KisGmicProgressManager()
 {
     QApplication::restoreOverrideCursor();
-    delete m_progressTimer;
     delete m_progressUpdater;
 }
 
 
 void KisGmicProgressManager::initProgress()
 {
-    m_progressTimer->start();
+    m_progressTimer.start();
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_updater = m_progressUpdater->startSubtask();
     m_progressPulseRequest = 0;
@@ -69,18 +70,18 @@ void KisGmicProgressManager::updateProgress(float progress)
         currentProgress = (m_progressPulseRequest % 10) * 10;
     }
 
-    dbgPlugins << "Current progress : " << currentProgress;
+    dbgPlugins << "Current progress : " << currentProgress << " vs " << progress;
     m_updater->setProgress(currentProgress);
 }
 
 void KisGmicProgressManager::finishProgress()
 {
-    m_progressTimer->stop();
+    m_progressTimer.stop();
     QApplication::restoreOverrideCursor();
     m_updater->setProgress(100);
 }
 
 bool KisGmicProgressManager::inProgress()
 {
-    return m_progressTimer->isActive();
+    return m_progressTimer.isActive();
 }

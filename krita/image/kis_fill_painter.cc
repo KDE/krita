@@ -93,6 +93,14 @@ void KisFillPainter::initFillPainter()
     m_threshold = 0;
 }
 
+void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
+{
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(device()->colorSpace());
+    fillDevice->setDefaultPixel(color.data());
+
+    bitBlt(rc.topLeft(), fillDevice, rc);
+}
+
 // 'regular' filling
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
@@ -168,7 +176,6 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
 {
     if (!generator) return;
     KisGeneratorSP g = KisGeneratorRegistry::instance()->value(generator->name());
-    if (!generator) return;
     if (!device()) return;
     if (w < 1) return;
     if (h < 1) return;

@@ -110,6 +110,7 @@ struct KisPainter::Private {
     QPointF                     axesCenter;
     bool                        mirrorHorizontaly;
     bool                        mirrorVerticaly;
+    bool                        isOpacityUnit; // TODO: move into ParameterInfo
     KoCompositeOp::ParameterInfo paramInfo;
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
@@ -167,6 +168,7 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
+    d->isOpacityUnit = true;
     d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
     d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
@@ -491,7 +493,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
 
     if (d->compositeOp->id() == COMPOSITE_COPY) {
-        if(!d->selection && srcX == dstX && srcY == dstY && d->device->fastBitBltPossible(srcDev)) {
+        if(!d->selection && d->isOpacityUnit &&
+           srcX == dstX && srcY == dstY &&
+           d->device->fastBitBltPossible(srcDev)) {
 
             if(useOldSrcData) {
                 d->device->fastBitBltOldData(srcDev, srcRect);
@@ -1323,6 +1327,11 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 {
+    drawPainterPath(path, pen, QRect());
+}
+
+void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen, const QRect &requestedRect)
+{
     // we are drawing mask, it has to be white
     // color of the path is given by paintColor()
     Q_ASSERT(pen.color() == Qt::white);
@@ -1337,12 +1346,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     Q_CHECK_PTR(d->polygon);
 
     QRectF boundingRect = path.boundingRect();
-    QRect fillRect;
-
-    fillRect.setLeft((qint32)floor(boundingRect.left()));
-    fillRect.setRight((qint32)ceil(boundingRect.right()));
-    fillRect.setTop((qint32)floor(boundingRect.top()));
-    fillRect.setBottom((qint32)ceil(boundingRect.bottom()));
+    QRect fillRect = boundingRect.toAlignedRect();
 
     // take width of the pen into account
     int penWidth = qRound(pen.widthF());
@@ -1350,6 +1354,10 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
+
+    if (!requestedRect.isNull()) {
+        fillRect &= requestedRect;
+    }
 
     d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
 
@@ -2436,11 +2444,13 @@ quint8 KisPainter::flow() const
 
 void KisPainter::setOpacityUpdateAverage(quint8 opacity)
 {
+    d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
     d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
 }
 
 void KisPainter::setOpacity(quint8 opacity)
 {
+    d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
     d->paramInfo.opacity = float(opacity) / 255.0f;
 }
 
@@ -2612,10 +2622,12 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
         dab->mirror(true, false);
         bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
 
-    }else if (d->mirrorHorizontaly){
+    }
+    else if (d->mirrorHorizontaly){
         dab->mirror(true, false);
         bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-    }else if (d->mirrorVerticaly){
+    }
+    else if (d->mirrorVerticaly){
         dab->mirror(false, true);
         bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
     }

@@ -24,10 +24,8 @@
 #include "empty_nodes_test.h"
 
 class KisDocument;
-class KisPart;
 class KisNameServer;
 class KisShapeController;
-class KisNodeDummy;
 class KisNodeModel;
 
 
@@ -35,7 +33,7 @@ class KisNodeModelTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
 

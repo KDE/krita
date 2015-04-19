@@ -46,10 +46,10 @@ public:
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
-private slots:
+private Q_SLOTS:
     void slotStartUpdateSelection();
 
-public slots:
+public Q_SLOTS:
     void selectionChanged();
     void antsAttackEvent();
 private:

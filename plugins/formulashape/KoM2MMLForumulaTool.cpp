@@ -42,7 +42,7 @@
 #include "KoFormulaShape.h"
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
-#include "itexToMML/itex2MML.h"
+#include "3rdparty/itexToMML/itex2MML.h"
 
 KoM2MMLFormulaTool::KoM2MMLFormulaTool(KoCanvasBase* canvas): KoToolBase(canvas), m_lineEdit(0), m_errorLabel(0), m_formulaShape(0), m_comboBox(0)
 {

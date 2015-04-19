@@ -46,7 +46,7 @@ public:
     KisRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     ~KisRecentDocumentsPane();
 
-protected slots:
+protected Q_SLOTS:
     void selectionChanged(const QModelIndex& index);
     void openFile();
     void openFile(const QModelIndex& index);

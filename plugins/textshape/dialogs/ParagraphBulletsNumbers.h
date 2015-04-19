@@ -47,13 +47,13 @@ public:
 
     void setImageCollection(KoImageCollection *imageCollection);
 
-signals:
+Q_SIGNALS:
     void parStyleChanged();
 
-public slots:
+public Q_SLOTS:
     void setFontSize(const KoCharacterStyle *style);
 
-private slots:
+private Q_SLOTS:
     void styleChanged(int);
     void customCharButtonPressed();
     void recalcPreview();

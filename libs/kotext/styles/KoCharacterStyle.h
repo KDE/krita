@@ -533,7 +533,7 @@ public:
 
     void remove(int key);
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
     void styleApplied(const KoCharacterStyle*) const;
 

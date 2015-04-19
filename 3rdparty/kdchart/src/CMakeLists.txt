@@ -7,7 +7,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/../kdablibfakes/include 
 )
 
-ADD_DEFINITIONS(-DKDCHART_BUILD_KDCHART_LIB)
+add_definitions(-DKDCHART_BUILD_KDCHART_LIB)
 
 ########### next target ###############
 

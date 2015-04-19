@@ -23,7 +23,6 @@
 #include <QFrame>
 
 class KoSegmentGradient;
-class KisAutogradientResource;
 class KisViewManager;
 class QLabel;
 class QPushButton;
@@ -53,21 +52,21 @@ class KisGradientChooser : public QFrame
     Q_OBJECT
 
 public:
-    // XXX: On library redesign, remove m_view parameter here, it's just a temporary hack for the autogradient dialog!
     KisGradientChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource * currentResource();
+    KoResource *currentResource();
+    void setCurrentResource(KoResource *resource);
 
     void setCurrentItem(int row, int column);
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource * resource);
 
-private slots:
+private Q_SLOTS:
     virtual void update(KoResource * resource);
     void addGradient();
     void editGradient();

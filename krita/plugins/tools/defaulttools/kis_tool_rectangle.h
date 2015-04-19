@@ -31,10 +31,7 @@
 #include <kis_tool_rectangle_base.h>
 #include <KoIcon.h>
 
-class QPainter;
-class KisPainter;
 
-class QPoint;
 class QRect;
 
 class KoCanvasBase;

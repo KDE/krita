@@ -64,7 +64,7 @@ public:
     virtual int priority() const;
     
     QList<int> beatLengths() const;
-public slots:
+public Q_SLOTS:
     /**
      * Changes the number of beats in this time signature.
      *
@@ -83,7 +83,7 @@ public slots:
      * Changes the type of the time signature.
      */
     void setType(TimeSignatureType type);
-signals:
+Q_SIGNALS:
     void beatsChanged(int beats);
     void beatChanged(int beat);
     void typeChanged(TimeSignatureType type);

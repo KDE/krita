@@ -23,7 +23,6 @@
 #include <krita_export.h>
 #include "kis_properties_configuration.h"
 
-class KisViewManager;
 
 class KRITAUI_EXPORT KisOperationConfiguration : public KisPropertiesConfiguration
 {

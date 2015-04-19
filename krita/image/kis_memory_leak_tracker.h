@@ -19,8 +19,6 @@
 #ifndef _KIS_MEMORY_LEAK_TRACKER_H_
 #define _KIS_MEMORY_LEAK_TRACKER_H_
 
-class QObject;
-class KisSharedData;
 
 #include <krita_export.h>
 

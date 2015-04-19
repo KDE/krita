@@ -5,7 +5,7 @@ include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
 if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
-endif (LIBATTICA_FOUND)
+endif ()
 
 set(kowidgets_LIB_SRCS
     KoGlobal.cpp
@@ -99,9 +99,9 @@ kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
 if(GHNS)
     target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KNEWSTUFF3_LIBS})
-else(GHNS)
+else()
     target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
-endif (GHNS)
+endif ()
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
 

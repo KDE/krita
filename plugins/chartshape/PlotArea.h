@@ -156,12 +156,12 @@ public:
     
     void relayout() const;
     
-public slots:
+public Q_SLOTS:
     void requestRepaint() const;
     void proxyModelStructureChanged();
     void plotAreaUpdate() const;
     
-signals:
+Q_SIGNALS:
     void gapBetweenBarsChanged(int);
     void gapBetweenSetsChanged(int);
     void pieAngleOffsetChanged(qreal);

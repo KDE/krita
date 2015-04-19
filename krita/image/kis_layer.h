@@ -36,10 +36,11 @@
 template <class T>
 class QStack;
 
-class QIcon;
 class QBitArray;
 class KisCloneLayer;
-class KisNodeVisitor;
+class KisPSDLayerStyle;
+class KisAbstractProjectionPlane;
+
 
 namespace KisMetaData
 {
@@ -79,26 +80,31 @@ public:
     /// returns the layer's composite op for the colorspace of the layer's parent.
     const KoCompositeOp * compositeOp() const;
 
+    KisPSDLayerStyleSP layerStyle() const;
+    void setLayerStyle(KisPSDLayerStyleSP layerStyle);
+
     /**
-     * Ask the layer to assemble its data & apply all the effect masks
-     * to it.
+     * \see a comment in KisNode::projectionPlane()
      */
-    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode);
+    virtual KisAbstractProjectionPlaneSP projectionPlane() const;
+
+    /**
+     * The projection plane representing the layer itself without any
+     * styles or anything else. It is used by the layer styles projection
+     * plane to stack up the planes.
+     */
+    virtual KisAbstractProjectionPlaneSP internalProjectionPlane() const;
 
     QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
     void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);
 
     virtual bool needProjection() const;
 
-    virtual void copyOriginalToProjection(const KisPaintDeviceSP original,
-                                          KisPaintDeviceSP projection,
-                                          const QRect& rect) const;
-
     /**
      * Return the fully rendered representation of this layer: its
      * data and its effect masks
      */
-    virtual KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP projection() const;
 
     /**
      * Return the layer data before the effect masks have had their go
@@ -248,8 +254,6 @@ public:
      */
     QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode = 0) const;
 
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-
     /**
      * Get the group layer that contains this layer.
      */
@@ -261,7 +265,27 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+    // override from KisNode
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
+protected:
+
+    /**
+     * Ask the layer to assemble its data & apply all the effect masks
+     * to it.
+     */
+    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode);
+
+    /**
+     * Layers can override this method to get some special behavior
+     * when copying data from \p original to \p projection, e.g. blend
+     * in indirect painting device.  If you need to modify data
+     * outside \p rect, please also override outgoingChangeRect()
+     * method.
+     */
+    virtual void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                          KisPaintDeviceSP projection,
+                                          const QRect& rect) const;
     /**
      * For KisLayer classes change rect transformation consists of two
      * parts: incoming and outgoing.
@@ -341,6 +365,10 @@ protected:
                      const KisPaintDeviceSP destination,
                      const QRect &requestedRect,
                      KisNodeSP filthyNode, KisNodeSP lastNode) const;
+private:
+    friend class KisLayerProjectionPlane;
+    friend class KisTransformMask;
+    friend class KisLayerTest;
 
 private:
     struct Private;

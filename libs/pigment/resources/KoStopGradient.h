@@ -26,7 +26,6 @@
 #include "KoResource.h"
 #include <pigment_export.h>
 
-class QFile;
 
 typedef QPair<qreal, KoColor> KoGradientStop;
 
@@ -39,6 +38,8 @@ class PIGMENTCMS_EXPORT KoStopGradient : public KoAbstractGradient
 public:
     explicit KoStopGradient(const QString &filename);
     virtual ~KoStopGradient();
+
+    KoAbstractGradient* clone() const;
 
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);

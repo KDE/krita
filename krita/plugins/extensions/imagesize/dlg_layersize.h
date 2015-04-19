@@ -54,7 +54,7 @@ public:
 
     KisFilterStrategy *filterType();
 
-private slots:
+private Q_SLOTS:
     void slotWidthChanged(int w);
     void slotHeightChanged(int h);
     void slotWidthChanged(double w);

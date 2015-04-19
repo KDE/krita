@@ -38,8 +38,6 @@ class KoColorSpace;
 
 class KisPaintInformation;
 class KisBoundary;
-class KisQImageSP;
-class KisScaledBrush;
 
 enum enumBrushType {
     INVALID,
@@ -73,7 +71,6 @@ typedef KisSharedPtr<KisBrush> KisBrushSP;
 class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
 {
 
-    class ScaledBrush;
 
 public:
     class ColoringInformation
@@ -212,7 +209,7 @@ public:
      */
     virtual enumBrushType brushType() const;
 
-    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
+    QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
 
     /**
      * Returns true if this brush can return something useful for the info. This is used

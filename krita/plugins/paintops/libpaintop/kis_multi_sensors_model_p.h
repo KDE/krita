@@ -56,7 +56,7 @@ public:
 
     void resetCurveOption();
 
-signals:
+Q_SIGNALS:
 
     void sensorChanged(KisDynamicSensorSP sensor);
 

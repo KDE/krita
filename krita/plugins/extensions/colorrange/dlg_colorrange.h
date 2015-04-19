@@ -70,7 +70,7 @@ public:
     DlgColorRange(KisViewManager *view, QWidget *parent = 0);
     ~DlgColorRange();
 
-private slots:
+private Q_SLOTS:
 
     void okClicked();
     void cancelClicked();

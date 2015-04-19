@@ -49,7 +49,7 @@ public:
      */
     static const KisMetaData::MergeStrategy* showDialog(QWidget* parent);
 
-private slots:
+private Q_SLOTS:
 
     void setCurrentDescription(int index);
 

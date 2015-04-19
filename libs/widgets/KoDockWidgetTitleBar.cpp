@@ -99,6 +99,10 @@ QSize KoDockWidgetTitleBar::minimumSizeHint() const
 
 QSize KoDockWidgetTitleBar::sizeHint() const
 {
+    if (isHidden()) {
+        return QSize(0, 0);
+    }
+
     QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
 
     int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);
@@ -148,7 +152,17 @@ QSize KoDockWidgetTitleBar::sizeHint() const
         return QSize(d->preCollapsedWidth, height);
     }
     else {
-        return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+        if (d->textVisibilityMode == FullTextAlwaysVisible) {
+            return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+        }
+        else {
+            if (q->widget()) {
+                return QSize(qMin(q->widget()->sizeHint().width(), buttonWidth), height);
+            }
+            else {
+                return QSize(buttonWidth, height);
+            }
+        }
     }
 }
 

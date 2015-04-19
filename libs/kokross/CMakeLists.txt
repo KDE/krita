@@ -1,8 +1,8 @@
-MACRO_ENSURE_VERSION( "4.1.81" ${KDE_VERSION} KDE_VERSION_OK)
+macro_ensure_version( "4.1.81" ${KDE_VERSION} KDE_VERSION_OK)
 if(NOT KDE_VERSION_OK)
     add_definitions( -DDISABLE_ADD_REMOVE )
     message(STATUS "KDE_VERSION: ${KDE_VERSION} (4.1.81 needed) ScriptManager: add/remove will not be compiled")
-endif(NOT KDE_VERSION_OK)
+endif()
 
 include_directories(${KDE4_KDECORE_INCLUDES} ${KDE4_KDEUI_INCLUDES} ${KOMAIN_INCLUDES})
 

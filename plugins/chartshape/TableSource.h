@@ -127,7 +127,7 @@ public:
      */
     void clear();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted whenever a table is added to this source.
      */
@@ -141,7 +141,7 @@ signals:
      */
     void tableRemoved(Table *table);
 
-private slots:
+private Q_SLOTS:
     /**
      * Methods that react on changes in the SheetAccessModel ("sam")
      */

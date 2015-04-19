@@ -25,7 +25,6 @@
 
 namespace KisMetaData
 {
-class Store;
 }
 
 /**
@@ -38,7 +37,7 @@ public:
     metadataeditorPlugin(QObject *parent, const QVariantList &);
     virtual ~metadataeditorPlugin();
 
-private slots:
+private Q_SLOTS:
 
     void slotEditLayerMetaData();
 };

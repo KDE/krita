@@ -25,9 +25,6 @@
 #include <QStyleOptionProgressBar>
 #include <krita_export.h>
 
-class QLineEdit;
-class QDoubleValidator;
-class QTimer;
 class KisAbstractSliderSpinBoxPrivate;
 class KisSliderSpinBoxPrivate;
 class KisDoubleSliderSpinBoxPrivate;
@@ -48,9 +45,14 @@ public:
     void showEdit();
     void hideEdit();
 
+    void setPrefix(const QString& prefix);
     void setSuffix(const QString& suffix);
 
     void setExponentRatio(qreal dbl);
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSize() const;
 
 protected:
     virtual void paintEvent(QPaintEvent* e);
@@ -61,9 +63,6 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
-
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
 
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
@@ -77,11 +76,18 @@ protected:
     virtual QString valueString() const = 0;
     virtual void setInternalValue(int value) = 0;
 
-protected slots:
+protected Q_SLOTS:
     void contextMenuEvent(QContextMenuEvent * event);
     void editLostFocus();
 protected:
     KisAbstractSliderSpinBoxPrivate* const d_ptr;
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
+    void paint(QPainter& painter);
+    void paintPlastique(QPainter& painter);
+    void paintBreeze(QPainter& painter);
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
@@ -115,7 +121,7 @@ public:
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value);
-signals:
+Q_SIGNALS:
     void valueChanged(int value);
 };
 
@@ -143,7 +149,7 @@ public:
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value);
-signals:
+Q_SIGNALS:
     void valueChanged(qreal value);
 };
 

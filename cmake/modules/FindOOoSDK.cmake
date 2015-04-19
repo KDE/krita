@@ -22,7 +22,7 @@ find_path(OOOSDK_URE_DIR
 )
 if (NOT OOOSDK_URE_DIR)
 	set(OOOSDK_ERROR "Could not find share/misc/types.rdb for OOoSDK.")
-endif (NOT OOOSDK_URE_DIR)
+endif ()
 
 find_path(OOOSDK_DIR
 	NAMES sdk/bin/cppumaker program/offapi.rdb
@@ -43,7 +43,7 @@ if (OOOSDK_DIR)
 	if (NOT CPPUHELPER_INCLUDE_DIR)
 		set(OOOSDK_ERROR 
 			"Could not find cppuhelper/bootstrap.hxx for OOoSDK.")
-	endif (NOT CPPUHELPER_INCLUDE_DIR)
+	endif ()
 
 	find_library(OOOSDK_LIBRARIES1
 		NAMES uno_cppuhelpergcc3
@@ -72,11 +72,11 @@ if (OOOSDK_DIR)
 	set(OOOSDK_LIBRARIES ${OOOSDK_LIBRARIES1} ${OOOSDK_LIBRARIES2} ${OOOSDK_LIBRARIES3} ${OOOSDK_LIBRARIES4})
 	if (NOT OOOSDK_LIBRARIES)
 		set(OOOSDK_ERROR "Could not find uno_cppuhelpergcc3 for OOoSDK.")
-	endif (NOT OOOSDK_LIBRARIES)
-else (OOOSDK_DIR)
+	endif ()
+else ()
 	set(OOOSDK_ERROR "Could not find sdk/bin/cppumaker
 		or program/offapi.rdb for OOoSDK.")
-endif (OOOSDK_DIR)
+endif ()
 
 if(CPPUHELPER_INCLUDE_DIR AND OOOSDK_URE_DIR AND OOOSDK_LIBRARIES)
 	set(OOOSDK_FOUND true)
@@ -96,15 +96,15 @@ if(CPPUHELPER_INCLUDE_DIR AND OOOSDK_URE_DIR AND OOOSDK_LIBRARIES)
 		DEPENDS ${_OOOINCLUDE}/com/sun/star/uno/Exception.hpp)
 
 	set(OOOSDK_INCLUDE_DIRS ${CPPUHELPER_INCLUDE_DIR} ${_OOOINCLUDE})
-endif(CPPUHELPER_INCLUDE_DIR AND OOOSDK_URE_DIR AND OOOSDK_LIBRARIES)
+endif()
 
 if(NOT OOoSDK_FOUND)
 	if(OOoSDK_FIND_REQUIRED)
 		message(FATAL_ERROR ${OOOSDK_ERROR})
-	else(OOoSDK_FIND_REQUIRED)
+	else()
 		message(STATUS ${OOOSDK_ERROR})
-	endif(OOoSDK_FIND_REQUIRED)
-else(NOT OOoSDK_FOUND)
+	endif()
+else()
 	message(STATUS "Found OpenOffice SDK.")
-endif(NOT OOoSDK_FOUND)
+endif()
 

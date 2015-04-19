@@ -98,7 +98,7 @@ public:
     /// reimplemented
     virtual QSize sizeHint() const;
 
-public slots:
+public Q_SLOTS:
     /// Set the unit of the ruler
     void setUnit(const KoUnit &unit);
 
@@ -234,7 +234,7 @@ public slots:
      */
     void createGuideToolConnection(KoCanvasBase *canvas);
 
-signals:
+Q_SIGNALS:
     /**
      * emitted when any of the indents is moved by the user.
      * @param final false until the user releases the mouse. So you can implement live update.

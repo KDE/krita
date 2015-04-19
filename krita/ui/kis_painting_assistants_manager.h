@@ -27,7 +27,6 @@
 #include "kis_action.h"
 
 class KisViewManager;
-class KActionCollection;
 class KisPaintingAssistantsDecoration;
 
 
@@ -43,7 +42,7 @@ public:
 
     void setView(QPointer<KisView> imageView);
 
-private slots:
+private Q_SLOTS:
     void updateAction();
 
 private:

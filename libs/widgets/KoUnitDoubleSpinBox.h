@@ -99,7 +99,7 @@ public:
     virtual double valueFromText( const QString& str ) const;
 
 
-signals:
+Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value
     void valueChangedPt( qreal );
 
@@ -107,7 +107,7 @@ private:
     class Private;
     Private * const d;
 
-private slots:
+private Q_SLOTS:
     // exists to do emits for valueChangedPt
     void privateValueChanged();
 };

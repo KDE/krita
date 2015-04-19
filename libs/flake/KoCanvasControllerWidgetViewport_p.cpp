@@ -53,7 +53,6 @@ Viewport::Viewport(KoCanvasControllerWidget *parent)
         , m_documentOffset(QPoint(0, 0))
         , m_margin(0)
 {
-    setBackgroundRole(QPalette::Dark);
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setMouseTracking(true);

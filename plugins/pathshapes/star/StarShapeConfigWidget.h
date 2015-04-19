@@ -42,7 +42,7 @@ public:
     /// reimplemented
     virtual KUndo2Command * createCommand();
 
-private slots:
+private Q_SLOTS:
     void typeChanged();
 private:
     Ui::StarShapeConfigWidget widget;

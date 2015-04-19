@@ -31,9 +31,9 @@
 KisGmicSmallApplicator::KisGmicSmallApplicator(QObject *parent)
     : QThread(parent),
       m_setting(0),
-      m_progress(0),
       m_gmicFinishedSuccessfully(true)
 {
+    m_gmicData = KisGmicDataSP(new KisGmicData());
 }
 
 KisGmicSmallApplicator::~KisGmicSmallApplicator()
@@ -77,9 +77,8 @@ void KisGmicSmallApplicator::run()
         gmicCommand = m_setting->gmicCommand();
     }
 
-    KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicCustomCommands);
+    KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicData, m_gmicCustomCommands);
     connect(&gmicCmd, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool, int, QString)));
-    m_progress = gmicCmd.progressPtr();
 
     gmicCmd.redo();
     if (!gmicCmd.isSuccessfullyDone())
@@ -120,9 +119,9 @@ KisNodeListSP KisGmicSmallApplicator::createPreviewThumbnails(KisNodeListSP laye
     return previewKritaNodes;
 }
 
-float KisGmicSmallApplicator::getProgress() const
+float KisGmicSmallApplicator::progress() const
 {
-    return (m_progress == 0) ? -2.0f : *m_progress;
+    return m_gmicData->progress();
 }
 
 KisPaintDeviceSP KisGmicSmallApplicator::preview()

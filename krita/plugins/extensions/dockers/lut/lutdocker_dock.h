@@ -39,11 +39,6 @@ namespace OCIO = OCIO_NAMESPACE;
 
 
 class KisCanvas2;
-class KisDoubleWidget;
-class KoZoomAdapter;
-class SqueezedComboBox;
-class QCheckBox;
-class QToolButton;
 class BlackWhitePointChooser;
 
 #include "ocio_display_filter.h"
@@ -69,7 +64,7 @@ QString observerName() { return "LutDockerDock"; }
     qreal currentGamma() const;
     void setCurrentGamma(qreal value);
 
-private slots:
+private Q_SLOTS:
 
     void slotImageColorSpaceChanged();
 

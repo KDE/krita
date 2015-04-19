@@ -34,7 +34,7 @@ public:
     explicit Text(KoReportItemText*);
 
     ~Text();
-public slots:
+public Q_SLOTS:
 
     /**Returns the source (column) that the field gets its data from*/
     QString source();

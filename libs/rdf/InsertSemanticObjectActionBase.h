@@ -24,7 +24,6 @@
 #include <kaction.h>
 
 class KoCanvasBase;
-class KoTextEditor;
 
 class InsertSemanticObjectActionBase : public KAction
 {
@@ -35,7 +34,7 @@ public:
                                    const QString &name);
     virtual ~InsertSemanticObjectActionBase();
 
-private slots:
+private Q_SLOTS:
     virtual void activated();
 
 protected:

@@ -91,7 +91,7 @@ public:
      */
     QList<KoShape*> topLevelShapes() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
@@ -198,7 +198,7 @@ public:
      */
     void setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy);
 
-signals:
+Q_SIGNALS:
     /// emitted when the selection is changed
     void selectionChanged();
     /// emitted when an object in the selection is changed (moved/rotated etc)

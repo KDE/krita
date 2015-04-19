@@ -35,7 +35,7 @@ public:
     ~KRScriptDraw();
     void setPage(OROPage*);
     void setOffset(QPointF);
-public slots:
+public Q_SLOTS:
     /**
     Draw a rectangle
     \param x X posistion

@@ -19,12 +19,12 @@
 #ifndef __KIS_DOM_UTILS_TEST_H
 #define __KIS_DOM_UTILS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisDomUtilsTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
     void testC2C();
     void testG2G();

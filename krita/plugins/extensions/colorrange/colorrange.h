@@ -32,7 +32,7 @@ public:
     ColorRange(QObject *parent, const QVariantList &);
     virtual ~ColorRange();
 
-private slots:
+private Q_SLOTS:
     void slotActivated();
     void selectOpaque();
 };

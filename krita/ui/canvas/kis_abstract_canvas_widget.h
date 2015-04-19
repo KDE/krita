@@ -20,7 +20,6 @@
 
 class QWidget;
 class QRect;
-class QPoint;
 class QPainter;
 class QRect;
 

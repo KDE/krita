@@ -25,9 +25,6 @@
 #include <kis_outline_generation_policy.h>
 #include "kis_grid_paintop_settings_widget.h"
 
-class QWidget;
-class QDomElement;
-class QDomDocument;
 
 
 class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>

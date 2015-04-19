@@ -44,7 +44,7 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-public slots:
+public Q_SLOTS:
     virtual void deactivate();
 
 private:

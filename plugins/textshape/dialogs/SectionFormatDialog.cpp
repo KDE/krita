@@ -31,9 +31,9 @@ class SectionFormatDialog::SectionNameValidator : public QValidator
 {
 public:
     SectionNameValidator(QObject *parent, KoSectionManager *sectionManager, KoSection *section)
-        : QValidator(parent)
-        , m_sectionManager(sectionManager)
-        , m_section(section)
+    : QValidator(parent)
+    , m_sectionManager(sectionManager)
+    , m_section(section)
     {
     }
 
@@ -63,7 +63,12 @@ SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
     setMainWidget(form);
 
     m_sectionManager = KoTextDocument(editor->document()).sectionManager();
-    m_widget.sectionTree->setModel(m_sectionManager->sectionsModel());
+    QStandardItemModel *model = m_sectionManager->update(true);
+    model->setColumnCount(1);
+    QStringList header;
+    header << i18n("Section name");
+    model->setHorizontalHeaderLabels(header);
+    m_widget.sectionTree->setModel(model);
     m_widget.sectionTree->expandAll();
 
     m_widget.sectionNameLineEdit->setEnabled(false);
@@ -78,7 +83,8 @@ SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
 void SectionFormatDialog::sectionNameChanged()
 {
     m_editor->renameSection(sectionFromModel(m_curIdx), m_widget.sectionNameLineEdit->text());
-    m_widget.sectionNameLineEdit->setModified(false);
+    m_widget.sectionTree->model()->setData(m_curIdx, m_widget.sectionNameLineEdit->text(), Qt::DisplayRole);
+    m_widget.sectionNameLineEdit->setModified(false); // value is set to line edit isn't modified (has new default value)
 }
 
 void SectionFormatDialog::sectionSelected(QModelIndex idx)
@@ -106,7 +112,7 @@ void SectionFormatDialog::updateTreeState()
         m_widget.sectionNameLineEdit->setPalette(pal);
 
         QToolTip::showText(m_widget.sectionNameLineEdit->mapToGlobal(QPoint()),
-            i18n("Invalid characters or section with such name exists."));
+                           i18n("Invalid characters or section with such name exists."));
 
         allOk = false;
     } else {
@@ -120,8 +126,7 @@ void SectionFormatDialog::updateTreeState()
 
 inline KoSection* SectionFormatDialog::sectionFromModel(QModelIndex idx)
 {
-    return static_cast<KoSection *>(m_widget.sectionTree->model()
-        ->itemData(idx)[Qt::UserRole + 1].value<void *>());
+    return m_widget.sectionTree->model()->itemData(idx)[Qt::UserRole + 1].value<KoSection *>();
 }
 
 #include <SectionFormatDialog.moc>

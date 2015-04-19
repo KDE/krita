@@ -70,7 +70,7 @@ public:
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
 
-private slots:
+private Q_SLOTS:
     void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);
 
     void updateMarkers(const QList<KoMarker*> &markers);

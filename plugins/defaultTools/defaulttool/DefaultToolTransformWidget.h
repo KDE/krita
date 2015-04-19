@@ -35,7 +35,7 @@ public:
     /// Sets the unit used by the unit aware child widgets
     void setUnit( const KoUnit &unit );
 
-private slots:
+private Q_SLOTS:
     void resourceChanged( int key, const QVariant & res );
     void rotationChanged();
     void shearXChanged();

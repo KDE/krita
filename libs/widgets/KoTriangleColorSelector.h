@@ -48,7 +48,7 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         // please use realColor() instead!
         KDE_DEPRECATED QColor color() const;
 
-    public slots:
+    public Q_SLOTS:
         void setHue(int h);
         void setValue(int v);
         void setSaturation(int s);
@@ -58,10 +58,10 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         KDE_DEPRECATED void setQColor(const QColor& );
 
         void setRealColor(const KoColor& );
-    signals:
+    Q_SIGNALS:
         void colorChanged(const QColor& );
         void realColorChanged(const KoColor& );
-    private slots:
+    private Q_SLOTS:
         void configurationChanged();
     private:
         void tellColorChanged();

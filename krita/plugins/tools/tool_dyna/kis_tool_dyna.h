@@ -32,11 +32,8 @@
 
 class KisDoubleSliderSpinBox;
 class QCheckBox;
-class QComboBox;
 class QGridLayout;
-class QSlider;
 
-class QDoubleSpinBox;
 
 class KoCanvasBase;
 
@@ -94,7 +91,7 @@ public:
 protected:
     virtual void initStroke(KoPointerEvent *event);
 
-private slots:
+private Q_SLOTS:
 
     void slotSetDynaWidth(double width);
     void slotSetMass(qreal mass);

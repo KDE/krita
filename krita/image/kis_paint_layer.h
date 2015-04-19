@@ -83,10 +83,6 @@ public:
 
     bool needProjection() const;
 
-    void copyOriginalToProjection(const KisPaintDeviceSP original,
-                                  KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
-
     using KisLayer::setDirty;
     void setDirty(const QRect & rect);
 
@@ -146,15 +142,21 @@ public:
      */
     void setAlphaLocked(bool lock);
 
-public slots:
+public Q_SLOTS:
 
     // KisIndirectPaintingSupport
     KisLayer* layer() {
         return this;
     }
 
-private slots:
+private Q_SLOTS:
     void keyframesChanged();
+
+protected:
+    // override from KisLayer
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
 
 private:
     void init(KisMultiPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());

@@ -23,7 +23,6 @@
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "krita_export.h"
 
-class KisPart;
 class KisMainWindow;
 class KisApplicationPrivate;
 
@@ -107,7 +106,7 @@ protected:
     // Current application object.
     static KisApplication *KoApp;
 
-public slots:
+public Q_SLOTS:
 
     void remoteArguments(const QByteArray &message, QObject*socket);
     void fileOpenRequested(const QString & url);

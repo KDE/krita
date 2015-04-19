@@ -34,14 +34,11 @@
 
 #include <KisMainWindow.h>
 
-class KJob;
 namespace KIO {
-  class Job;
 }
 
 class KisDocument;
 class KisView;
-class KisOpenPane;
 class QGraphicsItem;
 class KisDocument;
 
@@ -137,7 +134,7 @@ public:
 
     KisMainWindow *currentMainwindow() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * This slot loads an existing file and deletes the start up widget.
@@ -154,7 +151,7 @@ public slots:
      */
     void configureShortcuts();
 
-protected slots:
+protected Q_SLOTS:
 
     /**
      * This slot loads a template and deletes the start up widget.
@@ -162,13 +159,13 @@ protected slots:
      */
     void openTemplate(const KUrl& url);
 
-private slots:
+private Q_SLOTS:
 
     void viewDestroyed();
 
     void startCustomDocument(KisDocument *doc);
 
-signals:
+Q_SIGNALS:
     /**
      * emitted when a new document is opened.
      */
@@ -183,6 +180,8 @@ signals:
     void sigViewRemoved(KisView *view);
 
 public:
+
+    static KisInputManager *currentInputManager();
 
     //------------------ view management ------------------
 

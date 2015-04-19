@@ -216,6 +216,7 @@
     <Action name="theme_menu" icon="" text="&amp;Themes" whatsThis="" toolTip="Themes" iconText="Themes" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="fullscreen" icon="view-fullscreen" text="F&amp;ull Screen Mode" whatsThis="" toolTip="Display the window in full screen" iconText="Full Screen Mode" shortcut="Ctrl+Shift+F" defaultShortcut="Ctrl+Shift+F" isCheckable="false" statusTip=""/>
     <Action name="view_toggledockers" icon="" text="Show Dockers" whatsThis="" toolTip="Show Dockers" iconText="Show Dockers" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
+    <Action name="view_toggledockertitlebars" icon="" text="Show Docker Titlebars" whatsThis="" toolTip="Show Docker Titlebars" iconText="Show Docker Titlebars" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
     <Action name="settings_dockers_menu" icon="" text="Dockers" whatsThis="" toolTip="Dockers" iconText="Dockers" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="window" icon="" text="&amp;Window" whatsThis="" toolTip="Window" iconText="Window" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="windows_cascade" icon="" text="Cascade" whatsThis="" toolTip="Cascade" iconText="Cascade" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

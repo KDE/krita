@@ -23,7 +23,6 @@
 
 #include <kis_config_widget.h>
 
-class KisFilter;
 class Ui_WdgBlur;
 
 class KisWdgBlur : public KisConfigWidget
@@ -38,7 +37,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
 
-private slots:
+private Q_SLOTS:
 
     void linkSpacingToggled(bool);
     void spinBoxHalfWidthChanged(int);

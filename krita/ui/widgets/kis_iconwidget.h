@@ -25,15 +25,15 @@
 class KoResource;
 class KoAbstractResourceServerAdapter;
 
+/**
+ * The icon widget is used in the control box where the current color and brush
+ * are shown.
+ */
 class KisIconWidget : public KisPopupButton
 {
 
     Q_OBJECT
 
-    /**
-     * The icon widget is used in the control box where the current color and brush
-     * are shown.
-     */
 public:
     KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
@@ -41,7 +41,7 @@ public:
      * Set an resource server adapter that the widget will observe.
      */
     void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter);
-public slots:
+public Q_SLOTS:
     void slotSetItem(KoResource * resource);
     void slotAdapterResourceChanged(KoResource * resource);
 

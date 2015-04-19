@@ -19,7 +19,6 @@
 #ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
 #define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
-class KisDeformPaintOpSettingsWidget;
 
 #include <kis_paintop_settings.h>
 #include <kis_types.h>

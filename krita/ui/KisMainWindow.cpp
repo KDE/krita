@@ -181,6 +181,7 @@ public:
         , mdiNextWindow(0)
         , mdiPreviousWindow(0)
         , toggleDockers(0)
+        , toggleDockerTitleBars(0)
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
@@ -237,6 +238,9 @@ public:
     KisAction *mdiNextWindow;
     KisAction *mdiPreviousWindow;
     KisAction *toggleDockers;
+    KisAction *toggleDockerTitleBars;
+
+    KisAction *expandingSpacers[2];
 
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
@@ -303,7 +307,7 @@ KisMainWindow::KisMainWindow()
 
     actionCollection()->addAssociatedWidget(this);
 
-    initializeGeometry();
+    QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
     ToolDockerFactory toolDockerFactory;
     d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
@@ -407,6 +411,7 @@ KisMainWindow::KisMainWindow()
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
 
+    applyToolBarLayout();
 
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
@@ -782,6 +787,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
         QString suggestedFilename = suggestedURL.fileName();
+
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
@@ -819,8 +825,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
-        dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+        if (isExporting() && !d->lastExportUrl.isEmpty()) {
+            dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
+        }
+        else {
+            dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
+        }
         dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
         KUrl newURL = dialog.url();
 
@@ -866,7 +876,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                qDebug() << "save to directory: " << newURL.url();
+                //qDebug() << "save to directory: " << newURL.url();
             }
             else if (specialOutputFlag == KisDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
@@ -1170,6 +1180,30 @@ int KisMainWindow::viewCount() const
     return d->mdiArea->subWindowList().size();
 }
 
+bool KisMainWindow::restoreWorkspace(const QByteArray &state)
+{
+    QByteArray oldState = saveState();
+
+    // needed because otherwise the layout isn't correctly restored in some situations
+    foreach(QDockWidget *docker, dockWidgets()) {
+        docker->hide();
+    }
+
+    bool success = QMainWindow::restoreState(state);
+
+    if (!success) {
+        QMainWindow::restoreState(oldState);
+        return false;
+    }
+
+    return success;
+}
+
+KisViewManager *KisMainWindow::viewManager() const
+{
+    return d->viewManager;
+}
+
 void KisMainWindow::slotDocumentInfo()
 {
     if (!d->activeView->document())
@@ -1363,6 +1397,7 @@ void KisMainWindow::slotConfigureToolbars()
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotNewToolbarConfig()
@@ -1377,6 +1412,7 @@ void KisMainWindow::slotNewToolbarConfig()
         return;
 
     plugActionList("toolbarlist", d->toolbarList);
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
@@ -1645,6 +1681,11 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             titleBar->setCollapsed(true);
         if (titleBar && locked)
             titleBar->setLocked(true);
+
+        if (titleBar) {
+            KisConfig cfg;
+            titleBar->setVisible(cfg.showDockerTitleBars());
+        }
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
@@ -2045,6 +2086,13 @@ void KisMainWindow::createActions()
     actionManager->addAction("view_toggledockers", d->toggleDockers);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
+    d->toggleDockerTitleBars = new KisAction(i18nc("@action:inmenu", "Show Docker Titlebars"));
+    d->toggleDockerTitleBars->setCheckable(true);
+    KisConfig cfg;
+    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
+    actionManager->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
+
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
 
@@ -2078,6 +2126,25 @@ void KisMainWindow::createActions()
     actionManager->addAction("file_close", d->close);
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
+
+    for (int i = 0; i < 2; i++) {
+        d->expandingSpacers[i] = new KisAction(i18n("Expanding Spacer"));
+        d->expandingSpacers[i]->setDefaultWidget(new QWidget(this));
+        d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
+    }
+}
+
+void KisMainWindow::applyToolBarLayout()
+{
+    const bool isPlastiqueStyle = style()->objectName() == "plastique";
+
+    Q_FOREACH (KToolBar *toolBar, toolBars()) {
+        toolBar->layout()->setSpacing(4);
+        if (isPlastiqueStyle) {
+            toolBar->setContentsMargins(0, 0, 0, 2);
+        }
+    }
 }
 
 void KisMainWindow::initializeGeometry()
@@ -2092,7 +2159,6 @@ void KisMainWindow::initializeGeometry()
             QRect desk = QApplication::desktop()->availableGeometry(scnum);
             // if the desktop is virtual then use virtual screen size
             if (QApplication::desktop()->isVirtualDesktop()) {
-                desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
                 desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
             }
 
@@ -2121,7 +2187,19 @@ void KisMainWindow::initializeGeometry()
             setGeometry(geometry().x(), geometry().y(), w, h);
         }
     }
-    restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+}
+
+void KisMainWindow::showDockerTitleBars(bool show)
+{
+    foreach (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            dock->titleBarWidget()->setVisible(show);
+        }
+    }
+
+    KisConfig cfg;
+    cfg.setShowDockerTitleBars(show);
 }
 
 

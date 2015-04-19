@@ -25,7 +25,6 @@
 
 #include "wdg_layersplit.h"
 
-class KisViewManager;
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
@@ -48,7 +47,7 @@ public:
     bool disregardOpacity() const;
     int fuzziness() const;
 
-private slots:
+private Q_SLOTS:
 
     void applyClicked();
 

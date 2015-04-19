@@ -45,12 +45,12 @@ public:
 
     void setView(QPointer<KisView>imageView);
 
-public slots:
+public Q_SLOTS:
 
     void updateGUI();
     void checkVisibilityAction(bool check);
 
-private slots:
+private Q_SLOTS:
 
     void toggleSnapToGrid();
     void fastConfig1x1();

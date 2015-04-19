@@ -114,7 +114,7 @@ public:
     }
 
     inline KisTextureTile* getTextureTile(int x, int y) {
-        return getTextureTileCR(xToCol(x), yToRow(y));;
+        return getTextureTileCR(xToCol(x), yToRow(y));
     }
 
     inline qreal texelSize() const {
@@ -122,7 +122,7 @@ public:
         return 1.0 / m_texturesInfo.width;
     }
 
-public slots:
+public Q_SLOTS:
 
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
 

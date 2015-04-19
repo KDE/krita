@@ -19,12 +19,12 @@
 #ifndef __KIS_FILTER_WEIGHTS_BUFFER_TEST_H
 #define __KIS_FILTER_WEIGHTS_BUFFER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFilterWeightsBufferTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testTriangle();
     void testHermite();
     void testBicubic();

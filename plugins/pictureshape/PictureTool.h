@@ -25,10 +25,6 @@
 #include <kjob.h>
 
 class PictureShape;
-class KoFilterEffect;
-class QComboBox;
-class QScrollArea;
-class CropWidget;
 struct PictureToolUI;
 
 class PictureTool : public KoToolBase
@@ -57,7 +53,7 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
     void cropRegionChanged(const QRectF& rect, bool undoPrev);

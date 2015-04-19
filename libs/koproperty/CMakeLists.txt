@@ -92,4 +92,4 @@ if(FALSE) # TODO: install when we move to independent place
     editors/timeedit.h
     editors/urledit.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
-endif(FALSE)
+endif()

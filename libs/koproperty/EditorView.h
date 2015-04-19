@@ -85,7 +85,7 @@ public:
     //! @return default grid line color - Qt::gray
     static QColor defaultGridLineColor() { return Qt::gray; }
 
-public slots:
+public Q_SLOTS:
     /*! Populates the editor view with items for each property from the @ set set.
      Child items for composed properties are also created.
      See SetOption documentation for description of @a options options.
@@ -118,14 +118,14 @@ public slots:
     //! Sets grid line color
     void setGridLineColor(const QColor& color);
 
-signals:
+Q_SIGNALS:
     /*! Emitted when current property set has been changed. May be 0. */
     void propertySetChanged(KoProperty::Set *set);
 
 protected:
     virtual bool viewportEvent( QEvent * event );
 
-protected slots:
+protected Q_SLOTS:
     virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
     virtual void commitData( QWidget * editor );
 

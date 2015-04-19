@@ -27,7 +27,6 @@ class QTabletEvent;
 class QTouchEvent;
 class KisToolProxy;
 class KisCanvas2;
-class KisInputAction;
 /**
  * \brief Central object to manage canvas input.
  *
@@ -117,6 +116,7 @@ public:
 
 public Q_SLOTS:
     void stopIgnoringEvents();
+    void slotFocusOnEnter(bool value);
 
 private Q_SLOTS:
     void slotToolChanged();

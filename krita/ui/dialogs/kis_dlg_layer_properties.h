@@ -28,10 +28,8 @@
 #include "ui_wdglayerproperties.h"
 
 
-class QTimer;
 class QWidget;
 class QBitArray;
-class KisChannelFlagsWidget;
 class KisViewManager;
 class KisDocument;
 
@@ -73,12 +71,13 @@ private:
      */
     QBitArray getChannelFlags() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotNameChanged(const QString &);
     void applyNewProperties();
     void cleanPreviewChanges();
     void kickTimer();
     void updatePreview();
+    void adjustSize();
 
 private:
 

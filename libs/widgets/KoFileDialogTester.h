@@ -33,7 +33,7 @@ public:
     explicit KoFileDialogTester(QWidget *parent = 0);
     ~KoFileDialogTester();
     
-private slots:
+private Q_SLOTS:
 
     void testOpenFile();
     void testOpenFiles();

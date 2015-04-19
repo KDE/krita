@@ -2,17 +2,7 @@ add_subdirectory( tests )
 
 set(kritalayerstylesfilter_PART_SRCS
     layerstyles.cpp
-    kis_ls_drop_shadow_filter.cpp
-    kis_ls_satin_filter.cpp
-    kis_ls_stroke_filter.cpp
-    kis_ls_bevel_emboss_filter.cpp
-    kis_ls_overlay_filter.cpp
-    kis_ls_utils.cpp
-    gimp_bump_map.cpp
-    kis_layer_style_filter.cpp
-    kis_layer_style_filter_environment.cpp
-    kis_layer_style_filter_projection_plane.cpp
-    kis_layer_style_projection_plane.cpp
+
     kis_asl_reader.cpp
     kis_asl_xml_parser.cpp
     kis_asl_object_catcher.cpp
@@ -24,10 +14,6 @@ set(kritalayerstylesfilter_PART_SRCS
 
     kis_asl_layer_style_serializer.cpp
     )
-
-# kde4_add_ui_files(kritalayerstylesfilter_PART_SRCS
-#  wdglayerstyles.ui
-# )
 
 kde4_add_plugin(kritalayerstylesfilter ${kritalayerstylesfilter_PART_SRCS})
 

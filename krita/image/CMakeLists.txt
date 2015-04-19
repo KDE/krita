@@ -273,7 +273,18 @@ set(kritaimage_LIB_SRCS
 
    kis_psd_layer_style.cpp
    kis_layer_style_serializer.cpp
-   kis_layer_style_projection_plane_factory.cpp
+
+   layerstyles/kis_layer_style_filter.cpp
+   layerstyles/kis_layer_style_filter_environment.cpp
+   layerstyles/kis_layer_style_filter_projection_plane.cpp
+   layerstyles/kis_layer_style_projection_plane.cpp
+   layerstyles/kis_ls_drop_shadow_filter.cpp
+   layerstyles/kis_ls_satin_filter.cpp
+   layerstyles/kis_ls_stroke_filter.cpp
+   layerstyles/kis_ls_bevel_emboss_filter.cpp
+   layerstyles/kis_ls_overlay_filter.cpp
+   layerstyles/kis_ls_utils.cpp
+   layerstyles/gimp_bump_map.cpp
 )
 
 set(einspline_SRCS

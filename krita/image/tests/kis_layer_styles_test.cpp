@@ -26,9 +26,9 @@
 #include <KoColor.h>
 
 
-#include "../kis_layer_style_filter.h"
-#include "../kis_layer_style_filter_environment.h"
-#include "../kis_ls_drop_shadow_filter.h"
+#include "layerstyles/kis_layer_style_filter.h"
+#include "layerstyles/kis_layer_style_filter_environment.h"
+#include "layerstyles/kis_ls_drop_shadow_filter.h"
 #include "kis_psd_layer_style.h"
 
 

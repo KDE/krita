@@ -37,7 +37,7 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 
-#include "../kis_layer_style_projection_plane.h"
+#include "layerstyles/kis_layer_style_projection_plane.h"
 #include "kis_psd_layer_style.h"
 
 
@@ -393,7 +393,7 @@ void KisLayerStyleProjectionPlaneTest::testStroke()
 
 }
 
-#include "../gimp_bump_map.h"
+#include "layerstyles/gimp_bump_map.h"
 
 void KisLayerStyleProjectionPlaneTest::testBumpmap()
 {

@@ -19,9 +19,6 @@
 #include "layerstyles.h"
 #include <kpluginfactory.h>
 
-#include "kis_layer_style_projection_plane.h"
-#include "kis_layer_style_projection_plane_factory.h"
-
 #include "kis_layer_style_serializer.h"
 #include "kis_asl_layer_style_serializer.h"
 
@@ -32,14 +29,10 @@ LayerStylesPlugin::LayerStylesPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     {
-        KisLayerStyleProjectionPlaneFactory::Factory f(KisLayerStyleProjectionPlane::factoryObject);
-        KisLayerStyleProjectionPlaneFactory::instance()->setFactory(f);
-    }
-
-    {
         KisLayerStyleSerializerFactory::Factory f(KisAslLayerStyleSerializer::factoryObject);
         KisLayerStyleSerializerFactory::instance()->setFactory(f);
     }
+
 }
 
 LayerStylesPlugin::~LayerStylesPlugin()

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2006 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,11 +41,14 @@ namespace KoLZF {
 // the original implementation in http://liblzf.plan9.de/
 int compress(const void* input, int length, void* output, int maxout)
 {
-    Q_UNUSED(maxout);
+    if (input == 0 || length < 1 || output == 0 || maxout < 2) {
+        return 0;
+    }
 
     const quint8* ip = (const quint8*) input;
     const quint8* ip_limit = ip + length - MAX_COPY - 4;
     quint8* op = (quint8*) output;
+    const quint8* last_op = (quint8*) output + maxout - 1;
 
     const quint8* htab[HASH_SIZE];
     const quint8** hslot;
@@ -57,8 +61,9 @@ int compress(const void* input, int length, void* output, int maxout)
     quint8* anchor;
 
     /* initializes hash table */
-    for (hslot = htab; hslot < htab + HASH_SIZE; ++hslot)
+    for (hslot = htab; hslot < htab + HASH_SIZE; ++hslot) {
         *hslot = ip;
+    }
 
     /* we start with literal copy */
     copy = 0;
@@ -126,9 +131,10 @@ int compress(const void* input, int length, void* output, int maxout)
             anchor = anchor - copy - 1;
             *(op - copy - 1) = copy - 1;
             copy = 0;
-        } else
+        } else {
             /* back, to overwrite the copy count */
             --op;
+        }
 
         /* length is biased, '1' means a match of 3 bytes */
         len -= 2;
@@ -137,9 +143,15 @@ int compress(const void* input, int length, void* output, int maxout)
         --distance;
 
         /* encode the match */
-        if (len < 7)
+        if (len < 7) {
+            if (op + 2 > last_op) {
+                return 0;
+            }
             *op++ = (len << 5) + (distance >> 8);
-        else {
+        } else {
+            if (op + 3 > last_op) {
+                return 0;
+            }
             *op++ = (7 << 5) + (distance >> 8);
             *op++ = len - 7;
         }
@@ -157,9 +169,13 @@ int compress(const void* input, int length, void* output, int maxout)
         continue;
 
     literal:
+        if (op + 1 > last_op) {
+            return 0;
+        }
         *op++ = *ip++;
         ++copy;
         if (copy >= MAX_COPY) {
+            // start next literal copy item
             copy = 0;
             *op++ = MAX_COPY - 1;
         }
@@ -167,26 +183,50 @@ int compress(const void* input, int length, void* output, int maxout)
 
     /* left-over as literal copy */
     ip_limit = (const quint8*)input + length;
+
+    // TODO: smart calculation to see here if enough output is left
+
     while (ip < ip_limit) {
+        if (op == last_op) {
+            return 0;
+        }
         *op++ = *ip++;
         ++copy;
-        if (copy == MAX_COPY) {
+        if ((copy == MAX_COPY)) {
+            // start next literal copy item
             copy = 0;
-            *op++ = MAX_COPY - 1;
+            if (ip < ip_limit) {
+                if (op == last_op) {
+                    return 0;
+                }
+                *op++ = MAX_COPY - 1;
+            } else {
+                // do not write possibly out of bounds
+                // just pretend we moved one more, for the final treatment
+                ++op;
+            }
         }
     }
 
     /* if we have copied something, adjust the copy length */
-    if (copy)
+    if (copy) {
         *(op - copy - 1) = copy - 1;
-    else
+    } else {
         --op;
+    }
 
     return op - (quint8*)output;
 }
 
 int decompress(const void* input, int length, void* output, int maxout)
 {
+    if (input == 0 || length < 1) {
+        return 0;
+    }
+    if (output == 0 || maxout < 1) {
+        return 0;
+    }
+
     const quint8* ip = (const quint8*) input;
     const quint8* ip_limit  = ip + length - 1;
     quint8* op = (quint8*) output;

@@ -68,8 +68,7 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
     KIcon icon;
     bool useAdjustedIcons = true;
     if(!fast) {
-        KIconLoader iconLoader;
-        useAdjustedIcons = iconLoader.iconPath(name, KIconLoader::NoGroup, true).isEmpty();
+        useAdjustedIcons = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
     }
 
     if (useAdjustedIcons) {

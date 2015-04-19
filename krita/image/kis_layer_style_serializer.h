@@ -34,8 +34,8 @@ struct KRITAIMAGE_EXPORT KisLayerStyleSerializer {
 typedef QSharedPointer<KisLayerStyleSerializer> KisLayerStyleSerializerSP;
 
 class KRITAIMAGE_EXPORT KisLayerStyleSerializerFactory
-    : public KisExternalFactoryBase<KisLayerStyleSerializerSP, KisPSDLayerStyle*,
-                                    KisLayerStyleSerializerFactory>
+: public KisExternalFactoryBase<KisLayerStyleSerializerSP, KisPSDLayerStyle*,
+                                KisLayerStyleSerializerFactory>
 {
 public:
     static KisLayerStyleSerializerFactory* instance();

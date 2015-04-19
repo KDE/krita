@@ -48,6 +48,8 @@ public:
     virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
     virtual void addGradient(const QString &path, const KoAbstractGradient *gradient);
 
+    virtual void newStyleStarted();
+
     void setArrayMode(bool value);
 protected:
     bool m_arrayMode;

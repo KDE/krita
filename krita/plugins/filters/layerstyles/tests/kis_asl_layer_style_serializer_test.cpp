@@ -283,4 +283,47 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
 
 }
 
+void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+
+    QVector<KisPSDLayerStyleSP> styles;
+
+    {
+        KisAslLayerStyleSerializer s(0);
+
+        QString srcFileName(TestUtil::fetchDataFileLazy("multiple_styles.asl"));
+        QFile aslFile(srcFileName);
+        aslFile.open(QIODevice::ReadOnly);
+        s.readFromDevice(&aslFile);
+
+        styles = s.styles();
+    }
+
+
+    {
+        KisAslLayerStyleSerializer s(0);
+
+        QString dstFileName("multiple_styles_out.asl");
+        QFile aslFile(dstFileName);
+        aslFile.open(QIODevice::WriteOnly);
+
+        s.setStyles(styles);
+        s.saveToDevice(&aslFile);
+    }
+
+    {
+        KisAslLayerStyleSerializer s(0);
+
+        QString srcFileName("multiple_styles_out.asl");
+        QFile aslFile(srcFileName);
+        aslFile.open(QIODevice::ReadOnly);
+        s.readFromDevice(&aslFile);
+
+        styles = s.styles();
+
+        qDebug() << ppVar(styles.size());
+    }
+}
+
 QTEST_KDEMAIN(KisAslLayerStyleSerializerTest, GUI)

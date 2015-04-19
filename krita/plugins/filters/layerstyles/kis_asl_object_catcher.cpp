@@ -85,6 +85,11 @@ void KisAslObjectCatcher::addGradient(const QString &path, const KoAbstractGradi
     qDebug() << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "gradient" << value;
 }
 
+void KisAslObjectCatcher::newStyleStarted()
+{
+    qDebug() << "Unhandled:" << "new style started";
+}
+
 void KisAslObjectCatcher::setArrayMode(bool value) {
     m_arrayMode = value;
 }

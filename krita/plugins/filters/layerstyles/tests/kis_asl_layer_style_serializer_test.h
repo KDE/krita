@@ -28,6 +28,7 @@ private slots:
     void testReading();
     void testWriting();
     void testWritingGlobalPatterns();
+    void testReadMultipleStyles();
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H */

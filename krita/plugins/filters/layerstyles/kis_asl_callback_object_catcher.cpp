@@ -78,6 +78,8 @@ struct KisAslCallbackObjectCatcher::Private
     MapHashPattern mapPattern;
     MapHashPatternRef mapPatternRef;
     MapHashGradient mapGradient;
+
+    ASLCallbackNewStyle newStyleCallback;
 };
 
 
@@ -179,6 +181,13 @@ void KisAslCallbackObjectCatcher::addGradient(const QString &path, const KoAbstr
     passToCallback(path, m_d->mapGradient, value);
 }
 
+void KisAslCallbackObjectCatcher::newStyleStarted()
+{
+    if (m_d->newStyleCallback) {
+        m_d->newStyleCallback();
+    }
+}
+
 /*****************************************************************/
 /*      Subscription methods                                      */
 /*****************************************************************/
@@ -241,4 +250,9 @@ void KisAslCallbackObjectCatcher::subscribePatternRef(const QString &path, ASLCa
 void KisAslCallbackObjectCatcher::subscribeGradient(const QString &path, ASLCallbackGradient callback)
 {
     m_d->mapGradient.insert(path, callback);
+}
+
+void KisAslCallbackObjectCatcher::subscribeNewStyleStarted(ASLCallbackNewStyle callback)
+{
+    m_d->newStyleCallback = callback;
 }

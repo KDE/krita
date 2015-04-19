@@ -227,7 +227,12 @@ bool tryParseDescriptor(const QDomElement &el,
 {
     bool retval = true;
 
-    if (classId == "RGBC") {
+    if (classId == "null") {
+        catcher.newStyleStarted();
+        // here we just notify that a new style is started, we haven't
+        // processed the whole block yet, so return false.
+        retval = false;
+    } else if (classId == "RGBC") {
         catcher.addColor(path, parseRGBColorObject(el));
 
     } else if (classId == "ShpC") {

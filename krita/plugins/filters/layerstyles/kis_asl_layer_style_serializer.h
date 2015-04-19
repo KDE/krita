@@ -25,6 +25,9 @@
 class KisPSDLayerStyle;
 class KoPattern;
 
+#include "kis_asl_callback_object_catcher.h"
+
+
 
 class KRITAIMAGE_EXPORT KisAslLayerStyleSerializer : public KisLayerStyleSerializer
 {
@@ -38,6 +41,9 @@ public:
     void saveToDevice(QIODevice *device);
     void readFromDevice(QIODevice *device);
 
+    QVector<KisPSDLayerStyleSP> styles() const;
+    void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
+
 private:
     void registerPatternObject(const KoPattern *pattern);
 
@@ -47,9 +53,14 @@ private:
 
     QVector<KoPattern*> fetchAllPatterns(KisPSDLayerStyle *style);
 
+    void newStyleStarted();
+    void connectCatcherToStyle(KisPSDLayerStyle *style);
+
 private:
-    KisPSDLayerStyle *m_style;
     QHash<QString, KoPattern*> m_patternsStore;
+
+    KisAslCallbackObjectCatcher m_catcher;
+    QVector<KisPSDLayerStyleSP> m_stylesVector;
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_H */

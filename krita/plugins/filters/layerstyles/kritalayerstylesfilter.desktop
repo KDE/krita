@@ -1,6 +1,14 @@
 [Desktop Entry]
 Icon=
 Name=Layer Styles Filter (Extension)
+Name[ca]=Filtre d'estils de capa (Extensió)
+Name[nl]=Filter voor stijlen van lagen (extensie)
+Name[pt]=Filtro de Estilos das Camadas (Extensão)
+Name[pt_BR]=Filtro de estilos da camada (Extensão)
+Name[sk]=Filter štýlov vrstiev (rozšírenie)
+Name[sv]=Filter för lagerstilar (utökning)
+Name[uk]=Фільтр стилів шарів (розширення)
+Name[x-test]=xxLayer Styles Filter (Extension)xx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritalayerstylesfilter

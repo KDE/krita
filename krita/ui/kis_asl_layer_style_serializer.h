@@ -20,23 +20,20 @@
 #define __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 
 #include "krita_export.h"
-#include "kis_layer_style_serializer.h"
 
+class QIODevice;
 class KisPSDLayerStyle;
 class KoPattern;
 
-#include "kis_asl_callback_object_catcher.h"
+#include "kis_psd_layer_style.h"
+#include "asl/kis_asl_callback_object_catcher.h"
 
 
-
-class KRITAIMAGE_EXPORT KisAslLayerStyleSerializer : public KisLayerStyleSerializer
+class KRITAUI_EXPORT KisAslLayerStyleSerializer
 {
 public:
-    KisAslLayerStyleSerializer(KisPSDLayerStyle *style);
+    KisAslLayerStyleSerializer();
     ~KisAslLayerStyleSerializer();
-
-    // a method for registering on KisLayerStyleSerializerFactory
-    static KisLayerStyleSerializerSP factoryObject(KisPSDLayerStyle *style);
 
     void saveToDevice(QIODevice *device);
     void readFromDevice(QIODevice *device);

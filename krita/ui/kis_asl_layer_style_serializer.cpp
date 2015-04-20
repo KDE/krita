@@ -34,28 +34,21 @@
 #include "kis_psd_layer_style.h"
 #include "kis_embedded_pattern_manager.h"
 
-#include "kis_asl_reader.h"
-#include "kis_asl_xml_parser.h"
-#include "kis_asl_callback_object_catcher.h"
-#include "kis_asl_writer_utils.h"
+#include "asl/kis_asl_reader.h"
+#include "asl/kis_asl_xml_parser.h"
+#include "asl/kis_asl_callback_object_catcher.h"
+#include "asl/kis_asl_writer_utils.h"
 
-#include "kis_asl_xml_writer.h"
-#include "kis_asl_writer.h"
+#include "asl/kis_asl_xml_writer.h"
+#include "asl/kis_asl_writer.h"
 
 
-KisAslLayerStyleSerializer::KisAslLayerStyleSerializer(KisPSDLayerStyle *style)
+KisAslLayerStyleSerializer::KisAslLayerStyleSerializer()
 {
-    Q_UNUSED(style);
 }
 
 KisAslLayerStyleSerializer::~KisAslLayerStyleSerializer()
 {
-}
-
-
-KisLayerStyleSerializerSP KisAslLayerStyleSerializer::factoryObject(KisPSDLayerStyle *style)
-{
-    return toQShared(new KisAslLayerStyleSerializer(style));
 }
 
 QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::styles() const
@@ -280,6 +273,8 @@ QString fetchPatternUuidSafe(KoPattern *pattern, QHash<KoPattern*, QString> patt
 
 void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 {
+    KIS_ASSERT_RECOVER_RETURN(!m_stylesVector.isEmpty());
+
     QVector<KoPattern*> allPatterns;
 
     foreach (KisPSDLayerStyleSP style, m_stylesVector) {

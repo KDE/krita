@@ -26,6 +26,7 @@
 
 #include "psd_utils.h"
 #include "kis_debug.h"
+#include "libkispsd_export.h"
 
 
 namespace KisAslWriterUtils {
@@ -49,13 +50,14 @@ struct ASLWriteException : public std::runtime_error
         throw KisAslWriterUtils::ASLWriteException(msg);                \
     }
 
+
 namespace KisAslWriterUtils {
 
-void writeUnicodeString(const QString &value, QIODevice *device);
-void writeVarString(const QString &value, QIODevice *device);
-void writePascalString(const QString &value, QIODevice *device);
-void writeFixedString(const QString &value, QIODevice *device);
-QString getPatternUuidLazy(const KoPattern *pattern);
+LIBKISPSD_EXPORT void writeUnicodeString(const QString &value, QIODevice *device);
+LIBKISPSD_EXPORT void writeVarString(const QString &value, QIODevice *device);
+LIBKISPSD_EXPORT void writePascalString(const QString &value, QIODevice *device);
+LIBKISPSD_EXPORT void writeFixedString(const QString &value, QIODevice *device);
+LIBKISPSD_EXPORT QString getPatternUuidLazy(const KoPattern *pattern);
 
 /**
  * Align the pointer \p pos by alignment. Grow the pointer

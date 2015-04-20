@@ -29,23 +29,26 @@
 
 #include "testutil.h"
 #include "kis_psd_layer_style.h"
-#include "../kis_asl_layer_style_serializer.h"
-#include "../kis_asl_reader.h"
+#include "kis_asl_layer_style_serializer.h"
+#include <asl/kis_asl_reader.h>
 
 
 #define CMP(object, method, value) QCOMPARE(style->object()->method(), value)
 
 void KisAslLayerStyleSerializerTest::testReading()
 {
-    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    KisAslLayerStyleSerializer s;
 
-    KisAslLayerStyleSerializer s(style.data());
-
-//    QString srcFileName(TestUtil::fetchDataFileLazy("test_all_style.asl"));
-    QString srcFileName(TestUtil::fetchDataFileLazy("test_all_and_pattern.asl"));
+//    QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_style.asl"));
+    QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_and_pattern.asl"));
     QFile aslFile(srcFileName);
     aslFile.open(QIODevice::ReadOnly);
     s.readFromDevice(&aslFile);
+
+    QVector<KisPSDLayerStyleSP> styles = s.styles();
+
+    QVERIFY(styles.size() == 1);
+    KisPSDLayerStyleSP style = styles.first();
 
     CMP(dropShadow, effectEnabled, true);
     CMP(dropShadow, blendMode, COMPOSITE_MULT);
@@ -188,17 +191,19 @@ void KisAslLayerStyleSerializerTest::testReading()
 
 void KisAslLayerStyleSerializerTest::testWriting()
 {
-    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    QVector<KisPSDLayerStyleSP> styles;
 
     QByteArray refXMLDoc;
 
     {
-        KisAslLayerStyleSerializer s(style.data());
+        KisAslLayerStyleSerializer s;
 
-        QString srcFileName(TestUtil::fetchDataFileLazy("test_all_and_pattern.asl"));
+        QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_and_pattern.asl"));
         QFile aslFile(srcFileName);
         aslFile.open(QIODevice::ReadOnly);
         s.readFromDevice(&aslFile);
+
+        styles = s.styles();
 
         {
             aslFile.seek(0);
@@ -211,7 +216,10 @@ void KisAslLayerStyleSerializerTest::testWriting()
 
     // now we have an initialized KisPSDLayerStyle object
     {
-        KisAslLayerStyleSerializer s(style.data());
+        KisAslLayerStyleSerializer s;
+
+        s.setStyles(styles);
+
         QFile dstFile("test_written.asl");
         dstFile.open(QIODevice::WriteOnly);
         s.saveToDevice(&dstFile);
@@ -262,7 +270,10 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
     style->patternOverlay()->setPattern(pattern);
 
     {
-        KisAslLayerStyleSerializer s(style.data());
+        KisAslLayerStyleSerializer s;
+
+        s.setStyles(QVector<KisPSDLayerStyleSP>() << style);
+
         QFile dstFile("test_written_pattern_only.asl");
         dstFile.open(QIODevice::WriteOnly);
         s.saveToDevice(&dstFile);
@@ -290,9 +301,9 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
     QVector<KisPSDLayerStyleSP> styles;
 
     {
-        KisAslLayerStyleSerializer s(0);
+        KisAslLayerStyleSerializer s;
 
-        QString srcFileName(TestUtil::fetchDataFileLazy("multiple_styles.asl"));
+        QString srcFileName(TestUtil::fetchDataFileLazy("asl/multiple_styles.asl"));
         QFile aslFile(srcFileName);
         aslFile.open(QIODevice::ReadOnly);
         s.readFromDevice(&aslFile);
@@ -302,7 +313,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
 
     {
-        KisAslLayerStyleSerializer s(0);
+        KisAslLayerStyleSerializer s;
 
         QString dstFileName("multiple_styles_out.asl");
         QFile aslFile(dstFileName);
@@ -313,7 +324,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
     }
 
     {
-        KisAslLayerStyleSerializer s(0);
+        KisAslLayerStyleSerializer s;
 
         QString srcFileName("multiple_styles_out.asl");
         QFile aslFile(srcFileName);
@@ -324,6 +335,24 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
         qDebug() << ppVar(styles.size());
     }
+}
+
+#include <KoResourceServer.h>
+#include "kis_psd_layer_style_resource.h"
+#include "kis_resource_server_provider.h"
+
+void KisAslLayerStyleSerializerTest::testResources()
+{
+    QTest::qWait(1000);
+
+    KGlobal::locale();
+
+    QTest::qWait(1000);
+
+    KoResourceServer<KisPSDLayerStyleCollectionResource> *server =
+        KisResourceServerProvider::instance()->layerStyleCollectionServer();
+
+    qDebug() << ppVar(server->resourceCount());
 }
 
 QTEST_KDEMAIN(KisAslLayerStyleSerializerTest, GUI)

@@ -16,9 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_layer_style_serializer.h"
+#ifndef __KIS_ASL_XML_PARSER_H
+#define __KIS_ASL_XML_PARSER_H
 
-KisLayerStyleSerializerFactory* KisLayerStyleSerializerFactory::instance() {
-    return instanceImpl();
-}
+#include "libkispsd_export.h"
 
+class QDomDocument;
+class QIODevice;
+class KisAslObjectCatcher;
+
+
+class LIBKISPSD_EXPORT KisAslXmlParser
+{
+public:
+    void parseXML(const QDomDocument &doc, KisAslObjectCatcher &catcher);
+};
+
+#endif /* __KIS_ASL_XML_PARSER_H */

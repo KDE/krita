@@ -27,6 +27,8 @@
 #include <klocale.h>
 
 #include "kis_psd_layer_style.h"
+#include "kis_asl_layer_style_serializer.h"
+
 
 KisPSDLayerStyleCollectionResource::KisPSDLayerStyleCollectionResource(const QString &filename)
     : KoResource(filename)
@@ -52,12 +54,17 @@ bool KisPSDLayerStyleCollectionResource::load()
     result = loadFromDevice(&file);
     file.close();
 
+    setValid(true);
+
     return result;
 }
 
 bool KisPSDLayerStyleCollectionResource::loadFromDevice(QIODevice *dev)
 {
-    m_layerStyles = KisPSDLayerStyle::readASL(dev);
+    KisAslLayerStyleSerializer serializer;
+    serializer.readFromDevice(dev);
+    m_layerStyles = serializer.styles();
+
     return true;
 }
 
@@ -72,7 +79,13 @@ bool KisPSDLayerStyleCollectionResource::save()
 
 bool KisPSDLayerStyleCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    return KisPSDLayerStyle::writeASL(dev, m_layerStyles);
+    if (m_layerStyles.isEmpty()) return true;
+
+    KisAslLayerStyleSerializer serializer;
+    serializer.setStyles(m_layerStyles);
+    serializer.saveToDevice(dev);
+
+    return true;
 }
 
 QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
@@ -89,11 +102,11 @@ KisPSDLayerStyleCollectionResource::layerStyles() const
 QByteArray KisPSDLayerStyleCollectionResource::generateMD5() const
 {
     if (m_layerStyles.size() > 0) {
-        QByteArray ba;
-        QBuffer buf(&ba);
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
         saveToDevice(&buf);
         QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
+        md5.addData(buf.buffer());
         return md5.result();
     }
     return QByteArray();

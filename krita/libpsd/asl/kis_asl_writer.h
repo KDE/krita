@@ -16,20 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_ASL_XML_PARSER_H
-#define __KIS_ASL_XML_PARSER_H
+#ifndef __KIS_ASL_WRITER_H
+#define __KIS_ASL_WRITER_H
 
-#include "krita_export.h"
+#include "libkispsd_export.h"
 
 class QDomDocument;
 class QIODevice;
-class KisAslObjectCatcher;
 
 
-class KRITAIMAGE_EXPORT KisAslXmlParser
+class LIBKISPSD_EXPORT KisAslWriter
 {
 public:
-    void parseXML(const QDomDocument &doc, KisAslObjectCatcher &catcher);
+    void writeFile(QIODevice *device, const QDomDocument &doc);
 };
 
-#endif /* __KIS_ASL_XML_PARSER_H */
+#endif /* __KIS_ASL_WRITER_H */

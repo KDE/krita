@@ -28,15 +28,15 @@
 
 #include "KoPattern.h"
 
-#include "../kis_asl_reader.h"
-#include "../kis_asl_xml_parser.h"
-#include "../kis_asl_object_catcher.h"
-#include "../kis_asl_callback_object_catcher.h"
+#include <asl/kis_asl_reader.h>
+#include <asl/kis_asl_xml_parser.h>
+#include <asl/kis_asl_object_catcher.h>
+#include <asl/kis_asl_callback_object_catcher.h>
 
 
 void KisAslParserTest::test()
 {
-    QString fileName(TestUtil::fetchDataFileLazy("freebie.asl"));
+    QString fileName(TestUtil::fetchDataFileLazy("asl/freebie.asl"));
     QFile aslFile(fileName);
     aslFile.open(QIODevice::ReadOnly);
 
@@ -98,7 +98,7 @@ struct CallbackVerifier {
 
 void KisAslParserTest::testWithCallbacks()
 {
-    QString fileName(TestUtil::fetchDataFileLazy("freebie.asl"));
+    QString fileName(TestUtil::fetchDataFileLazy("asl/freebie.asl"));
     QFile aslFile(fileName);
     aslFile.open(QIODevice::ReadOnly);
 
@@ -123,7 +123,7 @@ void KisAslParserTest::testWithCallbacks()
     QCOMPARE(verifier.m_numCallsHappened, 6);
 }
 
-#include "../kis_asl_xml_writer.h"
+#include <asl/kis_asl_xml_writer.h>
 
 void KisAslParserTest::testASLXMLWriter()
 {
@@ -186,12 +186,12 @@ void KisAslParserTest::testASLXMLWriter()
 
 }
 
-#include "../kis_asl_writer.h"
+#include <asl/kis_asl_writer.h>
 
 void KisAslParserTest::testASLWriter()
 {
-    //QString srcFileName(TestUtil::fetchDataFileLazy("testset/freebie_with_pattern.asl"));
-    QString srcFileName(TestUtil::fetchDataFileLazy("freebie.asl"));
+    //QString srcFileName(TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl"));
+    QString srcFileName(TestUtil::fetchDataFileLazy("asl/freebie.asl"));
 
     QDomDocument srcDoc;
 

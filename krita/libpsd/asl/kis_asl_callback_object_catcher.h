@@ -24,6 +24,8 @@
 #include <boost/function.hpp>
 #include <QScopedPointer>
 
+#include "libkispsd_export.h"
+
 class KoPattern;
 
 typedef boost::function<void (double)> ASLCallbackDouble;
@@ -39,7 +41,7 @@ typedef boost::function<void (const KoAbstractGradient *)> ASLCallbackGradient;
 typedef boost::function<void ()> ASLCallbackNewStyle;
 
 
-class KRITAIMAGE_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
+class LIBKISPSD_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
 {
 public:
     KisAslCallbackObjectCatcher();

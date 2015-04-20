@@ -41,7 +41,7 @@
 #include "kis_canvas_resource_provider.h"
 
 #include <KoFileDialog.h>
-#include "kis_layer_style_serializer.h"
+
 
 
 KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
@@ -176,16 +176,16 @@ void KisDlgLayerStyle::slotLoadStyle()
     if (file.exists()) {
         file.open(QIODevice::ReadOnly);
 
-        KisLayerStyleSerializerSP serializer;
+        // KisLayerStyleSerializerSP serializer;
 
-        serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
-        KIS_ASSERT_RECOVER_RETURN(serializer);
+        // serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
+        // KIS_ASSERT_RECOVER_RETURN(serializer);
 
-        serializer->readFromDevice(&file);
+        // serializer->readFromDevice(&file);
 
-        setStyle(m_layerStyle);
-        m_configChangedCompressor->stop();
-        emit configChanged();
+        // setStyle(m_layerStyle);
+        // m_configChangedCompressor->stop();
+        // emit configChanged();
     }
 }
 
@@ -204,12 +204,13 @@ void KisDlgLayerStyle::slotSaveStyle()
     QFile file(filename);
     file.open(QIODevice::WriteOnly);
 
-    KisLayerStyleSerializerSP serializer;
+    // KisLayerStyleSerializerSP serializer;
 
-    serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
-    KIS_ASSERT_RECOVER_RETURN(serializer);
+    // serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
+    // KIS_ASSERT_RECOVER_RETURN(serializer);
 
-    serializer->saveToDevice(&file);
+    // serializer->saveToDevice(&file);
+
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)

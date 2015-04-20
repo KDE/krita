@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "layerstyles.h"
-#include <kpluginfactory.h>
+#ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
+#define __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
 
-#include "kis_layer_style_serializer.h"
-#include "kis_asl_layer_style_serializer.h"
+#include <QtTest/QtTest>
 
-K_PLUGIN_FACTORY(LayerStylesPluginFactory, registerPlugin<LayerStylesPlugin>();)
-K_EXPORT_PLUGIN(LayerStylesPluginFactory("krita"))
-
-LayerStylesPlugin::LayerStylesPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+class KisAslLayerStyleSerializerTest : public QObject
 {
-    {
-        KisLayerStyleSerializerFactory::Factory f(KisAslLayerStyleSerializer::factoryObject);
-        KisLayerStyleSerializerFactory::instance()->setFactory(f);
-    }
+    Q_OBJECT
+private slots:
+    void testReading();
+    void testWriting();
+    void testWritingGlobalPatterns();
+    void testReadMultipleStyles();
 
-}
+    void testResources();
+};
 
-LayerStylesPlugin::~LayerStylesPlugin()
-{
-}
+#endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H */

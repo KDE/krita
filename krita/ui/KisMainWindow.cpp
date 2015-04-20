@@ -1178,17 +1178,32 @@ int KisMainWindow::viewCount() const
 bool KisMainWindow::restoreWorkspace(const QByteArray &state)
 {
     QByteArray oldState = saveState();
+    const bool showTitlebars = KisConfig().showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
-    foreach(QDockWidget *docker, dockWidgets()) {
-        docker->hide();
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->hide();
+        dock->titleBarWidget()->setVisible(showTitlebars);
     }
 
-    bool success = QMainWindow::restoreState(state);
+    bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
-        QMainWindow::restoreState(oldState);
+        KXmlGuiWindow::restoreState(oldState);
+        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+            if (dock->titleBarWidget()) {
+                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+            }
+        }
         return false;
+    }
+
+
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
+        }
     }
 
     return success;
@@ -1676,11 +1691,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             titleBar->setCollapsed(true);
         if (titleBar && locked)
             titleBar->setLocked(true);
-
-        if (titleBar) {
-            KisConfig cfg;
-            titleBar->setVisible(cfg.showDockerTitleBars());
-        }
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
@@ -2189,7 +2199,8 @@ void KisMainWindow::showDockerTitleBars(bool show)
 {
     foreach (QDockWidget *dock, dockWidgets()) {
         if (dock->titleBarWidget()) {
-            dock->titleBarWidget()->setVisible(show);
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));
         }
     }
 

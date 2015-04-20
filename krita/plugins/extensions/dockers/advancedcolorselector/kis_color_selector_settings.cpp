@@ -329,7 +329,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 10));
 
-    ui->hideColorSelector->setChecked(cfg.readEntry("hideColorSelector", true));
+    ui->hideColorSelector->setChecked(cfg.readEntry("hideColorSelector", false));
 
     QString hsxSettingType=cfg.readEntry("hsxSettingType", "HSV");
     ui->colorSelectorHSVtype->setChecked(hsxSettingType=="HSV");

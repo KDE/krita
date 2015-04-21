@@ -365,6 +365,9 @@ void KisToolCrop::crop()
     } else {
         currentImage()->cropImage(cropRect);
     }
+
+    m_finalRect.setCropRect(image()->bounds());
+
 }
 
 void KisToolCrop::setCropTypeLegacy(int cropType)

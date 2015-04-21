@@ -543,6 +543,7 @@ bool KisToolCrop::forceHeight() const
 void KisToolCrop::setAllowGrow(bool g)
 {
     m_finalRect.setCanGrow(g);
+    m_finalRect.setCropRect(image()->bounds());
     configGroup.writeEntry("allowGrow", g);
 }
 

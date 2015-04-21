@@ -30,6 +30,7 @@
  */
 class KRITAUI_EXPORT KisPSDLayerStyleCollectionResource : public KoResource
 {
+public:
     typedef KisPSDLayerStyle::StylesVector StylesVector;
 
 public:
@@ -45,6 +46,7 @@ public:
     virtual QString defaultFileExtension() const;
 
     StylesVector layerStyles() const;
+    void setLayerStyles(StylesVector styles);
 
 protected:
 

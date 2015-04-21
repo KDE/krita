@@ -130,7 +130,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="bnNewStyle">
+      <widget class="QPushButton" name="btnNewStyle">
        <property name="text">
         <string>Ne&amp;w Style ...</string>
        </property>

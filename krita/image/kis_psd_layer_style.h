@@ -19,6 +19,7 @@
 #define KIS_PSD_LAYER_STYLE_H
 
 class QIODevice;
+class QUuid;
 
 #include <QVector>
 
@@ -54,8 +55,11 @@ public:
     QString name() const;
     void setName(const QString &value);
 
-    QString uuid() const;
-    void setUuid(const QString &value) const;
+    QUuid uuid() const;
+    void setUuid(const QUuid &value) const;
+
+    QString psdUuid() const;
+    void setPsdUuid(const QString &value) const;
 
     /**
      * \return true if all the styles are disabled

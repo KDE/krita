@@ -42,6 +42,7 @@ class QListWidgetItem;
 class KisPSDLayerStyle;
 class KisSignalCompressor;
 class KisCanvasResourceProvider;
+class QUuid;
 
 
 class Contour : public QWidget {
@@ -229,11 +230,20 @@ class StylesSelector : public QWidget {
     Q_OBJECT
 public:
     StylesSelector(QWidget *parent);
+
+    void notifyExternalStyleChanged(const QString &name, const QUuid &uuid, bool sanityIsDirty);
+
+    void addNewStyle(KisPSDLayerStyleSP style);
+
 private slots:
     void loadStyles(const QString &name);
     void selectStyle(QListWidgetItem *previous, QListWidgetItem* current);
 signals:
     void styleSelected(KisPSDLayerStyleSP style);
+
+private:
+    void refillCollections();
+
 private:
     Ui::WdgStylesSelector ui;
 };
@@ -251,6 +261,9 @@ signals:
     void configChanged();
 
 public slots:
+    void notifyGuiConfigChanged();
+    void notifyPredefinedStyleSelected(KisPSDLayerStyleSP style);
+
     void changePage(QListWidgetItem *, QListWidgetItem*);
 
     void slotNotifyOnAccept();
@@ -261,6 +274,7 @@ public slots:
 
     void slotLoadStyle();
     void slotSaveStyle();
+    void slotNewStyle();
 
 private:
 
@@ -285,6 +299,8 @@ private:
     Texture *m_texture;
 
     KisSignalCompressor *m_configChangedCompressor;
+    bool m_isSwitchingPredefinedStyle;
+    mutable bool m_sanityLayerStyleDirty;
 
 };
 

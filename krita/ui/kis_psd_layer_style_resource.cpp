@@ -99,6 +99,12 @@ KisPSDLayerStyleCollectionResource::layerStyles() const
     return m_layerStyles;
 }
 
+void KisPSDLayerStyleCollectionResource::setLayerStyles(StylesVector styles)
+{
+    m_layerStyles = styles;
+    setValid(!m_layerStyles.isEmpty());
+}
+
 QByteArray KisPSDLayerStyleCollectionResource::generateMD5() const
 {
     if (m_layerStyles.size() > 0) {

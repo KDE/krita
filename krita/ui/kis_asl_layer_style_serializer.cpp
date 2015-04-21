@@ -302,7 +302,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
         w.enterDescriptor("", "", "null");
         w.writeText("Nm  ", style->name());
-        w.writeText("Idnt", style->uuid());
+        w.writeText("Idnt", style->psdUuid());
         w.leaveDescriptor();
 
         w.enterDescriptor("", "", "Styl");
@@ -662,9 +662,6 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.leaveDescriptor();
     }
 
-    qDebug() << "WRITTEN:";
-    qDebug() << w.document().toString();
-
     KisAslWriter writer;
     writer.writeFile(device, w.document());
 }
@@ -884,7 +881,7 @@ private:
 void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style)
 {
     CONN_TEXT_RADDR("/null/Nm  ", setName, style, KisPSDLayerStyle);
-    CONN_TEXT_RADDR("/null/Idnt", setUuid, style, KisPSDLayerStyle);
+    CONN_TEXT_RADDR("/null/Idnt", setPsdUuid, style, KisPSDLayerStyle);
 
     psd_layer_effects_drop_shadow *dropShadow = style->dropShadow();
 

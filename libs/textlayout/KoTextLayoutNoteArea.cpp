@@ -45,6 +45,7 @@ public:
     bool isContinuedArea;
     qreal labelWidth;
     qreal labelHeight;
+    qreal labelYOffset;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -73,9 +74,9 @@ void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::
 
     KoTextLayoutArea::paint(painter, context);
     if (d->postLayout) {
-        d->postLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
+        d->postLayout->draw(painter, QPointF(left() + d->labelIndent, top() + d->labelYOffset));
     }
-    d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
+    d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top() + d->labelYOffset));
     painter->restore();
 }
 
@@ -101,8 +102,9 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     label.prepend(notesConfig->numberFormat().prefix());
     label.append(notesConfig->numberFormat().suffix());
     QPaintDevice *pd = documentLayout()->paintDevice();
-    QTextCharFormat format = cursor->it.currentBlock().charFormat();
-    KoCharacterStyle *style = documentLayout()->styleManager()->characterStyle(notesConfig->citationTextStyle());
+    QTextBlock block = cursor->it.currentBlock();
+    QTextCharFormat format = block.charFormat();
+    KoCharacterStyle *style = static_cast<KoCharacterStyle *>(notesConfig->citationTextStyle());
     if (style) {
         style->applyStyle(format);
     }
@@ -122,7 +124,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     QTextLine line = d->textLayout->createLine();
     d->textLayout->endLayout();
 
-    KoParagraphStyle pStyle(d->note->textFrame()->begin().currentBlock().blockFormat(), QTextCharFormat());
+    KoParagraphStyle pStyle(block.blockFormat(), QTextCharFormat());
     d->labelIndent = textIndent(d->note->textFrame()->begin().currentBlock(), 0, pStyle);
     if (line.naturalTextWidth() > -d->labelIndent) {
         KoTextLayoutArea::setExtraTextIndent(line.naturalTextWidth());
@@ -132,8 +134,11 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     d->labelIndent += pStyle.leftMargin();
     d->labelWidth = line.naturalTextWidth();
     d->labelHeight = line.naturalTextRect().bottom() - line.naturalTextRect().top();
+    d->labelYOffset = -line.ascent();
 
     bool contNotNeeded = KoTextLayoutArea::layout(cursor);
+
+    d->labelYOffset += block.layout()->lineAt(0).ascent();
 
     if (!contNotNeeded) {
         QString contNote = notesConfig->footnoteContinuationForward();
@@ -143,8 +148,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         QTextLayout::FormatRange contTextRange;
         contTextRange.start = 0;
         contTextRange.length = contNote.length();
-        contTextRange.format = format;
-        contTextRange.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+        contTextRange.format = block.charFormat();;
         contTextLayouts.append(contTextRange);
         d->postLayout->setAdditionalFormats(contTextLayouts);
 
@@ -175,7 +179,7 @@ KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy 
 
     pointedAt = KoTextLayoutArea::hitTest(tmpP, accuracy);
 
-    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelHeight)
+    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelYOffset + d->labelHeight)
     {
         pointedAt.noteReference = d->note->getPosInDocument();
         pointedAt.position = tmpP.x();

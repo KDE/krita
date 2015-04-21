@@ -74,7 +74,7 @@ void KoReportItemMaps::createProperties()
     m_latitudeProperty->setOption("max", 90);
     m_latitudeProperty->setOption("unit", QString::fromUtf8("°"));
 
-    m_longitudeProperty = new KoProperty::Property("longitude", 0.0, i18n("longitude"), i18n("longitude"), KoProperty::Double);
+    m_longitudeProperty = new KoProperty::Property("longitude", 0.0, i18n("Longitude"), i18n("Longitude"), KoProperty::Double);
     m_longitudeProperty->setOption("min", -180);
     m_longitudeProperty->setOption("max", 180);
     m_longitudeProperty->setOption("unit", QString::fromUtf8("°"));

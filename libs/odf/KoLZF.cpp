@@ -292,6 +292,8 @@ QByteArray compress(const QByteArray& input)
 // will not squeeze output
 void decompress(const QByteArray& input, QByteArray& output)
 {
+    Q_ASSERT(input.size() >= 5);
+
     // read out first how big is the uncompressed size
     unsigned int unpack_size = 0;
     unpack_size |= ((quint8)input[0]);
@@ -300,7 +302,7 @@ void decompress(const QByteArray& input, QByteArray& output)
     unpack_size |= ((quint8)input[3]) << 24;
 
     // prepare the output
-    output.reserve(unpack_size);
+    output.resize(unpack_size);
 
     // compression flag
     quint8 flag = (quint8)input[4];
@@ -311,12 +313,11 @@ void decompress(const QByteArray& input, QByteArray& output)
     unsigned char* out_data = (unsigned char*) output.data();
     unsigned int out_len = (unsigned int)unpack_size;
 
-    if (flag == 0)
+    if (flag == 0) {
         memcpy(output.data(), in_data, in_len);
-    else {
+    } else {
         unsigned int len = decompress(in_data, in_len, out_data, out_len);
-        output.resize(len);
-        output.squeeze();
+        Q_ASSERT(len == out_len);
     }
 }
 

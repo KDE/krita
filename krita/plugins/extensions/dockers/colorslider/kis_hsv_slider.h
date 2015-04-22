@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
+   Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +48,7 @@ public:
     KisDisplayColorConverter* converter() const;
 protected:
     virtual void drawContents( QPainter* );
+    virtual void drawArrow(QPainter *painter, const QPoint &pos);
     struct Private;
     Private* const d;
 private:

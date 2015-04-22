@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -46,17 +47,19 @@ KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, 
 void KisColorInput::init()
 {
     QHBoxLayout* m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(1);
+
     QLabel* m_label = new QLabel(i18n("%1:", m_channelInfo->name()), this);
     m_label->setMinimumWidth(50);
     m_layout->addWidget(m_label);
 
     m_colorSlider = new KoColorSlider(Qt::Horizontal, this, m_displayRenderer);
-    m_colorSlider->setMaximumHeight(20);
-    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_layout->addWidget(m_colorSlider);
 
     QWidget* m_input = createInput();
-    m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    m_colorSlider->setFixedHeight(m_input->sizeHint().height());
     m_layout->addWidget(m_input);
 }
 
@@ -235,6 +238,9 @@ void KisFloatColorInput::update()
 KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, 0, color, displayRenderer)
 {
     QHBoxLayout* m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(1);
+
     QLabel* m_label = new QLabel(i18n("Color name:"), this);
     m_label->setMinimumWidth(50);
     m_layout->addWidget(m_label);

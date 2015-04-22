@@ -58,7 +58,7 @@ bool psdwrite(QIODevice* io, double val)
     Q_ASSERT(sizeof(double) == sizeof(qint64));
     void *v = &val;
     qint64 i = qToBigEndian<qint64>(*(qint64*)(v));
-    quint64 write = io->write((char*)i, 8);
+    quint64 write = io->write((char*)&i, 8);
     if (write != 8) return false;
     return true;
 }

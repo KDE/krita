@@ -143,12 +143,12 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
 
+        setName(rhs.name());
+        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
+
         if (rhs.m_d->layerStyle) {
             setLayerStyle(rhs.m_d->layerStyle->clone());
         }
-
-        setName(rhs.name());
-        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
     }
 }
 

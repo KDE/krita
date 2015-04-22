@@ -48,6 +48,9 @@ public:
     StylesVector layerStyles() const;
     void setLayerStyles(StylesVector styles);
 
+    void collectAllLayerStyles(KisNodeSP root);
+    void assignAllLayerStyles(KisNodeSP root);
+
 protected:
 
     virtual QByteArray generateMD5() const;

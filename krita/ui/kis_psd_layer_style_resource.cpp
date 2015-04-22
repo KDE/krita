@@ -30,11 +30,15 @@
 #include "kis_psd_layer_style.h"
 #include "kis_asl_layer_style_serializer.h"
 
+#include "kis_layer.h"
+
 
 KisPSDLayerStyleCollectionResource::KisPSDLayerStyleCollectionResource(const QString &filename)
     : KoResource(filename)
 {
-    setName(QFileInfo(filename).fileName());
+    if (!filename.isEmpty()) {
+        setName(QFileInfo(filename).fileName());
+    }
 }
 
 KisPSDLayerStyleCollectionResource::~KisPSDLayerStyleCollectionResource()
@@ -56,7 +60,6 @@ bool KisPSDLayerStyleCollectionResource::load()
     file.close();
 
     setName(QFileInfo(filename()).fileName());
-    setValid(true);
 
     return result;
 }
@@ -66,6 +69,7 @@ bool KisPSDLayerStyleCollectionResource::loadFromDevice(QIODevice *dev)
     KisAslLayerStyleSerializer serializer;
     serializer.readFromDevice(dev);
     m_layerStyles = serializer.styles();
+    setValid(true);
 
     return true;
 }
@@ -118,4 +122,51 @@ QByteArray KisPSDLayerStyleCollectionResource::generateMD5() const
         return md5.result();
     }
     return QByteArray();
+}
+
+void KisPSDLayerStyleCollectionResource::collectAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = dynamic_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        KisPSDLayerStyleSP clone = layer->layerStyle()->clone();
+        clone->setName(i18nc("Auto-generated layer style name for embedded styles (style itself)", "<%1> (embedded)", layer->name()));
+        m_layerStyles << clone;
+        setValid(true);
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        collectAllLayerStyles(child);
+        child = child->nextSibling();
+    }
+}
+
+void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = dynamic_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        QUuid uuid = layer->layerStyle()->uuid();
+
+        bool found = false;
+
+        foreach (KisPSDLayerStyleSP style, m_layerStyles) {
+            if (style->uuid() == uuid) {
+                layer->setLayerStyle(style->clone());
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            qWarning() << "WARNING: loading layer style for" << layer->name() << "failed! It requests unexistent style:" << uuid;
+        }
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        assignAllLayerStyles(child);
+        child = child->nextSibling();
+    }
 }

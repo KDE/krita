@@ -170,6 +170,11 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     m_optionWidget->chooser->blockSignals(false); // Checking
     if (!pattern) return;
 
+    setting->setProperty("Texture/Pattern/Enabled", isChecked());
+    if (!isChecked()) {
+        return;
+    }
+
     qreal scale = m_optionWidget->scaleSlider->value();
 
     int offsetX = m_optionWidget->offsetSliderX->value();
@@ -209,7 +214,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/CutoffRight", m_optionWidget->cutoffSlider->white());
     setting->setProperty("Texture/Pattern/CutoffPolicy", m_optionWidget->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
-    setting->setProperty("Texture/Pattern/Enabled", isChecked());
+
     setting->setProperty("Texture/Pattern/MaximumOffsetX",m_optionWidget -> offsetSliderX ->maximum());
     setting->setProperty("Texture/Pattern/MaximumOffsetY",m_optionWidget -> offsetSliderY ->maximum());
     setting->setProperty("Texture/Pattern/isRandomOffsetX",m_optionWidget ->randomOffsetX ->isChecked());
@@ -222,6 +227,10 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    setChecked(setting->getBool("Texture/Pattern/Enabled"));
+    if (!isChecked()) {
+        return;
+    }
     KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     if (!pattern) {
@@ -238,8 +247,6 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
-
-    setChecked(setting->getBool("Texture/Pattern/Enabled"));
 }
 
 void KisTextureOption::resetGUI(KoResource* res)

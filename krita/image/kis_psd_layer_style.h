@@ -40,9 +40,6 @@ class KRITAIMAGE_EXPORT KisPSDLayerStyle
 {
 
 public:
-    typedef QVector<KisPSDLayerStyleSP> StylesVector;
-
-public:
     explicit KisPSDLayerStyle();
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);

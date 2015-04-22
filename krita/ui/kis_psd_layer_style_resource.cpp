@@ -99,8 +99,7 @@ QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
     return QString(".asl");
 }
 
-KisPSDLayerStyleCollectionResource::StylesVector
-KisPSDLayerStyleCollectionResource::layerStyles() const
+KisPSDLayerStyleCollectionResource::StylesVector KisPSDLayerStyleCollectionResource::layerStyles() const
 {
     return m_layerStyles;
 }

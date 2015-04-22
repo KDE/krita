@@ -160,7 +160,7 @@ void KisDlgLayerStyle::notifyGuiConfigChanged()
     m_layerStyle->setUuid(QUuid::createUuid());
     m_sanityLayerStyleDirty = true;
 
-    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid(), m_sanityLayerStyleDirty);
+    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
 }
 
 void KisDlgLayerStyle::notifyPredefinedStyleSelected(KisPSDLayerStyleSP style)
@@ -245,24 +245,11 @@ void KisDlgLayerStyle::slotLoadStyle()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
     //dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
+    dialog.setNameFilter(i18n("Layer style library (*.asl)"));
     filename = dialog.url();
 
-    QFile file(filename);
-    if (file.exists()) {
-        file.open(QIODevice::ReadOnly);
-
-        // KisLayerStyleSerializerSP serializer;
-
-        // serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
-        // KIS_ASSERT_RECOVER_RETURN(serializer);
-
-        // serializer->readFromDevice(&file);
-
-        // setStyle(m_layerStyle);
-        // m_configChangedCompressor->stop();
-        // emit configChanged();
-    }
+    m_stylesSelector->loadCollection(filename);
+    wdgLayerStyles.lstStyleSelector->setCurrentRow(0);
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
@@ -275,16 +262,16 @@ void KisDlgLayerStyle::slotSaveStyle()
     dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
     filename = dialog.url();
 
-    QFile file(filename);
-    file.open(QIODevice::WriteOnly);
+    QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
+        new KisPSDLayerStyleCollectionResource(filename));
 
-    // KisLayerStyleSerializerSP serializer;
+    KisPSDLayerStyleSP newStyle = style()->clone();
+    newStyle->setName(QFileInfo(filename).baseName());
 
-    // serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
-    // KIS_ASSERT_RECOVER_RETURN(serializer);
-
-    // serializer->saveToDevice(&file);
-
+    KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
+    vector << newStyle;
+    collection->setLayerStyles(vector);
+    collection->save();
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -300,7 +287,7 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     *m_layerStyle = *style;
     m_sanityLayerStyleDirty = false;
 
-    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid(), m_sanityLayerStyleDirty);
+    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
 
     QListWidgetItem *item;
     item = wdgLayerStyles.lstStyleSelector->item(2);
@@ -380,7 +367,7 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     m_stroke->fetchStroke(m_layerStyle->stroke());
 
     m_sanityLayerStyleDirty = false;
-    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid(), m_sanityLayerStyleDirty);
+    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
 
     return m_layerStyle;
 }
@@ -435,7 +422,7 @@ void StylesSelector::refillCollections()
     }
 }
 
-void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid, bool sanityIsDirty)
+void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
 {
     int currentIndex = -1;
 
@@ -481,6 +468,29 @@ void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*pr
     }
 }
 
+void StylesSelector::loadCollection(const QString &fileName)
+{
+    if (!QFileInfo(fileName).exists()) {
+        qWarning() << "Loaded style collection doesn't exist!";
+        return;
+    }
+
+    KisPSDLayerStyleCollectionResource *collection =
+        new KisPSDLayerStyleCollectionResource(fileName);
+
+    collection->load();
+
+    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    collection->setFilename(server->saveLocation() + QDir::separator() + collection->name());
+    server->addResource(collection);
+
+    refillCollections();
+
+    int index = ui.cmbStyleCollections->findText(collection->name());
+    ui.cmbStyleCollections->setCurrentIndex(index);
+    loadStyles(collection->name());
+}
+
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 {
     KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
@@ -523,7 +533,7 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 
     loadStyles(customName);
 
-    notifyExternalStyleChanged(style->name(), style->uuid(), false);
+    notifyExternalStyleChanged(style->name(), style->uuid());
 }
 
 /********************************************************************/

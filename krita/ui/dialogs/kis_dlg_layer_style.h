@@ -231,9 +231,10 @@ class StylesSelector : public QWidget {
 public:
     StylesSelector(QWidget *parent);
 
-    void notifyExternalStyleChanged(const QString &name, const QUuid &uuid, bool sanityIsDirty);
+    void notifyExternalStyleChanged(const QString &name, const QUuid &uuid);
 
     void addNewStyle(KisPSDLayerStyleSP style);
+    void loadCollection(const QString &fileName);
 
 private slots:
     void loadStyles(const QString &name);
@@ -300,8 +301,12 @@ private:
 
     KisSignalCompressor *m_configChangedCompressor;
     bool m_isSwitchingPredefinedStyle;
-    mutable bool m_sanityLayerStyleDirty;
 
+    /**
+     * Used for debugging purposes only to track if m_layerStyle is in
+     * sync with what is stored in the GUI
+     */
+    mutable bool m_sanityLayerStyleDirty;
 };
 
 #endif // KIS_DLG_LAYER_STYLE_H

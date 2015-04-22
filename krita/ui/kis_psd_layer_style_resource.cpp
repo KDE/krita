@@ -21,6 +21,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QFile>
+#include <QFileInfo>
 #include <QCryptographicHash>
 
 #include <kdebug.h>
@@ -33,7 +34,7 @@
 KisPSDLayerStyleCollectionResource::KisPSDLayerStyleCollectionResource(const QString &filename)
     : KoResource(filename)
 {
-
+    setName(QFileInfo(filename).fileName());
 }
 
 KisPSDLayerStyleCollectionResource::~KisPSDLayerStyleCollectionResource()
@@ -54,6 +55,7 @@ bool KisPSDLayerStyleCollectionResource::load()
     result = loadFromDevice(&file);
     file.close();
 
+    setName(QFileInfo(filename()).fileName());
     setValid(true);
 
     return result;

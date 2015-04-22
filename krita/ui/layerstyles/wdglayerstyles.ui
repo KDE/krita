@@ -132,21 +132,21 @@
      <item>
       <widget class="QPushButton" name="btnNewStyle">
        <property name="text">
-        <string>Ne&amp;w Style ...</string>
+        <string>Ne&amp;w...</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnLoadStyle">
        <property name="text">
-        <string>&amp;Load Style...</string>
+        <string>&amp;Import...</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnSaveStyle">
        <property name="text">
-        <string>&amp;Save Style...</string>
+        <string>&amp;Export...</string>
        </property>
       </widget>
      </item>

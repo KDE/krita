@@ -69,7 +69,7 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
         }
         QWidget *m_sliderdockerwidget = new QWidget;
         QVBoxLayout *m_layout = new QVBoxLayout(m_sliderdockerwidget);
-        m_layout->setContentsMargins(0,0,0,0);
+        m_layout->setContentsMargins(4,4,4,0);
         m_layout->setSpacing(1);
         setWidget(m_sliderdockerwidget);
         //m_updateAllowed = true;

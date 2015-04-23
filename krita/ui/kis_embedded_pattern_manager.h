@@ -32,7 +32,6 @@ public:
     static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
     static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
 
-    static KoAbstractGradient* tryFetchGradientByMd5(const QByteArray &md5);
     static KoPattern* tryFetchPatternByMd5(const QByteArray &md5);
 
 private:

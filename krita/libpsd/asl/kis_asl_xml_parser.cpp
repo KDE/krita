@@ -452,7 +452,7 @@ bool tryParseDescriptor(const QDomElement &el,
         }
 
         QString fileName = gradientName + ".ggr";
-        QScopedPointer<KoSegmentGradient> gradient(new KoSegmentGradient(fileName));
+        QSharedPointer<KoSegmentGradient> gradient(new KoSegmentGradient(fileName));
         Q_UNUSED(gradientSmoothness);
         gradient->setName(gradientName);
 
@@ -474,7 +474,7 @@ bool tryParseDescriptor(const QDomElement &el,
 
         gradient->setValid(true);
 
-        catcher.addGradient(path, gradient.data());
+        catcher.addGradient(path, gradient);
     } else {
         retval = false;
     }

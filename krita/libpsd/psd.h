@@ -229,8 +229,6 @@ struct psd_layer_effects_context {
 
 #define PSD_LOOKUP_TABLE_SIZE 256
 
-class KoAbstractGradient;
-
 // dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
 class LIBKISPSD_EXPORT psd_layer_effects_shadow_base {
 public:
@@ -350,7 +348,7 @@ public:
         return m_jitter;
     }
 
-    KoAbstractGradient* gradient() const {
+    KoAbstractGradientSP gradient() const {
         return m_gradient;
     }
 
@@ -432,7 +430,7 @@ public:
         m_jitter = value;
     }
 
-    void setGradient(KoAbstractGradient* value) {
+    void setGradient(KoAbstractGradientSP value) {
         m_gradient = value;
     }
 
@@ -465,7 +463,7 @@ private:
     psd_technique_type m_technique;
     qint32 m_range;
     qint32 m_jitter;
-    KoAbstractGradient *m_gradient;
+    KoAbstractGradientSP m_gradient;
 };
 
 class LIBKISPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base

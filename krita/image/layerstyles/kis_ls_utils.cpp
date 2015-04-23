@@ -501,7 +501,7 @@ namespace KisLsUtils
             /* end of copy paste from libpsd */
 
             KisGradientPainter gc(fillDevice);
-            gc.setGradient(config->gradient());
+            gc.setGradient(config->gradient().data());
             QPointF gradStart;
             QPointF gradEnd;
             KisGradientPainter::enumGradientRepeat repeat =
@@ -601,7 +601,7 @@ namespace KisLsUtils
                 new KisPaintDevice(dstDevice->colorSpace());
 
             QVector<KoColor> table(256);
-            Private::getGradientTable(config->gradient(), &table, dstDevice->colorSpace());
+            Private::getGradientTable(config->gradient().data(), &table, dstDevice->colorSpace());
 
             Private::applyGradient(overlayDevice, baseSelection->pixelSelection(),
                                    effectRect, table,

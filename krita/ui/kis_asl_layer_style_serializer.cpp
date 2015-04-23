@@ -380,7 +380,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
 
             if (outerGlow->fillType() == psd_fill_gradient && outerGlow->gradient()) {
-                KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(outerGlow->gradient());
+                KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(outerGlow->gradient().data());
 
                 if (segmentGradient) {
                     w.writeGradient("Grad", segmentGradient);
@@ -425,7 +425,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
 
             if (innerGlow->fillType() == psd_fill_gradient && innerGlow->gradient()) {
-                KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(innerGlow->gradient());
+                KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(innerGlow->gradient().data());
 
                 if (segmentGradient) {
                     w.writeGradient("Grad", segmentGradient);
@@ -562,7 +562,8 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
         // Gradient Overlay
         const psd_layer_effects_gradient_overlay *gradientOverlay = style->gradientOverlay();
-        KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(gradientOverlay->gradient());
+        KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(gradientOverlay->gradient().data());
+
         if (!segmentGradient) {
             qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first! Gradient Overlay style is skipped!";
         }
@@ -627,7 +628,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
             if (stroke->fillType() == psd_fill_solid_color) {
                 w.writeColor("Clr ", stroke->color());
             } else if (stroke->fillType() == psd_fill_gradient) {
-                KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(stroke->gradient());
+                KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(stroke->gradient().data());
 
                 if (segmentGradient) {
                     w.writeGradient("Grad", segmentGradient);
@@ -750,21 +751,6 @@ void convertAndSetEnum(const QString &value,
     setMappedValue(map[value]);
 }
 
-void cloneAndSetGradient(const KoAbstractGradient *resource,
-                         boost::function<void (KoAbstractGradient*)> setResource)
-{
-    QByteArray md5 = resource->md5();
-    KoAbstractGradient *newResource = KisEmbeddedPatternManager::tryFetchGradientByMd5(md5);
-
-    if (!newResource) {
-        newResource = resource->clone();
-        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        server->addResource(newResource, false);
-    }
-
-    setResource(newResource);
-}
-
 inline QString _prepaddr(const QString &addr) {
     return QString("/Styl/Lefx") + addr;
 }
@@ -799,9 +785,7 @@ inline QString _prepaddr(const QString &addr) {
 
 #define CONN_GRADIENT(addr, method, object, type)                      \
     {                                                                  \
-        boost::function<void (KoAbstractGradient*)> setter =    \
-            boost::bind(&type::method, object, _1);                    \
-        m_catcher.subscribeGradient(_prepaddr(addr), boost::bind(cloneAndSetGradient, _1, setter)); \
+        m_catcher.subscribeGradient(_prepaddr(addr), boost::bind(&type::method, object, _1)); \
     }
 
 #define CONN_PATTERN(addr, method, object, type)                       \

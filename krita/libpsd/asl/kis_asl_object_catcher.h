@@ -28,6 +28,8 @@ class QPointF;
 class KoPattern;
 class KoAbstractGradient;
 
+template<class T> class QSharedPointer;
+typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
 class LIBKISPSD_EXPORT KisAslObjectCatcher
 {
@@ -46,7 +48,7 @@ public:
     virtual void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
     virtual void addPattern(const QString &path, const KoPattern *pattern);
     virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
-    virtual void addGradient(const QString &path, const KoAbstractGradient *gradient);
+    virtual void addGradient(const QString &path, KoAbstractGradientSP gradient);
 
     virtual void newStyleStarted();
 

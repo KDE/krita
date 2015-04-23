@@ -176,7 +176,7 @@ void KisAslCallbackObjectCatcher::addPatternRef(const QString &path, const QStri
     }
 }
 
-void KisAslCallbackObjectCatcher::addGradient(const QString &path, const KoAbstractGradient *value)
+void KisAslCallbackObjectCatcher::addGradient(const QString &path, KoAbstractGradientSP value)
 {
     passToCallback(path, m_d->mapGradient, value);
 }

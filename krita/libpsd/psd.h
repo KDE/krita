@@ -354,12 +354,6 @@ public:
         return m_gradient;
     }
 
-protected:
-    /**
-     * All the setters are protected by default.  Should be made
-     * public by descendants manually when needed.
-     */
-
     void setBlendMode(QString value) {
         m_blendMode = value;
     }

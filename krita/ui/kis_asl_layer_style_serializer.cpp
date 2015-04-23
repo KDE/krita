@@ -28,7 +28,6 @@
 #include <KoSegmentGradient.h>
 #include <KoPattern.h>
 
-
 #include "psd.h"
 #include "kis_global.h"
 #include "kis_psd_layer_style.h"
@@ -999,8 +998,8 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style)
 
 
     QMap<QString, psd_gradient_style> gradientStyleMap;
-    gradientStyleMap.insert("Lnr ", psd_gradient_style_linear);
-    gradientStyleMap.insert("Rdl ", psd_gradient_style_radial);
+    gradientStyleMap.insert("Lnr ", psd_gradient_style_linear);
+    gradientStyleMap.insert("Rdl ", psd_gradient_style_radial);
     gradientStyleMap.insert("Angl", psd_gradient_style_angle);
     gradientStyleMap.insert("Rflc", psd_gradient_style_reflected);
     gradientStyleMap.insert("Dmnd", psd_gradient_style_diamond);

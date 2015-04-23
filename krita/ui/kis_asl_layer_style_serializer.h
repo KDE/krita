@@ -22,7 +22,6 @@
 #include "krita_export.h"
 
 class QIODevice;
-class KisPSDLayerStyle;
 class KoPattern;
 
 #include "kis_psd_layer_style.h"

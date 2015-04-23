@@ -338,16 +338,16 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
             if (tex_depth >= 0.0) {
                 if (tex_depth <= 100.0) {
-                    contrastadj = int(round((1-(tex_depth/100.0)) * -127));
+                    contrastadj = int(qRound((1-(tex_depth/100.0)) * -127));
                 } else {
-                    contrastadj = int(round(((tex_depth-100.0)/900.0) * 127));
+                    contrastadj = int(qRound(((tex_depth-100.0)/900.0) * 127));
                 }
             } else {
                 textureSelection->invert();
                 if (tex_depth >= -100.0) {
-                    contrastadj = int(round((1-(abs(tex_depth)/100.0)) * -127));
+                    contrastadj = int(qRound((1-(abs(tex_depth)/100.0)) * -127));
                 } else {
-                    contrastadj = int(round(((abs(tex_depth)-100.0)/900.0) * 127));
+                    contrastadj = int(qRound(((abs(tex_depth)-100.0)/900.0) * 127));
                 }
             }
         }

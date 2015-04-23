@@ -18,6 +18,8 @@
 #ifndef KIS_DLG_LAYER_STYLE_H
 #define KIS_DLG_LAYER_STYLE_H
 
+#include <QUuid>
+
 #include <kdialog.h>
 
 #include "kis_types.h"
@@ -42,7 +44,7 @@ class QListWidgetItem;
 class KisPSDLayerStyle;
 class KisSignalCompressor;
 class KisCanvasResourceProvider;
-class QUuid;
+
 
 
 class Contour : public QWidget {

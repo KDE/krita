@@ -32,8 +32,6 @@ public:
     static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
     static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
 
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5);
-
 private:
     struct Private;
 };

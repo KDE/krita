@@ -31,7 +31,6 @@
 #include "psd.h"
 #include "kis_global.h"
 #include "kis_psd_layer_style.h"
-#include "kis_embedded_pattern_manager.h"
 
 #include "asl/kis_asl_reader.h"
 #include "asl/kis_asl_xml_parser.h"
@@ -801,12 +800,11 @@ void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern)
     if (m_patternsStore.contains(uuid)) {
         qWarning() << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[uuid]->name());
     } else {
-        KoPattern *patternToAdd = KisEmbeddedPatternManager::tryFetchPatternByMd5(pattern->md5());
+        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
+        KoPattern *patternToAdd = server->resourceByMD5(pattern->md5());
 
         if (!patternToAdd) {
             patternToAdd = pattern->clone();
-
-            KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
             server->addResource(patternToAdd, false);
         }
 

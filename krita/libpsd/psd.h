@@ -354,6 +354,8 @@ public:
         return m_gradient;
     }
 
+public:
+
     void setBlendMode(QString value) {
         m_blendMode = value;
     }
@@ -469,23 +471,31 @@ private:
 class LIBKISPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
 {
 public:
-    using psd_layer_effects_shadow_base::setBlendMode;
-    using psd_layer_effects_shadow_base::setColor;
-    using psd_layer_effects_shadow_base::setOpacity;
-    using psd_layer_effects_shadow_base::setAngle;
-    using psd_layer_effects_shadow_base::setUseGlobalLight;
-    using psd_layer_effects_shadow_base::setDistance;
-    using psd_layer_effects_shadow_base::setSpread;
-    using psd_layer_effects_shadow_base::setSize;
-    using psd_layer_effects_shadow_base::setContourLookupTable;
-    using psd_layer_effects_shadow_base::setAntiAliased;
-    using psd_layer_effects_shadow_base::setNoise;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
+
+    // using psd_layer_effects_shadow_base::setBlendMode;
+    // using psd_layer_effects_shadow_base::setColor;
+    // using psd_layer_effects_shadow_base::setOpacity;
+    // using psd_layer_effects_shadow_base::setAngle;
+    // using psd_layer_effects_shadow_base::setUseGlobalLight;
+    // using psd_layer_effects_shadow_base::setDistance;
+    // using psd_layer_effects_shadow_base::setSpread;
+    // using psd_layer_effects_shadow_base::setSize;
+    // using psd_layer_effects_shadow_base::setContourLookupTable;
+    // using psd_layer_effects_shadow_base::setAntiAliased;
+    // using psd_layer_effects_shadow_base::setNoise;
 };
 
 class LIBKISPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_common
 {
 public:
-    using psd_layer_effects_shadow_base::setKnocksOut;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
+
+    //using psd_layer_effects_shadow_base::setKnocksOut;
 };
 
 // isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
@@ -509,21 +519,25 @@ public:
         setColor(Qt::white);
     }
 
-    using psd_layer_effects_shadow_base::setBlendMode;
-    using psd_layer_effects_shadow_base::setColor;
-    using psd_layer_effects_shadow_base::setOpacity;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
 
-    using psd_layer_effects_shadow_base::setSpread;
-    using psd_layer_effects_shadow_base::setSize;
-    using psd_layer_effects_shadow_base::setContourLookupTable;
-    using psd_layer_effects_shadow_base::setAntiAliased;
-    using psd_layer_effects_shadow_base::setNoise;
+    // using psd_layer_effects_shadow_base::setBlendMode;
+    // using psd_layer_effects_shadow_base::setColor;
+    // using psd_layer_effects_shadow_base::setOpacity;
 
-    using psd_layer_effects_shadow_base::setFillType;
-    using psd_layer_effects_shadow_base::setTechnique;
-    using psd_layer_effects_shadow_base::setRange;
-    using psd_layer_effects_shadow_base::setJitter;
-    using psd_layer_effects_shadow_base::setGradient;
+    // using psd_layer_effects_shadow_base::setSpread;
+    // using psd_layer_effects_shadow_base::setSize;
+    // using psd_layer_effects_shadow_base::setContourLookupTable;
+    // using psd_layer_effects_shadow_base::setAntiAliased;
+    // using psd_layer_effects_shadow_base::setNoise;
+
+    // using psd_layer_effects_shadow_base::setFillType;
+    // using psd_layer_effects_shadow_base::setTechnique;
+    // using psd_layer_effects_shadow_base::setRange;
+    // using psd_layer_effects_shadow_base::setJitter;
+    // using psd_layer_effects_shadow_base::setGradient;
 };
 
 // oglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
@@ -565,18 +579,22 @@ struct psd_layer_effects_satin : public psd_layer_effects_shadow_base
         setBlendMode(COMPOSITE_LINEAR_BURN);
     }
 
-    using psd_layer_effects_shadow_base::setBlendMode;
-    using psd_layer_effects_shadow_base::setColor;
-    using psd_layer_effects_shadow_base::setOpacity;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
 
-    // NOTE: no global light setting explicitly!
-    using psd_layer_effects_shadow_base::setAngle;
-    using psd_layer_effects_shadow_base::setDistance;
+    // using psd_layer_effects_shadow_base::setBlendMode;
+    // using psd_layer_effects_shadow_base::setColor;
+    // using psd_layer_effects_shadow_base::setOpacity;
 
-    using psd_layer_effects_shadow_base::setSize;
+    // // NOTE: no global light setting explicitly!
+    // using psd_layer_effects_shadow_base::setAngle;
+    // using psd_layer_effects_shadow_base::setDistance;
 
-    using psd_layer_effects_shadow_base::setContourLookupTable;
-    using psd_layer_effects_shadow_base::setAntiAliased;
+    // using psd_layer_effects_shadow_base::setSize;
+
+    // using psd_layer_effects_shadow_base::setContourLookupTable;
+    // using psd_layer_effects_shadow_base::setAntiAliased;
 
     bool invert() const {
         return m_invert;
@@ -636,13 +654,17 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         }
     }
 
-    using psd_layer_effects_shadow_base::setSize;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
 
-    using psd_layer_effects_shadow_base::setAngle;
-    using psd_layer_effects_shadow_base::setUseGlobalLight;
+    // using psd_layer_effects_shadow_base::setSize;
 
-    using psd_layer_effects_shadow_base::setContourLookupTable;
-    using psd_layer_effects_shadow_base::setAntiAliased;
+    // using psd_layer_effects_shadow_base::setAngle;
+    // using psd_layer_effects_shadow_base::setUseGlobalLight;
+
+    // using psd_layer_effects_shadow_base::setContourLookupTable;
+    // using psd_layer_effects_shadow_base::setAntiAliased;
 
     psd_bevel_style style() const {
         return m_style;
@@ -880,8 +902,12 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         setUseGlobalLight(false);
     }
 
-    using psd_layer_effects_shadow_base::setBlendMode;
-    using psd_layer_effects_shadow_base::setOpacity;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
+
+    // using psd_layer_effects_shadow_base::setBlendMode;
+    // using psd_layer_effects_shadow_base::setOpacity;
 
     int scale() const {
         return m_scale;
@@ -919,7 +945,8 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         return m_verticalPhase;
     }
 
-protected:
+// refactor that
+public:
 
     void setScale(int value) {
         m_scale = value;
@@ -977,8 +1004,12 @@ private:
     int m_verticalPhase; // 0..100%
 
 protected:
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
+
     // must be called in the derived classes' c-tor
-    using psd_layer_effects_shadow_base::setFillType;
+    // using psd_layer_effects_shadow_base::setFillType;
 };
 
 // sofi: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_70055
@@ -990,7 +1021,11 @@ struct psd_layer_effects_color_overlay : public psd_layer_effects_overlay_base
 
     }
 
-    using psd_layer_effects_shadow_base::setColor;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
+
+    // using psd_layer_effects_shadow_base::setColor;
 };
 
 struct psd_layer_effects_gradient_overlay : public psd_layer_effects_overlay_base
@@ -1005,17 +1040,21 @@ struct psd_layer_effects_gradient_overlay : public psd_layer_effects_overlay_bas
         setStyle(psd_gradient_style_linear);
 
     }
+public:
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
 
-    using psd_layer_effects_shadow_base::setGradient;
-    using psd_layer_effects_shadow_base::setAngle;
+    // using psd_layer_effects_shadow_base::setGradient;
+    // using psd_layer_effects_shadow_base::setAngle;
 
-    using psd_layer_effects_overlay_base::setReverse;
-    using psd_layer_effects_overlay_base::setScale;
-    using psd_layer_effects_overlay_base::setAlignWithLayer;
-    using psd_layer_effects_overlay_base::setStyle;
+    // using psd_layer_effects_overlay_base::setReverse;
+    // using psd_layer_effects_overlay_base::setScale;
+    // using psd_layer_effects_overlay_base::setAlignWithLayer;
+    // using psd_layer_effects_overlay_base::setStyle;
 
-    using psd_layer_effects_overlay_base::setGradientOffset;
-    using psd_layer_effects_overlay_base::gradientOffset;
+    // using psd_layer_effects_overlay_base::setGradientOffset;
+    // using psd_layer_effects_overlay_base::gradientOffset;
 };
 
 struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
@@ -1027,14 +1066,17 @@ struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
         setAlignWithLayer(true);
     }
 
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
 
-    using psd_layer_effects_overlay_base::setScale;
-    using psd_layer_effects_overlay_base::setAlignWithLayer;
+    // using psd_layer_effects_overlay_base::setScale;
+    // using psd_layer_effects_overlay_base::setAlignWithLayer;
 
-    using psd_layer_effects_overlay_base::setPattern;
+    // using psd_layer_effects_overlay_base::setPattern;
 
-    using psd_layer_effects_overlay_base::setPatternPhase;
-    using psd_layer_effects_overlay_base::patternPhase;
+    // using psd_layer_effects_overlay_base::setPatternPhase;
+    // using psd_layer_effects_overlay_base::patternPhase;
 
 private:
     int m_scale;
@@ -1063,25 +1105,29 @@ struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base
         setAlignWithLayer(true);
     }
 
-    using psd_layer_effects_shadow_base::setFillType;
-    using psd_layer_effects_shadow_base::setSize;
+    /// FIXME: 'using' is not supported by MSVC, so please refactor in
+    ///        some other way to ensure that the setters are not used
+    ///        in the classes we don't want
 
-    using psd_layer_effects_shadow_base::setColor;
+    // using psd_layer_effects_shadow_base::setFillType;
+    // using psd_layer_effects_shadow_base::setSize;
 
-    using psd_layer_effects_shadow_base::setGradient;
-    using psd_layer_effects_shadow_base::setAngle;
-    using psd_layer_effects_overlay_base::setReverse;
-    using psd_layer_effects_overlay_base::setScale;
-    using psd_layer_effects_overlay_base::setAlignWithLayer;
-    using psd_layer_effects_overlay_base::setStyle;
+    // using psd_layer_effects_shadow_base::setColor;
 
-    using psd_layer_effects_overlay_base::setGradientOffset;
-    using psd_layer_effects_overlay_base::gradientOffset;
+    // using psd_layer_effects_shadow_base::setGradient;
+    // using psd_layer_effects_shadow_base::setAngle;
+    // using psd_layer_effects_overlay_base::setReverse;
+    // using psd_layer_effects_overlay_base::setScale;
+    // using psd_layer_effects_overlay_base::setAlignWithLayer;
+    // using psd_layer_effects_overlay_base::setStyle;
 
-    using psd_layer_effects_overlay_base::setPattern;
+    // using psd_layer_effects_overlay_base::setGradientOffset;
+    // using psd_layer_effects_overlay_base::gradientOffset;
 
-    using psd_layer_effects_overlay_base::setPatternPhase;
-    using psd_layer_effects_overlay_base::patternPhase;
+    // using psd_layer_effects_overlay_base::setPattern;
+
+    // using psd_layer_effects_overlay_base::setPatternPhase;
+    // using psd_layer_effects_overlay_base::patternPhase;
 
     psd_stroke_position position() const {
         return m_position;

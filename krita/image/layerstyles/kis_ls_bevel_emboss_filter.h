@@ -23,8 +23,8 @@
 
 #include "kis_layer_style_filter.h"
 
-class psd_layer_effects_bevel_emboss;
-class psd_layer_effects_context;
+struct psd_layer_effects_bevel_emboss;
+struct psd_layer_effects_context;
 
 
 class KDE_EXPORT KisLsBevelEmbossFilter : public KisLayerStyleFilter

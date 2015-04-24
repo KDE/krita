@@ -23,8 +23,8 @@
 
 #include "kis_layer_style_filter.h"
 
-class psd_layer_effects_stroke;
-class psd_layer_effects_context;
+struct psd_layer_effects_stroke;
+struct psd_layer_effects_context;
 
 
 class KDE_EXPORT KisLsStrokeFilter : public KisLayerStyleFilter

@@ -87,6 +87,12 @@ Q_SIGNALS:
     void tagBoxEntryAdded(const QString& tag);
     void tagBoxEntryRemoved(const QString& tag);
 
+    void beforeResourcesLayoutReset(KoResource *activateAfterReformat);
+    void afterResourcesLayoutReset();
+
+private:
+    void doSafeLayoutReset(KoResource *activateAfterReformat);
+
 private Q_SLOTS:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);

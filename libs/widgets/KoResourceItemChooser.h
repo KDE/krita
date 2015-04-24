@@ -51,7 +51,8 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    explicit KoResourceItemChooser( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0 );
+    /// \p usePreview shows the aside preview with the resource's image
+    explicit KoResourceItemChooser( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0, bool usePreview = false);
     ~KoResourceItemChooser();
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
@@ -85,8 +86,6 @@ public:
 
     void showButtons( bool show );
 
-    /// shows the aside preview with the resource's image
-    void showPreview(bool show);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
     /// determines whether the preview should tile the resource's image or not
@@ -126,6 +125,11 @@ private Q_SLOTS:
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
 
+    void slotBeforeResourcesLayoutReset(KoResource *activateAfterReset);
+    void slotAfterResourcesLayoutReset();
+
+    void updateView();
+
 protected:
     virtual void showEvent(QShowEvent* event);
 
@@ -133,7 +137,7 @@ private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
 
-    void updateView();
+
 
     virtual void resizeEvent(QResizeEvent* event);
 

@@ -19,13 +19,13 @@
 #ifndef __KIS_ASL_WRITER_H
 #define __KIS_ASL_WRITER_H
 
-#include "krita_export.h"
+#include "libkispsd_export.h"
 
 class QDomDocument;
 class QIODevice;
 
 
-class KRITAIMAGE_EXPORT KisAslWriter
+class LIBKISPSD_EXPORT KisAslWriter
 {
 public:
     void writeFile(QIODevice *device, const QDomDocument &doc);

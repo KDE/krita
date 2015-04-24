@@ -16,23 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H
-#define __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H
+#ifndef __KIS_ASL_READER_H
+#define __KIS_ASL_READER_H
 
-class KisAbstractProjectionPlane;
+#include "libkispsd_export.h"
 
-#include "krita_export.h"
-#include "kis_types.h"
+class QDomDocument;
+class QIODevice;
 
-#include "kis_external_factory_base.h"
 
-class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlaneFactory
-    : public KisExternalFactoryBase<KisAbstractProjectionPlaneSP, KisLayer *,
-                                    KisLayerStyleProjectionPlaneFactory>
+class LIBKISPSD_EXPORT KisAslReader
 {
 public:
-    static KisLayerStyleProjectionPlaneFactory *instance();
+    QDomDocument readFile(QIODevice *device);
 };
 
-
-#endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H */
+#endif /* __KIS_ASL_READER_H */

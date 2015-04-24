@@ -21,9 +21,9 @@
 #define KOPAPIXMAPCACHE_H
 
 #include <QMap>
+#include <QSize>
 
 class QString;
-class QSize;
 class QPixmap;
 
 /**
@@ -81,7 +81,7 @@ public:
      *
      * The size is taken from the pixmap.
      */
-    bool insert( const QString & key, const QPixmap & pm );
+    bool insert( const QString & key, const QPixmap & pm, const QSize &size = QSize());
 
     /**
      * Remove all pixmaps associated with key from the cache

@@ -112,6 +112,7 @@ void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
 {
     Q_ASSERT(masterPage);
     m_masterPage = masterPage;
+    pageUpdated();
 }
 
 void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )

@@ -28,12 +28,16 @@
 #include <QLabel>
 #include <QStringList>
 
+
+
+
 #define myDebug() if (0) kDebug(44021)
+
 
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     : m_longtitude(0)
     , m_latitude(0)
-    , m_zoom(0)
+    , m_zoom(1200)
     , m_pageId(0)
     , m_sectionId(0)
     , m_oroPicture(0)
@@ -65,28 +69,32 @@ void KoReportItemMaps::createProperties()
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
-    m_latitudeProperty = new KoProperty::Property("latitude", 0.0, i18n("Latitude"), i18n("Latitude") );
+    m_latitudeProperty = new KoProperty::Property("latitude", 0.0, i18n("Latitude"), i18n("Latitude"), KoProperty::Double);
     m_latitudeProperty->setOption("min", -90);
     m_latitudeProperty->setOption("max", 90);
-    m_latitudeProperty->setOption("unit", "°");
+    m_latitudeProperty->setOption("unit", QString::fromUtf8("°"));
+    m_latitudeProperty->setOption("precision", 7);
 
-    m_longitudeProperty = new KoProperty::Property("longitude", 0.0, i18n("longitude"), i18n("longitude") );
+    m_longitudeProperty = new KoProperty::Property("longitude", 0.0, i18n("Longitude"), i18n("Longitude"), KoProperty::Double);
     m_longitudeProperty->setOption("min", -180);
     m_longitudeProperty->setOption("max", 180);
-    m_longitudeProperty->setOption("unit", "°");
+    m_longitudeProperty->setOption("unit", QString::fromUtf8("°"));
+    m_longitudeProperty->setOption("precision", 7);
 
     m_zoomProperty     = new KoProperty::Property("zoom", 1000, i18n("Zoom"), i18n("Zoom") );
+    m_zoomProperty->setOption("min", 0);
+    m_zoomProperty->setOption("max", 4000);
+    m_zoomProperty->setOption("step", 100);
+    m_zoomProperty->setOption("slider", true);
 
     QStringList mapThemIds(m_themeManager.mapThemeIds());
     m_themeProperty = new KoProperty::Property("theme",
-                                                mapThemIds,
-                                                mapThemIds,
-                                                mapThemIds[1],
-                                                i18n("Theme"),
-                                                i18n("Theme")
-                                              );
-    if (!mapThemIds.isEmpty()) {
-        m_themeProperty->setValue(mapThemIds[0], false);
+                                                    mapThemIds,
+                                                    mapThemIds,
+                                                    mapThemIds[1]);
+
+    if (mapThemIds.contains("earth/srtm/srtm.dgml")) {
+        m_themeProperty->setValue("earth/srtm/srtm.dgml", false);
     }
 
     addDefaultProperties();

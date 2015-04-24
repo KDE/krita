@@ -22,7 +22,7 @@
 #include <QScopedPointer>
 #include <QVector>
 
-#include "krita_export.h"
+#include "libkispsd_export.h"
 
 class QString;
 class QColor;
@@ -32,7 +32,7 @@ class KoPattern;
 class KoSegmentGradient;
 
 
-class KRITAIMAGE_EXPORT KisAslXmlWriter
+class LIBKISPSD_EXPORT KisAslXmlWriter
 {
 public:
     KisAslXmlWriter();

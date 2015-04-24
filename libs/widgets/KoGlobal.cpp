@@ -57,9 +57,6 @@ KoGlobal::KoGlobal()
         // Tell KStandardDirs about the calligra prefix
         KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);
     }
-
-    // Add calligra styles dir
-    KGlobal::dirs()->addResourceType("styles", "data", "calligra/styles/");
 }
 
 KoGlobal::~KoGlobal()

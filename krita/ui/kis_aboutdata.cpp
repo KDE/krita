@@ -181,6 +181,7 @@ KAboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Mohit Goyal"));
     aboutData->addAuthor(ki18n("Mojtaba Shahi Senobari"));
     aboutData->addAuthor(ki18n("Montel Laurent"));
+    aboutData->addAuthor(ki18n("Moritz Molch"));
     aboutData->addAuthor(ki18n("Nick Shaforostoff"));
     aboutData->addAuthor(ki18n("Nicolas Goutte"));
     aboutData->addAuthor(ki18n("Olivier Goffart"));

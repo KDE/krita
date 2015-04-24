@@ -16,29 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLE_SERIALIZER_H
-#define __KIS_LAYER_STYLE_SERIALIZER_H
+#ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
+#define __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
 
-class QIODevice;
+#include <QtTest/QtTest>
 
-#include "krita_export.h"
-
-#include "kis_external_factory_base.h"
-
-struct KRITAIMAGE_EXPORT KisLayerStyleSerializer {
-    virtual ~KisLayerStyleSerializer() {}
-    virtual void saveToDevice(QIODevice *device) = 0;
-    virtual void readFromDevice(QIODevice *device) = 0;
-};
-
-typedef QSharedPointer<KisLayerStyleSerializer> KisLayerStyleSerializerSP;
-
-class KRITAIMAGE_EXPORT KisLayerStyleSerializerFactory
-    : public KisExternalFactoryBase<KisLayerStyleSerializerSP, KisPSDLayerStyle*,
-                                    KisLayerStyleSerializerFactory>
+class KisAslLayerStyleSerializerTest : public QObject
 {
-public:
-    static KisLayerStyleSerializerFactory* instance();
+    Q_OBJECT
+private slots:
+    void testReading();
+    void testWriting();
+    void testWritingGlobalPatterns();
+    void testReadMultipleStyles();
+
+    void testResources();
 };
 
-#endif /* __KIS_LAYER_STYLE_SERIALIZER_H */
+#endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H */

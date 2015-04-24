@@ -20,23 +20,25 @@
 #define __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 
 #include "krita_export.h"
-#include "kis_layer_style_serializer.h"
 
-class KisPSDLayerStyle;
+class QIODevice;
 class KoPattern;
 
+#include "kis_psd_layer_style.h"
+#include "asl/kis_asl_callback_object_catcher.h"
 
-class KRITAIMAGE_EXPORT KisAslLayerStyleSerializer : public KisLayerStyleSerializer
+
+class KRITAUI_EXPORT KisAslLayerStyleSerializer
 {
 public:
-    KisAslLayerStyleSerializer(KisPSDLayerStyle *style);
+    KisAslLayerStyleSerializer();
     ~KisAslLayerStyleSerializer();
-
-    // a method for registering on KisLayerStyleSerializerFactory
-    static KisLayerStyleSerializerSP factoryObject(KisPSDLayerStyle *style);
 
     void saveToDevice(QIODevice *device);
     void readFromDevice(QIODevice *device);
+
+    QVector<KisPSDLayerStyleSP> styles() const;
+    void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
 
 private:
     void registerPatternObject(const KoPattern *pattern);
@@ -47,9 +49,14 @@ private:
 
     QVector<KoPattern*> fetchAllPatterns(KisPSDLayerStyle *style);
 
+    void newStyleStarted();
+    void connectCatcherToStyle(KisPSDLayerStyle *style);
+
 private:
-    KisPSDLayerStyle *m_style;
     QHash<QString, KoPattern*> m_patternsStore;
+
+    KisAslCallbackObjectCatcher m_catcher;
+    QVector<KisPSDLayerStyleSP> m_stylesVector;
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_H */

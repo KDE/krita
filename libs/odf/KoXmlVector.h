@@ -51,16 +51,16 @@ private:
     QVector<unsigned> m_startIndex;
     QVector<QByteArray> m_blocks;
 
-    unsigned m_bufferStartIndex;
-    QVector<T> m_bufferItems;
-    QByteArray m_bufferData;
+    mutable unsigned m_bufferStartIndex;
+    mutable QVector<T> m_bufferItems;
+    mutable QByteArray m_bufferData;
 
 protected:
     /**
      * fetch given item index to the buffer
      * will INVALIDATE all references to the buffer
      */
-    void fetchItem(unsigned index) {
+    void fetchItem(unsigned index) const {
         // already in the buffer ?
         if (index >= m_bufferStartIndex)
             if (index - m_bufferStartIndex < (unsigned)m_bufferItems.count())
@@ -152,7 +152,7 @@ public:
      * it may be invalid if another function is invoked
      */
     const T &operator[](int i) const {
-        ((KoXmlVector*)this)->fetchItem((unsigned)i);
+        fetchItem((unsigned)i);
         return m_bufferItems[i - m_bufferStartIndex];
     }
 

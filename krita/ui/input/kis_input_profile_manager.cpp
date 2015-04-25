@@ -284,7 +284,7 @@ void KisInputProfileManager::loadProfiles()
 
 void KisInputProfileManager::saveProfiles()
 {
-    QString storagePath = KGlobal::dirs()->saveLocation("appdata", "input/");
+    QString storagePath = KGlobal::dirs()->saveLocation("data", "krita/input/");
     Q_FOREACH(KisInputProfile * p, d->profiles) {
         QString fileName = d->profileFileName(p->name());
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);

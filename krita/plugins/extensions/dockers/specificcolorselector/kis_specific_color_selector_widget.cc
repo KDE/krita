@@ -20,6 +20,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QCheckBox>
+#include <QSpacerItem>
 
 #include <klocale.h>
 #include <kconfiggroup.h>
@@ -40,6 +41,7 @@
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     : QWidget(parent)
     , m_colorSpace(0)
+    , m_spacer(0)
     , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
     , m_customColorSpaceSelected(false)
     , m_displayRenderer(0)
@@ -108,6 +110,13 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     }
     m_inputs.clear();
 
+    if (m_spacer) {
+        m_layout->removeItem(m_spacer);
+    }
+    else {
+        m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    }
+
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 
     KoColorDisplayRendererInterface *displayRenderer = m_displayRenderer ? m_displayRenderer : m_fallbackRenderer;
@@ -153,7 +162,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         connect(input, SIGNAL(updated()), this,  SLOT(update()));
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
-    m_layout->addStretch(10);
+    m_layout->addItem(m_spacer);
 
     m_colorspaceSelector->blockSignals(true);
     m_colorspaceSelector->setCurrentColorSpace(cs);

@@ -38,6 +38,13 @@
  * similar to QVector, but using LZF compression to save memory space
  * this class is however not reentrant
  *
+ * Needs to be used like this, otherwise will crash:
+ * <sl>
+ * <li>add content with newItem()</li>
+ * <li>finish adding content with squeeze()</li>
+ * <li>just read content with operator[]</li>
+ * </sl>
+ *
  * @param uncompressedItemCount when number of buffered items reach this,
  *      compression will start small value will give better memory usage at the
  *      cost of speed bigger value will be better in term of speed, but use

@@ -47,13 +47,13 @@ template <typename T, int uncompressedItemCount = 256, int reservedBufferSize = 
 class KoXmlVector
 {
 private:
-    unsigned totalItems;
-    QVector<unsigned> startIndex;
-    QVector<QByteArray> blocks;
+    unsigned m_totalItems;
+    QVector<unsigned> m_startIndex;
+    QVector<QByteArray> m_blocks;
 
-    unsigned bufferStartIndex;
-    QVector<T> bufferItems;
-    QByteArray bufferData;
+    unsigned m_bufferStartIndex;
+    QVector<T> m_bufferItems;
+    QByteArray m_bufferData;
 
 protected:
     /**
@@ -62,74 +62,74 @@ protected:
      */
     void fetchItem(unsigned index) {
         // already in the buffer ?
-        if (index >= bufferStartIndex)
-            if (index - bufferStartIndex < (unsigned)bufferItems.count())
+        if (index >= m_bufferStartIndex)
+            if (index - m_bufferStartIndex < (unsigned)m_bufferItems.count())
                 return;
 
         // search in the stored blocks
         // TODO: binary search to speed up
-        int loc = startIndex.count() - 1;
-        for (int c = 0; c < startIndex.count() - 1; ++c)
-            if (index >= startIndex[c])
-                if (index < startIndex[c+1]) {
+        int loc = m_startIndex.count() - 1;
+        for (int c = 0; c < m_startIndex.count() - 1; ++c)
+            if (index >= m_startIndex[c])
+                if (index < m_startIndex[c+1]) {
                     loc = c;
                     break;
                 }
 
-        bufferStartIndex = startIndex[loc];
+        m_bufferStartIndex = m_startIndex[loc];
 #ifdef KOXMLVECTOR_USE_LZF
-        KoLZF::decompress(blocks[loc], bufferData);
+        KoLZF::decompress(m_blocks[loc], m_bufferData);
 #else
-        bufferData = blocks[loc];
+        m_bufferData = m_blocks[loc];
 #endif
-        QBuffer buffer(&bufferData);
+        QBuffer buffer(&m_bufferData);
         buffer.open(QIODevice::ReadOnly);
         QDataStream in(&buffer);
-        bufferItems.clear();
-        in >> bufferItems;
+        m_bufferItems.clear();
+        in >> m_bufferItems;
     }
 
     /**
-     * store data in the buffer to main blocks
+     * store data in the buffer to main m_blocks
      */
     void storeBuffer() {
         QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         QDataStream out(&buffer);
-        out << bufferItems;
+        out << m_bufferItems;
 
-        startIndex.append(bufferStartIndex);
+        m_startIndex.append(m_bufferStartIndex);
 #ifdef KOXMLVECTOR_USE_LZF
-        blocks.append(KoLZF::compress(buffer.data()));
+        m_blocks.append(KoLZF::compress(buffer.data()));
 #else
-        blocks.append(buffer.data());
+        m_blocks.append(buffer.data());
 #endif
 
-        bufferStartIndex += bufferItems.count();
-        bufferItems.clear();
+        m_bufferStartIndex += m_bufferItems.count();
+        m_bufferItems.clear();
     }
 
 public:
-    inline KoXmlVector(): totalItems(0), bufferStartIndex(0) {};
+    inline KoXmlVector(): m_totalItems(0), m_bufferStartIndex(0) {};
 
     void clear() {
-        totalItems = 0;
-        startIndex.clear();
-        blocks.clear();
+        m_totalItems = 0;
+        m_startIndex.clear();
+        m_blocks.clear();
 
-        bufferStartIndex = 0;
-        bufferItems.clear();
-        bufferData.reserve(reservedBufferSize);
+        m_bufferStartIndex = 0;
+        m_bufferItems.clear();
+        m_bufferData.reserve(reservedBufferSize);
     }
 
     inline int count() const {
-        return (int)totalItems;
+        return (int)m_totalItems;
     }
     inline int size() const {
-        return (int)totalItems;
+        return (int)m_totalItems;
     }
     inline bool isEmpty() const {
-        return totalItems == 0;
+        return m_totalItems == 0;
     }
 
     /**
@@ -139,12 +139,12 @@ public:
      */
     T& newItem() {
         // buffer full?
-        if (bufferItems.count() >= uncompressedItemCount - 1)
+        if (m_bufferItems.count() >= uncompressedItemCount - 1)
             storeBuffer();
 
-        ++totalItems;
-        bufferItems.resize(bufferItems.count() + 1);
-        return bufferItems[bufferItems.count()-1];
+        ++m_totalItems;
+        m_bufferItems.resize(m_bufferItems.count() + 1);
+        return m_bufferItems[m_bufferItems.count()-1];
     }
 
     /**
@@ -153,7 +153,7 @@ public:
      */
     const T &operator[](int i) const {
         ((KoXmlVector*)this)->fetchItem((unsigned)i);
-        return bufferItems[i - bufferStartIndex];
+        return m_bufferItems[i - m_bufferStartIndex];
     }
 
     /**

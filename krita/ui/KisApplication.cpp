@@ -57,7 +57,6 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QDesktopWidget>
-#include <QTime>
 
 #include <stdlib.h>
 
@@ -142,24 +141,13 @@ KisApplication::KisApplication(const QString &key)
     : QtSingleApplication(key, KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv())
     , d(new KisApplicationPrivate)
 {
-
-    QTime t;
-    t.start();
-    int step = 0;
-
     KisApplication::KoApp = this;
-
-    qDebug() << "KoApplication()" << ++step << t.elapsed();
 
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
-    qDebug() << "KoApplication()" << ++step << t.elapsed();
-
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
-
-    qDebug() << "KoApplication()" << ++step << t.elapsed();
 
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
@@ -171,15 +159,12 @@ KisApplication::KisApplication(const QString &key)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
-    qDebug() << "KoApplication()" << ++step << t.elapsed();
 
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");
     }
-
-    qDebug() << "KoApplication()" << ++step << t.elapsed();
 
 }
 
@@ -212,12 +197,6 @@ BOOL isWow64()
 
 bool KisApplication::start()
 {
-
-    QTime t;
-    t.start();
-    int step = 0;
-
-
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
@@ -257,13 +236,9 @@ bool KisApplication::start()
 
 #endif
 
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
-
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
-
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     QString dpiValues = args->getOption("dpi");
     if (!dpiValues.isEmpty()) {
@@ -284,8 +259,6 @@ bool KisApplication::start()
         }
     }
 
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
-
     const bool doTemplate = args->isSet("template");
     const bool print = args->isSet("print");
     const bool exportAs = args->isSet("export");
@@ -293,7 +266,6 @@ bool KisApplication::start()
     const QString exportFileName = args->getOption("export-filename");
     const QString profileFileName = args->getOption("profile-filename");
 
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     // only show the mainWindow when no command-line mode option is passed
     const bool showmainWindow = (   !(exportAsPdf || exportAs) );
@@ -304,10 +276,9 @@ bool KisApplication::start()
         processEvents();
     }
 
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
-
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
+
 
     const bool batchRun = (   showmainWindow
                               && !print
@@ -317,51 +288,36 @@ bool KisApplication::start()
 
     // Load various global plugins
     KoShapeRegistry* r = KoShapeRegistry::instance();
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
     r->add(new KisShapeSelectionFactory());
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
+
     KisFilterRegistry::instance();
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
     KisGeneratorRegistry::instance();
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
     KisPaintOpRegistry::instance();
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     // Load the krita-specific tools
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     // Load dockers
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
 
     // XXX_EXIV: make the exiv io backends real plugins
     KisExiv2::initialize();
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     KisMainWindow *mainWindow = 0;
 
     if (!exportAs) {
         // show a mainWindow asap, if we want that
         mainWindow = KisPart::instance()->createMainWindow();
-        qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
         KisPart::instance()->addMainWindow(mainWindow);
-
-        qDebug() << "KoApplication::start" << ++step << t.elapsed();
-
         if (showmainWindow) {
             mainWindow->show();
         }
-
-        qDebug() << "KoApplication::start" << ++step << t.elapsed();
     }
     short int numberOfOpenDocuments = 0; // number of documents open
-
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
     if (!batchRun) {
@@ -502,8 +458,6 @@ bool KisApplication::start()
             return nPrinted > 0;
         }
     }
-
-    qDebug() << "KoApplication::start" << ++step << t.elapsed();
 
     args->clear();
     // not calling this before since the program will quit there.

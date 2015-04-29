@@ -236,7 +236,7 @@ void KisPainter::copyAreaOptimized(const QPoint &dstPt,
                                    KisSelectionSP selection)
 {
     if (!selection) {
-        copyAreaOptimized(dstPt, src, dst, srcRect);
+        copyAreaOptimized(dstPt, src, dst, originalSrcRect);
         return;
     }
 

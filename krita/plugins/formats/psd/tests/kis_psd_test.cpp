@@ -36,6 +36,23 @@ void KisPSDTest::testFiles()
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
 }
 
+void KisPSDTest::testOpening()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "testing_psd_ls.psd");
+
+    QScopedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc.data());
+    manager.setBatchMode(true);
+
+    KisImportExportFilter::ConversionStatus status;
+    QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
+                                       status);
+    qDebug() << s;
+
+    Q_ASSERT(doc->image());
+}
+
 QTEST_KDEMAIN(KisPSDTest, GUI)
 
 #include "kis_psd_test.moc"

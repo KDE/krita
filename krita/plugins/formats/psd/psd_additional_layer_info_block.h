@@ -267,6 +267,9 @@ public:
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;
 
+private:
+    void readImpl(QIODevice* io);
+
 };
 
 #endif // PSD_ADDITIONAL_LAYER_INFO_BLOCK_H

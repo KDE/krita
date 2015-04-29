@@ -77,9 +77,9 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
     // try load themed icon
     QColor background = qApp->palette().background().color();
     bool useDarkIcons = background.value() > 100;
-    QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
+    const char * const prefix = useDarkIcons ? "dark_" : "light_";
 
-    QString realName = prefix + name;
+    QString realName = QLatin1String(prefix) + name;
     KIcon icon(realName);
 
     // fallback

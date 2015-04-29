@@ -206,7 +206,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
     QString version = reader.text("version");
     QString preset = reader.text("preset");
 
-    dbgImage << version << preset;
+    dbgImage << version;
 
     if (version != "2.2") {
         return false;

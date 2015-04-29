@@ -235,6 +235,11 @@ void KisPainter::copyAreaOptimized(const QPoint &dstPt,
                                    const QRect &originalSrcRect,
                                    KisSelectionSP selection)
 {
+    if (!selection) {
+        copyAreaOptimized(dstPt, src, dst, srcRect);
+        return;
+    }
+
     const QRect selectionRect = selection->selectedRect();
     const QRect srcRect = originalSrcRect & selectionRect;
     const QPoint dstOffset = srcRect.topLeft() - originalSrcRect.topLeft();

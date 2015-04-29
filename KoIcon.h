@@ -67,8 +67,6 @@
 inline KIcon themedIcon(const QString &name, bool fast = false) {
     Q_UNUSED(fast);
 
-    KIcon icon;
-
     static bool firstUse = true;
     if (firstUse) {
         // workaround for some kde-related crash
@@ -82,11 +80,11 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
     QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
 
     QString realName = prefix + name;
-    icon = koIcon(realName.toLatin1());
+    KIcon icon(realName);
 
     // fallback
     if (icon.isNull()) {
-        icon = koIcon(name.toLatin1());
+        icon = KIcon(name);
     }
 
     return icon;

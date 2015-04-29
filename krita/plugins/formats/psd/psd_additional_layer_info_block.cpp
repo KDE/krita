@@ -41,7 +41,7 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
         b = io->peek(4);
         if (b.size() != 4 || QString(b) != "8BIM") {
             error = "No 8BIM marker for additional layer info block";
-            return false;
+            return true;
         }
         else {
             io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for

@@ -141,12 +141,12 @@ void KisTransparencyMaskTest::testMoveParentLayer()
     layer->setX(100);
     layer->setY(100);
 
-    qDebug() << "Sel. rect before:" << mask->selection()->selectedRect();
+    qDebug() << "Sel. rect before:" << mask->selection()->selectedExactRect();
 
     mask->setX(100);
     mask->setY(100);
 
-    qDebug() << "Sel. rect after:" << mask->selection()->selectedRect();
+    qDebug() << "Sel. rect after:" << mask->selection()->selectedExactRect();
 
     QRect finalRect(100,100,200,100);
     QCOMPARE(layer->exactBounds(), finalRect);

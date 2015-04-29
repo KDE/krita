@@ -21,6 +21,7 @@
 #include <QBitArray>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
 
 
@@ -50,7 +51,12 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     KisPaintDeviceSP device = m_d->layer->projection();
     if (!device) return;
 
-    QRect needRect = rect & device->extent();
+    QRect needRect = rect;
+
+    if (m_d->layer->compositeOpId() != COMPOSITE_COPY) {
+        needRect &= device->extent();
+    }
+
     if(needRect.isEmpty()) return;
 
     QBitArray channelFlags = m_d->layer->channelFlags();
@@ -84,7 +90,6 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     }
 
     painter->setChannelFlags(channelFlags);
-
     painter->setCompositeOp(m_d->layer->compositeOp());
     painter->setOpacity(m_d->layer->opacity());
     painter->bitBlt(needRect.topLeft(), device, needRect);

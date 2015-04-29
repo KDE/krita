@@ -186,6 +186,77 @@ KisPainter::~KisPainter()
     delete d;
 }
 
+template <bool useOldData>
+void copyAreaOptimizedImpl(const QPoint &dstPt,
+                           KisPaintDeviceSP src,
+                           KisPaintDeviceSP dst,
+                           const QRect &srcRect)
+{
+    const QRect dstRect(dstPt, srcRect.size());
+
+    const bool srcEmpty = (src->extent() & srcRect).isEmpty();
+    const bool dstEmpty = (dst->extent() & dstRect).isEmpty();
+
+    if (!srcEmpty || !dstEmpty) {
+        if (srcEmpty) {
+            dst->clear(dstRect);
+        } else {
+            KisPainter gc(dst);
+            gc.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
+
+            if (useOldData) {
+                gc.bitBltOldData(dstRect.topLeft(), src, srcRect);
+            } else {
+                gc.bitBlt(dstRect.topLeft(), src, srcRect);
+            }
+        }
+    }
+}
+
+void KisPainter::copyAreaOptimized(const QPoint &dstPt,
+                                   KisPaintDeviceSP src,
+                                   KisPaintDeviceSP dst,
+                                   const QRect &srcRect)
+{
+    copyAreaOptimizedImpl<false>(dstPt, src, dst, srcRect);
+}
+
+void KisPainter::copyAreaOptimizedOldData(const QPoint &dstPt,
+                                          KisPaintDeviceSP src,
+                                          KisPaintDeviceSP dst,
+                                          const QRect &srcRect)
+{
+    copyAreaOptimizedImpl<true>(dstPt, src, dst, srcRect);
+}
+
+void KisPainter::copyAreaOptimized(const QPoint &dstPt,
+                                   KisPaintDeviceSP src,
+                                   KisPaintDeviceSP dst,
+                                   const QRect &originalSrcRect,
+                                   KisSelectionSP selection)
+{
+    const QRect selectionRect = selection->selectedRect();
+    const QRect srcRect = originalSrcRect & selectionRect;
+    const QPoint dstOffset = srcRect.topLeft() - originalSrcRect.topLeft();
+    const QRect dstRect = QRect(dstPt + dstOffset, srcRect.size());
+
+    const bool srcEmpty = (src->extent() & srcRect).isEmpty();
+    const bool dstEmpty = (dst->extent() & dstRect).isEmpty();
+
+    if (!srcEmpty || !dstEmpty) {
+        //if (srcEmpty) {
+        // doesn't support dstRect
+        // dst->clearSelection(selection);
+        // } else */
+        {
+            KisPainter gc(dst);
+            gc.setSelection(selection);
+            gc.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc.bitBlt(dstRect.topLeft(), src, srcRect);
+        }
+    }
+}
+
 void KisPainter::begin(KisPaintDeviceSP device)
 {
     begin(device, d->selection);

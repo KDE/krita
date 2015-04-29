@@ -73,7 +73,7 @@ protected:
             nextNode = currentNode->nextSibling();
 
             if(isLayer(currentNode)) {
-                tempRect = calculateChangeRect(currentNode, tempRect);
+                tempRect |= calculateChangeRect(currentNode, requestedRect);
 
                 if(!changeRectVaries)
                     changeRectVaries = tempRect != requestedRect;
@@ -96,7 +96,7 @@ protected:
     }
 
     void startTrip(KisNodeSP startWith) {
-        calculateChangeRect(startWith, requestedRect());
+        setExplicitChangeRect(startWith, requestedRect(), false);
 
         if(startWith == startNode()) {
             NodePosition pos = N_EXTRA | calculateNodePosition(startWith);

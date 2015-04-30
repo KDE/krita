@@ -141,6 +141,21 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
             }
         }
     }
+
+    QList<QLabel*> labels;
+    int labelWidth = 0;
+
+    Q_FOREACH (KisColorInput* input, m_inputs) {
+        Q_FOREACH (QLabel* label, input->findChildren<QLabel*>()) {
+            labels.append(label);
+            labelWidth = qMax(labelWidth, label->sizeHint().width());
+        }
+    }
+
+    Q_FOREACH (QLabel *label, labels) {
+        label->setMinimumWidth(labelWidth);
+    }
+
     bool allChannels8Bit = true;
     foreach (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR && channel->channelValueType() != KoChannelInfo::UINT8) {

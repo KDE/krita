@@ -68,11 +68,8 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_layout->addWidget(m_chkShowColorSpaceSelector);
     m_layout->addWidget(m_colorspaceSelector);
 
-    setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
-    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
-    c.setOpacity(OPACITY_OPAQUE_U8);
-    setColor(c);
-
+    m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_layout->addItem(m_spacer);
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
@@ -110,12 +107,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     }
     m_inputs.clear();
 
-    if (m_spacer) {
-        m_layout->removeItem(m_spacer);
-    }
-    else {
-        m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    }
+    m_layout->removeItem(m_spacer);
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 

@@ -71,6 +71,7 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
     if (firstUse) {
         // workaround for some kde-related crash
         bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
+        Q_UNUSED(_unused);
         firstUse = false;
     }
 

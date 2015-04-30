@@ -158,5 +158,58 @@ void KisTransparencyMaskTest::testMoveParentLayer()
     QCOMPARE(image->projection()->exactBounds(), QRect(150,150,100,50));
 }
 
+void KisTransparencyMaskTest::testMoveMaskItself()
+{
+    KisImageSP image;
+    KisPaintLayerSP layer;
+    KisPaintDeviceSP dev;
+    KisTransparencyMaskSP mask;
+
+    initImage(image, layer, dev, mask);
+    mask->initSelection(layer);
+    mask->selection()->pixelSelection()->invert();
+    mask->select(QRect(50, 50, 100, 100));
+
+    KisFullRefreshWalker walker(image->bounds());
+    KisAsyncMerger merger;
+
+    walker.collectRects(layer, image->bounds());
+    merger.startMerge(walker);
+
+    // image->projection()->convertToQImage(0, 0,0,300,300).save("proj_before.png");
+
+    QRect initialRect(0,0,200,100);
+    QCOMPARE(layer->exactBounds(), initialRect);
+    QCOMPARE(image->projection()->exactBounds(), QRect(50,50,100,50));
+
+
+    //layer->setX(100);
+    //layer->setY(100);
+
+    qDebug() << "Sel. rect before:" << mask->selection()->selectedExactRect();
+
+    mask->setX(50);
+    mask->setY(25);
+
+    qDebug() << "Sel. rect after:" << mask->selection()->selectedExactRect();
+
+
+    QCOMPARE(mask->selection()->selectedExactRect(), QRect(100, 75, 100, 100));
+    QCOMPARE(layer->paintDevice()->exactBounds(), initialRect);
+    QCOMPARE(layer->projection()->exactBounds(), QRect(50, 50, 100, 50));
+
+    qDebug() << "";
+
+    QRect updateRect(0,0,300,300);
+
+    walker.collectRects(mask, updateRect);
+    merger.startMerge(walker);
+
+    // image->projection()->convertToQImage(0, 0,0,300,300).save("proj_after.png");
+
+    QCOMPARE(layer->paintDevice()->exactBounds(), initialRect);
+    QCOMPARE(layer->projection()->exactBounds(), QRect(100, 75, 100, 25));
+}
+
 QTEST_KDEMAIN(KisTransparencyMaskTest, GUI)
 #include "kis_transparency_mask_test.moc"

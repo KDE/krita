@@ -83,15 +83,8 @@ private:
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList) const;
 
-    QMultiHash<const KoResource*, QString> m_resourceToTag;
-    QHash<QString, int> m_tagList;
-
-    QString m_tagsXMLFile;
-    QString m_serverExtensions;
-
-    KConfigGroup m_config;
-
-    KoResourceServerBase *m_resourceServer;
+    class Private;
+    Private * const d;
 };
 
 

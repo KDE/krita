@@ -662,6 +662,7 @@ protected:
         metastream << doc.toByteArray();
         f.close();
     }
+
 protected:
 
     KoResource* byMd5(const QByteArray &md5) const
@@ -672,14 +673,6 @@ protected:
     KoResource* byFileName(const QString &fileName) const
     {
         return Policy::toResourcePointer(resourceByFilename(fileName));
-    }
-
-
-    /// Destory the tag storage, only call this directly before deleting the sever and if the automatic
-    /// delete should not be used.
-    void destroyTagStorage() {
-        delete m_tagStore;
-        m_tagStore = 0;
     }
 
 private:

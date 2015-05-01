@@ -51,7 +51,7 @@ public:
     void removeResource(const KoResource *resource);
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
-    /// the tag is added bug unused
+    /// the tag is added but unused
     void addTag(KoResource* resource, const QString& tag);
 
     /// Remove the given tag for the given resource.
@@ -63,7 +63,7 @@ public:
     QStringList tagNamesList() const;
 
     /// Return a list of filenames for the given tag
-    QStringList searchTag(const QString& tag);
+    QStringList searchTag(const QString& query) const;
 
     void loadTags();
     void serializeTags();
@@ -81,7 +81,7 @@ private:
     QString adjustedFileName(const QString &fileName) const;
 
     /// Removes the adjustements before going to the server
-    QStringList removeAdjustedFileNames(QStringList fileNamesList);
+    QStringList removeAdjustedFileNames(QStringList fileNamesList) const;
 
     QMultiHash<const KoResource*, QString> m_resourceToTag;
     QHash<QString, int> m_tagList;

@@ -73,6 +73,7 @@ public:
     virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
+    virtual QStringList queryResources(const QString &query) const = 0;
     QString type() const { return m_type; }
 
     /**
@@ -487,12 +488,6 @@ public:
         writeBlackListFile();
     }
 
-    /// the below functions helps to access tagObject functions
-    QStringList assignedTagsList( KoResource* resource ) const
-    {
-        return m_tagStore->assignedTagsList(resource);
-    }
-
     QStringList tagNamesList() const
     {
         return m_tagStore->tagNamesList();
@@ -540,11 +535,15 @@ public:
         }
     }
 
-    KoResourceTagStore * tagObject() const
+    QStringList queryResources(const QString &query) const
     {
-        return m_tagStore;
+        return m_tagStore->searchTag(query);
     }
 
+    QStringList assignedTagsList(KoResource* resource) const
+    {
+        return m_tagStore->assignedTagsList(resource);
+    }
 
 
     /**

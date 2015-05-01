@@ -90,9 +90,9 @@ void KoResourceTagStore::delTag(const QString& tag)
     m_tagList.remove(tag);
 }
 
-QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
+QStringList KoResourceTagStore::searchTag(const QString& query) const
 {
-    QStringList tagsList = lineEditText.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
+    QStringList tagsList = query.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
     if (tagsList.isEmpty()) {
         return QStringList();
     }
@@ -290,7 +290,7 @@ QString KoResourceTagStore::adjustedFileName(const QString &fileName) const
     return fileName;
 }
 
-QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesList)
+QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesList) const
 {
     foreach (const QString & fileName, fileNamesList) {
         if (fileName.contains("-krita")) {

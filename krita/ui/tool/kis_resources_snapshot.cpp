@@ -85,15 +85,15 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentN
 
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = static_cast<KoPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
-    m_d->currentGradient = static_cast<KoAbstractGradient*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void*>());
+    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
+    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
     m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
-    m_d->currentGenerator = static_cast<KisFilterConfiguration*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void*>());
+    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
 
     m_d->axesCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
     if (m_d->axesCenter.isNull()){

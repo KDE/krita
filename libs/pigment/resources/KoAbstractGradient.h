@@ -19,6 +19,7 @@
 #define KOABSTRACTGRADIENT_H
 
 #include <QGradient>
+#include <QMetaType>
 
 #include "KoColorSpace.h"
 #include "KoResource.h"
@@ -85,5 +86,7 @@ private:
     struct Private;
     Private* const d;
 };
+
+Q_DECLARE_METATYPE(KoAbstractGradient*)
 
 #endif // KOABSTRACTGRADIENT_H

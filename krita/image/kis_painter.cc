@@ -1349,13 +1349,11 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
         fillPainter->fillRect(fillRect, q->backgroundColor(), OPACITY_OPAQUE_U8);
         break;
     case FillStylePattern:
-        Q_ASSERT(pattern != 0);
         if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
             fillPainter->fillRect(fillRect, pattern);
         }
         break;
     case FillStyleGenerator:
-        Q_ASSERT(generator != 0);
         if (generator) { // if the user hasn't got any generators, we shouldn't crash...
             fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), q->generator());
         }

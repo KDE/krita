@@ -139,7 +139,6 @@ void KoResourceTaggingTest::testReadWriteXML()
     QVERIFY(resources.size() == 1);
 
     resources = tagStore2.searchTag("dummytest");
-    qDebug() << resources;
     QVERIFY(resources.size() == 0);
 }
 

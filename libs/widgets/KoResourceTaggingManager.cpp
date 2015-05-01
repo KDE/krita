@@ -55,7 +55,6 @@ class KoResourceTaggingManager::Private
 {
 public:
     QString currentTag;
-    QString unfilteredView;
     QList<KoResource*> originalResources;
     TaggedResourceSet lastDeletedTag;
 
@@ -328,10 +327,9 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, Q
     : d(new Private())
 {
     d->model = model;
-    d->unfilteredView = i18n("All");
 
     d->tagChooser = new KoTagChooserWidget(parent);
-    d->tagChooser->addReadOnlyItem(d->unfilteredView);
+    d->tagChooser->addReadOnlyItem(i18n("All"));
     d->tagChooser->addItems(d->model->tagNamesList());
 
     d->tagFilter = new KoTagFilterWidget(parent);

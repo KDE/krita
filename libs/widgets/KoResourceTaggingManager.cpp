@@ -328,7 +328,7 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, Q
     : d(new Private())
 {
     d->model = model;
-    d->unfilteredView = i18n("All Presets");
+    d->unfilteredView = i18n("All");
 
     d->tagChooser = new KoTagChooserWidget(parent);
     d->tagChooser->addReadOnlyItem(d->unfilteredView);

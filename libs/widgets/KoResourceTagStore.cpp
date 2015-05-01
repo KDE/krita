@@ -30,25 +30,20 @@
 class KoResourceTagStore::Private {
 public:
 
-
     QMultiHash<const KoResource*, QString> resourceToTag;
     QHash<QString, int> tagList;
 
     QString tagsXMLFile;
-    QString serverExtensions;
-
-    KConfigGroup config;
 
     KoResourceServerBase *resourceServer;
 
 };
 
-KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions)
+KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer)
     : d(new Private)
 {
-    d->serverExtensions = extensions;
     d->resourceServer = resourceServer;
-    d->tagsXMLFile =  KStandardDirs::locateLocal("data", "krita/tags/" + resourceType + "_tags.xml");
+    d->tagsXMLFile =  KStandardDirs::locateLocal("data", "krita/tags/" + resourceServer->type() + "_tags.xml");
 }
 
 KoResourceTagStore::~KoResourceTagStore()
@@ -290,7 +285,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 bool KoResourceTagStore::isServerResource(const QString &resourceName) const
 {
     bool removeChild = false;
-    QStringList extensionsList = d->serverExtensions.split(':');
+    QStringList extensionsList = d->resourceServer->extensions().split(':');
     foreach (QString extension, extensionsList) {
         if (resourceName.contains(extension.remove('*'))) {
             removeChild = true;
@@ -303,7 +298,7 @@ bool KoResourceTagStore::isServerResource(const QString &resourceName) const
 QString KoResourceTagStore::adjustedFileName(const QString &fileName) const
 {
     if (!isServerResource(fileName)) {
-        return fileName + "-krita" + d->serverExtensions.split(':').takeFirst().remove('*');
+        return fileName + "-krita" + d->resourceServer->extensions().split(':').takeFirst().remove('*');
     }
     return fileName;
 }

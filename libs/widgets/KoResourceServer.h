@@ -142,7 +142,7 @@ public:
     {
         m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
-        m_tagStore = new KoResourceTagStore(this, type, extensions);
+        m_tagStore = new KoResourceTagStore(this);
     }
 
     virtual ~KoResourceServer()

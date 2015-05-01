@@ -45,7 +45,7 @@ public:
     explicit KoResourceTagStore(KoResourceServerBase *resourceServer);
     ~KoResourceTagStore();
 
-    QStringList assignedTagsList(KoResource* resource) const;
+    QStringList assignedTagsList(const KoResource *resource) const;
 
     /// remote the given resource from the tagstore
     void removeResource(const KoResource *resource);

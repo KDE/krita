@@ -29,9 +29,6 @@
 
 class KoResourceTagStore::Private {
 public:
-
-    QMultiHash<const KoResource*, QString> resourceToTag;
-
     QMultiHash<QByteArray, QString> md5ToTag;
     QMultiHash<QString, QString> identifierToTag;
 
@@ -48,18 +45,34 @@ KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer)
 
 KoResourceTagStore::~KoResourceTagStore()
 {
-    delete d;
     serializeTags();
+    delete d;
 }
 
-QStringList KoResourceTagStore::assignedTagsList(KoResource* resource) const
+QStringList KoResourceTagStore::assignedTagsList(const KoResource* resource) const
 {
-    return d->resourceToTag.values(resource);
+    if (!resource) return QStringList();
+
+    QStringList tags = d->md5ToTag.values(resource->md5());
+    tags += d->identifierToTag.values(resource->filename());
+    tags.removeDuplicates();
+    return tags;
 }
 
 void KoResourceTagStore::removeResource(const KoResource *resource)
 {
-    d->resourceToTag.remove(resource);
+    QStringList tags = assignedTagsList(resource);
+
+    d->md5ToTag.remove(resource->md5());
+    d->identifierToTag.remove(resource->filename());
+
+    foreach(const QString &tag, tags) {
+        if (d->tagList.contains(tag)) {
+            if (d->tagList[tag] > 0) {
+                d->tagList[tag]--;
+            }
+        }
+    }
 }
 
 QStringList KoResourceTagStore::tagNamesList() const
@@ -73,20 +86,33 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
         d->tagList.insert(tag, 0);
         return;
     }
-    if (d->resourceToTag.contains(resource, tag)) {
-        return;
+
+    bool added = false;
+
+    if (!d->md5ToTag.contains(resource->md5(), tag)) {
+        added = true;
+        d->md5ToTag.insert(resource->md5(), tag);
     }
-    d->resourceToTag.insert(resource, tag);
-    if (d->tagList.contains(tag)) {
-        d->tagList[tag]++;
-    } else {
-        d->tagList.insert(tag, 1);
+
+    if (!d->identifierToTag.contains(resource->filename())) {
+        added = true;
+        d->identifierToTag.insert(resource->filename(), tag);
+    }
+
+    if (added) {
+        if (d->tagList.contains(tag)) {
+            d->tagList[tag]++;
+        }
+        else {
+            d->tagList.insert(tag, 1);
+        }
     }
 }
 
 void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 {
-    int res = d->resourceToTag.remove(resource, tag);
+    int res = d->md5ToTag.remove(resource->md5(), tag);
+    res += d->identifierToTag.remove(resource->filename(), tag);
 
     if (res > 0) { // decrease the usecount for this tag
         if (d->tagList.contains(tag)) {
@@ -99,7 +125,8 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::delTag(const QString& tag)
 {
-    Q_ASSERT(!d->resourceToTag.values().contains(tag));
+    Q_ASSERT(!d->md5ToTag.values().contains(tag));
+    Q_ASSERT(!d->identifierToTag.values().contains(tag));
     d->tagList.remove(tag);
 }
 
@@ -113,13 +140,23 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
     QSet<const KoResource*> resources;
 
     foreach (QString tag, tagsList) {
-        foreach (const KoResource *res, d->resourceToTag.keys(tag)) {
-            resources << res;
+        foreach(const QByteArray &md5, d->md5ToTag.keys(tag)) {
+            KoResource *res = d->resourceServer->byMd5(md5);
+            if (res)
+                resources << res;
+        }
+        foreach(const QString &identifier, d->identifierToTag.keys(tag)) {
+            KoResource *res = d->resourceServer->byFileName(identifier);
+            if (res)
+                resources << res;
         }
     }
+
     QStringList filenames;
     foreach (const KoResource *res, resources) {
-        filenames << adjustedFileName(res->shortFilename());
+        if (res) {
+            filenames << adjustedFileName(res->shortFilename());
+        }
     }
 
     return removeAdjustedFileNames(filenames);
@@ -149,13 +186,28 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     root = doc.createElement("tags");
     doc.appendChild(root);
 
+    QSet<KoResource*> taggedResources;
+    foreach (const QByteArray &md5, d->md5ToTag.keys()) {
+        KoResource *res = d->resourceServer->byMd5(md5);
+        if (res) {
+            taggedResources << res;
+        }
+    }
 
-    foreach (const KoResource *res, d->resourceToTag.uniqueKeys()) {
+    foreach (const QString &identifier, d->identifierToTag.keys()) {
+        KoResource *res = d->resourceServer->byFileName(identifier);
+        if (res) {
+            taggedResources << res;
+        }
+    }
+
+    foreach (const KoResource *res, taggedResources) {
+
         QDomElement resourceEl = doc.createElement("resource");
         resourceEl.setAttribute("identifier", res->filename().replace(QDir::homePath(), QString("~")));
         resourceEl.setAttribute("md5", QString(res->md5().toBase64()));
 
-        foreach (const QString &tag, d->resourceToTag.values(res)) {
+        foreach (const QString &tag, assignedTagsList(res)) {
             QDomElement tagEl = doc.createElement("tag");
             tagEl.appendChild(doc.createTextNode(tag));
             resourceEl.appendChild(tagEl);
@@ -212,10 +264,11 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 
     QDomNodeList resourceNodesList = root.childNodes();
 
-    QByteArray resourceMD5;
-    QString identifier;
-
     for (int i = 0; i < resourceNodesList.count(); i++) {
+
+        QByteArray resourceMD5;
+        QString identifier;
+
         QDomElement element = resourceNodesList.at(i).toElement();
         if (element.tagName() == "resource") {
 
@@ -249,8 +302,8 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                     else {
                         addTag(0, tagEl.text());
                     }
-                    d->md5ToTag.insertMulti(resourceMD5, tagEl.text());
-                    d->identifierToTag.insertMulti(identifier, tagEl.text());
+                    d->md5ToTag.insert(resourceMD5, tagEl.text());
+                    d->identifierToTag.insert(identifier, tagEl.text());
                 }
             }
             else {
@@ -275,8 +328,8 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                     if (res) {
                         addTag(res, tagEl.text());
                     }
-                    d->md5ToTag.insertMulti(resourceMD5, tagEl.text());
-                    d->identifierToTag.insertMulti(identifier, tagEl.text());
+                    d->md5ToTag.insert(resourceMD5, tagEl.text());
+                    d->identifierToTag.insert(identifier, tagEl.text());
                 }
             }
         }

@@ -103,7 +103,7 @@ public:
         m_changeCounter = 0;
         m_oldChangeCounter = 0;
         m_enableFiltering = false;
-        m_resourceFilter.setTagStore(m_resourceServer->tagObject());
+        m_resourceFilter.setResourceServer(m_resourceServer);
     }
 
 

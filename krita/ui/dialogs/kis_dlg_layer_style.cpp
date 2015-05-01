@@ -875,6 +875,43 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
     }
 }
 
+class GradientPointerConverter
+{
+public:
+    static KoAbstractGradientSP resourceToStyle(KoAbstractGradient *gradient) {
+        return gradient ? KoAbstractGradientSP(gradient->clone()) : KoAbstractGradientSP();
+    }
+
+    static KoAbstractGradient* styleToResource(KoAbstractGradientSP gradient) {
+        if (!gradient) return 0;
+
+        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
+        KoAbstractGradient *resource = server->resourceByMD5(gradient->md5());
+
+        if (!resource) {
+            KoAbstractGradient *clone = gradient->clone();
+            clone->setName(findAvailableName(gradient->name()));
+            server->addResource(clone, false);
+            resource = clone;
+        }
+
+        return resource;
+    }
+
+private:
+    static QString findAvailableName(const QString &name) {
+        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
+        QString newName = name;
+        int i = 0;
+
+        while (server->resourceByName(newName)) {
+            newName = QString("%1%2").arg(name).arg(i++);
+        }
+
+        return newName;
+    }
+};
+
 /********************************************************************/
 /***** Gradient Overlay *********************************************/
 /********************************************************************/
@@ -910,7 +947,9 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
 
-    KoAbstractGradient *gradient = fetchGradientLazy(config->gradient(), m_resourceProvider);
+    KoAbstractGradient *gradient = fetchGradientLazy(
+        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -927,7 +966,7 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
 {
     config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     config->setOpacity(ui.intOpacity->value());
-    config->setGradient(ui.cmbGradient->gradient());
+    config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     config->setReverse(ui.chkReverse->isChecked());
     config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
@@ -1013,7 +1052,9 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.bnColor->setColor(config->color());
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
-    KoAbstractGradient *gradient = fetchGradientLazy(config->gradient(), m_resourceProvider);
+    KoAbstractGradient *gradient = fetchGradientLazy(
+        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -1052,7 +1093,7 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
     }
 
     config->setColor(ui.bnColor->color());
-    config->setGradient(ui.cmbGradient->gradient());
+    config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     config->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     config->setSpread(ui.intChoke->value());
     config->setSize(ui.intSize->value());
@@ -1270,7 +1311,9 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 
     ui.bnColor->setColor(stroke->color());
 
-    KoAbstractGradient *gradient = fetchGradientLazy(stroke->gradient(), m_resourceProvider);
+    KoAbstractGradient *gradient =
+        fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
+
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -1299,7 +1342,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setColor(ui.bnColor->color());
 
-    stroke->setGradient(ui.cmbGradient->gradient());
+    stroke->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     stroke->setReverse(ui.chkReverse->isChecked());
     stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());

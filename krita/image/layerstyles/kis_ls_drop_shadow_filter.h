@@ -23,7 +23,7 @@
 
 #include "kis_layer_style_filter.h"
 
-class psd_layer_effects_shadow_base;
+struct psd_layer_effects_shadow_base;
 
 
 class KDE_EXPORT KisLsDropShadowFilter : public KisLayerStyleFilter

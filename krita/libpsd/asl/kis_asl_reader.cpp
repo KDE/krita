@@ -33,103 +33,11 @@
 #include "kis_offset_on_exit_verifier.h"
 
 #include "kis_asl_writer_utils.h"
+#include "kis_asl_reader_utils.h"
+
+
 
 namespace Private {
-
-/**
- * Default value for variabled read from a file
- */
-#define GARBAGE_VALUE_MARK 999
-
-
-/**
- * Exception that is emitted when any parse error appear.
- * Thanks to KisOffsetOnExitVerifier parsing can be continued
- * most of the time, based on the offset values written in PSD.
- */
-
-struct ASLParseException : public std::runtime_error
-{
-    ASLParseException(const QString &msg)
-        : std::runtime_error(msg.toAscii().data())
-    {
-    }
-};
-
-#define SAFE_READ_EX(device, varname)                                   \
-    if (!psdread(device, &varname)) {                                   \
-        QString msg = QString("Failed to read \'%1\' tag!").arg(#varname); \
-        throw ASLParseException(msg);                                   \
-    }
-
-#define SAFE_READ_SIGNATURE_EX(device, varname, expected)               \
-    if (!psdread(device, &varname) || varname != expected) {            \
-        QString msg = QString("Failed to check signature \'%1\' tag!\n" \
-                              "Value: \'%2\' Expected: \'%3\'")         \
-            .arg(#varname).arg(varname).arg(expected);                  \
-        throw ASLParseException(msg);                                   \
-    }
-
-/**
- * String fetch functions
- *
- * ASL has 4 types of strings:
- *
- * - fixed length (4 bytes)
- * - variable length (length (4 bytes) + string (var))
- * - pascal (length (1 byte) + string (var))
- * - unicode string (length (4 bytes) + null-terminated unicode string (var)
- */
-
-QString readStringCommon(QIODevice *device, int length)
-{
-    QByteArray data;
-    data.resize(length);
-    qint64 dataRead = device->read(data.data(), length);
-
-    if (dataRead != length) {
-        QString msg =
-            QString("Failed to read a string! "
-                    "Bytes read: %1 Expected: %2")
-            .arg(dataRead).arg(length);
-        throw ASLParseException(msg);
-    }
-
-    return QString(data);
-}
-
-QString readFixedString(QIODevice *device) {
-    return readStringCommon(device, 4);
-}
-
-QString readVarString(QIODevice *device) {
-    quint32 length = 0;
-    SAFE_READ_EX(device, length);
-
-    if (!length) {
-        length = 4;
-    }
-
-    return readStringCommon(device, length);
-}
-
-QString readPascalString(QIODevice *device) {
-    quint8 length = 0;
-    SAFE_READ_EX(device, length);
-
-    return readStringCommon(device, length);
-}
-
-QString readUnicodeString(QIODevice *device) {
-    QString string;
-
-    if (!psdread_unicodestring(device, string)) {
-        QString msg = QString("Failed to read a unicode string!");
-        throw ASLParseException(msg);
-    }
-
-    return string;
-}
 
 /**
  * Numerical fetch functions
@@ -229,6 +137,8 @@ void readChildObject(QIODevice *device,
                      QDomDocument *doc,
                      bool skipKey = false)
 {
+    using namespace KisAslReaderUtils;
+
     QString key;
 
     if (!skipKey) {
@@ -298,6 +208,8 @@ void readDescriptor(QIODevice *device,
                     QDomElement *parent,
                     QDomDocument *doc)
 {
+    using namespace KisAslReaderUtils;
+
     QString name = readUnicodeString(device);
     QString classId = readVarString(device);
 
@@ -318,6 +230,8 @@ void readDescriptor(QIODevice *device,
 QImage readVirtualArrayList(QIODevice *device,
                             int numPlanes)
 {
+    using namespace KisAslReaderUtils;
+
     quint32 arrayVersion = GARBAGE_VALUE_MARK;
     SAFE_READ_EX(device, arrayVersion);
 
@@ -479,6 +393,8 @@ qint64 readPattern(QIODevice *device,
                    QDomElement *parent,
                    QDomDocument *doc)
 {
+    using namespace KisAslReaderUtils;
+
     quint32 patternSize = GARBAGE_VALUE_MARK;
     SAFE_READ_EX(device, patternSize);
 
@@ -577,6 +493,8 @@ qint64 readPattern(QIODevice *device,
 
 QDomDocument readFileImpl(QIODevice *device)
 {
+    using namespace KisAslReaderUtils;
+
     QDomDocument doc;
     QDomElement root = doc.createElement("asl");
     doc.appendChild(root);
@@ -663,8 +581,38 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
 
     try {
         doc = Private::readFileImpl(device);
-    } catch (Private::ASLParseException &e) {
+    } catch (KisAslReaderUtils::ASLParseException &e) {
         qWarning() << "WARNING: ASL:" << e.what();
+    }
+
+    return doc;
+}
+
+QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
+{
+    QDomDocument doc;
+
+    try {
+        {
+            quint32 objectEffectsVersion = GARBAGE_VALUE_MARK;
+            const quint32 ref = 0x00;
+            SAFE_READ_SIGNATURE_EX(device, objectEffectsVersion, ref);
+        }
+
+        {
+            quint32 descriptorVersion = GARBAGE_VALUE_MARK;
+            const quint32 ref = 0x10;
+            SAFE_READ_SIGNATURE_EX(device, descriptorVersion, ref);
+        }
+
+
+        QDomElement root = doc.createElement("asl");
+        doc.appendChild(root);
+
+        Private::readDescriptor(device, "", &root, &doc);
+
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        qWarning() << "WARNING: PSD: lfx2 section:" << e.what();
     }
 
     return doc;

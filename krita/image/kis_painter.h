@@ -87,6 +87,22 @@ public:
     virtual ~KisPainter();
 
 public:
+    static void copyAreaOptimized(const QPoint &dstPt,
+                                  KisPaintDeviceSP src,
+                                  KisPaintDeviceSP dst,
+                                  const QRect &originalSrcRect);
+
+    static void copyAreaOptimizedOldData(const QPoint &dstPt,
+                                         KisPaintDeviceSP src,
+                                         KisPaintDeviceSP dst,
+                                         const QRect &originalSrcRect);
+
+    static void copyAreaOptimized(const QPoint &dstPt,
+                                  KisPaintDeviceSP src,
+                                  KisPaintDeviceSP dst,
+                                  const QRect &originalSrcRect,
+                                  KisSelectionSP selection);
+
     /**
      * Start painting on the specified device. Not undoable.
      */

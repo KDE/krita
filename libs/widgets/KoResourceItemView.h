@@ -59,6 +59,8 @@ Q_SIGNALS:
     void currentResourceChanged(const QModelIndex &);
     void contextMenuRequested(const QPoint &);
 
+    void sigSizeChanged();
+
 protected:
     virtual void contextMenuEvent( QContextMenuEvent * event);
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);

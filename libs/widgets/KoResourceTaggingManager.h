@@ -31,7 +31,7 @@
 
 #include "kowidgets_export.h"
 
-class KoResourceModelBase;
+class KoResourceModel;
 class KoResource;
 
 class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
@@ -39,7 +39,7 @@ class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingManager(KoResourceModelBase*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModel* model, QWidget* parent);
     ~KoResourceTaggingManager();
     void showTaggingBar(bool showSearchBar, bool showOpBar);
     QStringList availableTags() const;

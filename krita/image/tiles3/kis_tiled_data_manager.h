@@ -324,6 +324,8 @@ private:
 private:
     void setDefaultPixelImpl(const quint8 *defPixel);
 
+    QRect extentImpl() const;
+
     bool writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 

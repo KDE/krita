@@ -13,7 +13,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
 endif()
 
 if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
-    cmake_policy(SET CMP0026 OLD)
+    cmake_policy(SET CMP0026 OLD) 
     cmake_policy(SET CMP0046 OLD)
 endif()
 
@@ -27,10 +27,10 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9.2")
+set(CALLIGRA_VERSION_STRING "2.9.3")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 2)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_VERSION_RELEASE 3)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC

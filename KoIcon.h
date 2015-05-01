@@ -65,21 +65,27 @@
 
 /// Use this function to load an icon that fits the current color theme
 inline KIcon themedIcon(const QString &name, bool fast = false) {
-    KIcon icon;
-    bool useAdjustedIcons = true;
-    if(!fast) {
-        useAdjustedIcons = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
+    Q_UNUSED(fast);
+
+    static bool firstUse = true;
+    if (firstUse) {
+        // workaround for some kde-related crash
+        bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
+        Q_UNUSED(_unused);
+        firstUse = false;
     }
 
-    if (useAdjustedIcons) {
-        QColor background = qApp->palette().background().color();
-        bool useDarkIcons = background.value() > 100;
-        QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
+    // try load themed icon
+    QColor background = qApp->palette().background().color();
+    bool useDarkIcons = background.value() > 100;
+    const char * const prefix = useDarkIcons ? "dark_" : "light_";
 
-        QString realName = prefix + name;
-        icon = koIcon(realName.toLatin1());
-    } else {
-        icon = koIcon(name.toLatin1());
+    QString realName = QLatin1String(prefix) + name;
+    KIcon icon(realName);
+
+    // fallback
+    if (icon.isNull()) {
+        icon = KIcon(name);
     }
 
     return icon;

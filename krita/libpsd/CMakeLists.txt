@@ -7,6 +7,7 @@ set(libkispsd_LIB_SRCS
     psd_pattern.cpp
 
     asl/kis_asl_reader.cpp
+    asl/kis_asl_reader_utils.cpp
     asl/kis_asl_xml_parser.cpp
     asl/kis_asl_object_catcher.cpp
     asl/kis_asl_callback_object_catcher.cpp

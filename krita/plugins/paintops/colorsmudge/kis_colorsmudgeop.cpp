@@ -171,9 +171,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
      * brush (due to rounding effects), which will result in a
      * really weird quality.
      */
-    m_lastPaintPos = newCenterPos;
-
     QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
+
+    m_lastPaintPos = newCenterPos;
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(scale, rotation,

@@ -27,14 +27,18 @@
 
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QPointer>
 
 #include <kdebug.h>
 
 #include <klocale.h>
+#include <kglobal.h>
 
-#include "KoResourceModelBase.h"
+#include "KoResourceModel.h"
 #include "KoResource.h"
 #include "KoResourceItemChooserContextMenu.h"
+
+#include <kconfiggroup.h>
 
 class TaggedResourceSet
 {
@@ -43,7 +47,8 @@ public:
     {}
 
     TaggedResourceSet(const QString& tagName, const QList<KoResource*>& resources)
-        : tagName(tagName), resources(resources)
+        : tagName(tagName)
+        , resources(resources)
     {}
 
     QString tagName;
@@ -63,7 +68,7 @@ public:
 
     QCompleter* tagCompleter;
 
-    KoResourceModelBase* model;
+    QPointer<KoResourceModel> model;
 };
 
 void KoResourceTaggingManager::showTaggingBar(bool showSearchBar, bool showOpBar)
@@ -323,10 +328,12 @@ KoTagFilterWidget* KoResourceTaggingManager::tagFilterWidget()
     return d->tagFilter;
 }
 
-KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, QWidget* parent)
-    : d(new Private())
+KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidget* parent)
+    : QObject(parent)
+    , d(new Private())
 {
     d->model = model;
+
 
     d->tagChooser = new KoTagChooserWidget(parent);
     d->tagChooser->addReadOnlyItem(i18n("All"));
@@ -359,14 +366,19 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, Q
     connect(d->model, SIGNAL(tagBoxEntryModified()),
             this, SLOT(syncTagBoxEntries()));
 
-    /// FIXME: fix tag completer
-    /// d->tagCompleter = new QCompleter(this);
-    ///  d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+    // FIXME: fix tag completer
+    // d->tagCompleter = new QCompleter(this);
+    //  d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+
+    KConfigGroup group = KGlobal::config()->group("SelectedTags");
+    QString tag = group.readEntry<QString>(d->model->serverType(), "");
+    if (!tag.isEmpty()) {
+        d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tag));
+    }
 
 }
 
 KoResourceTaggingManager::~KoResourceTaggingManager()
 {
     delete d;
-
 }

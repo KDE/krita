@@ -97,7 +97,8 @@ public:
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent, bool usePreview)
-    : QWidget( parent ), d( new Private() )
+    : QWidget( parent )
+    , d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
 

@@ -104,6 +104,7 @@ private Q_SLOTS:
 private:
     QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;
     int m_columnCount;
+    QString m_currentTag;
 };
 
 #endif // KORESOURCEMODEL_H

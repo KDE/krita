@@ -48,6 +48,11 @@ KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter>
 
 KoResourceModel::~KoResourceModel()
 {
+    if (!m_currentTag.isEmpty()) {
+        KConfigGroup group = KGlobal::config()->group("SelectedTags");
+        group.writeEntry(serverType(), m_currentTag);
+    }
+
 }
 
 int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
@@ -265,6 +270,7 @@ void KoResourceModel::enableResourceFiltering(bool enable)
 
 void KoResourceModel::setCurrentTag(const QString& currentTag)
 {
+    m_currentTag = currentTag;
     m_resourceAdapter->setCurrentTag(currentTag);
 }
 

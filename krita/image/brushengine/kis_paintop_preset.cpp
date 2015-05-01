@@ -169,8 +169,6 @@ bool KisPaintOpPreset::load()
         ba = resourceStore->device()->readAll();
         dev = new QBuffer(&ba);
 
-        qDebug() << "Going to load" << fn << "size" << ba.size();
-
         resourceStore->close();
     }
     else {

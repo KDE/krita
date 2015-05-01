@@ -9,6 +9,12 @@ target_link_libraries(TestKoLZF ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
+set(xmlvectortest_SRCS ../KoLZF.cpp TestKoXmlVector.cpp )
+kde4_add_unit_test(TestKoXmlVector TESTNAME libs-odf-TestKoXmlVector ${xmlvectortest_SRCS})
+target_link_libraries(TestKoXmlVector ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestKoGenStyles_SRCS TestKoGenStyles.cpp )
 kde4_add_unit_test(TestKoGenStyles TESTNAME libs-odf-TestKoGenStyles ${TestKoGenStyles_SRCS})
 target_link_libraries(TestKoGenStyles koodf ${QT_QTTEST_LIBRARY})

@@ -47,6 +47,7 @@ public:
     QList<KoResource*> filterResources(QList< KoResource* > resources);
     void setInclusions(const QStringList &inclusions);
     void setExclusions(const QStringList &exclusions);
+
 private:
 
     void setDoneFiltering();
@@ -57,6 +58,7 @@ private:
     void populateIncludeExcludeFilters(const QStringList& filteredNames);
     void sanitizeExclusionList();
     QStringList tokenizeSearchString(const QString& searchString) const;
+
     class Private;
     Private * const d;
 

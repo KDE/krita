@@ -112,3 +112,7 @@ Texture_leaves_fuzzy.kpp
 ink_precision_03.kpp
 pixel1.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
+
+install( FILES
+    kis_paintoppresets_tags.xml
+DESTINATION  ${DATA_INSTALL_DIR}/krita/tags)

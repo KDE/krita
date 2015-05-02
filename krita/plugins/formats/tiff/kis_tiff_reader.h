@@ -204,23 +204,29 @@ public:
 class KisTIFFReaderTarget16bit : public KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderTarget16bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
+    KisTIFFReaderTarget16bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 _alphaValue)
+        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor),
+          m_alphaValue(_alphaValue)
     {
     }
 public:
     virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+private:
+    uint16 m_alphaValue;
 };
 
 class KisTIFFReaderTarget32bit : public KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderTarget32bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
+    KisTIFFReaderTarget32bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint32 _alphaValue)
+        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor),
+          m_alphaValue(_alphaValue)
     {
     }
 public:
     virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+private:
+    uint32 m_alphaValue;
 };
 
 class KisTIFFReaderFromPalette : public  KisTIFFReaderBase

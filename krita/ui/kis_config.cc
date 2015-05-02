@@ -46,11 +46,6 @@
 
 #include <kis_color_manager.h>
 
-namespace
-{
-    static QMutex s_synchLocker;
-}
-
 KisConfig::KisConfig()
     : m_cfg(KGlobal::config()->group(""))
 {
@@ -58,9 +53,12 @@ KisConfig::KisConfig()
 
 KisConfig::~KisConfig()
 {
-    s_synchLocker.lock();
+    if (qApp->thread() != QThread::currentThread()) {
+        qDebug() << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        return;
+    }
+
     m_cfg.sync();
-    s_synchLocker.unlock();
 }
 
 

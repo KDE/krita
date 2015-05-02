@@ -55,7 +55,14 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
         if (nbchannels == 0) nbchannels = 1;
         extrasamplescount = nbchannels - 1; // FIX the extrasamples count in case of
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
-          return QPair<QString, QString>();
+           if (color_nb_bits == 16) {
+               destDepth = 16;
+               return QPair<QString, QString>(GrayAColorModelID.id(), Float16BitsColorDepthID.id());
+           }
+           else if (color_nb_bits == 32) {
+               destDepth = 32;
+               return QPair<QString, QString>(GrayAColorModelID.id(), Float32BitsColorDepthID.id());
+           }
         }
         if (color_nb_bits <= 8) {
             destDepth = 8;
@@ -70,14 +77,14 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
         if (nbchannels == 0) nbchannels = 3;
         extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
-//            if (color_nb_bits == 16) {
-//                destDepth = 16;
-//                return QPair<QString, QString>(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
-//            }
-//            else if (color_nb_bits == 32) {
-//                destDepth = 32;
-//                return QPair<QString, QString>(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
-//            }
+            if (color_nb_bits == 16) {
+                destDepth = 16;
+                return QPair<QString, QString>(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
+            }
+            else if (color_nb_bits == 32) {
+                destDepth = 32;
+                return QPair<QString, QString>(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
+            }
             return QPair<QString, QString>();
         }
         else {
@@ -447,10 +454,26 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         tiffReader = new KisTIFFReaderTarget8bit(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor);
     }
     else if (dstDepth == 16) {
-        tiffReader = new KisTIFFReaderTarget16bit(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor);
+        uint16 alphValue;
+        if(sampletype == SAMPLEFORMAT_IEEEFP)
+        {
+          float alpha = 1.0f;
+          alphValue = *(uint16*)&alpha;
+        } else {
+          alphValue = quint16_MAX;
+        }
+        tiffReader = new KisTIFFReaderTarget16bit(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, alphValue);
     }
     else if (dstDepth == 32) {
-        tiffReader = new KisTIFFReaderTarget32bit(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor);
+        uint32 alphValue;
+        if(sampletype == SAMPLEFORMAT_IEEEFP)
+        {
+          float alpha = 1.0;
+          alphValue = *(uint32*)&alpha;
+        } else {
+          alphValue = quint32_MAX;
+        }
+        tiffReader = new KisTIFFReaderTarget32bit(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, alphValue);
     }
 
     if (TIFFIsTiled(image)) {
@@ -475,10 +498,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         else {
             ps_buf = new tdata_t[nbchannels];
             uint32 * lineSizes = new uint32[nbchannels];
-            uint16 baseSize = TIFFTileSize(image) / nbchannels;
+            tmsize_t baseSize = TIFFTileSize(image) / nbchannels;
             for (uint i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(baseSize);
-                lineSizes[i] = baseSize / lineSizeCoeffs[i];
+                lineSizes[i] = tileWidth; // baseSize / lineSizeCoeffs[i];
             }
             tiffstream = new KisBufferStreamSeperate((uint8**) ps_buf, nbchannels, depth, lineSizes);
             delete [] lineSizes;

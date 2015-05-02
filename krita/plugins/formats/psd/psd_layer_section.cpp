@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
+#include <kis_effect_mask.h>
 
 #include "psd_header.h"
 #include "psd_utils.h"
@@ -106,25 +107,22 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             return false;
         }
 
-        if (nLayers < 0) {
-            hasTransparency = true; // first alpha channel is the alpha channel of the projection.
-            nLayers = -nLayers;
-        }
-        else {
-            hasTransparency = false;
-        }
-        dbgFile << "transparency" << hasTransparency;
+        hasTransparency = nLayers < 0; // first alpha channel is the alpha channel of the projection.
+        nLayers = qAbs(nLayers);
 
-        dbgFile << "Number of layers" << nLayers << "transparency" << hasTransparency;
+        dbgFile << "Number of layers:" << nLayers;
+        dbgFile << "Has separate projection transparency:" << hasTransparency;
 
         for (int i = 0; i < nLayers; ++i) {
 
             dbgFile << "Going to read layer" << i << "pos" << io->pos();
+            dbgFile << "== Enter PSDLayerRecord";
             PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                 return false;
             }
+            dbgFile << "== Leave PSDLayerRecord";
             dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
                     << layerRecord->blendModeKey << io->pos()
                     << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
@@ -148,14 +146,7 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             quint64 channelStartPos = io->pos();
             dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
 
-            Q_ASSERT(j < layerRecord->channelInfoRecords.size());
-            if (j > layerRecord->channelInfoRecords.size()) {
-                error = QString("Expected channel %1, but only have %2 channels for layer %3")
-                        .arg(j)
-                        .arg(layerRecord->channelInfoRecords.size())
-                        .arg(i);
-                return false;
-            }
+            KIS_ASSERT_RECOVER(j < layerRecord->channelInfoRecords.size()) { return false; }
 
             ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
@@ -167,9 +158,11 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             channelInfo->compressionType = (Compression::CompressionType)compressionType;
             dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
 
+            QRect channelRect = layerRecord->channelRect(channelInfo);
+
             // read the rle row lengths;
             if (channelInfo->compressionType == Compression::RLE) {
-                for(qint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
+                for(qint64 row = 0; row < channelRect.height(); ++row) {
 
                     //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 
@@ -267,6 +260,17 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
     dbgFile << layers.size();
 }
 
+KisNodeSP findOnlyTransparencyMask(KisNodeSP node)
+{
+    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    QList<KisEffectMaskSP> masks = layer->effectMasks();
+
+    if (masks.size() != 1) return 0;
+
+    KisEffectMaskSP onlyMask = masks.first();
+    return onlyMask->inherits("KisTransparencyMask") ? onlyMask : 0;
+}
+
 bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
@@ -298,7 +302,11 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
-        QRect rc = node->projection()->extent();
+        KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
+        const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
+        KisPaintDeviceSP layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+
+        QRect rc = layerContentDevice->extent();
         rc = rc.normalized();
         Q_ASSERT(rc.width() >= 0);
         Q_ASSERT(rc.height() >= 0);
@@ -310,7 +318,7 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
         layerRecord->left = rc.x();
         layerRecord->bottom = rc.y() + rc.height();
         layerRecord->right = rc.x() + rc.width();
-        layerRecord->nChannels = node->projection()->colorSpace()->colorChannelCount();
+        layerRecord->nChannels = layerContentDevice->colorSpace()->colorChannelCount();
 
         // XXX: masks should be saved as channels as well, with id -2
         ChannelInfo *info = new ChannelInfo;
@@ -335,7 +343,7 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 
         layerRecord->layerName = node->name();
 
-        if (!layerRecord->write(io, node)) {
+        if (!layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect)) {
             error = layerRecord->error;
             return false;
         }

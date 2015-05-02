@@ -25,7 +25,7 @@
 
 static QString lastBookMarkItem;
 
-ManageBookmark::ManageBookmark(QList<QString> nameList, KoTextEditor *editor, QWidget *parent)
+ManageBookmark::ManageBookmark(const QList<QString> &nameList, KoTextEditor *editor, QWidget *parent)
         : QWidget(parent),
           m_editor(editor)
 {
@@ -137,7 +137,7 @@ void ManageBookmark::slotBookmarkInsert()
     }
 }
 
-ManageBookmarkDialog::ManageBookmarkDialog(QList<QString> nameList, KoTextEditor *editor, QWidget *parent)
+ManageBookmarkDialog::ManageBookmarkDialog(const QList<QString> &nameList, KoTextEditor *editor, QWidget *parent)
         : KDialog(parent)
 {
     ui = new ManageBookmark(nameList, editor, this);

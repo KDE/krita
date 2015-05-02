@@ -20,8 +20,6 @@
 #include "KoTemplateTree.h"
 
 #include <QDir>
-#include <QImage>
-#include <QPixmap>
 #include <QPrinter>
 #include <QUrl>
 
@@ -29,12 +27,10 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <stdlib.h>
 
 #include <KoTemplate.h>
 #include <KoTemplateGroup.h>

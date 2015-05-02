@@ -546,6 +546,7 @@ K4AboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Pawel"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("P+B-Snegge"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("pepeland"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Peter Moonen"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Peter Simonsson"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Pete Smith"), ki18n("Krita 2.9 Kickstarter Backer"));

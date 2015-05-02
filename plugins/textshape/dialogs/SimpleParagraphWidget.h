@@ -57,7 +57,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void doneWithFocus();
     void paragraphStyleSelected(KoParagraphStyle *);
-    void newStyleRequested(QString name);
+    void newStyleRequested(const QString &name);
     void showStyleManager(int styleId);
 
 private Q_SLOTS:

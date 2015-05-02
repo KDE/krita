@@ -53,5 +53,61 @@ void KisPSDTest::testOpening()
     Q_ASSERT(doc->image());
 }
 
+QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
+{
+    QSharedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc.data());
+    manager.setBatchMode(true);
+
+    KisImportExportFilter::ConversionStatus status;
+    QString s = manager.importDocument(fileInfo.absoluteFilePath(), QString(),
+                                       status);
+
+    return doc;
+}
+
+void KisPSDTest::testTransparencyMask()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/masks.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
+    QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+
+    doc->setBackupFile(false);
+    doc->setOutputMimeType("image/vnd.adobe.photoshop");
+    QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_tmask.psd");
+    bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
+    QVERIFY(retval);
+
+    {
+        QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+        QVERIFY(doc->image());
+
+        QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
+        QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+
+        QVERIFY(doc->image()->root()->lastChild());
+        QVERIFY(doc->image()->root()->lastChild()->firstChild());
+        QVERIFY(doc->image()->root()->lastChild()->firstChild()->inherits("KisTransparencyMask"));
+    }
+}
+
+void KisPSDTest::testOpenGrayscaleMultilayered()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/gray.psd");
+    //QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/100x100gray8.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+}
+
 QTEST_KDEMAIN(KisPSDTest, GUI)
 

@@ -231,10 +231,13 @@ void KisAbstractSliderSpinBox::paintPlastique(QPainter &painter)
     QRegion rightRect = rect;
     rightRect = rightRect.subtracted(leftRect);
 
+    QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
+    textOption.setWrapMode(QTextOption::NoWrap);
+
     if (!(d->edit && d->edit->isVisible())) {
         painter.setClipRegion(rightRect);
         painter.setClipping(true);
-        painter.drawText(rect, progressOpts.text, QTextOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter));
+        painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
         painter.setClipping(false);
     }
 
@@ -246,7 +249,7 @@ void KisAbstractSliderSpinBox::paintPlastique(QPainter &painter)
             painter.setPen(palette().highlightedText().color());
             painter.setClipRect(leftRect.adjusted(0,0,1,0));
             painter.setClipping(true);
-            painter.drawText(rect, progressOpts.text, QTextOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter));
+            painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
             painter.setClipping(false);
         }
     }
@@ -286,8 +289,11 @@ void KisAbstractSliderSpinBox::paintBreeze(QPainter &painter)
     rightRect = rightRect.subtracted(leftRect);
     painter.setClipRegion(rightRect);
 
+    QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
+    textOption.setWrapMode(QTextOption::NoWrap);
+
     if (!(d->edit && d->edit->isVisible())) {
-        painter.drawText(progressOpts.rect, valueText, QTextOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter));
+        painter.drawText(progressOpts.rect, valueText, textOption);
     }
 
     if (!leftRect.isNull()) {
@@ -295,7 +301,7 @@ void KisAbstractSliderSpinBox::paintBreeze(QPainter &painter)
         painter.setClipRect(leftRect);
         style()->drawControl(QStyle::CE_ProgressBarContents, &progressOpts, &painter, this);
         if (!(d->edit && d->edit->isVisible())) {
-            painter.drawText(progressOpts.rect, valueText, QTextOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter));
+            painter.drawText(progressOpts.rect, valueText, textOption);
         }
     }
 
@@ -443,33 +449,43 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     QFont ft(font());
-    // Some styles use bold font in progressbars
-    ft.setBold(true);
+    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK) {
+        // Some styles use bold font in progressbars
+        // unfortunately there is no reliable way to check for that
+        ft.setBold(true);
+    }
+
     QFontMetrics fm(ft);
     QSize hint(fm.boundingRect(d->prefix + QString::number(d->maximum) + d->suffix).size());
-    hint += QSize(4, 2);
+    hint += QSize(0, 2);
 
-    // almost all "modern" styles have a margin around controls
-    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK) {
-        hint += QSize(4, 6);
+    switch (d->style) {
+    case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
+        hint += QSize(8, 0);
+        break;
+    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
+        hint += QSize(2, 0);
+        break;
+    case KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK:
+        // almost all "modern" styles have a margin around controls
+        hint += QSize(6, 6);
+        break;
+    default:
+        break;
     }
 
-    // The breeze style doesn't seem to need this
-    if (d->style != KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE) {
-        //Getting the size of the buttons is a pain as the calcs require a rect
-        //that is "big enough". We run the calc twice to get the "smallest" buttons
-        //This code was inspired by QAbstractSpinBox
-        QSize extra(35, 0);
-        spinOpts.rect.setSize(hint + extra);
-        extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
-                                                QStyle::SC_SpinBoxEditField, this).size();
+    //Getting the size of the buttons is a pain as the calcs require a rect
+    //that is "big enough". We run the calc twice to get the "smallest" buttons
+    //This code was inspired by QAbstractSpinBox
+    QSize extra(1000, 0);
+    spinOpts.rect.setSize(hint + extra);
+    extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
+                                            QStyle::SC_SpinBoxEditField, this).size();
+    spinOpts.rect.setSize(hint + extra);
+    extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
+                                            QStyle::SC_SpinBoxEditField, this).size();
+    hint += extra;
 
-        spinOpts.rect.setSize(hint + extra);
-        extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
-                                                QStyle::SC_SpinBoxEditField, this).size();
-
-        hint += extra;
-    }
 
     spinOpts.rect.setSize(hint);
     return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint)

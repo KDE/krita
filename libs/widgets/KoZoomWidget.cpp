@@ -107,12 +107,12 @@ KoZoomWidget::~KoZoomWidget()
 {
 }
 
-void KoZoomWidget::setZoomLevels(QStringList values)
+void KoZoomWidget::setZoomLevels(const QStringList &values)
 {
     d->input->setZoomLevels(values);
 }
 
-void KoZoomWidget::setCurrentZoomLevel(QString valueString)
+void KoZoomWidget::setCurrentZoomLevel(const QString &valueString)
 {
     d->input->setCurrentZoomLevel(valueString);
 }

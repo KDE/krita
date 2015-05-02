@@ -30,8 +30,6 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QHBoxLayout>
-#include <QFrame>
-#include <QByteArray>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGroupBox>

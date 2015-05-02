@@ -70,11 +70,11 @@ public:
      */
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
-    void setCreator(QString creator);
+    void setCreator(const QString &creator);
     QString creator() const;
-    void setDate(QString date);
+    void setDate(const QString &date);
     QString date() const;
-    void setDateString(QString date);
+    void setDateString(const QString &date);
     QString dateString() const;
 
 private:

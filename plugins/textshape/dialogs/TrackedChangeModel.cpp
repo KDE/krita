@@ -61,12 +61,12 @@ void ModelItem::setChangeType(KoGenChange::Type type)
     m_data.changeType = type;
 }
 
-void ModelItem::setChangeTitle(QString title)
+void ModelItem::setChangeTitle(const QString &title)
 {
     m_data.title = title;
 }
 
-void ModelItem::setChangeAuthor(QString author)
+void ModelItem::setChangeAuthor(const QString &author)
 {
     m_data.author = author;
 }

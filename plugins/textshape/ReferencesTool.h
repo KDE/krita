@@ -74,11 +74,11 @@ private Q_SLOTS:
     /// insert an autonumbered footnote
     void insertAutoFootNote();
     /// insert a labeled footnote
-    void insertLabeledFootNote(QString label);
+    void insertLabeledFootNote(const QString &label);
     /// insert an autonumbered endnote
     void insertAutoEndNote();
     /// insert a labeled endnote
-    void insertLabeledEndNote(QString label);
+    void insertLabeledEndNote(const QString &label);
     /// show the configuration dialog for footnotes
     void showFootnotesConfigureDialog();
     /// show the configuration dialog for endnotes
@@ -112,12 +112,12 @@ class LabeledWidget : public QWidget
     Q_OBJECT
 public:
     enum LabelPosition {INLINE, ABOVE};
-    LabeledWidget(KAction *action, const QString label, LabelPosition pos, bool warningLabelRequired);
+    LabeledWidget(KAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
     void setWarningText(int pos, const QString &warning);
     void clearLineEdit();
 Q_SIGNALS:
-    void triggered(QString label);
-    void lineEditChanged(QString);
+    void triggered(const QString &label);
+    void lineEditChanged(const QString &);
 
 private Q_SLOTS:
     void returnPressed();

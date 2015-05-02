@@ -22,6 +22,11 @@
 #include <kglobal.h>
 #include <KoConfig.h>
 
+#include "kis_debug.h"
+#include <QThread>
+#include <QApplication>
+
+
 KisImageConfig::KisImageConfig()
     : m_config(KGlobal::config()->group(""))
 {
@@ -29,6 +34,11 @@ KisImageConfig::KisImageConfig()
 
 KisImageConfig::~KisImageConfig()
 {
+    if (qApp->thread() != QThread::currentThread()) {
+        qDebug() << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
+        return;
+    }
+
     m_config.sync();
 }
 

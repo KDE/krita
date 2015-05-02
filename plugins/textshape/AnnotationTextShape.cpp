@@ -142,7 +142,7 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
     m_textShapeData->saveOdf(context, 0, 0, -1);
 }
 
-void AnnotationTextShape::setCreator(const QString creator)
+void AnnotationTextShape::setCreator(const QString &creator)
 {
     m_creator = creator;
 }
@@ -152,7 +152,7 @@ QString AnnotationTextShape::creator() const
     return m_creator;
 }
 
-void AnnotationTextShape::setDate(QString date)
+void AnnotationTextShape::setDate(const QString &date)
 {
     m_date = date;
 }
@@ -162,7 +162,7 @@ QString AnnotationTextShape::date() const
     return m_date;
 }
 
-void AnnotationTextShape::setDateString(QString dateString)
+void AnnotationTextShape::setDateString(const QString &dateString)
 {
     m_dateString = dateString;
 }

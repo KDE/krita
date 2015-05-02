@@ -63,7 +63,9 @@ public:
 
     GeneralTab(QWidget *parent = 0, const char *name = 0);
 
-    enumCursorStyle cursorStyle();
+    CursorStyle cursorStyle();
+    OutlineStyle outlineStyle();
+
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();

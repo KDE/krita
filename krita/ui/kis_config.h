@@ -99,8 +99,11 @@ public:
      */
     void defColorProfile(const QString & depth) const;
 
-    enumCursorStyle cursorStyle(bool defaultCursorStyle = false) const;
-    void setCursorStyle(enumCursorStyle style) const;
+    CursorStyle newCursorStyle(bool defaultValue = false) const;
+    void setNewCursorStyle(CursorStyle style);
+
+    OutlineStyle newOutlineStyle(bool defaultValue = false) const;
+    void setNewOutlineStyle(OutlineStyle style);
 
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;

@@ -237,7 +237,7 @@ void SimpleCharacterWidget::styleSelected(int index)
     emit doneWithFocus();
 }
 
-void SimpleCharacterWidget::styleSelected(QModelIndex &index)
+void SimpleCharacterWidget::styleSelected(const QModelIndex &index)
 {
     if (!index.isValid()) {
         emit doneWithFocus();

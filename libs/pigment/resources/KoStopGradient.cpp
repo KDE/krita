@@ -245,6 +245,11 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
     updatePreview();
 }
 
+QList<KoGradientStop> KoStopGradient::stops() const
+{
+    return m_stops;
+}
+
 void KoStopGradient::loadKarbonGradient(QIODevice *file)
 {
     QDomDocument doc;

@@ -36,6 +36,7 @@ public:
     }
 
 protected:
+    using utils::StrokeTester::initImage;
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(image);
 
@@ -55,6 +56,7 @@ protected:
         return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter());
     }
 
+    using utils::StrokeTester::addPaintingJobs;
     void addPaintingJobs(KisImageWSP image,
                          KisResourcesSnapshotSP resources,
                          KisPainter *painter) {

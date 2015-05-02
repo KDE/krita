@@ -201,6 +201,8 @@ set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
+set(QT_QTTEST_LIBRARY Qt5::Test)
+
 if (USEOPENGL)
     find_package(Qt5 5.3.0 REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})

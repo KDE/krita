@@ -167,10 +167,12 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     , m_initialized(false)
 {
     m_colorList = new ColorDataList();
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
     rServer->addObserver(this);
 
+    KisConfig cfg;
+    m_maxPresets = cfg.favoritePresets();
 }
 
 KisFavoriteResourceManager::~KisFavoriteResourceManager()
@@ -178,7 +180,7 @@ KisFavoriteResourceManager::~KisFavoriteResourceManager()
     KisConfig cfg;
     cfg.writeEntry<QString>("favoritePresetsTag", m_currentTag);
 
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->removeObserver(this);
     delete m_colorList;
 }
@@ -322,18 +324,23 @@ bool sortPresetByName(KisPaintOpPresetSP preset1, KisPaintOpPresetSP preset2)
 
 void KisFavoriteResourceManager::updateFavoritePresets()
 {
-    KisConfig cfg;
-    int maxPresets = cfg.favoritePresets();
     
     m_favoritePresetsList.clear();
     KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
     QStringList presetFilenames = rServer->searchTag(m_currentTag);
-    for(int i = 0; i < qMin(maxPresets, presetFilenames.size()); i++) {
+    for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
         KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
         m_favoritePresetsList.append(pr.data());
         qSort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
     emit updatePalettes();
+}
+
+void KisFavoriteResourceManager::configChanged()
+{
+    KisConfig cfg;
+    m_maxPresets = cfg.favoritePresets();
+    updateFavoritePresets();
 }
 
 void KisFavoriteResourceManager::init()

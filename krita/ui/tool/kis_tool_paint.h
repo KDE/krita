@@ -169,11 +169,24 @@ protected:
     QPointF m_outlineDocPoint;
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
-    bool m_toForegroundColor;
+
+    bool m_showColorPreview;
+    QRectF m_oldColorPreviewRect;
+    QRectF m_oldColorPreviewUpdateRect;
+    QColor m_colorPreviewCurrentColor;
+    bool m_colorPreviewShowComparePlate;
+    QColor m_colorPreviewBaseColor;
 
 private:
     QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
     void setOpacity(qreal opacity);
+
+    void activatePickColor(AlternateAction action);
+    void deactivatePickColor(AlternateAction action);
+    void pickColorWasOverridden();
+
+    int colorPreviewResourceId(AlternateAction action);
+    QRectF colorPreviewDocRect(const QPointF &outlineDocPoint);
 
 private:
 

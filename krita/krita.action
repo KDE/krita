@@ -231,7 +231,6 @@
     <Action name="selectopaque" icon="" text="Select Opaque" whatsThis="" toolTip="Select Opaque" iconText="Select Opaque" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagecolorspaceconversion" icon="" text="&amp;Convert Image Color Space..." whatsThis="" toolTip="Convert Image Color Space" iconText="Convert Image Color Space" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="layercolorspaceconversion" icon="" text="&amp;Convert Layer Color Space..." whatsThis="" toolTip="Convert Layer Color Space" iconText="Convert Layer Color Space" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="dropshadow" icon="" text="Add Drop Shadow..." whatsThis="" toolTip="Add Drop Shadow" iconText="Add Drop Shadow" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="gmic" icon="" text="Apply G'Mic Action..." whatsThis="" toolTip="Apply G'Mic Action" iconText="Apply G'Mic Action" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="histogram" icon="" text="&amp;Histogram..." whatsThis="" toolTip="Histogram" iconText="Histogram" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagesize" icon="" text="Scale To New Size..." whatsThis="" toolTip="Scale To New Size" iconText="Scale To New Size" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

@@ -185,8 +185,6 @@
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
       <Action name="layer_style"/>
-      <Separator/>
-      <Action name="dropshadow"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>

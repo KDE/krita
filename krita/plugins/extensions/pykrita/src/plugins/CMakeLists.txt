@@ -74,11 +74,11 @@ endfunction()
 
 install_pykrita_plugin(hello)
 
-if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
-    install_pykrita_plugin(cmake_utils)
-    install_pykrita_plugin(js_utils PATTERNS "*.json")
-    install_pykrita_plugin(expand PATTERNS "*.expand" "templates/*.tpl")
-endif()
+# if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
+#     install_pykrita_plugin(cmake_utils)
+#     install_pykrita_plugin(js_utils PATTERNS "*.json")
+#     install_pykrita_plugin(expand PATTERNS "*.expand" "templates/*.tpl")
+# endif()
 
 install(
     DIRECTORY libkritapykrita

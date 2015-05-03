@@ -24,12 +24,12 @@
 #ifndef __PYKRITA_ENGINE_H__
 # define  __PYKRITA_ENGINE_H__
 
+# include <Python.h>
+
 # include "version_checker.h"
 
 # include <kservice.h>
 # include <kurl.h>
-
-# include <Python.h>
 
 # include <QAbstractItemModel>
 # include <QList>

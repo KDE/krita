@@ -17,10 +17,10 @@
  */
 #include "view.h"
 
-#include <kis_view2.h>
+#include <KisView.h>
 
-View::View(QObject *view, QObject *parent)
+View::View(KisView *view, QObject *parent)
     : QObject(parent)
-    , m_view(qobject_cast<KisView2*>(view))
+    , m_view(view)
 {
 }

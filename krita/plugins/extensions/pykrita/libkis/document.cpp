@@ -18,11 +18,11 @@
 #include "document.h"
 #include "image.h"
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 
-Document::Document(QObject *document, QObject *parent)
+Document::Document(KisDocument *document, QObject *parent)
     : QObject(parent)
-    , m_document(qobject_cast<KisDoc2*>(document))
+    , m_document(document)
 {
 }
 

@@ -78,7 +78,7 @@ KIcon PyQtPluginSettings::icon()
 
 void PyQtPluginSettings::savePreferences() const
 {
-    emit settingsChanged();
+    Q_EMIT(settingsChanged());
 }
 
 void PyQtPluginSettings::loadPreferences()

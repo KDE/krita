@@ -1,6 +1,6 @@
 # NOTE Disable trivial Qt keywords due conflicts w/ some Python.h header
 # (at least version 3.3 of it has a member PyType_Spec::slots)
-#add_definitions(-DQT_NO_KEYWORDS)
+add_definitions(-DQT_NO_KEYWORDS)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SOURCES 

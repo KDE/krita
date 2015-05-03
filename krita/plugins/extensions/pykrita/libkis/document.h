@@ -18,17 +18,17 @@
 #ifndef LIBKIS_DOCUMENT_H
 #define LIBKIS_DOCUMENT_H
 
-#include <QObject>
 #include <krita_export.h>
+#include <QPointer>
 
-class KisDoc2;
+class KisDocument;
 class Image;
 
 class LIBKIS_EXPORT Document : public QObject
 {
     Q_OBJECT
 public:
-    explicit Document(QObject *document, QObject *parent = 0);
+    explicit Document(KisDocument *document, QObject *parent = 0);
 
     Image *image();
 
@@ -37,7 +37,7 @@ signals:
 public slots:
 private:
 
-    KisDoc2 *m_document;
+    QPointer<KisDocument> m_document;
 };
 
 #endif // LIBKIS_DOCUMENT_H

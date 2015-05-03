@@ -18,9 +18,9 @@
 #ifndef _PYQT_PLUGIN_H_
 #define _PYQT_PLUGIN_H_
 
-#include <QObject>
-
 #include <Python.h>
+
+#include <QObject>
 
 #include <kis_view_plugin.h>
 #include "engine.h"

@@ -17,12 +17,10 @@
  */
 #include "krita.h"
 
-#include <KoApplication.h>
-#include <KoPart.h>
-#include <KoMainWindow.h>
+#include <KisPart.h>
 
-#include <kis_view2.h>
-#include <kis_doc2.h>
+#include <KisViewManager.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_action.h>
 #include <kis_script_manager.h>
@@ -35,12 +33,8 @@ Krita::Krita(QObject *parent) :
 QList<MainWindow *> Krita::mainWindows()
 {
     QList<MainWindow *> ret;
-    foreach(KoPart *part, koApp->partList()) {
-        if (part) {
-            foreach(KoMainWindow *mainWin, part->mainWindows()) {
-                ret << new MainWindow(mainWin, this);
-            }
-        }
+    foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
+        ret << new MainWindow(mainWin, this);
     }
     return ret;
 }
@@ -48,8 +42,8 @@ QList<MainWindow *> Krita::mainWindows()
 QList<View *> Krita::views()
 {
     QList<View *> ret;
-    foreach(MainWindow *mainWin, mainWindows()) {
-        ret << mainWin->views();
+    foreach(QPointer<KisView> view, KisPart::instance()->views()) {
+        ret << new View(view, this);
     }
     return ret;
 }
@@ -57,13 +51,8 @@ QList<View *> Krita::views()
 QList<Document *> Krita::documents()
 {
     QList<Document *> ret;
-    foreach(KoPart *part, koApp->partList()) {
-        if (part) {
-            KisDoc2 *doc = qobject_cast<KisDoc2*>(part->document());
-            if (doc) {
-                ret << new Document(doc, this);
-            }
-        }
+    foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
+        ret << new Document(doc, this);
     }
     return ret;
 
@@ -81,17 +70,8 @@ QList<Image *> Krita::images()
 QAction *Krita::createAction(const QString &text)
 {
     KisAction *action = new KisAction(text, this);
-    foreach(KoPart *part, koApp->partList()) {
-        if (part) {
-            foreach(KoMainWindow *mainWin, part->mainWindows()) {
-                if (mainWin && mainWin->rootView()) {
-                    KisView2 *view = qobject_cast<KisView2*>(view);
-                    if (view) {
-                        view->scriptManager()->addAction(action);
-                    }
-                }
-            }
-        }
+    foreach(KisMainWindow *mainWin, KisPart::instance()->mainWindows()) {
+        mainWin->viewManager()->scriptManager()->addAction(action);
     }
     return action;
 }

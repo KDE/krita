@@ -46,6 +46,10 @@
 #include "kis_buffer_stream.h"
 #include "kis_tiff_writer_visitor.h"
 
+#if TIFFLIB_VERSION < 20111221
+typedef size_t tmsize_t;
+#endif
+
 namespace
 {
 

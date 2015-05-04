@@ -66,17 +66,17 @@
            </property>
            <item>
             <property name="text">
-             <string>Outside</string>
+             <string comment="@item:inlistbox Layer Style: Stroke position">Outside</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Inside</string>
+             <string comment="@item:inlistbox Layer Style: Stroke position">Inside</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Center</string>
+             <string comment="@item:inlistbox Layer Style: Stroke position">Center</string>
             </property>
            </item>
           </widget>
@@ -127,7 +127,7 @@
       <item row="1" column="0">
        <widget class="QGroupBox" name="groupBox_3">
         <property name="title">
-         <string>Fill</string>
+         <string comment="@title:group In Layer Style">Fill</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
@@ -144,7 +144,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Pattern</string>
+             <string comment="@title:group In Layer Style">Pattern</string>
             </property>
            </item>
           </widget>
@@ -237,7 +237,7 @@
                  </item>
                  <item>
                   <property name="text">
-                   <string>Angle</string>
+                   <string comment="@item:inlistbox Gradient style">Angle</string>
                   </property>
                  </item>
                  <item>

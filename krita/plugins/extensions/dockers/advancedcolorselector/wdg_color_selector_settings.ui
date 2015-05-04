@@ -875,7 +875,7 @@
                <item>
                 <widget class="QLabel" name="label_13">
                  <property name="text">
-                  <string>Direction:</string>
+                  <string comment="@title:group Color selector alignment">Direction:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1092,7 +1092,7 @@
                <item>
                 <widget class="QLabel" name="label_8">
                  <property name="text">
-                  <string>Direction:</string>
+                  <string comment="@title:group Color selector alignment">Direction:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

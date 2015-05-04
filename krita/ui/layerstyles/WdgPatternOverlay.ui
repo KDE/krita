@@ -23,7 +23,7 @@
       <item>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="title">
-         <string>Pattern</string>
+         <string comment="@title:group In Layer Style">Pattern</string>
         </property>
         <layout class="QFormLayout" name="formLayout">
          <property name="fieldGrowthPolicy">

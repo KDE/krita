@@ -259,12 +259,12 @@
            </property>
            <item>
             <property name="text">
-             <string>Center</string>
+             <string comment="@item:inlistbox Layer Style: Source">Center</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Edge</string>
+             <string comment="@item:inlistbox Layer Style: Source">Edge</string>
             </property>
            </item>
           </widget>

@@ -125,7 +125,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Channels</string>
+            <string>Channels:</string>
            </property>
           </widget>
          </item>
@@ -216,7 +216,7 @@
            </property>
            <item>
             <property name="text">
-             <string>None</string>
+             <string comment="@item:inlistbox Knockout option">None</string>
             </property>
            </item>
            <item>

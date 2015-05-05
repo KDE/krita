@@ -53,8 +53,8 @@ public:
 
     void setChangeId(int changeId);
     void setChangeType(KoGenChange::Type type);
-    void setChangeTitle(QString title);
-    void setChangeAuthor(QString author);
+    void setChangeTitle(const QString &title);
+    void setChangeAuthor(const QString &author);
 
     void appendChild(ModelItem *child);
 

@@ -51,7 +51,7 @@
 #include <QBoxLayout>
 #include <QMenu>
 
-LabeledWidget::LabeledWidget(KAction *action, const QString label, LabelPosition lb, bool warningLabelRequired)
+LabeledWidget::LabeledWidget(KAction *action, const QString &label, LabelPosition lb, bool warningLabelRequired)
     : QWidget()
     , m_action(action)
 {
@@ -294,7 +294,7 @@ void ReferencesTool::insertAutoFootNote()
     m_note->setAutoNumbering(true);
 }
 
-void ReferencesTool::insertLabeledFootNote(QString label)
+void ReferencesTool::insertLabeledFootNote(const QString &label)
 {
     m_note = textEditor()->insertFootNote();
     m_note->setAutoNumbering(false);
@@ -307,7 +307,7 @@ void ReferencesTool::insertAutoEndNote()
     m_note->setAutoNumbering(true);
 }
 
-void ReferencesTool::insertLabeledEndNote(QString label)
+void ReferencesTool::insertLabeledEndNote(const QString &label)
 {
     m_note = textEditor()->insertEndNote();
     m_note->setAutoNumbering(false);

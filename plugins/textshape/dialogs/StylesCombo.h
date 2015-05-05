@@ -66,7 +66,7 @@ Q_SIGNALS:
       * to be noted that this signal is also emitted when an item is selected again.
       * @param index: the index of the selected item. */
     void selected(int index);
-    void selected(QModelIndex &index);
+    void selected(const QModelIndex &index);
 
     /** This is emitted when a selection is changed (programatically or by user interaction). It is
       * to be noted that this signal is _not_ emitted when an item is selected again. Not even if it
@@ -76,7 +76,7 @@ Q_SIGNALS:
 
     /** This signal is emitted on validation of the name of a modified style (after pressing the + button). This validation happens on focus out or pressed enter key.
       * @param name: the name by which the new style should be called */
-    void newStyleRequested(QString name);
+    void newStyleRequested(const QString &name);
 
     /** This signal is emitted when the "show style manager" button is pressed in the dropdown list.
       * @param index: the index of the item on which the button was pressed */
@@ -88,10 +88,10 @@ Q_SIGNALS:
     void deleteStyle(int index);
 
 private Q_SLOTS:
-    void slotDeleteStyle(QModelIndex);
-    void slotShowDia(QModelIndex);
+    void slotDeleteStyle(const QModelIndex &);
+    void slotShowDia(const QModelIndex &);
     void slotSelectionChanged(int index);
-    void slotItemClicked(QModelIndex);
+    void slotItemClicked(const QModelIndex &);
     void slotPreviewClicked();
     void slotModelReset();
 

@@ -36,7 +36,7 @@ public:
     explicit SectionFormatDialog(QWidget *parent, KoTextEditor *editor);
 
 private Q_SLOTS:
-    void sectionSelected(QModelIndex idx);
+    void sectionSelected(const QModelIndex &idx);
     void sectionNameChanged();
     void updateTreeState();
 
@@ -48,7 +48,7 @@ private:
 
     class SectionNameValidator;
 
-    KoSection *sectionFromModel(QModelIndex idx);
+    KoSection *sectionFromModel(const QModelIndex &idx);
 };
 
 #endif //SECTIONFORMATDIALOG_H

@@ -78,7 +78,7 @@ void StylesManagerModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
     m_styleThumbnailer = thumbnailer;
 }
 
-void StylesManagerModel::setStyles(const QList<KoCharacterStyle *> styles)
+void StylesManagerModel::setStyles(const QList<KoCharacterStyle *> &styles)
 {
     beginResetModel();
     m_styles = styles;

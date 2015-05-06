@@ -26,6 +26,15 @@
 */
 namespace Scripting
 {
+
+/**
+ @brief Label script interface
+
+ The user facing interface for scripting report labels
+
+ @author Adam Pigg <adam@piggz.co.uk>.
+*/
+
 class Label : public QObject
 {
     Q_OBJECT
@@ -35,40 +44,76 @@ public:
     ~Label();
 
 public Q_SLOTS:
-    QString caption();
+
+    //! @returns the caption (text) for the label
+    QString caption() const;
+
+    //! Sets the caption (text) of the label to the given string
     void setCaption(const QString&);
 
-    /**Gets/sets the horizontal alignment, -1 Left, 0 Center, +1 Right*/
-    int horizontalAlignment();
+    //! @return the horizontal alignment as an integer
+    //! Valid values are left: -1, center: 0, right; 1
+    int horizontalAlignment() const;
+
+    //! Sets the horizontal alignment
+    //! Valid values for alignment are left: -1, center: 0, right; 1
     void setHorizonalAlignment(int);
 
-    /**Gets/sets the vertical alignment, -1 Top, 0 Middle, +1 Bottom*/
-    int verticalAlignment();
+    //! @return the vertical alignment
+    //! Valid values are top: -1, middle: 0, bottom: 1
+    int verticalAlignment() const;
+
+    //! Sets the vertical alignment
+    //! Valid values for aligmnt are top: -1, middle: 0, bottom: 1
     void setVerticalAlignment(int);
 
-    QColor backgroundColor();
+    //! @return the background color of the lable
+    QColor backgroundColor() const;
+
+    //! Set the background color of the label to the given color
     void setBackgroundColor(const QColor&);
 
-    QColor foregroundColor();
+    //! @return the foreground (text) color of the label
+    QColor foregroundColor() const;
+
+    //! Sets the foreground (text) color of the label to the given color
     void setForegroundColor(const QColor&);
 
-    int backgroundOpacity();
+    //! @return the opacity of the label
+    int backgroundOpacity() const;
+
+    //! Sets the background opacity of the label
+    //! Valid values are in the range 0-100
     void setBackgroundOpacity(int);
 
-    QColor lineColor();
+    //! @return the border line color of the label
+    QColor lineColor() const;
+
+    //! Sets the border line color of the label to the given color
     void setLineColor(const QColor&);
 
-    int lineWeight();
+    //! @return the border line weight (thickness) of the label
+    int lineWeight() const;
+
+    //! Sets the border line weight (thickness) of the label
     void setLineWeight(int);
 
-    /**Gets/sets the line style.  Valid values are those from Qt::PenStyle (0-5)*/
-    int lineStyle();
+    //! @return the border line style of the label.  Values are from Qt::Penstyle range 0-5
+    int lineStyle() const;
+
+    //! Sets the border line style of the label to the given style in the range 0-5
     void setLineStyle(int);
 
-    QPointF position();
+    //! @returns the position of the label in points
+    QPointF position() const;
+
+    //! Sets the position of the label to the given point coordinates
     void setPosition(const QPointF&);
 
-    QSizeF size();
+    //! @returns the size of the label in points
+    QSizeF size() const;
+
+    //! Sets the size of the label to the given size in points
     void setSize(const QSizeF&);
 
 private:

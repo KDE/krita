@@ -43,7 +43,7 @@ public Q_SLOTS:
      * Return the start position of the line
      * @return start position
      */
-    QPointF startPosition();
+    QPointF startPosition() const;
 
     /**
      * Set the start position of the line
@@ -55,7 +55,7 @@ public Q_SLOTS:
      * Return the end position of the line
      * @return end position
      */
-    QPointF endPosition();
+    QPointF endPosition() const;
 
     /**
      * Set the end position of the line
@@ -67,7 +67,7 @@ public Q_SLOTS:
      * Return the color of the line
      * @return line color
      */
-    QColor lineColor();
+    QColor lineColor() const;
 
     /**
      * Sets the line color
@@ -79,7 +79,7 @@ public Q_SLOTS:
      * Return the weight (width) of the line
      * @return Weight
      */
-    int lineWeight();
+    int lineWeight() const;
 
     /**
      * Set the weight (width) of the line
@@ -91,7 +91,7 @@ public Q_SLOTS:
      * Return the line style.  Valid values are those from Qt::PenStyle (0-5)
      * @return Style
      */
-    int lineStyle();
+    int lineStyle() const;
 
 
     /**

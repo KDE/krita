@@ -24,7 +24,11 @@
 class OROPage;
 
 /**
- @author Adam Pigg <adam@piggz.co.uk>
+ @brief Helper giving access to drawing functions
+
+ Contains methods for drawing shapes on a report page
+
+ @author Adam Pigg <adam@piggz.co.uk>.
 */
 class KRScriptDraw : public QObject
 {
@@ -37,7 +41,7 @@ public:
     void setOffset(QPointF);
 public Q_SLOTS:
     /**
-    Draw a rectangle
+    @brief Draw a rectangle
     \param x X posistion
     \param y Y position
     \param w Width
@@ -50,7 +54,7 @@ public Q_SLOTS:
     void rectangle(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 
     /**
-    Draw an ellipse
+    @brief Draw an ellipse
     \param x X posistion
     \param y Y position
     \param w Width
@@ -63,7 +67,7 @@ public Q_SLOTS:
     void ellipse(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 
     /**
-    Draw a line
+    @brief Draw a line
     \param x1 Start X position
     \param y1 Start Y Position
     \param x2 End X position
@@ -73,7 +77,7 @@ public Q_SLOTS:
     void line(qreal, qreal, qreal, qreal, const QString&);
 
     /**
-    Draw some text
+    @brief Draw some text
     \param x X Position
     \param y Y Position
     \param txt The text

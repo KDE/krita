@@ -25,6 +25,8 @@
 #include <kis_action.h>
 #include <kis_script_manager.h>
 
+Krita* Krita::s_instance = 0;
+
 Krita::Krita(QObject *parent) :
     QObject(parent)
 {
@@ -74,4 +76,13 @@ QAction *Krita::createAction(const QString &text)
         mainWin->viewManager()->scriptManager()->addAction(action);
     }
     return action;
+}
+
+Krita* Krita::instance()
+{
+    if (!s_instance)
+    {
+        s_instance = new Krita;
+    }
+    return s_instance;
 }

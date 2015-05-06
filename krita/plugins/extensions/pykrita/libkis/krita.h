@@ -42,12 +42,13 @@ public:
     QList<Image*> images();
 
     QAction *createAction(const QString &text);
-
+    static Krita* instance();
 signals:
 
 public slots:
 
 private:
+    static Krita* s_instance;
 };
 
 #endif // LIBKIS_KRITA_H

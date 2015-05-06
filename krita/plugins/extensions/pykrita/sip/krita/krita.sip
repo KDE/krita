@@ -7,9 +7,9 @@ class Krita : public QObject
 #include "krita.h"
 %End
 
-public:
     Krita(QObject *parent /TransferThis/ = 0);
-
+public:
+    static Krita* instance();
     QList<MainWindow*> mainWindows();
     QList<View*> views();
     QList<Document*> documents();

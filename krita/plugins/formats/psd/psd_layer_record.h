@@ -88,6 +88,8 @@ public:
         qDeleteAll(channelInfoRecords);
     }
 
+    QRect channelRect(ChannelInfo *channel) const;
+
     bool read(QIODevice* io);
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
     bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);

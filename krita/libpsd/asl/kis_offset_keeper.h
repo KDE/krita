@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_PSD_TEST_H_
-#define _KIS_PSD_TEST_H_
+#ifndef __KIS_OFFSET_KEEPER_H
+#define __KIS_OFFSET_KEEPER_H
 
-#include <QObject>
 
-class KisPSDTest : public QObject
+#include <QDebug>
+#include <QIODevice>
+
+/**
+ * Restore the offset of the io device on exit from the current
+ * namespace
+ */
+
+class KisOffsetKeeper
 {
-    Q_OBJECT
-private Q_SLOTS:
-    void testFiles();
-    void testOpening();
-    void testTransparencyMask();
+public:
+
+    KisOffsetKeeper(QIODevice *device)
+        : m_device(device)
+    {
+        m_expectedPos = m_device->pos();
+    }
+
+    ~KisOffsetKeeper() {
+        if (m_device->pos() != m_expectedPos) {
+            m_device->seek(m_expectedPos);
+        }
+    }
+
+private:
+    QIODevice *m_device;
+    qint64 m_expectedPos;
 };
 
-#endif
+#endif /* __KIS_OFFSET_KEEPER_H */

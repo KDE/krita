@@ -53,6 +53,30 @@ void KisPSDTest::testOpening()
     Q_ASSERT(doc->image());
 }
 
+void KisPSDTest::testTransparencyMask()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/masks.psd");
+    //QFileInfo sourceFileInfo("/home/dmitry/masks_multi.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QScopedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc.data());
+    manager.setBatchMode(true);
+
+    KisImportExportFilter::ConversionStatus status;
+    QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
+                                       status);
+    // qDebug() << s;
+
+    QVERIFY(doc->image());
+
+    QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
+
+    QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+}
+
 QTEST_KDEMAIN(KisPSDTest, GUI)
 
 #include "kis_psd_test.moc"

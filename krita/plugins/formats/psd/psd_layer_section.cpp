@@ -106,25 +106,22 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             return false;
         }
 
-        if (nLayers < 0) {
-            hasTransparency = true; // first alpha channel is the alpha channel of the projection.
-            nLayers = -nLayers;
-        }
-        else {
-            hasTransparency = false;
-        }
-        dbgFile << "transparency" << hasTransparency;
+        hasTransparency = nLayers < 0; // first alpha channel is the alpha channel of the projection.
+        nLayers = qAbs(nLayers);
 
-        dbgFile << "Number of layers" << nLayers << "transparency" << hasTransparency;
+        dbgFile << "Number of layers:" << nLayers;
+        dbgFile << "Has separate projection transparency:" << hasTransparency;
 
         for (int i = 0; i < nLayers; ++i) {
 
             dbgFile << "Going to read layer" << i << "pos" << io->pos();
+            dbgFile << "== Enter PSDLayerRecord";
             PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                 return false;
             }
+            dbgFile << "== Leave PSDLayerRecord";
             dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
                     << layerRecord->blendModeKey << io->pos()
                     << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
@@ -148,14 +145,7 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             quint64 channelStartPos = io->pos();
             dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
 
-            Q_ASSERT(j < layerRecord->channelInfoRecords.size());
-            if (j > layerRecord->channelInfoRecords.size()) {
-                error = QString("Expected channel %1, but only have %2 channels for layer %3")
-                        .arg(j)
-                        .arg(layerRecord->channelInfoRecords.size())
-                        .arg(i);
-                return false;
-            }
+            KIS_ASSERT_RECOVER(j < layerRecord->channelInfoRecords.size()) { return false; }
 
             ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
@@ -167,9 +157,11 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             channelInfo->compressionType = (Compression::CompressionType)compressionType;
             dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
 
+            QRect channelRect = layerRecord->channelRect(channelInfo);
+
             // read the rle row lengths;
             if (channelInfo->compressionType == Compression::RLE) {
-                for(qint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
+                for(qint64 row = 0; row < channelRect.height(); ++row) {
 
                     //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 

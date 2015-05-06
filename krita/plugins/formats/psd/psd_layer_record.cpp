@@ -37,6 +37,9 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 
+#include <asl/kis_offset_keeper.h>
+
+
 // Just for pretty debug messages
 QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 {
@@ -345,7 +348,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             if (!psdread(io, &layerMask.top)  ||
                     !psdread(io, &layerMask.left) ||
                     !psdread(io, &layerMask.bottom) ||
-                    !psdread(io, &layerMask.top) ||
+                    !psdread(io, &layerMask.right) ||
                     !psdread(io, &layerMask.defaultColor) ||
                     !psdread(io, &flags)) {
 
@@ -715,79 +718,86 @@ bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
     return false;
 }
 
-bool PSDLayerRecord::readMask(QIODevice */*io*/, KisPaintDeviceSP /*dev*/, ChannelInfo *channelInfo)
+QRect PSDLayerRecord::channelRect(ChannelInfo *channel) const
 {
+    QRect result;
+
+    if (channel->channelId < -1) {
+        result = QRect(layerMask.left,
+                       layerMask.top,
+                       layerMask.right - layerMask.left,
+                       layerMask.bottom - layerMask.top);
+    } else {
+        result = QRect(left,
+                       top,
+                       right - left,
+                       bottom - top);
+    }
+
+    return result;
+}
+
+bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channelInfo)
+{
+    KisOffsetKeeper keeper(io);
+
+    KIS_ASSERT_RECOVER(channelInfo->channelId < -1) { return false; }
+
     dbgFile << "Going to read" << channelIdToChannelType(channelInfo->channelId, m_header.colormode) << "mask";
-//    quint64 oldPosition = io->pos();
-//    qint64 width = right - left;
 
-//    if (width <= 0) {
-//        dbgFile << "Empty Channel";
-//        return true;
-//    }
+    QRect maskRect = channelRect(channelInfo);
+    if (maskRect.isEmpty()) {
+        dbgFile << "Empty Channel";
+        return true;
+    }
 
-//    int uncompressedLength = width;
+    // the device must be a pixel selection
+    KIS_ASSERT_RECOVER(dev->pixelSize() == 1) { return false; }
 
-//    if (channel->compressionType == Compression::ZIP
-//            || channel->compressionType == Compression::ZIPWithPrediction) {
+    dev->setDefaultPixel(&layerMask.defaultColor);
 
-//        error = "Unsupported Compression mode: zip";
-//        return false;
-//    }
 
-//    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
-//    for (int row = top ; row < bottom; row++)
-//    {
-//        QMap<quint16, QByteArray> channelBytes;
+    int uncompressedLength = maskRect.width();
 
-//        foreach(ChannelInfo *channelInfo, colorChannelInfoRecords) {
-//            io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+    if (channelInfo->compressionType == Compression::ZIP ||
+        channelInfo->compressionType == Compression::ZIPWithPrediction) {
 
-//            if (channelInfo->compressionType == Compression::Uncompressed) {
-//                channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
-//                channelInfo->channelOffset += uncompressedLength;
-//            }
-//            else if (channelInfo->compressionType == Compression::RLE) {
-//                int rleLength = channelInfo->rleRowLengths[row - top];
-//                QByteArray compressedBytes = io->read(rleLength);
-//                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
-//                channelBytes.insert(channelInfo->channelId, uncompressedBytes);
-//                channelInfo->channelOffset += rleLength;
+        error = "Unsupported Compression mode: zip";
+        return false;
+    }
 
-//            }
-//            else {
-//                error = "Unsupported Compression mode: " + channelInfo->compressionType;
-//                return false;
-//            }
-//        }
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(maskRect.left(), maskRect.top(), maskRect.width());
+    for (int row = maskRect.top(); row <= maskRect.bottom(); row++)
+    {
+        QByteArray channelBytes;
 
-//        for (qint64 col = 0; col < width; col++){
+        io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
 
-//            if (channelSize == 1) {
-//                readRGBPixel<KoBgrU8Traits>(channelBytes, col, it->rawData());
-//            }
+        if (channelInfo->compressionType == Compression::Uncompressed) {
+            channelBytes = io->read(uncompressedLength);
+            channelInfo->channelOffset += uncompressedLength;
+        } else if (channelInfo->compressionType == Compression::RLE) {
+            int rleLength = channelInfo->rleRowLengths[row - maskRect.top()];
+            QByteArray compressedBytes = io->read(rleLength);
+            channelBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+            channelInfo->channelOffset += rleLength;
+        } else {
+            error = "Unsupported Compression mode: " + channelInfo->compressionType;
+            return false;
+        }
 
-//            else if (channelSize == 2) {
-//                readRGBPixel<KoBgrU16Traits>(channelBytes, col, it->rawData());
-//            }
-//            else {
-//                // Unsupported channel sizes for now
-//                return false;
-//            }
-//            /*
-//            // XXX see implementation Openexr
-//            else if (channelSize == 4) {
-//                // NOT IMPLEMENTED!
-//            }
-//*/
-//            it->nextPixel();
-//        }
-//        it->nextRow();
-//    }
-//    // go back to the old position, because we've been seeking all over the place
-//    io->seek(oldPosition);
+        for (int col = 0; col < maskRect.width(); col++){
+            *it->rawData() = channelBytes[col];
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+
+    // the position of the io device will be restored by
+    // KisOffsetKeeper automagically
+
     return true;
-
 }
 
 bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP dev, QIODevice *io)
@@ -837,7 +847,8 @@ void readRGBPixel(const QMap<quint16, QByteArray> &channelBytes,
 
 bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 {
-    quint64 oldPosition = io->pos();
+    KisOffsetKeeper keeper(io);
+
     qint64 width = right - left;
 
     if (width <= 0) {
@@ -861,6 +872,9 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
         QMap<quint16, QByteArray> channelBytes;
 
         foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+            // user supplied masks are ignored here
+            if (channelInfo->channelId < -1) continue;
+
             io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
 
             if (channelInfo->compressionType == Compression::Uncompressed) {
@@ -904,8 +918,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
         }
         it->nextRow();
     }
-    // go back to the old position, because we've been seeking all over the place
-    io->seek(oldPosition);
+
     return true;
 }
 
@@ -913,7 +926,8 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
 {
     dbgFile << "doCMYK for" << layerName << "channels:" << channelInfoRecords.size() << "compression" << channelInfoRecords.first()->compressionType;
     dbgFile << "top" << top << "bottom" << bottom << "left" << left << "right" << right;
-    quint64 oldPosition = io->pos();
+
+    KisOffsetKeeper keeper(io);
 
     quint64 width = right - left;
     int channelSize = m_header.channelDepth / 8;
@@ -1019,13 +1033,13 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
         }
         it->nextRow();
     }
-    // go back to the old position, because we've been seeking all over the place
-    io->seek(oldPosition);
+
     return true;
 }
 
 bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
-{    quint64 oldPosition = io->pos();
+{
+    KisOffsetKeeper keeper(io);
 
      quint64 width = right - left;
       int channelSize = m_header.channelDepth / 8;
@@ -1111,8 +1125,7 @@ bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
              }
              it->nextRow();
          }
-          // go back to the old position, because we've been seeking all over the place
-          io->seek(oldPosition);
+
            return true;
 }
 

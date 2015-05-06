@@ -6,5 +6,6 @@ import krita
 def hello():
     QMessageBox.information(QWidget(), "Test", "Hello World")
 
-ac = Krita().createAction("Hello")
+kr = Krita()
+ac = kr.createAction("Hello")
 ac.triggered.connect(hello)

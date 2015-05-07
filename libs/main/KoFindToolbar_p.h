@@ -55,6 +55,7 @@ public:
     void replace();
     void replaceAll();
     void inputTimeout();
+    void returnPressed();
 
     KoFindToolbar *q;
 

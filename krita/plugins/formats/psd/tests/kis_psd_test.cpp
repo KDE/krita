@@ -98,6 +98,17 @@ void KisPSDTest::testTransparencyMask()
     }
 }
 
+void KisPSDTest::testOpenGrayscaleMultilayered()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/gray.psd");
+    //QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/100x100gray8.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+}
+
 QTEST_KDEMAIN(KisPSDTest, GUI)
 
 #include "kis_psd_test.moc"

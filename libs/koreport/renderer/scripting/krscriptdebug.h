@@ -24,8 +24,6 @@
  @brief Helper for the scripting API to display user messages
 
  Contains methods for display messages to the screen or console \n
-
- @author Adam Pigg <adam@piggz.co.uk>.
 */
 class KRScriptDebug : public QObject
 {

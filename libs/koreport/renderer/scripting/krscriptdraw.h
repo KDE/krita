@@ -27,8 +27,6 @@ class OROPage;
  @brief Helper giving access to drawing functions
 
  Contains methods for drawing shapes on a report page
-
- @author Adam Pigg <adam@piggz.co.uk>.
 */
 class KRScriptDraw : public QObject
 {

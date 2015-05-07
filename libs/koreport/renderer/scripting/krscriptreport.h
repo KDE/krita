@@ -42,8 +42,6 @@ namespace Scripting
  }
  reportname.initialize(new report())
  \endcode
- @author Adam Pigg <adam@piggz.co.uk>.
-
 */
 class Report : public QObject
 {

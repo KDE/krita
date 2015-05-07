@@ -27,8 +27,6 @@
 
  Contains methods for retreiving the current page number, page total
  and access to the PenStyle enums from user scripts
-
- @author Adam Pigg <adam@piggz.co.uk>.
 */
 class KRScriptConstants : public QObject
 {

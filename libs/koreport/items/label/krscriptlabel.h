@@ -21,9 +21,6 @@
 #include <QObject>
 #include "KoReportItemLabel.h"
 
-/**
- @author Adam Pigg <adam@piggz.co.uk>
-*/
 namespace Scripting
 {
 
@@ -31,8 +28,6 @@ namespace Scripting
  @brief Label script interface
 
  The user facing interface for scripting report labels
-
- @author Adam Pigg <adam@piggz.co.uk>.
 */
 
 class Label : public QObject

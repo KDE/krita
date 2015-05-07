@@ -28,7 +28,9 @@ namespace Scripting
 {
 
 /**
- @author Adam Pigg <adam@piggz.co.uk>
+ @brief Line item script interface
+
+ The user facing interface for scripting report line items
 */
 class Line : public QObject
 {
@@ -47,21 +49,21 @@ public Q_SLOTS:
 
     /**
      * Set the start position of the line
-     * @param StartPosition
+     * @param pos new start poisition in points
      */
-    void setStartPosition(const QPointF&);
+    void setStartPosition(const QPointF& pos);
 
     /**
      * Return the end position of the line
-     * @return end position
+     * @return end position as QPointF
      */
     QPointF endPosition() const;
 
     /**
      * Set the end position of the line
-     * @param EndPosition
+     * @param pos new end position in points
      */
-    void setEndPosition(const QPointF&);
+    void setEndPosition(const QPointF& pos);
 
     /**
      * Return the color of the line
@@ -71,25 +73,25 @@ public Q_SLOTS:
 
     /**
      * Sets the line color
-     * @param LineColor
+     * @param color new line color
      */
-    void setLineColor(const QColor&);
+    void setLineColor(const QColor& color);
 
     /**
      * Return the weight (width) of the line
-     * @return Weight
+     * @return weight (width) in points
      */
     int lineWeight() const;
 
     /**
      * Set the weight (width) of the line
-     * @param Weight
+     * @param weight new line weight
      */
-    void setLineWeight(int);
+    void setLineWeight(int weight);
 
     /**
      * Return the line style.  Valid values are those from Qt::PenStyle (0-5)
-     * @return Style
+     * @return line style in integer form
      */
     int lineStyle() const;
 

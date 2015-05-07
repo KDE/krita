@@ -21,17 +21,12 @@
 #include <QObject>
 #include "KoReportItemField.h"
 
-/**
- @author Adam Pigg <adam@piggz.co.uk>
-*/
 namespace Scripting
 {
 /**
  @brief Field script interface
 
  The user facing interface for scripting report fields
-
- @author Adam Pigg <adam@piggz.co.uk>.
 */
 
 class Field : public QObject

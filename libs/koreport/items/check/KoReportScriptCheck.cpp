@@ -20,7 +20,7 @@
 
 namespace Scripting
 {
-    
+
 Check::Check(KoReportItemCheck *c)
 {
     m_check = c;
@@ -31,7 +31,7 @@ Check::~Check()
 {
 }
 
-bool Check::value()
+bool Check::value() const
 {
     return m_check->value();
 }
@@ -41,7 +41,7 @@ void Check::setValue(bool v)
     m_check->setValue(v);
 }
 
-QString Check::checkStyle()
+QString Check::checkStyle() const
 {
     return m_check->m_checkStyle->value().toString();
 }
@@ -51,7 +51,7 @@ void Check::setCheckStyle(const QString &style)
     m_check->m_checkStyle->setValue(style);
 }
 
-QColor Check::foregroundColor()
+QColor Check::foregroundColor() const
 {
     return m_check->m_foregroundColor->value().value<QColor>();
 }
@@ -60,7 +60,7 @@ void Check::setForegroundColor(const QColor& c)
     m_check->m_foregroundColor->setValue(c);
 }
 
-QColor Check::lineColor()
+QColor Check::lineColor() const
 {
     return m_check->m_lineColor->value().value<QColor>();
 }
@@ -69,7 +69,7 @@ void Check::setLineColor(const QColor& c)
     m_check->m_lineColor->setValue(c);
 }
 
-int Check::lineWeight()
+int Check::lineWeight() const
 {
     return m_check->m_lineWeight->value().toInt();
 }
@@ -78,7 +78,7 @@ void Check::setLineWeight(int w)
     m_check->m_lineWeight->setValue(w);
 }
 
-int Check::lineStyle()
+int Check::lineStyle() const
 {
     return m_check->m_lineStyle->value().toInt();
 }
@@ -90,7 +90,7 @@ void Check::setLineStyle(int s)
     m_check->m_lineStyle->setValue(s);
 }
 
-QPointF Check::position()
+QPointF Check::position() const
 {
     return m_check->m_pos.toPoint();
 }
@@ -99,7 +99,7 @@ void Check::setPosition(const QPointF &p)
     m_check->m_pos.setPointPos(p);
 }
 
-QSizeF Check::size()
+QSizeF Check::size() const
 {
     return m_check->m_size.toPoint();
 }

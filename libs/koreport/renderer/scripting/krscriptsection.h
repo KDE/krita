@@ -41,8 +41,6 @@ namespace Scripting
  }
  reportname.section_detail.initialize(new detail())
  \endcode
- @author Adam Pigg <adam@piggz.co.uk>.
-
 */
 
 class Section : public QObject

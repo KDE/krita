@@ -717,6 +717,10 @@ BlendingOptions::BlendingOptions(QWidget *parent)
 {
     ui.setupUi(this);
 
+    // FIXME: Blend options are not implemented yet
+    ui.grpBlendingOptions->setTitle(QString("%1 (%2)").arg(ui.grpBlendingOptions->title()).arg(i18n("Not Implemented Yet")));
+    ui.grpBlendingOptions->setEnabled(false);
+
 }
 
 

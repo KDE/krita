@@ -15,13 +15,13 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="grpBlendingOptions">
      <property name="title">
       <string>Blending Options</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QGroupBox" name="groupBox_4">
+       <widget class="QGroupBox" name="grpGeneralBlending">
         <property name="title">
          <string>General Blending</string>
         </property>
@@ -85,7 +85,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="grpAdvancedBlending">
         <property name="title">
          <string>Advanced Blending</string>
         </property>
@@ -285,7 +285,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_3">
+       <widget class="QGroupBox" name="grpBlendIf">
         <property name="title">
          <string>Blend If</string>
         </property>

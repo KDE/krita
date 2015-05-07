@@ -53,6 +53,7 @@ struct LIBKISPSD_EXPORT ASLWriteException : public std::runtime_error
 
 namespace KisAslWriterUtils {
 
+LIBKISPSD_EXPORT void writeRect(const QRect &rect, QIODevice *device);
 LIBKISPSD_EXPORT void writeUnicodeString(const QString &value, QIODevice *device);
 LIBKISPSD_EXPORT void writeVarString(const QString &value, QIODevice *device);
 LIBKISPSD_EXPORT void writePascalString(const QString &value, QIODevice *device);
@@ -76,28 +77,54 @@ template <class OffsetType>
 class OffsetStreamPusher
 {
 public:
-    OffsetStreamPusher(QIODevice *device)
-        : m_device(device)
+    OffsetStreamPusher(QIODevice *device, qint64 alignOnExit = 0, qint64 externalSizeTagOffset = -1)
+        : m_device(device),
+          m_alignOnExit(alignOnExit),
+          m_externalSizeTagOffset(externalSizeTagOffset)
     {
-        m_sizeFieldPos = m_device->pos();
+        m_chunkStartPos = m_device->pos();
 
-        const OffsetType fakeObjectSize = 0xdeadbeef;
-        SAFE_WRITE_EX(m_device, fakeObjectSize);
+        if (externalSizeTagOffset < 0) {
+            const OffsetType fakeObjectSize = OffsetType(0xdeadbeef);
+            SAFE_WRITE_EX(m_device, fakeObjectSize);
+        }
     }
 
     ~OffsetStreamPusher() {
-        const qint64 currentPos = m_device->pos();
-        const qint64 writtenDataSize = currentPos - m_sizeFieldPos - sizeof(OffsetType);
+        if (m_alignOnExit) {
+            qint64 currentPos = m_device->pos();
+            const qint64 alignedPos = alignOffsetCeil(currentPos, m_alignOnExit);
 
-        m_device->seek(m_sizeFieldPos);
+            for (; currentPos < alignedPos; currentPos++) {
+                quint8 padding = 0;
+                SAFE_WRITE_EX(m_device, padding);
+            }
+        }
+
+        const qint64 currentPos = m_device->pos();
+
+        qint64 writtenDataSize = 0;
+        qint64 sizeFiledOffset = 0;
+
+        if (m_externalSizeTagOffset >= 0) {
+            writtenDataSize = currentPos - m_chunkStartPos;
+            sizeFiledOffset = m_externalSizeTagOffset;
+        } else {
+            writtenDataSize = currentPos - m_chunkStartPos - sizeof(OffsetType);
+            sizeFiledOffset = m_chunkStartPos;
+        }
+
+        m_device->seek(sizeFiledOffset);
         const OffsetType realObjectSize = writtenDataSize;
         SAFE_WRITE_EX(m_device, realObjectSize);
         m_device->seek(currentPos);
     }
 
 private:
-    qint64 m_sizeFieldPos;
+    qint64 m_chunkStartPos;
     QIODevice *m_device;
+    qint64 m_alignOnExit;
+    qint64 m_externalSizeTagOffset;
 };
 
 }

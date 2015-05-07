@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
+#include <kis_effect_mask.h>
 
 #include "psd_header.h"
 #include "psd_utils.h"
@@ -259,6 +260,17 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
     dbgFile << layers.size();
 }
 
+KisNodeSP findOnlyTransparencyMask(KisNodeSP node)
+{
+    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    QList<KisEffectMaskSP> masks = layer->effectMasks();
+
+    if (masks.size() != 1) return 0;
+
+    KisEffectMaskSP onlyMask = masks.first();
+    return onlyMask->inherits("KisTransparencyMask") ? onlyMask : 0;
+}
+
 bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
@@ -290,7 +302,11 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
-        QRect rc = node->projection()->extent();
+        KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
+        const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
+        KisPaintDeviceSP layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+
+        QRect rc = layerContentDevice->extent();
         rc = rc.normalized();
         Q_ASSERT(rc.width() >= 0);
         Q_ASSERT(rc.height() >= 0);
@@ -302,7 +318,7 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
         layerRecord->left = rc.x();
         layerRecord->bottom = rc.y() + rc.height();
         layerRecord->right = rc.x() + rc.width();
-        layerRecord->nChannels = node->projection()->colorSpace()->colorChannelCount();
+        layerRecord->nChannels = layerContentDevice->colorSpace()->colorChannelCount();
 
         // XXX: masks should be saved as channels as well, with id -2
         ChannelInfo *info = new ChannelInfo;
@@ -327,7 +343,7 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 
         layerRecord->layerName = node->name();
 
-        if (!layerRecord->write(io, node)) {
+        if (!layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect)) {
             error = layerRecord->error;
             return false;
         }

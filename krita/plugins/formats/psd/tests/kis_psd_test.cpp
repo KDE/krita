@@ -53,28 +53,49 @@ void KisPSDTest::testOpening()
     Q_ASSERT(doc->image());
 }
 
-void KisPSDTest::testTransparencyMask()
+QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/masks.psd");
-    //QFileInfo sourceFileInfo("/home/dmitry/masks_multi.psd");
-
-    Q_ASSERT(sourceFileInfo.exists());
-
-    QScopedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
+    QSharedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
 
     KisImportExportManager manager(doc.data());
     manager.setBatchMode(true);
 
     KisImportExportFilter::ConversionStatus status;
-    QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
+    QString s = manager.importDocument(fileInfo.absoluteFilePath(), QString(),
                                        status);
-    // qDebug() << s;
 
+    return doc;
+}
+
+void KisPSDTest::testTransparencyMask()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/masks.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
 
     QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
-
     QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+
+    doc->setBackupFile(false);
+    doc->setOutputMimeType("image/vnd.adobe.photoshop");
+    QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_tmask.psd");
+    bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
+    QVERIFY(retval);
+
+    {
+        QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+        QVERIFY(doc->image());
+
+        QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
+        QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
+
+        QVERIFY(doc->image()->root()->lastChild());
+        QVERIFY(doc->image()->root()->lastChild()->firstChild());
+        QVERIFY(doc->image()->root()->lastChild()->firstChild()->inherits("KisTransparencyMask"));
+    }
 }
 
 QTEST_KDEMAIN(KisPSDTest, GUI)

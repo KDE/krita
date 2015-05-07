@@ -94,7 +94,7 @@ public:
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
     bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    bool write(QIODevice* io, KisNodeSP node);
+    bool write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect);
     bool writePixelData(QIODevice* io);
 
     bool valid();
@@ -158,7 +158,11 @@ private:
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
-    KisNodeSP m_node;
+    KisPaintDeviceSP m_layerContentDevice;
+    KisNodeSP m_onlyTransparencyMask;
+    QRect m_onlyTransparencyMaskRect;
+    qint64 m_transparencyMaskSizeOffset;
+
     const PSDHeader m_header;
 };
 

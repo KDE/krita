@@ -26,6 +26,7 @@
 
 #include <KoPattern.h>
 #include <KoSegmentGradient.h>
+#include <KoStopGradient.h>
 
 #include <cfloat>
 
@@ -290,14 +291,51 @@ void KisAslXmlWriter::writePatternRef(const QString &key, const KoPattern *patte
     leaveDescriptor();
 }
 
-void KisAslXmlWriter::writeGradient(const QString &key, const KoSegmentGradient *gradient)
+void KisAslXmlWriter::writeGradientImpl(const QString &key,
+                                        const QString &name,
+                                        QVector<QColor> colors,
+                                        QVector<qreal> transparencies,
+                                        QVector<qreal> positions,
+                                        QVector<qreal> middleOffsets)
 {
     enterDescriptor(key, "Gradient", "Grdn");
 
-    writeText("Nm  ", gradient->name());
+    writeText("Nm  ", name);
     writeEnum("GrdF", "GrdF", "CstS");
     writeDouble("Intr", 4096);
 
+    enterList("Clrs");
+
+    for (int i = 0; i < colors.size(); i++) {
+        enterDescriptor("", "", "Clrt");
+
+        writeColor("Clr ", colors[i]);
+        writeEnum("Type", "Clry", "UsrS"); // NOTE: we do not support BG/FG color tags
+        writeInteger("Lctn", positions[i] * 4096.0);
+        writeInteger("Mdpn", middleOffsets[i] * 100.0);
+
+        leaveDescriptor();
+    };
+
+    leaveList();
+
+    enterList("Trns");
+
+    for (int i = 0; i < colors.size(); i++) {
+        enterDescriptor("", "", "TrnS");
+        writeUnitFloat("Opct", "#Prc", transparencies[i] * 100.0);
+        writeInteger("Lctn", positions[i] * 4096.0);
+        writeInteger("Mdpn", middleOffsets[i] * 100.0);
+        leaveDescriptor();
+    };
+
+    leaveList();
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writeGradient(const QString &key, const KoSegmentGradient *gradient)
+{
     const QList<KoGradientSegment *>&segments = gradient->segments();
 
     QVector<QColor> colors;
@@ -334,33 +372,26 @@ void KisAslXmlWriter::writeGradient(const QString &key, const KoSegmentGradient 
         middleOffsets << 0.5;
     }
 
-    enterList("Clrs");
-
-    for (int i = 0; i < colors.size(); i++) {
-        enterDescriptor("", "", "Clrt");
-
-        writeColor("Clr ", colors[i]);
-        writeEnum("Type", "Clry", "UsrS"); // NOTE: we do not support BG/FG color tags
-        writeInteger("Lctn", positions[i] * 4096.0);
-        writeInteger("Mdpn", middleOffsets[i] * 100.0);
-
-        leaveDescriptor();
-    };
-
-    leaveList();
-
-    enterList("Trns");
-
-    for (int i = 0; i < colors.size(); i++) {
-        enterDescriptor("", "", "TrnS");
-        writeUnitFloat("Opct", "#Prc", transparencies[i] * 100.0);
-        writeInteger("Lctn", positions[i] * 4096.0);
-        writeInteger("Mdpn", middleOffsets[i] * 100.0);
-        leaveDescriptor();
-    };
-
-    leaveList();
-
-    leaveDescriptor();
+    writeGradientImpl(key, gradient->name(), colors, transparencies, positions, middleOffsets);
 }
 
+void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient *gradient)
+{
+    QVector<QColor> colors;
+    QVector<qreal> transparencies;
+    QVector<qreal> positions;
+    QVector<qreal> middleOffsets;
+
+    foreach (const KoGradientStop &stop, gradient->stops()) {
+        QColor color = stop.second.toQColor();
+        qreal transparency = color.alphaF();
+        color.setAlphaF(1.0);
+
+        colors << color;
+        transparencies << transparency;
+        positions << stop.first;
+        middleOffsets << 0.5;
+    }
+
+    writeGradientImpl(key, gradient->name(), colors, transparencies, positions, middleOffsets);
+}

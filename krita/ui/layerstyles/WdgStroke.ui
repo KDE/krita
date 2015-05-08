@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>601</height>
+    <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -432,22 +432,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>cmbFillType</sender>
-   <signal>activated(int)</signal>
-   <receiver>fillStack</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>196</x>
-     <y>269</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>188</x>
-     <y>337</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

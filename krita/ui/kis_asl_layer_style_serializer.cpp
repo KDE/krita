@@ -26,6 +26,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoAbstractGradient.h>
 #include <KoSegmentGradient.h>
+#include <KoStopGradient.h>
 #include <KoPattern.h>
 
 #include "psd.h"
@@ -380,11 +381,14 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
             if (outerGlow->fillType() == psd_fill_gradient && outerGlow->gradient()) {
                 KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(outerGlow->gradient().data());
+                KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(outerGlow->gradient().data());
 
                 if (segmentGradient) {
                     w.writeGradient("Grad", segmentGradient);
+                } else if (stopGradient) {
+                    w.writeStopGradient("Grad", stopGradient);
                 } else {
-                    qWarning() << "WARNING: OG: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                    qWarning() << "WARNING: OG: Unknown gradient type!";
                     w.writeColor("Clr ", outerGlow->color());
                 }
 
@@ -425,11 +429,14 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
             if (innerGlow->fillType() == psd_fill_gradient && innerGlow->gradient()) {
                 KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(innerGlow->gradient().data());
+                KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(innerGlow->gradient().data());
 
                 if (segmentGradient) {
                     w.writeGradient("Grad", segmentGradient);
+                } else if (stopGradient) {
+                    w.writeStopGradient("Grad", stopGradient);
                 } else {
-                    qWarning() << "WARNING: IG: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                    qWarning() << "WARNING: IG: Unknown gradient type!";
                     w.writeColor("Clr ", innerGlow->color());
                 }
 
@@ -562,19 +569,20 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         // Gradient Overlay
         const psd_layer_effects_gradient_overlay *gradientOverlay = style->gradientOverlay();
         KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(gradientOverlay->gradient().data());
+        KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(gradientOverlay->gradient().data());
 
-        if (!segmentGradient) {
-            qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first! Gradient Overlay style is skipped!";
-        }
-
-        if (gradientOverlay->effectEnabled() && segmentGradient) {
+        if (gradientOverlay->effectEnabled() && (segmentGradient || stopGradient)) {
             w.enterDescriptor("GrFl", "", "GrFl");
 
             w.writeBoolean("enab", gradientOverlay->effectEnabled());
             w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(gradientOverlay->blendMode()));
             w.writeUnitFloat("Opct", "#Prc", gradientOverlay->opacity());
 
-            w.writeGradient("Grad", segmentGradient);
+            if (segmentGradient) {
+                w.writeGradient("Grad", segmentGradient);
+            } else if (stopGradient) {
+                w.writeStopGradient("Grad", stopGradient);
+            }
 
             w.writeUnitFloat("Angl", "#Ang", gradientOverlay->angle());
 
@@ -628,11 +636,14 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
                 w.writeColor("Clr ", stroke->color());
             } else if (stroke->fillType() == psd_fill_gradient) {
                 KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(stroke->gradient().data());
+                KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(stroke->gradient().data());
 
                 if (segmentGradient) {
                     w.writeGradient("Grad", segmentGradient);
+                } else if (stopGradient) {
+                    w.writeStopGradient("Grad", stopGradient);
                 } else {
-                    qWarning() << "WARNING: FIXME: saving stop-gradients is not supported yet, please convert them into segment gradients first!";
+                    qWarning() << "WARNING: Stroke: Unknown gradient type!";
                     w.writeColor("Clr ", stroke->color());
                 }
 

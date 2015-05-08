@@ -30,7 +30,7 @@ private slots:
     void testWritingGlobalPatterns();
     void testReadMultipleStyles();
 
-    void testResources();
+    void testWritingGradients();
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H */

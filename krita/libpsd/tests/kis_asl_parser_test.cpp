@@ -186,6 +186,51 @@ void KisAslParserTest::testASLXMLWriter()
 
 }
 
+#include <KoStopGradient.h>
+#include <KoSegmentGradient.h>
+
+void KisAslParserTest::testWritingGradients()
+{
+    KisAslXmlWriter w1;
+
+    KoSegmentGradient segmentGradient("");
+    segmentGradient.createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
+                                  0.0, 0.3, 0.15,
+                                  Qt::black, Qt::red);
+    segmentGradient.createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
+                                  0.3, 0.6, 0.45,
+                                  Qt::red, Qt::green);
+    segmentGradient.createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
+                                  0.6, 1.0, 0.8,
+                                  Qt::green, Qt::white);
+
+    w1.writeGradient("tstG", &segmentGradient);
+    //qDebug() << "===";
+    //qDebug() << ppVar(w1.document().toString());
+
+    KisAslXmlWriter w2;
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QList<KoGradientStop> stops;
+    stops << KoGradientStop(0.0, KoColor(Qt::black, cs));
+    stops << KoGradientStop(0.3, KoColor(Qt::red, cs));
+    stops << KoGradientStop(0.6, KoColor(Qt::green, cs));
+    stops << KoGradientStop(1.0, KoColor(Qt::white, cs));
+
+    KoStopGradient stopGradient("");
+    stopGradient.setStops(stops);
+
+    w2.writeStopGradient("tstG", &stopGradient);
+
+    //qDebug() << "===";
+    //qDebug() << ppVar(w2.document().toString());
+
+    QCOMPARE(w1.document().toString(),
+             w2.document().toString());
+
+}
+
 #include <asl/kis_asl_writer.h>
 
 void KisAslParserTest::testASLWriter()

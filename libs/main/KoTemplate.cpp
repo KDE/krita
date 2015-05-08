@@ -19,17 +19,13 @@
 
 #include "KoTemplate.h"
 
-#include <QDir>
 #include <QImage>
 #include <QPixmap>
-#include <QPrinter>
 
 #include <kdebug.h>
 
-#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <stdlib.h>
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,

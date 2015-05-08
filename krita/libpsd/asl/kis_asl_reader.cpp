@@ -579,6 +579,12 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
 {
     QDomDocument doc;
 
+    if (device->isSequential()) {
+        qWarning() << "WARNING: *** KisAslReader::readFile: the supplied"
+                   << "IO device is sequential. Chances are that"
+                   << "the layer style will *not* be loaded correctly!";
+    }
+
     try {
         doc = Private::readFileImpl(device);
     } catch (KisAslReaderUtils::ASLParseException &e) {
@@ -591,6 +597,12 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
 QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
 {
     QDomDocument doc;
+
+    if (device->isSequential()) {
+        qWarning() << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
+                   << "IO device is sequential. Chances are that"
+                   << "the layer style will *not* be loaded correctly!";
+    }
 
     try {
         {

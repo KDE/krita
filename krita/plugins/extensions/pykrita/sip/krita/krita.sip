@@ -16,5 +16,7 @@ public:
     QList<Image*> images();
 
     QAction *createAction(const QString &text);
+
+    void addViewExtension(ViewExtension* _viewExtension /TransferThis/);
 };
 

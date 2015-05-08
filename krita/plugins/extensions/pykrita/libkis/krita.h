@@ -30,6 +30,8 @@
 
 #include <krita_export.h>
 
+class ViewExtension;
+
 class LIBKIS_EXPORT Krita : public QObject
 {
     Q_OBJECT
@@ -42,13 +44,18 @@ public:
     QList<Image*> images();
 
     QAction *createAction(const QString &text);
+    
+    void addViewExtension(ViewExtension* _viewExtension);
+    QList<ViewExtension*> viewExtensions();
+    
     static Krita* instance();
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 
 private:
     static Krita* s_instance;
+    QList<ViewExtension*> m_viewExtensions;
 };
 
 #endif // LIBKIS_KRITA_H

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,23 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef LIBKIS_NODE_H
-#define LIBKIS_NODE_H
+#include "viewmanager.h"
 
-#include <QObject>
+#include <kis_action.h>
+#include <kis_script_manager.h>
+#include <KisViewManager.h>
 
-#include <krita_export.h>
-
-class LIBKIS_EXPORT Node : public QObject
+ViewManager::ViewManager(KisViewManager *viewManager, QObject *parent)
+    : QObject(parent)
+    , m_viewManager(viewManager)
 {
-    Q_OBJECT
-public:
-    explicit Node(QObject *parent = 0);
+}
 
-Q_SIGNALS:
-
-public Q_SLOTS:
-
-};
-
-#endif // LIBKIS_NODE_H
+QAction *ViewManager::createAction(const QString& text)
+{
+    KisAction *action = new KisAction(text, m_viewManager);
+    m_viewManager->scriptManager()->addAction(action);
+    return action;
+}

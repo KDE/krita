@@ -26,9 +26,9 @@ class LIBKIS_EXPORT Application : public QObject
 public:
     explicit Application(QObject *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 
 };
 

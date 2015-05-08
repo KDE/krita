@@ -22,6 +22,7 @@ target_link_libraries(
     ${PYTHON_LIBRARY}
     kritaui
     kritalibbrush
+    kritalibkis
   )
 
 install(TARGETS kritapykrita DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -18,3 +18,5 @@
 %Include krita.sip
 %Include node.sip
 %Include view.sip
+%Include viewextension.sip
+%Include viewmanager.sip

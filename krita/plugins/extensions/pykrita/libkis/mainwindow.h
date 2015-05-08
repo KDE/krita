@@ -22,17 +22,15 @@
 #include <krita_export.h>
 class KisMainWindow;
 
-#include <view.h>
-
 class LIBKIS_EXPORT MainWindow : public QObject
 {
     Q_OBJECT
 public:
     explicit MainWindow(KisMainWindow *mainWin, QObject *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 
 
 private:

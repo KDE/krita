@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,23 +15,31 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef LIBKIS_NODE_H
-#define LIBKIS_NODE_H
+#ifndef LIBKIS_VIEWMANAGER_H
+#define LIBKIS_VIEWMANAGER_H
 
 #include <QObject>
 
 #include <krita_export.h>
 
-class LIBKIS_EXPORT Node : public QObject
+class KisViewManager;
+class QAction;
+
+class LIBKIS_EXPORT ViewManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit Node(QObject *parent = 0);
+    explicit ViewManager(KisViewManager *viewManager, QObject *parent = 0);
+    QAction *createAction(const QString &text);
 
 Q_SIGNALS:
 
 public Q_SLOTS:
 
+private:
+
+    KisViewManager *m_viewManager;
+
 };
 
-#endif // LIBKIS_NODE_H
+#endif // LIBKIS_VIEW_H

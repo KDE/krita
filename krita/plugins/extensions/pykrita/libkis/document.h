@@ -32,9 +32,9 @@ public:
 
     Image *image();
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 private:
 
     QPointer<KisDocument> m_document;

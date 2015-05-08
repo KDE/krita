@@ -30,9 +30,9 @@ class LIBKIS_EXPORT View : public QObject
 public:
     explicit View(KisView *view, QObject *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 
 private:
 

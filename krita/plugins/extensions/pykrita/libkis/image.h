@@ -28,9 +28,9 @@ class LIBKIS_EXPORT Image : public QObject
 public:
     explicit Image(QObject *image, QObject *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 private:
     KisImageWSP m_image;
 };

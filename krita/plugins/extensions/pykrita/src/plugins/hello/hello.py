@@ -1,10 +1,14 @@
 from PyQt4.QtGui import *
 from PyKrita4.krita import *
 
-import krita
-
 def hello():
     QMessageBox.information(QWidget(), "Test", "Hello World")
 
-ac = Krita.instance().createAction("Hello")
-ac.triggered.connect(hello)
+class HelloViewExtension(ViewExtension):
+  def __init__(self, parent):
+      super().__init__(parent)
+  def setup(self, viewManager):
+      action = viewManager.createAction("Hello")
+      action.triggered.connect(hello)
+
+Krita.instance().addViewExtension(HelloViewExtension(Krita.instance()))

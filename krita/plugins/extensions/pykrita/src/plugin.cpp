@@ -26,6 +26,10 @@
 #include <kis_preference_set_registry.h>
 #include <pyqtpluginsettings.h>
 
+#include <libkis/krita.h>
+#include <libkis/viewextension.h>
+#include <libkis/viewmanager.h>
+
 K_PLUGIN_FACTORY(KritaPyQtPluginFactory, registerPlugin<KritaPyQtPlugin>();)
 K_EXPORT_PLUGIN(KritaPyQtPluginFactory("krita"))
 
@@ -63,9 +67,11 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
         dbgScript << "Cannot load pykrita module";
         m_engine.setBroken();
     }
-
-
-
+    ViewManager* viewManager = new ViewManager(m_view);
+    Q_FOREACH (ViewExtension* ext, Krita::instance()->viewExtensions())
+    {
+        ext->setup(viewManager);
+    }
 }
 
 KritaPyQtPlugin::~KritaPyQtPlugin()

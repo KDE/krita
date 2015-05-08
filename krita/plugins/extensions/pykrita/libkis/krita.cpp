@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "krita.h"
+#include "viewextension.h"
 
 #include <KisPart.h>
 
@@ -76,6 +77,16 @@ QAction *Krita::createAction(const QString &text)
         mainWin->viewManager()->scriptManager()->addAction(action);
     }
     return action;
+}
+
+void Krita::addViewExtension(ViewExtension* _viewExtension)
+{
+    m_viewExtensions.append(_viewExtension);
+}
+
+QList< ViewExtension* > Krita::viewExtensions()
+{
+    return m_viewExtensions;
 }
 
 Krita* Krita::instance()

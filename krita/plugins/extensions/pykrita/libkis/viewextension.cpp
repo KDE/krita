@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,23 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef LIBKIS_NODE_H
-#define LIBKIS_NODE_H
 
-#include <QObject>
+#include "viewextension.h"
 
-#include <krita_export.h>
+#include <QDebug>
 
-class LIBKIS_EXPORT Node : public QObject
+ViewExtension::ViewExtension(QObject* parent): QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit Node(QObject *parent = 0);
 
-Q_SIGNALS:
+}
 
-public Q_SLOTS:
-
-};
-
-#endif // LIBKIS_NODE_H
+ViewExtension::~ViewExtension()
+{
+    qDebug() << "~";
+}

@@ -9,6 +9,8 @@ set(kritalibkis_LIB_SRCS
     krita.cpp
     node.cpp
     view.cpp
+    viewextension.cpp
+    viewmanager.cpp
 )
 
 kde4_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

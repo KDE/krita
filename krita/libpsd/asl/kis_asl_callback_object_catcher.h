@@ -24,6 +24,8 @@
 #include <boost/function.hpp>
 #include <QScopedPointer>
 
+#include <KoAbstractGradient.h>
+
 #include "libkispsd_export.h"
 
 class KoPattern;

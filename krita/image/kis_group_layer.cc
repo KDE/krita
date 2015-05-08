@@ -35,6 +35,8 @@
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
 #include "kis_selection_mask.h"
+#include "kis_psd_layer_style.h"
+
 
 struct KisGroupLayer::Private
 {

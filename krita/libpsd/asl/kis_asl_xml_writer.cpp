@@ -334,7 +334,7 @@ void KisAslXmlWriter::writeGradientImpl(const QString &key,
     leaveDescriptor();
 }
 
-void KisAslXmlWriter::writeGradient(const QString &key, const KoSegmentGradient *gradient)
+void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient)
 {
     const QList<KoGradientSegment *>&segments = gradient->segments();
 

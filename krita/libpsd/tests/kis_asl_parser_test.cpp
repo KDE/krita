@@ -204,7 +204,7 @@ void KisAslParserTest::testWritingGradients()
                                   0.6, 1.0, 0.8,
                                   Qt::green, Qt::white);
 
-    w1.writeGradient("tstG", &segmentGradient);
+    w1.writeSegmentGradient("tstG", &segmentGradient);
     //qDebug() << "===";
     //qDebug() << ppVar(w1.document().toString());
 

@@ -384,7 +384,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(outerGlow->gradient().data());
 
                 if (segmentGradient) {
-                    w.writeGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", segmentGradient);
                 } else if (stopGradient) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
@@ -432,7 +432,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(innerGlow->gradient().data());
 
                 if (segmentGradient) {
-                    w.writeGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", segmentGradient);
                 } else if (stopGradient) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
@@ -579,7 +579,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
             w.writeUnitFloat("Opct", "#Prc", gradientOverlay->opacity());
 
             if (segmentGradient) {
-                w.writeGradient("Grad", segmentGradient);
+                w.writeSegmentGradient("Grad", segmentGradient);
             } else if (stopGradient) {
                 w.writeStopGradient("Grad", stopGradient);
             }
@@ -639,7 +639,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(stroke->gradient().data());
 
                 if (segmentGradient) {
-                    w.writeGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", segmentGradient);
                 } else if (stopGradient) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {

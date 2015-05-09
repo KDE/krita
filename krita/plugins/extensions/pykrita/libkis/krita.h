@@ -30,7 +30,7 @@
 
 #include <krita_export.h>
 
-class DockWidgetFactory;
+class DockWidgetFactoryBase;
 class ViewExtension;
 
 class LIBKIS_EXPORT Krita : public QObject
@@ -48,7 +48,7 @@ public:
     
     void addViewExtension(ViewExtension* _viewExtension);
     QList<ViewExtension*> viewExtensions();
-    void addDockWidgetFactory(DockWidgetFactory* _factory );
+    void addDockWidgetFactory(DockWidgetFactoryBase* _factory );
     
     static Krita* instance();
 Q_SIGNALS:

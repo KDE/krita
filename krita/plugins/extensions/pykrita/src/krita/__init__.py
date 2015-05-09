@@ -4,6 +4,8 @@ import sys
 
 from .api import *
 from .decorators import *
+from .dockwidgetfactory import *
+from PyKrita4.krita import *
 
 def kDebug(text):
     '''Use KDE way to show debug info

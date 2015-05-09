@@ -1,10 +1,10 @@
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
 
-class DockWidgetFactory
+class DockWidgetFactoryBase
 {
 %TypeHeaderCode
-#include "dockwidgetfactory.h"
+#include "dockwidgetfactorybase.h"
 %End
 
 public:
@@ -16,7 +16,7 @@ public:
         DockLeft,   ///< Left of the centra widget
         DockMinimized  ///< Not docked, but reachable via the menu
     };
-    DockWidgetFactory(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);
+    DockWidgetFactoryBase(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);
     virtual QDockWidget* createDockWidget() = 0 /Factory/;
 };
 

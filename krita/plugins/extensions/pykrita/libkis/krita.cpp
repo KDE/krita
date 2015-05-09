@@ -27,7 +27,7 @@
 #include <kis_action.h>
 #include <kis_script_manager.h>
 
-#include "dockwidgetfactory.h"
+#include "dockwidgetfactorybase.h"
 #include "viewextension.h"
 
 Krita* Krita::s_instance = 0;
@@ -93,7 +93,7 @@ QList< ViewExtension* > Krita::viewExtensions()
     return m_viewExtensions;
 }
 
-void Krita::addDockWidgetFactory(DockWidgetFactory* _factory)
+void Krita::addDockWidgetFactory(DockWidgetFactoryBase* _factory)
 {
     KoDockRegistry::instance()->add(_factory);
 }

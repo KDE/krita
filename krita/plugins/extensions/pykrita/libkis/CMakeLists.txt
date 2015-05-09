@@ -5,7 +5,7 @@ set(kritalibkis_LIB_SRCS
     application.cpp
     document.cpp
     dockwidget.cpp
-    dockwidgetfactory.cpp
+    dockwidgetfactorybase.cpp
     image.cpp
     mainwindow.cpp
     krita.cpp

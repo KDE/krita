@@ -14,7 +14,7 @@
 %Include application.sip
 %Include document.sip
 %Include dockwidget.sip
-%Include dockwidgetfactory.sip
+%Include dockwidgetfactorybase.sip
 %Include image.sip
 %Include mainwindow.sip
 %Include krita.sip

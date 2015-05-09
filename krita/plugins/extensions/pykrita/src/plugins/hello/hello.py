@@ -1,5 +1,5 @@
 from PyQt4.QtGui import *
-from PyKrita4.krita import *
+from krita import *
 
 def hello():
     QMessageBox.information(QWidget(), "Test", "Hello World")
@@ -19,10 +19,4 @@ class HelloDocker(DockWidget):
       label = QLabel("Hello", self)
       self.setWidget(label)
 
-class HelloDockerFactory(DockWidgetFactory):
-  def __init__(self):
-      super().__init__("hello", DockWidgetFactory.DockRight)
-  def createDockWidget(self):
-      return HelloDocker()
-
-Krita.instance().addDockWidgetFactory(HelloDockerFactory())
+Krita.instance().addDockWidgetFactory(DockWidgetFactory("hello", DockWidgetFactory.DockRight, HelloDocker))

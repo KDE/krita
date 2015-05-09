@@ -16,27 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef LIBKIS_DOCKWIDGETFACTORY_H
-#define LIBKIS_DOCKWIDGETFACTORY_H
-
-#include <QString>
-#include <KoDockFactoryBase.h>
-
-#include <krita_export.h>
-
-class LIBKIS_EXPORT DockWidgetFactory : public KoDockFactoryBase
+#include "dockwidgetfactorybase.h"
+#include <QDebug>
+DockWidgetFactoryBase::DockWidgetFactoryBase(const QString& _id, KoDockFactoryBase::DockPosition _dockPosition, bool _isCollapsable, bool _defaultCollapsed)
+    : m_id(_id),
+    m_dockPosition(_dockPosition),
+    m_isCollapsable(_isCollapsable),
+    m_defaultCollapsed(_defaultCollapsed)
 {
-public:
-    DockWidgetFactory(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);
-    virtual ~DockWidgetFactory();
-    virtual QString id() const;
-    virtual DockPosition defaultDockPosition() const;
-    virtual bool isCollapsable() const;
-    virtual bool defaultCollapsed() const;
-private:
-    QString m_id;
-    DockPosition m_dockPosition;
-    bool m_isCollapsable, m_defaultCollapsed;
-};
 
-#endif
+}
+
+DockWidgetFactoryBase::~DockWidgetFactoryBase()
+{
+qDebug() << "Iamdying";
+}
+
+bool DockWidgetFactoryBase::defaultCollapsed() const
+{
+    return m_defaultCollapsed;
+}
+
+KoDockFactoryBase::DockPosition DockWidgetFactoryBase::defaultDockPosition() const
+{
+    return m_dockPosition;
+}
+
+QString DockWidgetFactoryBase::id() const
+{
+    return m_id;
+}
+
+bool DockWidgetFactoryBase::isCollapsable() const
+{
+    return m_isCollapsable;
+}

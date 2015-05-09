@@ -18,5 +18,6 @@ public:
     };
     DockWidgetFactoryBase(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);
     virtual QDockWidget* createDockWidget() = 0 /Factory/;
+    QString id() const;
 };
 

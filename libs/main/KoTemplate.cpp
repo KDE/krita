@@ -25,7 +25,6 @@
 #include <kdebug.h>
 
 #include <kiconloader.h>
-#include <klocale.h>
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,

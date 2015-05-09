@@ -17,7 +17,7 @@ public:
 
     QAction *createAction(const QString &text);
 
-    void addViewExtension(ViewExtension* _viewExtension /Transfer/);
+    void addViewExtension(ViewExtension* _viewExtension /TransferThis/);
     void addDockWidgetFactory(DockWidgetFactoryBase* _factory /Transfer, TransferThis/);
 };
 

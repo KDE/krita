@@ -29,7 +29,6 @@ DockWidgetFactoryBase::DockWidgetFactoryBase(const QString& _id, KoDockFactoryBa
 
 DockWidgetFactoryBase::~DockWidgetFactoryBase()
 {
-qDebug() << "Iamdying";
 }
 
 bool DockWidgetFactoryBase::defaultCollapsed() const

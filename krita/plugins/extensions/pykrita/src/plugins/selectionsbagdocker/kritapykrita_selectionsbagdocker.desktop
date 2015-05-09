@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=selectionsbagdocker
+X-Python-2-Compatible=true
+Name=Selections Bag Docker
+Comment=A docker that allow to store a list of selections

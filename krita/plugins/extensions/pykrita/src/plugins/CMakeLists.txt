@@ -73,6 +73,7 @@ function(install_pykrita_plugin name)
 endfunction()
 
 install_pykrita_plugin(hello)
+install_pykrita_plugin(selectionsbagdocker)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

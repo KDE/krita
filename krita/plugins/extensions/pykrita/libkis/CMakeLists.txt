@@ -4,6 +4,8 @@ include_directories(${KOMAIN_INCLUDES} ${KRITA_INCLUDES})
 set(kritalibkis_LIB_SRCS
     application.cpp
     document.cpp
+    dockwidget.cpp
+    dockwidgetfactory.cpp
     image.cpp
     mainwindow.cpp
     krita.cpp

@@ -7,7 +7,6 @@ class ViewExtension : public QObject
 
 %TypeHeaderCode
 #include "viewextension.h"
-#include <QDebug>
 %End
 
 public:

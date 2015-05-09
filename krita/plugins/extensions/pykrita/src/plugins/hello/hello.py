@@ -12,3 +12,17 @@ class HelloViewExtension(ViewExtension):
       action.triggered.connect(hello)
 
 Krita.instance().addViewExtension(HelloViewExtension(Krita.instance()))
+
+class HelloDocker(DockWidget):
+  def __init__(self):
+      super().__init__()
+      label = QLabel("Hello", self)
+      self.setWidget(label)
+
+class HelloDockerFactory(DockWidgetFactory):
+  def __init__(self):
+      super().__init__("hello", DockWidgetFactory.DockRight)
+  def createDockWidget(self):
+      return HelloDocker()
+
+Krita.instance().addDockWidgetFactory(HelloDockerFactory())

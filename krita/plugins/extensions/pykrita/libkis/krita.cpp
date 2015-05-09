@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "krita.h"
-#include "viewextension.h"
+
+#include <KoDockRegistry.h>
 
 #include <KisPart.h>
 
@@ -25,6 +26,9 @@
 #include <kis_image.h>
 #include <kis_action.h>
 #include <kis_script_manager.h>
+
+#include "dockwidgetfactory.h"
+#include "viewextension.h"
 
 Krita* Krita::s_instance = 0;
 
@@ -87,6 +91,11 @@ void Krita::addViewExtension(ViewExtension* _viewExtension)
 QList< ViewExtension* > Krita::viewExtensions()
 {
     return m_viewExtensions;
+}
+
+void Krita::addDockWidgetFactory(DockWidgetFactory* _factory)
+{
+    KoDockRegistry::instance()->add(_factory);
 }
 
 Krita* Krita::instance()

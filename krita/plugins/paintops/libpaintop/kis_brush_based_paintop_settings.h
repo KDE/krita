@@ -48,7 +48,7 @@ public:
     virtual bool isLoadable();
 
 protected:
-    QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale) const;
+    QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false) const;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

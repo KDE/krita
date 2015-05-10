@@ -51,11 +51,14 @@ int KisBrushBasedPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
+                                                            OutlineMode mode,
+                                                            qreal additionalScale,
+                                                            bool forceOutline) const
 {
     QPainterPath path;
 
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
+    if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline) {
         KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
 
         if (!widget) {
@@ -68,7 +71,9 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
 
         QPainterPath realOutline = brush->outline();
 
-        if (mode == CursorIsCircleOutline) {
+        if (mode == CursorIsCircleOutline ||
+            (forceOutline && mode == CursorNoOutline)) {
+
             QPainterPath ellipse;
             ellipse.addEllipse(realOutline.boundingRect());
             realOutline = ellipse;

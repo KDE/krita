@@ -38,7 +38,7 @@ bool KisGridPaintOpSettings::paintIncremental()
 QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
         qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
         qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
         QRectF rc(0, 0, sizex, sizey);

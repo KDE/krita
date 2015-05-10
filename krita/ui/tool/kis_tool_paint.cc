@@ -167,7 +167,7 @@ void KisToolPaint::deactivate()
 QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
     KisConfig cfg;
-    if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) return originalOutline;
+    if (cfg.newOutlineStyle() == OUTLINE_NONE) return originalOutline;
 
     const qreal minThresholdSize = cfg.outlineSizeMinimum();
 
@@ -555,19 +555,18 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
-    outlineMode = KisPaintOpSettings::CursorIsNotOutline;
+    outlineMode = KisPaintOpSettings::CursorNoOutline;
 
     if (isOutlineEnabled() &&
         (mode() == KisTool::GESTURE_MODE ||
-         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED)&&
+         ((cfg.newOutlineStyle() == OUTLINE_FULL ||
+           cfg.newOutlineStyle() == OUTLINE_CIRCLE) &&
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
-        outlineMode = KisPaintOpSettings::CursorIsOutline;
+        outlineMode = cfg.newOutlineStyle() == OUTLINE_CIRCLE ?
+            KisPaintOpSettings::CursorIsCircleOutline :
+            KisPaintOpSettings::CursorIsOutline;
     }
 
     m_outlineDocPoint = outlineDocPoint;

@@ -206,16 +206,120 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
-enumCursorStyle KisConfig::cursorStyle(bool defaultValue) const
+void cleanOldCursorStyleKeys(KConfigGroup &cfg)
 {
-    return (enumCursorStyle) (defaultValue ?
-                CURSOR_STYLE_OUTLINE :
-                m_cfg.readEntry("cursorStyleDef", int(CURSOR_STYLE_OUTLINE)));
+    if (cfg.hasKey("newCursorStyle") &&
+        cfg.hasKey("newOutlineStyle")) {
+
+        cfg.deleteEntry("cursorStyleDef");
+    }
 }
 
-void KisConfig::setCursorStyle(enumCursorStyle style) const
+CursorStyle KisConfig::newCursorStyle(bool defaultValue) const
 {
-    m_cfg.writeEntry("cursorStyleDef", (int)style);
+    if (defaultValue) {
+        return CURSOR_STYLE_NO_CURSOR;
+    }
+
+
+    int style = m_cfg.readEntry("newCursorStyle", int(-1));
+
+    if (style < 0) {
+        // old style format
+        style = m_cfg.readEntry("cursorStyleDef", int(OLD_CURSOR_STYLE_OUTLINE));
+
+        switch (style) {
+        case OLD_CURSOR_STYLE_TOOLICON:
+            style = CURSOR_STYLE_TOOLICON;
+            break;
+        case OLD_CURSOR_STYLE_CROSSHAIR:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_CROSS:
+            style = CURSOR_STYLE_CROSSHAIR;
+            break;
+        case OLD_CURSOR_STYLE_POINTER:
+            style = CURSOR_STYLE_POINTER;
+            break;
+        case OLD_CURSOR_STYLE_OUTLINE:
+        case OLD_CURSOR_STYLE_NO_CURSOR:
+            style = CURSOR_STYLE_NO_CURSOR;
+            break;
+        case OLD_CURSOR_STYLE_SMALL_ROUND:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_DOT:
+            style = CURSOR_STYLE_SMALL_ROUND;
+            break;
+        case OLD_CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
+            style = CURSOR_STYLE_TRIANGLE_RIGHTHANDED;
+            break;
+        case OLD_CURSOR_STYLE_TRIANGLE_LEFTHANDED:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
+            style = CURSOR_STYLE_TRIANGLE_LEFTHANDED;
+            break;
+        default:
+            style = -1;
+        }
+    }
+
+    cleanOldCursorStyleKeys(m_cfg);
+
+    if (style < 0) {
+        style = CURSOR_STYLE_NO_CURSOR;
+    }
+
+    return (CursorStyle) style;
+}
+
+void KisConfig::setNewCursorStyle(CursorStyle style)
+{
+    m_cfg.writeEntry("newCursorStyle", (int)style);
+}
+
+OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
+{
+    if (defaultValue) {
+        return OUTLINE_FULL;
+    }
+
+    int style = m_cfg.readEntry("newOutlineStyle", int(-1));
+
+    if (style < 0) {
+        // old style format
+        style = m_cfg.readEntry("cursorStyleDef", int(OLD_CURSOR_STYLE_OUTLINE));
+
+        switch (style) {
+        case OLD_CURSOR_STYLE_TOOLICON:
+        case OLD_CURSOR_STYLE_CROSSHAIR:
+        case OLD_CURSOR_STYLE_POINTER:
+        case OLD_CURSOR_STYLE_NO_CURSOR:
+        case OLD_CURSOR_STYLE_SMALL_ROUND:
+        case OLD_CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
+        case OLD_CURSOR_STYLE_TRIANGLE_LEFTHANDED:
+            style = OUTLINE_NONE;
+            break;
+        case OLD_CURSOR_STYLE_OUTLINE:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_DOT:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_CROSS:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
+            style = OUTLINE_FULL;
+            break;
+        default:
+            style = -1;
+        }
+    }
+
+    cleanOldCursorStyleKeys(m_cfg);
+
+    if (style < 0) {
+        style = OUTLINE_FULL;
+    }
+
+    return (OutlineStyle) style;
+}
+
+void KisConfig::setNewOutlineStyle(OutlineStyle style)
+{
+    m_cfg.writeEntry("newOutlineStyle", (int)style);
 }
 
 bool KisConfig::useDirtyPresets(bool defaultValue) const

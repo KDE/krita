@@ -215,13 +215,13 @@ void KisToolBrush::setUseScalableDistance(bool value)
 void KisToolBrush::resetCursorStyle()
 {
     KisConfig cfg;
-    enumCursorStyle cursorStyle = cfg.cursorStyle();
+    CursorStyle cursorStyle = cfg.newCursorStyle();
 
     // When the stabilizer is in use, we avoid using the brush outline cursor,
     // because it would hide the real position of the cursor to the user,
     // yielding unexpected results.
     if (smoothingOptions()->smoothingType() == KisSmoothingOptions::STABILIZER
-        && cursorStyle == CURSOR_STYLE_OUTLINE) {
+        && cursorStyle != CURSOR_STYLE_NO_CURSOR) {
         useCursor(KisCursor::roundCursor());
     } else {
         KisToolFreehand::resetCursorStyle();

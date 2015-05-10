@@ -84,20 +84,21 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
-    m_cmbCursorShape->addItem(i18n("Tool Icon"));
-    m_cmbCursorShape->addItem(i18n("Crosshair"));
-    m_cmbCursorShape->addItem(i18n("Arrow"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline"));
     m_cmbCursorShape->addItem(i18n("No Cursor"));
+    m_cmbCursorShape->addItem(i18n("Tool Icon"));
+    m_cmbCursorShape->addItem(i18n("Arrow"));
     m_cmbCursorShape->addItem(i18n("Small Circle"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Crosshair"));
     m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
     m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Righthanded"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Lefthanded"));
 
-    m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
+    m_cmbOutlineShape->addItem(i18n("No Outline"));
+    m_cmbOutlineShape->addItem(i18n("Circle Outline"));
+    m_cmbOutlineShape->addItem(i18n("Preview Outline"));
+
+    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
+    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     int autosaveInterval = cfg.autoSaveInterval();
@@ -124,7 +125,8 @@ void GeneralTab::setDefault()
 {
     KisConfig cfg;
 
-    m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle(true));
+    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle(true));
+    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle(true));
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
     m_autosaveCheckBox->setChecked(cfg.autoSaveInterval(true) > 0);
     //convert to minutes
@@ -142,9 +144,14 @@ void GeneralTab::setDefault()
     m_chkCompressKra->setChecked(cfg.compressKra(true));
 }
 
-enumCursorStyle GeneralTab::cursorStyle()
+CursorStyle GeneralTab::cursorStyle()
 {
-    return (enumCursorStyle)m_cmbCursorShape->currentIndex();
+    return (CursorStyle)m_cmbCursorShape->currentIndex();
+}
+
+OutlineStyle GeneralTab::outlineStyle()
+{
+    return (OutlineStyle)m_cmbOutlineShape->currentIndex();
 }
 
 bool GeneralTab::showRootLayer()
@@ -856,7 +863,8 @@ bool KisDlgPreferences::editPreferences()
     if (baccept) {
         // General settings
         KisConfig cfg;
-        cfg.setCursorStyle(dialog->m_general->cursorStyle());
+        cfg.setNewCursorStyle(dialog->m_general->cursorStyle());
+        cfg.setNewOutlineStyle(dialog->m_general->outlineStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());

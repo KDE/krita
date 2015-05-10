@@ -24,7 +24,11 @@
 
 namespace Scripting
 {
+    /**
+    @brief Check (box) script interface
 
+    The user facing interface for scripting report checkbox items
+    */
     class Check : public QObject
     {
         Q_OBJECT
@@ -34,31 +38,58 @@ namespace Scripting
             ~Check();
 
         public Q_SLOTS:
-            bool value();
+
+            //! @returns the value of the checkbox as a boolean
+            bool value() const;
+
+            //! Sets the value of the checkbox.
+            //! Defaults to true if no value given
             void setValue(bool val = true);
 
-            /**Gets/sets the check style eg, Cross, Tick Dot*/
-            QString checkStyle();
+            //! @returns the style of the checkbox as a string
+            //! Possible values are Cross, Tick, Dot
+            QString checkStyle() const;
+
+            //! Sets the style of the checkbox to one of
+            //! Cross, Tick, Dot
             void setCheckStyle(const QString&);
 
-            QColor foregroundColor();
+            //! @returns the foreground color of the checkbox
+            QColor foregroundColor() const;
+
+            //! Sets the foreground color of the checkbox to the given color
             void setForegroundColor(const QColor&);
 
-            QColor lineColor();
+            //! @returns the line color of the checkbox
+            QColor lineColor() const;
+
+            //! Sets the line color of the checkbox to the given color
             void setLineColor(const QColor&);
 
-            int lineWeight();
+            //! @returns the line weight (width) of the checkbox
+            int lineWeight() const;
+
+            //! Sets the line weight (width) of the checkbox
             void setLineWeight(int);
 
-            /**Gets/sets the line style.  Valid values are those from Qt::PenStyle (0-5)*/
-            int lineStyle();
+            //! @return the border line style of the label.  Values are from Qt::Penstyle range 0-5
+            int lineStyle() const;
+
+            //! Sets the border line style of the label to the given style in the range 0-5
             void setLineStyle(int);
 
-            QPointF position();
+            //! @returns the position of the label in points
+            QPointF position() const;
+
+            //! Sets the position of the label to the given point coordinates
             void setPosition(const QPointF&);
 
-            QSizeF size();
+            //! @returns the size of the label in points
+            QSizeF size() const;
+
+            //! Sets the size of the label to the given size in points
             void setSize(const QSizeF&);
+
 
         private:
             KoReportItemCheck *m_check;

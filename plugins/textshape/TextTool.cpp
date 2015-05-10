@@ -2725,7 +2725,7 @@ void TextTool::shapeDataRemoved()
     }
 }
 
-void TextTool::createStyleFromCurrentBlockFormat(QString name)
+void TextTool::createStyleFromCurrentBlockFormat(const QString &name)
 {
     KoTextDocument document(m_textShapeData->document());
     KoStyleManager *styleManager = document.styleManager();
@@ -2737,7 +2737,7 @@ void TextTool::createStyleFromCurrentBlockFormat(QString name)
     emit blockFormatChanged(m_textEditor.data()->blockFormat());
 }
 
-void TextTool::createStyleFromCurrentCharFormat(QString name)
+void TextTool::createStyleFromCurrentCharFormat(const QString &name)
 {
     KoTextDocument document(m_textShapeData->document());
     KoStyleManager *styleManager = document.styleManager();

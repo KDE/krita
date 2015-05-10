@@ -31,6 +31,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_clone_layer.h"
+#include "kis_group_layer.h"
 
 
 
@@ -932,6 +933,56 @@ void KisTransformMaskTest::testWeirdFullUpdates()
 
     KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj", "dd");
 
+}
+
+void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
+{
+    //TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
+
+    QRect imageRect(0,0,512,512);
+    QRect fillRect(10, 10, 236, 236);
+    QRect outsideFillRect = fillRect.translated(0, -1.5 * 256);
+
+    TestUtil::MaskParent p(imageRect);
+
+    //p.layer->paintDevice()->fill(fillRect, KoColor(Qt::green, p.layer->colorSpace()));
+
+    p.image->initialRefreshGraph();
+
+    KisGroupLayerSP glayer = new KisGroupLayer(p.image, "gl", OPACITY_OPAQUE_U8);
+    p.image->addNode(glayer, p.image->root());
+
+    KisPaintLayerSP player1 = new KisPaintLayer(p.image, "pl1", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    player1->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+    player1->paintDevice()->fill(outsideFillRect, KoColor(Qt::blue, p.layer->colorSpace()));
+    p.image->addNode(player1, glayer);
+
+    player1->setDirty();
+    p.image->waitForDone();
+
+    QCOMPARE(p.image->projection()->exactBounds(), fillRect);
+
+    //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_initial", "dd");
+
+    KisTransformMaskSP mask1 = new KisTransformMask();
+    mask1->setName("mask1");
+    QTransform transform1 =
+        QTransform::fromTranslate(0, 1.5 * 256);
+    mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform1)));
+
+    p.image->addNode(mask1, player1);
+
+    mask1->setDirty();
+    p.image->waitForDone();
+
+    /**
+     * Transform mask i sexpected to crop the externals of the layer by 50%
+     * far behind the layer border! Take care!
+     */
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(10, 128, 236, 384));
+
+    //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_mask", "dd");
 }
 
 QTEST_KDEMAIN(KisTransformMaskTest, GUI)

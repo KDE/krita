@@ -25,6 +25,26 @@
 
 namespace KisAslWriterUtils {
 
+void writeRect(const QRect &rect, QIODevice *device)
+{
+    {
+        const quint32 rectY0 = rect.y();
+        SAFE_WRITE_EX(device, rectY0);
+    }
+    {
+        const quint32 rectX0 = rect.x();
+        SAFE_WRITE_EX(device, rectX0);
+    }
+    {
+        const quint32 rectY1 = rect.y() + rect.height();
+        SAFE_WRITE_EX(device, rectY1);
+    }
+    {
+        const quint32 rectX1 = rect.x() + rect.width();
+        SAFE_WRITE_EX(device, rectX1);
+    }
+}
+
 void writeUnicodeString(const QString &value, QIODevice *device)
 {
     quint32 len = value.length() + 1;

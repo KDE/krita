@@ -138,7 +138,7 @@ void StylesCombo::slotSelectionChanged(int index)
 //    emit selectionChanged(index);
 }
 
-void StylesCombo::slotItemClicked(QModelIndex index)
+void StylesCombo::slotItemClicked(const QModelIndex &index)
 {
     //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
     m_selectedItem = index.row();
@@ -187,12 +187,12 @@ bool StylesCombo::eventFilter(QObject *object, QEvent *event)
     return false;
 }
 
-void StylesCombo::slotShowDia(QModelIndex index)
+void StylesCombo::slotShowDia(const QModelIndex &index)
 {
     emit showStyleManager(index.row());
 }
 
-void StylesCombo::slotDeleteStyle(QModelIndex index)
+void StylesCombo::slotDeleteStyle(const QModelIndex &index)
 {
     emit deleteStyle(index.row());
 }

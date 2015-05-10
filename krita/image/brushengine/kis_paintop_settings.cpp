@@ -228,7 +228,7 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
         path = ellipseOutline(10, 10, 1.0, 0).translated(info.pos());
     }
 

@@ -22,8 +22,6 @@
 #define koTemplateTree_h
 
 #include <QList>
-#include <QStringList>
-#include <QPixmap>
 #include <kcomponentdata.h>
 #include "komain_export.h"
 

@@ -29,6 +29,7 @@ class QColor;
 class QPointF;
 class QDomDocument;
 class KoPattern;
+class KoStopGradient;
 class KoSegmentGradient;
 
 
@@ -59,7 +60,16 @@ public:
     void writeCurve(const QString &key, const QString &name, const QVector<QPointF> &points);
     QString writePattern(const QString &key, const KoPattern *pattern);
     void writePatternRef(const QString &key, const KoPattern *pattern, const QString &uuid);
-    void writeGradient(const QString &key, const KoSegmentGradient *gradient);
+    void writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient);
+    void writeStopGradient(const QString &key, const KoStopGradient *gradient);
+
+private:
+    void writeGradientImpl(const QString &key,
+                           const QString &name,
+                           QVector<QColor> colors,
+                           QVector<qreal> transparencies,
+                           QVector<qreal> positions,
+                           QVector<qreal> middleOffsets);
 
 private:
     struct Private;

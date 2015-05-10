@@ -353,7 +353,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         {
             KoStoreDevice device(store);
             device.open(QIODevice::ReadOnly);
-            collection->loadFromDevice(&device);
+
+            /**
+             * ASL loading code cannot work with non-sequential IO devices,
+             * so convert the device beforehand!
+             */
+            QByteArray buf = device.readAll();
+            QBuffer raDevice(&buf);
+            raDevice.open(QIODevice::ReadOnly);
+            collection->loadFromDevice(&raDevice);
         }
         store->close();
 

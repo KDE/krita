@@ -28,6 +28,8 @@
 
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoAbstractGradient.h>
+
 
 #include "libkispsd_export.h"
 

@@ -82,8 +82,8 @@ struct KisTool::Private {
           optionWidget(0),
 #ifdef HAVE_OPENGL
           cursorShader(0),
-          useGLToolOutlineWorkaround(false)
 #endif
+          useGLToolOutlineWorkaround(false)
     {
     }
 

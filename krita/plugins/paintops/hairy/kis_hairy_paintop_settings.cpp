@@ -36,21 +36,7 @@ KisHairyPaintOpSettings::KisHairyPaintOpSettings()
 
 QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    QPainterPath path;
-    if (mode == CursorIsOutline) {
-        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-
-        if (!widget) {
-            return KisPaintOpSettings::brushOutline(info, mode);
-        }
-
-        KisBrushSP brush = widget->brush();
-
-        qreal additionalScale = brush->scale() * getDouble(HAIRY_BRISTLE_SCALE);
-
-        return outlineFetcher()->fetchOutline(info, this, brush->outline(), additionalScale, brush->angle());
-    }
-    return path;
+    return brushOutlineImpl(info, mode, getDouble(HAIRY_BRISTLE_SCALE));
 }
 
 void KisHairyPaintOpSettings::fromXML(const QDomElement& elt)

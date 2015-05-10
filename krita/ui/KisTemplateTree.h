@@ -22,8 +22,6 @@
 #define KIS_TEMPLATE_TREE_H
 
 #include <QList>
-#include <QStringList>
-#include <QPixmap>
 #include <kcomponentdata.h>
 #include "krita_export.h"
 

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="66" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="70" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
@@ -187,8 +187,6 @@
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
       <Action name="layer_style"/>
-      <Separator/>
-      <Action name="dropshadow"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>

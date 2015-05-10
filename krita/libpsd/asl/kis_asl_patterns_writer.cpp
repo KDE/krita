@@ -47,26 +47,6 @@ void KisAslPatternsWriter::writePatterns()
     parser.parseXML(m_doc, c);
 }
 
-void writeRect(const QRect &rect, QIODevice *device)
-{
-    {
-        const quint32 rectY0 = rect.y();
-        SAFE_WRITE_EX(device, rectY0);
-    }
-    {
-        const quint32 rectX0 = rect.x();
-        SAFE_WRITE_EX(device, rectX0);
-    }
-    {
-        const quint32 rectY1 = rect.y() + rect.height();
-        SAFE_WRITE_EX(device, rectY1);
-    }
-    {
-        const quint32 rectX1 = rect.x() + rect.width();
-        SAFE_WRITE_EX(device, rectX1);
-    }
-}
-
 void sliceQImage(const QImage &image, QVector<QVector<QByteArray> > *dstPlanes, bool *isCompressed)
 {
     KIS_ASSERT_RECOVER_NOOP(image.format() == QImage::Format_ARGB32);
@@ -88,7 +68,13 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray> > *dstPlanes, 
             uncompressedRows[i].append(QByteArray(image.width(), '\0'));
             quint8 *dstPtr = (quint8*)uncompressedRows[i].last().data();
 
-            const quint8 *srcPtr = image.constScanLine(row) + srcRowOffset;
+#if QT_VERSION >= 0x040700
+        const quint8 *srcPtr = image.constScanLine(row) + srcRowOffset;
+#else
+        const quint8 *srcPtr = image.scanLine(row) + srcRowOffset;
+#endif
+            
+
 
             for (int col = 0; col < image.width(); col++) {
                 *dstPtr = *srcPtr;
@@ -155,7 +141,7 @@ void KisAslPatternsWriter::addPattern(const KoPattern *pattern)
 
             KisAslWriterUtils::OffsetStreamPusher<quint32> arraySizeField(m_device);
 
-            writeRect(patternRect, m_device);
+            KisAslWriterUtils::writeRect(patternRect, m_device);
 
             {
                 // don't ask me why it is called this way...
@@ -182,7 +168,7 @@ void KisAslPatternsWriter::addPattern(const KoPattern *pattern)
                     SAFE_WRITE_EX(m_device, pixelDepth1);
                 }
 
-                writeRect(patternRect, m_device);
+                KisAslWriterUtils::writeRect(patternRect, m_device);
 
                 {
                     // why twice? who knows...

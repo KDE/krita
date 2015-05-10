@@ -21,7 +21,7 @@
 #ifndef koTemplate_h
 #define koTemplate_h
 
-#include <QStringList>
+#include <QString>
 #include <QPixmap>
 
 /**

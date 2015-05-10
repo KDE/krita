@@ -28,6 +28,8 @@ private slots:
     void test();
     void testWithCallbacks();
     void testASLXMLWriter();
+    void testWritingGradients();
+
     void testASLWriter();
 
     void testParserWithPatterns();

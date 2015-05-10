@@ -144,7 +144,7 @@
              </item>
              <item>
               <property name="text">
-               <string>Angle</string>
+               <string comment="@item:inlistbox Gradient style">Angle</string>
               </property>
              </item>
              <item>

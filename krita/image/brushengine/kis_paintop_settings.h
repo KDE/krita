@@ -128,7 +128,8 @@ public:
      */
     enum OutlineMode {
         CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
-        CursorIsNotOutline = 2 ///< Currently, this mode means that there is no outline active. It used to mean using of QImage-based outlines (e.g. for clone tool) but it was not implemented.
+        CursorIsCircleOutline,
+        CursorNoOutline
     };
 
     /**

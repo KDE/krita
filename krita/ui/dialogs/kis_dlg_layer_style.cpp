@@ -717,6 +717,10 @@ BlendingOptions::BlendingOptions(QWidget *parent)
 {
     ui.setupUi(this);
 
+    // FIXME: Blend options are not implemented yet
+    ui.grpBlendingOptions->setTitle(QString("%1 (%2)").arg(ui.grpBlendingOptions->title()).arg(i18n("Not Implemented Yet")));
+    ui.grpBlendingOptions->setEnabled(false);
+
 }
 
 
@@ -1264,6 +1268,8 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.intScale_2->setRange(0, 100);
     ui.intScale_2->setSuffix(" %");
 
+    connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), ui.fillStack, SLOT(setCurrentIndex(int)));
+
     connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbPosition, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -1284,6 +1290,9 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale_2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    // cold initialization
+    ui.fillStack->setCurrentIndex(ui.cmbFillType->currentIndex());
 }
 
 void Stroke::slotDialAngleChanged(int value)

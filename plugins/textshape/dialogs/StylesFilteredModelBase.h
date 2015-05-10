@@ -69,8 +69,8 @@ public:
     /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
-    virtual QImage stylePreview(int row, QSize size = QSize());
-//    virtual QImage stylePreview(QModelIndex &index, QSize size = QSize());
+    virtual QImage stylePreview(int row, const QSize &size = QSize());
+//    virtual QImage stylePreview(QModelIndex &index, const QSize &size = QSize());
 
     virtual AbstractStylesModel::Type stylesType() const;
 

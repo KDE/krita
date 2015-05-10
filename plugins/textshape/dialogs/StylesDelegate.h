@@ -42,10 +42,10 @@ public:
     void setEditButtonEnable(bool enable);
 
 Q_SIGNALS:
-    void styleManagerButtonClicked(QModelIndex index);
-    void deleteStyleButtonClicked(QModelIndex index);
-    void needsUpdate(QModelIndex index);
-    void clickedInItem(QModelIndex index);
+    void styleManagerButtonClicked(const QModelIndex &index);
+    void deleteStyleButtonClicked(const QModelIndex &index);
+    void needsUpdate(const QModelIndex &index);
+    void clickedInItem(const QModelIndex &index);
 
 private:
     bool m_editButtonPressed;

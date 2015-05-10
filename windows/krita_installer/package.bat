@@ -86,7 +86,6 @@ cp %CALLIGRA_INST%\lib\kde4/kritadefaulttools.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritadeformpaintop.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritadigitalmixer.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritadodgeburn.dll %C2WINSTALL_INPUT%\lib\kde4
-cp %CALLIGRA_INST%\lib\kde4/kritadropshadow.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritadynapaintop.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritaembossfilter.dll %C2WINSTALL_INPUT%\lib\kde4
 cp %CALLIGRA_INST%\lib\kde4/kritaexample.dll %C2WINSTALL_INPUT%\lib\kde4

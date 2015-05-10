@@ -169,8 +169,8 @@ Q_SIGNALS:
      */
     void zoomedToAll();
 
-    void zoomLevelsChanged(QStringList values);
-    void currentZoomLevelChanged(QString valueString);
+    void zoomLevelsChanged(const QStringList &values);
+    void currentZoomLevelChanged(const QString &valueString);
     void sliderChanged(int value);
 
 public:

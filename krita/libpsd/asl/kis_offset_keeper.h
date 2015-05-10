@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TRANSFORM_MASK_TEST_H
-#define __KIS_TRANSFORM_MASK_TEST_H
+#ifndef __KIS_OFFSET_KEEPER_H
+#define __KIS_OFFSET_KEEPER_H
 
-#include <QtTest>
 
-class KisTransformMaskTest : public QObject
+#include <QDebug>
+#include <QIODevice>
+
+/**
+ * Restore the offset of the io device on exit from the current
+ * namespace
+ */
+
+class KisOffsetKeeper
 {
-    Q_OBJECT
-private Q_SLOTS:
-    void testSafeTransform();
-    void testMaskOnPaintLayer();
-    void testMaskOnCloneLayer();
-    void testMaskOnCloneLayerWithOffset();
-    void testSafeTransformUnity();
-    void testSafeTransformSingleVanishingPoint();
+public:
 
-    void testMultipleMasks();
-    void testMaskWithOffset();
+    KisOffsetKeeper(QIODevice *device)
+        : m_device(device)
+    {
+        m_expectedPos = m_device->pos();
+    }
 
-    void testWeirdFullUpdates();
-    void testTransformHiddenPartsOfTheGroup();
+    ~KisOffsetKeeper() {
+        if (m_device->pos() != m_expectedPos) {
+            m_device->seek(m_expectedPos);
+        }
+    }
+
+private:
+    QIODevice *m_device;
+    qint64 m_expectedPos;
 };
 
-#endif /* __KIS_TRANSFORM_MASK_TEST_H */
+#endif /* __KIS_OFFSET_KEEPER_H */

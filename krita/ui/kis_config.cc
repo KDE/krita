@@ -262,7 +262,8 @@ CursorStyle KisConfig::newCursorStyle(bool defaultValue) const
 
     cleanOldCursorStyleKeys(m_cfg);
 
-    if (style < 0) {
+    // compatibility with future versions
+    if (style < 0 || style >= N_CURSOR_STYLE_SIZE) {
         style = CURSOR_STYLE_NO_CURSOR;
     }
 
@@ -310,7 +311,8 @@ OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
 
     cleanOldCursorStyleKeys(m_cfg);
 
-    if (style < 0) {
+    // compatibility with future versions
+    if (style < 0 || style >= N_OUTLINE_STYLE_SIZE) {
         style = OUTLINE_FULL;
     }
 

@@ -324,6 +324,16 @@ void KisConfig::setNewOutlineStyle(OutlineStyle style)
     m_cfg.writeEntry("newOutlineStyle", (int)style);
 }
 
+QRect KisConfig::colorPreviewRect() const
+{
+    return m_cfg.readEntry("colorPreviewRect", QVariant(QRect(32, 32, 48, 48))).toRect();
+}
+
+void KisConfig::setColorPreviewRect(const QRect &rect)
+{
+    m_cfg.writeEntry("colorPreviewRect", QVariant(rect));
+}
+
 bool KisConfig::useDirtyPresets(bool defaultValue) const
 {
    return (defaultValue ? false : m_cfg.readEntry("useDirtyPresets",false));

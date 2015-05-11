@@ -69,7 +69,7 @@
     <Action name="edit_cut" icon="edit-cut" text="Cu&amp;t" whatsThis="" toolTip="Cut selection to clipboard" iconText="Cut" shortcut="Ctrl+X; Shift+Del" defaultShortcut="Ctrl+X; Shift+Del" isCheckable="false" statusTip=""/>
     <Action name="edit_copy" icon="edit-copy" text="&amp;Copy" whatsThis="" toolTip="Copy selection to clipboard" iconText="Copy" shortcut="Ctrl+C; Ctrl+Ins" defaultShortcut="Ctrl+C; Ctrl+Ins" isCheckable="false" statusTip=""/>
     <Action name="edit_paste" icon="edit-paste" text="&amp;Paste" whatsThis="" toolTip="Paste clipboard content" iconText="Paste" shortcut="Ctrl+V; Shift+Ins" defaultShortcut="Ctrl+V; Shift+Ins" isCheckable="false" statusTip=""/>
-    <Action name="paste_new" icon="" text="Paste into &amp;New Image" whatsThis="" toolTip="Paste into New Image" iconText="Paste into New Image" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="paste_new" icon="" text="Paste into &amp;New Image" whatsThis="" toolTip="Paste into New Image" iconText="Paste into New Image" shortcut="Ctrl+Shift+N" defaultShortcut="Ctrl+Shift+N" isCheckable="false" statusTip=""/>
     <Action name="paste_at" icon="" text="Paste at cursor" whatsThis="" toolTip="Paste at cursor" iconText="Paste at cursor" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="copy_merged" icon="" text="Copy merged" whatsThis="" toolTip="Copy merged" iconText="Copy merged" shortcut="Ctrl+Shift+C" defaultShortcut="Ctrl+Shift+C" isCheckable="false" statusTip=""/>
     <Action name="select_all" icon="edit-select-all" text="Select &amp;All" whatsThis="" toolTip="Select All" iconText="Select All" shortcut="Ctrl+A" defaultShortcut="Ctrl+A" isCheckable="false" statusTip=""/>

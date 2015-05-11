@@ -404,6 +404,18 @@ void KisSelectionManager::copy()
     factory.run(false, false, m_view);
 }
 
+void KisSelectionManager::cutSharp()
+{
+    KisCutCopyActionFactory factory;
+    factory.run(true, true, m_view);
+}
+
+void KisSelectionManager::copySharp()
+{
+    KisCutCopyActionFactory factory;
+    factory.run(false, true, m_view);
+}
+
 void KisSelectionManager::copyMerged()
 {
     KisCopyMergedActionFactory factory;

@@ -49,7 +49,6 @@ const QString COMPOSITE_DIVIDE                = "divide";
 const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
 const QString COMPOSITE_ADDITIVE_SUBTRACTIVE  = "additive_subtractive";
-const QString COMPOSITE_INVERTED_DIVIDE       = "inverted_divide"; // XXX: not implemented anywhere yet, isn't this just regular BURN?
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";
 const QString COMPOSITE_ALLANON       = "allanon";
@@ -62,7 +61,7 @@ const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
 
 const QString COMPOSITE_DARKEN      = "darken";
-const QString COMPOSITE_BURN        = "burn";//this is also color burn in photoshop...
+const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.
 const QString COMPOSITE_LINEAR_BURN = "linear_burn";
 const QString COMPOSITE_GAMMA_DARK  = "gamma_dark";
 

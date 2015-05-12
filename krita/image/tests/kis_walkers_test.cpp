@@ -29,6 +29,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_selection.h"
 
@@ -62,34 +63,34 @@ public:
 
 protected:
 
-    void registerChangeRect(KisNodeSP node, NodePosition position) {
+    void registerChangeRect(KisProjectionLeafSP node, NodePosition position) {
         QString postfix;
 
-        if(!node->inherits("KisLayer")) {
+        if(!node->isLayer()) {
             postfix = "[skipped as not-a-layer]";
         }
 
 #ifdef DEBUG_VISITORS
-        qDebug()<< "FW:"<< node->name() <<'\t'<< nodeTypeString(position) << postfix;
+        qDebug()<< "FW:"<< node->node()->name() <<'\t'<< nodeTypeString(position) << postfix;
 #endif
 
         if(postfix.isEmpty()) {
-            m_order.append(node->name());
+            m_order.append(node->node()->name());
         }
     }
 
-    void registerNeedRect(KisNodeSP node, NodePosition position) {
+    void registerNeedRect(KisProjectionLeafSP node, NodePosition position) {
         QString postfix;
 
-        if(!node->inherits("KisLayer")) {
+        if(!node->isLayer()) {
             postfix = "[skipped as not-a-layer]";
         }
 
 #ifdef DEBUG_VISITORS
-        qDebug()<< "BW:"<< node->name() <<'\t'<< nodeTypeString(position) << postfix;
+        qDebug()<< "BW:"<< node->node()->name() <<'\t'<< nodeTypeString(position) << postfix;
 #endif
         if(postfix.isEmpty()) {
-            m_order.append(node->name() + nodeTypePostfix(position));
+            m_order.append(node->node()->name() + nodeTypePostfix(position));
         }
     }
 
@@ -192,7 +193,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
                                   QRect accessRect, bool changeRectVaries,
                                   bool needRectVaries)
 {
-    KisMergeWalker::NodeStack &list = walker.nodeStack();
+    KisMergeWalker::LeafStack &list = walker.leafStack();
     QStringList::const_iterator iter = reference.constBegin();
 
     if(reference.size() != list.size()) {
@@ -203,12 +204,12 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
 
     foreach(const KisMergeWalker::JobItem &item, list) {
 #ifdef DEBUG_VISITORS
-        qDebug() << item.m_node->name() << '\t'
+        qDebug() << item.m_leaf->node()->name() << '\t'
                  << item.m_applyRect << '\t'
                  << nodeTypeString(item.m_position);
 #endif
 
-        QCOMPARE(item.m_node->name(), *iter);
+        QCOMPARE(item.m_leaf->node()->name(), *iter);
 
         iter++;
     }
@@ -271,7 +272,7 @@ void KisWalkersTest::testUsualVisiting()
         QStringList orderList = order.split(',');
 
         reportStartWith("paint3");
-        walker.startTrip(paintLayer3);
+        walker.startTrip(paintLayer3->projectionLeaf());
         QVERIFY(walker.popResult() == orderList);
     }
 
@@ -282,7 +283,7 @@ void KisWalkersTest::testUsualVisiting()
         QStringList orderList = order.split(',');
 
         reportStartWith("adj");
-        walker.startTrip(adjustmentLayer);
+        walker.startTrip(adjustmentLayer->projectionLeaf());
         QVERIFY(walker.popResult() == orderList);
     }
 
@@ -292,7 +293,7 @@ void KisWalkersTest::testUsualVisiting()
         QStringList orderList = order.split(',');
 
         reportStartWith("group");
-        walker.startTrip(groupLayer);
+        walker.startTrip(groupLayer->projectionLeaf());
         QVERIFY(walker.popResult() == orderList);
     }
 }
@@ -358,7 +359,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
         QStringList orderList = order.split(',');
 
         reportStartWith("paint3");
-        walker.startTrip(paintLayer3);
+        walker.startTrip(paintLayer3->projectionLeaf());
         QVERIFY(walker.popResult() == orderList);
     }
 
@@ -369,7 +370,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
         QStringList orderList = order.split(',');
 
         reportStartWith("adj");
-        walker.startTrip(adjustmentLayer);
+        walker.startTrip(adjustmentLayer->projectionLeaf());
         QVERIFY(walker.popResult() == orderList);
     }
 
@@ -379,7 +380,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
         QStringList orderList = order.split(',');
 
         reportStartWith("group");
-        walker.startTrip(groupLayer);
+        walker.startTrip(groupLayer->projectionLeaf());
         QVERIFY(walker.popResult() == orderList);
     }
 }
@@ -884,7 +885,7 @@ void KisWalkersTest::testMasksVisiting()
         QStringList orderList = order.split(',');
 
         reportStartWith("tmask");
-        twalker.startTrip(transparencyMask);
+        twalker.startTrip(transparencyMask->projectionLeaf());
         QCOMPARE(twalker.popResult(), orderList);
     }
 }

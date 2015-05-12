@@ -179,6 +179,7 @@ set(kritaimage_LIB_SRCS
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
    kis_mask_projection_plane.cpp
+   kis_projection_leaf.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp

@@ -435,10 +435,7 @@ void KisLayerBox::updateUI()
         if (activeNode->inherits("KisMask")) {
             m_wdgLayerBox->cmbComposite->setEnabled(false);
             m_wdgLayerBox->doubleOpacity->setEnabled(false);
-        }
-
-        if (activeNode->inherits("KisLayer")) {
-            m_wdgLayerBox->cmbComposite->setEnabled(true);
+        } else if (activeNode->inherits("KisLayer")) {
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
             KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
@@ -450,6 +447,11 @@ void KisLayerBox::updateUI()
             } else {
                 m_wdgLayerBox->cmbComposite->setEnabled(false);
             }
+
+            const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(activeNode.data());
+            bool compositeSelectionActive = !(group && group->passThroughMode());
+
+            m_wdgLayerBox->cmbComposite->setEnabled(compositeSelectionActive);
         }
     }
 }

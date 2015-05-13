@@ -23,6 +23,7 @@
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
+#include "kis_projection_leaf.h"
 
 
 struct KisLayerProjectionPlane::Private
@@ -91,7 +92,7 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 
     painter->setChannelFlags(channelFlags);
     painter->setCompositeOp(m_d->layer->compositeOp());
-    painter->setOpacity(m_d->layer->opacity());
+    painter->setOpacity(m_d->layer->projectionLeaf()->opacity());
     painter->bitBlt(needRect.topLeft(), device, needRect);
 }
 

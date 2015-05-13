@@ -104,6 +104,7 @@ const QString Y_SHEAR = "y_shear";
 const QString Y_TRANSLATION = "y_translation";
 const QString ACTIVE = "active";
 const QString LAYER_STYLE_UUID = "layerstyle";
+const QString PASS_THROUGH_MODE = "passthrough";
 }
 
 

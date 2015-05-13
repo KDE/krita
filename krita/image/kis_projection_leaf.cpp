@@ -18,6 +18,8 @@
 
 #include "kis_projection_leaf.h"
 
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_layer.h"
 #include "kis_mask.h"
 #include "kis_group_layer.h"
@@ -29,6 +31,19 @@ struct KisProjectionLeaf::Private
     Private(KisNode *_node) : node(_node) {}
 
     KisNode* node;
+
+    static bool checkPassThrough(const KisNode *node) {
+        const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(node);
+        return group && group->passThroughMode();
+    }
+
+    bool checkParentPassThrough() {
+        return node->parent() && checkPassThrough(node->parent());
+    }
+
+    bool checkThisPassThrough() {
+        return checkPassThrough(node);
+    }
 };
 
 KisProjectionLeaf::KisProjectionLeaf(KisNode *node)
@@ -43,31 +58,68 @@ KisProjectionLeaf::~KisProjectionLeaf()
 KisProjectionLeafSP KisProjectionLeaf::parent() const
 {
     KisNodeSP node = m_d->node->parent();
+
+    if (node && Private::checkPassThrough(node)) {
+        node = node->parent();
+    }
+
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
 
 KisProjectionLeafSP KisProjectionLeaf::firstChild() const
 {
-    KisNodeSP node = m_d->node->firstChild();
+    KisNodeSP node;
+
+    if (!m_d->checkThisPassThrough()) {
+        node = m_d->node->firstChild();
+    }
+
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
 KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 {
-    KisNodeSP node = m_d->node->lastChild();
+    KisNodeSP node;
+
+    if (!m_d->checkThisPassThrough()) {
+        node = m_d->node->lastChild();
+    }
+
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
 KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
 {
-    KisNodeSP node = m_d->node->prevSibling();
+    KisNodeSP node;
+
+    if (m_d->checkThisPassThrough()) {
+        node = m_d->node->lastChild();
+    }
+
+    if (!node) {
+        node = m_d->node->prevSibling();
+    }
+
+    if (!node && m_d->checkParentPassThrough()) {
+        node = m_d->node->parent()->prevSibling();
+    }
+
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
 KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
 {
     KisNodeSP node = m_d->node->nextSibling();
+
+    if (node && Private::checkPassThrough(node) && node->firstChild()) {
+        node = node->firstChild();
+    }
+
+    if (!node && m_d->checkParentPassThrough()) {
+        node = m_d->node->parent();
+    }
+
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
@@ -131,7 +183,23 @@ bool KisProjectionLeaf::dependsOnLowerNodes() const
 bool KisProjectionLeaf::visible() const
 {
     // check opacity as well!
-    return m_d->node->visible();
+    return m_d->node->visible(true);
+}
+
+quint8 KisProjectionLeaf::opacity() const
+{
+    quint8 resultOpacity = m_d->node->opacity();
+    quint8 parentOpacity = 255;
+
+    if (m_d->checkParentPassThrough()) {
+        quint8 parentOpacity = m_d->node->parent()->projectionLeaf()->opacity();
+
+        if (parentOpacity != OPACITY_OPAQUE_U8) {
+            resultOpacity = (int(resultOpacity) * parentOpacity) / OPACITY_OPAQUE_U8;
+        }
+    }
+
+    return resultOpacity;
 }
 
 bool KisProjectionLeaf::isStillInGraph() const

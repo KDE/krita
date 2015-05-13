@@ -149,6 +149,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     else {
         layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, GROUP_LAYER, layer);
+        layerElement.setAttribute(PASS_THROUGH_MODE, layer->passThroughMode());
         m_elem.appendChild(layerElement);
     }
     QDomElement elem = m_doc.createElement(LAYERS);

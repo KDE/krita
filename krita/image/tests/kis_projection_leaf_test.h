@@ -26,6 +26,7 @@ class KisProjectionLeafTest : public QObject
     Q_OBJECT
 private slots:
     void test();
+    void testPassThrough();
 };
 
 #endif /* __KIS_PROJECTION_LEAF_TEST_H */

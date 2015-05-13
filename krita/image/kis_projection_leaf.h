@@ -56,6 +56,7 @@ public:
     bool canHaveChildLayers() const;
     bool dependsOnLowerNodes() const;
     bool visible() const;
+    quint8 opacity() const;
     bool isStillInGraph() const;
 
 private:

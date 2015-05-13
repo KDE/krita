@@ -32,12 +32,12 @@ class KOMAIN_EXPORT KoTemplateTree
 {
 
 public:
-    KoTemplateTree(const QByteArray &templateType, const KComponentData &instance,
+    KoTemplateTree(const QString &templatesResourcePath, const KComponentData &instance,
                    bool readTree = false);
     ~KoTemplateTree();
 
-    QByteArray templateType() const {
-        return m_templateType;
+    QString templatesResourcePath() const {
+        return m_templatesResourcePath;
     }
     KComponentData componentData() const {
         return m_componentData;
@@ -63,7 +63,7 @@ private:
     void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
                        const QString &localDir);
 
-    QByteArray m_templateType;
+    QString m_templatesResourcePath;
     KComponentData m_componentData;
     QList<KoTemplateGroup*> m_groups;
     KoTemplateGroup *m_defaultGroup;

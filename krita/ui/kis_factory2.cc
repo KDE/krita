@@ -69,7 +69,6 @@ const KComponentData &KisFactory::componentData()
     if (!s_componentData) {
         s_componentData = new KComponentData(aboutData());
         Q_CHECK_PTR(s_componentData);
-        s_componentData->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
         // for cursors
         s_componentData->dirs()->addResourceType("kis_pics", "data", "krita/pics/");

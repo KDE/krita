@@ -500,11 +500,11 @@ bool KoApplication::start()
                         kDebug(30003) << "using full path...";
                     } else {
                         QString desktopName(args->arg(argNumber));
-                        QString appName = KGlobal::mainComponent().componentName();
+                        const QString templatesResourcePath = part->templatesResourcePath();
 
-                        paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
+                        paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
                         if (paths.isEmpty()) {
-                            paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
+                            paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                         }
                         if (paths.isEmpty()) {
                             KMessageBox::error(0, i18n("No template found for: %1", desktopName));

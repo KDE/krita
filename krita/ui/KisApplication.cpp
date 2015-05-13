@@ -347,11 +347,11 @@ bool KisApplication::start()
                 }
                 else {
                     QString desktopName(args->arg(argNumber));
-                    QString appName = KGlobal::mainComponent().componentName();
+                    const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
-                    paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
+                    paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
                     if (paths.isEmpty()) {
-                        paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
+                        paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                     }
                     if (paths.isEmpty()) {
                         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1"));

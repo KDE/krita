@@ -24,7 +24,6 @@
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceTagStore.h>
 
 #include <kglobal.h>
 

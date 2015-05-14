@@ -18,7 +18,6 @@
  */
 
 #include "KoResourceFiltering.h"
-#include "KoResourceTagStore.h"
 
 #include "KoResourceServer.h"
 

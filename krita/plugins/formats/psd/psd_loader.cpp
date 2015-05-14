@@ -203,6 +203,19 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 KisGroupLayerSP groupLayer = groupStack.pop();
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
+
+                QString compositeOp = psd_blendmode_to_composite_op(layerRecord->infoBlocks.sectionDividerBlendMode);
+
+                // Krita doesn't support pass-through blend
+                // mode. Instead it is just a property of a goupr
+                // layer, so flip it
+                if (compositeOp == COMPOSITE_PASS_THROUGH) {
+                    compositeOp = COMPOSITE_OVER;
+                    groupLayer->setPassThroughMode(true);
+                }
+
+                groupLayer->setCompositeOp(compositeOp);
+
                 newLayer = groupLayer;
             }
         }

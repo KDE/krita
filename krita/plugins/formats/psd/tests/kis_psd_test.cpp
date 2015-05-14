@@ -30,6 +30,9 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
+#include "kis_group_layer.h"
+
+
 
 void KisPSDTest::testFiles()
 {
@@ -108,6 +111,23 @@ void KisPSDTest::testOpenGrayscaleMultilayered()
     QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
 }
+
+void KisPSDTest::testOpenGroupLayers()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "group_layers.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    KisNodeSP node = TestUtil::findNode(doc->image()->root(), "Group 1 PT");
+    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(node.data());
+    QVERIFY(group);
+
+    QVERIFY(group->passThroughMode());
+}
+
 
 QTEST_KDEMAIN(KisPSDTest, GUI)
 

@@ -197,6 +197,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
             SAFE_READ_EX(io, dividerType);
             this->sectionDividerType = (psd_section_type)dividerType;
 
+            dbgFile << "Reading \"lsct\" block:";
+            dbgFile << ppVar(blockSize);
+            dbgFile << ppVar(dividerType);
 
             if (blockSize >= 12) {
                 quint32 lsctSignature = GARBAGE_VALUE_MARK;
@@ -204,6 +207,8 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
                 SAFE_READ_SIGNATURE_EX(io, lsctSignature, refSignature1);
 
                 this->sectionDividerBlendMode = readFixedString(io);
+
+                dbgFile << ppVar(this->sectionDividerBlendMode);
             }
 
             // Animation

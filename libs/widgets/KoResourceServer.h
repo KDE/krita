@@ -26,18 +26,15 @@
 #define KORESOURCESERVER_H
 
 #include <QMutex>
-#include <QMutexLocker>
 #include <QString>
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
 #include <QDir>
-#include <QMultiHash>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include <QXmlStreamReader>
 #include <QTemporaryFile>
 #include <QDomDocument>
 #include "KoResource.h"

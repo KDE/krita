@@ -31,7 +31,6 @@
 #include "KoCanvasBase.h"
 #include "kis_random_accessor_ng.h"
 #include "KoColor.h"
-#include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>

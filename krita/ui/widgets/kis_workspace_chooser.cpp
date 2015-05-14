@@ -23,6 +23,7 @@
 #include <QAbstractItemDelegate>
 #include <QPainter>
 #include <QPushButton>
+#include <QAction>
 
 #include <klocale.h>
 

@@ -28,7 +28,6 @@
 #include <KoXmlWriter.h>
 #include "KoPattern.h"
 #include "KoAbstractGradient.h"
-#include "KoResourceServerProvider.h"
 
 #include "kis_brush_server.h"
 #include "kis_resource_server_provider.h"

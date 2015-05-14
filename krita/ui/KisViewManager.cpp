@@ -64,7 +64,6 @@
 #include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
 #include <KoResourceItemChooserSync.h>
-#include <KoResourceServerProvider.h>
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoToolManager.h>

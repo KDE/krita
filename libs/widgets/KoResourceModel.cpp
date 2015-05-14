@@ -21,6 +21,7 @@
 #include "KoResourceModel.h"
 
 #include <klocale.h>
+#include <kconfiggroup.h>
 
 #include <KoResourceServerAdapter.h>
 #include <math.h>

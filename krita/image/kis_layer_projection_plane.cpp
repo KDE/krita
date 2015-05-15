@@ -60,7 +60,7 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 
     if(needRect.isEmpty()) return;
 
-    QBitArray channelFlags = m_d->layer->channelFlags();
+    QBitArray channelFlags = m_d->layer->projectionLeaf()->channelFlags();
 
 
     // if the color spaces don't match we will have a problem with the channel flags

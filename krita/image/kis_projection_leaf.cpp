@@ -205,6 +205,35 @@ quint8 KisProjectionLeaf::opacity() const
     return resultOpacity;
 }
 
+QBitArray KisProjectionLeaf::channelFlags() const
+{
+    QBitArray channelFlags;
+
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node);
+    if (!layer) return channelFlags;
+
+    channelFlags = layer->channelFlags();
+
+    if (m_d->checkParentPassThrough()) {
+        QBitArray parentChannelFlags;
+
+        if (*m_d->node->colorSpace() ==
+            *m_d->node->parent()->colorSpace()) {
+
+            KisLayer *parentLayer = qobject_cast<KisLayer*>(m_d->node->parent().data());
+            parentChannelFlags = parentLayer->channelFlags();
+        }
+
+        if (!channelFlags.isEmpty() && !parentChannelFlags.isEmpty()) {
+            channelFlags &= parentChannelFlags;
+        } else if (!parentChannelFlags.isEmpty()) {
+            channelFlags = parentChannelFlags;
+        }
+    }
+
+    return channelFlags;
+}
+
 bool KisProjectionLeaf::isStillInGraph() const
 {
     return (bool)m_d->node->graphListener();

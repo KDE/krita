@@ -21,10 +21,6 @@
 
 #include "KisApplication.h"
 
-#ifndef QT_NO_DBUS
-#include <QtDBus>
-#endif
-
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
@@ -580,40 +576,6 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     // all autosave files for our application
     autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
-
-    QStringList pids;
-    QString ourPid;
-    ourPid.setNum(qApp->applicationPid());
-
-#ifndef QT_NO_DBUS
-    // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
-    QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
-
-    foreach (const QString &name, reply.value()) {
-        if (name.contains("krita")) {
-            // we got another instance of ourselves running, let's get the pid
-            QString pid = name.split('-').last();
-            if (pid != ourPid) {
-                pids << pid;
-            }
-        }
-    }
-#endif
-
-    // remove the autosave files that are saved for other, open instances of ourselves.
-    foreach(const QString &autoSaveFileName, autoSaveFiles) {
-        if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
-            autoSaveFiles.removeAll(autoSaveFileName);
-            continue;
-        }
-        QStringList split = autoSaveFileName.split('-');
-        if (split.size() == 4) {
-            if (pids.contains(split[1])) {
-                // We've got an active, owned autosave file. Remove.
-                autoSaveFiles.removeAll(autoSaveFileName);
-            }
-        }
-    }
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {

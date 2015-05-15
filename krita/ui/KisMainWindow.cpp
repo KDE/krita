@@ -496,6 +496,9 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();
 
         QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
+        subwin->setAttribute(Qt::WA_DeleteOnClose, true);
+        connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
+
         KisConfig cfg;
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));

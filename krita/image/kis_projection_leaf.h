@@ -41,7 +41,7 @@ public:
     KisProjectionLeafSP prevSibling() const;
     KisProjectionLeafSP nextSibling() const;
 
-    int childCount() const;
+    bool hasChildren() const;
 
     KisNodeSP node() const;
     KisAbstractProjectionPlaneSP projectionPlane() const;

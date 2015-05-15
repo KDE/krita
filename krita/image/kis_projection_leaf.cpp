@@ -123,13 +123,10 @@ KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
-
-int KisProjectionLeaf::childCount() const
+bool KisProjectionLeaf::hasChildren() const
 {
-    // FIXME:!!!
-    return m_d->node->childCount();
+    return m_d->node->firstChild();
 }
-
 
 KisNodeSP KisProjectionLeaf::node() const
 {

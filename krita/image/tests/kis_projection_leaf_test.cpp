@@ -64,7 +64,6 @@ void checkNode(KisNodeSP node, const QString &prefix)
     safeCompare(node->projectionLeaf()->prevSibling(), node->prevSibling());
     safeCompare(node->projectionLeaf()->nextSibling(), node->nextSibling());
 
-    QCOMPARE(node->projectionLeaf()->childCount(), (int)node->childCount());
     QCOMPARE(node->projectionLeaf()->node(), node);
 
 

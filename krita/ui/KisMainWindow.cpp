@@ -1813,7 +1813,9 @@ void KisMainWindow::updateWindowMenu()
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QAction *action = docMenu->addAction(doc->url().prettyUrl());
+            QString title = doc->url().prettyUrl();
+            if (title.isEmpty()) title = doc->image()->objectName();
+            QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));
             d->documentMapper->setMapping(action, doc);

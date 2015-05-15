@@ -182,8 +182,14 @@ bool KisProjectionLeaf::dependsOnLowerNodes() const
 
 bool KisProjectionLeaf::visible() const
 {
-    // check opacity as well!
-    return m_d->node->visible(true);
+    // TODO: check opacity as well!
+
+    bool hiddenByParentPassThrough =
+        m_d->checkParentPassThrough() && !m_d->node->parent()->visible();
+
+    return m_d->node->visible(false) &&
+        !m_d->checkThisPassThrough() &&
+        !hiddenByParentPassThrough;
 }
 
 quint8 KisProjectionLeaf::opacity() const

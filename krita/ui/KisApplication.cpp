@@ -350,12 +350,12 @@ bool KisApplication::start()
                         paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                     }
                     if (paths.isEmpty()) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1"));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
                     }
                     else if (paths.count() > 1) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1"));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
                     }

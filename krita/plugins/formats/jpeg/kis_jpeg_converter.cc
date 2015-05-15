@@ -225,6 +225,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     // Set resolution
+    qDebug() << "cinfo.X_density" << cinfo.X_density << "cinfo.y_density" << cinfo.Y_density << "unit" << cinfo.density_unit;
     double xres = 72, yres = 72;
     if (cinfo.density_unit == 1) {
         xres = cinfo.X_density;
@@ -408,6 +409,15 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Dump loaded metadata
     layer->metaData()->debugDump();
+
+    // Check whether the metadata has resolution info, too...
+    if (cinfo.density_unit == 0) {
+        double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
+        double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
+        if (xres != 0 && yres != 0) {
+            m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+        }
+    }
 
     // Finish decompression
     jpeg_finish_decompress(&cinfo);

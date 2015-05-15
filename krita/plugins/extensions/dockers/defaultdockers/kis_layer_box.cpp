@@ -522,7 +522,10 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(splitAlphaMenu, "split_alpha_write");
         addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-        addActionToMenu(&menu, "isolate_layer");
+        KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+        if (node && !node->inherits("KisTransformMask")) {
+            addActionToMenu(&menu, "isolate_layer");
+        }
     }
     menu.addSeparator();
     addActionToMenu(&menu, "add_new_transparency_mask");

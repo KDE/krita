@@ -31,7 +31,7 @@ class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
 
-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >
+class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> >
 {
     Q_OBJECT
 

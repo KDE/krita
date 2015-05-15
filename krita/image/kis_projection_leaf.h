@@ -59,6 +59,8 @@ public:
     quint8 opacity() const;
     bool isStillInGraph() const;
 
+    bool isDroppedMask() const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

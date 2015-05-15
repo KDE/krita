@@ -209,3 +209,9 @@ bool KisProjectionLeaf::isStillInGraph() const
 {
     return (bool)m_d->node->graphListener();
 }
+
+bool KisProjectionLeaf::isDroppedMask() const
+{
+    return qobject_cast<KisMask*>(m_d->node) &&
+        m_d->checkParentPassThrough();
+}

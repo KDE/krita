@@ -114,7 +114,7 @@ void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement*> &mar
     }
 }
 
-QList<KoMarker*> KoMarkerCollection::markers()
+QList<KoMarker*> KoMarkerCollection::markers() const
 {
     QList<KoMarker*> markerList;
     foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers){

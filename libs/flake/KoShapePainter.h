@@ -75,7 +75,7 @@ public:
     void paint(QImage &image);
 
     /// Returns the bounding rect of the shapes to paint
-    QRectF contentRect();
+    QRectF contentRect() const;
 
 private:
     class Private;

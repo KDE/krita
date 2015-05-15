@@ -126,6 +126,7 @@ KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
 
 int KisProjectionLeaf::childCount() const
 {
+    // FIXME:!!!
     return m_d->node->childCount();
 }
 
@@ -195,7 +196,6 @@ bool KisProjectionLeaf::visible() const
 quint8 KisProjectionLeaf::opacity() const
 {
     quint8 resultOpacity = m_d->node->opacity();
-    quint8 parentOpacity = 255;
 
     if (m_d->checkParentPassThrough()) {
         quint8 parentOpacity = m_d->node->parent()->projectionLeaf()->opacity();

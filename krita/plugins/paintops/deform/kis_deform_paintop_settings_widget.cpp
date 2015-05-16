@@ -19,7 +19,7 @@
 #include "kis_deform_paintop_settings_widget.h"
 #include "kis_deform_option.h"
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_brush_size_option.h>
 
 #include <kis_pressure_rotation_option.h>
@@ -30,7 +30,7 @@
 #include <kis_compositeop_option.h>
 
 KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     m_deformOption = new KisDeformOption();
     m_brushSizeOption = new KisBrushSizeOption();

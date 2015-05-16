@@ -22,7 +22,7 @@
 #include "kis_spray_shape_option.h"
 
 #include <kis_color_option.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 
 #include <kis_pressure_rotation_option.h>
@@ -35,7 +35,7 @@
 #include <kis_compositeop_option.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
     , m_sprayArea(new KisSprayOpOption())
 {
     addPaintOpOption(m_sprayArea, i18n("Spray shape"));

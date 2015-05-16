@@ -31,7 +31,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_compositeop_option.h>
 #include "kis_texture_option.h"

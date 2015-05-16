@@ -19,10 +19,10 @@
 #ifndef KIS_EXPERIMENTPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_EXPERIMENTPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 
-class KisExperimentPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisExperimentPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 public:

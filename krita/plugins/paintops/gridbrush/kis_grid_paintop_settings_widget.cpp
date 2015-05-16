@@ -23,12 +23,12 @@
 
 #include <kis_color_option.h>
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_compositeop_option.h>
 
 KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     m_gridOption =  new KisGridOpOption();
     m_gridShapeOption = new KisGridShapeOption();

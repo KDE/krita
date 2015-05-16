@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PAINTOP_OPTIONS_WIDGET_H
-#define KIS_PAINTOP_OPTIONS_WIDGET_H
+#ifndef KIS_PAINTOP_SETTINGS_WIDGET_H
+#define KIS_PAINTOP_SETTINGS_WIDGET_H
 
 #include <krita_export.h>
 #include <kis_paintop_config_widget.h>
@@ -31,15 +31,15 @@ class KisPaintOpConfigWidget;
  * the effect of tablet pressure, tilt and rotation and
  * other paintop settings.
  */
-class KRITAUI_EXPORT KisPaintOpOptionsWidget : public KisPaintOpConfigWidget
+class KRITAUI_EXPORT KisPaintOpSettingsWidget : public KisPaintOpConfigWidget
 {
     Q_OBJECT
 
 public:
 
-    KisPaintOpOptionsWidget(QWidget * parent = 0);
+    KisPaintOpSettingsWidget(QWidget * parent = 0);
 
-    ~KisPaintOpOptionsWidget();
+    ~KisPaintOpSettingsWidget();
 
     void addPaintOpOption(KisPaintOpOption * option, const QString &label);
 

@@ -28,7 +28,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_rotation_option.h>

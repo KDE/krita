@@ -21,7 +21,7 @@
 #include "kis_experiment_paintop_settings.h"
 
 #include <kis_color_option.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 
 #include <kis_pressure_opacity_option.h>
@@ -30,7 +30,7 @@
 #include <kis_compositeop_option.h>
 
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     addPaintOpOption(new KisExperimentOpOption(), i18n("Experiment option"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));

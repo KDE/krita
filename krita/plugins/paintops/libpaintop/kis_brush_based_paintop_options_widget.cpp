@@ -21,7 +21,7 @@
 #include "krita_export.h"
 
 KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     m_brushOption = new KisBrushOptionWidget();
     addPaintOpOption(m_brushOption, i18n("Brush Tip"));

@@ -28,7 +28,7 @@
 #include "kis_curves_opacity_option.h"
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     m_curveOption = new KisCurveOpOption();
     addPaintOpOption(m_curveOption, i18n("Value"));

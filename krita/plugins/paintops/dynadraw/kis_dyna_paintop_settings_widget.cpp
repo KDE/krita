@@ -20,13 +20,13 @@
 #include "kis_dynaop_option.h"
 #include "kis_dyna_paintop_settings.h"
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
 
 KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     addPaintOpOption(new KisDynaOpOption(), i18n("Brush size"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));

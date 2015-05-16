@@ -19,13 +19,13 @@
 #ifndef KIS_GRIDPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_GRIDPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 class KisGridOpOption;
 class KisGridShapeOption;
 class KisColorOption;
 
-class KisGridPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisGridPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 

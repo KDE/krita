@@ -24,9 +24,10 @@
 
 #include <krita_export.h>
 
-
+class KisPainter;
 class KisLayer;
 class QPainterPath;
+class QBitArray;
 
 
 class KDE_EXPORT KisLayerStyleFilterEnvironment
@@ -39,6 +40,10 @@ public:
     QRect defaultBounds() const;
 
     QPainterPath layerOutlineCache() const;
+
+    void setupFinalPainter(KisPainter *gc,
+                           quint8 opacity,
+                           const QBitArray &channelFlags) const;
 
 private:
     struct Private;

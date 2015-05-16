@@ -18,12 +18,14 @@
 
 #include "kis_projection_leaf.h"
 
-#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 
 #include "kis_layer.h"
 #include "kis_mask.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+
+#include "krita_utils.h"
 
 
 struct KisProjectionLeaf::Private
@@ -197,9 +199,7 @@ quint8 KisProjectionLeaf::opacity() const
     if (m_d->checkParentPassThrough()) {
         quint8 parentOpacity = m_d->node->parent()->projectionLeaf()->opacity();
 
-        if (parentOpacity != OPACITY_OPAQUE_U8) {
-            resultOpacity = (int(resultOpacity) * parentOpacity) / OPACITY_OPAQUE_U8;
-        }
+        resultOpacity = KritaUtils::mergeOpacity(resultOpacity, parentOpacity);
     }
 
     return resultOpacity;
@@ -224,11 +224,7 @@ QBitArray KisProjectionLeaf::channelFlags() const
             parentChannelFlags = parentLayer->channelFlags();
         }
 
-        if (!channelFlags.isEmpty() && !parentChannelFlags.isEmpty()) {
-            channelFlags &= parentChannelFlags;
-        } else if (!parentChannelFlags.isEmpty()) {
-            channelFlags = parentChannelFlags;
-        }
+        channelFlags = KritaUtils::mergeChannelFlags(channelFlags, parentChannelFlags);
     }
 
     return channelFlags;

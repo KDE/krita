@@ -115,7 +115,7 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
     const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
 
     gc.setCompositeOp(compositeOp);
-    gc.setOpacity(opacityU8);
+    env->setupFinalPainter(&gc, opacityU8, QBitArray());
     gc.setSelection(baseSelection);
 
     gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);

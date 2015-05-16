@@ -336,16 +336,16 @@ bool KisApplication::start()
             KUrl url = args->url(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                QStringList paths;
+                QString templatePath;
                 if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
-                    paths << QString(args->url(argNumber).toLocalFile());
+                    templatePath = args->url(argNumber).toLocalFile();
                     kDebug(30003) << "using full path...";
                 }
                 else {
                     QString desktopName(args->arg(argNumber));
                     const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
-                    paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
+                    QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
                     if (paths.isEmpty()) {
                         paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                     }
@@ -358,13 +358,15 @@ bool KisApplication::start()
                         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
+                    } else {
+                        templatePath = paths.at(0);
                     }
                 }
 
-                if (!paths.isEmpty()) {
+                if (!templatePath.isEmpty()) {
                     KUrl templateBase;
-                    templateBase.setPath(paths[0]);
-                    KDesktopFile templateInfo(paths[0]);
+                    templateBase.setPath(templatePath);
+                    KDesktopFile templateInfo(templatePath);
 
                     QString templateName = templateInfo.readUrl();
                     KUrl templateURL;

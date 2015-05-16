@@ -28,7 +28,7 @@ KoShapeConfigWidgetBase::~KoShapeConfigWidgetBase()
 {
 }
 
-void KoShapeConfigWidgetBase::setUnit(KoUnit unit)
+void KoShapeConfigWidgetBase::setUnit(const KoUnit &unit)
 {
     Q_UNUSED(unit);
 }

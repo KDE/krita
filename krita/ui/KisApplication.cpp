@@ -348,6 +348,10 @@ bool KisApplication::start()
             KUrl url = args->url(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
+                // called in mix with exportAs? ignore and silently skip
+                if (!mainWindow) {
+                    continue;
+                }
                 QString templatePath;
                 if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
                     templatePath = args->url(argNumber).toLocalFile();
@@ -363,13 +367,9 @@ bool KisApplication::start()
                     }
                     if (paths.isEmpty()) {
                         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1", desktopName));
-                        delete mainWindow;
-                        mainWindow = 0;
                     }
                     else if (paths.count() > 1) {
                         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1", desktopName));
-                        delete mainWindow;
-                        mainWindow = 0;
                     } else {
                         templatePath = paths.at(0);
                     }
@@ -385,13 +385,8 @@ bool KisApplication::start()
                     templateURL.setPath(templateBase.directory() + '/' + templateName);
 
                     KisDocument *doc = KisPart::instance()->createDocument();
-
-                    if (doc) {
-                        KisPart::instance()->addDocument(doc);
-                        if (mainWindow) {
-                            mainWindow->openDocumentInternal(templateURL, doc);
-                        }
-
+                    KisPart::instance()->addDocument(doc);
+                    if (mainWindow->openDocumentInternal(templateURL, doc)) {
                         doc->resetURL();
                         doc->setEmpty();
                         doc->setTitleModified();
@@ -407,68 +402,54 @@ bool KisApplication::start()
             }
             else {
 
-                KisDocument *doc = KisPart::instance()->createDocument();
-
-                if (doc) {
-
-                    if (mainWindow) {
-                        KisPart::instance()->addDocument(doc);
-                        mainWindow->openDocumentInternal(url, doc);
-
+                if (exportAs) {
+                    KMimeType::Ptr outputMimetype;
+                    outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
+                    if (outputMimetype->name() == KMimeType::defaultMimeType()) {
+                        kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                        return 1;
                     }
 
-                    if (print && mainWindow) {
-                        mainWindow->slotFilePrint();
-                        nPrinted++;
+                    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+                    QString outputFormat = outputMimetype->name();
+
+                    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+                    KisImportExportManager manager(url.path());
+                    manager.setBatchMode(true);
+                    QByteArray mime(outputFormat.toLatin1());
+                    status = manager.exportDocument(exportFileName, mime);
+
+                    if (status != KisImportExportFilter::OK) {
+                        kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
                     }
-                    else if (exportAsPdf && mainWindow) {
-                        KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
-                        if (job) {
-                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
+                    nPrinted++;
+                    QTimer::singleShot(0, this, SLOT(quit()));
+                } else if (mainWindow) {
+                    KisDocument *doc = KisPart::instance()->createDocument();
+                    KisPart::instance()->addDocument(doc);
+                    if (mainWindow->openDocumentInternal(url, doc)) {
+                        if (print) {
+                            mainWindow->slotFilePrint();
+                            nPrinted++;
                         }
-                        nPrinted++;
-                    }
-                    else if (exportAs) {
-
-                        KMimeType::Ptr outputMimetype;
-                        outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
-                        if (outputMimetype->name() == KMimeType::defaultMimeType()) {
-                            kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
-                            return 1;
+                        else if (exportAsPdf) {
+                            KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
+                            if (job)
+                                connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
+                                        SLOT(slotFileQuit()), Qt::QueuedConnection);
+                            nPrinted++;
+                        } else {
+                            // Normal case, success
+                            numberOfOpenDocuments++;
                         }
-
-                        QApplication::setOverrideCursor(Qt::WaitCursor);
-
-                        QString outputFormat = outputMimetype->name();
-
-                        KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-                        KisImportExportManager manager(url.path());
-                        manager.setBatchMode(true);
-                        QByteArray mime(outputFormat.toLatin1());
-                        status = manager.exportDocument(exportFileName, mime);
-
-                        if (status != KisImportExportFilter::OK) {
-                            kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
-                        }
-                        nPrinted++;
-                        QTimer::singleShot(0, this, SLOT(quit()));
-
                     } else {
-                        // Normal case, success
-                        numberOfOpenDocuments++;
-                    }
-
-                } else {
                     // .... if failed
                     // delete doc; done by openDocument
-                    delete mainWindow;
-                    mainWindow = 0;
+                    }
                 }
             }
-
         }
-
 
         if (print || exportAsPdf || exportAs) {
             return nPrinted > 0;

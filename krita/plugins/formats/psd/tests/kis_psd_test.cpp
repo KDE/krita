@@ -128,6 +128,23 @@ void KisPSDTest::testOpenGroupLayers()
     QVERIFY(group->passThroughMode());
 }
 
+void KisPSDTest::testOpenLayerStyles()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "testing_psd_ls.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+/*
+    KisNodeSP node = TestUtil::findNode(doc->image()->root(), "Group 1 PT");
+    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(node.data());
+    QVERIFY(group);
+
+    QVERIFY(group->passThroughMode());
+*/
+}
+
 
 QTEST_KDEMAIN(KisPSDTest, GUI)
 

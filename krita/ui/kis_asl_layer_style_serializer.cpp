@@ -761,48 +761,48 @@ void convertAndSetEnum(const QString &value,
     setMappedValue(map[value]);
 }
 
-inline QString _prepaddr(const QString &addr) {
-    return QString("/Styl/Lefx") + addr;
+inline QString _prepaddr(const QString &pref, const QString &addr) {
+    return pref + addr;
 }
 
 #define CONN_TEXT_RADDR(addr, method, object, type) m_catcher.subscribeText(addr, boost::bind(&type::method, object, _1))
-#define CONN_COLOR(addr, method, object, type) m_catcher.subscribeColor(_prepaddr(addr), boost::bind(&type::method, object, _1))
-#define CONN_UNITF(addr, unit, method, object, type) m_catcher.subscribeUnitFloat(_prepaddr(addr), unit, boost::bind(&type::method, object, _1))
-#define CONN_BOOL(addr, method, object, type) m_catcher.subscribeBoolean(_prepaddr(addr), boost::bind(&type::method, object, _1))
+#define CONN_COLOR(addr, method, object, type, prefix) m_catcher.subscribeColor(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1))
+#define CONN_UNITF(addr, unit, method, object, type, prefix) m_catcher.subscribeUnitFloat(_prepaddr(prefix, addr), unit, boost::bind(&type::method, object, _1))
+#define CONN_BOOL(addr, method, object, type, prefix) m_catcher.subscribeBoolean(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1))
 
-#define CONN_POINT(addr, method, object, type) m_catcher.subscribePoint(_prepaddr(addr), boost::bind(&type::method, object, _1))
+#define CONN_POINT(addr, method, object, type, prefix) m_catcher.subscribePoint(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1))
 
-#define CONN_COMPOSITE_OP(addr, method, object, type)                   \
+#define CONN_COMPOSITE_OP(addr, method, object, type, prefix)                   \
     {                                                                   \
         boost::function<void (const QString&)> setter =                 \
             boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeEnum(_prepaddr(addr), "BlnM", boost::bind(convertAndSetBlendMode, _1, setter)); \
+        m_catcher.subscribeEnum(_prepaddr(prefix, addr), "BlnM", boost::bind(convertAndSetBlendMode, _1, setter)); \
     }
 
-#define CONN_CURVE(addr, method, object, type)                          \
+#define CONN_CURVE(addr, method, object, type, prefix)                          \
     {                                                                   \
         boost::function<void (const quint8*)> setter =                  \
             boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeCurve(_prepaddr(addr), boost::bind(convertAndSetCurve, _1, _2, setter)); \
+        m_catcher.subscribeCurve(_prepaddr(prefix, addr), boost::bind(convertAndSetCurve, _1, _2, setter)); \
     }
 
-#define CONN_ENUM(addr, tag, method, map, mapped_type, object, type)                       \
+#define CONN_ENUM(addr, tag, method, map, mapped_type, object, type, prefix)                       \
     {                                                                   \
         boost::function<void (mapped_type)> setter =                  \
             boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeEnum(_prepaddr(addr), tag, boost::bind(convertAndSetEnum<mapped_type>, _1, map, setter)); \
+        m_catcher.subscribeEnum(_prepaddr(prefix, addr), tag, boost::bind(convertAndSetEnum<mapped_type>, _1, map, setter)); \
     }
 
-#define CONN_GRADIENT(addr, method, object, type)                      \
+#define CONN_GRADIENT(addr, method, object, type, prefix)                      \
     {                                                                  \
-        m_catcher.subscribeGradient(_prepaddr(addr), boost::bind(&type::method, object, _1)); \
+        m_catcher.subscribeGradient(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1)); \
     }
 
-#define CONN_PATTERN(addr, method, object, type)                       \
+#define CONN_PATTERN(addr, method, object, type, prefix)                       \
     {                                                                  \
         boost::function<void (KoPattern*)> setter =    \
             boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribePatternRef(_prepaddr(addr), boost::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
+        m_catcher.subscribePatternRef(_prepaddr(prefix, addr), boost::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
     }
 
 void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern) {
@@ -870,124 +870,124 @@ private:
     }
 };
 
-void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style)
+void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, const QString &prefix)
 {
     CONN_TEXT_RADDR("/null/Nm  ", setName, style, KisPSDLayerStyle);
     CONN_TEXT_RADDR("/null/Idnt", setPsdUuid, style, KisPSDLayerStyle);
 
     psd_layer_effects_drop_shadow *dropShadow = style->dropShadow();
 
-    CONN_COMPOSITE_OP("/DrSh/Md  ", setBlendMode, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_COLOR("/DrSh/Clr ", setColor, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_UNITF("/DrSh/Opct", "#Prc", setOpacity, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_UNITF("/DrSh/lagl", "#Ang", setAngle, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_UNITF("/DrSh/Dstn", "#Pxl", setDistance, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_UNITF("/DrSh/Ckmt", "#Pxl", setSpread, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_UNITF("/DrSh/blur", "#Pxl", setSize, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_UNITF("/DrSh/Nose", "#Prc", setNoise, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_BOOL("/DrSh/enab", setEffectEnabled, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_BOOL("/DrSh/uglg", setUseGlobalLight, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_BOOL("/DrSh/AntA", setAntiAliased, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_BOOL("/DrSh/layerConceals", setKnocksOut, dropShadow, psd_layer_effects_drop_shadow);
-    CONN_CURVE("/DrSh/TrnS", setContourLookupTable, dropShadow, psd_layer_effects_drop_shadow);
+    CONN_COMPOSITE_OP("/DrSh/Md  ", setBlendMode, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_COLOR("/DrSh/Clr ", setColor, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_UNITF("/DrSh/Opct", "#Prc", setOpacity, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_UNITF("/DrSh/lagl", "#Ang", setAngle, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_UNITF("/DrSh/Dstn", "#Pxl", setDistance, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_UNITF("/DrSh/Ckmt", "#Pxl", setSpread, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_UNITF("/DrSh/blur", "#Pxl", setSize, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_UNITF("/DrSh/Nose", "#Prc", setNoise, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_BOOL("/DrSh/enab", setEffectEnabled, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_BOOL("/DrSh/uglg", setUseGlobalLight, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_BOOL("/DrSh/AntA", setAntiAliased, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_BOOL("/DrSh/layerConceals", setKnocksOut, dropShadow, psd_layer_effects_drop_shadow, prefix);
+    CONN_CURVE("/DrSh/TrnS", setContourLookupTable, dropShadow, psd_layer_effects_drop_shadow, prefix);
 
     psd_layer_effects_inner_shadow *innerShadow = style->innerShadow();
 
-    CONN_COMPOSITE_OP("/IrSh/Md  ", setBlendMode, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_COLOR("/IrSh/Clr ", setColor, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_UNITF("/IrSh/Opct", "#Prc", setOpacity, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_UNITF("/IrSh/lagl", "#Ang", setAngle, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_UNITF("/IrSh/Dstn", "#Pxl", setDistance, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_UNITF("/IrSh/Ckmt", "#Pxl", setSpread, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_UNITF("/IrSh/blur", "#Pxl", setSize, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_UNITF("/IrSh/Nose", "#Prc", setNoise, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_BOOL("/IrSh/enab", setEffectEnabled, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_BOOL("/IrSh/uglg", setUseGlobalLight, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_BOOL("/IrSh/AntA", setAntiAliased, innerShadow, psd_layer_effects_inner_shadow);
-    CONN_CURVE("/IrSh/TrnS", setContourLookupTable, innerShadow, psd_layer_effects_inner_shadow);
+    CONN_COMPOSITE_OP("/IrSh/Md  ", setBlendMode, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_COLOR("/IrSh/Clr ", setColor, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_UNITF("/IrSh/Opct", "#Prc", setOpacity, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_UNITF("/IrSh/lagl", "#Ang", setAngle, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_UNITF("/IrSh/Dstn", "#Pxl", setDistance, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_UNITF("/IrSh/Ckmt", "#Pxl", setSpread, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_UNITF("/IrSh/blur", "#Pxl", setSize, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_UNITF("/IrSh/Nose", "#Prc", setNoise, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_BOOL("/IrSh/enab", setEffectEnabled, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_BOOL("/IrSh/uglg", setUseGlobalLight, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_BOOL("/IrSh/AntA", setAntiAliased, innerShadow, psd_layer_effects_inner_shadow, prefix);
+    CONN_CURVE("/IrSh/TrnS", setContourLookupTable, innerShadow, psd_layer_effects_inner_shadow, prefix);
 
     psd_layer_effects_outer_glow *outerGlow = style->outerGlow();
 
-    CONN_COMPOSITE_OP("/OrGl/Md  ", setBlendMode, outerGlow, psd_layer_effects_outer_glow);
-    CONN_COLOR("/OrGl/Clr ", setColor, outerGlow, psd_layer_effects_outer_glow);
-    CONN_UNITF("/OrGl/Opct", "#Prc", setOpacity, outerGlow, psd_layer_effects_outer_glow);
-    CONN_UNITF("/OrGl/Ckmt", "#Pxl", setSpread, outerGlow, psd_layer_effects_outer_glow);
-    CONN_UNITF("/OrGl/blur", "#Pxl", setSize, outerGlow, psd_layer_effects_outer_glow);
-    CONN_UNITF("/OrGl/Nose", "#Prc", setNoise, outerGlow, psd_layer_effects_outer_glow);
-    CONN_BOOL("/OrGl/enab", setEffectEnabled, outerGlow, psd_layer_effects_outer_glow);
-    CONN_BOOL("/OrGl/AntA", setAntiAliased, outerGlow, psd_layer_effects_outer_glow);
-    CONN_CURVE("/OrGl/TrnS", setContourLookupTable, outerGlow, psd_layer_effects_outer_glow);
+    CONN_COMPOSITE_OP("/OrGl/Md  ", setBlendMode, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_COLOR("/OrGl/Clr ", setColor, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_UNITF("/OrGl/Opct", "#Prc", setOpacity, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_UNITF("/OrGl/Ckmt", "#Pxl", setSpread, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_UNITF("/OrGl/blur", "#Pxl", setSize, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_UNITF("/OrGl/Nose", "#Prc", setNoise, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_BOOL("/OrGl/enab", setEffectEnabled, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_BOOL("/OrGl/AntA", setAntiAliased, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_CURVE("/OrGl/TrnS", setContourLookupTable, outerGlow, psd_layer_effects_outer_glow, prefix);
 
     QMap<QString, psd_technique_type> fillTechniqueMap;
     fillTechniqueMap.insert("PrBL", psd_technique_precise);
     fillTechniqueMap.insert("SfBL", psd_technique_softer);
-    CONN_ENUM("/OrGl/GlwT", "BETE", setTechnique, fillTechniqueMap, psd_technique_type, outerGlow, psd_layer_effects_outer_glow);
+    CONN_ENUM("/OrGl/GlwT", "BETE", setTechnique, fillTechniqueMap, psd_technique_type, outerGlow, psd_layer_effects_outer_glow, prefix);
 
-    CONN_GRADIENT("/OrGl/Grad", setGradient, outerGlow, psd_layer_effects_outer_glow);
+    CONN_GRADIENT("/OrGl/Grad", setGradient, outerGlow, psd_layer_effects_outer_glow, prefix);
 
-    CONN_UNITF("/OrGl/Inpr", "#Prc", setRange, outerGlow, psd_layer_effects_outer_glow);
-    CONN_UNITF("/OrGl/ShdN", "#Prc", setJitter, outerGlow, psd_layer_effects_outer_glow);
+    CONN_UNITF("/OrGl/Inpr", "#Prc", setRange, outerGlow, psd_layer_effects_outer_glow, prefix);
+    CONN_UNITF("/OrGl/ShdN", "#Prc", setJitter, outerGlow, psd_layer_effects_outer_glow, prefix);
 
 
     psd_layer_effects_inner_glow *innerGlow = style->innerGlow();
 
-    CONN_COMPOSITE_OP("/IrGl/Md  ", setBlendMode, innerGlow, psd_layer_effects_inner_glow);
-    CONN_COLOR("/IrGl/Clr ", setColor, innerGlow, psd_layer_effects_inner_glow);
-    CONN_UNITF("/IrGl/Opct", "#Prc", setOpacity, innerGlow, psd_layer_effects_inner_glow);
-    CONN_UNITF("/IrGl/Ckmt", "#Pxl", setSpread, innerGlow, psd_layer_effects_inner_glow);
-    CONN_UNITF("/IrGl/blur", "#Pxl", setSize, innerGlow, psd_layer_effects_inner_glow);
-    CONN_UNITF("/IrGl/Nose", "#Prc", setNoise, innerGlow, psd_layer_effects_inner_glow);
-    CONN_BOOL("/IrGl/enab", setEffectEnabled, innerGlow, psd_layer_effects_inner_glow);
-    CONN_BOOL("/IrGl/AntA", setAntiAliased, innerGlow, psd_layer_effects_inner_glow);
-    CONN_CURVE("/IrGl/TrnS", setContourLookupTable, innerGlow, psd_layer_effects_inner_glow);
+    CONN_COMPOSITE_OP("/IrGl/Md  ", setBlendMode, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_COLOR("/IrGl/Clr ", setColor, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_UNITF("/IrGl/Opct", "#Prc", setOpacity, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_UNITF("/IrGl/Ckmt", "#Pxl", setSpread, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_UNITF("/IrGl/blur", "#Pxl", setSize, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_UNITF("/IrGl/Nose", "#Prc", setNoise, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_BOOL("/IrGl/enab", setEffectEnabled, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_BOOL("/IrGl/AntA", setAntiAliased, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_CURVE("/IrGl/TrnS", setContourLookupTable, innerGlow, psd_layer_effects_inner_glow, prefix);
 
-    CONN_ENUM("/IrGl/GlwT", "BETE", setTechnique, fillTechniqueMap, psd_technique_type, innerGlow, psd_layer_effects_inner_glow);
+    CONN_ENUM("/IrGl/GlwT", "BETE", setTechnique, fillTechniqueMap, psd_technique_type, innerGlow, psd_layer_effects_inner_glow, prefix);
 
-    CONN_GRADIENT("/IrGl/Grad", setGradient, innerGlow, psd_layer_effects_inner_glow);
+    CONN_GRADIENT("/IrGl/Grad", setGradient, innerGlow, psd_layer_effects_inner_glow, prefix);
 
-    CONN_UNITF("/IrGl/Inpr", "#Prc", setRange, innerGlow, psd_layer_effects_inner_glow);
-    CONN_UNITF("/IrGl/ShdN", "#Prc", setJitter, innerGlow, psd_layer_effects_inner_glow);
+    CONN_UNITF("/IrGl/Inpr", "#Prc", setRange, innerGlow, psd_layer_effects_inner_glow, prefix);
+    CONN_UNITF("/IrGl/ShdN", "#Prc", setJitter, innerGlow, psd_layer_effects_inner_glow, prefix);
 
     QMap<QString, psd_glow_source> glowSourceMap;
     glowSourceMap.insert("SrcC", psd_glow_center);
     glowSourceMap.insert("SrcE", psd_glow_edge);
-    CONN_ENUM("/IrGl/glwS", "IGSr", setSource, glowSourceMap, psd_glow_source, innerGlow, psd_layer_effects_inner_glow);
+    CONN_ENUM("/IrGl/glwS", "IGSr", setSource, glowSourceMap, psd_glow_source, innerGlow, psd_layer_effects_inner_glow, prefix);
 
 
     psd_layer_effects_satin *satin = style->satin();
 
-    CONN_COMPOSITE_OP("/ChFX/Md  ", setBlendMode, satin, psd_layer_effects_satin);
-    CONN_COLOR("/ChFX/Clr ", setColor, satin, psd_layer_effects_satin);
+    CONN_COMPOSITE_OP("/ChFX/Md  ", setBlendMode, satin, psd_layer_effects_satin, prefix);
+    CONN_COLOR("/ChFX/Clr ", setColor, satin, psd_layer_effects_satin, prefix);
 
-    CONN_UNITF("/ChFX/Opct", "#Prc", setOpacity, satin, psd_layer_effects_satin);
-    CONN_UNITF("/ChFX/lagl", "#Ang", setAngle, satin, psd_layer_effects_satin);
-    CONN_UNITF("/ChFX/Dstn", "#Pxl", setDistance, satin, psd_layer_effects_satin);
-    CONN_UNITF("/ChFX/blur", "#Pxl", setSize, satin, psd_layer_effects_satin);
+    CONN_UNITF("/ChFX/Opct", "#Prc", setOpacity, satin, psd_layer_effects_satin, prefix);
+    CONN_UNITF("/ChFX/lagl", "#Ang", setAngle, satin, psd_layer_effects_satin, prefix);
+    CONN_UNITF("/ChFX/Dstn", "#Pxl", setDistance, satin, psd_layer_effects_satin, prefix);
+    CONN_UNITF("/ChFX/blur", "#Pxl", setSize, satin, psd_layer_effects_satin, prefix);
 
-    CONN_BOOL("/ChFX/enab", setEffectEnabled, satin, psd_layer_effects_satin);
-    CONN_BOOL("/ChFX/AntA", setAntiAliased, satin, psd_layer_effects_satin);
-    CONN_BOOL("/ChFX/Invr", setInvert, satin, psd_layer_effects_satin);
-    CONN_CURVE("/ChFX/MpgS", setContourLookupTable, satin, psd_layer_effects_satin);
+    CONN_BOOL("/ChFX/enab", setEffectEnabled, satin, psd_layer_effects_satin, prefix);
+    CONN_BOOL("/ChFX/AntA", setAntiAliased, satin, psd_layer_effects_satin, prefix);
+    CONN_BOOL("/ChFX/Invr", setInvert, satin, psd_layer_effects_satin, prefix);
+    CONN_CURVE("/ChFX/MpgS", setContourLookupTable, satin, psd_layer_effects_satin, prefix);
 
     psd_layer_effects_color_overlay *colorOverlay = style->colorOverlay();
 
-    CONN_COMPOSITE_OP("/SoFi/Md  ", setBlendMode, colorOverlay, psd_layer_effects_color_overlay);
-    CONN_COLOR("/SoFi/Clr ", setColor, colorOverlay, psd_layer_effects_color_overlay);
-    CONN_UNITF("/SoFi/Opct", "#Prc", setOpacity, colorOverlay, psd_layer_effects_color_overlay);
-    CONN_BOOL("/SoFi/enab", setEffectEnabled, colorOverlay, psd_layer_effects_color_overlay);
+    CONN_COMPOSITE_OP("/SoFi/Md  ", setBlendMode, colorOverlay, psd_layer_effects_color_overlay, prefix);
+    CONN_COLOR("/SoFi/Clr ", setColor, colorOverlay, psd_layer_effects_color_overlay, prefix);
+    CONN_UNITF("/SoFi/Opct", "#Prc", setOpacity, colorOverlay, psd_layer_effects_color_overlay, prefix);
+    CONN_BOOL("/SoFi/enab", setEffectEnabled, colorOverlay, psd_layer_effects_color_overlay, prefix);
 
     psd_layer_effects_gradient_overlay *gradientOverlay = style->gradientOverlay();
 
-    CONN_COMPOSITE_OP("/GrFl/Md  ", setBlendMode, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_UNITF("/GrFl/Opct", "#Prc", setOpacity, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_UNITF("/GrFl/Scl ", "#Prc", setScale, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_UNITF("/GrFl/Angl", "#Ang", setAngle, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_BOOL("/GrFl/enab", setEffectEnabled, gradientOverlay, psd_layer_effects_gradient_overlay);
-    // CONN_BOOL("/GrFl/Dthr", setDitherNotImplemented, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_BOOL("/GrFl/Rvrs", setReverse, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_BOOL("/GrFl/Algn", setAlignWithLayer, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_POINT("/GrFl/Ofst", setGradientOffset, gradientOverlay, psd_layer_effects_gradient_overlay);
-    CONN_GRADIENT("/GrFl/Grad", setGradient, gradientOverlay, psd_layer_effects_gradient_overlay);
+    CONN_COMPOSITE_OP("/GrFl/Md  ", setBlendMode, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_UNITF("/GrFl/Opct", "#Prc", setOpacity, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_UNITF("/GrFl/Scl ", "#Prc", setScale, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_UNITF("/GrFl/Angl", "#Ang", setAngle, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_BOOL("/GrFl/enab", setEffectEnabled, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    // CONN_BOOL("/GrFl/Dthr", setDitherNotImplemented, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_BOOL("/GrFl/Rvrs", setReverse, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_BOOL("/GrFl/Algn", setAlignWithLayer, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_POINT("/GrFl/Ofst", setGradientOffset, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_GRADIENT("/GrFl/Grad", setGradient, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
 
 
     QMap<QString, psd_gradient_style> gradientStyleMap;
@@ -996,74 +996,74 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style)
     gradientStyleMap.insert("Angl", psd_gradient_style_angle);
     gradientStyleMap.insert("Rflc", psd_gradient_style_reflected);
     gradientStyleMap.insert("Dmnd", psd_gradient_style_diamond);
-    CONN_ENUM("/GrFl/Type", "GrdT", setStyle, gradientStyleMap, psd_gradient_style, gradientOverlay, psd_layer_effects_gradient_overlay);
+    CONN_ENUM("/GrFl/Type", "GrdT", setStyle, gradientStyleMap, psd_gradient_style, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
 
     psd_layer_effects_pattern_overlay *patternOverlay = style->patternOverlay();
 
-    CONN_BOOL("/patternFill/enab", setEffectEnabled, patternOverlay, psd_layer_effects_pattern_overlay);
-    CONN_COMPOSITE_OP("/patternFill/Md  ", setBlendMode, patternOverlay, psd_layer_effects_pattern_overlay);
-    CONN_UNITF("/patternFill/Opct", "#Prc", setOpacity, patternOverlay, psd_layer_effects_pattern_overlay);
-    CONN_PATTERN("/patternFill/Ptrn", setPattern, patternOverlay, psd_layer_effects_pattern_overlay);
-    CONN_UNITF("/patternFill/Scl ", "#Prc", setScale, patternOverlay, psd_layer_effects_pattern_overlay);
-    CONN_BOOL("/patternFill/Algn", setAlignWithLayer, patternOverlay, psd_layer_effects_pattern_overlay);
-    CONN_POINT("/patternFill/phase", setPatternPhase, patternOverlay, psd_layer_effects_pattern_overlay);
+    CONN_BOOL("/patternFill/enab", setEffectEnabled, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
+    CONN_COMPOSITE_OP("/patternFill/Md  ", setBlendMode, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
+    CONN_UNITF("/patternFill/Opct", "#Prc", setOpacity, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
+    CONN_PATTERN("/patternFill/Ptrn", setPattern, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
+    CONN_UNITF("/patternFill/Scl ", "#Prc", setScale, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
+    CONN_BOOL("/patternFill/Algn", setAlignWithLayer, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
+    CONN_POINT("/patternFill/phase", setPatternPhase, patternOverlay, psd_layer_effects_pattern_overlay, prefix);
 
     psd_layer_effects_stroke *stroke = style->stroke();
 
-    CONN_COMPOSITE_OP("/FrFX/Md  ", setBlendMode, stroke, psd_layer_effects_stroke);
-    CONN_BOOL("/FrFX/enab", setEffectEnabled, stroke, psd_layer_effects_stroke);
-    CONN_UNITF("/FrFX/Opct", "#Prc", setOpacity, stroke, psd_layer_effects_stroke);
-    CONN_UNITF("/FrFX/Sz  ", "#Pxl", setSize, stroke, psd_layer_effects_stroke);
+    CONN_COMPOSITE_OP("/FrFX/Md  ", setBlendMode, stroke, psd_layer_effects_stroke, prefix);
+    CONN_BOOL("/FrFX/enab", setEffectEnabled, stroke, psd_layer_effects_stroke, prefix);
+    CONN_UNITF("/FrFX/Opct", "#Prc", setOpacity, stroke, psd_layer_effects_stroke, prefix);
+    CONN_UNITF("/FrFX/Sz  ", "#Pxl", setSize, stroke, psd_layer_effects_stroke, prefix);
 
     QMap<QString, psd_stroke_position> strokeStyleMap;
     strokeStyleMap.insert("OutF", psd_stroke_outside);
     strokeStyleMap.insert("InsF", psd_stroke_inside);
     strokeStyleMap.insert("CtrF", psd_stroke_center);
-    CONN_ENUM("/FrFX/Styl", "FStl", setPosition, strokeStyleMap, psd_stroke_position, stroke, psd_layer_effects_stroke);
+    CONN_ENUM("/FrFX/Styl", "FStl", setPosition, strokeStyleMap, psd_stroke_position, stroke, psd_layer_effects_stroke, prefix);
 
     QMap<QString, psd_fill_type> strokeFillType;
     strokeFillType.insert("SClr", psd_fill_solid_color);
     strokeFillType.insert("GrFl", psd_fill_gradient);
     strokeFillType.insert("Ptrn", psd_fill_pattern);
-    CONN_ENUM("/FrFX/PntT", "FrFl", setFillType, strokeFillType, psd_fill_type, stroke, psd_layer_effects_stroke);
+    CONN_ENUM("/FrFX/PntT", "FrFl", setFillType, strokeFillType, psd_fill_type, stroke, psd_layer_effects_stroke, prefix);
 
     // Color type
-    CONN_COLOR("/FrFX/Clr ", setColor, stroke, psd_layer_effects_stroke);
+    CONN_COLOR("/FrFX/Clr ", setColor, stroke, psd_layer_effects_stroke, prefix);
 
     // Gradient Type
-    CONN_GRADIENT("/FrFX/Grad", setGradient, stroke, psd_layer_effects_stroke);
-    CONN_UNITF("/FrFX/Angl", "#Ang", setAngle, stroke, psd_layer_effects_stroke);
-    CONN_UNITF("/FrFX/Scl ", "#Prc", setScale, stroke, psd_layer_effects_stroke);
-    CONN_ENUM("/FrFX/Type", "GrdT", setStyle, gradientStyleMap, psd_gradient_style, stroke, psd_layer_effects_stroke);
-    CONN_BOOL("/FrFX/Rvrs", setReverse, stroke, psd_layer_effects_stroke);
-    CONN_BOOL("/FrFX/Algn", setAlignWithLayer, stroke, psd_layer_effects_stroke);
-    CONN_POINT("/FrFX/Ofst", setGradientOffset, stroke, psd_layer_effects_stroke);
-    // CONN_BOOL("/FrFX/Dthr", setDitherNotImplemented, stroke, psd_layer_effects_stroke);
+    CONN_GRADIENT("/FrFX/Grad", setGradient, stroke, psd_layer_effects_stroke, prefix);
+    CONN_UNITF("/FrFX/Angl", "#Ang", setAngle, stroke, psd_layer_effects_stroke, prefix);
+    CONN_UNITF("/FrFX/Scl ", "#Prc", setScale, stroke, psd_layer_effects_stroke, prefix);
+    CONN_ENUM("/FrFX/Type", "GrdT", setStyle, gradientStyleMap, psd_gradient_style, stroke, psd_layer_effects_stroke, prefix);
+    CONN_BOOL("/FrFX/Rvrs", setReverse, stroke, psd_layer_effects_stroke, prefix);
+    CONN_BOOL("/FrFX/Algn", setAlignWithLayer, stroke, psd_layer_effects_stroke, prefix);
+    CONN_POINT("/FrFX/Ofst", setGradientOffset, stroke, psd_layer_effects_stroke, prefix);
+    // CONN_BOOL("/FrFX/Dthr", setDitherNotImplemented, stroke, psd_layer_effects_stroke, prefix);
 
     // Pattern type
 
-    CONN_PATTERN("/FrFX/Ptrn", setPattern, stroke, psd_layer_effects_stroke);
-    CONN_BOOL("/FrFX/Lnkd", setAlignWithLayer, stroke, psd_layer_effects_stroke); // yes, we share the params...
-    CONN_POINT("/FrFX/phase", setPatternPhase, stroke, psd_layer_effects_stroke);
+    CONN_PATTERN("/FrFX/Ptrn", setPattern, stroke, psd_layer_effects_stroke, prefix);
+    CONN_BOOL("/FrFX/Lnkd", setAlignWithLayer, stroke, psd_layer_effects_stroke, prefix); // yes, we share the params...
+    CONN_POINT("/FrFX/phase", setPatternPhase, stroke, psd_layer_effects_stroke, prefix);
 
 
     psd_layer_effects_bevel_emboss *bevelAndEmboss = style->bevelAndEmboss();
 
-    CONN_BOOL("/ebbl/enab", setEffectEnabled, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_BOOL("/ebbl/enab", setEffectEnabled, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_COMPOSITE_OP("/ebbl/hglM", setHighlightBlendMode, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_COLOR("/ebbl/hglC", setHighlightColor, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_UNITF("/ebbl/hglO", "#Prc", setHighlightOpacity, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_COMPOSITE_OP("/ebbl/hglM", setHighlightBlendMode, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_COLOR("/ebbl/hglC", setHighlightColor, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/hglO", "#Prc", setHighlightOpacity, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_COMPOSITE_OP("/ebbl/sdwM", setShadowBlendMode, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_COLOR("/ebbl/sdwC", setShadowColor, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_UNITF("/ebbl/sdwO", "#Prc", setShadowOpacity, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_COMPOSITE_OP("/ebbl/sdwM", setShadowBlendMode, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_COLOR("/ebbl/sdwC", setShadowColor, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/sdwO", "#Prc", setShadowOpacity, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
     QMap<QString, psd_technique_type> bevelTechniqueMap;
     bevelTechniqueMap.insert("PrBL", psd_technique_precise);
     bevelTechniqueMap.insert("SfBL", psd_technique_softer);
     bevelTechniqueMap.insert("Slmt", psd_technique_slope_limit);
-    CONN_ENUM("/ebbl/bvlT", "bvlT", setTechnique, bevelTechniqueMap, psd_technique_type, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_ENUM("/ebbl/bvlT", "bvlT", setTechnique, bevelTechniqueMap, psd_technique_type, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
     QMap<QString, psd_bevel_style> bevelStyleMap;
     bevelStyleMap.insert("OtrB", psd_bevel_outer_bevel);
@@ -1071,48 +1071,48 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style)
     bevelStyleMap.insert("Embs", psd_bevel_emboss);
     bevelStyleMap.insert("PlEb", psd_bevel_pillow_emboss);
     bevelStyleMap.insert("strokeEmboss", psd_bevel_stroke_emboss);
-    CONN_ENUM("/ebbl/bvlS", "BESl", setStyle, bevelStyleMap, psd_bevel_style, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_ENUM("/ebbl/bvlS", "BESl", setStyle, bevelStyleMap, psd_bevel_style, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_BOOL("/ebbl/uglg", setUseGlobalLight, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_BOOL("/ebbl/uglg", setUseGlobalLight, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_UNITF("/ebbl/lagl", "#Ang", setAngle, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_UNITF("/ebbl/Lald", "#Ang", setAltitude, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_UNITF("/ebbl/lagl", "#Ang", setAngle, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/Lald", "#Ang", setAltitude, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_UNITF("/ebbl/srgR", "#Prc", setDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_UNITF("/ebbl/srgR", "#Prc", setDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_UNITF("/ebbl/blur", "#Pxl", setSize, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_UNITF("/ebbl/blur", "#Pxl", setSize, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
 
     QMap<QString, psd_direction> bevelDirectionMap;
     bevelDirectionMap.insert("In  ", psd_direction_up);
     bevelDirectionMap.insert("Out ", psd_direction_down);
-    CONN_ENUM("/ebbl/bvlD", "BESs", setDirection, bevelDirectionMap, psd_direction, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_ENUM("/ebbl/bvlD", "BESs", setDirection, bevelDirectionMap, psd_direction, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_CURVE("/ebbl/TrnS", setContourLookupTable, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_CURVE("/ebbl/TrnS", setContourLookupTable, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_BOOL("/ebbl/antialiasGloss", setGlossAntiAliased, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_BOOL("/ebbl/antialiasGloss", setGlossAntiAliased, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
-    CONN_UNITF("/ebbl/Sftn", "#Pxl", setSoften, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_UNITF("/ebbl/Sftn", "#Pxl", setSoften, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
     // Use shape mode
 
-    CONN_BOOL("/ebbl/useShape", setContourEnabled, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_CURVE("/ebbl/MpgS", setGlossContourLookupTable, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_BOOL("/ebbl/AntA", setAntiAliased, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_UNITF("/ebbl/Inpr", "#Prc", setContourRange, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_BOOL("/ebbl/useShape", setContourEnabled, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_CURVE("/ebbl/MpgS", setGlossContourLookupTable, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_BOOL("/ebbl/AntA", setAntiAliased, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/Inpr", "#Prc", setContourRange, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 
     // Use texture mode
 
-    CONN_BOOL("/ebbl/useTexture", setTextureEnabled, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_BOOL("/ebbl/InvT", setTextureInvert, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_BOOL("/ebbl/Algn", setTextureAlignWithLayer, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_UNITF("/ebbl/Scl ", "#Prc", setTextureScale, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_UNITF("/ebbl/textureDepth", "#Prc", setTextureDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_PATTERN("/ebbl/Ptrn", setTexturePattern, bevelAndEmboss, psd_layer_effects_bevel_emboss);
-    CONN_POINT("/ebbl/phase", setTexturePhase, bevelAndEmboss, psd_layer_effects_bevel_emboss);
+    CONN_BOOL("/ebbl/useTexture", setTextureEnabled, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_BOOL("/ebbl/InvT", setTextureInvert, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_BOOL("/ebbl/Algn", setTextureAlignWithLayer, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/Scl ", "#Prc", setTextureScale, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/textureDepth", "#Prc", setTextureDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_PATTERN("/ebbl/Ptrn", setTexturePattern, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_POINT("/ebbl/phase", setTexturePhase, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 }
 
-void KisAslLayerStyleSerializer::newStyleStarted()
+void KisAslLayerStyleSerializer::newStyleStarted(bool isPsdStructure)
 {
     m_stylesVector.append(toQShared(new KisPSDLayerStyle()));
     KisPSDLayerStyle *currentStyle = m_stylesVector.last().data();
@@ -1121,7 +1121,8 @@ void KisAslLayerStyleSerializer::newStyleStarted()
     context->global_angle = 0;
     context->keep_original = 0;
 
-    connectCatcherToStyle(currentStyle);
+    QString prefix = isPsdStructure ? "/null" : "/Styl/Lefx";
+    connectCatcherToStyle(currentStyle, prefix);
 }
 
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
@@ -1129,10 +1130,32 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     m_stylesVector.clear();
 
     m_catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
-    m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this));
+    m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, false));
 
     KisAslReader reader;
     QDomDocument doc = reader.readFile(device);
+
+    //qDebug() << ppVar(doc.toString());
+
+    //KisAslObjectCatcher c2;
+    KisAslXmlParser parser;
+    parser.parseXML(doc, m_catcher);
+
+    // correct all the layer styles
+    foreach(KisPSDLayerStyleSP style, m_stylesVector) {
+        FillStylesCorrector::correct(style.data());
+    }
+}
+
+void KisAslLayerStyleSerializer::readFromPSDSection(QIODevice *device)
+{
+    m_stylesVector.clear();
+
+    //m_catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+    m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, true));
+
+    KisAslReader reader;
+    QDomDocument doc = reader.readLfx2PsdSection(device);
 
     //qDebug() << ppVar(doc.toString());
 

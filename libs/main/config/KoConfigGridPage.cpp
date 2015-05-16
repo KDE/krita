@@ -25,6 +25,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoUnitDoubleSpinBox.h>
 #include <KoAspectButton.h>
 #include <KoPart.h>
+#include <KoUnit.h>
 
 #include <kcolorbutton.h>
 #include <kconfiggroup.h>

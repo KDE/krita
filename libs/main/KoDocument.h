@@ -29,7 +29,6 @@
 
 #include <kcomponentdata.h>
 
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "komain_export.h"
 #include "KoGridData.h"
@@ -49,6 +48,7 @@ class KoDocumentRdfBase;
 class KoProgressUpdater;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
+class KoUnit;
 
 class KoVersionInfo
 {

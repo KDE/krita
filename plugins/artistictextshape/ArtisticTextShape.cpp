@@ -27,7 +27,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KoUnit.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
 #include <KoPathShapeLoader.h>

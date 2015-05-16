@@ -37,7 +37,6 @@
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
 #include <KisImportExportManager.h>
-#include <KoUnit.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>

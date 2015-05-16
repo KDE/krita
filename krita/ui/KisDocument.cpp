@@ -41,6 +41,7 @@
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
 #include <KoDpi.h>
+#include <KoUnit.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoFileDialog.h>
 #include <KoID.h>

@@ -45,6 +45,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoUnit.h>
 
 #include <kis_painter.h>
 #include <KisDocument.h>

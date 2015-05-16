@@ -18,8 +18,6 @@
  */
 #include "TestNumberStyle.h"
 
-#include <KoUnit.h>
-
 QString escapeLocals(const QString &text)
 {
     QString t(text);

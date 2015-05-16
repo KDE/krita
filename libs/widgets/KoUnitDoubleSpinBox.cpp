@@ -20,6 +20,9 @@
 */
 
 #include "KoUnitDoubleSpinBox.h"
+
+#include <KoUnit.h>
+
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -132,7 +135,7 @@ void KoUnitDoubleSpinBox::privateValueChanged() {
     emit valueChangedPt( value () );
 }
 
-void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
+void KoUnitDoubleSpinBox::setUnit( const KoUnit &unit )
 {
     if (unit == d->unit) return;
 

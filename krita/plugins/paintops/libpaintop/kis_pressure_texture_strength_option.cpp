@@ -21,10 +21,8 @@
 #include <klocale.h>
 
 KisPressureTextureStrengthOption::KisPressureTextureStrengthOption()
-    : KisCurveOption(i18n("Strength"), "Texture/Strength/", KisPaintOpOption::textureCategory(), false)
+    : KisCurveOption("Texture/Strength/", KisPaintOpOption::TEXTURE, false)
 {
-    setMinimumLabel(i18n("Weak"));
-    setMaximumLabel(i18n("Strong"));
 }
 
 double KisPressureTextureStrengthOption::apply(const KisPaintInformation & info) const

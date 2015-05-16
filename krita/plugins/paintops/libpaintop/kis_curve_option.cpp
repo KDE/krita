@@ -21,10 +21,9 @@
 
 #include <QDomNode>
 
-KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category,
+KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
                                bool checked, qreal value, qreal min, qreal max)
     : m_name(name)
-    , m_label(label)
     , m_category(category)
     , m_checkable(true)
     , m_checked(checked)
@@ -39,8 +38,6 @@ KisCurveOption::KisCurveOption(const QString & label, const QString& name, const
     }
     m_sensorMap[PressureId.id()]->setActive(true);
 
-    setMinimumLabel(i18n("0.0"));
-    setMaximumLabel(i18n("1.0"));
     setValueRange(min, max);
     setValue(value);
 }
@@ -56,12 +53,7 @@ const QString& KisCurveOption::name() const
     return m_name;
 }
 
-const QString & KisCurveOption::label() const
-{
-    return m_label;
-}
-
-const QString& KisCurveOption::category() const
+KisPaintOpOption::PaintopCategory KisCurveOption::category() const
 {
     return m_category;
 }
@@ -310,26 +302,6 @@ void KisCurveOption::setCurve(const QString &sensorId, bool useSameCurve, const 
         }
         m_useSameCurve = useSameCurve;
     }
-}
-
-const QString& KisCurveOption::minimumLabel() const
-{
-    return m_minimumLabel;
-}
-
-const QString& KisCurveOption::maximumLabel() const
-{
-    return m_maximumLabel;
-}
-
-void KisCurveOption::setMinimumLabel(const QString& _label)
-{
-    m_minimumLabel = _label;
-}
-
-void KisCurveOption::setMaximumLabel(const QString& _label)
-{
-    m_maximumLabel = _label;
 }
 
 void KisCurveOption::setValueRange(qreal min, qreal max)

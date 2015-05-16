@@ -34,6 +34,10 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_compositeop_option.h>
+#include "kis_texture_option.h"
+#include "kis_curve_option_widget.h"
+#include <kis_pressure_mirror_option_widget.h>
+#include "kis_pressure_texture_strength_option.h"
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -45,23 +49,25 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
 
     //-------Adding widgets to the screen------------
 
-    addPaintOpOption(new KisHatchingOptions());
-    addPaintOpOption(new KisHatchingPreferences());
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addMirrorOption();
-    addPaintOpOption(new KisPaintActionTypeOption());
+    addPaintOpOption(new KisHatchingOptions(), i18n("Hatching options"));
+    addPaintOpOption(new KisHatchingPreferences(), i18n("Hatching preferences"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption(), i18n("0.0"), i18n("1.0")), i18n("Separation"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption(), i18n("0.0"), i18n("1.0")), i18n("Thickness"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption(), i18n("0.0"), i18n("1.0")), i18n("Crosshatching"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
-    addTextureOptions();
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+
+    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
+        addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
     //-----Useful to read first:------
     /*
     Below you will encounter a reasonably correct solution to the problem of changing
-    the default presets of the "BrushTip" popup configuration dialgoue.
+    the default presets of the "BrushTip" popup configuration dialogue.
     In my (Pentalis) opinion, the best solution is code refactoring (simpler ways
     to change the defaults). On the meanwhile, copypasting this code
     won't give your class a charisma penalty.

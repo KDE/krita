@@ -22,10 +22,8 @@
 #include <KoColor.h>
 
 KisPressureMixOption::KisPressureMixOption()
-    : KisCurveOption(i18n("Mix"), "Mix", KisPaintOpOption::colorCategory(), false)
+    : KisCurveOption("Mix", KisPaintOpOption::COLOR, false)
 {
-    setMinimumLabel(i18n("Foreground"));
-    setMaximumLabel(i18n("Background"));
 }
 
 

@@ -38,9 +38,9 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
 public:
-    KisGridOpOption* m_gridOption;
-    KisGridShapeOption* m_gridShapeOption;
-    KisColorOption* m_ColorOption;
+    KisGridOpOption *m_gridOption;
+    KisGridShapeOption *m_gridShapeOption;
+    KisColorOption *m_ColorOption;
 };
 
 #endif

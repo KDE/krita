@@ -41,7 +41,7 @@ public:
 
     ~KisPaintOpOptionsWidget();
 
-    void addPaintOpOption(KisPaintOpOption * option);
+    void addPaintOpOption(KisPaintOpOption * option, const QString &label);
 
     /// Reimplemented
     virtual void setConfiguration(const KisPropertiesConfiguration * config);

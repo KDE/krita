@@ -92,10 +92,10 @@ KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
     delete m_d;
 }
 
-void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
+void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption *option, const QString &label)
 {
     if (!option->configurationPage()) return;
-    m_d->model->addPaintOpOption(option, m_d->optionsStack->count());
+    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), label);
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;

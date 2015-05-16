@@ -38,7 +38,7 @@ public:
 };
 
 KisCurveOpOption::KisCurveOpOption()
-    : KisPaintOpOption(i18n("Lines"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisCurveOpOptionsWidget();
@@ -50,6 +50,8 @@ KisCurveOpOption::KisCurveOpOption()
     connect(m_options->curvesOpacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
+
+    setObjectName("KisCurveOpOption");
 }
 
 KisCurveOpOption::~KisCurveOpOption()

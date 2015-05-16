@@ -26,7 +26,7 @@
 
 
 KisBrushOptionWidget::KisBrushOptionWidget()
-    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::generalCategory(), true)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget();
@@ -35,6 +35,8 @@ KisBrushOptionWidget::KisBrushOptionWidget()
     m_brushSelectionWidget->hide();
     setConfigurationPage(m_brushSelectionWidget);
     m_brushOption.setBrush(brush());
+
+    setObjectName("KisBrushOptionWidget");
 }
 
 KisBrushSP KisBrushOptionWidget::brush() const

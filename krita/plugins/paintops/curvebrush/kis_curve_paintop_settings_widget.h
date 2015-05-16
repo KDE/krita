@@ -35,7 +35,7 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
 private:
-    KisCurveOpOption * m_options;
+    KisCurveOpOption *m_curveOption;
 };
 
 

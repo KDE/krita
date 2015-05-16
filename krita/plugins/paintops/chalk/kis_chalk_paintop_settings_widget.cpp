@@ -31,12 +31,11 @@
 KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpOptionsWidget(parent)
 {
-    m_chalkOption =  new KisChalkOpOption();
-
-    addPaintOpOption(m_chalkOption);
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisAirbrushOption(false));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    m_chalkOption = new KisChalkOpOption();
+    addPaintOpOption(m_chalkOption, i18n("Brush size"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 
 KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()

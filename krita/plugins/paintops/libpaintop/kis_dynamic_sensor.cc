@@ -31,6 +31,7 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id)
     , m_customCurve(false)
     , m_active(false)
 {
+    //qDebug() << "creating KisDynamicSensor" << id;
     setMinimumLabel(i18n("0.0"));
     setMaximumLabel(i18n("1.0"));
 }

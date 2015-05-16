@@ -40,12 +40,12 @@ public:
 
 
 KisAirbrushOption::KisAirbrushOption(bool enabled)
-    : KisPaintOpOption(i18n("Airbrush"), KisPaintOpOption::colorCategory(), enabled)
+    : KisPaintOpOption(KisPaintOpOption::COLOR, enabled)
 {
+    setObjectName("KisAirBrushOption");
     m_checkable = true;
     m_optionWidget = new KisAirbrushWidget();
     connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
-
     setConfigurationPage(m_optionWidget);
 }
 
@@ -53,7 +53,6 @@ KisAirbrushOption::KisAirbrushOption(bool enabled)
 KisAirbrushOption::~KisAirbrushOption()
 {
 }
-
 
 void KisAirbrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {

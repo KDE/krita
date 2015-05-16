@@ -19,9 +19,9 @@
 #include "kis_colorsmudgeop_settings_widget.h"
 #include "kis_brush_based_paintop_settings.h"
 #include "kis_overlay_mode_option.h"
-#include "kis_rate_option_widget.h"
+#include "kis_rate_option.h"
 #include "kis_smudge_option_widget.h"
-#include "kis_smudge_radius_option_widget.h"
+#include "kis_smudge_radius_option.h"
 
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
@@ -34,7 +34,10 @@
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
 #include <kis_pressure_spacing_option_widget.h>
-
+#include "kis_texture_option.h"
+#include "kis_curve_option_widget.h"
+#include <kis_pressure_mirror_option_widget.h>
+#include "kis_pressure_texture_strength_option.h"
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
@@ -42,21 +45,24 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
 
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
-    addMirrorOption();
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
+    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
-    addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Length"), i18n("Length: "), "SmudgeRate", true));
-    addPaintOpOption(new KisSmudgeRadiusOptionWidget(i18n("Smudge Radius"), i18n("Radius(%): "), "SmudgeRadius", true));
-    addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisPressureScatterOptionWidget());
-    addPaintOpOption(new KisOverlayModeOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption()));
+    addPaintOpOption(new KisSmudgeOptionWidget(), i18n("Smudge Length"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0")), i18n("Smudge Radius"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
 
-    addTextureOptions();
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
+    addPaintOpOption(new KisOverlayModeOptionWidget(), i18n("Overlay Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")), i18n("Gradient"));
+
+    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+
 }
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }

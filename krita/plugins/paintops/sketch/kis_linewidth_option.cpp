@@ -17,13 +17,10 @@
  */
 
 #include "kis_linewidth_option.h"
-#include <klocale.h>
 
 KisLineWidthOption::KisLineWidthOption()
-    : KisCurveOption(i18n("Line width"), "Line width", KisPaintOpOption::generalCategory(), false)
+    : KisCurveOption("Line width", KisPaintOpOption::GENERAL, false)
 {
-    setMinimumLabel(i18n("0%"));
-    setMaximumLabel(i18n("100%"));
 }
 
 

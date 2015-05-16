@@ -32,8 +32,10 @@
 #include "kis_pressure_sharpness_option_widget.h"
 
 KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
-    KisCurveOptionWidget(new KisPressureSharpnessOption())
+    KisCurveOptionWidget(new KisPressureSharpnessOption(), i18n("0.0"), i18n("1.0"))
 {
+    setObjectName("KisPressureSharpnessOptionWidget");
+
     QLabel* thresholdLbl = new QLabel(i18n("Threshold:"));
 
     m_threshold = new KisSliderSpinBox();

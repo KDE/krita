@@ -37,7 +37,7 @@
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
 
-KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
     , m_isPresetValid(true)

@@ -31,7 +31,7 @@
 
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
-    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::generalCategory(), true),
+    KisPaintOpOption(KisPaintOpOption::GENERAL, true),
     m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;
@@ -54,6 +54,9 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
         connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
         connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
+
+    setObjectName("KisCompositeOpOption");
+
 }
 
 KisCompositeOpOption::~KisCompositeOpOption()

@@ -26,9 +26,28 @@ KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
 {
 }
 
-void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int widgetIndex)
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label)
 {
-    DataItem *item = categoriesMapper()->addEntry(option->category(), KisOptionInfo(option, widgetIndex));
+
+    QString category;
+    switch(option->category()) {
+    case KisPaintOpOption::GENERAL:
+        category = i18nc("option category", "General");
+        break;
+    case KisPaintOpOption::COLOR:
+        category = i18nc("option category", "Color");
+        break;
+    case KisPaintOpOption::TEXTURE:
+        category = i18nc("option category", "Texture");
+        break;
+    case KisPaintOpOption::FILTER:
+        category = i18nc("option category", "Filter");
+        break;
+    default:
+        category = i18n("Unknown");
+    };
+
+    DataItem *item = categoriesMapper()->addEntry(category, KisOptionInfo(option, widgetIndex, label));
 
     if (option->isCheckable()) {
         item->setCheckable(true);
@@ -76,7 +95,7 @@ bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& 
 bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
 {
     if (a.index != b.index) return false;
-    if (a.option->label() != b.option->label()) return false;
+    if (a.option->objectName() == b.option->objectName())
     if (a.option->category() != b.option->category()) return false;
     if (a.option->isCheckable() != b.option->isCheckable()) return false;
     if (a.option->isChecked() != b.option->isChecked()) return false;

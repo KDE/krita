@@ -40,13 +40,12 @@
 
 
 
- class KisRandomConstAccessorNG;
+class KisRandomConstAccessorNG;
 
-KisSmudgeRadiusOption::KisSmudgeRadiusOption(const QString& name, const QString& label, bool checked, const QString& category):
-    KisRateOption(name, label, checked, category)
+KisSmudgeRadiusOption::KisSmudgeRadiusOption():
+    KisRateOption("SmudgeRadius", KisPaintOpOption::GENERAL, true)
 {
     setValueRange(0.0,300.0);
-
 }
 
 void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy,KisPaintDeviceSP dev) const
@@ -124,13 +123,13 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                         memcpy(pixels[0],data,pixelSize);
 
 
-                   }
-                   x = x*(-1);
+                    }
+                    x = x*(-1);
                 }
                 y = y*(-1);
             }
 
-            }
+        }
 
         KoColor color = KoColor(pixels[0],cs);
         painter.setPaintColor(color);
@@ -138,7 +137,7 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         for (int l = 0; l < 2; l++){
             delete[] pixels[l];
         }
-       // delete[] pixels;
+        // delete[] pixels;
         delete[] data;
     }
 

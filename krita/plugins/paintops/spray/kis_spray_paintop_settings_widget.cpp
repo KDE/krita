@@ -38,19 +38,19 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpOptionsWidget(parent)
     , m_sprayArea(new KisSprayOpOption())
 {
-    addPaintOpOption(m_sprayArea);
-    addPaintOpOption(new KisSprayShapeOption());
-    addPaintOpOption(new KisBrushOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(m_sprayArea, i18n("Spray shape"));
+    addPaintOpOption(new KisSprayShapeOption(), i18n("Spray shape"));
+    addPaintOpOption(new KisBrushOptionWidget(), i18n("Brush Tip"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
 
-    addPaintOpOption(new KisSprayShapeDynamicsOption());
-    addPaintOpOption(new KisColorOption());
+    addPaintOpOption(new KisSprayShapeDynamicsOption(), i18n("Shape dynamics"));
+    addPaintOpOption(new KisColorOption(), i18n("Color options"));
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisAirbrushOption());
-    addPaintOpOption(new KisPaintActionTypeOption());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 
 KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()

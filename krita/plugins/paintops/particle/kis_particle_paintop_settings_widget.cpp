@@ -32,10 +32,10 @@ KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* par
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_particleOption =  new KisParticleOpOption();
 
-    addPaintOpOption(m_particleOption);
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisAirbrushOption());
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(m_particleOption, i18n("Brush size"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+    addPaintOpOption(m_paintActionTypeOption, i18n("Painting Mode"));
 }
 
 KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()

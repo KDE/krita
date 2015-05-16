@@ -33,8 +33,6 @@ public:
     virtual ~KisBrushBasedPaintopOptionWidget();
 
     void setPrecisionEnabled(bool value);
-    void addTextureOptions();
-    void addMirrorOption();
 
     KisBrushSP brush();
 

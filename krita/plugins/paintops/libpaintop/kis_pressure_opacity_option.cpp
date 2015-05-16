@@ -23,11 +23,9 @@
 
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::generalCategory(), true)
+    : KisCurveOption("Opacity", KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
-    setMinimumLabel(i18n("Transparent"));
-    setMaximumLabel(i18n("Opaque"));
 }
 
 

@@ -36,7 +36,7 @@ struct KisColorSourceOptionWidget::Private {
 };
 
 KisColorSourceOptionWidget::KisColorSourceOptionWidget()
-    : KisPaintOpOption(i18n("Source"), KisPaintOpOption::colorCategory(), true)
+    : KisPaintOpOption(KisPaintOpOption::COLOR, true)
     , d(new Private)
 {
     m_checkable = false;
@@ -59,6 +59,8 @@ KisColorSourceOptionWidget::KisColorSourceOptionWidget()
     verticalLayout_2->addStretch();
 
     setConfigurationPage(configurationWidget);
+
+    setObjectName("KisColorSourceOptionWidget");
 
 }
 

@@ -29,7 +29,7 @@
 class KisPainter;
 class KisPaintOp;
 class QWidget;
-class KisPaintOpSettingsWidget;
+class KisPaintOpConfigWidget;
 
 /**
  * The paintop factory is responsible for creating paintops of the specified class.
@@ -89,7 +89,7 @@ public:
     /**
      * create a widget that can display paintop settings
      */
-    virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) = 0;
+    virtual KisPaintOpConfigWidget* createSettingsWidget(QWidget* parent) = 0;
 
     /**
      * Set the priority of this paintop, as it is shown in the UI; lower number means

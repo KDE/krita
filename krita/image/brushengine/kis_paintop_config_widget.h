@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PAINTOP_SETTINGS_WIDGET_H_
-#define KIS_PAINTOP_SETTINGS_WIDGET_H_
+#ifndef KIS_PAINTOP_CONFIG_WIDGET_H_
+#define KIS_PAINTOP_CONFIG_WIDGET_H_
 
 #include "krita_export.h"
 
@@ -28,16 +28,16 @@
 /**
  * Base class for widgets that are used to edit and display paintop settings.
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettingsWidget : public KisConfigWidget
+class KRITAIMAGE_EXPORT KisPaintOpConfigWidget : public KisConfigWidget
 {
 
 public:
 
-    KisPaintOpSettingsWidget(QWidget * parent = 0, Qt::WFlags f = 0)
+    KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0)
         : KisConfigWidget(parent, f, 10) {
     }
 
-    virtual ~KisPaintOpSettingsWidget() {
+    virtual ~KisPaintOpConfigWidget() {
     }
 
     /**

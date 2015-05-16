@@ -52,7 +52,7 @@
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 #include <kis_action.h>
 
 #include "kis_canvas2.h"

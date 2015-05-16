@@ -50,7 +50,7 @@ struct KisPaintOpOptionsWidget::Private
 };
 
 KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
-        : KisPaintOpSettingsWidget(parent)
+        : KisPaintOpConfigWidget(parent)
         , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");

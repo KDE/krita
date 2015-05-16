@@ -27,7 +27,7 @@
 #include "recorder/kis_recorded_paint_action.h"
 #include <kis_paintop_preset.h>
 #include <kis_paintop_registry.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 
 #include "ui_wdgpaintactioneditor.h"
 #include <KoColorSpaceRegistry.h>

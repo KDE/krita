@@ -20,18 +20,18 @@
 #define KIS_PAINTOP_OPTIONS_WIDGET_H
 
 #include <krita_export.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 
 class KisPaintOpOption;
 class KisPropertiesConfiguration;
-class KisPaintOpSettingsWidget;
+class KisPaintOpConfigWidget;
 
 /**
  * A common widget for enabling/disabling and determining
  * the effect of tablet pressure, tilt and rotation and
  * other paintop settings.
  */
-class KRITAUI_EXPORT KisPaintOpOptionsWidget : public KisPaintOpSettingsWidget
+class KRITAUI_EXPORT KisPaintOpOptionsWidget : public KisPaintOpConfigWidget
 {
     Q_OBJECT
 
@@ -54,8 +54,6 @@ public:
 
     ///Reimplemented, sets node on option widgets
     virtual void setNode(KisNodeWSP node);
-
-
 
 private Q_SLOTS:
 

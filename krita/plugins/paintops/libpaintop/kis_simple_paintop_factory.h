@@ -106,7 +106,7 @@ public:
         return settings;
     }
 
-    KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) {
+    KisPaintOpConfigWidget* createSettingsWidget(QWidget* parent) {
         return new OpSettingsWidget(parent);
     }
 

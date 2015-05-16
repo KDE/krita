@@ -30,7 +30,7 @@
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
 #include <kis_paintop_registry.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
@@ -58,7 +58,7 @@ public:
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
-    QMap<KisPaintOpPreset*, KisPaintOpSettingsWidget*> settingsWidgets;
+    QMap<KisPaintOpPreset*, KisPaintOpConfigWidget*> settingsWidgets;
 
     qreal opacity;
     bool opacityEnabled;

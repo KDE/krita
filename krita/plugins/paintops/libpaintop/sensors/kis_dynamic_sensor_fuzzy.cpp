@@ -31,6 +31,7 @@ KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
     setMinimumLabel(QString());
     setMaximumLabel(QString());
 }
+
 QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidget *ss)
 {
     QWidget *w = new QWidget(parent);

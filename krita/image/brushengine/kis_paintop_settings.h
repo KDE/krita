@@ -30,7 +30,7 @@
 #include "kis_paint_information.h"
 
 
-class KisPaintOpSettingsWidget;
+class KisPaintOpConfigWidget;
 
 /**
  * This class is used to cache the settings for a paintop
@@ -57,7 +57,7 @@ public:
     /**
      *
      */
-    virtual void setOptionsWidget(KisPaintOpSettingsWidget* widget);
+    virtual void setOptionsWidget(KisPaintOpConfigWidget* widget);
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -236,7 +236,7 @@ protected:
     /**
     * @return the option widget of the paintop (can be 0 is no option widgets is set)
     */
-    KisPaintOpSettingsWidget* optionsWidget() const;
+    KisPaintOpConfigWidget* optionsWidget() const;
 
     /**
      * The callback is called every time when a property changes

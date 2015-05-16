@@ -1727,12 +1727,12 @@ void KisMainWindow::forceDockTabFonts()
     }
 }
 
-QList<QDockWidget*> KisMainWindow::dockWidgets()
+QList<QDockWidget*> KisMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
 }
 
-QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 

@@ -116,7 +116,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(KUrl url);
+    void addRecentURLToAllMainWindows(const KUrl &url);
 
     KoMainWindow *currentMainwindow() const;
 

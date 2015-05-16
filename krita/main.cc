@@ -123,7 +123,12 @@ extern "C" int main(int argc, char **argv)
 
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-        if (!args->isSet("export")) {
+        // only pass arguments to main instance if they are not for batch processing
+        // any batch processing would be done in this separate instance
+        const bool batchRun =
+            args->isSet("print") || args->isSet("export") || args->isSet("export-pdf");
+
+        if (!batchRun) {
 
             QByteArray ba;
             QDataStream ds(&ba, QIODevice::WriteOnly);

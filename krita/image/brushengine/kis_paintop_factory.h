@@ -89,7 +89,7 @@ public:
     /**
      * create a widget that can display paintop settings
      */
-    virtual KisPaintOpConfigWidget* createSettingsWidget(QWidget* parent) = 0;
+    virtual KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) = 0;
 
     /**
      * Set the priority of this paintop, as it is shown in the UI; lower number means

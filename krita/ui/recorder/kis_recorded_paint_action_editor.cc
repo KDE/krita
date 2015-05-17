@@ -145,7 +145,7 @@ void KisRecordedPaintActionEditor::nodeQueryPathChanged()
 void KisRecordedPaintActionEditor::setPaintOpPreset()
 {
     delete m_configWidget;
-    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(m_actionEditor->frmOptionWidgetContainer);
+    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createConfigWidget(m_actionEditor->frmOptionWidgetContainer);
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
         //TODO use default configuration instead?

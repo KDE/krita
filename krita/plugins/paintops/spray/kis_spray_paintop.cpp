@@ -50,6 +50,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+
     m_rotationOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
     m_sizeOption.resetAllSensors();

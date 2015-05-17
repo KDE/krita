@@ -28,8 +28,6 @@
 #include <kis_composite_ops_model.h>
 #include "kis_signals_blocker.h"
 
-
-
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     KisPaintOpOption(KisPaintOpOption::GENERAL, true),
     m_createConfigWidget(createConfigWidget)

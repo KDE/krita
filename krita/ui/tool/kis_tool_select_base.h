@@ -40,6 +40,13 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
+    void setAlternateSelectionAction(SelectionAction action);
+
+    virtual void activateAlternateAction(AlternateAction action);
+    virtual void deactivateAlternateAction(AlternateAction action);    
+    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
 public Q_SLOTS:
     void setSelectionAction(int newSelectionAction);
@@ -49,10 +56,11 @@ Q_SIGNALS:
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
 
 private:
-    KisSelectionToolConfigWidgetHelper m_widgetHelper;
     SelectionAction m_selectionAction;
+    SelectionAction m_selectionActionAlternate;
 };
 
 #endif // KISTOOLSELECTBASE_H

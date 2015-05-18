@@ -40,8 +40,10 @@ KisAlternateInvocationAction::KisAlternateInvocationAction()
     setName(i18n("Alternate Invocation"));
     setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
     QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Primary Mode"), PrimaryAlternateModeShortcut);
-    shortcuts.insert(i18n("Secondary Mode"), SecondaryAlternateModeShortcut);
+    shortcuts.insert(i18n("Primary Alternate Mode"), PrimaryAlternateModeShortcut);
+    shortcuts.insert(i18n("Secondary Alternate Mode"), SecondaryAlternateModeShortcut);
+    shortcuts.insert(i18n("Tertiary Alternate Mode"), TertiaryAlternateModeShortcut);
+
 
     shortcuts.insert(i18n("Pick Foreground Color from Current Layer"), PickColorFgLayerModeShortcut);
     shortcuts.insert(i18n("Pick Background Color from Current Layer"), PickColorBgLayerModeShortcut);
@@ -78,6 +80,9 @@ KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int short
         break;
     case SecondaryAlternateModeShortcut:
         action = KisTool::AlternateThird;
+        break;
+    case TertiaryAlternateModeShortcut:
+        action = KisTool::AlternateFourth;
         break;
     }
 

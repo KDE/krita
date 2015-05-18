@@ -28,9 +28,8 @@ KoShapeConfigWidgetBase::~KoShapeConfigWidgetBase()
 {
 }
 
-void KoShapeConfigWidgetBase::setUnit(const KoUnit &unit)
+void KoShapeConfigWidgetBase::setUnit(const KoUnit &)
 {
-    Q_UNUSED(unit);
 }
 
 void KoShapeConfigWidgetBase::setResourceManager(KoCanvasResourceManager *rm)

@@ -53,7 +53,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisFlowOpacityOptionWidget(), i18n("Flow"));
+    addPaintOpOption(new KisFlowOpacityOptionWidget(), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));

@@ -571,7 +571,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
 
 #ifdef Q_OS_WIN
-    QDir dir = QDir::tempPath();
+    QDir dir = QDir::temp();
 #else
     QDir dir = QDir::home();
 #endif
@@ -587,7 +587,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
             foreach (const QString &autosaveFile, autoSaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
                     // remove the files the user didn't want to recover
-                    QFile::remove(QDir::homePath() + "/" + autosaveFile);
+                    QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
             autoSaveFiles = filesToRecover;
@@ -604,7 +604,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
         foreach(const QString &autoSaveFile, autoSaveFiles) {
             // For now create an empty document
-            url.setPath(QDir::homePath() + "/" + autoSaveFile);
+            url.setPath(dir.absolutePath() + "/" + autoSaveFile);
 
             KisDocument *doc = KisPart::instance()->createDocument();
             KisPart::instance()->addDocument(doc);

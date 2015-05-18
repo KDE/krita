@@ -34,7 +34,7 @@ K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportMapsPlugin, mapsplugin)
 KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     Q_UNUSED(args)
-    
+
     myDebug() << "\e[35m======\e[0m";
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("maps");
@@ -67,12 +67,12 @@ QObject* KoReportMapsPlugin::createDesignerInstance(KoReportDesigner* designer, 
     return new KoReportDesignerItemMaps(designer, scene, pos);
 }
 
-QObject* KoReportMapsPlugin::createScriptInstance(KoReportItemBase* /*item*/)
+QObject* KoReportMapsPlugin::createScriptInstance(KoReportItemBase* item)
 {
     myDebug() << "\e[35m======\e[0m";
-    /*KoReportItemMaps *image = dynamic_cast<KoReportItemMaps*>(item);
-    if (image) {
-        return new Scripting::Maps(image);
-    }*/
+    KoReportItemMaps *map = dynamic_cast<KoReportItemMaps*>(item);
+    if (map) {
+        return new Scripting::Maps(map);
+    }
     return 0;
 }

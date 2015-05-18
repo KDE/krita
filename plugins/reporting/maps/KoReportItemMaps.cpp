@@ -41,6 +41,9 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     , m_pageId(0)
     , m_sectionId(0)
     , m_oroPicture(0)
+    , m_longDataSetFromScript(false)
+    , m_latitudeProperty(false)
+    , m_zoomDataSetFromScript(false)
 {
     createProperties();
 
@@ -125,7 +128,7 @@ int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const
                                        const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
-    
+
     deserializeData(data);
     m_pageId = page;
     m_sectionId = section;
@@ -198,3 +201,38 @@ QString KoReportItemMaps::themeId() const
 {
     return m_themeProperty->value().toString();
 }
+
+QVariant KoReportItemMaps::realItemData(const QVariant& itemData) const
+{
+    double lat, lon;
+    int zoom;
+
+    QStringList dataList = itemData.toString().split(QLatin1Char(';'));
+
+    if (dataList.size() == 3) {
+        lat = dataList[0].toDouble();
+        lon = dataList[1].toDouble();
+        zoom = dataList[2].toInt();
+    } else if (dataList.size() == 2) {
+        lat = dataList[0].toDouble();
+        lon = dataList[1].toDouble();
+        zoom = m_zoomProperty->value().toInt();
+    } else {
+        lat = m_latitudeProperty->value().toReal();
+        lon = m_longitudeProperty->value().toReal();
+        zoom = m_zoomProperty->value().toInt();
+    }
+
+    if (m_longDataSetFromScript) {
+        lon = m_longtitude;
+    }
+    if (m_latDataSetFromScript) {
+        lat = m_latitude;
+    }
+    if (m_zoomDataSetFromScript) {
+        zoom = m_zoom;
+    }
+
+    return QString("%1;%2;%3").arg(lat).arg(lon).arg(zoom);
+}
+

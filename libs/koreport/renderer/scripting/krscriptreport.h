@@ -83,6 +83,7 @@ public Q_SLOTS:
 private:
     KoReportReportData *m_reportData;
     Kross::Object::Ptr m_scriptObject;
+    QMap<QString, QObject*> m_scriptObjMap;
 };
 
 }

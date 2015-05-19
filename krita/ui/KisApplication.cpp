@@ -69,6 +69,7 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 
+#include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -198,13 +199,42 @@ bool KisApplication::start()
 #ifdef ENV32BIT
     if (isWow64()) {
         QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Critical Error"),
+                                 i18nc("@title:window", "Krita: Warning"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."));
 
     }
 #endif
+
+/**
+ * Warn about Intel's broken video drivers
+ */
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+    KisConfig cfg;
+    if (cfg.useOpenGL() && KisConfig::readEntry("WarnedAboutIntel", false)) {
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        if (renderer.startsWith("Intel(R) HD Graphics")) {
+            int result = QMessageBox::question(0,
+                                               i18nc("@title:window", "Krita: Warning"),
+                                               i18n("You have an Intel(R) HD Graphics video adapter\n"
+                                                    "If you experience problems like a black or blank screen,\n"
+                                                    "please update your display driver to 10.18.14 or later\n."
+                                                    "You can also disable OpenGL rendering which reduces performance.\n"
+                                                    "Do you want to disable OpenGL?", QMessageBox::Yes | QMessageBox::No);
+
+            if (result == QMessageBox::Yes) {
+                cfg.setUseOpenGL(false);
+            }
+
+        }
+        KisConfig::writeEntry("WarnedAboutIntel", true);
+    }
+
+#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
+
+
+
     QDir appdir(applicationDirPath());
     appdir.cdUp();
 

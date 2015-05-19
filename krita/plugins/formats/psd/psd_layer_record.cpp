@@ -173,10 +173,10 @@ PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
     , visible(true)
     , irrelevant(false)
     , layerName("UNINITIALIZED")
+    , infoBlocks(header)
     , m_transparencyMaskSizeOffset(0)
     , m_header(header)
 {
-    infoBlocks.m_header = header;
 }
 
 bool PSDLayerRecord::read(QIODevice* io)

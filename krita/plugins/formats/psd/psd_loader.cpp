@@ -38,6 +38,7 @@
 #include <kis_transaction.h>
 #include <kis_transparency_mask.h>
 
+#include <kis_asl_layer_style_serializer.h>
 #include <kis_psd_layer_style_resource.h>
 #include "kis_resource_server_provider.h"
 
@@ -189,7 +190,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     QStack<KisGroupLayerSP> groupStack;
     groupStack.push(m_image->rootLayer());
 
-    QVector<KisPSDLayerStyleSP> allStyles;
+    typedef QPair<QDomDocument, KisLayerSP> LayerStyleMapping;
+    QVector<LayerStyleMapping> allStylesXml;
 
     // read the channels for the various layers
     for(int i = 0; i < layerSection.nLayers; ++i) {
@@ -228,11 +230,10 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
             layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
 
-            KisPSDLayerStyleSP style = layerRecord->infoBlocks.layerStyle;
+            const QDomDocument &styleXml = layerRecord->infoBlocks.layerStyleXml;
 
-            if (style) {
-                allStyles << style;
-                layer->setLayerStyle(style->clone());
+            if (!styleXml.isNull()) {
+                allStylesXml << LayerStyleMapping(styleXml, layer);
             }
 
             if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
@@ -263,14 +264,46 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         }
     }
 
-    if (!allStyles.isEmpty()) {
+    const QVector<QDomDocument> &embeddedPatterns =
+        layerSection.globalInfoSection.embeddedPatterns;
+
+    KisAslLayerStyleSerializer serializer;
+
+    if (!embeddedPatterns.isEmpty()) {
+        foreach (const QDomDocument &doc, embeddedPatterns) {
+            serializer.registerPSDPattern(doc);
+        }
+    }
+
+    QVector<KisPSDLayerStyleSP> allStylesForServer;
+
+    if (!allStylesXml.isEmpty()) {
+        foreach (const LayerStyleMapping &mapping, allStylesXml) {
+            serializer.readFromPSDXML(mapping.first);
+
+            if (serializer.styles().size() == 1) {
+                KisPSDLayerStyleSP layerStyle = serializer.styles().first();
+                KisLayerSP layer = mapping.second;
+
+                layerStyle->setName(layer->name());
+
+                allStylesForServer << layerStyle;
+                layer->setLayerStyle(layerStyle->clone());
+            } else {
+                qWarning() << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
+            }
+
+        }
+    }
+
+    if (!allStylesForServer.isEmpty()) {
         KisPSDLayerStyleCollectionResource *collection =
             new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl");
 
         collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_image->objectName()));
         KIS_ASSERT_RECOVER_NOOP(!collection->valid());
 
-        collection->setLayerStyles(allStyles);
+        collection->setLayerStyles(allStylesForServer);
         KIS_ASSERT_RECOVER_NOOP(collection->valid());
 
         KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();

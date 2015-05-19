@@ -30,6 +30,8 @@ class LIBKISPSD_EXPORT KisAslReader
 public:
     QDomDocument readFile(QIODevice *device);
     QDomDocument readLfx2PsdSection(QIODevice *device);
+
+    static QDomDocument readPsdSectionPattern(QIODevice *device, qint64 bytesLeft);
 };
 
 #endif /* __KIS_ASL_READER_H */

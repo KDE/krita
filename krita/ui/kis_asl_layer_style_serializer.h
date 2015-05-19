@@ -40,7 +40,8 @@ public:
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
 
-    void readFromPSDSection(QIODevice *device);
+    void registerPSDPattern(const QDomDocument &doc);
+    void readFromPSDXML(const QDomDocument &doc);
 
 private:
     void registerPatternObject(const KoPattern *pattern);

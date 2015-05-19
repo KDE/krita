@@ -30,8 +30,9 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
+#include <KoPattern.h>
 #include "kis_group_layer.h"
-
+#include "kis_psd_layer_style.h"
 
 
 void KisPSDTest::testFiles()
@@ -136,13 +137,51 @@ void KisPSDTest::testOpenLayerStyles()
 
     QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
-/*
-    KisNodeSP node = TestUtil::findNode(doc->image()->root(), "Group 1 PT");
-    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(node.data());
-    QVERIFY(group);
 
-    QVERIFY(group->passThroughMode());
-*/
+    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer->layerStyle());
+    QVERIFY(layer->layerStyle()->dropShadow());
+    QVERIFY(layer->layerStyle()->dropShadow()->effectEnabled());
+}
+
+void KisPSDTest::testOpenLayerStylesWithPattern()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_ls_pattern.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer->layerStyle());
+    QVERIFY(layer->layerStyle()->patternOverlay());
+    QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
+    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
+    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+}
+
+void KisPSDTest::testOpenLayerStylesWithPatternMulti()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_ls_pattern_multi.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer->layerStyle());
+
+    QVERIFY(layer->layerStyle()->patternOverlay());
+    QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
+    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
+    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+
+    QVERIFY(layer->layerStyle()->stroke());
+    QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
+    QVERIFY(layer->layerStyle()->stroke()->pattern());
+    QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
 }
 
 

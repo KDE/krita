@@ -288,9 +288,13 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.enterList("Patterns");
 
         foreach (KoPattern *pattern, allPatterns) {
-            if (!patternToUuidMap.contains(pattern)) {
-                QString uuid = w.writePattern("", pattern);
-                patternToUuidMap.insert(pattern, uuid);
+            if (pattern) {
+                if (!patternToUuidMap.contains(pattern)) {
+                    QString uuid = w.writePattern("", pattern);
+                    patternToUuidMap.insert(pattern, uuid);
+                }
+            } else {
+                qWarning() << "WARNING: KisAslLayerStyleSerializer::saveToDevice: saved pattern is null!";
             }
         }
 
@@ -833,6 +837,12 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
 
     if (!pattern) {
         qWarning() << "WARNING: ASL style contains inexistent pattern reference!";
+
+        QImage dumbImage(32, 32, QImage::Format_ARGB32);
+        dumbImage.fill(Qt::red);
+        KoPattern *dumbPattern = new KoPattern(dumbImage, "invalid", "");
+        registerPatternObject(dumbPattern);
+        pattern = dumbPattern;
     }
 
     setPattern(pattern);
@@ -1147,17 +1157,27 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     }
 }
 
-void KisAslLayerStyleSerializer::readFromPSDSection(QIODevice *device)
+void KisAslLayerStyleSerializer::registerPSDPattern(const QDomDocument &doc)
 {
+    KisAslCallbackObjectCatcher catcher;
+    catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+
+    //KisAslObjectCatcher c2;
+    KisAslXmlParser parser;
+    parser.parseXML(doc, catcher);
+}
+
+void KisAslLayerStyleSerializer::readFromPSDXML(const QDomDocument &doc)
+{
+    // The caller prepares the document using th efollowing code
+    //
+    // KisAslReader reader;
+    // QDomDocument doc = reader.readLfx2PsdSection(device);
+
     m_stylesVector.clear();
 
     //m_catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
     m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, true));
-
-    KisAslReader reader;
-    QDomDocument doc = reader.readLfx2PsdSection(device);
-
-    //qDebug() << ppVar(doc.toString());
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;

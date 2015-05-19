@@ -23,13 +23,11 @@
 #include <asl/kis_offset_on_exit_verifier.h>
 
 #include <asl/kis_asl_reader_utils.h>
-
 #include <asl/kis_asl_reader.h>
-#include <kis_asl_layer_style_serializer.h>
 
 
-
-PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock()
+PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader& header)
+    : m_header(header)
 {
 }
 
@@ -163,19 +161,14 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
 
         }
         else if (key == "lfx2") {
-            KisAslLayerStyleSerializer serializer;
-            serializer.readFromPSDSection(io);
-
-            QVector<KisPSDLayerStyleSP> styles = serializer.styles();
-
-            if (styles.size() == 1) {
-                layerStyle = styles.first();
-            } else {
-                qWarning() << "WARNING: Couldn't read layer style!";
-            }
+            KisAslReader reader;
+            layerStyleXml = reader.readLfx2PsdSection(io);
         }
         else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
+            KisAslReader reader;
+            QDomDocument pattern = reader.readPsdSectionPattern(io, blockSize);
 
+            embeddedPatterns << pattern;
         }
         else if (key == "Anno") {
 
@@ -331,11 +324,6 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
         else if (key == "FEid") {
 
         }
-
-    }
-
-    if (layerStyle && !unicodeLayerName.isEmpty()) {
-        layerStyle->setName(unicodeLayerName);
     }
 }
 

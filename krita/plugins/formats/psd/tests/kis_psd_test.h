@@ -31,6 +31,9 @@ private Q_SLOTS:
     void testOpenGrayscaleMultilayered();
     void testOpenGroupLayers();
     void testOpenLayerStyles();
+
+    void testOpenLayerStylesWithPattern();
+    void testOpenLayerStylesWithPatternMulti();
 };
 
 #endif

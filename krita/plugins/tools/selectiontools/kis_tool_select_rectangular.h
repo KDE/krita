@@ -24,40 +24,35 @@
 
 #include "KoToolFactoryBase.h"
 #include "kis_tool_rectangle_base.h"
-#include "kis_selection_action_template.h"
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 #include <kshortcut.h>
 
 
-class __KisToolSelectRectangularLocal : public KisToolRectangleBase
+class KisToolSelectRectangular : public KisToolRectangleBase
 {
     Q_OBJECT
-
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
-    __KisToolSelectRectangularLocal(KoCanvasBase * canvas);
+    KisToolSelectRectangular(KoCanvasBase * canvas);
+    QWidget* createOptionWidget();
+    SelectionAction selectionAction() const;
 
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+
+Q_SIGNALS:
+    void selectionActionChanged();
 
 private:
+    void keyPressEvent(QKeyEvent *event);
     void finishRect(const QRectF& rect);
+
+private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
+    SelectionAction m_selectionAction;
 };
 
-typedef SelectionActionHandler<__KisToolSelectRectangularLocal> KisToolSelectRectangularTemplate;
-
-class KisToolSelectRectangular : public KisToolSelectRectangularTemplate
-{
-    Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
-public:
-    KisToolSelectRectangular(KoCanvasBase* canvas);
-
-    Q_SIGNALS: void selectionActionChanged();
-    public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
-};
 
 class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {
@@ -76,7 +71,7 @@ public:
     virtual ~KisToolSelectRectangularFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
-        return new KisToolSelectRectangular(canvas);
+        return  new KisToolSelectRectangular(canvas);
     }
 };
 

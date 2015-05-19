@@ -41,10 +41,7 @@ SelectionMode KisToolSelectBase::selectionMode() const
 
 SelectionAction KisToolSelectBase::selectionAction() const
 {
-    if (m_selectionActionAlternate == SELECTION_DEFAULT) {
-        return m_selectionAction;
-    }
-    return m_selectionActionAlternate;
+    return m_selectionAction;
 }
 
 void KisToolSelectBase::setSelectionAction(int newSelectionAction)
@@ -78,79 +75,5 @@ void KisToolSelectBase::keyPressEvent(QKeyEvent *event)
 {
     if (!m_widgetHelper.processKeyPressEvent(event)) {
         KisTool::keyPressEvent(event);
-    }
-}
-
-void KisToolSelectBase::activateAlternateAction(AlternateAction action)
-{
-    kDebug() << "Switching to alternate action " << action;
-    switch (action) {
-    case AlternateSecondary:
-        //useCursor(KisCursor::pickerPlusCursor());
-        setAlternateSelectionAction(SELECTION_ADD);
-        emit selectionActionChanged();
-        break;
-    case AlternateThird:
-        //useCursor(KisCursor::pickerMinusCursor());
-        setAlternateSelectionAction(SELECTION_SUBTRACT);
-        emit selectionActionChanged();
-        break;
-    case AlternateFourth:
-        //useCursor(KisCursor::pickerMinusCursor());
-        setAlternateSelectionAction(SELECTION_INTERSECT);
-        emit selectionActionChanged();
-        break;
-    default:
-        KisTool::activateAlternateAction(action);
-    };
-}
-
-
-void KisToolSelectBase::setAlternateSelectionAction(SelectionAction action)
-{
-    m_selectionActionAlternate = action;
-}
-
-void KisToolSelectBase::deactivateAlternateAction(AlternateAction action)
-{
-    if (action != AlternateSecondary &&
-        action != AlternateThird &&
-        action != AlternateFourth) {
-        KisTool::deactivateAlternateAction(action);
-        return;
-    }
-
-    resetCursorStyle();
-    setAlternateSelectionAction(SELECTION_DEFAULT);
-    emit selectionActionChanged();
-}
-
-
-void KisToolSelectBase::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
-{
-    if (m_selectionActionAlternate == SELECTION_DEFAULT) {
-        KisTool::beginAlternateAction(event, action);
-    } else {
-        beginPrimaryAction(event);
-    }
-
-}
-
-void KisToolSelectBase::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
-{
-    if (m_selectionActionAlternate == SELECTION_DEFAULT) {
-        KisTool::continueAlternateAction(event, action);
-    } else {
-        continuePrimaryAction(event);
-    }
-
-}
-
-void KisToolSelectBase::endAlternateAction(KoPointerEvent *event, AlternateAction action)
-{
-    if (m_selectionActionAlternate == SELECTION_DEFAULT) {
-        KisTool::endAlternateAction(event, action);
-    } else {
-        endPrimaryAction(event);
     }
 }

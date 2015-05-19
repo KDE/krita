@@ -25,44 +25,37 @@
 
 #include "KoToolFactoryBase.h"
 #include "kis_tool_polyline_base.h"
-#include "kis_selection_action_template.h"
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 
 
-class __KisToolSelectPolygonalLocal : public KisToolPolylineBase
+class KisToolSelectPolygonal : public KisToolPolylineBase
 {
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
-    __KisToolSelectPolygonalLocal(KoCanvasBase *canvas);
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
-    virtual bool antiAliasSelection() const = 0;
+    KisToolSelectPolygonal(KoCanvasBase *canvas);
+    QWidget* createOptionWidget();
+    SelectionAction selectionAction() const;
+
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+
+Q_SIGNALS:
+    void selectionActionChanged();
+
 private:
+    void keyPressEvent(QKeyEvent *event);
     void finishPolyline(const QVector<QPointF> &points);
 private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
+    SelectionAction m_selectionAction;
 };
-
-
-typedef SelectionActionHandler<__KisToolSelectPolygonalLocal> KisToolSelectPolygonalTemplate;
-
-class KisToolSelectPolygonal : public KisToolSelectPolygonalTemplate
-{
-    Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
-public:
-    KisToolSelectPolygonal(KoCanvasBase* canvas);
-
-    Q_SIGNALS: void selectionActionChanged();
-    public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
-};
-
 
 
 class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 {
+
 public:
     KisToolSelectPolygonalFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectPolygonal") {

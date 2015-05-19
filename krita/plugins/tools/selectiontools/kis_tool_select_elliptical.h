@@ -25,48 +25,29 @@
 
 #include "KoToolFactoryBase.h"
 #include "kis_tool_ellipse_base.h"
-#include "kis_selection_action_template.h"
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 #include <kshortcut.h>
 
-
-
-class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
+class KisToolSelectElliptical : public KisToolEllipseBase
 {
     Q_OBJECT
 
 public:
-    __KisToolSelectEllipticalLocal(KoCanvasBase *canvas);
+    KisToolSelectElliptical(KoCanvasBase *canvas);
+    QWidget* createOptionWidget();
 
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
-    virtual bool antiAliasSelection() const = 0;
 private:
+    void keyPressEvent(QKeyEvent *event);
     void finishRect(const QRectF &rect);
-};
 
-
-
-typedef SelectionActionHandler<__KisToolSelectEllipticalLocal> KisToolSelectEllipticalTemplate;
-
-class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
-{
-    Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
-public:
-    KisToolSelectElliptical(KoCanvasBase* canvas);
-
-    Q_SIGNALS: void selectionActionChanged();
-    public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
-
-
+private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 {
+
 public:
     KisToolSelectEllipticalFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectElliptical") {
@@ -81,10 +62,14 @@ public:
     virtual ~KisToolSelectEllipticalFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
-        return new KisToolSelectElliptical(canvas);
+        return  new KisToolSelectElliptical(canvas);
     }
 
 };
+
+
+
+
 
 #endif //__KIS_TOOL_SELECT_ELLIPTICAL_H__
 

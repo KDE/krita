@@ -119,5 +119,4 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
     }
 }
 
-
 #include "kis_tool_select_path.moc"

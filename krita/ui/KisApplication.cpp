@@ -217,9 +217,9 @@ bool KisApplication::start()
         if (renderer.startsWith("Intel(R) HD Graphics")) {
             int result = QMessageBox::question(0,
                                                i18nc("@title:window", "Krita: Warning"),
-                                               i18n("You have an Intel(R) HD Graphics video adapter\n"
+                                               i18n("You have an Intel(R) HD Graphics video adapter.\n"
                                                     "If you experience problems like a black or blank screen,\n"
-                                                    "please update your display driver to 10.18.14 or later\n."
+                                                    "please update your display driver to 10.18.14 or later.\n"
                                                     "You can also disable OpenGL rendering which reduces performance.\n"
                                                     "Do you want to disable OpenGL?", QMessageBox::Yes | QMessageBox::No);
 

@@ -195,45 +195,20 @@ BOOL isWow64()
 
 bool KisApplication::start()
 {
+
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
-    if (isWow64()) {
+    KisConfig cfg;
+    if (isWow64() && cfg.readEntry("WarnedAbout32Bits", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."));
+        cfg.writeEntry("WarnedAbout32Bits", true);
 
     }
 #endif
-
-/**
- * Warn about Intel's broken video drivers
- */
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-    KisConfig cfg;
-    if (cfg.useOpenGL() && KisConfig::readEntry("WarnedAboutIntel", false)) {
-        QString renderer((const char*)glGetString(GL_RENDERER));
-        if (renderer.startsWith("Intel(R) HD Graphics")) {
-            int result = QMessageBox::question(0,
-                                               i18nc("@title:window", "Krita: Warning"),
-                                               i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                                    "If you experience problems like a black or blank screen,\n"
-                                                    "please update your display driver to 10.18.14 or later.\n"
-                                                    "You can also disable OpenGL rendering which reduces performance.\n"
-                                                    "Do you want to disable OpenGL?", QMessageBox::Yes | QMessageBox::No);
-
-            if (result == QMessageBox::Yes) {
-                cfg.setUseOpenGL(false);
-            }
-
-        }
-        KisConfig::writeEntry("WarnedAboutIntel", true);
-    }
-
-#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
-
-
 
     QDir appdir(applicationDirPath());
     appdir.cdUp();
@@ -346,9 +321,15 @@ bool KisApplication::start()
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
+
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    if (!batchRun) {
-        numberOfOpenDocuments += checkAutosaveFiles(mainWindow);
+    QList<KUrl> urls = checkAutosaveFiles();
+    if (!batchRun && mainWindow) {
+        foreach(const KUrl &url, urls) {
+            KisDocument *doc = KisPart::instance()->createDocument();
+            KisPart::instance()->addDocument(doc);
+            mainWindow->openDocumentInternal(url, doc);
+        }
     }
 
     if (argsCount > 0) {
@@ -359,6 +340,7 @@ bool KisApplication::start()
                 && profileFile.open(QFile::WriteOnly | QFile::Truncate)) {
             profileoutput.setDevice(&profileFile);
         }
+
 
         // Loop through arguments
         short int nPrinted = 0;
@@ -430,7 +412,9 @@ bool KisApplication::start()
                 if (doc) {
 
                     if (mainWindow) {
+                        KisPart::instance()->addDocument(doc);
                         mainWindow->openDocumentInternal(url, doc);
+
                     }
 
                     if (print && mainWindow) {
@@ -439,9 +423,10 @@ bool KisApplication::start()
                     }
                     else if (exportAsPdf && mainWindow) {
                         KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
-                        if (job)
+                        if (job) {
                             connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
                                      SLOT(slotFileQuit()), Qt::QueuedConnection);
+                        }
                         nPrinted++;
                     }
                     else if (exportAs) {
@@ -483,6 +468,8 @@ bool KisApplication::start()
             }
 
         }
+
+
         if (print || exportAsPdf || exportAs) {
             return nPrinted > 0;
         }
@@ -557,7 +544,7 @@ void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
             KUrl url = args->url(argNumber);
             if (url.isValid()) {
                 KisDocument *doc = KisPart::instance()->createDocument();
-
+                KisPart::instance()->addDocument(doc);
                 if (doc) {
                     mw->openDocumentInternal(url, doc);
 
@@ -571,34 +558,23 @@ void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
 
 void KisApplication::fileOpenRequested(const QString &url)
 {
-    KisDocument *doc = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(doc);
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
+        KisDocument *doc = KisPart::instance()->createDocument();
+        KisPart::instance()->addDocument(doc);
         mainWindow->openDocumentInternal(url, doc);
     }
 }
 
 
-int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
+QList<KUrl> KisApplication::checkAutosaveFiles()
 {
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
     QStringList autoSaveFiles;
 
-    // get all possible autosave files in the home dir, this is for unsaved document autosave files
-    // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(KIS_MIME_TYPE);
-    if (!mime) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", KIS_MIME_TYPE);
-    }
-    QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) {
-        extension = mime->mainExtension();
-    }
-
     QStringList filters;
-    filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
+    filters << QString(".krita-*-*-autosave.kra");
 
 #ifdef Q_OS_WIN
     QDir dir = QDir::temp();
@@ -611,12 +587,12 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {
-        KisAutoSaveRecoveryDialog dlg(autoSaveFiles);
-        if (dlg.exec() == QDialog::Accepted) {
-            QStringList filesToRecover = dlg.recoverableFiles();
+        KisAutoSaveRecoveryDialog *dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
+        if (dlg->exec() == QDialog::Accepted) {
+
+            QStringList filesToRecover = dlg->recoverableFiles();
             foreach (const QString &autosaveFile, autoSaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
-                    // remove the files the user didn't want to recover
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
@@ -628,31 +604,17 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
         }
     }
 
+    QList<KUrl> autosaveUrls;
     if (autoSaveFiles.size() > 0) {
-        short int numberOfOpenDocuments = 0; // number of documents open
-        KUrl url;
 
         foreach(const QString &autoSaveFile, autoSaveFiles) {
-            // For now create an empty document
+            KUrl url;
             url.setPath(dir.absolutePath() + "/" + autoSaveFile);
-
-            KisDocument *doc = KisPart::instance()->createDocument();
-            KisPart::instance()->addDocument(doc);
-            if (mainWindow) {
-                mainWindow->openDocumentInternal(url, doc);
-            }
-
-            if (doc) {
-                doc->resetURL();
-                doc->setModified(true);
-                QFile::remove(url.toLocalFile());
-                numberOfOpenDocuments++;
-            }
+            autosaveUrls << url;
         }
-        return numberOfOpenDocuments;
     }
 
-    return 0;
+    return autosaveUrls;
 }
 
 #include <KisApplication.moc>

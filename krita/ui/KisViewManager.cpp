@@ -748,12 +748,12 @@ void KisViewManager::createActions()
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
-
+#ifndef Q_OS_WIN
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
-
     slotUpdateAuthorProfileActions();
+#endif
 }
 
 

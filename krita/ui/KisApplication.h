@@ -113,7 +113,7 @@ public Q_SLOTS:
 
 private:
     /// @return the number of autosavefiles opened
-    int checkAutosaveFiles(KisMainWindow *mainWindow);
+    QList<KUrl> checkAutosaveFiles();
 
     KisApplicationPrivate * const d;
     class ResetStarting;

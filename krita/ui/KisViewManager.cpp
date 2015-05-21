@@ -56,6 +56,7 @@
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kurl.h>
+#include <kselectaction.h>
 #include <kxmlguifactory.h>
 
 #include <KoCanvasController.h>
@@ -71,6 +72,7 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoPluginLoader.h>
+#include <KoDocumentInfo.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -237,6 +239,7 @@ public:
         , guiUpdateCompressor(0)
         , actionCollection(0)
         , mirrorManager(0)
+        , actionAuthor(0)
     {
     }
 
@@ -293,6 +296,7 @@ public:
     QPointer<KisInputManager> inputManager;
 
     KisSignalAutoConnectionsStore viewConnections;
+    KSelectAction *actionAuthor; // Select action for author profile.
 };
 
 
@@ -744,6 +748,12 @@ void KisViewManager::createActions()
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+
+    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
+    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    actionCollection()->addAction("settings_active_author", d->actionAuthor);
+
+    slotUpdateAuthorProfileActions();
 }
 
 
@@ -1280,6 +1290,49 @@ void KisViewManager::showHideScrollbars()
 void KisViewManager::setShowFloatingMessage(bool show)
 {
     d->showFloatingMessage = show;
+}
+
+void KisViewManager::changeAuthorProfile(const QString &profileName)
+{
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    if (profileName.isEmpty()) {
+        appAuthorGroup.writeEntry("active-profile", "");
+    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
+        appAuthorGroup.writeEntry("active-profile", "anonymous");
+    } else {
+        appAuthorGroup.writeEntry("active-profile", profileName);
+    }
+    appAuthorGroup.sync();
+    foreach(KisDocument *doc, KisPart::instance()->documents()) {
+        doc->documentInfo()->updateParameters();
+    }
+}
+
+void KisViewManager::slotUpdateAuthorProfileActions()
+{
+    Q_ASSERT(d->actionAuthor);
+    if (!d->actionAuthor) {
+        return;
+    }
+    d->actionAuthor->clear();
+    d->actionAuthor->addAction(i18n("Default Author Profile"));
+    d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
+
+    KConfigGroup authorGroup(KGlobal::config(), "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    foreach (const QString &profile , profiles) {
+        d->actionAuthor->addAction(profile);
+    }
+
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profileName = appAuthorGroup.readEntry("active-profile", "");
+    if (profileName == "anonymous") {
+        d->actionAuthor->setCurrentItem(1);
+    } else if (profiles.contains(profileName)) {
+        d->actionAuthor->setCurrentAction(profileName);
+    } else {
+        d->actionAuthor->setCurrentItem(0);
+    }
 }
 
 

@@ -94,8 +94,8 @@ public:
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
     bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    bool write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType);
-    bool writePixelData(QIODevice* io);
+    void write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType, const QDomDocument &stylesXmlDoc);
+    void writePixelData(QIODevice* io);
 
     bool valid();
 

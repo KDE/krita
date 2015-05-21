@@ -27,6 +27,8 @@
 #include <kis_group_layer.h>
 #include <kis_effect_mask.h>
 
+#include "kis_dom_utils.h"
+
 #include "psd_header.h"
 #include "psd_utils.h"
 
@@ -34,6 +36,8 @@
 
 #include <asl/kis_offset_on_exit_verifier.h>
 #include <asl/kis_asl_reader_utils.h>
+#include <kis_asl_layer_style_serializer.h>
+#include <asl/kis_asl_writer_utils.h>
 
 
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader& header)
@@ -321,7 +325,62 @@ KisNodeSP findOnlyTransparencyMask(KisNodeSP node)
     return onlyMask->inherits("KisTransparencyMask") ? onlyMask : 0;
 }
 
+QDomDocument fetchLayerStyleXmlData(KisNodeSP node)
+{
+    const KisLayer *layer = qobject_cast<KisLayer*>(node.data());
+    KisPSDLayerStyleSP layerStyle = layer->layerStyle();
+
+    if (!layerStyle) return QDomDocument();
+
+    KisAslLayerStyleSerializer serializer;
+    serializer.setStyles(QVector<KisPSDLayerStyleSP>() << layerStyle);
+    return serializer.formPsdXmlDocument();
+}
+
+inline QDomNode findNodeByKey(const QString &key, QDomNode parent) {
+    return KisDomUtils::findElementByAttibute(parent, "node", "key", key);
+}
+
+void mergePatternsXMLSection(const QDomDocument &src, QDomDocument &dst)
+{
+    QDomNode srcPatternsNode = findNodeByKey("Patterns", src.documentElement());
+    QDomNode dstPatternsNode = findNodeByKey("Patterns", dst.documentElement());
+
+    if (srcPatternsNode.isNull()) return;
+    if (dstPatternsNode.isNull()) {
+        dst = src;
+        return;
+    }
+
+    KIS_ASSERT_RECOVER_RETURN(!srcPatternsNode.isNull());
+    KIS_ASSERT_RECOVER_RETURN(!dstPatternsNode.isNull());
+
+    QDomNode node = srcPatternsNode.firstChild();
+    while(!node.isNull()) {
+        QDomNode importedNode = dst.importNode(node, true);
+        KIS_ASSERT_RECOVER_RETURN(!importedNode.isNull());
+
+        dstPatternsNode.appendChild(importedNode);
+        node = node.nextSibling();
+    }
+
+}
+
 bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
+{
+    bool retval = true;
+
+    try {
+        writeImpl(io, rootLayer);
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        error = PREPEND_METHOD(e.what());
+        retval = false;
+    }
+
+    return retval;
+}
+
+void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
 
@@ -330,157 +389,148 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
     flattenNodes(rootLayer, nodes);
 
     if (nodes.isEmpty()) {
-        error = "Could not find paint layers to save";
-        return false;
+        throw KisAslWriterUtils::ASLWriteException("Could not find paint layers to save");
     }
 
-    quint64 layerMaskPos = io->pos();
-    // length of the layer info and mask information section
-    dbgFile << "Length of layer info and mask info section at" << layerMaskPos;
-    psdwrite(io, (quint32)0);
+    {
+        KisAslWriterUtils::OffsetStreamPusher<quint32> layerAndMaskSectionSizeTag(io, 2);
+        QDomDocument mergedPatternsXmlDoc;
 
-    quint64 layerInfoPos = io->pos();
-    dbgFile << "length of the layer info section, rounded up to a multiple of two, at" << layerInfoPos;
-    psdwrite(io, (quint32)0);
+        {
+            KisAslWriterUtils::OffsetStreamPusher<quint32> layerInfoSizeTag(io, 4);
 
-    // number of layers (negative, because krita always has alpha)
-    dbgFile << "number of layers" << -nodes.size() << "at" << io->pos();
-    psdwrite(io, (qint16)-nodes.size());
+            {
+                // number of layers (negative, because krita always has alpha)
+                const qint16 layersSize = -nodes.size();
+                SAFE_WRITE_EX(io, layersSize);
 
-    // Layer records section
-    foreach(const FlattenedNode &item, nodes) {
-        KisNodeSP node = item.node;
+                dbgFile << "Number of layers" << layersSize << "at" << io->pos();
+            }
 
-        PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
-        layers.append(layerRecord);
+            // Layer records section
+            foreach(const FlattenedNode &item, nodes) {
+                KisNodeSP node = item.node;
 
-        KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
-        const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
+                PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
+                layers.append(layerRecord);
 
-        const bool nodeVisible = node->visible();
-        const KoColorSpace *colorSpace = node->colorSpace();
-        const quint8 nodeOpacity = node->opacity();
-        const quint8 nodeClipping = 0;
-        const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
-        const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
-        const QString nodeCompositeOp = node->compositeOpId();
+                KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
+                const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
 
-        const KisGroupLayer *groupLayer = qobject_cast<KisGroupLayer*>(node.data());
-        const bool nodeIsPassThrough = groupLayer && groupLayer->passThroughMode();
+                const bool nodeVisible = node->visible();
+                const KoColorSpace *colorSpace = node->colorSpace();
+                const quint8 nodeOpacity = node->opacity();
+                const quint8 nodeClipping = 0;
+                const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+                const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
+                const QString nodeCompositeOp = node->compositeOpId();
 
-        bool nodeIrrelevant = false;
-        QString nodeName;
-        KisPaintDeviceSP layerContentDevice;
-        psd_section_type sectionType;
+                const KisGroupLayer *groupLayer = qobject_cast<KisGroupLayer*>(node.data());
+                const bool nodeIsPassThrough = groupLayer && groupLayer->passThroughMode();
 
-        if (item.type == FlattenedNode::RASTER_LAYER) {
-            nodeIrrelevant = false;
-            nodeName = node->name();
-            layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
-            sectionType = psd_other;
-        } else {
-            nodeIrrelevant = true;
-            nodeName = item.type == FlattenedNode::SECTION_DIVIDER ?
-                QString("</Layer group>") :
-                node->name();
-            layerContentDevice = 0;
-            sectionType =
-                item.type == FlattenedNode::SECTION_DIVIDER ? psd_bounding_divider :
-                item.type == FlattenedNode::FOLDER_OPEN ? psd_open_folder :
-                psd_closed_folder;
+                QDomDocument stylesXmlDoc = fetchLayerStyleXmlData(node);
+
+                if (mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
+                    mergedPatternsXmlDoc = stylesXmlDoc;
+                } else if (!mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
+                    mergePatternsXMLSection(stylesXmlDoc, mergedPatternsXmlDoc);
+                }
+
+                bool nodeIrrelevant = false;
+                QString nodeName;
+                KisPaintDeviceSP layerContentDevice;
+                psd_section_type sectionType;
+
+                if (item.type == FlattenedNode::RASTER_LAYER) {
+                    nodeIrrelevant = false;
+                    nodeName = node->name();
+                    layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+                    sectionType = psd_other;
+                } else {
+                    nodeIrrelevant = true;
+                    nodeName = item.type == FlattenedNode::SECTION_DIVIDER ?
+                        QString("</Layer group>") :
+                        node->name();
+                    layerContentDevice = 0;
+                    sectionType =
+                        item.type == FlattenedNode::SECTION_DIVIDER ? psd_bounding_divider :
+                        item.type == FlattenedNode::FOLDER_OPEN ? psd_open_folder :
+                        psd_closed_folder;
+                }
+
+
+                // === no access to node anymore
+
+                QRect layerRect;
+
+                if (layerContentDevice) {
+                    QRect rc = layerContentDevice->extent();
+                    rc = rc.normalized();
+
+                    // keep to the max of photoshop's capabilities
+                    if (rc.width() > 30000) rc.setWidth(30000);
+                    if (rc.height() > 30000) rc.setHeight(30000);
+
+                    layerRect = rc;
+                }
+
+                layerRecord->top = layerRect.y();
+                layerRecord->left = layerRect.x();
+                layerRecord->bottom = layerRect.y() + layerRect.height();
+                layerRecord->right = layerRect.x() + layerRect.width();
+
+                // colors + alpha channel
+                // note: transparency mask not included
+                layerRecord->nChannels = colorSpace->colorChannelCount() + 1;
+
+                ChannelInfo *info = new ChannelInfo;
+                info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
+                layerRecord->channelInfoRecords << info;
+
+                // the rest is in display order: rgb, cmyk, lab...
+                for (int i = 0; i < (int)colorSpace->colorChannelCount(); ++i) {
+                    info = new ChannelInfo;
+                    info->channelId = i; // 0 for red, 1 = green, etc
+                    layerRecord->channelInfoRecords << info;
+                }
+
+                layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
+                layerRecord->isPassThrough = nodeIsPassThrough;
+                layerRecord->opacity = nodeOpacity;
+                layerRecord->clipping = nodeClipping;
+
+                layerRecord->transparencyProtected = alphaLocked;
+                layerRecord->visible = nodeVisible;
+                layerRecord->irrelevant = nodeIrrelevant;
+
+                layerRecord->layerName = nodeName;
+
+                layerRecord->write(io,
+                                   layerContentDevice,
+                                   onlyTransparencyMask,
+                                   maskRect,
+                                   sectionType,
+                                   stylesXmlDoc);
+            }
+
+            dbgFile << "start writing layer pixel data" << io->pos();
+
+            // Now save the pixel data
+            foreach(PSDLayerRecord *layerRecord, layers) {
+                layerRecord->writePixelData(io);
+            }
+
         }
 
-
-        // === no access to node anymore
-
-        QRect layerRect;
-
-        if (layerContentDevice) {
-            QRect rc = layerContentDevice->extent();
-            rc = rc.normalized();
-
-            // keep to the max of photoshop's capabilities
-            if (rc.width() > 30000) rc.setWidth(30000);
-            if (rc.height() > 30000) rc.setHeight(30000);
-
-            layerRect = rc;
+        {
+            // write the global layer mask info -- which is empty
+            const quint32 globalMaskSize = 0;
+            SAFE_WRITE_EX(io, globalMaskSize);
         }
 
-        layerRecord->top = layerRect.y();
-        layerRecord->left = layerRect.x();
-        layerRecord->bottom = layerRect.y() + layerRect.height();
-        layerRecord->right = layerRect.x() + layerRect.width();
-
-        // colors + alpha channel
-        // note: transparency mask not included
-        layerRecord->nChannels = colorSpace->colorChannelCount() + 1;
-
-        ChannelInfo *info = new ChannelInfo;
-        info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
-        layerRecord->channelInfoRecords << info;
-
-        // the rest is in display order: rgb, cmyk, lab...
-        for (int i = 0; i < (int)colorSpace->colorChannelCount(); ++i) {
-            info = new ChannelInfo;
-            info->channelId = i; // 0 for red, 1 = green, etc
-            layerRecord->channelInfoRecords << info;
-        }
-
-        layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
-        layerRecord->isPassThrough = nodeIsPassThrough;
-        layerRecord->opacity = nodeOpacity;
-        layerRecord->clipping = nodeClipping;
-
-        layerRecord->transparencyProtected = alphaLocked;
-        layerRecord->visible = nodeVisible;
-        layerRecord->irrelevant = nodeIrrelevant;
-
-        layerRecord->layerName = nodeName;
-
-        if (!layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType)) {
-            error = layerRecord->error;
-            return false;
+        {
+            PsdAdditionalLayerInfoBlock globalInfoSection(m_header);
+            globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
         }
     }
-
-    // Now save the pixel data
-    dbgFile << "start writing layer pixel data" << io->pos();
-    foreach(PSDLayerRecord *layerRecord, layers) {
-        if (!layerRecord->writePixelData(io)) {
-            error = layerRecord->error;
-            return false;
-        }
-    }
-
-    // Write the final size of the block
-    dbgFile << "Final io pos after writing layer pixel data" << io->pos();
-    quint64 eof_pos = io->pos();
-
-    io->seek(layerInfoPos);
-
-    // length of the layer info information section
-    quint32 layerInfoSize = eof_pos - layerInfoPos - sizeof(qint32);
-    dbgFile << "Layer Info Section length" << layerInfoSize << "at"  << io->pos();
-    psdwrite(io, layerInfoSize);
-
-    io->seek(eof_pos);
-
-    // Write the global layer mask info -- which is empty
-    psdwrite(io, (quint32)0);
-
-    // Write the final size of the block
-    dbgFile << "Final io pos after writing layer pixel data" << io->pos();
-    eof_pos = io->pos();
-
-    io->seek(layerInfoPos);
-
-    // length of the layer and mask info section, rounded up to a multiple of two
-    io->seek(layerMaskPos);
-    quint32 layerMaskSize = eof_pos - layerMaskPos - sizeof(qint32);
-    dbgFile << "Layer and Mask information length" << layerMaskSize << "at" << io->pos();
-    psdwrite(io, layerMaskSize);
-
-    io->seek(eof_pos);
-
-    return true;
 }

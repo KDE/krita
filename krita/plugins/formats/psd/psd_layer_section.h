@@ -61,7 +61,7 @@ public:
 
 private:
     bool readImpl(QIODevice* io);
-
+    void writeImpl(QIODevice* io, KisNodeSP rootLayer);
 private:
 
     const PSDHeader m_header;

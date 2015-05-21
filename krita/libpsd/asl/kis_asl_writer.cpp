@@ -143,6 +143,45 @@ int calculateNumStyles(const QDomElement &root)
     return numStyles;
 }
 
+void writeSingleStyle(QIODevice *device, QDomNode child)
+{
+    KisAslWriterUtils::OffsetStreamPusher<quint32> theOnlyStyleSizeField(device);
+
+    KIS_ASSERT_RECOVER_RETURN(!child.isNull());
+
+    {
+        quint32 stylesFormatVersion = 16;
+        SAFE_WRITE_EX(device, stylesFormatVersion);
+    }
+
+    while (!child.isNull()) {
+        QDomElement el = child.toElement();
+        QString key = el.attribute("key", "");
+
+        if (key != "Patterns") break;
+
+        child = child.nextSibling();
+    }
+
+    parseElement(child.toElement(), device);
+    child = child.nextSibling();
+
+    {
+        quint32 stylesFormatVersion = 16;
+        SAFE_WRITE_EX(device, stylesFormatVersion);
+    }
+
+    parseElement(child.toElement(), device);
+    child = child.nextSibling();
+
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device->pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(paddingSize, '\0');
+        device->write(padding);
+    }
+}
+
 void writeFileImpl(QIODevice *device, const QDomDocument &doc)
 {
     {
@@ -183,41 +222,47 @@ void writeFileImpl(QIODevice *device, const QDomDocument &doc)
     QDomNode child = root.firstChild();
 
     for (int styleIndex = 0; styleIndex < numStyles; styleIndex++) {
-        KisAslWriterUtils::OffsetStreamPusher<quint32> theOnlyStyleSizeField(device);
+        writeSingleStyle(device, child);
+    }
+}
 
-        KIS_ASSERT_RECOVER_RETURN(!child.isNull());
+void writePsdLfx2SectionImpl(QIODevice *device, const QDomDocument &doc)
+{
+    QDomElement root = doc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
 
-        {
-            quint32 stylesFormatVersion = 16;
-            SAFE_WRITE_EX(device, stylesFormatVersion);
-        }
+    int numStyles = calculateNumStyles(root);
+    KIS_ASSERT_RECOVER_RETURN(numStyles == 1);
 
-        while (!child.isNull()) {
-            QDomElement el = child.toElement();
-            QString key = el.attribute("key", "");
+    {
+        quint32 objectEffectsVersion = 0;
+        SAFE_WRITE_EX(device, objectEffectsVersion);
+    }
 
-            if (key != "Patterns") break;
+    {
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(device, descriptorVersion);
+    }
 
-            child = child.nextSibling();
-        }
+    QDomNode child = root.firstChild();
 
-        parseElement(child.toElement(), device);
+    while (!child.isNull()) {
+        QDomElement el = child.toElement();
+        QString key = el.attribute("key", "");
+
+        if (key != "Patterns") break;
+
         child = child.nextSibling();
+    }
 
-        {
-            quint32 stylesFormatVersion = 16;
-            SAFE_WRITE_EX(device, stylesFormatVersion);
-        }
+    parseElement(child.toElement(), device);
+    child = child.nextSibling();
 
-        parseElement(child.toElement(), device);
-        child = child.nextSibling();
-
-        // ASL files' size should be 4-bytes aligned
-        const qint64 paddingSize = 4 - (device->pos() & 0x3);
-        if (paddingSize != 4) {
-            QByteArray padding(paddingSize, '\0');
-            device->write(padding);
-        }
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device->pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(paddingSize, '\0');
+        device->write(padding);
     }
 }
 
@@ -230,4 +275,9 @@ void KisAslWriter::writeFile(QIODevice *device, const QDomDocument &doc)
     } catch (Private::ASLWriteException &e) {
         qWarning() << "WARNING: ASL:" << e.what();
     }
+}
+
+void KisAslWriter::writePsdLfx2SectionEx(QIODevice *device, const QDomDocument &doc)
+{
+    Private::writePsdLfx2SectionImpl(device, doc);
 }

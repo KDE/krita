@@ -29,6 +29,9 @@
 #include <KoStopGradient.h>
 #include <KoPattern.h>
 
+#include "kis_dom_utils.h"
+
+
 #include "psd.h"
 #include "kis_global.h"
 #include "kis_psd_layer_style.h"
@@ -236,7 +239,7 @@ QString strokeFillTypeToString(psd_fill_type position)
     return result;
 }
 
-QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style)
+QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style) const
 {
     QVector <KoPattern*> allPatterns;
 
@@ -269,10 +272,9 @@ QString fetchPatternUuidSafe(KoPattern *pattern, QHash<KoPattern*, QString> patt
     }
 }
 
-
-void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
+QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 {
-    KIS_ASSERT_RECOVER_RETURN(!m_stylesVector.isEmpty());
+    KIS_ASSERT_RECOVER(!m_stylesVector.isEmpty()) { return QDomDocument(); }
 
     QVector<KoPattern*> allPatterns;
 
@@ -676,8 +678,53 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.leaveDescriptor();
     }
 
+    return w.document();
+}
+
+inline QDomNode findNodeByClassId(const QString &classId, QDomNode parent) {
+    return KisDomUtils::findElementByAttibute(parent, "node", "classId", classId);
+}
+
+void replaceAllChildren(QDomNode src, QDomNode dst)
+{
+    QDomNode node;
+
+    do {
+        node = dst.lastChild();
+        dst.removeChild(node);
+
+    } while(!node.isNull());
+
+
+    node = src.firstChild();
+    while(!node.isNull()) {
+        dst.appendChild(node);
+        node = src.firstChild();
+    }
+
+    src.parentNode().removeChild(src);
+}
+
+QDomDocument KisAslLayerStyleSerializer::formPsdXmlDocument() const
+{
+    QDomDocument doc = formXmlDocument();
+
+    QDomNode nullNode = findNodeByClassId("null", doc.documentElement());
+    QDomNode stylNode = findNodeByClassId("Styl", doc.documentElement());
+    QDomNode lefxNode = findNodeByClassId("Lefx", stylNode);
+
+    replaceAllChildren(lefxNode, nullNode);
+
+    return doc;
+}
+
+void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
+{
+    QDomDocument doc = formXmlDocument();
+    if (doc.isNull()) return ;
+
     KisAslWriter writer;
-    writer.writeFile(device, w.document());
+    writer.writeFile(device, doc);
 }
 
 void convertAndSetBlendMode(const QString &mode,

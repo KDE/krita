@@ -452,7 +452,12 @@ bool PSDLayerRecord::read(QIODevice* io)
     return valid();
 }
 
-bool PSDLayerRecord::write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType)
+void PSDLayerRecord::write(QIODevice* io,
+                           KisPaintDeviceSP layerContentDevice,
+                           KisNodeSP onlyTransparencyMask,
+                           const QRect &maskRect,
+                           psd_section_type sectionType,
+                           const QDomDocument &stylesXmlDoc)
 {
     dbgFile << "writing layer info record" << "at" << io->pos();
 
@@ -558,34 +563,25 @@ bool PSDLayerRecord::write(QIODevice* io, KisPaintDeviceSP layerContentDevice, K
             // layer name: Pascal string, padded to a multiple of 4 bytes.
             psdwrite_pascalstring(io, layerName, 4);
 
+
+            PsdAdditionalLayerInfoBlock additionalInfoBlock(m_header);
+
             // write 'luni' data block
-            {
-                KisAslWriterUtils::writeFixedString("8BIM", io);
-                KisAslWriterUtils::writeFixedString("luni", io);
-                KisAslWriterUtils::OffsetStreamPusher<quint32> layerNameSizeTag(io, 2);
-                KisAslWriterUtils::writeUnicodeString(layerName, io);
-            }
+            additionalInfoBlock.writeLuniBlockEx(io, layerName);
 
             // write 'lsct' data block
             if (sectionType != psd_other) {
-                KisAslWriterUtils::writeFixedString("8BIM", io);
-                KisAslWriterUtils::writeFixedString("lsct", io);
-                KisAslWriterUtils::OffsetStreamPusher<quint32> sectionTypeSizeTag(io, 2);
-                SAFE_WRITE_EX(io, (quint32)sectionType);
+                additionalInfoBlock.writeLsctBlockEx(io, sectionType, isPassThrough, blendModeKey);
+            }
 
-                QString realBlendModeKey = isPassThrough ? QString("pass") : blendModeKey;
-
-                KisAslWriterUtils::writeFixedString("8BIM", io);
-                KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
+            // write 'lfx2' data block
+            if (!stylesXmlDoc.isNull()) {
+                additionalInfoBlock.writeLfx2BlockEx(io, stylesXmlDoc);
             }
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
-        qWarning() << "WARNING: PSDLayerRecord:" << e.what();
-        return false;
+        throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
     }
-
-
-    return true;
 }
 
 void writeChannelDataRLE(QIODevice *io, const quint8 *plane, const int channelSize, const QRect &rc, const qint64 sizeFieldOffset)
@@ -631,10 +627,8 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
     }
 }
 
-bool PSDLayerRecord::writePixelData(QIODevice *io)
+void PSDLayerRecord::writePixelData(QIODevice *io)
 {
-    bool retval = true;
-
     dbgFile << "writing pixel data for layer" << layerName << "at" << io->pos();
 
     KisPaintDeviceSP dev = m_layerContentDevice;
@@ -653,11 +647,10 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
             writeTransparencyMaskPixelData(io);
 
         } catch (KisAslWriterUtils::ASLWriteException &e) {
-            error = e.what();
-            retval = false;
+            throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
         }
 
-        return retval;
+        return;
     }
 
     // now write all the channels in display order
@@ -721,14 +714,14 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         writeTransparencyMaskPixelData(io);
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
-        error = e.what();
-        retval = false;
+        qDeleteAll(planes);
+        planes.clear();
+
+        throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
     }
 
     qDeleteAll(planes);
     planes.clear();
-
-    return retval;
 }
 
 bool PSDLayerRecord::valid()

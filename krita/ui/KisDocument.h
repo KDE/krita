@@ -700,7 +700,7 @@ public:
     QString localFilePath() const;
     void setLocalFilePath( const QString &localFilePath );
 
-    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 

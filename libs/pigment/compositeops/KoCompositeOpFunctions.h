@@ -89,14 +89,14 @@ inline void cfDarkerColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TR
     TReal lum = getLightness<HSXType>(dr, dg, db);
     TReal lum2 = getLightness<HSXType>(sr, sg, sb);
     if (lum<lum2) {
-    sr = dr;
-    sg = dg;
-    sb = db;
+        sr = dr;
+        sg = dg;
+        sb = db;
     }
     else {
-    dr = sr;
-    dg = sg;
-    db = sb;
+        dr = sr;
+        dg = sg;
+        db = sb;
     }
 
 }
@@ -107,14 +107,14 @@ inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, T
     TReal lum = getLightness<HSXType>(dr, dg, db);
     TReal lum2 = getLightness<HSXType>(sr, sg, sb);
     if (lum>lum2) {
-    sr = dr;
-    sg = dg;
-    sb = db;
+        sr = dr;
+        sg = dg;
+        sb = db;
     }
     else {
-    dr = sr;
-    dg = sg;
-    db = sb;
+        dr = sr;
+        dg = sg;
+        db = sb;
     }
 
 }
@@ -251,7 +251,7 @@ inline T cfVividLight(T src, T dst) {
     if(src < halfValue<T>()) {
         if(src == zeroValue<T>())
             return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
-            
+
         // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
         composite_type dsti = inv(dst);

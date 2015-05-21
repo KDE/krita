@@ -86,7 +86,8 @@ namespace KisLsUtils
                              const QRect &srcRect,
                              const QRect &dstRect,
                              const psd_layer_effects_context *context,
-                             const psd_layer_effects_shadow_base *config);
+                             const psd_layer_effects_shadow_base *config,
+                             const KisLayerStyleFilterEnvironment *env);
 
 }
 

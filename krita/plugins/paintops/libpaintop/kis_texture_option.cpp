@@ -135,8 +135,10 @@ public:
 };
 
 KisTextureOption::KisTextureOption(QObject *)
-    : KisPaintOpOption(i18n("Pattern"), KisPaintOpOption::textureCategory(), true)
+    : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
 {
+    setObjectName("KisTextureOption");
+
     setChecked(false);
     m_optionWidget = new KisTextureOptionWidget;
     m_optionWidget->hide();

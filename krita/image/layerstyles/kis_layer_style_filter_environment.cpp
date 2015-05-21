@@ -18,11 +18,16 @@
 
 #include "kis_layer_style_filter_environment.h"
 
+#include <QBitArray>
+
 #include "kis_layer.h"
 #include "kis_ls_utils.h"
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_painter.h"
+
+#include "krita_utils.h"
 
 
 struct KisLayerStyleFilterEnvironment::Private
@@ -69,4 +74,12 @@ QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
     selection->recalculateOutlineCache();
 
     return selection->outlineCache();
+}
+
+void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,
+                                                       quint8 opacity,
+                                                       const QBitArray &channelFlags) const
+{
+    gc->setOpacity(KritaUtils::mergeOpacity(opacity, m_d->sourceLayer->opacity()));
+    gc->setChannelFlags(KritaUtils::mergeChannelFlags(channelFlags, m_d->sourceLayer->channelFlags()));
 }

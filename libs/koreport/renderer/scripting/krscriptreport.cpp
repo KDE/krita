@@ -56,6 +56,10 @@ QString Report::recordSource() const
 
 QObject* Report::objectByName(const QString &n)
 {
+    if (m_scriptObjMap.contains(n)) {
+        return m_scriptObjMap[n];
+    }
+    
     QList<KoReportItemBase *>obs = m_reportData->objects();
     foreach(KoReportItemBase *o, obs) {
         if (o->entityName() == n) {
@@ -69,6 +73,7 @@ QObject* Report::objectByName(const QString &n)
                 if (plugin) {
                     QObject *obj = plugin->createScriptInstance(o);
                     if (obj) {
+                        m_scriptObjMap[n] = obj;
                         return obj;
                     }
                 }

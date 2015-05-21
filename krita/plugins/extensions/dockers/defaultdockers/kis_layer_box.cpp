@@ -435,10 +435,7 @@ void KisLayerBox::updateUI()
         if (activeNode->inherits("KisMask")) {
             m_wdgLayerBox->cmbComposite->setEnabled(false);
             m_wdgLayerBox->doubleOpacity->setEnabled(false);
-        }
-
-        if (activeNode->inherits("KisLayer")) {
-            m_wdgLayerBox->cmbComposite->setEnabled(true);
+        } else if (activeNode->inherits("KisLayer")) {
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
             KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
@@ -450,6 +447,11 @@ void KisLayerBox::updateUI()
             } else {
                 m_wdgLayerBox->cmbComposite->setEnabled(false);
             }
+
+            const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(activeNode.data());
+            bool compositeSelectionActive = !(group && group->passThroughMode());
+
+            m_wdgLayerBox->cmbComposite->setEnabled(compositeSelectionActive);
         }
     }
 }
@@ -512,7 +514,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(convertToMenu, "convert_to_paint_layer");
         addActionToMenu(convertToMenu, "convert_to_transparency_mask");
         addActionToMenu(convertToMenu, "convert_to_filter_mask");
-        addActionToMenu(convertToMenu, "convert_to_transform_mask");
         addActionToMenu(convertToMenu, "convert_to_selection_mask");
 
         QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
@@ -520,7 +521,10 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(splitAlphaMenu, "split_alpha_write");
         addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-        addActionToMenu(&menu, "isolate_layer");
+        KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+        if (node && !node->inherits("KisTransformMask")) {
+            addActionToMenu(&menu, "isolate_layer");
+        }
     }
     menu.addSeparator();
     addActionToMenu(&menu, "add_new_transparency_mask");

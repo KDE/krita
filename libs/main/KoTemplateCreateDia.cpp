@@ -103,7 +103,7 @@ public:
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia(const char *templateType, const KComponentData &componentData,
+KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &componentData,
                                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
   : KDialog(parent)
   , d(new KoTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
@@ -139,7 +139,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const char *templateType, const KCompon
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSortingEnabled(true);
 
-    d->m_tree=new KoTemplateTree(templateType, componentData, true);
+    d->m_tree = new KoTemplateTree(templatesResourcePath, componentData, true);
     fillGroupTree();
     d->m_groups->sortItems(0, Qt::AscendingOrder);
 
@@ -207,7 +207,7 @@ void KoTemplateCreateDia::slotSelectionChanged()
     }
 }
 
-void KoTemplateCreateDia::createTemplate(const char *templateType,
+void KoTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const char *suffix,
                                          const KComponentData &componentData,
                                          KoDocument *document, QWidget *parent)
@@ -227,7 +227,7 @@ void KoTemplateCreateDia::createTemplate(const char *templateType,
 
     const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
 
-    KoTemplateCreateDia *dia = new KoTemplateCreateDia(templateType, componentData, fileName, thumbnail, parent);
+    KoTemplateCreateDia *dia = new KoTemplateCreateDia(templatesResourcePath, componentData, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
 
@@ -279,7 +279,7 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
+    QString dir = d->m_tree->componentData().dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -438,7 +438,7 @@ void KoTemplateCreateDia::slotAddGroup() {
         KMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
+    QString dir = d->m_tree->componentData().dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);

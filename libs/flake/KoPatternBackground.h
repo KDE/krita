@@ -74,7 +74,7 @@ public:
     void setPattern(KoImageData *imageData);
 
     /// Returns the pattern
-    QImage pattern();
+    QImage pattern() const;
 
     /// Sets the pattern repeatgfl
     void setRepeat(PatternRepeat repeat);

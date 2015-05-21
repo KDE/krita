@@ -43,8 +43,11 @@ public:
 };
 
 KisHairyBristleOption::KisHairyBristleOption()
-    : KisPaintOpOption(i18n("Bristle options"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisHairyBristleOption");
+
+
     m_checkable = false;
     m_options = new KisBristleOptionsWidget();
 
@@ -65,8 +68,6 @@ KisHairyBristleOption::~KisHairyBristleOption()
 {
     delete m_options;
 }
-
-
 
 void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* config)
 {

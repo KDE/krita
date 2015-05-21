@@ -23,13 +23,12 @@
 
 
 #include <kdebug.h>
-#include <KoResource.h>
-#include <QDomDocument>
 #include "kowidgets_export.h"
-#include <kconfiggroup.h>
-#include <KoConfig.h>
 
 class KoResourceServerBase;
+class KoResource;
+class QStringList;
+class QString;
 
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags

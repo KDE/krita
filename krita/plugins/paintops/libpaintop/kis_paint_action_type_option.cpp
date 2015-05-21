@@ -34,8 +34,10 @@ public:
 
 
 KisPaintActionTypeOption::KisPaintActionTypeOption()
-    : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
 {
+    setObjectName("KisPaintActionTypeOption");
+
     m_checkable = false;
     m_optionWidget = new KisPaintActionWidget();
     connect(m_optionWidget->radioBuildup, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));

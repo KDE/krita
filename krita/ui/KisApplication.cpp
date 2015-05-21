@@ -21,10 +21,6 @@
 
 #include "KisApplication.h"
 
-#ifndef QT_NO_DBUS
-#include <QtDBus>
-#endif
-
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
@@ -73,6 +69,7 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 
+#include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -202,13 +199,42 @@ bool KisApplication::start()
 #ifdef ENV32BIT
     if (isWow64()) {
         QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Critical Error"),
+                                 i18nc("@title:window", "Krita: Warning"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."));
 
     }
 #endif
+
+/**
+ * Warn about Intel's broken video drivers
+ */
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+    KisConfig cfg;
+    if (cfg.useOpenGL() && KisConfig::readEntry("WarnedAboutIntel", false)) {
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        if (renderer.startsWith("Intel(R) HD Graphics")) {
+            int result = QMessageBox::question(0,
+                                               i18nc("@title:window", "Krita: Warning"),
+                                               i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                                    "If you experience problems like a black or blank screen,\n"
+                                                    "please update your display driver to 10.18.14 or later.\n"
+                                                    "You can also disable OpenGL rendering which reduces performance.\n"
+                                                    "Do you want to disable OpenGL?", QMessageBox::Yes | QMessageBox::No);
+
+            if (result == QMessageBox::Yes) {
+                cfg.setUseOpenGL(false);
+            }
+
+        }
+        KisConfig::writeEntry("WarnedAboutIntel", true);
+    }
+
+#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
+
+
+
     QDir appdir(applicationDirPath());
     appdir.cdUp();
 
@@ -340,35 +366,37 @@ bool KisApplication::start()
             KUrl url = args->url(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                QStringList paths;
+                QString templatePath;
                 if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
-                    paths << QString(args->url(argNumber).toLocalFile());
+                    templatePath = args->url(argNumber).toLocalFile();
                     kDebug(30003) << "using full path...";
                 }
                 else {
                     QString desktopName(args->arg(argNumber));
-                    QString appName = KGlobal::mainComponent().componentName();
+                    const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
-                    paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
+                    QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
                     if (paths.isEmpty()) {
-                        paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
+                        paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                     }
                     if (paths.isEmpty()) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1"));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
                     }
                     else if (paths.count() > 1) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1"));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
+                    } else {
+                        templatePath = paths.at(0);
                     }
                 }
 
-                if (!paths.isEmpty()) {
+                if (!templatePath.isEmpty()) {
                     KUrl templateBase;
-                    templateBase.setPath(paths[0]);
-                    KDesktopFile templateInfo(paths[0]);
+                    templateBase.setPath(templatePath);
+                    KDesktopFile templateInfo(templatePath);
 
                     QString templateName = templateInfo.readUrl();
                     KUrl templateURL;
@@ -573,47 +601,13 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
 
 #ifdef Q_OS_WIN
-    QDir dir = QDir::tempPath();
+    QDir dir = QDir::temp();
 #else
     QDir dir = QDir::home();
 #endif
 
     // all autosave files for our application
     autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
-
-    QStringList pids;
-    QString ourPid;
-    ourPid.setNum(qApp->applicationPid());
-
-#ifndef QT_NO_DBUS
-    // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
-    QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
-
-    foreach (const QString &name, reply.value()) {
-        if (name.contains("krita")) {
-            // we got another instance of ourselves running, let's get the pid
-            QString pid = name.split('-').last();
-            if (pid != ourPid) {
-                pids << pid;
-            }
-        }
-    }
-#endif
-
-    // remove the autosave files that are saved for other, open instances of ourselves.
-    foreach(const QString &autoSaveFileName, autoSaveFiles) {
-        if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
-            autoSaveFiles.removeAll(autoSaveFileName);
-            continue;
-        }
-        QStringList split = autoSaveFileName.split('-');
-        if (split.size() == 4) {
-            if (pids.contains(split[1])) {
-                // We've got an active, owned autosave file. Remove.
-                autoSaveFiles.removeAll(autoSaveFileName);
-            }
-        }
-    }
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {
@@ -623,7 +617,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
             foreach (const QString &autosaveFile, autoSaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
                     // remove the files the user didn't want to recover
-                    QFile::remove(QDir::homePath() + "/" + autosaveFile);
+                    QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
             autoSaveFiles = filesToRecover;
@@ -640,7 +634,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
         foreach(const QString &autoSaveFile, autoSaveFiles) {
             // For now create an empty document
-            url.setPath(QDir::homePath() + "/" + autoSaveFile);
+            url.setPath(dir.absolutePath() + "/" + autoSaveFile);
 
             KisDocument *doc = KisPart::instance()->createDocument();
             KisPart::instance()->addDocument(doc);

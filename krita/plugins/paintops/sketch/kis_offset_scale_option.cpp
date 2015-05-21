@@ -20,10 +20,8 @@
 #include <klocale.h>
 
 KisOffsetScaleOption::KisOffsetScaleOption()
-    : KisCurveOption(i18n("Offset scale"), "Offset scale", KisPaintOpOption::generalCategory(), false)
+    : KisCurveOption("Offset scale", KisPaintOpOption::GENERAL, false)
 {
-    setMinimumLabel(i18n("0%"));
-    setMaximumLabel(i18n("100%"));
 }
 
 

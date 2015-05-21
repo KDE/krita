@@ -20,7 +20,7 @@
 #ifndef KIS_HATCHING_PAINTOP_SETTINGS_WIDGET_H_
 #define KIS_HATCHING_PAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_brush_based_paintop_options_widget.h>
 
 #include "ui_wdghatchingoptions.h"

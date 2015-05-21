@@ -27,8 +27,6 @@
 #include "kis_resource_server_provider.h"
 #include <KoTriangleColorSelector.h>
 #include "KoColorSpaceRegistry.h"
-#include "KoResource.h"
-#include <KoResourceServer.h>
 #include <kis_types.h>
 #include <QtGui>
 #include <QDebug>

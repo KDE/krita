@@ -24,7 +24,7 @@
 
 class KoResource;
 
-template <class T> struct PointerStroragePolicy
+template <class T> struct PointerStoragePolicy
 {
     typedef T* PointerType;
     static inline void deleteResource(PointerType resource) {
@@ -35,7 +35,7 @@ template <class T> struct PointerStroragePolicy
     }
 };
 
-template <class SharedPointer> struct SharedPointerStroragePolicy
+template <class SharedPointer> struct SharedPointerStoragePolicy
 {
     typedef SharedPointer PointerType;
     static inline void deleteResource(PointerType resource) {

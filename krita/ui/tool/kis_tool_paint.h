@@ -158,6 +158,8 @@ private Q_SLOTS:
     void increaseBrushSize();
     void decreaseBrushSize();
 
+    void activatePickColorDelayed();
+
 protected Q_SLOTS:
     virtual void updateTabletPressureSamples();
 
@@ -201,6 +203,8 @@ private:
 
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
+    AlternateAction delayedAction;
+
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 

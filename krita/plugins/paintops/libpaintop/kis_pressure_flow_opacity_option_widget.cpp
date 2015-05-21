@@ -35,8 +35,10 @@
 #include "ui_wdgflowopacityoption.h"
 
 KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
-    KisCurveOptionWidget(new KisFlowOpacityOption(0), true)
+    KisCurveOptionWidget(new KisFlowOpacityOption(0), i18n("Transparent"), i18n("Opaque"), true)
 {
+    setObjectName("KisFlowOpacityOptionWidget");
+
     QWidget* widget = new QWidget();
 
     Ui_wdgFlowOpacityOption ui;

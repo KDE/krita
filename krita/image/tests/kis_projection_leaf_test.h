@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,14 +15,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
-#define KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
 
-#include <kis_curve_option_widget.h>
+#ifndef __KIS_PROJECTION_LEAF_TEST_H
+#define __KIS_PROJECTION_LEAF_TEST_H
 
-class KisSmudgeRadiusOptionWidget: public KisCurveOptionWidget
+#include <QtTest/QtTest>
+
+class KisProjectionLeafTest : public QObject
 {
-public:
-    KisSmudgeRadiusOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
+    Q_OBJECT
+private slots:
+    void test();
+    void testPassThrough();
 };
-#endif // KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
+
+#endif /* __KIS_PROJECTION_LEAF_TEST_H */

@@ -38,6 +38,10 @@ public:
     virtual void undo();
 
 private:
+    void doUpdate(const KisDocumentSectionModel::PropertyList &oldPropertyList,
+                  const KisDocumentSectionModel::PropertyList &newPropertyList);
+
+private:
     KisDocumentSectionModel::PropertyList m_newPropertyList;
     KisDocumentSectionModel::PropertyList m_oldPropertyList;
 };

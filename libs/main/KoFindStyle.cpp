@@ -62,7 +62,7 @@ KoFindStyle::~KoFindStyle()
     delete d;
 }
 
-QList< QTextDocument* > KoFindStyle::documents()
+QList< QTextDocument* > KoFindStyle::documents() const
 {
     return d->documents;
 }

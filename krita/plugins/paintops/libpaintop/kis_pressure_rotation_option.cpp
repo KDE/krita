@@ -26,13 +26,12 @@
 #include <KoColor.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
-        : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::generalCategory(), false),
+        : KisCurveOption("Rotation", KisPaintOpOption::GENERAL, false),
           m_defaultAngle(0.0),
           m_canvasAxisXMirrored(false),
           m_canvasAxisYMirrored(false)
 {
-     setMinimumLabel(i18n("0°"));
-     setMaximumLabel(i18n("360°"));
+
 }
 
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const

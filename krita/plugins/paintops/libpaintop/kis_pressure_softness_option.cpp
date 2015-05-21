@@ -20,16 +20,8 @@
 #include <klocale.h>
 
 KisPressureSoftnessOption::KisPressureSoftnessOption()
-    : KisCurveOption(i18n("Softness"),
-                     "Softness",
-                     KisPaintOpOption::generalCategory(),
-                     false,
-                     1.0,
-                     0.1,
-                     1.0)
+    : KisCurveOption("Softness", KisPaintOpOption::GENERAL, false, 1.0, 0.1, 1.0)
 {
-    setMinimumLabel(i18n("Soft"));
-    setMaximumLabel(i18n("Hard"));
 }
 
 

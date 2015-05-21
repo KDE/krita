@@ -64,7 +64,6 @@
 #include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
 #include <KoResourceItemChooserSync.h>
-#include <KoResourceServerProvider.h>
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoToolManager.h>
@@ -841,7 +840,7 @@ int KisViewManager::viewCount() const
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
-    KisTemplateCreateDia::createTemplate("krita_template", ".kra",
+    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra",
                                         KisFactory::componentData(), document(), mainWindow());
 }
 

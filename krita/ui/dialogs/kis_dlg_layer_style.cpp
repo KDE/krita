@@ -31,6 +31,7 @@
 
 
 #include <KoColorPopupButton.h>
+#include <KoResourceServerProvider.h>
 
 #include "kis_config.h"
 #include "kis_cmb_contour.h"

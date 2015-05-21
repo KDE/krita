@@ -36,11 +36,6 @@ public:
     KisAirbrushOption(bool enabled = true);
     ~KisAirbrushOption();
 
-    // return true if it's on
-    bool airbrushing() const;
-    // rate in miliseconds (delay between two brush masks are delivered )
-    int rate() const;
-
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

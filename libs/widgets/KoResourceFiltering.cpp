@@ -18,9 +18,12 @@
  */
 
 #include "KoResourceFiltering.h"
-#include "KoResourceTagStore.h"
 
 #include "KoResourceServer.h"
+
+#include <QStringList>
+#include <QString>
+
 
 class KoResourceFiltering::Private
 {

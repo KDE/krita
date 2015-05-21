@@ -54,8 +54,10 @@ public:
 };
 
 KisHatchingOptions::KisHatchingOptions()
-    : KisPaintOpOption(i18n("Hatching options"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisHatchingOptions");
+
     m_checkable = false;
     m_options = new KisHatchingOptionsWidget();
 

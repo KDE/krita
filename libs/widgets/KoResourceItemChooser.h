@@ -27,13 +27,10 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
-#include <QAction>
-#include <QModelIndex>
-#include <QCompleter>
 
 #include "kowidgets_export.h"
-#include <KoConfig.h>
 
+class QModelIndex;
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
 class QToolButton;

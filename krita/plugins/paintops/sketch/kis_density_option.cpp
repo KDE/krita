@@ -20,10 +20,8 @@
 #include <klocale.h>
 
 KisDensityOption::KisDensityOption()
-    : KisCurveOption(i18n("Density"), "Density", KisPaintOpOption::generalCategory(), false)
+    : KisCurveOption("Density", KisPaintOpOption::GENERAL, false)
 {
-    setMinimumLabel(i18n("0%"));
-    setMaximumLabel(i18n("100%"));
 }
 
 

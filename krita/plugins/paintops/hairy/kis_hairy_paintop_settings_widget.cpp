@@ -36,13 +36,13 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
     //m_hairyShapeOption = new KisHairyShapeOption();
 
     //addPaintOpOption(m_hairyShapeOption);
-    addPaintOpOption(new KisHairyBristleOption());
-    addPaintOpOption(new KisHairyInkOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    addPaintOpOption(new KisHairyBristleOption(), i18n("Bristle options"));
+    addPaintOpOption(new KisHairyInkOption(), i18n("Ink depletion"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 
 KisHairyPaintOpSettingsWidget::~ KisHairyPaintOpSettingsWidget()

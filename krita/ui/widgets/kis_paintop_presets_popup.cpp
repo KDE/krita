@@ -37,7 +37,7 @@
 
 #include <KoIcon.h>
 #include <kis_paintop_preset.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
 #include <widgets/kis_preset_selector_strip.h>
@@ -56,7 +56,7 @@ public:
 
     Ui_WdgPaintOpSettings uiWdgPaintOpPresetSettings;
     QGridLayout *layout;
-    KisPaintOpSettingsWidget *settingsWidget;
+    KisPaintOpConfigWidget *settingsWidget;
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     bool detached;
@@ -176,7 +176,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     m_d->layout->update();
     updateGeometry();
 
-    m_d->settingsWidget = static_cast<KisPaintOpSettingsWidget*>(widget);
+    m_d->settingsWidget = static_cast<KisPaintOpConfigWidget*>(widget);
     if (m_d->settingsWidget){
         if (m_d->settingsWidget->supportScratchBox()) {
             showScratchPad();

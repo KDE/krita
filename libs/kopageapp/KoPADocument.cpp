@@ -48,6 +48,7 @@
 #include <KoDocumentInfo.h>
 #include <KoVariableManager.h>
 #include <KoPart.h>
+#include <KoUnit.h>
 
 #include <kdebug.h>
 #include <kglobal.h>

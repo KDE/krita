@@ -37,7 +37,6 @@ public:
 
     bool read(QIODevice* io);
     bool write(QIODevice* io, KisNodeSP rootLayer);
-    bool valid();
 
     QString error;
 
@@ -47,7 +46,6 @@ public:
     // layer info: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000
     bool hasTransparency;
 
-    quint64 layerInfoSize;
     qint16  nLayers; // If layer count is a negative number, its absolute value is the number of layers and the first alpha channel contains the transparency data for the merged result.
     QVector<PSDLayerRecord*> layers;
 
@@ -59,8 +57,10 @@ public:
         quint8  kind; // Kind. 0 = Color selected--i.e. inverted; 1 = Color protected;128 = use value stored per layer. This value is preferred. The others are for backward compatibility with beta versions.
     };
     GlobalLayerMaskInfo globalLayerMaskInfo;
+    PsdAdditionalLayerInfoBlock globalInfoSection;
 
-
+private:
+    bool readImpl(QIODevice* io);
 
 private:
 

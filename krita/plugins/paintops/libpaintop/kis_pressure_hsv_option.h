@@ -35,11 +35,19 @@ class PAINTOP_EXPORT KisPressureHSVOption : public KisCurveOption
 {
 public:
     static KisPressureHSVOption* createHueOption();
+    static QString hueMinLabel();
+    static QString huemaxLabel();
+
     static KisPressureHSVOption* createSaturationOption();
+    static QString saturationMinLabel();
+    static QString saturationmaxLabel();
+
     static KisPressureHSVOption* createValueOption();
+    static QString valueMinLabel();
+    static QString valuemaxLabel();
 public:
 
-    KisPressureHSVOption(const QString& name, const QString& parameterName, double min, double max);
+    KisPressureHSVOption(const QString& parameterName);
 
     void apply(KoColorTransformation* hsvTransfo, const KisPaintInformation& info) const;
 private:

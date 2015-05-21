@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 #include <kis_effect_mask.h>
 
 #include "psd_header.h"
@@ -31,12 +32,16 @@
 
 #include "compression.h"
 
+#include <asl/kis_offset_on_exit_verifier.h>
+#include <asl/kis_asl_reader_utils.h>
+
+
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader& header)
-    : m_header(header)
+    : globalInfoSection(header),
+      m_header(header)
 {
     hasTransparency = false;
     layerMaskBlockSize = 0;
-    layerInfoSize = 0;
     nLayers = 0;
 }
 
@@ -47,6 +52,20 @@ PSDLayerMaskSection::~PSDLayerMaskSection()
 
 bool PSDLayerMaskSection::read(QIODevice* io)
 {
+    bool retval = true; // be optimistic! <:-)
+
+    try {
+        retval = readImpl(io);
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        qWarning() << "WARNING: PSD (emb. pattern):" << e.what();
+        retval = false;
+    }
+
+    return retval;
+}
+
+bool PSDLayerMaskSection::readImpl(QIODevice* io)
+{
     dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
 
     layerMaskBlockSize = 0;
@@ -54,7 +73,7 @@ bool PSDLayerMaskSection::read(QIODevice* io)
         quint32 _layerMaskBlockSize = 0;
         if (!psdread(io, &_layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io->bytesAvailable()) {
             error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
-                    .arg(_layerMaskBlockSize).arg(io->bytesAvailable());
+                .arg(_layerMaskBlockSize).arg(io->bytesAvailable());
             return false;
         }
         layerMaskBlockSize = _layerMaskBlockSize;
@@ -62,7 +81,7 @@ bool PSDLayerMaskSection::read(QIODevice* io)
     else if (m_header.version == 2) {
         if (!psdread(io, &layerMaskBlockSize) || layerMaskBlockSize > (quint64)io->bytesAvailable()) {
             error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
-                    .arg(layerMaskBlockSize).arg(io->bytesAvailable());
+                .arg(layerMaskBlockSize).arg(io->bytesAvailable());
             return false;
         }
     }
@@ -76,136 +95,128 @@ bool PSDLayerMaskSection::read(QIODevice* io)
         return true;
     }
 
-    dbgFile << "reading layer info block. Bytes left" << io->bytesAvailable() << "position" << io->pos();
-    if (m_header.version == 1) {
-        quint32 _layerInfoSize;
-        if (!psdread(io, &_layerInfoSize) || _layerInfoSize > (quint64)io->bytesAvailable()) {
-            error = "Could not read layer section size";
-            return false;
-        }
-        layerInfoSize = _layerInfoSize;
+    KIS_ASSERT_RECOVER(m_header.version == 1) { return false; }
+
+    quint32 layerInfoSectionSize = 0;
+    SAFE_READ_EX(io, layerInfoSectionSize);
+
+    if (layerInfoSectionSize & 0x1) {
+        qWarning() << "WARNING: layerInfoSectionSize is NOT even! Fixing...";
+        layerInfoSectionSize++;
     }
-    else if (m_header.version == 2) {
-        if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
-            error = "Could not read layer section size";
-            return false;
+
+
+    {
+        SETUP_OFFSET_VERIFIER(layerInfoSectionTag, io, layerInfoSectionSize, 0);
+        dbgFile << "Layer info block size" << layerInfoSectionSize;
+
+        if (layerInfoSectionSize > 0 ) {
+
+            if (!psdread(io, &nLayers) || nLayers == 0) {
+                error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
+                return false;
+            }
+
+            hasTransparency = nLayers < 0; // first alpha channel is the alpha channel of the projection.
+            nLayers = qAbs(nLayers);
+
+            dbgFile << "Number of layers:" << nLayers;
+            dbgFile << "Has separate projection transparency:" << hasTransparency;
+
+            for (int i = 0; i < nLayers; ++i) {
+
+                dbgFile << "Going to read layer" << i << "pos" << io->pos();
+                dbgFile << "== Enter PSDLayerRecord";
+                PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
+                if (!layerRecord->read(io)) {
+                    error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
+                    return false;
+                }
+                dbgFile << "== Leave PSDLayerRecord";
+                dbgFile << "Finished reading layer" << i << layerRecord->layerName << "blending mode"
+                        << layerRecord->blendModeKey << io->pos()
+                        << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
+                layers << layerRecord;
+            }
         }
-    }
-    dbgFile << "Layer info block size" << layerInfoSize;
 
-
-    if (layerInfoSize > 0 ) {
-
-        // rounded to a multiple of 2
-        if ((layerInfoSize & 0x01) != 0) {
-            layerInfoSize++;
-        }
-        dbgFile << "Layer info block size after rounding" << layerInfoSize;
-
-        if (!psdread(io, &nLayers) || nLayers == 0) {
-            error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
-            return false;
-        }
-
-        hasTransparency = nLayers < 0; // first alpha channel is the alpha channel of the projection.
-        nLayers = qAbs(nLayers);
-
-        dbgFile << "Number of layers:" << nLayers;
-        dbgFile << "Has separate projection transparency:" << hasTransparency;
-
+        // get the positions for the channels belonging to each layer
         for (int i = 0; i < nLayers; ++i) {
 
-            dbgFile << "Going to read layer" << i << "pos" << io->pos();
-            dbgFile << "== Enter PSDLayerRecord";
-            PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
-            if (!layerRecord->read(io)) {
-                error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
+            dbgFile << "Going to seek channel positions for layer" << i << "pos" << io->pos();
+            if (i > layers.size()) {
+                error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
                 return false;
             }
-            dbgFile << "== Leave PSDLayerRecord";
-            dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
-                    << layerRecord->blendModeKey << io->pos()
-                    << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
-            layers << layerRecord;
-        }
-    }
 
-    // get the positions for the channels belonging to each layer
-    for (int i = 0; i < nLayers; ++i) {
+            PSDLayerRecord *layerRecord = layers.at(i);
 
-        dbgFile << "Going to seek channel positions for layer" << i << "pos" << io->pos();
-        if (i > layers.size()) {
-            error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
-            return false;
-        }
+            for (int j = 0; j < layerRecord->nChannels; ++j) {
+                // save the current location so we can jump beyond this block later on.
+                quint64 channelStartPos = io->pos();
+                dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
 
-        PSDLayerRecord *layerRecord = layers.at(i);
+                KIS_ASSERT_RECOVER(j < layerRecord->channelInfoRecords.size()) { return false; }
 
-        for (int j = 0; j < layerRecord->nChannels; ++j) {
-            // save the current location so we can jump beyond this block later on.
-            quint64 channelStartPos = io->pos();
-            dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
+                ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
-            KIS_ASSERT_RECOVER(j < layerRecord->channelInfoRecords.size()) { return false; }
-
-            ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
-
-            quint16 compressionType;
-            if (!psdread(io, &compressionType)) {
-                error = "Could not read compression type for channel";
-                return false;
-            }
-            channelInfo->compressionType = (Compression::CompressionType)compressionType;
-            dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
-
-            QRect channelRect = layerRecord->channelRect(channelInfo);
-
-            // read the rle row lengths;
-            if (channelInfo->compressionType == Compression::RLE) {
-                for(qint64 row = 0; row < channelRect.height(); ++row) {
-
-                    //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
-
-                    quint32 byteCount;
-                    if (m_header.version == 1) {
-                        quint16 _byteCount;
-                        if (!psdread(io, &_byteCount)) {
-                            error = QString("Could not read byteCount for rle-encoded channel");
-                            return 0;
-                        }
-                        byteCount = _byteCount;
-                    }
-                    else {
-                        if (!psdread(io, &byteCount)) {
-                            error = QString("Could not read byteCount for rle-encoded channel");
-                            return 0;
-                        }
-                    }
-                    ////dbgFile << "rle byte count" << byteCount;
-                    channelInfo->rleRowLengths << byteCount;
+                quint16 compressionType;
+                if (!psdread(io, &compressionType)) {
+                    error = "Could not read compression type for channel";
+                    return false;
                 }
+                channelInfo->compressionType = (Compression::CompressionType)compressionType;
+                dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
+
+                QRect channelRect = layerRecord->channelRect(channelInfo);
+
+                // read the rle row lengths;
+                if (channelInfo->compressionType == Compression::RLE) {
+                    for(qint64 row = 0; row < channelRect.height(); ++row) {
+
+                        //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
+
+                        quint32 byteCount;
+                        if (m_header.version == 1) {
+                            quint16 _byteCount;
+                            if (!psdread(io, &_byteCount)) {
+                                error = QString("Could not read byteCount for rle-encoded channel");
+                                return 0;
+                            }
+                            byteCount = _byteCount;
+                        }
+                        else {
+                            if (!psdread(io, &byteCount)) {
+                                error = QString("Could not read byteCount for rle-encoded channel");
+                                return 0;
+                            }
+                        }
+                        ////dbgFile << "rle byte count" << byteCount;
+                        channelInfo->rleRowLengths << byteCount;
+                    }
+                }
+
+                // we're beyond all the length bytes, rle bytes and whatever, this is the
+                // location of the real pixel data
+                channelInfo->channelDataStart = io->pos();
+
+                dbgFile << "\t\tstart" << channelStartPos
+                        << "data start" << channelInfo->channelDataStart
+                        << "data length" << channelInfo->channelDataLength
+                        << "pos" << io->pos();
+
+                // make sure we are at the start of the next channel data block
+                io->seek(channelStartPos + channelInfo->channelDataLength);
+
+                // this is the length of the actual channel data bytes
+                channelInfo->channelDataLength = channelInfo->channelDataLength - (channelInfo->channelDataStart - channelStartPos);
+
+                dbgFile << "\t\tchannel record" << j << "for layer" << i << "with id" << channelInfo->channelId
+                        << "starting postion" << channelInfo->channelDataStart
+                        << "with length" << channelInfo->channelDataLength
+                        << "and has compression type" << channelInfo->compressionType;
+
             }
-
-            // we're beyond all the length bytes, rle bytes and whatever, this is the
-            // location of the real pixel data
-            channelInfo->channelDataStart = io->pos();
-
-            dbgFile << "\t\tstart" << channelStartPos
-                    << "data start" << channelInfo->channelDataStart
-                    << "data length" << channelInfo->channelDataLength
-                    << "pos" << io->pos();
-
-            // make sure we are at the start of the next channel data block
-            io->seek(channelStartPos + channelInfo->channelDataLength);
-
-            // this is the length of the actual channel data bytes
-            channelInfo->channelDataLength = channelInfo->channelDataLength - (channelInfo->channelDataStart - channelStartPos);
-
-            dbgFile << "\t\tchannel record" << j << "for layer" << i << "with id" << channelInfo->channelId
-                    << "starting postion" << channelInfo->channelDataStart
-                    << "with length" << channelInfo->channelDataLength
-                    << "and has compression type" << channelInfo->compressionType;
-
         }
     }
 
@@ -240,24 +251,63 @@ bool PSDLayerMaskSection::read(QIODevice* io)
         }
     }
 
+    // second try to read additional sections
+    globalInfoSection.read(io);
+
     /* put us after this section so reading the next section will work even if we mess up */
     io->seek(start + layerMaskBlockSize);
 
-    return valid();
+    return true;
 }
 
-void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
+struct FlattenedNode {
+    FlattenedNode() : type(RASTER_LAYER) {}
+
+    KisNodeSP node;
+
+    enum Type {
+        RASTER_LAYER,
+        FOLDER_OPEN,
+        FOLDER_CLOSED,
+        SECTION_DIVIDER
+    };
+
+    Type type;
+};
+
+void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
 {
-    for (uint i = 0; i < node->childCount(); ++i) {
-        KisNodeSP child = node->at(i);
-        if (child->inherits("KisPaintLayer") || child->inherits("KisShapeLayer")) {
-            layers << child;
+    KisNodeSP child = node->firstChild();
+    while (child) {
+
+        bool isGroupLayer = child->inherits("KisGroupLayer");
+        bool isRasterLayer = child->inherits("KisPaintLayer") || child->inherits("KisShapeLayer");
+
+        if (isGroupLayer) {
+            {
+                FlattenedNode item;
+                item.node = child;
+                item.type = FlattenedNode::SECTION_DIVIDER;
+                nodes << item;
+            }
+
+            flattenNodes(child, nodes);
+
+            {
+                FlattenedNode item;
+                item.node = child;
+                item.type = FlattenedNode::FOLDER_OPEN;
+                nodes << item;
+            }
+        } else if (isRasterLayer) {
+            FlattenedNode item;
+            item.node = child;
+            item.type = FlattenedNode::RASTER_LAYER;
+            nodes << item;
         }
-        if (child->childCount() > 0) {
-            flattenLayers(child, layers);
-        }
+
+        child = child->nextSibling();
     }
-    dbgFile << layers.size();
 }
 
 KisNodeSP findOnlyTransparencyMask(KisNodeSP node)
@@ -276,8 +326,8 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
     dbgFile << "Writing layer layer section";
 
     // Build the whole layer structure
-    QList<KisNodeSP> nodes;
-    flattenLayers(rootLayer, nodes);
+    QList<FlattenedNode> nodes;
+    flattenNodes(rootLayer, nodes);
 
     if (nodes.isEmpty()) {
         error = "Could not find paint layers to save";
@@ -298,52 +348,96 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
     psdwrite(io, (qint16)-nodes.size());
 
     // Layer records section
-    foreach(KisNodeSP node, nodes) {
+    foreach(const FlattenedNode &item, nodes) {
+        KisNodeSP node = item.node;
+
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
         KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
         const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
-        KisPaintDeviceSP layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
 
-        QRect rc = layerContentDevice->extent();
-        rc = rc.normalized();
-        Q_ASSERT(rc.width() >= 0);
-        Q_ASSERT(rc.height() >= 0);
+        const bool nodeVisible = node->visible();
+        const KoColorSpace *colorSpace = node->colorSpace();
+        const quint8 nodeOpacity = node->opacity();
+        const quint8 nodeClipping = 0;
+        const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+        const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
+        const QString nodeCompositeOp = node->compositeOpId();
 
-        // keep to the max of photoshop's capabilities
-        if (rc.width() > 30000) rc.setWidth(30000);
-        if (rc.height() > 30000) rc.setHeight(30000);
-        layerRecord->top = rc.y();
-        layerRecord->left = rc.x();
-        layerRecord->bottom = rc.y() + rc.height();
-        layerRecord->right = rc.x() + rc.width();
-        layerRecord->nChannels = layerContentDevice->colorSpace()->colorChannelCount();
+        const KisGroupLayer *groupLayer = qobject_cast<KisGroupLayer*>(node.data());
+        const bool nodeIsPassThrough = groupLayer && groupLayer->passThroughMode();
 
-        // XXX: masks should be saved as channels as well, with id -2
+        bool nodeIrrelevant = false;
+        QString nodeName;
+        KisPaintDeviceSP layerContentDevice;
+        psd_section_type sectionType;
+
+        if (item.type == FlattenedNode::RASTER_LAYER) {
+            nodeIrrelevant = false;
+            nodeName = node->name();
+            layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+            sectionType = psd_other;
+        } else {
+            nodeIrrelevant = true;
+            nodeName = item.type == FlattenedNode::SECTION_DIVIDER ?
+                QString("</Layer group>") :
+                node->name();
+            layerContentDevice = 0;
+            sectionType =
+                item.type == FlattenedNode::SECTION_DIVIDER ? psd_bounding_divider :
+                item.type == FlattenedNode::FOLDER_OPEN ? psd_open_folder :
+                psd_closed_folder;
+        }
+
+
+        // === no access to node anymore
+
+        QRect layerRect;
+
+        if (layerContentDevice) {
+            QRect rc = layerContentDevice->extent();
+            rc = rc.normalized();
+
+            // keep to the max of photoshop's capabilities
+            if (rc.width() > 30000) rc.setWidth(30000);
+            if (rc.height() > 30000) rc.setHeight(30000);
+
+            layerRect = rc;
+        }
+
+        layerRecord->top = layerRect.y();
+        layerRecord->left = layerRect.x();
+        layerRecord->bottom = layerRect.y() + layerRect.height();
+        layerRecord->right = layerRect.x() + layerRect.width();
+
+        // colors + alpha channel
+        // note: transparency mask not included
+        layerRecord->nChannels = colorSpace->colorChannelCount() + 1;
+
         ChannelInfo *info = new ChannelInfo;
         info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
         layerRecord->channelInfoRecords << info;
 
         // the rest is in display order: rgb, cmyk, lab...
-        for (int i = 0; i < layerRecord->nChannels; ++i) {
+        for (int i = 0; i < (int)colorSpace->colorChannelCount(); ++i) {
             info = new ChannelInfo;
             info->channelId = i; // 0 for red, 1 = green, etc
             layerRecord->channelInfoRecords << info;
         }
-        layerRecord->nChannels++; // to compensate for the alpha channel at the start
 
-        layerRecord->blendModeKey = composite_op_to_psd_blendmode(node->compositeOpId());
-        layerRecord->opacity = node->opacity();
-        layerRecord->clipping = 0;
+        layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
+        layerRecord->isPassThrough = nodeIsPassThrough;
+        layerRecord->opacity = nodeOpacity;
+        layerRecord->clipping = nodeClipping;
 
-        KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
-        layerRecord->transparencyProtected = (paintLayer && paintLayer->alphaLocked());
-        layerRecord->visible = node->visible();
+        layerRecord->transparencyProtected = alphaLocked;
+        layerRecord->visible = nodeVisible;
+        layerRecord->irrelevant = nodeIrrelevant;
 
-        layerRecord->layerName = node->name();
+        layerRecord->layerName = nodeName;
 
-        if (!layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect)) {
+        if (!layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType)) {
             error = layerRecord->error;
             return false;
         }
@@ -388,22 +482,5 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 
     io->seek(eof_pos);
 
-    return true;
-}
-
-bool PSDLayerMaskSection::valid()
-{
-    if (layerInfoSize > 0) {
-        if (nLayers <= 0) return false;
-        if (nLayers != layers.size()) return false;
-        foreach(PSDLayerRecord* layer, layers) {
-            if (!layer->valid()) {
-                return false;
-            }
-        }
-    }
-    if (!error.isNull()) {
-        return false;
-    }
     return true;
 }

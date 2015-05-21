@@ -30,7 +30,7 @@ KisPaintOpPreset            A KoResource that defines a set of parameters for a 
                             contains a KisPaintopSettings widget.
 KisPaintOpRegistry          Contains the list of all brush engine plugins
 KisPaintOpSettings          A KisPropertiesConfiguration subclass that stores the settings for a paintop
-KisPaintOpSettingsWidget    A KisConfigWidget that knows how to display and edit the KisPaintopSettings
+KisPaintOpConfigWidget    A KisConfigWidget that knows how to display and edit the KisPaintopSettings
 
 These classes are used in the Krita core to handle painting: a further set
 of utility classes for brush engine implementators is available in

@@ -36,6 +36,7 @@ class KisNodeVisitor;
 class KisNodeGraphListener;
 class KisNodeProgressProxy;
 class KisAbstractProjectionPlane;
+class KisProjectionLeaf;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -138,6 +139,16 @@ public:
      * pass-through blending and etc.
      */
     virtual KisAbstractProjectionPlaneSP projectionPlane() const;
+
+    /**
+     * The rendering of the image may not always happen in the order
+     * of the main graph. Pass-through nodes ake some subgraphs
+     * linear, so it the order of rendering change. projectionLeaf()
+     * is a special interface of KisNode that represents "a graph for
+     * projection rendering". Therefore the nodes in projectionLeaf()
+     * graph may have a different order the main one.
+     */
+    virtual KisProjectionLeafSP projectionLeaf() const;
 
 protected:
 

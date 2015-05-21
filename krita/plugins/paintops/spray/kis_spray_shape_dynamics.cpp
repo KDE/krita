@@ -30,8 +30,10 @@ public:
 };
 
 KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
-    : KisPaintOpOption(i18n("Shape dynamics"), KisPaintOpOption::generalCategory(), true)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
 {
+    setObjectName("KisSprayShapeDynamicsOption");
+
     m_checkable = true;
     m_options = new KisShapeDynamicsOptionsWidget();
 

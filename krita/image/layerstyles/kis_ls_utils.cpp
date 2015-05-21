@@ -564,7 +564,8 @@ namespace KisLsUtils
                              const QRect &srcRect,
                              const QRect &dstRect,
                              const psd_layer_effects_context *context,
-                             const psd_layer_effects_shadow_base *config)
+                             const psd_layer_effects_shadow_base *config,
+                             const KisLayerStyleFilterEnvironment *env)
     {
         const KoColor effectColor(config->color(), srcDevice->colorSpace());
 
@@ -585,8 +586,7 @@ namespace KisLsUtils
         if (config->fillType() == psd_fill_solid_color) {
             KisFillPainter gc(dstDevice);
             gc.setCompositeOp(compositeOp);
-            gc.setOpacity(opacityU8);
-
+            env->setupFinalPainter(&gc, opacityU8, QBitArray());
             gc.setSelection(baseSelection);
             gc.fillSelection(effectRect, effectColor);
             gc.end();
@@ -609,8 +609,7 @@ namespace KisLsUtils
 
             KisPainter gc(dstDevice);
             gc.setCompositeOp(compositeOp);
-            gc.setOpacity(opacityU8);
-
+            env->setupFinalPainter(&gc, opacityU8, QBitArray());
             gc.bitBlt(effectRect.topLeft(), overlayDevice, effectRect);
             gc.end();
         }
@@ -619,6 +618,7 @@ namespace KisLsUtils
 
         if (context->keep_original) {
             KisPainter gc(dstDevice);
+            // FIXME: opacity?
             gc.bitBlt(dstRect.topLeft(), tempDevice, dstRect);
         }
     }

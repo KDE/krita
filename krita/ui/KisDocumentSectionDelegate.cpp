@@ -118,6 +118,11 @@ bool KisDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *
         const QRect iconsRect_ = iconsRect(option, index).translated(option.rect.topLeft());
 
         if (iconsRect_.isValid() && iconsRect_.contains(mouseEvent->pos())) {
+            // Avoid conflicts with context menu events
+            if (!(mouseEvent->buttons() & Qt::LeftButton)) {
+                return false;
+            }
+
             const int iconWidth = option.decorationSize.width();
             int xPos = mouseEvent->pos().x() - iconsRect_.left();
             if (xPos % (iconWidth + d->margin) < iconWidth) { //it's on an icon, not a margin

@@ -364,6 +364,34 @@ KisMainWindow::KisMainWindow()
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
         d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
+
+        KActionCollection *actions = actionCollection();
+        QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->helpMenu->action(KHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->helpMenu->action(KHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->helpMenu->action(KHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->helpMenu->action(KHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->helpMenu->action(KHelpMenu::menuAboutKDE);
+
+        if (helpContentsAction) {
+            actions->addAction(helpContentsAction->objectName(), helpContentsAction);
+        }
+        if (whatsThisAction) {
+            actions->addAction(whatsThisAction->objectName(), whatsThisAction);
+        }
+        if (reportBugAction) {
+            actions->addAction(reportBugAction->objectName(), reportBugAction);
+        }
+        if (switchLanguageAction) {
+            actions->addAction(switchLanguageAction->objectName(), switchLanguageAction);
+        }
+        if (aboutAppAction) {
+            actions->addAction(aboutAppAction->objectName(), aboutAppAction);
+        }
+        if (aboutKdeAction) {
+            actions->addAction(aboutKdeAction->objectName(), aboutKdeAction);
+        }
+
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 

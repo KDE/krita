@@ -264,6 +264,8 @@ signals:
     void configChanged();
 
 public slots:
+    void slotMasterFxSwitchChanged(bool value);
+
     void notifyGuiConfigChanged();
     void notifyPredefinedStyleSelected(KisPSDLayerStyleSP style);
 

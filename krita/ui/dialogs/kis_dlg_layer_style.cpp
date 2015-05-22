@@ -145,12 +145,24 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     connect(wdgLayerStyles.btnLoadStyle, SIGNAL(clicked()), SLOT(slotLoadStyle()));
     connect(wdgLayerStyles.btnSaveStyle, SIGNAL(clicked()), SLOT(slotSaveStyle()));
 
+    connect(wdgLayerStyles.chkMasterFxSwitch, SIGNAL(toggled(bool)), SLOT(slotMasterFxSwitchChanged(bool)));
+
     connect(this, SIGNAL(accepted()), SLOT(slotNotifyOnAccept()));
     connect(this, SIGNAL(rejected()), SLOT(slotNotifyOnReject()));
 }
 
 KisDlgLayerStyle::~KisDlgLayerStyle()
 {
+}
+
+void KisDlgLayerStyle::slotMasterFxSwitchChanged(bool value)
+{
+    wdgLayerStyles.lstStyleSelector->setEnabled(value);
+    wdgLayerStyles.stylesStack->setEnabled(value);
+    wdgLayerStyles.btnNewStyle->setEnabled(value);
+    wdgLayerStyles.btnLoadStyle->setEnabled(value);
+    wdgLayerStyles.btnSaveStyle->setEnabled(value);
+    notifyGuiConfigChanged();
 }
 
 void KisDlgLayerStyle::notifyGuiConfigChanged()
@@ -338,10 +350,14 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     m_patternOverlay->setPatternOverlay(m_layerStyle->patternOverlay());
     m_stroke->setStroke(m_layerStyle->stroke());
 
+    wdgLayerStyles.chkMasterFxSwitch->setChecked(m_layerStyle->isEnabled());
+    slotMasterFxSwitchChanged(m_layerStyle->isEnabled());
 }
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
+    m_layerStyle->setEnabled(wdgLayerStyles.chkMasterFxSwitch->isChecked());
+
     m_layerStyle->dropShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
     m_layerStyle->innerShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(3)->checkState() == Qt::Checked);
     m_layerStyle->outerGlow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(4)->checkState() == Qt::Checked);

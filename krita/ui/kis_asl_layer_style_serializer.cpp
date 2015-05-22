@@ -318,7 +318,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
         w.enterDescriptor("Lefx", "", "Lefx");
 
         w.writeUnitFloat("Scl ", "#Prc", 100);
-        w.writeBoolean("masterFXSwitch", true);
+        w.writeBoolean("masterFXSwitch", style->isEnabled());
 
 
         // Drop Shadow
@@ -931,6 +931,8 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
 {
     CONN_TEXT_RADDR("/null/Nm  ", setName, style, KisPSDLayerStyle);
     CONN_TEXT_RADDR("/null/Idnt", setPsdUuid, style, KisPSDLayerStyle);
+
+    CONN_BOOL("/masterFXSwitch", setEnabled, style, KisPSDLayerStyle, prefix);
 
     psd_layer_effects_drop_shadow *dropShadow = style->dropShadow();
 

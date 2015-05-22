@@ -789,7 +789,7 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
     (*lastPoint)->unsetProperty(KoPathPoint::CloseSubpath);
 }
 
-QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
+QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
 {
     QList<KoPathPoint*> result;
 
@@ -808,7 +808,7 @@ QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
     return result;
 }
 
-QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r)
+QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r) const
 {
     QList<KoPathSegment> segments;
     int subpathCount = m_subpaths.count();

@@ -22,6 +22,8 @@
 
 #include <ui_GuidesToolOptionWidget.h>
 
+#include <KoUnit.h>
+
 #include <QWidget>
 
 class GuidesToolOptionWidget : public QWidget

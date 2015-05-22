@@ -45,6 +45,7 @@
 #include <KoUpdater.h>
 #include <KoDocumentRdfBase.h>
 #include <KoDpi.h>
+#include <KoUnit.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentInfoDlg.h>
 

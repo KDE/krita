@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 
 #include <KoResource.h>
-#include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>

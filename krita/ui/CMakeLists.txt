@@ -117,7 +117,7 @@ set(kritaui_LIB_SRCS
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
-    kis_paintop_options_widget.cpp
+    kis_paintop_settings_widget.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
@@ -522,6 +522,6 @@ install( FILES
 #    canvas/kis_perspective_grid_manager.h
     kis_paintop_option.h
     kis_paintop_options_model.h
-    kis_paintop_options_widget.h
+    kis_paintop_settings_widget.h
     processing/fill_processing_visitor.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

@@ -25,20 +25,36 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+#include <QString>
+
 struct KRITAUI_EXPORT KisOptionInfo
 {
-    KisOptionInfo() { }
-    KisOptionInfo(KisPaintOpOption* o, int i): option(o), index(i) { }
-    KisOptionInfo(const KisOptionInfo& info): option(info.option), index(info.index) { }
-    KisPaintOpOption* option;
-    int               index;
+    KisOptionInfo()
+        : option(0)
+    {}
+
+    KisOptionInfo(KisPaintOpOption* o, int i, const QString &label)
+        : label(label)
+        , option(o)
+        , index(i)
+    {}
+
+    KisOptionInfo(const KisOptionInfo& info)
+        : label(info.label)
+        , option(info.option)
+        , index(info.index)
+    {}
+
+    QString label;
+    KisPaintOpOption *option;
+    int index;
 };
 
 KRITAUI_EXPORT bool operator==(const KisOptionInfo& a, const KisOptionInfo& b);
 
 struct KRITAUI_EXPORT OptionInfoToQStringConverter {
     QString operator() (const KisOptionInfo &info) {
-        return info.option->label();
+        return info.label;
     }
 };
 
@@ -51,7 +67,7 @@ class KRITAUI_EXPORT KisPaintOpOptionListModel : public BaseOptionCategorizedLis
 {
 public:
     KisPaintOpOptionListModel(QObject *parent);
-    void addPaintOpOption(KisPaintOpOption* option, int widgetIndex);
+    void addPaintOpOption(KisPaintOpOption* option, int widgetIndex, const QString &label);
     QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
     void signalDataChanged(const QModelIndex& index);

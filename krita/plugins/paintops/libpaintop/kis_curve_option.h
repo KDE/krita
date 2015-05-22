@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QVector>
 
+#include "kis_paintop_option.h"
 #include "kis_global.h"
 #include "kis_paintop_option.h"
 #include "kis_paint_information.h"
@@ -42,9 +43,8 @@ class KisDynamicSensor;
 class PAINTOP_EXPORT KisCurveOption
 {
 public:
-    KisCurveOption(const QString& label,
-                   const QString& name,
-                   const QString& category,
+    KisCurveOption(const QString& name,
+                   KisPaintOpOption::PaintopCategory category,
                    bool checked,
                    qreal value = 1.0,
                    qreal min = 0.0,
@@ -56,8 +56,7 @@ public:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     const QString& name() const;
-    const QString& label() const;
-    const QString& category() const;
+    KisPaintOpOption::PaintopCategory category() const;
     qreal minValue() const;
     qreal maxValue() const;
     qreal value() const;
@@ -80,9 +79,6 @@ public:
     void setCurve(const QString &sensorId, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
 
-    const QString& minimumLabel() const;
-    const QString& maximumLabel() const;
-
     /**
      * Uses the curves set on the sensors to compute a single
      * double value that can control the parameters of a brush.
@@ -91,8 +87,6 @@ public:
 
 protected:
 
-    void setMinimumLabel(const QString& _label);
-    void setMaximumLabel(const QString& _label);
     void setValueRange(qreal min, qreal max);
 
     /**
@@ -101,8 +95,7 @@ protected:
     void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting);
 
     QString m_name;
-    QString m_label;
-    QString m_category;
+    KisPaintOpOption::PaintopCategory m_category;
 
     bool m_checkable;
     bool m_checked;
@@ -118,9 +111,6 @@ private:
     qreal m_value;
     qreal m_minValue;
     qreal m_maxValue;
-    QString m_minimumLabel;
-    QString m_maximumLabel;
-
 };
 
 #endif

@@ -22,11 +22,10 @@
 
 #include <ui_ParagraphIndentSpacing.h>
 
-#include <KoUnit.h>
-
 #include <QWidget>
 
 class KoParagraphStyle;
+class KoUnit;
 
 class ParagraphIndentSpacing : public QWidget
 {

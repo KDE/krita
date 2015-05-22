@@ -25,7 +25,7 @@
 
 class KisMainWindow;
 class KisApplicationPrivate;
-
+class KCmdLineArgs;
 class QWidget;
 class QStringList;
 
@@ -113,8 +113,10 @@ public Q_SLOTS:
 
 private:
     /// @return the number of autosavefiles opened
-    int checkAutosaveFiles(KisMainWindow *mainWindow);
+    QList<KUrl> checkAutosaveFiles();
+    bool createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow);
 
+private:
     KisApplicationPrivate * const d;
     class ResetStarting;
     friend class ResetStarting;

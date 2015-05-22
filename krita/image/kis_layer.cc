@@ -28,6 +28,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
@@ -207,14 +208,25 @@ KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KisDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-    if (compositeOp())
+
+    if (compositeOp()) {
         l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+    }
+
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+
     return l;
 }
 
 void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
+
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Inherit Alpha")) {
+            disableAlphaChannel(property.state.toBool());
+        }
+    }
 }
 
 void KisLayer::disableAlphaChannel(bool disable)

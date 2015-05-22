@@ -145,11 +145,10 @@ void KisPaintLayer::setImage(KisImageWSP image)
 KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    
+
     // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
-    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
-    
+
     return l;
 }
 
@@ -159,11 +158,8 @@ void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::Pro
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Inherit Alpha")) {
-            disableAlphaChannel(property.state.toBool());
-        }
     }
-    
+
     KisLayer::setSectionModelProperties(properties);
 }
 

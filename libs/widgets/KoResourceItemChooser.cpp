@@ -56,6 +56,8 @@
 #include "KoResourceModel.h"
 #include "KoResource.h"
 #include "KoResourceTaggingManager.h"
+#include "KoTagFilterWidget.h"
+#include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
 
 class KoResourceItemChooser::Private

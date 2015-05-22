@@ -40,6 +40,13 @@ public:
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
 
+    void registerPSDPattern(const QDomDocument &doc);
+    void readFromPSDXML(const QDomDocument &doc);
+
+    QDomDocument formXmlDocument() const;
+    QDomDocument formPsdXmlDocument() const;
+
+
 private:
     void registerPatternObject(const KoPattern *pattern);
 
@@ -47,10 +54,10 @@ private:
                              const QString &patternName,
                              boost::function<void (KoPattern *)> setPattern);
 
-    QVector<KoPattern*> fetchAllPatterns(KisPSDLayerStyle *style);
+    QVector<KoPattern*> fetchAllPatterns(KisPSDLayerStyle *style) const;
 
-    void newStyleStarted();
-    void connectCatcherToStyle(KisPSDLayerStyle *style);
+    void newStyleStarted(bool isPsdStructure);
+    void connectCatcherToStyle(KisPSDLayerStyle *style, const QString &prefix);
 
 private:
     QHash<QString, KoPattern*> m_patternsStore;

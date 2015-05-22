@@ -35,8 +35,10 @@ public:
 
 
 KisBrushSizeOption::KisBrushSizeOption()
-    : KisPaintOpOption(i18n("Brush tip"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisBrushSizeOption");
+
     m_checkable = false;
     m_options = new KisBrushSizeOptionsWidget();
 

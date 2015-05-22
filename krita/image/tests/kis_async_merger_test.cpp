@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_selection.h"

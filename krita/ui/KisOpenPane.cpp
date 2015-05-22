@@ -131,7 +131,7 @@ public:
    
 };
 
-KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templateType)
+KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templatesResourcePath)
     : QDialog(parent)
     , d(new KisOpenPanePrivate)
 {
@@ -157,7 +157,7 @@ KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, c
    connect(d->cancelButton,SIGNAL(clicked()),this,SLOT(close()));
 
     initRecentDocs();
-    initTemplates(templateType);
+    initTemplates(templatesResourcePath);
 
     d->m_freeCustomWidgetIndex = 4;
 
@@ -235,14 +235,14 @@ void KisOpenPane::initRecentDocs()
     }
 }
 
-void KisOpenPane::initTemplates(const QString& templateType)
+void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 {
     QTreeWidgetItem* selectItem = 0;
     QTreeWidgetItem* firstItem = 0;
     const int templateOffset = 1000;
 
-    if (!templateType.isEmpty()) {
-        KisTemplateTree templateTree(templateType.toLocal8Bit(), d->m_componentData, true);
+    if (!templatesResourcePath.isEmpty()) {
+        KisTemplateTree templateTree(templatesResourcePath, d->m_componentData, true);
 
         foreach (KisTemplateGroup *group, templateTree.groups()) {
             if (group->isHidden()) {

@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="70" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+name="Krita"
+version="71"
+xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
@@ -261,7 +265,8 @@
       <Action name="options_configure"/>        
       <Separator/>    
       <Action name="manage_bundles"/> 
-      <Action name="switch_application_language"/>    
+      <Action name="switch_application_language"/>
+      <Action name="settings_active_author"/>
       <Separator/>
     </Menu>
     <Action name="window"/>

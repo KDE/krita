@@ -582,6 +582,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         }
     }
 
+    if (node->inherits("KisGroupLayer")) {
+        if (element.hasAttribute(PASS_THROUGH_MODE)) {
+            bool value = element.attribute(PASS_THROUGH_MODE, "0") != "0";
+
+            KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
+            group->setPassThroughMode(value);
+        }
+    }
+
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node.data());
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());

@@ -27,12 +27,10 @@
 #include <KoColor.h>
 
 KisPressureMirrorOption::KisPressureMirrorOption()
-    : KisCurveOption(i18n("Mirror"), "Mirror", KisPaintOpOption::generalCategory(), false)
+    : KisCurveOption("Mirror", KisPaintOpOption::GENERAL, false)
 {
     m_enableHorizontalMirror = false;
     m_enableVerticalMirror = false;
-    setMinimumLabel(i18n("Not mirrored"));
-    setMaximumLabel(i18n("Mirrored"));
 }
 
 void KisPressureMirrorOption::enableHorizontalMirror(bool mirror)

@@ -30,8 +30,10 @@ public:
 };
 
 KisGridShapeOption::KisGridShapeOption()
-    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisGridShapeOption");
+
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
     connect(m_options->shapeCBox, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));

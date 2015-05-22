@@ -132,7 +132,7 @@ public:
      * Return the app-specific panels.
      * @see setOptionPanels()
      */
-    QList<KoShapeConfigFactoryBase*> panelFactories();
+    QList<KoShapeConfigFactoryBase*> panelFactories() const;
 
     /**
      * return the id for the shape this factory creates.

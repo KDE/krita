@@ -50,7 +50,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->container = new KoSliderComboContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
     QStyleOptionComboBox opt;
-    opt.init(this);
+    opt.initFrom(this);
 //    d->container->setFrameStyle(style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, this));
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -99,7 +99,7 @@ QSize KoSliderCombo::minimumSizeHint() const
 
     // add style and strut values
     QStyleOptionComboBox opt;
-    opt.init(this);
+    opt.initFrom(this);
     opt.subControls = QStyle::SC_All;
     opt.editable = true;
     sh = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, sh, this);
@@ -115,13 +115,13 @@ void KoSliderCombo::KoSliderComboPrivate::showPopup()
     }
 
     QStyleOptionSlider opt;
-    opt.init(slider);
+    opt.initFrom(slider);
     opt.maximum=256;
     opt.sliderPosition = opt.sliderValue = slider->value();
     int hdlPos = thePublic->style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle).center().x();
 
     QStyleOptionComboBox optThis;
-    optThis.init(thePublic);
+    optThis.initFrom(thePublic);
     optThis.subControls = QStyle::SC_All;
     optThis.editable = true;
     int arrowPos = thePublic->style()->subControlRect(QStyle::CC_ComboBox, &optThis, QStyle::SC_ComboBoxArrow).center().x();
@@ -178,7 +178,7 @@ void KoSliderCombo::paintEvent(QPaintEvent *)
     gc.setPen(palette().color(QPalette::Text));
 
     QStyleOptionComboBox opt;
-    opt.init(this);
+    opt.initFrom(this);
     opt.subControls = QStyle::SC_All;
     opt.editable = true;
     gc.drawComplexControl(QStyle::CC_ComboBox, opt);
@@ -188,7 +188,7 @@ void KoSliderCombo::paintEvent(QPaintEvent *)
 void KoSliderCombo::mousePressEvent(QMouseEvent *e)
 {
     QStyleOptionComboBox opt;
-    opt.init(this);
+    opt.initFrom(this);
     opt.subControls = QStyle::SC_All;
     opt.editable = true;
     QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, e->pos(),

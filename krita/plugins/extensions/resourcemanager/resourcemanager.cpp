@@ -32,7 +32,6 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
-#include <KoResourceTagStore.h>
 #include <KoFileDialog.h>
 #include <KoResource.h>
 #include <KoResourceServer.h>

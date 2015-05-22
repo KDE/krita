@@ -38,6 +38,8 @@
 #include <commands/kis_node_property_list_command.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_projection_leaf.h>
+
 
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -389,7 +391,15 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
-        return belongsToIsolatedGroup(node) ? QVariant() : QVariant( QColor(Qt::gray));
+        return belongsToIsolatedGroup(node) &&
+            !node->projectionLeaf()->isDroppedMask() ? QVariant() : QVariant(QColor(Qt::gray));
+    case Qt::FontRole: {
+        QFont baseFont;
+        if (node->projectionLeaf()->isDroppedMask()) {
+            baseFont.setStrikeOut(true);
+        }
+        return baseFont;
+    }
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
     case ProgressRole: {

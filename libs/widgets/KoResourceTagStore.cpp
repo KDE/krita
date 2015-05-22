@@ -26,6 +26,8 @@
 #include <QFile>
 #include <QDir>
 #include <KoResourceServer.h>
+#include <QDomDocument>
+
 
 class KoResourceTagStore::Private {
 public:

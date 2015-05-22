@@ -125,7 +125,8 @@ void applySatin(KisPaintDeviceSP srcDevice,
                 KisPaintDeviceSP dstDevice,
                 const QRect &applyRect,
                 const psd_layer_effects_context *context,
-                const psd_layer_effects_satin *config)
+                const psd_layer_effects_satin *config,
+                const KisLayerStyleFilterEnvironment *env)
 {
     if (applyRect.isEmpty()) return;
 
@@ -187,7 +188,8 @@ void applySatin(KisPaintDeviceSP srcDevice,
                                     d.srcRect,
                                     d.dstRect,
                                     context,
-                                    config);
+                                    config,
+                                    env);
 
     //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("6_dst_final.png");
 }
@@ -198,13 +200,12 @@ void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,
                                        KisPSDLayerStyleSP style,
                                        KisLayerStyleFilterEnvironment *env) const
 {
-    Q_UNUSED(env);
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_satin *config = style->satin();
     if (!config->effectEnabled()) return;
 
-    applySatin(src, dst, applyRect, style->context(), config);
+    applySatin(src, dst, applyRect, style->context(), config, env);
 }
 
 QRect KisLsSatinFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const

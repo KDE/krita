@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <KoDocumentInfo.h>
+#include <KoUnit.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>

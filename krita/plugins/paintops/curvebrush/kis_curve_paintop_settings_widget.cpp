@@ -28,14 +28,15 @@
 #include "kis_curves_opacity_option.h"
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
-    addPaintOpOption(new KisCurveOpOption());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisCurvesOpacityOption()));
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    m_curveOption = new KisCurveOpOption();
+    addPaintOpOption(m_curveOption, i18n("Value"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption(), i18n("0%"), i18n("100%")), i18n("Line width"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisCurvesOpacityOption(), i18n("0%"), i18n("100%")), i18n("Curves opacity"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 
 KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()

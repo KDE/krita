@@ -70,9 +70,9 @@ int KoParameterShape::handleIdAt(const QRectF & rect) const
     return handle;
 }
 
-QPointF KoParameterShape::handlePosition(int handleId)
+QPointF KoParameterShape::handlePosition(int handleId) const
 {
-    Q_D(KoParameterShape);
+    Q_D(const KoParameterShape);
     return d->handles.value(handleId);
 }
 

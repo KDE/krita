@@ -36,7 +36,7 @@ public:
         return FULL_REFRESH;
     }
 
-    void startTrip(KisNodeSP startWith) {
+    void startTrip(KisProjectionLeafSP startWith) {
         if(m_firstRun) {
             m_firstRun = false;
 
@@ -58,9 +58,9 @@ public:
         }
     }
 
-    void registerChangeRect(KisNodeSP node, NodePosition position) {
+    void registerChangeRect(KisProjectionLeafSP leaf, NodePosition position) {
         if(m_currentUpdateType == FULL_REFRESH) {
-            KisRefreshSubtreeWalker::registerChangeRect(node, position);
+            KisRefreshSubtreeWalker::registerChangeRect(leaf, position);
         }
         else {
             /**
@@ -73,23 +73,23 @@ public:
              * changeRects of all its children here.
              */
 
-            if(node == startNode() && node->parent()) {
-                KisRefreshSubtreeWalker::calculateChangeRect(node, requestedRect());
+            if(isStartLeaf(leaf)&& !leaf->isRoot()) {
+                KisRefreshSubtreeWalker::calculateChangeRect(leaf, requestedRect());
             }
             else {
-                KisMergeWalker::registerChangeRect(node, position);
+                KisMergeWalker::registerChangeRect(leaf, position);
             }
         }
     }
-    void registerNeedRect(KisNodeSP node, NodePosition position) {
+    void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position) {
         if(m_currentUpdateType == FULL_REFRESH) {
-            KisRefreshSubtreeWalker::registerNeedRect(node, position);
+            KisRefreshSubtreeWalker::registerNeedRect(leaf, position);
         }
         else {
-            KisMergeWalker::registerNeedRect(node, position);
+            KisMergeWalker::registerNeedRect(leaf, position);
         }
     }
-    void adjustMasksChangeRect(KisNodeSP firstMask) {
+    void adjustMasksChangeRect(KisProjectionLeafSP firstMask) {
         if(m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::adjustMasksChangeRect(firstMask);
         }

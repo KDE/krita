@@ -21,14 +21,14 @@
 #ifndef KORESOURCEFILTER_H
 #define KORESOURCEFILTER_H
 
-#include <QStringList>
-#include <QString>
-
-#include "KoResource.h"
-
 #include "kowidgets_export.h"
 
+#include <QList>
+
 class KoResourceServerBase;
+class KoResource;
+class QStringList;
+class QString;
 
 class KOWIDGETS_EXPORT KoResourceFiltering
 {

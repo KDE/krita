@@ -76,7 +76,7 @@ KoDetailsPane::~KoDetailsPane()
     delete d;
 }
 
-KComponentData KoDetailsPane::componentData()
+KComponentData KoDetailsPane::componentData() const
 {
     return d->m_componentData;
 }

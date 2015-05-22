@@ -94,8 +94,8 @@ public:
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
     bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    bool write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect);
-    bool writePixelData(QIODevice* io);
+    void write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType, const QDomDocument &stylesXmlDoc);
+    void writePixelData(QIODevice* io);
 
     bool valid();
 
@@ -111,6 +111,7 @@ public:
     QVector<ChannelInfo*> channelInfoRecords;
 
     QString blendModeKey;
+    bool isPassThrough;
 
     quint8 opacity;
     quint8 clipping;
@@ -150,6 +151,9 @@ public:
     QString layerName; // pascal, not unicode!
 
     PsdAdditionalLayerInfoBlock infoBlocks;
+
+private:
+    void writeTransparencyMaskPixelData(QIODevice *io);
 
 private:
 

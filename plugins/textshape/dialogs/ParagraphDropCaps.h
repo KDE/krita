@@ -23,10 +23,10 @@
 #define PARAGRAPHDROPCAPS_H
 #include "ui_ParagraphDropCaps.h"
 
-#include "KoUnit.h"
 #include <QWidget>
 
 class KoParagraphStyle;
+class KoUnit;
 
 namespace Ui {
     class ParagraphDropCaps;

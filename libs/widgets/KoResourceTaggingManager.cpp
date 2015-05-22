@@ -34,6 +34,8 @@
 #include <klocale.h>
 #include <kglobal.h>
 
+#include "KoTagFilterWidget.h"
+#include "KoTagChooserWidget.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
 #include "KoResourceItemChooserContextMenu.h"

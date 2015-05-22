@@ -149,7 +149,7 @@ void KoShapeFactoryBase::setOptionPanels(const QList<KoShapeConfigFactoryBase*> 
     d->configPanels = panelFactories;
 }
 
-QList<KoShapeConfigFactoryBase*> KoShapeFactoryBase::panelFactories()
+QList<KoShapeConfigFactoryBase*> KoShapeFactoryBase::panelFactories() const
 {
     return d->configPanels;
 }

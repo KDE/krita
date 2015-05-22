@@ -43,7 +43,6 @@
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>
-#include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
 
 #include <kis_fill_painter.h>

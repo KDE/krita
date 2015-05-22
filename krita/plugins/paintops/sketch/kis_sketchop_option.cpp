@@ -29,14 +29,12 @@ public:
 };
 
 KisSketchOpOption::KisSketchOpOption()
-    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
-
-
+    setObjectName("KisSketchOpOption");
 
     m_checkable = false;
     m_options = new KisSketchOpOptionsWidget();
-
 
     // initialize slider values
     m_options->lineWidthSPBox->setRange(1.0, 100.0, 0);

@@ -76,7 +76,8 @@
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor),
       m_showColorPreview(false),
-      m_colorPreviewShowComparePlate(false)
+      m_colorPreviewShowComparePlate(false),
+      m_colorPickerDelayTimer()
 {
     m_specialHoverModifier = false;
     m_optionsWidgetLayout = 0;
@@ -122,6 +123,9 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     if (kiscanvas && kiscanvas->viewManager()) {
         connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
     }
+
+    m_colorPickerDelayTimer.setSingleShot(true);
+    connect(&m_colorPickerDelayTimer, SIGNAL(timeout()), this, SLOT(activatePickColorDelayed()));
 }
 
 
@@ -273,25 +277,42 @@ void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
     switch (action) {
     case PickFgNode:
-        useCursor(KisCursor::pickerLayerForegroundCursor());
-        activatePickColor(action);
-        break;
     case PickBgNode:
-        useCursor(KisCursor::pickerLayerBackgroundCursor());
-        activatePickColor(action);
-        break;
     case PickFgImage:
-        useCursor(KisCursor::pickerImageForegroundCursor());
-        activatePickColor(action);
-        break;
     case PickBgImage:
-        useCursor(KisCursor::pickerImageBackgroundCursor());
-        activatePickColor(action);
-        break;
+        delayedAction = action;
+        m_colorPickerDelayTimer.start(100);
     default:
         pickColorWasOverridden();
         KisTool::activateAlternateAction(action);
     };
+}
+
+void KisToolPaint::activatePickColorDelayed()
+{
+    switch (delayedAction) {
+        case PickFgNode:
+        useCursor(KisCursor::pickerLayerForegroundCursor());
+        activatePickColor(delayedAction);
+        break;
+    case PickBgNode:
+        useCursor(KisCursor::pickerLayerBackgroundCursor());
+        activatePickColor(delayedAction);
+        break;
+    case PickFgImage:
+        useCursor(KisCursor::pickerImageForegroundCursor());
+        activatePickColor(delayedAction);
+        break;
+    case PickBgImage:
+        useCursor(KisCursor::pickerImageBackgroundCursor());
+        activatePickColor(delayedAction);
+        break;
+    default:
+        break;
+    };
+
+    repaintDecorations();
+
 }
 
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
@@ -304,6 +325,9 @@ void KisToolPaint::deactivateAlternateAction(AlternateAction action)
         KisTool::deactivateAlternateAction(action);
         return;
     }
+
+    delayedAction = KisTool::NONE;
+    m_colorPickerDelayTimer.stop();
 
     resetCursorStyle();
     deactivatePickColor(action);

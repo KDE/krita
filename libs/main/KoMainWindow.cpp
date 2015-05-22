@@ -253,7 +253,7 @@ public:
 
 };
 
-KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData &componentData)
+KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentData &componentData)
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
@@ -1931,12 +1931,12 @@ void KoMainWindow::forceDockTabFonts()
     }
 }
 
-QList<QDockWidget*> KoMainWindow::dockWidgets()
+QList<QDockWidget*> KoMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
 }
 
-QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers() const
 {
 
     QList<KoCanvasObserverBase*> observers;

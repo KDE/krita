@@ -62,7 +62,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const QByteArray nativeMimeType, const KComponentData &instance);
+    explicit KoMainWindow(const QByteArray &nativeMimeType, const KComponentData &instance);
 
     /**
      *  Destructor.
@@ -159,9 +159,9 @@ public:
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     /// Return the list of dock widgets belonging to this main window.
-    QList<QDockWidget*> dockWidgets();
+    QList<QDockWidget*> dockWidgets() const;
 
-    QList<KoCanvasObserverBase*> canvasObservers();
+    QList<KoCanvasObserverBase*> canvasObservers() const;
 
     /**
      * @return the KoDockerManager which is assigned

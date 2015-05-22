@@ -52,6 +52,8 @@ transparency-disabled.png
 transparency-enabled.png
 transparency-locked.png
 transparency-unlocked.png
+passthrough-enabled.png
+passthrough-disabled.png
 unlinked.png
 unlocked.png
 visible.png

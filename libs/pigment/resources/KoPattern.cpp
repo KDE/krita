@@ -141,7 +141,7 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
     if (index != -1)
         fileExtension = filename().mid(index + 1).toLower();
 
-    if (fileExtension == ".pat") {
+    if (fileExtension == "pat") {
 
         // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
         // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA

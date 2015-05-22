@@ -25,6 +25,7 @@
 #include <KisTemplateTree.h>
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
+#include <KisPart.h>
 #include <kiconloader.h>
 #include <QApplication>
 #include <QTimer>
@@ -156,7 +157,7 @@ void TemplatesModel::toggleGroup(const QString& name)
 
 void TemplatesModel::populate()
 {
-    KisTemplateTree templateTree("krita_template", KisFactory::componentData(), true);
+    KisTemplateTree templateTree(KisPart::instance()->templatesResourcePath(), KisFactory::componentData(), true);
     foreach (KisTemplateGroup *group, templateTree.groups()) {
         if (group->isHidden()) {
             continue;

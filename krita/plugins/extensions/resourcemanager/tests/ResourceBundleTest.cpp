@@ -22,7 +22,6 @@
 #include <QDate>
 
 #include <KoResourceServerProvider.h>
-#include <KoResourceTagStore.h>
 
 #include <kis_resource_server_provider.h>
 #include "kis_workspace_resource.h"

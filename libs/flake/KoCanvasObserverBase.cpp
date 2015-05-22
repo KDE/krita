@@ -54,7 +54,7 @@ void KoCanvasObserverBase::unsetObservedCanvas()
     unsetCanvas();
 }
 
-KoCanvasBase* KoCanvasObserverBase::observedCanvas()
+KoCanvasBase* KoCanvasObserverBase::observedCanvas() const
 {
     return d->canvas;
 }

@@ -631,3 +631,9 @@ target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  kritaimage Qt5::Te
 set(kis_layer_style_projection_plane_test_SRCS kis_layer_style_projection_plane_test.cpp )
 kde4_add_unit_test(KisLayerStyleProjectionPlaneTest TESTNAME kritaimage-layer_style_projection_plane_test ${kis_layer_style_projection_plane_test_SRCS})
 target_link_libraries(KisLayerStyleProjectionPlaneTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+
+########### next target ###############
+
+set(kis_projection_leaf_test_SRCS kis_projection_leaf_test.cpp )
+kde4_add_unit_test(KisProjectionLeafTest TESTNAME kritaimage-projection_leaf_test ${kis_projection_leaf_test_SRCS})
+target_link_libraries(KisProjectionLeafTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

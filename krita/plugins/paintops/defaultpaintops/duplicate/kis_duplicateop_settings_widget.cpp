@@ -26,11 +26,15 @@
 
 #include <kis_image.h>
 #include <kis_properties_configuration.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
+#include "kis_texture_option.h"
+#include "kis_curve_option_widget.h"
+#include <kis_pressure_mirror_option_widget.h>
+#include "kis_pressure_texture_strength_option.h"
 
 
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
@@ -39,14 +43,14 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
 
-    m_duplicateOption = new KisDuplicateOpOption;
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addMirrorOption();
-    addPaintOpOption(m_duplicateOption);
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
+    addPaintOpOption(new KisDuplicateOpOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
-    addTextureOptions();
 }
 
 KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()

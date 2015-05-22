@@ -33,6 +33,7 @@
 #include <QWidget>
 #include <QVector>
 
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <QMessageBox>

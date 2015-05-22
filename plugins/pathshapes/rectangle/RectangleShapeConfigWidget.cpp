@@ -29,7 +29,7 @@ RectangleShapeConfigWidget::RectangleShapeConfigWidget()
     connect(widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
 }
 
-void RectangleShapeConfigWidget::setUnit(KoUnit unit)
+void RectangleShapeConfigWidget::setUnit(const KoUnit &unit)
 {
     widget.cornerRadiusX->setUnit(unit);
     widget.cornerRadiusY->setUnit(unit);

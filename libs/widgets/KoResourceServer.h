@@ -26,18 +26,15 @@
 #define KORESOURCESERVER_H
 
 #include <QMutex>
-#include <QMutexLocker>
 #include <QString>
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
 #include <QDir>
-#include <QMultiHash>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include <QXmlStreamReader>
 #include <QTemporaryFile>
 #include <QDomDocument>
 #include "KoResource.h"
@@ -120,18 +117,18 @@ protected:
  * of a resource is handled.  There are to predefined policies:
 
  *
- *   o PointerStroragePolicy --- usual pointers with ownership over
- *                               the resource.
+ *   o PointerStoragePolicy --- usual pointers with ownership over
+ *                              the resource.
 
- *   o SharedPointerStroragePolicy --- shared pointers. The server does no
- *                                     extra handling for the lifetime of
- *                                     the resource.
+ *   o SharedPointerStoragePolicy --- shared pointers. The server does no
+ *                                    extra handling for the lifetime of
+ *                                    the resource.
  *
  * Use the former for usual resources and the latter for shared pointer based
  * ones.
  */
 
-template <class T, class Policy = PointerStroragePolicy<T> >
+template <class T, class Policy = PointerStoragePolicy<T> >
 class KoResourceServer : public KoResourceServerBase
 {
 public:
@@ -690,7 +687,7 @@ private:
 
 };
 
-template <class T, class Policy = PointerStroragePolicy<T> >
+template <class T, class Policy = PointerStoragePolicy<T> >
     class KoResourceServerSimpleConstruction : public KoResourceServer<T, Policy>
 {
 public:

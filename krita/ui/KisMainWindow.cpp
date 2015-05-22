@@ -1993,9 +1993,8 @@ void KisMainWindow::showErrorAndDie()
 
 void KisMainWindow::showAboutApplication()
 {
-// QT5TODO
-//     KisAboutApplication dlg(KisFactory::aboutData(), this);
-//     dlg.exec();
+    KisAboutApplication dlg(KisFactory::aboutData(), this);
+    dlg.exec();
 }
 
 QPointer<KisView>KisMainWindow::activeKisView()

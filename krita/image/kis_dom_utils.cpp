@@ -209,5 +209,26 @@ bool loadValue(const QDomElement &e, QTransform *t)
     return true;
 }
 
+QDomElement findElementByAttibute(QDomNode parent,
+                                  const QString &tag,
+                                  const QString &attribute,
+                                  const QString &key)
+{
+    QDomNode node = parent.firstChild();
+
+    while (!node.isNull()) {
+        QDomElement el = node.toElement();
+
+        if (!el.isNull() && el.tagName() == tag) {
+            QString value = el.attribute(attribute, "<undefined>");
+            if (value == key) return el;
+        }
+
+        node = node.nextSibling();
+    }
+
+    return QDomElement();
+}
+
 
 }

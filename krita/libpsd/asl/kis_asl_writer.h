@@ -29,6 +29,7 @@ class LIBKISPSD_EXPORT KisAslWriter
 {
 public:
     void writeFile(QIODevice *device, const QDomDocument &doc);
+    void writePsdLfx2SectionEx(QIODevice *device, const QDomDocument &doc);
 };
 
 #endif /* __KIS_ASL_WRITER_H */

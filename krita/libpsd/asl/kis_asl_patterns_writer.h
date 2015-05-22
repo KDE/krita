@@ -19,13 +19,15 @@
 #ifndef __KIS_ASL_PATTERNS_WRITER_H
 #define __KIS_ASL_PATTERNS_WRITER_H
 
+#include "libkispsd_export.h"
+
 class QDomDocument;
 class QIODevice;
 
 class KoPattern;
 
 
-class KisAslPatternsWriter
+class LIBKISPSD_EXPORT KisAslPatternsWriter
 {
 public:
     KisAslPatternsWriter(const QDomDocument &doc, QIODevice *device);

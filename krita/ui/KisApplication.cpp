@@ -193,47 +193,78 @@ BOOL isWow64()
 }
 #endif
 
+
+bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow)
+{
+    QString templatePath;
+
+    const KUrl templateUrl = args->url(argNumber);
+    if (templateUrl.isLocalFile() && QFile::exists(templateUrl.toLocalFile())) {
+        templatePath = templateUrl.toLocalFile();
+        kDebug(30003) << "using full path...";
+    } else {
+        QString desktopName(args->arg(argNumber));
+        const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
+
+        QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
+        if (paths.isEmpty()) {
+            paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
+        }
+
+        if (paths.isEmpty()) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("No template found for: %1", desktopName));
+        } else if (paths.count() > 1) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("Too many templates found for: %1", desktopName));
+        } else {
+            templatePath = paths.at(0);
+        }
+    }
+
+    if (!templatePath.isEmpty()) {
+        KUrl templateBase;
+        templateBase.setPath(templatePath);
+        KDesktopFile templateInfo(templatePath);
+
+        QString templateName = templateInfo.readUrl();
+        KUrl templateURL;
+        templateURL.setPath(templateBase.directory() + '/' + templateName);
+
+        KisDocument *doc = KisPart::instance()->createDocument();
+        KisPart::instance()->addDocument(doc);
+        if (mainWindow->openDocumentInternal(templateURL, doc)) {
+            doc->resetURL();
+            doc->setEmpty();
+            doc->setTitleModified();
+            kDebug(30003) << "Template loaded...";
+            return true;
+        }
+        else {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("Template %1 failed to load.", templateURL.prettyUrl()));
+        }
+    }
+
+    return false;
+}
+
 bool KisApplication::start()
 {
+
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
-    if (isWow64()) {
+    KisConfig cfg;
+    if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."));
+        cfg.writeEntry("WarnedAbout32Bits", true);
 
     }
 #endif
-
-/**
- * Warn about Intel's broken video drivers
- */
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-    KisConfig cfg;
-    if (cfg.useOpenGL() && KisConfig::readEntry("WarnedAboutIntel", false)) {
-        QString renderer((const char*)glGetString(GL_RENDERER));
-        if (renderer.startsWith("Intel(R) HD Graphics")) {
-            int result = QMessageBox::question(0,
-                                               i18nc("@title:window", "Krita: Warning"),
-                                               i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                                    "If you experience problems like a black or blank screen,\n"
-                                                    "please update your display driver to 10.18.14 or later.\n"
-                                                    "You can also disable OpenGL rendering which reduces performance.\n"
-                                                    "Do you want to disable OpenGL?", QMessageBox::Yes | QMessageBox::No);
-
-            if (result == QMessageBox::Yes) {
-                cfg.setUseOpenGL(false);
-            }
-
-        }
-        KisConfig::writeEntry("WarnedAboutIntel", true);
-    }
-
-#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
-
-
 
     QDir appdir(applicationDirPath());
     appdir.cdUp();
@@ -293,11 +324,16 @@ bool KisApplication::start()
     const QString exportFileName = args->getOption("export-filename");
     const QString profileFileName = args->getOption("profile-filename");
 
-
+    const bool batchRun = (print || exportAs || exportAsPdf);
+    // print & exportAsPdf do user interaction ATM
+    const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
-    const bool showmainWindow = (   !(exportAsPdf || exportAs) );
-    bool runningInGnome = (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME");
-    if (d->splashScreen && showmainWindow && !runningInGnome) {
+    // TODO: fix print & exportAsPdf to work without mainwindow shown
+    const bool showmainWindow = !exportAs; // would be !batchRun;
+    const bool runningInGnome = (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME");
+    const bool showSplashScreen = !batchRun && !runningInGnome;
+
+    if (d->splashScreen && showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
         processEvents();
@@ -305,13 +341,6 @@ bool KisApplication::start()
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
-
-
-    const bool batchRun = (   showmainWindow
-                              && !print
-                              && !exportAs
-                              && !profileFileName.isEmpty());
-
 
     // Load various global plugins
     KoShapeRegistry* r = KoShapeRegistry::instance();
@@ -335,7 +364,7 @@ bool KisApplication::start()
 
     KisMainWindow *mainWindow = 0;
 
-    if (!exportAs) {
+    if (needsMainWindow) {
         // show a mainWindow asap, if we want that
         mainWindow = KisPart::instance()->createMainWindow();
 
@@ -346,9 +375,15 @@ bool KisApplication::start()
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
+
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    if (!batchRun) {
-        numberOfOpenDocuments += checkAutosaveFiles(mainWindow);
+    QList<KUrl> urls = checkAutosaveFiles();
+    if (!batchRun && mainWindow) {
+        foreach(const KUrl &url, urls) {
+            KisDocument *doc = KisPart::instance()->createDocument();
+            KisPart::instance()->addDocument(doc);
+            mainWindow->openDocumentInternal(url, doc);
+        }
     }
 
     if (argsCount > 0) {
@@ -360,130 +395,75 @@ bool KisApplication::start()
             profileoutput.setDevice(&profileFile);
         }
 
+
         // Loop through arguments
         short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {
             KUrl url = args->url(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                QString templatePath;
-                if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
-                    templatePath = args->url(argNumber).toLocalFile();
-                    kDebug(30003) << "using full path...";
+                // called in mix with batch options? ignore and silently skip
+                if (batchRun) {
+                    continue;
                 }
-                else {
-                    QString desktopName(args->arg(argNumber));
-                    const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
-
-                    QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
-                    if (paths.isEmpty()) {
-                        paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
-                    }
-                    if (paths.isEmpty()) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1", desktopName));
-                        delete mainWindow;
-                        mainWindow = 0;
-                    }
-                    else if (paths.count() > 1) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1", desktopName));
-                        delete mainWindow;
-                        mainWindow = 0;
-                    } else {
-                        templatePath = paths.at(0);
-                    }
-                }
-
-                if (!templatePath.isEmpty()) {
-                    KUrl templateBase;
-                    templateBase.setPath(templatePath);
-                    KDesktopFile templateInfo(templatePath);
-
-                    QString templateName = templateInfo.readUrl();
-                    KUrl templateURL;
-                    templateURL.setPath(templateBase.directory() + '/' + templateName);
-
-                    KisDocument *doc = KisPart::instance()->createDocument();
-
-                    if (doc) {
-                        KisPart::instance()->addDocument(doc);
-                        if (mainWindow) {
-                            mainWindow->openDocumentInternal(templateURL, doc);
-                        }
-
-                        doc->resetURL();
-                        doc->setEmpty();
-                        doc->setTitleModified();
-                        kDebug(30003) << "Template loaded...";
-                        numberOfOpenDocuments++;
-                    }
-                    else {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Template %1 failed to load.", templateURL.prettyUrl()));
-
-                    }
+                if (createNewDocFromTemplate(args, argNumber, mainWindow)) {
+                    ++numberOfOpenDocuments;
                 }
                 // now try to load
             }
             else {
 
-                KisDocument *doc = KisPart::instance()->createDocument();
-
-                if (doc) {
-
-                    if (mainWindow) {
-                        mainWindow->openDocumentInternal(url, doc);
+                if (exportAs) {
+                    KMimeType::Ptr outputMimetype;
+                    outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
+                    if (outputMimetype->name() == KMimeType::defaultMimeType()) {
+                        kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                        return 1;
                     }
 
-                    if (print && mainWindow) {
-                        mainWindow->slotFilePrint();
-                        nPrinted++;
-                    }
-                    else if (exportAsPdf && mainWindow) {
-                        KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
-                        if (job)
-                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
-                        nPrinted++;
-                    }
-                    else if (exportAs) {
+                    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-                        KMimeType::Ptr outputMimetype;
-                        outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
-                        if (outputMimetype->name() == KMimeType::defaultMimeType()) {
-                            kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
-                            return 1;
+                    QString outputFormat = outputMimetype->name();
+
+                    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+                    KisImportExportManager manager(url.path());
+                    manager.setBatchMode(true);
+                    QByteArray mime(outputFormat.toLatin1());
+                    status = manager.exportDocument(exportFileName, mime);
+
+                    if (status != KisImportExportFilter::OK) {
+                        kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
+                    }
+                    nPrinted++;
+                    QTimer::singleShot(0, this, SLOT(quit()));
+                } else if (mainWindow) {
+                    KisDocument *doc = KisPart::instance()->createDocument();
+                    KisPart::instance()->addDocument(doc);
+                    if (mainWindow->openDocumentInternal(url, doc)) {
+                        if (print) {
+                            mainWindow->slotFilePrint();
+                            nPrinted++;
+                            // TODO: trigger closing of app once printing is done
                         }
-
-                        QApplication::setOverrideCursor(Qt::WaitCursor);
-
-                        QString outputFormat = outputMimetype->name();
-
-                        KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-                        KisImportExportManager manager(url.path());
-                        manager.setBatchMode(true);
-                        QByteArray mime(outputFormat.toLatin1());
-                        status = manager.exportDocument(exportFileName, mime);
-
-                        if (status != KisImportExportFilter::OK) {
-                            kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
+                        else if (exportAsPdf) {
+                            KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
+                            if (job)
+                                connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
+                                        SLOT(slotFileQuit()), Qt::QueuedConnection);
+                            nPrinted++;
+                        } else {
+                            // Normal case, success
+                            numberOfOpenDocuments++;
                         }
-                        nPrinted++;
-                        QTimer::singleShot(0, this, SLOT(quit()));
-
                     } else {
-                        // Normal case, success
-                        numberOfOpenDocuments++;
-                    }
-
-                } else {
                     // .... if failed
                     // delete doc; done by openDocument
-                    delete mainWindow;
-                    mainWindow = 0;
+                    }
                 }
             }
-
         }
-        if (print || exportAsPdf || exportAs) {
+
+        if (batchRun) {
             return nPrinted > 0;
         }
     }
@@ -535,12 +515,7 @@ void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
 {
     Q_UNUSED(socket);
 
-    QDataStream ds(message);
-    KCmdLineArgs::loadAppArgs(ds);
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    int argsCount = args->count();
-
+    // check if we have any mainwindow
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
     if (!mw) {
         mw = KisPart::instance()->mainWindows().first();
@@ -550,55 +525,51 @@ void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
         return;
     }
 
+    QDataStream ds(message);
+    KCmdLineArgs::loadAppArgs(ds);
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    const bool doTemplate = args->isSet("template");
+    const int argsCount = args->count();
+
     if (argsCount > 0) {
-
         // Loop through arguments
-        for (int argNumber = 0; argNumber < argsCount; argNumber++) {
+        for (int argNumber = 0; argNumber < argsCount; ++argNumber) {
             KUrl url = args->url(argNumber);
-            if (url.isValid()) {
-                KisDocument *doc = KisPart::instance()->createDocument();
-
-                if (doc) {
-                    mw->openDocumentInternal(url, doc);
-
-                }
+            // are we just trying to open a template?
+            if (doTemplate) {
+                createNewDocFromTemplate(args, argNumber, mw);
             }
-
+            else if (url.isValid()) {
+                KisDocument *doc = KisPart::instance()->createDocument();
+                KisPart::instance()->addDocument(doc);
+                mw->openDocumentInternal(url, doc);
+            }
         }
     }
 
+    args->clear();
 }
 
 void KisApplication::fileOpenRequested(const QString &url)
 {
-    KisDocument *doc = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(doc);
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
+        KisDocument *doc = KisPart::instance()->createDocument();
+        KisPart::instance()->addDocument(doc);
         mainWindow->openDocumentInternal(url, doc);
     }
 }
 
 
-int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
+QList<KUrl> KisApplication::checkAutosaveFiles()
 {
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
     QStringList autoSaveFiles;
 
-    // get all possible autosave files in the home dir, this is for unsaved document autosave files
-    // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(KIS_MIME_TYPE);
-    if (!mime) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", KIS_MIME_TYPE);
-    }
-    QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) {
-        extension = mime->mainExtension();
-    }
-
     QStringList filters;
-    filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
+    filters << QString(".krita-*-*-autosave.kra");
 
 #ifdef Q_OS_WIN
     QDir dir = QDir::temp();
@@ -611,12 +582,12 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {
-        KisAutoSaveRecoveryDialog dlg(autoSaveFiles);
-        if (dlg.exec() == QDialog::Accepted) {
-            QStringList filesToRecover = dlg.recoverableFiles();
+        KisAutoSaveRecoveryDialog *dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
+        if (dlg->exec() == QDialog::Accepted) {
+
+            QStringList filesToRecover = dlg->recoverableFiles();
             foreach (const QString &autosaveFile, autoSaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
-                    // remove the files the user didn't want to recover
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
@@ -628,31 +599,17 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
         }
     }
 
+    QList<KUrl> autosaveUrls;
     if (autoSaveFiles.size() > 0) {
-        short int numberOfOpenDocuments = 0; // number of documents open
-        KUrl url;
 
         foreach(const QString &autoSaveFile, autoSaveFiles) {
-            // For now create an empty document
+            KUrl url;
             url.setPath(dir.absolutePath() + "/" + autoSaveFile);
-
-            KisDocument *doc = KisPart::instance()->createDocument();
-            KisPart::instance()->addDocument(doc);
-            if (mainWindow) {
-                mainWindow->openDocumentInternal(url, doc);
-            }
-
-            if (doc) {
-                doc->resetURL();
-                doc->setModified(true);
-                QFile::remove(url.toLocalFile());
-                numberOfOpenDocuments++;
-            }
+            autosaveUrls << url;
         }
-        return numberOfOpenDocuments;
     }
 
-    return 0;
+    return autosaveUrls;
 }
 
 #include <KisApplication.moc>

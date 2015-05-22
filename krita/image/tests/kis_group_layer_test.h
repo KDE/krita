@@ -29,6 +29,8 @@ private Q_SLOTS:
 
     void testProjection();
 
+    void testRemoveAndUndo();
+
 };
 
 #endif

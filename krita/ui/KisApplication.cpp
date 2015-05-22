@@ -255,7 +255,7 @@ bool KisApplication::start()
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     KisConfig cfg;
-    if (isWow64() && cfg.readEntry("WarnedAbout32Bits", false)) {
+    if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"

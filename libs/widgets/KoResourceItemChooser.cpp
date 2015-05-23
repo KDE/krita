@@ -118,6 +118,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)),
             this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(clicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect (d->view, SIGNAL(contextMenuRequested(QPoint)),
             this, SLOT(contextMenuRequested(QPoint)));
 

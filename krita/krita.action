@@ -12,7 +12,7 @@
     <Action name="view_show_just_the_canvas" icon="" text="Show Canvas Only" whatsThis="" toolTip="Shows just the canvas or the whole window" iconText="Show Canvas Only" shortcut="Tab" defaultShortcut="Tab" isCheckable="false" statusTip=""/>
     <Action name="edit_blacklist_cleanup" icon="" text="Cleanup removed files..." whatsThis="" toolTip="Cleanup removed files" iconText="Cleanup removed files" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="filter_apply_again" icon="" text="Apply Filter Again" whatsThis="" toolTip="Apply Filter Again" iconText="Apply Filter Again" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="color_filters" icon="" text="Colors" whatsThis="" toolTip="Colors" iconText="Colors" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="color_filters" icon="" text="Colors" whatsThis="" toolTip="Colors" iconText="Colors" shortcut="" defaultShortcut="Ctrl+F" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_colortoalpha" icon="" text="&amp;Color to Alpha..." whatsThis="" toolTip="Color to Alpha" iconText="Color to Alpha" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="edge_filters" icon="" text="Edge Detection" whatsThis="" toolTip="Edge Detection" iconText="Edge Detection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_top edge detections" icon="" text="Top Edge Detection" whatsThis="" toolTip="Top Edge Detection" iconText="Top Edge Detection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

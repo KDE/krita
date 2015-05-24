@@ -19,7 +19,7 @@
 #ifndef KIS_PARTICLEPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_PARTICLEPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 #include "ui_wdgparticleoptions.h"
 #include "widgets/kis_popup_button.h"
@@ -27,7 +27,7 @@
 class KisPaintActionTypeOption;
 class KisParticleOpOption;
 
-class KisParticlePaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisParticlePaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 

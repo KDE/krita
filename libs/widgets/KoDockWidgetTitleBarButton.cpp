@@ -92,7 +92,7 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     QPainter p(this);
 
     QStyleOptionToolButton opt;
-    opt.init(this);
+    opt.initFrom(this);
     opt.state |= QStyle::State_AutoRaise;
 
     if (isEnabled() && underMouse() && !isChecked() && !isDown())

@@ -54,10 +54,10 @@
 //#define DEBUG_MERGER
 
 #ifdef DEBUG_MERGER
-#define DEBUG_NODE_ACTION(message, type, node, rect)            \
-    qDebug() << message << type << ":" << node->name() << rect
+#define DEBUG_NODE_ACTION(message, type, leaf, rect)            \
+    qDebug() << message << type << ":" << leaf->node()->name() << rect
 #else
-#define DEBUG_NODE_ACTION(message, type, node, rect)
+#define DEBUG_NODE_ACTION(message, type, leaf, rect)
 #endif
 
 
@@ -103,9 +103,7 @@ public:
              * filter inside. Then the layer has work as a pass-through
              * node. Just copy the merged data to the layer's original.
              */
-            KisPainter gc(originalDevice);
-            gc.setCompositeOp(COMPOSITE_COPY);
-            gc.bitBlt(applyRect.topLeft(), m_projection, applyRect);
+            KisPainter::copyAreaOptimized(applyRect.topLeft(), m_projection, originalDevice, applyRect);
             return true;
         }
 
@@ -198,70 +196,68 @@ private:
 /*                     KisAsyncMerger                                */
 /*********************************************************************/
 
-/**
- * FIXME: Check node<->layer transitions
- */
 void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
-    KisMergeWalker::NodeStack &nodeStack = walker.nodeStack();
+    KisMergeWalker::LeafStack &leafStack = walker.leafStack();
 
     const bool useTempProjections = walker.needRectVaries();
 
-    while(!nodeStack.isEmpty()) {
-        KisMergeWalker::JobItem item = nodeStack.pop();
-        if(isRootNode(item.m_node)) continue;
+    while(!leafStack.isEmpty()) {
+        KisMergeWalker::JobItem item = leafStack.pop();
+        KisProjectionLeafSP currentLeaf = item.m_leaf;
 
-        KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
+        if(currentLeaf->isRoot()) continue;
+
         // All the masks should be filtered by the walkers
-        Q_ASSERT(currentNode);
+        Q_ASSERT(currentLeaf->isLayer());
 
         QRect applyRect = item.m_applyRect;
 
         if(item.m_position & KisMergeWalker::N_EXTRA) {
             // The type of layers that will not go to projection.
 
-            DEBUG_NODE_ACTION("Updating", "N_EXTRA", currentNode, applyRect);
+            DEBUG_NODE_ACTION("Updating", "N_EXTRA", currentLeaf, applyRect);
             KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                      m_currentProjection,
                                                      walker.cropRect());
-            currentNode->accept(originalVisitor);
-            currentNode->projectionPlane()->recalculate(applyRect, currentNode);
+            currentLeaf->accept(originalVisitor);
+            currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node());
 
             continue;
         }
 
 
         if(!m_currentProjection)
-            setupProjection(currentNode, applyRect, useTempProjections);
+            setupProjection(currentLeaf, applyRect, useTempProjections);
 
         KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                  m_currentProjection,
                                                  walker.cropRect());
 
         if(item.m_position & KisMergeWalker::N_FILTHY) {
-            DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
-            currentNode->accept(originalVisitor);
-            currentNode->projectionPlane()->recalculate(applyRect, walker.startNode());
+            DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentLeaf, applyRect);
+            currentLeaf->accept(originalVisitor);
+            currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
-            DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
-            if(dependOnLowerNodes(currentNode)) {
-                currentNode->accept(originalVisitor);
-                currentNode->projectionPlane()->recalculate(applyRect, currentNode);
+            DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentLeaf, applyRect);
+            if(currentLeaf->dependsOnLowerNodes()) {
+                currentLeaf->accept(originalVisitor);
+                currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node());
             }
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
-            DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
-            currentNode->projectionPlane()->recalculate(applyRect, walker.startNode());
+            DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentLeaf, applyRect);
+            currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
         }
         else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
-            DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentNode, applyRect);
+            DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentLeaf, applyRect);
             /* nothing to do */
         }
 
-        compositeWithProjection(currentNode, applyRect);
+        compositeWithProjection(currentLeaf, applyRect);
 
         if(item.m_position & KisMergeWalker::N_TOPMOST) {
-            writeProjection(currentNode, useTempProjections, applyRect);
+            writeProjection(currentLeaf, useTempProjections, applyRect);
             resetProjection();
         }
     }
@@ -280,23 +276,15 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
     }
 }
 
-bool KisAsyncMerger::isRootNode(KisNodeSP node) {
-    return !node->parent();
-}
-
-bool KisAsyncMerger::dependOnLowerNodes(KisNodeSP node) {
-    return qobject_cast<KisAdjustmentLayer*>(node.data());
-}
-
 void KisAsyncMerger::resetProjection() {
     m_currentProjection = 0;
     m_finalProjection = 0;
 }
 
-void KisAsyncMerger::setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection) {
-    KisPaintDeviceSP parentOriginal = currentNode->parent()->original();
+void KisAsyncMerger::setupProjection(KisProjectionLeafSP currentLeaf, const QRect& rect, bool useTempProjection) {
+    KisPaintDeviceSP parentOriginal = currentLeaf->parent()->original();
 
-    if (parentOriginal != currentNode->projection()) {
+    if (parentOriginal != currentLeaf->projection()) {
         if (useTempProjection) {
             if(!m_cachedPaintDevice)
                 m_cachedPaintDevice = new KisPaintDevice(parentOriginal->colorSpace());
@@ -321,28 +309,26 @@ void KisAsyncMerger::setupProjection(KisNodeSP currentNode, const QRect& rect, b
     }
 }
 
-void KisAsyncMerger::writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect) {
+void KisAsyncMerger::writeProjection(KisProjectionLeafSP topmostLeaf, bool useTempProjection, QRect rect) {
     Q_UNUSED(useTempProjection);
-    Q_UNUSED(topmostNode);
+    Q_UNUSED(topmostLeaf);
     if (!m_currentProjection) return;
 
     if(m_currentProjection != m_finalProjection) {
-        KisPainter gc(m_finalProjection);
-        gc.setCompositeOp(m_finalProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc.bitBlt(rect.topLeft(), m_currentProjection, rect);
+        KisPainter::copyAreaOptimized(rect.topLeft(), m_currentProjection, m_finalProjection, rect);
     }
-    DEBUG_NODE_ACTION("Writing projection", "", topmostNode->parent(), rect);
+    DEBUG_NODE_ACTION("Writing projection", "", topmostLeaf->parent(), rect);
 }
 
-bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect) {
+bool KisAsyncMerger::compositeWithProjection(KisProjectionLeafSP leaf, const QRect &rect) {
 
     if (!m_currentProjection) return true;
-    if (!layer->visible()) return true;
+    if (!leaf->visible()) return true;
 
     KisPainter gc(m_currentProjection);
-    layer->projectionPlane()->apply(&gc, rect);
+    leaf->projectionPlane()->apply(&gc, rect);
 
-    DEBUG_NODE_ACTION("Compositing projection", "", layer, needRect);
+    DEBUG_NODE_ACTION("Compositing projection", "", leaf, rect);
     return true;
 }
 

@@ -224,7 +224,7 @@ void DesktopViewProxy::documentChanged()
 
 void DesktopViewProxy::updateKeyBindings()
 {
-    KisView* view = qobject_cast<KisView*>(d->mainWindow->sketchKisView());
+    //KisView* view = qobject_cast<KisView*>(d->mainWindow->sketchKisView());
     foreach(QAction* action, d->desktopWindow->actions()) {
         QAction* otherAction = d->desktopWindow->action(action->objectName().toLatin1());
         if(otherAction) {

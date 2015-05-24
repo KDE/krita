@@ -1,7 +1,0 @@
-[Desktop Entry]
-Icon=
-Name=Layer Styles Filter (Extension)
-X-KDE-ServiceTypes=Krita/Filter
-Type=Service
-X-KDE-Library=kritalayerstylesfilter
-X-Krita-Version=28

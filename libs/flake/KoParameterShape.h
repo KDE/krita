@@ -74,7 +74,7 @@ public:
      *
      * @param handleId the id of the handle for which to get the position in shape coordinates
      */
-    QPointF handlePosition(int handleId);
+    QPointF handlePosition(int handleId) const;
 
     /**
      * @brief Paint the handles

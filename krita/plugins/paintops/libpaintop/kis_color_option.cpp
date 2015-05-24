@@ -41,10 +41,12 @@ public:
 };
 
 KisColorOption::KisColorOption()
-    : KisPaintOpOption(i18n("Color options"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
 {
     m_checkable = false;
     m_options = new KisColorOptionsWidget();
+
+    setObjectName("KisColorOption");
 
     // ui
     connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), m_options->hsvWidget, SLOT(setEnabled(bool)));

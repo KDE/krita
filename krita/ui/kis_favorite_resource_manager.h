@@ -31,7 +31,7 @@ class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
 
-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >
+class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> >
 {
     Q_OBJECT
 
@@ -106,6 +106,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void updateFavoritePresets();
+    void configChanged();
 
 private:
 
@@ -127,6 +128,8 @@ private:
     QString m_currentTag;
 
     bool m_initialized;
+
+    int m_maxPresets;
 };
 
 #endif

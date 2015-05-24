@@ -22,7 +22,7 @@ set(kritaheightmapexport_PART_SRCS
 ki18n_wrap_ui(kritaheightmapexport_PART_SRCS kis_wdg_options_heightmap.ui )
 
 add_library(kritaheightmapexport MODULE ${kritaheightmapexport_PART_SRCS})
-kcoreaddons_desktop_to_json(kritaheightmapimport krita_heightmap_export.desktop)
+kcoreaddons_desktop_to_json(kritaheightmapexport krita_heightmap_export.desktop)
 
 target_link_libraries(kritaheightmapexport kritaui  )
 

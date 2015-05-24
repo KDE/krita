@@ -155,10 +155,8 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
     } else if (copyFromDevice) {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
-        KisPainter gc(selection->pixelSelection());
-        gc.setCompositeOp(COMPOSITE_COPY);
         QRect rc(copyFromDevice->extent());
-        gc.bitBlt(rc.topLeft(), copyFromDevice, rc);
+        KisPainter::copyAreaOptimized(rc.topLeft(), copyFromDevice, selection->pixelSelection(), rc);
         selection->pixelSelection()->invalidateOutlineCache();
 
     } else {
@@ -246,12 +244,8 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
 
         QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
 
-        KisPainter gc(projection);
         // masks don't have any compositioning
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.setSelection(m_d->selection);
-        gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
-
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, m_d->selection);
         m_d->paintDeviceCache.putDevice(cacheDevice);
 
     } else {

@@ -29,6 +29,7 @@ class KisColorInput;
 class KisColorSpaceSelector;
 class QCheckBox;
 class KisSignalCompressor;
+class QSpacerItem;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
@@ -52,6 +53,7 @@ private:
     QList<KisColorInput*> m_inputs;
     const KoColorSpace* m_colorSpace;
     QVBoxLayout *m_layout;
+    QSpacerItem *m_spacer;
     KoColor m_color;
     bool m_updateAllowed;
     KisSignalCompressor *m_updateCompressor;

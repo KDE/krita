@@ -27,8 +27,8 @@
 
 #include <KoColor.h>
 
-KisSmudgeOption::KisSmudgeOption(const QString& name, const QString& label, bool checked, const QString& category):
-    KisRateOption(name, label, checked, category),
+KisSmudgeOption::KisSmudgeOption():
+    KisRateOption("SmudgeRate", KisPaintOpOption::GENERAL, true),
     m_mode(SMEARING_MODE)
 {
     setValueRange(0.01, 1.0);

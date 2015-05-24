@@ -94,7 +94,7 @@ public:
         , sketchView(0)
         , desktopWindow(0)
         , currentView(0)
-        , desktopCursorStyle(CURSOR_STYLE_OUTLINE)
+        , desktopCursorStyle(CURSOR_STYLE_NO_CURSOR)
         , slateMode(false)
         , docked(false)
         , sketchKisView(0)
@@ -123,7 +123,7 @@ public:
     SketchDeclarativeView* sketchView;
     KisMainWindow* desktopWindow;
     QObject* currentView;
-    enumCursorStyle desktopCursorStyle;
+    CursorStyle desktopCursorStyle;
 
     bool slateMode;
     bool docked;
@@ -256,9 +256,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
     // default if it's no cursor (that's most likely due to a broken config)
-    if (cfg.cursorStyle() != CURSOR_STYLE_NO_CURSOR)
-        d->desktopCursorStyle = cfg.cursorStyle();
-    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+    if (cfg.newCursorStyle() != CURSOR_STYLE_NO_CURSOR)
+        d->desktopCursorStyle = cfg.newCursorStyle();
+    cfg.setNewCursorStyle(CURSOR_STYLE_NO_CURSOR);
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
@@ -325,7 +325,7 @@ void MainWindow::switchToSketch()
 
     KisConfig cfg;
     if (d->desktopWindow && centralWidget() == d->desktopWindow) {
-        d->desktopCursorStyle = cfg.cursorStyle();
+        d->desktopCursorStyle = cfg.newCursorStyle();
         view = qobject_cast<KisViewManager*>(d->desktopWindow->activeView());
 
         //Notify the view we are switching away from that we are about to switch away from it
@@ -372,7 +372,7 @@ void MainWindow::sketchChange()
         d->syncObject = 0;
         qApp->processEvents();
         KisConfig cfg;
-        cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+        cfg.setNewCursorStyle(CURSOR_STYLE_NO_CURSOR);
         emit switchedToSketch();
     }
     if (d->toDesktop)
@@ -416,7 +416,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
         QApplication::sendEvent(view, &switchedEvent);
         KisConfig cfg;
-        cfg.setCursorStyle(d->desktopCursorStyle);
+        cfg.setNewCursorStyle(d->desktopCursorStyle);
     }
 
     if (d->toSketch && !justLoaded)
@@ -709,7 +709,7 @@ MainWindow::~MainWindow()
 {
     delete d;
     KisConfig cfg;
-    cfg.setCursorStyle(d->desktopCursorStyle);
+    cfg.setNewCursorStyle(d->desktopCursorStyle);
 }
 
 #ifdef Q_OS_WIN

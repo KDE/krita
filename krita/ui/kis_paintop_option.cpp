@@ -21,46 +21,28 @@
 
 #include <klocale.h>
 
-QString KisPaintOpOption::generalCategory()
-{
-    return i18n("General");
-}
-
-QString KisPaintOpOption::colorCategory()
-{
-    return i18n("Color");
-}
-
-QString KisPaintOpOption::textureCategory()
-{
-    return i18n("Texture");
-}
-
-
 struct KisPaintOpOption::Private
 {
 public:
     bool checked;
     QString label;
-    QString category;
-    QWidget * configurationPage;
+    KisPaintOpOption::PaintopCategory category;
+    QWidget *configurationPage;
 
     bool updatesBlocked;
     bool isWritingSettings;
 };
 
-KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& category, bool checked)
-        : m_checkable(true)
-        , m_d(new Private())
+KisPaintOpOption::KisPaintOpOption(PaintopCategory category, bool checked)
+    : m_checkable(true)
+    , m_d(new Private())
 
 {
     m_d->checked = checked;
-    m_d->label = label;
     m_d->category = category;
-    m_d->configurationPage = 0;
     m_d->updatesBlocked = false;
     m_d->isWritingSettings = false;
-
+    m_d->configurationPage = 0;
 }
 
 KisPaintOpOption::~KisPaintOpOption()
@@ -91,12 +73,7 @@ void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setti
     m_d->isWritingSettings = false;
 }
 
-QString KisPaintOpOption::label() const
-{
-    return m_d->label;
-}
-
-QString KisPaintOpOption::category() const
+KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
 {
     return m_d->category;
 }
@@ -104,6 +81,10 @@ QString KisPaintOpOption::category() const
 bool KisPaintOpOption::isChecked() const
 {
     return m_d->checked;
+}
+
+bool KisPaintOpOption::isCheckable() const {
+    return m_checkable;
 }
 
 void KisPaintOpOption::setChecked(bool checked)

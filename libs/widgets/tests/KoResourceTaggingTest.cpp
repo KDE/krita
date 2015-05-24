@@ -30,7 +30,7 @@
 
 void KoResourceTaggingTest::testInitialization()
 {
-    KoResourceTagStore tagStore(KoResourceServerProvider::instance()->patternServer(), "ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
+    KoResourceTagStore tagStore(KoResourceServerProvider::instance()->patternServer());
     QVERIFY(tagStore.tagNamesList().isEmpty());
     QVERIFY(tagStore.assignedTagsList(0).isEmpty());
     QVERIFY(tagStore.searchTag("bla").isEmpty());
@@ -39,7 +39,7 @@ void KoResourceTaggingTest::testInitialization()
 void KoResourceTaggingTest::testTagging()
 {
     KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
-    KoResourceTagStore tagStore(patServer, "ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
+    KoResourceTagStore tagStore(patServer);
     KoResource *res = patServer->resources().first();
     QVERIFY(res);
     QVERIFY(patServer->resourceByFilename(res->shortFilename()) == res);
@@ -89,7 +89,7 @@ void KoResourceTaggingTest::testTagging()
 void KoResourceTaggingTest::testReadWriteXML()
 {
     KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
-    KoResourceTagStore tagStore(patServer, "ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
+    KoResourceTagStore tagStore(patServer);
 
     QList<KoPattern*> patterns = patServer->resources();
     Q_ASSERT(patterns.size() > 5);
@@ -109,7 +109,7 @@ void KoResourceTaggingTest::testReadWriteXML()
 
     tagStore.writeXMLFile(QString(FILES_OUTPUT_DIR) + "/" + "kis_pattern_tags.xml");
 
-    KoResourceTagStore tagStore2(patServer, "ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
+    KoResourceTagStore tagStore2(patServer);
     tagStore2.readXMLFile(QString(FILES_OUTPUT_DIR) + "/" + "kis_pattern_tags.xml");
 
     QVERIFY(tagStore2.tagNamesList().size() == 9);

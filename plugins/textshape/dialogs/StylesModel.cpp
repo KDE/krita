@@ -187,7 +187,7 @@ QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
     }
 }
 
-QImage StylesModel::stylePreview(int row, QSize size)
+QImage StylesModel::stylePreview(int row, const QSize &size)
 {
     if (!m_styleManager || !m_styleThumbnailer) {
         return QImage();
@@ -228,7 +228,7 @@ QImage StylesModel::stylePreview(int row, QSize size)
     return QImage();
 }
 /*
-QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
+QImage StylesModel::stylePreview(QModelIndex &index, const QSize &size)
 {
     if (!m_styleManager || !m_styleThumbnailer) {
         return QImage();

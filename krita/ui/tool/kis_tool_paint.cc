@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2003-2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,6 +60,7 @@
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_cubic_curve.h>
+#include "kis_display_color_converter.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -73,7 +75,9 @@
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor),
-      m_isOutlineEnabled(false)
+      m_showColorPreview(false),
+      m_colorPreviewShowComparePlate(false),
+      m_colorPickerDelayTimer()
 {
     m_specialHoverModifier = false;
     m_optionsWidgetLayout = 0;
@@ -119,6 +123,9 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     if (kiscanvas && kiscanvas->viewManager()) {
         connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
     }
+
+    m_colorPickerDelayTimer.setSingleShot(true);
+    connect(&m_colorPickerDelayTimer, SIGNAL(timeout()), this, SLOT(activatePickColorDelayed()));
 }
 
 
@@ -166,7 +173,7 @@ void KisToolPaint::deactivate()
 QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
     KisConfig cfg;
-    if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) return originalOutline;
+    if (cfg.newOutlineStyle() == OUTLINE_NONE) return originalOutline;
 
     const qreal minThresholdSize = cfg.outlineSizeMinimum();
 
@@ -207,6 +214,16 @@ void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 
     QPainterPath path = tryFixBrushOutline(pixelToView(m_currentOutline));
     paintToolOutline(&gc, path);
+
+    if (m_showColorPreview) {
+        QRectF viewRect = converter.documentToView(m_oldColorPreviewRect);
+        gc.fillRect(viewRect, m_colorPreviewCurrentColor);
+
+        if (m_colorPreviewShowComparePlate) {
+            QRectF baseColorRect = viewRect.translated(viewRect.width(), 0);
+            gc.fillRect(baseColorRect, m_colorPreviewBaseColor);
+        }
+    }
 }
 
 void KisToolPaint::setMode(ToolMode mode)
@@ -221,24 +238,81 @@ void KisToolPaint::setMode(ToolMode mode)
     KisTool::setMode(mode);
 }
 
+void KisToolPaint::activatePickColor(AlternateAction action)
+{
+    m_showColorPreview = true;
+
+    requestUpdateOutline(m_outlineDocPoint, 0);
+
+    int resource = colorPreviewResourceId(action);
+    KoColor color = canvas()->resourceManager()->koColorResource(resource);
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+
+    m_colorPreviewCurrentColor = kisCanvas->displayColorConverter()->toQColor(color);
+
+    if (!m_colorPreviewBaseColor.isValid()) {
+        m_colorPreviewBaseColor = m_colorPreviewCurrentColor;
+    }
+}
+
+void KisToolPaint::deactivatePickColor(AlternateAction action)
+{
+    Q_UNUSED(action);
+
+    m_showColorPreview = false;
+    m_oldColorPreviewRect = QRect();
+    m_oldColorPreviewUpdateRect = QRect();
+    m_colorPreviewCurrentColor = QColor();
+}
+
+void KisToolPaint::pickColorWasOverridden()
+{
+    m_colorPreviewShowComparePlate = false;
+    m_colorPreviewBaseColor = QColor();
+}
+
 void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
     switch (action) {
     case PickFgNode:
+    case PickBgNode:
+    case PickFgImage:
+    case PickBgImage:
+        delayedAction = action;
+        m_colorPickerDelayTimer.start(100);
+    default:
+        pickColorWasOverridden();
+        KisTool::activateAlternateAction(action);
+    };
+}
+
+void KisToolPaint::activatePickColorDelayed()
+{
+    switch (delayedAction) {
+        case PickFgNode:
         useCursor(KisCursor::pickerLayerForegroundCursor());
+        activatePickColor(delayedAction);
         break;
     case PickBgNode:
         useCursor(KisCursor::pickerLayerBackgroundCursor());
+        activatePickColor(delayedAction);
         break;
     case PickFgImage:
         useCursor(KisCursor::pickerImageForegroundCursor());
+        activatePickColor(delayedAction);
         break;
     case PickBgImage:
         useCursor(KisCursor::pickerImageBackgroundCursor());
+        activatePickColor(delayedAction);
         break;
     default:
-        KisTool::activateAlternateAction(action);
+        break;
     };
+
+    repaintDecorations();
+
 }
 
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
@@ -252,7 +326,11 @@ void KisToolPaint::deactivateAlternateAction(AlternateAction action)
         return;
     }
 
+    delayedAction = KisTool::NONE;
+    m_colorPickerDelayTimer.stop();
+
     resetCursorStyle();
+    deactivatePickColor(action);
 }
 
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -270,6 +348,8 @@ void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateActio
 {
     if (!pickColor(event->point, action)) {
         KisTool::continueAlternateAction(event, action);
+    } else {
+        requestUpdateOutline(event->point, event);
     }
 }
 
@@ -283,6 +363,15 @@ void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction act
     }
 }
 
+int KisToolPaint::colorPreviewResourceId(AlternateAction action)
+{
+    bool toForegroundColor = action == PickFgNode || action == PickFgImage;
+    int resource = toForegroundColor ?
+        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
+
+    return resource;
+}
+
 bool KisToolPaint::pickColor(const QPointF &documentPixel,
                              AlternateAction action)
 {
@@ -294,11 +383,9 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
         return false;
     }
 
-    bool toForegroundColor = action == PickFgNode || action == PickFgImage;
     bool fromCurrentNode = action == PickFgNode || action == PickBgNode;
 
-    int resource = toForegroundColor ?
-        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
+    int resource = colorPreviewResourceId(action);
 
     KisPaintDeviceSP device = fromCurrentNode ?
         currentNode()->projection() : image()->projection();
@@ -306,9 +393,18 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
     KoColor color;
+    QColor previewColor;
+
     if (KisToolUtils::pick(device, imagePoint, &color)) {
         canvas()->resourceManager()->setResource(resource, color);
+
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_ASSERT_RECOVER(kisCanvas) { return true; }
+        previewColor = kisCanvas->displayColorConverter()->toQColor(color);
     }
+
+    m_colorPreviewCurrentColor = previewColor;
+    m_colorPreviewShowComparePlate = true;
 
     return true;
 }
@@ -344,7 +440,7 @@ QWidget * KisToolPaint::createOptionWidget()
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
-    verticalLayout->setMargin(0);
+    verticalLayout->setContentsMargins(0,0,0,0);
     verticalLayout->setSpacing(1);
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -358,8 +454,8 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setColumnStretch(1, 1);
 
     verticalLayout->addLayout(m_optionsWidgetLayout);
+    m_optionsWidgetLayout->setContentsMargins(0,0,0,0);
     m_optionsWidgetLayout->setSpacing(1);
-    m_optionsWidgetLayout->setMargin(0);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
@@ -429,9 +525,6 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
     Q_ASSERT(m_optionsWidgetLayout != 0);
     if (label) {
-        if (QLabel *lbl = qobject_cast<QLabel*>(label)) {
-            lbl->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-        }
         m_optionsWidgetLayout->addWidget(label, m_optionsWidgetLayout->rowCount(), 0);
         m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount() - 1, 1);
     }
@@ -498,6 +591,7 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
 
 void KisToolPaint::activatePrimaryAction()
 {
+    pickColorWasOverridden();
     setOutlineEnabled(true);
 }
 
@@ -551,25 +645,36 @@ void KisToolPaint::decreaseBrushSize()
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
+QRectF KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
+{
+    if (!m_showColorPreview) return QRect();
+
+    KisConfig cfg;
+
+    const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
+    const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
+
+    return colorPreviewDocumentRect.translated(outlineDocPoint);
+}
+
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
     if (!m_supportOutline) return;
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
-    outlineMode = KisPaintOpSettings::CursorIsNotOutline;
+    outlineMode = KisPaintOpSettings::CursorNoOutline;
 
     if (isOutlineEnabled() &&
         (mode() == KisTool::GESTURE_MODE ||
-         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED)&&
+         ((cfg.newOutlineStyle() == OUTLINE_FULL ||
+           cfg.newOutlineStyle() == OUTLINE_CIRCLE) &&
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
-        outlineMode = KisPaintOpSettings::CursorIsOutline;
+        outlineMode = cfg.newOutlineStyle() == OUTLINE_CIRCLE ?
+            KisPaintOpSettings::CursorIsCircleOutline :
+            KisPaintOpSettings::CursorIsOutline;
     }
 
     m_outlineDocPoint = outlineDocPoint;
@@ -586,17 +691,36 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
     qreal xoffset = 2.0/zoomX;
     qreal yoffset = 2.0/zoomY;
-    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+
+    if (!outlineDocRect.isEmpty()) {
+        outlineDocRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
+    }
+
+    QRectF colorPreviewDocRect = this->colorPreviewDocRect(m_outlineDocPoint);
+    QRectF colorPreviewDocUpdateRect;
+    if (!colorPreviewDocRect.isEmpty()) {
+        colorPreviewDocUpdateRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
+    }
+
+    if (!m_oldColorPreviewUpdateRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldColorPreviewUpdateRect);
+    }
 
     if (!m_oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
-    if (!newOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(newOutlineRect);
+    if (!outlineDocRect.isEmpty()) {
+        canvas()->updateCanvas(outlineDocRect);
     }
 
-    m_oldOutlineRect = newOutlineRect;
+    if (!colorPreviewDocUpdateRect.isEmpty()) {
+        canvas()->updateCanvas(colorPreviewDocUpdateRect);
+    }
+
+    m_oldOutlineRect = outlineDocRect;
+    m_oldColorPreviewRect = colorPreviewDocRect;
+    m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
 }
 
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,

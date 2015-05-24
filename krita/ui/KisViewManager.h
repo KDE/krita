@@ -233,6 +233,8 @@ private Q_SLOTS:
     void openResourcesDirectory();
     void makeStatusBarVisible();
     void guiUpdateTimeout();
+    void changeAuthorProfile(const QString &profileName);
+    void slotUpdateAuthorProfileActions();
 
 private:
     void createActions();

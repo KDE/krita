@@ -12,9 +12,8 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
     cmake_policy(SET CMP0022 OLD)
 endif()
 
-if(NOT ${CMAKE_VERSION} VERSION_LESS 3.0.0)
-    # reduce cmake warnings from KDE4Macros.cmake
-    cmake_policy(SET CMP0026 OLD)
+if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
+    cmake_policy(SET CMP0026 OLD) 
     cmake_policy(SET CMP0046 OLD)
 endif()
 
@@ -201,6 +200,8 @@ find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11E
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+
+set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
     find_package(Qt5 5.3.0 REQUIRED OpenGL)
@@ -806,7 +807,9 @@ set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
 # Widgets depends on flake
 set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/widgets)
+                   ${CMAKE_BINARY_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgets
+                   ${CMAKE_BINARY_DIR}/libs/widgets)
 
 # BasicFlakes depends on flake, widgets
 set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}

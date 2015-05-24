@@ -202,11 +202,16 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
         FileItem *file = new FileItem();
         file->name = filename;
 
+#ifdef Q_OS_WIN
+        QString path = QDir::tempPath() + "/" + filename;
+#else
         QString path = QDir::homePath() + "/" + filename;
+#endif
+
         // get thumbnail -- all calligra apps save a thumbnail
         KoStore* store = KoStore::createStore(path, KoStore::Read);
 
-        if (store && (    store->open(QString("Thumbnails/thumbnail.png"))
+        if (store && (store->open(QString("Thumbnails/thumbnail.png"))
                           || store->open(QString("preview.png")))) {
             // Hooray! No long delay for the user...
             QByteArray bytes = store->read(store->size());

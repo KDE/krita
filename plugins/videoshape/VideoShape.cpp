@@ -36,7 +36,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoStore.h>
-#include <KoUnit.h>
 #include <KoIcon.h>
 
 #include <kdebug.h>

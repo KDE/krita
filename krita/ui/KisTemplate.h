@@ -21,7 +21,7 @@
 #ifndef KIS_TEMPLATE_H
 #define KIS_TEMPLATE_H
 
-#include <QStringList>
+#include <QString>
 #include <QPixmap>
 
 /** @internal */

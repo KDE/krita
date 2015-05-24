@@ -493,10 +493,10 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
           *srcDevice->compositionSourceColorSpace())) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
-        KisPainter gc(clone);
-        gc.setCompositeOp(COMPOSITE_COPY);
+
         QRect rc(srcDevice->extent());
-        gc.bitBlt(rc.topLeft(), srcDevice, rc);
+        KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
+
     } else {
         clone = new KisPaintDevice(*srcDevice);
     }

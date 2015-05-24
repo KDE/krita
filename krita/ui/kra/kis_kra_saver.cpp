@@ -42,6 +42,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
+#include <kis_psd_layer_style_resource.h>
 
 #include "KisDocument.h"
 #include <string>
@@ -155,6 +156,26 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             location += m_d->imageName + ICC_PATH;
             if (store->open(location)) {
                 store->write(annotation->annotation());
+                store->close();
+            }
+        }
+    }
+
+    {
+        KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
+        KIS_ASSERT_RECOVER_NOOP(!collection.valid());
+        collection.collectAllLayerStyles(image->root());
+        if (collection.valid()) {
+            location = external ? QString() : uri;
+            location += m_d->imageName + LAYER_STYLES_PATH;
+
+            if (store->open(location)) {
+                QBuffer aslBuffer;
+                aslBuffer.open(QIODevice::WriteOnly);
+                collection.saveToDevice(&aslBuffer);
+                aslBuffer.close();
+
+                store->write(aslBuffer.buffer());
                 store->close();
             }
         }

@@ -227,10 +227,10 @@ public:
     // ------- startup/openpane etc ---------------
 
     /**
-     * Template type used. This is used by the start up widget to show
+     * Template resource path used. This is used by the start up widget to show
      * the correct templates.
      */
-    QString templateType() const;
+    QString templatesResourcePath() const;
 
 
     /**
@@ -243,10 +243,10 @@ public:
 protected:
 
     /**
-     * Set the template type used. This is used by the start up widget to show
+     * Set the templates resource path used. This is used by the start up widget to show
      * the correct templates.
      */
-    void setTemplateType(const QString& _templateType);
+    void setTemplatesResourcePath(const QString &templatesResourcePath);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

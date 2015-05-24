@@ -55,8 +55,8 @@ public Q_SLOTS:
     bool unappliedStyleChanges();
 
 private Q_SLOTS:
-    void slotParagraphStyleSelected(QModelIndex index);
-    void slotCharacterStyleSelected(QModelIndex index);
+    void slotParagraphStyleSelected(const QModelIndex &index);
+    void slotCharacterStyleSelected(const QModelIndex &index);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);

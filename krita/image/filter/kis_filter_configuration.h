@@ -18,6 +18,8 @@
 #ifndef _KIS_FILTER_CONFIGURATION_H_
 #define _KIS_FILTER_CONFIGURATION_H_
 
+#include <QMetaType>
+
 #include "kis_properties_configuration.h"
 
 #include "kis_types.h"
@@ -130,5 +132,7 @@ private:
     struct Private;
     Private* const d;
 };
+
+Q_DECLARE_METATYPE(KisFilterConfiguration*)
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

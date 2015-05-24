@@ -43,7 +43,6 @@
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>
-#include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
 
 #include <kis_fill_painter.h>
@@ -94,10 +93,9 @@ void KisImageFromClipboard::createImage()
         KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
         if (clip) {
             QRect r = clip->exactBounds();
-            KisPainter painter;
-            painter.begin(layer->paintDevice());
-            painter.setCompositeOp(COMPOSITE_COPY);
-            painter.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
+
+            KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
+
             layer->setDirty();
         }
 

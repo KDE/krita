@@ -58,7 +58,6 @@ endif()
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
    kis_debug.cpp
-   kis_assert.cpp
    kis_distance_information.cpp
    kis_painter.cc
    kis_progress_updater.cpp
@@ -180,6 +179,7 @@ set(kritaimage_LIB_SRCS
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
    kis_mask_projection_plane.cpp
+   kis_projection_leaf.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
@@ -272,8 +272,18 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_shape_paint_action.cpp
 
    kis_psd_layer_style.cpp
-   kis_layer_style_serializer.cpp
-   kis_layer_style_projection_plane_factory.cpp
+
+   layerstyles/kis_layer_style_filter.cpp
+   layerstyles/kis_layer_style_filter_environment.cpp
+   layerstyles/kis_layer_style_filter_projection_plane.cpp
+   layerstyles/kis_layer_style_projection_plane.cpp
+   layerstyles/kis_ls_drop_shadow_filter.cpp
+   layerstyles/kis_ls_satin_filter.cpp
+   layerstyles/kis_ls_stroke_filter.cpp
+   layerstyles/kis_ls_bevel_emboss_filter.cpp
+   layerstyles/kis_ls_overlay_filter.cpp
+   layerstyles/kis_ls_utils.cpp
+   layerstyles/gimp_bump_map.cpp
 )
 
 set(einspline_SRCS
@@ -287,8 +297,8 @@ set(einspline_SRCS
 
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

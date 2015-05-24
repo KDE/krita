@@ -36,7 +36,7 @@ public:
     KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     virtual ~KoDetailsPane();
 
-    KComponentData componentData();
+    KComponentData componentData() const;
 
     virtual bool eventFilter(QObject* watched, QEvent* e);
 

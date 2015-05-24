@@ -20,8 +20,6 @@
 #include "KisTemplateTree.h"
 
 #include <QDir>
-#include <QImage>
-#include <QPixmap>
 #include <QPrinter>
 #include <QUrl>
 
@@ -30,21 +28,18 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-#include <kcomponentdata.h>
-#include <ksavefile.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <stdlib.h>
 
 #include <KisTemplate.h>
 #include <KisTemplateGroup.h>
 #include <KisTemplates.h>
 
-KisTemplateTree::KisTemplateTree(const QByteArray &templateType,
+KisTemplateTree::KisTemplateTree(const QString &templatesResourcePath,
                                const KComponentData &componentData, bool readTree) :
-        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0),
+        m_templatesResourcePath(templatesResourcePath), m_componentData(componentData), m_defaultGroup(0),
         m_defaultTemplate(0)
 {
     if (readTree)
@@ -65,7 +60,7 @@ void KisTemplateTree::readTemplateTree()
 
 void KisTemplateTree::writeTemplateTree()
 {
-    QString localDir = KGlobal::dirs()->saveLocation(m_templateType);
+    QString localDir = KGlobal::dirs()->saveLocation("data", m_templatesResourcePath);
 
     foreach (KisTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
@@ -142,7 +137,7 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 void KisTemplateTree::readGroups()
 {
 
-    QStringList dirs = KGlobal::dirs()->resourceDirs(m_templateType);
+    QStringList dirs = KGlobal::dirs()->findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);

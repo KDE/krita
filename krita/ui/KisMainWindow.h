@@ -125,9 +125,9 @@ public:
 
 
     /// Return the list of dock widgets belonging to this main window.
-    QList<QDockWidget*> dockWidgets();
+    QList<QDockWidget*> dockWidgets() const;
 
-    QList<KoCanvasObserverBase*> canvasObservers();
+    QList<KoCanvasObserverBase*> canvasObservers() const;
 
     /**
      * @return the KisDockerManager which is assigned

@@ -23,9 +23,10 @@
 #include "kowidgets_export.h"
 
 #include <KoText.h>
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <QWidget>
+
+class KoUnit;
 
 /// the widget that shows the size/margins and other page settings.
 class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget

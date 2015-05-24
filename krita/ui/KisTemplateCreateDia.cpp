@@ -30,8 +30,6 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QHBoxLayout>
-#include <QFrame>
-#include <QByteArray>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGroupBox>
@@ -108,7 +106,7 @@ public:
  *
  ****************************************************************************/
 
-KisTemplateCreateDia::KisTemplateCreateDia(const char *templateType, const KComponentData &componentData,
+KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &componentData,
                                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
   : KDialog(parent)
   , d(new KisTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
@@ -144,7 +142,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const char *templateType, const KComp
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSortingEnabled(true);
 
-    d->m_tree=new KisTemplateTree(templateType, componentData, true);
+    d->m_tree = new KisTemplateTree(templatesResourcePath, componentData, true);
     fillGroupTree();
     d->m_groups->sortItems(0, Qt::AscendingOrder);
 
@@ -212,7 +210,7 @@ void KisTemplateCreateDia::slotSelectionChanged()
     }
 }
 
-void KisTemplateCreateDia::createTemplate(const char *templateType,
+void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const char *suffix,
                                          const KComponentData &componentData,
                                          KisDocument *document, QWidget *parent)
@@ -232,7 +230,7 @@ void KisTemplateCreateDia::createTemplate(const char *templateType,
 
     const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
 
-    KisTemplateCreateDia *dia = new KisTemplateCreateDia(templateType, componentData, fileName, thumbnail, parent);
+    KisTemplateCreateDia *dia = new KisTemplateCreateDia(templatesResourcePath, componentData, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
 
@@ -284,7 +282,7 @@ void KisTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir=KGlobal::dirs()->saveLocation(d->m_tree->templateType());
+    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -445,7 +443,7 @@ void KisTemplateCreateDia::slotAddGroup() {
         QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir= KGlobal::dirs()->saveLocation(d->m_tree->templateType());
+    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=name;
     KisTemplateGroup *newGroup=new KisTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);

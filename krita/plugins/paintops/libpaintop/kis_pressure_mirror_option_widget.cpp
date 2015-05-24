@@ -29,8 +29,10 @@
 #include "kis_pressure_mirror_option.h"
 
 KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
-    : KisCurveOptionWidget(new KisPressureMirrorOption())
+    : KisCurveOptionWidget(new KisPressureMirrorOption(), i18n("Not mirrored"), i18n("Mirrored"))
 {
+    setObjectName("KisPressureMirrorOptionWidget");
+
     QWidget* w = new QWidget;
     m_horizontalMirror = new QCheckBox(i18n("Horizontally"));
     m_horizontalMirror->setChecked(false);

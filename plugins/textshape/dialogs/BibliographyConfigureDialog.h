@@ -53,12 +53,12 @@ class SortKeyWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent);
+    explicit SortKeyWidget(const QString &sortKey, Qt::SortOrder order, QWidget *parent);
 
     QString sortKey() const;
     Qt::SortOrder sortOrder() const;
 
-    void setSortKey(QString &sortKey);
+    void setSortKey(const QString &sortKey);
     void setSortOrder(Qt::SortOrder order);
 
 private:

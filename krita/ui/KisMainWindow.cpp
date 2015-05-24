@@ -278,8 +278,8 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-//     QT5TODO
-//     setComponentData(KisFactory::componentData());
+//    setComponentData(KisFactory::componentData());
+
     KGlobal::setActiveComponent(KisFactory::componentData());
 
     d->viewManager = new KisViewManager(this, actionCollection());
@@ -364,6 +364,34 @@ KisMainWindow::KisMainWindow()
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
         d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
+
+        KActionCollection *actions = actionCollection();
+        QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->helpMenu->action(KHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->helpMenu->action(KHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->helpMenu->action(KHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->helpMenu->action(KHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->helpMenu->action(KHelpMenu::menuAboutKDE);
+
+        if (helpContentsAction) {
+            actions->addAction(helpContentsAction->objectName(), helpContentsAction);
+        }
+        if (whatsThisAction) {
+            actions->addAction(whatsThisAction->objectName(), whatsThisAction);
+        }
+        if (reportBugAction) {
+            actions->addAction(reportBugAction->objectName(), reportBugAction);
+        }
+        if (switchLanguageAction) {
+            actions->addAction(switchLanguageAction->objectName(), switchLanguageAction);
+        }
+        if (aboutAppAction) {
+            actions->addAction(aboutAppAction->objectName(), aboutAppAction);
+        }
+        if (aboutKdeAction) {
+            actions->addAction(aboutKdeAction->objectName(), aboutKdeAction);
+        }
+
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
@@ -499,6 +527,9 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();
 
         QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
+        subwin->setAttribute(Qt::WA_DeleteOnClose, true);
+        connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
+
         KisConfig cfg;
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
@@ -1182,17 +1213,32 @@ int KisMainWindow::viewCount() const
 bool KisMainWindow::restoreWorkspace(const QByteArray &state)
 {
     QByteArray oldState = saveState();
+    const bool showTitlebars = KisConfig().showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
-    foreach(QDockWidget *docker, dockWidgets()) {
-        docker->hide();
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->hide();
+        dock->titleBarWidget()->setVisible(showTitlebars);
     }
 
-    bool success = QMainWindow::restoreState(state);
+    bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
-        QMainWindow::restoreState(oldState);
+        KXmlGuiWindow::restoreState(oldState);
+        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+            if (dock->titleBarWidget()) {
+                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+            }
+        }
         return false;
+    }
+
+
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
+        }
     }
 
     return success;
@@ -1683,11 +1729,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (titleBar && locked)
             titleBar->setLocked(true);
 
-        if (titleBar) {
-            KisConfig cfg;
-            titleBar->setVisible(cfg.showDockerTitleBars());
-        }
-
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[factory->id()];
@@ -1720,12 +1761,12 @@ void KisMainWindow::forceDockTabFonts()
     }
 }
 
-QList<QDockWidget*> KisMainWindow::dockWidgets()
+QList<QDockWidget*> KisMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
 }
 
-QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 
@@ -1809,7 +1850,9 @@ void KisMainWindow::updateWindowMenu()
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QAction *action = docMenu->addAction(doc->url().prettyUrl());
+            QString title = doc->url().prettyUrl();
+            if (title.isEmpty()) title = doc->image()->objectName();
+            QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));
             d->documentMapper->setMapping(action, doc);
@@ -1950,9 +1993,8 @@ void KisMainWindow::showErrorAndDie()
 
 void KisMainWindow::showAboutApplication()
 {
-// QT5TODO
-//     KisAboutApplication dlg(KisFactory::aboutData(), this);
-//     dlg.exec();
+    KisAboutApplication dlg(KisFactory::aboutData(), this);
+    dlg.exec();
 }
 
 QPointer<KisView>KisMainWindow::activeKisView()
@@ -2196,7 +2238,8 @@ void KisMainWindow::showDockerTitleBars(bool show)
 {
     foreach (QDockWidget *dock, dockWidgets()) {
         if (dock->titleBarWidget()) {
-            dock->titleBarWidget()->setVisible(show);
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));
         }
     }
 

@@ -39,7 +39,7 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
-    void setStyles(const QList<KoCharacterStyle *> styles);
+    void setStyles(const QList<KoCharacterStyle *> &styles);
     void addStyle(KoCharacterStyle *style);
     void removeStyle(KoCharacterStyle *style);
     void replaceStyle(KoCharacterStyle *oldStyle, KoCharacterStyle *newStyle);

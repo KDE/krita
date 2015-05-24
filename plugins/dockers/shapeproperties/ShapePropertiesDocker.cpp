@@ -28,6 +28,7 @@
 #include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoParameterShape.h>
+#include <KoUnit.h>
 
 #include <klocale.h>
 

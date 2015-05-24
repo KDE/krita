@@ -75,7 +75,7 @@ protected:
 
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
-    KConfigGroup configGroup;
+    KConfigGroup m_configGroup;
 
 
 };

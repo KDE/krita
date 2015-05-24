@@ -253,7 +253,7 @@ public:
 
 };
 
-KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData &componentData)
+KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentData &componentData)
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
@@ -1931,12 +1931,12 @@ void KoMainWindow::forceDockTabFonts()
     }
 }
 
-QList<QDockWidget*> KoMainWindow::dockWidgets()
+QList<QDockWidget*> KoMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
 }
 
-QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers() const
 {
 
     QList<KoCanvasObserverBase*> observers;
@@ -2003,8 +2003,36 @@ void KoMainWindow::newView()
 
 void KoMainWindow::createMainwindowGUI()
 {
-    if ( isHelpMenuEnabled() && !d->m_helpMenu )
+    if ( isHelpMenuEnabled() && !d->m_helpMenu ) {
         d->m_helpMenu = new KHelpMenu( this, *componentData().aboutData(), true );
+
+        KActionCollection *actions = actionCollection();
+        QAction *helpContentsAction = d->m_helpMenu->action(KHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->m_helpMenu->action(KHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->m_helpMenu->action(KHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->m_helpMenu->action(KHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->m_helpMenu->action(KHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->m_helpMenu->action(KHelpMenu::menuAboutKDE);
+
+        if (helpContentsAction) {
+            actions->addAction(helpContentsAction->objectName(), helpContentsAction);
+        }
+        if (whatsThisAction) {
+            actions->addAction(whatsThisAction->objectName(), whatsThisAction);
+        }
+        if (reportBugAction) {
+            actions->addAction(reportBugAction->objectName(), reportBugAction);
+        }
+        if (switchLanguageAction) {
+            actions->addAction(switchLanguageAction->objectName(), switchLanguageAction);
+        }
+        if (aboutAppAction) {
+            actions->addAction(aboutAppAction->objectName(), aboutAppAction);
+        }
+        if (aboutKdeAction) {
+            actions->addAction(aboutKdeAction->objectName(), aboutKdeAction);
+        }
+    }
 
     QString f = xmlFile();
     setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc"/*, componentData()*/ ) );

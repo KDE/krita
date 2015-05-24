@@ -32,7 +32,7 @@
 
 #include <kis_image.h>
 #include <kis_brush_option_widget.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
@@ -128,7 +128,9 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    path = KisBrushBasedPaintOpSettings::brushOutline(info, mode);
+
+    // clone tool should always show an outline
+    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, mode, 1.0, true);
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();

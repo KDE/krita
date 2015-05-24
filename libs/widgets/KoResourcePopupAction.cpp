@@ -20,7 +20,6 @@
 
 #include "KoResourcePopupAction.h"
 
-#include "KoResourceServerProvider.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
 #include "KoResourceModel.h"
@@ -28,6 +27,8 @@
 #include "KoResource.h"
 #include "KoCheckerBoardPainter.h"
 #include "KoShapeBackground.h"
+#include <KoAbstractGradient.h>
+#include <KoPattern.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>

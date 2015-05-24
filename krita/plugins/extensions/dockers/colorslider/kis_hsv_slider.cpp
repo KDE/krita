@@ -2,6 +2,7 @@
    Copyright (C) 2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
    Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
+   Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +26,11 @@
 #include <KoMixColorsOp.h>
 #include <QPainter>
 #include <QTimer>
+#include <QStyleOption>
 
 #include "kis_display_color_converter.h"
+
+#define ARROWSIZE 8
 
 struct KisHSVSlider::Private
 {
@@ -222,4 +226,43 @@ KisDisplayColorConverter* KisHSVSlider::converter() const
         m_canvas->displayColorConverter() :
         KisDisplayColorConverter::dumbConverterInstance();
 }
+
+void KisHSVSlider::drawArrow(QPainter *painter, const QPoint &pos)
+{
+    painter->setPen(palette().text().color());
+    painter->setBrush(palette().text());
+
+    QStyleOption o;
+    o.initFrom(this);
+    o.state &= ~QStyle::State_MouseOver;
+
+    if ( orientation() == Qt::Vertical ) {
+        o.rect = QRect( pos.x(), pos.y() - ARROWSIZE / 2,
+                        ARROWSIZE, ARROWSIZE );
+    } else {
+        o.rect = QRect( pos.x() - ARROWSIZE / 2, pos.y(),
+                        ARROWSIZE, ARROWSIZE );
+    }
+
+    QStyle::PrimitiveElement arrowPE;
+    switch (arrowDirection()) {
+    case Qt::UpArrow:
+        arrowPE = QStyle::PE_IndicatorArrowUp;
+        break;
+    case Qt::DownArrow:
+        arrowPE = QStyle::PE_IndicatorArrowDown;
+        break;
+    case Qt::RightArrow:
+        arrowPE = QStyle::PE_IndicatorArrowRight;
+        break;
+    case Qt::LeftArrow:
+    default:
+        arrowPE = QStyle::PE_IndicatorArrowLeft;
+        break;
+    }
+
+    style()->drawPrimitive(arrowPE, &o, painter, this);
+
+}
+
 #include <kis_hsv_slider.moc>

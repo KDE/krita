@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 
 #include <KoResource.h>
-#include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
@@ -86,6 +85,7 @@ private:
             foreach(KisAbrBrush * abrBrush, collection.brushes()) {
 //                abrBrush->setBrushTipImage(QImage());
                 brushes.append(abrBrush);
+                addTag(abrBrush, collection.filename());
             }
         }
         else {

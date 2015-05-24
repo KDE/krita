@@ -19,12 +19,12 @@
 #ifndef KIS_DEFORM_PAINTOP_SETTINGS_WIDGET_H_
 #define KIS_DEFORM_PAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 class KisDeformOption;
 class KisBrushSizeOption;
 
-class KisDeformPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisDeformPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 public:

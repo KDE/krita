@@ -103,7 +103,7 @@ void BibliographyConfigureDialog::sortMethodChanged(bool sortByPosition)
     }
 }
 
-SortKeyWidget::SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent) :
+SortKeyWidget::SortKeyWidget(const QString &sortKey, Qt::SortOrder order, QWidget *parent) :
     QWidget(parent),
     m_dataFields(new QComboBox),
     m_ascButton(new QRadioButton(i18n("Ascending"))),
@@ -120,7 +120,7 @@ SortKeyWidget::SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *pare
     m_layout->addWidget(m_dscButton);
 }
 
-void SortKeyWidget::setSortKey(QString &sortKey)
+void SortKeyWidget::setSortKey(const QString &sortKey)
 {
     int sortKeyIndex = KoOdfBibliographyConfiguration::bibDataFields.indexOf(sortKey);
     if (sortKeyIndex != -1) {

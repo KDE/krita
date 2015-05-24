@@ -90,7 +90,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
-    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+    cfg.setNewCursorStyle(CURSOR_STYLE_NO_CURSOR);
+    cfg.setNewOutlineStyle(OUTLINE_NONE);
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {

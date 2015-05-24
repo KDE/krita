@@ -37,16 +37,17 @@
 #include <kis_fixed_paint_device.h>
 
 
-KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
-    KisBrushBasedPaintOp(settings, painter),
-    m_firstRun(true), m_image(image),
-    m_tempDev(painter->device()->createCompositionSourceDevice()),
-    m_backgroundPainter(new KisPainter(m_tempDev)),
-    m_smudgePainter(new KisPainter(m_tempDev)),
-    m_colorRatePainter(new KisPainter(m_tempDev)),
-    m_smudgeRateOption("SmudgeRate"),
-    m_colorRateOption("ColorRate"),
-    m_smudgeRadiusOption("SmudgeRadius")
+KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
+    : KisBrushBasedPaintOp(settings, painter)
+    , m_firstRun(true)
+    , m_image(image)
+    , m_tempDev(painter->device()->createCompositionSourceDevice())
+    , m_backgroundPainter(new KisPainter(m_tempDev))
+    , m_smudgePainter(new KisPainter(m_tempDev))
+    , m_colorRatePainter(new KisPainter(m_tempDev))
+    , m_smudgeRateOption()
+    , m_colorRateOption("ColorRate", KisPaintOpOption::GENERAL, false)
+    , m_smudgeRadiusOption()
 {
     Q_UNUSED(node);
 
@@ -171,9 +172,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
      * brush (due to rounding effects), which will result in a
      * really weird quality.
      */
-    m_lastPaintPos = newCenterPos;
-
     QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
+
+    m_lastPaintPos = newCenterPos;
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(scale, rotation,

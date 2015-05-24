@@ -52,9 +52,7 @@ QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
     Q_UNUSED(maskPos);
 
     if (src != dst) {
-        KisPainter gc(dst);
-        gc.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc.bitBlt(rc.topLeft(), src, rc);
+        KisPainter::copyAreaOptimized(rc.topLeft(), src, dst, rc);
         src->fill(rc, KoColor(Qt::transparent, src->colorSpace()));
     }
 

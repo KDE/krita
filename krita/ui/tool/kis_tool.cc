@@ -78,14 +78,13 @@ struct KisTool::Private {
     Private()
         : currentPattern(0),
           currentGradient(0),
+          currentExposure(1.0),
           currentGenerator(0),
-#ifdef HAVE_OPENGL
           optionWidget(0),
+#ifdef HAVE_OPENGL
           cursorShader(0),
-          useGLToolOutlineWorkaround(false)
-#else
-          optionWidget(0)
 #endif
+          useGLToolOutlineWorkaround(false)
     {
     }
 
@@ -167,20 +166,27 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    d->currentPattern = static_cast<KoPattern *>(canvas()->resourceManager()->
-                                                  resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
-    d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
-                                                           resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
+
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentPattern)) {
+        d->currentPattern = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
+    }
+
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentGradient)) {
+        d->currentGradient = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
+    }
 
     KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (preset && preset->settings()) {
         preset->settings()->activate();
     }
 
-    d->currentExposure = static_cast<float>(canvas()->resourceManager()->
-                                            resource(KisCanvasResourceProvider::HdrExposure).toDouble());
-    d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
-                                                               resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::HdrExposure)) {
+        d->currentExposure = static_cast<float>(canvas()->resourceManager()->resource(KisCanvasResourceProvider::HdrExposure).toDouble());
+    }
+
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentGeneratorConfiguration)) {
+        d->currentGenerator = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
+    }
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);

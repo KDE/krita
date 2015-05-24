@@ -21,6 +21,7 @@
 #include "KoResourceModel.h"
 
 #include <klocale.h>
+#include <kconfiggroup.h>
 
 #include <KoResourceServerAdapter.h>
 #include <math.h>
@@ -48,6 +49,11 @@ KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter>
 
 KoResourceModel::~KoResourceModel()
 {
+    if (!m_currentTag.isEmpty()) {
+        KConfigGroup group = KGlobal::config()->group("SelectedTags");
+        group.writeEntry(serverType(), m_currentTag);
+    }
+
 }
 
 int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
@@ -131,26 +137,37 @@ QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) 
     return createIndex( row, column, resources[index] );
 }
 
+void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
+{
+    emit beforeResourcesLayoutReset(activateAfterReformat);
+    reset();
+    emit afterResourcesLayoutReset();
+}
+
 void KoResourceModel::setColumnCount( int columnCount )
 {
     if (columnCount != m_columnCount) {
+        emit beforeResourcesLayoutReset(0);
         m_columnCount = columnCount;
         reset();
+        emit afterResourcesLayoutReset();
     }
 }
 
 void KoResourceModel::resourceAdded(KoResource *resource)
 {
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
-    if (newIndex < 0)
-        return;
-    reset();
+    if (newIndex >= 0) {
+        doSafeLayoutReset(0);
+    }
 }
 
 void KoResourceModel::resourceRemoved(KoResource *resource)
 {
     Q_UNUSED(resource);
-    reset();
+
+    KoResource *first = !m_resourceAdapter->resources().isEmpty() ? m_resourceAdapter->resources().first() : 0;
+    doSafeLayoutReset(first);
 }
 
 void KoResourceModel::resourceChanged(KoResource* resource)
@@ -254,6 +271,7 @@ void KoResourceModel::enableResourceFiltering(bool enable)
 
 void KoResourceModel::setCurrentTag(const QString& currentTag)
 {
+    m_currentTag = currentTag;
     m_resourceAdapter->setCurrentTag(currentTag);
 }
 

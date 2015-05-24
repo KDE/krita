@@ -24,7 +24,6 @@
 
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>

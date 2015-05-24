@@ -44,7 +44,6 @@ public:
     explicit ParagraphGeneral(QWidget *parent = 0);
 
     void setStyle(KoParagraphStyle *style, int level = 0);
-    void setParagraphStyles(const QList<KoParagraphStyle*> styles);
     void setUnit(const KoUnit &unit);
 
     void switchToGeneralTab();

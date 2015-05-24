@@ -26,8 +26,12 @@
 #include <QDial>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QUuid>
+#include <QInputDialog>
+
 
 #include <KoColorPopupButton.h>
+#include <KoResourceServerProvider.h>
 
 #include "kis_config.h"
 #include "kis_cmb_contour.h"
@@ -41,7 +45,7 @@
 #include "kis_canvas_resource_provider.h"
 
 #include <KoFileDialog.h>
-#include "kis_layer_style_serializer.h"
+
 
 
 KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
@@ -57,6 +61,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     : KDialog(parent)
     , m_layerStyle(layerStyle)
     , m_initialLayerStyle(layerStyle->clone())
+    , m_isSwitchingPredefinedStyle(false)
+    , m_sanityLayerStyleDirty(false)
 {
     setCaption(i18n("Layer Styles"));
     setButtons(Ok | Cancel);
@@ -70,10 +76,10 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     wdgLayerStyles.setupUi(page);
     setMainWidget(page);
 
-    connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemChanged(QListWidgetItem*)), m_configChangedCompressor, SLOT(start()));
+    connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(notifyGuiConfigChanged()));
 
     m_stylesSelector = new StylesSelector(this);
-    connect(m_stylesSelector, SIGNAL(styleSelected(KisPSDLayerStyleSP)), SLOT(setStyle(KisPSDLayerStyleSP)));
+    connect(m_stylesSelector, SIGNAL(styleSelected(KisPSDLayerStyleSP)), SLOT(notifyPredefinedStyleSelected(KisPSDLayerStyleSP)));
     wdgLayerStyles.stylesStack->addWidget(m_stylesSelector);
 
     m_blendingOptions = new BlendingOptions(this);
@@ -81,19 +87,19 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
 
     m_dropShadow = new DropShadow(DropShadow::DropShadowMode, this);
     wdgLayerStyles.stylesStack->addWidget(m_dropShadow);
-    connect(m_dropShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_dropShadow, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_innerShadow = new DropShadow(DropShadow::InnerShadowMode, this);
     wdgLayerStyles.stylesStack->addWidget(m_innerShadow);
-    connect(m_innerShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_innerShadow, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_outerGlow = new InnerGlow(InnerGlow::OuterGlowMode, resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_outerGlow);
-    connect(m_outerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_outerGlow, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_innerGlow = new InnerGlow(InnerGlow::InnerGlowMode, resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_innerGlow);
-    connect(m_innerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_innerGlow, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_contour = new Contour(this);
     m_texture = new Texture(this);
@@ -103,27 +109,27 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     wdgLayerStyles.stylesStack->addWidget(m_contour);
     wdgLayerStyles.stylesStack->addWidget(m_texture);
 
-    connect(m_bevelAndEmboss, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_bevelAndEmboss, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_satin = new Satin(this);
     wdgLayerStyles.stylesStack->addWidget(m_satin);
-    connect(m_satin, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_satin, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_colorOverlay = new ColorOverlay(this);
     wdgLayerStyles.stylesStack->addWidget(m_colorOverlay);
-    connect(m_colorOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_colorOverlay, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_gradientOverlay = new GradientOverlay(resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_gradientOverlay);
-    connect(m_gradientOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_gradientOverlay, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_patternOverlay = new PatternOverlay(this);
     wdgLayerStyles.stylesStack->addWidget(m_patternOverlay);
-    connect(m_patternOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_patternOverlay, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_stroke = new Stroke(resourceProvider, this);
     wdgLayerStyles.stylesStack->addWidget(m_stroke);
-    connect(m_stroke, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+    connect(m_stroke, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     KisConfig cfg;
     wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));
@@ -133,8 +139,9 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
              this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
 
-    setStyle(layerStyle);
+    notifyPredefinedStyleSelected(layerStyle);
 
+    connect(wdgLayerStyles.btnNewStyle, SIGNAL(clicked()), SLOT(slotNewStyle()));
     connect(wdgLayerStyles.btnLoadStyle, SIGNAL(clicked()), SLOT(slotLoadStyle()));
     connect(wdgLayerStyles.btnSaveStyle, SIGNAL(clicked()), SLOT(slotSaveStyle()));
 
@@ -146,6 +153,26 @@ KisDlgLayerStyle::~KisDlgLayerStyle()
 {
 }
 
+void KisDlgLayerStyle::notifyGuiConfigChanged()
+{
+    if (m_isSwitchingPredefinedStyle) return;
+
+    m_configChangedCompressor->start();
+    m_layerStyle->setUuid(QUuid::createUuid());
+    m_sanityLayerStyleDirty = true;
+
+    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
+}
+
+void KisDlgLayerStyle::notifyPredefinedStyleSelected(KisPSDLayerStyleSP style)
+{
+    m_isSwitchingPredefinedStyle = true;
+    setStyle(style);
+    m_isSwitchingPredefinedStyle = false;
+    m_configChangedCompressor->start();
+}
+
+
 void KisDlgLayerStyle::slotNotifyOnAccept()
 {
     if (m_configChangedCompressor->isActive()) {
@@ -156,10 +183,60 @@ void KisDlgLayerStyle::slotNotifyOnAccept()
 
 void KisDlgLayerStyle::slotNotifyOnReject()
 {
-    setStyle(m_initialLayerStyle);
+    notifyPredefinedStyleSelected(m_initialLayerStyle);
 
     m_configChangedCompressor->stop();
     emit configChanged();
+}
+
+bool checkCustomNameAvailable(const QString &name)
+{
+    const QString customName = "CustomStyles.asl";
+
+    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+
+    KoResource *resource = server->resourceByName(customName);
+    if (!resource) return true;
+
+    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
+
+    foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
+        if (style->name() == name) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+QString selectAvailableStyleName(const QString &name)
+{
+    QString finalName = name;
+    if (checkCustomNameAvailable(finalName)) {
+        return finalName;
+    }
+
+    int i = 0;
+
+    do {
+        finalName = QString("%1%2").arg(name).arg(i++);
+    } while (!checkCustomNameAvailable(finalName));
+
+    return finalName;
+}
+
+void KisDlgLayerStyle::slotNewStyle()
+{
+    QString styleName =
+        QInputDialog::getText(this,
+                              i18nc("@title:window", "Enter new style name"),
+                              i18nc("@label:textbox", "Name:"),
+                              QLineEdit::Normal, i18nc("Default name for a new style", "New Style"));
+
+    KisPSDLayerStyleSP style = this->style();
+    style->setName(selectAvailableStyleName(styleName));
+
+    m_stylesSelector->addNewStyle(style->clone());
 }
 
 void KisDlgLayerStyle::slotLoadStyle()
@@ -169,24 +246,11 @@ void KisDlgLayerStyle::slotLoadStyle()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
     //dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
+    dialog.setNameFilter(i18n("Layer style library (*.asl)"));
     filename = dialog.url();
 
-    QFile file(filename);
-    if (file.exists()) {
-        file.open(QIODevice::ReadOnly);
-
-        KisLayerStyleSerializerSP serializer;
-
-        serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
-        KIS_ASSERT_RECOVER_RETURN(serializer);
-
-        serializer->readFromDevice(&file);
-
-        setStyle(m_layerStyle);
-        m_configChangedCompressor->stop();
-        emit configChanged();
-    }
+    m_stylesSelector->loadCollection(filename);
+    wdgLayerStyles.lstStyleSelector->setCurrentRow(0);
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
@@ -199,17 +263,16 @@ void KisDlgLayerStyle::slotSaveStyle()
     dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
     filename = dialog.url();
 
-    qDebug() << ppVar(filename);
+    QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
+        new KisPSDLayerStyleCollectionResource(filename));
 
-    QFile file(filename);
-    file.open(QIODevice::WriteOnly);
+    KisPSDLayerStyleSP newStyle = style()->clone();
+    newStyle->setName(QFileInfo(filename).baseName());
 
-    KisLayerStyleSerializerSP serializer;
-
-    serializer = KisLayerStyleSerializerFactory::instance()->create(m_layerStyle.data());
-    KIS_ASSERT_RECOVER_RETURN(serializer);
-
-    serializer->saveToDevice(&file);
+    KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
+    vector << newStyle;
+    collection->setLayerStyles(vector);
+    collection->save();
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -222,53 +285,58 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
 
 void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
+    *m_layerStyle = *style;
+    m_sanityLayerStyleDirty = false;
+
+    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
+
     QListWidgetItem *item;
     item = wdgLayerStyles.lstStyleSelector->item(2);
-    item->setCheckState(style->dropShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->dropShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(3);
-    item->setCheckState(style->innerShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->innerShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(4);
-    item->setCheckState(style->outerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->outerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(5);
-    item->setCheckState(style->innerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->innerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(6);
-    item->setCheckState(style->bevelAndEmboss()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->bevelAndEmboss()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(7);
-    item->setCheckState(style->bevelAndEmboss()->contourEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->bevelAndEmboss()->contourEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(8);
-    item->setCheckState(style->bevelAndEmboss()->textureEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->bevelAndEmboss()->textureEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(9);
-    item->setCheckState(style->satin()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->satin()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(10);
-    item->setCheckState(style->colorOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->colorOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(11);
-    item->setCheckState(style->gradientOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->gradientOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(12);
-    item->setCheckState(style->patternOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->patternOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(13);
-    item->setCheckState(style->stroke()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(m_layerStyle->stroke()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
-    m_dropShadow->setShadow(style->dropShadow());
-    m_innerShadow->setShadow(style->innerShadow());
-    m_outerGlow->setConfig(style->outerGlow());
-    m_innerGlow->setConfig(style->innerGlow());
-    m_bevelAndEmboss->setBevelAndEmboss(style->bevelAndEmboss());
-    m_satin->setSatin(style->satin());
-    m_colorOverlay->setColorOverlay(style->colorOverlay());
-    m_gradientOverlay->setGradientOverlay(style->gradientOverlay());
-    m_patternOverlay->setPatternOverlay(style->patternOverlay());
-    m_stroke->setStroke(style->stroke());
+    m_dropShadow->setShadow(m_layerStyle->dropShadow());
+    m_innerShadow->setShadow(m_layerStyle->innerShadow());
+    m_outerGlow->setConfig(m_layerStyle->outerGlow());
+    m_innerGlow->setConfig(m_layerStyle->innerGlow());
+    m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss());
+    m_satin->setSatin(m_layerStyle->satin());
+    m_colorOverlay->setColorOverlay(m_layerStyle->colorOverlay());
+    m_gradientOverlay->setGradientOverlay(m_layerStyle->gradientOverlay());
+    m_patternOverlay->setPatternOverlay(m_layerStyle->patternOverlay());
+    m_stroke->setStroke(m_layerStyle->stroke());
 
 }
 
@@ -299,12 +367,28 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     m_patternOverlay->fetchPatternOverlay(m_layerStyle->patternOverlay());
     m_stroke->fetchStroke(m_layerStyle->stroke());
 
+    m_sanityLayerStyleDirty = false;
+    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
+
     return m_layerStyle;
 }
 
 /********************************************************************/
 /***** Styles Selector **********************************************/
 /********************************************************************/
+
+class StyleItem : public QListWidgetItem {
+public:
+    StyleItem(KisPSDLayerStyleSP style)
+        : QListWidgetItem(style->name())
+        , m_style(style)
+    {
+    }
+
+public:
+    KisPSDLayerStyleSP m_style;
+};
+
 
 StylesSelector::StylesSelector(QWidget *parent)
     : QWidget(parent)
@@ -313,20 +397,56 @@ StylesSelector::StylesSelector(QWidget *parent)
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectStyle(QListWidgetItem*,QListWidgetItem*)));
-    foreach(KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
-        ui.cmbStyleCollections->addItem(res->name());
+
+    refillCollections();
+
+    if (ui.cmbStyleCollections->count()) {
+        ui.cmbStyleCollections->setCurrentIndex(0);
+        loadStyles(ui.cmbStyleCollections->currentText());
     }
 }
 
-class StyleItem : public QListWidgetItem {
-public:
-    StyleItem(KisPSDLayerStyleSP style, const QString &name)
-        : QListWidgetItem(name)
-        , m_style(style)
-    {
+void StylesSelector::refillCollections()
+{
+    QString previousCollection = ui.cmbStyleCollections->currentText();
+
+    ui.cmbStyleCollections->clear();
+    foreach(KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
+        ui.cmbStyleCollections->addItem(res->name());
     }
-    KisPSDLayerStyleSP m_style;
-};
+
+    if (!previousCollection.isEmpty()) {
+        KisSignalsBlocker blocker(this);
+
+        int index = ui.cmbStyleCollections->findText(previousCollection);
+        ui.cmbStyleCollections->setCurrentIndex(index);
+    }
+}
+
+void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
+{
+    int currentIndex = -1;
+
+    for (int i = 0; i < ui.listStyles->count(); i++ ) {
+        StyleItem *item = dynamic_cast<StyleItem*>(ui.listStyles->item(i));
+
+        QString itemName = item->m_style->name();
+
+        if (itemName == name) {
+            bool isDirty = item->m_style->uuid() != uuid;
+
+            if (isDirty) {
+                itemName += "*";
+            }
+
+            currentIndex = i;
+        }
+
+        item->setText(itemName);
+    }
+
+    ui.listStyles->setCurrentRow(currentIndex);
+}
 
 void StylesSelector::loadStyles(const QString &name)
 {
@@ -336,17 +456,85 @@ void StylesSelector::loadStyles(const QString &name)
     if (collection) {
         foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
             // XXX: also use the preview image, when we have one
-            ui.listStyles->addItem(new StyleItem(style, style->name()));
+            ui.listStyles->addItem(new StyleItem(style));
         }
     }
 }
 
-void StylesSelector::selectStyle(QListWidgetItem */*previous*/, QListWidgetItem* current)
+void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*previous*/)
 {
     StyleItem *item = dynamic_cast<StyleItem*>(current);
     if (item) {
         emit styleSelected(item->m_style);
     }
+}
+
+void StylesSelector::loadCollection(const QString &fileName)
+{
+    if (!QFileInfo(fileName).exists()) {
+        qWarning() << "Loaded style collection doesn't exist!";
+        return;
+    }
+
+    KisPSDLayerStyleCollectionResource *collection =
+        new KisPSDLayerStyleCollectionResource(fileName);
+
+    collection->load();
+
+    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    collection->setFilename(server->saveLocation() + QDir::separator() + collection->name());
+    server->addResource(collection);
+
+    refillCollections();
+
+    int index = ui.cmbStyleCollections->findText(collection->name());
+    ui.cmbStyleCollections->setCurrentIndex(index);
+    loadStyles(collection->name());
+}
+
+void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
+{
+    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+
+    // NOTE: not translatable, since it is a key!
+    const QString customName = "CustomStyles.asl";
+    const QString saveLocation = server->saveLocation();
+    const QString fullFilename = saveLocation + customName;
+
+    KoResource *resource = server->resourceByName(customName);
+    KisPSDLayerStyleCollectionResource *collection = 0;
+
+    if (!resource) {
+        collection = new KisPSDLayerStyleCollectionResource("");
+        collection->setName(customName);
+        collection->setFilename(fullFilename);
+
+        KisPSDLayerStyleCollectionResource::StylesVector vector;
+        vector << style;
+        collection->setLayerStyles(vector);
+
+        server->addResource(collection);
+    } else {
+        collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
+
+        KisPSDLayerStyleCollectionResource::StylesVector vector;
+        vector = collection->layerStyles();
+        vector << style;
+        collection->setLayerStyles(vector);
+        collection->save();
+    }
+
+    refillCollections();
+
+    // select in gui
+
+    int index = ui.cmbStyleCollections->findText(customName);
+    KIS_ASSERT_RECOVER_RETURN(index >= 0);
+    ui.cmbStyleCollections->setCurrentIndex(index);
+
+    loadStyles(customName);
+
+    notifyExternalStyleChanged(style->name(), style->uuid());
 }
 
 /********************************************************************/
@@ -530,6 +718,10 @@ BlendingOptions::BlendingOptions(QWidget *parent)
 {
     ui.setupUi(this);
 
+    // FIXME: Blend options are not implemented yet
+    ui.grpBlendingOptions->setTitle(QString("%1 (%2)").arg(ui.grpBlendingOptions->title()).arg(i18n("Not Implemented Yet")));
+    ui.grpBlendingOptions->setEnabled(false);
+
 }
 
 
@@ -688,6 +880,43 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
     }
 }
 
+class GradientPointerConverter
+{
+public:
+    static KoAbstractGradientSP resourceToStyle(KoAbstractGradient *gradient) {
+        return gradient ? KoAbstractGradientSP(gradient->clone()) : KoAbstractGradientSP();
+    }
+
+    static KoAbstractGradient* styleToResource(KoAbstractGradientSP gradient) {
+        if (!gradient) return 0;
+
+        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
+        KoAbstractGradient *resource = server->resourceByMD5(gradient->md5());
+
+        if (!resource) {
+            KoAbstractGradient *clone = gradient->clone();
+            clone->setName(findAvailableName(gradient->name()));
+            server->addResource(clone, false);
+            resource = clone;
+        }
+
+        return resource;
+    }
+
+private:
+    static QString findAvailableName(const QString &name) {
+        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
+        QString newName = name;
+        int i = 0;
+
+        while (server->resourceByName(newName)) {
+            newName = QString("%1%2").arg(name).arg(i++);
+        }
+
+        return newName;
+    }
+};
+
 /********************************************************************/
 /***** Gradient Overlay *********************************************/
 /********************************************************************/
@@ -723,7 +952,9 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
 
-    KoAbstractGradient *gradient = fetchGradientLazy(config->gradient(), m_resourceProvider);
+    KoAbstractGradient *gradient = fetchGradientLazy(
+        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -740,7 +971,7 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
 {
     config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     config->setOpacity(ui.intOpacity->value());
-    config->setGradient(ui.cmbGradient->gradient());
+    config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     config->setReverse(ui.chkReverse->isChecked());
     config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
@@ -826,7 +1057,9 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.bnColor->setColor(config->color());
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
-    KoAbstractGradient *gradient = fetchGradientLazy(config->gradient(), m_resourceProvider);
+    KoAbstractGradient *gradient = fetchGradientLazy(
+        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -865,7 +1098,7 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
     }
 
     config->setColor(ui.bnColor->color());
-    config->setGradient(ui.cmbGradient->gradient());
+    config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     config->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     config->setSpread(ui.intChoke->value());
     config->setSize(ui.intSize->value());
@@ -1036,6 +1269,8 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.intScale_2->setRange(0, 100);
     ui.intScale_2->setSuffix(" %");
 
+    connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), ui.fillStack, SLOT(setCurrentIndex(int)));
+
     connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbPosition, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -1056,6 +1291,9 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale_2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    // cold initialization
+    ui.fillStack->setCurrentIndex(ui.cmbFillType->currentIndex());
 }
 
 void Stroke::slotDialAngleChanged(int value)
@@ -1083,7 +1321,9 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 
     ui.bnColor->setColor(stroke->color());
 
-    KoAbstractGradient *gradient = fetchGradientLazy(stroke->gradient(), m_resourceProvider);
+    KoAbstractGradient *gradient =
+        fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
+
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -1112,7 +1352,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setColor(ui.bnColor->color());
 
-    stroke->setGradient(ui.cmbGradient->gradient());
+    stroke->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     stroke->setReverse(ui.chkReverse->isChecked());
     stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());

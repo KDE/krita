@@ -95,7 +95,7 @@ calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALL
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
-calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_GEMINI "The Calligra Gemini application"  REQUIRES PART_QTQUICK)
 # TODO: this needs to be split up by app products
@@ -131,7 +131,6 @@ calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" UNPORTED  
 calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
 
 # staging plugins
-calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
 
 # Sheets filters

@@ -82,10 +82,12 @@ struct KisOpenGLCanvas2::Private
 {
 public:
     Private()
-        : displayShader(0)
+        : canvasInitialized(false)
+        , displayShader(0)
         , checkerShader(0)
         , glSyncObject(0)
         , wrapAroundMode(false)
+
     {
         vertices = new QVector3D[6];
         texCoords = new QVector2D[6];
@@ -100,6 +102,8 @@ public:
 
         Sync::deleteSync(glSyncObject);
     }
+
+    bool canvasInitialized;
 
     QVector3D *vertices;
     QVector2D *texCoords;
@@ -232,6 +236,8 @@ void KisOpenGLCanvas2::initializeGL()
     initializeDisplayShader();
 
     Sync::init();
+
+    d->canvasInitialized = true;
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
@@ -508,11 +514,12 @@ void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString 
 
     cfg.setUseOpenGL(false);
     cfg.setCanvasState("OPENGL_FAILED");
-    exit(1);
 }
 
 void KisOpenGLCanvas2::initializeCheckerShader()
 {
+    if (d->canvasInitialized) return;
+
     delete d->checkerShader;
     d->checkerShader = new QGLShaderProgram();
 
@@ -592,6 +599,8 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader() const
 
 void KisOpenGLCanvas2::initializeDisplayShader()
 {
+    if (d->canvasInitialized) return;
+
     delete d->displayShader;
     d->displayShader = new QGLShaderProgram();
 

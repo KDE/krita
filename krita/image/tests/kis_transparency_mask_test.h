@@ -29,6 +29,7 @@ private Q_SLOTS:
     void testCreation();
     void testApply();
     void testMoveParentLayer();
+    void testMoveMaskItself();
 };
 
 #endif

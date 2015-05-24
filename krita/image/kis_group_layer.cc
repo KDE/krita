@@ -35,6 +35,8 @@
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
 #include "kis_selection_mask.h"
+#include "kis_psd_layer_style.h"
+
 
 struct KisGroupLayer::Private
 {
@@ -42,12 +44,15 @@ public:
     Private()
         : paintDevice(0)
         , x(0)
-        , y(0) {
+        , y(0)
+        , passThroughMode(false)
+    {
     }
 
     KisPaintDeviceSP paintDevice;
     qint32 x;
     qint32 y;
+    bool passThroughMode;
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
@@ -262,6 +267,35 @@ KoColor KisGroupLayer::defaultProjectionColor() const
 {
     KoColor color(m_d->paintDevice->defaultPixel(), m_d->paintDevice->colorSpace());
     return color;
+}
+
+bool KisGroupLayer::passThroughMode() const
+{
+    return m_d->passThroughMode;
+}
+
+void KisGroupLayer::setPassThroughMode(bool value)
+{
+    m_d->passThroughMode = value;
+}
+
+KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const
+{
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    // XXX: get right icons
+    l << KisDocumentSectionModel::Property(i18n("Pass Through"), koIcon("passthrough-enabled"), koIcon("passthrough-disabled"), passThroughMode());
+    return l;
+}
+
+void KisGroupLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+{
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Pass Through")) {
+            setPassThroughMode(property.state.toBool());
+        }
+    }
+
+    KisLayer::setSectionModelProperties(properties);
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

@@ -146,11 +146,11 @@ KisLayerBox::KisLayerBox()
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
-    actions << m_viewModeMenu->addAction(themedIcon("view-list-text"),
+    actions << m_viewModeMenu->addAction(koIcon("view-list-text"),
                                          i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(themedIcon("view-list-details"),
+    actions << m_viewModeMenu->addAction(koIcon("view-list-details"),
                                          i18n("Detailed View"), this, SLOT(slotDetailedView()));
-    actions << m_viewModeMenu->addAction(themedIcon("view-preview"),
+    actions << m_viewModeMenu->addAction(koIcon("view-preview"),
                                          i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
 
     for (int i = 0, n = actions.count(); i < n; ++i) {
@@ -162,7 +162,7 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_wdgLayerBox->bnViewMode->setIcon(themedIcon("view-choose"));
+    m_wdgLayerBox->bnViewMode->setIcon(koIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
     m_wdgLayerBox->bnDelete->setIcon(themedIcon("deletelayer"));
@@ -238,7 +238,8 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
-    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_selectOpaque->setActivationConditions(KisAction::SELECTION_EDITABLE);
     m_selectOpaque->setObjectName("select_opaque");
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
@@ -434,10 +435,7 @@ void KisLayerBox::updateUI()
         if (activeNode->inherits("KisMask")) {
             m_wdgLayerBox->cmbComposite->setEnabled(false);
             m_wdgLayerBox->doubleOpacity->setEnabled(false);
-        }
-
-        if (activeNode->inherits("KisLayer")) {
-            m_wdgLayerBox->cmbComposite->setEnabled(true);
+        } else if (activeNode->inherits("KisLayer")) {
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
             KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
@@ -449,6 +447,11 @@ void KisLayerBox::updateUI()
             } else {
                 m_wdgLayerBox->cmbComposite->setEnabled(false);
             }
+
+            const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(activeNode.data());
+            bool compositeSelectionActive = !(group && group->passThroughMode());
+
+            m_wdgLayerBox->cmbComposite->setEnabled(compositeSelectionActive);
         }
     }
 }
@@ -511,7 +514,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(convertToMenu, "convert_to_paint_layer");
         addActionToMenu(convertToMenu, "convert_to_transparency_mask");
         addActionToMenu(convertToMenu, "convert_to_filter_mask");
-        addActionToMenu(convertToMenu, "convert_to_transform_mask");
         addActionToMenu(convertToMenu, "convert_to_selection_mask");
 
         QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
@@ -519,7 +521,10 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(splitAlphaMenu, "split_alpha_write");
         addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-        addActionToMenu(&menu, "isolate_layer");
+        KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+        if (node && !node->inherits("KisTransformMask")) {
+            addActionToMenu(&menu, "isolate_layer");
+        }
     }
     menu.addSeparator();
     addActionToMenu(&menu, "add_new_transparency_mask");

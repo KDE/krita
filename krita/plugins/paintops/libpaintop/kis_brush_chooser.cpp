@@ -34,9 +34,6 @@
 #include <klocale.h>
 
 #include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
 
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"

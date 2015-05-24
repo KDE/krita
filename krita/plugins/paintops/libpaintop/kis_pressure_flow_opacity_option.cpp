@@ -29,15 +29,13 @@
 #include <widgets/kis_curve_widget.h>
 
 KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
-    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::generalCategory(), true, 1.0, 0.0, 1.0)
+    : KisCurveOption("Opacity", KisPaintOpOption::GENERAL, true, 1.0, 0.0, 1.0)
     , m_flow(1.0)
 {
     setCurveUsed(true);
     setSeparateCurveValue(true);
 
     m_checkable = false;
-    setMinimumLabel(i18n("Transparent"));
-    setMaximumLabel(i18n("Opaque"));
 
     m_nodeHasIndirectPaintingSupport =
         currentNode &&

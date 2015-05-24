@@ -36,6 +36,7 @@
 #include "KoShapeFactoryBase.h"
 #include "KoShape.h"
 #include "KoConnectionShape.h"
+#include <KoUnit.h>
 
 #include <QObject>
 

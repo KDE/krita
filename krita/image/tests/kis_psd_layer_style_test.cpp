@@ -29,20 +29,6 @@
 void KisPSDLayerStyleTest::testRoundTrip()
 {
     KisPSDLayerStyle layerStyle;
-    QFile f(FILES_DATA_DIR + QDir::separator() + "teststyles.asl");
-    bool res = f.open(QIODevice::ReadOnly);
-    Q_ASSERT(res);
-    QByteArray ba = f.readAll();
-    f.close();
-    Q_ASSERT(ba.size() > 0);
-    QBuffer in(&ba);
-    KisPSDLayerStyle::StylesVector styles;
-    styles = layerStyle.readASL(&in);
-
-    QByteArray ba2;
-    QBuffer out(&ba2);
-    res = layerStyle.writeASL(&out, styles);
-    Q_ASSERT(res);
 }
 
 QTEST_KDEMAIN(KisPSDLayerStyleTest, GUI)

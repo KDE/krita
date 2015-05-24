@@ -72,10 +72,10 @@ bool KoPAPixmapCache::find( const QString & key, const QSize & size, QPixmap & p
     return QPixmapCache::find( k, pm );
 }
 
-bool KoPAPixmapCache::insert( const QString & key, const QPixmap & pm )
+bool KoPAPixmapCache::insert( const QString & key, const QPixmap & pm, const QSize &size )
 {
-    QString k = generateKey( key, pm.size() );
-    m_keySize[key].append( pm.size() );
+    QString k = generateKey( key, size.isValid() ? size: pm.size() );
+    m_keySize[key].append( size.isValid() ? size: pm.size() );
     return QPixmapCache::insert( k, pm );
 }
 

@@ -117,7 +117,7 @@ void SpellCheckMenu::addWordToDictionary()
     m_currentMisspelledPosition = -1;
 }
 
-void SpellCheckMenu::setMisspelled(const QString word, int position,int length)
+void SpellCheckMenu::setMisspelled(const QString &word, int position,int length)
 {
     m_currentMisspelled = word;
     m_lengthMisspelled=length;

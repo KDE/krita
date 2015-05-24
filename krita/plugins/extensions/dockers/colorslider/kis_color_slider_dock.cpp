@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -68,6 +69,8 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
         }
         QWidget *m_sliderdockerwidget = new QWidget;
         QVBoxLayout *m_layout = new QVBoxLayout(m_sliderdockerwidget);
+        m_layout->setContentsMargins(4,4,4,0);
+        m_layout->setSpacing(1);
         setWidget(m_sliderdockerwidget);
         //m_updateAllowed = true;
 

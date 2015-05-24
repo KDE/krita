@@ -39,7 +39,12 @@ void KisMultiSensorsModel::setCurveOption(KisCurveOption *curveOption)
 
 int KisMultiSensorsModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return m_curveOption->sensors().size();
+    if (m_curveOption) {
+        return m_curveOption->sensors().size();
+    }
+    else {
+        return 0;
+    }
 }
 
 QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const

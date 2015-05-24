@@ -20,8 +20,6 @@
 #include "KoTemplateTree.h"
 
 #include <QDir>
-#include <QImage>
-#include <QPixmap>
 #include <QPrinter>
 #include <QUrl>
 
@@ -29,20 +27,19 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-#include <kcomponentdata.h>
+#include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <stdlib.h>
 
 #include <KoTemplate.h>
 #include <KoTemplateGroup.h>
 #include <KoTemplates.h>
 
-KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
+KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath,
                                const KComponentData &componentData, bool readTree) :
-        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0),
+        m_templatesResourcePath(templatesResourcePath), m_componentData(componentData), m_defaultGroup(0),
         m_defaultTemplate(0)
 {
     if (readTree)
@@ -63,9 +60,8 @@ void KoTemplateTree::readTemplateTree()
 
 void KoTemplateTree::writeTemplateTree()
 {
-    // QT5TODO: find a way to both set type of template and allow customizing by component
-    QString localDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + m_componentData.componentName() + "/templates/";
-//     QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
+
+    QString localDir = KGlobal::dirs()->saveLocation("data", m_templatesResourcePath);
 
     foreach (KoTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
@@ -141,9 +137,8 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 
 void KoTemplateTree::readGroups()
 {
-    // QT5TODO: find a way to both set type of template and allow customizing by component
-    QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, m_componentData.componentName() + "/templates/", QStandardPaths::LocateDirectory);
-//     QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
+
+    QStringList dirs = KGlobal::dirs()->findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);

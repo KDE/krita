@@ -220,14 +220,14 @@ public:
      * @param rect the rectangle the requested points are in
      * @return list of points within the rectangle
      */
-    QList<KoPathPoint*> pointsAt(const QRectF &rect);
+    QList<KoPathPoint*> pointsAt(const QRectF &rect) const;
 
     /**
      * @brief Returns the list of path segments within the given rectangle.
      * @param rect the rectangle the requested segments are in
      * @return list of segments within the rectangle
      */
-    QList<KoPathSegment> segmentsAt(const QRectF &rect);
+    QList<KoPathSegment> segmentsAt(const QRectF &rect) const;
 
     /**
      * @brief Returns the path point index of a given path point

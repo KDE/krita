@@ -19,18 +19,9 @@
 
 #include "KoTemplateGroup.h"
 
-#include <QDir>
-#include <QImage>
-#include <QPixmap>
-#include <QPrinter>
-
-#include <kdebug.h>
-
-#include <kcomponentdata.h>
-#include <klocale.h>
-#include <stdlib.h>
-
 #include <KoTemplate.h>
+
+#include <QFile>
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
                                  int _sortingWeight, bool touched) :

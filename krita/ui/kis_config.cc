@@ -46,11 +46,6 @@
 
 #include <kis_color_manager.h>
 
-namespace
-{
-    static QMutex s_synchLocker;
-}
-
 KisConfig::KisConfig()
     : m_cfg(KGlobal::config()->group(""))
 {
@@ -58,9 +53,12 @@ KisConfig::KisConfig()
 
 KisConfig::~KisConfig()
 {
-    s_synchLocker.lock();
+    if (qApp->thread() != QThread::currentThread()) {
+        qDebug() << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        return;
+    }
+
     m_cfg.sync();
-    s_synchLocker.unlock();
 }
 
 
@@ -208,16 +206,132 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
-enumCursorStyle KisConfig::cursorStyle(bool defaultValue) const
+void cleanOldCursorStyleKeys(KConfigGroup &cfg)
 {
-    return (enumCursorStyle) (defaultValue ?
-                CURSOR_STYLE_OUTLINE :
-                m_cfg.readEntry("cursorStyleDef", int(CURSOR_STYLE_OUTLINE)));
+    if (cfg.hasKey("newCursorStyle") &&
+        cfg.hasKey("newOutlineStyle")) {
+
+        cfg.deleteEntry("cursorStyleDef");
+    }
 }
 
-void KisConfig::setCursorStyle(enumCursorStyle style) const
+CursorStyle KisConfig::newCursorStyle(bool defaultValue) const
 {
-    m_cfg.writeEntry("cursorStyleDef", (int)style);
+    if (defaultValue) {
+        return CURSOR_STYLE_NO_CURSOR;
+    }
+
+
+    int style = m_cfg.readEntry("newCursorStyle", int(-1));
+
+    if (style < 0) {
+        // old style format
+        style = m_cfg.readEntry("cursorStyleDef", int(OLD_CURSOR_STYLE_OUTLINE));
+
+        switch (style) {
+        case OLD_CURSOR_STYLE_TOOLICON:
+            style = CURSOR_STYLE_TOOLICON;
+            break;
+        case OLD_CURSOR_STYLE_CROSSHAIR:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_CROSS:
+            style = CURSOR_STYLE_CROSSHAIR;
+            break;
+        case OLD_CURSOR_STYLE_POINTER:
+            style = CURSOR_STYLE_POINTER;
+            break;
+        case OLD_CURSOR_STYLE_OUTLINE:
+        case OLD_CURSOR_STYLE_NO_CURSOR:
+            style = CURSOR_STYLE_NO_CURSOR;
+            break;
+        case OLD_CURSOR_STYLE_SMALL_ROUND:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_DOT:
+            style = CURSOR_STYLE_SMALL_ROUND;
+            break;
+        case OLD_CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
+            style = CURSOR_STYLE_TRIANGLE_RIGHTHANDED;
+            break;
+        case OLD_CURSOR_STYLE_TRIANGLE_LEFTHANDED:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
+            style = CURSOR_STYLE_TRIANGLE_LEFTHANDED;
+            break;
+        default:
+            style = -1;
+        }
+    }
+
+    cleanOldCursorStyleKeys(m_cfg);
+
+    // compatibility with future versions
+    if (style < 0 || style >= N_CURSOR_STYLE_SIZE) {
+        style = CURSOR_STYLE_NO_CURSOR;
+    }
+
+    return (CursorStyle) style;
+}
+
+void KisConfig::setNewCursorStyle(CursorStyle style)
+{
+    m_cfg.writeEntry("newCursorStyle", (int)style);
+}
+
+OutlineStyle KisConfig::newOutlineStyle(bool defaultValue) const
+{
+    if (defaultValue) {
+        return OUTLINE_FULL;
+    }
+
+    int style = m_cfg.readEntry("newOutlineStyle", int(-1));
+
+    if (style < 0) {
+        // old style format
+        style = m_cfg.readEntry("cursorStyleDef", int(OLD_CURSOR_STYLE_OUTLINE));
+
+        switch (style) {
+        case OLD_CURSOR_STYLE_TOOLICON:
+        case OLD_CURSOR_STYLE_CROSSHAIR:
+        case OLD_CURSOR_STYLE_POINTER:
+        case OLD_CURSOR_STYLE_NO_CURSOR:
+        case OLD_CURSOR_STYLE_SMALL_ROUND:
+        case OLD_CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
+        case OLD_CURSOR_STYLE_TRIANGLE_LEFTHANDED:
+            style = OUTLINE_NONE;
+            break;
+        case OLD_CURSOR_STYLE_OUTLINE:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_DOT:
+        case OLD_CURSOR_STYLE_OUTLINE_CENTER_CROSS:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
+        case OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
+            style = OUTLINE_FULL;
+            break;
+        default:
+            style = -1;
+        }
+    }
+
+    cleanOldCursorStyleKeys(m_cfg);
+
+    // compatibility with future versions
+    if (style < 0 || style >= N_OUTLINE_STYLE_SIZE) {
+        style = OUTLINE_FULL;
+    }
+
+    return (OutlineStyle) style;
+}
+
+void KisConfig::setNewOutlineStyle(OutlineStyle style)
+{
+    m_cfg.writeEntry("newOutlineStyle", (int)style);
+}
+
+QRect KisConfig::colorPreviewRect() const
+{
+    return m_cfg.readEntry("colorPreviewRect", QVariant(QRect(32, 32, 48, 48))).toRect();
+}
+
+void KisConfig::setColorPreviewRect(const QRect &rect)
+{
+    m_cfg.writeEntry("colorPreviewRect", QVariant(rect));
 }
 
 bool KisConfig::useDirtyPresets(bool defaultValue) const

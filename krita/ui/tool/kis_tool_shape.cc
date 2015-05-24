@@ -64,7 +64,7 @@ KisToolShape::~KisToolShape()
 void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group(toolId());
+    m_configGroup = KGlobal::config()->group(toolId());
 }
 
 
@@ -75,28 +75,7 @@ int KisToolShape::flags() const
 
 QWidget * KisToolShape::createOptionWidget()
 {
-    QWidget * optionWidget = KisToolPaint::createOptionWidget();
-
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
-    Q_CHECK_PTR(m_shapeOptionsWidget);
-
-    m_shapeOptionsWidget->cmbFill->setParent(optionWidget);
-    m_shapeOptionsWidget->cmbFill->move(QPoint(0, 0));
-    m_shapeOptionsWidget->cmbFill->show();
-    m_shapeOptionsWidget->textLabelFill->setParent(optionWidget);
-    m_shapeOptionsWidget->textLabelFill->move(QPoint(0, 0));
-    m_shapeOptionsWidget->textLabelFill->show();
-    addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabelFill);
-
-    m_shapeOptionsWidget->cmbFill->setCurrentIndex(KisPainter::FillStyleNone);
-
-    m_shapeOptionsWidget->cmbOutline->setParent(optionWidget);
-    m_shapeOptionsWidget->cmbOutline->move(QPoint(0, 0));
-    m_shapeOptionsWidget->cmbOutline->show();
-    m_shapeOptionsWidget->textLabelOutline->setParent(optionWidget);
-    m_shapeOptionsWidget->textLabelOutline->move(QPoint(0, 0));
-    m_shapeOptionsWidget->textLabelOutline->show();
-    addOptionWidgetOption(m_shapeOptionsWidget->cmbOutline, m_shapeOptionsWidget->textLabelOutline);
 
     m_shapeOptionsWidget->cmbOutline->setCurrentIndex(KisPainter::StrokeStyleBrush);
 
@@ -104,8 +83,8 @@ QWidget * KisToolShape::createOptionWidget()
     connect(m_shapeOptionsWidget->cmbOutline, SIGNAL(currentIndexChanged(int)), this, SLOT(outlineSettingChanged(int)));
     connect(m_shapeOptionsWidget->cmbFill, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSettingChanged(int)));
 
-    m_shapeOptionsWidget->cmbOutline->setCurrentIndex(configGroup.readEntry("outlineType", 0));
-    m_shapeOptionsWidget->cmbFill->setCurrentIndex(configGroup.readEntry("fillType", 0));
+    m_shapeOptionsWidget->cmbOutline->setCurrentIndex(m_configGroup.readEntry("outlineType", 0));
+    m_shapeOptionsWidget->cmbFill->setCurrentIndex(m_configGroup.readEntry("fillType", 0));
 
     //if both settings are empty, force the outline to brush so the tool will work when first activated
     if (  m_shapeOptionsWidget->cmbFill->currentIndex() == 0 &&
@@ -114,17 +93,17 @@ QWidget * KisToolShape::createOptionWidget()
         m_shapeOptionsWidget->cmbOutline->setCurrentIndex(1); // brush
     }
 
-    return optionWidget;
+    return m_shapeOptionsWidget;
 }
 
 void KisToolShape::outlineSettingChanged(int value)
 {
-    configGroup.writeEntry("outlineType", value);
+    m_configGroup.writeEntry("outlineType", value);
 }
 
 void KisToolShape::fillSettingChanged(int value)
 {
-    configGroup.writeEntry("fillType", value);
+    m_configGroup.writeEntry("fillType", value);
 }
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)
@@ -168,8 +147,10 @@ void KisToolShape::addShape(KoShape* shape)
         case KisPainter::FillStylePattern:
             if (imageCollection) {
                 QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
-                fill->setPattern(currentPattern()->pattern());
-                shape->setBackground(fill);
+                if (currentPattern()) {
+                    fill->setPattern(currentPattern()->pattern());
+                    shape->setBackground(fill);
+                }
             } else {
                 shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             }

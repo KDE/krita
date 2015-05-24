@@ -58,6 +58,7 @@
 #include <kundo2command.h>
 
 #include <float.h>
+#include <math.h>
 
 const int BlinkInterval = 500;
 

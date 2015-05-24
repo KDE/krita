@@ -41,7 +41,7 @@ public:
     ~SpellCheckMenu();
 
     QPair<QString, QAction*> menuAction();
-    void setMisspelled(const QString word, int position,int length);
+    void setMisspelled(const QString &word, int position,int length);
     void setEnabled(bool b);
     void setVisible(bool b);
     void setCurrentLanguage(const QString &language);

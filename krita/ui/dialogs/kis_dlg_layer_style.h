@@ -18,6 +18,8 @@
 #ifndef KIS_DLG_LAYER_STYLE_H
 #define KIS_DLG_LAYER_STYLE_H
 
+#include <QUuid>
+
 #include <kdialog.h>
 
 #include "kis_types.h"
@@ -42,6 +44,7 @@ class QListWidgetItem;
 class KisPSDLayerStyle;
 class KisSignalCompressor;
 class KisCanvasResourceProvider;
+
 
 
 class Contour : public QWidget {
@@ -229,11 +232,21 @@ class StylesSelector : public QWidget {
     Q_OBJECT
 public:
     StylesSelector(QWidget *parent);
+
+    void notifyExternalStyleChanged(const QString &name, const QUuid &uuid);
+
+    void addNewStyle(KisPSDLayerStyleSP style);
+    void loadCollection(const QString &fileName);
+
 private slots:
     void loadStyles(const QString &name);
     void selectStyle(QListWidgetItem *previous, QListWidgetItem* current);
 signals:
     void styleSelected(KisPSDLayerStyleSP style);
+
+private:
+    void refillCollections();
+
 private:
     Ui::WdgStylesSelector ui;
 };
@@ -251,6 +264,9 @@ signals:
     void configChanged();
 
 public slots:
+    void notifyGuiConfigChanged();
+    void notifyPredefinedStyleSelected(KisPSDLayerStyleSP style);
+
     void changePage(QListWidgetItem *, QListWidgetItem*);
 
     void slotNotifyOnAccept();
@@ -261,6 +277,7 @@ public slots:
 
     void slotLoadStyle();
     void slotSaveStyle();
+    void slotNewStyle();
 
 private:
 
@@ -285,7 +302,13 @@ private:
     Texture *m_texture;
 
     KisSignalCompressor *m_configChangedCompressor;
+    bool m_isSwitchingPredefinedStyle;
 
+    /**
+     * Used for debugging purposes only to track if m_layerStyle is in
+     * sync with what is stored in the GUI
+     */
+    mutable bool m_sanityLayerStyleDirty;
 };
 
 #endif // KIS_DLG_LAYER_STYLE_H

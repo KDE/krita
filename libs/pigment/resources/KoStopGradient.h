@@ -57,6 +57,7 @@ public:
     
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
+    QList<KoGradientStop> stops() const;
 
     /// reimplemented
     QString defaultFileExtension() const;

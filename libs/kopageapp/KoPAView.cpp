@@ -58,6 +58,7 @@
 #include <KoDrag.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
+#include <KoUnit.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"

@@ -20,7 +20,6 @@
 #define KIS_IMAGE_FROM_CLIPBOARD_WIDGET_H
 
 #include "kis_global.h"
-#include "KoUnit.h"
 #include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
 

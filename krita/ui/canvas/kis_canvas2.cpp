@@ -404,6 +404,10 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 #ifdef HAVE_OPENGL
         if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
             createOpenGLCanvas();
+            if (cfg.canvasState() == "OPENGL_FAILED") {
+                // Creating the opengl canvas failed, fall back
+                createQPainterCanvas();
+            }
         } else {
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();

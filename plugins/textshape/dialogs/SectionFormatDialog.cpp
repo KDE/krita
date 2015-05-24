@@ -87,7 +87,7 @@ void SectionFormatDialog::sectionNameChanged()
     m_widget.sectionNameLineEdit->setModified(false); // value is set to line edit isn't modified (has new default value)
 }
 
-void SectionFormatDialog::sectionSelected(QModelIndex idx)
+void SectionFormatDialog::sectionSelected(const QModelIndex &idx)
 {
     KoSection *curSection = sectionFromModel(idx);
     m_curIdx = m_widget.sectionTree->currentIndex();
@@ -124,7 +124,7 @@ void SectionFormatDialog::updateTreeState()
     enableButtonOk(allOk);
 }
 
-inline KoSection* SectionFormatDialog::sectionFromModel(QModelIndex idx)
+inline KoSection* SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
 {
     return m_widget.sectionTree->model()->itemData(idx)[Qt::UserRole + 1].value<KoSection *>();
 }

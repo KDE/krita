@@ -24,9 +24,9 @@
 
 #include <QWidget>
 
-#include "komain_export.h"
+#include "kowidgets_export.h"
 
-class KOMAIN_EXPORT KoConfigAuthorPage : public QWidget
+class KOWIDGETS_EXPORT KoConfigAuthorPage : public QWidget
 {
     Q_OBJECT
 

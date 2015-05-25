@@ -38,6 +38,7 @@
 
 class KoID;
 class KisInputConfigurationPage;
+class KoConfigAuthorPage;
 
 /**
  *  "General"-tab for preferences dialog
@@ -293,6 +294,7 @@ protected:
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
+    KoConfigAuthorPage *m_authorPage;
 
 protected Q_SLOTS:
 

@@ -19,10 +19,9 @@
 #include "kis_dynamic_sensors.h"
 
 
-KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
+KisDynamicSensorSpeed::KisDynamicSensorSpeed()
+    : KisDynamicSensor(SPEED)
 {
-    setMinimumLabel(i18n("Slow"));
-    setMaximumLabel(i18n("Fast"));
 }
 
 qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
@@ -48,52 +47,44 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
     return m_speed;
 }
 
-KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(RotationId)
+KisDynamicSensorRotation::KisDynamicSensorRotation()
+    : KisDynamicSensor(ROTATION)
 {
-    setMinimumLabel(i18n("0°"));
-    setMaximumLabel(i18n("360°"));
 }
 
-KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)
+KisDynamicSensorPressure::KisDynamicSensorPressure()
+    : KisDynamicSensor(PRESSURE)
 {
-    setMinimumLabel(i18n("Low"));
-    setMaximumLabel(i18n("High"));
 }
 
-KisDynamicSensorXTilt::KisDynamicSensorXTilt() : KisDynamicSensor(XTiltId)
+KisDynamicSensorXTilt::KisDynamicSensorXTilt()
+    : KisDynamicSensor(XTILT)
 {
-    setMinimumLabel(i18n("-30°"));
-    setMaximumLabel(i18n("30°"));
 }
 
-KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
+KisDynamicSensorYTilt::KisDynamicSensorYTilt()
+    : KisDynamicSensor(YTILT)
 {
-    setMinimumLabel(i18n("-30°"));
-    setMaximumLabel(i18n("30°"));
 }
 
-KisDynamicSensorTiltDirection::KisDynamicSensorTiltDirection() : KisDynamicSensor(TiltDirectionId)
+KisDynamicSensorTiltDirection::KisDynamicSensorTiltDirection() :
+    KisDynamicSensor(TILT_DIRECTION)
 {
-    setMinimumLabel(i18n("0°"));
-    setMaximumLabel(i18n("360°"));
 }
 
-KisDynamicSensorTiltElevation::KisDynamicSensorTiltElevation() : KisDynamicSensor(TiltElevationId)
+KisDynamicSensorTiltElevation::KisDynamicSensorTiltElevation()
+    : KisDynamicSensor(TILT_ELEVATATION)
 {
-    setMinimumLabel(i18n("90°"));
-    setMaximumLabel(i18n("0°"));
 }
 
 
-KisDynamicSensorPerspective::KisDynamicSensorPerspective() : KisDynamicSensor(PerspectiveId)
+KisDynamicSensorPerspective::KisDynamicSensorPerspective()
+    : KisDynamicSensor(PERSPECTIVE)
 {
-    setMinimumLabel(i18n("Far"));
-    setMaximumLabel(i18n("Near"));
 }
 
-KisDynamicSensorTangentialPressure::KisDynamicSensorTangentialPressure() : KisDynamicSensor(TangentialPressureId)
+KisDynamicSensorTangentialPressure::KisDynamicSensorTangentialPressure()
+    : KisDynamicSensor(TANGENTIAL_PRESSURE)
 {
-    setMinimumLabel(i18n("Low"));
-    setMaximumLabel(i18n("High"));
 }
 

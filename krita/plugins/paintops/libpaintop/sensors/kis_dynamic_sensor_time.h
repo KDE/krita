@@ -45,7 +45,6 @@ public Q_SLOTS:
     virtual void fromXML(const QDomElement&);
 private:
     int m_time;
-    int m_length;
     bool m_periodic;
     int m_lastTime;
 };

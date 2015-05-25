@@ -64,6 +64,24 @@ const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< t
 class KisDynamicSensor;
 typedef KisSharedPtr<KisDynamicSensor> KisDynamicSensorSP;
 
+enum DynamicSensorType {
+    FUZZY,
+    SPEED,
+    FADE,
+    DISTANCE,
+    TIME,
+    ANGLE,
+    ROTATION,
+    PRESSURE,
+    XTILT,
+    YTILT,
+    TILT_DIRECTION,
+    TILT_ELEVATATION,
+    PERSPECTIVE,
+    TANGENTIAL_PRESSURE,
+    SENSORS_LIST,
+    UNKNOWN = 255
+};
 
 /**
  * Sensors are used to extract from KisPaintInformation a single
@@ -72,6 +90,7 @@ typedef KisSharedPtr<KisDynamicSensor> KisDynamicSensorSP;
  */
 class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration, public KisShared
 {
+
 public:
     enum ParameterSign {
         NegativeParameter = -1,
@@ -80,7 +99,7 @@ public:
     };
 
 protected:
-    KisDynamicSensor(const KoID& id);
+    KisDynamicSensor(DynamicSensorType type);
 
 public:
 
@@ -105,10 +124,23 @@ public:
     /**
      * Creates a sensor from its identifiant.
      */
-    static KisDynamicSensorSP id2Sensor(const KoID&);
+    static KisDynamicSensorSP id2Sensor(const KoID& id);
     static KisDynamicSensorSP id2Sensor(const QString& s) {
         return id2Sensor(KoID(s));
     }
+
+    static DynamicSensorType id2Type(const KoID& id);
+    static DynamicSensorType id2Type(const QString& s) {
+        return id2Type(KoID(s));
+    }
+
+    /**
+     * type2Sensor creates a new sensor for the give type
+     */
+    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType);
+
+    static QString minimumLabel(DynamicSensorType sensorType);
+    static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
 
     static KisDynamicSensorSP createFromXML(const QString&);
     static KisDynamicSensorSP createFromXML(const QDomElement&);
@@ -117,26 +149,18 @@ public:
      * @return the list of sensors
      */
     static QList<KoID> sensorsIds();
+    static QList<DynamicSensorType> sensorsTypes();
 
     /**
      * @return the identifiant of this sensor
      */
-    inline QString id() const {
-        return m_id.id();
-    }
-
-    inline QString name() const {
-        return m_id.name();
-    }
+    static QString id(DynamicSensorType sensorType);
 
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
-
-    const QString& minimumLabel() const;
-    const QString& maximumLabel() const;
 
     void setCurve(const KisCubicCurve& curve);
     const KisCubicCurve& curve() const;
@@ -148,20 +172,25 @@ public:
 
     virtual bool dependsOnCanvasRotation() const;
 
+    inline DynamicSensorType sensorType() const { return m_type; }
+
+
+    /**
+     * @return the currently set length or -1 if not relevant
+     */
+    int length() { return m_length; }
+
 protected:
 
     virtual qreal value(const KisPaintInformation& info) = 0;
 
-    void setMinimumLabel(const QString& _label);
-    void setMaximumLabel(const QString &_label);
+    int m_length;
 
 private:
 
     Q_DISABLE_COPY(KisDynamicSensor)
 
-    const KoID& m_id;
-    QString m_minimumLabel;
-    QString m_maximumLabel;
+    DynamicSensorType m_type;
     bool m_customCurve;
     KisCubicCurve m_curve;
     bool m_active;

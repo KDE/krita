@@ -19,7 +19,7 @@
 #define LIBKIS_APPLICATION_H
 
 #include <QObject>
-#include <krita_export.h>
+#include "libkis_export.h"
 class LIBKIS_EXPORT Application : public QObject
 {
     Q_OBJECT

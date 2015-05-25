@@ -18,7 +18,7 @@
 #ifndef LIBKIS_DOCUMENT_H
 #define LIBKIS_DOCUMENT_H
 
-#include <krita_export.h>
+#include "libkis_export.h"
 #include <QPointer>
 
 class KisDocument;

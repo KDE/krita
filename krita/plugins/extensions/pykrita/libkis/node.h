@@ -20,7 +20,7 @@
 
 #include <QObject>
 
-#include <krita_export.h>
+#include "libkis_export.h"
 
 class LIBKIS_EXPORT Node : public QObject
 {

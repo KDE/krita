@@ -28,7 +28,7 @@
 #include "document.h"
 #include "image.h"
 
-#include <krita_export.h>
+#include "libkis_export.h"
 
 class DockWidgetFactoryBase;
 class ViewExtension;

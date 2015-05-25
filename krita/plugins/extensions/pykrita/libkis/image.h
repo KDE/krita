@@ -20,7 +20,7 @@
 
 #include <QObject>
 #include <kis_image.h>
-#include <krita_export.h>
+#include "libkis_export.h"
 
 class LIBKIS_EXPORT Image : public QObject
 {

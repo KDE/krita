@@ -19,7 +19,7 @@
 #ifndef LIBKIS_VIEWEXTENSION_H
 #define LIBKIS_VIEWEXTENSION_H
 
-#include <krita_export.h>
+#include "libkis_export.h"
 
 #include <QObject>
 

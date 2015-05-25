@@ -22,7 +22,7 @@
 #include <QString>
 #include <KoDockFactoryBase.h>
 
-#include <krita_export.h>
+#include "libkis_export.h"
 
 class LIBKIS_EXPORT DockWidgetFactoryBase : public KoDockFactoryBase
 {

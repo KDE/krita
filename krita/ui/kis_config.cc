@@ -378,7 +378,8 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
 
 QString KisConfig::monitorProfile(int screen) const
 {
-    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "");
+    // Note: keep this in sync with the default profile for the RGB colorspaces!
+    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "sRGB-elle-V2-srgbtrc.icc");
     //qDebug() << "KisConfig::monitorProfile()" << profile;
     return profile;
 }

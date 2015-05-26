@@ -33,19 +33,26 @@ class QPainterPath;
 class KisToolSelectOutline : public KisToolSelectBase
 {
 
+
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
+    Q_SIGNALS: void selectionActionChanged();
+
 public:
     KisToolSelectOutline(KoCanvasBase *canvas);
     virtual ~KisToolSelectOutline();
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
-
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
+
 
 public Q_SLOTS:
     virtual void deactivate();
+    void setSelectionAction(int newSelectionAction);
+
+protected:
+    using KisToolSelectBase::m_widgetHelper;
 
 private:
     void updateFeedback();
@@ -53,13 +60,10 @@ private:
 
     QPainterPath * m_paintPath;
     vQPointF m_points;
-
 };
-
 
 class KisToolSelectOutlineFactory : public KoToolFactoryBase
 {
-
 public:
     KisToolSelectOutlineFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectOutline") {

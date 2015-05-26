@@ -47,6 +47,8 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
     virtual void deactivate();
+    void listenToModifiers(bool listen);
+    bool listeningToModifiers();
 
     QList<QPointer<QWidget> > createOptionWidgets();
     
@@ -61,6 +63,7 @@ protected:
     bool m_isRatioForced;
     bool m_isWidthForced;
     bool m_isHeightForced;
+    bool m_listenToModifiers;
     float m_forcedRatio;
     float m_forcedWidth;
     float m_forcedHeight;

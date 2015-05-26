@@ -175,7 +175,6 @@ set(kritaui_LIB_SRCS
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
-    tool/kis_tool_select_base.cpp
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp

@@ -71,6 +71,10 @@ public:
     virtual ~KisToolPaint();
     virtual int flags() const;
 
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+
 protected:
 
     void setMode(ToolMode mode);
@@ -88,10 +92,6 @@ protected:
     virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
-
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
 
     virtual void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 

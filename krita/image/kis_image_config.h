@@ -29,6 +29,7 @@ public:
     KisImageConfig();
     ~KisImageConfig();
 
+    bool enablePerfLog() const;
     qreal transformMaskOffBoundsReadArea() const;
 
     int updatePatchHeight() const;

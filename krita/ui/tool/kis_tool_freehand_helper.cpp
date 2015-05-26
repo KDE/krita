@@ -35,6 +35,8 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_utils.h"
 
+#include "kis_update_time_monitor.h"
+
 
 #include <math.h>
 
@@ -330,6 +332,8 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     KisPaintInformation info =
             m_d->infoBuilder->continueStroke(event,
                                              elapsedStrokeTime());
+
+    KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
 
     /**
      * Smooth the coordinates out using the history and the

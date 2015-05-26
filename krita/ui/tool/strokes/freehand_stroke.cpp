@@ -23,6 +23,7 @@
 #include "kis_paintop_settings.h"
 #include "kis_painter.h"
 
+#include "kis_update_time_monitor.h"
 
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -54,12 +55,21 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
     setIndirectPaintingCompositeOp(indirectPaintingCompositeOp);
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
+
+    KisUpdateTimeMonitor::instance()->startStrokeMeasure();
+}
+
+FreehandStrokeStrategy::~FreehandStrokeStrategy()
+{
+    KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
     PainterInfo *info = d->painterInfo;
+
+    KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
 
     switch(d->type) {
     case Data::POINT:
@@ -91,5 +101,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         info->painter->paintPainterPath(d->path);
     };
 
-    d->node->setDirty(info->painter->takeDirtyRegion());
+    QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
+    KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
+    d->node->setDirty(dirtyRects);
 }

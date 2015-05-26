@@ -38,6 +38,8 @@ private Q_SLOTS:
     void testEmptyStroke();
     void testLazyWaitCondition();
     void testBlockUpdates();
+
+    void testTimeMonitor();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

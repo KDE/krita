@@ -368,7 +368,6 @@ bool KisApplication::start()
         // show a mainWindow asap, if we want that
         mainWindow = KisPart::instance()->createMainWindow();
 
-        KisPart::instance()->addMainWindow(mainWindow);
         if (showmainWindow) {
             mainWindow->show();
         }

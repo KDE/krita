@@ -141,6 +141,11 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
 
     notifyPredefinedStyleSelected(layerStyle);
 
+    connect(m_dropShadow, SIGNAL(globalAngleChanged(int)), SLOT(syncGlobalAngle(int)));
+    connect(m_innerShadow, SIGNAL(globalAngleChanged(int)), SLOT(syncGlobalAngle(int)));
+    connect(m_bevelAndEmboss, SIGNAL(globalAngleChanged(int)), SLOT(syncGlobalAngle(int)));
+
+
     connect(wdgLayerStyles.btnNewStyle, SIGNAL(clicked()), SLOT(slotNewStyle()));
     connect(wdgLayerStyles.btnLoadStyle, SIGNAL(clicked()), SLOT(slotLoadStyle()));
     connect(wdgLayerStyles.btnSaveStyle, SIGNAL(clicked()), SLOT(slotSaveStyle()));
@@ -389,6 +394,23 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     return m_layerStyle;
 }
 
+void KisDlgLayerStyle::syncGlobalAngle(int angle)
+{
+    KisPSDLayerStyleSP style = this->style();
+
+    if (style->dropShadow()->useGlobalLight()) {
+        style->dropShadow()->setAngle(angle);
+    }
+    if (style->innerShadow()->useGlobalLight()) {
+        style->innerShadow()->setAngle(angle);
+    }
+    if (style->bevelAndEmboss()->useGlobalLight()) {
+        style->bevelAndEmboss()->setAngle(angle);
+    }
+
+    setStyle(style);
+}
+
 /********************************************************************/
 /***** Styles Selector **********************************************/
 /********************************************************************/
@@ -590,8 +612,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.dialAngle, SLOT(setDisabled(bool)));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.intAngle, SLOT(setDisabled(bool)));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SLOT(slotGlobalLightToggled()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -639,6 +660,7 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
 
     ui.dialAngle->setValue(bevelAndEmboss->angle());
     ui.intAngle->setValue(bevelAndEmboss->angle());
+    ui.chkUseGlobalLight->setChecked(bevelAndEmboss->useGlobalLight());
     ui.intAltitude->setValue(bevelAndEmboss->altitude());
     // FIXME: curve editing
     // ui.cmbContour;
@@ -672,6 +694,7 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setSoften(ui.intSoften->value());
 
     bevelAndEmboss->setAngle(ui.dialAngle->value());
+    bevelAndEmboss->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
     bevelAndEmboss->setAltitude(ui.intAltitude->value());
     bevelAndEmboss->setGlossAntiAliased(ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setHighlightBlendMode(ui.cmbHighlightMode->selectedCompositeOp().id());
@@ -696,12 +719,27 @@ void BevelAndEmboss::slotDialAngleChanged(int value)
 {
     KisSignalsBlocker b(ui.intAngle);
     ui.intAngle->setValue(value);
+
+    if (ui.chkUseGlobalLight->isChecked()) {
+        emit globalAngleChanged(value);
+    }
 }
 
 void BevelAndEmboss::slotIntAngleChanged(int value)
 {
     KisSignalsBlocker b(ui.dialAngle);
     ui.dialAngle->setValue(value);
+
+    if (ui.chkUseGlobalLight->isChecked()) {
+        emit globalAngleChanged(value);
+    }
+}
+
+void BevelAndEmboss::slotGlobalLightToggled()
+{
+    if (ui.chkUseGlobalLight->isChecked()) {
+        emit globalAngleChanged(ui.intAngle->value());
+    }
 }
 
 /********************************************************************/
@@ -801,8 +839,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.dialAngle, SLOT(setDisabled(bool)));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.intAngle, SLOT(setDisabled(bool)));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SLOT(slotGlobalLightToggled()));
 
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -834,12 +871,27 @@ void DropShadow::slotDialAngleChanged(int value)
 {
     KisSignalsBlocker b(ui.intAngle);
     ui.intAngle->setValue(value);
+
+    if (ui.chkUseGlobalLight->isChecked()) {
+        emit globalAngleChanged(value);
+    }
 }
 
 void DropShadow::slotIntAngleChanged(int value)
 {
     KisSignalsBlocker b(ui.dialAngle);
     ui.dialAngle->setValue(value);
+
+    if (ui.chkUseGlobalLight->isChecked()) {
+        emit globalAngleChanged(value);
+    }
+}
+
+void DropShadow::slotGlobalLightToggled()
+{
+    if (ui.chkUseGlobalLight->isChecked()) {
+        emit globalAngleChanged(ui.intAngle->value());
+    }
 }
 
 void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)

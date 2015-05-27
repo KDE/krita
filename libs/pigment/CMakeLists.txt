@@ -8,15 +8,7 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-if (HAVE_VC)
-    message(".>>>>>>>>>>>>" ${KDE4_INCLUDES})
-    #set(SPLIT_INCLUDES list(APPEND _flags "$<$<BOOL:${KDE4_INCLUDES}>:-I$<JOIN:${KDE4_INCLUDES}, -I>>"))
-    #message(">>>>>>>>>>>>>>>>>>>>>>>>>>>" << ${SPLIT_INCLUDES})
-    # put KDELibs4Support include directories before any include directory that might be same with KDELibs4 include directory to avoid compiler picking KDELibs4 headers
-    include_directories(${KDE4_INCLUDES} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS} ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
-else()
-    include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
-endif()
+include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)

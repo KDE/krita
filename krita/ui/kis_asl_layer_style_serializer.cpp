@@ -1177,7 +1177,6 @@ void KisAslLayerStyleSerializer::newStyleStarted(bool isPsdStructure)
     KisPSDLayerStyle *currentStyle = m_stylesVector.last().data();
 
     psd_layer_effects_context *context = currentStyle->context();
-    context->global_angle = 0;
     context->keep_original = 0;
 
     QString prefix = isPsdStructure ? "/null" : "/Styl/Lefx";

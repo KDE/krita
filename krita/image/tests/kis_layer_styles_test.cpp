@@ -54,7 +54,6 @@ struct TestConfig {
     bool keep_original;
 
     void writeProperties(KisPSDLayerStyleSP style) const {
-        style->context()->global_angle = angle;
         style->context()->keep_original = keep_original;
 
         style->dropShadow()->setEffectEnabled(true);

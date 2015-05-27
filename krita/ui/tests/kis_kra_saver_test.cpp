@@ -188,5 +188,62 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
     testRoundTripFillLayerImpl("fill_layer_pattern", config);
 }
 
+#include "kis_psd_layer_style.h"
+
+
+void KisKraSaverTest::testRoundTripLayerStyles()
+{
+    TestUtil::ExternalImageChecker chk("kra_saver_test", "layer_styles");
+
+    QRect imageRect(0,0,512,512);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+    KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP layer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP layer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    image->addNode(layer1);
+    image->addNode(layer2);
+    image->addNode(layer3);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setCurrentImage(image);
+    doc->documentInfo()->setAboutInfo("title", image->objectName());
+
+    layer1->paintDevice()->fill(QRect(100, 100, 100, 100), KoColor(Qt::red, cs));
+    layer2->paintDevice()->fill(QRect(200, 200, 100, 100), KoColor(Qt::green, cs));
+    layer3->paintDevice()->fill(QRect(300, 300, 100, 100), KoColor(Qt::blue, cs));
+
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->dropShadow()->setEffectEnabled(true);
+
+
+    style->dropShadow()->setAngle(-90);
+    style->dropShadow()->setUseGlobalLight(false);
+    layer1->setLayerStyle(style->clone());
+
+    style->dropShadow()->setAngle(180);
+    style->dropShadow()->setUseGlobalLight(true);
+    layer2->setLayerStyle(style->clone());
+
+    style->dropShadow()->setAngle(90);
+    style->dropShadow()->setUseGlobalLight(false);
+    layer3->setLayerStyle(style->clone());
+
+    image->initialRefreshGraph();
+    chk.checkImage(image, "00_initial_layers");
+
+    doc->saveNativeFormat("roundtrip_layer_styles.kra");
+
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_layer_styles.kra");
+
+    doc2->image()->waitForDone();
+    chk.checkImage(doc2->image(), "00_initial_layers");
+
+    QVERIFY(chk.testPassed());
+}
+
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

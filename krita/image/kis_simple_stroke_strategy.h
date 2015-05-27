@@ -30,7 +30,11 @@ public:
         JOB_INIT = 0,
         JOB_CANCEL,
         JOB_FINISH,
-        JOB_DOSTROKE
+        JOB_DOSTROKE,
+        JOB_SUSPEND,
+        JOB_RESUME,
+
+        NJOBS
     };
 
 public:
@@ -40,20 +44,29 @@ public:
     KisStrokeJobStrategy* createFinishStrategy();
     KisStrokeJobStrategy* createCancelStrategy();
     KisStrokeJobStrategy* createDabStrategy();
+    KisStrokeJobStrategy* createSuspendStrategy();
+    KisStrokeJobStrategy* createResumeStrategy();
 
     KisStrokeJobData* createInitData();
     KisStrokeJobData* createFinishData();
     KisStrokeJobData* createCancelData();
+    KisStrokeJobData* createSuspendData();
+    KisStrokeJobData* createResumeData();
 
     virtual void initStrokeCallback();
     virtual void finishStrokeCallback();
     virtual void cancelStrokeCallback();
     virtual void doStrokeCallback(KisStrokeJobData *data);
+    virtual void suspendStrokeCallback();
+    virtual void resumeStrokeCallback();
 
 protected:
     void enableJob(JobType type, bool enable = true,
                    KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                    KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
+
+protected:
+    KisSimpleStrokeStrategy(const KisSimpleStrokeStrategy &rhs);
 
 private:
     KisStrokeJobStrategy* createStrategy(JobType type);

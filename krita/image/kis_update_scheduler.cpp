@@ -220,6 +220,45 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
     return m_d->strokesQueue->wrapAroundModeSupported();
 }
 
+void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
+{
+    m_d->strokesQueue->setDesiredLevelOfDetail(lod);
+}
+
+int KisUpdateScheduler::currentLevelOfDetail() const
+{
+    int levelOfDetail = -1;
+
+    if (levelOfDetail < 0) {
+        levelOfDetail = m_d->updaterContext->currentLevelOfDetail();
+    }
+
+    if (levelOfDetail < 0) {
+        levelOfDetail = m_d->updatesQueue->overrideLevelOfDetail();
+    }
+
+    if (levelOfDetail < 0) {
+        levelOfDetail = 0;
+    }
+
+    return levelOfDetail;
+}
+
+void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setLod0ToNStrokeStrategyFactory(factory);
+}
+
+void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setSuspendUpdatesStrokeStrategyFactory(factory);
+}
+
+void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setResumeUpdatesStrokeStrategyFactory(factory);
+}
+
 void KisUpdateScheduler::updateSettings()
 {
     if(m_d->updatesQueue) {
@@ -238,6 +277,12 @@ void KisUpdateScheduler::lock()
 
 void KisUpdateScheduler::unlock()
 {
+    /**
+     * Legacy strokes may have changed the image while we didn't
+     * control it. Notify the queue to take it into account.
+     */
+    m_d->strokesQueue->notifyUFOChangedImage();
+
     m_d->processingBlocked = false;
     processQueues();
 }

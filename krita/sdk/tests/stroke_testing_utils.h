@@ -65,10 +65,10 @@ namespace utils {
 
         // overload
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
+        virtual void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode);
 
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
                                                 KisResourcesSnapshotSP resources,
-                                                KisPainter *painter,
                                                 KisImageWSP image) = 0;
 
         virtual void addPaintingJobs(KisImageWSP image,

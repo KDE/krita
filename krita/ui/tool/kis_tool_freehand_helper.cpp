@@ -688,34 +688,34 @@ void KisToolFreehandHelper::doAirbrushing()
     }
 }
 
-void KisToolFreehandHelper::paintAt(PainterInfo *painterInfo,
+void KisToolFreehandHelper::paintAt(int painterInfoId,
                                     const KisPaintInformation &pi)
 {
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                painterInfo, pi));
+                                                                painterInfoId, pi));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addPoint(pi);
     }
 }
 
-void KisToolFreehandHelper::paintLine(PainterInfo *painterInfo,
+void KisToolFreehandHelper::paintLine(int painterInfoId,
                                       const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                painterInfo, pi1, pi2));
+                                                                painterInfoId, pi1, pi2));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addLine(pi1, pi2);
     }
 }
 
-void KisToolFreehandHelper::paintBezierCurve(PainterInfo *painterInfo,
+void KisToolFreehandHelper::paintBezierCurve(int painterInfoId,
                                              const KisPaintInformation &pi1,
                                              const QPointF &control1,
                                              const QPointF &control2,
@@ -748,7 +748,7 @@ void KisToolFreehandHelper::paintBezierCurve(PainterInfo *painterInfo,
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                                                painterInfo,
+                                                                painterInfoId,
                                                                 pi1, control1, control2, pi2));
 
     if(m_d->recordingAdapter) {
@@ -760,42 +760,18 @@ void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
                                            const QPointF &lastPosition,
                                            int lastTime)
 {
-    painterInfos <<
-        new PainterInfo(new KisPainter(),
-                        new KisDistanceInformation(lastPosition, lastTime));
-}
-
-void KisToolFreehandHelper::paintAt(const QVector<PainterInfo*> &painterInfos,
-                                    const KisPaintInformation &pi)
-{
-    paintAt(painterInfos.first(), pi);
-}
-
-void KisToolFreehandHelper::paintLine(const QVector<PainterInfo*> &painterInfos,
-                                      const KisPaintInformation &pi1,
-                                      const KisPaintInformation &pi2)
-{
-    paintLine(painterInfos.first(), pi1, pi2);
-}
-
-void KisToolFreehandHelper::paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
-                                             const KisPaintInformation &pi1,
-                                             const QPointF &control1,
-                                             const QPointF &control2,
-                                             const KisPaintInformation &pi2)
-{
-    paintBezierCurve(painterInfos.first(), pi1, control1, control2, pi2);
+    painterInfos << new PainterInfo(lastPosition, lastTime);
 }
 
 void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)
 {
-    paintAt(m_d->painterInfos, pi);
+    paintAt(0, pi);
 }
 
 void KisToolFreehandHelper::paintLine(const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
-    paintLine(m_d->painterInfos, pi1, pi2);
+    paintLine(0, pi1, pi2);
 }
 
 void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
@@ -803,5 +779,5 @@ void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
                                              const QPointF &control2,
                                              const KisPaintInformation &pi2)
 {
-    paintBezierCurve(m_d->painterInfos, pi1, control1, control2, pi2);
+    paintBezierCurve(0, pi1, control1, control2, pi2);
 }

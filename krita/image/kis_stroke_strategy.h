@@ -37,10 +37,16 @@ public:
     virtual KisStrokeJobStrategy* createFinishStrategy();
     virtual KisStrokeJobStrategy* createCancelStrategy();
     virtual KisStrokeJobStrategy* createDabStrategy();
+    virtual KisStrokeJobStrategy* createSuspendStrategy();
+    virtual KisStrokeJobStrategy* createResumeStrategy();
 
     virtual KisStrokeJobData* createInitData();
     virtual KisStrokeJobData* createFinishData();
     virtual KisStrokeJobData* createCancelData();
+    virtual KisStrokeJobData* createSuspendData();
+    virtual KisStrokeJobData* createResumeData();
+
+    virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
@@ -73,6 +79,12 @@ protected:
     void setSupportsWrapAroundMode(bool value);
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
+
+protected:
+    /**
+     * Protected c-tor, used for cloning of hi-level strategies
+     */
+    KisStrokeStrategy(const KisStrokeStrategy &rhs);
 
 private:
     bool m_exclusive;

@@ -50,6 +50,14 @@ public:
         case KisSimpleStrokeStrategy::JOB_DOSTROKE:
             m_parentStroke->doStrokeCallback(data);
             break;
+        case KisSimpleStrokeStrategy::JOB_SUSPEND:
+            m_parentStroke->suspendStrokeCallback();
+            break;
+        case KisSimpleStrokeStrategy::JOB_RESUME:
+            m_parentStroke->resumeStrokeCallback();
+            break;
+        default:
+            break;
         }
     }
 
@@ -65,9 +73,17 @@ private:
 
 KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, const KUndo2MagicString &name)
     : KisStrokeStrategy(id, name),
-      m_jobEnabled(4, false),
-      m_jobSequentiality(4, KisStrokeJobData::SEQUENTIAL),
-      m_jobExclusivity(4, KisStrokeJobData::NORMAL)
+      m_jobEnabled(NJOBS, false),
+      m_jobSequentiality(NJOBS, KisStrokeJobData::SEQUENTIAL),
+      m_jobExclusivity(NJOBS, KisStrokeJobData::NORMAL)
+{
+}
+
+KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(const KisSimpleStrokeStrategy &rhs)
+    : KisStrokeStrategy(rhs),
+      m_jobEnabled(rhs.m_jobEnabled),
+      m_jobSequentiality(rhs.m_jobSequentiality),
+      m_jobExclusivity(rhs.m_jobExclusivity)
 {
 }
 
@@ -112,6 +128,16 @@ KisStrokeJobStrategy* KisSimpleStrokeStrategy::createDabStrategy()
     return createStrategy(JOB_DOSTROKE);
 }
 
+KisStrokeJobStrategy* KisSimpleStrokeStrategy::createSuspendStrategy()
+{
+    return createStrategy(JOB_SUSPEND);
+}
+
+KisStrokeJobStrategy* KisSimpleStrokeStrategy::createResumeStrategy()
+{
+    return createStrategy(JOB_RESUME);
+}
+
 KisStrokeJobData* KisSimpleStrokeStrategy::createData(JobType type)
 {
     KisStrokeJobData::Sequentiality sequentiality = m_jobSequentiality[(int)type];
@@ -135,6 +161,16 @@ KisStrokeJobData* KisSimpleStrokeStrategy::createCancelData()
     return createData(JOB_CANCEL);
 }
 
+KisStrokeJobData* KisSimpleStrokeStrategy::createSuspendData()
+{
+    return createData(JOB_SUSPEND);
+}
+
+KisStrokeJobData* KisSimpleStrokeStrategy::createResumeData()
+{
+    return createData(JOB_RESUME);
+}
+
 void KisSimpleStrokeStrategy::initStrokeCallback()
 {
 }
@@ -150,4 +186,12 @@ void KisSimpleStrokeStrategy::cancelStrokeCallback()
 void KisSimpleStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Q_UNUSED(data);
+}
+
+void KisSimpleStrokeStrategy::suspendStrokeCallback()
+{
+}
+
+void KisSimpleStrokeStrategy::resumeStrokeCallback()
+{
 }

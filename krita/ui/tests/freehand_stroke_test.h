@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testColorSmudgeStroke();
     void testAutoTextured17();
     void testAutoTextured38();
+    void testAutobrushStrokeLod();
     void testMixDullCompositioning();
 };
 

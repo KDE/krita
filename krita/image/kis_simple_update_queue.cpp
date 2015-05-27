@@ -53,6 +53,7 @@
 
 
 KisSimpleUpdateQueue::KisSimpleUpdateQueue()
+    : m_overrideLevelOfDetail(-1)
 {
     updateSettings();
 }
@@ -78,6 +79,11 @@ void KisSimpleUpdateQueue::updateSettings()
     m_maxMergeCollectAlpha = config.maxMergeCollectAlpha();
 }
 
+int KisSimpleUpdateQueue::overrideLevelOfDetail() const
+{
+    return m_overrideLevelOfDetail;
+}
+
 void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
 {
     updaterContext.lock();
@@ -96,13 +102,22 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     KisMutableWalkersListIterator iter(m_updatesList);
     bool jobAdded = false;
 
+    int currentLevelOfDetail = updaterContext.currentLevelOfDetail();
+
     while(iter.hasNext()) {
         item = iter.next();
 
-        if(!item->checksumValid())
-            item->recalculate(item->requestedRect());
+        if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
+            !item->checksumValid()) {
 
-        if(updaterContext.isJobAllowed(item)) {
+            m_overrideLevelOfDetail = item->levelOfDetail();
+            item->recalculate(item->requestedRect());
+            m_overrideLevelOfDetail = -1;
+        }
+
+        if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
+            updaterContext.isJobAllowed(item)) {
+
             updaterContext.addMergeJob(item);
             iter.remove();
             jobAdded = true;
@@ -156,8 +171,10 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc,
                                   const QRect& cropRect,
                                   KisBaseRectsWalker::UpdateType type)
 {
+    int levelOfDetail = node->projection()->defaultBounds()->currentLevelOfDetail();
+
     if(trySplitJob(node, rc, cropRect, type)) return;
-    if(tryMergeJob(node, rc, cropRect, type)) return;
+    if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) return;
 
     KisBaseRectsWalkerSP walker;
 
@@ -240,6 +257,7 @@ bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
 
 bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
                                        const QRect& cropRect,
+                                       int levelOfDetail,
                                        KisBaseRectsWalker::UpdateType type)
 {
     QMutexLocker locker(&m_lock);
@@ -263,6 +281,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
         if(item->startNode() != node) continue;
         if(item->type() != type) continue;
         if(item->cropRect() != cropRect) continue;
+        if(item->levelOfDetail() != levelOfDetail) continue;
 
         if(joinRects(baseRect, item->requestedRect(), m_maxMergeAlpha)) {
             goodCandidate = item;
@@ -271,7 +290,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
     }
 
     if(goodCandidate)
-        collectJobs(goodCandidate, baseRect, node, m_maxMergeCollectAlpha);
+        collectJobs(goodCandidate, baseRect, m_maxMergeCollectAlpha);
 
     return (bool)goodCandidate;
 }
@@ -284,14 +303,12 @@ void KisSimpleUpdateQueue::optimize()
 
     KisBaseRectsWalkerSP baseWalker = m_updatesList.first();
     QRect baseRect = baseWalker->requestedRect();
-    KisNodeSP baseNode = baseWalker->startNode();
 
-    collectJobs(baseWalker, baseRect, baseNode, m_maxCollectAlpha);
+    collectJobs(baseWalker, baseRect, m_maxCollectAlpha);
 }
 
 void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
                                        QRect baseRect,
-                                       const KisNodeSP &baseNode,
                                        const qreal maxAlpha)
 {
     KisBaseRectsWalkerSP item;
@@ -302,8 +319,9 @@ void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
 
         if(item == baseWalker) continue;
         if(item->type() != baseWalker->type()) continue;
-        if(item->startNode() != baseNode) continue;
+        if(item->startNode() != baseWalker->startNode()) continue;
         if(item->cropRect() != baseWalker->cropRect()) continue;
+        if(item->levelOfDetail() != baseWalker->levelOfDetail()) continue;
 
         if(joinRects(baseRect, item->requestedRect(), maxAlpha)) {
             iter.remove();
@@ -311,7 +329,7 @@ void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
     }
 
     if(baseWalker->requestedRect() != baseRect) {
-        baseWalker->collectRects(baseNode, baseRect);
+        baseWalker->collectRects(baseWalker->startNode(), baseRect);
     }
 }
 

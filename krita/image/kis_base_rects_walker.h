@@ -113,6 +113,11 @@ public:
     typedef QStack<JobItem> NodeStack;
 
 public:
+    KisBaseRectsWalker()
+        : m_levelOfDetail(0)
+    {
+    }
+
     virtual ~KisBaseRectsWalker() {
     }
 
@@ -124,11 +129,15 @@ public:
         m_resultUncroppedChangeRect = requestedRect;
         m_requestedRect = requestedRect;
         m_startNode = node;
+        m_levelOfDetail = getNodeLevelOfDetail(node);
         startTrip(node);
     }
 
     inline void recalculate(const QRect& requestedRect) {
         Q_ASSERT(m_startNode);
+
+        // FIXME: remove it and/or change to a warning!
+        Q_ASSERT(m_levelOfDetail == getNodeLevelOfDetail(m_startNode));
 
         if(isStillInGraph(m_startNode)) {
             collectRects(m_startNode, requestedRect);
@@ -193,6 +202,10 @@ public:
 
     inline const QRect& requestedRect() const {
         return m_requestedRect;
+    }
+
+    inline int levelOfDetail() const {
+        return m_levelOfDetail;
     }
 
     virtual UpdateType type() const = 0;
@@ -405,6 +418,11 @@ protected:
     }
 
 private:
+    inline int getNodeLevelOfDetail(KisNodeSP node) {
+        return node->projection()->defaultBounds()->currentLevelOfDetail();
+    }
+
+private:
     /**
      * The result variables.
      * By the end of a recursion they will store a complete
@@ -446,6 +464,8 @@ private:
 
     QRect m_childNeedRect;
     QRect m_lastNeedRect;
+
+    int m_levelOfDetail;
 };
 
 #endif /* __KIS_BASE_RECTS_WALKER_H */

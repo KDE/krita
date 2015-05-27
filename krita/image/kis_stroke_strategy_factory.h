@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UPDATE_SELECTION_JOB_H
-#define __KIS_UPDATE_SELECTION_JOB_H
+#ifndef __KIS_STROKE_STRATEGY_FACTORY_H
+#define __KIS_STROKE_STRATEGY_FACTORY_H
 
-#include "kis_spontaneous_job.h"
-#include "kis_selection.h"
+#include <boost/function.hpp>
+typedef boost::function< KisStrokeStrategy*() > KisStrokeStrategyFactory;
 
-class KRITAIMAGE_EXPORT KisUpdateSelectionJob : public KisSpontaneousJob
-{
-public:
-    KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect = QRect());
-
-    bool overrides(const KisSpontaneousJob *otherJob);
-    void run();
-    int levelOfDetail() const;
-
-private:
-    KisSelectionSP m_selection;
-    QRect m_updateRect;
-};
-
-#endif /* __KIS_UPDATE_SELECTION_JOB_H */
+#endif /* __KIS_STROKE_STRATEGY_FACTORY_H */

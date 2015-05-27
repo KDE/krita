@@ -237,6 +237,9 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     info->tileList.reserve(numItems);
 
     const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
+    const QRect bounds = m_image->bounds();
+    const int levelOfDetail = m_image->currentLevelOfDetail();
+
 
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
@@ -248,7 +251,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
                 new KisTextureTileUpdateInfo(col, row,
                                              tileTextureRect,
                                              updateRect,
-                                             m_image->bounds()));
+                                             bounds,
+                                             levelOfDetail));
             // Don't update empty tiles
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);

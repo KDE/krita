@@ -25,7 +25,6 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
-#include "kis_painter.h"
 #include "kis_paintop_preset.h"
 #include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
@@ -272,7 +271,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
         initImage(image, resources->currentNode(), i);
 
-        KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter, image);
+        KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, image);
         m_strokeId = image->startStroke(stroke);
         addPaintingJobs(image, resources, painter, i);
 
@@ -286,6 +285,8 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
         image->waitForDone();
         currentNode = resources->currentNode();
     }
+
+    beforeCheckingResult(image, currentNode);
 
     QImage resultImage;
     if(needQImage) {
@@ -342,4 +343,10 @@ void utils::StrokeTester::addPaintingJobs(KisImageWSP image,
     Q_UNUSED(image);
     Q_UNUSED(resources);
     Q_UNUSED(painter);
+}
+
+void utils::StrokeTester::beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(activeNode);
 }

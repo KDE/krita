@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UPDATE_SELECTION_JOB_H
-#define __KIS_UPDATE_SELECTION_JOB_H
+#include "kis_projection_updates_filter.h"
 
-#include "kis_spontaneous_job.h"
-#include "kis_selection.h"
 
-class KRITAIMAGE_EXPORT KisUpdateSelectionJob : public KisSpontaneousJob
+#include <QtGlobal>
+
+
+KisProjectionUpdatesFilter::~KisProjectionUpdatesFilter()
 {
-public:
-    KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect = QRect());
+}
 
-    bool overrides(const KisSpontaneousJob *otherJob);
-    void run();
-    int levelOfDetail() const;
-
-private:
-    KisSelectionSP m_selection;
-    QRect m_updateRect;
-};
-
-#endif /* __KIS_UPDATE_SELECTION_JOB_H */
+bool KisDropAllProjectionUpdatesFilter::filter(KisImage *image, KisNode *node, const QRect& rect)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(node);
+    Q_UNUSED(rect);
+    return true;
+}

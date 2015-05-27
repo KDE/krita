@@ -75,6 +75,9 @@ public Q_SLOTS:
     void setMinMaxZoom();
 
 private:
+    void nofityLevelOfDetailChange(qreal zoom);
+
+private:
 
     QPointer<KisView> m_view;
     KoZoomHandler * m_zoomHandler;

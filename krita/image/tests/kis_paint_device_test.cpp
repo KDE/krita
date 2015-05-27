@@ -795,6 +795,9 @@ KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
         bool wrapAroundMode() const {
             return true;
         }
+        int currentLevelOfDetail() const {
+            return 0;
+        }
     };
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -1333,6 +1336,90 @@ void KisPaintDeviceTest::testCacheState()
     }
 
     pool.waitForDone();
+}
+
+void KisPaintDeviceTest::testLodDevice()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
+        TestingLodDefaultBounds() : m_lod(0) {}
+
+        QRect bounds() const {
+            return QRect(0,0,100,100);
+        }
+        bool wrapAroundMode() const {
+            return false;
+        }
+
+        int currentLevelOfDetail() const {
+            return m_lod;
+        }
+
+        void testingSetLevelOfDetail(int lod) {
+            m_lod = lod;
+        }
+
+    private:
+        int m_lod;
+    };
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestingLodDefaultBounds *bounds = new TestingLodDefaultBounds();
+    dev->setDefaultBounds(bounds);
+
+
+    // fill device with a gradient
+    QRect rect = dev->defaultBounds()->bounds();
+    for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
+        for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
+            QColor c((10 * x) % 255, (10 * y) % 255, 0, 255);
+            dev->setPixel(x, y, c);
+        }
+    }
+
+    QImage result;
+
+    qDebug() << ppVar(dev->exactBounds());
+    result = dev->convertToQImage(0,0,0,100,100);
+    /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
+                                  "lod", "initial"));
+
+    bounds->testingSetLevelOfDetail(1);
+    dev->syncLodCache(1);
+
+    qDebug() << ppVar(dev->exactBounds());
+    result = dev->convertToQImage(0,0,0,100,100);
+    /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
+                                  "lod", "lod1"));
+
+    bounds->testingSetLevelOfDetail(2);
+
+    qDebug() << ppVar(dev->exactBounds());
+    result = dev->convertToQImage(0,0,0,100,100);
+    /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
+                                  "lod", "lod1"));
+
+    dev->syncLodCache(2);
+
+    qDebug() << ppVar(dev->exactBounds());
+    result = dev->convertToQImage(0,0,0,100,100);
+    /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
+                                  "lod", "lod2"));
+
+    bounds->testingSetLevelOfDetail(0);
+
+    dev->setX(6);
+    dev->setY(14);
+
+    bounds->testingSetLevelOfDetail(1);
+    dev->syncLodCache(1);
+
+    qDebug() << ppVar(dev->exactBounds()) << ppVar(dev->x()) << ppVar(dev->y());
+    result = dev->convertToQImage(0,0,0,100,100);
+    /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
+                                  "lod", "lod1-offset-6-14"));
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

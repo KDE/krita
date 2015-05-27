@@ -26,9 +26,13 @@ class KisStrokeJob : public KisRunnable
 {
 public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,
-                 KisStrokeJobData *data)
+                 KisStrokeJobData *data,
+                 int levelOfDetail,
+                 bool isCancellable)
         : m_dabStrategy(strategy),
-          m_dabData(data)
+          m_dabData(data),
+          m_levelOfDetail(levelOfDetail),
+          m_isCancellable(isCancellable)
     {
     }
 
@@ -55,6 +59,14 @@ public:
         return m_dabData ? m_dabData->isExclusive() : false;
     }
 
+    int levelOfDetail() const {
+        return m_levelOfDetail;
+    }
+
+    bool isCancellable() const {
+        return m_isCancellable;
+    }
+
 private:
     // for testing use only, do not use in real code
     friend QString getJobName(KisStrokeJob *job);
@@ -75,6 +87,9 @@ private:
 
     // Owned by the job
     KisStrokeJobData *m_dabData;
+
+    int m_levelOfDetail;
+    bool m_isCancellable;
 };
 
 #endif /* __KIS_STROKE_JOB_H */

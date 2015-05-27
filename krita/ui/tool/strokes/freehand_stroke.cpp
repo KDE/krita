@@ -23,7 +23,9 @@
 #include "kis_paintop_settings.h"
 #include "kis_painter.h"
 
-
+struct FreehandStrokeStrategy::Private
+{
+};
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
@@ -31,7 +33,8 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                PainterInfo *painterInfo,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfo,true)
+                                    resources, painterInfo),
+      m_d(new Private())
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -42,9 +45,20 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                QVector<PainterInfo*> painterInfos,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfos,true)
+                                    resources, painterInfos),
+      m_d(new Private())
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
+}
+
+FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs)
+    : KisPainterBasedStrokeStrategy(rhs),
+      m_d(new Private())
+{
+}
+
+FreehandStrokeStrategy::~FreehandStrokeStrategy()
+{
 }
 
 void FreehandStrokeStrategy::init(bool needsIndirectPainting,
@@ -59,7 +73,7 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    PainterInfo *info = d->painterInfo;
+    PainterInfo *info = painterInfos()[d->painterInfoId];
 
     switch(d->type) {
     case Data::POINT:
@@ -92,4 +106,13 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     };
 
     d->node->setDirty(info->painter->takeDirtyRegion());
+}
+
+KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    Q_UNUSED(levelOfDetail);
+
+    FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this);
+    clone->setUndoEnabled(false);
+    return clone;
 }

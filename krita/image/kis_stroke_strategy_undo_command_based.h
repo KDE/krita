@@ -93,11 +93,14 @@ protected:
                            KisStrokeJobData::Sequentiality sequentiality,
                            KisStrokeJobData::Exclusivity exclusivity);
 
+    KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
+                                      int levelOfDetail);
 private:
     void executeCommand(KUndo2CommandSP command, bool undo);
 
 private:
     bool m_undo;
+    bool m_supportsLevelOfDetail;
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
     KisPostExecutionUndoAdapter *m_undoAdapter;

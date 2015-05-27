@@ -80,7 +80,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 
 void KisSelectionBasedLayer::initSelection()
 {
-    m_d->selection = new KisSelection();
+    m_d->selection = new KisSelection(new KisDefaultBounds(image()));
     m_d->selection->pixelSelection()->select(image()->bounds());
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
@@ -187,8 +187,16 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->setParentNode(this);
         m_d->selection->updateProjection();
-    } else
+    } else {
         m_d->selection = 0;
+    }
+
+    if (selection->pixelSelection()->defaultBounds()->bounds() != image()->bounds()) {
+        qWarning() << "WARNING: KisSelectionBasedLayer::setInternalSelection"
+                   << "New selection has suspicious default bounds";
+        qWarning() << "WARNING:" << ppVar(selection->pixelSelection()->defaultBounds()->bounds());
+        qWarning() << "WARNING:" << ppVar(image()->bounds());
+    }
 }
 
 qint32 KisSelectionBasedLayer::x() const

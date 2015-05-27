@@ -52,3 +52,8 @@ void KisUpdateSelectionJob::run()
 
     m_selection->notifySelectionChanged();
 }
+
+int KisUpdateSelectionJob::levelOfDetail() const
+{
+    return 0;
+}

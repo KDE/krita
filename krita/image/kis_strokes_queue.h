@@ -23,6 +23,7 @@
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
+#include "kis_stroke_strategy_factory.h"
 
 class KisUpdaterContext;
 class KisStroke;
@@ -41,7 +42,8 @@ public:
 
     bool tryCancelCurrentStrokeAsync();
 
-    void processQueue(KisUpdaterContext &updaterContext, bool externalJobsPending);
+    void processQueue(KisUpdaterContext &updaterContext,
+                      bool externalJobsPending);
     bool needsExclusiveAccess() const;
     bool isEmpty() const;
 
@@ -51,13 +53,28 @@ public:
 
     bool wrapAroundModeSupported() const;
 
+    void setDesiredLevelOfDetail(int lod);
+    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+
+    /**
+     * Notifies the queue, that someone else (neither strokes nor the
+     * queue itself have changed the image. It means that the caches
+     * should be regenerated
+     */
+    void notifyUFOChangedImage();
+
 private:
-    bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);
-    bool checkStrokeState(bool hasStrokeJobsRunning);
+    bool processOneJob(KisUpdaterContext &updaterContext,
+                       bool externalJobsPending);
+    bool checkStrokeState(bool hasStrokeJobsRunning,
+                          int runningLevelOfDetail);
     bool checkExclusiveProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
     bool checkSequentialProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
     bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
                               bool externalJobsPending);
+    bool checkLevelOfDetailProperty(int runningLevelOfDetail);
 private:
     struct Private;
     Private * const m_d;

@@ -148,7 +148,7 @@ public:
     /**
      * Returns the number of bytes a pixel takes
      */
-    inline quint32 pixelSize() {
+    inline quint32 pixelSize() const {
         return ACTUAL_DATAMGR::pixelSize();
     }
 

@@ -508,6 +508,23 @@ public:
     bool wrapAroundModeActive() const;
 
     /**
+     * \return curent level of detail which is used when processing the image.
+     * Current working zoom = 2 ^ (- currentLevelOfDetail()). Default value is
+     * null, which means we work on the original image.
+     */
+    int currentLevelOfDetail() const;
+
+    /**
+     * Notify KisImage which level of detail should be used in the
+     * lod-mode. Setting the mode does not guarantee the LOD to be
+     * used. It will be activated only when the stokes supports it.
+     */
+    void setDesiredLevelOfDetail(int lod);
+
+    // FIXME: for testing purposes only
+    void testingSetLevelOfDetailsEnabled(bool value);
+
+    /**
      * Notifies that the node collapsed state has changed
      */
     void notifyNodeCollpasedChanged();
@@ -702,6 +719,10 @@ public Q_SLOTS:
      * whole subtree of nodes. But while we change any particular
      * node, it can ask for an update itself. This method is a way of
      * blocking such intermediate (and excessive) requests.
+     *
+     * NOTE: this is a convenience function for setProjectionUpdatesFilter()
+     *       that installs a predefined filter that eats everything. Please
+     *       note that these calls are *not* recursive
      */
     void disableDirtyRequests();
 
@@ -709,6 +730,19 @@ public Q_SLOTS:
      * \see disableDirtyRequests()
      */
     void enableDirtyRequests();
+
+    /**
+     * Installs a filter object that will filter all the incoming projection update
+     * requests. If the filter return true, the incoming update is dropped.
+     *
+     * NOTE: you cannot set filters recursively!
+     */
+    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter);
+
+    /**
+     * \see setProjectionUpdatesFilter()
+     */
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const;
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);

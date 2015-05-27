@@ -48,6 +48,7 @@
 #include "kis_config.h"
 #include "krita_utils.h"
 #include "kis_canvas_resource_provider.h"
+#include "opengl/kis_opengl.h"
 
 
 class KisZoomController : public KoZoomController
@@ -244,6 +245,33 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     // zoom by average of x and y
     const qreal effectiveZoom = 0.5 * (scaleX + scaleY);
     m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
+
+    nofityLevelOfDetailChange(effectiveZoom);
+}
+
+void KisZoomManager::nofityLevelOfDetailChange(qreal zoom)
+{
+    KisCanvas2 *kritaCanvas = m_view->canvasBase();
+
+    int lod = 0;
+
+#ifdef HAVE_OPENGL
+
+    if (!kritaCanvas->canvasIsOpenGL() ||
+        !KisOpenGL::supportsGLSL13()) {
+
+        qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
+    } else {
+        KisConfig cfg;
+        const int maxLod = cfg.numMipmapLevels();
+
+        lod = qMin(maxLod, qMax(0, qFloor(log2(1.0 / zoom))));
+        qDebug() << ppVar(lod);
+    }
+#endif // HAVE_OPENGL
+
+
+    m_view->image()->setDesiredLevelOfDetail(lod);
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

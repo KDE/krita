@@ -21,6 +21,7 @@
 
 #include <QtTest>
 
+#include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
@@ -104,6 +105,8 @@ public:
 
     ComplexRectsLayer(KisImageWSP image, const QString & name, quint8 opacity)
             : KisLayer(image, name, opacity) {
+
+        m_device = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image), "test device");
     }
 
     KisNodeSP clone() {
@@ -118,12 +121,11 @@ public:
     }
 
     KisPaintDeviceSP original() const {
-        // This test doesn't use updateProjection so just return 0
-        return 0;
+        return m_device;
     }
 
     KisPaintDeviceSP paintDevice() const {
-        return 0;
+        return m_device;
     }
 
     QIcon icon() const {
@@ -173,7 +175,8 @@ public:
         const qint32 delta = 7;
         return rect.adjusted(-delta, -delta, delta, delta);
     }
-
+private:
+    KisPaintDeviceSP m_device;
 };
 
 class CacheLayer : public ComplexRectsLayer

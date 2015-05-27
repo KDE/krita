@@ -35,6 +35,7 @@ private Q_SLOTS:
     void testImmediateCancel();
     void testOpenedStrokeCounter();
     void testAsyncCancelWhileOpenedStroke();
+    void testStrokesLevelOfDetail();
 };
 
 #endif /* __KIS_STROKES_QUEUE_TEST_H */

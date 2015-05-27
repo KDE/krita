@@ -78,6 +78,16 @@
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
+
+#include "kis_lod_transform.h"
+
+#include "kis_suspend_projection_updates_stroke_strategy.h"
+#include "kis_sync_lod_cache_stroke_strategy.h"
+#include <boost/functional/factory.hpp>
+#include <boost/bind.hpp>
+
+#include "kis_projection_updates_filter.h"
+
 #include "kis_layer_projection_plane.h"
 
 #include "kis_multi_paint_device.h"
@@ -115,6 +125,8 @@ public:
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted;
+    int testingDesiredLevelOfDetail;
+    bool testingLevelOfDetailsEnabled;
 
     KisNameServer *nserver;
 
@@ -127,7 +139,7 @@ public:
     vKisAnnotationSP annotations;
 
     QAtomicInt disableUIUpdateSignals;
-    QAtomicInt disableDirtyRequests;
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter;
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
@@ -158,6 +170,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->perspectiveGrid = 0;
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
+    m_d->testingDesiredLevelOfDetail = 0;
+    m_d->testingLevelOfDetailsEnabled = false;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
 
@@ -187,6 +201,12 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     if (m_d->startProjection) {
         m_d->scheduler = new KisUpdateScheduler(this);
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+        m_d->scheduler->setLod0ToNStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSyncLodCacheStrokeStrategy*>(), KisImageWSP(this)));
+        m_d->scheduler->setSuspendUpdatesStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), true));
+        m_d->scheduler->setResumeUpdatesStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), false));
     }
 
     m_d->frameCache = new KisAnimationFrameCache();
@@ -1459,14 +1479,27 @@ void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     }
 }
 
+void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
+{
+    // udpate filters are *not* recursive!
+    KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
+
+    m_d->projectionUpdatesFilter = filter;
+}
+
+KisProjectionUpdatesFilterSP KisImage::projectionUpdatesFilter() const
+{
+    return m_d->projectionUpdatesFilter;
+}
+
 void KisImage::disableDirtyRequests()
 {
-    m_d->disableDirtyRequests.ref();
+    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP(new KisDropAllProjectionUpdatesFilter()));
 }
 
 void KisImage::enableDirtyRequests()
 {
-    m_d->disableDirtyRequests.deref();
+    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
 }
 
 void KisImage::disableUIUpdates()
@@ -1482,7 +1515,12 @@ void KisImage::enableUIUpdates()
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
     if (!m_d->disableUIUpdateSignals) {
-        emit sigImageUpdated(rc);
+        int lod = currentLevelOfDetail();
+        QRect dirtyRect = !lod ? rc : KisLodTransform::upscaledRect(rc, lod);
+
+        if (dirtyRect.isEmpty()) return;
+
+        emit sigImageUpdated(dirtyRect);
     }
 }
 
@@ -1520,7 +1558,11 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
-    if (m_d->disableDirtyRequests) return;
+    if (m_d->projectionUpdatesFilter
+        && m_d->projectionUpdatesFilter->filter(this, node, rect)) {
+
+        return;
+    }
 
     /**
      * Here we use 'permitted' instead of 'active' intentively,
@@ -1608,6 +1650,30 @@ bool KisImage::wrapAroundModeActive() const
 {
     return m_d->wrapAroundModePermitted && m_d->scheduler &&
         m_d->scheduler->wrapAroundModeSupported();
+}
+
+void KisImage::setDesiredLevelOfDetail(int lod)
+{
+    // TODO: remove
+    m_d->testingDesiredLevelOfDetail = lod;
+
+    if (m_d->scheduler) {
+        m_d->scheduler->setDesiredLevelOfDetail(lod);
+    }
+}
+
+int KisImage::currentLevelOfDetail() const
+{
+    if (m_d->testingLevelOfDetailsEnabled) {
+        return m_d->testingDesiredLevelOfDetail;
+    }
+
+    return m_d->scheduler ? m_d->scheduler->currentLevelOfDetail() : 0;
+}
+
+void KisImage::testingSetLevelOfDetailsEnabled(bool value)
+{
+    m_d->testingLevelOfDetailsEnabled = value;
 }
 
 void KisImage::notifyNodeCollpasedChanged()

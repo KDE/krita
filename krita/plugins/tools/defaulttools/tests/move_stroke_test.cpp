@@ -36,6 +36,7 @@ public:
     }
 
 protected:
+    using utils::StrokeTester::initImage;
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(image);
 
@@ -45,22 +46,19 @@ protected:
 
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisPainter *painter,
                                     KisImageWSP image) {
 
         Q_UNUSED(indirectPainting);
-        Q_UNUSED(painter);
 
         KisNodeSP node = resources->currentNode();
         return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter());
     }
 
+    using utils::StrokeTester::addPaintingJobs;
     void addPaintingJobs(KisImageWSP image,
-                         KisResourcesSnapshotSP resources,
-                         KisPainter *painter) {
+                         KisResourcesSnapshotSP resources) {
 
         Q_UNUSED(resources);
-        Q_UNUSED(painter);
 
         image->
             addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(100,100)));

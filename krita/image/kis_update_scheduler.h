@@ -24,6 +24,7 @@
 #include "kis_types.h"
 
 #include "kis_image_interfaces.h"
+#include "kis_stroke_strategy_factory.h"
 
 class QRect;
 class KoProgressProxy;
@@ -132,6 +133,34 @@ public:
     bool cancelStroke(KisStrokeId id);
 
     /**
+     * Sets the desired level of detail on which the strokes should
+     * work.  Please note that this configuration will be applied
+     * starting from the next stroke. Please also note that this value
+     * is not guaranteed to coincide with the one returned by
+     * currentLevelOfDetail()
+     */
+    void setDesiredLevelOfDetail(int lod);
+
+    /**
+     * Install a factory of a stroke strategy, that will be started
+     * every time when the scheduler needs to synchronize LOD caches
+     * of all the paint devices of the image.
+     */
+    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+
+    /**
+     * Install a factory of a stroke strategy, that will be started
+     * every time when the scheduler needs to postpone all the updates
+     * of the *LOD0* strokes.
+     */
+    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+
+    /**
+     * \see setSuspendUpdatesStrokeStrategyFactory()
+     */
+    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+
+    /**
      * tryCancelCurrentStrokeAsync() checks whether there is a
      * *running* stroke (which is being executed at this very moment)
      * which is not still open by the owner (endStroke() or
@@ -146,6 +175,7 @@ public:
     bool tryCancelCurrentStrokeAsync();
 
     bool wrapAroundModeSupported() const;
+    int currentLevelOfDetail() const;
 
 protected:
     // Trivial constructor for testing support

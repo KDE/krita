@@ -232,6 +232,9 @@ typedef KisStrokeWSP KisStrokeId;
 class KisFilterConfiguration;
 typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 
+class KisProjectionUpdatesFilter;
+typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
+
 class KisAbstractProjectionPlane;
 typedef QSharedPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneSP;
 typedef QWeakPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneWSP;

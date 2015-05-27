@@ -40,6 +40,8 @@
 #include <kis_color_source.h>
 #include <kis_pressure_sharpness_option.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_lod_transform.h>
+
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter), m_opacityOption(node), m_hsvTransformation(0)
@@ -107,6 +109,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
         return KisSpacingInformation(1.0);
 
     qreal scale = m_sizeOption.apply(info);
+    scale *= KisLodTransform::lodToScale(painter()->device());
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
 

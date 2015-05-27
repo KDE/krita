@@ -174,7 +174,7 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QImage createThumbnail(qint32 w, qint32 h);
 
-    void testingInitSelection(const QRect &rect);
+    void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
 
 protected:
     /**

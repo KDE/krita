@@ -49,16 +49,49 @@ void KisUpdaterContextTest::testJobInterference()
     KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
     walker1->collectRects(paintLayer, dirtyRect1);
 
-    QRect dirtyRect2(30,0,100,100);
-    KisBaseRectsWalkerSP walker2 = new KisMergeWalker(imageRect);
-    walker2->collectRects(paintLayer, dirtyRect2);
-
     context.lock();
     context.addMergeJob(walker1);
-
-    QVERIFY(!context.isJobAllowed(walker2));
-
     context.unlock();
+
+    // overlapping job --- forbidden
+    {
+        QRect dirtyRect(30,0,100,100);
+        KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
+        walker->collectRects(paintLayer, dirtyRect);
+
+        context.lock();
+        QVERIFY(!context.isJobAllowed(walker));
+        context.unlock();
+    }
+
+    // not overlapping job --- allowed
+    {
+        QRect dirtyRect(60,0,100,100);
+        KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
+        walker->collectRects(paintLayer, dirtyRect);
+
+        context.lock();
+        QVERIFY(context.isJobAllowed(walker));
+        context.unlock();
+    }
+
+    // not overlapping job, conflicting LOD --- forbidden
+    {
+        image->setDesiredLevelOfDetail(1);
+        image->testingSetLevelOfDetailsEnabled(true);
+        QCOMPARE(image->currentLevelOfDetail(), 1);
+
+        QRect dirtyRect(60,0,100,100);
+        KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
+        walker->collectRects(paintLayer, dirtyRect);
+
+        context.lock();
+        QVERIFY(!context.isJobAllowed(walker));
+        context.unlock();
+
+        image->setDesiredLevelOfDetail(0);
+        image->testingSetLevelOfDetailsEnabled(false);
+    }
 }
 
 void KisUpdaterContextTest::testSnapshot()
@@ -77,31 +110,58 @@ void KisUpdaterContextTest::testSnapshot()
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 0);
     QCOMPARE(numStrokeJobs, 0);
+    QCOMPARE(context.currentLevelOfDetail(), -1);
 
     context.addMergeJob(walker1);
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 1);
     QCOMPARE(numStrokeJobs, 0);
+    QCOMPARE(context.currentLevelOfDetail(), 0);
 
 
     KisStrokeJobData *data =
         new KisStrokeJobData(KisStrokeJobData::SEQUENTIAL,
                              KisStrokeJobData::NORMAL);
 
-    KisStrokeJobStrategy *strategy = new KisNoopDabStrategy("test");
+    QScopedPointer<KisStrokeJobStrategy> strategy(
+        new KisNoopDabStrategy("test"));
 
-    context.addStrokeJob(new KisStrokeJob(strategy, data));
+    context.addStrokeJob(new KisStrokeJob(strategy.data(), data, 0, true));
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 1);
     QCOMPARE(numStrokeJobs, 1);
+    QCOMPARE(context.currentLevelOfDetail(), 0);
 
 
     context.addSpontaneousJob(new KisNoopSpontaneousJob());
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 2);
     QCOMPARE(numStrokeJobs, 1);
+    QCOMPARE(context.currentLevelOfDetail(), 0);
 
     context.unlock();
+
+    {
+        context.lock();
+        context.clear();
+
+        context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+        QCOMPARE(numMergeJobs, 0);
+        QCOMPARE(numStrokeJobs, 0);
+        QCOMPARE(context.currentLevelOfDetail(), -1);
+
+        data =
+            new KisStrokeJobData(KisStrokeJobData::SEQUENTIAL,
+                                 KisStrokeJobData::NORMAL);
+
+        context.addStrokeJob(new KisStrokeJob(strategy.data(), data, 2, true));
+        context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+        QCOMPARE(numMergeJobs, 0);
+        QCOMPARE(numStrokeJobs, 1);
+        QCOMPARE(context.currentLevelOfDetail(), 2);
+
+        context.unlock();
+    }
 }
 
 #define NUM_THREADS 10
@@ -162,7 +222,7 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
             KisStrokeJobStrategy *strategy =
                 new ExclusivenessCheckerStrategy(counter, hadConcurrency);
 
-            context.addStrokeJob(new KisStrokeJob(strategy, data));
+            context.addStrokeJob(new KisStrokeJob(strategy, data, 0, true));
         }
         else {
             QTest::qSleep(CHECK_DELAY);

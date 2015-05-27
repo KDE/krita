@@ -35,6 +35,7 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_lod_transform.h>
 
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
@@ -138,6 +139,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
+    scale *= KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(info);
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();

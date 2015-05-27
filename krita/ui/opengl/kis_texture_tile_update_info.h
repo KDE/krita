@@ -32,6 +32,8 @@
 #include "kis_config.h"
 #include <KoColorConversionTransformation.h>
 #include <KoChannelInfo.h>
+#include <kis_lod_transform.h>
+
 
 class KisTextureTileUpdateInfo;
 typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;
@@ -101,15 +103,24 @@ public:
     {
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect)
+    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect, int levelOfDetail)
         : m_patchPixelsLength(0)
     {
         m_tileCol = col;
         m_tileRow = row;
         m_tileRect = tileRect;
+        m_originalTileRect = m_tileRect;
         m_patchRect = m_tileRect & updateRect;
+        m_originalPatchRect = m_patchRect;
         m_currentImageRect = currentImageRect;
-        m_numPixels = m_patchRect.width() * m_patchRect.height();
+
+        m_patchLevelOfDetail = levelOfDetail;
+
+        if (m_patchLevelOfDetail) {
+            m_originalPatchRect = KisLodTransform::alignedRect(m_originalPatchRect, m_patchLevelOfDetail);
+            m_patchRect = KisLodTransform::scaledRect(m_originalPatchRect, m_patchLevelOfDetail);
+            m_tileRect = KisLodTransform::scaledRect(m_originalTileRect, m_patchLevelOfDetail);
+        }
     }
 
     ~KisTextureTileUpdateInfo() {
@@ -187,7 +198,7 @@ public:
     {
         if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty) return;
 
-        if (m_numPixels > 0) {
+        if (m_patchRect.isValid()) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
             const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
 
@@ -204,25 +215,41 @@ public:
         return m_patchPixels.data();
     }
 
-    inline bool isEntireTileUpdated() const {
-        return m_patchRect == m_tileRect;
+    inline int patchLevelOfDetail() const {
+        return m_patchLevelOfDetail;
     }
 
-    inline QPoint patchOffset() const {
+    inline QPoint realPatchOffset() const {
         return QPoint(m_patchRect.x() - m_tileRect.x(),
                       m_patchRect.y() - m_tileRect.y());
     }
 
-    inline QSize patchSize() const {
+    inline QSize realPatchSize() const {
         return m_patchRect.size();
     }
 
-    inline QRect tileRect() const {
-        return m_tileRect;
+    inline QSize realTileSize() const {
+        return m_tileRect.size();
     }
 
-    inline QRect imageRect() const {
-        return m_currentImageRect;
+    inline bool isTopmost() const {
+        return m_originalPatchRect.top() == m_currentImageRect.top();
+    }
+
+    inline bool isLeftmost() const {
+        return m_originalPatchRect.left() == m_currentImageRect.left();
+    }
+
+    inline bool isRightmost() const {
+        return m_originalPatchRect.right() == m_currentImageRect.right();
+    }
+
+    inline bool isBottommost() const {
+        return m_originalPatchRect.bottom() == m_currentImageRect.bottom();
+    }
+
+    inline bool isEntireTileUpdated() const {
+        return m_patchRect == m_tileRect;
     }
 
     inline qint32 tileCol() const {
@@ -242,7 +269,7 @@ public:
     }
 
     inline bool valid() const {
-        return m_numPixels > 0;
+        return m_patchRect.isValid();
     }
 
 private:
@@ -257,7 +284,13 @@ private:
     const KoColorSpace* m_patchColorSpace;
     quint32 m_patchPixelsLength;
 
-    quint32 m_numPixels;
+    QRect m_realPatchRect;
+    QRect m_realPatchOffset;
+    QRect m_realTileSize;
+    int m_patchLevelOfDetail;
+
+    QRect m_originalPatchRect;
+    QRect m_originalTileRect;
 
     ConversionCache::Buffer m_patchPixels;
     static ConversionCache m_patchPixelsCache;

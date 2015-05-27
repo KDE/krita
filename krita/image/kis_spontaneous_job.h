@@ -31,6 +31,7 @@ class KRITAIMAGE_EXPORT KisSpontaneousJob : public KisRunnable
 {
 public:
     virtual bool overrides(const KisSpontaneousJob *otherJob) = 0;
+    virtual int levelOfDetail() const = 0;
 };
 
 #endif /* __KIS_SPONTANEOUS_JOB_H */

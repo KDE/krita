@@ -1,15 +1,28 @@
-#version 130
-
 /*
  * shader for handling scaling
  */
 uniform sampler2D texture0;
-uniform float viewportScale;
-uniform float texelSize;
+
+#ifdef USE_OCIO
+uniform sampler3D texture1;
+#endif
+
 in vec4 v_textureCoordinate;
 out vec4 fragColor;
 
 const float eps = 1e-6;
+
+#if defined HIGHQ_SCALING || defined DIRECT_LOD_FETCH
+uniform float viewportScale;
+#endif /* defined HIGHQ_SCALING || defined DIRECT_LOD_FETCH */
+
+#ifdef DIRECT_LOD_FETCH
+uniform float fixedLodLevel;
+#endif
+
+#ifdef HIGHQ_SCALING
+
+uniform float texelSize;
 
 vec4 filterPureLinear8(sampler2D texture, vec2 texcoord)
 {
@@ -59,5 +72,56 @@ vec4 filterPureLinear8(sampler2D texture, vec2 texcoord)
     vec4 p6 = vec4(3.0) * textureLod(texture, vec2(texcoord.x, texcoord.y), level + 1.0);
 
     return (p1 + p2 + p3 + p4 + p5 + p6) / vec4(11.0);
+
+}
+
+#endif /* HIGHQ_SCALING */
+
+void main() {
+    vec4 col;
+
+#if defined HIGHQ_SCALING || defined DIRECT_LOD_FETCH
+
+    if (viewportScale < 0.5 - eps) {
+
+#ifdef DIRECT_LOD_FETCH
+
+        if (fixedLodLevel > eps) {
+            col = textureLod(texture0, v_textureCoordinate.st, fixedLodLevel);
+        } else
+
+#endif /* DIRECT_LOD_FETCH */
+
+        {
+
+#ifdef HIGHQ_SCALING
+            col = filterPureLinear8(texture0, v_textureCoordinate.st);
+#else /* HIGHQ_SCALING */
+            col = texture2D(texture0, v_textureCoordinate.st);
+#endif /* HIGHQ_SCALING */
+
+        }
+    } else
+
+#endif /* defined HIGHQ_SCALING || defined DIRECT_LOD_FETCH */
+
+    {
+#ifdef DIRECT_LOD_FETCH
+
+        if (fixedLodLevel > eps) {
+            col = textureLod(texture0, v_textureCoordinate.st, fixedLodLevel);
+        } else
+
+#endif /* DIRECT_LOD_FETCH */
+        {
+            col = texture2D(texture0, v_textureCoordinate.st);
+        }
+    }
+
+#ifdef USE_OCIO
+    fragColor = OCIODisplay(col, texture1);
+#else /* USE_OCIO */
+    fragColor = col;
+#endif /* USE_OCIO */
 
 }

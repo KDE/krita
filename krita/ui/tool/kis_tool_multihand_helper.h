@@ -39,15 +39,12 @@ protected:
                         const QPointF &lastPosition,
                         int lastTime);
 
-    void paintAt(const QVector<PainterInfo*> &painterInfos,
-                 const KisPaintInformation &pi);
+    void paintAt(const KisPaintInformation &pi);
 
-    void paintLine(const QVector<PainterInfo*> &painterInfos,
-                   const KisPaintInformation &pi1,
+    void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
-                          const KisPaintInformation &pi1,
+    void paintBezierCurve(const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
                           const KisPaintInformation &pi2);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UPDATE_SELECTION_JOB_H
-#define __KIS_UPDATE_SELECTION_JOB_H
+#ifndef __KIS_PROJECTION_UPDATES_FILTER_H
+#define __KIS_PROJECTION_UPDATES_FILTER_H
 
-#include "kis_spontaneous_job.h"
-#include "kis_selection.h"
+#include <QSharedPointer>
 
-class KRITAIMAGE_EXPORT KisUpdateSelectionJob : public KisSpontaneousJob
+class KisImage;
+class KisNode;
+class QRect;
+
+class KisProjectionUpdatesFilter
 {
 public:
-    KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect = QRect());
+    virtual ~KisProjectionUpdatesFilter();
 
-    bool overrides(const KisSpontaneousJob *otherJob);
-    void run();
-    int levelOfDetail() const;
-
-private:
-    KisSelectionSP m_selection;
-    QRect m_updateRect;
+    /**
+     * \return true if an update should be dropped by the image
+     */
+    virtual bool filter(KisImage *image, KisNode *node, const QRect& rect) = 0;
 };
 
-#endif /* __KIS_UPDATE_SELECTION_JOB_H */
+
+
+/**
+ * A dummy filter implementation that eats all the updates
+ */
+class KisDropAllProjectionUpdatesFilter : public KisProjectionUpdatesFilter
+{
+public:
+    bool filter(KisImage *image, KisNode *node, const QRect& rect);
+};
+
+#endif /* __KIS_PROJECTION_UPDATES_FILTER_H */

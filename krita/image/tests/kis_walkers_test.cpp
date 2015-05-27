@@ -854,9 +854,9 @@ void KisWalkersTest::testMasksVisiting()
     QRect selection2(30, 15, 10, 10);
     QRect selection3(20, 10, 20, 10);
 
-    filterMask1->testingInitSelection(selection1);
-    transparencyMask->testingInitSelection(selection2);
-    filterMask2->testingInitSelection(selection3);
+    filterMask1->testingInitSelection(selection1, paintLayer1);
+    transparencyMask->testingInitSelection(selection2, paintLayer1);
+    filterMask2->testingInitSelection(selection3, paintLayer1);
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(transparencyMask, paintLayer1);
@@ -927,9 +927,9 @@ void KisWalkersTest::testMasksVisitingNoFilthy()
     QRect selection2(30, 15, 10, 10);
     QRect selection3(20, 10, 20, 10);
 
-    filterMask1->testingInitSelection(selection1);
-    transparencyMask->testingInitSelection(selection2);
-    filterMask2->testingInitSelection(selection3);
+    filterMask1->testingInitSelection(selection1, paintLayer1);
+    transparencyMask->testingInitSelection(selection2, paintLayer1);
+    filterMask2->testingInitSelection(selection3, paintLayer1);
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(transparencyMask, paintLayer1);
@@ -1004,9 +1004,9 @@ void KisWalkersTest::testMasksOverlapping()
     QRect selection2(128, 0, 128, 128);
     QRect selection3(0, 64, 256, 128);
 
-    filterMask1->testingInitSelection(selection1);
-    transparencyMask->testingInitSelection(selection2);
-    filterMask2->testingInitSelection(selection3);
+    filterMask1->testingInitSelection(selection1, paintLayer1);
+    transparencyMask->testingInitSelection(selection2, paintLayer1);
+    filterMask2->testingInitSelection(selection3, paintLayer1);
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(transparencyMask, paintLayer1);

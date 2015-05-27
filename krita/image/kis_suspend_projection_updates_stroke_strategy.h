@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UPDATE_SELECTION_JOB_H
-#define __KIS_UPDATE_SELECTION_JOB_H
+#ifndef __KIS_SUSPEND_PROJECTION_UPDATES_STROKE_STRATEGY_H
+#define __KIS_SUSPEND_PROJECTION_UPDATES_STROKE_STRATEGY_H
 
-#include "kis_spontaneous_job.h"
-#include "kis_selection.h"
+#include <kis_simple_stroke_strategy.h>
 
-class KRITAIMAGE_EXPORT KisUpdateSelectionJob : public KisSpontaneousJob
+#include <QScopedPointer>
+
+class KisSuspendProjectionUpdatesStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
-    KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect = QRect());
-
-    bool overrides(const KisSpontaneousJob *otherJob);
-    void run();
-    int levelOfDetail() const;
+    KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend);
+    ~KisSuspendProjectionUpdatesStrokeStrategy();
 
 private:
-    KisSelectionSP m_selection;
-    QRect m_updateRect;
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_UPDATE_SELECTION_JOB_H */
+#endif /* __KIS_SUSPEND_PROJECTION_UPDATES_STROKE_STRATEGY_H */

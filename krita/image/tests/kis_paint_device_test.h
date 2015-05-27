@@ -61,6 +61,8 @@ private Q_SLOTS:
     void testMoveWrapAround();
 
     void testCacheState();
+
+    void testLodDevice();
 };
 
 #endif

@@ -290,10 +290,6 @@ void KisPart::addView(KisView *view, KisDocument *document)
         d->views.append(view);
     }
 
-    if (!d->documents.contains(document)) {
-        d->documents.append(document);
-    }
-
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
 
     emit sigViewAdded(view);

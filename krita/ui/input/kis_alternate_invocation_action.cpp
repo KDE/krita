@@ -42,8 +42,6 @@ KisAlternateInvocationAction::KisAlternateInvocationAction()
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Primary Mode"), PrimaryAlternateModeShortcut);
     shortcuts.insert(i18n("Secondary Mode"), SecondaryAlternateModeShortcut);
-    shortcuts.insert(i18n("Tertiary Mode"), TertiaryAlternateModeShortcut);
-
 
     shortcuts.insert(i18n("Pick Foreground Color from Current Layer"), PickColorFgLayerModeShortcut);
     shortcuts.insert(i18n("Pick Background Color from Current Layer"), PickColorBgLayerModeShortcut);
@@ -80,9 +78,6 @@ KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int short
         break;
     case SecondaryAlternateModeShortcut:
         action = KisTool::AlternateThird;
-        break;
-    case TertiaryAlternateModeShortcut:
-        action = KisTool::AlternateFourth;
         break;
     }
 

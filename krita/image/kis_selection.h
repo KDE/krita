@@ -33,8 +33,7 @@ enum SelectionAction {
     SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT,
-    SELECTION_INTERSECT,
-    SELECTION_DEFAULT
+    SELECTION_INTERSECT
 };
 
 #include "kis_pixel_selection.h"

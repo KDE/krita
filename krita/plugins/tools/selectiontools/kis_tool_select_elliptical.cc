@@ -3,7 +3,6 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,15 +34,29 @@
 #include "kis_selection_manager.h"
 #include "kis_system_locker.h"
 
-
-__KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *canvas)
-    : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT,
-                         KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
+KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas)
+    : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)),
+      m_widgetHelper(i18n("Elliptical Selection"))
 {
-    setObjectName("tool_select_elliptical");
 }
 
-void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
+QWidget* KisToolSelectElliptical::createOptionWidget()
+{
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    Q_ASSERT(canvas);
+
+    m_widgetHelper.createOptionWidget(canvas, this->toolId());
+    return m_widgetHelper.optionWidget();
+}
+
+void KisToolSelectElliptical::keyPressEvent(QKeyEvent *event)
+{
+    if (!m_widgetHelper.processKeyPressEvent(event)) {
+        KisTool::keyPressEvent(event);
+    }
+}
+
+void KisToolSelectElliptical::finishRect(const QRectF &rect)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
@@ -57,13 +70,13 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Ellipse"));
 
-    if (selectionMode() == PIXEL_SELECTION) {
+    if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
-        painter.setAntiAliasPolygonFill(antiAliasSelection());
+        painter.setAntiAliasPolygonFill(m_widgetHelper.optionWidget()->antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
@@ -73,7 +86,7 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
         cache.addEllipse(rect);
         tmpSel->setOutlineCache(cache);
 
-        helper.selectPixelSelection(tmpSel, selectionAction());
+        helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
@@ -81,24 +94,3 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
         helper.addSelectionShape(shape);
     }
 }
-
-
-KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
-    KisToolSelectEllipticalTemplate(canvas, i18n("Elliptical Selection"))
-{
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
-}
-
-void KisToolSelectElliptical::setSelectionAction(int newSelectionAction)
-{
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
-}
-

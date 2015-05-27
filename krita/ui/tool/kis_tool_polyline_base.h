@@ -45,8 +45,6 @@ public:
 
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
-    virtual void listenToModifiers(bool listen);
-    virtual bool listeningToModifiers();
     void requestStrokeEnd();
     void requestStrokeCancellation();
 
@@ -67,7 +65,6 @@ private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     bool m_dragging;
-    bool m_listenToModifiers;
     vQPointF m_points;
     ToolType m_type;
     bool m_closeSnappingActivated;

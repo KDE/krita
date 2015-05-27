@@ -5,7 +5,6 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,66 +34,20 @@
 #include "kis_shape_tool_helper.h"
 
 #include "kis_system_locker.h"
-#include "KisViewManager.h"
-#include "kis_selection_manager.h"
 
 
-__KisToolSelectPolygonalLocal::__KisToolSelectPolygonalLocal(KoCanvasBase *canvas)
+KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
     : KisToolPolylineBase(canvas, KisToolPolylineBase::SELECT,
-                          KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
+                          KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6)),
+      m_widgetHelper(i18n("Polygonal Selection"))
 {
     setObjectName("tool_select_polygonal");
-}
-
-
-void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &points)
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-    if (!kisCanvas)
-        return;
-
-    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
-
-    if (selectionMode() == PIXEL_SELECTION) {
-        KisPixelSelectionSP tmpSel = new KisPixelSelection();
-
-        KisPainter painter(tmpSel);
-        painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
-        painter.setAntiAliasPolygonFill(antiAliasSelection());
-        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-
-        painter.paintPolygon(points);
-
-        QPainterPath cache;
-        cache.addPolygon(points);
-        cache.closeSubpath();
-        tmpSel->setOutlineCache(cache);
-
-        helper.selectPixelSelection(tmpSel, selectionAction());
-    } else {
-        KoPathShape* path = new KoPathShape();
-        path->setShapeId(KoPathShapeId);
-
-        QTransform resolutionMatrix;
-        resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-        path->moveTo(resolutionMatrix.map(points[0]));
-        for (int i = 1; i < points.count(); i++)
-            path->lineTo(resolutionMatrix.map(points[i]));
-        path->close();
-        path->normalize();
-
-        helper.addSelectionShape(path);
-    }
-}
-
-
-KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
-    SelectionActionHandler<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
-{
     connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+}
+
+SelectionAction KisToolSelectPolygonal::selectionAction() const
+{
+    return m_selectionAction;
 }
 
 void KisToolSelectPolygonal::setSelectionAction(int newSelectionAction)
@@ -110,3 +63,61 @@ void KisToolSelectPolygonal::setSelectionAction(int newSelectionAction)
     }
 }
 
+QWidget* KisToolSelectPolygonal::createOptionWidget()
+{
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    Q_ASSERT(canvas);
+
+    m_widgetHelper.createOptionWidget(canvas, this->toolId());
+    return m_widgetHelper.optionWidget();
+}
+
+void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *event)
+{
+    if (!m_widgetHelper.processKeyPressEvent(event)) {
+        KisToolPolylineBase::keyPressEvent(event);
+    }
+}
+
+void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+    if (!kisCanvas)
+        return;
+
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
+
+    if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
+
+        KisPainter painter(tmpSel);
+        painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+        painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
+        painter.setAntiAliasPolygonFill(m_widgetHelper.optionWidget()->antiAliasSelection());
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+        painter.paintPolygon(points);
+
+        QPainterPath cache;
+        cache.addPolygon(points);
+        cache.closeSubpath();
+        tmpSel->setOutlineCache(cache);
+
+        helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
+    } else {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+
+        QTransform resolutionMatrix;
+        resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+        path->moveTo(resolutionMatrix.map(points[0]));
+        for (int i = 1; i < points.count(); i++)
+            path->lineTo(resolutionMatrix.map(points[i]));
+        path->close();
+        path->normalize();
+
+        helper.addSelectionShape(path);
+    }
+}

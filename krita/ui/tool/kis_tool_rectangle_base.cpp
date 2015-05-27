@@ -36,7 +36,6 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
     , m_isRatioForced(false)
     , m_isWidthForced(false)
     , m_isHeightForced(false)
-    , m_listenToModifiers(true)
     , m_forcedRatio(1.0)
     , m_forcedWidth(0)
     , m_forcedHeight(0)
@@ -80,15 +79,6 @@ void KisToolRectangleBase::deactivate()
 {
     updateArea();
     KisToolShape::deactivate();
-}
-
-void KisToolRectangleBase::listenToModifiers(bool listen)
-{
-    m_listenToModifiers = listen;
-}
-bool KisToolRectangleBase::listeningToModifiers()
-{
-    return m_listenToModifiers;
 }
 
 void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
@@ -146,9 +136,9 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    bool constraintToggle = (event->modifiers() & Qt::ShiftModifier) && m_listenToModifiers;
-    bool translateMode = (event->modifiers() & Qt::AltModifier) && m_listenToModifiers;
-    bool expandFromCenter = (event->modifiers() & Qt::ControlModifier) && m_listenToModifiers;
+    bool constraintToggle = (event->modifiers() & Qt::ShiftModifier);
+    bool translateMode = (event->modifiers() & Qt::AltModifier);
+    bool expandFromCenter = (event->modifiers() & Qt::ControlModifier);
     
     bool fixedSize = isFixedSize() && !constraintToggle;
     

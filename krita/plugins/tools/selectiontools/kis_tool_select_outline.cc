@@ -5,7 +5,6 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,16 +51,13 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 
-#define FEEDBACK_LINE_WIDTH 2
-
 
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas,
-                  KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
-                  i18n("Outline Selection")),
+                            KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
+                            i18n("Outline Selection")),
           m_paintPath(new QPainterPath())
 {
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -71,8 +67,6 @@ KisToolSelectOutline::~KisToolSelectOutline()
 
 void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 {
-
-    KisToolSelectBase::beginPrimaryAction(event);
     if (!selectionEditable()) {
         event->ignore();
         return;
@@ -83,27 +77,22 @@ void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
     m_points.clear();
     m_points.append(convertToPixelCoord(event));
     m_paintPath->moveTo(pixelToView(convertToPixelCoord(event)));
-
 }
 
 void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-    KisToolSelectBase::continuePrimaryAction(event);
 
     QPointF point = convertToPixelCoord(event);
     m_paintPath->lineTo(pixelToView(point));
     m_points.append(point);
     updateFeedback();
-
-
 }
 
 void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-    KisToolSelectBase::endPrimaryAction(event);
     setMode(KisTool::HOVER_MODE);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -166,7 +155,7 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
-
+#define FEEDBACK_LINE_WIDTH 2
 
 void KisToolSelectOutline::updateFeedback()
 {
@@ -186,25 +175,8 @@ void KisToolSelectOutline::deactivate()
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
 
-    KisTool::deactivate();
+    KisToolSelectBase::deactivate();
 }
-
-
-void KisToolSelectOutline::setSelectionAction(int newSelectionAction)
-{
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
-}
-
-
-
 
 #include "kis_tool_select_outline.moc"
 

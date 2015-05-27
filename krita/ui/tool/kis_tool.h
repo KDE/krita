@@ -254,10 +254,6 @@ protected:
 
     virtual QWidget* createOptionWidget();
 
-    /// For a system of modifier keys with inheritance
-    virtual bool listeningToModifiers();
-    virtual void listenToModifiers(bool listen);
-
 protected:
     KisImageWSP image() const;
     QCursor cursor() const;

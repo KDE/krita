@@ -671,7 +671,6 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
 {
     if (!newdoc) {
         newdoc = KisPart::instance()->createDocument();
-        KisPart::instance()->addDocument(newdoc);
     }
 
     d->firstTime = true;
@@ -683,7 +682,10 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
         delete newdoc;
         return false;
     }
+
+    KisPart::instance()->addDocument(newdoc);
     updateReloadFileAction(newdoc);
+
 
     KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
     if (!file.isWritable()) {

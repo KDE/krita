@@ -1244,28 +1244,34 @@ void KisMainWindow::slotDocumentInfo()
     delete dlg;
 }
 
-void KisMainWindow::slotFileCloseAll()
+bool KisMainWindow::slotFileCloseAll()
 {
     foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         if (subwin) {
-            subwin->close();
+            if(!subwin->close())
+                return false;
         }
     }
-    d->mdiArea->closeAllSubWindows();
+
     updateCaption();
+    return true;
 }
 
 void KisMainWindow::slotFileQuit()
 {
+    if(!slotFileCloseAll())
+        return;
+
+    close();
+
     foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
         if (mainWin != this) {
-            mainWin->slotFileCloseAll();
-            close();
+            if(!mainWin->slotFileCloseAll())
+                return;
+
+            mainWin->close();
         }
     }
-
-    slotFileCloseAll();
-    close();
 }
 
 void KisMainWindow::slotFilePrint()

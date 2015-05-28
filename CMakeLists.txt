@@ -17,6 +17,17 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
     cmake_policy(SET CMP0046 OLD)
 endif()
 
+# QT5TODO: remove KDE4_BUILD_TESTS post-3.0
+# transitional forward compatibility:
+# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5
+# have BUILD_TESTING overrule KDE4_BUILD_TESTS if set
+# slightly broken approach, if a cache exists then unsetting tests will need both
+# BUILD_TESTING and KDE4_BUILD_TESTS to be set to FALSE
+# better fixes welcome
+if (BUILD_TESTING)
+    set(KDE4_BUILD_TESTS TRUE)
+endif()
+
  ######################
 #######################
 ## Constants defines ##

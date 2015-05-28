@@ -523,7 +523,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (!m_batchMode) {
+        if (m_batchMode) {
             KisConfig cfg;
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {

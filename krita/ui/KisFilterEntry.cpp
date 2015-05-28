@@ -23,36 +23,36 @@ Boston, MA 02110-1301, USA.
 #include "KisDocument.h"
 #include "KisImportExportFilter.h"
 
-#include <kservicetype.h>
 #include <kdebug.h>
-#include <KoServiceLocator.h>
+#include <KoJsonTrader.h>
+#include <kpluginfactory.h>
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
 
 
-KisFilterEntry::KisFilterEntry(const KService::Ptr& service)
-        : m_service(service)
+KisFilterEntry::KisFilterEntry(QPluginLoader *loader)
+        : m_loader(loader)
 {
-    import = service->property("X-KDE-Import", QVariant::StringList).toStringList();
-    export_ = service->property("X-KDE-Export", QVariant::StringList).toStringList();
-    int w = service->property("X-KDE-Weight", QVariant::Int).toInt();
+    import = loader->metaData().value("MetaData").toObject().value("X-KDE-Import").toString().split(',');
+    export_ = loader->metaData().value("MetaData").toObject().value("X-KDE-Export").toString().split(',');
+    int w = loader->metaData().value("MetaData").toObject().value("X-KDE-Weight").toString().toInt();
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
-    available = service->property("X-KDE-Available", QVariant::String).toString();
+    available = loader->metaData().value("MetaData").toObject().value("X-KDE-Available").toString();
 }
 
 QList<KisFilterEntry::Ptr> KisFilterEntry::query()
 {
     QList<KisFilterEntry::Ptr> lst;
 
-    const KService::List offers = KoServiceLocator::instance()->entries("Krita/FileFilter");
+    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Krita/FileFilter", QString());
 
-    KService::List::ConstIterator it = offers.constBegin();
+    QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();
     kDebug(30500) <<"Query returned" << max <<" offers";
     for (unsigned int i = 0; i < max; i++) {
-        kDebug(30500) <<"   desktopEntryPath=" << (*it)->entryPath()
-                       << "   library=" << (*it)->library() << endl;
+        //kDebug(30500) <<"   desktopEntryPath=" << (*it)->entryPath()
+        //               << "   library=" << (*it)->library() << endl;
         // Append converted offer
         lst.append(KisFilterEntry::Ptr(new KisFilterEntry(*it)));
         // Next service
@@ -64,11 +64,10 @@ QList<KisFilterEntry::Ptr> KisFilterEntry::query()
 
 KisImportExportFilter* KisFilterEntry::createFilter(KisFilterChain* chain, QObject* parent)
 {
-    KPluginLoader loader(*m_service);
-    KLibFactory* factory = loader.factory();
+    KLibFactory *factory = qobject_cast<KLibFactory *>(m_loader->instance());
 
     if (!factory) {
-        kWarning(30003) << loader.errorString();
+        kWarning(30003) << m_loader->errorString();
         return 0;
     }
 

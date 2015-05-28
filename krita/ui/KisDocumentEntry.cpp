@@ -25,18 +25,19 @@
 
 #include <kservicetype.h>
 #include <kdebug.h>
-#include <KoServiceLocator.h>
-#include <QFile>
+#include <KoJsonTrader.h>
+
+#include <QPluginLoader>
 
 #include <limits.h> // UINT_MAX
 
 KisDocumentEntry::KisDocumentEntry()
-        : m_service(0)
+        : m_loader(0)
 {
 }
 
-KisDocumentEntry::KisDocumentEntry(const KService::Ptr& service)
-        : m_service(service)
+KisDocumentEntry::KisDocumentEntry(QPluginLoader *loader)
+        : m_loader(loader)
 {
 }
 
@@ -55,29 +56,29 @@ QStringList KisDocumentEntry::extraNativeMimeTypes()
 }
 
 
-KService::Ptr KisDocumentEntry::service() const {
-    return m_service;
+QPluginLoader * KisDocumentEntry::loader() const {
+    return m_loader;
 }
 
 /**
  * @return TRUE if the service pointer is null
  */
 bool KisDocumentEntry::isEmpty() const {
-    return !m_service;
+    return (m_loader == 0);
 }
 
 /**
  * @return name of the associated service
  */
 QString KisDocumentEntry::name() const {
-    return m_service->name();
+    return m_loader->fileName(); //QT5TODO: should return servicename
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KisDocumentEntry::mimeTypes() const {
-    return m_service->serviceTypes();
+    return QStringList(); //QT5TODO: m_loader->serviceTypes();
 }
 
 /**
@@ -124,31 +125,10 @@ QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
     QList<KisDocumentEntry> lst;
 
     // Query the trader
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", mimetype);
 
-    foreach(KService::Ptr offer, offers) {
-
-        QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
-        QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        QStringList serviceTypes = offer->property("ServiceTypes", QVariant::StringList).toStringList();
-
-        if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
-
-            if (offer->noDisplay())
-                continue;
-            KisDocumentEntry d(offer);
-            // Append converted offer
-            lst.append(d);
-
-            // And if it's the part that belongs to the current application it's our own, so break off
-            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
-                lst.clear();
-                lst.append(d);
-                break;
-            }
-
-            // Next service
-        }
+    foreach(QPluginLoader *pluginLoader, offers) {
+        lst.append(KisDocumentEntry(pluginLoader));
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {

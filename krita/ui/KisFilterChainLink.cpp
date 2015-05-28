@@ -18,6 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 #include "KisFilterChainLink.h"
 #include <QMetaMethod>
+#include <QPluginLoader>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -98,7 +99,7 @@ namespace CalligraFilter {
 
     void ChainLink::dump() const
     {
-        kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
+        kDebug(30500) << "   Link:" << m_filterEntry->loader()->fileName();
     }
 
     void ChainLink::setupCommunication(const KisImportExportFilter *const parentFilter) const

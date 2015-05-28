@@ -197,7 +197,9 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     d->displayFilter = displayFilter;
+    d->canvasInitialized = false;
     initializeDisplayShader();
+    d->canvasInitialized = true;
 }
 
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)

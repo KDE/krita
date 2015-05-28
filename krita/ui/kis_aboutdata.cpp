@@ -32,7 +32,7 @@ KAboutData *newKritaAboutData()
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion);
 #else
     version = calligraVersion;
 #endif

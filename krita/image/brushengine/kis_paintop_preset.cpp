@@ -83,6 +83,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 
     preset->setPaintOp(paintOp());
     preset->setName(name());
+    preset->setImage(image());
     preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
 
     Q_ASSERT(preset->valid());

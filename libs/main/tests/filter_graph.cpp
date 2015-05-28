@@ -20,6 +20,7 @@
 #include <QFile>
 #include <QByteArray>
 #include <QList>
+#include <QPluginLoader>
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"

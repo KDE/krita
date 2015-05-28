@@ -21,8 +21,8 @@
 #ifndef __ko_document_entry_h__
 #define __ko_document_entry_h__
 
-#include <kservice.h>
 #include <QList>
+#include <QString>
 #include "komain_export.h"
 
 class QStringList;

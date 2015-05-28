@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 #include "KoFilter.h"
 
 #include <kdebug.h>
-#include <KoServiceLocator.h>
 #include <KoJsonTrader.h>
 #include <kpluginfactory.h>
 #include <QFile>
@@ -52,7 +51,7 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
     unsigned int max = offers.count();
     //kDebug(30500) <<"Query returned" << max <<" offers";
     for (unsigned int i = 0; i < max; i++) {
-        //kDebug(30500) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
+        //kDebug(30500) <<"   desktopEntryPath=" << (*it)->entryPath()
         //               << "   library=" << (*it)->library() << endl;
         // Append converted offer
         lst.append(KoFilterEntry::Ptr(new KoFilterEntry(*it)));

@@ -25,8 +25,8 @@
 #include "KoFilter.h"
 
 #include <kservicetype.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
-#include <KoServiceLocator.h>
 #include <KoJsonTrader.h>
 
 #include <QPluginLoader>
@@ -63,14 +63,14 @@ bool KoDocumentEntry::isEmpty() const {
  * @return name of the associated service
  */
 QString KoDocumentEntry::name() const {
-    return m_loader->fileName(); //FIXME should return servicename
+    return m_loader->fileName(); //QT5TODO: should return servicename
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KoDocumentEntry::mimeTypes() const {
-    return QStringList();//FIXME m_loader->serviceTypes();
+    return QStringList();//QT5TODO: m_loader->serviceTypes();
 }
 
 /**

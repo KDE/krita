@@ -162,6 +162,8 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
     m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
+    m_clear->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_clear->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));

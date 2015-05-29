@@ -207,7 +207,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
-    showTaggingBar(false,false);
+    showTaggingBar(false);
     activated(d->model->index(0, 0));
 }
 
@@ -315,9 +315,10 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 #endif
 }
 
-void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
+void KoResourceItemChooser::showTaggingBar(bool show)
 {
-    d->tagManager->showTaggingBar(showSearchBar, showOpBar);
+    d->tagManager->showTaggingBar(show);
+
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )

@@ -86,7 +86,7 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setColumnCount(1);
-    m_itemChooser->showTaggingBar(false, false);
+    m_itemChooser->showTaggingBar(false);
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 

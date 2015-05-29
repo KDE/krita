@@ -44,6 +44,7 @@ public Q_SLOTS:
     void loadPreferences();
     void loadDefaultPreferences();
     void hsxchange();
+    void changedColorDocker(int);
 
 Q_SIGNALS:
     void settingsChanged() const;

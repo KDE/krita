@@ -22,6 +22,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QComboBox>
 
 #include <kconfiggroup.h>
 
@@ -55,6 +56,18 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     resize(minimumSize());
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
+
+    /* color docker selector drop down */
+    ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
+    ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
+    ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
+
+    connect( ui->dockerColorSettingsComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedColorDocker(int)));
+
+    /* color slider options container */
+    ui->colorSliderOptions->hide();
+
+
 
     connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
             ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
@@ -233,6 +246,22 @@ void KisColorSelectorSettings::savePreferences() const
 //        break;
 //    }
 //}
+
+
+void KisColorSelectorSettings::changedColorDocker(int index)
+{
+    if (index == 0) // advanced color selector options selected
+    {
+         ui->advancedColorSelectorOptions->show();
+         ui->colorSliderOptions->hide();
+    }
+    else  // color slider options selected
+    {
+         ui->advancedColorSelectorOptions->hide();
+         ui->colorSliderOptions->show();
+    }
+}
+
 
 void KisColorSelectorSettings::loadPreferences()
 {

@@ -6,16 +6,70 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
-    <height>469</height>
+    <width>718</width>
+    <height>653</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Color Selector Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
-    <widget class="KTabWidget" name="tab_shadeSelector">
+    <layout class="QFormLayout" name="dockerSelectForm">
+     <property name="labelAlignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="verticalSpacing">
+      <number>6</number>
+     </property>
+     <property name="bottomMargin">
+      <number>20</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="dockerColorSettingsLabel">
+       <property name="text">
+        <string>Docker:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="dockerColorSettingsComboBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="KTabWidget" name="advancedColorSelectorOptions">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>684</width>
+       <height>421</height>
+      </size>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -23,207 +77,615 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <widget class="QGroupBox" name="groupBox_3">
-           <property name="title">
-            <string>When the widget gets shrunken</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item>
-             <widget class="QRadioButton" name="shadeSelectorHideable">
-              <property name="text">
-               <string>hide shade selector</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="allowHorizontalLayout">
-              <property name="text">
-               <string>change to a horizontal layout</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="shrunkenDoNothing">
-              <property name="text">
-               <string>do nothing</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_4">
-           <property name="title">
-            <string>Zoom selectors</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
-             <widget class="QRadioButton" name="popupOnMouseClick">
-              <property name="text">
-               <string>when pressing mid mousebutton</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="popupOnMouseOver">
-              <property name="text">
-               <string>on mouse over</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="neverZoom">
-              <property name="text">
-               <string>never</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <item>
-               <widget class="QLabel" name="label_11">
-                <property name="text">
-                 <string>zoom to size</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="popupSize">
-                <property name="suffix">
-                 <string>px</string>
-                </property>
-                <property name="minimum">
-                 <number>100</number>
-                </property>
-                <property name="maximum">
-                 <number>1000</number>
-                </property>
-                <property name="singleStep">
-                 <number>10</number>
-                </property>
-                <property name="value">
-                 <number>260</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Color Space</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_10">
+      <widget class="QGroupBox" name="groupBox_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>170</y>
+         <width>400</width>
+         <height>93</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Color Space</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QRadioButton" name="useImageColorSpace">
-              <property name="text">
-               <string>use image color space</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="useCustomColorSpace">
-              <property name="text">
-               <string>use custom color space</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QRadioButton" name="useImageColorSpace">
+            <property name="text">
+             <string>use image color space</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="KisColorSpaceSelector" name="colorSpace">
-            <property name="enabled">
-             <bool>false</bool>
+           <widget class="QRadioButton" name="useCustomColorSpace">
+            <property name="text">
+             <string>use custom color space</string>
             </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+        </item>
+        <item>
+         <widget class="KisColorSpaceSelector" name="colorSpace">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>When the widget gets shrunken</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QRadioButton" name="shadeSelectorHideable">
+             <property name="text">
+              <string>hide shade selector</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="allowHorizontalLayout">
+             <property name="text">
+              <string>change to a horizontal layout</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="shrunkenDoNothing">
+             <property name="text">
+              <string>do nothing</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="title">
+           <string>Zoom selectors</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QRadioButton" name="popupOnMouseClick">
+             <property name="text">
+              <string>when pressing mid mousebutton</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="popupOnMouseOver">
+             <property name="text">
+              <string>on mouse over</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="neverZoom">
+             <property name="text">
+              <string>never</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>zoom to size</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="popupSize">
+               <property name="suffix">
+                <string>px</string>
+               </property>
+               <property name="minimum">
+                <number>100</number>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="singleStep">
+                <number>10</number>
+               </property>
+               <property name="value">
+                <number>260</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_typeshape">
       <attribute name="title">
        <string>Color Selector</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="5" column="0" colspan="8">
-        <widget class="QGroupBox" name="horizontalGroupBox_3">
-         <property name="title">
-          <string>Luma Coefficients</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_15">
+      <widget class="QGroupBox" name="horizontalGroupBox_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>250</y>
+         <width>662</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Luma Coefficients</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
+        <item>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>3</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="redlabel">
+            <property name="text">
+             <string>Red':</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="l_lumaG">
+            <property name="inputMask">
+             <string notr="true">9.90000</string>
+            </property>
+            <property name="text">
+             <string notr="true">0.7152</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="l_lumaR">
+            <property name="inputMask">
+             <string notr="true">9.9000</string>
+            </property>
+            <property name="text">
+             <string notr="true">0.2126</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="greenlabel">
+            <property name="text">
+             <string>Green':</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="bluelabel">
+            <property name="text">
+             <string>Blue':</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="l_lumaB">
+            <property name="inputMask">
+             <string>9.90000</string>
+            </property>
+            <property name="text">
+             <string notr="true">0.0722</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="info_luma">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Luma coefficients are used to calculate the Y' from the HSY' color model. Default is set to 'rec 709'(red:&amp;quot;0.2126&amp;quot;, green:&amp;quot;0.7152&amp;quot; and blue:&amp;quot;0.0722&amp;quot;).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="margin">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QLabel" name="l_type">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>9</y>
+         <width>37</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Type:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>colorSelectorConfiguration</cstring>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="colorSelectorHSItype">
+       <property name="geometry">
+        <rect>
+         <x>206</x>
+         <y>9</y>
+         <width>53</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>HSI</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="colorSelectorHSVtype">
+       <property name="geometry">
+        <rect>
+         <x>75</x>
+         <y>9</y>
+         <width>59</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>HSV</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="colorSelectorHSYtype">
+       <property name="geometry">
+        <rect>
+         <x>271</x>
+         <y>9</y>
+         <width>62</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>HSY'</string>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="vb_infolabel">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>37</y>
+         <width>471</width>
+         <height>201</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Information:</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_13">
+        <property name="leftMargin">
+         <number>30</number>
+        </property>
+        <property name="rightMargin">
+         <number>1</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="l_HSVtypeInfo">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HSV is a colour model where value goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="margin">
+           <number>2</number>
+          </property>
+          <property name="setHidden" stdset="0">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="l_HSLtypeInfo">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HSL is a colour model where lightness goes from black to white, with middle grey being equal to the most saturated colour.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="setHidden" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="l_HSItypeInfo">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>HSI is a color model where intensity maps to the sum of rgb components</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="setHidden" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="l_HSYtypeInfo">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>HSY' is a color model where luma(Y') is weighted by its coefficients (below).</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="setHidden" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QRadioButton" name="colorSelectorHSLtype">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>9</y>
+         <width>57</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>HSL</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>37</y>
+         <width>181</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_16">
+        <item>
+         <widget class="QLabel" name="l_shape">
+          <property name="text">
+           <string>Shape:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KisColorSelectorComboBox" name="colorSelectorConfiguration"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Shade Selector</string>
+      </attribute>
+      <widget class="QGroupBox" name="b_lineShadeSelector">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>39</y>
+         <width>478</width>
+         <height>86</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Update shade selector when</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="shadeSelectorUpdateOnRightClick">
+          <property name="text">
+           <string>right clicking on shade selector</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="shadeSelectorUpdateOnForeground">
+          <property name="toolTip">
+           <string>this doesn't include a color change by the shade selector</string>
+          </property>
+          <property name="text">
+           <string>foreground color changes</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="shadeSelectorUpdateOnLeftClick">
+          <property name="text">
+           <string>left clicking on shade selector</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="shadeSelectorUpdateOnBackground">
+          <property name="toolTip">
+           <string>this doesn't include a color change by the shade selector</string>
+          </property>
+          <property name="text">
+           <string>background color change</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="b_mypainttype">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>131</y>
+         <width>403</width>
+         <height>58</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>MyPaint Shade Selector</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Color-model type:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="MyPaint_HSV">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue Saturation Value model.(Default)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This model sets all the most saturated colours at the same level as white. Think value as a measure of pixel-brightness.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>HSV</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="MyPaint_HSL">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Lightness model.&lt;/p&gt;&lt;p&gt;This model sets all the most saturated colors at lightness 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>HSL</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="MyPaint_HSI">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Intensity model for the MyPaint Shade Selector&lt;/p&gt;&lt;p&gt;Intensity marks itself by measuring the sum of the r, g, b components. As such, yellow(1,1,0) is brighter than blue(0,0,1).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>HSI</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="MyPaint_HSY">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Luma model for the MyPaint Shade Selector&lt;/p&gt;&lt;p&gt;Luma is similar to Intensity, except it weighs the red green and blue components before adding them together. As such, Yellow is brighter than Cyan. This model is exactly the same as MyPaint HCY'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>HSY'</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="b_minimaltype">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>195</y>
+         <width>356</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Minimal Shade Selector</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_12">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <layout class="QGridLayout" name="gridLayout_5">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>20</number>
-            </property>
-            <property name="verticalSpacing">
-             <number>3</number>
-            </property>
+           <layout class="QFormLayout" name="formLayout_2">
             <item row="0" column="0">
-             <widget class="QLabel" name="redlabel">
+             <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>Red':</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="l_lumaG">
-              <property name="inputMask">
-               <string notr="true">9.90000</string>
-              </property>
-              <property name="text">
-               <string notr="true">0.7152</string>
+               <string>Line Count</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -231,900 +693,277 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="l_lumaR">
-              <property name="inputMask">
-               <string notr="true">9.9000</string>
+             <widget class="QSpinBox" name="minimalShadeSelectorLineCount">
+              <property name="minimum">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string notr="true">0.2126</string>
+              <property name="maximum">
+               <number>10</number>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <property name="value">
+               <number>3</number>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="greenlabel">
+             <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>Green':</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="bluelabel">
-              <property name="text">
-               <string>Blue':</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="l_lumaB">
-              <property name="inputMask">
-               <string>9.90000</string>
-              </property>
-              <property name="text">
-               <string notr="true">0.0722</string>
+               <string>line height</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
+              <property name="minimum">
+               <number>8</number>
+              </property>
+              <property name="maximum">
+               <number>99</number>
+              </property>
+              <property name="value">
+               <number>16</number>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QRadioButton" name="minimalShadeSelectorAsGradient">
+              <property name="text">
+               <string>gradient</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="minimalShadeSelectorAsColorPatches">
+              <property name="text">
+               <string>color patches</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QFormLayout" name="formLayout_3">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>patches per line</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_7">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>20</width>
+              <height>0</height>
              </size>
             </property>
            </spacer>
           </item>
-          <item>
-           <widget class="QLabel" name="info_luma">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Luma coefficients are used to calculate the Y' from the HSY' color model. Default is set to 'rec 709'(red:&amp;quot;0.2126&amp;quot;, green:&amp;quot;0.7152&amp;quot; and blue:&amp;quot;0.0722&amp;quot;).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="margin">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
          </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="l_type">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>colorSelectorConfiguration</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QRadioButton" name="colorSelectorHSItype">
-         <property name="text">
-          <string>HSI</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="colorSelectorHSVtype">
-         <property name="text">
-          <string>HSV</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
-        <widget class="QRadioButton" name="colorSelectorHSYtype">
-         <property name="text">
-          <string>HSY'</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" rowspan="3" colspan="4">
-        <layout class="QHBoxLayout" name="horizontalLayout_16">
-         <item>
-          <widget class="QLabel" name="l_shape">
-           <property name="text">
-            <string>Shape:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KisColorSelectorComboBox" name="colorSelectorConfiguration"/>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="4" rowspan="3" colspan="4">
-        <widget class="QGroupBox" name="vb_infolabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>400</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Information:</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_13">
-          <property name="leftMargin">
-           <number>30</number>
+        </item>
+        <item>
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="widgetResizable">
+           <bool>true</bool>
           </property>
-          <property name="rightMargin">
-           <number>1</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="l_HSVtypeInfo">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HSV is a colour model where value goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-            <property name="setHidden" stdset="0">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="l_HSLtypeInfo">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HSL is a colour model where lightness goes from black to white, with middle grey being equal to the most saturated colour.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="setHidden" stdset="0">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="l_HSItypeInfo">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>HSI is a color model where intensity maps to the sum of rgb components</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="setHidden" stdset="0">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="l_HSYtypeInfo">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>HSY' is a color model where luma(Y') is weighted by its coefficients (below).</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="setHidden" stdset="0">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="colorSelectorHSLtype">
-         <property name="text">
-          <string>HSL</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Shade Selector</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_11">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QLabel" name="l_shadeType">
-           <property name="text">
-            <string>Type</string>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>103</width>
+             <height>133</height>
+            </rect>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="shadeSelectorTypeMyPaint">
-           <property name="text">
-            <string>MyPaint</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="shadeSelectorTypeMinimal">
-           <property name="text">
-            <string>Minimal</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="shadeSelectorTypeHidden">
-           <property name="text">
-            <string>do not show</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="b_lineShadeSelector">
-         <property name="title">
-          <string>Update shade selector when</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="shadeSelectorUpdateOnRightClick">
-            <property name="text">
-             <string>right clicking on shade selector</string>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="topMargin">
+             <number>0</number>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="shadeSelectorUpdateOnForeground">
-            <property name="toolTip">
-             <string>this doesn't include a color change by the shade selector</string>
+            <property name="bottomMargin">
+             <number>0</number>
             </property>
-            <property name="text">
-             <string>foreground color changes</string>
+            <property name="spacing">
+             <number>0</number>
             </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="shadeSelectorUpdateOnLeftClick">
-            <property name="text">
-             <string>left clicking on shade selector</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="shadeSelectorUpdateOnBackground">
-            <property name="toolTip">
-             <string>this doesn't include a color change by the shade selector</string>
-            </property>
-            <property name="text">
-             <string>background color change</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="b_mypainttype">
-         <property name="title">
-          <string>MyPaint Shade Selector</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_13">
-          <item>
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Color-model type:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="MyPaint_HSV">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue Saturation Value model.(Default)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This model sets all the most saturated colours at the same level as white. Think value as a measure of pixel-brightness.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>HSV</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="MyPaint_HSL">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Lightness model.&lt;/p&gt;&lt;p&gt;This model sets all the most saturated colors at lightness 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>HSL</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="MyPaint_HSI">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Intensity model for the MyPaint Shade Selector&lt;/p&gt;&lt;p&gt;Intensity marks itself by measuring the sum of the r, g, b components. As such, yellow(1,1,0) is brighter than blue(0,0,1).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>HSI</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="MyPaint_HSY">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Luma model for the MyPaint Shade Selector&lt;/p&gt;&lt;p&gt;Luma is similar to Intensity, except it weighs the red green and blue components before adding them together. As such, Yellow is brighter than Cyan. This model is exactly the same as MyPaint HCY'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>HSY'</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="b_minimaltype">
-         <property name="title">
-          <string>Minimal Shade Selector</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_12">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <layout class="QFormLayout" name="formLayout_2">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>Line Count</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="minimalShadeSelectorLineCount">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>10</number>
-                </property>
-                <property name="value">
-                 <number>3</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>line height</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
-                <property name="minimum">
-                 <number>8</number>
-                </property>
-                <property name="maximum">
-                 <number>99</number>
-                </property>
-                <property name="value">
-                 <number>16</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <widget class="QRadioButton" name="minimalShadeSelectorAsGradient">
-                <property name="text">
-                 <string>gradient</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="minimalShadeSelectorAsColorPatches">
-                <property name="text">
-                 <string>color patches</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QFormLayout" name="formLayout_3">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label">
-                <property name="text">
-                 <string>patches per line</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_7">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
+            <item row="0" column="0">
+             <widget class="KisShadeSelectorLinesSettings" name="minimalShadeSelectorLineSettings"/>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QScrollArea" name="scrollArea">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>104</width>
-               <height>28</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_4">
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <item row="0" column="0">
-               <widget class="KisShadeSelectorLinesSettings" name="minimalShadeSelectorLineSettings"/>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="l_shadeType">
+          <property name="text">
+           <string>Type</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="shadeSelectorTypeMyPaint">
+          <property name="text">
+           <string>MyPaint</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="shadeSelectorTypeMinimal">
+          <property name="text">
+           <string>Minimal</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="shadeSelectorTypeHidden">
+          <property name="text">
+           <string>do not show</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="QWidget" name="tab_ColorPatches">
+     <widget class="QWidget" name="tab_ColorHistory">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
-       <string>Color Patches</string>
+       <string>Color History</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="2" column="1">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>3</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>3</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="commonColorsShow">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="title">
-          <string>Show Colors from the image</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QWidget" name="widget_2" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_3">
+      <widget class="QGroupBox" name="lastUsedColorsShow">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>309</width>
+         <height>260</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Show Color History</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_10">
-               <item>
-                <widget class="QLabel" name="label_12">
-                 <property name="text">
-                  <string>Size:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="commonColorsWidth">
-                 <property name="suffix">
-                  <string> px</string>
-                 </property>
-                 <property name="prefix">
-                  <string/>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="commonColorsHeight">
-                 <property name="suffix">
-                  <string> px</string>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_5">
-               <item>
-                <widget class="QLabel" name="label_9">
-                 <property name="text">
-                  <string>Patch count:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="commonColorsPatchCount">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="value">
-                  <number>30</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>10</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <item>
-                <widget class="QLabel" name="label_13">
-                 <property name="text">
-                  <string comment="@title:group Color selector alignment">Direction:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="buddy">
-                  <cstring>commonColorsAlignHorizontal</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="commonColorsAlignVertical">
-                 <property name="text">
-                  <string>Vertical</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="commonColorsAlignHorizontal">
-                 <property name="text">
-                  <string>Horizontal</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="commonColorsAllowScrolling">
+              <widget class="QLabel" name="label_14">
                <property name="text">
-                <string>Allow scrolling</string>
+                <string>Size:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_4" native="true">
-               <property name="enabled">
-                <bool>false</bool>
+              <widget class="QSpinBox" name="lastUsedColorsWidth">
+               <property name="suffix">
+                <string> px</string>
                </property>
-               <layout class="QGridLayout" name="gridLayout_2">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="lbl_commonColorsNumCols">
-                  <property name="text">
-                   <string>Number of columns</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>commonColorsNumCols</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="commonColorsNumCols">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="lbl_commonColorsNumRows">
-                  <property name="text">
-                   <string>Number of rows</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>commonColorsNumRows</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="commonColorsNumRows">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>3</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="commonColorsAutoUpdate">
-               <property name="toolTip">
-                <string>this can be slow on big images</string>
+               <property name="prefix">
+                <string/>
                </property>
-               <property name="text">
-                <string>Update after every stroke</string>
+               <property name="minimum">
+                <number>16</number>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
+              <widget class="QSpinBox" name="lastUsedColorsHeight">
+               <property name="suffix">
+                <string> px</string>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
+               <property name="minimum">
+                <number>16</number>
                </property>
-              </spacer>
+              </widget>
              </item>
             </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="lastUsedColorsShow">
-         <property name="title">
-          <string>Show Color History</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QWidget" name="widget" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_2">
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_11">
-               <item>
-                <widget class="QLabel" name="label_14">
-                 <property name="text">
-                  <string>Size:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="lastUsedColorsWidth">
-                 <property name="suffix">
-                  <string> px</string>
-                 </property>
-                 <property name="prefix">
-                  <string/>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="lastUsedColorsHeight">
-                 <property name="suffix">
-                  <string> px</string>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <item>
-                <widget class="QLabel" name="label_10">
-                 <property name="text">
-                  <string>Patch count:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="lastUsedColorsPatchCount">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="value">
-                  <number>30</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
-                <widget class="QLabel" name="label_8">
-                 <property name="text">
-                  <string comment="@title:group Color selector alignment">Direction:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="buddy">
-                  <cstring>lastUsedColorsAlignVertical</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="lastUsedColorsAlignVertical">
-                 <property name="text">
-                  <string>Vertical</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="lastUsedColorsAlignHorizontal">
-                 <property name="text">
-                  <string>Horizontal</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="lastUsedColorsAllowScrolling">
+              <widget class="QLabel" name="label_10">
                <property name="text">
-                <string>Allow scrolling</string>
+                <string>Patch count:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="lastUsedColorsPatchCount">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>30</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string comment="@title:group Color selector alignment">Direction:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="buddy">
+                <cstring>lastUsedColorsAlignVertical</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="lastUsedColorsAlignVertical">
+               <property name="text">
+                <string>Vertical</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -1132,253 +971,559 @@
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_3" native="true">
-               <layout class="QGridLayout" name="gridLayout">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="lbl_lastUsedNumCols">
-                  <property name="text">
-                   <string>Number of columns</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>lastUsedColorsNumCols</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="lastUsedColorsNumCols">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="lbl_lastUsedNumRows">
-                  <property name="text">
-                   <string>Number of rows</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>lastUsedColorsNumRows</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="lastUsedColorsNumRows">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>3</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+              <widget class="QRadioButton" name="lastUsedColorsAlignHorizontal">
+               <property name="text">
+                <string>Horizontal</string>
+               </property>
               </widget>
              </item>
             </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Advanced Color Selector Docker Settings</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="lastUsedColorsAllowScrolling">
+             <property name="text">
+              <string>Allow scrolling</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget_3" native="true">
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="lbl_lastUsedNumCols">
+                <property name="text">
+                 <string>Number of columns</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>lastUsedColorsNumCols</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="lastUsedColorsNumCols">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>20</number>
+                </property>
+                <property name="value">
+                 <number>2</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lbl_lastUsedNumRows">
+                <property name="text">
+                 <string>Number of rows</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>lastUsedColorsNumRows</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="lastUsedColorsNumRows">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>20</number>
+                </property>
+                <property name="value">
+                 <number>3</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="QWidget" name="tab_colorSliderSettings">
+     <widget class="QWidget" name="tab_colorsFromImage">
       <attribute name="title">
-       <string>Color Sliders</string>
+       <string>Colors from Image</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_8">
-       <property name="spacing">
-        <number>4</number>
+      <widget class="QGroupBox" name="commonColorsShow">
+       <property name="enabled">
+        <bool>true</bool>
        </property>
-       <item row="3" column="0" colspan="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_14">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_12">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>328</width>
+         <height>294</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Show Colors from the image</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QWidget" name="widget_2" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QLabel" name="HSV_title">
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Size:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="commonColorsWidth">
+               <property name="suffix">
+                <string> px</string>
+               </property>
+               <property name="prefix">
+                <string/>
+               </property>
+               <property name="minimum">
+                <number>16</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="commonColorsHeight">
+               <property name="suffix">
+                <string> px</string>
+               </property>
+               <property name="minimum">
+                <number>16</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>Patch count:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="commonColorsPatchCount">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>30</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>10</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string comment="@title:group Color selector alignment">Direction:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="buddy">
+                <cstring>commonColorsAlignHorizontal</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="commonColorsAlignVertical">
+               <property name="text">
+                <string>Vertical</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="commonColorsAlignHorizontal">
+               <property name="text">
+                <string>Horizontal</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="commonColorsAllowScrolling">
              <property name="text">
-              <string>HSV</string>
+              <string>Allow scrolling</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="csl_hsvH">
+            <widget class="QWidget" name="widget_4" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="lbl_commonColorsNumCols">
+                <property name="text">
+                 <string>Number of columns</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>commonColorsNumCols</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="commonColorsNumCols">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>20</number>
+                </property>
+                <property name="value">
+                 <number>2</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lbl_commonColorsNumRows">
+                <property name="text">
+                 <string>Number of rows</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>commonColorsNumRows</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="commonColorsNumRows">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>20</number>
+                </property>
+                <property name="value">
+                 <number>3</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="commonColorsAutoUpdate">
+             <property name="toolTip">
+              <string>this can be slow on big images</string>
+             </property>
              <property name="text">
-              <string>Hue</string>
+              <string>Update after every stroke</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="csl_hsvS">
-             <property name="text">
-              <string>Saturation</string>
+            <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsvV">
-             <property name="text">
-              <string>Value</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
              </property>
-            </widget>
+            </spacer>
            </item>
           </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_22">
-           <item>
-            <widget class="QLabel" name="HSL_title">
-             <property name="text">
-              <string>HSL</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hslH">
-             <property name="text">
-              <string>Hue</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hslS">
-             <property name="text">
-              <string>Saturation</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hslL">
-             <property name="text">
-              <string>Lightness</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_23">
-           <item>
-            <widget class="QLabel" name="HSI_title">
-             <property name="text">
-              <string>HSI</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsiH">
-             <property name="text">
-              <string>Hue</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsiS">
-             <property name="text">
-              <string>Saturation</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsiI">
-             <property name="text">
-              <string>Intensity</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_24">
-           <item>
-            <widget class="QLabel" name="HSY_title">
-             <property name="text">
-              <string>HSY'</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsyH">
-             <property name="text">
-              <string>Hue</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsyS">
-             <property name="text">
-              <string>Saturation</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="csl_hsyY">
-             <property name="text">
-              <string>Luma</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="sliders_info">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>These settings affect the color slider docker.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <zorder>HSL_title</zorder>
+      <zorder>commonColorsShow</zorder>
      </widget>
     </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="colorSliderOptions" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>640</width>
+       <height>131</height>
+      </size>
+     </property>
+     <widget class="QCheckBox" name="csl_hsyY">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>100</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Luma</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsvS">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>30</y>
+        <width>102</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Saturation</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="HSL_title">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>139</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>HSL Sliders to Show</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="HSI_title">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>10</y>
+        <width>138</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>HSI Sliders to Show</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="HSV_title">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>HSV Sliders to Show</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsiS">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>30</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Saturation</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hslL">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>100</y>
+        <width>139</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lightness</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="HSY_title">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>80</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>HSY' Sliders to Show</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsvH">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>102</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hue</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsiI">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>30</y>
+        <width>91</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Intensity</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsvV">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>30</y>
+        <width>102</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Value</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hslS">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>100</y>
+        <width>139</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Saturation</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsyS">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>100</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Saturation</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hslH">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>139</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hue</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsiH">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>30</y>
+        <width>61</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hue</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="csl_hsyH">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>100</y>
+        <width>61</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hue</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -1408,134 +1553,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>commonColorsAlignVertical</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lbl_commonColorsNumCols</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>322</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>268</x>
-     <y>213</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignVertical</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>commonColorsNumCols</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>322</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>381</x>
-     <y>213</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignVertical</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lbl_commonColorsNumRows</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>322</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>268</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignVertical</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>commonColorsNumRows</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>322</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>381</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignHorizontal</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lbl_commonColorsNumCols</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>389</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>268</x>
-     <y>213</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignHorizontal</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>commonColorsNumCols</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>389</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>381</x>
-     <y>213</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignHorizontal</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lbl_commonColorsNumRows</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>389</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>268</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAlignHorizontal</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>commonColorsNumRows</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>389</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>381</x>
-     <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>lastUsedColorsAlignVertical</sender>
    <signal>toggled(bool)</signal>
    <receiver>lbl_lastUsedNumCols</receiver>
@@ -1660,22 +1677,6 @@
     <hint type="destinationlabel">
      <x>144</x>
      <y>241</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>commonColorsAllowScrolling</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>widget_4</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>279</x>
-     <y>182</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>279</x>
-     <y>209</y>
     </hint>
    </hints>
   </connection>

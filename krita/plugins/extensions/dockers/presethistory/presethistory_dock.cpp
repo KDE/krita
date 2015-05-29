@@ -129,13 +129,15 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& /*v*/)
 
 void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
 {
-    QListWidgetItem *item = new QListWidgetItem(QPixmap::fromImage(preset->image()), preset->name());
-    QVariant v = QVariant::fromValue<KisPaintOpPresetSP>(preset);
-    item->setData(Qt::UserRole, v);
-    m_presetHistory->insertItem(0, item);
-    m_presetHistory->setCurrentRow(0);
-    if (m_presetHistory->count() > 10) {
-        m_presetHistory->takeItem(10);
+    if (preset) {
+        QListWidgetItem *item = new QListWidgetItem(QPixmap::fromImage(preset->image()), preset->name());
+        QVariant v = QVariant::fromValue<KisPaintOpPresetSP>(preset);
+        item->setData(Qt::UserRole, v);
+        m_presetHistory->insertItem(0, item);
+        m_presetHistory->setCurrentRow(0);
+        if (m_presetHistory->count() > 10) {
+            m_presetHistory->takeItem(10);
+        }
     }
 
 }

@@ -49,7 +49,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     QString knsrcFile = "kritapatterns.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true, true);
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setSynced(true);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),

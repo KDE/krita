@@ -1189,12 +1189,12 @@ void KisConfig::setUseOcio(bool useOCIO) const
 
 int KisConfig::favoritePresets(bool defaultValue) const
 {
-    return (defaultValue ? 10 : m_cfg.readEntry("favoritePresets", 10));
+    return (defaultValue ? 10 : m_cfg.readEntry("numFavoritePresets", 10));
 }
 
 void KisConfig::setFavoritePresets(const int value)
 {
-    m_cfg.writeEntry("favoritePresets", value);
+    m_cfg.writeEntry("numFavoritePresets", value);
 }
 
 

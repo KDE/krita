@@ -116,8 +116,9 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& /*v*/)
     if (m_canvas && key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset) {
-            if (m_presetHistory->count() > 0) {
-                if (preset->name() == m_presetHistory->item(0)->text()) {
+            for (int i = 0; i < m_presetHistory->count(); ++i) {
+                if (preset->name() == m_presetHistory->item(i)->text()) {
+                    m_presetHistory->setCurrentRow(i);
                     return;
                 }
             }

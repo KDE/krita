@@ -21,25 +21,31 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+#include <kis_types.h>
+
 class QListWidget;
 class QListWidgetItem;
 class KisCanvas2;
 
+
 class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
-    PresetHistoryDock( );
+    PresetHistoryDock();
     QString observerName() { return "PresetHistoryDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); }
+    virtual void unsetCanvas();
 
 private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);
     void canvasResourceChanged(int key, const QVariant& v);
 private:
+    void addPreset(KisPaintOpPresetSP preset);
+private:
     KisCanvas2 *m_canvas;
     QListWidget *m_presetHistory;
     bool m_block;
+    bool m_initialized;
 };
 
 

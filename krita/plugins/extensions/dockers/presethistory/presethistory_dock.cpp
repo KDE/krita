@@ -27,11 +27,13 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 
+#include "kis_config.h"
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
 #include "kis_paintop_box.h"
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_resource_server_provider.h"
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
 
@@ -41,6 +43,7 @@ PresetHistoryDock::PresetHistoryDock( )
     : QDockWidget(i18n("Brush Preset History"))
     , m_canvas(0)
     , m_block(false)
+    , m_initialized(false)
 {
     m_presetHistory = new QListWidget(this);
     m_presetHistory->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -67,6 +70,32 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
     if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
 
     connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
+
+    if (!m_initialized) {
+        KisConfig cfg;
+        QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        foreach(const QString &p, presetHistory) {
+            KisPaintOpPresetSP preset = rserver->resourceByName(p);
+            addPreset(preset);
+        }
+        m_initialized = true;
+    }
+}
+
+void PresetHistoryDock::unsetCanvas()
+{
+    m_canvas = 0;
+    setEnabled(false);
+    QStringList presetHistory;
+    for(int i = m_presetHistory->count() -1; i >=0; --i) {
+        QListWidgetItem *item = m_presetHistory->item(i);
+        QVariant v = item->data(Qt::UserRole);
+        KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
+        presetHistory << preset->name();
+    }
+    KisConfig cfg;
+    cfg.writeEntry("presethistory", presetHistory.join(","));
 }
 
 void PresetHistoryDock::presetSelected(QListWidgetItem *item)
@@ -92,16 +121,22 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& /*v*/)
                     return;
                 }
             }
-            QListWidgetItem *item = new QListWidgetItem(QPixmap::fromImage(preset->image()), preset->name());
-            QVariant v = QVariant::fromValue<KisPaintOpPresetSP>(preset);
-            item->setData(Qt::UserRole, v);
-            m_presetHistory->insertItem(0, item);
-            m_presetHistory->setCurrentRow(0);
-            if (m_presetHistory->count() > 10) {
-                m_presetHistory->takeItem(10);
-            }
+            addPreset(preset);
         }
     }
+}
+
+void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
+{
+    QListWidgetItem *item = new QListWidgetItem(QPixmap::fromImage(preset->image()), preset->name());
+    QVariant v = QVariant::fromValue<KisPaintOpPresetSP>(preset);
+    item->setData(Qt::UserRole, v);
+    m_presetHistory->insertItem(0, item);
+    m_presetHistory->setCurrentRow(0);
+    if (m_presetHistory->count() > 10) {
+        m_presetHistory->takeItem(10);
+    }
+
 }
 
 #include "presethistory_dock.moc"

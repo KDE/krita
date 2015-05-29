@@ -1133,6 +1133,9 @@ void KisMainWindow::slotFileOpen()
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
+    QStringList filters = dialog.nameFilters();
+    filters << i18n("All files (*.*)");
+    dialog.setNameFilters(filters);
     dialog.setHideNameFilterDetailsOption();
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 

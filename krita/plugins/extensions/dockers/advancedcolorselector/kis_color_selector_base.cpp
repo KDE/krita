@@ -431,9 +431,18 @@ void KisColorSelectorBase::updateSettings()
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
-    bool onMouseOver = cfg.readEntry("popupOnMouseOver", false);
-    bool onMouseClick = cfg.readEntry("popupOnMouseClick", true);
-    setPopupBehaviour(onMouseOver, onMouseClick);
+
+   int zoomSelectorOptions =  (int) cfg.readEntry("zoomSelectorOptions", 0) ;
+   if (zoomSelectorOptions == 0)   {
+       setPopupBehaviour(false, true);   // middle mouse button click will open zoom selector
+   } else if (zoomSelectorOptions == 1)   {
+       setPopupBehaviour(true, false);   // move over will open the zoom selector
+   }
+   else
+   {
+        setPopupBehaviour(false, false); // do not show zoom selector
+   }
+
 
     if(m_isPopup) {
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));

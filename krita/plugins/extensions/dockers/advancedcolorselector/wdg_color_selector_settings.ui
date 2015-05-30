@@ -75,15 +75,15 @@
      </property>
      <widget class="QWidget" name="tab_general">
       <attribute name="title">
-       <string>General</string>
+       <string>Behavior</string>
       </attribute>
-      <widget class="QGroupBox" name="groupBox_5">
+      <widget class="QGroupBox" name="useDifferentColorSpaceCheckbox">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>400</width>
-         <height>93</height>
+         <x>20</x>
+         <y>160</y>
+         <width>631</width>
+         <height>151</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -93,144 +93,116 @@
         </size>
        </property>
        <property name="title">
-        <string>Color Space</string>
+        <string>Use Different Color Space</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_10">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QRadioButton" name="useImageColorSpace">
-            <property name="text">
-             <string>use image color space</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="useCustomColorSpace">
-            <property name="text">
-             <string>use custom color space</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item>
          <widget class="KisColorSpaceSelector" name="colorSpace">
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <item>
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>When the widget gets shrunken</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item>
-            <widget class="QRadioButton" name="shadeSelectorHideable">
-             <property name="text">
-              <string>hide shade selector</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="allowHorizontalLayout">
-             <property name="text">
-              <string>change to a horizontal layout</string>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="shrunkenDoNothing">
-             <property name="text">
-              <string>do nothing</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="title">
-           <string>Zoom selectors</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_8">
-           <item>
-            <widget class="QRadioButton" name="popupOnMouseClick">
-             <property name="text">
-              <string>when pressing mid mousebutton</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="popupOnMouseOver">
-             <property name="text">
-              <string>on mouse over</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="neverZoom">
-             <property name="text">
-              <string>never</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QLabel" name="label_11">
-               <property name="text">
-                <string>zoom to size</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="popupSize">
-               <property name="suffix">
-                <string>px</string>
-               </property>
-               <property name="minimum">
-                <number>100</number>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="singleStep">
-                <number>10</number>
-               </property>
-               <property name="value">
-                <number>260</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
+      <widget class="QComboBox" name="dockerResizeOptionsComboBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>30</y>
+         <width>291</width>
+         <height>27</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="zoomSelectorOptionComboBox">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>70</y>
+         <width>291</width>
+         <height>27</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>30</y>
+         <width>151</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>When Docker Resizes:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>70</y>
+         <width>161</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Show Zoom Selector UI:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_11">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>70</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Size:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="popupSize">
+       <property name="geometry">
+        <rect>
+         <x>540</x>
+         <y>70</y>
+         <width>82</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="suffix">
+        <string>px</string>
+       </property>
+       <property name="minimum">
+        <number>100</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>260</number>
+       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="tab_typeshape">
@@ -1697,38 +1669,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>useCustomColorSpace</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>colorSpace</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>491</x>
-     <y>218</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>334</x>
-     <y>246</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>useImageColorSpace</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>colorSpace</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>68</x>
-     <y>226</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>97</x>
-     <y>249</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>minimalShadeSelectorAsColorPatches</sender>
    <signal>toggled(bool)</signal>
    <receiver>minimalShadeSelectorPatchesPerLine</receiver>
@@ -1741,54 +1681,6 @@
     <hint type="destinationlabel">
      <x>149</x>
      <y>308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minimalShadeSelectorAsGradient</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>minimalShadeSelectorPatchesPerLine</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>69</x>
-     <y>278</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>137</x>
-     <y>312</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>shadeSelectorTypeMyPaint</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>b_minimaltype</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>162</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>216</x>
-     <y>189</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>shadeSelectorTypeMinimal</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>b_minimaltype</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>294</x>
-     <y>43</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>287</x>
-     <y>197</y>
     </hint>
    </hints>
   </connection>

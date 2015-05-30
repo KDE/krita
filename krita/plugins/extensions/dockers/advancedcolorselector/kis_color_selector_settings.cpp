@@ -56,6 +56,9 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     resize(minimumSize());
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
+    ui->useDifferentColorSpaceCheckbox->setChecked(false);
+
+    connect(ui->useDifferentColorSpaceCheckbox, SIGNAL(clicked(bool)), this, SLOT(useDifferentColorSpaceChecked(bool)));
 
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
@@ -64,8 +67,24 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     connect( ui->dockerColorSettingsComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedColorDocker(int)));
 
+    /* advanced color docker options */
+    ui->dockerResizeOptionsComboBox->addItem(i18n("Change to a Horizontal Layout"));
+    ui->dockerResizeOptionsComboBox->addItem(i18n("Hide Shade Selector"));
+    ui->dockerResizeOptionsComboBox->addItem(i18n("Do Nothing"));
+    ui->dockerResizeOptionsComboBox->setCurrentIndex(0);
+
+
+    ui->zoomSelectorOptionComboBox->addItem(i18n("When Pressing Middle Mouse Button"));
+    ui->zoomSelectorOptionComboBox->addItem(i18n("On Mouse Over"));
+    ui->zoomSelectorOptionComboBox->addItem(i18n("Never"));
+    ui->zoomSelectorOptionComboBox->setCurrentIndex(0);
+
+
     /* color slider options container */
     ui->colorSliderOptions->hide();
+
+
+
 
 
 
@@ -135,16 +154,16 @@ void KisColorSelectorSettings::savePreferences() const
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
-    //general
-    cfg.writeEntry("shadeSelectorHideable", ui->shadeSelectorHideable->isChecked());
-    cfg.writeEntry("allowHorizontalLayout", ui->allowHorizontalLayout->isChecked());
-    cfg.writeEntry("popupOnMouseOver", ui->popupOnMouseOver->isChecked());
-    cfg.writeEntry("popupOnMouseClick", ui->popupOnMouseClick->isChecked());
-    cfg.writeEntry("zoomSize", ui->popupSize->value());
+    // SLP - advanced color selector
+   cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
+   cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
+   cfg.writeEntry("zoomSize", ui->popupSize->value());
 
-    bool useCustomColorSpace = ui->useCustomColorSpace->isChecked();
-    const KoColorSpace* colorSpace = useCustomColorSpace ?
-                ui->colorSpace->currentColorSpace() : 0;
+
+
+    bool useCustomColorSpace =  ui->useDifferentColorSpaceCheckbox->isChecked();
+    const KoColorSpace* colorSpace = useCustomColorSpace ? ui->colorSpace->currentColorSpace() : 0;
+
 
     KisConfig kisconfig;
     kisconfig.setCustomColorSelectorColorSpace(colorSpace);
@@ -250,18 +269,21 @@ void KisColorSelectorSettings::savePreferences() const
 
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
-    if (index == 0) // advanced color selector options selected
-    {
+    if (index == 0)     { // advanced color selector options selected
          ui->advancedColorSelectorOptions->show();
          ui->colorSliderOptions->hide();
     }
-    else  // color slider options selected
-    {
+    else   {  // color slider options selected
          ui->advancedColorSelectorOptions->hide();
          ui->colorSliderOptions->show();
     }
 }
 
+
+void KisColorSelectorSettings::useDifferentColorSpaceChecked(bool enabled)
+{
+        ui->colorSpace->setEnabled(enabled);
+}
 
 void KisColorSelectorSettings::loadPreferences()
 {
@@ -271,17 +293,11 @@ void KisColorSelectorSettings::loadPreferences()
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
-    //general
 
-    //it's not possible to set a radio box to false. additionally, we need to set shrunkenDonothing to true, in case..
-    bool a = cfg.readEntry("shadeSelectorHideable", false);
-    bool b = cfg.readEntry("allowHorizontalLayout", true);
-    if(a)
-        ui->shadeSelectorHideable->setChecked(true);
-    else if(b)
-        ui->allowHorizontalLayout->setChecked(true);
-    else
-        ui->shrunkenDoNothing->setChecked(true);
+    // SLP - advanced color selector
+    ui->dockerResizeOptionsComboBox->setCurrentIndex(  (int)cfg.readEntry("onDockerResize", 0) );
+    ui->zoomSelectorOptionComboBox->setCurrentIndex(   (int) cfg.readEntry("zoomSelectorOptions", 0) );
+    ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
 
 
     {
@@ -289,27 +305,19 @@ void KisColorSelectorSettings::loadPreferences()
         const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
 
         if(cs) {
-            ui->useCustomColorSpace->setChecked(true);
+            ui->useDifferentColorSpaceCheckbox->setChecked(true);
+            ui->colorSpace->setEnabled(true);
             ui->colorSpace->setCurrentColorSpace(cs);
         } else {
-            ui->useImageColorSpace->setChecked(true);
+            ui->useDifferentColorSpaceCheckbox->setChecked(false);
+            ui->colorSpace->setEnabled(false);
         }
     }
 
-    a = cfg.readEntry("popupOnMouseOver", false);
-    b = cfg.readEntry("popupOnMouseClick", true);
-    if(a)
-        ui->popupOnMouseOver->setChecked(true);
-    else if(b)
-        ui->popupOnMouseClick->setChecked(true);
-    else
-        ui->neverZoom->setChecked(true);
-
-    ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
 
     //color patches
     ui->lastUsedColorsShow->setChecked(cfg.readEntry("lastUsedColorsShow", true));
-    a = cfg.readEntry("lastUsedColorsAlignment", true);
+    bool a = cfg.readEntry("lastUsedColorsAlignment", true);
     ui->lastUsedColorsAlignVertical->setChecked(a);
     ui->lastUsedColorsAlignHorizontal->setChecked(!a);
     ui->lastUsedColorsAllowScrolling->setChecked(cfg.readEntry("lastUsedColorsScrolling", true));
@@ -391,17 +399,13 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     //set defaults
     //if you change something, don't forget that loadPreferences should be kept in sync
 
-    //general
-    ui->allowHorizontalLayout->setChecked(false);
-    ui->shadeSelectorHideable->setChecked(false);
-    ui->allowHorizontalLayout->setChecked(true);
-
-    ui->popupOnMouseClick->setChecked(true);
-    ui->popupOnMouseOver->setChecked(false);
-    ui->neverZoom->setChecked(false);
+    // advanced color selector docker
+    ui->dockerResizeOptionsComboBox->setCurrentIndex(0);
+    ui->zoomSelectorOptionComboBox->setCurrentIndex(0);
     ui->popupSize->setValue(280);
 
-    ui->useImageColorSpace->setChecked(true);
+
+    ui->useDifferentColorSpaceCheckbox->setChecked(false);
     ui->colorSpace->setCurrentColorModel(KoID("RGBA"));
     ui->colorSpace->setCurrentColorDepth(KoID("U8"));
     ui->colorSpace->setCurrentProfile(KoColorSpaceRegistry::instance()->rgb8()->profile()->name());

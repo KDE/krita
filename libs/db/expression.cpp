@@ -22,6 +22,7 @@
 
 #include "expression.h"
 #include "utils.h"
+#include "driver_p.h"
 #include "parser/sqlparser.h"
 #include "parser/parser_p.h"
 
@@ -126,8 +127,9 @@ QString BaseExpr::tokenToDebugString(int token)
     return QLatin1String(tokenName(token));
 }
 
-QString BaseExpr::tokenToString()
+QString BaseExpr::tokenToString(const Driver *driver)
 {
+    Q_UNUSED(driver);
     if (m_token < 255 && isprint(m_token))
         return tokenToDebugString();
     return QString();
@@ -232,7 +234,7 @@ bool NArgExpr::containsNullArgument()
 QString NArgExpr::debugString()
 {
     QString s = QString("NArgExpr(")
-                + tokenToString() + ", " + "class=" + exprClassName(m_cl);
+                + tokenToString(0) + ", " + "class=" + exprClassName(m_cl);
     foreach(BaseExpr *expr, list) {
         s += ", " +
              expr->debugString();
@@ -241,13 +243,13 @@ QString NArgExpr::debugString()
     return s;
 }
 
-QString NArgExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString NArgExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
     if (BaseExpr::token() == KEXIDB_TOKEN_BETWEEN_AND && list.count() == 3) {
-        return list[0]->toString() + " BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+        return list[0]->toString(driver) + " BETWEEN " + list[1]->toString(driver) + " AND " + list[2]->toString(driver);
     }
     if (BaseExpr::token() == KEXIDB_TOKEN_NOT_BETWEEN_AND && list.count() == 3) {
-        return list[0]->toString() + " NOT BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+        return list[0]->toString(driver) + " NOT BETWEEN " + list[1]->toString(driver) + " AND " + list[2]->toString(driver);
     }
 
     QString s;
@@ -255,7 +257,7 @@ QString NArgExpr::toString(QuerySchemaParameterValueListIterator* params)
     foreach(BaseExpr* e, list) {
         if (!s.isEmpty())
             s += ", ";
-        s += e->toString(params);
+        s += e->toString(driver, params);
     }
     return s;
 }
@@ -329,13 +331,13 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
     return true;
 }
 
-QString NArgExpr::tokenToString()
+QString NArgExpr::tokenToString(const Driver *driver)
 {
     switch (m_token) {
     case KEXIDB_TOKEN_BETWEEN_AND: return "BETWEEN_AND";
     case KEXIDB_TOKEN_NOT_BETWEEN_AND: return "NOT_BETWEEN_AND";
     default: {
-        const QString s = BaseExpr::tokenToString();
+        const QString s = BaseExpr::tokenToString(driver);
         if (!s.isEmpty()) {
             return QString("'%1'").arg(s);
         }
@@ -380,19 +382,19 @@ QString UnaryExpr::debugString()
            + QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
-QString UnaryExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString UnaryExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
     if (m_token == '(') //parentheses (special case)
-        return '(' + (m_arg ? m_arg->toString(params) : "<NULL>") + ')';
+        return '(' + (m_arg ? m_arg->toString(driver, params) : "<NULL>") + ')';
     if (m_token < 255 && isprint(m_token))
-        return tokenToDebugString() + (m_arg ? m_arg->toString(params) : "<NULL>");
+        return tokenToDebugString() + (m_arg ? m_arg->toString(driver, params) : "<NULL>");
     if (m_token == NOT)
-        return "NOT " + (m_arg ? m_arg->toString(params) : "<NULL>");
+        return "NOT " + (m_arg ? m_arg->toString(driver, params) : "<NULL>");
     if (m_token == SQL_IS_NULL)
-        return (m_arg ? m_arg->toString(params) : "<NULL>") + " IS NULL";
+        return (m_arg ? m_arg->toString(driver, params) : "<NULL>") + " IS NULL";
     if (m_token == SQL_IS_NOT_NULL)
-        return (m_arg ? m_arg->toString(params) : "<NULL>") + " IS NOT NULL";
-    return QString("{INVALID_OPERATOR#%1} ").arg(m_token) + (m_arg ? m_arg->toString(params) : "<NULL>");
+        return (m_arg ? m_arg->toString(driver, params) : "<NULL>") + " IS NOT NULL";
+    return QString("{INVALID_OPERATOR#%1} ").arg(m_token) + (m_arg ? m_arg->toString(driver, params) : "<NULL>");
 }
 
 void UnaryExpr::getQueryParameters(QuerySchemaParameterList& params)
@@ -551,7 +553,7 @@ QString BinaryExpr::debugString()
            + QString::fromLatin1(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
-QString BinaryExpr::tokenToString()
+QString BinaryExpr::tokenToString(const Driver *driver)
 {
     if (m_token < 255 && isprint(m_token))
         return tokenToDebugString();
@@ -564,8 +566,8 @@ QString BinaryExpr::tokenToString()
     case NOT_EQUAL2: return "!=";
     case LESS_OR_EQUAL: return "<=";
     case GREATER_OR_EQUAL: return ">=";
-    case LIKE: return "LIKE";
-    case NOT_LIKE: return "NOT LIKE";
+    case LIKE: return driver ? driver->behaviour()->LIKE_OPERATOR : "LIKE";
+    case NOT_LIKE: return driver ? (QString::fromLatin1("NOT ") + driver->behaviour()->LIKE_OPERATOR) : QString::fromLatin1("NOT LIKE");
     case SQL_IN: return "IN";
         // other logical operations: OR (or ||) AND (or &&) XOR
     case SIMILAR_TO: return "SIMILAR TO";
@@ -582,11 +584,11 @@ QString BinaryExpr::tokenToString()
     return QString("{INVALID_BINARY_OPERATOR#%1} ").arg(m_token);
 }
 
-QString BinaryExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString BinaryExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
 #define INFIX(a) \
-    (m_larg ? m_larg->toString(params) : "<NULL>") + ' ' + a + ' ' + (m_rarg ? m_rarg->toString(params) : "<NULL>")
-    return INFIX(tokenToString());
+    (m_larg ? m_larg->toString(driver, params) : "<NULL>") + ' ' + a + ' ' + (m_rarg ? m_rarg->toString(driver, params) : "<NULL>")
+    return INFIX(tokenToString(driver));
 }
 
 void BinaryExpr::getQueryParameters(QuerySchemaParameterList& params)
@@ -659,12 +661,13 @@ Field::Type ConstExpr::type()
 
 QString ConstExpr::debugString()
 {
-    return QString("ConstExpr('") + tokenToDebugString() + "'," + toString()
+    return QString("ConstExpr('") + tokenToDebugString() + "'," + toString(0)
            + QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
-QString ConstExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString ConstExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
+    Q_UNUSED(driver);
     Q_UNUSED(params);
     if (m_token == SQL_NULL)
         return "NULL";
@@ -736,8 +739,9 @@ QString QueryParameterExpr::debugString()
            + QString("',type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
-QString QueryParameterExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString QueryParameterExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
+    Q_UNUSED(driver);
     return params ? params->getPreviousValueAsString(type()) : QString::fromLatin1("[%2]").arg(value.toString());
 }
 
@@ -790,8 +794,9 @@ QString VariableExpr::debugString()
            + QString(",type=%1)").arg(field ? Driver::defaultSQLTypeName(type()) : QString("FIELD NOT DEFINED YET"));
 }
 
-QString VariableExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString VariableExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
+    Q_UNUSED(driver);
     Q_UNUSED(params);
     return name;
 }
@@ -1012,9 +1017,9 @@ QString FunctionExpr::debugString()
     return res;
 }
 
-QString FunctionExpr::toString(QuerySchemaParameterValueListIterator* params)
+QString FunctionExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
-    return name + '(' + (args ? args->toString(params) : QString()) + ')';
+    return name + '(' + (args ? args->toString(driver, params) : QString()) + ')';
 }
 
 void FunctionExpr::getQueryParameters(QuerySchemaParameterList& params)

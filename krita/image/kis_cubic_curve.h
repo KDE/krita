@@ -54,6 +54,8 @@ public:
     int addPoint(const QPointF& point);
     void removePoint(int idx);
 
+    bool isNull() const;
+
     /**
      * This allows us to carry around a display name for the curve internally. It is used
      * currently in Sketch for perchannel, but would potentially be useful anywhere

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_CUBIC_CURVE_TEST_H_
-#define _KIS_CUBIC_CURVE_TEST_H_
+#ifndef __VIRTUAL_CHANNEL_INFO_H
+#define __VIRTUAL_CHANNEL_INFO_H
 
-#include <QtTest>
+#include <KoChannelInfo.h>
 
-#include <QPointF>
-
-class KisCubicCurveTest : public QObject
+class VirtualChannelInfo
 {
-    Q_OBJECT
 public:
-    KisCubicCurveTest();
-private Q_SLOTS:
+    enum Type {
+        REAL,
+        LIGHTNESS
+    };
 
-    void testCreation();
-    void testCopy();
-    void testEdition();
-    void testComparison();
-    void testSerialization();
-    void testValue();
-    void testNull();
-    void testTransfer();
+    VirtualChannelInfo();
+
+    VirtualChannelInfo(Type type, int pixelIndex, KoChannelInfo *realChannelInfo);
+
+    Type type() const;
+    KoChannelInfo* channelInfo() const;
+    QString name() const;
+    int pixelIndex() const;
+    KoChannelInfo::enumChannelValueType valueType() const;
+    int channelSize() const;
+
 private:
-    QPointF pt0, pt1, pt2, pt3, pt4, pt5;
+    Type m_type;
+    int m_pixelIndex;
+    KoChannelInfo *m_realChannelInfo;
 };
 
-
-#endif
+#endif /* __VIRTUAL_CHANNEL_INFO_H */

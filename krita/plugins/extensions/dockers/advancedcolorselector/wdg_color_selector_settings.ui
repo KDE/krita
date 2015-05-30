@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -71,19 +71,326 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_general">
       <attribute name="title">
        <string>Behavior</string>
       </attribute>
+      <widget class="QComboBox" name="dockerResizeOptionsComboBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>30</y>
+         <width>291</width>
+         <height>27</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="zoomSelectorOptionComboBox">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>70</y>
+         <width>291</width>
+         <height>27</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>151</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>When Docker Resizes:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>161</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Show Zoom Selector UI:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_11">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>110</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Zoom Selector Size:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="popupSize">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>110</y>
+         <width>82</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="suffix">
+        <string> px</string>
+       </property>
+       <property name="minimum">
+        <number>100</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>260</number>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_typeshape">
+      <attribute name="title">
+       <string>Color Selector</string>
+      </attribute>
+      <widget class="QGroupBox" name="lumaCoefficientGroupbox">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>110</y>
+         <width>411</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Luma Coefficients</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
+        <item>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="redlabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Red':</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="l_lumaG">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="inputMask">
+             <string notr="true">9.90000</string>
+            </property>
+            <property name="text">
+             <string notr="true">0.7152</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="greenlabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Green':</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="bluelabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Blue':</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="l_lumaR">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="inputMask">
+             <string notr="true">9.9000</string>
+            </property>
+            <property name="text">
+             <string notr="true">0.2126</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QLineEdit" name="l_lumaB">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="inputMask">
+             <string>9.90000</string>
+            </property>
+            <property name="text">
+             <string notr="true">0.0722</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QLabel" name="l_type">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>30</y>
+         <width>37</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Type:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>colorSelectorConfiguration</cstring>
+       </property>
+      </widget>
+      <widget class="KisColorSelectorComboBox" name="colorSelectorConfiguration">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>131</width>
+         <height>121</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="colorSelectorTypeComboBox">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>30</y>
+         <width>131</width>
+         <height>27</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ACSTypeDescriptionLabel">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>70</y>
+         <width>451</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Type Description goes here</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
       <widget class="QGroupBox" name="useDifferentColorSpaceCheckbox">
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>160</y>
-         <width>631</width>
-         <height>151</height>
+         <y>210</y>
+         <width>641</width>
+         <height>141</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -93,7 +400,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Use Different Color Space</string>
+        <string>Color Selector Uses Different Color Space than Image</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -114,404 +421,18 @@
         </item>
        </layout>
       </widget>
-      <widget class="QComboBox" name="dockerResizeOptionsComboBox">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>30</y>
-         <width>291</width>
-         <height>27</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="zoomSelectorOptionComboBox">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>70</y>
-         <width>291</width>
-         <height>27</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_3">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>30</y>
-         <width>151</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>When Docker Resizes:</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_5">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>70</y>
-         <width>161</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Show Zoom Selector UI:</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_11">
-       <property name="geometry">
-        <rect>
-         <x>490</x>
-         <y>70</y>
-         <width>41</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Size:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="popupSize">
-       <property name="geometry">
-        <rect>
-         <x>540</x>
-         <y>70</y>
-         <width>82</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="suffix">
-        <string>px</string>
-       </property>
-       <property name="minimum">
-        <number>100</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="singleStep">
-        <number>10</number>
-       </property>
-       <property name="value">
-        <number>260</number>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="tab_typeshape">
-      <attribute name="title">
-       <string>Color Selector</string>
-      </attribute>
-      <widget class="QGroupBox" name="horizontalGroupBox_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>250</y>
-         <width>662</width>
-         <height>121</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Luma Coefficients</string>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_15">
-        <item>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>20</number>
-          </property>
-          <property name="verticalSpacing">
-           <number>3</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="redlabel">
-            <property name="text">
-             <string>Red':</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="l_lumaG">
-            <property name="inputMask">
-             <string notr="true">9.90000</string>
-            </property>
-            <property name="text">
-             <string notr="true">0.7152</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="l_lumaR">
-            <property name="inputMask">
-             <string notr="true">9.9000</string>
-            </property>
-            <property name="text">
-             <string notr="true">0.2126</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="greenlabel">
-            <property name="text">
-             <string>Green':</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="bluelabel">
-            <property name="text">
-             <string>Blue':</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="l_lumaB">
-            <property name="inputMask">
-             <string>9.90000</string>
-            </property>
-            <property name="text">
-             <string notr="true">0.0722</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QLabel" name="info_luma">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Luma coefficients are used to calculate the Y' from the HSY' color model. Default is set to 'rec 709'(red:&amp;quot;0.2126&amp;quot;, green:&amp;quot;0.7152&amp;quot; and blue:&amp;quot;0.0722&amp;quot;).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="margin">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QLabel" name="l_type">
-       <property name="geometry">
-        <rect>
-         <x>9</x>
-         <y>9</y>
-         <width>37</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Type:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>colorSelectorConfiguration</cstring>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="colorSelectorHSItype">
-       <property name="geometry">
-        <rect>
-         <x>206</x>
-         <y>9</y>
-         <width>53</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>HSI</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="colorSelectorHSVtype">
-       <property name="geometry">
-        <rect>
-         <x>75</x>
-         <y>9</y>
-         <width>59</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>HSV</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="colorSelectorHSYtype">
-       <property name="geometry">
-        <rect>
-         <x>271</x>
-         <y>9</y>
-         <width>62</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>HSY'</string>
-       </property>
-      </widget>
-      <widget class="QGroupBox" name="vb_infolabel">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>37</y>
-         <width>471</width>
-         <height>201</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>400</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Information:</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_13">
-        <property name="leftMargin">
-         <number>30</number>
-        </property>
-        <property name="rightMargin">
-         <number>1</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="l_HSVtypeInfo">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HSV is a colour model where value goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="margin">
-           <number>2</number>
-          </property>
-          <property name="setHidden" stdset="0">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="l_HSLtypeInfo">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HSL is a colour model where lightness goes from black to white, with middle grey being equal to the most saturated colour.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="setHidden" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="l_HSItypeInfo">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>HSI is a color model where intensity maps to the sum of rgb components</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="setHidden" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="l_HSYtypeInfo">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>HSY' is a color model where luma(Y') is weighted by its coefficients (below).</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="setHidden" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QRadioButton" name="colorSelectorHSLtype">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>9</y>
-         <width>57</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>HSL</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="">
-       <property name="geometry">
-        <rect>
-         <x>9</x>
-         <y>37</y>
-         <width>181</width>
-         <height>161</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_16">
-        <item>
-         <widget class="QLabel" name="l_shape">
-          <property name="text">
-           <string>Shape:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KisColorSelectorComboBox" name="colorSelectorConfiguration"/>
-        </item>
-       </layout>
-      </widget>
+      <zorder>lumaCoefficientGroupbox</zorder>
+      <zorder>l_type</zorder>
+      <zorder>colorSelectorConfiguration</zorder>
+      <zorder>colorSelectorTypeComboBox</zorder>
+      <zorder>ACSTypeDescriptionLabel</zorder>
+      <zorder>l_lumaR</zorder>
+      <zorder>l_lumaG</zorder>
+      <zorder>l_lumaB</zorder>
+      <zorder>redlabel</zorder>
+      <zorder>greenlabel</zorder>
+      <zorder>bluelabel</zorder>
+      <zorder>useDifferentColorSpaceCheckbox</zorder>
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -1482,6 +1403,26 @@
        <string>Hue</string>
       </property>
      </widget>
+     <zorder>csl_hsyY</zorder>
+     <zorder>csl_hsvS</zorder>
+     <zorder>HSL_title</zorder>
+     <zorder>HSI_title</zorder>
+     <zorder>HSV_title</zorder>
+     <zorder>csl_hsiS</zorder>
+     <zorder>csl_hslL</zorder>
+     <zorder>HSY_title</zorder>
+     <zorder>csl_hsvH</zorder>
+     <zorder>csl_hsiI</zorder>
+     <zorder>csl_hsvV</zorder>
+     <zorder>csl_hslS</zorder>
+     <zorder>csl_hsyS</zorder>
+     <zorder>csl_hslH</zorder>
+     <zorder>csl_hsiH</zorder>
+     <zorder>csl_hsyH</zorder>
+     <zorder>advancedColorSelectorOptions</zorder>
+     <zorder>advancedColorSelectorOptions</zorder>
+     <zorder>advancedColorSelectorOptions</zorder>
+     <zorder>advancedColorSelectorOptions</zorder>
     </widget>
    </item>
    <item>
@@ -1697,102 +1638,6 @@
     <hint type="destinationlabel">
      <x>432</x>
      <y>189</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorSelectorHSItype</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>l_HSItypeInfo</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>216</x>
-     <y>65</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>475</x>
-     <y>254</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorSelectorHSVtype</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>l_HSVtypeInfo</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>148</x>
-     <y>65</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>475</x>
-     <y>156</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorSelectorHSLtype</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>l_HSLtypeInfo</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>155</x>
-     <y>65</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>475</x>
-     <y>227</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorSelectorHSYtype</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>l_HSYtypeInfo</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>324</x>
-     <y>65</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>475</x>
-     <y>281</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorSelectorHSYtype</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>colorSelectorConfiguration</receiver>
-   <slot>update()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>307</x>
-     <y>65</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>200</x>
-     <y>218</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorSelectorHSVtype</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>colorSelectorConfiguration</receiver>
-   <slot>update()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>107</x>
-     <y>65</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>200</x>
-     <y>218</y>
     </hint>
    </hints>
   </connection>

@@ -47,12 +47,6 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     ui->lbl_commonColorsNumCols->hide();
     ui->commonColorsNumCols->hide();
     
-    if (ui->colorSelectorHSVtype->isChecked()==false){
-        ui->l_HSVtypeInfo->hide();
-    }
-    ui->l_HSLtypeInfo->hide();
-    ui->l_HSItypeInfo->hide();
-    ui->l_HSYtypeInfo->hide();
     resize(minimumSize());
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
@@ -80,24 +74,24 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     ui->zoomSelectorOptionComboBox->setCurrentIndex(0);
 
 
+    ui->colorSelectorTypeComboBox->addItem(i18n("HSV"));
+    ui->colorSelectorTypeComboBox->addItem(i18n("HSL"));
+    ui->colorSelectorTypeComboBox->addItem(i18n("HSI"));
+    ui->colorSelectorTypeComboBox->addItem(i18n("HSY'"));
+    ui->colorSelectorTypeComboBox->setCurrentIndex(0);
+    connect( ui->colorSelectorTypeComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedACSColorSelectorType(int)));
+    changedACSColorSelectorType(0); // initialize everything to HSV at the start
+
+
     /* color slider options container */
     ui->colorSliderOptions->hide();
 
 
 
 
-
-
     connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
             ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
-    connect(ui->colorSelectorHSVtype, SIGNAL(toggled(bool)),
-            this, SLOT(hsxchange()));
-    connect(ui->colorSelectorHSLtype, SIGNAL(toggled(bool)),
-            this, SLOT(hsxchange()));
-    connect(ui->colorSelectorHSItype, SIGNAL(toggled(bool)),
-            this, SLOT(hsxchange()));
-    connect(ui->colorSelectorHSYtype, SIGNAL(toggled(bool)),
-            this, SLOT(hsxchange()));
+
 
     connect(this, SIGNAL(hsxchanged(int)),
             ui->colorSelectorConfiguration, SLOT(setList(int)));
@@ -222,15 +216,7 @@ void KisColorSelectorSettings::savePreferences() const
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
     
-    QString hsxSettingType("HSV");
-    if(ui->colorSelectorHSLtype->isChecked())
-        hsxSettingType="HSL";
-    if(ui->colorSelectorHSItype->isChecked())
-        hsxSettingType="HSI";
-    if(ui->colorSelectorHSYtype->isChecked())
-        hsxSettingType="HSY";
-    
-    cfg.writeEntry("hsxSettingType", hsxSettingType);
+    cfg.writeEntry("hsxSettingType", ui->colorSelectorTypeComboBox->currentIndex());
     
     //luma//
     cfg.writeEntry("lumaR", ui->l_lumaR->text());
@@ -277,6 +263,29 @@ void KisColorSelectorSettings::changedColorDocker(int index)
          ui->advancedColorSelectorOptions->hide();
          ui->colorSliderOptions->show();
     }
+}
+
+void KisColorSelectorSettings::changedACSColorSelectorType(int index)
+{
+      ui->lumaCoefficientGroupbox->setVisible(false);
+
+    if (index == 0)     {  // HSV
+       ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black."));
+    }
+    else if (index == 1)     {  // HSL
+        ui->ACSTypeDescriptionLabel->setText(i18n("Lightness goes from black to white, with middle grey being equal to the most saturated colour."));
+    }
+    else if (index == 2)     {  // HSI
+        ui->ACSTypeDescriptionLabel->setText(i18n("Intensity maps to the sum of rgb components"));
+    }
+    else {  // HSY'
+        ui->ACSTypeDescriptionLabel->setText(i18n("Luma(Y') is weighted by its coefficients which are configurable. Default values are set to 'rec 709'."));
+        ui->lumaCoefficientGroupbox->setVisible(true);
+    }
+
+    ui->colorSelectorConfiguration->update();
+    emit hsxchanged(index);
+
 }
 
 
@@ -364,11 +373,10 @@ void KisColorSelectorSettings::loadPreferences()
     ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 10));
 
-    QString hsxSettingType=cfg.readEntry("hsxSettingType", "HSV");
-    ui->colorSelectorHSVtype->setChecked(hsxSettingType=="HSV");
-    ui->colorSelectorHSLtype->setChecked(hsxSettingType=="HSL");
-    ui->colorSelectorHSItype->setChecked(hsxSettingType=="HSI");
-    ui->colorSelectorHSYtype->setChecked(hsxSettingType=="HSY");
+    int hsxSettingType= (int)cfg.readEntry("hsxSettingType", 0);
+    ui->colorSelectorTypeComboBox->setCurrentIndex(hsxSettingType);
+
+
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
@@ -455,11 +463,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;");
     ui->minimalShadeSelectorLineHeight->setValue(10);
 
-    //color selector
-    ui->colorSelectorHSVtype->setChecked(true);
-    ui->colorSelectorHSVtype->setChecked(false);
-    ui->colorSelectorHSVtype->setChecked(false);
-    ui->colorSelectorHSVtype->setChecked(false);
+    // set advanced color selector to use HSV
+    ui->colorSelectorTypeComboBox->setCurrentIndex(0);
     
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
@@ -482,19 +487,6 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->csl_hsyH->setChecked(false);
     ui->csl_hsyS->setChecked(false);
     ui->csl_hsyY->setChecked(false);
-}
-
-void KisColorSelectorSettings::hsxchange() {
-
-    int hsxSettingType=0;
-    if(ui->colorSelectorHSLtype->isChecked())
-        hsxSettingType=1;
-    if(ui->colorSelectorHSItype->isChecked())
-        hsxSettingType=2;
-    if(ui->colorSelectorHSYtype->isChecked())
-        hsxSettingType=3;
-
-    emit hsxchanged(hsxSettingType);
 }
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :

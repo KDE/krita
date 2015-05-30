@@ -116,14 +116,11 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     d->view->viewport()->installEventFilter(this);
 
-    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)),
-            this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(clicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
-    connect (d->view, SIGNAL(contextMenuRequested(QPoint)),
-            this, SLOT(contextMenuRequested(QPoint)));
+    connect (d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
 
-    connect (d->view, SIGNAL(sigSizeChanged()),
-            this, SLOT(updateView()));
+    connect (d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
 
     d->splitter->addWidget(d->view);
     d->splitter->setStretchFactor(0, 2);

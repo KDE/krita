@@ -98,6 +98,7 @@
 
 #include <db/connection.h>
 #include <db/queryschema.h>
+#include <db/queryschema_p.h>
 #include <db/field.h>
 #include <db/tableschema.h>
 
@@ -125,7 +126,7 @@ extern "C"
 }
 
 
-#line 129 "sqlparser.cpp" /* yacc.c:339  */
+#line 130 "sqlparser.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -228,7 +229,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 476 "sqlparser.y" /* yacc.c:355  */
+#line 477 "sqlparser.y" /* yacc.c:355  */
 
     QString* stringValue;
     qint64 integerValue;
@@ -244,7 +245,7 @@ union YYSTYPE
     OrderByColumnInternal::List *orderByColumns;
     QVariant *variantValue;
 
-#line 248 "sqlparser.cpp" /* yacc.c:355  */
+#line 249 "sqlparser.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -261,7 +262,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 265 "sqlparser.cpp" /* yacc.c:358  */
+#line 266 "sqlparser.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -564,16 +565,16 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   565,   565,   575,   579,   580,   595,   693,   700,   705,
-     711,   717,   726,   736,   742,   748,   755,   765,   774,   783,
-     793,   801,   813,   819,   826,   833,   837,   844,   849,   854,
-     858,   863,   868,   872,   876,   880,   884,   889,   894,   899,
-     903,   907,   911,   915,   919,   923,   930,   938,   943,   947,
-     952,   957,   961,   966,   971,   976,   980,   984,   988,   993,
-     998,  1002,  1006,  1011,  1017,  1021,  1025,  1029,  1033,  1041,
-    1047,  1054,  1061,  1068,  1074,  1091,  1097,  1102,  1110,  1114,
-    1121,  1126,  1134,  1179,  1184,  1192,  1220,  1231,  1247,  1253,
-    1262,  1271,  1276,  1285,  1297,  1341,  1350,  1359
+       0,   566,   566,   576,   580,   581,   596,   694,   701,   706,
+     712,   718,   727,   737,   743,   749,   756,   766,   775,   784,
+     794,   802,   814,   820,   827,   834,   838,   845,   850,   855,
+     859,   864,   869,   873,   877,   881,   885,   890,   895,   900,
+     904,   908,   912,   916,   920,   924,   931,   939,   944,   948,
+     953,   958,   962,   967,   972,   977,   981,   985,   989,   994,
+     999,  1003,  1007,  1012,  1018,  1022,  1026,  1030,  1034,  1042,
+    1048,  1055,  1062,  1069,  1075,  1092,  1098,  1103,  1111,  1115,
+    1122,  1127,  1135,  1180,  1185,  1193,  1221,  1232,  1248,  1254,
+    1263,  1272,  1277,  1286,  1298,  1342,  1351,  1360
 };
 #endif
 
@@ -1470,153 +1471,153 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 566 "sqlparser.y" /* yacc.c:1646  */
+#line 567 "sqlparser.y" /* yacc.c:1646  */
     {
 //todo: multiple statements
 //todo: not only "select" statements
     parser->setOperation(Parser::OP_Select);
     parser->setQuerySchema((yyvsp[0].querySchema));
 }
-#line 1481 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1482 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 576 "sqlparser.y" /* yacc.c:1646  */
+#line 577 "sqlparser.y" /* yacc.c:1646  */
     {
 //todo: multiple statements
 }
-#line 1489 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1490 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 581 "sqlparser.y" /* yacc.c:1646  */
+#line 582 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.querySchema) = (yyvsp[-1].querySchema);
 }
-#line 1497 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1498 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 596 "sqlparser.y" /* yacc.c:1646  */
+#line 597 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.querySchema) = (yyvsp[0].querySchema);
 }
-#line 1505 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1506 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 694 "sqlparser.y" /* yacc.c:1646  */
+#line 695 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "Select ColViews=" << (yyvsp[0].exprList)->debugString();
 
     if (!((yyval.querySchema) = buildSelectQuery( (yyvsp[-1].querySchema), (yyvsp[0].exprList) )))
         return 0;
 }
-#line 1516 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1517 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 701 "sqlparser.y" /* yacc.c:1646  */
+#line 702 "sqlparser.y" /* yacc.c:1646  */
     {
     if (!((yyval.querySchema) = buildSelectQuery( (yyvsp[-2].querySchema), (yyvsp[-1].exprList), (yyvsp[0].exprList) )))
         return 0;
 }
-#line 1525 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1526 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 706 "sqlparser.y" /* yacc.c:1646  */
+#line 707 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "Select ColViews Tables";
     if (!((yyval.querySchema) = buildSelectQuery( (yyvsp[-1].querySchema), 0, (yyvsp[0].exprList) )))
         return 0;
 }
-#line 1535 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1536 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 712 "sqlparser.y" /* yacc.c:1646  */
+#line 713 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "Select ColViews Conditions";
     if (!((yyval.querySchema) = buildSelectQuery( (yyvsp[-2].querySchema), (yyvsp[-1].exprList), 0, (yyvsp[0].selectOptions) )))
         return 0;
 }
-#line 1545 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1546 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 718 "sqlparser.y" /* yacc.c:1646  */
+#line 719 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "Select ColViews Tables SelectOptions";
     if (!((yyval.querySchema) = buildSelectQuery( (yyvsp[-3].querySchema), (yyvsp[-2].exprList), (yyvsp[-1].exprList), (yyvsp[0].selectOptions) )))
         return 0;
 }
-#line 1555 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1556 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 727 "sqlparser.y" /* yacc.c:1646  */
+#line 728 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "SELECT";
 //    parser->createSelect();
 //    parser->setOperation(Parser::OP_Select);
-    (yyval.querySchema) = new QuerySchema();
+    (yyval.querySchema) = QuerySchemaPrivate::createQuery(parser->db());
 }
-#line 1566 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1567 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 737 "sqlparser.y" /* yacc.c:1646  */
+#line 738 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "WhereClause";
     (yyval.selectOptions) = new SelectOptionsInternal;
     (yyval.selectOptions)->whereExpr = (yyvsp[0].expr);
 }
-#line 1576 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1577 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 743 "sqlparser.y" /* yacc.c:1646  */
+#line 744 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "OrderByClause";
     (yyval.selectOptions) = new SelectOptionsInternal;
     (yyval.selectOptions)->orderByColumns = (yyvsp[0].orderByColumns);
 }
-#line 1586 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1587 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 749 "sqlparser.y" /* yacc.c:1646  */
+#line 750 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "WhereClause ORDER BY OrderByClause";
     (yyval.selectOptions) = new SelectOptionsInternal;
     (yyval.selectOptions)->whereExpr = (yyvsp[-3].expr);
     (yyval.selectOptions)->orderByColumns = (yyvsp[0].orderByColumns);
 }
-#line 1597 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1598 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 756 "sqlparser.y" /* yacc.c:1646  */
+#line 757 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "OrderByClause WhereClause";
     (yyval.selectOptions) = new SelectOptionsInternal;
     (yyval.selectOptions)->whereExpr = (yyvsp[0].expr);
     (yyval.selectOptions)->orderByColumns = (yyvsp[-1].orderByColumns);
 }
-#line 1608 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1609 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 766 "sqlparser.y" /* yacc.c:1646  */
+#line 767 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = (yyvsp[0].expr);
 }
-#line 1616 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1617 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 775 "sqlparser.y" /* yacc.c:1646  */
+#line 776 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "ORDER BY IDENTIFIER";
     (yyval.orderByColumns) = new OrderByColumnInternal::List;
@@ -1625,11 +1626,11 @@ yyreduce:
     (yyval.orderByColumns)->append( orderByColumn );
     delete (yyvsp[0].variantValue);
 }
-#line 1629 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1630 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 784 "sqlparser.y" /* yacc.c:1646  */
+#line 785 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "ORDER BY IDENTIFIER OrderByOption";
     (yyval.orderByColumns) = new OrderByColumnInternal::List;
@@ -1639,11 +1640,11 @@ yyreduce:
     (yyval.orderByColumns)->append( orderByColumn );
     delete (yyvsp[-1].variantValue);
 }
-#line 1643 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1644 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 794 "sqlparser.y" /* yacc.c:1646  */
+#line 795 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.orderByColumns) = (yyvsp[0].orderByColumns);
     OrderByColumnInternal orderByColumn;
@@ -1651,11 +1652,11 @@ yyreduce:
     (yyval.orderByColumns)->append( orderByColumn );
     delete (yyvsp[-2].variantValue);
 }
-#line 1655 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1656 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 802 "sqlparser.y" /* yacc.c:1646  */
+#line 803 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.orderByColumns) = (yyvsp[0].orderByColumns);
     OrderByColumnInternal orderByColumn;
@@ -1664,329 +1665,329 @@ yyreduce:
     (yyval.orderByColumns)->append( orderByColumn );
     delete (yyvsp[-3].variantValue);
 }
-#line 1668 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1669 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 814 "sqlparser.y" /* yacc.c:1646  */
+#line 815 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.variantValue) = new QVariant( *(yyvsp[0].stringValue) );
     KexiDBDbg << "OrderByColumnId: " << *(yyval.variantValue);
     delete (yyvsp[0].stringValue);
 }
-#line 1678 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1679 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 820 "sqlparser.y" /* yacc.c:1646  */
+#line 821 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.variantValue) = new QVariant( *(yyvsp[-2].stringValue) + "." + *(yyvsp[0].stringValue) );
     KexiDBDbg << "OrderByColumnId: " << *(yyval.variantValue);
     delete (yyvsp[-2].stringValue);
     delete (yyvsp[0].stringValue);
 }
-#line 1689 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1690 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 827 "sqlparser.y" /* yacc.c:1646  */
+#line 828 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.variantValue) = new QVariant((yyvsp[0].integerValue));
     KexiDBDbg << "OrderByColumnId: " << *(yyval.variantValue);
 }
-#line 1698 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1699 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 834 "sqlparser.y" /* yacc.c:1646  */
+#line 835 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.booleanValue) = true;
 }
-#line 1706 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1707 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 838 "sqlparser.y" /* yacc.c:1646  */
+#line 839 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.booleanValue) = false;
 }
-#line 1714 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1715 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 850 "sqlparser.y" /* yacc.c:1646  */
+#line 851 "sqlparser.y" /* yacc.c:1646  */
     {
 //    KexiDBDbg << "AND " << $3.debugString();
     (yyval.expr) = new BinaryExpr( KexiDBExpr_Logical, (yyvsp[-2].expr), AND, (yyvsp[0].expr) );
 }
-#line 1723 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1724 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 855 "sqlparser.y" /* yacc.c:1646  */
+#line 856 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr( KexiDBExpr_Logical, (yyvsp[-2].expr), OR, (yyvsp[0].expr) );
 }
-#line 1731 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1732 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 859 "sqlparser.y" /* yacc.c:1646  */
+#line 860 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr( KexiDBExpr_Arithm, (yyvsp[-2].expr), XOR, (yyvsp[0].expr) );
 }
-#line 1739 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1740 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 869 "sqlparser.y" /* yacc.c:1646  */
+#line 870 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), '>', (yyvsp[0].expr));
 }
-#line 1747 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1748 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 873 "sqlparser.y" /* yacc.c:1646  */
+#line 874 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), GREATER_OR_EQUAL, (yyvsp[0].expr));
 }
-#line 1755 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1756 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 877 "sqlparser.y" /* yacc.c:1646  */
+#line 878 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), '<', (yyvsp[0].expr));
 }
-#line 1763 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1764 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 881 "sqlparser.y" /* yacc.c:1646  */
+#line 882 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), LESS_OR_EQUAL, (yyvsp[0].expr));
 }
-#line 1771 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1772 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 885 "sqlparser.y" /* yacc.c:1646  */
+#line 886 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), '=', (yyvsp[0].expr));
 }
-#line 1779 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1780 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 895 "sqlparser.y" /* yacc.c:1646  */
+#line 896 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), NOT_EQUAL, (yyvsp[0].expr));
 }
-#line 1787 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1788 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 900 "sqlparser.y" /* yacc.c:1646  */
+#line 901 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), NOT_EQUAL2, (yyvsp[0].expr));
 }
-#line 1795 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1796 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 904 "sqlparser.y" /* yacc.c:1646  */
+#line 905 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), LIKE, (yyvsp[0].expr));
 }
-#line 1803 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1804 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 908 "sqlparser.y" /* yacc.c:1646  */
+#line 909 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), NOT_LIKE, (yyvsp[0].expr));
 }
-#line 1811 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1812 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 912 "sqlparser.y" /* yacc.c:1646  */
+#line 913 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), SQL_IN, (yyvsp[0].expr));
 }
-#line 1819 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1820 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 916 "sqlparser.y" /* yacc.c:1646  */
+#line 917 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), SIMILAR_TO, (yyvsp[0].expr));
 }
-#line 1827 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1828 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 920 "sqlparser.y" /* yacc.c:1646  */
+#line 921 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Relational, (yyvsp[-2].expr), NOT_SIMILAR_TO, (yyvsp[0].expr));
 }
-#line 1835 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1836 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 924 "sqlparser.y" /* yacc.c:1646  */
+#line 925 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new NArgExpr(KexiDBExpr_Relational, KEXIDB_TOKEN_BETWEEN_AND);
     (yyval.expr)->toNArg()->add( (yyvsp[-4].expr) );
     (yyval.expr)->toNArg()->add( (yyvsp[-2].expr) );
     (yyval.expr)->toNArg()->add( (yyvsp[0].expr) );
 }
-#line 1846 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1847 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 931 "sqlparser.y" /* yacc.c:1646  */
+#line 932 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new NArgExpr(KexiDBExpr_Relational, KEXIDB_TOKEN_NOT_BETWEEN_AND);
     (yyval.expr)->toNArg()->add( (yyvsp[-4].expr) );
     (yyval.expr)->toNArg()->add( (yyvsp[-2].expr) );
     (yyval.expr)->toNArg()->add( (yyvsp[0].expr) );
 }
-#line 1857 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1858 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 944 "sqlparser.y" /* yacc.c:1646  */
+#line 945 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new UnaryExpr( SQL_IS_NULL, (yyvsp[-1].expr) );
 }
-#line 1865 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1866 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 948 "sqlparser.y" /* yacc.c:1646  */
+#line 949 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new UnaryExpr( SQL_IS_NOT_NULL, (yyvsp[-1].expr) );
 }
-#line 1873 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1874 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 958 "sqlparser.y" /* yacc.c:1646  */
+#line 959 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), BITWISE_SHIFT_LEFT, (yyvsp[0].expr));
 }
-#line 1881 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1882 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 962 "sqlparser.y" /* yacc.c:1646  */
+#line 963 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), BITWISE_SHIFT_RIGHT, (yyvsp[0].expr));
 }
-#line 1889 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1890 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 972 "sqlparser.y" /* yacc.c:1646  */
+#line 973 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '+', (yyvsp[0].expr));
     (yyval.expr)->debug();
 }
-#line 1898 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1899 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 977 "sqlparser.y" /* yacc.c:1646  */
+#line 978 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), CONCATENATION, (yyvsp[0].expr));
 }
-#line 1906 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1907 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 981 "sqlparser.y" /* yacc.c:1646  */
+#line 982 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '-', (yyvsp[0].expr));
 }
-#line 1914 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1915 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 985 "sqlparser.y" /* yacc.c:1646  */
+#line 986 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '&', (yyvsp[0].expr));
 }
-#line 1922 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1923 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 989 "sqlparser.y" /* yacc.c:1646  */
+#line 990 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '|', (yyvsp[0].expr));
 }
-#line 1930 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1931 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 999 "sqlparser.y" /* yacc.c:1646  */
+#line 1000 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '/', (yyvsp[0].expr));
 }
-#line 1938 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1939 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 1003 "sqlparser.y" /* yacc.c:1646  */
+#line 1004 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '*', (yyvsp[0].expr));
 }
-#line 1946 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1947 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 1007 "sqlparser.y" /* yacc.c:1646  */
+#line 1008 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(KexiDBExpr_Arithm, (yyvsp[-2].expr), '%', (yyvsp[0].expr));
 }
-#line 1954 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1955 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 1018 "sqlparser.y" /* yacc.c:1646  */
+#line 1019 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new UnaryExpr( '-', (yyvsp[0].expr) );
 }
-#line 1962 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1963 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 1022 "sqlparser.y" /* yacc.c:1646  */
+#line 1023 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new UnaryExpr( '+', (yyvsp[0].expr) );
 }
-#line 1970 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1971 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 1026 "sqlparser.y" /* yacc.c:1646  */
+#line 1027 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new UnaryExpr( '~', (yyvsp[0].expr) );
 }
-#line 1978 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1979 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 1030 "sqlparser.y" /* yacc.c:1646  */
+#line 1031 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new UnaryExpr( NOT, (yyvsp[0].expr) );
 }
-#line 1986 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1987 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 1034 "sqlparser.y" /* yacc.c:1646  */
+#line 1035 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new VariableExpr( *(yyvsp[0].stringValue) );
 
@@ -1994,63 +1995,63 @@ yyreduce:
     KexiDBDbg << "  + identifier: " << *(yyvsp[0].stringValue);
     delete (yyvsp[0].stringValue);
 }
-#line 1998 "sqlparser.cpp" /* yacc.c:1646  */
+#line 1999 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 1042 "sqlparser.y" /* yacc.c:1646  */
+#line 1043 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new QueryParameterExpr( *(yyvsp[0].stringValue) );
     KexiDBDbg << "  + query parameter: " << (yyval.expr)->debugString();
     delete (yyvsp[0].stringValue);
 }
-#line 2008 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2009 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 1048 "sqlparser.y" /* yacc.c:1646  */
+#line 1049 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "  + function: " << *(yyvsp[-1].stringValue) << "(" << (yyvsp[0].exprList)->debugString() << ")";
     (yyval.expr) = new FunctionExpr(*(yyvsp[-1].stringValue), (yyvsp[0].exprList));
     delete (yyvsp[-1].stringValue);
 }
-#line 2018 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2019 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 1055 "sqlparser.y" /* yacc.c:1646  */
+#line 1056 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new VariableExpr( *(yyvsp[-2].stringValue) + "." + *(yyvsp[0].stringValue) );
     KexiDBDbg << "  + identifier.identifier: " << *(yyvsp[-2].stringValue) << "." << *(yyvsp[0].stringValue);
     delete (yyvsp[-2].stringValue);
     delete (yyvsp[0].stringValue);
 }
-#line 2029 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2030 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 1062 "sqlparser.y" /* yacc.c:1646  */
+#line 1063 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new ConstExpr( SQL_NULL, QVariant() );
     KexiDBDbg << "  + NULL";
 //    $$ = new Field();
     //$$->setName(QString());
 }
-#line 2040 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2041 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 1069 "sqlparser.y" /* yacc.c:1646  */
+#line 1070 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new ConstExpr( CHARACTER_STRING_LITERAL, *(yyvsp[0].stringValue) );
     KexiDBDbg << "  + constant " << (yyvsp[0].stringValue);
     delete (yyvsp[0].stringValue);
 }
-#line 2050 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2051 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 1075 "sqlparser.y" /* yacc.c:1646  */
+#line 1076 "sqlparser.y" /* yacc.c:1646  */
     {
     QVariant val;
     if ((yyvsp[0].integerValue) <= INT_MAX && (yyvsp[0].integerValue) >= INT_MIN)
@@ -2067,89 +2068,89 @@ yyreduce:
     (yyval.expr) = new ConstExpr( INTEGER_CONST, val );
     KexiDBDbg << "  + int constant: " << val.toString();
 }
-#line 2071 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2072 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 1092 "sqlparser.y" /* yacc.c:1646  */
+#line 1093 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new ConstExpr( REAL_CONST, QPoint( (yyvsp[0].realValue).integer, (yyvsp[0].realValue).fractional ) );
     KexiDBDbg << "  + real constant: " << (yyvsp[0].realValue).integer << "." << (yyvsp[0].realValue).fractional;
 }
-#line 2080 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2081 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 1103 "sqlparser.y" /* yacc.c:1646  */
+#line 1104 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "(expr)";
     (yyval.expr) = new UnaryExpr('(', (yyvsp[-1].expr));
 }
-#line 2089 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2090 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 1111 "sqlparser.y" /* yacc.c:1646  */
+#line 1112 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = (yyvsp[-1].exprList);
 }
-#line 2097 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2098 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 1115 "sqlparser.y" /* yacc.c:1646  */
+#line 1116 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = new NArgExpr(KexiDBExpr_ArgumentList, ',');
 }
-#line 2105 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2106 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 1122 "sqlparser.y" /* yacc.c:1646  */
+#line 1123 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = (yyvsp[0].exprList);
     (yyval.exprList)->prepend( (yyvsp[-2].expr) );
 }
-#line 2114 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2115 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 1127 "sqlparser.y" /* yacc.c:1646  */
+#line 1128 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = new NArgExpr(KexiDBExpr_ArgumentList, ',');
     (yyval.exprList)->add( (yyvsp[0].expr) );
 }
-#line 2123 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2124 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 1135 "sqlparser.y" /* yacc.c:1646  */
+#line 1136 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = (yyvsp[0].exprList);
 }
-#line 2131 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2132 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 1180 "sqlparser.y" /* yacc.c:1646  */
+#line 1181 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = (yyvsp[-2].exprList);
     (yyval.exprList)->add((yyvsp[0].expr));
 }
-#line 2140 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2141 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 1185 "sqlparser.y" /* yacc.c:1646  */
+#line 1186 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
     (yyval.exprList)->add((yyvsp[0].expr));
 }
-#line 2149 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2150 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 1193 "sqlparser.y" /* yacc.c:1646  */
+#line 1194 "sqlparser.y" /* yacc.c:1646  */
     {
     KexiDBDbg << "FROM: '" << *(yyvsp[0].stringValue) << "'";
     (yyval.expr) = new VariableExpr(*(yyvsp[0].stringValue));
@@ -2177,11 +2178,11 @@ yyreduce:
     }*/
     delete (yyvsp[0].stringValue);
 }
-#line 2181 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2182 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 1221 "sqlparser.y" /* yacc.c:1646  */
+#line 1222 "sqlparser.y" /* yacc.c:1646  */
     {
     //table + alias
     (yyval.expr) = new BinaryExpr(
@@ -2192,11 +2193,11 @@ yyreduce:
     delete (yyvsp[-1].stringValue);
     delete (yyvsp[0].stringValue);
 }
-#line 2196 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2197 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 1232 "sqlparser.y" /* yacc.c:1646  */
+#line 1233 "sqlparser.y" /* yacc.c:1646  */
     {
     //table + alias
     (yyval.expr) = new BinaryExpr(
@@ -2207,31 +2208,31 @@ yyreduce:
     delete (yyvsp[-2].stringValue);
     delete (yyvsp[0].stringValue);
 }
-#line 2211 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2212 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 1248 "sqlparser.y" /* yacc.c:1646  */
+#line 1249 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = (yyvsp[-2].exprList);
     (yyval.exprList)->add( (yyvsp[0].expr) );
     KexiDBDbg << "ColViews: ColViews , ColItem";
 }
-#line 2221 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2222 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 1254 "sqlparser.y" /* yacc.c:1646  */
+#line 1255 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.exprList) = new NArgExpr(0,0);
     (yyval.exprList)->add( (yyvsp[0].expr) );
     KexiDBDbg << "ColViews: ColItem";
 }
-#line 2231 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2232 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 1263 "sqlparser.y" /* yacc.c:1646  */
+#line 1264 "sqlparser.y" /* yacc.c:1646  */
     {
 //    $$ = new Field();
 //    dummy->addField($$);
@@ -2240,20 +2241,20 @@ yyreduce:
     (yyval.expr) = (yyvsp[0].expr);
     KexiDBDbg << " added column expr: '" << (yyvsp[0].expr)->debugString() << "'";
 }
-#line 2244 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2245 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 1272 "sqlparser.y" /* yacc.c:1646  */
+#line 1273 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = (yyvsp[0].expr);
     KexiDBDbg << " added column wildcard: '" << (yyvsp[0].expr)->debugString() << "'";
 }
-#line 2253 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2254 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 1277 "sqlparser.y" /* yacc.c:1646  */
+#line 1278 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(
         KexiDBExpr_SpecialBinary, (yyvsp[-2].expr), AS,
@@ -2262,11 +2263,11 @@ yyreduce:
     KexiDBDbg << " added column expr: " << (yyval.expr)->debugString();
     delete (yyvsp[0].stringValue);
 }
-#line 2266 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2267 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 1286 "sqlparser.y" /* yacc.c:1646  */
+#line 1287 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new BinaryExpr(
         KexiDBExpr_SpecialBinary, (yyvsp[-1].expr), 0,
@@ -2275,29 +2276,29 @@ yyreduce:
     KexiDBDbg << " added column expr: " << (yyval.expr)->debugString();
     delete (yyvsp[0].stringValue);
 }
-#line 2279 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2280 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 1298 "sqlparser.y" /* yacc.c:1646  */
+#line 1299 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = (yyvsp[0].expr);
 }
-#line 2287 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2288 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 1342 "sqlparser.y" /* yacc.c:1646  */
+#line 1343 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = (yyvsp[-1].expr);
 //TODO
 //    $$->setName("DISTINCT(" + $3->name() + ")");
 }
-#line 2297 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2298 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 1351 "sqlparser.y" /* yacc.c:1646  */
+#line 1352 "sqlparser.y" /* yacc.c:1646  */
     {
     (yyval.expr) = new VariableExpr("*");
     KexiDBDbg << "all columns";
@@ -2306,11 +2307,11 @@ yyreduce:
 //    parser->select()->addAsterisk(ast);
 //    requiresTable = true;
 }
-#line 2310 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2311 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 1360 "sqlparser.y" /* yacc.c:1646  */
+#line 1361 "sqlparser.y" /* yacc.c:1646  */
     {
     QString s( *(yyvsp[-2].stringValue) );
     s += ".*";
@@ -2318,11 +2319,11 @@ yyreduce:
     KexiDBDbg << "  + all columns from " << s;
     delete (yyvsp[-2].stringValue);
 }
-#line 2322 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2323 "sqlparser.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2326 "sqlparser.cpp" /* yacc.c:1646  */
+#line 2327 "sqlparser.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2550,7 +2551,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1375 "sqlparser.y" /* yacc.c:1906  */
+#line 1376 "sqlparser.y" /* yacc.c:1906  */
 
 
 const char* tokenName(unsigned int offset) { return yytname[YYTRANSLATE(offset)]; }

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Preset History Docker
+Comment=Show the last used presets
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritapresethistory
+X-Krita-Version=28

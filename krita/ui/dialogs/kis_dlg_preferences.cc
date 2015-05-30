@@ -54,6 +54,7 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 #include "KoID.h"
+#include <KoConfigAuthorPage.h>
 
 #include <klocale.h>
 #include <kvbox.h>
@@ -805,6 +806,12 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
+    // Author profiles
+    m_authorPage = new KoConfigAuthorPage();
+    page = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
+    page->setHeader(i18n("Author"));
+    page->setIcon(koIcon("user-identity"));
+
 
     // input settings
     m_inputConfiguration = new KisInputConfigurationPage();
@@ -830,6 +837,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         connect(this, SIGNAL(defaultClicked()), preferenceSet, SLOT(loadDefaultPreferences()), Qt::UniqueConnection);
         connect(this, SIGNAL(okClicked()),      preferenceSet, SLOT(savePreferences()),        Qt::UniqueConnection);
     }
+
 
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 
@@ -962,6 +970,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
+
+        dialog->m_authorPage->apply();
 
     }
     delete dialog;

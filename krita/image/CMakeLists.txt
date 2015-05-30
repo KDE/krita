@@ -162,6 +162,7 @@ set(kritaimage_LIB_SRCS
    kis_update_scheduler.cpp
    kis_queues_progress_updater.cpp
    kis_composite_progress_proxy.cpp
+   kis_update_time_monitor.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc

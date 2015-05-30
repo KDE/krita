@@ -63,6 +63,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
+    dialogs/kis_dlg_png_import.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -368,6 +369,7 @@ endif()
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
+    forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui

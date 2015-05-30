@@ -42,6 +42,11 @@ KisImageConfig::~KisImageConfig()
     m_config.sync();
 }
 
+bool KisImageConfig::enablePerfLog() const
+{
+    return m_config.readEntry("enablePerfLog", false);
+}
+
 qreal KisImageConfig::transformMaskOffBoundsReadArea() const
 {
     return m_config.readEntry("transformMaskOffBoundsReadArea", 0.5);

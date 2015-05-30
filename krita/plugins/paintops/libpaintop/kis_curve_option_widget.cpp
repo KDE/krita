@@ -139,8 +139,8 @@ void KisCurveOptionWidget::transferCurve()
 void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
 {
     if (sensor) {
-        m_curveOptionWidget->label_xmin->setText(sensor->minimumLabel());
-        m_curveOptionWidget->label_xmax->setText(sensor->maximumLabel());
+        m_curveOptionWidget->label_xmin->setText(KisDynamicSensor::minimumLabel(sensor->sensorType()));
+        m_curveOptionWidget->label_xmax->setText(KisDynamicSensor::maximumLabel(sensor->sensorType(), sensor->length()));
     }
 }
 

@@ -401,7 +401,6 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     if (rect.isEmpty()) return;
 
     KisDocument *doc = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(doc);
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -416,6 +415,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
+    KisPart::instance()->addDocument(doc);
 
     KisMainWindow *win = viewManager->mainWindow();
     KisView *view = KisPart::instance()->createView(doc, win->resourceManager(), win->actionCollection(), win);

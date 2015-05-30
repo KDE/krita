@@ -24,9 +24,12 @@
 
 #include "kis_paint_information.h"
 
-KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0), m_length(3 * 1000), m_periodic(true), m_lastTime(0)
+KisDynamicSensorTime::KisDynamicSensorTime()
+    : KisDynamicSensor(TIME)
+    , m_time(0)
+    , m_periodic(true)
+    , m_lastTime(0)
 {
-    setMinimumLabel(i18n("0 s"));
     setLength(3);
 }
 
@@ -68,7 +71,6 @@ void KisDynamicSensorTime::setPeriodic(bool periodic)
 void KisDynamicSensorTime::setLength(int length)
 {
     m_length = length * 1000;
-    setMaximumLabel(i18n("%1 s", length));
 }
 
 QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidget* ss)

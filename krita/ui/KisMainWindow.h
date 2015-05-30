@@ -282,7 +282,7 @@ private Q_SLOTS:
     /**
      * Closes all open documents.
      */
-    void slotFileCloseAll();
+    bool slotFileCloseAll();
 
     /**
      * @brief showAboutApplication show the about box

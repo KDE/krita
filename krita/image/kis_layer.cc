@@ -213,6 +213,10 @@ KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
         l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
     }
 
+    if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
+        l << KisDocumentSectionModel::Property(i18n("Layer Style"), koIcon("layer-style-enabled"), koIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
+    }
+
     l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
 
     return l;
@@ -225,6 +229,12 @@ void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::Property
     foreach (const KisDocumentSectionModel::Property &property, properties) {
         if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
+        }
+
+        if (property.name == i18n("Layer Style")) {
+            if (m_d->layerStyle) {
+                m_d->layerStyle->setEnabled(property.state.toBool());
+            }
         }
     }
 }

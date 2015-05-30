@@ -56,7 +56,7 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::CheckStateRole) {
         QString selectedSensorId = KisDynamicSensor::sensorsIds()[index.row()].id();
-        KisDynamicSensorSP sensor = m_curveOption->sensor(selectedSensorId, false);
+        KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::id2Type(selectedSensorId), false);
         if (sensor) {
             //qDebug() << sensor->id() << sensor->isActive();
             return QVariant(sensor->isActive() ? Qt::Checked : Qt::Unchecked);
@@ -76,7 +76,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
         bool checked = (value.toInt() == Qt::Checked);
 
         if (checked || m_curveOption->activeSensors().size() != 1) { // Don't uncheck the last sensor (but why not?)
-            KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), false);
+            KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::id2Type(KisDynamicSensor::sensorsIds()[index.row()].id()), false);
 
             if (!sensor) {
                 sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id());
@@ -100,7 +100,7 @@ KisDynamicSensorSP KisMultiSensorsModel::getSensor(const QModelIndex& index)
 {
     if (!index.isValid()) return 0;
     QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
-    return m_curveOption->sensor(id, false);
+    return m_curveOption->sensor(KisDynamicSensor::id2Type(id), false);
 }
 
 void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
@@ -108,12 +108,12 @@ void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, cons
     if (!currentIndex.isValid()) return;
 
     QString selectedSensorId =  KisDynamicSensor::sensorsIds()[currentIndex.row()].id();
-    m_curveOption->setCurve(selectedSensorId, useSameCurve, curve);
+    m_curveOption->setCurve(KisDynamicSensor::id2Type(selectedSensorId), useSameCurve, curve);
 }
 
 QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensorSP arg1)
 {
-    return index(KisDynamicSensor::sensorsIds().indexOf(KoID(arg1->id())));
+    return index(KisDynamicSensor::sensorsIds().indexOf(KoID(KisDynamicSensor::id(arg1->sensorType()))));
 }
 
 void KisMultiSensorsModel::resetCurveOption()

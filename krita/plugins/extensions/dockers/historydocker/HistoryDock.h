@@ -41,7 +41,7 @@ public:
     HistoryDock();
     QString observerName() { return "HistoryDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_historyCanvas = 0; setEnabled(false);}
+    virtual void unsetCanvas() { m_historyCanvas = 0; setEnabled(false); m_undoView->setStack(0); }
 private:
     KisUndoView* m_undoView;
     KoCanvasBase* m_historyCanvas;

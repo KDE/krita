@@ -23,6 +23,7 @@
 #include <kurl.h>
 
 #include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -64,7 +65,7 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        KisPNGConverter ib(doc);
+        KisPNGConverter ib(doc, m_chain->manager()->getBatchMode());
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

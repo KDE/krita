@@ -1,0 +1,71 @@
+/*
+ *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This library is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2.1 of the License.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "presethistory.h"
+
+#include <kpluginfactory.h>
+
+#include <KoDockFactoryBase.h>
+#include <KoDockRegistry.h>
+
+#include "presethistory_dock.h"
+
+K_PLUGIN_FACTORY(PresetHistoryPluginFactory, registerPlugin<PresetHistoryPlugin>();)
+K_EXPORT_PLUGIN(PresetHistoryPluginFactory( "krita" ) )
+
+class PresetHistoryDockFactory : public KoDockFactoryBase
+{
+public:
+    PresetHistoryDockFactory()
+    {
+    }
+
+    virtual QString id() const
+    {
+        return QString( "PresetHistory" );
+    }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    virtual QDockWidget* createDockWidget()
+    {
+        PresetHistoryDock * dockWidget = new PresetHistoryDock();
+        dockWidget->setObjectName(id());
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+};
+
+
+PresetHistoryPlugin::PresetHistoryPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
+{
+    KoDockRegistry::instance()->add(new PresetHistoryDockFactory());
+}
+
+PresetHistoryPlugin::~PresetHistoryPlugin()
+{
+}
+
+#include "presethistory.moc"

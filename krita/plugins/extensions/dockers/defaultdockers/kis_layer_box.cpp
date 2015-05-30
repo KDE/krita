@@ -498,6 +498,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
     if (index.isValid()) {
         menu.addAction(m_propertiesAction);
+        addActionToMenu(&menu, "layer_style");
+
         menu.addSeparator();
         menu.addAction(m_removeAction);
 

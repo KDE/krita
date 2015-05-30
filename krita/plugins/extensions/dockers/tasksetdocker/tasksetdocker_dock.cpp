@@ -114,7 +114,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);
     itemChooser->setColumnCount(1);
-    itemChooser->showTaggingBar(true, true);
+    itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 
     connect(itemChooser, SIGNAL(resourceSelected(KoResource*)),

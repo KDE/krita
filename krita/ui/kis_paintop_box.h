@@ -37,6 +37,7 @@
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
 #include "kis_config.h"
+#include "krita_export.h"
 
 
 class QToolButton;
@@ -80,7 +81,7 @@ class KisAction;
  *
  * XXX: instead of text, use pretty pictures.
  */
-class KisPaintopBox : public QWidget
+class KRITAUI_EXPORT KisPaintopBox : public QWidget
 {
     Q_OBJECT
 

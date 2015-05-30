@@ -73,6 +73,7 @@
 #include <KoZoomHandler.h>
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
+#include <KoGlobal.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -342,6 +343,8 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotUpdateAuthorProfileActions()));
 
     KisInputProfileManager::instance()->loadProfiles();
 
@@ -1294,7 +1297,7 @@ void KisViewManager::setShowFloatingMessage(bool show)
 
 void KisViewManager::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
     if (profileName.isEmpty()) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
@@ -1318,7 +1321,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     d->actionAuthor->addAction(i18n("Default Author Profile"));
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
-    KConfigGroup authorGroup(KGlobal::config(), "Author");
+    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
     foreach (const QString &profile , profiles) {
         d->actionAuthor->addAction(profile);

@@ -382,6 +382,34 @@ void KisUpdateSchedulerTest::testBlockUpdates()
     threadPool.waitForDone();
 }
 
+#include "kis_update_time_monitor.h"
+
+void KisUpdateSchedulerTest::testTimeMonitor()
+{
+    QVector<QRect> dirtyRects;
+
+    KisUpdateTimeMonitor::instance()->startStrokeMeasure();
+    KisUpdateTimeMonitor::instance()->reportMouseMove(QPointF(100, 0));
+
+    KisUpdateTimeMonitor::instance()->reportJobStarted((void*) 10);
+    QTest::qSleep(300);
+    KisUpdateTimeMonitor::instance()->reportJobStarted((void*) 20);
+    QTest::qSleep(100);
+    dirtyRects << QRect(10,10,10,10);
+    KisUpdateTimeMonitor::instance()->reportJobFinished((void*) 10, dirtyRects);
+    QTest::qSleep(100);
+    dirtyRects.clear();
+    dirtyRects << QRect(30,30,10,10);
+    KisUpdateTimeMonitor::instance()->reportJobFinished((void*) 20, dirtyRects);
+    QTest::qSleep(500);
+    KisUpdateTimeMonitor::instance()->reportUpdateFinished(QRect(10,10,10,10));
+    QTest::qSleep(300);
+    KisUpdateTimeMonitor::instance()->reportUpdateFinished(QRect(30,30,10,10));
+
+    KisUpdateTimeMonitor::instance()->reportMouseMove(QPointF(130, 0));
+
+    KisUpdateTimeMonitor::instance()->endStrokeMeasure();
+}
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
 

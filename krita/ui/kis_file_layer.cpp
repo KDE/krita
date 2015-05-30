@@ -58,6 +58,8 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 
     m_scalingMethod = rhs.m_scalingMethod;
 
+    m_image = new KisPaintDevice(rhs.image()->colorSpace());
+
     connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
     m_loader.setPath(path());
     m_loader.reloadImage();

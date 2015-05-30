@@ -68,7 +68,7 @@ void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if(preset)
-            m_presetChooser->canvasResourceChanged(preset.data(),preset);
+            m_presetChooser->canvasResourceChanged(preset.data(), preset);
         sender()->blockSignals(false);
         m_presetChooser->updateViewSettings();
     }

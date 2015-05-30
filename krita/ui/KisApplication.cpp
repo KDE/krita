@@ -232,7 +232,6 @@ bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber,
         templateURL.setPath(templateBase.directory() + '/' + templateName);
 
         KisDocument *doc = KisPart::instance()->createDocument();
-        KisPart::instance()->addDocument(doc);
         if (mainWindow->openDocumentInternal(templateURL, doc)) {
             doc->resetURL();
             doc->setEmpty();
@@ -368,7 +367,6 @@ bool KisApplication::start()
         // show a mainWindow asap, if we want that
         mainWindow = KisPart::instance()->createMainWindow();
 
-        KisPart::instance()->addMainWindow(mainWindow);
         if (showmainWindow) {
             mainWindow->show();
         }
@@ -381,7 +379,6 @@ bool KisApplication::start()
     if (!batchRun && mainWindow) {
         foreach(const KUrl &url, urls) {
             KisDocument *doc = KisPart::instance()->createDocument();
-            KisPart::instance()->addDocument(doc);
             mainWindow->openDocumentInternal(url, doc);
         }
     }
@@ -438,7 +435,6 @@ bool KisApplication::start()
                     QTimer::singleShot(0, this, SLOT(quit()));
                 } else if (mainWindow) {
                     KisDocument *doc = KisPart::instance()->createDocument();
-                    KisPart::instance()->addDocument(doc);
                     if (mainWindow->openDocumentInternal(url, doc)) {
                         if (print) {
                             mainWindow->slotFilePrint();
@@ -542,7 +538,6 @@ void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
             }
             else if (url.isValid()) {
                 KisDocument *doc = KisPart::instance()->createDocument();
-                KisPart::instance()->addDocument(doc);
                 mw->openDocumentInternal(url, doc);
             }
         }
@@ -556,7 +551,6 @@ void KisApplication::fileOpenRequested(const QString &url)
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
         KisDocument *doc = KisPart::instance()->createDocument();
-        KisPart::instance()->addDocument(doc);
         mainWindow->openDocumentInternal(url, doc);
     }
 }

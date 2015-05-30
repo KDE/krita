@@ -143,45 +143,6 @@ int calculateNumStyles(const QDomElement &root)
     return numStyles;
 }
 
-void writeSingleStyle(QIODevice *device, QDomNode child)
-{
-    KisAslWriterUtils::OffsetStreamPusher<quint32> theOnlyStyleSizeField(device);
-
-    KIS_ASSERT_RECOVER_RETURN(!child.isNull());
-
-    {
-        quint32 stylesFormatVersion = 16;
-        SAFE_WRITE_EX(device, stylesFormatVersion);
-    }
-
-    while (!child.isNull()) {
-        QDomElement el = child.toElement();
-        QString key = el.attribute("key", "");
-
-        if (key != "Patterns") break;
-
-        child = child.nextSibling();
-    }
-
-    parseElement(child.toElement(), device);
-    child = child.nextSibling();
-
-    {
-        quint32 stylesFormatVersion = 16;
-        SAFE_WRITE_EX(device, stylesFormatVersion);
-    }
-
-    parseElement(child.toElement(), device);
-    child = child.nextSibling();
-
-    // ASL files' size should be 4-bytes aligned
-    const qint64 paddingSize = 4 - (device->pos() & 0x3);
-    if (paddingSize != 4) {
-        QByteArray padding(paddingSize, '\0');
-        device->write(padding);
-    }
-}
-
 void writeFileImpl(QIODevice *device, const QDomDocument &doc)
 {
     {
@@ -222,7 +183,41 @@ void writeFileImpl(QIODevice *device, const QDomDocument &doc)
     QDomNode child = root.firstChild();
 
     for (int styleIndex = 0; styleIndex < numStyles; styleIndex++) {
-        writeSingleStyle(device, child);
+        KisAslWriterUtils::OffsetStreamPusher<quint32> theOnlyStyleSizeField(device);
+
+        KIS_ASSERT_RECOVER_RETURN(!child.isNull());
+
+        {
+            quint32 stylesFormatVersion = 16;
+            SAFE_WRITE_EX(device, stylesFormatVersion);
+        }
+
+        while (!child.isNull()) {
+            QDomElement el = child.toElement();
+            QString key = el.attribute("key", "");
+
+            if (key != "Patterns") break;
+
+            child = child.nextSibling();
+        }
+
+        parseElement(child.toElement(), device);
+        child = child.nextSibling();
+
+        {
+            quint32 stylesFormatVersion = 16;
+            SAFE_WRITE_EX(device, stylesFormatVersion);
+        }
+
+        parseElement(child.toElement(), device);
+        child = child.nextSibling();
+
+        // ASL files' size should be 4-bytes aligned
+        const qint64 paddingSize = 4 - (device->pos() & 0x3);
+        if (paddingSize != 4) {
+            QByteArray padding(paddingSize, '\0');
+            device->write(padding);
+        }
     }
 }
 

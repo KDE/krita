@@ -32,16 +32,14 @@ struct KisPSDLayerStyle::Private
 {
     Private()
         : version(-1)
-        , effects_count(0)
-        , visible(false)
+        , effectEnabled(true)
     {}
 
     Private(const Private &rhs)
         : name(rhs.name),
           uuid(rhs.uuid),
           version(rhs.version),
-          effects_count(rhs.effects_count),
-          visible(rhs.visible),
+          effectEnabled(rhs.effectEnabled),
           context(rhs.context),
           drop_shadow(rhs.drop_shadow),
           inner_shadow(rhs.inner_shadow),
@@ -61,8 +59,7 @@ struct KisPSDLayerStyle::Private
             name = rhs.name;
             uuid = rhs.uuid;
             version = rhs.version;
-            effects_count = rhs.effects_count;
-            visible = rhs.visible;
+            effectEnabled = rhs.effectEnabled;
             context = rhs.context;
             drop_shadow = rhs.drop_shadow;
             inner_shadow = rhs.inner_shadow;
@@ -82,8 +79,7 @@ struct KisPSDLayerStyle::Private
     QString name;
     QUuid uuid;
     quint16 version;
-    quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
-    bool visible; // common state info, visible: always true
+    bool effectEnabled;
     psd_layer_effects_context context;
     psd_layer_effects_drop_shadow drop_shadow;
     psd_layer_effects_inner_shadow inner_shadow;
@@ -102,7 +98,6 @@ KisPSDLayerStyle::KisPSDLayerStyle()
 {
     d->name = i18n("Unnamed");
     d->version = 7;
-    d->visible = true;
 }
 
 KisPSDLayerStyle::~KisPSDLayerStyle()
@@ -121,6 +116,16 @@ KisPSDLayerStyle KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
         *d = *rhs.d;
     }
     return *this;
+}
+
+bool KisPSDLayerStyle::isEnabled() const
+{
+    return d->effectEnabled;
+}
+
+void KisPSDLayerStyle::setEnabled(bool value)
+{
+    d->effectEnabled = value;
 }
 
 KisPSDLayerStyleSP KisPSDLayerStyle::clone() const

@@ -314,8 +314,15 @@ void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
     }
 }
 
-KisNodeSP findOnlyTransparencyMask(KisNodeSP node)
+KisNodeSP findOnlyTransparencyMask(KisNodeSP node, FlattenedNode::Type type)
 {
+    if (type != FlattenedNode::FOLDER_OPEN &&
+        type != FlattenedNode::FOLDER_CLOSED &&
+        type != FlattenedNode::RASTER_LAYER) {
+
+        return 0;
+    }
+
     KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
     QList<KisEffectMaskSP> masks = layer->effectMasks();
 
@@ -414,7 +421,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
                 PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
                 layers.append(layerRecord);
 
-                KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
+                KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node, item.type);
                 const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
 
                 const bool nodeVisible = node->visible();

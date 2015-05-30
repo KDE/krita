@@ -318,7 +318,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
         w.enterDescriptor("Lefx", "", "Lefx");
 
         w.writeUnitFloat("Scl ", "#Prc", 100);
-        w.writeBoolean("masterFXSwitch", true);
+        w.writeBoolean("masterFXSwitch", style->isEnabled());
 
 
         // Drop Shadow
@@ -932,6 +932,8 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_TEXT_RADDR("/null/Nm  ", setName, style, KisPSDLayerStyle);
     CONN_TEXT_RADDR("/null/Idnt", setPsdUuid, style, KisPSDLayerStyle);
 
+    CONN_BOOL("/masterFXSwitch", setEnabled, style, KisPSDLayerStyle, prefix);
+
     psd_layer_effects_drop_shadow *dropShadow = style->dropShadow();
 
     CONN_COMPOSITE_OP("/DrSh/Md  ", setBlendMode, dropShadow, psd_layer_effects_drop_shadow, prefix);
@@ -1175,7 +1177,6 @@ void KisAslLayerStyleSerializer::newStyleStarted(bool isPsdStructure)
     KisPSDLayerStyle *currentStyle = m_stylesVector.last().data();
 
     psd_layer_effects_context *context = currentStyle->context();
-    context->global_angle = 0;
     context->keep_original = 0;
 
     QString prefix = isPsdStructure ? "/null" : "/Styl/Lefx";

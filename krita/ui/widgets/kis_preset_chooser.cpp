@@ -250,9 +250,9 @@ KoResource* KisPresetChooser::currentResource()
     return m_chooser->currentResource();
 }
 
-void KisPresetChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
+void KisPresetChooser::showTaggingBar(bool show)
 {
-    m_chooser->showTaggingBar(showSearchBar, showOpBar);
+    m_chooser->showTaggingBar(show);
 }
 
 KoResourceItemChooser *KisPresetChooser::itemChooser()

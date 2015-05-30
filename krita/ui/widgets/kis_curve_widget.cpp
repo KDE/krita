@@ -58,10 +58,6 @@
 
 #include "kis_curve_widget_p.h"
 
-
-//static bool pointLessThan(const QPointF &a, const QPointF &b);
-
-
 KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
         : QWidget(parent, f), d(new KisCurveWidget::Private(this))
 {

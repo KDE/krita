@@ -138,7 +138,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
     }
 
     int index = tags.indexOf(tagName);
-    if (findIndexOf(tagName) == -1) {
+    if (d->comboBox->findText(tagName) == -1) {
         insertItemAt(index, tagName);
         d->tags.append(tagName);
     }

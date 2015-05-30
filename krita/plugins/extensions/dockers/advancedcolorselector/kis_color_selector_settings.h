@@ -47,6 +47,8 @@ public Q_SLOTS:
     void changedColorDocker(int);
     void useDifferentColorSpaceChecked(bool);
     void changedACSColorSelectorType(int);
+    void changedACSShadeSelectorType(int);
+    void changedACSColorAlignment(bool);
 
 Q_SIGNALS:
     void settingsChanged() const;

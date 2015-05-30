@@ -41,6 +41,7 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     ui(new Ui::KisColorSelectorSettings)
 {
     ui->setupUi(this);
+
     ui->lbl_lastUsedNumRows->hide();
     ui->lastUsedColorsNumRows->hide();
 
@@ -60,6 +61,8 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
     connect( ui->dockerColorSettingsComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedColorDocker(int)));
+    changedColorDocker(0);
+
 
     /* advanced color docker options */
     ui->dockerResizeOptionsComboBox->addItem(i18n("Change to a Horizontal Layout"));
@@ -83,10 +86,24 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     changedACSColorSelectorType(0); // initialize everything to HSV at the start
 
 
-    /* color slider options container */
-    ui->colorSliderOptions->hide();
+    ui->ACSshadeSelectorMyPaintColorModelComboBox->addItem(i18n("HSV"));
+    ui->ACSshadeSelectorMyPaintColorModelComboBox->addItem(i18n("HSL"));
+    ui->ACSshadeSelectorMyPaintColorModelComboBox->addItem(i18n("HSI"));
+    ui->ACSshadeSelectorMyPaintColorModelComboBox->addItem(i18n("HSY'"));
+    ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(0);
 
 
+    ui->ACSShadeSelectorTypeComboBox->addItem(i18n("MyPaint"));
+    ui->ACSShadeSelectorTypeComboBox->addItem(i18n("Minimal"));
+    ui->ACSShadeSelectorTypeComboBox->addItem(i18n("Do Not Show"));
+    ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(0);
+    changedACSShadeSelectorType(0); // show/hide UI elements for MyPaint settings
+    connect( ui->ACSShadeSelectorTypeComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedACSShadeSelectorType(int)));
+
+
+    ui->commonColorsAlignVertical->setChecked(true);
+    ui->commonColorsAlignHorizontal->setChecked(true);
+    connect( ui->commonColorsAlignHorizontal, SIGNAL(toggled(bool)), this, SLOT(changedACSColorAlignment(bool)));
 
 
     connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
@@ -144,11 +161,11 @@ KIcon KisColorSelectorSettings::icon()
 
 void KisColorSelectorSettings::savePreferences() const
 {
-    //write cfg
+    // write cfg
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
-    // SLP - advanced color selector
+    //  advanced color selector
    cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
    cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
    cfg.writeEntry("zoomSize", ui->popupSize->value());
@@ -183,13 +200,18 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("commonColorsAutoUpdate", ui->commonColorsAutoUpdate->isChecked());
 
     //shade selector
-    QString shadeSelectorType("MyPaint");
-    if(ui->shadeSelectorTypeMinimal->isChecked())
-        shadeSelectorType="Minimal";
-    if(ui->shadeSelectorTypeHidden->isChecked())
-        shadeSelectorType="Hidden";
 
-    cfg.writeEntry("shadeSelectorType", shadeSelectorType);
+
+
+    int shadeSelectorTypeIndex =  ui->ACSShadeSelectorTypeComboBox->currentIndex();
+
+    if(shadeSelectorTypeIndex == 0) {
+        cfg.writeEntry("shadeSelectorType", "MyPaint");
+    } else if (shadeSelectorTypeIndex == 1) {
+        cfg.writeEntry("shadeSelectorType", "Minimal");
+    } else {
+        cfg.writeEntry("shadeSelectorType", "Hidden");
+    }
 
     cfg.writeEntry("shadeSelectorUpdateOnRightClick", ui->shadeSelectorUpdateOnRightClick->isChecked());
     cfg.writeEntry("shadeSelectorUpdateOnForeground", ui->shadeSelectorUpdateOnForeground->isChecked());
@@ -197,15 +219,19 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("shadeSelectorUpdateOnBackground", ui->shadeSelectorUpdateOnBackground->isChecked());
 
     //mypaint model
-    QString shadeMyPaintType("HSV");
-    if(ui->MyPaint_HSL->isChecked())
-        shadeMyPaintType="HSL";
-    if(ui->MyPaint_HSI->isChecked())
-        shadeMyPaintType="HSI";
-    if(ui->MyPaint_HSY->isChecked())
-        shadeMyPaintType="HSY";
 
-    cfg.writeEntry("shadeMyPaintType", shadeMyPaintType);
+    int shadeMyPaintComboBoxIndex  = ui->ACSshadeSelectorMyPaintColorModelComboBox->currentIndex();
+    if (shadeMyPaintComboBoxIndex == 0 ) {
+          cfg.writeEntry("shadeMyPaintType",   "HSV");
+    } else  if (shadeMyPaintComboBoxIndex == 1 ) {
+          cfg.writeEntry("shadeMyPaintType",   "HSL");
+    } else  if (shadeMyPaintComboBoxIndex == 2 ) {
+          cfg.writeEntry("shadeMyPaintType",   "HSI");
+    } else {   // HSY
+          cfg.writeEntry("shadeMyPaintType",   "HSY");
+    }
+
+
 
     cfg.writeEntry("minimalShadeSelectorAsGradient", ui->minimalShadeSelectorAsGradient->isChecked());
     cfg.writeEntry("minimalShadeSelectorPatchCount", ui->minimalShadeSelectorPatchesPerLine->value());
@@ -255,6 +281,10 @@ void KisColorSelectorSettings::savePreferences() const
 
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
+    // having a situation where too many sections are visible makes the window too large. turn all off before turning more on
+      ui->colorSliderOptions->hide();
+      ui->advancedColorSelectorOptions->hide();
+
     if (index == 0)     { // advanced color selector options selected
          ui->advancedColorSelectorOptions->show();
          ui->colorSliderOptions->hide();
@@ -289,6 +319,60 @@ void KisColorSelectorSettings::changedACSColorSelectorType(int index)
 }
 
 
+void KisColorSelectorSettings::changedACSColorAlignment(bool toggled)
+{
+    // this slot is tied to the horizontal radio button's state being changed
+    // you can infer the vertical state
+
+   if (toggled) {  // horizontal layout. show rows
+       ui->lbl_commonColorsNumCols->hide();
+       ui->commonColorsNumCols->hide();
+
+       ui->lbl_commonColorsNumRows->show();
+       ui->commonColorsNumRows->show();
+
+   } else {
+       ui->lbl_commonColorsNumCols->show();
+       ui->commonColorsNumCols->show();
+
+       ui->lbl_commonColorsNumRows->hide();
+       ui->commonColorsNumRows->hide();
+
+   }
+
+
+
+
+}
+
+
+
+void KisColorSelectorSettings::changedACSShadeSelectorType(int index)
+{
+
+  if (index == 0)     {  // MyPaint
+      ui->minimalShadeSelectorGroup->hide();
+      ui->myPaintColorModelLabel->show();
+      ui->ACSshadeSelectorMyPaintColorModelComboBox->show();
+
+  } else if (index == 1) { // Minimal
+       ui->minimalShadeSelectorGroup->show();
+       ui->myPaintColorModelLabel->hide();
+       ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
+
+  }else { // do not show
+       ui->minimalShadeSelectorGroup->hide();
+       ui->myPaintColorModelLabel->hide();
+       ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
+  }
+
+
+
+}
+
+
+
+
 void KisColorSelectorSettings::useDifferentColorSpaceChecked(bool enabled)
 {
         ui->colorSpace->setEnabled(enabled);
@@ -303,7 +387,7 @@ void KisColorSelectorSettings::loadPreferences()
     KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
 
-    // SLP - advanced color selector
+    // Advanced color selector
     ui->dockerResizeOptionsComboBox->setCurrentIndex(  (int)cfg.readEntry("onDockerResize", 0) );
     ui->zoomSelectorOptionComboBox->setCurrentIndex(   (int) cfg.readEntry("zoomSelectorOptions", 0) );
     ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
@@ -350,20 +434,33 @@ void KisColorSelectorSettings::loadPreferences()
 
     //shade selector
     QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "MyPaint");
-    ui->shadeSelectorTypeMyPaint->setChecked(shadeSelectorType=="MyPaint");
-    ui->shadeSelectorTypeMinimal->setChecked(shadeSelectorType=="Minimal");
-    ui->shadeSelectorTypeHidden->setChecked(shadeSelectorType=="Hidden");
+
+    if ( shadeSelectorType == "MyPaint") {
+        ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(0);
+    } else if (shadeSelectorType == "Minimal") {
+        ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(1);
+    } else {   // Hidden
+        ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(2);
+    }
 
     ui->shadeSelectorUpdateOnRightClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnRightClick", false));
     ui->shadeSelectorUpdateOnLeftClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnLeftClick", false));
     ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", true));
     ui->shadeSelectorUpdateOnBackground->setChecked(cfg.readEntry("shadeSelectorUpdateOnBackground", true));
 
-    QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
-    ui->MyPaint_HSV->setChecked(shadeMyPaintType=="HSV");
-    ui->MyPaint_HSL->setChecked(shadeMyPaintType=="HSL");
-    ui->MyPaint_HSI->setChecked(shadeMyPaintType=="HSI");
-    ui->MyPaint_HSY->setChecked(shadeMyPaintType=="HSY");
+
+    QString shadeMyPaintType = cfg.readEntry("shadeMyPaintType", "HSV");
+
+    if (shadeMyPaintType == "HSV" ) {
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(0);
+    } else  if (shadeMyPaintType == "HSL" ) {
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(1);
+    } else  if (shadeMyPaintType == "HSI" ) {
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(2);
+    } else {   // HSY
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(3);
+    }
+
 
     bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", true);
     if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
@@ -441,14 +538,9 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->commonColorsAutoUpdate->setChecked(false);
 
     //shade selector
-    ui->shadeSelectorTypeMyPaint->setChecked(true);
-    ui->shadeSelectorTypeMinimal->setChecked(false);
-    ui->shadeSelectorTypeHidden->setChecked(false);
+    ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(0); // MyPaint
 
-    ui->MyPaint_HSV->setChecked(true);
-    ui->MyPaint_HSL->setChecked(false);
-    ui->MyPaint_HSI->setChecked(false);
-    ui->MyPaint_HSY->setChecked(false);
+    ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(0);
 
     ui->shadeSelectorUpdateOnRightClick->setChecked(false);
     ui->shadeSelectorUpdateOnLeftClick->setChecked(false);

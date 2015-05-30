@@ -543,7 +543,7 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Pat David"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Patrick \"ponpat\" Poniewas"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Paul Wortmann"), ki18n("Krita 2.9 Kickstarter Backer"));
-    aboutData->addCredit(ki18n("Pawel l l l l l l l Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("Pawel Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("P+B-Snegge"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("pepeland"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Peter Moonen"), ki18n("Krita 2.9 Kickstarter Backer"));

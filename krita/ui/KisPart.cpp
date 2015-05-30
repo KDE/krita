@@ -227,6 +227,7 @@ void KisPart::addDocument(KisDocument *document)
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
+        emit documentOpened('/'+objectName());
     }
 }
 
@@ -250,12 +251,16 @@ int KisPart::documentCount() const
 void KisPart::removeDocument(KisDocument *document)
 {
     d->documents.removeAll(document);
+    emit documentClosed('/'+objectName());
     document->deleteLater();
 }
 
 KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
+
+    addMainWindow(mw);
+
     return mw;
 }
 
@@ -285,15 +290,7 @@ void KisPart::addView(KisView *view, KisDocument *document)
         d->views.append(view);
     }
 
-    if (!d->documents.contains(document)) {
-        d->documents.append(document);
-    }
-
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-
-    if (d->views.size() == 1) {
-        documentOpened('/'+objectName());
-    }
 
     emit sigViewAdded(view);
 }
@@ -318,10 +315,6 @@ void KisPart::removeView(KisView *view)
         if (!found) {
             removeDocument(doc);
         }
-    }
-
-    if (d->views.isEmpty()) {
-        emit documentClosed('/'+objectName());
     }
 }
 

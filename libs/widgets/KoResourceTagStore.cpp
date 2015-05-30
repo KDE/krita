@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+ /*  This file is part of the KDE project
 
     Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
     Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
@@ -127,6 +127,13 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::delTag(const QString& tag)
 {
+    foreach(const QByteArray &res, d->md5ToTag.keys(tag)) {
+        d->md5ToTag.remove(res, tag);
+    }
+    foreach(const QString &identifier, d->identifierToTag.keys(tag)) {
+        d->identifierToTag.remove(identifier, tag);
+    }
+
     Q_ASSERT(!d->md5ToTag.values().contains(tag));
     Q_ASSERT(!d->identifierToTag.values().contains(tag));
     d->tagList.remove(tag);

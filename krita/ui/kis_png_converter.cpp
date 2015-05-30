@@ -44,9 +44,11 @@
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoUnit.h>
 
+#include <kis_config.h>
 #include <kis_painter.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -59,6 +61,8 @@
 #include <kis_meta_data_io_backend.h>
 #include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
+#include "dialogs/kis_dlg_png_import.h"
+#include "kis_clipboard.h"
 
 namespace
 {
@@ -255,15 +259,16 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
-KisPNGConverter::KisPNGConverter(KisDocument *doc)
+KisPNGConverter::KisPNGConverter(KisDocument *doc, bool batchMode)
 {
-//     Q_ASSERT(doc);
-//     Q_ASSERT(adapter);
+    //     Q_ASSERT(doc);
+    //     Q_ASSERT(adapter);
 
     m_doc = doc;
     m_stop = false;
     m_max_row = 0;
     m_image = 0;
+    m_batchMode = batchMode;
 }
 
 KisPNGConverter::~KisPNGConverter()
@@ -448,7 +453,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_set_read_fn(png_ptr, iod, _read_fn);
 
 #if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
-   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+    png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
 #endif
 
     // read all PNG info up to image data
@@ -510,19 +515,46 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
         Q_CHECK_PTR(profile);
         if (profile) {
-//                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
+            //                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
             if (!profile->isSuitableForOutput()) {
                 dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
             }
         }
-    } else {
+    }
+    else {
+        dbgFile << "no embedded profile, will use the default profile";
+        if (m_batchMode) {
+            KisConfig cfg;
+            quint32 behaviour = cfg.pasteBehaviour();
+            if (behaviour == PASTE_ASK) {
+                KisDlgPngImport dlg(m_path, csName.first, csName.second);
+                QApplication::restoreOverrideCursor();
+                dlg.exec();
+                if (!dlg.profile().isEmpty()) {
+
+                    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
+
+                    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
+                    if (csf) {
+                        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+                        foreach(const KoColorProfile *p, profileList) {
+                            if (p->name() == dlg.profile()) {
+                                profile = p;
+                                break;
+                            }
+                        }
+                    }
+                }
+                QApplication::setOverrideCursor(Qt::WaitCursor);
+            }
+        }
         dbgFile << "no embedded profile, will use the default profile";
     }
 
     // Check that the profile is used by the color space
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
-        KoColorSpaceRegistry::instance()->colorSpaceId(
-      csName.first, csName.second))->profileIsCompatible(profile)) {
+                KoColorSpaceRegistry::instance()->colorSpaceId(
+                    csName.first, csName.second))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
         profile = 0;
     }
@@ -530,10 +562,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Retrieve a pointer to the colorspace
     const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput()) {
-        dbgFile << "image has embedded profile: " << profile -> name() << "\n";
+        dbgFile << "image has embedded profile: " << profile->name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile);
-    } else
-        cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
+    }
+    else {
+        if (csName.first == RGBAColorModelID.id()) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "sRGB-elle-V2-srgbtrc.icc");
+        }
+        else {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
+        }
+    }
 
     if (cs == 0) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -710,7 +749,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 }
             } while (it->nextPixel());
         }
-        break;
+            break;
         default:
             return KisImageBuilder_RESULT_UNSUPPORTED;
         }
@@ -738,6 +777,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
+    m_path = uri.prettyUrl();
+
     // We're not set up to handle asynchronous loading at the moment.
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
@@ -748,7 +789,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 
         // open the file
         dbgFile << QFile::encodeName(uriTF.toLocalFile()) << " " << uriTF.toLocalFile() << " " << uriTF;
-//         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
+        //         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
         QFile *fp = new QFile(uriTF.toLocalFile());
         if (fp->exists()) {
             result = buildImage(fp);
@@ -783,7 +824,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP i
     KisImageBuilder_Result result = buildFile(fp, image, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
     return result;
-// TODO: if failure do            KIO::del(uri); // async
+    // TODO: if failure do            KIO::del(uri); // async
 
 }
 
@@ -829,7 +870,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     }
 
 #if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
-   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+    png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
 #endif
 
 
@@ -849,10 +890,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         return (KisImageBuilder_RESULT_FAILURE);
     }
     // Initialize the writing
-//     png_init_io(png_ptr, fp);
+    //     png_init_io(png_ptr, fp);
     // Setup the progress function
     // XXX: Implement progress updating -- png_set_write_status_fn(png_ptr, progress);"
-//     setProgressTotalSteps(100/*height*/);
+    //     setProgressTotalSteps(100/*height*/);
 
     /* set the zlib compression level */
     png_set_compression_level(png_ptr, options.compression);
@@ -1062,7 +1103,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 #endif
 
     // Write the PNG
-//     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+    //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
     // Fill the data structure
     png_byte** row_pointers = new png_byte*[height];
@@ -1129,7 +1170,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                 writestream.setNextValue(i);
             } while (it->nextPixel());
         }
-        break;
+            break;
         default:
             delete[] row_pointers;
             return KisImageBuilder_RESULT_UNSUPPORTED;
@@ -1164,7 +1205,7 @@ void KisPNGConverter::cancel()
 void KisPNGConverter::progress(png_structp png_ptr, png_uint_32 row_number, int pass)
 {
     if (png_ptr == NULL || row_number > PNG_MAX_UINT || pass > 7) return;
-//     setProgress(row_number);
+    //     setProgress(row_number);
 }
 
 

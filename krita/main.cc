@@ -82,8 +82,6 @@ extern "C" int main(int argc, char **argv)
 #endif
 
     int state;
-    KisFactory factory;
-    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
     KAboutData *aboutData = KisFactory::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
@@ -118,6 +116,12 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a  pixmap
     KisApplication app(key);
+
+    // create factory only after application, the componentData it creates in the
+    // constructor will need an existing QCoreApplication at least with Qt5/KF5,
+    // to set name of application etc., as also needed to find resources
+    KisFactory factory;
+    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
 
     if (app.isRunning()) {
 

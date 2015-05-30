@@ -81,6 +81,8 @@
 
 #include "kis_layer_projection_plane.h"
 
+#include "kis_update_time_monitor.h"
+
 
 // #define SANITY_CHECKS
 
@@ -1343,6 +1345,8 @@ KisNodeSP KisImage::isolatedModeRoot() const
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
+    KisUpdateTimeMonitor::instance()->reportJobStarted(data);
+
     if (m_d->scheduler) {
         m_d->scheduler->addJob(id, data);
     }
@@ -1472,6 +1476,8 @@ void KisImage::enableUIUpdates()
 
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
+    KisUpdateTimeMonitor::instance()->reportUpdateFinished(rc);
+
     if (!m_d->disableUIUpdateSignals) {
         emit sigImageUpdated(rc);
     }

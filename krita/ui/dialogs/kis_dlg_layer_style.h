@@ -74,8 +74,11 @@ private Q_SLOTS:
     void slotDialAngleChanged(int value);
     void slotIntAngleChanged(int value);
 
+    void slotGlobalLightToggled();
+
 Q_SIGNALS:
     void configChanged();
+    void globalAngleChanged(int value);
 
 private:
     Contour *m_contour;
@@ -128,8 +131,11 @@ private Q_SLOTS:
     void slotDialAngleChanged(int value);
     void slotIntAngleChanged(int value);
 
+    void slotGlobalLightToggled();
+
 Q_SIGNALS:
     void configChanged();
+    void globalAngleChanged(int value);
 
 private:
     Ui::WdgDropShadow ui;
@@ -264,6 +270,9 @@ signals:
     void configChanged();
 
 public slots:
+    void slotMasterFxSwitchChanged(bool value);
+    void syncGlobalAngle(int angle);
+
     void notifyGuiConfigChanged();
     void notifyPredefinedStyleSelected(KisPSDLayerStyleSP style);
 

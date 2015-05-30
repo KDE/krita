@@ -28,13 +28,11 @@
 
 
 KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle()
-    : KisDynamicSensor(DrawingAngleId),
+    : KisDynamicSensor(ANGLE),
       m_fanCornersEnabled(false),
       m_fanCornersStep(30),
       m_angleOffset(0)
 {
-    setMinimumLabel(i18n("0°"));
-    setMaximumLabel(i18n("360°"));
 }
 
 qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)

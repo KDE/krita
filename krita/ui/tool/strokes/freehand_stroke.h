@@ -117,6 +117,8 @@ public:
                            QVector<PainterInfo*> painterInfos,
                            const KUndo2MagicString &name);
 
+    ~FreehandStrokeStrategy();
+
     void doStrokeCallback(KisStrokeJobData *data);
 
 private:

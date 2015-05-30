@@ -45,7 +45,7 @@ class KoResourceTaggingManager : public QObject
 public:
     explicit KoResourceTaggingManager(KoResourceModel* model, QWidget* parent);
     ~KoResourceTaggingManager();
-    void showTaggingBar(bool showSearchBar, bool showOpBar);
+    void showTaggingBar(bool show);
     QStringList availableTags() const;
     QString currentTag();
     void contextMenuRequested(KoResource* currentResource, QPoint pos);

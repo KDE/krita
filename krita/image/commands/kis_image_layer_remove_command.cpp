@@ -61,5 +61,10 @@ void KisImageLayerRemoveCommand::redo()
 void KisImageLayerRemoveCommand::undo()
 {
     KisImageCommand::undo();
-    m_node->setDirty(m_image->bounds());
+
+    /**
+     * We are removing the group recursively, so the updates should
+     * come recursively as well
+     */
+    m_image->refreshGraphAsync(m_node, m_image->bounds());
 }

@@ -74,10 +74,10 @@ public:
     bool allowTagModification;
 };
 
-void KoResourceTaggingManager::showTaggingBar(bool showSearchBar, bool showOpBar)
+void KoResourceTaggingManager::showTaggingBar(bool show)
 {
-    showSearchBar ? d->tagFilter->show() : d->tagFilter->hide();
-    showOpBar ? d->tagChooser->show() : d->tagChooser->hide();
+    show ? d->tagFilter->show() : d->tagFilter->hide();
+    show ? d->tagChooser->show() : d->tagChooser->hide();
 }
 
 void KoResourceTaggingManager::purgeTagUndeleteList()
@@ -354,7 +354,6 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidg
 {
     d->model = model;
 
-
     d->tagChooser = new KoTagChooserWidget(parent);
     d->tagChooser->addReadOnlyItem(i18n("All"));
     d->tagChooser->addItems(d->model->tagNamesList());
@@ -395,6 +394,9 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidg
     QString tag = group.readEntry<QString>(d->model->serverType(), "");
     if (!tag.isEmpty()) {
         d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tag));
+    }
+    else {
+        d->tagChooser->setCurrentIndex(0);
     }
 
 }

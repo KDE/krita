@@ -220,12 +220,10 @@ struct psd_pattern {
 
 struct psd_layer_effects_context {
     psd_layer_effects_context()
-        : global_angle(120),
-          keep_original(false)
+        : keep_original(false)
     {
     }
 
-    qint32 global_angle;
     bool keep_original;
 };
 

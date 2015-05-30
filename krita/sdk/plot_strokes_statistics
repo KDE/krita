@@ -1,0 +1,31 @@
+#!/bin/sh
+gnuplot -p << EOF
+
+set size 1,1
+set origin 0,0
+
+set multiplot
+
+set grid
+set key bottom right
+set key box
+unset title
+set xlabel "Mouse speed, px/msec"
+set ylabel "Response time, msec"
+
+set size 1,0.5
+set origin 0,0.5
+plot '< sort -n -t \t $1' using 1:4 title "Total response time" with linespoints pointtype 2, \
+     '< sort -n -t \t $1' using 1:3 title "Jobs running time" with linespoints pointtype 10
+
+set grid
+set key top right
+set key box
+unset title
+set xlabel "Mouse speed, px/msec"
+set ylabel "Stroke jobs per update"
+
+set size 1,0.5
+set origin 0,0
+plot '< sort -n -t \t $1' using 1:2 title "Jobs per update" with linespoints pointtype 2
+EOF

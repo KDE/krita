@@ -63,6 +63,9 @@ public:
      */
     bool isEmpty() const;
 
+    bool isEnabled() const;
+    void setEnabled(bool value);
+
     const psd_layer_effects_context* context() const;
     const psd_layer_effects_drop_shadow* dropShadow() const;
     const psd_layer_effects_inner_shadow* innerShadow() const;

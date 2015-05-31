@@ -65,8 +65,9 @@ KisKraSaver::KisKraSaver(KisDocument* document)
     m_d->doc = document;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
-    if (m_d->imageName.isEmpty())
-        m_d->imageName = "Unnamed";
+    if (m_d->imageName.isEmpty()) {
+        m_d->imageName = i18n("Unnamed");
+    }
 }
 
 KisKraSaver::~KisKraSaver()

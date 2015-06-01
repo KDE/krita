@@ -55,15 +55,30 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>&amp;View</text>
       <Action name="view_show_just_the_canvas"/>
       <Action name="fullscreen"/>
-      <Action name="mirror_canvas"/>
+      
       <Action name="wrap_around_mode"/>
       <Separator/>
-      <Action name="zoom"/>
-      <Action name="zoom_in"/>
-      <Action name="zoom_out"/>
+      <Menu name="Canvas">
+          <text>&amp;Canvas</text>
+          <Action name="mirror_canvas"/>
+          <Separator/>
+          <Action name="zoom_to_100pct" />
+          <Action name="rotate_canvas_right" />
+          <Action name="rotate_canvas_left" />
+          <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController. 
+                     It seems they are not being properly placed in the view manager since the MDI changes were implemented 
+	  <Action name="zoom_in"/>
+          <Action name="zoom_out"/>
+          -->
+
+
+      </Menu>
+      <!-- TODO: None of these actions are showing. There names must have been changed to something with the MDI changes?...
       <Action name="actual_pixels"/>
       <Action name="actual_size"/>
       <Action name="fit_to_canvas"/>
+      -->
+
       <Separator/>
       <Action name="view_ruler"/>
       <Action name="view_guidelines"/>

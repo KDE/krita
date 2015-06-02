@@ -225,6 +225,7 @@ private Q_SLOTS:
 
     void slotBlacklistCleanup();
     void slotCreateTemplate();
+    void slotCreateCopy();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();

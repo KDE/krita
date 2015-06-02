@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="71"
+version="72"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
@@ -14,6 +14,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_save"/>
       <Action name="file_save_as"/>
       <Action name="file_reload_file"/>
+      <Action name="file_reload_file"/>
       <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
@@ -22,6 +23,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="save_incremental_version"/>
       <Action name="save_incremental_backup"/>
       <Action name="create_template"/>
+      <Action name="create_copy"/>
       <Separator/>
       <Action name="file_print"/>
       <Action name="file_print_preview"/>

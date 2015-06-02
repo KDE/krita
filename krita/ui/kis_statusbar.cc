@@ -22,7 +22,10 @@
 #include <QLabel>
 #include <QFontMetrics>
 #include <QToolButton>
+#include <QPushButton>
 #include <QAction>
+#include <QToolTip>
+
 
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
@@ -37,6 +40,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_selection_manager.h>
+#include "kis_memory_statistics_server.h"
 
 #include <KisView.h>
 #include "KisViewManager.h"
@@ -85,11 +89,13 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
     m_progress = new KisProgressWidget();
     view->addStatusBarItem(m_progress);
 
-    m_imageSizeLabel = new QLabel(QString());
-    m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_imageSizeLabel->setContentsMargins(5,5, 5, 5);
-    m_imageSizeLabel->setMinimumWidth(100);
-    view->addStatusBarItem(m_imageSizeLabel);
+    m_memoryReportBox = new QPushButton();
+    m_memoryReportBox->setFlat(true);
+    m_memoryReportBox->setContentsMargins(5, 5, 5, 5);
+    m_memoryReportBox->setMinimumWidth(120);
+    view->addStatusBarItem(m_memoryReportBox);
+
+    connect(m_memoryReportBox, SIGNAL(clicked()), SLOT(showMemoryInfoToolTip()));
 
     m_pointerPositionLabel = new QLabel(QString());
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -98,6 +104,9 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
     view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
 
+    connect(KisMemoryStatisticsServer::instance(),
+            SIGNAL(sigUpdateMemoryStatistics()),
+            SLOT(imageSizeChanged()));
 }
 
 KisStatusBar::~KisStatusBar()
@@ -105,7 +114,7 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_selectionStatus);
     m_view->removeStatusBarItem(m_statusBarStatusLabel);
     m_view->removeStatusBarItem(m_statusBarProfileLabel);
-    m_view->removeStatusBarItem(m_imageSizeLabel);
+    m_view->removeStatusBarItem(m_memoryReportBox);
     m_view->removeStatusBarItem(m_pointerPositionLabel);
     m_view->removeStatusBarItem(m_progress);
 }
@@ -118,6 +127,7 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
     if (m_imageView) {
         m_imageView->disconnect(this);
         m_view->removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+        m_imageView = 0;
     }
     if (imageView) {
         m_imageView = imageView;
@@ -129,14 +139,17 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
         connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
-        imageSizeChanged();
         m_view->addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
     }
+
+    imageSizeChanged();
 }
 
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 {
-    QPoint pixelPos = m_view->image()->documentToIntPixel(pos);
+    if (!m_imageView) return;
+
+    QPoint pixelPos = m_imageView->image()->documentToIntPixel(pos);
 
     pixelPos.setX(qBound(0, pixelPos.x(), m_view->image()->width() - 1));
     pixelPos.setY(qBound(0, pixelPos.y(), m_view->image()->height() - 1));
@@ -145,11 +158,21 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 
 void KisStatusBar::imageSizeChanged()
 {
-    KisImageWSP image = m_view->image();
-    qint32 w = image->width();
-    qint32 h = image->height();
+    updateMemoryStatus();
 
-    m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
+    QString sizeText;
+    KisImageWSP image = m_imageView ? m_imageView->image() : 0;
+    if (image) {
+        qint32 w = image->width();
+        qint32 h = image->height();
+        sizeText = QString("%1 x %2 (%3)").arg(w).arg(h).arg(m_shortMemoryTag);
+    } else {
+        sizeText = m_shortMemoryTag;
+    }
+
+    m_memoryReportBox->setIcon(m_memoryStatusIcon);
+    m_memoryReportBox->setText(sizeText);
+    m_memoryReportBox->setToolTip(m_longMemoryTag);
 }
 
 void KisStatusBar::updateSelectionIcon()
@@ -163,6 +186,89 @@ void KisStatusBar::updateSelectionIcon()
         icon = themedIcon("selection-mode_ants.png");
     }
     m_selectionStatus->setIcon(icon);
+}
+
+inline QString formatSize(qint64 size)
+{
+    qint64 K = 1024;
+    QString suffix = i18nc("very shortened \'byte\' suffix (for statusbar)", "b");
+
+    if (size > K) {
+        size /= K;
+        suffix = i18nc("very shortened KiB suffix (for statusbar)", "K");
+    }
+
+    if (size > K) {
+        size /= K;
+        suffix = i18nc("very shortened MiB suffix (for statusbar)", "M");
+    }
+
+    if (size > K) {
+        size /= K;
+        suffix = i18nc("very shortened GiB suffix (for statusbar)", "G");
+    }
+
+    if (size > K) {
+        size /= K;
+        suffix = i18nc("very shortened TiB suffix (for statusbar)", "T");
+    }
+
+    return QString("%2%3").arg(size).arg(suffix);
+}
+
+void KisStatusBar::updateMemoryStatus()
+{
+    KisMemoryStatisticsServer::Statistics stats =
+        KisMemoryStatisticsServer::instance()
+        ->fetchMemoryStatistics(m_imageView ? m_imageView->image() : 0);
+
+    QString longStats =
+        i18nc("tooltip on statusbar memory reporting button",
+              "Image size:\t %1\n"
+              "\n"
+              "Memory used:\t %2 / %3\n"
+              "  image data:\t %4 / %5\n"
+              "  pool:\t\t %6 / %7\n"
+              "  undo data:\t %8\n"
+              "\n"
+              "Swap used:\t %9",
+              formatSize(stats.imageSize),
+
+              formatSize(stats.totalMemorySize),
+              formatSize(stats.totalMemoryLimit),
+
+              formatSize(stats.realMemorySize),
+              formatSize(stats.tilesHardLimit),
+
+              formatSize(stats.poolSize),
+              formatSize(stats.tilesPoolLimit),
+
+              formatSize(stats.historicalMemorySize),
+              formatSize(stats.swapSize));
+
+    QString shortStats = formatSize(stats.imageSize);
+    QIcon icon;
+    qint64 warnLevel = stats.tilesHardLimit - stats.tilesHardLimit / 8;
+
+    if (stats.imageSize > warnLevel ||
+        stats.realMemorySize > warnLevel) {
+
+        icon = QIcon::fromTheme("dialog-warning");
+        QString suffix =
+            i18nc("tooltip on statusbar memory reporting button",
+                  "\n\nWARNING:\tOut of memory! Swapping has been started.\n"
+                  "\t\tPlease configure more RAM for Krita in Settings dialog");
+        longStats += suffix;
+    }
+
+    m_shortMemoryTag = shortStats;
+    m_longMemoryTag = longStats;
+    m_memoryStatusIcon = icon;
+}
+
+void KisStatusBar::showMemoryInfoToolTip()
+{
+    QToolTip::showText(QCursor::pos(), m_memoryReportBox->toolTip(), m_memoryReportBox);
 }
 
 void KisStatusBar::updateSelectionToolTip()
@@ -220,7 +326,9 @@ void KisStatusBar::setHelp(const QString &t)
 
 void KisStatusBar::updateStatusBarProfileLabel()
 {
-    setProfile(m_view->image());
+    if (!m_imageView) return;
+
+    setProfile(m_imageView->image());
 }
 
 

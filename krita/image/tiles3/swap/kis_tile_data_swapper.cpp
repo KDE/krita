@@ -159,7 +159,7 @@ public:
 
     static inline bool isInteresting(KisTileData *td) {
         // We are working with mementoed tiles only...
-        return td->mementoed() && td->numUsers() <= 1;
+        return td->historical();
     }
 
     static inline bool swapOutFirst(KisTileData *td) {

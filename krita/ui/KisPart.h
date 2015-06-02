@@ -198,7 +198,7 @@ public:
      * This calls KisView::updateReadWrite to tell the new view
      * whether the document is readonly or not.
      */
-    void addView(KisView *view, KisDocument *document);
+    void addView(KisView *view);
 
     /**
      * Removes a view of the document.

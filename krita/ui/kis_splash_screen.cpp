@@ -53,56 +53,59 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
-    lblLinks->setFixedWidth(pixmap.width());
-    lblLinks->setWordWrap(true);
     lblLinks->setTextFormat(Qt::RichText);
     lblLinks->setText(i18n("<html>"
                            "<head/>"
                            "<body>"
+                           "<p align=\"center\"><b>Links</b></p>"
 
-                           "<p align=\"center\"><b><a href=\"https://krita.org/kickstarter/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Support Krita's Kickstarter!</span></a></b></p><p/>"
+                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Support Krita</span></a></p>"
 
-                           "<p>During May, Krita is running a kickstarter campaign. We're crowdfunding performance improvements, animation support and a host of exciting stretch goals. Help us make Krita even better!</p>"
+                           "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Getting Started</span></a></p>"
+                           "<p><a href=\"http://userbase.kde.org/Krita\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Manual</span></a></p>"
+                           "<p><a href=\"http://krita.org\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita Website</span></a></p>"
+                           "<p><a href=\"http://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:#FFFFFF;\">User Community</span></a></p>"
 
+                           "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Source Code</span></a></p>"
+
+                           "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>"));
 
     lblVersion->setText(i18n("Version: %1", version));
 
-//    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
-//    int i = 1;
+    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
+    int i = 1;
 
-//    QString recent = i18n("<html>"
-//                          "<head/>"
-//                          "<body>"
-//                          "<p align=\"center\"><b>Recent Files</b></p>");
+    QString recent = i18n("<html>"
+                          "<head/>"
+                          "<body>"
+                          "<p align=\"center\"><b>Recent Files</b></p>");
 
-//    QString path;
-//    QStringList recentfiles;
+    QString path;
+    QStringList recentfiles;
 
-//    do {
-//        path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
-//        if (!path.isEmpty()) {
-//            QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
-//            KUrl url(path);
-//            if (name.isEmpty())
-//                name = url.fileName();
+    do {
+        path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
+        if (!path.isEmpty()) {
+            QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
+            KUrl url(path);
+            if (name.isEmpty())
+                name = url.fileName();
 
-//            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-//                recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:#FFFFFF;\">%2</span></a></p>").arg(path).arg(name));
-//            }
-//        }
+            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
+                recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:#FFFFFF;\">%2</span></a></p>").arg(path).arg(name));
+            }
+        }
 
-//        i++;
-//    } while (!path.isEmpty() || i <= 8);
+        i++;
+    } while (!path.isEmpty() || i <= 8);
 
-//    recent += recentfiles.join("\n");
-//    recent += "</body>"
-//            "</html>";
-//    lblRecent->setText(recent);
-//    lblRecent->hide();
-
-//    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
+    recent += recentfiles.join("\n");
+    recent += "</body>"
+            "</html>";
+    lblRecent->setText(recent);
+    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
 }
 
 

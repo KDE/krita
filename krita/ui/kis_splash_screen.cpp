@@ -37,7 +37,7 @@
 
 #include <kis_factory2.h>
 
-KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, QWidget *parent, Qt::WindowFlags f)
+KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
@@ -46,7 +46,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
 
     QString color = "#FFFFFF";
-    if (qApp->palette().background().color().value() >100) {
+    if (themed && qApp->palette().background().color().value() >100) {
         color = "#000000";
     }
 

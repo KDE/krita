@@ -30,7 +30,7 @@ class KRITAUI_EXPORT KisSplashScreen : public QWidget, public Ui::WdgSplash
 {
     Q_OBJECT
 public:
-    explicit KisSplashScreen(const QString &m_version, const QPixmap &m_pixmap, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit KisSplashScreen(const QString &m_version, const QPixmap &m_pixmap, bool themed = false, QWidget *parent = 0, Qt::WindowFlags f = 0);
 
     void repaint();
 

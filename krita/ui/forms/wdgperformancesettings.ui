@@ -6,77 +6,202 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
-    <height>383</height>
+    <width>711</width>
+    <height>574</height>
    </rect>
   </property>
-  <layout class="QGridLayout">
-   <item row="0" column="0" colspan="2">
-    <layout class="QHBoxLayout">
-     <property name="leftMargin">
-      <number>0</number>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>RAM (needs restarting Krita)</string>
      </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="textLabel1">
-       <property name="whatsThis">
-        <string>The maximum number of &quot;tiles&quot; that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
-Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
-       </property>
-       <property name="text">
-        <string>Maximum number of tiles kept in memory:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KIntNumInput" name="m_maxTiles" native="true">
-       <property name="whatsThis">
-        <string>The maximum number of &quot;tiles&quot; that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
-Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>81</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Memory available:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="lblTotalMemory">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>XXX MiB</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Memory Limit:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="intMemoryLimit">
+          <property name="suffix">
+           <string> MiB</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Internal Pool:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="intPoolLimit">
+          <property name="suffix">
+           <string> MiB</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Swap Undo After:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="intUndoLimit">
+          <property name="suffix">
+           <string> MiB</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <spacer>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Swapping (needs restarting Krita)</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>File Size Limit</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="intSwapSize">
+          <property name="suffix">
+           <string> GiB</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Advanced</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QCheckBox" name="chkPerformanceLogging">
+        <property name="text">
+         <string>Enable performace logging (needs restarting Krita)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>When performance logging is enabed Krita saves all strokes timing information into '&lt;working_dir&gt;/log' subdirectly. In case of performace problems, enable this option and send directory contetns to developers.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>495</width>
-       <height>71</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
@@ -85,9 +210,15 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KIntNumInput</class>
+   <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

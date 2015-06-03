@@ -29,7 +29,9 @@ public:
     KisImageConfig();
     ~KisImageConfig();
 
-    bool enablePerfLog() const;
+    bool enablePerfLog(bool requestDefault = false) const;
+    void setEnablePerfLog(bool value);
+
     qreal transformMaskOffBoundsReadArea() const;
 
     int updatePatchHeight() const;
@@ -43,7 +45,7 @@ public:
     qreal schedulerBalancingRatio() const;
     void setSchedulerBalancingRatio(qreal value);
 
-    int maxSwapSize() const;
+    int maxSwapSize(bool requestDefault = false) const;
     void setMaxSwapSize(int value);
 
     int swapSlabSize() const;
@@ -56,9 +58,9 @@ public:
     int tilesSoftLimit() const; // MiB
     int poolLimit() const; // MiB
 
-    qreal memoryHardLimitPercent() const; // % of total RAM
-    qreal memorySoftLimitPercent() const; // % of total RAM
-    qreal memoryPoolLimitPercent() const; // % of total RAM
+    qreal memoryHardLimitPercent(bool requestDefault = false) const; // % of total RAM
+    qreal memorySoftLimitPercent(bool requestDefault = false) const; // % of memoryHardLimitPercent() * (1 - 0.01 * memoryPoolLimitPercent())
+    qreal memoryPoolLimitPercent(bool requestDefault = false) const; // % of memoryHardLimitPercent()
     void setMemoryHardLimitPercent(qreal value);
     void setMemorySoftLimitPercent(qreal value);
     void setMemoryPoolLimitPercent(qreal value);

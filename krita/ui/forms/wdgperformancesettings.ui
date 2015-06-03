@@ -42,6 +42,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
+        <property name="toolTip">
+         <string>Krita will not use more memory than this limit.</string>
+        </property>
         <property name="text">
          <string>Memory Limit:</string>
         </property>
@@ -56,6 +59,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Krita will not use more memory than this limit.</string>
           </property>
          </widget>
         </item>
@@ -98,6 +104,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
+        <property name="toolTip">
+         <string>When undo information reaches this limit, it will be stored in a temporary file and memory will be freed. Undo will be slower.</string>
+        </property>
         <property name="text">
          <string>Swap Undo After:</string>
         </property>
@@ -112,6 +121,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>When undo information reaches this limit, it will be stored in a temporary file and memory will be freed. Undo will be slower.</string>
           </property>
          </widget>
         </item>

@@ -183,7 +183,7 @@
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
-         <string>When performance logging is enabed Krita saves all strokes timing information into '&lt;working_dir&gt;/log' subdirectly. In case of performace problems, enable this option and send directory contetns to developers.</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When performance logging is enabed Krita saves timing information into the '&amp;lt;working_dir&amp;gt;/log' folder. If you experience performance problems and want to help us, enable this option and add the contents of the directory to a bug report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

@@ -40,6 +40,7 @@
 #include <QMdiArea>
 #include <QMessageBox>
 #include <QDesktopWidget>
+#include <QFileDialog>
 
 #include <boost/bind.hpp>
 
@@ -550,8 +551,8 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     sliderSwapSize->setRange(1, 64);
     intSwapSize->setRange(1, 64);
 
-    KisAcyclicSignalConnector *swapSizeConnector =
-        new KisAcyclicSignalConnector(this);
+
+    KisAcyclicSignalConnector *swapSizeConnector = new KisAcyclicSignalConnector(this);
 
     swapSizeConnector->connectForwardInt(sliderSwapSize, SIGNAL(valueChanged(int)),
                                          intSwapSize, SLOT(setValue(int)));
@@ -559,6 +560,8 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     swapSizeConnector->connectBackwardInt(intSwapSize, SIGNAL(valueChanged(int)),
                                           sliderSwapSize, SLOT(setValue(int)));
 
+    lblSwapFileLocation->setText(cfg.swapDir());
+    connect(bnSwapFile, SIGNAL(clicked()), SLOT(selectSwapDir()));
 
     load(false);
 }
@@ -579,6 +582,7 @@ void PerformanceTab::load(bool requestDefault)
     chkPerformanceLogging->setChecked(cfg.enablePerfLog(requestDefault));
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
+    lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
 }
 
 void PerformanceTab::save()
@@ -592,6 +596,16 @@ void PerformanceTab::save()
     cfg.setEnablePerfLog(chkPerformanceLogging->isChecked());
 
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
+
+    cfg.setSwapDir(lblSwapFileLocation->text());
+}
+
+void PerformanceTab::selectSwapDir()
+{
+    KisImageConfig cfg;
+    QString swapDir = cfg.swapDir();
+    swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
+    lblSwapFileLocation->setText(swapDir);
 }
 
 //---------------------------------------------------------------------------------------------------

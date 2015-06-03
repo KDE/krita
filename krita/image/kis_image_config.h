@@ -71,7 +71,8 @@ public:
      * @return a specific directory for the swapfile, if set. If not set, return an
      * empty QString and use the default KDE directory.
      */
-    QString swapDir();
+    QString swapDir(bool requestDefault = false);
+    void setSwapDir(const QString &swapDir);
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

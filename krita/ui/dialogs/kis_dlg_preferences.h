@@ -173,6 +173,10 @@ public:
     void load(bool requestDefault);
     void save();
 
+private Q_SLOTS:
+
+    void selectSwapDir();
+
 private:
     int realTilesRAM();
 

@@ -199,7 +199,9 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         PSDLayerRecord* layerRecord = layerSection.layers.at(i);
         dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
         KisLayerSP newLayer;
-        if (layerRecord->infoBlocks.keys.contains("lsct")) {
+        if (layerRecord->infoBlocks.keys.contains("lsct") &&
+            layerRecord->infoBlocks.sectionDividerType != psd_other) {
+
             if (layerRecord->infoBlocks.sectionDividerType == psd_bounding_divider && !groupStack.isEmpty()) {
                 KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
                 m_image->addNode(groupLayer, groupStack.top());

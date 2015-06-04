@@ -236,6 +236,16 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
 }
 
+void KisPSDTest::testOpeningFromOpenCanvas()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_krita_psd_from_opencanvas.psd");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+    QVERIFY(doc->image()->root()->firstChild());
+}
 
 
 QTEST_KDEMAIN(KisPSDTest, GUI)

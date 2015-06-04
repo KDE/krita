@@ -662,7 +662,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
 
     /**
      * The center of the original image should still
-     * stay the the origin of CS
+     * stay the origin of CS
      */
     KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(currentArgs.originalCenter()).manhattanLength() < 1e-4);
 

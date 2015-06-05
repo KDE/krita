@@ -867,6 +867,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // General
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
+    page->setObjectName("general");
     page->setHeader(i18n("General"));
     page->setIcon(koIcon("configure"));
     addPage(page);
@@ -875,6 +876,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Display
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
+    page->setObjectName("display");
     page->setHeader(i18n("Display"));
     page->setIcon(koIcon("preferences-desktop-display"));
     addPage(page);
@@ -883,6 +885,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Color
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
+    page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
     page->setIcon(koIcon("preferences-desktop-color"));
     addPage(page);
@@ -891,6 +894,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Performance
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
+    page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
@@ -899,6 +903,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Grid
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
+    page->setObjectName("grid");
     page->setHeader(i18n("Grid"));
     page->setIcon(koIcon("grid"));
     addPage(page);
@@ -907,15 +912,16 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Tablet
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
+    page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
     page->setIcon(koIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
-
     // full-screen mode
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
+    page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
@@ -924,6 +930,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Author profiles
     m_authorPage = new KoConfigAuthorPage();
     page = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
+    page->setObjectName("author");
     page->setHeader(i18n("Author"));
     page->setIcon(koIcon("user-identity"));
 
@@ -932,7 +939,9 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_inputConfiguration = new KisInputConfigurationPage();
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
+    page->setObjectName("canvasinput");
     page->setIcon(koIcon("input-tablet"));
+
     connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(cancelClicked()), m_inputConfiguration, SLOT(revertChanges()));
@@ -964,15 +973,30 @@ KisDlgPreferences::~KisDlgPreferences()
 
 void KisDlgPreferences::slotDefault()
 {
-    m_general->setDefault();
-    m_colorSettings->setDefault();
-    m_performanceSettings->load(true);
-#ifdef HAVE_OPENGL
-    m_displaySettings->setDefault();
-#endif
-    m_gridSettings->setDefault();
-    m_tabletSettings->setDefault();
-    m_fullscreenSettings->setDefault();
+    if (currentPage()->objectName() == "default") {
+        m_general->setDefault();
+    }
+    else if (currentPage()->objectName() == "display") {
+        m_displaySettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "colormanagement") {
+        m_colorSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "performance") {
+        m_performanceSettings->load(true);
+    }
+    else if (currentPage()->objectName() == "grid") {
+        m_gridSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "tablet") {
+        m_tabletSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "canvasonly") {
+        m_fullscreenSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "canvasinput") {
+        m_inputConfiguration->setDefaults();
+    }
 }
 
 bool KisDlgPreferences::editPreferences()

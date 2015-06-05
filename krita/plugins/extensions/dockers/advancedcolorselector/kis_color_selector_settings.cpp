@@ -166,9 +166,9 @@ void KisColorSelectorSettings::savePreferences() const
     KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
     //  advanced color selector
-   cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
-   cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
-   cfg.writeEntry("zoomSize", ui->popupSize->value());
+    cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
+    cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
+    cfg.writeEntry("zoomSize", ui->popupSize->value());
 
 
 
@@ -222,13 +222,13 @@ void KisColorSelectorSettings::savePreferences() const
 
     int shadeMyPaintComboBoxIndex  = ui->ACSshadeSelectorMyPaintColorModelComboBox->currentIndex();
     if (shadeMyPaintComboBoxIndex == 0 ) {
-          cfg.writeEntry("shadeMyPaintType",   "HSV");
+        cfg.writeEntry("shadeMyPaintType",   "HSV");
     } else  if (shadeMyPaintComboBoxIndex == 1 ) {
-          cfg.writeEntry("shadeMyPaintType",   "HSL");
+        cfg.writeEntry("shadeMyPaintType",   "HSL");
     } else  if (shadeMyPaintComboBoxIndex == 2 ) {
-          cfg.writeEntry("shadeMyPaintType",   "HSI");
+        cfg.writeEntry("shadeMyPaintType",   "HSI");
     } else {   // HSY
-          cfg.writeEntry("shadeMyPaintType",   "HSY");
+        cfg.writeEntry("shadeMyPaintType",   "HSY");
     }
 
 
@@ -282,25 +282,25 @@ void KisColorSelectorSettings::savePreferences() const
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
     // having a situation where too many sections are visible makes the window too large. turn all off before turning more on
-      ui->colorSliderOptions->hide();
-      ui->advancedColorSelectorOptions->hide();
+    ui->colorSliderOptions->hide();
+    ui->advancedColorSelectorOptions->hide();
 
     if (index == 0)     { // advanced color selector options selected
-         ui->advancedColorSelectorOptions->show();
-         ui->colorSliderOptions->hide();
+        ui->advancedColorSelectorOptions->show();
+        ui->colorSliderOptions->hide();
     }
     else   {  // color slider options selected
-         ui->advancedColorSelectorOptions->hide();
-         ui->colorSliderOptions->show();
+        ui->advancedColorSelectorOptions->hide();
+        ui->colorSliderOptions->show();
     }
 }
 
 void KisColorSelectorSettings::changedACSColorSelectorType(int index)
 {
-      ui->lumaCoefficientGroupbox->setVisible(false);
+    ui->lumaCoefficientGroupbox->setVisible(false);
 
     if (index == 0)     {  // HSV
-       ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black."));
+        ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black."));
     }
     else if (index == 1)     {  // HSL
         ui->ACSTypeDescriptionLabel->setText(i18n("Lightness goes from black to white, with middle grey being equal to the most saturated colour."));
@@ -324,21 +324,21 @@ void KisColorSelectorSettings::changedACSColorAlignment(bool toggled)
     // this slot is tied to the horizontal radio button's state being changed
     // you can infer the vertical state
 
-   if (toggled) {  // horizontal layout. show rows
-       ui->lbl_commonColorsNumCols->hide();
-       ui->commonColorsNumCols->hide();
+    if (toggled) {  // horizontal layout. show rows
+        ui->lbl_commonColorsNumCols->hide();
+        ui->commonColorsNumCols->hide();
 
-       ui->lbl_commonColorsNumRows->show();
-       ui->commonColorsNumRows->show();
+        ui->lbl_commonColorsNumRows->show();
+        ui->commonColorsNumRows->show();
 
-   } else {
-       ui->lbl_commonColorsNumCols->show();
-       ui->commonColorsNumCols->show();
+    } else {
+        ui->lbl_commonColorsNumCols->show();
+        ui->commonColorsNumCols->show();
 
-       ui->lbl_commonColorsNumRows->hide();
-       ui->commonColorsNumRows->hide();
+        ui->lbl_commonColorsNumRows->hide();
+        ui->commonColorsNumRows->hide();
 
-   }
+    }
 
 
 
@@ -350,21 +350,21 @@ void KisColorSelectorSettings::changedACSColorAlignment(bool toggled)
 void KisColorSelectorSettings::changedACSShadeSelectorType(int index)
 {
 
-  if (index == 0)     {  // MyPaint
-      ui->minimalShadeSelectorGroup->hide();
-      ui->myPaintColorModelLabel->show();
-      ui->ACSshadeSelectorMyPaintColorModelComboBox->show();
+    if (index == 0)     {  // MyPaint
+        ui->minimalShadeSelectorGroup->hide();
+        ui->myPaintColorModelLabel->show();
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->show();
 
-  } else if (index == 1) { // Minimal
-       ui->minimalShadeSelectorGroup->show();
-       ui->myPaintColorModelLabel->hide();
-       ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
+    } else if (index == 1) { // Minimal
+        ui->minimalShadeSelectorGroup->show();
+        ui->myPaintColorModelLabel->hide();
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
 
-  }else { // do not show
-       ui->minimalShadeSelectorGroup->hide();
-       ui->myPaintColorModelLabel->hide();
-       ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
-  }
+    }else { // do not show
+        ui->minimalShadeSelectorGroup->hide();
+        ui->myPaintColorModelLabel->hide();
+        ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
+    }
 
 
 
@@ -375,7 +375,7 @@ void KisColorSelectorSettings::changedACSShadeSelectorType(int index)
 
 void KisColorSelectorSettings::useDifferentColorSpaceChecked(bool enabled)
 {
-        ui->colorSpace->setEnabled(enabled);
+    ui->colorSpace->setEnabled(enabled);
 }
 
 void KisColorSelectorSettings::loadPreferences()

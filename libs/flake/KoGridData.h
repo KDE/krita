@@ -24,6 +24,7 @@
 #include "flake_export.h"
 #include <KoXmlReaderForward.h>
 #include <QColor>
+#include <QWidget>
 
 class QPainter;
 class QRectF;

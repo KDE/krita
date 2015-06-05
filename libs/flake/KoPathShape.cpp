@@ -51,12 +51,10 @@
 #include <kdebug.h>
 #include <QPainter>
 
-#ifndef QT_NO_DEBUG
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
-#endif
 
 static const qreal DefaultMarkerWidth = 3.0;
 

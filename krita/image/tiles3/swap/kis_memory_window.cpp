@@ -28,8 +28,9 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
       m_writeWindowEx(writeWindowSize)
 {
     QString swapFileTemplate = (swapDir.isEmpty() ? QDir::tempPath() : swapDir) + QDir::separator() + SWP_PREFIX;
-    if (!QDir::exists(swapDir.isEmpty() ? QDir::tempPath() : swapDir)) {
-        QDir::mkpath(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
+    QDir d(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
+    if (!d.exists()) {
+        d.mkpath(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
     }
     m_file.setFileTemplate(swapFileTemplate);
     bool res = m_file.open();

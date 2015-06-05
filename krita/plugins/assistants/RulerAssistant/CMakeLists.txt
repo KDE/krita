@@ -9,6 +9,7 @@ set(kritarulerassistanttool_PART_SRCS
     VanishingPointAssistant.cc
     InfiniteRulerAssistant.cc
     ParallelRulerAssistant.cc
+    ConcentricEllipseAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc
     )

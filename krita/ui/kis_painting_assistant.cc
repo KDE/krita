@@ -412,6 +412,12 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("parallel ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
+    else if (d->id == "concentric ellipse"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "concentric ellipse");
+        assistantElement.setAttribute("filename", QString("concentric ellipse%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
     else if (d->id == "ruler"){
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "ruler");

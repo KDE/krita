@@ -215,8 +215,8 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         QPointF intersectTransformed(0, 0); //dummy for holding transformed intersection so the code is more readable.
 
         if (poly.containsPoint(initialTransform.inverted().map(mousePos), Qt::OddEvenFill)==true){
-            //check if the lines aren't parallel to each other to avoid calculation errors in the intersection calculation//
-            if (QLineF(poly[0], poly[1]).angle()!=QLineF(poly[2], poly[3]).angle()){
+            //check if the lines aren't parallel to each other to avoid calculation errors in the intersection calculation (bug 345754)//
+            if (QLineF(poly[0], poly[1]).angle()>=QLineF(poly[2], poly[3]).angle()+2 || QLineF(poly[0], poly[1]).angle()<=QLineF(poly[2], poly[3]).angle()-2){
                 if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
                     intersectTransformed = initialTransform.map(intersection); 
                     snapLine = QLineF(intersectTransformed, mousePos);
@@ -233,7 +233,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
                     }
                 }
             }
-            if (QLineF(poly[1], poly[2]).angle()!=QLineF(poly[3], poly[0]).angle()){
+            if (QLineF(poly[1], poly[2]).angle()>=QLineF(poly[3], poly[0]).angle()+2 || QLineF(poly[1], poly[2]).angle()<=QLineF(poly[3], poly[0]).angle()-2){
                 if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
                     intersectTransformed = initialTransform.map(intersection); 
                     snapLine = QLineF(intersectTransformed, mousePos);

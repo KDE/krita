@@ -185,11 +185,15 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     if (getTransform(poly, transform) && assistantVisible==true) {
         // draw vanishing points
         QPointF intersection(0, 0);
-        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-            drawPath(gc, drawX(initialTransform.map(intersection)));
+        if (QLineF(poly[0], poly[1]).angle()>=QLineF(poly[2], poly[3]).angle()+2 || QLineF(poly[0], poly[1]).angle()<=QLineF(poly[2], poly[3]).angle()-2){
+            if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+                drawPath(gc, drawX(initialTransform.map(intersection)));
+            }
         }
-        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-            drawPath(gc, drawX(initialTransform.map(intersection)));
+        if (QLineF(poly[1], poly[2]).angle()>=QLineF(poly[3], poly[0]).angle()+2 || QLineF(poly[1], poly[2]).angle()<=QLineF(poly[3], poly[0]).angle()-2){
+            if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+                drawPath(gc, drawX(initialTransform.map(intersection)));
+            }
         }
     }
 

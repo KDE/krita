@@ -466,7 +466,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
             new QTabletEvent(event->type(),
                              event->pos(),
                              event->globalPos(),
-// QT5TODO
+// QT5TODO: Qt5's QTabletEvent no longer has a hiResGlobalPos, and we don't know whether this bug still happens in Qt5.
 //                          #ifdef HAVE_X11
 //                              multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
 //                          #else

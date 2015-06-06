@@ -43,7 +43,8 @@ private:
     bool isAlreadyThere(QString fileName);
 
     void verifyFilters(QVector<FilterDescription> filters);
-    void generateXmlDump();
+    void generateXmlDump(const QString &outputFilePath);
+    QString pathToString(Component * c);
 
 private:
     Component * m_root;
@@ -51,7 +52,6 @@ private:
     gmic_list<float> m_images;
     gmic_image<float> m_gmicImage;
     QString m_blacklistFilePath;
-    QString m_filterDefinitionsXmlFilePath;
     KisGmicBlacklister * m_blacklister;
 
 private Q_SLOTS:
@@ -62,16 +62,20 @@ private Q_SLOTS:
     void testColorizeFilter();
 #endif
     /**
-     * This test case tests our parser of @file gmic_def.gmic definitions. These definitions are translated to gmic command
-     * and compared to similar output produced by G'MIC for GIMP plug-in.
+     * This test case tests our parser of @file updateXXXX.gmic definitions. These definitions are translated to gmic commands
+     * and compared to output produced by G'MIC for GIMP plug-in as expected result.
+     *
+     *
      */
      void testCompareToGmicGimp();
 
     /**
-     * This test case tests our parser of @file gmic_def.gmic definitions. These definitions are translated to gmic command
+     * This test case tests our parser of @file updateXXXX.gmic definitions. These definitions are translated to gmic command
      * and compared to what our parser parsed . It helps to spot regressions when updating gmic.
      */
      void testCompareToKrita();
+
+
 
     /**
      * If you define RUN_FILTERS in compilation, it will try to run all filters on specified image.
@@ -82,6 +86,7 @@ private Q_SLOTS:
     void testAllFilters();
     void testBlacklister();
     void testBlacklisterSearchByParamName();
+    void testFindFilterByPath();
     void testGatherLayers();
 
     void testConvertGrayScaleGmic();
@@ -92,6 +97,8 @@ private Q_SLOTS:
     void testFilterOnlySelection();
 
     void testLoadingGmicCommands();
+
+    void testFindFilterByName();
 
 
 };

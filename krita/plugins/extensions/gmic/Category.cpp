@@ -71,9 +71,9 @@ Component* Category::child(int index) const
     }
 }
 
-int Category::indexOf(Component* c) const
+int Category::indexOf(const Component* c) const
 {
-    return m_components.indexOf(c);
+    return m_components.indexOf((Component *)c);
 }
 
 int Category::row() const

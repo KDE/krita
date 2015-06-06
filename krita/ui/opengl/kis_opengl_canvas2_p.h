@@ -189,14 +189,11 @@ namespace VSyncWorkaround {
     bool tryDisableVSync(QWidget *widget) {
         bool result = false;
 
-// // QT5TODO
-#if 0
         bool triedDisable = false;
-        QX11Info info = widget->x11Info();
-        Display *dpy = info.display();
+        Display *dpy = QX11Info::display();
         WId wid = widget->winId();
 
-        QGLExtensionMatcher extensions(glXQueryExtensionsString(dpy, info.appScreen()));
+        QGLExtensionMatcher extensions(glXQueryExtensionsString(dpy, QX11Info::appScreen()));
 
         if (extensions.match("GLX_EXT_swap_control")) {
             typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
@@ -251,7 +248,6 @@ namespace VSyncWorkaround {
             qCritical() << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
             qCritical();
         }
-#endif
         return result;
     }
 }

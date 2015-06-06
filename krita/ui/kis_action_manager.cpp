@@ -232,6 +232,7 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
 {
     QAction *standardAction = KStandardAction::create(actionType, receiver, member, 0);
     KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
+// QT5TODO
 //     action->setShortcut(standardAction->shortcut(KAction::DefaultShortcut), KAction::DefaultShortcut);
 //     action->setShortcut(standardAction->shortcut(KAction::ActiveShortcut), KAction::ActiveShortcut);
     action->setCheckable(standardAction->isCheckable());

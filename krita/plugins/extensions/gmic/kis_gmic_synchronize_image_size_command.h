@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ * Copyright (c) 2015 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,28 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_RESIZE_COMMAND_H_
-#define KIS_IMAGE_RESIZE_COMMAND_H_
+#ifndef KIS_GMIC_SYNCHRONIZE_IMAGE_SIZE_COMMAND_H
+#define KIS_GMIC_SYNCHRONIZE_IMAGE_SIZE_COMMAND_H
 
-#include "krita_export.h"
-#include "kis_types.h"
+#include <QSharedPointer>
+
 
 #include <kundo2command.h>
-#include <QSize>
 
+#include <kis_image.h>
+#include <kis_types.h>
 
-class KRITAIMAGE_EXPORT KisImageResizeCommand : public KUndo2Command
+#include <gmic.h>
+
+class KisImageResizeCommand;
+
+class KisGmicSynchronizeImageSizeCommand : public KUndo2Command
 {
 public:
-    KisImageResizeCommand(KisImageWSP image, const QSize& newRect);
+    KisGmicSynchronizeImageSizeCommand(QSharedPointer< cimg_library::CImgList< float > > images, KisImageWSP image);
+    ~KisGmicSynchronizeImageSizeCommand();
 
     void redo();
     void undo();
 
 private:
-    QSize m_sizeBefore;
-    QSize m_sizeAfter;
+    QSize findMaxLayerSize(QSharedPointer< gmic_list<float> > images);
+
+private:
+    QSharedPointer< gmic_list<float> > m_images;
     KisImageWSP m_image;
+    KisImageResizeCommand * m_resizeCommand;
+
 };
 
 #endif

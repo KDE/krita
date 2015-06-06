@@ -156,6 +156,7 @@ set(kritagmic_PART_SRCS
     kis_gmic_command.cpp
     kis_gmic_data.cpp
     kis_gmic_synchronize_layers_command.cpp
+    kis_gmic_synchronize_image_size_command.cpp
     kis_import_gmic_processing_visitor.cpp
     kis_gmic_progress_manager.cpp
     kis_gmic_small_applicator.cpp
@@ -178,10 +179,10 @@ install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  
+install( FILES
   #${GMIC_SOURCE_DIR}/gmic_def.gmic
-  ${GMIC_SOURCE_DIR}/update1610.gmic 
-  gmic_def.gmic.blacklist 
+  ${GMIC_SOURCE_DIR}/update1610.gmic
+  gmic_def.gmic.blacklist
 DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem

@@ -84,7 +84,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
 
     connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));
-    connect(d->uiFilterDialog.pushButtonPreview, SIGNAL(toggled(bool)), SLOT(pushButtonPreviewToggled(bool)));
+    connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(toggled(bool)), SLOT(enablePreviewToggled(bool)));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
 
@@ -92,7 +92,8 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(this, SIGNAL(rejected()), SLOT(slotOnReject()));
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
-    d->uiFilterDialog.pushButtonPreview->setChecked(group.readEntry("showPreview", true));
+    d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
+
 }
 
 KisDlgFilter::~KisDlgFilter()
@@ -129,7 +130,8 @@ void KisDlgFilter::updatePreview()
 {
     if (!d->uiFilterDialog.filterSelection->configuration()) return;
 
-    if (d->uiFilterDialog.pushButtonPreview->isChecked()) {
+
+    if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
         KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
         startApplyingFilter(config);
     }
@@ -189,7 +191,7 @@ void KisDlgFilter::createMask()
     accept();
 }
 
-void KisDlgFilter::pushButtonPreviewToggled(bool state)
+void KisDlgFilter::enablePreviewToggled(bool state)
 {
     if (state) {
         updatePreview();
@@ -198,7 +200,8 @@ void KisDlgFilter::pushButtonPreviewToggled(bool state)
     }
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
-    group.writeEntry("showPreview", d->uiFilterDialog.pushButtonPreview->isChecked());
+    group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
+
     group.config()->sync();
 }
 

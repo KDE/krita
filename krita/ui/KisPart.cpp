@@ -113,8 +113,7 @@ public:
 
 void KisPart::Private::loadActions()
 {
-    // QT5TODO
-    actionCollection = new KActionCollection(part, KGlobal::mainComponent().componentName());
+    actionCollection = new KActionCollection(part, KisFactory::componentName());
 
     KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
     QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
@@ -440,7 +439,7 @@ void KisPart::configureShortcuts()
     }
 
     KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
-    // QT5TODO
+// QT5TODO: KDialog is deprecated so the buttons don't exist anymore
 //     dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
     dlg.addCollection(d->actionCollection);
 //     dlg.setButtonText(KDialog::User1, i18n("Print"));

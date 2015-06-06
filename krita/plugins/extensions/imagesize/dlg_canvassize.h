@@ -98,7 +98,7 @@ private:
     int m_xOffset, m_yOffset;
 
     WdgCanvasSize * m_page;
-    KIcon m_anchorIcons[9];
+    QIcon m_anchorIcons[9];
     QButtonGroup *m_group;
 };
 

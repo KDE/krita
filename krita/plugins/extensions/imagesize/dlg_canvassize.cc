@@ -522,16 +522,15 @@ void DlgCanvasSize::updateYOffsetUIValue(double value)
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-//     QT5TODO
-//     m_anchorIcons[NORTH_WEST] =  koIcon("arrow_north_west");
-//     m_anchorIcons[NORTH] = koIcon("arrow_north");
-//     m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
-//     m_anchorIcons[EAST] = koIcon("arrow_east");
-//     m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
-//     m_anchorIcons[WEST] = koIcon("arrow_west");
-//     m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
-//     m_anchorIcons[SOUTH] = koIcon("arrow_south");
-//     m_anchorIcons[SOUTH_EAST] = koIcon("arrow_south_east");
+     m_anchorIcons[NORTH_WEST] =  koQIcon("arrow_north_west");
+     m_anchorIcons[NORTH] = koQIcon("arrow_north");
+     m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
+     m_anchorIcons[EAST] = koQIcon("arrow_east");
+     m_anchorIcons[CENTER] = koQIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
+     m_anchorIcons[WEST] = koQIcon("arrow_west");
+     m_anchorIcons[SOUTH_WEST] = koQIcon("arrow_south_west");
+     m_anchorIcons[SOUTH] = koQIcon("arrow_south");
+     m_anchorIcons[SOUTH_EAST] = koQIcon("arrow_south_east");
 }
 
 void DlgCanvasSize::updateAnchorIcons(int id)

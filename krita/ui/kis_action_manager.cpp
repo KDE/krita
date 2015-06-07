@@ -232,9 +232,10 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
 {
     QAction *standardAction = KStandardAction::create(actionType, receiver, member, 0);
     KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
-// QT5TODO
-//     action->setShortcut(standardAction->shortcut(KAction::DefaultShortcut), KAction::DefaultShortcut);
-//     action->setShortcut(standardAction->shortcut(KAction::ActiveShortcut), KAction::ActiveShortcut);
+    const QList<QKeySequence> defaultShortcuts = standardAction->property("defaultShortcuts").value<QList<QKeySequence> >();
+    const QKeySequence defaultShortcut = defaultShortcuts.isEmpty() ? QKeySequence() : defaultShortcuts.at(0);
+    action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
+    action->setShortcut(standardAction->shortcut(), KAction::ActiveShortcut);
     action->setCheckable(standardAction->isCheckable());
     if (action->isCheckable()) {
         action->setChecked(standardAction->isChecked());

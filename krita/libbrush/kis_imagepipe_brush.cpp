@@ -198,9 +198,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 
 KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
     : KisGbrBrush(rhs),
-      m_d(new Private)
+      m_d(new Private(*rhs.m_d))
 {
-    *m_d = *(rhs.m_d);
 }
 
 

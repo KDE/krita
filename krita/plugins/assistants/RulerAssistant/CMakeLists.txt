@@ -12,6 +12,7 @@ set(kritarulerassistanttool_PART_SRCS
     ConcentricEllipseAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc
+    FisheyePointAssistant.cc
     )
 
 kde4_add_ui_files(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )

@@ -36,7 +36,7 @@ public:
     virtual int childCount() const = 0;
     virtual int columnCount() const = 0;
 
-    virtual int indexOf(Component *c) const { Q_UNUSED(c); return 0; }
+    virtual int indexOf(const Component *c) const { Q_UNUSED(c); return -1; }
 
     virtual void setName(const QString &name) {  m_name = name; }
     virtual QString name() const { return m_name; }

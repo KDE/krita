@@ -140,6 +140,7 @@ public:
         m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
         m_tagStore = new KoResourceTagStore(this);
+        m_tagStore->loadTags();
     }
 
     virtual ~KoResourceServer()
@@ -171,6 +172,7 @@ public:
      * @param filenames list of filenames to be loaded
      */
     void loadResources(QStringList filenames) {
+
         QStringList uniqueFiles;
 
         while (!filenames.empty()) {
@@ -214,7 +216,6 @@ public:
         }
 
         m_resources = sortedResources();
-        m_tagStore->loadTags();
 
         foreach(ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();

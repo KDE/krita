@@ -666,16 +666,6 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
     m_cfg.writeEntry("maxthreads", maxThreads);
 }
 
-qint32 KisConfig::maxTilesInMem(bool defaultValue) const
-{
-    return (defaultValue ? 5000 : m_cfg.readEntry("maxtilesinmem", 5000));
-}
-
-void KisConfig::setMaxTilesInMem(qint32 tiles) const
-{
-    m_cfg.writeEntry("maxtilesinmem", tiles);
-}
-
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
     quint32 v = m_cfg.readEntry("gridmainstyle", 0);

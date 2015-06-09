@@ -203,9 +203,12 @@ void KoResourceModel::tagBoxEntryWasRemoved(const QString& tag)
 QModelIndex KoResourceModel::indexFromResource(KoResource* resource) const
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
-    int row = resourceIndex / columnCount();
-    int column = resourceIndex % columnCount();
-    return index(row, column);
+    if (columnCount() > 0) {
+        int row = resourceIndex / columnCount();
+        int column = resourceIndex % columnCount();
+        return index(row, column);
+    }
+    return QModelIndex();
 }
 
 QString KoResourceModel::extensions() const

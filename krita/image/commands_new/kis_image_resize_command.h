@@ -27,7 +27,7 @@
 #include <QSize>
 
 
-class KisImageResizeCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisImageResizeCommand : public KUndo2Command
 {
 public:
     KisImageResizeCommand(KisImageWSP image, const QSize& newRect);

@@ -33,8 +33,11 @@
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
 #include "KoColorTransformation.h"
+#include "KoCompositeColorTransformation.h"
 #include "KoCompositeOp.h"
 #include "KoID.h"
+
+#include "kis_signals_blocker.h"
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_config_widget.h"
@@ -47,7 +50,22 @@
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
 
+QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
+{
+    QVector<VirtualChannelInfo> vchannels;
 
+    QList<KoChannelInfo *> sortedChannels =
+        KoChannelInfo::displayOrderSorted(cs->channels());
+
+    vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0);
+
+    foreach(KoChannelInfo *channel, sortedChannels) {
+        int pixelIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), sortedChannels);
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel);
+    }
+
+    return vchannels;
+}
 
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
         : KisConfigWidget(parent, f), m_histogram(0)
@@ -61,27 +79,22 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     layout->addWidget(m_page);
 
     m_dev = dev;
-    m_activeCh = 0;
+    m_activeVChannel = 0;
+
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+
+    m_virtualChannels = getVirtualChannels(dev->colorSpace());
+    const int virtualChannelCount = m_virtualChannels.size();
 
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-            m_dev->colorSpace()->channelCount());
+                                                        virtualChannelCount);
+    for (int i = 0; i < virtualChannelCount; i++) {
+        const VirtualChannelInfo &info = m_virtualChannels[i];
 
-    QList<KoChannelInfo *> colorChannels;
-    foreach(KoChannelInfo *channel, dev->colorSpace()->channels()) {
-        if (channel->channelType() == KoChannelInfo::COLOR || channel->channelType() == KoChannelInfo::ALPHA) {
-            colorChannels.append(channel);
-        }
+        m_page->cmbChannel->addItem(info.name(), info.pixelIndex());
+        m_curves[i].setName(info.name());
     }
-    // fill in the channel chooser, in the display order, but store the pixel index as well.
-    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
-    foreach(KoChannelInfo *channel, sortedChannels) {
-        QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
-                                                                         KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
-        m_page->cmbChannel->addItem(channel->name(), pixelIndex);
-        KisCubicCurve curve = m_curves[m_page->cmbChannel->count() - 1];
-        curve.setName(channel->name());
-        m_curves[m_page->cmbChannel->count() - 1] = curve;
-    }
+
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // create the horizontal and vertical gradient labels
@@ -91,7 +104,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     // init histogram calculator
     QList<QString> keys =
         KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
-    
+
     if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
@@ -102,10 +115,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
-    m_page->curveWidget->blockSignals(true);
-    m_page->curveWidget->setCurve(m_curves[0]);
-    setActiveChannel(0);
-    m_page->curveWidget->blockSignals(false);
+    {
+        KisSignalsBlocker b(m_page->curveWidget);
+        m_page->curveWidget->setCurve(m_curves[0]);
+        setActiveChannel(0);
+    }
 }
 
 KisPerChannelConfigWidget::~KisPerChannelConfigWidget()
@@ -147,9 +161,11 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     QPainter p(&pix);
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 
-    if(m_histogram)
+    const VirtualChannelInfo &info = m_virtualChannels[m_activeVChannel];
+
+    if (m_histogram && info.type() == VirtualChannelInfo::REAL)
     {
-        m_histogram->setChannel(m_activeCh);
+        m_histogram->setChannel(info.pixelIndex());
 
         double highest = (double)m_histogram->calculations().getHighest();
         qint32 bins = m_histogram->producer()->numberOfBins();
@@ -174,22 +190,27 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
 
 void KisPerChannelConfigWidget::setActiveChannel(int ch)
 {
-    m_curves[m_activeCh] = m_page->curveWidget->curve();
-    m_activeCh = ch;
-    m_page->curveWidget->setCurve(m_curves[m_activeCh]);
+    m_curves[m_activeVChannel] = m_page->curveWidget->curve();
+
+    m_activeVChannel = ch;
+    m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);
     m_page->curveWidget->setPixmap(getHistogram());
-    m_page->cmbChannel->setCurrentIndex(ch);
+    m_page->cmbChannel->setCurrentIndex(m_activeVChannel);
+
 
     // Getting range accepted by channel
-    KoChannelInfo *channel = m_dev->colorSpace()->channels()[m_activeCh];
-    int order = BITS_PER_BYTE * channel->size();
+    VirtualChannelInfo &currentVChannel = m_virtualChannels[m_activeVChannel];
+
+    KoChannelInfo::enumChannelValueType valueType = currentVChannel.valueType();
+
+    int order = BITS_PER_BYTE * currentVChannel.channelSize();
     int maxValue = pwr2(order);
     int min;
     int max;
 
     m_page->curveWidget->dropInOutControls();
 
-    switch (channel->channelValueType()) {
+    switch (valueType) {
     case KoChannelInfo::UINT8:
     case KoChannelInfo::UINT16:
     case KoChannelInfo::UINT32:
@@ -223,13 +244,12 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 
 KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
 {
-    int nCh = m_dev->colorSpace()->channelCount();
-    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
+    int numChannels = m_virtualChannels.size();
+    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(numChannels);
 
-    // updating current state
-    if (m_activeCh < m_curves.size()) {
-        m_curves[m_activeCh] = m_page->curveWidget->curve();
-    }
+    KIS_ASSERT_RECOVER(m_activeVChannel < m_curves.size()) { return cfg; }
+
+    m_curves[m_activeVChannel] = m_page->curveWidget->curve();
     cfg->setCurves(m_curves);
 
     return cfg;
@@ -245,36 +265,31 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         /**
          * HACK ALERT: our configuration factory generates
          * default configuration with nTransfers==0.
-         * Catching it here.
+         * Catching it here. Just reset all the transfers.
          */
 
+        const int virtualChannelCount = m_virtualChannels.size();
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-                m_dev->colorSpace()->channelCount());
+                                                            virtualChannelCount);
 
-        // Getting the names of the color channels {
-        QList<KoChannelInfo *> colorChannels;
-        foreach(KoChannelInfo *channel, m_dev->colorSpace()->channels()) {
-            if (channel->channelType() == KoChannelInfo::COLOR || channel->channelType() == KoChannelInfo::ALPHA) {
-                colorChannels.append(channel);
-            }
+        for (int i = 0; i < virtualChannelCount; i++) {
+            const VirtualChannelInfo &info = m_virtualChannels[i];
+            m_curves[i].setName(info.name());
         }
-        // Get the channel information, but listed in display order
-        QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
-        int i = 0;
-        foreach(KoChannelInfo *channel, sortedChannels) {
-            KisCubicCurve curve = m_curves[i];
-            curve.setName(channel->name());
-            m_curves[i++] = curve;
-        }
-        // } Getting the names of the color channels
-    } else if (cfg->curves().size() != int(m_dev->colorSpace()->channelCount())) {
+
+    } else if (cfg->curves().size() != int(m_virtualChannels.size())) {
+        qWarning() << "WARNING: trying to load a curve with incorrect  number of channels!";
+        qWarning() << "WARNING:   expected:" << m_virtualChannels.size();
+        qWarning() << "WARNING:        got:" << cfg->curves().size();
         return;
     } else {
         for (int ch = 0; ch < cfg->curves().size(); ch++)
             m_curves[ch] = cfg->curves()[ch];
     }
 
-    m_page->curveWidget->setCurve(m_curves[m_activeCh]);
+    // HACK: we save the previous curve in setActiveChannel, so just copy it
+    m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);
+
     setActiveChannel(0);
 }
 
@@ -350,8 +365,6 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
     while (!e.isNull()) {
         if ((attributeName = e.attribute("name")) == "nTransfers") {
             numTransfers = e.text().toUShort();
-        } else if ((attributeName = e.attribute("name")) == "nTransfersWithAlpha") {
-            numTransfers = e.text().toUShort();
         } else {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
@@ -364,23 +377,8 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
                 }
                 curves.insert(index, curve);
             }
-            QRegExp rxAlphaCurve("alphaCurve");
-            if (rxAlphaCurve.indexIn(attributeName, 0) != -1) {
-                index = curves.count() + 1;
-
-                if (!e.text().isEmpty()) {
-                    curve.fromString(e.text());
-                }
-                curves.insert(index,curve);
-            }
         }
         e = e.nextSiblingElement();
-    }
-
-    curve.fromString("0,0;1,1");
-    if(numTransfers == 3) {
-        numTransfers++;
-        curves.insert(index + 1, curve);
     }
 
     if (!numTransfers)
@@ -395,66 +393,45 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
  */
 //void KisPerChannelFilterConfiguration::fromXML(const QString& s)
 
+void addParamNode(QDomDocument& doc,
+                  QDomElement& root,
+                  const QString &name,
+                  const QString &value)
+{
+    QDomText text = doc.createTextNode(value);
+    QDomElement t = doc.createElement("param");
+    t.setAttribute("name", name);
+    t.appendChild(text);
+    root.appendChild(t);
+}
+
 void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     /**
      * <params version=1>
      *       <param name="nTransfers">3</param>
-     *       <param name="nTransfersWithAlpha">4</param>
      *       <param name="curve0">0,0;0.5,0.5;1,1;</param>
      *       <param name="curve1">0,0;1,1;</param>
      *       <param name="curve2">0,0;1,1;</param>
-     *       <param name="alphaCurve">0,0;1,1;</param>
-     *       <!-- for the future
-     *       <param name="commonCurve">0,0;1,1;</param>
-     *       -->
      * </params>
      */
 
     root.setAttribute("version", version());
 
-    QDomElement t = doc.createElement("param");
-    QDomText text, textAlpha;
-    if(m_curves.size() == 4) {
-        text = doc.createTextNode(QString::number(m_curves.size()-1));
-        textAlpha = doc.createTextNode(QString::number(m_curves.size()));
-    }
-    else {
-        text = doc.createTextNode(QString::number(m_curves.size()));
-        textAlpha = doc.createTextNode(QString::number(m_curves.size()));
-    }
+    QDomText text;
+    QDomElement t;
 
-    t.setAttribute("name", "nTransfers");
-    t.appendChild(text);
-    root.appendChild(t);
-
-    t = doc.createElement("param");
-    t.setAttribute("name", "nTransfersWithAlpha");
-    t.appendChild(textAlpha);
-    root.appendChild(t);
+    addParamNode(doc, root, "nTransfers", QString::number(m_curves.size()));
 
     KisCubicCurve curve;
     QString paramName;
 
-    for (int i = 0; i < m_curves.size() - 1; ++i) {
-        paramName = QLatin1String("curve") + QString::number(i);
-        t = doc.createElement("param");
-        t.setAttribute("name", paramName);
+    for (int i = 0; i < m_curves.size(); ++i) {
+        QString name = QLatin1String("curve") + QString::number(i);
+        QString value = m_curves[i].toString();
 
-        curve = m_curves[i];
-        text = doc.createTextNode(curve.toString());
-        t.appendChild(text);
-        root.appendChild(t);
+        addParamNode(doc, root, name, value);
     }
-
-    paramName = QLatin1String("alphaCurve");
-    t = doc.createElement("param");
-    t.setAttribute("name", paramName);
-
-    curve = m_curves[m_curves.size()-1];
-    text = doc.createTextNode(curve.toString());
-    t.appendChild(text);
-    root.appendChild(t);
 }
 
 /**
@@ -485,20 +462,78 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
         dynamic_cast<const KisPerChannelFilterConfiguration*>(config); // Somehow, this shouldn't happen
     Q_ASSERT(configBC);
 
-    const QVector<QVector<quint16> > &originalTransfers =
-        configBC->transfers();
+    const QVector<QVector<quint16> > &originalTransfers = configBC->transfers();
+    const QList<KisCubicCurve> &originalCurves = configBC->curves();
 
-    if (originalTransfers.size() != int(cs->channelCount())) {
-        // We got an illegal number of colorchannels.KisFilter
+    /**
+     * TODO: What about the order of channels? (DK)
+     *
+     * Virtual channels are sorted in display order, does Lcms accepts
+     * transforms in display order? Why on Earth it works?! Is it
+     * documented anywhere?
+     */
+    const QVector<VirtualChannelInfo> virtualChannels = getVirtualChannels(cs);
+
+    if (originalTransfers.size() != int(virtualChannels.size())) {
+        // We got an illegal number of colorchannels :(
         return 0;
     }
 
-    const quint16** transfers = new const quint16*[configBC->curves().size()];
-    for(int i = 0; i < originalTransfers.size(); ++i) {
-        transfers[i] = originalTransfers[i].constData();
+    bool colorsNull = true;
+    bool lightnessNull = true;
+
+    QVector<QVector<quint16> > realTransfers;
+    QVector<quint16> lightnessTansfer;
+    for (int i = 0; i < virtualChannels.size(); i++) {
+        if (virtualChannels[i].type() == VirtualChannelInfo::REAL) {
+            realTransfers << originalTransfers[i];
+            if (colorsNull && !originalCurves[i].isNull()) {
+                colorsNull = false;
+            }
+        } else if (virtualChannels[i].type() == VirtualChannelInfo::LIGHTNESS) {
+            KIS_ASSERT_RECOVER_NOOP(lightnessTansfer.isEmpty());
+            lightnessTansfer = originalTransfers[i];
+
+            if (lightnessNull && !originalCurves[i].isNull()) {
+                lightnessNull = false;
+            }
+        }
     }
-    KoColorTransformation* t = cs->createPerChannelAdjustment(transfers);
+
+    const quint16** transfers = new const quint16*[configBC->curves().size()];
+    for(int i = 0; i < realTransfers.size(); ++i) {
+        transfers[i] = realTransfers[i].constData();
+    }
+
+    KoColorTransformation *lightnessTransform = 0;
+    KoColorTransformation *colorTransform = 0;
+
+    if (!colorsNull) {
+        colorTransform = cs->createPerChannelAdjustment(transfers);
+    }
+
+    if (!lightnessNull) {
+        lightnessTransform = cs->createBrightnessContrastAdjustment(lightnessTansfer.constData());
+    }
+
+    KoColorTransformation *finalTransform = 0;
+
+    if (colorTransform && lightnessTransform) {
+        KoCompositeColorTransformation *compositeTransform =
+            new KoCompositeColorTransformation(
+                KoCompositeColorTransformation::INPLACE);
+
+        compositeTransform->appendTransform(colorTransform);
+        compositeTransform->appendTransform(lightnessTransform);
+
+        finalTransform = compositeTransform;
+    } else if (lightnessTransform) {
+        finalTransform = lightnessTransform;
+    } else  if (colorTransform) {
+        finalTransform = colorTransform;
+    }
+
     delete [] transfers;
-    return t;
+    return finalTransform;
 }
 

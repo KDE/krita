@@ -163,7 +163,6 @@ private Q_SLOTS:
 protected Q_SLOTS:
     virtual void updateTabletPressureSamples();
 
-
 protected:
     quint8 m_opacity;
     bool m_paintOutline;

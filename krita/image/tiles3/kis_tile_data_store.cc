@@ -95,6 +95,25 @@ KisTileDataStore* KisTileDataStore::instance()
     return s_instance;
 }
 
+KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
+{
+    QMutexLocker lock(&m_listLock);
+
+    MemoryStatistics stats;
+
+    const qint64 metricCoeff = KisTileData::WIDTH * KisTileData::HEIGHT;
+
+    stats.realMemorySize = m_pooler.lastRealMemoryMetric() * metricCoeff;
+    stats.historicalMemorySize = m_pooler.lastHistoricalMemoryMetric() * metricCoeff;
+    stats.poolSize = m_pooler.lastPoolMemoryMetric() * metricCoeff;
+
+    stats.totalMemorySize = memoryMetric() * metricCoeff + stats.poolSize;
+
+    stats.swapSize = m_swappedStore.totalMemoryMetric() * metricCoeff;
+
+    return stats;
+}
+
 inline void KisTileDataStore::registerTileDataImp(KisTileData *td)
 {
     td->m_listIterator = m_tileDataList.insert(m_tileDataList.end(), td);

@@ -48,6 +48,12 @@ KisToolPolyline::~KisToolPolyline()
 {
 }
 
+void KisToolPolyline::resetCursorStyle()
+{
+    KisToolPolylineBase::resetCursorStyle();
+    overrideCursorIfNotEditable();
+}
+
 QWidget* KisToolPolyline::createOptionWidget()
 {
     // there are no options there

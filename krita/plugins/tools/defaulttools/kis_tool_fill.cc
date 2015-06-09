@@ -74,6 +74,13 @@ KisToolFill::~KisToolFill()
 {
 }
 
+void KisToolFill::resetCursorStyle()
+{
+    KisToolPaint::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
+}
+
 void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);

@@ -78,6 +78,13 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
+void KisToolGradient::resetCursorStyle()
+{
+    KisToolPaint::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
+}
+
 void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);

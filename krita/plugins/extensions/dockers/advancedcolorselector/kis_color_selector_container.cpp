@@ -45,9 +45,6 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_myPaintShadeSelector(new KisMyPaintShadeSelector(this)),
     m_minimalShadeSelector(new KisMinimalShadeSelector(this)),
     m_shadeSelector(m_myPaintShadeSelector),
-    m_shadeSelectorHideable(false),
-    m_hideColorSelector(false),
-    m_allowHorizontalLayout(true),
     m_colorSelAction(0),
     m_mypaintAction(0),
     m_minimalAction(0),
@@ -127,9 +124,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 void KisColorSelectorContainer::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    m_shadeSelectorHideable = cfg.readEntry("shadeSelectorHideable", false);
-    m_allowHorizontalLayout = cfg.readEntry("allowHorizontalLayout", true);
-    m_hideColorSelector = cfg.readEntry("hideColorSelector", false);
+    m_onDockerResizeSetting =  (int)cfg.readEntry("onDockerResize", 0);
 
     QString type = cfg.readEntry("shadeSelectorType", "MyPaint");
 
@@ -141,10 +136,6 @@ void KisColorSelectorContainer::updateSettings()
     else
         newShadeSelector = 0;
 
-    if (m_hideColorSelector)
-        m_colorSelector->hide();
-    else
-        m_colorSelector->show();
 
 
     if(m_shadeSelector!=newShadeSelector && m_shadeSelector!=0) {
@@ -182,13 +173,15 @@ void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
     if(m_shadeSelector!=0) {
         int minimumHeightForBothWidgets = m_colorSelector->minimumHeight()+m_shadeSelector->minimumHeight()+30; //+30 for the buttons (temporarily)
 
-        if(height()<minimumHeightForBothWidgets && m_shadeSelectorHideable) {
+        if(height()<minimumHeightForBothWidgets && m_onDockerResizeSetting== 1) {  // 1 option is hide shade selector
             m_shadeSelector->hide();
         }
         else {
             m_shadeSelector->show();
         }
-        if(height() < width() && m_allowHorizontalLayout && m_shadeSelector!=m_minimalShadeSelector) {
+
+        // m_onDockerResizeSetting==0 is allow horizontal layout
+        if(height() < width() && m_onDockerResizeSetting==0 && m_shadeSelector!=m_minimalShadeSelector) {
             m_widgetLayout->setDirection(QBoxLayout::LeftToRight);
         }
         else {

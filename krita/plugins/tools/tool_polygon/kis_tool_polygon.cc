@@ -49,6 +49,12 @@ KisToolPolygon::~KisToolPolygon()
 {
 }
 
+void KisToolPolygon::resetCursorStyle()
+{
+    KisToolPolylineBase::resetCursorStyle();
+    overrideCursorIfNotEditable();
+}
+
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
     if (image()) {

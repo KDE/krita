@@ -36,7 +36,7 @@ public:
     void setParent(Component * parent) { m_parent = parent; }
 
     virtual int row() const;
-    virtual int indexOf(Component* c) const;
+    virtual int indexOf(const Component* c) const;
     virtual int childCount() const;
     virtual int columnCount() const;
 
@@ -47,14 +47,14 @@ public:
     virtual QVariant data(int column);
 
     template <typename T>
-    int indexOf(const QString &categoryName) const
+    int indexOf(const QString &componentName) const
     {
         for (int i = 0; i < m_components.size(); i++)
         {
             const T * component = dynamic_cast<T *>(m_components.at(i));
             if (component)
             {
-                if (component->name() == categoryName)
+                if (component->name() == componentName)
                 {
                     return i;
                 }

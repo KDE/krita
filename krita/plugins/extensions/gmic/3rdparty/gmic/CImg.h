@@ -13688,6 +13688,8 @@ namespace cimg_library_suffixed {
       CImg<charT> expr;
       const CImg<T>& reference;
       CImg<Tdouble> reference_stats;
+      double median_value;
+      bool is_median_value;
       unsigned int mempos, result;
       const char *const calling_function;
       typedef double (*mp_func)(_cimg_math_parser&);
@@ -13712,10 +13714,10 @@ namespace cimg_library_suffixed {
 #endif
 
       // Constructors.
-      _cimg_math_parser():reference(CImg<T>::empty()),calling_function(0) {}
+      _cimg_math_parser():reference(CImg<T>::empty()),median_value(0),is_median_value(false),calling_function(0) {}
 
       _cimg_math_parser(const CImg<T>& img, const char *const expression, const char *const funcname=0):
-        reference(img),calling_function(funcname?funcname:"cimg_math_parser") {
+        reference(img),median_value(0),is_median_value(false),calling_function(funcname?funcname:"cimg_math_parser") {
         unsigned int l = 0;
         if (expression) {
           l = (unsigned int)std::strlen(expression);
@@ -13867,41 +13869,45 @@ namespace cimg_library_suffixed {
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
               if (label1pos[4]!=~0U) _cimg_mp_return(label1pos[4]); _cimg_mp_opcode0(mp_iv);
             }
+            if (*ss1=='c') { // ic
+              if (!is_median_value && reference) { median_value = reference.median(); is_median_value = true; }
+              if (label1pos[5]!=~0U) _cimg_mp_return(label1pos[5]); _cimg_mp_opcode0(mp_ic);
+            }
           }
           if (*ss1=='m') {
             if (*ss=='x') { // xm
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[5]!=~0U) _cimg_mp_return(label1pos[5]); _cimg_mp_opcode0(mp_xm);
+              if (label1pos[6]!=~0U) _cimg_mp_return(label1pos[6]); _cimg_mp_opcode0(mp_xm);
             }
             if (*ss=='y') { // ym
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[6]!=~0U) _cimg_mp_return(label1pos[6]); _cimg_mp_opcode0(mp_ym);
+              if (label1pos[7]!=~0U) _cimg_mp_return(label1pos[7]); _cimg_mp_opcode0(mp_ym);
             }
             if (*ss=='z') { // zm
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[7]!=~0U) _cimg_mp_return(label1pos[7]); _cimg_mp_opcode0(mp_zm);
+              if (label1pos[8]!=~0U) _cimg_mp_return(label1pos[8]); _cimg_mp_opcode0(mp_zm);
             }
             if (*ss=='c') { // cm
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[8]!=~0U) _cimg_mp_return(label1pos[8]); _cimg_mp_opcode0(mp_cm);
+              if (label1pos[9]!=~0U) _cimg_mp_return(label1pos[9]); _cimg_mp_opcode0(mp_cm);
             }
           }
           if (*ss1=='M') {
             if (*ss=='x') { // xM
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[9]!=~0U) _cimg_mp_return(label1pos[9]); _cimg_mp_opcode0(mp_xM);
+              if (label1pos[10]!=~0U) _cimg_mp_return(label1pos[10]); _cimg_mp_opcode0(mp_xM);
             }
             if (*ss=='y') { // yM
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[10]!=~0U) _cimg_mp_return(label1pos[10]); _cimg_mp_opcode0(mp_yM);
+              if (label1pos[11]!=~0U) _cimg_mp_return(label1pos[11]); _cimg_mp_opcode0(mp_yM);
             }
             if (*ss=='z') { // zM
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[11]!=~0U) _cimg_mp_return(label1pos[11]); _cimg_mp_opcode0(mp_zM);
+              if (label1pos[12]!=~0U) _cimg_mp_return(label1pos[12]); _cimg_mp_opcode0(mp_zM);
             }
             if (*ss=='c') { // cM
               if (!reference_stats) reference.get_stats().move_to(reference_stats);
-              if (label1pos[12]!=~0U) _cimg_mp_return(label1pos[12]); _cimg_mp_opcode0(mp_cM);
+              if (label1pos[13]!=~0U) _cimg_mp_return(label1pos[13]); _cimg_mp_opcode0(mp_cM);
             }
           }
         }
@@ -13941,16 +13947,17 @@ namespace cimg_library_suffixed {
                 else if (c2=='M') variable_name.fill(2,0); // iM
                 else if (c2=='a') variable_name.fill(3,0); // ia
                 else if (c2=='v') variable_name.fill(4,0); // iv
+                else if (c2=='c') variable_name.fill(5,0); // ic
               } else if (c2=='m') {
-                if (c1=='x') variable_name.fill(5,0); // xm
-                else if (c1=='y') variable_name.fill(6,0); // ym
-                else if (c1=='z') variable_name.fill(7,0); // zm
-                else if (c1=='c') variable_name.fill(8,0); // cm
+                if (c1=='x') variable_name.fill(6,0); // xm
+                else if (c1=='y') variable_name.fill(7,0); // ym
+                else if (c1=='z') variable_name.fill(8,0); // zm
+                else if (c1=='c') variable_name.fill(9,0); // cm
               } else if (c2=='M') {
-                if (c1=='x') variable_name.fill(9,0); // xM
-                else if (c1=='y') variable_name.fill(10,0); // yM
-                else if (c1=='z') variable_name.fill(11,0); // zM
-                else if (c1=='c') variable_name.fill(12,0); // cM
+                if (c1=='x') variable_name.fill(10,0); // xM
+                else if (c1=='y') variable_name.fill(11,0); // yM
+                else if (c1=='z') variable_name.fill(12,0); // zM
+                else if (c1=='c') variable_name.fill(13,0); // cM
               }
             }
             if (variable_name[1]) { // Multi-char variable.
@@ -14549,6 +14556,9 @@ namespace cimg_library_suffixed {
       }
       static double mp_iv(_cimg_math_parser& mp) {
         return mp.reference_stats?mp.reference_stats[3]:0;
+      }
+      static double mp_ic(_cimg_math_parser& mp) {
+        return mp.is_median_value?mp.median_value:0;
       }
       static double mp_xm(_cimg_math_parser& mp) {
         return mp.reference_stats?mp.reference_stats[4]:0;
@@ -18182,12 +18192,15 @@ namespace cimg_library_suffixed {
     /**
        \param expression C-string describing a math formula, or a list of values.
        \param repeat_values In case a list of values is provided, tells if this list must be repeated for the filling.
+       \param allow_formula tells if a formula is allowed or only a list of values.
     **/
-    CImg<T>& fill(const char *const expression, const bool repeat_values) {
+    CImg<T>& fill(const char *const expression, const bool repeat_values, const bool allow_formula=true) {
       if (is_empty() || !expression || !*expression) return *this;
       const unsigned int omode = cimg::exception_mode();
       cimg::exception_mode(0);
-      try { // Try to fill values according to a formula.
+      CImg<charT> is_error;
+
+      if (allow_formula) try { // Try to fill values according to a formula.
         const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(), &base = _base?_base:*this;
         _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"fill");
         T *ptrd = *expression=='<'?end()-1:_data;
@@ -18209,8 +18222,10 @@ namespace cimg_library_suffixed {
 #endif
             cimg_forXYZC(*this,x,y,z,c) *(ptrd++) = (T)mp(x,y,z,c);
         }
-      } catch (CImgException& e) { // If failed, try to recognize a list of values.
+      } catch (CImgException& e) { CImg<charT>::string(e._message).move_to(is_error); }
 
+      // If failed, try to recognize a list of values.
+      if (!allow_formula || is_error) {
         char *const item = new char[16384], sep = 0;
         const char *nexpression = expression;
         unsigned long nb = 0;
@@ -18219,7 +18234,7 @@ namespace cimg_library_suffixed {
         *item = 0;
         for (double val = 0; *nexpression && nb<siz; ++nb) {
           sep = 0;
-          const int err = std::sscanf(nexpression,"%16383[ \n\t0-9.e+-]%c",item,&sep);
+          const int err = std::sscanf(nexpression,"%16383[ \n\t0-9.eEinfa+-]%c",item,&sep);
           if (err>0 && std::sscanf(item,"%lf",&val)==1 && (sep==',' || sep==';' || err==1)) {
             nexpression+=std::strlen(item) + (err>1?1:0);
             *(ptrd++) = (T)val;
@@ -18227,8 +18242,12 @@ namespace cimg_library_suffixed {
         }
         delete[] item;
         cimg::exception_mode(omode);
-        if (nb<siz && (sep || *nexpression))
-          throw CImgArgumentException(e.what(),pixel_type(),expression);
+        if (nb<siz && (sep || *nexpression)) {
+          if (is_error) throw CImgArgumentException("%s",is_error._data);
+          else throw CImgArgumentException(_cimg_instance
+                                           "fill(): Invalid sequence of filling values '%s'.",
+                                           cimg_instance,expression);
+        }
         if (repeat_values && nb && nb<siz)
           for (T *ptrs = _data, *const ptre = _data + siz; ptrd<ptre; ++ptrs) *(ptrd++) = *ptrs;
       }
@@ -18237,8 +18256,8 @@ namespace cimg_library_suffixed {
     }
 
     //! Fill sequentially pixel values according to a given expression \newinstance.
-    CImg<T> get_fill(const char *const values, const bool repeat_values) const {
-      return (+*this).fill(values,repeat_values);
+    CImg<T> get_fill(const char *const values, const bool repeat_values, const bool allow_formula=true) const {
+      return (+*this).fill(values,repeat_values,allow_formula);
     }
 
     //! Fill sequentially pixel values according to the values found in another image.
@@ -38089,7 +38108,7 @@ namespace cimg_library_suffixed {
       int err = std::fscanf(nfile,"%255[^\n]",line._data);
       unsigned int dx = 0, dy = 1, dz = 1, dc = 1;
       std::sscanf(line,"%u%*c%u%*c%u%*c%u",&dx,&dy,&dz,&dc);
-      err = std::fscanf(nfile,"%*[^0-9.eE+-]");
+      err = std::fscanf(nfile,"%*[^0-9.eEinfa+-]");
       if (!dx || !dy || !dz || !dc) {
         if (!file) cimg::fclose(nfile);
         throw CImgIOException(_cimg_instance
@@ -38104,7 +38123,7 @@ namespace cimg_library_suffixed {
       double val;
       T *ptr = _data;
       for (err = 1, off = 0; off<siz && err==1; ++off) {
-        err = std::fscanf(nfile,"%lf%*[^0-9.eE+-]",&val);
+        err = std::fscanf(nfile,"%lf%*[^0-9.eEinfa+-]",&val);
         *(ptr++) = (T)val;
       }
       if (err!=1)
@@ -38152,7 +38171,7 @@ namespace cimg_library_suffixed {
       int err = 0;
       double val;
       assign(256,256);
-      while ((err = std::fscanf(nfile,"%lf%255[^0-9.+-]",&val,delimiter._data))>0) {
+      while ((err = std::fscanf(nfile,"%lf%255[^0-9eEinfa.+-]",&val,delimiter._data))>0) {
         if (err>0) (*this)(cdx++,dy) = (T)val;
         if (cdx>=_width) resize(3*_width/2,_height,1,1,0);
         char c = 0;

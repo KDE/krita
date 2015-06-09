@@ -227,6 +227,8 @@ void KisToolBrush::resetCursorStyle()
     } else {
         KisToolFreehand::resetCursorStyle();
     }
+
+    overrideCursorIfNotEditable();
 }
 
 // stabilizer brush settings

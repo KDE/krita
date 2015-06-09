@@ -31,7 +31,6 @@
 
 #include <kdatetime.h>
 
-#include <QMap>
 #include <QMetaType>
 
 

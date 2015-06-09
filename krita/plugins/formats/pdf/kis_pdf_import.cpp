@@ -140,6 +140,8 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
+    image->setResolution(wdg->intResolution->value() / 72.0, wdg->intResolution->value() / 72.0);
+
     // create a layer
     QList<int> pages = wdg->pages();
     QPointer<KoUpdater> loadUpdater =  m_chain->outputDocument()->progressUpdater()->startSubtask(1, "load");
@@ -152,7 +154,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
         Poppler::Page* page = pdoc->page(*it);
 
-        QImage img = page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), 0, 0, width, height);
+        QImage img = page->renderToImage(wdg->intResolution->value(), wdg->intResolution->value(), 0, 0, width, height);
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
 
 // XXX: this rendering in tiles is a good idea, but: a) it is slower b) it is buggy -- see bug https://bugs.kde.org/show_bug.cgi?id=300554

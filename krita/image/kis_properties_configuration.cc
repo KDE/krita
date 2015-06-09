@@ -122,7 +122,7 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
             type = "string";
         } else if(v.type() == QVariant::ByteArray ) {
-            text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitary Data
+            text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitrary Data
             type = "bytearray";
         } else {
             text = doc.createTextNode(v.toString());

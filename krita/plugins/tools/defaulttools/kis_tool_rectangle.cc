@@ -51,6 +51,12 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
+void KisToolRectangle::resetCursorStyle()
+{
+    KisToolRectangleBase::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
+}
 
 void KisToolRectangle::finishRect(const QRectF &rect)
 {

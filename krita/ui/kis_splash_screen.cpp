@@ -39,11 +39,19 @@
 
 #include <kis_factory2.h>
 
-KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, QWidget *parent, Qt::WindowFlags f)
+KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
+
     setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
+
+
+    QString color = "#FFFFFF";
+    if (themed && qApp->palette().background().color().value() >100) {
+        color = "#000000";
+    }
+
 
     lblSplash->setPixmap(pixmap);
     bnClose->hide();
@@ -55,56 +63,60 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
-    lblLinks->setFixedWidth(pixmap.width());
-    lblLinks->setWordWrap(true);
     lblLinks->setTextFormat(Qt::RichText);
     lblLinks->setText(i18n("<html>"
                            "<head/>"
                            "<body>"
+                           "<p align=\"center\"><span style=\" color:%1;\"><b>Links</b></span></p>"
 
-                           "<p align=\"center\"><b><a href=\"https://krita.org/kickstarter/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Support Krita's Kickstarter!</span></a></b></p><p/>"
+                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 
-                           "<p>During May, Krita is running a kickstarter campaign. We're crowdfunding performance improvements, animation support and a host of exciting stretch goals. Help us make Krita even better!</p>"
+                           "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                           "<p><a href=\"http://userbase.kde.org/Krita\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
+                           "<p><a href=\"http://krita.org\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
+                           "<p><a href=\"http://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
 
+                           "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+
+                           "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
                            "</body>"
-                           "</html>"));
+                           "</html>").arg(color));
 
     lblVersion->setText(i18n("Version: %1", version));
+    lblVersion->setStyleSheet("color:" + color);
 
-//    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
-//    int i = 1;
+    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
+    int i = 1;
 
-//    QString recent = i18n("<html>"
-//                          "<head/>"
-//                          "<body>"
-//                          "<p align=\"center\"><b>Recent Files</b></p>");
+    QString recent = i18n("<html>"
+                          "<head/>"
+                          "<body>"
+                          "<p align=\"center\"><b><span style=\" color:%1;\">Recent Files</span></b></p>").arg(color);
 
-//    QString path;
-//    QStringList recentfiles;
+    QString path;
+    QStringList recentfiles;
 
-//    do {
-//        path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
-//        if (!path.isEmpty()) {
-//            QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
-//            KUrl url(path);
-//            if (name.isEmpty())
-//                name = url.fileName();
+    do {
+        path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
+        if (!path.isEmpty()) {
+            QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
+            KUrl url(path);
+            if (name.isEmpty())
+                name = url.fileName();
 
-//            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-//                recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:#FFFFFF;\">%2</span></a></p>").arg(path).arg(name));
-//            }
-//        }
+            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
+                recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:%3;\">%2</span></a></p>").arg(path).arg(name).arg(color));
+            }
+        }
 
-//        i++;
-//    } while (!path.isEmpty() || i <= 8);
+        i++;
+    } while (!path.isEmpty() || i <= 8);
 
-//    recent += recentfiles.join("\n");
-//    recent += "</body>"
-//            "</html>";
-//    lblRecent->setText(recent);
-//    lblRecent->hide();
-
-//    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
+    recent += recentfiles.join("\n");
+    recent += "</body>"
+            "</html>";
+    lblRecent->setText(recent);
+    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
 }
 
 

@@ -31,6 +31,7 @@
 
 #include <Component.h>
 #include "Command.h"
+#include "Category.h"
 
 KisGmicBlacklister::KisGmicBlacklister(const QString& filePath):m_fileName(filePath)
 {
@@ -123,9 +124,9 @@ QString KisGmicBlacklister::toPlainText(const QString& htmlText)
     return doc.toPlainText();
 }
 
-Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName)
+Command* KisGmicBlacklister::findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName)
 {
-    Component * result = 0;
+    Command * result = 0;
 
     QQueue<const Component *> q;
     q.enqueue(rootNode);
@@ -140,7 +141,8 @@ Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QStri
                 // check category
                 if (toPlainText(c->parent()->name()) == filterCategory)
                 {
-                    result = c;
+                    result = static_cast<Command *>(c);
+                    break;
                 }
             }
             else
@@ -157,6 +159,38 @@ Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QStri
         }
     }
     return result;
+}
+
+Component* KisGmicBlacklister::findFilterByPath(const Component* rootNode, const Component * path)
+{
+    const Component * pathIter = path;
+    const Component * rootIter = rootNode;
+
+    while ((pathIter->childCount() > 0) && (rootIter->childCount() > 0))
+    {
+        const Category * rootCategory = static_cast<const Category *>(rootIter);
+        int indexOfItem = rootCategory->indexOf<Category>(pathIter->name());
+        if ((indexOfItem > -1) && (indexOfItem <  rootIter->childCount()))
+        {
+            rootIter = rootIter->child(indexOfItem);
+            Q_ASSERT(pathIter->childCount() == 1);
+            pathIter = pathIter->child(0);
+            if (pathIter->childCount() == 0 && rootIter->childCount() > 0)
+            {
+                int index = static_cast<const Category *>(rootIter)->indexOf<Command>(pathIter->name());
+                if (index != -1)
+                {
+                    return rootIter->child(index);
+                }
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return 0;
 }
 
 QList<Command*> KisGmicBlacklister::findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType)
@@ -179,6 +213,27 @@ QList<Command*> KisGmicBlacklister::findFilterByParamName(const Component* rootN
     return commands;
 }
 
+QVector<Command*> KisGmicBlacklister::filtersByName(const Component* rootNode, const QString& filterName)
+{
+    QVector<Command *> commands;
+    ComponentIterator it(rootNode);
+    while (it.hasNext())
+    {
+        Component * component = const_cast<Component *>( it.next() );
+        if (component->childCount() == 0)
+        {
+            Command * cmd = static_cast<Command *>(component);
+            if (toPlainText(cmd->name()) == filterName)
+            {
+                commands.append(cmd);
+            }
+        }
+    }
+
+    return commands;
+}
+
+
 QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
 {
     ComponentIterator it(rootNode);
@@ -197,7 +252,7 @@ QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
             Component * parent = component->parent();
             while (parent != 0)
             {
-                pathStack.push( toPlainText(parent->name()) );
+                pathStack.push( /*toPlainText*/(parent->name()) );
                 parent = parent->parent();
             }
 
@@ -212,7 +267,7 @@ QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
             {
                 // add categories if needed
                 bool alreadyExists = false;
-                QString categoryName = toPlainText(categoryPath.at(i));
+                QString categoryName = /*toPlainText*/(categoryPath.at(i));
                 QDomNodeList elems = parentElem.elementsByTagName("category");
                 for (int i = 0; i < elems.size(); i++)
                 {
@@ -242,7 +297,7 @@ QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
 
             QString filterCommand = settings.gmicCommand();
             filterCommand = filterCommand.replace(QDir::homePath(), QLatin1String("[[:home:]]"));
-            QString filterName = toPlainText(component->name());
+            QString filterName = /*toPlainText*/(component->name());
 
             QDomElement filterElem = doc.createElement("filter");
             filterElem.setAttribute("name", filterName);

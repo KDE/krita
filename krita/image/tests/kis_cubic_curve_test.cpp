@@ -139,6 +139,23 @@ void KisCubicCurveTest::testValue()
     }
 }
 
+void KisCubicCurveTest::testNull()
+{
+    KisCubicCurve cc;
+    QVERIFY(cc.isNull());
+
+    cc.addPoint(QPointF(0.2, 0.3));
+    QVERIFY(!cc.isNull());
+
+    QList<QPointF> points;
+    points << QPointF();
+    points << QPointF(0.2,0.2);
+    points << QPointF(1.0,1.0);
+
+    cc.setPoints(points);
+    QVERIFY(cc.isNull());
+}
+
 
 void KisCubicCurveTest::testTransfer()
 {

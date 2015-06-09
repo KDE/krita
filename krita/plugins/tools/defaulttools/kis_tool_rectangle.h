@@ -46,6 +46,9 @@ public:
 
 protected:
     virtual void finishRect(const QRectF& rect);
+
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 };
 
 class KisToolRectangleFactory : public KoToolFactoryBase

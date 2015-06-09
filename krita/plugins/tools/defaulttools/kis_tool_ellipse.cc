@@ -48,6 +48,13 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
+void KisToolEllipse::resetCursorStyle()
+{
+    KisToolEllipseBase::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
+}
+
 void KisToolEllipse::finishRect(const QRectF& rect)
 {
     if (rect.isEmpty())

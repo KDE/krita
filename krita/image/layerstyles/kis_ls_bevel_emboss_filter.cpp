@@ -47,9 +47,6 @@
 
 #include "kis_ls_utils.h"
 
-#include "kis_convolution_kernel.h"
-#include <kis_convolution_painter.h>
-
 #include "gimp_bump_map.h"
 #include "kis_transaction.h"
 

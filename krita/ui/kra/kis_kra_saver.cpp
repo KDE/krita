@@ -65,8 +65,9 @@ KisKraSaver::KisKraSaver(KisDocument* document)
     m_d->doc = document;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
-    if (m_d->imageName.isEmpty())
-        m_d->imageName = "Unnamed";
+    if (m_d->imageName.isEmpty()) {
+        m_d->imageName = i18n("Unnamed");
+    }
 }
 
 KisKraSaver::~KisKraSaver()
@@ -250,7 +251,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
-    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_spline = 0;
+    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_concentricellipse = 0, count_fisheyepoint = 0, count_spline = 0;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
@@ -278,6 +279,14 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
             else if (assist->id() == "parallel ruler"){
                 assist->saveXmlList(doc, assistantsElement, count_parallelruler);
                 count_parallelruler++;
+            }
+            else if (assist->id() == "concentric ellipse"){
+                assist->saveXmlList(doc, assistantsElement, count_concentricellipse);
+                count_concentricellipse++;
+            }
+            else if (assist->id() == "fisheye-point"){
+                assist->saveXmlList(doc, assistantsElement, count_fisheyepoint);
+                count_fisheyepoint++;
             }
             else if (assist->id() == "ruler"){
                 assist->saveXmlList(doc, assistantsElement, count_ruler);

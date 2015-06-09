@@ -717,7 +717,6 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
     KisPart::instance()->addDocument(newdoc);
     updateReloadFileAction(newdoc);
 
-
     KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
     if (!file.isWritable()) {
         setReadWrite(false);

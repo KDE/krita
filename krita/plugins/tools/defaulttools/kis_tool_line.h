@@ -63,6 +63,9 @@ public:
 
     virtual QString quickHelp() const;
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 private Q_SLOTS:
     void updateStroke();
     void setUseSensors(bool value);

@@ -51,6 +51,13 @@ KisToolMove::~KisToolMove()
     endStroke();
 }
 
+void KisToolMove::resetCursorStyle()
+{
+    KisTool::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
+}
+
 void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);

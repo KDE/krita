@@ -69,6 +69,9 @@ public Q_SLOTS:
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 private Q_SLOTS:
 
     void areaDone(const QRect & rc) {

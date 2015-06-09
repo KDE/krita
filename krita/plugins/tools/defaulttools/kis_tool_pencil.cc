@@ -31,6 +31,12 @@ KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
 {
 }
 
+void KisToolPencil::resetCursorStyle()
+{
+    DelegatedPencilTool::resetCursorStyle();
+    overrideCursorIfNotEditable();
+}
+
 void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
     if (!nodeEditable()) return;

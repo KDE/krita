@@ -111,8 +111,10 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     , d(new Private)
 {
     d->cursor = cursor;
+    m_isActive = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
+    connect(this, SIGNAL(isActiveChanged()), SLOT(resetCursorStyle()));
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
@@ -192,6 +194,9 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
     connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
+
+    m_isActive = true;
+    emit isActiveChanged();
 }
 
 void KisTool::deactivate()
@@ -208,6 +213,9 @@ void KisTool::deactivate()
         qWarning() << "WARNING: KisTool::deactivate() failed to disconnect"
                    << "some signal connections. Your actions might be executed twice!";
     }
+
+    m_isActive = false;
+    emit isActiveChanged();
 }
 
 void KisTool::requestUndoDuringStroke()
@@ -249,9 +257,12 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
+        break;
+    case(KisCanvasResourceProvider::CurrentKritaNode):
+        resetCursorStyle();
+        break;
     default:
-        ;
-        // Do nothing
+        break; // Do nothing
     };
 }
 
@@ -452,10 +463,12 @@ KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
 
 void KisTool::activatePrimaryAction()
 {
+    resetCursorStyle();
 }
 
 void KisTool::deactivatePrimaryAction()
 {
+    resetCursorStyle();
 }
 
 void KisTool::beginPrimaryAction(KoPointerEvent *event)
@@ -685,10 +698,27 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
 void KisTool::resetCursorStyle()
 {
-    KisConfig cfg;
     useCursor(d->cursor);
 }
 
+bool KisTool::overrideCursorIfNotEditable()
+{
+    // override cursor for canvas iff this tool is active
+    // and we can't paint on the active layer
+    if (isActive()) {
+        KisNodeSP node = currentNode();
+        if (node && !node->isEditable()) {
+            canvas()->setCursor(Qt::ForbiddenCursor);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KisTool::isActive() const
+{
+    return m_isActive;
+}
 
 void KisTool::slotToggleFgBg()
 {

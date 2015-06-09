@@ -142,7 +142,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 {
     KisTool::canvasResourceChanged(key, v);
 
-    switch(key){
+    switch(key) {
     case(KisCanvasResourceProvider::Opacity):
         setOpacity(v.toDouble());
         break;
@@ -593,11 +593,13 @@ void KisToolPaint::activatePrimaryAction()
 {
     pickColorWasOverridden();
     setOutlineEnabled(true);
+    KisTool::activatePrimaryAction();
 }
 
 void KisToolPaint::deactivatePrimaryAction()
 {
     setOutlineEnabled(false);
+    KisTool::deactivatePrimaryAction();
 }
 
 bool KisToolPaint::isOutlineEnabled() const

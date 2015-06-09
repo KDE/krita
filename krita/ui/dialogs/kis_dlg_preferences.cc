@@ -213,7 +213,13 @@ void GeneralTab::getBackgroundImage()
     dialog.setCaption(i18n("Select a Background Image"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setImageFilters();
+
     QString fn = dialog.url();
+    // dialog box was canceled or somehow no file was selected
+    if (fn.isEmpty()) {
+        return;
+    }
+
     QImage image(fn);
     if (image.isNull()) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("%1 is not a valid image file!", fn));
@@ -221,7 +227,6 @@ void GeneralTab::getBackgroundImage()
     else {
         m_backgroundimage->setText(fn);
     }
-
 }
 
 void GeneralTab::clearBackgroundImage()

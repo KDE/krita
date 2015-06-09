@@ -18,6 +18,7 @@
 */
 
 #include "queryschema.h"
+#include "queryschema_p.h"
 #include "driver.h"
 #include "connection.h"
 #include "expression.h"
@@ -26,8 +27,6 @@
 #include "lookupfieldschema.h"
 
 #include <assert.h>
-
-#include <QBitArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -56,335 +55,6 @@ QString QueryColumnInfo::debugString() const
             : (QLatin1String(" AS ") + QString(alias)))
             + (visible ? QString() : QLatin1String(" [INVISIBLE]"));
     return res;
-}
-
-//=======================================
-namespace KexiDB
-{
-//! @internal
-class QuerySchemaPrivate
-{
-public:
-    explicit QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy = 0)
-            : query(q)
-            , masterTable(0)
-            , fakeRowIDField(0)
-            , fakeRowIDCol(0)
-            , maxIndexWithAlias(-1)
-            , visibility(64)
-            , fieldsExpanded(0)
-            , internalFields(0)
-            , fieldsExpandedWithInternalAndRowID(0)
-            , fieldsExpandedWithInternal(0)
-            , orderByColumnList(0)
-            , autoincFields(0)
-            , columnsOrder(0)
-            , columnsOrderWithoutAsterisks(0)
-            , columnsOrderExpanded(0)
-            , pkeyFieldsOrder(0)
-            , pkeyFieldsCount(0)
-            , tablesBoundToColumns(64, -1) // will be resized if needed
-            , whereExpr(0)
-            , ownedVisibleColumns(0)
-            , regenerateExprAliases(false) {
-//Qt 4   columnAliases.setAutoDelete(true);
-//Qt 4   tableAliases.setAutoDelete(true);
-//Qt 4   asterisks.setAutoDelete(true);
-//Qt 4   relations.setAutoDelete(true);
-//Qt 4   tablePositionsForAliases.setAutoDelete(true);
-//Qt 4   columnPositionsForAliases.setAutoDelete(true);
-        visibility.fill(false);
-        if (copy) {
-            // deep copy
-            *this = *copy;
-            // <clear, so computeFieldsExpanded() will re-create it>
-            fieldsExpanded = 0;
-            internalFields = 0;
-            columnsOrder = 0;
-            columnsOrderWithoutAsterisks = 0;
-            columnsOrderExpanded = 0;
-            orderByColumnList = 0;
-            autoincFields = 0;
-            autoIncrementSQLFieldsList.clear();
-            columnInfosByNameExpanded.clear();
-            columnInfosByName.clear();
-            ownedVisibleColumns = 0;
-            fieldsExpandedWithInternalAndRowID = 0;
-            fieldsExpandedWithInternal = 0;
-            pkeyFieldsOrder = 0;
-            fakeRowIDCol = 0;
-            fakeRowIDField = 0;
-            ownedVisibleColumns = 0;
-            // </clear, so computeFieldsExpanded() will re-create it>
-            if (copy->whereExpr) {
-                whereExpr = copy->whereExpr->copy();
-            }
-            // "*this = *copy" causes copying pointers; pull of them without destroying,
-            // will be deep-copied in the QuerySchema ctor.
-            asterisks.setAutoDelete(false);
-            asterisks.clear();
-            asterisks.setAutoDelete(true);
-        }
-        else {
-            orderByColumnList = new OrderByColumnList;
-        }
-    }
-    ~QuerySchemaPrivate() {
-        delete orderByColumnList;
-        delete autoincFields;
-        delete columnsOrder;
-        delete columnsOrderWithoutAsterisks;
-        delete columnsOrderExpanded;
-        delete pkeyFieldsOrder;
-        delete whereExpr;
-        delete fakeRowIDCol;
-        delete fakeRowIDField;
-        delete ownedVisibleColumns;
-        if (fieldsExpanded)
-            qDeleteAll(*fieldsExpanded);
-        delete fieldsExpanded;
-        if (internalFields) {
-            qDeleteAll(*internalFields);
-            delete internalFields;
-        }
-        delete fieldsExpandedWithInternalAndRowID;
-        delete fieldsExpandedWithInternal;
-    }
-
-    void clear() {
-        columnAliases.clear();
-        tableAliases.clear();
-        asterisks.clear();
-        relations.clear();
-        masterTable = 0;
-        tables.clear();
-        clearCachedData();
-        delete pkeyFieldsOrder;
-        pkeyFieldsOrder = 0;
-        visibility.fill(false);
-        tablesBoundToColumns = QVector<int>(64, -1); // will be resized if needed
-        tablePositionsForAliases.clear();
-        columnPositionsForAliases.clear();
-    }
-
-    void clearCachedData() {
-        if (orderByColumnList) {
-            orderByColumnList->clear();
-        }
-        if (fieldsExpanded) {
-            delete columnsOrder;
-            columnsOrder = 0;
-            delete columnsOrderWithoutAsterisks;
-            columnsOrderWithoutAsterisks = 0;
-            delete columnsOrderExpanded;
-            columnsOrderExpanded = 0;
-            delete autoincFields;
-            autoincFields = 0;
-            autoIncrementSQLFieldsList.clear();
-            columnInfosByNameExpanded.clear();
-            columnInfosByName.clear();
-            delete ownedVisibleColumns;
-            ownedVisibleColumns = 0;
-            qDeleteAll(*fieldsExpanded);
-            delete fieldsExpanded;
-            fieldsExpanded = 0;
-            if (internalFields) {
-                qDeleteAll(*internalFields);
-                delete internalFields;
-                internalFields = 0;
-            }
-        }
-    }
-
-    inline void setColumnAlias(uint position, const QByteArray& alias) {
-        if (alias.isEmpty()) {
-            columnAliases.remove(position);
-            maxIndexWithAlias = -1;
-        } else {
-            setColumnAliasInternal(position, alias);
-        }
-    }
-
-    inline void setTableAlias(uint position, const QByteArray& alias) {
-        tableAliases.insert(position, alias.toLower());
-        tablePositionsForAliases.insert(alias.toLower(), position);
-    }
-
-    inline bool hasColumnAliases() {
-        tryRegenerateExprAliases();
-        return !columnAliases.isEmpty();
-    }
-
-    inline QByteArray columnAlias(uint position) {
-        tryRegenerateExprAliases();
-        return columnAliases.value(position);
-    }
-
-    inline bool hasColumnAlias(uint position) {
-        tryRegenerateExprAliases();
-        return columnAliases.contains(position);
-    }
-
-    inline void removeTablePositionForAlias(const QByteArray& alias) {
-        tablePositionsForAliases.remove(alias.toLower());
-    }
-
-    inline int tablePositionForAlias(const QByteArray& alias) const {
-        return tablePositionsForAliases.value(alias.toLower(), -1);
-    }
-
-    inline int columnPositionForAlias(const QByteArray& alias) const {
-        return columnPositionsForAliases.value(alias.toLower(), -1);
-    }
-
-    QuerySchema *query;
-
-    /*! Master table of the query. (may be NULL)
-      Any data modifications can be performed if we know master table.
-      If null, query's records cannot be modified. */
-    TableSchema *masterTable;
-
-    /*! List of tables used in this query */
-    TableSchema::List tables;
-
-    Field *fakeRowIDField; //! used to mark a place for ROWID
-    QueryColumnInfo *fakeRowIDCol; //! used to mark a place for ROWID
-
-protected:
-    void tryRegenerateExprAliases() {
-        if (!regenerateExprAliases)
-            return;
-        //regenerate missing aliases for experessions
-        uint colNum = 0; //used to generate a name
-        QByteArray columnAlias;
-        uint p = -1;
-        foreach(Field* f, *query->fields()) {
-            p++;
-            if (f->isExpression() && columnAliases.value(p).isEmpty()) {
-                //missing
-                do { //find 1st unused
-                    colNum++;
-                    columnAlias = (i18nc("short for 'expression' word, e.g. 'expr' (only latin letters, please, no '.')", "expr")
-                                   .toLatin1() + QByteArray::number(colNum));
-                } while (-1 != tablePositionForAlias(columnAlias));
-
-                setColumnAliasInternal(p, columnAlias);
-            }
-        }
-        regenerateExprAliases = false;
-    }
-
-    void setColumnAliasInternal(uint position, const QByteArray& alias) {
-        columnAliases.insert(position, alias.toLower());
-        columnPositionsForAliases.insert(alias.toLower(), position);
-        maxIndexWithAlias = qMax(maxIndexWithAlias, (int)position);
-    }
-
-    /*! Used to mapping columns to its aliases for this query */
-    QHash<int, QByteArray> columnAliases;
-
-    /*! Collects table positions for aliases: used in tablePositionForAlias(). */
-    QHash<QByteArray, int> tablePositionsForAliases;
-
-    /*! Collects column positions for aliases: used in columnPositionForAlias(). */
-    QHash<QByteArray, int> columnPositionsForAliases;
-
-public:
-    /*! Used to mapping tables to its aliases for this query */
-    QHash<int, QByteArray> tableAliases;
-
-    /*! Helper used with aliases */
-    int maxIndexWithAlias;
-
-    /*! Helper used with tableAliases */
-    int maxIndexWithTableAlias;
-
-    /*! Used to store visibility flag for every field */
-    QBitArray visibility;
-
-    /*! List of asterisks defined for this query  */
-    Field::List asterisks;
-
-    /*! Temporary field vector for using in fieldsExpanded() */
-    QueryColumnInfo::Vector *fieldsExpanded;
-
-    /*! Temporary field vector containing internal fields used for lookup columns. */
-    QueryColumnInfo::Vector *internalFields;
-
-    /*! Temporary, used to cache sum of expanded fields and internal fields (+rowid) used for lookup columns.
-     Contains not auto-deleted items.*/
-    QueryColumnInfo::Vector *fieldsExpandedWithInternalAndRowID;
-
-    /*! Temporary, used to cache sum of expanded fields and internal fields used for lookup columns.
-     Contains not auto-deleted items.*/
-    QueryColumnInfo::Vector *fieldsExpandedWithInternal;
-
-    /*! A list of fields for ORDER BY section. @see QuerySchema::orderByColumnList(). */
-    OrderByColumnList* orderByColumnList;
-
-    /*! A cache for autoIncrementFields(). */
-    QueryColumnInfo::List *autoincFields;
-
-    /*! A cache for autoIncrementSQLFieldsList(). */
-    QString autoIncrementSQLFieldsList;
-    QPointer<Driver> lastUsedDriverForAutoIncrementSQLFieldsList;
-
-    /*! A hash for fast lookup of query columns' order (unexpanded version). */
-    QHash<QueryColumnInfo*, int> *columnsOrder;
-
-    /*! A hash for fast lookup of query columns' order (unexpanded version without asterisks). */
-    QHash<QueryColumnInfo*, int> *columnsOrderWithoutAsterisks;
-
-    /*! A hash for fast lookup of query columns' order.
-     This is exactly opposite information compared to vector returned
-     by fieldsExpanded() */
-    QHash<QueryColumnInfo*, int> *columnsOrderExpanded;
-
-//  QValueList<bool> detailedVisibility;
-
-    /*! order of PKEY fields (e.g. for updateRow() ) */
-    QVector<int> *pkeyFieldsOrder;
-
-    /*! number of PKEY fields within the query */
-    uint pkeyFieldsCount;
-
-    /*! forced (predefined) statement */
-    QString statement;
-
-    /*! Relationships defined for this query. */
-    Relationship::List relations;
-
-    /*! Information about columns bound to tables.
-     Used if table is used in FROM section more than once
-     (using table aliases).
-
-     This list is updated by insertField(uint position, Field *field,
-     int bindToTable, bool visible), using bindToTable parameter.
-
-     Example: for this statement:
-     SELECT t1.a, othertable.x, t2.b FROM table t1, table t2, othertable;
-     tablesBoundToColumns list looks like this:
-     [ 0, -1, 1 ]
-     - first column is bound to table 0 "t1"
-     - second coulmn is not specially bound (othertable.x isn't ambiguous)
-     - third column is bound to table 1 "t2"
-    */
-    QVector<int> tablesBoundToColumns;
-
-    /*! WHERE expression */
-    BaseExpr *whereExpr;
-
-    QHash<QString, QueryColumnInfo*> columnInfosByNameExpanded;
-
-    QHash<QString, QueryColumnInfo*> columnInfosByName; //!< Same as columnInfosByNameExpanded but asterisks are skipped
-
-    //! field schemas created for multiple joined columns like a||' '||b||' '||c
-    Field::List *ownedVisibleColumns;
-
-    /*! Set by insertField(): true, if aliases for expression columns should
-     be generated on next columnAlias() call. */
-    bool regenerateExprAliases : 1;
-};
 }
 
 //=======================================
@@ -623,12 +293,22 @@ QuerySchema::QuerySchema()
     init();
 }
 
+QuerySchema::QuerySchema(Connection *conn)
+        : FieldList(false)//fields are not owned by QuerySchema object
+        , SchemaData(KexiDB::QueryObjectType)
+        , d(new QuerySchemaPrivate(this))
+{
+    init();
+    d->conn = conn;
+}
+
 QuerySchema::QuerySchema(TableSchema& tableSchema)
         : FieldList(false)
         , SchemaData(KexiDB::QueryObjectType)
         , d(new QuerySchemaPrivate(this))
 {
     d->masterTable = &tableSchema;
+    d->conn = tableSchema.connection();
     init();
     /*if (!d->masterTable) {
       KexiDBWarn << "!d->masterTable";
@@ -845,8 +525,12 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 
 Connection* QuerySchema::connection() const
 {
-    TableSchema *mt = masterTable();
-    return mt ? mt->connection() : 0;
+    if (d->conn)
+        return d->conn;
+    if (!d->tables.isEmpty()) {
+        return d->tables.first()->connection();
+    }
+    return 0;
 }
 
 QString QuerySchema::debugString() const
@@ -1347,6 +1031,7 @@ void QuerySchema::computeFieldsExpanded()
             // "LEFT OUTER JOIN lookupTable ON thisTable.thisField=lookupTable.boundField"
             LookupFieldSchema::RowSource& rowSource = lookupFieldSchema->rowSource();
             if (rowSource.type() == LookupFieldSchema::RowSource::Table) {
+                rowSource.debug();
                 TableSchema *lookupTable = connection()->tableSchema(rowSource.name());
                 FieldList* visibleColumns = 0;
                 Field *boundField = 0;

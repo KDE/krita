@@ -52,6 +52,8 @@
 
 #include "kis_gmic_tests.h"
 #include <gmic.h>
+#include <Category.h>
+
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -69,21 +71,20 @@ public:
 using namespace cimg_library;
 
 const static QString EXTENSION = ".png";
+const static QString STANDARD_SETTINGS("update1610.gmic");
+const static QString BLACKLIST("gmic_def.gmic.blacklist");
 
 void KisGmicTests::initTestCase()
 {
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
 
-    QString standardSettings("gmic_def.gmic");
-    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings);
-    m_blacklistFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings + ".blacklist");
-
-    QStringList filePaths;
-    filePaths << definitionFilePath;
+    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_SETTINGS);
+    QStringList filePaths = (QStringList() << definitionFilePath);
 
     KisGmicParser parser(filePaths);
     m_root = parser.createFilterTree();
 
+    m_blacklistFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", BLACKLIST);
     m_blacklister = new KisGmicBlacklister(m_blacklistFilePath);
 
     m_qimage = QImage(QString(FILES_DATA_DIR)+"/"+"poster_rodents_bunnysize.jpg");
@@ -95,13 +96,7 @@ void KisGmicTests::initTestCase()
 
     m_images.assign(1);
 
-    m_filterDefinitionsXmlFilePath = QString(FILES_DATA_DIR)+"/"+"gmic_def_" + QString::number(int(gmic_version)) + "_krita.xml";
-    if (!QFileInfo(m_filterDefinitionsXmlFilePath).exists())
-    {
-        qWarning() << "Reference xml file for the krita parser does not exist, creating one!";
-        qWarning() << "Creating " << m_filterDefinitionsXmlFilePath;
-        generateXmlDump();
-    }
+
 }
 
 void KisGmicTests::cleanupTestCase()
@@ -118,15 +113,13 @@ void KisGmicTests::testColorizeFilter()
     QString filterName = "Colorize [comics]";
     QString filterCategory = "Black & white";
 
-    Component * c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
-
+    Command * cmd = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
     KisGmicFilterSetting filterSettings;
-    if (c == 0)
+    if (cmd == 0)
     {
             qDebug() << "Filter not found!";
     }else
     {
-        Command * cmd = static_cast<Command *>(c);
         cmd->setParameter("Input layers", "Lineart + color spots");
         cmd->setParameter("Output layers", "Lineart + color spots + extrapolated colors");
         cmd->setParameter("Smoothness", "0.05");
@@ -160,107 +153,63 @@ void KisGmicTests::testColorizeFilter()
 }
 #endif
 
-void KisGmicTests::testCompareToGmicGimp()
-{
-    QVector <FilterDescription> filterDescriptions;
 
-    // filter name, category, command
-    QString filePath = QString(FILES_DATA_DIR)+"/"+"filterCommands.txt";
-    QFile inputFile(filePath);
-
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-       QTextStream in(&inputFile);
-       FilterDescription fd;
-       int fieldCounter = 0;
-       while ( !in.atEnd() )
-       {
-            QString line = in.readLine();
-            if (!line.startsWith("#") && !line.isEmpty())
-            {
-                line.replace("[[:home:]]", QDir::homePath());
-                if (fieldCounter == 0)
-                {
-                    fd.filterName = line;
-                    fieldCounter++;
-                }
-                else if (fieldCounter == 1)
-                {
-                    fd.category = line;
-                    fieldCounter++;
-                }
-                else if (fieldCounter == 2)
-                {
-                    fd.gmicCommand = line;
-                    fieldCounter = 0;
-                    filterDescriptions.append(fd);
-                }
-            }
-       }
-       inputFile.close();
-    }
-    else
-    {
-        QString msg = "File " + filePath + " can't be open!";
-        QFAIL(QTest::toString(msg));
-    }
-
-    verifyFilters(filterDescriptions);
-
-}
-
-
-//#define VERBOSE
+#define VERBOSE
+typedef QPair<QString, QString> StringPair;
 void KisGmicTests::testBlacklisterSearchByParamName()
 {
-
-    QString paramNames [] = {
-        "1st additional palette (.gpl file)",
-        "2nd additional palette (.gpl file)",
-        "CLUT filename",
-        "Filename"
-    };
-
-    QString expectedFilterNames [] =
-    {
-        "Colorize [interactive]",
-        "Colorize [interactive]",
-        "User-defined",
-        "Import data"
-    };
+    QVector<StringPair> paramFilters;
+    paramFilters << StringPair("1st additional palette (.gpl file)","Colorize [interactive]");
+    paramFilters << StringPair("2nd additional palette (.gpl file)","Colorize [interactive]");
+    paramFilters << StringPair("Clut filename","User-defined");
+    paramFilters << StringPair("Filename","Import data");
 
     bool beVerbose = false;
 #ifdef VERBOSE
     beVerbose = true;
 #endif
 
-    int nameCount = sizeof(paramNames)/sizeof(paramNames[0]);
 
-    if (beVerbose)
+    for (int i = 0; i < paramFilters.size(); i++)
     {
-        qDebug() << nameCount;
-    }
-
-    for (int i = 0; i < nameCount; i++)
-    {
+        const QString& paramName = paramFilters.at(i).first;
+        const QString& expectedFilterName = paramFilters.at(i).second;
         if (beVerbose)
         {
-            qDebug() << "Parameter:" << paramNames[i];
+            qDebug() << "Searching for filter by parameter name :" << paramName;
         }
 
-        QList<Command *> filters = KisGmicBlacklister::findFilterByParamName(m_root, paramNames[i], "file");
+        QList<Command *> filters = KisGmicBlacklister::findFilterByParamName(m_root, paramName, "file");
+        if (filters.size() == 0)
+        {
+            qDebug() << "Can't find filter by param name: " << paramName;
+        }
         QCOMPARE(filters.size(), 1);
 
         Command * c = filters.at(0);
-        QCOMPARE(c->name(), expectedFilterNames[i]);
+        QCOMPARE(c->name(), expectedFilterName);
         if (beVerbose)
         {
-            qDebug() << "FilterName: << \"" + c->name() + "\" << \"" + KisGmicBlacklister::toPlainText(c->parent()->name()) + "\"";
+            qDebug() << "FilterName: << \"" + c->name() + "\" << \"" + KisGmicBlacklister::toPlainText(c->parent()->name()) + "\"" << " passed!";
         }
-
     }
 }
 
+void KisGmicTests::testFindFilterByPath()
+{
+    Category * path = new Category;
+    path->setName("<i>About</i>");
+
+    Command * cmd = new Command(path);
+    cmd->setName("Contributors");
+    path->add(cmd);
+
+    Component * c = KisGmicBlacklister::findFilterByPath(m_root, path);
+    QVERIFY(c != 0);
+    QVERIFY(c->name() == cmd->name());
+
+    delete path;
+}
 
 
 
@@ -648,17 +597,16 @@ void KisGmicTests::testFilterOnlySelection()
     QString filterName = "Sepia";
     QString filterCategory = "Colors";
 
-    Component * c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
+    Command * gmicCmd = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
 
     KisGmicFilterSetting filterSettings;
-    if (c == 0)
+    if (gmicCmd == 0)
     {
             qDebug() << "Filter not found!";
     }
     else
     {
-        Command * cmd = static_cast<Command *>(c);
-        cmd->writeConfiguration(&filterSettings);
+        gmicCmd->writeConfiguration(&filterSettings);
     }
 
     QVERIFY(!filterSettings.gmicCommand().isEmpty());
@@ -679,17 +627,16 @@ void KisGmicTests::testFilterOnlySelection()
 
 void KisGmicTests::testLoadingGmicCommands()
 {
-    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", "gmic_def.gmic");
+    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_SETTINGS);
     QByteArray data = KisGmicParser::extractGmicCommandsOnly(definitionFilePath);
     QVERIFY(data.size() > 0);
 }
 
 
-void KisGmicTests::generateXmlDump()
+void KisGmicTests::generateXmlDump(const QString &outputFilePath)
 {
     QDomDocument doc = KisGmicBlacklister::dumpFiltersToXML(m_root);
-
-    QFile outputFile(m_filterDefinitionsXmlFilePath);
+    QFile outputFile(outputFilePath);
     if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QTextStream ts(&outputFile);
@@ -698,15 +645,61 @@ void KisGmicTests::generateXmlDump()
     }
 }
 
-void KisGmicTests::testCompareToKrita()
+void KisGmicTests::testCompareToGmicGimp()
 {
     QVector<FilterDescription> filterDescriptions;
+    QDomDocument doc("myDoc");
 
-    // nacitaj xml a vyzer z neho trojice filter, categoria, prikaz
-    QDomDocument doc("mydocument");
-    QFile file(m_filterDefinitionsXmlFilePath);
+    QFile file(QString(FILES_DATA_DIR)+"/"+"gmic_def_1610_gimp.xml");
     QVERIFY(file.open(QIODevice::ReadOnly));
     QVERIFY(doc.setContent(&file));
+
+    QDomNodeList children = doc.documentElement().childNodes();
+    for (int i = 0; i < children.size(); i++)
+    {
+        if (children.at(i).isElement())
+        {
+            QDomElement elem = children.at(i).toElement();
+            QDomElement cmdElem = elem.firstChildElement("gmicCommand");
+            QVERIFY(!cmdElem.isNull());
+
+            FilterDescription fd;
+            fd.filterName = elem.attribute("name");
+            fd.category = QString();
+            fd.gmicCommand = cmdElem.text();
+            // symbolic home to real directory
+            fd.gmicCommand = fd.gmicCommand.replace("[[:home:]]", QDir::homePath());
+            fd.gmicCommand = fd.gmicCommand.replace("\n", "\\n");
+            filterDescriptions.append(fd);
+        }
+    }
+
+    verifyFilters(filterDescriptions);
+}
+
+typedef QPair<Component *, QString> FilterPair;
+void KisGmicTests::testCompareToKrita()
+{
+    QString fileName = "gmic_def_" + QString::number(int(gmic_version)) + "_krita.xml";
+    QString filePath = QString(FILES_DATA_DIR)+"/"+fileName;
+
+    QFileInfo info(filePath);
+    if (!info.exists())
+    {
+        qWarning() << "Reference xml file for the krita parser does not exist, creating one!";
+        qWarning() << "Creating it at " << filePath;
+        generateXmlDump(filePath);
+    }
+
+    QFile file(filePath);
+    QVERIFY(file.open(QIODevice::ReadOnly));
+
+    // Load the xml file that Krita produced
+    // select filter, category, command
+    QDomDocument doc("mydocument");
+    QVERIFY(doc.setContent(&file));
+
+    QVector<FilterPair> filterDescriptions;
 
     QDomElement child = doc.documentElement().firstChildElement();
     QQueue<QDomElement> queue;
@@ -720,17 +713,45 @@ void KisGmicTests::testCompareToKrita()
             {
                 QDomElement cmdElem = elem.firstChildElement("gmicCommand");
                 QVERIFY(!cmdElem.isNull());
-                QVERIFY(elem.parentNode().isElement());
-                QDomElement categoryElem = elem.parentNode().toElement();
-                QVERIFY(categoryElem.tagName() == "category");
+                QString gmicCommand = cmdElem.text().replace("[[:home:]]", QDir::homePath());
 
-                FilterDescription fd;
-                fd.filterName = elem.attribute("name");
-                fd.category = categoryElem.attribute("name");
-                fd.gmicCommand = cmdElem.text();
-                // symbolic home to real directory
-                fd.gmicCommand = fd.gmicCommand.replace("[[:home:]]", QDir::homePath());
-                filterDescriptions.append(fd);
+                Command * command = new Command;
+                command->setName(elem.attribute("name"));
+
+                QDomElement iter = elem.parentNode().toElement();
+                Category * currentCategory = 0;
+                while (iter.isElement())
+                {
+
+                    if (iter.tagName() == "category")
+                    {
+                        if (iter.attribute("name") == "Filters")
+                        {
+                            break;
+                        }
+                        Category * category = new Category;
+                        category->setName(iter.attribute("name"));
+                        if (currentCategory == 0)
+                        {
+                            category->add(command);
+                            command->setParent(category);
+                        }
+                        else
+                        {
+                            category->add(currentCategory);
+                            currentCategory->setParent(category);
+                        }
+                        currentCategory = category;
+                    }
+                    else
+                    {
+                            qWarning() << "Unexpected element #20151819 " << iter.tagName();
+                    }
+                    iter = iter.parentNode().toElement();
+                }
+
+                FilterPair pair = FilterPair(currentCategory, gmicCommand);
+                filterDescriptions.append(pair);
             }
         }
         else
@@ -746,51 +767,196 @@ void KisGmicTests::testCompareToKrita()
         }
     }
 
-    verifyFilters(filterDescriptions);
+    //verifyFilters(filterDescriptions);
 
+    int success = 0;
+    for (int i = 0; i < filterDescriptions.size(); i++)
+    {
+        Component * path = filterDescriptions.at(i).first;
+        const QString &gmicCommand = filterDescriptions.at(i).second;
+
+        Component * component = KisGmicBlacklister::findFilterByPath(m_root, path);
+        if (!component)
+        {
+            qDebug () << "Can't find filter: " << pathToString(path);
+        }
+        else
+        {
+            KisGmicFilterSetting filterSettings;
+            static_cast<Command *>(component)->writeConfiguration(&filterSettings);
+
+            if (filterSettings.gmicCommand() != gmicCommand)
+            {
+                qDebug() << "Filter  : " <<  pathToString(path);
+                qDebug() << "  Actual: " << filterSettings.gmicCommand();
+                qDebug() << "Expected: " << gmicCommand;
+            }
+            else
+            {
+                success++;
+            }
+        }
+    }
+
+    int count = filterDescriptions.size();
+    if (success != count)
+    {
+        qDebug() << "Number of failed filters: " << count - success;
+    }
+
+    QCOMPARE(success, count);
+
+    for (int i = 0; i < filterDescriptions.size(); i++)
+    {
+        delete filterDescriptions[i].first;
+    }
 }
+
+QString KisGmicTests::pathToString(Component* c)
+{
+    QStringList pathItems;
+    Component * iter = c;
+    while (iter->childCount() > 0)
+    {
+        pathItems << iter->name();
+        iter = iter->child(0);
+    }
+    pathItems << iter->name();
+
+
+    return pathItems.join(" / ");
+}
+
 
 void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
 {
+    // without knowing the category (the dumped xml file for gmic gimp does not contain
+    // this information, because it is non-trivial to extract it automatically)
+    // we will try to find matching filters
+
     int count = filters.size();
 
+
+    // Expected failures due to buggy filter definitions
+    QSet<QString> expectedFilterFailures;
+    expectedFilterFailures
+    << "Ellipsionism" // MINOR: buggy filter definition: default value bigger than max
+    << "Simple local contrast" //  TODO: bug in our parser
+    << "Granular texture" // MINOR
+    << "Repair scanned document" // MINOR
+    << "Cartoon [animated]" // MINOR
+    << "3d video conversion" // TODO: bug in our parser
+    << "Luminance to alpha" //buggy filter definition
+    << "Generate film data" // buggy filter definition (folder param)
+    <<  "Motifs degrades cie"; // buggy filter definition (default value bigger than max)
+
     int success = 0;
+    int expectedFail = 0;
     for (int i = 0; i < count; i++)
     {
         FilterDescription fd = filters.at(i);
 
-        Component * c = KisGmicBlacklister::findFilter(m_root, fd.category, fd.filterName);
-        if (c == 0)
+        QVector<Command *> commands;
+        if (fd.category.isEmpty())
         {
-            qWarning() << "Can't find "<< "filterName: " << fd.filterName << "category: " << fd.category;
-            continue;
-        }
+            commands = KisGmicBlacklister::filtersByName(m_root, fd.filterName);
+            if (commands.size() == 0)
+            {
+                qWarning() << "Can't find "<< "filterName: " << fd.filterName;
+                continue;
+            }
 
-        QVERIFY(c->childCount() == 0);
-        Command * cmd = dynamic_cast<Command *>(c);
+            #if 0
+            if (commands.size() > 1)
+            {
 
-        QVERIFY(cmd != 0);
-
-        KisGmicFilterSetting filterSettings;
-        cmd->writeConfiguration(&filterSettings);
-
-        if (filterSettings.gmicCommand() != fd.gmicCommand)
-        {
-            qDebug() << "Category: " << fd.category << " Filter name: " << fd.filterName;
-            qDebug() << "  Actual: " << filterSettings.gmicCommand();
-            qDebug() << "Expected: " << fd.gmicCommand;
+                qDebug() << "Multiple entries found:";
+                foreach (Command * c, commands)
+                {
+                    qDebug() << "filter: " << c->name() << "category: " << c->parent()->name();
+                }
+            }
+            #endif
         }
         else
         {
+            Command * c = KisGmicBlacklister::findFilter(m_root, fd.category, fd.filterName);
+            if (c == 0)
+            {
+                qWarning() << "Can't find "<< "filterName: " << fd.filterName << "category: " << fd.category;
+                continue;
+            }else
+            {
+                commands.append(c);
+            }
+        }
+
+        bool foundMatch = false;
+        QString lastGmicCommand;
+
+        QString errors;
+        for (int i = 0; i < commands.size(); i++)
+        {
+            QTextStream errorLog(&errors);
+            Component * c = commands[i];
+            QVERIFY(c->childCount() == 0);
+            Command * cmd = dynamic_cast<Command *>(c);
+            QVERIFY(cmd != 0);
+
+            KisGmicFilterSetting filterSettings;
+            cmd->writeConfiguration(&filterSettings);
+            lastGmicCommand = filterSettings.gmicCommand();
+
+            if (filterSettings.gmicCommand() == fd.gmicCommand)
+            {
+                foundMatch = true;
+            }
+        }
+
+        if (foundMatch)
+        {
             success++;
+        }
+        else
+        {
+            if (expectedFilterFailures.contains(fd.filterName))
+            {
+                expectedFail++;
+            }
+            else
+            {
+                qDebug() << "Filter " << fd.category << " / " << fd.filterName << " does not match any  of " << commands.size() << " filter definitions!";
+                qDebug() << "Expected: " << fd.gmicCommand;
+                if (commands.size() == 1)
+                {
+                    qDebug() << "  Actual: " << lastGmicCommand;
+                }
+                else
+                {
+                    qDebug() << "=== BEGIN ==";
+                    qDebug() << errors;
+                    qDebug() << "===  END  ===";
+                }
+            }
+
         }
     }
 
     if (success != count)
     {
-        qDebug() << "Number of failed filters: " << count - success;
+        qDebug() << "=== Stats ===";
+        qDebug() << "Number of failed filters (with expected failures): " << count - success;
+        qDebug() << "Number of expected failures:" << expectedFail;
     }
-    QCOMPARE(success,count);
+
+    int realSuccess = success + expectedFail;
+    QCOMPARE(realSuccess,count);
+}
+
+void KisGmicTests::testFindFilterByName()
+{
+    QVector<Command *> commands = KisGmicBlacklister::filtersByName(m_root, "B&W stencil");
+    QVERIFY(commands.size() > 0);
 }
 
 

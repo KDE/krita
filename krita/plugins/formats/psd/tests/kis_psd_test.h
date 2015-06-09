@@ -36,6 +36,8 @@ private Q_SLOTS:
     void testOpenLayerStylesWithPatternMulti();
 
     void testSaveLayerStylesWithPatternMulti();
+
+    void testOpeningFromOpenCanvas();
 };
 
 #endif

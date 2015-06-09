@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <filters>
  <category name="Filters">
-  <category name="About">
+  <category name="&lt;i>About&lt;/i>">
    <filter name="Contributors">
-    <gmicCommand><![CDATA[-_none_ ]]></gmicCommand>
+    <gmicCommand><![CDATA[-_none_]]></gmicCommand>
    </filter>
    <filter name="Filter design">
-    <gmicCommand><![CDATA[-_none_ ]]></gmicCommand>
+    <gmicCommand><![CDATA[-_none_]]></gmicCommand>
    </filter>
    <filter name="Filter sources">
-    <gmicCommand><![CDATA[-_none_ ]]></gmicCommand>
+    <gmicCommand><![CDATA[-_none_]]></gmicCommand>
    </filter>
-   <filter name="Friends Hall of Fame">
-    <gmicCommand><![CDATA[-_none_ ]]></gmicCommand>
+   <filter name="Friends hall of fame">
+    <gmicCommand><![CDATA[-_none_]]></gmicCommand>
    </filter>
-   <filter name="Gmicky / Roddy">
+   <filter name="Gmicky - Roddy">
     <gmicCommand><![CDATA[-gimp_gmicky 0]]></gmicCommand>
    </filter>
    <filter name="Links">
-    <gmicCommand><![CDATA[-_none_ ]]></gmicCommand>
+    <gmicCommand><![CDATA[-_none_]]></gmicCommand>
    </filter>
    <filter name="Release notes">
-    <gmicCommand><![CDATA[-_none_ ]]></gmicCommand>
+    <gmicCommand><![CDATA[-_none_]]></gmicCommand>
+   </filter>
+   <filter name="User satisfaction survey">
+    <gmicCommand><![CDATA[-gimp_survey 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"","","",0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Arrays &amp; tiles">
+  <category name="&lt;b>Arrays &amp;amp; tiles&lt;/b>">
    <filter name="Array [faded]">
     <gmicCommand><![CDATA[-gimp_array_fade 2,2,0,0,80,90,0,0]]></gmicCommand>
    </filter>
@@ -58,6 +61,9 @@
    <filter name="Grid [hexagonal]">
     <gmicCommand><![CDATA[-imagegrid_hexagonal 32,0.1,1]]></gmicCommand>
    </filter>
+   <filter name="Hearts">
+    <gmicCommand><![CDATA[-samj_en_Coeurs_Hearts_002 16,100,0,0,1,0,255,255,255,255,0,0,0,1,1]]></gmicCommand>
+   </filter>
    <filter name="Make seamless">
     <gmicCommand><![CDATA[-gimp_make_seamless 0,0,3,0]]></gmicCommand>
    </filter>
@@ -65,7 +71,7 @@
     <gmicCommand><![CDATA[-gimp_ministeck 8,64,8,2,100,0.3,0]]></gmicCommand>
    </filter>
    <filter name="Montage">
-    <gmicCommand><![CDATA[-gimp_montage 0,"V(H(0,1),H(2,V(3,4)))",1,0.5,0,0,0,0,0,255,0,0,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_montage 0,"V(H(0,1),H(2,V(3,4)))",1,0.5,0,0,0,0,0,255,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Puzzle">
     <gmicCommand><![CDATA[-gimp_puzzle 5,5,0.5,0,0,0.3,100,0.2,255,100,0,0,0,0,0,0]]></gmicCommand>
@@ -76,31 +82,49 @@
    <filter name="Tileable rotation">
     <gmicCommand><![CDATA[-gimp_rotate_tileable 45,8,0]]></gmicCommand>
    </filter>
-   <filter name="Tiled rotation">
-    <gmicCommand><![CDATA[-gimp_rotate_tiles 5,5,15,3,3,1.8]]></gmicCommand>
+   <filter name="Tiled isolation">
+    <gmicCommand><![CDATA[-gimp_isolate_tiles 10,10,5,5,1,1]]></gmicCommand>
    </filter>
    <filter name="Tiled normalization">
     <gmicCommand><![CDATA[-gimp_normalize_tiles 25,25,0,255,7]]></gmicCommand>
    </filter>
-   <filter name="Tiled random shifts">
-    <gmicCommand><![CDATA[-gimp_shift_tiles 10,10,10,1]]></gmicCommand>
-   </filter>
    <filter name="Tiled parameterization">
     <gmicCommand><![CDATA[-gimp_parameterize_tiles 10,10,0]]></gmicCommand>
    </filter>
-   <filter name="Tiled isolation">
-    <gmicCommand><![CDATA[-gimp_isolate_tiles 10,10,5,5,1,1]]></gmicCommand>
+   <filter name="Tiled random shifts">
+    <gmicCommand><![CDATA[-gimp_shift_tiles 10,10,10,1]]></gmicCommand>
+   </filter>
+   <filter name="Tiled rotation">
+    <gmicCommand><![CDATA[-gimp_rotate_tiles 5,5,15,3,3,1.8]]></gmicCommand>
    </filter>
   </category>
-  <category name="Artistic">
+  <category name="&lt;b>Artistic&lt;/b>">
+   <filter name="Aurora">
+    <gmicCommand><![CDATA[-gcd_aurora 6,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Black crayon graffiti">
+    <gmicCommand><![CDATA[-gimp_crayongraffiti2 300,50,1,0.4,12,1,2,2,0]]></gmicCommand>
+   </filter>
+   <filter name="Blockism">
+    <gmicCommand><![CDATA[-gimp_blockism 3,1.6,0.5,50,0.5,64,0,1,0]]></gmicCommand>
+   </filter>
    <filter name="Bokeh">
     <gmicCommand><![CDATA[-bokeh 250,2,0.5,24,10,2,0.7,0]]></gmicCommand>
    </filter>
    <filter name="Cartoon">
     <gmicCommand><![CDATA[-cartoon 3,200,20,0.25,1.5,8,0]]></gmicCommand>
    </filter>
+   <filter name="Chalk it up">
+    <gmicCommand><![CDATA[-samj_en_chalkitup 5,2.5,1.5,50,1,5,5,0,0,2,0.8,1.9,0,0]]></gmicCommand>
+   </filter>
    <filter name="Circle abstraction">
     <gmicCommand><![CDATA[-gimp_circle_abstraction 8,5,0.8,0,1,1,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Colored pencils">
+    <gmicCommand><![CDATA[-gimp_cpencil 1.3,50,20,2,2,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Color abstraction paint">
+    <gmicCommand><![CDATA[-gimp_ColorAbstractionPaint 5,10,1,0,1,0,1,0,0,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Cubism">
     <gmicCommand><![CDATA[-gimp_cubism 2,50,10,90,0.7,0,0]]></gmicCommand>
@@ -108,14 +132,29 @@
    <filter name="Cutout">
     <gmicCommand><![CDATA[-gimp_cutout 4,0.5,4,1,0]]></gmicCommand>
    </filter>
+   <filter name="Dream smoothing">
+    <gmicCommand><![CDATA[-gimp_dreamsmooth 3,1,1,0.8,0,0.8,1,24,0]]></gmicCommand>
+   </filter>
    <filter name="Ellipsionism">
     <gmicCommand><![CDATA[-gimp_ellipsionism 20,10,0.5,0.7,8,0.5,0]]></gmicCommand>
    </filter>
    <filter name="Felt pen">
     <gmicCommand><![CDATA[-gimp_feltpen 300,50,1,0.1,20,5,0]]></gmicCommand>
    </filter>
+   <filter name="Finger paint">
+    <gmicCommand><![CDATA[-gtutor_fpaint 0.5,0.5,0,0,45,0.5,0.5,0.5,0]]></gmicCommand>
+   </filter>
    <filter name="Fractalize">
     <gmicCommand><![CDATA[-fractalize 0.8]]></gmicCommand>
+   </filter>
+   <filter name="Granular texture">
+    <gmicCommand><![CDATA[-samj_en_Texture_Granuleuse 0,20,80,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Graphic boost">
+    <gmicCommand><![CDATA[-gimp_graphic_boost4 1.25,2,0,0.15,14,0,1,0.5,0.45,2,0,1,0,1,1,1,0.5,0.45,1]]></gmicCommand>
+   </filter>
+   <filter name="Graphic novel">
+    <gmicCommand><![CDATA[-gimp_graphic_novelfxl 0,2,6,5,20,0,0.62,14,0,1,0.5,0.78,1.92,0,0,0,1,1,1,0.5,0.8,1.28]]></gmicCommand>
    </filter>
    <filter name="Hope poster">
     <gmicCommand><![CDATA[-gimp_poster_hope 0,3,0]]></gmicCommand>
@@ -126,17 +165,29 @@
    <filter name="Lylejk's painting">
     <gmicCommand><![CDATA[-gimp_lylejk_painting 10,2,4,10,0]]></gmicCommand>
    </filter>
+   <filter name="Make squiggly">
+    <gmicCommand><![CDATA[-gimp_Squiggly 2,12,0.8,0,0.5,1,0,0,3,0.2,0.4,0,1,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Morphology painting">
+    <gmicCommand><![CDATA[-gimp_MorphoPaint 1,18,2,25,100,230,8,3,4,0.5,2,0.5,200,1,1,1,1,1,1,1,1,0]]></gmicCommand>
+   </filter>
    <filter name="Painting">
     <gmicCommand><![CDATA[-gimp_painting 5,2.5,1.5,50,1,0]]></gmicCommand>
    </filter>
    <filter name="Pen drawing">
     <gmicCommand><![CDATA[-gimp_pen_drawing 10,0]]></gmicCommand>
    </filter>
+   <filter name="Photoillustration">
+    <gmicCommand><![CDATA[-gimp_tk_photoillustration 0,0.25,0,0.3,0.5,0.5,1,0,5,0,1,0,0,1,0,0,1.2,98.5,5,0.5,0,0,0,0,0,1,0]]></gmicCommand>
+   </filter>
    <filter name="Polygonize [delaunay]">
     <gmicCommand><![CDATA[-gimp_delaunay 5,75,1,3,0,0,0,128,1,1,0]]></gmicCommand>
    </filter>
    <filter name="Polygonize [energy]">
     <gmicCommand><![CDATA[-gimp_polygonize 300,10,10,10,10,0,0,0,255,0]]></gmicCommand>
+   </filter>
+   <filter name="Posterized dithering">
+    <gmicCommand><![CDATA[-gimp_pdithered 1,1,0,0,20,1,0,1,0]]></gmicCommand>
    </filter>
    <filter name="Poster edges">
     <gmicCommand><![CDATA[-gimp_poster_edges 20,60,5,0,10,0,0,0]]></gmicCommand>
@@ -150,16 +201,19 @@
    <filter name="Warhol">
     <gmicCommand><![CDATA[-warhol 3,3,2,40]]></gmicCommand>
    </filter>
+   <filter name="Watercolor">
+    <gmicCommand><![CDATA[-gimp_watercolor 1.8,0.1,1,80,0,0.5,0,0,0,2,0,2,4,2,0,3,3,2,0,4,2,0,0,0,0,0]]></gmicCommand>
+   </filter>
    <filter name="Whirl drawing">
     <gmicCommand><![CDATA[-draw_whirl 20,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Black &amp; white">
-   <filter name="Black &amp; white">
-    <gmicCommand><![CDATA[-gimp_blackandwhite 0.299,0,0.587,0,0.114,0,0,1,0,0,0,0,0,0,2,0,0,0,16,4,0,0,0]]></gmicCommand>
-   </filter>
-   <filter name="B&amp;W stencil">
+  <category name="&lt;b>Black &amp;amp; white&lt;/b>">
+   <filter name="B&amp;amp;W stencil">
     <gmicCommand><![CDATA[-gimp_stencilbw 10,10,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Black &amp;amp; white">
+    <gmicCommand><![CDATA[-gimp_blackandwhite 0.299,0,0.587,0,0.114,0,0,1,0,0,0,0,0,0,2,0,0,0,16,4,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Charcoal">
     <gmicCommand><![CDATA[-gimp_charcoal 65,70,170,0,1,0,50,70,255,255,255,0,0,0,0,0]]></gmicCommand>
@@ -179,14 +233,23 @@
    <filter name="Dithering">
     <gmicCommand><![CDATA[-gimp_ditheredbw 0,1,0,0,0,0,0]]></gmicCommand>
    </filter>
+   <filter name="Engrave">
+    <gmicCommand><![CDATA[-gimp_engrave 0.5,50,0,8,40,0,0,0,10,1,0,0,0,1,0]]></gmicCommand>
+   </filter>
    <filter name="Hard sketch">
     <gmicCommand><![CDATA[-gimp_hardsketchbw 300,50,1,0.1,20,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Hard sketch xy">
+    <gmicCommand><![CDATA[-XY_hardsketchbw_samj_en 0.2,300,50,1,0.1,20,0,0,0,0,180,40,160,255,0]]></gmicCommand>
    </filter>
    <filter name="Hough sketch">
     <gmicCommand><![CDATA[-gimp_houghsketchbw 1.25,10,5,80,0.1,0,0]]></gmicCommand>
    </filter>
    <filter name="Ink wash">
     <gmicCommand><![CDATA[-gimp_ink_wash 0.14,23,0,0.5,0.54,2.25,0,2,6,5,20]]></gmicCommand>
+   </filter>
+   <filter name="Multi-layer etch">
+    <gmicCommand><![CDATA[-gimp_gcd_layeretch 11,4,12,0.12,100,8.5,5,0,0,3,1,1,0]]></gmicCommand>
    </filter>
    <filter name="Pencil">
     <gmicCommand><![CDATA[-gimp_pencilbw 0.3,60,0,0,0]]></gmicCommand>
@@ -198,10 +261,13 @@
     <gmicCommand><![CDATA[-gimp_sketchbw 2,45,180,30,1,0.03,0,0.6,0.1,0.6,0.25,1,0,1,0,0]]></gmicCommand>
    </filter>
    <filter name="Stamp">
-    <gmicCommand><![CDATA[-gimp_stamp 1,50,0,0,0,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_stamp 1,50,0,0,0,0,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Threshold etch">
+    <gmicCommand><![CDATA[-gimp_gcd_etch 125,153,171,185,0.1,50,80,50,10,15,12,20,0,1,0.3,1,0,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Colors">
+  <category name="&lt;b>Colors&lt;/b>">
    <filter name="Abstraction">
     <gmicCommand><![CDATA[-gimp_color_abstraction 1,10,0.2,0]]></gmicCommand>
    </filter>
@@ -214,11 +280,23 @@
    <filter name="Channel processing">
     <gmicCommand><![CDATA[-gimp_channel_processing 0,1,0,0,0,0,100,256,0,0,0,2,0,0]]></gmicCommand>
    </filter>
-   <filter name="Color balance">
-    <gmicCommand><![CDATA[-gimp_balance_gamma 128,128,128,1,0]]></gmicCommand>
+   <filter name="CMYK tone">
+    <gmicCommand><![CDATA[-iain_cmyk_tone_p 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255,255,0,0]]></gmicCommand>
    </filter>
    <filter name="Colormap">
     <gmicCommand><![CDATA[-gimp_colormap 1,1,32,8,0,0,0,255,255,255,255,0,0,0,255,0,0,0,255,255,255,0,255,0,255,0,255,255,0]]></gmicCommand>
+   </filter>
+   <filter name="Color balance">
+    <gmicCommand><![CDATA[-gimp_balance_gamma 128,128,128,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Color grading">
+    <gmicCommand><![CDATA[-jl_colorgrading 0,1,1,0,0,0,0,0,0,1,0,0,0,0.75,0,70,0,0,0,0,0,70,180,0,1,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Color temperature">
+    <gmicCommand><![CDATA[-gimp_tk_colortemp 0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Couleurs metalliques">
+    <gmicCommand><![CDATA[-Couleurs_Metalliques_samj_en 0,0,22,0,0,0,0,6,5,20,1,0,0,0,0.3,60,1,1,0]]></gmicCommand>
    </filter>
    <filter name="Curves">
     <gmicCommand><![CDATA[-gimp_apply_curve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0,0,0]]></gmicCommand>
@@ -235,11 +313,20 @@
    <filter name="Equalize HSV">
     <gmicCommand><![CDATA[-gimp_hsv_equalizer 0,180,40,0,0,0,180,40,0,0,0,180,40,0,0,0]]></gmicCommand>
    </filter>
-   <filter name="Mixer [RGB]">
-    <gmicCommand><![CDATA[-gimp_mix_rgb 1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
+   <filter name="HSL adjustment">
+    <gmicCommand><![CDATA[-gcd_hsl 1,0,0,180,0.2,0,1,1,0]]></gmicCommand>
    </filter>
-   <filter name="Mixer [YCbCr]">
-    <gmicCommand><![CDATA[-gimp_mix_ycbcr 1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
+   <filter name="HSV select">
+    <gmicCommand><![CDATA[-gcd_hsv_select 0,0.5,1,180,0.5,0.5,2,2,18,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Hue lighten-darken">
+    <gmicCommand><![CDATA[-iain_hue_light_dark_p 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,100,255,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Metallic look">
+    <gmicCommand><![CDATA[-gimp_tk_metallic 1,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Mixer [CMYK]">
+    <gmicCommand><![CDATA[-gimp_mix_cmyk 1,0,0,1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
    </filter>
    <filter name="Mixer [HSV]">
     <gmicCommand><![CDATA[-gimp_mix_hsv 1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
@@ -247,53 +334,71 @@
    <filter name="Mixer [Lab]">
     <gmicCommand><![CDATA[-gimp_mix_lab 1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
    </filter>
-   <filter name="Mixer [CMYK]">
-    <gmicCommand><![CDATA[-gimp_mix_cmyk 1,0,0,1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
+   <filter name="Mixer [RGB]">
+    <gmicCommand><![CDATA[-gimp_mix_rgb 1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
    </filter>
-   <filter name="Select/replace color">
+   <filter name="Mixer [YCbCr]">
+    <gmicCommand><![CDATA[-gimp_mix_ycbcr 1,0,0,1,0,0,1,0,0,0,2,0]]></gmicCommand>
+   </filter>
+   <filter name="RGB tone">
+    <gmicCommand><![CDATA[-iain_rgb_tone 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255,255,0]]></gmicCommand>
+   </filter>
+   <filter name="Saturation equalizer">
+    <gmicCommand><![CDATA[-Saturation_EQ_p 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Select-replace color">
     <gmicCommand><![CDATA[-gimp_select_color 0,20,0,0,255,255,255,255,0,255,0,0,255,0]]></gmicCommand>
    </filter>
    <filter name="Sepia">
     <gmicCommand><![CDATA[-gimp_sepia 0,1,0,0]]></gmicCommand>
    </filter>
+   <filter name="Tone presets">
+    <gmicCommand><![CDATA[-iain_tone_presets_p 0,100,0,0]]></gmicCommand>
+   </filter>
    <filter name="User-defined">
     <gmicCommand><![CDATA[-gimp_custom_transform "i","i + 90*(x/w)*cos(i/10)","i","i","i","i",0]]></gmicCommand>
    </filter>
-   <category name="Curves [RGB]">
-    <filter name="Red">
-     <gmicCommand><![CDATA[-gimp_apply_RGBcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
-    <filter name="Green">
-     <gmicCommand><![CDATA[-gimp_apply_RGBcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
-    <filter name="Blue">
-     <gmicCommand><![CDATA[-gimp_apply_RGBcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
-   </category>
-   <category name="Curves [YCbCr]">
-    <filter name="Luminance">
-     <gmicCommand><![CDATA[-gimp_apply_YCbCrcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
-    <filter name="Blue chrominance">
-     <gmicCommand><![CDATA[-gimp_apply_YCbCrcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
-    <filter name="Red chrominance">
-     <gmicCommand><![CDATA[-gimp_apply_YCbCrcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
-   </category>
-   <category name="Curves [Lab]">
-    <filter name="Lightness">
-     <gmicCommand><![CDATA[-gimp_apply_Labcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
-    </filter>
+   <filter name="Vintage style">
+    <gmicCommand><![CDATA[-gimp_tk_vintage 2,0.85,0.7,80,200,5,147,26,161,0.3,235,220,176,0.4,190,181,108,0.2,0,0,100,0,0.3,25,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Zone system">
+    <gmicCommand><![CDATA[-gimp_zonesystem 1,10,1,1,0,255,0]]></gmicCommand>
+   </filter>
+   <category name="&lt;i>Curves [Lab]&lt;/i>">
     <filter name="A-color">
      <gmicCommand><![CDATA[-gimp_apply_Labcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
     </filter>
     <filter name="B-color">
      <gmicCommand><![CDATA[-gimp_apply_Labcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
     </filter>
+    <filter name="Lightness">
+     <gmicCommand><![CDATA[-gimp_apply_Labcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Curves [RGB]&lt;/i>">
+    <filter name="Blue">
+     <gmicCommand><![CDATA[-gimp_apply_RGBcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Green">
+     <gmicCommand><![CDATA[-gimp_apply_RGBcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Red">
+     <gmicCommand><![CDATA[-gimp_apply_RGBcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Curves [YCbCr]&lt;/i>">
+    <filter name="Blue chrominance">
+     <gmicCommand><![CDATA[-gimp_apply_YCbCrcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Luminance">
+     <gmicCommand><![CDATA[-gimp_apply_YCbCrcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Red chrominance">
+     <gmicCommand><![CDATA[-gimp_apply_YCbCrcurve 0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1,0,0]]></gmicCommand>
+    </filter>
    </category>
   </category>
-  <category name="Contours">
+  <category name="&lt;b>Contours&lt;/b>">
    <filter name="Convolve">
     <gmicCommand><![CDATA[-gimp_convolve 0,1,"0,1,0;1,-4,1;0,1,0",1,1,0,0]]></gmicCommand>
    </filter>
@@ -343,7 +448,7 @@
     <gmicCommand><![CDATA[-gimp_thin_edges 0,15,0,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Deformations">
+  <category name="&lt;b>Deformations&lt;/b>">
    <filter name="Cartesian transform">
     <gmicCommand><![CDATA[-gimp_custom_deformation "(w+h)/20 * cos(y*20/h)","(w+h)/20 * sin(x*20/w)",1,1,1]]></gmicCommand>
    </filter>
@@ -380,11 +485,11 @@
    <filter name="Random">
     <gmicCommand><![CDATA[-deform 10]]></gmicCommand>
    </filter>
-   <filter name="Ripple">
-    <gmicCommand><![CDATA[-ripple 10,20,2,0,0]]></gmicCommand>
-   </filter>
    <filter name="Reflection">
     <gmicCommand><![CDATA[-gimp_reflect 50,1,110,160,190,64,0,1.5,0,-3.3,7,1.5]]></gmicCommand>
+   </filter>
+   <filter name="Ripple">
+    <gmicCommand><![CDATA[-ripple 10,20,2,0,0]]></gmicCommand>
    </filter>
    <filter name="Seamcarve">
     <gmicCommand><![CDATA[-gimp_seamcarve 85,100,15,0,1]]></gmicCommand>
@@ -414,7 +519,7 @@
     <gmicCommand><![CDATA[-gimp_zoom 2,50,50,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Degradations">
+  <category name="&lt;b>Degradations&lt;/b>">
    <filter name="Blur [angular]">
     <gmicCommand><![CDATA[-gimp_blur_angular 2,50,50,0,1,0,0]]></gmicCommand>
    </filter>
@@ -432,6 +537,9 @@
    </filter>
    <filter name="Blur [radial]">
     <gmicCommand><![CDATA[-gimp_blur_radial 3,50,50,0,1,0,0]]></gmicCommand>
+   </filter>
+   <filter name="CRT sub-pixels">
+    <gmicCommand><![CDATA[-gimp_gcd_crt 1.8,1.8,0,0]]></gmicCommand>
    </filter>
    <filter name="Dirty">
     <gmicCommand><![CDATA[-gimp_dirty 30,1,0,0,0]]></gmicCommand>
@@ -461,23 +569,44 @@
     <gmicCommand><![CDATA[-gimp_watermark_visible "\251 G'MIC",0.4,50,25,0.5,1]]></gmicCommand>
    </filter>
   </category>
-  <category name="Details">
+  <category name="&lt;b>Details&lt;/b>">
    <filter name="Details equalizer">
     <gmicCommand><![CDATA[-gimp_equalize_details 0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0,7,0,0,32,0]]></gmicCommand>
+   </filter>
+   <filter name="Dynamic range increase">
+    <gmicCommand><![CDATA[-gimp_tk_dri 0,0,0,1,0.5,1,1,0]]></gmicCommand>
    </filter>
    <filter name="Freaky details">
     <gmicCommand><![CDATA[-gimp_freaky_details 2,10,1,7,0,32,0]]></gmicCommand>
    </filter>
+   <filter name="High pass">
+    <gmicCommand><![CDATA[-gimp_highpass 5,2,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Local contrast enhancement">
+    <gmicCommand><![CDATA[-gimp_LCE 80,0.5,1,1,3,0]]></gmicCommand>
+   </filter>
    <filter name="Local normalization">
     <gmicCommand><![CDATA[-gimp_normalize_local 2,6,5,20,1,7,0]]></gmicCommand>
+   </filter>
+   <filter name="Local variance normalization">
+    <gmicCommand><![CDATA[-jeje_normalize_local_variance 50,5,5,1,3,0]]></gmicCommand>
+   </filter>
+   <filter name="Make up">
+    <gmicCommand><![CDATA[-make_up 15,4,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Mask creator">
+    <gmicCommand><![CDATA[-gimp_tk_mask 0,0,0,255,0,1,0,0,1,0]]></gmicCommand>
    </filter>
    <filter name="Mighty details">
     <gmicCommand><![CDATA[-gimp_mighty_details 25,1,25,1,7,0]]></gmicCommand>
    </filter>
+   <filter name="Portrait retouching">
+    <gmicCommand><![CDATA[-gimp_tk_portrait 0,100,1,5,20,3,20,10,0,0,1,2,25,2,250,180,150,255,0,0,1,1.5,10,1,0,0,1,1,0,0]]></gmicCommand>
+   </filter>
    <filter name="Sharpen [deblur]">
     <gmicCommand><![CDATA[-gimp_deblur 2,10,20,0.1,1,7,0,24,0]]></gmicCommand>
    </filter>
-   <filter name="Sharpen [Gold-Meinel]">
+   <filter name="Sharpen [gold-meinel]">
     <gmicCommand><![CDATA[-gimp_unsharp_goldmeinel 1,5,1,1,1,7,0,24,0]]></gmicCommand>
    </filter>
    <filter name="Sharpen [inverse diffusion]">
@@ -486,7 +615,7 @@
    <filter name="Sharpen [octave sharpening]">
     <gmicCommand><![CDATA[-gimp_unsharp_octave 4,5,3,0,0,0,24,0]]></gmicCommand>
    </filter>
-   <filter name="Sharpen [Richardson-Lucy]">
+   <filter name="Sharpen [richardson-lucy]">
     <gmicCommand><![CDATA[-gimp_unsharp_richardsonlucy 1,10,1,1,0]]></gmicCommand>
    </filter>
    <filter name="Sharpen [shock filters]">
@@ -495,11 +624,23 @@
    <filter name="Sharpen [unsharp mask]">
     <gmicCommand><![CDATA[-gimp_unsharp 0,1.25,30,3,0,1,1,1,0,0,0]]></gmicCommand>
    </filter>
+   <filter name="Sharpen [whiten]">
+    <gmicCommand><![CDATA[-jeje_whiten_frequency 50,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Simple local contrast">
+    <gmicCommand><![CDATA[-simplelocalcontrast_p 16,2,0,1,1,1,1,1,1,1]]></gmicCommand>
+   </filter>
    <filter name="Split details [alpha]">
     <gmicCommand><![CDATA[-gimp_split_details_alpha 6,10,1,5,0]]></gmicCommand>
    </filter>
    <filter name="Split details [layers]">
     <gmicCommand><![CDATA[-gimp_split_details_layers 6,10,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Spotify">
+    <gmicCommand><![CDATA[-jeje_spotify 1,1,1,1,3,0]]></gmicCommand>
+   </filter>
+   <filter name="Texture enhance">
+    <gmicCommand><![CDATA[-iain_texture_enhance_p 2,2,30,0,7,0,0]]></gmicCommand>
    </filter>
    <filter name="Tone mapping">
     <gmicCommand><![CDATA[-gimp_map_tones 0.5,0.7,0.1,30,0,0]]></gmicCommand>
@@ -507,12 +648,15 @@
    <filter name="Tone mapping [fast]">
     <gmicCommand><![CDATA[-gimp_map_tones_fast 3,0.5,7,0]]></gmicCommand>
    </filter>
+   <filter name="Yag effect">
+    <gmicCommand><![CDATA[-gimp_yag_soften 0,0,0]]></gmicCommand>
+   </filter>
   </category>
-  <category name="Film emulation">
+  <category name="&lt;b>Film emulation&lt;/b>">
    <filter name="Add grain">
     <gmicCommand><![CDATA[-gimp_emulate_grain 0,1,0.2,100,0,0,1,0,0,0,0,0]]></gmicCommand>
    </filter>
-   <filter name="B&amp;W films">
+   <filter name="B&amp;amp;W films">
     <gmicCommand><![CDATA[-gimp_emulate_film_bw 0,1,0,1,0,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Instant [consumer]">
@@ -542,8 +686,8 @@
    <filter name="Various">
     <gmicCommand><![CDATA[-gimp_emulate_film_various 0,1,0,1,0,0,0,0,0]]></gmicCommand>
    </filter>
-   <category name="[Collages]">
-    <filter name="B&amp;W films - collage">
+   <category name="&lt;i>[collages]&lt;/i>">
+    <filter name="B&amp;amp;W films - collage">
      <gmicCommand><![CDATA[-gimp_emulate_film_collage_bw 512,4,16,0]]></gmicCommand>
     </filter>
     <filter name="Instant - collage [consumer]">
@@ -572,7 +716,7 @@
     </filter>
    </category>
   </category>
-  <category name="Frames">
+  <category name="&lt;b>Frames&lt;/b>">
    <filter name="Droste">
     <gmicCommand><![CDATA[-gimp_droste 20,20,80,20,80,80,20,80,1,0,0,0,1,0,1,0,0]]></gmicCommand>
    </filter>
@@ -583,7 +727,7 @@
     <gmicCommand><![CDATA[-frame_cube 3,0,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Frame [fuzzy]">
-    <gmicCommand><![CDATA[-gimp_frame_fuzzy 10,10,10,1,255,255,255,255]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_frame_fuzzy 5,5,10,1,255,255,255,255]]></gmicCommand>
    </filter>
    <filter name="Frame [painting]">
     <gmicCommand><![CDATA[-gimp_frame_painting 10,0.4,6,225,200,120,2,400,50,10,1,0.5,123456,0]]></gmicCommand>
@@ -610,12 +754,26 @@
     <gmicCommand><![CDATA[-gimp_vignette 70,70,95,0,0,0,255]]></gmicCommand>
    </filter>
   </category>
-  <category name="Layers">
+  <category name="&lt;b>Frequencies&lt;/b>">
+   <filter name="Bandpass">
+    <gmicCommand><![CDATA[-gimp_bandpass 0,100,0,2,0]]></gmicCommand>
+   </filter>
+   <filter name="Fourier analysis">
+    <gmicCommand><![CDATA[-gimp_display_fft]]></gmicCommand>
+   </filter>
+   <filter name="Fourier transform">
+    <gmicCommand><![CDATA[-gimp_fourier 0,1]]></gmicCommand>
+   </filter>
+   <filter name="Fourier watermark">
+    <gmicCommand><![CDATA[-gimp_watermark_fourier "(c) G'MIC",53]]></gmicCommand>
+   </filter>
+  </category>
+  <category name="&lt;b>Layers&lt;/b>">
    <filter name="Align layers">
     <gmicCommand><![CDATA[-gimp_align_layers 0,0.7,0,0]]></gmicCommand>
    </filter>
    <filter name="Blend [average all]">
-    <gmicCommand><![CDATA[-gimp_blend_average_all ]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_blend_average_all]]></gmicCommand>
    </filter>
    <filter name="Blend [edges]">
     <gmicCommand><![CDATA[-gimp_blend_edges 1,0.8,0]]></gmicCommand>
@@ -624,25 +782,25 @@
     <gmicCommand><![CDATA[-gimp_blend_fade 1,0,0,5,0,0,0,0,0,0,"cos(4*pi*x/w) * sin(4*pi*y/h)"]]></gmicCommand>
    </filter>
    <filter name="Blend [median]">
-    <gmicCommand><![CDATA[-blend_median ]]></gmicCommand>
-   </filter>
-   <filter name="Blend [standard]">
-    <gmicCommand><![CDATA[-gimp_blend 0,0,1,0,1]]></gmicCommand>
+    <gmicCommand><![CDATA[-blend_median]]></gmicCommand>
    </filter>
    <filter name="Blend [seamless]">
     <gmicCommand><![CDATA[-gimp_blend_seamless 0,0,25,0]]></gmicCommand>
    </filter>
+   <filter name="Blend [standard]">
+    <gmicCommand><![CDATA[-gimp_blend 0,0,1,0,1]]></gmicCommand>
+   </filter>
    <filter name="Colors to layers">
-    <gmicCommand><![CDATA[-gimp_colors2layers 16]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_split_colors 50,16,1,0]]></gmicCommand>
    </filter>
    <filter name="Fade layers">
     <gmicCommand><![CDATA[-gimp_fade_layers 10]]></gmicCommand>
    </filter>
-   <filter name="Morph layers">
-    <gmicCommand><![CDATA[-gimp_morph 10,0.2,0.1,0]]></gmicCommand>
-   </filter>
    <filter name="Layers to tiles">
     <gmicCommand><![CDATA[-append_tiles 0,0]]></gmicCommand>
+   </filter>
+   <filter name="Morph layers">
+    <gmicCommand><![CDATA[-gimp_morph 10,0.2,0.1,0]]></gmicCommand>
    </filter>
    <filter name="Tiles to layers">
     <gmicCommand><![CDATA[-split_tiles 3,3,0]]></gmicCommand>
@@ -654,12 +812,15 @@
     <gmicCommand><![CDATA[-gimp_transfer_colors 0,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Lights &amp; shadows">
+  <category name="&lt;b>Lights &amp;amp; shadows&lt;/b>">
    <filter name="Burn">
     <gmicCommand><![CDATA[-gimp_burn 0.5,30,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Contrast swiss mask">
     <gmicCommand><![CDATA[-gimp_contrast_swm 2,0,1]]></gmicCommand>
+   </filter>
+   <filter name="Dodge and burn">
+    <gmicCommand><![CDATA[-gimp_dodgeburn 15,1.5,25,10,40,1.5,25,10,0,0,10,0]]></gmicCommand>
    </filter>
    <filter name="Drop shadow">
     <gmicCommand><![CDATA[-gimp_drop_shadow 3,3,1.8,0,0,0]]></gmicCommand>
@@ -686,7 +847,7 @@
     <gmicCommand><![CDATA[-gimp_shadow_patch 0.7,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Patterns">
+  <category name="&lt;b>Patterns&lt;/b>">
    <filter name="Bayer filter">
     <gmicCommand><![CDATA[-rgb2bayer 0,1]]></gmicCommand>
    </filter>
@@ -699,14 +860,23 @@
    <filter name="Canvas texture">
     <gmicCommand><![CDATA[-texturize_canvas 20,3,0.6]]></gmicCommand>
    </filter>
+   <filter name="Clouds">
+    <gmicCommand><![CDATA[-jeje_clouds 50,0.5]]></gmicCommand>
+   </filter>
    <filter name="Cracks">
     <gmicCommand><![CDATA[-gimp_cracks 1,-80,1,0,0]]></gmicCommand>
    </filter>
    <filter name="Crystal">
     <gmicCommand><![CDATA[-gimp_crystal 50,0.2,20,0]]></gmicCommand>
    </filter>
+   <filter name="Denim">
+    <gmicCommand><![CDATA[-Denim_samj_en 5,2,0,40,40,25,50,0,43,108,126,255]]></gmicCommand>
+   </filter>
    <filter name="Halftone">
     <gmicCommand><![CDATA[-gimp_halftone 0,1,0,0,5,8,8,5,0.1,0]]></gmicCommand>
+   </filter>
+   <filter name="Halftone shapes">
+    <gmicCommand><![CDATA[-iain_halftone_shapes 100,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Hearts">
     <gmicCommand><![CDATA[-gimp_hearts 10,0,0]]></gmicCommand>
@@ -735,6 +905,9 @@
    <filter name="Paper texture">
     <gmicCommand><![CDATA[-gimp_paper 0,0]]></gmicCommand>
    </filter>
+   <filter name="Periodic dots">
+    <gmicCommand><![CDATA[-jeje_periodic_dots 6,4,0,1,0]]></gmicCommand>
+   </filter>
    <filter name="Plaid">
     <gmicCommand><![CDATA[-gimp_plaid_texture 50,2,0,90,1,300]]></gmicCommand>
    </filter>
@@ -747,17 +920,29 @@
    <filter name="Random color ellipses">
     <gmicCommand><![CDATA[-gimp_color_ellipses 400,8,0.1]]></gmicCommand>
    </filter>
+   <filter name="Random pattern courtepointe">
+    <gmicCommand><![CDATA[-samj_en_Courtepointe 20,0,1,0,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Rays">
+    <gmicCommand><![CDATA[-jeje_rays 50,50,10,0,0.5,255,0,0,255,255,0,0]]></gmicCommand>
+   </filter>
    <filter name="Resynthetize texture">
     <gmicCommand><![CDATA[-syntexturize 1024,1024,0]]></gmicCommand>
    </filter>
    <filter name="Rorschach">
     <gmicCommand><![CDATA[-gimp_rorschach 3,1,2]]></gmicCommand>
    </filter>
+   <filter name="Seamless deco">
+    <gmicCommand><![CDATA[-gimp_mad_rorscharchp 3,0,50,1,300,0,0,0,0]]></gmicCommand>
+   </filter>
    <filter name="Seamless turbulence">
     <gmicCommand><![CDATA[-gimp_seamless_turbulence 15,20,0,1,3,0]]></gmicCommand>
    </filter>
    <filter name="Shock waves">
     <gmicCommand><![CDATA[-gimp_shockwaves 10,10,20,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Simple noise canvas">
+    <gmicCommand><![CDATA[-gimp_SimpleNoiseCanvas 0,3,2,5,5,0,255,0,2,0,0,0,1,0,255,255,255,255,0]]></gmicCommand>
    </filter>
    <filter name="Sponge">
     <gmicCommand><![CDATA[-gimp_sponge 13,0,0]]></gmicCommand>
@@ -771,6 +956,9 @@
    <filter name="Stencil">
     <gmicCommand><![CDATA[-gimp_stencil 3,0,8,0,2,0,0]]></gmicCommand>
    </filter>
+   <filter name="Strip">
+    <gmicCommand><![CDATA[-jeje_strip 45,50,0,1,0]]></gmicCommand>
+   </filter>
    <filter name="Tetris">
     <gmicCommand><![CDATA[-gimp_tetris 10]]></gmicCommand>
    </filter>
@@ -780,6 +968,9 @@
    <filter name="Turbulence">
     <gmicCommand><![CDATA[-gimp_turbulence 128,6,4,0,0]]></gmicCommand>
    </filter>
+   <filter name="Turing">
+    <gmicCommand><![CDATA[-jeje_turing_pattern 1,2000,0.1,0.899,-0.91,2,0.1,0.25]]></gmicCommand>
+   </filter>
    <filter name="Weave">
     <gmicCommand><![CDATA[-weave 6,65,0,0.5,0,0,0,0,0]]></gmicCommand>
    </filter>
@@ -787,12 +978,158 @@
     <gmicCommand><![CDATA[-gimp_whirls 7,2,0.2,1.8,7,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Repair">
+  <category name="&lt;b>Rendering&lt;/b>">
+   <filter name="3d blocks">
+    <gmicCommand><![CDATA[-gimp_blocks3d 32,0,2,1.5,30,60,45,50,50,0,-50,-100,0.5,0.7,1,1,0,0,0,128]]></gmicCommand>
+   </filter>
+   <filter name="3d colored object">
+    <gmicCommand><![CDATA[-gimp_coloredobject3d 1,128,128,128,255,0.5,0.5,0.5,57,41,21,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
+   </filter>
+   <filter name="3d elevation">
+    <gmicCommand><![CDATA[-gimp_elevation3d 100,1,1024,1024,0.8,25,0,21,45,0,0,-100,0.5,0.7,2,1]]></gmicCommand>
+   </filter>
+   <filter name="3d extrusion">
+    <gmicCommand><![CDATA[-gimp_extrude3d 10,512,0.6,1024,1024,0.5,57,41,21,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
+   </filter>
+   <filter name="3d image object">
+    <gmicCommand><![CDATA[-gimp_imageobject3d 1,1024,1024,0.5,57,41,21,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
+   </filter>
+   <filter name="3d lathing">
+    <gmicCommand><![CDATA[-gimp_lathing3d 76,2,361,1024,1024,0.5,0,0,0,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
+   </filter>
+   <filter name="3d random objects">
+    <gmicCommand><![CDATA[-gimp_random3d 0,50,3,100,45,0,0,-100,0.5,0.7,3,1]]></gmicCommand>
+   </filter>
+   <filter name="Adjacent rectangles">
+    <gmicCommand><![CDATA[-samj_en_Rectangles_Adjacents 10,10,80,80,0,50,6,0,0,0,0,0,255,1,255,255,0,127,0,0,255,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Annular steiner chains">
+    <gmicCommand><![CDATA[-samj_en_Annular_Steiner_Chains 50,50,50,6,0,0,0,0,255,1,255,255,0,127,64,192,128,127,0,255,0,127,0,0,255,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Ball">
+    <gmicCommand><![CDATA[-gimp_ball 128,0.8,1,1.5,255,0,255]]></gmicCommand>
+   </filter>
+   <filter name="Circle art">
+    <gmicCommand><![CDATA[-gimp_circle_art 1,15,0.5,8,1,1,15,0,0,0.5,1,1,1,1]]></gmicCommand>
+   </filter>
+   <filter name="Cupid">
+    <gmicCommand><![CDATA[-gimp_cupid 0,255,0,0,255]]></gmicCommand>
+   </filter>
+   <filter name="Equation plot [parametric]">
+    <gmicCommand><![CDATA[-gimp_equation_parametric "sin(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)","cos(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)",0,100,4096,1,0,64,0,0,128,0,0,1,1,1]]></gmicCommand>
+   </filter>
+   <filter name="Equation plot [y=f(x)]">
+    <gmicCommand><![CDATA[-gimp_equation_plot "X*c+10*cos(X+c+?)",-10,10,100,3,2,0]]></gmicCommand>
+   </filter>
+   <filter name="Gradient cie Lab [linear]">
+    <gmicCommand><![CDATA[-samj_en_Linear_Gradient_CIE_Lab 0,0,240,40,160,255,240,240,40,255]]></gmicCommand>
+   </filter>
+   <filter name="Gradient cie Lab [shape]">
+    <gmicCommand><![CDATA[-samj_en_Shape_Linear_Gradient_CIE_Lab 10,10,90,90,2,0,240,40,160,255,240,240,40,255,0,0,0,0,255,0]]></gmicCommand>
+   </filter>
+   <filter name="Gradient [corners]">
+    <gmicCommand><![CDATA[-gimp_corner_gradient 255,255,255,128,255,0,0,255,0,255,0,255,0,0,255,255]]></gmicCommand>
+   </filter>
+   <filter name="Gradient [custom shape]">
+    <gmicCommand><![CDATA[-gimp_custom_gradient 0,0,0,1,4,1,0,128,100,100,2,0,1,0,"",1,0,0,0,0,255,255,0,0,255,255,255,0,255,255,255,255,255,0,255,255,255,0,255,0,255,0,0,255,255,128,128,128,255,255,0,255,255,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Gradient [from line]">
+    <gmicCommand><![CDATA[-gimp_line_gradient 0,0,100,100,100,0,0,0,1,""]]></gmicCommand>
+   </filter>
+   <filter name="Gradient [linear]">
+    <gmicCommand><![CDATA[-gimp_linear_gradient 0,0,0,255,255,255,255,255,0,45,0,100]]></gmicCommand>
+   </filter>
+   <filter name="Gradient [radial]">
+    <gmicCommand><![CDATA[-gimp_radial_gradient 0,0,0,255,255,255,255,255,0,0,100,50,50]]></gmicCommand>
+   </filter>
+   <filter name="Hair locks">
+    <gmicCommand><![CDATA[-gtutor_hairlock 0.5,0.5,0.5,255,255,0,255,0.5,45,0.5,0.5,0]]></gmicCommand>
+   </filter>
+   <filter name="Harmonograph">
+    <gmicCommand><![CDATA[-Harmonograph_samj_en 50,50,192,128,64,255,0,0,1000,0,400,150,200,200,100,4,6,2,2,15,270,75,60,0.04,0.04,0.05,0.06,0,0,0,1,1]]></gmicCommand>
+   </filter>
+   <filter name="Hawaiian earring">
+    <gmicCommand><![CDATA[-samj_en_Hawaiian_Earring 50,50,40,6,0,0,0,0,0,255,1,255,255,0,127,0,0,255,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Heart">
+    <gmicCommand><![CDATA[-gimp_heart 75,0,255,0,0,255]]></gmicCommand>
+   </filter>
+   <filter name="Lightning">
+    <gmicCommand><![CDATA[-gimp_lightning 20,90,256,3,1.5,0.75,255,255,255,255,0,50,5,0,6,0.2,25,60,95,100,30,40,-0.25,-0.1,-0.2]]></gmicCommand>
+   </filter>
+   <filter name="Lines around a point">
+    <gmicCommand><![CDATA[-Traits_Strokes_samj_en 50,50,35,0,100,0,30,0,360,240,60,120,255,0,0,0,20,0,0,0,1,1]]></gmicCommand>
+   </filter>
+   <filter name="Lines of varying thickness">
+    <gmicCommand><![CDATA[-samj_en_Lignes_Epaisseur_Variable 0,32,3,0,0,0,255,255,255,255,255,0,0,1,0,0,0,0,0,0,0.5,0.5,1.8,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Lissajous">
+    <gmicCommand><![CDATA[-gimp_lissajous 4096,0.9,0.9,3,8,7,0,0,0,0,0,0,0,0,255,255,255,255]]></gmicCommand>
+   </filter>
+   <filter name="Mandelbrot-julia sets">
+    <gmicCommand><![CDATA[-gimp_mandelbrot 0,0,0,128,0,"0.317","0.03",0,0,255,0,255,0,255,0,0,255,0,255]]></gmicCommand>
+   </filter>
+   <filter name="Pappus chain">
+    <gmicCommand><![CDATA[-samj_en_Cercles_Tangents_Dans_Cercle 50,50,50,40,0,0,0,0,255,1,127,127,127,127,255,0,0,127,0,255,0,127,0,0,255,127,255,0,255,127,255,255,0,127,0,255,255,127,192,128,64,127,64,192,128,127,128,64,192,127,192,64,128,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Pintograph">
+    <gmicCommand><![CDATA[-Pintograph_samj_en 50,50,192,128,64,255,0,0,1000,0,400,150,200,200,100,4,4.05,4.16,4.32,75,150,75,60,0,0,0,1,1]]></gmicCommand>
+   </filter>
+   <filter name="Quick copyright">
+    <gmicCommand><![CDATA[-gimp_quick_copyright "\251 G'MIC",27,255,255,255,128,1,3,5,1]]></gmicCommand>
+   </filter>
+   <filter name="Rainbow">
+    <gmicCommand><![CDATA[-gimp_rainbow 80,80,175,175,3,80]]></gmicCommand>
+   </filter>
+   <filter name="Rotating circles">
+    <gmicCommand><![CDATA[-samj_en_Cercles_Qui_Tournent 800,255,255,255,255,0,1,0.5,0.33,7,17,1,0.5,0.33,7,17,1,10,0,0,0,255,0,0,0,0,0,0,0,0.5,0.5,1.8,0]]></gmicCommand>
+   </filter>
+   <filter name="Shade bobs">
+    <gmicCommand><![CDATA[-gimp_shadebobs 50,5,200,1,-1,2,1,0.8,0,8]]></gmicCommand>
+   </filter>
+   <filter name="Sierpinski triangle">
+    <gmicCommand><![CDATA[-gimp_sierpinski 6,50,0,0,100,100,100,128,128,128,1]]></gmicCommand>
+   </filter>
+   <filter name="Simple geometric shapes">
+    <gmicCommand><![CDATA[-samj_en_Formes_Geometriques_Simples 50,50,127,127,127,127,255,255,0,255,0,0,255,255,5,40,40,4,0,0,1]]></gmicCommand>
+   </filter>
+   <filter name="Snowflake">
+    <gmicCommand><![CDATA[-gimp_snowflake 3,20,70,80,70,50,10,1,128,128,128]]></gmicCommand>
+   </filter>
+   <filter name="Snowflake en">
+    <gmicCommand><![CDATA[-samj_en_Flocon_De_Neige 50,50,6,50,40,0,3,192,192,192,1,0,3,255,255,255,0.7,0,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Spiral">
+    <gmicCommand><![CDATA[-mathmap_spiral 5,0]]></gmicCommand>
+   </filter>
+   <filter name="Spirograph">
+    <gmicCommand><![CDATA[-Spirographe_samj_en 50,50,200,50,150,192,128,64,255,0,0,3,0,1,0,0,0,255,0,0,255,0,255,255,0,255,0,0,0,1,1]]></gmicCommand>
+   </filter>
+   <filter name="Straight lines">
+    <gmicCommand><![CDATA[-samj_en_Des_Lignes_002 100,0,0,192,128,64,255,0,0,1,50,50,0,0,0,0,1]]></gmicCommand>
+   </filter>
+   <filter name="Superformula">
+    <gmicCommand><![CDATA[-gimp_superformula 4096,0.9,0.9,8,1,5,8,0,0,0,3,128,255,128,255]]></gmicCommand>
+   </filter>
+  </category>
+  <category name="&lt;b>Repair&lt;/b>">
+   <filter name="Banding denoise">
+    <gmicCommand><![CDATA[-banding_denoise 5,5,5,10,0]]></gmicCommand>
+   </filter>
    <filter name="Bayer reconstruction">
     <gmicCommand><![CDATA[-bayer2rgb 6,6,4]]></gmicCommand>
    </filter>
    <filter name="Deinterlace">
     <gmicCommand><![CDATA[-deinterlace 0,0]]></gmicCommand>
+   </filter>
+   <filter name="Despeckle">
+    <gmicCommand><![CDATA[-gcd_despeckle 20,10]]></gmicCommand>
+   </filter>
+   <filter name="Iain's fast denoise p">
+    <gmicCommand><![CDATA[-iain_fast_denoise_p 0,0,1,0,0,0,1]]></gmicCommand>
+   </filter>
+   <filter name="Iain's noise reduction">
+    <gmicCommand><![CDATA[-iain_iains_nr 3,3,1,0,0,0,1,0,0,0,1.35,0,0]]></gmicCommand>
    </filter>
    <filter name="Inpaint [diffusion]">
     <gmicCommand><![CDATA[-gimp_inpaint_diffusion 1,10,10,20,0.7,1.2,1,255,0,0,255]]></gmicCommand>
@@ -806,23 +1143,41 @@
    <filter name="Inpaint [solidify]">
     <gmicCommand><![CDATA[-gimp_solidify 0,1.5,1,0.5,0]]></gmicCommand>
    </filter>
+   <filter name="Local similarity mask">
+    <gmicCommand><![CDATA[-local_similarity_mask 50,50,50,128,4,1]]></gmicCommand>
+   </filter>
+   <filter name="Pixel denoise">
+    <gmicCommand><![CDATA[-iain_pixel_denoise_p 2,1,7,0,1]]></gmicCommand>
+   </filter>
+   <filter name="Recursive median">
+    <gmicCommand><![CDATA[-iain_recursive_median_p 3,1,0,0,1]]></gmicCommand>
+   </filter>
    <filter name="Red-eye attenuation">
     <gmicCommand><![CDATA[-red_eye 75,3.5,0.1]]></gmicCommand>
    </filter>
    <filter name="Remove hot pixels">
     <gmicCommand><![CDATA[-gimp_remove_hotpixels 3,10,0]]></gmicCommand>
    </filter>
+   <filter name="Repair scanned document">
+    <gmicCommand><![CDATA[-jeje_scandoc 3,1,90,5,0]]></gmicCommand>
+   </filter>
    <filter name="Smooth [anisotropic]">
-    <gmicCommand><![CDATA[-gimp_anisotropic_smoothing 60,0.7,0.3,0.6,1.1,0.8,30,2,0,1,1,0,0,24,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_anisotropic_smoothing 60,0.7,0.3,0.6,1.1,0.8,30,2,0,1,1,0,0]]></gmicCommand>
    </filter>
    <filter name="Smooth [bilateral]">
     <gmicCommand><![CDATA[-gimp_bilateral 10,7,2,0,0,24,0]]></gmicCommand>
    </filter>
-   <filter name="Smooth [guided]">
-    <gmicCommand><![CDATA[-gimp_blur_guided 5,30,1,0,0,24,0]]></gmicCommand>
+   <filter name="Smooth [block pca]">
+    <gmicCommand><![CDATA[-jeje_denoise_patch_dict 1,8,1.1,1.1,0,0]]></gmicCommand>
    </filter>
    <filter name="Smooth [diffusion]">
     <gmicCommand><![CDATA[-gimp_diffusion_smoothing 0.7,0.3,0.6,1.1,15,8,0,0,24,0]]></gmicCommand>
+   </filter>
+   <filter name="Smooth [guided]">
+    <gmicCommand><![CDATA[-gimp_blur_guided 5,30,1,0,0,24,0]]></gmicCommand>
+   </filter>
+   <filter name="Smooth [iuwt]">
+    <gmicCommand><![CDATA[-jeje_denoise_iuwt 3,4,2,0]]></gmicCommand>
    </filter>
    <filter name="Smooth [mean-curvature]">
     <gmicCommand><![CDATA[-gimp_meancurvature_smoothing 30,4,0,0,0,24,0]]></gmicCommand>
@@ -831,7 +1186,7 @@
     <gmicCommand><![CDATA[-gimp_median 3,255,0,0]]></gmicCommand>
    </filter>
    <filter name="Smooth [nlmeans]">
-    <gmicCommand><![CDATA[-gimp_nlmeans 4,4,10,3,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_nlmeans 4,4,10,3,0,0,24,0]]></gmicCommand>
    </filter>
    <filter name="Smooth [patch-based]">
     <gmicCommand><![CDATA[-gimp_patch_smoothing 10,10,3,5,0,1,1,0,0,24,0]]></gmicCommand>
@@ -854,6 +1209,12 @@
    <filter name="Smooth [wavelets]">
     <gmicCommand><![CDATA[-gimp_haar_smoothing 1,10,10,0,0,24,0]]></gmicCommand>
    </filter>
+   <filter name="Smooth [wiener]">
+    <gmicCommand><![CDATA[-jeje_local_wiener 2,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Unstrip">
+    <gmicCommand><![CDATA[-jeje_unstrip 1,20,4,1,0,0]]></gmicCommand>
+   </filter>
    <filter name="Upscale [diffusion]">
     <gmicCommand><![CDATA[-gimp_upscale_smart "200%","200%",2,0.4,50]]></gmicCommand>
    </filter>
@@ -861,90 +1222,7 @@
     <gmicCommand><![CDATA[-gimp_scalenx 0,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Rendering">
-   <filter name="3d blocks">
-    <gmicCommand><![CDATA[-gimp_blocks3d 32,0,2,1.5,30,60,45,50,50,0,-50,-100,0.5,0.7,1,1,0,0,0,128]]></gmicCommand>
-   </filter>
-   <filter name="3d colored object">
-    <gmicCommand><![CDATA[-gimp_coloredobject3d 1,128,128,128,255,0.5,0.5,0.5,57,41,21,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
-   </filter>
-   <filter name="3d elevation">
-    <gmicCommand><![CDATA[-gimp_elevation3d 100,1,1024,1024,0.8,25,0,21,45,0,0,-100,0.5,0.7,2,1]]></gmicCommand>
-   </filter>
-   <filter name="3d extrusion">
-    <gmicCommand><![CDATA[-gimp_extrude3d 10,512,0.6,1024,1024,0.5,57,41,21,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
-   </filter>
-   <filter name="3d image object">
-    <gmicCommand><![CDATA[-gimp_imageobject3d 1,1024,1024,0.5,57,41,21,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
-   </filter>
-   <filter name="3d lathing">
-    <gmicCommand><![CDATA[-gimp_lathing3d 76,2,361,1024,1024,0.5,0,0,0,45,0,0,-100,0.5,0.7,4,1]]></gmicCommand>
-   </filter>
-   <filter name="3d random objects">
-    <gmicCommand><![CDATA[-gimp_random3d 0,50,3,100,45,0,0,-100,0.5,0.7,3,1]]></gmicCommand>
-   </filter>
-   <filter name="Ball">
-    <gmicCommand><![CDATA[-gimp_ball 128,0.8,1,1.5,255,0,255]]></gmicCommand>
-   </filter>
-   <filter name="Circle art">
-    <gmicCommand><![CDATA[-gimp_circle_art 1,15,0.5,8,1,1,15,0,0,0.5,1,1,1,1]]></gmicCommand>
-   </filter>
-   <filter name="Cupid">
-    <gmicCommand><![CDATA[-gimp_cupid 0,255,0,0,255]]></gmicCommand>
-   </filter>
-   <filter name="Equation plot [parametric]">
-    <gmicCommand><![CDATA[-gimp_equation_parametric "sin(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)","cos(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)",0,100,4096,1,0,64,0,0,128,0,0,1,1,1]]></gmicCommand>
-   </filter>
-   <filter name="Equation plot [y=f(x)]">
-    <gmicCommand><![CDATA[-gimp_equation_plot "X*c+10*cos(X+c+?)",-10,10,100,3,2,0]]></gmicCommand>
-   </filter>
-   <filter name="Gradient [corners]">
-    <gmicCommand><![CDATA[-gimp_corner_gradient 255,255,255,128,255,0,0,255,0,255,0,255,0,0,255,255]]></gmicCommand>
-   </filter>
-   <filter name="Gradient [custom shape]">
-    <gmicCommand><![CDATA[-gimp_custom_gradient 0,0,0,1,4,1,0,128,100,100,2,0,1,0,"",1,0,0,0,0,255,255,0,0,255,255,255,0,255,255,255,255,255,0,255,255,255,0,255,0,255,0,0,255,255,128,128,128,255,255,0,255,255,0,0,0,0]]></gmicCommand>
-   </filter>
-   <filter name="Gradient [from line]">
-    <gmicCommand><![CDATA[-gimp_line_gradient 0,0,100,100,100,0,0,0,1,""]]></gmicCommand>
-   </filter>
-   <filter name="Gradient [linear]">
-    <gmicCommand><![CDATA[-gimp_linear_gradient 0,0,0,255,255,255,255,255,0,45,0,100]]></gmicCommand>
-   </filter>
-   <filter name="Gradient [radial]">
-    <gmicCommand><![CDATA[-gimp_radial_gradient 0,0,0,255,255,255,255,255,0,0,100,50,50]]></gmicCommand>
-   </filter>
-   <filter name="Heart">
-    <gmicCommand><![CDATA[-gimp_heart 75,0,255,0,0,255]]></gmicCommand>
-   </filter>
-   <filter name="Lightning">
-    <gmicCommand><![CDATA[-gimp_lightning 20,90,256,3,1.5,0.75,255,255,255,255,0,50,5,0,6,0.2,25,60,95,100,30,40,-0.25,-0.1,-0.2]]></gmicCommand>
-   </filter>
-   <filter name="Lissajous">
-    <gmicCommand><![CDATA[-gimp_lissajous 4096,0.9,0.9,3,8,7,0,0,0,0,0,0,0,0,255,255,255,255]]></gmicCommand>
-   </filter>
-   <filter name="Mandelbrot-julia sets">
-    <gmicCommand><![CDATA[-gimp_mandelbrot 0,0,0,128,0,"0.317","0.03",0,0,255,0,255,0,255,0,0,255,0,255]]></gmicCommand>
-   </filter>
-   <filter name="Quick copyright">
-    <gmicCommand><![CDATA[-gimp_quick_copyright "\251 G'MIC",27,255,255,255,128,1,3,5,1]]></gmicCommand>
-   </filter>
-   <filter name="Rainbow">
-    <gmicCommand><![CDATA[-gimp_rainbow 80,80,175,175,3,80]]></gmicCommand>
-   </filter>
-   <filter name="Shade bobs">
-    <gmicCommand><![CDATA[-gimp_shadebobs 50,5,200,1,-1,2,1,0.8,0,8]]></gmicCommand>
-   </filter>
-   <filter name="Sierpinski triangle">
-    <gmicCommand><![CDATA[-gimp_sierpinski 6,50,0,0,100,100,100,128,128,128,1]]></gmicCommand>
-   </filter>
-   <filter name="Snowflake">
-    <gmicCommand><![CDATA[-gimp_snowflake 3,20,70,80,70,50,10,1,128,128,128]]></gmicCommand>
-   </filter>
-   <filter name="Superformula">
-    <gmicCommand><![CDATA[-gimp_superformula 4096,0.9,0.9,8,1,5,8,0,0,0,3,128,255,128,255]]></gmicCommand>
-   </filter>
-  </category>
-  <category name="Sequences">
+  <category name="&lt;b>Sequences&lt;/b>">
    <filter name="3d elevation [animated]">
     <gmicCommand><![CDATA[-gimp_animate_elevation3d 10,1,0,"[[:home:]]",100,1,1024,1024,2,0.8,35,0,0,45,0,0,-100,0.5,0.7,0.8,35,0,360,45,0,0,-100,0.5,0.7]]></gmicCommand>
    </filter>
@@ -960,23 +1238,20 @@
    <filter name="3d tiles">
     <gmicCommand><![CDATA[-gimp_transition3d 10,8,8,"1","1","0",800,1]]></gmicCommand>
    </filter>
-   <filter name="Plasma transition">
-    <gmicCommand><![CDATA[-gimp_transition_plasma 30,5,0.5]]></gmicCommand>
-   </filter>
-   <filter name="B&amp;W pencil [animated]">
+   <filter name="B&amp;amp;W pencil [animated]">
     <gmicCommand><![CDATA[-gimp_animate_pencilbw 10,1,0,"[[:home:]]",2.3,100,0.3,60]]></gmicCommand>
    </filter>
-   <filter name="B&amp;W stencil [animated]">
+   <filter name="B&amp;amp;W stencil [animated]">
     <gmicCommand><![CDATA[-gimp_animate_stencilbw 10,1,0,"[[:home:]]",10,10,10,20]]></gmicCommand>
    </filter>
    <filter name="Cartoon [animated]">
     <gmicCommand><![CDATA[-gimp_animate_cartoon 10,1,0,"[[:home:]]",4,0.5,200,10,0.1,1.5,3,200,10,0.1,1.5]]></gmicCommand>
    </filter>
-   <filter name="Edges [animated]">
-    <gmicCommand><![CDATA[-gimp_animate_edges 10,1,0,"[[:home:]]",0,0,10,0,30]]></gmicCommand>
-   </filter>
    <filter name="Edges on fire">
     <gmicCommand><![CDATA[-gimp_fire_edges 0.7,0.25,0.5,25,20,20,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Edges [animated]">
+    <gmicCommand><![CDATA[-gimp_animate_edges 10,1,0,"[[:home:]]",0,0,10,0,30]]></gmicCommand>
    </filter>
    <filter name="Lava lamp">
     <gmicCommand><![CDATA[-gimp_lavalampbw 3,30,1,20,2,0.01,0]]></gmicCommand>
@@ -987,6 +1262,12 @@
    <filter name="Morphological filter [animated]">
     <gmicCommand><![CDATA[-gimp_animate_morpho 10,1,0,"[[:home:]]",0,0,0,5,50]]></gmicCommand>
    </filter>
+   <filter name="Object animation">
+    <gmicCommand><![CDATA[-gimp_tk_animateobject 0,0,0,0.5,0.5,400,2,0,0,0,0,0,1,0,0,1]]></gmicCommand>
+   </filter>
+   <filter name="Plasma transition">
+    <gmicCommand><![CDATA[-gimp_transition_plasma 30,5,0.5]]></gmicCommand>
+   </filter>
    <filter name="Rodilius [animated]">
     <gmicCommand><![CDATA[-gimp_animate_rodilius 10,1,0,"[[:home:]]",1,10,10,300,5,0,10,10,300,5,180]]></gmicCommand>
    </filter>
@@ -994,32 +1275,56 @@
     <gmicCommand><![CDATA[-gimp_animate_glow 10,1,0,"[[:home:]]",0,3]]></gmicCommand>
    </filter>
   </category>
-  <category name="Spectral filters">
-   <filter name="Bandpass">
-    <gmicCommand><![CDATA[-gimp_bandpass 0,100,0,2,0]]></gmicCommand>
+  <category name="&lt;b>Stereoscopic 3d&lt;/b>">
+   <filter name="3d conversion">
+    <gmicCommand><![CDATA[-gimp_tk_make3D 0,20,0,20,0,0,0,0,0,0,0,0,0,1.2,25,1,0,1,0,0,0,2,200]]></gmicCommand>
    </filter>
-   <filter name="Fourier analysis">
-    <gmicCommand><![CDATA[-gimp_display_fft ]]></gmicCommand>
+   <filter name="3d video conversion">
+    <gmicCommand><![CDATA[-gimp_tk_video3D 0,10,-10,20,0,0,0,0,0,0,0,0,0,0,"[[:home:]]",1.2,25,1,0,1,1,1280,1,0,0,0,"[[:home:]]","frame_",0,1,0,0,,"# old movie #\n#-luminance -gimp_stripes_y 10,3,0 -sepia \n\n#simple vintage#\n#--fc 0,15,125 -rv -gimp_compose_exclusion 0.3 \n\n# HDR popout #\n#-gimp_map_tones_fast 2,0.3,3,2 -gimp_unsharp_octave 4,5,3,0,0,0\n\n",0,0,1,5,0,0,0,1,0]]></gmicCommand>
    </filter>
-   <filter name="Fourier transform">
-    <gmicCommand><![CDATA[-gimp_fourier 0,1]]></gmicCommand>
+   <filter name="Automatic depth estimation">
+    <gmicCommand><![CDATA[-gimp_tk_autodepth]]></gmicCommand>
    </filter>
-   <filter name="Fourier watermark">
-    <gmicCommand><![CDATA[-gimp_watermark_fourier "(c) G'MIC",53]]></gmicCommand>
+   <filter name="De-anaglyph">
+    <gmicCommand><![CDATA[-gimp_tk_deana 20,2]]></gmicCommand>
+   </filter>
+   <filter name="Depth map construction">
+    <gmicCommand><![CDATA[-gimp_tk_depthmap 0,20,0,0,0,0,0,0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Depth map reconstruction">
+    <gmicCommand><![CDATA[-gimp_tk_depth_obtain 0,0.1,100,0]]></gmicCommand>
+   </filter>
+   <filter name="Lenticular print">
+    <gmicCommand><![CDATA[-gimp_tk_lenticular 30,0,5,0,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Single image stereogram">
+    <gmicCommand><![CDATA[-gimp_tk_stereogram 50,0.5,10,0,40,255,255,0,255,0,0,0,255,0,0,0,255,0.5,0]]></gmicCommand>
+   </filter>
+   <filter name="Stereoscopic image alignment">
+    <gmicCommand><![CDATA[-gimp_tk_stereoimage 0,0,1,0,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Stereo image">
+    <gmicCommand><![CDATA[-gcd_stereo_img 0,4,1.2,1,0.25,2,4,1,0]]></gmicCommand>
+   </filter>
+   <filter name="Undo anaglyph">
+    <gmicCommand><![CDATA[-gcd_unstereo 5,0.1,1,1,1,1,0]]></gmicCommand>
    </filter>
   </category>
-  <category name="Various">
-   <filter name="Custom code (local)">
-    <gmicCommand><![CDATA[-gimp_custom_code "-repeat @# -l[$>]\n\n  -to_rgb\n  --deform 20\n  -blend_edges 3\n\n-endl -done\n\n\n",0,0,0]]></gmicCommand>
-   </filter>
+  <category name="&lt;b>Various&lt;/b>">
    <filter name="Custom code (global)">
     <gmicCommand><![CDATA[-gimp_custom_code "-repeat @# -l[$>]\n\n  -to_rgb\n  --deform 20\n  -blend_edges 3\n\n-endl -done\n\n\n",0,0,0]]></gmicCommand>
    </filter>
-   <filter name="Games &amp; demos">
+   <filter name="Custom code (local)">
+    <gmicCommand><![CDATA[-gimp_custom_code "-repeat @# -l[$>]\n\n  -to_rgb\n  --deform 20\n  -blend_edges 3\n\n-endl -done\n\n\n",0,0,0]]></gmicCommand>
+   </filter>
+   <filter name="Games &amp;amp; demos">
     <gmicCommand><![CDATA[-gimp_gmic_demos 0]]></gmicCommand>
    </filter>
    <filter name="Histogram analysis">
     <gmicCommand><![CDATA[-_none_ 256,0]]></gmicCommand>
+   </filter>
+   <filter name="Import 16bit image">
+    <gmicCommand><![CDATA[-gimp_import_image_16 "[[:home:]]",1,2.2,0,1,0,0,0,0,100,0]]></gmicCommand>
    </filter>
    <filter name="Import data">
     <gmicCommand><![CDATA[-gimp_import_image "[[:home:]]",1]]></gmicCommand>
@@ -1027,6 +1332,639 @@
    <filter name="Solve maze">
     <gmicCommand><![CDATA[-gimp_solve_maze 5,5,95,95,0.1,3,255,0,0,0]]></gmicCommand>
    </filter>
+  </category>
+  <category name="&lt;b>Testing&lt;/b>">
+   <category name="&lt;i>Corvo&lt;/i>">
+    <filter name="Corvo's painting 5">
+     <gmicCommand><![CDATA[-gimp_corvo_painting_5 35,10,10,0.5,50,0.3,50,2,5,1]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Garagecoder&lt;/i>">
+    <filter name="Blend [feather]">
+     <gmicCommand><![CDATA[-gcd_blend_feather 100,0.5,2,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Depth blur">
+     <gmicCommand><![CDATA[-gcd_depth_blur 0,15,0.25,2,4,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Emboss">
+     <gmicCommand><![CDATA[-gcd_emboss 128]]></gmicCommand>
+    </filter>
+    <filter name="Recolor">
+     <gmicCommand><![CDATA[-gcd_recol -14,14]]></gmicCommand>
+    </filter>
+    <filter name="Seam carve">
+     <gmicCommand><![CDATA[-gcd_seamcarve 10]]></gmicCommand>
+    </filter>
+    <filter name="Seam carve [fast]">
+     <gmicCommand><![CDATA[-gcd_opt_seams 75]]></gmicCommand>
+    </filter>
+    <filter name="Sharpen [tones]">
+     <gmicCommand><![CDATA[-gcd_sharpen_tones 1,128]]></gmicCommand>
+    </filter>
+    <filter name="Smart rotate">
+     <gmicCommand><![CDATA[-gcd_srotate 0,50,50,1,1,6,0.6,0]]></gmicCommand>
+    </filter>
+    <filter name="Split objects">
+     <gmicCommand><![CDATA[-gcd_splitobj 50,3,3,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Stereo video">
+     <gmicCommand><![CDATA[-gcd_stereo_vid "[[:home:]]","[[:home:]]","[[:home:]]",0,4,1.2,0.25,2,4,1,5,1]]></gmicCommand>
+    </filter>
+    <filter name="Tone enhance">
+     <gmicCommand><![CDATA[-gcd_tone_enhance 1,0,0,1,0,128,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Unquantize [jpeg smooth]">
+     <gmicCommand><![CDATA[-gcd_unquantize 6,1,1,5,15]]></gmicCommand>
+    </filter>
+    <filter name="Warp map">
+     <gmicCommand><![CDATA[-gcd_warpmap 5,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Xbr2x">
+     <gmicCommand><![CDATA[-gcd_xbr2x]]></gmicCommand>
+    </filter>
+    <category name="&lt;i>.image repair [old]&lt;/i>">
+     <filter name="Anti alias">
+      <gmicCommand><![CDATA[-gcd_anti_alias 60,0.3,50,0]]></gmicCommand>
+     </filter>
+     <filter name="Compression blur">
+      <gmicCommand><![CDATA[-gcd_comp_blur 2,3,1,100,1,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Jpeg smooth">
+      <gmicCommand><![CDATA[-gcd_jpeg_smooth 1,1,0,0]]></gmicCommand>
+     </filter>
+    </category>
+   </category>
+   <category name="&lt;i>Gentlemanbeggar&lt;/i>">
+    <filter name="60's cinema">
+     <gmicCommand><![CDATA[-gimp_gb_cfx 10,0,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="About">
+     <gmicCommand><![CDATA[-_none_]]></gmicCommand>
+    </filter>
+    <filter name="Lens blur">
+     <gmicCommand><![CDATA[-gimp_gb_lb 10,7,0]]></gmicCommand>
+    </filter>
+    <filter name="Maxfield parrish">
+     <gmicCommand><![CDATA[-gimp_gb_mp 2,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Modern cinema">
+     <gmicCommand><![CDATA[-gimp_gb_mcfx 0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Ping pong">
+     <gmicCommand><![CDATA[-gimp_gb_pp]]></gmicCommand>
+    </filter>
+    <filter name="Urban blight">
+     <gmicCommand><![CDATA[-gimp_gb_ub -1,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Gmic tutorials&lt;/i>">
+    <filter name="Blur by color">
+     <gmicCommand><![CDATA[-gtutor_blur_img 3,0.5]]></gmicCommand>
+    </filter>
+    <filter name="Hedcut (experimental)">
+     <gmicCommand><![CDATA[-hedcut 0.5,0.5,0.5,0,0.5,0,1,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Iain fergusson&lt;/i>">
+    <filter name="Automixer">
+     <gmicCommand><![CDATA[-automixer 0,0]]></gmicCommand>
+    </filter>
+    <filter name="Brown spot clean">
+     <gmicCommand><![CDATA[-iain_brown_spot_clean 1,2]]></gmicCommand>
+    </filter>
+    <filter name="Ca correction">
+     <gmicCommand><![CDATA[-iain_CA_correction 0,0,2,0,3]]></gmicCommand>
+    </filter>
+    <filter name="Easy skin retouch">
+     <gmicCommand><![CDATA[-iain_easy_skin_retouch 7,2,0.7,1,1,0.7,0.6,0.5,0.5,0.5,0]]></gmicCommand>
+    </filter>
+    <filter name="Exfuse">
+     <gmicCommand><![CDATA[-exfuse 1,0.6,0,0.5,1,5]]></gmicCommand>
+    </filter>
+    <filter name="Exfusion">
+     <gmicCommand><![CDATA[-exfusion 20]]></gmicCommand>
+    </filter>
+    <filter name="Exfusion3">
+     <gmicCommand><![CDATA[-exfusion3 0.3,0.3,0.2,0.3,-1,0]]></gmicCommand>
+    </filter>
+    <filter name="Exfusion5">
+     <gmicCommand><![CDATA[-exfusion5 0,0.2,0.2,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Fast formula">
+     <gmicCommand><![CDATA[-iain_fast_formula "-apply_gamma 2.2"]]></gmicCommand>
+    </filter>
+    <filter name="Fast median stack">
+     <gmicCommand><![CDATA[-iain_fast_median_stack]]></gmicCommand>
+    </filter>
+    <filter name="Fft tile">
+     <gmicCommand><![CDATA[-fft_tile 500,128,0]]></gmicCommand>
+    </filter>
+    <filter name="Fill holes">
+     <gmicCommand><![CDATA[-fill_holes 11,21,5,0,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Grey descreen">
+     <gmicCommand><![CDATA[-iain_descreen2 3,-10000,10]]></gmicCommand>
+    </filter>
+    <filter name="Hearttone">
+     <gmicCommand><![CDATA[-iain_hearttone 100,0]]></gmicCommand>
+    </filter>
+    <filter name="Iain 2x">
+     <gmicCommand><![CDATA[-iain_2x]]></gmicCommand>
+    </filter>
+    <filter name="Iain demosiac">
+     <gmicCommand><![CDATA[-iain_demosiac 0]]></gmicCommand>
+    </filter>
+    <filter name="Iain star burst">
+     <gmicCommand><![CDATA[-iain_star_burst 254,50,5,45,2,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Iain unindex">
+     <gmicCommand><![CDATA[-iain_unindex 30,20,1,50,50]]></gmicCommand>
+    </filter>
+    <filter name="Iain weightmap">
+     <gmicCommand><![CDATA[-iain_weightmap 1,40]]></gmicCommand>
+    </filter>
+    <filter name="Luminance nr">
+     <gmicCommand><![CDATA[-luminance_nr 10,1,1,6,5,4,3,2,1,5000,64,1.3]]></gmicCommand>
+    </filter>
+    <filter name="Luminance nr2">
+     <gmicCommand><![CDATA[-luminance_nr_two 10,1,1,0.8,0.7,0.6,0.5,0.4,0.3,1200,64,0,0,0,0,0,0,0,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Moire removal">
+     <gmicCommand><![CDATA[-iain_moire_removal 5,5,0]]></gmicCommand>
+    </filter>
+    <filter name="Moire removal not parallel">
+     <gmicCommand><![CDATA[-iain_moire_removal_NP 5,5,0]]></gmicCommand>
+    </filter>
+    <filter name="Ms nlmeans c noise2">
+     <gmicCommand><![CDATA[-ms_nlmeans_c_noise2_p 3,1,0,0,0,0,0,10,2,4,2,7,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Ms patch chroma">
+     <gmicCommand><![CDATA[-ms_patch_c 5,1,1,5,4,3,2,1,1,1.3,0.375,0.5,0.125,0]]></gmicCommand>
+    </filter>
+    <filter name="Ms patch nr">
+     <gmicCommand><![CDATA[-MS_Patch_NR 1.3,0,0,0,3,5]]></gmicCommand>
+    </filter>
+    <filter name="Ms patch nr3">
+     <gmicCommand><![CDATA[-MS_Patch_NR3 1.3,0,0,0,3,5,1,0,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Multi scale patch smoothing">
+     <gmicCommand><![CDATA[-ms_patch_smooth 10,5,3,5,0,1,1,7,5,4,3,2,1,1,1.3,0]]></gmicCommand>
+    </filter>
+    <filter name="Multi scale smoothing">
+     <gmicCommand><![CDATA[-ms_smooth 0,0,0,0,0,0,2,0,2,0]]></gmicCommand>
+    </filter>
+    <filter name="Noise reduction 3">
+     <gmicCommand><![CDATA[-nr3 1,1,0,0,0,0,1,0.75,1,0,0.75,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Noise reduction 5">
+     <gmicCommand><![CDATA[-nr5 1.6,5,1,1,0.75,3,0,0.75,0.5,0,1,1,100,0,-100,0,1.3,0]]></gmicCommand>
+    </filter>
+    <filter name="Savenoiseprint">
+     <gmicCommand><![CDATA[-iain_savenoiseprint 0,1,1.4]]></gmicCommand>
+    </filter>
+    <filter name="Skin mask">
+     <gmicCommand><![CDATA[-iain_gimp_skin_mask 55,200,0,0,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Smart demosaic">
+     <gmicCommand><![CDATA[-iain_smartdemos 0,1.5,2]]></gmicCommand>
+    </filter>
+    <filter name="Spot mask">
+     <gmicCommand><![CDATA[-spot_mask 4,80,5]]></gmicCommand>
+    </filter>
+    <filter name="Star tone">
+     <gmicCommand><![CDATA[-star_tone 100]]></gmicCommand>
+    </filter>
+    <filter name="Turbulent halftone">
+     <gmicCommand><![CDATA[-iain_turbulent_halftone_preview 15,20,0,1,512,0.75,0,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>J&amp;#233;j&amp;#233;&lt;/i>">
+    <filter name="3d rendering">
+     <gmicCommand><![CDATA[-jeje_render3d "[[:home:]]",8,6,0.1,240,0,30,1,32,32,64,255,64,128,96,255,0]]></gmicCommand>
+    </filter>
+    <filter name="Deconvolve">
+     <gmicCommand><![CDATA[-jeje_deconvolve 20,0,3,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Jayprich&lt;/i>">
+    <filter name="About">
+     <gmicCommand><![CDATA[-_none_]]></gmicCommand>
+    </filter>
+    <filter name="Jpr colourillusion">
+     <gmicCommand><![CDATA[-jpr_colourillusion 2,25]]></gmicCommand>
+    </filter>
+    <filter name="Jpr coltexindex">
+     <gmicCommand><![CDATA[-jpr_coltexindex 5,55,55,45,45,1,1,0,0.05,0.5,0.95,0.5,1,2,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Jpr decimate">
+     <gmicCommand><![CDATA[-jpr_decimate 0.375,2]]></gmicCommand>
+    </filter>
+    <filter name="Jpr gradient smooth">
+     <gmicCommand><![CDATA[-jpr_gradient_smooth 0,1.5]]></gmicCommand>
+    </filter>
+    <filter name="Jpr line edges">
+     <gmicCommand><![CDATA[-jpr_line_edges 2,2,4,1]]></gmicCommand>
+    </filter>
+    <filter name="Jpr orientedthinning">
+     <gmicCommand><![CDATA[-jpr_orientedthinning 5,15,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Jpr phasecongruence">
+     <gmicCommand><![CDATA[-jpr_phasecongruence 45,1,50,1]]></gmicCommand>
+    </filter>
+    <filter name="Jpr remove blocks1">
+     <gmicCommand><![CDATA[-jpr_remove_blocks1 4,3,70]]></gmicCommand>
+    </filter>
+    <filter name="Jpr shapes gradient">
+     <gmicCommand><![CDATA[-jpr_shapes_gradient 4.5,0.25,0.01,7]]></gmicCommand>
+    </filter>
+    <filter name="Jpr specularbumps">
+     <gmicCommand><![CDATA[-jpr_specularbumps 270,1,13,0,80,0.1,0.1,0]]></gmicCommand>
+    </filter>
+    <filter name="Jpr warpfromthreshold">
+     <gmicCommand><![CDATA[-jpr_warpfromthreshold 170,2,10,2]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Karo's tests&lt;/i>">
+    <filter name="About">
+     <gmicCommand><![CDATA[-_none_]]></gmicCommand>
+    </filter>
+    <filter name="Cimg nlmeans">
+     <gmicCommand><![CDATA[-gimp_karo_cimg_nlmeans 0,0,0,1,-1,-1,3,2,1]]></gmicCommand>
+    </filter>
+    <filter name="Cimg skeleton">
+     <gmicCommand><![CDATA[-gimp_karo_cimg_skel 1,50,0,0,-0.3,0,0,1,1]]></gmicCommand>
+    </filter>
+    <filter name="Mm differences">
+     <gmicCommand><![CDATA[-gimp_karo_mm_diff 5,7,2,1,0,1,1]]></gmicCommand>
+    </filter>
+    <filter name="Oc differences">
+     <gmicCommand><![CDATA[-gimp_karo_oc_diff 5,1,0,1,1]]></gmicCommand>
+    </filter>
+    <filter name="Pink operator">
+     <gmicCommand><![CDATA[-gimp_pink 0,0,0,5,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Pink operator binary">
+     <gmicCommand><![CDATA[-gimp_karo_pink_bin 1,50,3,0,5,4,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Pink test operator bianca">
+     <gmicCommand><![CDATA[-gimp_karo_pink_bianca 5,60,5,1,0,0,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Lylejk&lt;/i>">
+    <filter name="Blend [shape average]">
+     <gmicCommand><![CDATA[-gimp_blend_shapeaverage 1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Lylejk's stencil">
+     <gmicCommand><![CDATA[-gimp_lylejk_stencil 5,10,3,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Naggobot&lt;/i>">
+    <filter name="Abstract flood">
+     <gmicCommand><![CDATA[-gimp_AbstractFlood 1,10,7,2,0,10,5,3,255,255,255,255,0,300,10,90,0.7,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Black &amp;amp; white film">
+     <gmicCommand><![CDATA[-gimp_bwfilmsimulate 0,0.299,0,0.587,0,0.114,0,1,1,0,0,0,0,0,0,2,0,0,0,16,4,0]]></gmicCommand>
+    </filter>
+    <filter name="Composition analysis">
+     <gmicCommand><![CDATA[-gimp_CompositionAnalysis 0]]></gmicCommand>
+    </filter>
+    <filter name="Dodge sketch">
+     <gmicCommand><![CDATA[-gimp_dodgesketch 3,10,7,2,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Exposure fusion weight map">
+     <gmicCommand><![CDATA[-gimp_ExposureWeightMap 0.3,0.3,0.2,0.3,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Gmic structure tensors">
+     <gmicCommand><![CDATA[-gimp_StructureTensors 0.1,0]]></gmicCommand>
+    </filter>
+    <filter name="Import 16bit image">
+     <gmicCommand><![CDATA[-gimp_import_image_16_info]]></gmicCommand>
+    </filter>
+    <filter name="Luminance to alpha">
+     <gmicCommand><![CDATA[-gimp_split_luminance 1,1,1,0,-keep[-1]]]></gmicCommand>
+    </filter>
+    <filter name="Make old squiggly">
+     <gmicCommand><![CDATA[-gimp_OldSquiggly 2,12,0.8,0,0.5,3,0.2,0.4,50,245,45,0.5]]></gmicCommand>
+    </filter>
+    <filter name="Mapped smoothing">
+     <gmicCommand><![CDATA[-gimp_MappedSmooth 0,0,0,300,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Night hdr image black noise correction">
+     <gmicCommand><![CDATA[-gimp_fix_HDR_black 20,25,50,200,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Noise painting">
+     <gmicCommand><![CDATA[-gimp_noisepainting 0,0,0,5,2.5,1.5,50,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Pastell art">
+     <gmicCommand><![CDATA[-gimp_pastell 0.6,1,0,20,30,300,1,30,1,1,0.5,0,0,10,3,0,9,3,0,12,0]]></gmicCommand>
+    </filter>
+    <filter name="Smooth sketch">
+     <gmicCommand><![CDATA[-gimp_SmoothSketch 1,6,0.8,0.3,0.3,0,1000,0,50,10,2,0.6,0.55,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Vector field rotation demo">
+     <gmicCommand><![CDATA[-gimp_DemoVecRot 0]]></gmicCommand>
+    </filter>
+    <filter name="Warp test">
+     <gmicCommand><![CDATA[-gimp_WarpTest 0,0,0,1,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Okyl168&lt;/i>">
+    <filter name="Jobs colors">
+     <gmicCommand><![CDATA[-gimp_jobs_colors 0,0,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Photocomix&lt;/i>">
+    <filter name="B&amp;amp;W steampunk pencil">
+     <gmicCommand><![CDATA[-gimp_steampen 0.95,14,2,2,0.9,0,1,0,0.5,0.75,0.48,0]]></gmicCommand>
+    </filter>
+    <filter name="Boost screen">
+     <gmicCommand><![CDATA[-gimp_compose_boostscreen 0.7,0,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Color doping">
+     <gmicCommand><![CDATA[-gimp_compose_colordoping 1,0]]></gmicCommand>
+    </filter>
+    <filter name="Color sketch">
+     <gmicCommand><![CDATA[-gimp_colorsketchbw 300,50,1,0.1,20,1,0,20,2,0,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Color stamp">
+     <gmicCommand><![CDATA[-gimp_colorstamp 1,50,1,20,2,0]]></gmicCommand>
+    </filter>
+    <filter name="Comix colors">
+     <gmicCommand><![CDATA[-gimp_compose_comix_color 1,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Dark edges">
+     <gmicCommand><![CDATA[-gimp_compose_darkedges 1,0.5,0,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Dark screen">
+     <gmicCommand><![CDATA[-gimp_compose_darkscreen 0.7,0,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Graphic colors">
+     <gmicCommand><![CDATA[-gimp_compose_graphicolor 0.6,0,0.8]]></gmicCommand>
+    </filter>
+    <filter name="Graphic novel-old">
+     <gmicCommand><![CDATA[-gimp_novelfx 0,2,6,5,20,0,0.62,14,0,1,0.5,0.78,1.92,0,0,0,1,1,0.5,0.8,1.28,0]]></gmicCommand>
+    </filter>
+    <filter name="Graphix colors">
+     <gmicCommand><![CDATA[-gimp_compose_graphixcolor 1,0,1.25,2,0,0.15,14,0,1,0.5,0.45,2,0,1,0,1,1,0.5,0.45,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Heavy screen">
+     <gmicCommand><![CDATA[-gimp_compose_heavyscreen 0.6,0,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Metallic grain">
+     <gmicCommand><![CDATA[-gimp_metalgrain 0.5,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Metallic stencils">
+     <gmicCommand><![CDATA[-gimp_metallicstencils 0,0]]></gmicCommand>
+    </filter>
+    <filter name="Phoenix steam-pencil">
+     <gmicCommand><![CDATA[-gimp_phoenix 0.95,14,2,2,0.9,0,0,0,1,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Photocomix smoothing">
+     <gmicCommand><![CDATA[-gimp_anisotropic_smoothing 60,0.16,0.63,0.6,2.35,0.8,30,2,0,1,1,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Psychedelic glasswork tiler">
+     <gmicCommand><![CDATA[-gimp_psyglass 0,20,0.1,1,1,0,1,1,0,1,1,0,0,2,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Scale down neat">
+     <gmicCommand><![CDATA[-gimp_scaledown3 0,1,1,1,1600,1600,0,2.3,1,3,0]]></gmicCommand>
+    </filter>
+    <filter name="Symmetry master">
+     <gmicCommand><![CDATA[-gimp_viral 3,0,0,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Vivid colors">
+     <gmicCommand><![CDATA[-gimp_compose_vivid_color 1,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Vivid edges">
+     <gmicCommand><![CDATA[-gimp_compose_vividedges 1,0.5,0,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Vivid screen">
+     <gmicCommand><![CDATA[-gimp_compose_vividscreen 0.6,0,0.7]]></gmicCommand>
+    </filter>
+    <filter name="Wild cartoonizer">
+     <gmicCommand><![CDATA[-gimp_m_l_unsharp2 12,2.18,0.3,1.5,1,0.5,0,0.5,0.8,1.28,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Rl&lt;/i>">
+    <filter name="Plasma transition">
+     <gmicCommand><![CDATA[-plasma_transition 0.5,5,1,42]]></gmicCommand>
+    </filter>
+    <filter name="Randomwaves">
+     <gmicCommand><![CDATA[-randomwaves 84,80,1.2,42]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Ronounours&lt;/i>">
+    <filter name="Auto-adjust orientation">
+     <gmicCommand><![CDATA[-gimp_adjust_orientation 5]]></gmicCommand>
+    </filter>
+    <filter name="Circlism">
+     <gmicCommand><![CDATA[-gimp_circlism 2,10,1,0.4,3,2,0]]></gmicCommand>
+    </filter>
+    <filter name="Clean skin">
+     <gmicCommand><![CDATA[-gimp_clean_skin 0.8,2,0]]></gmicCommand>
+    </filter>
+    <filter name="Convolve fft">
+     <gmicCommand><![CDATA[-gimp_convolve_fft 0]]></gmicCommand>
+    </filter>
+    <filter name="Faded mirror">
+     <gmicCommand><![CDATA[-gimp_faded_mirror 0,10,10]]></gmicCommand>
+    </filter>
+    <filter name="Generate film data">
+     <gmicCommand><![CDATA[-gimp_generate_film_data "",75,196,1]]></gmicCommand>
+    </filter>
+    <filter name="Grain [old]">
+     <gmicCommand><![CDATA[-gimp_grain 40,5,0,2,0.8,0.5,0.5,1,0,0.5,0.6,0.2,0.5,0]]></gmicCommand>
+    </filter>
+    <filter name="Perspective scale">
+     <gmicCommand><![CDATA[-gimp_perspective_scale 2,75,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Shaded segmentation">
+     <gmicCommand><![CDATA[-dt_segment_shaded 1,0.7,1]]></gmicCommand>
+    </filter>
+    <filter name="Sharpen [unsharp mask; 16bits]">
+     <gmicCommand><![CDATA[-gimp_unsharp16 "[[:home:]]","gmic_unsharp16.png",0,1.25,30,3,0,1,1,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Smooth [anisotropic; 16bits]">
+     <gmicCommand><![CDATA[-gimp_anisotropic_smoothing16 "[[:home:]]","gmic_anisotropic16.png",60,0.7,0.3,0.6,1.1,0.8,30,2,0,1,1,0,1]]></gmicCommand>
+    </filter>
+    <filter name="Smooth [patch-based; 16bits]">
+     <gmicCommand><![CDATA[-gimp_patch_smoothing16 "[[:home:]]","gmic_patch16.png",10,10,3,5,0,1,1,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Samj&lt;/i>">
+    <filter name="About">
+     <gmicCommand><![CDATA[-_none_]]></gmicCommand>
+    </filter>
+    <category name="&lt;i>Arrays &amp;amp; tiles&lt;/i>">
+     <filter name="Samj coeurs hearts 002">
+      <gmicCommand><![CDATA[-samj_Coeurs_Hearts_002 16,100,0,0,1,0,255,255,255,255,0,0,0,1,1]]></gmicCommand>
+     </filter>
+    </category>
+    <category name="&lt;i>Artistic&lt;/i>">
+     <filter name="Chalk it up">
+      <gmicCommand><![CDATA[-samj_chalkitup 5,2.5,1.5,50,1,5,5,0,0,2,0.8,1.9,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Granular texture">
+      <gmicCommand><![CDATA[-samj_Texture_Granuleuse 0,20,80,0,0,0]]></gmicCommand>
+     </filter>
+    </category>
+    <category name="&lt;i>Black &amp;amp; white&lt;/i>">
+     <filter name="Hard sketch xy">
+      <gmicCommand><![CDATA[-XY_hardsketchbw_samj 0.2,300,50,1,0.1,20,0,0,0,0,180,40,160,255,0]]></gmicCommand>
+     </filter>
+    </category>
+    <category name="&lt;i>Colors&lt;/i>">
+     <filter name="Couleurs metalliques">
+      <gmicCommand><![CDATA[-Couleurs_Metalliques 0,0,22,0,0,0,0,6,5,20,1,0,0,0,0.3,60,1,1,0]]></gmicCommand>
+     </filter>
+    </category>
+    <category name="&lt;i>Patterns&lt;/i>">
+     <filter name="Denim texture">
+      <gmicCommand><![CDATA[-Denim_samj 5,2,0,40,40,25,50,0,43,108,126,255]]></gmicCommand>
+     </filter>
+     <filter name="Motifs degrades cie">
+      <gmicCommand><![CDATA[-samj_Degrades_XYZ_CIE 6,800,240,240,40,255,120,40,240,255,0,0,0,100,64,64,0,0,1,0,100,-128,128,-128,128,0,11,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Points aleatoires 001">
+      <gmicCommand><![CDATA[-samj_Points_Aleatoires_001 10,255,255,0,255,3,0,1]]></gmicCommand>
+     </filter>
+     <filter name="Random pattern courtepointe">
+      <gmicCommand><![CDATA[-samj_Courtepointe 20,0,1,0,1,0]]></gmicCommand>
+     </filter>
+    </category>
+    <category name="&lt;i>Rendering&lt;/i>">
+     <filter name="Adjacent rectangles">
+      <gmicCommand><![CDATA[-samj_Rectangles_Adjacents 10,10,80,80,0,50,6,0,0,0,0,0,255,1,255,255,0,127,0,0,255,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Annular steiner chains">
+      <gmicCommand><![CDATA[-samj_Annular_Steiner_Chains 50,50,50,6,0,0,0,0,255,1,255,255,0,127,64,192,128,127,0,255,0,127,0,0,255,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Chryzodes">
+      <gmicCommand><![CDATA[-samj_Chryzodes 100,0,0,0,255,0,50,50,45,79,3,1,240,128,64,255,0,0,0,0,0,0,0,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Dessiner un polygone - draw a polygon">
+      <gmicCommand><![CDATA[-samj_dessiner_un_polygone 5,50,50,0,40,50,1,255,255,0,0,0,0,0,1,0,0,255,0,0,255,0,0,0,127,127,127,0,0,0,0,0,255,255,255,0,0,0,0,1,255,0,0,0,1]]></gmicCommand>
+     </filter>
+     <filter name="Egg oeuf granville">
+      <gmicCommand><![CDATA[-samj_Egg_Oeuf_Granville 50,50,0,20,30,10,0,0,0,0,255,1,255,255,0,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Egg oeuf hugelschaffer">
+      <gmicCommand><![CDATA[-samj_Egg_Oeuf_Hugelschaffer 50,50,50,6,48,0,0,0,0,0,255,1,255,255,0,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Egg oeuf rosillo">
+      <gmicCommand><![CDATA[-samj_Egg_Oeuf_Rosillo 50,50,40,200,300,0,0,0,0,255,1,255,255,0,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Etoiles remplies triangles sierpinski">
+      <gmicCommand><![CDATA[-samj_Etoiles_Remplies_Triangles_Sierpinski 6,50,50,50,40,30,0,0,0,0,0,255,1,4,255,0,0,127,255,192,64,127,0,0,255,127,0,255,255,127,255,255,0,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Etoile de pompei triangles sierpinski">
+      <gmicCommand><![CDATA[-samj_Etoile_De_Pompei_Triangles_Sierpinski 50,50,30,100,0,0,0,255,0,5,255,0,0,127,255,0,255,127,0,0,255,127,0,255,255,127,255,255,0,127,0,63,255,64,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Flocon de neige">
+      <gmicCommand><![CDATA[-samj_Flocon_De_Neige 50,50,6,50,40,0,3,192,192,192,1,0,3,255,255,255,0.7,0,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Gradient cie Lab [linear]">
+      <gmicCommand><![CDATA[-samj_Linear_Gradient_CIE_Lab 0,0,240,40,160,255,240,240,40,255]]></gmicCommand>
+     </filter>
+     <filter name="Gradient cie Lab [shape]">
+      <gmicCommand><![CDATA[-samj_Shape_Linear_Gradient_CIE_Lab 10,10,90,90,2,0,240,40,160,255,240,240,40,255,0,0,0,0,255,0]]></gmicCommand>
+     </filter>
+     <filter name="Harmonograph">
+      <gmicCommand><![CDATA[-Harmonograph_samj 50,50,192,128,64,255,0,0,1000,0,400,150,200,200,100,4,6,2,2,15,270,75,60,0.04,0.04,0.05,0.06,0,0,0,1,1]]></gmicCommand>
+     </filter>
+     <filter name="Hawaiian earring">
+      <gmicCommand><![CDATA[-samj_Hawaiian_Earring 50,50,40,6,0,0,0,0,0,255,1,255,255,0,127,0,0,255,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Lines of varying thickness">
+      <gmicCommand><![CDATA[-samj_Lignes_Epaisseur_Variable 0,32,3,0,0,0,255,255,255,255,255,0,0,1,0,0,0,0,0,0,0.5,0.5,1.8,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Pappus chain">
+      <gmicCommand><![CDATA[-samj_Cercles_Tangents_Dans_Cercle 50,50,50,40,0,0,0,0,255,1,127,127,127,127,255,0,0,127,0,255,0,127,0,0,255,127,255,0,255,127,255,255,0,127,0,255,255,127,192,128,64,127,64,192,128,127,128,64,192,127,192,64,128,127,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Pintograph">
+      <gmicCommand><![CDATA[-Pintograph_samj 50,50,192,128,64,255,0,0,1000,0,400,150,200,200,100,4,4.05,4.16,4.32,75,150,75,60,0,0,0,1,1]]></gmicCommand>
+     </filter>
+     <filter name="Poisson d avril">
+      <gmicCommand><![CDATA[-samj_Poisson_D_Avril 50,50,40,2,0,0,0,0,255,1,250,60,10,255,255,255,255,255,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Rosace triangles sierpinski">
+      <gmicCommand><![CDATA[-samj_Rosace_Triangles_Sierpinski 6,6,50,50,50,-15,25,5,30,0,0,0,255,0,0,0,0,3,0,0,255,127,255,255,0,127,128,64,192,127,64,128,192,127,0,255,255,127,0,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Rotating circles">
+      <gmicCommand><![CDATA[-samj_Cercles_Qui_Tournent 800,255,255,255,255,0,1,0.5,0.33,7,17,1,0.5,0.33,7,17,1,10,0,0,0,255,0,0,0,0,0,0,0,0.5,0.5,1.8,0]]></gmicCommand>
+     </filter>
+     <filter name="Simple geometric shapes">
+      <gmicCommand><![CDATA[-samj_Formes_Geometriques_Simples 50,50,127,127,127,127,255,255,0,255,0,0,255,255,5,40,40,4,0,0,1]]></gmicCommand>
+     </filter>
+     <filter name="Spirographe samj">
+      <gmicCommand><![CDATA[-Spirographe_samj 50,50,200,50,150,192,128,64,255,0,0,3,0,1,0,0,0,255,0,0,255,0,255,255,0,255,0,0,0,1,1]]></gmicCommand>
+     </filter>
+     <filter name="Straight lines">
+      <gmicCommand><![CDATA[-samj_Des_Lignes_002 100,0,0,192,128,64,255,0,0,1,50,50,0,0,0,0,1]]></gmicCommand>
+     </filter>
+     <filter name="Superposition triangles sierpinski">
+      <gmicCommand><![CDATA[-samj_Superposition_Triangles_Sierpinski 6,6,50,50,50,1,20,30,0,0,0,255,1,4,0,0,255,127,255,255,0,127,128,64,192,127,64,128,192,127,0,255,255,127,0,0,0,0,0,0,0,0,0.5,0.5,1.8,0,0,0,0]]></gmicCommand>
+     </filter>
+     <filter name="Traits strokes">
+      <gmicCommand><![CDATA[-Traits_Strokes_samj 50,50,35,0,100,0,30,0,360,240,60,120,255,0,0,0,20,0,0,0,1,1]]></gmicCommand>
+     </filter>
+    </category>
+    <category name="&lt;i>Various&lt;/i>">
+     <filter name="Do nothing">
+      <gmicCommand><![CDATA[-Je_passe_l_hiver_en_Floride]]></gmicCommand>
+     </filter>
+     <filter name="Samj test a">
+      <gmicCommand><![CDATA[-samj_test_A 64,192,500]]></gmicCommand>
+     </filter>
+     <filter name="Samj test b">
+      <gmicCommand><![CDATA[-samj_test_B 100]]></gmicCommand>
+     </filter>
+     <filter name="Test courbes">
+      <gmicCommand><![CDATA[-samj_test_x_color_curves 1,0]]></gmicCommand>
+     </filter>
+     <filter name="Tout interactif">
+      <gmicCommand><![CDATA[-samj_test_tout_interactif]]></gmicCommand>
+     </filter>
+    </category>
+   </category>
+   <category name="&lt;i>Telperion&lt;/i>">
+    <filter name="Mc flou">
+     <gmicCommand><![CDATA[-mc_flou 30,6,1,1,1,0,255,1,1,1,0]]></gmicCommand>
+    </filter>
+    <filter name="Mc pendraw">
+     <gmicCommand><![CDATA[-mc_pendraw 8,0.8,450,21,0.5,1,0,0,255,0,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Tom keil&lt;/i>">
+    <filter name="About">
+     <gmicCommand><![CDATA[-_none_]]></gmicCommand>
+    </filter>
+    <filter name="Beauty retouch">
+     <gmicCommand><![CDATA[-gimp_tk_retouch 30,3,1,20,1.5,1,2.5,0,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Dof manipulation">
+     <gmicCommand><![CDATA[-gimp_tk_dof 50,50,30,60,5,15,2,0,0,200,40,2,0,0,0,0,0.01,0,1,0,0]]></gmicCommand>
+    </filter>
+    <filter name="Infrared simulation">
+     <gmicCommand><![CDATA[-gimp_tk_infrared 0.75,0.5,-100,0.75,0,1,0,0,1,1,0,50,0]]></gmicCommand>
+    </filter>
+   </category>
+   <category name="&lt;i>Zonderr&lt;/i>">
+    <filter name="Demo mathmap ra">
+     <gmicCommand><![CDATA[-demo_ra 1,1]]></gmicCommand>
+    </filter>
+    <filter name="Demo mathmap xy">
+     <gmicCommand><![CDATA[-demo_xy 1,1]]></gmicCommand>
+    </filter>
+    <filter name="Fourier picture watermark">
+     <gmicCommand><![CDATA[-gimp_fourier_picture_watermark 0.2]]></gmicCommand>
+    </filter>
+    <filter name="Mathmap flag">
+     <gmicCommand><![CDATA[-mathmap_flag 0.05,5,1,5]]></gmicCommand>
+    </filter>
+    <filter name="Rel2ellv3">
+     <gmicCommand><![CDATA[-mathmap_rel2ellv3]]></gmicCommand>
+    </filter>
+   </category>
   </category>
  </category>
 </filters>

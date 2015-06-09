@@ -65,6 +65,9 @@ protected:
     void requestStrokeCancellation();
     void requestStrokeEnd();
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 private:
     friend class __KisToolPathLocalTool;
 };

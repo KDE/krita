@@ -132,6 +132,13 @@ public:
      */
     inline qint32 numUsers() const;
 
+    /**
+     * Conveniece method. Returns true iff the tile data is linked to
+     * information only and therefore can be swapped out easily.
+     *
+     * Effectively equivalent to: (mementoed() && numUsers() <= 1)
+     */
+     inline bool historical() const;
 
     /**
      * Used for swapping purposes only.

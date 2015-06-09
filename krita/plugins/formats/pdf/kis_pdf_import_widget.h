@@ -45,8 +45,7 @@ private Q_SLOTS:
     void selectFirstPage(bool v);
     void selectSelectionOfPages(bool v);
     void updateSelectionOfPages();
-    void updateWidth();
-    void updateHeight();
+    void updateResolution();
     void updateHRes();
     void updateHVer();
     void heightAspectRatio();

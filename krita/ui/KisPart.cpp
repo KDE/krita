@@ -276,12 +276,12 @@ KisView *KisPart::createView(KisDocument *document, KoCanvasResourceManager *res
     document->setModified(false);
     QApplication::restoreOverrideCursor();
 
-    addView(view, document);
+    addView(view);
 
     return view;
 }
 
-void KisPart::addView(KisView *view, KisDocument *document)
+void KisPart::addView(KisView *view)
 {
     if (!view)
         return;

@@ -173,10 +173,6 @@ public:
     qint32 maxNumberOfThreads(bool defaultValue = false) const;
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 
-    /// Maximum tiles in memory (this is a guideline, not absolute)
-    qint32 maxTilesInMem(bool defaultValue = false) const;
-    void setMaxTilesInMem(qint32 tiles) const;
-
     quint32 getGridMainStyle(bool defaultValue = false) const;
     void setGridMainStyle(quint32 v) const;
 

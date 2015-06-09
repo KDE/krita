@@ -91,6 +91,9 @@ public:
 protected:
     virtual void initStroke(KoPointerEvent *event);
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 private Q_SLOTS:
 
     void slotSetDynaWidth(double width);

@@ -55,6 +55,9 @@ public Q_SLOTS:
     void requestStrokeEnd();
     void requestStrokeCancellation();
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 public:
     enum MoveToolMode {
         MoveSelectedLayer,

@@ -264,6 +264,7 @@ public:
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
     KisAction *createTemplate;
+    KisAction *createCopy;
     KisAction *saveIncremental;
     KisAction *saveIncrementalBackup;
     KisAction *openResourcesDirectory;
@@ -677,6 +678,11 @@ void KisViewManager::createActions()
     actionManager()->addAction("create_template", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
+    d->createCopy = new KisAction( i18n( "&Create Copy From Current Image" ), this);
+    d->createCopy->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("create_copy", d->createCopy);
+    connect(d->createCopy, SIGNAL(triggered()), this, SLOT(slotCreateCopy()));
+
     d->openResourcesDirectory = new KisAction(i18n("Open Resources Folder"), this);
     d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
     d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
@@ -751,12 +757,12 @@ void KisViewManager::createActions()
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
-#ifndef Q_OS_WIN
+
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
-#endif
+
 }
 
 
@@ -856,6 +862,28 @@ void KisViewManager::slotCreateTemplate()
     KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra",
                                         KisFactory::componentData(), document(), mainWindow());
 }
+
+void KisViewManager::slotCreateCopy()
+{
+    if (!document()) return;
+    KisDocument *doc = KisPart::instance()->createDocument();
+
+    QString name = document()->documentInfo()->aboutInfo("name");
+    if (name.isEmpty()) {
+        name = document()->url().toLocalFile();
+    }
+    name = i18n("%1 (Copy)", name);
+    doc->documentInfo()->setAboutInfo("title", name);
+    KisImageWSP image = document()->image();
+    KisImageSP newImage = new KisImage(doc->createUndoStore(), image->width(), image->height(), image->colorSpace(), name);
+    newImage->setRootLayer(dynamic_cast<KisGroupLayer*>(image->rootLayer()->clone().data()));
+    doc->setCurrentImage(newImage);
+    KisPart::instance()->addDocument(doc);
+    KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
+    KisView *view = KisPart::instance()->createView(doc, resourceProvider()->resourceManager(), mw->actionCollection(), mw);
+    mw->addView(view);
+}
+
 
 QMainWindow* KisViewManager::qtMainWindow() const
 {
@@ -1327,8 +1355,9 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
+
     if (profileName == "anonymous") {
         d->actionAuthor->setCurrentItem(1);
     } else if (profiles.contains(profileName)) {

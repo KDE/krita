@@ -122,7 +122,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 476 "sqlparser.y" /* yacc.c:1909  */
+#line 477 "sqlparser.y" /* yacc.c:1909  */
 
     QString* stringValue;
     qint64 integerValue;

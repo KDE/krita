@@ -83,6 +83,8 @@ class  KRITAUI_EXPORT KisTool
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
+
 public:
     enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02 };
 
@@ -198,6 +200,8 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
 
+    bool isActive() const;
+
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
@@ -207,6 +211,9 @@ public Q_SLOTS:
     // At the moment this is used for smoothing options in the freehand brush, but
     // this will likely be expanded.
     virtual void updateSettingsViews();
+
+Q_SIGNALS:
+    void isActiveChanged();
 
 protected:
     // conversion methods are also needed by the paint information builder
@@ -285,6 +292,9 @@ protected:
     /// Checks checks if the selection is editable, only applies to local selection as global selection is always editable
     bool selectionEditable();
 
+    /// Override the cursor appropriately if current node is not editable
+    bool overrideCursorIfNotEditable();
+
 protected:
     enum ToolMode {
         HOVER_MODE,
@@ -298,7 +308,6 @@ protected:
 
     virtual void setMode(ToolMode mode);
     virtual ToolMode mode() const;
-
 
 protected Q_SLOTS:
     /**
@@ -337,6 +346,7 @@ private Q_SLOTS:
 
 private:
     ToolMode m_mode;
+    bool m_isActive;
 
     struct Private;
     Private* const d;

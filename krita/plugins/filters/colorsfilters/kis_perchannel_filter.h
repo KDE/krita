@@ -30,6 +30,9 @@
 #include <kis_paint_device.h>
 #include "ui_wdg_perchannel.h"
 
+#include "virtual_channel_info.h"
+
+
 class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
 {
     Q_OBJECT
@@ -108,6 +111,10 @@ private Q_SLOTS:
 
 private:
 
+    QVector<VirtualChannelInfo> m_virtualChannels;
+    int m_activeVChannel;
+
+
     // private routines
     inline QPixmap getHistogram();
     inline QPixmap createGradient(Qt::Orientation orient /*, int invert (not used now) */);
@@ -117,7 +124,6 @@ private:
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
     mutable QList<KisCubicCurve> m_curves;
-    int m_activeCh;
 
     // scales for displaying color numbers
     double m_scale;

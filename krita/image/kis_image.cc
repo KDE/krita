@@ -59,6 +59,7 @@
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
+#include "kis_memory_statistics_server.h"
 
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
@@ -187,6 +188,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
     }
 
+    connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }
 
 KisImage::~KisImage()

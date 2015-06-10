@@ -31,14 +31,16 @@
 
 #include <klocale.h>
 
+#include <QPushButton>
+
+
 KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
 : KPageDialog(parent)
 {
     setFaceType(List);
     setWindowTitle(i18n("Configure"));
-// QT5TODO: port to QDialog
-//     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
-//     setDefaultButton(KDialog::Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     m_miscPage = new KoConfigMiscPage( parent->koDocument(), parent->kopaCanvas()->shapeController()->resourceManager() );
     KPageWidgetItem *item = addPage( m_miscPage, i18n( "Misc" ) );
@@ -62,9 +64,9 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
-    connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
-    connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotApply()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
+    connect( button(QDialogButtonBox::Apply), SIGNAL(clicked(bool)), this, SLOT(slotApply()) );
     connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
 }
 

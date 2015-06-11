@@ -40,6 +40,8 @@ public:
 
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 
+    static KoColorTransformation* createOptimizedCompositeTransform(const QVector<KoColorTransformation*> transforms);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

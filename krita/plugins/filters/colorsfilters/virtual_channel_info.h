@@ -20,18 +20,21 @@
 #define __VIRTUAL_CHANNEL_INFO_H
 
 #include <KoChannelInfo.h>
+class KoColorSpace;
+
 
 class VirtualChannelInfo
 {
 public:
     enum Type {
         REAL,
-        LIGHTNESS
+        LIGHTNESS,
+        ALL_COLORS
     };
 
     VirtualChannelInfo();
 
-    VirtualChannelInfo(Type type, int pixelIndex, KoChannelInfo *realChannelInfo);
+    VirtualChannelInfo(Type type, int pixelIndex, KoChannelInfo *realChannelInfo, const KoColorSpace *cs);
 
     Type type() const;
     KoChannelInfo* channelInfo() const;
@@ -40,10 +43,16 @@ public:
     KoChannelInfo::enumChannelValueType valueType() const;
     int channelSize() const;
 
+    bool isAlpha() const;
+
 private:
     Type m_type;
     int m_pixelIndex;
     KoChannelInfo *m_realChannelInfo;
+
+    QString m_nameOverride;
+    KoChannelInfo::enumChannelValueType m_valueTypeOverride;
+    int m_channelSizeOverride;
 };
 
 #endif /* __VIRTUAL_CHANNEL_INFO_H */

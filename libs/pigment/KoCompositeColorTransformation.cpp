@@ -43,7 +43,9 @@ KoCompositeColorTransformation::~KoCompositeColorTransformation()
 
 void KoCompositeColorTransformation::appendTransform(KoColorTransformation *transform)
 {
-    m_d->transformations.append(transform);
+    if (transform) {
+        m_d->transformations.append(transform);
+    }
 }
 
 void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
@@ -59,4 +61,38 @@ void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, q
             (*it)->transform(dst, dst, nPixels);
         }
     }
+}
+
+KoColorTransformation* KoCompositeColorTransformation::createOptimizedCompositeTransform(const QVector<KoColorTransformation*> transforms)
+{
+    KoColorTransformation *finalTransform = 0;
+
+    int numValidTransforms = 0;
+    foreach (KoColorTransformation *t, transforms) {
+        numValidTransforms += bool(t);
+    }
+
+    if (numValidTransforms > 1) {
+        KoCompositeColorTransformation *compositeTransform =
+            new KoCompositeColorTransformation(
+                KoCompositeColorTransformation::INPLACE);
+
+        foreach (KoColorTransformation *t, transforms) {
+            if (t) {
+                compositeTransform->appendTransform(t);
+            }
+        }
+
+        finalTransform = compositeTransform;
+
+    } else if (numValidTransforms == 1) {
+        foreach (KoColorTransformation *t, transforms) {
+            if (t) {
+                finalTransform = t;
+                break;
+            }
+        }
+    }
+
+    return finalTransform;
 }

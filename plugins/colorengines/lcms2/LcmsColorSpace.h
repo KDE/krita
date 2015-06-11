@@ -306,11 +306,15 @@ public:
         cmsToneCurve ** transferFunctions = new cmsToneCurve*[ this->colorChannelCount()];
 
         for (uint ch = 0; ch < this->colorChannelCount(); ch++) {
-            transferFunctions[ch] = cmsBuildTabulatedToneCurve16( 0, 256, transferValues[ch]);
+            transferFunctions[ch] = transferValues[ch] ?
+                cmsBuildTabulatedToneCurve16( 0, 256, transferValues[ch]) :
+                cmsBuildGamma(0, 1.0);
         }
 
         cmsToneCurve ** alphaTransferFunctions = new cmsToneCurve*[1];
-        alphaTransferFunctions[0] = cmsBuildTabulatedToneCurve16( 0, 256, transferValues[this->colorChannelCount()]);
+        alphaTransferFunctions[0] = transferValues[this->colorChannelCount()] ?
+            cmsBuildTabulatedToneCurve16( 0, 256, transferValues[this->colorChannelCount()]) :
+            cmsBuildGamma(0, 1.0);
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);

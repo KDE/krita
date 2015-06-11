@@ -75,6 +75,13 @@ public:
     virtual bool start();
 
     /**
+     * Checks if user is holding ctrl+alt+shift keys and asks if the settings file should be cleared.
+     *
+     * Typically called during startup before reading the config.
+     */
+    void askClearConfig();
+
+    /**
      * Tell KisApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
      * to have the splash show correctly on Xinerama displays. 
@@ -115,6 +122,7 @@ private:
     /// @return the number of autosavefiles opened
     QList<KUrl> checkAutosaveFiles();
     bool createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow);
+    void clearConfig();
 
 private:
     KisApplicationPrivate * const d;

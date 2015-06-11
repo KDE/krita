@@ -31,6 +31,7 @@
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
+#include "KoColorModelStandardIds.h"
 #include "KoColorSpace.h"
 #include "KoColorTransformation.h"
 #include "KoCompositeColorTransformation.h"
@@ -52,19 +53,29 @@
 
 QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
 {
+    const bool supportsLightness =
+        cs->colorModelId() != LABAColorModelID &&
+        cs->colorModelId() != GrayAColorModelID &&
+        cs->colorModelId() != GrayColorModelID &&
+        cs->colorModelId() != AlphaColorModelID;
+
     QVector<VirtualChannelInfo> vchannels;
 
     QList<KoChannelInfo *> sortedChannels =
         KoChannelInfo::displayOrderSorted(cs->channels());
 
-    vchannels << VirtualChannelInfo(VirtualChannelInfo::ALL_COLORS, -1, 0, cs);
+    if (supportsLightness) {
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::ALL_COLORS, -1, 0, cs);
+    }
 
     foreach(KoChannelInfo *channel, sortedChannels) {
         int pixelIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), sortedChannels);
         vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel, cs);
     }
 
-    vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0, cs);
+    if (supportsLightness) {
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0, cs);
+    }
 
     return vchannels;
 }

@@ -33,6 +33,7 @@ public:
     void addCommand(KUndo2Command *cmd);
     void beginMacro(const KUndo2MagicString& macroName);
     void endMacro();
+    void purgeRedoState();
 
 private:
     KisDocument* m_doc;

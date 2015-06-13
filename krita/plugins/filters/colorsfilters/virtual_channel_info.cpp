@@ -19,6 +19,7 @@
 #include "virtual_channel_info.h"
 #include <klocale.h>
 
+#include <KoColorSpace.h>
 
 
 VirtualChannelInfo::VirtualChannelInfo()
@@ -30,11 +31,21 @@ VirtualChannelInfo::VirtualChannelInfo()
 
 VirtualChannelInfo::VirtualChannelInfo(Type type,
                                        int pixelIndex,
-                                       KoChannelInfo *realChannelInfo)
+                                       KoChannelInfo *realChannelInfo,
+                                       const KoColorSpace *cs)
     : m_type(type),
       m_pixelIndex(pixelIndex),
       m_realChannelInfo(realChannelInfo)
 {
+    if (m_type == LIGHTNESS) {
+        m_nameOverride = i18n("Lightness");
+        m_valueTypeOverride = KoChannelInfo::FLOAT32;
+        m_channelSizeOverride = 4;
+    } else if (m_type == ALL_COLORS) {
+        m_nameOverride = cs->colorModelId().id();
+        m_valueTypeOverride = cs->channels().first()->channelValueType();
+        m_channelSizeOverride = cs->channels().first()->size();
+    }
 }
 
 VirtualChannelInfo::Type VirtualChannelInfo::type() const {
@@ -46,7 +57,7 @@ KoChannelInfo* VirtualChannelInfo::channelInfo() const {
 }
 
 QString VirtualChannelInfo::name() const {
-    return m_type == REAL ? m_realChannelInfo->name() : i18n("Lightness");
+    return m_type == REAL ? m_realChannelInfo->name() : m_nameOverride;
 }
 
 int VirtualChannelInfo::pixelIndex() const {
@@ -54,9 +65,15 @@ int VirtualChannelInfo::pixelIndex() const {
 }
 
 KoChannelInfo::enumChannelValueType VirtualChannelInfo::valueType() const {
-    return m_type == REAL ? m_realChannelInfo->channelValueType() : KoChannelInfo::FLOAT32;
+    return m_type == REAL ? m_realChannelInfo->channelValueType() : m_valueTypeOverride;
 }
 
 int VirtualChannelInfo::channelSize() const {
-    return m_type == REAL ? m_realChannelInfo->size() : 4;
+    return m_type == REAL ? m_realChannelInfo->size() : m_channelSizeOverride;
+}
+
+bool VirtualChannelInfo::isAlpha() const
+{
+    return m_type == REAL &&
+        m_realChannelInfo->channelType() == KoChannelInfo::ALPHA;
 }

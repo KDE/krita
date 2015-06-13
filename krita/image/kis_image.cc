@@ -1302,6 +1302,14 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
      */
     requestStrokeEnd();
 
+    /**
+     * Some of the strokes can cancel their work with undoing all the
+     * changes they did to the paint devices. The problem is that undo
+     * stack will know nothing about it. Therefore, just notify it
+     * explicitly
+     */
+    m_d->undoStore->purgeRedoState();
+
     KisStrokeId id;
 
     if (m_d->scheduler) {

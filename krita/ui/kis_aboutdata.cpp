@@ -236,6 +236,7 @@ K4AboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Vadim Zhukov"));
     aboutData->addAuthor(ki18n("Vera Lukman"));
     aboutData->addAuthor(ki18n("Victor Lafon"));
+    aboutData->addAuthor(ki18n("Victor Wåhlström"));
     aboutData->addAuthor(ki18n("Volker Krause"));
     aboutData->addAuthor(ki18n("Waldo Bastian"));
     aboutData->addAuthor(ki18n("Werner Trobin"));

@@ -1,6 +1,6 @@
 project( lcmsengine )
 
-if(!WIN32)
+if(NOT WIN32)
 ## Only test if on non-Windows system
 	add_subdirectory(tests)
 endif()

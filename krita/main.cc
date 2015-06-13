@@ -114,8 +114,13 @@ extern "C" int main(int argc, char **argv)
 #endif
 #endif
 
-    // first create the application so we can create a  pixmap
+    // first create the application so we can create a pixmap
     KisApplication app(key);
+
+    // If we should clear the config, it has to be done as soon as possible after
+    // KisApplication has been created. Otherwise the config file may have been read
+    // and stored in a KConfig object we have no control over.
+    app.askClearConfig();
 
     // create factory only after application, the componentData it creates in the
     // constructor will need an existing QCoreApplication at least with Qt5/KF5,
@@ -173,6 +178,7 @@ extern "C" int main(int argc, char **argv)
     else {
         splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
     }
+
     app.setSplashScreen(splash);
 
     if (!app.start()) {

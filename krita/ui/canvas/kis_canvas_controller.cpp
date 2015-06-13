@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 
+#include "kis_canvas_decoration.h"
 #include "kis_paintop_transformation_connector.h"
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
@@ -162,6 +163,10 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
+    KisCanvasDecoration *decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
+    KIS_ASSERT_RECOVER_RETURN(decorator);
+    decorator->setVisible(enable);
+
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
@@ -221,4 +226,12 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
 
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);
+}
+
+bool KisCanvasController::wrapAroundMode() const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->wrapAroundViewingMode();
 }

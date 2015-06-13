@@ -36,7 +36,6 @@
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <QMessageBox>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
@@ -281,7 +280,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a black or blank screen,\n"
+                                      "If you experience problems like a black or blank screen,"
                                       "please update your display driver to the latest version.\n\n"
                                       "You can also disable OpenGL rendering in Krita's Settings.\n"));
         cfg.writeEntry("WarnedAboutIntel", true);

@@ -176,6 +176,16 @@ void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
     m_verticalRuler->updateMouseCoordinate(pt.y());
 }
 
+bool KisZoomManager::horizontalRulerVisible() const
+{
+    return m_horizontalRuler->isVisible();
+}
+
+bool KisZoomManager::verticalRulerVisible() const
+{
+    return m_verticalRuler->isVisible();
+}
+
 void KisZoomManager::toggleShowRulers(bool show)
 {
     m_horizontalRuler->setVisible(show);

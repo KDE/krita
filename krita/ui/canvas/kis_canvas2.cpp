@@ -899,6 +899,17 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
 
+bool KisCanvas2::wrapAroundViewingMode() const
+{
+    KisCanvasDecoration *infinityDecoration =
+        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
+
+    if (infinityDecoration) {
+        return !(infinityDecoration->visible());
+    }
+    return false;
+}
+
 KoGuidesData *KisCanvas2::guidesData()
 {
     return &m_d->view->document()->guidesData();

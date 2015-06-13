@@ -24,6 +24,23 @@
 #include <QScopedPointer>
 
 
+/**
+ * A class for storing a composite color transformation. All the
+ * trasnformations added with appendTransform() are applied
+ * sequentually to the process pixels.
+ *
+ * \p mode defines how the buffers are used while processing.
+ *
+ * When using INPLACE mode all transformations but the first one do
+ * the conversion in place, that is in \p dst buffer. That is \p dst
+ * is written at least N - 1 times, where N is the number of embedded
+ * transformations.
+ *
+ * In BUFFERED mode all the transformations are called with distinct
+ * src and dst buffers, which are created in temporary memory owned by
+ * KoCompositeColorTransformation. Please note that this mode IS NOT
+ * IMPLEMENTED YET!
+ */
 class PIGMENTCMS_EXPORT KoCompositeColorTransformation : public KoColorTransformation
 {
 public:
@@ -36,9 +53,21 @@ public:
     KoCompositeColorTransformation(Mode mode);
     ~KoCompositeColorTransformation();
 
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+
+    /**
+     * Append a transform to a composite. If \p transform is null,
+     * nothing happens.
+     */
     void appendTransform(KoColorTransformation *transform);
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+    /**
+     * Convenience method that checks if the transformations in \p
+     * transforms are not null and adds existent ones only. If there
+     * is only one non-null transform, it is returned directly to
+     * avoid extra virtual calls added by KoCompositeColorTransformation.
+     */
+    static KoColorTransformation* createOptimizedCompositeTransform(const QVector<KoColorTransformation*> transforms);
 
 private:
     struct Private;

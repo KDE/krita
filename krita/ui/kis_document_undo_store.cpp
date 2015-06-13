@@ -69,3 +69,8 @@ void KisDocumentUndoStore::endMacro()
 {
     m_doc->endMacro();
 }
+
+void KisDocumentUndoStore::purgeRedoState()
+{
+    m_doc->undoStack()->purgeRedoState();
+}

@@ -426,6 +426,11 @@ public:
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
+     *
+     * The layout of the channels must be the following:
+     *
+     * 0..N-2 - color channels of the pixel;
+     * N-1 - alpha channel of the pixel (if exists)
      */
     virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const = 0;
 

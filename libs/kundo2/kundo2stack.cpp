@@ -543,6 +543,34 @@ void KUndo2QStack::setIndex(int idx, bool clean)
         emit cleanChanged(is_clean);
 }
 
+void KUndo2QStack::purgeRedoState()
+{
+    bool macro = !m_macro_stack.isEmpty();
+    if (macro) return;
+
+    bool redoStateChanged = false;
+    bool cleanStateChanged = false;
+
+    while (m_index < m_command_list.size()) {
+        delete m_command_list.takeLast();
+        redoStateChanged = true;
+    }
+
+    if (m_clean_index > m_index) {
+        m_clean_index = -1; // we've deleted the clean state
+        cleanStateChanged = true;
+    }
+
+    if (redoStateChanged) {
+        emit canRedoChanged(canRedo());
+        emit redoTextChanged(redoText());
+    }
+
+    if (cleanStateChanged) {
+        emit cleanChanged(isClean());
+    }
+}
+
 /*! \internal
     If the number of commands on the stack exceedes the undo limit, deletes commands from
     the bottom of the stack.

@@ -31,6 +31,7 @@
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
+#include "KoColorModelStandardIds.h"
 #include "KoColorSpace.h"
 #include "KoColorTransformation.h"
 #include "KoCompositeColorTransformation.h"
@@ -52,16 +53,28 @@
 
 QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
 {
+    const bool supportsLightness =
+        cs->colorModelId() != LABAColorModelID &&
+        cs->colorModelId() != GrayAColorModelID &&
+        cs->colorModelId() != GrayColorModelID &&
+        cs->colorModelId() != AlphaColorModelID;
+
     QVector<VirtualChannelInfo> vchannels;
 
     QList<KoChannelInfo *> sortedChannels =
         KoChannelInfo::displayOrderSorted(cs->channels());
 
-    vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0);
+    if (supportsLightness) {
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::ALL_COLORS, -1, 0, cs);
+    }
 
     foreach(KoChannelInfo *channel, sortedChannels) {
         int pixelIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), sortedChannels);
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel);
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel, cs);
+    }
+
+    if (supportsLightness) {
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0, cs);
     }
 
     return vchannels;
@@ -481,60 +494,90 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
 
     bool colorsNull = true;
     bool lightnessNull = true;
+    bool allColorsNull = true;
+    int alphaIndexInReal = -1;
 
     QVector<QVector<quint16> > realTransfers;
-    QVector<quint16> lightnessTansfer;
+    QVector<quint16> lightnessTransfer;
+    QVector<quint16> allColorsTransfer;
+
     for (int i = 0; i < virtualChannels.size(); i++) {
         if (virtualChannels[i].type() == VirtualChannelInfo::REAL) {
             realTransfers << originalTransfers[i];
+
+            if (virtualChannels[i].isAlpha()) {
+                alphaIndexInReal = realTransfers.size() - 1;
+            }
+
             if (colorsNull && !originalCurves[i].isNull()) {
                 colorsNull = false;
             }
         } else if (virtualChannels[i].type() == VirtualChannelInfo::LIGHTNESS) {
-            KIS_ASSERT_RECOVER_NOOP(lightnessTansfer.isEmpty());
-            lightnessTansfer = originalTransfers[i];
+            KIS_ASSERT_RECOVER_NOOP(lightnessTransfer.isEmpty());
+            lightnessTransfer = originalTransfers[i];
 
             if (lightnessNull && !originalCurves[i].isNull()) {
                 lightnessNull = false;
             }
+        } else if (virtualChannels[i].type() == VirtualChannelInfo::ALL_COLORS) {
+            KIS_ASSERT_RECOVER_NOOP(allColorsTransfer.isEmpty());
+            allColorsTransfer = originalTransfers[i];
+
+            if (allColorsNull && !originalCurves[i].isNull()) {
+                allColorsNull = false;
+            }
         }
     }
 
-    const quint16** transfers = new const quint16*[configBC->curves().size()];
-    for(int i = 0; i < realTransfers.size(); ++i) {
-        transfers[i] = realTransfers[i].constData();
-    }
-
     KoColorTransformation *lightnessTransform = 0;
+    KoColorTransformation *allColorsTransform = 0;
     KoColorTransformation *colorTransform = 0;
 
     if (!colorsNull) {
+        const quint16** transfers = new const quint16*[realTransfers.size()];
+        for(int i = 0; i < realTransfers.size(); ++i) {
+            transfers[i] = realTransfers[i].constData();
+
+            /**
+             * createPerChannelAdjustment() expects alpha channel to
+             * be the last channel in the list, so just it here
+             */
+            KIS_ASSERT_RECOVER_NOOP(i != alphaIndexInReal ||
+                                    alphaIndexInReal == (realTransfers.size() - 1));
+        }
+
         colorTransform = cs->createPerChannelAdjustment(transfers);
+        delete [] transfers;
     }
 
     if (!lightnessNull) {
-        lightnessTransform = cs->createBrightnessContrastAdjustment(lightnessTansfer.constData());
+        lightnessTransform = cs->createBrightnessContrastAdjustment(lightnessTransfer.constData());
     }
 
-    KoColorTransformation *finalTransform = 0;
+    if (!allColorsNull) {
+        const quint16** allColorsTransfers = new const quint16*[realTransfers.size()];
+        for(int i = 0; i < realTransfers.size(); ++i) {
+            allColorsTransfers[i] = (i != alphaIndexInReal) ?
+                allColorsTransfer.constData() : 0;
 
-    if (colorTransform && lightnessTransform) {
-        KoCompositeColorTransformation *compositeTransform =
-            new KoCompositeColorTransformation(
-                KoCompositeColorTransformation::INPLACE);
+            /**
+             * createPerChannelAdjustment() expects alpha channel to
+             * be the last channel in the list, so just it here
+             */
+            KIS_ASSERT_RECOVER_NOOP(i != alphaIndexInReal ||
+                                    alphaIndexInReal == (realTransfers.size() - 1));
+        }
 
-        compositeTransform->appendTransform(colorTransform);
-        compositeTransform->appendTransform(lightnessTransform);
-
-        finalTransform = compositeTransform;
-    } else if (lightnessTransform) {
-        finalTransform = lightnessTransform;
-    } else  if (colorTransform) {
-        finalTransform = colorTransform;
+        allColorsTransform = cs->createPerChannelAdjustment(allColorsTransfers);
+        delete[] allColorsTransfers;
     }
 
-    delete [] transfers;
-    return finalTransform;
+    QVector<KoColorTransformation*> allTransforms;
+    allTransforms << lightnessTransform;
+    allTransforms << allColorsTransform;
+    allTransforms << colorTransform;
+
+    return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
 }
 
 #include "kis_perchannel_filter.moc"

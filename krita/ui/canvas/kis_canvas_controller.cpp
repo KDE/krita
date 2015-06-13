@@ -227,3 +227,11 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);
 }
+
+bool KisCanvasController::wrapAroundMode() const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->wrapAroundViewingMode();
+}

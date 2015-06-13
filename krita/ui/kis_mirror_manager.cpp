@@ -53,19 +53,17 @@ void KisMirrorManager::setup(KActionCollection * collection)
 
 void KisMirrorManager::setView(QPointer<KisView> imageView)
 {
+    if (m_imageView) {
+        m_mirrorCanvas->disconnect();
+    }
     m_imageView = imageView;
     if (m_imageView && !decoration()) {
 
         m_imageView->canvasBase()->addDecoration(new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView));
     }
-
     if (m_imageView && decoration()) {
-        connect(m_mirrorCanvas, SIGNAL(toggled(bool)),
-                dynamic_cast<KisCanvasController*>(m_imageView->canvasController()),
-                SLOT(mirrorCanvas(bool)),
-                Qt::UniqueConnection);
+        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
     }
-
     updateAction();
 }
 

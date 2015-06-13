@@ -74,6 +74,10 @@ public Q_SLOTS:
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();
 
+public:
+    bool horizontalRulerVisible() const;
+    bool verticalRulerVisible() const;
+
 private:
 
     QPointer<KisView> m_view;

@@ -419,7 +419,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
-        imageView->zoomManager()->toggleShowRulers(d->showRulersAction->isChecked());
+        d->showRulersAction->setChecked(imageView->zoomManager()->horizontalRulerVisible() && imageView->zoomManager()->verticalRulerVisible());
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 

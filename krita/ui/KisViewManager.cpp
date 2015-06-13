@@ -409,14 +409,17 @@ void KisViewManager::setCurrentView(KisView *view)
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         d->currentImageView = imageView;
+        KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
 
         d->viewConnections.addUniqueConnection(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
-        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
-        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
-        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), canvasController, SLOT(rotateCanvasRight15()));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),canvasController, SLOT(rotateCanvasLeft15()));
+        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
+        canvasController->slotToggleWrapAroundMode(d->wrapAroundAction->isChecked());
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        imageView->zoomManager()->toggleShowRulers(d->showRulersAction->isChecked());
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 

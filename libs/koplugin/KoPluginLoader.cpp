@@ -130,7 +130,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
             whiteList << pluginName;
-            qDebug() << "Loaded plugin" << loader->fileName();
+            //qDebug() << "Loaded plugin" << loader->fileName();
             delete plugin;
         } else {
             qWarning() << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();

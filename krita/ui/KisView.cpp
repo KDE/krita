@@ -110,7 +110,6 @@ public:
         , canvas(0)
         , zoomManager(0)
         , viewManager(0)
-        , mirrorAxis(0)
         , actionCollection(0)
         , paintingAssistantsDecoration(0)
         , shown(false)
@@ -128,7 +127,6 @@ public:
         delete canvasController;
         delete canvas;
         delete viewConverter;
-        delete mirrorAxis;
     }
 
     KisUndoStackAction *undo;
@@ -151,7 +149,6 @@ public:
     KisZoomManager *zoomManager;
     KisViewManager *viewManager;
     KisNodeSP currentNode;
-    KisMirrorAxis* mirrorAxis;
     KActionCollection* actionCollection;
     KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
     bool shown;

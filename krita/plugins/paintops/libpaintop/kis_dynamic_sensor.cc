@@ -340,7 +340,7 @@ QString KisDynamicSensor::id(DynamicSensorType sensorType)
     case FUZZY:
         return "fuzzy";
     case FADE:
-        return "speed";
+        return "fade";
     case DISTANCE:
         return "distance";
     case TIME:

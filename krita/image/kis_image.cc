@@ -64,6 +64,7 @@
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
+#include "kis_stroke_strategy.h"
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"
@@ -1308,7 +1309,9 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
      * stack will know nothing about it. Therefore, just notify it
      * explicitly
      */
-    m_d->undoStore->purgeRedoState();
+    if (strokeStrategy->clearsRedoOnStart()) {
+        m_d->undoStore->purgeRedoState();
+    }
 
     KisStrokeId id;
 

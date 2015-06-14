@@ -85,6 +85,8 @@ public:
      */
     using KisStrokeStrategy::setSupportsWrapAroundMode;
 
+    void setUsedWhileUndoRedo(bool value);
+
 protected:
     void runAndSaveCommand(KUndo2CommandSP command,
                            KisStrokeJobData::Sequentiality sequentiality,

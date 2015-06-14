@@ -117,6 +117,28 @@ const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
 
 static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 
+// just to get access to paintMarker method, until there is a proper way to
+// have markers painted by some util class
+class MarkerPainterDummyDiagram : public KChart::AbstractDiagram
+{
+public:
+    MarkerPainterDummyDiagram() {}
+    void doPaintMarker( QPainter* painter,
+                        const KChart::MarkerAttributes& markerAttributes,
+                        const QBrush& brush, const QPen& pen,
+                        const QPointF& point, const QSizeF& size );
+public: // abstract KChart::AbstractDiagram API
+    virtual void paint ( KChart::PaintContext* /*paintContext*/ ) {}
+protected: // abstract KChart::AbstractDiagram API
+    virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const { return QPair<QPointF, QPointF>(); }
+};
+
+void MarkerPainterDummyDiagram::doPaintMarker(QPainter* painter, const KChart::MarkerAttributes& markerAttributes, const QBrush& brush, const QPen& pen, const QPointF& point, const QSizeF& size)
+{
+    paintMarker(painter, markerAttributes, brush, pen, point, size);
+}
+
+
 class DataSet::Private
 {
 public:
@@ -715,8 +737,7 @@ QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
         QPainter *painter = new QPainter(markerPixmap);
         KChart::MarkerAttributes matt;
         matt.setMarkerStyle(odf2kdMarker(markerStyle));
-// QT5TODO: this should be normal API
-//         KChart::AbstractDiagram::paintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+        MarkerPainterDummyDiagram().doPaintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
         QIcon markerIcon = QIcon(*markerPixmap);
         return markerIcon;
     }

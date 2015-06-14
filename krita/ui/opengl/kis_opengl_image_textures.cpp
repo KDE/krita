@@ -273,16 +273,12 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
     KisOpenGL::makeSharedContextCurrent();
 
-    KIS_OPENGL_CLEAR_ERROR();
-
     KisTextureTileUpdateInfoSP tileInfo;
     foreach(tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
         tile->update(*tileInfo);
-
-        KIS_OPENGL_PRINT_ERROR();
     }
 }
 

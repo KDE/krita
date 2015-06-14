@@ -177,32 +177,6 @@ QGLWidget *KisOpenGL::sharedContextWidget()
     return SharedContextWidget;
 }
 
-void KisOpenGL::printError(const char *file, int line)
-{
-    GLenum glErr = glGetError();
-
-    while (glErr != GL_NO_ERROR) {
-
-        dbgUI << "glError:" << (const char *)gluErrorString(glErr);
-
-        if (file != 0) {
-            if (line != -1) {
-                dbgUI << " at" << file << " line" << line;
-            } else {
-                dbgUI << " in" << file;
-            }
-        }
-
-        glErr = glGetError();
-    }
-}
-
-void KisOpenGL::clearError()
-{
-    while (glGetError() != GL_NO_ERROR) {
-    }
-}
-
 bool KisOpenGL::supportsGLSL13()
 {
     return QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0;

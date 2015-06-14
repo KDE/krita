@@ -35,11 +35,6 @@
 #endif
 
 #include <QtGlobal>
-#ifdef Q_WS_MAC
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 
 #include "krita_export.h"
 
@@ -72,20 +67,6 @@ public:
      */
     static void makeContextCurrent(QGLWidget *widget);
 
-
-    /**
-     * Print any error messages waiting to be read from glGetError(). Use
-     * the helper macro KIS_OPENGL_PRINT_ERROR() to generate the source
-     * file and line number to identify the location the error is reported
-     * from.
-     */
-    static void printError(const char *file = 0, int line = -1);
-
-    /**
-     * Clear any error codes waiting to be read from glGetError().
-     */
-    static void clearError();
-
     /**
      * @brief supportsGLSL13
      * @return true if we have a modern opengl capable of high-quality filtering
@@ -103,19 +84,6 @@ private:
 
     static void createContext();
 };
-
-/**
- * Helper macro to print out any OpenGL error messages waiting to be
- * read. This will also print the source file and line number where
- * the print is performed.
- */
-#define KIS_OPENGL_PRINT_ERROR() KisOpenGL::printError(__FILE__, __LINE__)
-
-/**
- * Helper macro to clear out any OpenGL error messages waiting to be
- * read.
- */
-#define KIS_OPENGL_CLEAR_ERROR() KisOpenGL::clearError()
 
 #endif // HAVE_OPENGL
 

@@ -32,6 +32,8 @@
 #include "kis_shared.h"
 #include "kis_default_bounds_base.h"
 
+#include "kis_raster_keyframe_channel.h"
+
 #include <krita_export.h>
 
 class KUndo2Command;
@@ -113,6 +115,9 @@ public:
      * Fill this paint device with the pixels from the specified file store.
      */
     virtual bool read(QIODevice *stream);
+
+    bool write(KisPaintDeviceWriter &store, int frame);
+    bool read(QIODevice *stream, int frame);
 
 public:
 
@@ -661,6 +666,39 @@ public:
      */
     virtual quint32 channelCount() const;
 
+    /**
+     * Create a keyframe channel for the content on this device.
+     * @param id identifier for the channel
+     * @param node the parent node for the channel
+     * @return keyframe channel
+     */
+    KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id, const KisNodeWSP node);
+
+    /**
+     * Creates a new frame on the device and returns an identifier for it
+     * @return frame id
+     */
+    int createFrame(bool copy, int copySrc);
+
+    /**
+     * Create a new frame with given id. This should not normally be used
+     * except when loading an image.
+     * @param frameId ID to use
+     */
+    void forceCreateFrame(int frameId);
+
+    /**
+     * Delete the frame with given id
+     * @param frame frame ID
+     */
+    void deleteFrame(int frame);
+
+    /**
+     * Return a list of IDs for the frames contained in this paint device
+     * @return list of frame IDs
+     */
+    QList<int> frames();
+
 public:
 
     /**
@@ -763,6 +801,14 @@ private:
      * in the colorspace of this paint device.
      */
     QVector<qint32> channelSizes() const;
+
+private Q_SLOTS:
+    void keyframeAboutToBeAdded(KisKeyframe *keyframe);
+    void keyframeAdded(KisKeyframe *keyframe);
+    void keyframeAboutToBeRemoved(KisKeyframe *keyframe);
+    void keyframeRemoved(KisKeyframe *keyframe);
+    void keyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
+    void keyframeMoved(KisKeyframe *keyframe, int fromTime);
 
 protected:
     friend class KisSelectionTest;

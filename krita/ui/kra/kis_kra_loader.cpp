@@ -549,17 +549,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
             for (KoXmlNode channelElement = child.firstChildElement(); !channelElement.isNull(); channelElement = channelElement.nextSibling()) {
                 if (channelElement.nodeName().toUpper() != "CHANNEL") continue;
 
-                KisKeyframeChannel *channel = node->keyframes()->getChannel(channelElement.toElement().attribute("name"));
+                QString id = channelElement.toElement().attribute("name");
+                KisKeyframeChannel *channel = node->getKeyframeChannel(id);
                 if (!channel) continue;
 
-                for (KoXmlNode keyframeElement = channelElement.firstChild(); !keyframeElement.isNull(); keyframeElement = keyframeElement.nextSibling()) {
-                    if (keyframeElement.nodeName().toUpper() != "KEYFRAME") continue;
-
-                    int time = keyframeElement.toElement().attribute("time").toUInt();
-                    QVariant value = keyframeElement.toElement().attribute("value");
-
-                    channel->setKeyframe(time, value);
-                }
+                channel->loadXML(channelElement);
             }
             break;
         }

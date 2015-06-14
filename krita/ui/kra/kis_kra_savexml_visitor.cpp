@@ -333,20 +333,12 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     QDomElement keyframesElement = m_doc.createElement("keyframes");
     el.appendChild(keyframesElement);
 
-    QList<KisKeyframeChannel*> keyframeChannels = layer->keyframes()->channels();
+    QList<KisKeyframeChannel*> keyframeChannels = layer->keyframeChannels();
     foreach (KisKeyframeChannel *channel, keyframeChannels) {
         if (channel->keyframes().count() == 0) continue;
 
-        QDomElement channelElement = m_doc.createElement("channel");
-        channelElement.setAttribute("name", channel->name());
+        QDomElement channelElement = channel->toXML(m_doc);
         keyframesElement.appendChild(channelElement);
-
-        foreach (KisKeyframe *keyframe, channel->keyframes()) {
-            QDomElement keyframeElement = m_doc.createElement("keyframe");
-            keyframeElement.setAttribute("time", keyframe->time());
-            keyframeElement.setAttribute("value", keyframe->value().toString());
-            channelElement.appendChild(keyframeElement);
-        }
     }
 
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);

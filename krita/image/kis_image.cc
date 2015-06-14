@@ -90,7 +90,6 @@
 
 #include "kis_layer_projection_plane.h"
 
-#include "kis_multi_paint_device.h"
 #include "kis_animation_frame_cache.h"
 
 // #define SANITY_CHECKS
@@ -942,8 +941,8 @@ void KisImage::flatten()
     refreshHiddenArea(oldRootLayer, bounds());
 
     lock();
-    KisMultiPaintDeviceSP projectionCopy =
-        new KisMultiPaintDevice(*oldRootLayer->projection());
+    KisPaintDeviceSP projectionCopy =
+        new KisPaintDevice(*oldRootLayer->projection());
     unlock();
 
     KisPaintLayerSP flattenLayer =
@@ -1039,7 +1038,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
     refreshHiddenArea(layer, bounds());
 
     lock();
-    KisMultiPaintDeviceSP mergedDevice = new KisMultiPaintDevice(*layer->projection());
+    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
     unlock();
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
@@ -1686,17 +1685,19 @@ int KisImage::currentTime()
     return m_d->time;
 }
 
-void KisImage::seekToTime(int time)
+void KisImage::seekToTime(int newTime)
 {
     // TODO: remove this once we have a proper way to composite animation frames
     QImage frame = convertToQImage(bounds(), profile());
     m_d->frameCache->cacheFrame(m_d->time, frame);
     //
 
-    m_d->time = time;
-    m_d->rootLayer->seekToTime(time);
+    emit sigTimeAboutToChange(newTime);
 
-    emit sigTimeChanged();
+    int oldTime = m_d->time;
+    m_d->time = newTime;
+
+    emit sigTimeChanged(oldTime);
 }
 
 QImage KisImage::getRenderedFrame(int time)

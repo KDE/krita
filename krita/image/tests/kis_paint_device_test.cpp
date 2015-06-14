@@ -798,6 +798,10 @@ KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
         int currentLevelOfDetail() const {
             return 0;
         }
+
+        int currentTime() const {
+            return 0;
+        }
     };
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -1354,6 +1358,10 @@ void KisPaintDeviceTest::testLodDevice()
 
         int currentLevelOfDetail() const {
             return m_lod;
+        }
+
+        int currentTime() const {
+            return 0;
         }
 
         void testingSetLevelOfDetail(int lod) {

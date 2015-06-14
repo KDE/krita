@@ -65,6 +65,11 @@ int KisDefaultBounds::currentLevelOfDetail() const
     return m_d->image ? m_d->image->currentLevelOfDetail() : 0;
 }
 
+int KisDefaultBounds::currentTime() const
+{
+    return m_d->image ? m_d->image->currentTime() : 0;
+}
+
 /******************************************************************/
 /*                  KisSelectionDefaultBounds                     */
 /******************************************************************/

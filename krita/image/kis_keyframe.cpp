@@ -17,10 +17,16 @@
  */
 
 #include "kis_keyframe.h"
+#include "kis_keyframe_channel.h"
 
 QVariant KisKeyframe::value() const
 {
     return val;
+}
+
+void KisKeyframe::setValue(QVariant value)
+{
+    val = value;
 }
 
 int KisKeyframe::time() const
@@ -37,3 +43,17 @@ KisKeyframeChannel *KisKeyframe::channel() const
 {
     return ch;
 }
+
+bool KisKeyframe::affects(int time) const
+{
+    return wouldAffect(time, this->time());
+}
+
+bool KisKeyframe::wouldAffect(int time, int newTime) const
+{
+    // TODO: think through corner cases..
+    KisKeyframe *nextKey = ch->nextKeyframeAfter(newTime);
+    return (newTime <= time && (!nextKey || time < nextKey->time()));
+}
+
+#include "kis_keyframe.moc"

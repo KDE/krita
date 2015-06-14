@@ -54,7 +54,6 @@
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
 #include "kis_dom_utils.h"
-#include "kis_multi_paint_device.h"
 
 using namespace KRA;
 
@@ -359,32 +358,28 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         m_store->close();
     }
 
-    if (device->inherits("KisMultiPaintDevice")) {
-        KisMultiPaintDevice *dev = qobject_cast<KisMultiPaintDevice*>(device.data());
+    if (m_store->open(location + ".frames")) {
+        QList<int> frames;
 
-        if (m_store->open(location + ".frames")) {
-            QList<int> contexts;
+        while (!m_store->device()->atEnd()) {
+            QByteArray line = m_store->device()->readLine();
+            int id = QString(line).toInt();
+            frames.append(id);
+        }
+        m_store->close();
 
-            while (!m_store->device()->atEnd()) {
-                QByteArray line = m_store->device()->readLine();
-                int id = QString(line).toInt();
-                contexts.append(id);
-            }
-            m_store->close();
+        for (int i = 0; i < frames.count(); i++) {
+            int id = frames[i];
+            m_store->open(location + ".f" + QString::number(id));
 
-            for (int i = 0; i < contexts.count(); i++) {
-                int id = contexts[i];
-                m_store->open(location + ".f" + QString::number(id));
-
-                if (!dev->readContext(id, m_store->device())) {
-                    m_errorMessages << i18n("Could not read frame: %1 at %2.", id, location);
-                    dev->disconnect();
-                    m_store->close();
-                    return false;
-                }
-
+            if (!device->read(m_store->device(), id)) {
+                m_errorMessages << i18n("Could not read frame: %1 at %2.", id, location);
+                device->disconnect();
                 m_store->close();
+                return false;
             }
+
+            m_store->close();
         }
     }
 

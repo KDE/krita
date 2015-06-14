@@ -84,7 +84,7 @@ void TimelineWidget::setImage(KisImageWSP image)
     m_image = image;
 
     if (m_image) {
-        connect(m_image, SIGNAL(sigTimeChanged()), this, SLOT(imageTimeChanged()));
+        connect(m_image, SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
     }
 }
 

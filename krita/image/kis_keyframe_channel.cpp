@@ -17,23 +17,23 @@
  */
 
 #include "kis_keyframe_channel.h"
+#include "KoID.h"
+#include "kis_node.h"
 
 #include <QMap>
 
 struct KisKeyframeChannel::Private
 {
     QMap<int, KisKeyframe*> keys;
-    KisKeyframeSequence *sequence;
-    QString name;
-    QString displayName;
+    KisNodeWSP node;
+    KoID id;
 };
 
-KisKeyframeChannel::KisKeyframeChannel(const QString &name, const QString &displayName, KisKeyframeSequence *sequence)
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, const KisNodeWSP node)
     : m_d(new Private)
 {
-    m_d->sequence = sequence;
-    m_d->name = name;
-    m_d->displayName = displayName;
+    m_d->id = id;
+    m_d->node = node;
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -41,68 +41,92 @@ KisKeyframeChannel::~KisKeyframeChannel()
     qDeleteAll(m_d->keys.values());
 }
 
+QString KisKeyframeChannel::id() const
+{
+    return m_d->id.id();
+}
+
 QString KisKeyframeChannel::name() const
 {
-    return m_d->name;
+    return m_d->id.name();
 }
 
-QString KisKeyframeChannel::displayName() const
+KisNodeWSP KisKeyframeChannel::node() const
 {
-    return m_d->displayName;
+    return m_d->node;
 }
 
-void KisKeyframeChannel::setKeyframe(int time, const QVariant &value)
+KisKeyframe *KisKeyframeChannel::addKeyframe(int time)
 {
-    deleteKeyframe(time);
-
-    KisKeyframe *keyframe = new KisKeyframe(this, time, value);
-
-    emit sigKeyframeAboutToBeAdded(keyframe);
-    m_d->keys.insert(time, keyframe);
-    emit sigKeyframeAdded(keyframe);
+    return insertKeyframe(time, 0);
 }
 
-void KisKeyframeChannel::deleteKeyframe(int time)
+bool KisKeyframeChannel::deleteKeyframe(KisKeyframe *keyframe)
 {
-    KisKeyframe *keyframe = m_d->keys.value(time);
-    if (!keyframe) return;
+    if (canDeleteKeyframe(keyframe)) {
+        emit sigKeyframeAboutToBeRemoved(keyframe);
+        m_d->keys.remove(keyframe->time());
+        destroyKeyframe(keyframe);
+        emit sigKeyframeRemoved(keyframe);
 
-    emit sigKeyframeAboutToBeRemoved(keyframe);
+        delete keyframe;
 
-    delete keyframe;
-    m_d->keys.remove(time);
+        return true;
+    }
 
-    emit sigKeyframeRemoved(keyframe);
+    return false;
 }
 
-bool KisKeyframeChannel::hasKeyframeAt(int time)
+bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int newTime)
 {
-    return m_d->keys.contains(time);
-}
+    KisKeyframe *other = keyframeAt(newTime);
+    if (other) return false;
 
-bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int time)
-{
-    if (m_d->keys.contains(time)) return false;
+    emit sigKeyframeAboutToBeMoved(keyframe, newTime);
 
-    emit sigKeyframeAboutToBeMoved(keyframe, time);
     m_d->keys.remove(keyframe->time());
+    int oldTime = keyframe->time();
+    keyframe->setTime(newTime);
+    m_d->keys.insert(newTime, keyframe);
 
-    keyframe->setTime(time);
-
-    m_d->keys.insert(keyframe->time(), keyframe);
-    emit sigKeyframeMoved(keyframe);
+    emit sigKeyframeMoved(keyframe, oldTime);
 
     return true;
 }
 
-QVariant KisKeyframeChannel::getValueAt(int time)
+KisKeyframe *KisKeyframeChannel::copyKeyframe(const KisKeyframe *keyframe, int newTime)
 {
-    QMap<int, KisKeyframe*>::iterator nextKeyframe = m_d->keys.upperBound(time);
+    return insertKeyframe(newTime, keyframe);
+}
 
-    if (nextKeyframe == m_d->keys.begin()) return QVariant();
+KisKeyframe *KisKeyframeChannel::keyframeAt(int time)
+{
+    QMap<int, KisKeyframe*>::iterator i = m_d->keys.find(time);
+    if (i != m_d->keys.end()) {
+        return i.value();
+    }
 
-    nextKeyframe--;
-    return nextKeyframe.value()->value();
+    return 0;
+}
+
+KisKeyframe *KisKeyframeChannel::activeKeyframeAt(int time) const
+{
+    const QMap<int, KisKeyframe *> keys = constKeys();
+    QMap<int, KisKeyframe*>::const_iterator i = keys.upperBound(time);
+
+    if (i != keys.begin()) i--;
+
+    return i.value();
+}
+
+KisKeyframe *KisKeyframeChannel::nextKeyframeAfter(int time) const
+{
+    const QMap<int, KisKeyframe *> keys = constKeys();
+    QMap<int, KisKeyframe*>::const_iterator i = keys.upperBound(time);
+
+    if (i == keys.end()) return 0;
+
+    return i.value();
 }
 
 QList<KisKeyframe*> KisKeyframeChannel::keyframes() const
@@ -110,8 +134,57 @@ QList<KisKeyframe*> KisKeyframeChannel::keyframes() const
     return m_d->keys.values();
 }
 
-KisKeyframeSequence *KisKeyframeChannel::sequence() const
+QDomElement KisKeyframeChannel::toXML(QDomDocument doc) const
 {
-    return m_d->sequence;
+    QDomElement channelElement = doc.createElement("channel");
+
+    channelElement.setAttribute("name", id());
+
+    foreach (KisKeyframe *keyframe, m_d->keys.values()) {
+        QDomElement keyframeElement = doc.createElement("keyframe");
+        keyframeElement.setAttribute("time", keyframe->time());
+
+        saveKeyframe(keyframe, keyframeElement);
+
+        channelElement.appendChild(keyframeElement);
+    }
+
+    return channelElement;
 }
 
+void KisKeyframeChannel::loadXML(KoXmlNode channelNode)
+{
+    for (KoXmlNode keyframeNode = channelNode.firstChild(); !keyframeNode .isNull(); keyframeNode  = keyframeNode .nextSibling()) {
+        if (keyframeNode.nodeName().toUpper() != "KEYFRAME") continue;
+
+        KisKeyframe *keyframe = loadKeyframe(keyframeNode);
+
+        m_d->keys.insert(keyframe->time(), keyframe);
+    }
+}
+
+QMap<int, KisKeyframe *> KisKeyframeChannel::keys()
+{
+    return m_d->keys;
+}
+
+const QMap<int, KisKeyframe *> KisKeyframeChannel::constKeys() const
+{
+    return m_d->keys;
+}
+
+KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *copySrc)
+{
+    KisKeyframe *keyframe = keyframeAt(time);
+    if (keyframe) return keyframe;
+
+    keyframe = createKeyframe(time, copySrc);
+
+    emit sigKeyframeAboutToBeAdded(keyframe);
+    m_d->keys.insert(time, keyframe);
+    emit sigKeyframeAdded(keyframe);
+
+    return keyframe;
+}
+
+#include "kis_keyframe_channel.moc"

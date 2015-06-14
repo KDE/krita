@@ -531,7 +531,7 @@ public:
 
 
     int currentTime();
-    void seekToTime(int);
+    void seekToTime(int newTime);
 
     QImage getRenderedFrame(int time);
 
@@ -675,10 +675,14 @@ Q_SIGNALS:
     void sigNodeCollapsedChanged();
 
     /**
-     * Emitted when the current time is changed, after the states
-     * of nodes have been updated to reflect the change.
+     * Emitted before the current time is changed
      */
-    void sigTimeChanged();
+    void sigTimeAboutToChange(int newTime);
+
+    /**
+     * Emitted after the current time is changed
+     */
+    void sigTimeChanged(int oldTime);
 
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();

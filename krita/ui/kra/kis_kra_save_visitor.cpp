@@ -50,7 +50,6 @@
 #include <kis_pixel_selection.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
-#include <kis_multi_paint_device.h>
 
 #include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
@@ -265,14 +264,13 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
         m_store->close();
     }
 
-    if (device->inherits("KisMultiPaintDevice")) {
-        KisMultiPaintDevice *dev = qobject_cast<KisMultiPaintDevice*>(device.data());
-        QList<int> contexts = dev->contexts();
+    if (device->frames().count() > 1) {
+        QList<int> frames = device->frames();
 
-        for (int i = 0; i < contexts.count(); i++) {
-            int id = contexts[i];
+        for (int i = 0; i < frames.count(); i++) {
+            int id = frames[i];
             m_store->open(location + ".f" + QString::number(id));
-            if(!dev->writeContext(id, *m_writer)) {
+            if(!device->write(*m_writer, id)) {
                 device->disconnect();
                 m_store->close();
                 return false;
@@ -281,8 +279,8 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
         }
 
         QByteArray framelist;
-        for (int i = 0; i < contexts.count(); i++) {
-            int id = contexts[i];
+        for (int i = 0; i < frames.count(); i++) {
+            int id = frames[i];
             framelist.append(QString::number(id).toLatin1());
             framelist.append("\n");
         }

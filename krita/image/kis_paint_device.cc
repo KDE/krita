@@ -57,6 +57,7 @@
 #include "kis_lock_free_cache.h"
 #include "kis_lod_transform.h"
 
+#include "kis_raster_keyframe_channel.h"
 
 class PaintDeviceCache
 {
@@ -194,6 +195,7 @@ struct KisPaintDevice::Private
     inline void setColorSpace(const KoColorSpace *cs) { currentData()->colorSpace = cs; }
 
     inline KisDataManagerSP dataManager() const { return currentData()->dataManager; }
+    inline KisDataManagerSP dataManager(int frame) const { return frames[frame]->dataManager; }
     inline void setDataManager(KisDataManagerSP dm) { currentData()->dataManager = dm;  }
 
     inline qint32 x() const { return currentData()->x; }
@@ -202,8 +204,56 @@ struct KisPaintDevice::Private
     inline void setY(qint32 y) { currentData()->y = y; }
 
     inline PaintDeviceCache* cache() { return &currentData()->cache; }
+    inline PaintDeviceCache* cache(int frame) { return &frames[frame]->cache; }
+
+    int createFrame(bool copy, int copySrc)
+    {
+        Data *data;
+
+        if (copy) {
+            Data *srcData = frames[copySrc];
+
+            data = new Data(q);
+            data->x = srcData->x;
+            data->y = srcData->y;
+            data->colorSpace = srcData->colorSpace;
+
+            data->dataManager = new KisDataManager(*(srcData->dataManager.data()));
+
+            data->cache.setupCache();
+        } else {
+            data = new Data(m_data);
+        }
+
+        int frameId = nextFreeFrameId++;
+        frames.insert(frameId, data);
+
+        return frameId;
+    }
+
+    void forceCreateFrame(int frameId)
+    {
+        if (nextFreeFrameId <= frameId) nextFreeFrameId = frameId + 1;
+
+        Data *data = new Data(m_data);
+        frames.insert(frameId, data);
+    }
+
+    void deleteFrame(int frame)
+    {
+        Data *data = frames[frame];
+        frames.remove(frame);
+        delete data;
+    }
+
+    const QList<int> frameIds() const
+    {
+        return frames.keys();
+    }
 
     QRegion syncLodData(int newLod);
+
+    KisRasterKeyframeChannel *contentChannel;
 
 private:
     QRegion syncWholeDevice();
@@ -238,24 +288,40 @@ private:
 
 private:
     inline Data* currentData() {
-        if (defaultBounds && defaultBounds->currentLevelOfDetail()) {
-            if (!m_lodData) {
-                m_lodData.reset(new Data(m_data));
+        if (defaultBounds) {
+            if (defaultBounds->currentLevelOfDetail()) {
+                if (!m_lodData) {
+                    m_lodData.reset(new Data(m_data));
+                }
+
+                return m_lodData.data();
             }
 
-            return m_lodData.data();
+            if (contentChannel) {
+                int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
+                Q_ASSERT(frames.contains(frameId));
+                return frames[frameId];
+            }
         }
 
         return &m_data;
     }
 
     inline const Data* currentData() const {
-        if (defaultBounds && defaultBounds->currentLevelOfDetail()) {
-            if (!m_lodData) {
-                m_lodData.reset(new Data(m_data));
+        if (defaultBounds) {
+            if (defaultBounds->currentLevelOfDetail()) {
+                if (!m_lodData) {
+                    m_lodData.reset(new Data(m_data));
+                }
+
+                return m_lodData.data();
             }
 
-            return m_lodData.data();
+            if (contentChannel) {
+                int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
+                Q_ASSERT(frames.contains(frameId));
+                return frames[frameId];
+            }
         }
 
         return &m_data;
@@ -264,6 +330,8 @@ private:
 private:
     Data m_data;
     mutable QScopedPointer<Data> m_lodData;
+    QHash<int, Data*> frames;
+    int nextFreeFrameId;
 };
 
 #include "kis_paint_device_strategies.h"
@@ -271,7 +339,9 @@ private:
 KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
-      m_data(paintDevice)
+      contentChannel(0),
+      m_data(paintDevice),
+      nextFreeFrameId(0)
 {
 }
 
@@ -825,6 +895,18 @@ bool KisPaintDevice::read(QIODevice *stream)
     return retval;
 }
 
+bool KisPaintDevice::write(KisPaintDeviceWriter &store, int frame)
+{
+    return m_d->dataManager(frame)->write(store);
+}
+
+bool KisPaintDevice::read(QIODevice *stream, int frame)
+{
+    bool retval = m_d->dataManager(frame)->read(stream);
+    m_d->cache(frame)->invalidate();
+    return retval;
+}
+
 KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     m_d->cache()->invalidate();
@@ -1273,6 +1355,40 @@ quint32 KisPaintDevice::channelCount() const
     return _channelCount;
 }
 
+KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, const KisNodeWSP node)
+{
+    m_d->contentChannel = new KisRasterKeyframeChannel(id, node, this);
+
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframe*)), this, SLOT(keyframeAboutToBeAdded(KisKeyframe*)), Qt::DirectConnection);
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeAdded(KisKeyframe*)), this, SLOT(keyframeAdded(KisKeyframe*)), Qt::DirectConnection);
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)), this, SLOT(keyframeAboutToBeRemoved(KisKeyframe*)), Qt::DirectConnection);
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeRemoved(KisKeyframe*)), this, SLOT(keyframeRemoved(KisKeyframe*)), Qt::DirectConnection);
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframe*,int)), this, SLOT(keyframeAboutToBeMoved(KisKeyframe*, int)), Qt::DirectConnection);
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeMoved(KisKeyframe*,int)), this, SLOT(keyframeMoved(KisKeyframe*, int)), Qt::DirectConnection);
+
+    return m_d->contentChannel;
+}
+
+int KisPaintDevice::createFrame(bool copy, int copySrc)
+{
+    return m_d->createFrame(copy, copySrc);
+}
+
+void KisPaintDevice::forceCreateFrame(int frameId)
+{
+    m_d->forceCreateFrame(frameId);
+}
+
+void KisPaintDevice::deleteFrame(int frame)
+{
+    m_d->deleteFrame(frame);
+}
+
+QList<int> KisPaintDevice::frames()
+{
+    return m_d->frameIds();
+}
+
 const KoColorSpace* KisPaintDevice::colorSpace() const
 {
     Q_ASSERT(m_d->colorSpace() != 0);
@@ -1348,6 +1464,52 @@ QRegion KisPaintDevice::syncLodCache(int levelOfDetail)
     }
 
     return dirtyRegion;
+}
+
+void KisPaintDevice::keyframeAboutToBeAdded(KisKeyframe *keyframe)
+{
+    if (keyframe->affects(defaultBounds()->currentTime())) {
+        setDirty();
+    }
+}
+
+void KisPaintDevice::keyframeAdded(KisKeyframe *keyframe)
+{
+    if (keyframe->affects(defaultBounds()->currentTime())) {
+        setDirty();
+    }
+}
+
+void KisPaintDevice::keyframeAboutToBeRemoved(KisKeyframe *keyframe)
+{
+    if (keyframe->affects(defaultBounds()->currentTime())) {
+        setDirty();
+    }
+}
+
+void KisPaintDevice::keyframeRemoved(KisKeyframe *keyframe)
+{
+    if (keyframe->affects(defaultBounds()->currentTime())) {
+        setDirty();
+    }
+}
+
+void KisPaintDevice::keyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime)
+{
+    int time = defaultBounds()->currentTime();
+
+    if (keyframe->affects(time) || keyframe->wouldAffect(time, toTime)) {
+        setDirty();
+    }
+}
+
+void KisPaintDevice::keyframeMoved(KisKeyframe *keyframe, int fromTime)
+{
+    int time = defaultBounds()->currentTime();
+
+    if (keyframe->affects(time) || keyframe->wouldAffect(time, fromTime)) {
+        setDirty();
+    }
 }
 
 #include "kis_paint_device.moc"

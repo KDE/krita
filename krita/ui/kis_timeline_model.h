@@ -83,7 +83,7 @@ private:
 
     QModelIndex getChannelIndex(KisKeyframeChannel *channel, int column) const;
     void connectAllChannels(KisNodeDummy *nodeDummy, bool needConnect);
-    void connectChannels(KisKeyframeSequence *seq, bool needConnect);
+    void connectChannels(KisNodeSP node, bool needConnect);
     int getInsertionPointByTime(KisKeyframeChannel *channel, int time);
 };
 

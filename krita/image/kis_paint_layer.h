@@ -92,8 +92,6 @@ public:
     KisDocumentSectionModel::PropertyList sectionModelProperties() const;
     void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
-    void seekToTime(int time);
-
     void addNewFrame(int time, bool blank);
 
     void deleteKeyfame(int time);
@@ -150,7 +148,8 @@ public Q_SLOTS:
     }
 
 private Q_SLOTS:
-    void keyframesChanged();
+    void imageTimeAboutToChange(int newTime);
+    void imageTimeChanged(int oldTime);
 
 protected:
     // override from KisLayer
@@ -159,7 +158,7 @@ protected:
                                   const QRect& rect) const;
 
 private:
-    void init(KisMultiPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());
+    void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());
 
     struct Private;
     Private * const m_d;

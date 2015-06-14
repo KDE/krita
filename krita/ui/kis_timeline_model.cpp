@@ -63,17 +63,17 @@ void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, 
 }
 
 void KisTimelineModel::connectAllChannels(KisNodeDummy *nodeDummy, bool needConnect) {
-    connectChannels(nodeDummy->node()->keyframes(), needConnect);
+    connectChannels(nodeDummy->node(), needConnect);
 
     nodeDummy = nodeDummy->firstChild();
     while(nodeDummy) {
-        connectChannels(nodeDummy->node()->keyframes(), needConnect);
+        connectChannels(nodeDummy->node(), needConnect);
         nodeDummy = nodeDummy->nextSibling();
     }
 }
 
-void KisTimelineModel::connectChannels(KisKeyframeSequence *seq, bool needConnect) {
-    QList<KisKeyframeChannel*> channels = seq->channels();
+void KisTimelineModel::connectChannels(KisNodeSP node, bool needConnect) {
+    QList<KisKeyframeChannel*> channels = node->keyframeChannels();
 
     foreach (KisKeyframeChannel *channel, channels) {
         if (needConnect) {
@@ -82,7 +82,7 @@ void KisTimelineModel::connectChannels(KisKeyframeSequence *seq, bool needConnec
             connect(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)), this, SLOT(slotKeyframeAboutToBeRemoved(KisKeyframe*)));
             connect(channel, SIGNAL(sigKeyframeRemoved(KisKeyframe*)), this, SLOT(slotKeyframeRemoved(KisKeyframe*)));
             connect(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframe*,int)), this, SLOT(slotKeyframeAboutToBeMoved(KisKeyframe*,int)));
-            connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframe*)), this, SLOT(slotKeyframeMoved(KisKeyframe*)));
+            connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframe*, int)), this, SLOT(slotKeyframeMoved(KisKeyframe*)));
         } else {
             disconnect(channel, 0, this, 0);
         }
@@ -117,7 +117,7 @@ QModelIndex KisTimelineModel::index(int row, int column, const QModelIndex &pare
             int channelIndex = row - childNodeCount;
 
             KisNodeSP parentNode = nodeFromIndex(parent);
-            KisKeyframeChannel *channel = parentNode->keyframes()->channels().at(channelIndex);
+            KisKeyframeChannel *channel = parentNode->keyframeChannels().at(channelIndex);
 
             return createIndex(row, column, channel);
         }
@@ -143,7 +143,7 @@ QModelIndex KisTimelineModel::parent(const QModelIndex &child) const
     } else if (childObj->inherits("KisKeyframeChannel")) {
         KisKeyframeChannel *channel = qobject_cast<KisKeyframeChannel*>(childObj);
 
-        KisNodeWSP node = channel->sequence()->node();
+        KisNodeWSP node = channel->node();
 
         return KisNodeModel::indexFromNode(node);
     } else { // KisNodeDummy
@@ -168,7 +168,7 @@ int KisTimelineModel::rowCount(const QModelIndex &parent) const
         }
     } else { // KisNodeDummy
         KisNodeSP parentNode = nodeFromIndex(parent);
-        int channelCount = parentNode->keyframes()->channels().count();
+        int channelCount = parentNode->keyframeChannels().count();
         return KisNodeModel::rowCount(parent) + channelCount;
     }
 }
@@ -203,7 +203,7 @@ QVariant KisTimelineModel::data(const QModelIndex &index, int role) const
     } else if (obj->inherits("KisKeyframeChannel")) {
         KisKeyframeChannel *channel = qobject_cast<KisKeyframeChannel*>(obj);
         switch (role) {
-        case Qt::DisplayRole: return channel->displayName();
+        case Qt::DisplayRole: return channel->name();
         }
         return QVariant();
     } else { // KisNodeDummy
@@ -245,14 +245,12 @@ Qt::ItemFlags KisTimelineModel::flags(const QModelIndex &index) const
 
 void KisTimelineModel::slotEndInsertDummy2(KisNodeDummy *dummy)
 {
-    KisNodeSP node = dummy->node();
-    connectChannels(node->keyframes(), true);
+    connectChannels(dummy->node(), true);
 }
 
 void KisTimelineModel::slotBeginRemoveDummy2(KisNodeDummy *dummy)
 {
-    KisNodeSP node = dummy->node();
-    connectChannels(node->keyframes(), true);
+    connectChannels(dummy->node(), true);
 }
 
 void KisTimelineModel::slotKeyframeAboutToBeAdded(KisKeyframe *keyframe)
@@ -326,8 +324,8 @@ int KisTimelineModel::getInsertionPointByTime(KisKeyframeChannel *channel, int t
 
 QModelIndex KisTimelineModel::getChannelIndex(KisKeyframeChannel *channel, int column) const
 {
-    KisKeyframeSequence *sequence = channel->sequence();
-    int row = sequence->node()->childCount() + sequence->channels().indexOf(channel);
+    KisNodeWSP node = channel->node();
+    int row = node->childCount() + node->keyframeChannels().indexOf(channel);
     return createIndex(row, column, channel);
 }
 

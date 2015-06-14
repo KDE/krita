@@ -22,7 +22,7 @@
 
 #include "kis_undo_adapter.h"
 #include "kis_base_node.h"
-#include "kis_keyframe_sequence.h"
+#include "kis_keyframe_channel.h"
 
 #include "krita_export.h"
 
@@ -141,21 +141,20 @@ public:
     virtual KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
-     * Return the set of keyframes associated with this node.
-     * @return keyframe sequence
+     * Return the keyframe channels associated with this node
+     * @return list of keyframe channels
      */
-    KisKeyframeSequence *keyframes() const;
+    QList<KisKeyframeChannel *> keyframeChannels() const;
 
     /**
-     * Update the state of the node to that at the given time within
-     * animation timeline.
-     *
-     * Subclasses should override this to implement animation of their
-     * behavior.
-     *
-     * @param time new animation time
+     * Get the keyframe channel with given id.
+     * @param id internal name for channel
+     * @return keyframe channel with the id, or null if not found
      */
-    virtual void seekToTime(int time);
+    KisKeyframeChannel *getKeyframeChannel(const QString &id);
+
+protected:
+    void addKeyframeChannel(KisKeyframeChannel* channel);
 
 protected:
 

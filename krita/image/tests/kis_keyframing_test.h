@@ -20,6 +20,7 @@
 #define KIS_KEYFRAMING_TEST_H
 
 #include <QtTest>
+#include "KoColor.h"
 
 class KisKeyframingTest : public QObject
 {
@@ -27,9 +28,20 @@ class KisKeyframingTest : public QObject
 
 private slots:
 
-    void testChannels();
-    void testKeyframes();
+    void initTestCase();
 
+    void testScalarChannel();
+    void testRasterChannel();
+    void testChannelSignals();
+
+    void cleanupTestCase();
+
+private:
+
+    const KoColorSpace *cs;
+    quint8* red;
+    quint8* green;
+    quint8* blue;
 };
 
 #endif

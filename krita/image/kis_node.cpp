@@ -88,7 +88,7 @@ public:
     KisSafeReadNodeList nodes;
     KisNodeProgressProxy *nodeProgressProxy;
     QReadWriteLock nodeSubgraphLock;
-    KisKeyframeSequence *keyframes;
+    QMap<QString, KisKeyframeChannel*> keyframeChannels;
 
     const KisNode* findSymmetricClone(const KisNode *srcRoot,
                                       const KisNode *dstRoot,
@@ -164,8 +164,6 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
-
-    m_d->keyframes = new KisKeyframeSequence(this);
 }
 
 KisNode::KisNode(const KisNode & rhs)
@@ -174,8 +172,6 @@ KisNode::KisNode(const KisNode & rhs)
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
-
-    m_d->keyframes = new KisKeyframeSequence(this);
 
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!
@@ -229,6 +225,23 @@ KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
         toQShared(new KisDumbProjectionPlane());
 
     return plane;
+}
+
+QList<KisKeyframeChannel*> KisNode::keyframeChannels() const
+{
+    return m_d->keyframeChannels.values();
+}
+
+KisKeyframeChannel * KisNode::getKeyframeChannel(const QString &id)
+{
+    QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
+    if (i == m_d->keyframeChannels.end()) return 0;
+    return i.value();
+}
+
+void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
+{
+    m_d->keyframeChannels.insert(channel->id(), channel);
 }
 
 bool KisNode::accept(KisNodeVisitor &v)
@@ -517,22 +530,6 @@ void KisNode::setDirty(const QRect & rect)
 {
     if(m_d->graphListener) {
         m_d->graphListener->requestProjectionUpdate(this, rect);
-    }
-}
-
-KisKeyframeSequence* KisNode::keyframes() const
-{
-    return m_d->keyframes;
-}
-
-void KisNode::seekToTime(int time)
-{
-    // TODO: do we need to do locking??
-
-    KisSafeReadNodeList::const_iterator iter;
-    FOREACH_SAFE(iter, m_d->nodes) {
-        KisNodeSP child = (*iter);
-        child->seekToTime(time);
     }
 }
 

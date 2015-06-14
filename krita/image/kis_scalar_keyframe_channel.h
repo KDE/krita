@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <mctyyppi42@gmail.com>
+ *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,33 +15,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef _KIS_SCALAR_KEYFRAME_CHANNEL_H
+#define _KIS_SCALAR_KEYFRAME_CHANNEL_H
 
-#ifndef KIS_KEYFRAME_SEQUENCE_H
-#define KIS_KEYFRAME_SEQUENCE_H
-
-#include <krita_export.h>
 #include "kis_keyframe_channel.h"
-#include "kis_node.h"
 
-class KRITAIMAGE_EXPORT KisKeyframeSequence
+class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
+    Q_OBJECT
 
 public:
+    KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node, qreal minValue, qreal maxValue);
 
-    KisKeyframeSequence(KisNodeWSP node=0);
-    ~KisKeyframeSequence();
+    bool hasScalarValue() const;
+    qreal minScalarValue() const;
+    qreal maxScalarValue() const;
+    qreal scalarValue(const KisKeyframe *keyframe) const;
+    void setScalarValue(KisKeyframe *keyframe, qreal value);
 
-    KisKeyframeChannel *createChannel(const QString& name, const QString& displayName);
-    KisKeyframeChannel *getChannel(const QString& name);
+protected:
+    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc);
+    bool canDeleteKeyframe(KisKeyframe *key);
+    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const;
+    KisKeyframe *loadKeyframe(KoXmlNode keyframeNode);
 
-    QList<KisKeyframeChannel*> channels() const;
-
-    KisNodeWSP node();
 private:
-
     struct Private;
     Private * const m_d;
-
 };
 
-#endif // KIS_KEYFRAME_SEQUENCE_H
+#endif

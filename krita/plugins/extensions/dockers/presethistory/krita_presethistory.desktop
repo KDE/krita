@@ -2,6 +2,7 @@
 Name=Preset History Docker
 Name[ca]=Acoblador d'historial de valors predeterminats
 Name[es]=Panel del historial de preajustes
+Name[fi]=Esiasetushistoriatelakka
 Name[it]=Area di aggancio cronologia delle preimpostazioni
 Name[nb]=Historie for  forhåndsinnstillinger
 Name[nl]=Verankering voor voorinstelling van geschiedenis
@@ -15,6 +16,7 @@ Comment=Show the last used presets
 Comment[ca]=Mostra els valors predeterminats usats darrerament
 Comment[cs]=Zobrazit naposledy použité p5edvolby
 Comment[es]=Mostrar los últimos preajustes usados
+Comment[fi]=Näytä viimeksi käytetyt esiasetukset
 Comment[it]=Mostra le ultime preimpostazioni utilizzate
 Comment[nb]=Vis sist brukte forhåndsinnstillinger
 Comment[nl]=De laatst gebruikte voorinstellingen tonen

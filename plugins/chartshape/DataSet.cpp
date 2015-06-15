@@ -129,6 +129,7 @@ public:
                         const QPointF& point, const QSizeF& size );
 public: // abstract KChart::AbstractDiagram API
     virtual void paint ( KChart::PaintContext* /*paintContext*/ ) {}
+    virtual void resize ( const QSizeF& /*area*/ ) {}
 protected: // abstract KChart::AbstractDiagram API
     virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const { return QPair<QPointF, QPointF>(); }
 };

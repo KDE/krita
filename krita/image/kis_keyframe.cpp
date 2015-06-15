@@ -19,29 +19,55 @@
 #include "kis_keyframe.h"
 #include "kis_keyframe_channel.h"
 
-QVariant KisKeyframe::value() const
+struct KisKeyframe::Private
 {
-    return val;
+    KisKeyframeChannel *channel;
+    quintptr data;
+    int time;
+
+    Private(KisKeyframeChannel *channel, int time, quintptr data)
+        : channel(channel), time(time), data(data)
+    {}
+};
+
+KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, void* data)
+    : QObject()
+    , m_d(new Private(channel, time, (quintptr)data))
+{}
+
+KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value)
+    : QObject()
+    , m_d(new Private(channel, time, value))
+{}
+
+quint32 KisKeyframe::value() const
+{
+    return m_d->data;
 }
 
-void KisKeyframe::setValue(QVariant value)
+void *KisKeyframe::data() const
 {
-    val = value;
+    return (void*)m_d->data;
+}
+
+void KisKeyframe::setValue(quint32 value)
+{
+    m_d->data = value;
 }
 
 int KisKeyframe::time() const
 {
-    return t;
+    return m_d->time;
 }
 
 void KisKeyframe::setTime(int time)
 {
-    t = time;
+    m_d->time = time;
 }
 
 KisKeyframeChannel *KisKeyframe::channel() const
 {
-    return ch;
+    return m_d->channel;
 }
 
 bool KisKeyframe::affects(int time) const
@@ -52,7 +78,7 @@ bool KisKeyframe::affects(int time) const
 bool KisKeyframe::wouldAffect(int time, int newTime) const
 {
     // TODO: think through corner cases..
-    KisKeyframe *nextKey = ch->nextKeyframeAfter(newTime);
+    KisKeyframe *nextKey = m_d->channel->nextKeyframeAfter(newTime);
     return (newTime <= time && (!nextKey || time < nextKey->time()));
 }
 

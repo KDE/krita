@@ -23,11 +23,13 @@ struct KisScalarKeyframeChannel::Private
 {
 public:
     Private(qreal min, qreal max)
-        : minValue(min), maxValue(max)
+        : minValue(min), maxValue(max), firstFreeIndex(0)
     {}
 
     qreal minValue;
     qreal maxValue;
+    QMap<int, qreal> values;
+    int firstFreeIndex;
 };
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node, qreal minValue, qreal maxValue)
@@ -53,19 +55,22 @@ qreal KisScalarKeyframeChannel::maxScalarValue() const
 
 qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframe *keyframe) const
 {
-    return keyframe->value().toDouble();
+    return m_d->values[keyframe->value()];
 }
 
 void KisScalarKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value)
 {
-    keyframe->setValue(value);
+    m_d->values[keyframe->value()] = value;
 }
 
 KisKeyframe *KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
 {
     qreal value = (copySrc != 0) ? scalarValue(copySrc) : 0;
+    int index = m_d->firstFreeIndex++;
 
-    return new KisKeyframe(this, time, value);
+    m_d->values[index] = value;
+
+    return new KisKeyframe(this, time, index);
 }
 
 bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
@@ -73,9 +78,14 @@ bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
     return true;
 }
 
+void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframe *key)
+{
+    m_d->values.remove(key->value());
+}
+
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const
 {
-    keyframeElement.setAttribute("value", keyframe->value().toString());
+    keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);
 }
 
 KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(KoXmlNode keyframeNode)
@@ -83,5 +93,8 @@ KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(KoXmlNode keyframeNode)
     int time = keyframeNode.toElement().attribute("time").toUInt();
     QVariant value = keyframeNode.toElement().attribute("value");
 
-    return new KisKeyframe(this, time, value);
+    KisKeyframe *keyframe = createKeyframe(time, 0);
+    setScalarValue(keyframe, value.toReal());
+
+    return keyframe;
 }

@@ -40,14 +40,14 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNode
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
     KisKeyframe *key = activeKeyframeAt(time);
-    return key->value().toInt();
+    return key->value();
 }
 
 KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
 {
-    int srcFrame = (copySrc != 0) ? srcFrame = copySrc->value().toInt() : 0;
+    int srcFrame = (copySrc != 0) ? srcFrame = copySrc->value() : 0;
 
-    int frameId = m_d->paintDevice->createFrame((copySrc != 0), srcFrame);
+    quint32 frameId = (quint32)m_d->paintDevice->createFrame((copySrc != 0), srcFrame);
     KisKeyframe *keyframe = new KisKeyframe(this, time, frameId);
 
     return keyframe;
@@ -61,12 +61,12 @@ bool KisRasterKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
 
 void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key)
 {
-    m_d->paintDevice->deleteFrame(key->value().toInt());
+    m_d->paintDevice->deleteFrame(key->value());
 }
 
 void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const
 {
-    keyframeElement.setAttribute("frame", keyframe->value().toString());
+    keyframeElement.setAttribute("frame", keyframe->value());
 }
 
 KisKeyframe * KisRasterKeyframeChannel::loadKeyframe(KoXmlNode keyframeNode)

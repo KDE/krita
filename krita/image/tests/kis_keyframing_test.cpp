@@ -204,7 +204,7 @@ void KisKeyframingTest::testRasterChannel()
 
     // Fetching current keyframe before the first one should
     // return the first keyframe
-    QCOMPARE(channel->frameIdAt(0), key_10->value().toInt());
+    QCOMPARE(channel->frameIdAt(0), (int)key_10->value());
 }
 
 void KisKeyframingTest::testChannelSignals()

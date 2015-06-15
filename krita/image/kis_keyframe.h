@@ -19,8 +19,6 @@
 #ifndef KIS_KEYFRAME_H
 #define KIS_KEYFRAME_H
 
-#include <QVariant>
-
 #include "krita_export.h"
 #include "kis_keyframe.h"
 
@@ -30,15 +28,13 @@ class KRITAIMAGE_EXPORT KisKeyframe : public QObject {
     Q_OBJECT
 
 public:
-    KisKeyframe(KisKeyframeChannel *channel, int time, const QVariant &value)
-        : QObject()
-        , ch(channel)
-        , val(value)
-        , t(time)
-    {}
+    KisKeyframe(KisKeyframeChannel *channel, int time, void *data);
+    KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value);
 
-    QVariant value() const;
-    void setValue(QVariant value);
+    quint32 value() const;
+    void *data() const;
+
+    void setValue(quint32 value);
     int time() const;
     void setTime(int time);
     KisKeyframeChannel *channel() const;
@@ -61,9 +57,8 @@ public:
     bool wouldAffect(int time, int newTime) const;
 
 private:
-    KisKeyframeChannel *ch;
-    QVariant val;
-    int t;
+    struct Private;
+    Private * const m_d;
 };
 
 Q_DECLARE_METATYPE(KisKeyframe*)

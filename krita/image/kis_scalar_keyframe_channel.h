@@ -36,6 +36,8 @@ public:
 protected:
     KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc);
     bool canDeleteKeyframe(KisKeyframe *key);
+    void destroyKeyframe(KisKeyframe *key);
+
     void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const;
     KisKeyframe *loadKeyframe(KoXmlNode keyframeNode);
 

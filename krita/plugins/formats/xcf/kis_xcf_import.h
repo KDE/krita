@@ -21,6 +21,7 @@
 #define _KIS_XCF_IMPORT_H_
 
 #include <QVariant>
+#include <QIODevice>
 
 #include <KisImportExportFilter.h>
 

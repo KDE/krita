@@ -195,6 +195,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Parts KIO
                                      XmlGui Kross Wallet GlobalAccel
                                      Emoticons ConfigWidgets KDELibs4Support
+                                     TextWidgets KIO
     OPTIONAL_COMPONENTS
         NotifyConfig
         Activities

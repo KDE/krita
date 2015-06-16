@@ -171,9 +171,12 @@ target_link_libraries(KisBasicMathToolboxTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5
 
 ########### next target ###############
 
+# target name "KisBookmarkedConfigurationManagerTest" for some reason that need to be investigated still
+# makes (the automoc of) cmake of at least version 3.1.3 not have moc run on its sources
+# thus using slightly different naming pattern here with trailing _
 set(kis_bookmarked_configuration_manager_test_SRCS kis_bookmarked_configuration_manager_test.cpp )
-kde4_add_unit_test(KisBookmarkedConfigurationManagerTest TESTNAME krita-image-KisBookmarkedConfigurationManagerTest ${kis_bookmarked_configuration_manager_test_SRCS})
-target_link_libraries(KisBookmarkedConfigurationManagerTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+kde4_add_unit_test(KisBookmarkedConfigurationManagerTest_ TESTNAME krita-image-KisBookmarkedConfigurationManagerTest ${kis_bookmarked_configuration_manager_test_SRCS})
+target_link_libraries(KisBookmarkedConfigurationManagerTest_  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 

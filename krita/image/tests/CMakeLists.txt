@@ -309,9 +309,12 @@ target_link_libraries(KisWalkersTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 
+# target name "KisAsyncMergerTest" for some reason that need to be investigated still
+# makes (the automoc of) cmake of at least version 3.1.3 not have moc run on its sources
+# thus using slightly different naming pattern here with trailing _
 set(kis_async_merger_test_SRCS kis_async_merger_test.cpp )
-kde4_add_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
-target_link_libraries(KisAsyncMergerTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+kde4_add_unit_test(KisAsyncMergerTest_ TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
+target_link_libraries(KisAsyncMergerTest_  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 

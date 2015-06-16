@@ -622,9 +622,12 @@ target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::T
 
 ########### next target ###############
 
+# target name "KisDomUtilsTest" for some reason that need to be investigated still
+# makes (the automoc of) cmake of at least version 3.1.3 not have moc run on its sources
+# thus using slightly different naming pattern here with trailing _
 set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
-kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
-target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+kde4_add_unit_test(KisDomUtilsTest_ TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
+target_link_libraries(KisDomUtilsTest_  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 

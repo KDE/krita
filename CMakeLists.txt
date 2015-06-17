@@ -195,7 +195,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Parts KIO
                                      XmlGui Kross Wallet GlobalAccel
                                      Emoticons ConfigWidgets KDELibs4Support
-                                     TextWidgets KIO
+                                     TextWidgets TextEditor KIO
     OPTIONAL_COMPONENTS
         NotifyConfig
         Activities
@@ -206,7 +206,8 @@ if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Script Svg Test Concurrent)
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui UiTools Widgets Xml Network PrintSupport
+                                           Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})

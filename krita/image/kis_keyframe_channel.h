@@ -49,6 +49,7 @@ public:
     KisKeyframe *activeKeyframeAt(int time) const;
     KisKeyframe *nextKeyframeAfter(int time) const;
 
+    int keyframeCount() const;
     QList<KisKeyframe*> keyframes() const;
 
     virtual bool hasScalarValue() const = 0;

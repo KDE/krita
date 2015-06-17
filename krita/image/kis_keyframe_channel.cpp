@@ -129,6 +129,11 @@ KisKeyframe *KisKeyframeChannel::nextKeyframeAfter(int time) const
     return i.value();
 }
 
+int KisKeyframeChannel::keyframeCount() const
+{
+    return m_d->keys.count();
+}
+
 QList<KisKeyframe*> KisKeyframeChannel::keyframes() const
 {
     return m_d->keys.values();

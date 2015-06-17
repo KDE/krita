@@ -113,10 +113,10 @@ void KisPaintLayerTest::testKeyframing()
     KisKeyframeChannel *contentChannel = layer->getKeyframeChannel("content");
 
     QVERIFY(contentChannel != 0);
-    QCOMPARE(contentChannel->keyframes().count(), 1);
+    QCOMPARE(contentChannel->keyframeCount(), 1);
 
     layer->addNewFrame(7, true);
-    QCOMPARE(contentChannel->keyframes().count(), 2);
+    QCOMPARE(contentChannel->keyframeCount(), 2);
     QVERIFY(contentChannel->keyframeAt(0) != contentChannel->keyframeAt(7));
 
 

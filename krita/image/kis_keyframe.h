@@ -19,6 +19,8 @@
 #ifndef KIS_KEYFRAME_H
 #define KIS_KEYFRAME_H
 
+#include <qglobal.h>
+#include <qmetatype.h>
 #include "krita_export.h"
 #include "kis_keyframe.h"
 

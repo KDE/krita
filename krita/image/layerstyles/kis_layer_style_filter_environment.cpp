@@ -39,7 +39,7 @@ struct KisLayerStyleFilterEnvironment::Private
 KisLayerStyleFilterEnvironment::KisLayerStyleFilterEnvironment(KisLayer *sourceLayer)
     : m_d(new Private)
 {
-    Q_ASSERT(m_d->sourceLayer);
+    Q_ASSERT(sourceLayer);
     m_d->sourceLayer = sourceLayer;
 }
 

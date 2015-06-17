@@ -785,7 +785,8 @@ void Axis::Private::createBubbleDiagram()
 
      // disable the connecting line
     KChart::LineAttributes la = kdBubbleDiagram->lineAttributes();
-    la.setVisible(false);
+    // QT5TODO: this isn't in my copy of kchart... (Boud)
+    //la.setVisible(false);
     kdBubbleDiagram->setLineAttributes(la);
 
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdBubbleDiagram);

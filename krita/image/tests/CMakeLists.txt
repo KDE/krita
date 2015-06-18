@@ -1,3 +1,15 @@
+# cmake in some versions for some not yet known reasons fails to run automoc
+# on random targets (changing target names already has an effect)
+# As temporary workaround skipping build of tests on these versions for now
+# See https://mail.kde.org/pipermail/kde-buildsystem/2015-June/010819.html
+# extend range of affected cmake versions as needed
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1.3 AND
+   NOT ${CMAKE_VERSION} VERSION_GREATER 3.1.3)
+    message(WARNING "Skipping krita/image/tests, cmake in version 3.1.3 seems to have a problem with automoc")
+    return()
+endif()
+
+
 # set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
@@ -171,12 +183,9 @@ target_link_libraries(KisBasicMathToolboxTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5
 
 ########### next target ###############
 
-# target name "KisBookmarkedConfigurationManagerTest" for some reason that need to be investigated still
-# makes (the automoc of) cmake of at least version 3.1.3 not have moc run on its sources
-# thus using slightly different naming pattern here with trailing _
 set(kis_bookmarked_configuration_manager_test_SRCS kis_bookmarked_configuration_manager_test.cpp )
-kde4_add_unit_test(KisBookmarkedConfigurationManagerTest_ TESTNAME krita-image-KisBookmarkedConfigurationManagerTest ${kis_bookmarked_configuration_manager_test_SRCS})
-target_link_libraries(KisBookmarkedConfigurationManagerTest_  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+kde4_add_unit_test(KisBookmarkedConfigurationManagerTest TESTNAME krita-image-KisBookmarkedConfigurationManagerTest ${kis_bookmarked_configuration_manager_test_SRCS})
+target_link_libraries(KisBookmarkedConfigurationManagerTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 
@@ -312,12 +321,9 @@ target_link_libraries(KisWalkersTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 
-# target name "KisAsyncMergerTest" for some reason that need to be investigated still
-# makes (the automoc of) cmake of at least version 3.1.3 not have moc run on its sources
-# thus using slightly different naming pattern here with trailing _
 set(kis_async_merger_test_SRCS kis_async_merger_test.cpp )
-kde4_add_unit_test(KisAsyncMergerTest_ TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
-target_link_libraries(KisAsyncMergerTest_  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+kde4_add_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
+target_link_libraries(KisAsyncMergerTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 
@@ -622,12 +628,9 @@ target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::T
 
 ########### next target ###############
 
-# target name "KisDomUtilsTest" for some reason that need to be investigated still
-# makes (the automoc of) cmake of at least version 3.1.3 not have moc run on its sources
-# thus using slightly different naming pattern here with trailing _
 set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
-kde4_add_unit_test(KisDomUtilsTest_ TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
-target_link_libraries(KisDomUtilsTest_  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
+target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ########### next target ###############
 

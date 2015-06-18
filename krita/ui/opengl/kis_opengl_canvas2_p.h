@@ -46,8 +46,13 @@
 #define GL_NUM_EXTENSIONS 0x821D
 #endif
 
-//QT5TODO
-//extern const QString qt_gl_library_name();
+QString gl_library_name() {
+#if defined (QT_OPENGL_ES_2)
+    return QLatin1String("GLESv2");
+#else
+    return QLatin1String("GL");
+#endif
+}
 
 namespace VSyncWorkaround {
 
@@ -153,10 +158,9 @@ namespace VSyncWorkaround {
                 }
                 if (!glXGetProcAddressARB)
                 {
-                    //QT5TODO
-//                     QLibrary lib(::qt_gl_library_name());
-//                     //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
-//                     glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
+                     QLibrary lib(gl_library_name());
+                     //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+                     glXGetProcAddressARB = (qt_glXGetProcAddressARB)(void*)lib.resolve("glXGetProcAddressARB");
                 }
             }
         }
@@ -174,13 +178,12 @@ namespace VSyncWorkaround {
                 dlclose(handle);
             }
         }
-        // QT5TODO
-//         if (!procAddress) {
-// 
-//             QLibrary lib(::qt_gl_library_name());
-//             //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
-//             procAddress = lib.resolve(procName);
-//         }
+         if (!procAddress) {
+
+             QLibrary lib(gl_library_name());
+             //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+             procAddress = (void*)lib.resolve(procName);
+         }
 
         return procAddress;
     }

@@ -46,6 +46,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
     // https://bugs.kde.org/show_bug.cgi?id=294122
     // demand the opposite from each other...
     setCompositeOp(COMPOSITE_COPY);
+    setUseSelectionInProjection(false);
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
@@ -78,7 +79,7 @@ QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const
     /**
      * We can't paint outside a selection, that is why we call
      * KisSelectionBasedLayer::cropChangeRectBySelection to crop
-     * actual change area in the end
+     * actual change area in the end.
      */
     filteredRect = cropChangeRectBySelection(filteredRect);
 

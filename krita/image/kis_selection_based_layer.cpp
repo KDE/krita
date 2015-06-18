@@ -39,8 +39,11 @@
 struct KisSelectionBasedLayer::Private
 {
 public:
+    Private() : useSelectionInProjection(true) {}
+
     KisSelectionSP selection;
     KisPaintDeviceSP paintDevice;
+    bool useSelectionInProjection;
 };
 
 
@@ -113,40 +116,51 @@ bool KisSelectionBasedLayer::needProjection() const
     return m_d->selection;
 }
 
+void KisSelectionBasedLayer::setUseSelectionInProjection(bool value) const
+{
+    m_d->useSelectionInProjection = value;
+}
+
+KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRect &rect) const
+{
+    if (!m_d->selection) return 0;
+    m_d->selection->updateProjection(rect);
+
+    KisSelectionSP tempSelection = m_d->selection;
+
+    lockTemporaryTarget();
+
+    if (hasTemporaryTarget()) {
+        /**
+         * Cloning a selection with COW
+         * FIXME: check whether it's faster than usual bitBlt'ing
+         */
+        tempSelection = new KisSelection(*tempSelection);
+
+        KisPainter gc2(tempSelection->pixelSelection());
+        setupTemporaryPainter(&gc2);
+        gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
+    }
+
+    unlockTemporaryTarget();
+
+    return tempSelection;
+}
+
 void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
         const QRect& rect) const
 {
-    lockTemporaryTarget();
 
-    m_d->selection->updateProjection(rect);
-
-    KisSelectionSP tempSelection = m_d->selection;
     KisPainter gc(projection);
 
-    if (m_d->selection) {
-        if (hasTemporaryTarget()) {
-            /**
-             * Cloning a selection with COW
-             * FIXME: check whether it's faster than usual bitBlt'ing
-             */
-            tempSelection = new KisSelection(*tempSelection);
+    KisSelectionSP tempSelection;
 
-            KisPainter gc2(tempSelection->pixelSelection());
-            setupTemporaryPainter(&gc2);
-            gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
-        }
-
-        projection->clear(rect);
-        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_OVER));
-        gc.setSelection(tempSelection);
-    } else {
-        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+    if (m_d->useSelectionInProjection) {
+        tempSelection = fetchComposedInternalSelection(rect);
     }
 
-    gc.bitBlt(rect.topLeft(), original, rect);
-
-    unlockTemporaryTarget();
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect, tempSelection);
 }
 
 QRect KisSelectionBasedLayer::cropChangeRectBySelection(const QRect &rect) const

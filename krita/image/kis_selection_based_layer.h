@@ -107,6 +107,16 @@ public:
     void setInternalSelection(KisSelectionSP selection);
 
     /**
+     * When painted in indirect painting mode, the internal selection
+     * might not contain actual selection, because a part of it is
+     * stored on an indirect painting device. This method returns the
+     * merged copy of the real selection. The area in \p rect only is
+     * guaranteed to be prepared. The content of the rest of the
+     * selection is undefined.
+     */
+    KisSelectionSP fetchComposedInternalSelection(const QRect &rect) const;
+
+    /**
      * gets this layer's x coordinate, taking selection into account
      * @return x-coordinate value
      */
@@ -166,6 +176,17 @@ protected:
     void initSelection();
 
     QRect cropChangeRectBySelection(const QRect &rect) const;
+
+    /**
+     * Sets if the selection should be used in
+     * copyOriginalToProjection() method.
+     *
+     * Default value is 'true'. The descendants should override it to
+     * get desired behaviour.
+     *
+     * Must be called only once in the child's constructor
+     */
+    void setUseSelectionInProjection(bool value) const;
 
 public Q_SLOTS:
 

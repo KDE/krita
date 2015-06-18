@@ -24,8 +24,6 @@
 
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 
 #include "kis_paint_device.h"
 #include "kis_node_visitor.h"

@@ -77,11 +77,12 @@ QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const
     }
 
     /**
-     * We can't paint outside a selection, that is why we call
-     * KisSelectionBasedLayer::cropChangeRectBySelection to crop
-     * actual change area in the end.
+     * After the change in the blending using
+     * setUseSelectionInProjection(false) we should *not* crop the
+     * change rect of the layer, because we pass contents through.
+     *
+     * //filteredRect = cropChangeRectBySelection(filteredRect);
      */
-    filteredRect = cropChangeRectBySelection(filteredRect);
 
     return filteredRect;
 }

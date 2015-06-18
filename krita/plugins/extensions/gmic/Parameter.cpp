@@ -144,7 +144,11 @@ bool Parameter::isTypeDefined(const QString& typeName)
     == FloatParameter ==
  ***************************/
 
-FloatParameter::FloatParameter(const QString& name, bool updatePreview): Parameter(name,updatePreview)
+FloatParameter::FloatParameter(const QString& name, bool updatePreview)
+    : Parameter(name,updatePreview)
+    , m_value(0.0)
+    , m_minValue(0.0)
+    , m_maxValue(0.0)
 {
     m_type = FLOAT_P;
 }
@@ -156,18 +160,20 @@ void FloatParameter::parseValues(const QString& typeDefinition)
     bool isOk = true;
 
     m_value = m_defaultValue = values.at(0).toFloat(&isOk);
-
-    if (!isOk)
-    {
-        dbgPlugins << "Incorect type definition: " << typeDefinition;
+    if (!isOk) {
+        dbgPlugins << "Incorect type definition: " << typeDefinition << "for" << values.at(0);
     }
-    Q_ASSERT(isOk);
-
 
     m_minValue = values.at(1).toFloat(&isOk);
-    Q_ASSERT(isOk);
+    if (!isOk) {
+        dbgPlugins << "Incorect type definition: " << typeDefinition << "for" << values.at(1);
+    }
+
     m_maxValue = values.at(2).toFloat(&isOk);
-    Q_ASSERT(isOk);
+    if (!isOk) {
+        dbgPlugins << "Incorect type definition: " << typeDefinition << "for" << values.at(2);
+    }
+
 }
 
 
@@ -210,7 +216,11 @@ void FloatParameter::reset()
     == IntParameter ==
  ***************************/
 
-IntParameter::IntParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+IntParameter::IntParameter(const QString& name, bool updatePreview)
+    : Parameter(name, updatePreview)
+    , m_value(0)
+    , m_minValue(0)
+    , m_maxValue(0)
 {
     m_type = INT_P;
 }
@@ -221,11 +231,21 @@ void IntParameter::parseValues(const QString& typeDefinition)
     bool isOk = true;
 
     m_value = m_defaultValue = values.at(0).toInt(&isOk);
-    Q_ASSERT(isOk);
+    if (!isOk) {
+        dbgPlugins << "Incorect type definition: " << typeDefinition << "for" << values.at(0);
+    }
+
     m_minValue = values.at(1).toInt(&isOk);
-    Q_ASSERT(isOk);
+    if (!isOk) {
+        dbgPlugins << "Incorect type definition: " << typeDefinition << "for" << values.at(0);
+    }
+
     m_maxValue = values.at(2).toInt(&isOk);
-    Q_ASSERT(isOk);
+    if (!isOk) {
+        dbgPlugins << "Incorect type definition: " << typeDefinition << "for" << values.at(0);
+    }
+
+
 }
 
 

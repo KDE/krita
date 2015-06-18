@@ -388,6 +388,8 @@ void KisViewManager::setCurrentView(KisView *view)
 {
     bool first = true;
     if (d->currentImageView) {
+        d->currentImageView->notifyCurrentStateChanged(false);
+
         d->currentImageView->canvasBase()->setCursor(QCursor(Qt::ArrowCursor));
         first = false;
         KisDocument* doc = d->currentImageView->document();
@@ -439,6 +441,7 @@ void KisViewManager::setCurrentView(KisView *view)
     d->mirrorManager->setView(imageView);
 
     if (d->currentImageView) {
+        d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
     }
@@ -1281,18 +1284,9 @@ void KisViewManager::guiUpdateTimeout()
 
 void KisViewManager::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
-    if(d->showFloatingMessage && qtMainWindow()) {
-        if (d->savedFloatingMessage) {
-            d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
-        } else {
-            if(d->currentImageView) {
-                d->savedFloatingMessage = new KisFloatingMessage(message, d->currentImageView->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
-                d->savedFloatingMessage->setShowOverParent(true);
-                d->savedFloatingMessage->setIcon(icon);
-                d->savedFloatingMessage->showMessage();
-            }
-        }
-    }
+    if (!d->currentImageView) return;
+    d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
+
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
 #endif

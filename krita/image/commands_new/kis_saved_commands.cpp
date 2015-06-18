@@ -45,6 +45,7 @@ void KisSavedCommandBase::runStroke(bool undo)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
         new KisStrokeStrategyUndoCommandBased(text(), undo, 0);
+    strategy->setUsedWhileUndoRedo(true);
 
     KisStrokeId id = m_strokesFacade->startStroke(strategy);
     addCommands(id, undo);

@@ -47,6 +47,15 @@ public:
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 
+    /**
+     * Returns true if mere start of the stroke should cancel all the
+     * pending redo tasks.
+     *
+     * This method should return true in almost all circumstances
+     * except if we are running an undo or redo stroke.
+     */
+    bool clearsRedoOnStart() const;
+
     QString id() const;
     KUndo2MagicString name() const;
 
@@ -73,12 +82,14 @@ protected:
     void setSupportsWrapAroundMode(bool value);
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
+    void setClearsRedoOnStart(bool value);
 
 private:
     bool m_exclusive;
     bool m_supportsWrapAroundMode;
     bool m_needsIndirectPainting;
     QString m_indirectPaintingCompositeOp;
+    bool m_clearsRedoOnStart;
 
     QString m_id;
     KUndo2MagicString m_name;

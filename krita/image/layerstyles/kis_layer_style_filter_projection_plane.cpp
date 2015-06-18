@@ -42,6 +42,7 @@ KisLayerStyleFilterProjectionPlane::
 KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer)
     : m_d(new Private)
 {
+    Q_ASSERT(sourceLayer);
     m_d->sourceLayer = sourceLayer;
     m_d->environment.reset(new KisLayerStyleFilterEnvironment(sourceLayer));
 }

@@ -90,7 +90,7 @@ public:
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
-        QRect applyRect = m_updateRect & m_projection->extent();
+        const QRect applyRect = m_updateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is
         //      null, we are finish here.
@@ -107,6 +107,9 @@ public:
             return true;
         }
 
+        KisSelectionSP selection = layer->fetchComposedInternalSelection(applyRect);
+        const QRect filterRect = selection ? applyRect & selection->selectedRect() : applyRect;
+
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
 
@@ -116,8 +119,21 @@ public:
         updater.start(100, filter->name());
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-        // We do not create a transaction here, as srcDevice != dstDevice
-        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig.data(), updaterPtr);
+        KisPaintDeviceSP dstDevice = originalDevice;
+
+        if (selection) {
+            dstDevice = new KisPaintDevice(originalDevice->colorSpace());
+        }
+
+        if (!filterRect.isEmpty()) {
+            // We do not create a transaction here, as srcDevice != dstDevice
+            filter->process(m_projection, dstDevice, 0, filterRect, filterConfig.data(), updaterPtr);
+        }
+
+        if (selection) {
+            KisPainter::copyAreaOptimized(applyRect.topLeft(), m_projection, originalDevice, applyRect);
+            KisPainter::copyAreaOptimized(filterRect.topLeft(), dstDevice, originalDevice, filterRect, selection);
+        }
 
         updaterPtr->setProgress(100);
 

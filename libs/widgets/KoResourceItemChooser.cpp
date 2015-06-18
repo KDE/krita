@@ -117,7 +117,6 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->view->viewport()->installEventFilter(this);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
-    connect(d->view, SIGNAL(clicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect (d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
 
     connect (d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));

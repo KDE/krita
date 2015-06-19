@@ -29,6 +29,8 @@
 #include <kis_types.h>
 #include "krita_export.h"
 
+#include "widgets/kis_floating_message.h"
+
 class KisDocument;
 class KisMainWindow;
 class KisPrintJob;
@@ -72,8 +74,6 @@ public:
      */
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
     ~KisView();
-
-    bool shown() const;
 
     KAction *undoAction() const;
     KAction *redoAction() const;
@@ -202,6 +202,11 @@ public:
     /// the global selection.
     KisSelectionSP selection();
 
+    void notifyCurrentStateChanged(bool isCurrent);
+
+    void setShowFloatingMessage(bool show);
+    void showFloatingMessageImpl(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
+
 public Q_SLOTS:
 
     /**
@@ -232,7 +237,7 @@ protected:
     void dropEvent(QDropEvent * event);
     bool event( QEvent* event );
     void closeEvent(QCloseEvent *event);
-    void showEvent(QShowEvent *event);
+
     /**
      * Generate a name for this view.
      */
@@ -243,10 +248,6 @@ public Q_SLOTS:
     void slotSavingFinished();
     void slotImageResolutionChanged();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
-
-private Q_SLOTS:
-
-    void setShown();
 
 private:
 

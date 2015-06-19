@@ -58,8 +58,8 @@ inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPoin
 
 void KisInfinityManager::imagePositionChanged()
 {
-    QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    QRect widgetRect = m_canvas->canvasWidget()->rect();
+    const QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+    const QRect widgetRect = m_canvas->canvasWidget()->rect();
 
     KisConfig cfg;
     qreal vastScrolling = cfg.vastScrolling();
@@ -168,6 +168,14 @@ inline int expandRight(int x0, int x1, int maxExpand)
 
 bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 {
+    /**
+     * We connect our event filter to the global InputManager which is
+     * shared among all the canvases. Ideally we should disconnect our
+     * event filter whin this canvas is not active, but for now we can
+     * just check the destination of the event, if it is correct.
+     */
+    if (obj != m_canvas->canvasWidget()) return false;
+
     KIS_ASSERT_RECOVER_NOOP(m_filteringEnabled);
 
     bool retval = false;

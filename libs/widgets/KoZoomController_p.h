@@ -67,6 +67,11 @@ public:
         parent->setZoom(mode, zoom);
     }
 
+    void init(KoCanvasController *co,
+              KoZoomHandler *zh,
+              KActionCollection *actionCollection,
+              bool createZoomShortcuts);
+
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;
     KoZoomAction *action;

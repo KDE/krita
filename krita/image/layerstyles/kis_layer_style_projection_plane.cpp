@@ -59,6 +59,7 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
 
 void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleSP style)
 {
+    Q_ASSERT(sourceLayer);
     m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
     m_d->style = style;
 
@@ -139,6 +140,7 @@ KisLayerStyleProjectionPlane::~KisLayerStyleProjectionPlane()
 
 KisAbstractProjectionPlaneSP KisLayerStyleProjectionPlane::factoryObject(KisLayer *sourceLayer)
 {
+    Q_ASSERT(sourceLayer);
     return toQShared(new KisLayerStyleProjectionPlane(sourceLayer));
 }
 

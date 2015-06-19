@@ -34,7 +34,7 @@
 #include "kis_transaction.h"
 #include "kis_painter.h"
 
-#include <KoUpdater.h>
+#include "kis_busy_progress_indicator.h"
 #include "kis_perspectivetransform_worker.h"
 #include "kis_transform_mask_params_interface.h"
 #include "kis_recalculate_transform_mask_job.h"
@@ -215,7 +215,6 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      const QRect & rc,
                                      PositionToFilthy maskPos) const
 {
-    Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisTransformMask::decorateRect",
                "src must be != dst, because we cant create transactions "
                "during merge, as it breaks reentrancy");
@@ -264,6 +263,9 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 #endif /* DEBUG_RENDERING */
 
     }
+
+    KIS_ASSERT_RECOVER_NOOP(this->busyProgressIndicator());
+    this->busyProgressIndicator()->update();
 
     return rc;
 }

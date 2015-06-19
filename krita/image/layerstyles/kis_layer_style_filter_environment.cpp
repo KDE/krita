@@ -39,6 +39,7 @@ struct KisLayerStyleFilterEnvironment::Private
 KisLayerStyleFilterEnvironment::KisLayerStyleFilterEnvironment(KisLayer *sourceLayer)
     : m_d(new Private)
 {
+    Q_ASSERT(sourceLayer);
     m_d->sourceLayer = sourceLayer;
 }
 
@@ -60,9 +61,8 @@ QRect KisLayerStyleFilterEnvironment::defaultBounds() const
 QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
 {
     // TODO: make it really cachable!
-
+    Q_ASSERT(m_d->sourceLayer);
     KisPaintDeviceSP srcDevice = m_d->sourceLayer->projection();
-
     QRect srcRect = srcDevice->exactBounds();
     if (srcRect.isEmpty()) return QPainterPath();
 
@@ -80,6 +80,8 @@ void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,
                                                        quint8 opacity,
                                                        const QBitArray &channelFlags) const
 {
+    Q_ASSERT(m_d->sourceLayer);
     gc->setOpacity(KritaUtils::mergeOpacity(opacity, m_d->sourceLayer->opacity()));
     gc->setChannelFlags(KritaUtils::mergeChannelFlags(channelFlags, m_d->sourceLayer->channelFlags()));
+
 }

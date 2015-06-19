@@ -276,6 +276,7 @@ protected:
     virtual void registerChangeRect(KisProjectionLeafSP leaf, NodePosition position) {
         // We do not work with masks here. It is KisLayer's job.
         if(!leaf->isLayer()) return;
+        if(!leaf->visible()) return;
 
         QRect currentChangeRect = leaf->projectionPlane()->changeRect(m_resultChangeRect,
                                                                       convertPositionToFilthy(position));
@@ -322,7 +323,12 @@ protected:
         if(position & N_TOPMOST)
             m_lastNeedRect = m_childNeedRect;
 
-        if(position & (N_FILTHY | N_ABOVE_FILTHY | N_EXTRA)) {
+        if (!leaf->visible()) {
+            if (!m_lastNeedRect.isEmpty()) {
+                // push a dumb job to fit state machine requirements
+                pushJob(leaf, position, m_lastNeedRect);
+            }
+        } else if(position & (N_FILTHY | N_ABOVE_FILTHY | N_EXTRA)) {
             if(!m_lastNeedRect.isEmpty())
                 pushJob(leaf, position, m_lastNeedRect);
             //else /* Why push empty rect? */;

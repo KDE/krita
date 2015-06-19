@@ -35,6 +35,7 @@ class KoProperties;
 class KisNodeVisitor;
 class KisNodeGraphListener;
 class KisNodeProgressProxy;
+class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
 
@@ -297,6 +298,8 @@ public:
      *         it will return 0
      */
     KisNodeProgressProxy* nodeProgressProxy() const;
+
+    KisBusyProgressIndicator* busyProgressIndicator() const;
 
 private:
 

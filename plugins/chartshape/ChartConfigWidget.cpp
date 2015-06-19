@@ -689,10 +689,6 @@ void ChartConfigWidget::updateMarkers()
     d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
     d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
 
-    Q_ASSERT(dataSet);
-    if (!dataSet)
-        return;
-
     OdfMarkerStyle style = dataSet->markerStyle();
     QIcon icon = dataSet->markerIcon(style);
     if (!icon.isNull()) {

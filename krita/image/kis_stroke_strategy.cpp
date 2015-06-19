@@ -25,6 +25,7 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
       m_supportsWrapAroundMode(false),
       m_needsIndirectPainting(false),
       m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
+      m_clearsRedoOnStart(true),
       m_id(id),
       m_name(name)
 {
@@ -118,4 +119,14 @@ void KisStrokeStrategy::setNeedsIndirectPainting(bool value)
 void KisStrokeStrategy::setIndirectPaintingCompositeOp(const QString &id)
 {
     m_indirectPaintingCompositeOp = id;
+}
+
+bool KisStrokeStrategy::clearsRedoOnStart() const
+{
+    return m_clearsRedoOnStart;
+}
+
+void KisStrokeStrategy::setClearsRedoOnStart(bool value)
+{
+    m_clearsRedoOnStart = value;
 }

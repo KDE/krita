@@ -733,13 +733,13 @@ OdfMarkerStyle DataSet::markerStyle() const
 QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
 {
     if (markerStyle != NoMarker) {
-        QPixmap *markerPixmap = new QPixmap(16,16);
-        markerPixmap->fill(QColor(255,255,255,0));
-        QPainter *painter = new QPainter(markerPixmap);
+        QPixmap markerPixmap(16,16);
+        markerPixmap.fill(QColor(255,255,255,0));
+        QPainter painter(&markerPixmap);
         KChart::MarkerAttributes matt;
         matt.setMarkerStyle(odf2kdMarker(markerStyle));
-        MarkerPainterDummyDiagram().doPaintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
-        QIcon markerIcon = QIcon(*markerPixmap);
+        MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+        QIcon markerIcon = QIcon(markerPixmap);
         return markerIcon;
     }
     return QIcon();

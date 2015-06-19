@@ -42,6 +42,11 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
+void KisStrokeStrategyUndoCommandBased::setUsedWhileUndoRedo(bool value)
+{
+    setClearsRedoOnStart(!value);
+}
+
 void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)
 {
     if(!command) return;

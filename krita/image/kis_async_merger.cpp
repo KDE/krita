@@ -24,8 +24,6 @@
 
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 
 #include "kis_paint_device.h"
 #include "kis_node_visitor.h"
@@ -42,7 +40,7 @@
 #include "kis_selection.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
-#include "kis_node_progress_proxy.h"
+#include "kis_busy_progress_indicator.h"
 
 
 #include "kis_merge_walker.h"
@@ -90,7 +88,7 @@ public:
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
-        QRect applyRect = m_updateRect & m_projection->extent();
+        const QRect applyRect = m_updateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is
         //      null, we are finish here.
@@ -107,19 +105,30 @@ public:
             return true;
         }
 
+        KisSelectionSP selection = layer->fetchComposedInternalSelection(applyRect);
+        const QRect filterRect = selection ? applyRect & selection->selectedRect() : applyRect;
+
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
 
-        Q_ASSERT(layer->nodeProgressProxy());
+        KisPaintDeviceSP dstDevice = originalDevice;
 
-        KoProgressUpdater updater(layer->nodeProgressProxy());
-        updater.start(100, filter->name());
-        QPointer<KoUpdater> updaterPtr = updater.startSubtask();
+        if (selection) {
+            dstDevice = new KisPaintDevice(originalDevice->colorSpace());
+        }
 
-        // We do not create a transaction here, as srcDevice != dstDevice
-        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig.data(), updaterPtr);
+        if (!filterRect.isEmpty()) {
+            KIS_ASSERT_RECOVER_NOOP(layer->busyProgressIndicator());
+            layer->busyProgressIndicator()->update();
 
-        updaterPtr->setProgress(100);
+            // We do not create a transaction here, as srcDevice != dstDevice
+            filter->process(m_projection, dstDevice, 0, filterRect, filterConfig.data(), 0);
+        }
+
+        if (selection) {
+            KisPainter::copyAreaOptimized(applyRect.topLeft(), m_projection, originalDevice, applyRect);
+            KisPainter::copyAreaOptimized(filterRect.topLeft(), dstDevice, originalDevice, filterRect, selection);
+        }
 
         return true;
     }

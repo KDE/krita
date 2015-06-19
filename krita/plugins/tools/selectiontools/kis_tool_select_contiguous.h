@@ -47,6 +47,10 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event);
 
+protected:
+
+    virtual bool wantsAutoScroll() const { return false; }
+
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);

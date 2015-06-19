@@ -68,7 +68,29 @@ public:
     * @param actionCollection the action collection where the KoZoomAction is added to
     * @param specialButtons controls which special buttons to show
     */
-    KoZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons = 0, QObject *parent = 0);
+    KoZoomController(KoCanvasController *controller,
+                     KoZoomHandler *zoomHandler,
+                     KActionCollection *actionCollection,
+                     KoZoomAction::SpecialButtons specialButtons = 0,
+                     QObject *parent = 0);
+
+    /**
+     * A special override for for creation of a zoom controller
+     * without automatic generation of standard zoom in and zoom out
+     * actions. The caller is supposed create and connect the
+     * corresponding actions himself.
+     *
+     * @param createZoomShortcuts shows whether the zoom actions should be
+     *                            created or not.
+     *
+     * Used in KisZoomController.
+     */
+    KoZoomController(KoCanvasController *controller,
+                     KoZoomHandler *zoomHandler,
+                     KActionCollection *actionCollection,
+                     bool createZoomShortcuts,
+                     KoZoomAction::SpecialButtons specialButtons = 0,
+                     QObject *parent = 0);
 
     /// destructor
     ~KoZoomController();

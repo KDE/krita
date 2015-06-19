@@ -223,6 +223,8 @@ public:
         , wrapAroundAction(0)
         , showRulersAction(0)
         , zoomTo100pct(0)
+        , zoomIn(0)
+        , zoomOut(0)
         , showGuidesAction(0)
         , selectionManager(0)
         , controlFrame(0)
@@ -273,6 +275,8 @@ public:
     KisAction *wrapAroundAction;
     KisAction *showRulersAction;
     KisAction *zoomTo100pct;
+    KisAction *zoomIn;
+    KisAction *zoomOut;
     KisAction *showGuidesAction;
 
     KisSelectionManager *selectionManager;
@@ -423,6 +427,8 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
         d->showRulersAction->setChecked(imageView->zoomManager()->horizontalRulerVisible() && imageView->zoomManager()->verticalRulerVisible());
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
+        d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
+        d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
         d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 
         showHideScrollbars();
@@ -763,6 +769,9 @@ void KisViewManager::createActions()
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+
+    d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
+    d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));

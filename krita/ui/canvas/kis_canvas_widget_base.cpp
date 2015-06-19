@@ -144,9 +144,11 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     }
 
     // then paint the guides
-    m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
-                                                                     *m_d->viewConverter,
-                                                                     updateWidgetRect);
+    if (m_d->canvas && m_d->canvas->viewManager() && m_d->canvas->viewManager()->document()) {
+        m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
+                                                                         *m_d->viewConverter,
+                                                                         updateWidgetRect);
+    }   
 
     gc.restore();
 }

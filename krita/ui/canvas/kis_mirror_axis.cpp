@@ -20,11 +20,6 @@
 #include "kis_mirror_axis.h"
 
 #include "KoConfig.h"
-#include "config-glew.h"
-
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    #include <GL/glew.h>
-#endif
 
 #include <QPainter>
 #include <QToolButton>
@@ -152,6 +147,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
+//QT5TODO    
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
     // So instead, use native OpenGL anti-aliasing when available.
@@ -214,6 +210,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         }
     }
 
+//QT5TODO    
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     if(gc.paintEngine()->type() == QPaintEngine::OpenGL2 && GLEW_ARB_multisample) {
         gc.beginNativePainting();

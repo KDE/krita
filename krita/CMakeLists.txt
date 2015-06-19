@@ -39,17 +39,6 @@ configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/imag
 
 include(CheckFunctionExists)
 
-macro_optional_find_package(GLEW)
-macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
-configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
-macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
-
-if(HAVE_GLEW)
-    message(STATUS "GLEW found!")
-else()
-    message(STATUS "GLEW NOT found - krita will not be able to use OpenGL.")
-endif()
-
 if(HAVE_OPENGL)
     message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
 else()

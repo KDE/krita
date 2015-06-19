@@ -462,10 +462,6 @@ if(HAVE_OPENGL)
     endif()
 
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};Qt5::OpenGL")
-    if(HAVE_GLEW)
-        target_link_libraries(kritaui ${GLEW_LIBRARIES})
-    endif()
-
 endif()
 
 if(X11_FOUND)

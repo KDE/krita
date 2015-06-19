@@ -256,8 +256,8 @@ namespace VSyncWorkaround {
 }
 
 #elif defined Q_OS_WIN
-
-#include <GL/wglew.h>
+// QT5TODO
+//#include <GL/wglew.h>
 namespace VSyncWorkaround {
     bool tryDisableVSync(QWidget *) {
         bool retval = false;

@@ -125,7 +125,6 @@ target_link_libraries(kritasketchlib
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}
-    ${GLEW_LIBRARIES}
 )
 
 include(GNUInstallDirs)
@@ -144,7 +143,6 @@ target_link_libraries(kritasketch
     Qt5::Gui
     Qt5::Core
     ${QT_LIBRARIES}
-    ${GLEW_LIBRARIES}
     kritaui
     kritasketchlib
 )
@@ -168,7 +166,6 @@ target_link_libraries(kritasketchplugin
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}
-    ${GLEW_LIBRARIES}
     kritasketchlib
 )
 

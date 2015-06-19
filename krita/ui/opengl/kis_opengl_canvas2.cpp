@@ -157,10 +157,13 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
-    : QGLWidget(KisOpenGL::sharedContextWidget()->format(), parent, KisOpenGL::sharedContextWidget())
+    : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
+
+    initializeOpenGLFunctions();
+
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
@@ -174,15 +177,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
-    if (isSharing()) {
-        dbgUI << "Created QGLWidget with sharing";
-    } else {
-        dbgUI << "Created QGLWidget with no sharing";
-    }
-
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
-
 
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
@@ -191,7 +187,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
-    KisOpenGL::makeContextCurrent(this);
     delete d;
 }
 
@@ -226,7 +221,7 @@ void KisOpenGLCanvas2::initializeGL()
             qWarning() << "WARNING: affect the quality of the final image, though.";
             qWarning();
 
-            if (cfg.disableDoubleBuffering() && doubleBuffer()) {
+            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
                 qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
                 qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
                 qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
@@ -300,7 +295,7 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
     texCoords[5] = QVector2D(rc.right(), rc.bottom());
 }
 
-void KisOpenGLCanvas2::drawCheckers() const
+void KisOpenGLCanvas2::drawCheckers()
 {
     if(!d->checkerShader)
         return;
@@ -359,7 +354,7 @@ void KisOpenGLCanvas2::drawCheckers() const
     d->checkerShader->release();
 }
 
-void KisOpenGLCanvas2::drawImage() const
+void KisOpenGLCanvas2::drawImage()
 {
     if(!d->displayShader)
         return;
@@ -558,7 +553,7 @@ void KisOpenGLCanvas2::initializeCheckerShader()
 
 }
 
-QByteArray KisOpenGLCanvas2::buildFragmentShader() const
+QByteArray KisOpenGLCanvas2::buildFragmentShader()
 {
     QByteArray shaderText;
 
@@ -654,7 +649,7 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::renderCanvasGL() const
+void KisOpenGLCanvas2::renderCanvasGL()
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
@@ -681,7 +676,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
     // Workaround for bug 322808, paint events with only a partial rect cause flickering
     // Drop those event and trigger a new full update
     if (event->rect().width() == width() && event->rect().height() == height()) {
-        QGLWidget::paintEvent(event);
+        QOpenGLWidget::paintEvent(event);
     } else {
         update();
     }

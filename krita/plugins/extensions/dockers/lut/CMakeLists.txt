@@ -22,13 +22,6 @@ if(HAVE_OPENGL)
     target_link_libraries(kritalutdocker ${_LIBRARIES})
 endif()
 
-if(HAVE_OPENGL)
-    if(HAVE_GLEW)
-        target_link_libraries(kritalutdocker ${GLEW_LIBRARIES})
-    endif()
-endif()
-
-
 install(TARGETS kritalutdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 

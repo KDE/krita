@@ -37,7 +37,6 @@ target_link_libraries(kritagemini
     Qt5::Gui
     Qt5::Core
     ${QT_LIBRARIES}
-    ${GLEW_LIBRARIES}
     kritaui
     kritasketchlib
 )

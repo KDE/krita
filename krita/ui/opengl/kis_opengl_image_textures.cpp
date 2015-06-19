@@ -19,7 +19,7 @@
 #include "opengl/kis_opengl_image_textures.h"
 
 #ifdef HAVE_OPENGL
-#include <QGLWidget>
+#include <QOpenGLWidget>
 
 #include <QMessageBox>
 
@@ -80,8 +80,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
 {
     Q_ASSERT(renderingIntent < 4);
 
-    KisOpenGL::makeSharedContextCurrent();
-
     getTextureSize(&m_texturesInfo);
 
     glGenTextures(1, &m_checkerTexture);
@@ -117,8 +115,6 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    KisOpenGL::makeSharedContextCurrent();
-
     if (imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
 
@@ -151,8 +147,6 @@ QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
     KisConfig cfg;
-
-    KisOpenGL::makeSharedContextCurrent();
 
     destroyImageTextureTiles();
     updateTextureFormat();
@@ -188,8 +182,6 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
     if(m_textureTiles.isEmpty()) return;
-
-    KisOpenGL::makeSharedContextCurrent();
 
     foreach(KisTextureTile *tile, m_textureTiles) {
         delete tile;
@@ -271,8 +263,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
-    KisOpenGL::makeSharedContextCurrent();
-
     KisTextureTileUpdateInfoSP tileInfo;
     foreach(tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
@@ -284,7 +274,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
 void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
-    KisOpenGL::makeSharedContextCurrent();
 
     glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
 
@@ -412,6 +401,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     dbgUI << "Choosing texture format:";
 
+// QT5TODO    
 #ifdef HAVE_GLEW
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {

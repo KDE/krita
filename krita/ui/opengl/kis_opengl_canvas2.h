@@ -23,7 +23,8 @@
 
 #ifdef HAVE_OPENGL
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 
 #include <KoCanvasBase.h>
 
@@ -44,7 +45,7 @@ class KisCanvas2;
  * in the qpainter canvas.
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisCanvasWidgetBase
+class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget, public QOpenGLFunctions, public KisCanvasWidgetBase
 {
 
     Q_OBJECT
@@ -69,7 +70,7 @@ public:
     bool isBusy() const;
     void initializeCheckerShader();
     void initializeDisplayShader();
-    void renderCanvasGL() const;
+    void renderCanvasGL();
     void renderDecorations(QPainter *painter);
 
 
@@ -103,9 +104,9 @@ private:
     struct Private;
     Private * const d;
 
-    void drawImage() const;
-    void drawCheckers() const;
-    QByteArray buildFragmentShader() const;
+    void drawImage();
+    void drawCheckers();
+    QByteArray buildFragmentShader();
 
 };
 

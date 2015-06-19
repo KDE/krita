@@ -376,8 +376,6 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGL::makeSharedContextCurrent();
-
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
                                                                         m_d->displayColorConverter->monitorProfile(),
                                                                         m_d->displayColorConverter->renderingIntent(),
@@ -402,7 +400,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
+        if (QGLFormat::hasOpenGL()) {
             createOpenGLCanvas();
             if (cfg.canvasState() == "OPENGL_FAILED") {
                 // Creating the opengl canvas failed, fall back

@@ -24,21 +24,15 @@
 
 #ifdef HAVE_OPENGL
 
-#include <config-glew.h>
-
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
-#endif
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
 #endif
 
 #include <QtGlobal>
 
 #include "krita_export.h"
 
-class QGLWidget;
+class QOpenGLWidget;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -47,25 +41,8 @@ class QGLWidget;
 class KRITAUI_EXPORT KisOpenGL
 {
 public:
-    /**
-     * Returns the QGLWidget that uses the shared OpenGL context.
-     * You should pass this as the shareWidget parameter to the
-     * QGLWidget constructor.
-     */
-    static QGLWidget *sharedContextWidget();
-    /**
-     * Make the shared OpenGL context the current context. You should
-     * make the context current before creating textures, display lists,
-     * shader objects, etc, that are to be shared by multiple QGLWidgets.
-     */
-    static void makeSharedContextCurrent();
 
-    /**
-     * Make the context of the widget current. You should
-     * make the context current before creating textures, display lists,
-     * shader objects, etc, that are to be shared by multiple QGLWidgets.
-     */
-    static void makeContextCurrent(QGLWidget *widget);
+    static void initialize();
 
     /**
      * @brief supportsGLSL13
@@ -82,7 +59,7 @@ public:
 private:
     KisOpenGL();
 
-    static void createContext();
+
 };
 
 #endif // HAVE_OPENGL

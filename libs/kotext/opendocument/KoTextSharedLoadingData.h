@@ -165,18 +165,6 @@ public:
     KoSectionStyle *sectionStyle(const QString &name, bool stylesDotXml) const;
 
     /**
-     * Get the document-wide configuration for footnotes -- this contains information
-     * about numbering style, starting number etc.
-     */
-    KoOdfNotesConfiguration footnotesConfiguration() const;
-
-    /**
-     * Get the document-wide configuration for endnotes -- this contains information
-     * about numbering style, starting number etc.
-     */
-    KoOdfNotesConfiguration endnotesConfiguration() const;
-
-    /**
      * Get the document-wide configuration for bibliography this contains information
      * about prefix, suffix, sort by position, sort algorithm etc.
      */
@@ -254,7 +242,7 @@ private:
 
     void addOutlineStyle(KoShapeLoadingContext & context, KoStyleManager *styleManager);
 
-    void addNotesConfiguration(KoShapeLoadingContext &context);
+    void addNotesConfiguration(KoShapeLoadingContext &context, KoStyleManager *styleManager);
 
     void addBibliographyConfiguration(KoShapeLoadingContext &context);
 

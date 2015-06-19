@@ -24,8 +24,6 @@
 
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 
 #include "kis_paint_device.h"
 #include "kis_node_visitor.h"
@@ -42,7 +40,7 @@
 #include "kis_selection.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
-#include "kis_node_progress_proxy.h"
+#include "kis_busy_progress_indicator.h"
 
 
 #include "kis_merge_walker.h"
@@ -113,12 +111,6 @@ public:
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
 
-        Q_ASSERT(layer->nodeProgressProxy());
-
-        KoProgressUpdater updater(layer->nodeProgressProxy());
-        updater.start(100, filter->name());
-        QPointer<KoUpdater> updaterPtr = updater.startSubtask();
-
         KisPaintDeviceSP dstDevice = originalDevice;
 
         if (selection) {
@@ -126,16 +118,17 @@ public:
         }
 
         if (!filterRect.isEmpty()) {
+            KIS_ASSERT_RECOVER_NOOP(layer->busyProgressIndicator());
+            layer->busyProgressIndicator()->update();
+
             // We do not create a transaction here, as srcDevice != dstDevice
-            filter->process(m_projection, dstDevice, 0, filterRect, filterConfig.data(), updaterPtr);
+            filter->process(m_projection, dstDevice, 0, filterRect, filterConfig.data(), 0);
         }
 
         if (selection) {
             KisPainter::copyAreaOptimized(applyRect.topLeft(), m_projection, originalDevice, applyRect);
             KisPainter::copyAreaOptimized(filterRect.topLeft(), dstDevice, originalDevice, filterRect, selection);
         }
-
-        updaterPtr->setProgress(100);
 
         return true;
     }

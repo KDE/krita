@@ -18,7 +18,6 @@
 #include "kis_image_pyramid.h"
 
 #include <QBitArray>
-
 #include <KoChannelInfo.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
@@ -32,6 +31,7 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include "kis_config.h"
+#include "kis_image_config.h"
 
 //#define DEBUG_PYRAMID
 
@@ -178,7 +178,36 @@ void KisImagePyramid::setImage(KisImageWSP newImage)
 
         clearPyramid();
         setImageSize(m_originalImage->width(), m_originalImage->height());
-        retrieveImageData(m_originalImage->projection()->exactBounds());
+
+        // Get the full image size
+        QRect rc = m_originalImage->projection()->exactBounds();
+
+        KisImageConfig config;
+
+        int patchWidth = config.updatePatchWidth();
+        int patchHeight = config.updatePatchHeight();
+
+        if (rc.width() * rc.height() <= patchWidth * patchHeight) {
+            retrieveImageData(rc);
+        }
+        else {
+            qint32 firstCol = rc.x() / patchWidth;
+            qint32 firstRow = rc.y() / patchHeight;
+
+            qint32 lastCol = (rc.x() + rc.width()) / patchWidth;
+            qint32 lastRow = (rc.y() + rc.height()) / patchHeight;
+
+            for(qint32 i = firstRow; i <= lastRow; i++) {
+                for(qint32 j = firstCol; j <= lastCol; j++) {
+                    QRect maxPatchRect(j * patchWidth,
+                                       i * patchHeight,
+                                       patchWidth, patchHeight);
+                    QRect patchRect = rc & maxPatchRect;
+                    retrieveImageData(patchRect);
+                }
+            }
+
+        }
         //TODO: check whether there is needed recalculateCache()
     }
 }

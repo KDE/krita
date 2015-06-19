@@ -113,7 +113,7 @@ const KoColorSpace * KisDlgImageProperties::colorSpace()
 void KisDlgImageProperties::setCurrentColor()
 {
     m_image->setDefaultProjectionColor(m_defaultColorAction->currentKoColor());
-    m_image->refreshGraph();
+    m_image->refreshGraphAsync();
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

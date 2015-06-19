@@ -70,6 +70,11 @@ DlgColorSpaceConversion::~DlgColorSpaceConversion()
     delete m_page;
 }
 
+void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs)
+{
+    m_page->colorSpaceSelector->setCurrentColorSpace(cs);
+}
+
 void DlgColorSpaceConversion::selectionChanged(bool valid)
 {
     Q_UNUSED(valid);

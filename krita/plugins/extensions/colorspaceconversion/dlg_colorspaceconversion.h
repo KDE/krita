@@ -28,6 +28,8 @@
 
 #include "ui_wdgconvertcolorspace.h"
 
+class KoColorSpace;
+
 class WdgConvertColorSpace : public QWidget, public Ui::WdgConvertColorSpace
 {
     Q_OBJECT
@@ -50,6 +52,8 @@ public:
 
     DlgColorSpaceConversion(QWidget * parent = 0, const char* name = 0);
     ~DlgColorSpaceConversion();
+
+    void setInitialColorSpace(const KoColorSpace *cs);
 
     WdgConvertColorSpace * m_page;
 

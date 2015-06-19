@@ -54,7 +54,7 @@ class KisZoomController : public KoZoomController
 {
 public:
     KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
-        : KoZoomController(co, zh, actionCollection, specialButtons, parent),
+        : KoZoomController(co, zh, actionCollection, false, specialButtons, parent),
           m_converter(zh)
     {
     }

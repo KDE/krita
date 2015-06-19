@@ -211,7 +211,10 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
             }
         }
     }
-    Q_ASSERT(scoreValues.size() >= 1);
+    if (scoreValues.size() < 1) {
+        warnKrita << "SmartMergeStrategy::election returned less than 1 scolre value";
+        return Value();
+    }
     const ScoreValue* bestSv = 0;
     double bestScore = -1.0;
     foreach(const ScoreValue& sv, scoreValues) {

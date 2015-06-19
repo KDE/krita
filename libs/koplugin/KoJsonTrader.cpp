@@ -53,8 +53,9 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
         appDir.cdUp();
 
         searchDirs << appDir;
+        // help plugin trader find installed plugins when run from uninstalled tests
 #ifdef CMAKE_INSTALL_PREFIX
-        searchDirs << QDir{CMAKE_INSTALL_PREFIX};
+        searchDirs << QDir(CMAKE_INSTALL_PREFIX);
 #endif
 
         foreach(const QDir& dir, searchDirs) {

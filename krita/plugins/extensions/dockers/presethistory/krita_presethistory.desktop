@@ -15,6 +15,7 @@ Name[x-test]=xxPreset History Dockerxx
 Comment=Show the last used presets
 Comment[ca]=Mostra els valors predeterminats usats darrerament
 Comment[cs]=Zobrazit naposledy použité p5edvolby
+Comment[de]=Zuletzt verwendete Voreinstellungen anzeigen
 Comment[es]=Mostrar los últimos preajustes usados
 Comment[fi]=Näytä viimeksi käytetyt esiasetukset
 Comment[it]=Mostra le ultime preimpostazioni utilizzate

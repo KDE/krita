@@ -114,9 +114,9 @@ extern "C" int main(int argc, char **argv)
 #endif
 #endif
 
-// Causes a crash in QGuiApplication in virtual box?
 #if defined HAVE_OPENGL
-//    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 #endif
 
     // first create the application so we can create a pixmap

@@ -176,6 +176,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAutoFillBackground(false);
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
+    setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();

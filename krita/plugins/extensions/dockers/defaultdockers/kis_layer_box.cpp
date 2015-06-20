@@ -1,4 +1,4 @@
-/*
+1/*
  *  kis_layer_box.cc - part of Krita aka Krayon aka KimageShop
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
@@ -122,8 +122,6 @@ KisLayerBox::KisLayerBox()
         , m_wdgLayerBox(new Ui_WdgLayerBox)
 {
     KisConfig cfg;
-
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);

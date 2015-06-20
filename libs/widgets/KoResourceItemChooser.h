@@ -122,7 +122,7 @@ private Q_SLOTS:
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
 
-    void slotBeforeResourcesLayoutReset(KoResource *activateAfterReset);
+    void slotBeforeResourcesLayoutReset();
     void slotAfterResourcesLayoutReset();
 
     void updateView();

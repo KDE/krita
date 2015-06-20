@@ -107,7 +107,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->splitter = new QSplitter(this);
 
     d->model = new KoResourceModel(resourceAdapter, this);
-    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource *)), SLOT(slotBeforeResourcesLayoutReset(KoResource *)));
+    connect(d->model, SIGNAL(beforeResourcesLayoutReset()), SLOT(slotBeforeResourcesLayoutReset()));
     connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KoResourceItemView(this);
@@ -367,22 +367,28 @@ void KoResourceItemChooser::setCurrentResource(KoResource *resource)
     if (!index.isValid())
         return;
 
-    d->view->setCurrentIndex(index);
+    // We update the index only if either the index or the resource at that index
+    // aren't the same anymore, to avoid sending unneeded events.
+    if (index != d->view->currentIndex() || resource != currentResource()) {
+        d->view->setCurrentIndex(index);
+    }
+
     updatePreview(resource);
 }
 
-void KoResourceItemChooser::slotBeforeResourcesLayoutReset(KoResource *activateAfterReset)
+void KoResourceItemChooser::slotBeforeResourcesLayoutReset()
 {
-    d->savedResourceWhileReset = activateAfterReset ? activateAfterReset : currentResource();
+    // If the resource we are trying to restore doesn't appear in the current filtering
+    // of resources, currentResource() will return 0, but we don't want to store it and
+    // lose the previous selection. So we keep the current selection and try to restore
+    // it even if the next setCurrentResource() will do nothing.
+    KoResource *resource = currentResource();
+    d->savedResourceWhileReset = resource ? resource : d->savedResourceWhileReset;
 }
 
 void KoResourceItemChooser::slotAfterResourcesLayoutReset()
 {
-    if (d->savedResourceWhileReset) {
-        this->blockSignals(true);
-        setCurrentResource(d->savedResourceWhileReset);
-        this->blockSignals(false);
-    }
+    setCurrentResource(d->savedResourceWhileReset);
 }
 
 void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
@@ -403,13 +409,16 @@ void KoResourceItemChooser::setGrayscalePreview(bool grayscale)
 void KoResourceItemChooser::setCurrentItem(int row, int column)
 {
     QModelIndex index = d->model->index(row, column);
+
     if (!index.isValid())
         return;
 
-    d->view->setCurrentIndex(index);
-    if (index.isValid()) {
-        updatePreview(resourceFromModelIndex(index));
-    }
+    // We update only if the index is really changed, to avoid sending
+    // uneeded events.
+    if (index != d->view->currentIndex())
+        d->view->setCurrentIndex(index);
+
+    updatePreview(resourceFromModelIndex(index));
 }
 
 void KoResourceItemChooser::setProxyModel(QAbstractProxyModel *proxyModel)

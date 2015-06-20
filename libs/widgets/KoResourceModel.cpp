@@ -137,9 +137,9 @@ QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) 
     return createIndex( row, column, resources[index] );
 }
 
-void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
+void KoResourceModel::doSafeLayoutReset()
 {
-    emit beforeResourcesLayoutReset(activateAfterReformat);
+    emit beforeResourcesLayoutReset();
     reset();
     emit afterResourcesLayoutReset();
 }
@@ -147,7 +147,7 @@ void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
 void KoResourceModel::setColumnCount( int columnCount )
 {
     if (columnCount != m_columnCount) {
-        emit beforeResourcesLayoutReset(0);
+        emit beforeResourcesLayoutReset();
         m_columnCount = columnCount;
         reset();
         emit afterResourcesLayoutReset();
@@ -158,7 +158,7 @@ void KoResourceModel::resourceAdded(KoResource *resource)
 {
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
     if (newIndex >= 0) {
-        doSafeLayoutReset(0);
+        doSafeLayoutReset();
     }
 }
 
@@ -166,8 +166,7 @@ void KoResourceModel::resourceRemoved(KoResource *resource)
 {
     Q_UNUSED(resource);
 
-    KoResource *first = !m_resourceAdapter->resources().isEmpty() ? m_resourceAdapter->resources().first() : 0;
-    doSafeLayoutReset(first);
+    doSafeLayoutReset();
 }
 
 void KoResourceModel::resourceChanged(KoResource* resource)

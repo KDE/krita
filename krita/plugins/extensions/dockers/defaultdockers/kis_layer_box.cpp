@@ -1,4 +1,4 @@
-1/*
+/*
  *  kis_layer_box.cc - part of Krita aka Krayon aka KimageShop
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>

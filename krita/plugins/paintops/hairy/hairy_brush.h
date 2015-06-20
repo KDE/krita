@@ -87,7 +87,7 @@ public:
 
 private:
     /// paints single bristle
-    void addBristleInk(Bristle *bristle, QPointF pos, const KoColor &color);
+    void addBristleInk(Bristle *bristle,const QPointF &pos, const KoColor &color);
     /// composite single pixel to dab
     void plotPixel(int wx, int wy, const KoColor &color);
     /// check the opacity of dab pixel and if the opacity is less then color, it will copy color to dab

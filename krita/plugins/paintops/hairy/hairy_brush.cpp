@@ -281,7 +281,7 @@ void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, q
 	m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
 	m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
     m_transfo->setParameter(m_saturationId, saturation);
-	m_transfo->setParameter(3, 1);//sets the type to 
+	m_transfo->setParameter(3, 1);//sets the type to
 	m_transfo->setParameter(4, false);//sets the colorize to none.
     m_transfo->transform(bristleColor.data(), bristleColor.data() , 1);
 }
@@ -322,7 +322,7 @@ void HairyBrush::repositionBristles(double angle, double slope)
     }
 }
 
-inline void HairyBrush::addBristleInk(Bristle *bristle, QPointF pos, const KoColor &color)
+inline void HairyBrush::addBristleInk(Bristle *bristle,const QPointF &pos, const KoColor &color)
 {
     Q_UNUSED(bristle);
     if (m_properties->antialias) {

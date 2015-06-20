@@ -81,7 +81,7 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidg
     d->model = model;
 
     d->tagChooser = new KoTagChooserWidget(parent);
-    d->tagChooser->addReadOnlyItem(i18n("All"));
+    d->tagChooser->addReadOnlyItem("All"); // not translatable until other tags made translatable!
     d->tagChooser->addItems(d->model->tagNamesList());
 
     d->tagFilter = new KoTagFilterWidget(parent);

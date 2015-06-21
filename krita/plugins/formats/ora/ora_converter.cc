@@ -115,15 +115,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
         store->close();
     }
 
-    if (store->open("mergedimage.png")) {
-        QImage mergedimage = image->projection()->convertToQImage(0);
-        KoStoreDevice io(store);
-        if (io.open(QIODevice::WriteOnly)) {
-            mergedimage.save(&io, "PNG");
-        }
-        io.close();
-        store->close();
-    }
+    KisPNGConverter::saveDeviceToStore("mergedimage.png", image, image->projection(), store);
 
     delete store;
     return KisImageBuilder_RESULT_OK;

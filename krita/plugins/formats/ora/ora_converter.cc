@@ -30,7 +30,7 @@
 #include <kis_open_raster_stack_load_visitor.h>
 #include <kis_open_raster_stack_save_visitor.h>
 #include <kis_paint_layer.h>
-
+#include "kis_png_converter.h"
 #include "ora_load_context.h"
 #include "ora_save_context.h"
 

@@ -1889,12 +1889,10 @@ void KisMainWindow::updateWindowMenu()
         if (child) {
             QString text;
             if (i < 9) {
-                text = i18n("&%1 %2").arg(i + 1)
-                        .arg(child->document()->url().prettyUrl());
+                text = i18n("&%1 %2", i + 1, child->document()->url().prettyUrl());
             }
             else {
-                text = i18n("%1 %2").arg(i + 1)
-                        .arg(child->document()->url().prettyUrl());
+                text = i18n("%1 %2", i + 1, child->document()->url().prettyUrl());
             }
 
             QAction *action  = menu->addAction(text);

@@ -233,7 +233,9 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
 
             }
             else {
-                bristleColor.setOpacity(bristle->length());
+                if (bristleColor.opacityU8() != 0) {
+                    bristleColor.setOpacity(bristle->length());
+                }
             }
 
             addBristleInk(bristle, bristlePath.at(i), bristleColor);

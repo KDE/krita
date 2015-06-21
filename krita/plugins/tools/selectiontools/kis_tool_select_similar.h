@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,32 +20,42 @@
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
 #include <KoToolFactoryBase.h>
-#include "kis_tool_select_base.h"
 #include <KoIcon.h>
 #include <kconfig.h>
+#include "kis_tool_select_base.h"
 #include <kconfiggroup.h>
 
-/**
+
+
+/*
  * Tool to select colors by pointing at a color on the image.
  */
-class KisToolSelectSimilar : public KisToolSelectBase
+class KisToolSelectSimilar: public KisToolSelectBase
 {
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
+    Q_SIGNALS: void selectionActionChanged();
 
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     void beginPrimaryAction(KoPointerEvent *event);
-    QWidget* createOptionWidget();
     void paint(QPainter&, const KoViewConverter &) {}
+    QWidget* createOptionWidget();
 
-public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void slotSetFuzziness(int);
+
+    public Q_SLOTS:    
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void setSelectionAction(int newSelectionAction);
+    void slotSetFuzziness(int);
+
+protected:
+    using KisToolSelectBase::m_widgetHelper;
 
 private:
     int m_fuzziness;
     KConfigGroup m_configGroup;
 };
+
 
 class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
@@ -57,13 +68,10 @@ public:
         setIconName(koIconNameCStr("tool_similar_selection"));
         setPriority(57);
     }
-
     virtual ~KisToolSelectSimilarFactory() {}
-
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectSimilar(canvas);
     }
-
 };
 
 

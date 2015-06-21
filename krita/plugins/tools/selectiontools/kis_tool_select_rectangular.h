@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
  *
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -24,35 +25,38 @@
 
 #include "KoToolFactoryBase.h"
 #include "kis_tool_rectangle_base.h"
+#include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 #include <kshortcut.h>
 
 
-class KisToolSelectRectangular : public KisToolRectangleBase
+class __KisToolSelectRectangularLocal : public KisToolRectangleBase
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
+
 public:
-    KisToolSelectRectangular(KoCanvasBase * canvas);
-    QWidget* createOptionWidget();
-    SelectionAction selectionAction() const;
+    __KisToolSelectRectangularLocal(KoCanvasBase * canvas);
 
-public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
-
-Q_SIGNALS:
-    void selectionActionChanged();
+protected:
+    virtual SelectionMode selectionMode() const = 0;
+    virtual SelectionAction selectionAction() const = 0;
 
 private:
-    void keyPressEvent(QKeyEvent *event);
     void finishRect(const QRectF& rect);
-
-private:
-    KisSelectionToolConfigWidgetHelper m_widgetHelper;
-    SelectionAction m_selectionAction;
 };
 
+
+class KisToolSelectRectangular : public SelectionActionHandler<__KisToolSelectRectangularLocal>
+{
+    Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
+public:
+    KisToolSelectRectangular(KoCanvasBase* canvas);
+    Q_SIGNALS: void selectionActionChanged();
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+};
 
 class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {
@@ -71,7 +75,7 @@ public:
     virtual ~KisToolSelectRectangularFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
-        return  new KisToolSelectRectangular(canvas);
+        return new KisToolSelectRectangular(canvas);
     }
 };
 

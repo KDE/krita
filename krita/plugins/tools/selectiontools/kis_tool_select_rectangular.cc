@@ -2,9 +2,10 @@
  *  kis_tool_select_rectangular.cc -- part of Krita
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *                2001 John Califf <jcaliff@compuzone.net>
- *                2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2001 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,50 +37,14 @@
 #include "kis_selection_manager.h"
 
 
-KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
+__KisToolSelectRectangularLocal::__KisToolSelectRectangularLocal(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
-                           KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
-      m_widgetHelper(i18n("Rectangular Selection"))
+                           KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6))
 {
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+        setObjectName("tool_select_rectangular");
 }
 
-SelectionAction KisToolSelectRectangular::selectionAction() const
-{
-    return m_selectionAction;
-}
-
-void KisToolSelectRectangular::setSelectionAction(int newSelectionAction)
-{
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
-}
-
-QWidget* KisToolSelectRectangular::createOptionWidget()
-{
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
-    Q_ASSERT(canvas);
-
-    m_widgetHelper.createOptionWidget(canvas, this->toolId());
-    m_widgetHelper.optionWidget()->disableAntiAliasSelectionOption();
-    return m_widgetHelper.optionWidget();
-}
-
-void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
-{
-    if (!m_widgetHelper.processKeyPressEvent(event)) {
-        KisTool::keyPressEvent(event);
-    }
-}
-
-void KisToolSelectRectangular::finishRect(const QRectF& rect)
+void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
@@ -97,7 +62,7 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         return;
     }
 
-    if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
+    if (selectionMode() == PIXEL_SELECTION) {
         if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
             tmpSel->select(rc);
@@ -106,10 +71,30 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
             cache.addRect(rc);
             tmpSel->setOutlineCache(cache);
 
-            helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
+            helper.selectPixelSelection(tmpSel, selectionAction());
         }
     } else {
         QRectF documentRect = convertToPt(rc);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
+    }
+}
+
+KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas):
+    SelectionActionHandler<__KisToolSelectRectangularLocal>(canvas, i18n("Rectangular Selection"))
+{
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+}
+
+
+void KisToolSelectRectangular::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+        if(m_widgetHelper.optionWidget())
+        {
+            m_widgetHelper.slotSetAction(newSelectionAction);
+        }
+        m_selectionAction = (SelectionAction)newSelectionAction;
+        emit selectionActionChanged();
     }
 }

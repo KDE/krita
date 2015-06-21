@@ -61,6 +61,10 @@ public:
 
     virtual QList< QPointer<QWidget> > createOptionWidgets();
 
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
 protected:
     void requestStrokeCancellation();
     void requestStrokeEnd();
@@ -95,4 +99,3 @@ public:
 
 
 #endif // KIS_TOOL_PATH_H_
-

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Preset History Docker
 Name[ca]=Acoblador d'historial de valors predeterminats
+Name[en_GB]=Preset History Docker
 Name[es]=Panel del historial de preajustes
 Name[fi]=Esiasetushistoriatelakka
 Name[it]=Area di aggancio cronologia delle preimpostazioni
@@ -17,6 +18,7 @@ Comment=Show the last used presets
 Comment[ca]=Mostra els valors predeterminats usats darrerament
 Comment[cs]=Zobrazit naposledy použité p5edvolby
 Comment[de]=Zuletzt verwendete Voreinstellungen anzeigen
+Comment[en_GB]=Show the last used presets
 Comment[es]=Mostrar los últimos preajustes usados
 Comment[fi]=Näytä viimeksi käytetyt esiasetukset
 Comment[it]=Mostra le ultime preimpostazioni utilizzate

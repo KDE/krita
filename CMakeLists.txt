@@ -38,11 +38,11 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "3.0 Pre-Alpha")
-set(CALLIGRA_VERSION_MAJOR 2)
-set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+set(CALLIGRA_VERSION_STRING "3.0 Alpha")
+set(CALLIGRA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
+set(CALLIGRA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
+set(CALLIGRA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
@@ -53,17 +53,15 @@ endif()
 
 message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
 
-# define the generic version of the Calligra libraries here
-# this makes it easy to advance it when the next Calligra release comes
-if(CALLIGRA_VERSION_MAJOR EQUAL 2)
-    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 5")
-    if(NOT DEFINED CALLIGRA_STABLE)
-        # bump some more because it is in fact unstable 3.0 so has to be larger than for any 2.9.x
-        math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR} + 1")
-    endif()
+# Define the generic version of the Calligra libraries here
+# This makes it easy to advance it when the next Calligra release comes.
+# 14 was the last GENERIC_CALLIGRA_LIB_VERSION_MAJOR of the previous Calligra series
+# (2.x) so we're starting with 15 in 3.x series.
+if(CALLIGRA_STABLE_VERSION_MAJOR EQUAL 3)
+    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
 else()
-    # let's make sure we won't forget to update the "5"
-    message(FATAL_ERROR "Reminder: please update offset == 5 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
+    # let's make sure we won't forget to update the "15"
+    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
 endif()
 set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")

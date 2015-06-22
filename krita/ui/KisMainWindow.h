@@ -350,6 +350,11 @@ private Q_SLOTS:
      */
     void toggleDockersVisibility(bool visible);
 
+    /**
+     * Handle theme changes from theme manager
+     */
+    void slotThemeChanged();
+
     void undo();
     void redo();
     void subWindowActivated();

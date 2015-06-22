@@ -544,6 +544,15 @@ void KisMainWindow::slotPreferences()
     }
 }
 
+void KisMainWindow::slotThemeChanged()
+{
+    // save theme changes instantly
+    KConfigGroup group(KGlobal::config(), "theme");
+    group.writeEntry("Theme", d->themeManager->currentThemeName());
+
+    emit themeChanged();
+}
+
 void KisMainWindow::updateReloadFileAction(KisDocument */*doc*/)
 {
 //    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
@@ -2097,7 +2106,7 @@ void KisMainWindow::createActions()
 
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 

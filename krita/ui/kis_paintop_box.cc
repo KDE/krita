@@ -444,49 +444,30 @@ KoID KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    KisPaintOpPresetSP currentPreset = m_resourceProvider->currentPreset();
-
-    // If the preset is the same and hasn't changed, no need to reload and reset it.
-    if (currentPreset == preset && !preset->isPresetDirty())
-        return;
-
-    bool loadSucceeded = !m_dirtyPresetsEnabled;
-
     if (!m_dirtyPresetsEnabled) {
         KisSignalsBlocker blocker(m_optionWidget);
         if (!preset->load()) {
             qWarning() << "failed to load the preset.";
-            loadSucceeded = false;
         }
     }
 
-    // Here we set the paintOp only if dirty presets are not enabled and the preset load
-    // doesn't fail, or if dirty presets are enabled.
-    if (loadSucceeded)
-        setCurrentPaintop(paintop, preset);
+    setCurrentPaintop(paintop, preset);
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    KisPaintOpPresetSP currentPreset = m_resourceProvider->currentPreset();
+    if (m_resourceProvider->currentPreset()) {
 
-    if (currentPreset) {
-
-        // We don't want to do unnecessary work.
-        // Moreover there's no point in setting the previous preset equal to the new one.
-        if (currentPreset == preset)
-            return;
-
-        m_resourceProvider->setPreviousPaintOpPreset(currentPreset);
+        m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
             m_optionWidget->disconnect(this);
             m_optionWidget->hide();
         }
 
-        m_paintOpPresetMap[currentPreset->paintOp()] = currentPreset;
-        m_tabletToolMap[m_currTabletToolID].preset = currentPreset;
-        m_tabletToolMap[m_currTabletToolID].paintOpID = currentPreset->paintOp();
+        m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset();
+        m_tabletToolMap[m_currTabletToolID].preset = m_resourceProvider->currentPreset();
+        m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
 
     preset = (!preset) ? activePreset(paintop) : preset;

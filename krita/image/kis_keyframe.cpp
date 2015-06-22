@@ -31,14 +31,19 @@ struct KisKeyframe::Private
 };
 
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, void* data)
-    : QObject()
+    : QObject(channel)
     , m_d(new Private(channel, time, (quintptr)data))
 {}
 
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value)
-    : QObject()
+    : QObject(channel)
     , m_d(new Private(channel, time, value))
 {}
+
+KisKeyframe::~KisKeyframe()
+{
+    delete m_d;
+}
 
 quint32 KisKeyframe::value() const
 {

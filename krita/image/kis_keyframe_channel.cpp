@@ -29,8 +29,8 @@ struct KisKeyframeChannel::Private
     KoID id;
 };
 
-KisKeyframeChannel::KisKeyframeChannel(const KoID &id, const KisNodeWSP node)
-    : m_d(new Private)
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node)
+    : QObject(node.data()), m_d(new Private)
 {
     m_d->id = id;
     m_d->node = node;
@@ -38,7 +38,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, const KisNodeWSP node)
 
 KisKeyframeChannel::~KisKeyframeChannel()
 {
-    qDeleteAll(m_d->keys.values());
+    delete m_d;
 }
 
 QString KisKeyframeChannel::id() const

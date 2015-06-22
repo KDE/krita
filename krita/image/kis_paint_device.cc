@@ -246,11 +246,10 @@ struct KisPaintDevice::Private
     {
         Data *data = frames[frame];
         frames.remove(frame);
+        delete data;
 
-        if (frames.count() < 2) {
-            m_data = data;
-        } else {
-            delete data;
+        if (frames.count() == 1) {
+            m_data = frames.begin().value();
         }
     }
 

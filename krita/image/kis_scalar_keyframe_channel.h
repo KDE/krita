@@ -26,6 +26,7 @@ class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 
 public:
     KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node, qreal minValue, qreal maxValue);
+    ~KisScalarKeyframeChannel();
 
     bool hasScalarValue() const;
     qreal minScalarValue() const;

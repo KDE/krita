@@ -37,6 +37,11 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNode
     addKeyframe(0);
 }
 
+KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
+{
+    delete m_d;
+}
+
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
     KisKeyframe *key = activeKeyframeAt(time);

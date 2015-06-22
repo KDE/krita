@@ -32,7 +32,7 @@ class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
     Q_OBJECT
 
 public:
-    KisKeyframeChannel(const KoID& id, const KisNodeWSP node);
+    KisKeyframeChannel(const KoID& id, KisNodeWSP node);
     ~KisKeyframeChannel();
 
     QString id() const;

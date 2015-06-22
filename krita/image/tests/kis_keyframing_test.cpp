@@ -42,9 +42,9 @@ void KisKeyframingTest::initTestCase()
 
 void KisKeyframingTest::cleanupTestCase()
 {
-    delete red;
-    delete green;
-    delete blue;
+    delete[] red;
+    delete[] green;
+    delete[] blue;
 }
 
 void KisKeyframingTest::testScalarChannel()
@@ -205,6 +205,8 @@ void KisKeyframingTest::testRasterChannel()
     // Fetching current keyframe before the first one should
     // return the first keyframe
     QCOMPARE(channel->frameIdAt(0), (int)key_10->value());
+
+    delete channel;
 }
 
 void KisKeyframingTest::testChannelSignals()

@@ -53,6 +53,7 @@ class KoColorProfile;
 class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
+class KisImageAnimationInterface;
 
 namespace KisMetaData
 {
@@ -529,6 +530,7 @@ public:
      */
     void notifyNodeCollpasedChanged();
 
+    KisImageAnimationInterface *animationInterface() const;
 
     int currentTime();
     void seekToTime(int newTime);

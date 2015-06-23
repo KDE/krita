@@ -63,6 +63,7 @@
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
+#include "kis_image_animation_interface.h"
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"
@@ -140,6 +141,7 @@ public:
     QAtomicInt disableUIUpdateSignals;
     KisProjectionUpdatesFilterSP projectionUpdatesFilter;
     KisImageSignalRouter *signalRouter;
+    KisImageAnimationInterface *animationInterface;
     KisUpdateScheduler *scheduler;
 
     KisCompositeProgressProxy *compositeProgressProxy;
@@ -173,6 +175,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->testingLevelOfDetailsEnabled = false;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
+    m_d->animationInterface = new KisImageAnimationInterface(this);
 
     if (!undoStore) {
         undoStore = new KisDumbUndoStore();
@@ -236,6 +239,7 @@ KisImage::~KisImage()
     delete m_d->undoStore;
     delete m_d->compositeProgressProxy;
 
+    delete m_d->animationInterface;
     delete m_d->signalRouter;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
@@ -1680,9 +1684,15 @@ void KisImage::notifyNodeCollpasedChanged()
     emit sigNodeCollapsedChanged();
 }
 
+KisImageAnimationInterface* KisImage::animationInterface() const
+{
+    return m_d->animationInterface;
+}
+
 int KisImage::currentTime()
 {
-    return m_d->time;
+    // TODO: remove this method and use animation interface directly
+    return m_d->animationInterface->currentTime();
 }
 
 void KisImage::seekToTime(int newTime)

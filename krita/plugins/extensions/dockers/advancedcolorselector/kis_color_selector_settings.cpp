@@ -217,7 +217,8 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("shadeSelectorUpdateOnForeground", ui->shadeSelectorUpdateOnForeground->isChecked());
     cfg.writeEntry("shadeSelectorUpdateOnLeftClick", ui->shadeSelectorUpdateOnLeftClick->isChecked());
     cfg.writeEntry("shadeSelectorUpdateOnBackground", ui->shadeSelectorUpdateOnBackground->isChecked());
-
+    cfg.writeEntry("hidePopupOnClickCheck", ui->hidePopupOnClickCheck->isChecked());
+    
     //mypaint model
 
     int shadeMyPaintComboBoxIndex  = ui->ACSshadeSelectorMyPaintColorModelComboBox->currentIndex();
@@ -447,7 +448,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->shadeSelectorUpdateOnLeftClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnLeftClick", false));
     ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", true));
     ui->shadeSelectorUpdateOnBackground->setChecked(cfg.readEntry("shadeSelectorUpdateOnBackground", true));
-
+    ui->hidePopupOnClickCheck->setChecked(cfg.readEntry("hidePopupOnClickCheck", false));
 
     QString shadeMyPaintType = cfg.readEntry("shadeMyPaintType", "HSV");
 

@@ -48,6 +48,26 @@ int KisRasterKeyframeChannel::frameIdAt(int time) const
     return key->value();
 }
 
+bool KisRasterKeyframeChannel::fetchFrame(KisPaintDeviceSP targetDevice, int time, int offset)
+{
+    QMap<int, KisKeyframe*>::const_iterator i = activeKeyIterator(time);
+
+    while (offset > 0 && i != constKeys().end()) {
+        offset--;
+        i++;
+    }
+    while (offset < 0 && i != constKeys().begin()) {
+        offset++;
+        i--;
+    }
+
+    if (offset != 0 || i == constKeys().end()) return false;
+
+    m_d->paintDevice->fetchFrame(i.value()->value(), targetDevice);
+
+    return true;
+}
+
 KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
 {
     int srcFrame = (copySrc != 0) ? srcFrame = copySrc->value() : 0;

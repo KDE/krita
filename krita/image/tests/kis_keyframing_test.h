@@ -33,6 +33,7 @@ private slots:
     void testScalarChannel();
     void testRasterChannel();
     void testChannelSignals();
+    void testRasterFrameFetching();
 
     void cleanupTestCase();
 

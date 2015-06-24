@@ -699,6 +699,13 @@ public:
      */
     QList<int> frames();
 
+    /**
+     * Copy the given frame into the target device
+     * @param frameId ID of the frame to be copied
+     * @param targetDevice paint device to copy to
+     */
+    void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+
 public:
 
     /**

@@ -27,6 +27,33 @@
 
 #include <KoColorSpaceRegistry.h>
 
+struct TestingKeyframingDefaultBounds : public KisDefaultBoundsBase {
+    TestingKeyframingDefaultBounds() : m_time(0) {}
+
+    QRect bounds() const {
+        return QRect(0,0,100,100);
+    }
+
+    bool wrapAroundMode() const {
+        return false;
+    }
+
+    int currentLevelOfDetail() const {
+        return 0;
+    }
+
+    int currentTime() const {
+        return m_time;
+    }
+
+    void testingSetTime(int time) {
+        m_time = time;
+    }
+
+private:
+    int m_time;
+};
+
 void KisKeyframingTest::initTestCase()
 {
     cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -102,33 +129,6 @@ void KisKeyframingTest::testScalarChannel()
 
 void KisKeyframingTest::testRasterChannel()
 {
-    struct TestingKeyframingDefaultBounds : public KisDefaultBoundsBase {
-        TestingKeyframingDefaultBounds() : m_time(0) {}
-
-        QRect bounds() const {
-            return QRect(0,0,100,100);
-        }
-
-        bool wrapAroundMode() const {
-            return false;
-        }
-
-        int currentLevelOfDetail() const {
-            return 0;
-        }
-
-        int currentTime() const {
-            return m_time;
-        }
-
-        void testingSetTime(int time) {
-            m_time = time;
-        }
-
-    private:
-        int m_time;
-    };
-
     TestingKeyframingDefaultBounds *bounds = new TestingKeyframingDefaultBounds();
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -276,6 +276,67 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPostRemove.count(), 1);
 
     delete channel;
+}
+
+void KisKeyframingTest::testRasterFrameFetching()
+{
+    TestingKeyframingDefaultBounds *bounds = new TestingKeyframingDefaultBounds();
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    KisPaintDeviceSP devTarget = new KisPaintDevice(cs);
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    bool ok;
+
+    channel->addKeyframe(0);
+    channel->addKeyframe(10);
+    channel->addKeyframe(50);
+
+    bounds->testingSetTime(0);
+    dev->fill(0, 0, 512, 512, red);
+    QImage frame1 = dev->createThumbnail(50, 50);
+
+    bounds->testingSetTime(10);
+    dev->fill(0, 256, 512, 512, green);
+    QImage frame2 = dev->createThumbnail(50, 50);
+
+    bounds->testingSetTime(50);
+    dev->fill(0, 0, 256, 512, blue);
+    QImage frame3 = dev->createThumbnail(50, 50);
+
+    bounds->testingSetTime(10);
+
+    ok = channel->fetchFrame(devTarget, 50, 0);
+    QCOMPARE(ok, true);
+    QImage fetched3 = devTarget->createThumbnail(50, 50);
+
+    ok = channel->fetchFrame(devTarget, 50, -1);
+    QCOMPARE(ok, true);
+    QImage fetched2 = devTarget->createThumbnail(50, 50);
+
+    ok = channel->fetchFrame(devTarget, 50, -2);
+    QCOMPARE(ok, true);
+    QImage fetched1 = devTarget->createThumbnail(50, 50);
+
+    QVERIFY(fetched1 == frame1);
+    QVERIFY(fetched2 == frame2);
+    QVERIFY(fetched3 == frame3);
+
+    // Fetching frames before or after one exists
+
+    devTarget->clear();
+    QImage blank = devTarget->createThumbnail(50, 50);
+
+    ok = channel->fetchFrame(devTarget, 50, -3);
+    QCOMPARE(ok, false);
+    QImage fetched4 = devTarget->createThumbnail(50, 50);
+    QVERIFY(fetched4 == blank);
+
+    ok = channel->fetchFrame(devTarget, 50, 1);
+    QCOMPARE(ok, false);
+    QImage fetched5 = devTarget->createThumbnail(50, 50);
+    QVERIFY(fetched5 == blank);
 }
 
 QTEST_KDEMAIN(KisKeyframingTest, NoGUI)

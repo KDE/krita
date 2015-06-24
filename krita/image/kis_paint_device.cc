@@ -269,6 +269,8 @@ struct KisPaintDevice::Private
         return frames.keys();
     }
 
+    void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+
     QRegion syncLodData(int newLod);
 
     KisRasterKeyframeChannel *contentChannel;
@@ -498,6 +500,17 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
 
     QRegion dirtyRegion(dstRect);
     return dirtyRegion;
+}
+
+void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+{
+    Data *data = frames[frameId];
+
+    QRect extent = data->dataManager->extent();
+    extent.translate(data->x, data->y);
+
+    targetDevice->m_d->prepareCloneImpl(q, data);
+    targetDevice->m_d->currentStrategy()->fastBitBltRough(data->dataManager, extent);
 }
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -1423,6 +1436,11 @@ void KisPaintDevice::deleteFrame(int frame)
 QList<int> KisPaintDevice::frames()
 {
     return m_d->frameIds();
+}
+
+void KisPaintDevice::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+{
+    m_d->fetchFrame(frameId, targetDevice);
 }
 
 const KoColorSpace* KisPaintDevice::colorSpace() const

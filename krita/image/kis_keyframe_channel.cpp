@@ -111,12 +111,7 @@ KisKeyframe *KisKeyframeChannel::keyframeAt(int time)
 
 KisKeyframe *KisKeyframeChannel::activeKeyframeAt(int time) const
 {
-    const QMap<int, KisKeyframe *> keys = constKeys();
-    QMap<int, KisKeyframe*>::const_iterator i = keys.upperBound(time);
-
-    if (i != keys.begin()) i--;
-
-    return i.value();
+    return activeKeyIterator(time).value();
 }
 
 KisKeyframe *KisKeyframeChannel::nextKeyframeAfter(int time) const
@@ -190,6 +185,16 @@ KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *co
     emit sigKeyframeAdded(keyframe);
 
     return keyframe;
+}
+
+QMap<int, KisKeyframe*>::const_iterator KisKeyframeChannel::activeKeyIterator(int time) const
+{
+    const QMap<int, KisKeyframe *> keys = constKeys();
+    QMap<int, KisKeyframe*>::const_iterator i = keys.upperBound(time);
+
+    if (i != keys.begin()) i--;
+
+    return i;
 }
 
 #include "kis_keyframe_channel.moc"

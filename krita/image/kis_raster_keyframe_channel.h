@@ -37,6 +37,16 @@ public:
      */
     int frameIdAt(int time) const;
 
+    /**
+     * Copy the active frame at given time and offset to target device.
+     * Note: offset is the number of keyframes back or forth counted
+     * from the active keyframe at the given time.
+     * @param targetDevice device to copy the frame to
+     * @param time time to determine base keyframe
+     * @param offset number of keyframes to offset from base keyframe
+     */
+    bool fetchFrame(KisPaintDeviceSP targetDevice, int time, int offset);
+
     bool hasScalarValue() const;
     qreal minScalarValue() const;
     qreal maxScalarValue() const;

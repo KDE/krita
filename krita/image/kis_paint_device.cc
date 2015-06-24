@@ -207,6 +207,17 @@ struct KisPaintDevice::Private
     inline PaintDeviceCache* cache() { return &currentData()->cache; }
     inline PaintDeviceCache* cache(int frame) { return &frames[frame]->cache; }
 
+    void prepareClone(KisPaintDeviceSP src)
+    {
+        prepareCloneImpl(src, src->m_d->currentData());
+        Q_ASSERT(fastBitBltPossible(src));
+    }
+
+    bool fastBitBltPossible(KisPaintDeviceSP src)
+    {
+        return fastBitBltPossibleImpl(src->m_d->currentData());
+    }
+
     int createFrame(bool copy, int copySrc)
     {
         Data *data;
@@ -332,6 +343,30 @@ private:
         }
 
         return m_data;
+    }
+
+    void prepareCloneImpl(KisPaintDeviceSP src, Data *srcData)
+    {
+        q->clear();
+        setX(srcData->x);
+        setY(srcData->y);
+
+        if(!(*colorSpace() == *srcData->colorSpace)) {
+            if (colorSpace()->pixelSize() != srcData->colorSpace->pixelSize()) {
+                setDataManager(new KisDataManager(srcData->colorSpace->pixelSize(), srcData->dataManager->defaultPixel()));
+                cache()->setupCache();
+            }
+
+            setColorSpace(srcData->colorSpace);
+        }
+        q->setDefaultPixel(srcData->dataManager->defaultPixel());
+        q->setDefaultBounds(src->defaultBounds());
+    }
+
+    bool fastBitBltPossibleImpl(Data *srcData)
+    {
+        return x() == srcData->x && y() == srcData->y &&
+                *colorSpace() == *srcData->colorSpace;
     }
 
 private:
@@ -550,21 +585,7 @@ KisPaintDevice::~KisPaintDevice()
 
 void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
 {
-    clear();
-    m_d->setX(src->x());
-    m_d->setY(src->y());
-
-    if(!(*colorSpace() == *src->colorSpace())) {
-        if (m_d->colorSpace()->pixelSize() != src->colorSpace()->pixelSize()) {
-            m_d->setDataManager(new KisDataManager(src->pixelSize(), src->defaultPixel()));
-            m_d->cache()->setupCache();
-        }
-
-        m_d->setColorSpace(src->colorSpace());
-    }
-    setDefaultPixel(src->defaultPixel());
-    setDefaultBounds(src->defaultBounds());
-
+    m_d->prepareClone(src);
     Q_ASSERT(fastBitBltPossible(src));
 }
 
@@ -1302,8 +1323,7 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
 
 bool KisPaintDevice::fastBitBltPossible(KisPaintDeviceSP src)
 {
-    return m_d->x() == src->x() && m_d->y() == src->y() &&
-            *colorSpace() == *src->colorSpace();
+    return m_d->fastBitBltPossible(src);
 }
 
 void KisPaintDevice::fastBitBlt(KisPaintDeviceSP src, const QRect &rect)

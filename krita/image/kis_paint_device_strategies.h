@@ -118,9 +118,7 @@ public:
 
     virtual void fastBitBlt(KisPaintDeviceSP src, const QRect &rect) {
         Q_ASSERT(m_device->fastBitBltPossible(src));
-
-        m_d->dataManager()->bitBlt(src->dataManager(), rect.translated(-m_d->x(), -m_d->y()));
-        m_d->cache()->invalidate();
+        fastBitBltImpl(src->dataManager(), rect);
     }
 
     virtual void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) {
@@ -132,9 +130,11 @@ public:
 
     virtual void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect) {
         Q_ASSERT(m_device->fastBitBltPossible(src));
+        fastBitBltRoughImpl(src->dataManager(), rect);
+    }
 
-        m_d->dataManager()->bitBltRough(src->dataManager(), rect.translated(-m_d->x(), -m_d->y()));
-        m_d->cache()->invalidate();
+    virtual void fastBitBltRough(KisDataManagerSP srcDataManager, const QRect &rect) {
+        fastBitBltRoughImpl(srcDataManager, rect);
     }
 
     virtual void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect) {
@@ -177,6 +177,18 @@ protected:
                                        rect.width(),
                                        rect.height(),
                                        dataRowStride);
+        m_d->cache()->invalidate();
+    }
+
+    virtual void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect)
+    {
+        m_d->dataManager()->bitBlt(srcDataManager, rect.translated(-m_d->x(), -m_d->y()));
+        m_d->cache()->invalidate();
+    }
+
+    virtual void fastBitBltRoughImpl(KisDataManagerSP srcDataManager, const QRect &rect)
+    {
+        m_d->dataManager()->bitBltRough(srcDataManager, rect.translated(-m_d->x(), -m_d->y()));
         m_d->cache()->invalidate();
     }
 
@@ -314,10 +326,10 @@ public:
         return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_wrapRect);
     }
 
-    void fastBitBlt(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) {
         KisWrappedRect splitRect(rect, m_wrapRect);
         foreach (const QRect &rc, splitRect) {
-            KisPaintDeviceStrategy::fastBitBlt(src, rc);
+            KisPaintDeviceStrategy::fastBitBltImpl(srcDataManager, rc);
         }
     }
 
@@ -328,9 +340,10 @@ public:
         }
     }
 
-    void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect) {
+    virtual void fastBitBltRoughImpl(KisDataManagerSP srcDataManager, const QRect &rect)
+    {
         // no rough version in wrapped mode
-        fastBitBlt(src, rect);
+        fastBitBltImpl(srcDataManager, rect);
     }
 
     void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect) {

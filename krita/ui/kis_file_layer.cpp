@@ -18,6 +18,7 @@
 #include "kis_file_layer.h"
 
 #include <QFile>
+#include <QFileInfo>
 
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
@@ -41,8 +42,12 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
     m_image = new KisPaintDevice(image->colorSpace());
 
     connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
-    m_loader.setPath(path());
-    m_loader.reloadImage();
+
+    QFileInfo fi(path());
+    if (fi.exists()) {
+        m_loader.setPath(path());
+        m_loader.reloadImage();
+    }
 }
 
 KisFileLayer::~KisFileLayer()

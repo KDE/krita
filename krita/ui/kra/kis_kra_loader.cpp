@@ -658,8 +658,11 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     QString basePath = info.absolutePath();
 
     QString fullPath = basePath + QDir::separator() + filename;
-
+    // Entering the event loop to show the messagebox will delete the image, so up the ref by one
+    image->ref();
     if (!QFileInfo(fullPath).exists()) {
+
+        qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
             "@info",
             "The file associated to a file layer with the name \"%1\" is not found.<nl/><nl/>"
@@ -683,6 +686,8 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
                 filename = d.relativeFilePath(url);
             }
         }
+
+        qApp->restoreOverrideCursor();
     }
 
     KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);

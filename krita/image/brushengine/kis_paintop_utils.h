@@ -36,7 +36,7 @@ bool paintFan(PaintOp &op,
     const qreal initialAngle = currentDistance->lastDrawingAngle();
     const qreal finalAngle = pi2.drawingAngleSafe(*currentDistance);
     const qreal fullDistance = shortestAngularDistance(initialAngle,
-                                                       pi2.drawingAngleSafe(*currentDistance));
+                                                       finalAngle);
     qreal lastAngle = initialAngle;
 
     int i = 0;

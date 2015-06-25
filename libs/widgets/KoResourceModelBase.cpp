@@ -20,13 +20,12 @@
 
 #include "KoResourceModelBase.h"
 
-KoResourceModelBase::KoResourceModelBase(QObject *parent) : QAbstractTableModel(parent)
+KoResourceModelBase::KoResourceModelBase(QObject *parent)
+    : QAbstractTableModel(parent)
 {
-
 }
 
 KoResourceModelBase::~KoResourceModelBase()
 {
-
 }
 

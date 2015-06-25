@@ -19,10 +19,11 @@
 #define KIS_PATTERN_CHOOSER_H_
 
 #include <QFrame>
-#include <KoResourceItemChooser.h>
 #include <krita_export.h>
 
 class QLabel;
+class KoResourceItemChooser;
+class KoResource;
 
 class KRITAUI_EXPORT KisPatternChooser : public QFrame
 {

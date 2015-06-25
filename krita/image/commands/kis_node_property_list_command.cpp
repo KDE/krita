@@ -18,6 +18,8 @@
 
 #include <klocale.h>
 #include "kis_node.h"
+#include "kis_layer.h"
+#include "kis_image.h"
 #include "commands/kis_node_property_list_command.h"
 
 
@@ -36,11 +38,40 @@ KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisDocume
 void KisNodePropertyListCommand::redo()
 {
     m_node->setSectionModelProperties(m_newPropertyList);
-    m_node->setDirty(); // TODO check if visibility was changed or not
+    doUpdate(m_oldPropertyList, m_newPropertyList);
 }
 
 void KisNodePropertyListCommand::undo()
 {
     m_node->setSectionModelProperties(m_oldPropertyList);
-    m_node->setDirty(); // TODO check if visibility was changed or not
+    doUpdate(m_newPropertyList, m_oldPropertyList);
+}
+
+void KisNodePropertyListCommand::doUpdate(const KisDocumentSectionModel::PropertyList &oldPropertyList,
+                                          const KisDocumentSectionModel::PropertyList &newPropertyList)
+{
+    bool oldPassThroughValue = false;
+    bool newPassThroughValue = false;
+
+    foreach(const KisDocumentSectionModel::Property &prop, oldPropertyList) {
+        if (prop.name == i18n("Pass Through")) {
+            oldPassThroughValue = prop.state.toBool();
+        }
+    }
+
+    foreach(const KisDocumentSectionModel::Property &prop, newPropertyList) {
+        if (prop.name == i18n("Pass Through")) {
+            newPassThroughValue = prop.state.toBool();
+        }
+    }
+
+    if (oldPassThroughValue && !newPassThroughValue) {
+        KisLayer *layer = qobject_cast<KisLayer*>(m_node.data());
+        layer->image()->refreshGraphAsync(layer);
+    } else if (m_node->parent() && !oldPassThroughValue && newPassThroughValue) {
+        KisLayer *layer = qobject_cast<KisLayer*>(m_node->parent().data());
+        layer->image()->refreshGraphAsync(layer);
+    } else {
+        m_node->setDirty(); // TODO check if visibility was changed or not
+    }
 }

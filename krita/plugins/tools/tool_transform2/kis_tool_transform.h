@@ -79,8 +79,6 @@ class KisToolTransform : public KisTool
 
     Q_OBJECT
 
-    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
-
     Q_PROPERTY(TransformToolMode transformMode READ transformMode WRITE setTransformMode NOTIFY transformModeChanged)
 
     Q_PROPERTY(double translateX READ translateX WRITE setTranslateX NOTIFY freeTransformChanged)
@@ -145,7 +143,6 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter);
 
-    bool isActive() const;
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -192,9 +189,11 @@ public Q_SLOTS:
     void setWarpFlexibility(double flexibility);
     void setWarpPointDensity(int density);
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 Q_SIGNALS:
     void transformModeChanged();
-    void isActiveChanged();
     void freeTransformChanged();
     void warpTransformChanged();
 
@@ -269,8 +268,6 @@ private:
 
     KisToolTransformConfigWidget *m_optionsWidget;
     KisCanvas2 *m_canvas;
-
-    bool m_isActive;
 
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;

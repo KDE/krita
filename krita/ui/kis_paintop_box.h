@@ -37,6 +37,7 @@
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
 #include "kis_config.h"
+#include "krita_export.h"
 
 
 class QToolButton;
@@ -52,7 +53,7 @@ class KisCanvasResourceProvider;
 class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
-class KisPaintOpSettingsWidget;
+class KisPaintOpConfigWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
@@ -80,7 +81,7 @@ class KisAction;
  *
  * XXX: instead of text, use pretty pictures.
  */
-class KisPaintopBox : public QWidget
+class KRITAUI_EXPORT KisPaintopBox : public QWidget
 {
     Q_OBJECT
 
@@ -167,7 +168,7 @@ private:
     KisCanvasResourceProvider*           m_resourceProvider;
     QHBoxLayout*                         m_layout;
     QWidget*                             m_paintopWidget;
-    KisPaintOpSettingsWidget*            m_optionWidget;
+    KisPaintOpConfigWidget*            m_optionWidget;
     KisPopupButton*                      m_settingsWidget;
     KisPopupButton*                      m_presetWidget;
     KisPopupButton*                      m_brushChooser;
@@ -181,7 +182,7 @@ private:
     KisViewManager*                      m_viewManager;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
-    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
+    QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
     QToolButton*                         m_reloadButton;
 

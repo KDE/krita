@@ -31,6 +31,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_clone_layer.h"
+#include "kis_group_layer.h"
 
 
 
@@ -808,6 +809,180 @@ void KisTransformMaskTest::testMaskWithOffset()
     chk.checkImage(p.image, "02X_mask1_y_offset");
 
     QVERIFY(chk.testPassed());
+}
+
+void KisTransformMaskTest::testWeirdFullUpdates()
+{
+    //TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
+
+    QRect imageRect(0,0,512,512);
+    QRect fillRect(10, 10, 236, 236);
+    TestUtil::MaskParent p(imageRect);
+
+    p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+
+    KisPaintLayerSP player1 = new KisPaintLayer(p.image, "pl1", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    player1->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+    p.image->addNode(player1, p.image->root());
+
+    KisTransformMaskSP mask1 = new KisTransformMask();
+    mask1->setName("mask1");
+    QTransform transform1 =
+        QTransform::fromTranslate(256, 0);
+    mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform1)));
+
+    p.image->addNode(mask1, player1);
+
+
+    KisPaintLayerSP player2 = new KisPaintLayer(p.image, "pl2", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    player2->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+    p.image->addNode(player2, p.image->root());
+
+    KisTransformMaskSP mask2 = new KisTransformMask();
+    mask2->setName("mask2");
+    QTransform transform2 =
+        QTransform::fromTranslate(0, 256);
+    mask2->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform2)));
+
+    p.image->addNode(mask2, player2);
+
+
+    KisPaintLayerSP player3 = new KisPaintLayer(p.image, "pl3", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    player3->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+    p.image->addNode(player3, p.image->root());
+
+    KisTransformMaskSP mask3 = new KisTransformMask();
+    mask3->setName("mask3");
+    QTransform transform3 =
+        QTransform::fromTranslate(256, 256);
+    mask3->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform3)));
+
+    p.image->addNode(mask3, player3);
+
+
+
+    //p.image->initialRefreshGraph();
+
+    p.image->refreshGraphAsync(0, QRect(0,0,256,256), QRect());
+    p.image->waitForDone();
+
+    QVERIFY(player1->projection()->extent().isEmpty());
+    QVERIFY(player1->projection()->exactBounds().isEmpty());
+
+    QVERIFY(player2->projection()->extent().isEmpty());
+    QVERIFY(player2->projection()->exactBounds().isEmpty());
+
+    QVERIFY(player3->projection()->extent().isEmpty());
+    QVERIFY(player3->projection()->exactBounds().isEmpty());
+
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,236,236)));
+
+
+
+    p.image->refreshGraphAsync(0, QRect(0,256,256,256), QRect());
+    p.image->waitForDone();
+
+    QVERIFY(player1->projection()->extent().isEmpty());
+    QVERIFY(player1->projection()->exactBounds().isEmpty());
+
+    QVERIFY(!player2->projection()->extent().isEmpty());
+    QVERIFY(!player2->projection()->exactBounds().isEmpty());
+
+    QVERIFY(player3->projection()->extent().isEmpty());
+    QVERIFY(player3->projection()->exactBounds().isEmpty());
+
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,236,492)));
+
+
+    p.image->refreshGraphAsync(0, QRect(256,0,256,256), QRect());
+    p.image->waitForDone();
+
+    QVERIFY(!player1->projection()->extent().isEmpty());
+    QVERIFY(!player1->projection()->exactBounds().isEmpty());
+
+    QVERIFY(!player2->projection()->extent().isEmpty());
+    QVERIFY(!player2->projection()->exactBounds().isEmpty());
+
+    QVERIFY(player3->projection()->extent().isEmpty());
+    QVERIFY(player3->projection()->exactBounds().isEmpty());
+
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,492,492)));
+    QVERIFY((p.image->projection()->region() & QRect(256,256,256,256)).isEmpty());
+
+
+
+    p.image->refreshGraphAsync(0, QRect(256,256,256,256), QRect());
+    p.image->waitForDone();
+
+    QVERIFY(!player1->projection()->extent().isEmpty());
+    QVERIFY(!player1->projection()->exactBounds().isEmpty());
+
+    QVERIFY(!player2->projection()->extent().isEmpty());
+    QVERIFY(!player2->projection()->exactBounds().isEmpty());
+
+    QVERIFY(!player3->projection()->extent().isEmpty());
+    QVERIFY(!player3->projection()->exactBounds().isEmpty());
+
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,492,492)));
+    QVERIFY(!(p.image->projection()->region() & QRect(256,256,256,256)).isEmpty());
+
+    p.image->waitForDone();
+
+    KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj", "dd");
+
+}
+
+void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
+{
+    //TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
+
+    QRect imageRect(0,0,512,512);
+    QRect fillRect(10, 10, 236, 236);
+    QRect outsideFillRect = fillRect.translated(0, -1.5 * 256);
+
+    TestUtil::MaskParent p(imageRect);
+
+    //p.layer->paintDevice()->fill(fillRect, KoColor(Qt::green, p.layer->colorSpace()));
+
+    p.image->initialRefreshGraph();
+
+    KisGroupLayerSP glayer = new KisGroupLayer(p.image, "gl", OPACITY_OPAQUE_U8);
+    p.image->addNode(glayer, p.image->root());
+
+    KisPaintLayerSP player1 = new KisPaintLayer(p.image, "pl1", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    player1->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+    player1->paintDevice()->fill(outsideFillRect, KoColor(Qt::blue, p.layer->colorSpace()));
+    p.image->addNode(player1, glayer);
+
+    player1->setDirty();
+    p.image->waitForDone();
+
+    QCOMPARE(p.image->projection()->exactBounds(), fillRect);
+
+    //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_initial", "dd");
+
+    KisTransformMaskSP mask1 = new KisTransformMask();
+    mask1->setName("mask1");
+    QTransform transform1 =
+        QTransform::fromTranslate(0, 1.5 * 256);
+    mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform1)));
+
+    p.image->addNode(mask1, player1);
+
+    mask1->setDirty();
+    p.image->waitForDone();
+
+    /**
+     * Transform mask i sexpected to crop the externals of the layer by 50%
+     * far behind the layer border! Take care!
+     */
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(10, 128, 236, 384));
+
+    //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_mask", "dd");
 }
 
 QTEST_KDEMAIN(KisTransformMaskTest, GUI)

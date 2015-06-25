@@ -42,7 +42,7 @@ public:
     // For now we only save the used markers and that is done with a KoSharedSavingData when a marker usage is encountered.
     //void saveOdf(KoShapeSavingContext &context) const;
 
-    QList<KoMarker*> markers();
+    QList<KoMarker*> markers() const;
 
     /**
      * Add marker to collection

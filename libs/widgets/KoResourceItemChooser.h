@@ -27,13 +27,10 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
-#include <QAction>
-#include <QModelIndex>
-#include <QCompleter>
 
 #include "kowidgets_export.h"
-#include <KoConfig.h>
 
+class QModelIndex;
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
 class QToolButton;
@@ -51,7 +48,8 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    explicit KoResourceItemChooser( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0 );
+    /// \p usePreview shows the aside preview with the resource's image
+    explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0, bool usePreview = false);
     ~KoResourceItemChooser();
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
@@ -85,8 +83,6 @@ public:
 
     void showButtons( bool show );
 
-    /// shows the aside preview with the resource's image
-    void showPreview(bool show);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
     /// determines whether the preview should tile the resource's image or not
@@ -97,7 +93,7 @@ public:
 
     void showGetHotNewStuff( bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.
-    void showTaggingBar( bool showSearchBar, bool showOpBar );
+    void showTaggingBar(bool show);
 
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
@@ -126,6 +122,11 @@ private Q_SLOTS:
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
 
+    void slotBeforeResourcesLayoutReset(KoResource *activateAfterReset);
+    void slotAfterResourcesLayoutReset();
+
+    void updateView();
+
 protected:
     virtual void showEvent(QShowEvent* event);
 
@@ -133,7 +134,7 @@ private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
 
-    void updateView();
+
 
     virtual void resizeEvent(QResizeEvent* event);
 

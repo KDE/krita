@@ -55,8 +55,7 @@ private:
     KisMinimalShadeSelector* m_minimalShadeSelector;
     QWidget* m_shadeSelector;
 
-    bool m_shadeSelectorHideable;
-    bool m_allowHorizontalLayout;
+    int m_onDockerResizeSetting;
 
     QBoxLayout* m_widgetLayout;
 

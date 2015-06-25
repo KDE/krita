@@ -203,6 +203,11 @@ void KoFileDialog::setHideNameFilterDetailsOption()
     d->hideDetails = true;
 }
 
+QStringList KoFileDialog::nameFilters() const
+{
+    return d->filterList;
+}
+
 QString KoFileDialog::selectedNameFilter() const
 {
     if (!d->useStaticForNative) {

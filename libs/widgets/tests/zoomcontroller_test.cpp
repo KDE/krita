@@ -28,7 +28,6 @@
 #include "KoCanvasControllerWidget.h"
 #include "KoZoomHandler.h"
 #include "KoZoomController.h"
-#include "KoUnit.h"
 
 void zoomcontroller_test::testApi()
 {

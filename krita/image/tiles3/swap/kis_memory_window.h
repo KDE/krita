@@ -21,7 +21,8 @@
 
 #include "krita_export.h"
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
+
 #include "kis_chunk_allocator.h"
 
 
@@ -31,8 +32,7 @@ class KRITAIMAGE_EXPORT KisMemoryWindow
 {
 public:
     /**
-     * @param swapDir. A non-default directory for swap. If empty, the default directory will
-     *     be used.
+     * @param swapDir. If the dir doesn't exist, it'll be created, if it's empty QDir::tempPath will be used.
      */
     KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize = DEFAULT_WINDOW_SIZE);
     ~KisMemoryWindow();
@@ -73,7 +73,7 @@ private:
                       MappingWindow *otherWindow);
 
 private:
-    KTemporaryFile m_file;
+    QTemporaryFile m_file;
 
     MappingWindow m_readWindowEx;
     MappingWindow m_writeWindowEx;

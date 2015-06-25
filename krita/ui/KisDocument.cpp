@@ -41,6 +41,7 @@
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
 #include <KoDpi.h>
+#include <KoUnit.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoFileDialog.h>
 #include <KoID.h>
@@ -743,7 +744,7 @@ bool KisDocument::saveFile()
     if (!ret) {
         if (!suppressErrorDialog) {
             if (errorMessage().isEmpty()) {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()) + "\n\n" + i18n("Most likely a layer is still processing effects."));
             } else if (errorMessage() != "USER_CANCELED") {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }

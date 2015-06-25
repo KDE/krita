@@ -87,7 +87,6 @@
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
     , m_workRecursively(true)
-    , m_isActive(false)
     , m_changesTracker(&m_transaction)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
@@ -146,6 +145,13 @@ void KisToolTransform::outlineChanged()
 void KisToolTransform::canvasUpdateRequested()
 {
     m_canvas->updateCanvas();
+}
+
+void KisToolTransform::resetCursorStyle()
+{
+    KisTool::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -207,6 +213,10 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolTransform::setFunctionalCursor()
 {
+    if (overrideCursorIfNotEditable()) {
+        return;
+    }
+
     if (!m_strokeData.strokeId()) {
         useCursor(KisCursor::pointingHandCursor());
     } else {
@@ -444,11 +454,6 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
 void KisToolTransform::applyTransform()
 {
     slotApplyTransform();
-}
-
-bool KisToolTransform::isActive() const
-{
-    return m_isActive;
 }
 
 KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
@@ -767,8 +772,6 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, currentNode());
     }
 
-    m_isActive = true;
-    emit isActiveChanged();
     startStroke(ToolTransformArgs::FREE_TRANSFORM);
 }
 
@@ -776,9 +779,6 @@ void KisToolTransform::deactivate()
 {
     endStroke();
     m_canvas->updateCanvas();
-    m_isActive = false;
-    emit isActiveChanged();
-
     KisTool::deactivate();
 }
 

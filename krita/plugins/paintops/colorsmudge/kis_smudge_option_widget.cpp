@@ -29,10 +29,10 @@
 #include "kis_smudge_option.h"
 
 
-KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
-    KisCurveOptionWidget(new KisSmudgeOption(name, label, checked))
+KisSmudgeOptionWidget::KisSmudgeOptionWidget():
+    KisCurveOptionWidget(new KisSmudgeOption(), i18n("0.0"), i18n("1.0"))
 {
-    Q_UNUSED(sliderLabel);
+    setObjectName("KisSmudgeOptionWidget");
 
     mCbSmudgeMode = new QComboBox();
     mCbSmudgeMode->addItem(i18n("Smearing"), KisSmudgeOption::SMEARING_MODE);

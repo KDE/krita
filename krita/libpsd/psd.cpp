@@ -84,9 +84,9 @@ QString psd_blendmode_to_composite_op(const QString& blendmode)
     // 'mul ' = multiply
     if (blendmode == "mul ") return COMPOSITE_MULT;
     // 'idiv' = color burn
-    if (blendmode == "idiv") return COMPOSITE_INVERTED_DIVIDE;
+    if (blendmode == "idiv") return COMPOSITE_BURN;
     // 'lbrn' = linear burn
-    if (blendmode == "lbrn") return COMPOSITE_BURN;
+    if (blendmode == "lbrn") return COMPOSITE_LINEAR_BURN;
     // 'dkCl' = darker color
     if (blendmode == "dkCl") return COMPOSITE_DARKER_COLOR;
     // 'lite' = lighten
@@ -147,9 +147,9 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
     // 'mul ' = multiply
     if (compositeop == COMPOSITE_MULT) return "mul ";
     // 'idiv' = color burn
-    if (compositeop == COMPOSITE_INVERTED_DIVIDE ) return "idiv";
+    if (compositeop == COMPOSITE_BURN ) return "idiv";
     // 'lbrn' = linear burn
-    if (compositeop == COMPOSITE_BURN || compositeop == COMPOSITE_LINEAR_BURN) return "lbrn";
+    if (compositeop == COMPOSITE_LINEAR_BURN) return "lbrn";
     // 'dkCl' = darker color
     if (compositeop == COMPOSITE_DARKER_COLOR) return "dkCl";
     // 'lite' = lighten
@@ -201,8 +201,9 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
 
 QPoint psd_layer_effects_shadow_base::calculateOffset(const psd_layer_effects_context *context) const
 {
-    qint32 angle = this->m_useGlobalLight ?
-        context->global_angle : this->m_angle;
+    Q_UNUSED(context);
+
+    qint32 angle = this->m_angle;
 
     qint32 distanceX = -qRound(this->m_distance * cos(kisDegreesToRadians(qreal(angle))));
     qint32 distanceY =  qRound(this->m_distance * sin(kisDegreesToRadians(qreal(angle))));

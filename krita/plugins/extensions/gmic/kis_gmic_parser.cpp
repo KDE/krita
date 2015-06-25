@@ -28,13 +28,14 @@
 #include <Command.h>
 #include <Category.h>
 
+const static QRegExp FILTER_TREE_LINE_PREFIX_RX("^(#@gimp|#@gimp_en)");
 // category match example : #@gimp _<b>Lights &amp; Shadows</b>
-const static QRegExp CATEGORY_NAME_RX("#@gimp\\s+[^:]+$");
+const static QRegExp CATEGORY_NAME_RX("\\s+[^:]+$");
 // command match example: #@gimp Poster edges : gimp_poster_edges, gimp_poster_edges_preview(0)
-const static QRegExp COMMAND_NAME_RX("#@gimp\\s+\\w+[^:]+:\\s*\\w+\\s*,\\s*\\w+\\(?[0-2]?\\)?");
+const static QRegExp COMMAND_NAME_RX("\\s+[^:]+:\\s*\\w+\\s*,\\s*\\w+\\(?[0-2]?\\)?");
 // parameter match example:  #@gimp : Fast approximation = bool(0)
 //                           #@gimp : X-size = float(0.9,0,2)
-const static QRegExp PARAMETER_RX("#@gimp\\s+:\\s*[^=]*=\\s*[\\w]*");
+const static QRegExp PARAMETER_RX("\\s+:\\s*[^=]*=\\s*[\\w]*");
 
 KisGmicParser::KisGmicParser(const QStringList& filePaths):m_filePaths(filePaths)
 {
@@ -71,7 +72,7 @@ bool KisGmicParser::isCategory(const QString& line)
 QString KisGmicParser::parseCategoryName(const QString& line)
 {
     QString result = line;
-    return result.remove(0, GIMP_COMMENT.size()).trimmed();
+    return result.trimmed();
 }
 
 Component* KisGmicParser::createFilterTree()
@@ -103,7 +104,22 @@ Component* KisGmicParser::createFilterTree()
         while(!in.atEnd()) {
             QString line = fetchLine(in, lineNum);
 
-            if (line.startsWith(GIMP_COMMENT))
+            // match
+            bool lineOfInterest = false;
+
+
+
+
+
+            int indexOfMatch = FILTER_TREE_LINE_PREFIX_RX.indexIn(line);
+            int matchedLength = FILTER_TREE_LINE_PREFIX_RX.matchedLength();
+            if ((indexOfMatch == 0) && (matchedLength > 0))
+            {
+                lineOfInterest = true;
+                line.remove(indexOfMatch, matchedLength);
+            }
+
+            if (lineOfInterest)
             {
                 if (isCategory(line))
                 {
@@ -134,8 +150,6 @@ Component* KisGmicParser::createFilterTree()
                                 break;
                             }
                         }
-
-
 
                         categoryName = categoryName.remove(0,toParentSteps);
                     }
@@ -213,10 +227,6 @@ Component* KisGmicParser::createFilterTree()
                         dbgPlugins << "No command for given parameter, invalid gmic definition line: " << line;
 
                     }
-                }
-                else if (line.startsWith(GIMP_COMMENT+"_"))
-                {
-                    // TODO: do something with those translations
                 }
                 else
                 {

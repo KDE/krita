@@ -158,9 +158,10 @@ private Q_SLOTS:
     void increaseBrushSize();
     void decreaseBrushSize();
 
+    void activatePickColorDelayed();
+
 protected Q_SLOTS:
     virtual void updateTabletPressureSamples();
-
 
 protected:
     quint8 m_opacity;
@@ -169,11 +170,24 @@ protected:
     QPointF m_outlineDocPoint;
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
-    bool m_toForegroundColor;
+
+    bool m_showColorPreview;
+    QRectF m_oldColorPreviewRect;
+    QRectF m_oldColorPreviewUpdateRect;
+    QColor m_colorPreviewCurrentColor;
+    bool m_colorPreviewShowComparePlate;
+    QColor m_colorPreviewBaseColor;
 
 private:
     QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
     void setOpacity(qreal opacity);
+
+    void activatePickColor(AlternateAction action);
+    void deactivatePickColor(AlternateAction action);
+    void pickColorWasOverridden();
+
+    int colorPreviewResourceId(AlternateAction action);
+    QRectF colorPreviewDocRect(const QPointF &outlineDocPoint);
 
 private:
 
@@ -188,6 +202,8 @@ private:
 
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
+    AlternateAction delayedAction;
+
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 

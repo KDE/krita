@@ -185,11 +185,15 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     if (getTransform(poly, transform) && assistantVisible==true) {
         // draw vanishing points
         QPointF intersection(0, 0);
-        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-            drawPath(gc, drawX(initialTransform.map(intersection)));
+        if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0 || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
+            if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+                drawPath(gc, drawX(initialTransform.map(intersection)));
+            }
         }
-        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-            drawPath(gc, drawX(initialTransform.map(intersection)));
+        if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0 || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
+            if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+                drawPath(gc, drawX(initialTransform.map(intersection)));
+            }
         }
     }
 
@@ -215,34 +219,39 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         QPointF intersectTransformed(0, 0); //dummy for holding transformed intersection so the code is more readable.
 
         if (poly.containsPoint(initialTransform.inverted().map(mousePos), Qt::OddEvenFill)==true){
-            if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                intersectTransformed = initialTransform.map(intersection); 
-                snapLine = QLineF(intersectTransformed, mousePos);
-                KisAlgebra2D::intersectLineRect(snapLine, viewport);
-                bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
-                QPainterPath path;
-                if (bounds.contains(intersectTransformed.toPoint())){
-                    path2.moveTo(intersectTransformed);
-                    path2.lineTo(snapLine.p1());
-                }
-                else {
-                    path2.moveTo(snapLine.p1());
-                    path2.lineTo(snapLine.p2());
+            //check if the lines aren't parallel to each other to avoid calculation errors in the intersection calculation (bug 345754)//
+            if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0 || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
+                if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+                    intersectTransformed = initialTransform.map(intersection); 
+                    snapLine = QLineF(intersectTransformed, mousePos);
+                    KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                    bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                    QPainterPath path;
+                    if (bounds.contains(intersectTransformed.toPoint())){
+                        path2.moveTo(intersectTransformed);
+                        path2.lineTo(snapLine.p1());
+                    }
+                    else {
+                        path2.moveTo(snapLine.p1());
+                        path2.lineTo(snapLine.p2());
+                    }
                 }
             }
-            if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                intersectTransformed = initialTransform.map(intersection); 
-                snapLine = QLineF(intersectTransformed, mousePos);
-                KisAlgebra2D::intersectLineRect(snapLine, viewport);
-                bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
-                QPainterPath path;
-                if (bounds.contains(intersectTransformed.toPoint())){
-                    path2.moveTo(intersectTransformed);
-                    path2.lineTo(snapLine.p1());
-                }
-                else {
-                    path2.moveTo(snapLine.p1());
-                    path2.lineTo(snapLine.p2());
+            if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0 || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
+                if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+                    intersectTransformed = initialTransform.map(intersection); 
+                    snapLine = QLineF(intersectTransformed, mousePos);
+                    KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                    bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                    QPainterPath path;
+                    if (bounds.contains(intersectTransformed.toPoint())){
+                        path2.moveTo(intersectTransformed);
+                        path2.lineTo(snapLine.p1());
+                    }
+                    else {
+                        path2.moveTo(snapLine.p1());
+                        path2.lineTo(snapLine.p2());
+                    }
                 }
             }
             drawPreview(gc, path2);

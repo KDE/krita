@@ -29,8 +29,10 @@
 
 #include <iostream>
 
-KisRateOption::KisRateOption(const QString& name, const QString& label, bool checked, const QString& category):
-    KisCurveOption(label, name, category, checked) { }
+KisRateOption::KisRateOption(const QString& name, KisPaintOpOption::PaintopCategory category, bool checked):
+    KisCurveOption(name, category, checked)
+{
+}
 
 void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {

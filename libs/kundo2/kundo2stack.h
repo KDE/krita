@@ -193,6 +193,8 @@ public Q_SLOTS:
     virtual void redo();
     void setActive(bool active = true);
 
+    void purgeRedoState();
+
 Q_SIGNALS:
     void indexChanged(int idx);
     void cleanChanged(bool clean);

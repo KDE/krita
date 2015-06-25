@@ -60,7 +60,8 @@ public Q_SLOTS:
     void slotSetSizemod(int);
     void slotSetFeather(int);
 
-
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 
 private:
     void updateGUI();

@@ -39,8 +39,10 @@ public:
 };
 
 KisDynaOpOption::KisDynaOpOption()
-    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisDynaOpOption");
+
     m_checkable = false;
     m_options = new KisDynaOpOptionsWidget();
 

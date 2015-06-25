@@ -2,111 +2,94 @@
 <ui version="4.0">
  <class>WdgGeometryOptions</class>
  <widget class="QWidget" name="WdgGeometryOptions">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>239</width>
-    <height>119</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Geometry Options</string>
   </property>
-  <layout class="QGridLayout">
-   <item row="0" column="0" colspan="2">
-    <layout class="QGridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="textLabelOutline">
-       <property name="text">
-        <string>Outline:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+  <layout class="QFormLayout">
+   <property name="labelAlignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+   <property name="horizontalSpacing">
+    <number>1</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>1</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="2" column="0">
+    <widget class="QLabel" name="textLabelOutline">
+     <property name="text">
+      <string>Outline:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="cmbOutline">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>No Outline</string>
+      </property>
      </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="cmbOutline">
-       <item>
-        <property name="text">
-         <string>No Outline</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Brush</string>
-        </property>
-       </item>
-      </widget>
+     <item>
+      <property name="text">
+       <string>Brush</string>
+      </property>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="textLabelFill">
-       <property name="text">
-        <string>Fill:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="cmbFill">
-       <item>
-        <property name="text">
-         <string>Not Filled</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Foreground Color</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Background Color</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Pattern</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
+    </widget>
    </item>
    <item row="1" column="0">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QLabel" name="textLabelFill">
+     <property name="text">
+      <string>Fill:</string>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>69</width>
-       <height>31</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
    <item row="1" column="1">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    <widget class="QComboBox" name="cmbFill">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>111</width>
-       <height>41</height>
-      </size>
-     </property>
-    </spacer>
+     <item>
+      <property name="text">
+       <string>Not Filled</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Foreground Color</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Background Color</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Pattern</string>
+      </property>
+     </item>
+    </widget>
    </item>
   </layout>
  </widget>

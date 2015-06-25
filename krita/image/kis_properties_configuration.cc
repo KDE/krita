@@ -93,7 +93,7 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
         }
         n = n.nextSibling();
     }
-    dump();
+    //dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -122,7 +122,7 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
             type = "string";
         } else if(v.type() == QVariant::ByteArray ) {
-            text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitary Data
+            text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitrary Data
             type = "bytearray";
         } else {
             text = doc.createTextNode(v.toString());
@@ -280,28 +280,10 @@ QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
 {
     return d->properties;
 }
-bool KisPropertiesConfiguration::removeProperty(const QString & name)
+
+void KisPropertiesConfiguration::removeProperty(const QString & name)
 {
-    if(hasProperty(name)){
-        KisPropertiesConfiguration *temp = new KisPropertiesConfiguration();
-        QMapIterator<QString, QVariant> selfMapIterator(getProperties());
-        while(selfMapIterator.hasNext()){
-            selfMapIterator.next();
-            temp->setProperty(selfMapIterator.key(),QVariant(selfMapIterator.value()));
-        }
-        clearProperties();
-        QMapIterator<QString, QVariant> newMapIterator(temp->getProperties());
-        while(newMapIterator.hasNext()){
-            newMapIterator.next();
-            if(newMapIterator.key()!=name){
-                setProperty(newMapIterator.key(),QVariant(newMapIterator.value()));
-            }
-        }
-        return true;
-    }
-    else{
-        return false;
-    }
+    d->properties.remove(name);
 }
 
 // --- factory ---

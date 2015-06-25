@@ -105,7 +105,7 @@ QSize StylesComboPreview::availableSize() const
     return QSize(contentsRect().width()- m_addButton->width(), contentsRect().height()); ///TODO dynamic resizing when button shown/hidden.
 }
 
-void StylesComboPreview::setPreview(QImage image)
+void StylesComboPreview::setPreview(const QImage &image)
 {
     m_stylePreview = image;
 }

@@ -2,7 +2,7 @@
 Categories=Qt;KDE;Office;Graphics;
 Exec=krita %u
 GenericName=
-Icon=krita
+Icon=calligrakrita
 MimeType=image/x-r16;
 Name=Krita
 Name[af]=Krita

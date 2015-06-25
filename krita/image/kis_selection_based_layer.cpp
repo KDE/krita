@@ -140,9 +140,9 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
         projection->clear(rect);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_OVER));
         gc.setSelection(tempSelection);
-    } else
+    } else {
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-
+    }
 
     gc.bitBlt(rect.topLeft(), original, rect);
 

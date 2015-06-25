@@ -21,8 +21,6 @@
 
 #include "kis_node.h"
 #include "kis_types.h"
-#include "kis_clone_layer.h"
-#include "kis_group_layer.h"
 #include "kis_base_rects_walker.h"
 
 
@@ -43,46 +41,38 @@ public:
     {
     }
 
-private:
-    inline bool canHaveChildLayers(KisNodeSP node) {
-        return qobject_cast<KisGroupLayer*>(node.data());
-    }
-    static inline bool isRootNode(KisNodeSP node) {
-        return !node->parent();
-    }
-
 protected:
     KisRefreshSubtreeWalker() {}
 
 
-    QRect calculateChangeRect(KisNodeSP startWith,
+    QRect calculateChangeRect(KisProjectionLeafSP startWith,
                               const QRect &requestedRect) {
 
-        if(!isLayer(startWith))
+        if(!startWith->isLayer())
             return requestedRect;
 
         QRect childrenRect;
         QRect tempRect = requestedRect;
         bool changeRectVaries = false;
 
-        KisNodeSP currentNode = startWith->firstChild();
-        KisNodeSP prevNode;
-        KisNodeSP nextNode;
+        KisProjectionLeafSP currentLeaf = startWith->firstChild();
+        KisProjectionLeafSP prevLeaf;
+        KisProjectionLeafSP nextLeaf;
 
-        while(currentNode) {
-            nextNode = currentNode->nextSibling();
+        while(currentLeaf) {
+            nextLeaf = currentLeaf->nextSibling();
 
-            if(isLayer(currentNode)) {
-                tempRect = calculateChangeRect(currentNode, tempRect);
+            if(currentLeaf->isLayer()) {
+                tempRect |= calculateChangeRect(currentLeaf, requestedRect);
 
                 if(!changeRectVaries)
                     changeRectVaries = tempRect != requestedRect;
 
                 childrenRect = tempRect;
-                prevNode = currentNode;
+                prevLeaf = currentLeaf;
             }
 
-            currentNode = nextNode;
+            currentLeaf = nextLeaf;
         }
 
         tempRect |= startWith->projectionPlane()->changeRect(requestedRect | childrenRect);
@@ -95,28 +85,41 @@ protected:
         return tempRect;
     }
 
-    void startTrip(KisNodeSP startWith) {
-        calculateChangeRect(startWith, requestedRect());
+    void startTrip(KisProjectionLeafSP startWith) {
+        setExplicitChangeRect(startWith, requestedRect(), false);
 
-        if(startWith == startNode()) {
-            NodePosition pos = N_EXTRA | calculateNodePosition(startWith);
-            registerNeedRect(startWith, pos);
-        }
+        if (isStartLeaf(startWith)) {
+            KisProjectionLeafSP extraUpdateLeaf = startWith;
 
+            if (startWith->isMask()) {
+                /**
+                 * When the mask is the root of the update, update
+                 * its parent projection using N_EXTRA method.
+                 *
+                 * This special update is necessary because the following
+                 * wolker will work in N_ABOVE_FILTHY mode only
+                 */
 
-        KisNodeSP currentNode = startWith->lastChild();
-        while(currentNode) {
-            NodePosition pos = N_FILTHY | calculateNodePosition(currentNode);
-            registerNeedRect(currentNode, pos);
-            currentNode = currentNode->prevSibling();
-        }
-
-        currentNode = startWith->lastChild();
-        while(currentNode) {
-            if(canHaveChildLayers(currentNode)) {
-                startTrip(currentNode);
+                extraUpdateLeaf = startWith->parent();
             }
-            currentNode = currentNode->prevSibling();
+
+            NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateLeaf);
+            registerNeedRect(extraUpdateLeaf, pos);
+        }
+
+        KisProjectionLeafSP currentLeaf = startWith->lastChild();
+        while(currentLeaf) {
+            NodePosition pos = N_FILTHY | calculateNodePosition(currentLeaf);
+            registerNeedRect(currentLeaf, pos);
+            currentLeaf = currentLeaf->prevSibling();
+        }
+
+        currentLeaf = startWith->lastChild();
+        while(currentLeaf) {
+            if(currentLeaf->canHaveChildLayers()) {
+                startTrip(currentLeaf);
+            }
+            currentLeaf = currentLeaf->prevSibling();
         }
     }
 };

@@ -56,6 +56,8 @@
 #include "KoResourceModel.h"
 #include "KoResource.h"
 #include "KoResourceTaggingManager.h"
+#include "KoTagFilterWidget.h"
+#include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
 
 class KoResourceItemChooser::Private
@@ -65,10 +67,16 @@ public:
         : model(0)
         , view(0)
         , buttonGroup(0)
+        , viewModeButton(0)
+        , usePreview(false)
+        , previewScroller(0)
+        , previewLabel(0)
+        , splitter(0)
         , tiledPreview(false)
         , grayscalePreview(false)
         , synced(false)
         , updatesBlocked(false)
+        , savedResourceWhileReset(0)
     {}
     KoResourceModel* model;
     KoResourceTaggingManager* tagManager;
@@ -77,6 +85,8 @@ public:
     QToolButton  *viewModeButton;
 
     QString knsrcFile;
+
+    bool usePreview;
     QScrollArea *previewScroller;
     QLabel *previewLabel;
     QSplitter *splitter;
@@ -84,37 +94,53 @@ public:
     bool grayscalePreview;
     bool synced;
     bool updatesBlocked;
+
+    KoResource *savedResourceWhileReset;
 };
 
-KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent )
-    : QWidget( parent ), d( new Private() )
+KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent, bool usePreview)
+    : QWidget( parent )
+    , d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
 
     d->splitter = new QSplitter(this);
 
     d->model = new KoResourceModel(resourceAdapter, this);
+    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource*)), SLOT(slotBeforeResourcesLayoutReset(KoResource*)));
+    connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
+
     d->view = new KoResourceItemView(this);
     d->view->setModel(d->model);
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     d->view->viewport()->installEventFilter(this);
 
-    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)),
-            this, SLOT(activated(QModelIndex)));
-    connect (d->view, SIGNAL(contextMenuRequested(QPoint)),
-            this, SLOT(contextMenuRequested(QPoint)));
+    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(clicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect (d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
 
-    d->previewScroller = new QScrollArea(this);
-    d->previewScroller->setWidgetResizable(true);
-    d->previewScroller->setBackgroundRole(QPalette::Dark);
-    d->previewScroller->setVisible(false);
-    d->previewScroller->setAlignment(Qt::AlignCenter);
-    d->previewLabel = new QLabel(this);
-    d->previewScroller->setWidget(d->previewLabel);
+    connect (d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
 
     d->splitter->addWidget(d->view);
-    d->splitter->addWidget(d->previewScroller);
+    d->splitter->setStretchFactor(0, 2);
+
+    d->usePreview = usePreview;
+    if (d->usePreview) {
+        d->previewScroller = new QScrollArea(this);
+        d->previewScroller->setWidgetResizable(true);
+        d->previewScroller->setBackgroundRole(QPalette::Dark);
+        d->previewScroller->setVisible(true);
+        d->previewScroller->setAlignment(Qt::AlignCenter);
+        d->previewLabel = new QLabel(this);
+        d->previewScroller->setWidget(d->previewLabel);
+        d->splitter->addWidget(d->previewScroller);
+
+        if (d->splitter->count() == 2) {
+            d->splitter->setSizes(QList<int>() << 280 << 160);
+        }
+    }
+
     d->splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
@@ -178,7 +204,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
-    showTaggingBar(false,false);
+    showTaggingBar(false);
     activated(d->model->index(0, 0));
 }
 
@@ -286,9 +312,10 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 #endif
 }
 
-void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
+void KoResourceItemChooser::showTaggingBar(bool show)
 {
-    d->tagManager->showTaggingBar(showSearchBar, showOpBar);
+    d->tagManager->showTaggingBar(show);
+
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )
@@ -305,10 +332,6 @@ void KoResourceItemChooser::setRowCount( int rowCount )
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
-    //Force an update to get the right column width
-    QRect geometry = d->view->geometry();
-    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
-    d->view->setGeometry(geometry);
 }
 
 void KoResourceItemChooser::setRowHeight( int rowHeight )
@@ -350,9 +373,18 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
     updatePreview(resource);
 }
 
-void KoResourceItemChooser::showPreview(bool show)
+void KoResourceItemChooser::slotBeforeResourcesLayoutReset(KoResource *activateAfterReset)
 {
-    d->previewScroller->setVisible(show);
+    d->savedResourceWhileReset = activateAfterReset ? activateAfterReset : currentResource();
+}
+
+void KoResourceItemChooser::slotAfterResourcesLayoutReset()
+{
+    if (d->savedResourceWhileReset) {
+        this->blockSignals(true);
+        setCurrentResource(d->savedResourceWhileReset);
+        this->blockSignals(false);
+    }
 }
 
 void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
@@ -424,7 +456,7 @@ void KoResourceItemChooser::updateButtonState()
 
 void KoResourceItemChooser::updatePreview(KoResource *resource)
 {
-    if (!resource) return;
+    if (!d->usePreview || !resource) return;
 
     QImage image = resource->image();
 

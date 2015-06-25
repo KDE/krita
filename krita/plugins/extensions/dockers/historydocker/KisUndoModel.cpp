@@ -86,6 +86,7 @@ void KisUndoModel::setStack(KUndo2QStack *stack)
         return;
 
     if (m_stack != 0) {
+        disconnect(m_stack, SIGNAL(canRedoChanged(bool)), this, SLOT(stackChanged()));
         disconnect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
         disconnect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));
         disconnect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
@@ -95,6 +96,7 @@ void KisUndoModel::setStack(KUndo2QStack *stack)
     m_stack = stack;
 
     if (m_stack != 0) {
+        connect(m_stack, SIGNAL(canRedoChanged(bool)), this, SLOT(stackChanged()));
         connect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
         connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));
         connect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));

@@ -37,6 +37,7 @@ const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
 const QString ICC_PATH = "/annotations/icc";
+const QString LAYER_STYLES_PATH = "/annotations/layerstyles.asl";
 const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 
@@ -102,6 +103,8 @@ const QString Y_SCALE = "y_scale";
 const QString Y_SHEAR = "y_shear";
 const QString Y_TRANSLATION = "y_translation";
 const QString ACTIVE = "active";
+const QString LAYER_STYLE_UUID = "layerstyle";
+const QString PASS_THROUGH_MODE = "passthrough";
 }
 
 

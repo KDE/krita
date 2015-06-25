@@ -23,6 +23,7 @@ set(kowidgets_LIB_SRCS
     KoPositionSelector.cpp
     KoSliderCombo.cpp
     KoColorPopupButton.cpp
+    KoConfigAuthorPage.cpp
     KoUnitDoubleSpinBox.cpp
     KoZoomAction.cpp
     KoZoomController.cpp
@@ -86,6 +87,7 @@ set(kowidgets_LIB_SRCS
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
+    KoConfigAuthorPage.ui
     KoCsvImportDialog.ui
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
@@ -114,7 +116,6 @@ install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
     KoGlobal.h
     KoResourceItemChooserContextMenu.h
-    KoResourceTaggingManager.h
     KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h

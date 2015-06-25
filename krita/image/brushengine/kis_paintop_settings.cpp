@@ -34,7 +34,7 @@
 #include "kis_paint_device.h"
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
-#include "kis_paintop_settings_widget.h"
+#include "kis_paintop_config_widget.h"
 #include "kis_paintop_preset.h"
 #include <time.h>
 #include<kis_types.h>
@@ -42,7 +42,7 @@
 struct KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
 
-    QPointer<KisPaintOpSettingsWidget> settingsWidget;
+    QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
 
@@ -80,7 +80,7 @@ KisPaintOpSettings::~KisPaintOpSettings()
 {
 }
 
-void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
+void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
     d->settingsWidget = widget;
 }
@@ -202,7 +202,7 @@ void KisPaintOpSettings::setModelName(const QString & modelName)
     d->modelName = modelName;
 }
 
-KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
+KisPaintOpConfigWidget* KisPaintOpSettings::optionsWidget() const
 {
     if (d->settingsWidget.isNull())
         return 0;
@@ -228,7 +228,7 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
         path = ellipseOutline(10, 10, 1.0, 0).translated(info.pos());
     }
 

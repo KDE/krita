@@ -29,7 +29,7 @@ Label::~Label()
 {
 }
 
-QString Label::caption()
+QString Label::caption() const
 {
     return m_label->text();
 }
@@ -39,7 +39,7 @@ void Label::setCaption(const QString& c)
     m_label->setText(c);
 }
 
-int Label::horizontalAlignment()
+int Label::horizontalAlignment() const
 {
     const QString a = m_label->m_horizontalAlignment->value().toString().toLower();
 
@@ -72,7 +72,7 @@ void Label::setHorizonalAlignment(int a)
     }
 }
 
-int Label::verticalAlignment()
+int Label::verticalAlignment() const
 {
     const QString a = m_label->m_horizontalAlignment->value().toString().toLower();
 
@@ -105,7 +105,7 @@ void Label::setVerticalAlignment(int a)
     }
 }
 
-QColor Label::backgroundColor()
+QColor Label::backgroundColor() const
 {
     return m_label->m_backgroundColor->value().value<QColor>();
 }
@@ -114,7 +114,7 @@ void Label::setBackgroundColor(const QColor& c)
     m_label->m_backgroundColor->setValue(c);
 }
 
-QColor Label::foregroundColor()
+QColor Label::foregroundColor() const
 {
     return m_label->m_foregroundColor->value().value<QColor>();
 }
@@ -123,7 +123,7 @@ void Label::setForegroundColor(const QColor& c)
     m_label->m_foregroundColor->setValue(c);
 }
 
-int Label::backgroundOpacity()
+int Label::backgroundOpacity() const
 {
     return m_label->m_backgroundOpacity->value().toInt();
 }
@@ -132,7 +132,7 @@ void Label::setBackgroundOpacity(int o)
     m_label->m_backgroundOpacity->setValue(o);
 }
 
-QColor Label::lineColor()
+QColor Label::lineColor() const
 {
     return m_label->m_lineColor->value().value<QColor>();
 }
@@ -141,7 +141,7 @@ void Label::setLineColor(const QColor& c)
     m_label->m_lineColor->setValue(c);
 }
 
-int Label::lineWeight()
+int Label::lineWeight() const
 {
     return m_label->m_lineWeight->value().toInt();
 }
@@ -150,7 +150,7 @@ void Label::setLineWeight(int w)
     m_label->m_lineWeight->setValue(w);
 }
 
-int Label::lineStyle()
+int Label::lineStyle() const
 {
     return m_label->m_lineStyle->value().toInt();
 }
@@ -162,7 +162,7 @@ void Label::setLineStyle(int s)
     m_label->m_lineStyle->setValue(s);
 }
 
-QPointF Label::position()
+QPointF Label::position() const
 {
     return m_label->m_pos.toPoint();
 }
@@ -171,7 +171,7 @@ void Label::setPosition(const QPointF &p)
     m_label->m_pos.setPointPos(p);
 }
 
-QSizeF Label::size()
+QSizeF Label::size() const
 {
     return m_label->m_size.toPoint();
 }

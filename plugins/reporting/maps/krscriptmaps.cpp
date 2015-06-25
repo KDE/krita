@@ -25,6 +25,9 @@ namespace Scripting
 Maps::Maps(KoReportItemMaps *i)
 {
     m_map = i;
+    m_map->m_latDataSetFromScript = false;
+    m_map->m_longDataSetFromScript = false;
+    m_map->m_zoomDataSetFromScript = false;
 }
 
 
@@ -50,30 +53,23 @@ void Maps::setSize(const QSizeF& s)
     m_map->m_size.setPointSize(s);
 }
 
-QString Maps::resizeMode()
+void Maps::setLatitude(qreal lat)
 {
-    return m_map->m_resizeMode->value().toString();
+    m_map->m_latitude = lat;
+    m_map->m_latDataSetFromScript = true;
 }
 
-void Maps::setResizeMode(const QString &rm)
+void Maps::setLongitude(qreal lon)
 {
-    if (rm == "Stretch") {
-        m_map->m_resizeMode->setValue("Stretch");
-    } else {
-        m_map->m_resizeMode->setValue("Clip");
-    }
+    m_map->m_longtitude = lon;
+    m_map->m_longDataSetFromScript = true;
 }
 
-void Maps::setInlineImage(const QByteArray &/*ba*/)
+void Maps::setZoom(int z)
 {
-    //m_map->setInlineImageData(ba);
+    m_map->m_zoom = z;
+    m_map->m_zoomDataSetFromScript = true;
 }
 
-void Maps::loadFromFile(const QVariant &pth)
-{
-    QPixmap img;
 
-    QString str = pth.toString();
-    //m_map->setInlineImageData(QByteArray(), str);
-}
 }

@@ -54,13 +54,13 @@ private Q_SLOTS:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
     void styleSelected(int index);
-    void styleSelected(QModelIndex &index);
+    void styleSelected(const QModelIndex &index);
     void slotShowStyleManager(int index);
 
 Q_SIGNALS:
     void doneWithFocus();
     void characterStyleSelected(KoCharacterStyle *);
-    void newStyleRequested(QString name);
+    void newStyleRequested(const QString &name);
     void showStyleManager(int styleId);
 
 private:

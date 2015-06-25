@@ -12,7 +12,7 @@
     <Action name="view_show_just_the_canvas" icon="" text="Show Canvas Only" whatsThis="" toolTip="Shows just the canvas or the whole window" iconText="Show Canvas Only" shortcut="Tab" defaultShortcut="Tab" isCheckable="false" statusTip=""/>
     <Action name="edit_blacklist_cleanup" icon="" text="Cleanup removed files..." whatsThis="" toolTip="Cleanup removed files" iconText="Cleanup removed files" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="filter_apply_again" icon="" text="Apply Filter Again" whatsThis="" toolTip="Apply Filter Again" iconText="Apply Filter Again" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="color_filters" icon="" text="Colors" whatsThis="" toolTip="Colors" iconText="Colors" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="color_filters" icon="" text="Colors" whatsThis="" toolTip="Colors" iconText="Colors" shortcut="" defaultShortcut="Ctrl+F" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_colortoalpha" icon="" text="&amp;Color to Alpha..." whatsThis="" toolTip="Color to Alpha" iconText="Color to Alpha" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="edge_filters" icon="" text="Edge Detection" whatsThis="" toolTip="Edge Detection" iconText="Edge Detection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_top edge detections" icon="" text="Top Edge Detection" whatsThis="" toolTip="Top Edge Detection" iconText="Top Edge Detection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -69,7 +69,7 @@
     <Action name="edit_cut" icon="edit-cut" text="Cu&amp;t" whatsThis="" toolTip="Cut selection to clipboard" iconText="Cut" shortcut="Ctrl+X; Shift+Del" defaultShortcut="Ctrl+X; Shift+Del" isCheckable="false" statusTip=""/>
     <Action name="edit_copy" icon="edit-copy" text="&amp;Copy" whatsThis="" toolTip="Copy selection to clipboard" iconText="Copy" shortcut="Ctrl+C; Ctrl+Ins" defaultShortcut="Ctrl+C; Ctrl+Ins" isCheckable="false" statusTip=""/>
     <Action name="edit_paste" icon="edit-paste" text="&amp;Paste" whatsThis="" toolTip="Paste clipboard content" iconText="Paste" shortcut="Ctrl+V; Shift+Ins" defaultShortcut="Ctrl+V; Shift+Ins" isCheckable="false" statusTip=""/>
-    <Action name="paste_new" icon="" text="Paste into &amp;New Image" whatsThis="" toolTip="Paste into New Image" iconText="Paste into New Image" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="paste_new" icon="" text="Paste into &amp;New Image" whatsThis="" toolTip="Paste into New Image" iconText="Paste into New Image" shortcut="Ctrl+Shift+N" defaultShortcut="Ctrl+Shift+N" isCheckable="false" statusTip=""/>
     <Action name="paste_at" icon="" text="Paste at cursor" whatsThis="" toolTip="Paste at cursor" iconText="Paste at cursor" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="copy_merged" icon="" text="Copy merged" whatsThis="" toolTip="Copy merged" iconText="Copy merged" shortcut="Ctrl+Shift+C" defaultShortcut="Ctrl+Shift+C" isCheckable="false" statusTip=""/>
     <Action name="select_all" icon="edit-select-all" text="Select &amp;All" whatsThis="" toolTip="Select All" iconText="Select All" shortcut="Ctrl+A" defaultShortcut="Ctrl+A" isCheckable="false" statusTip=""/>
@@ -231,7 +231,6 @@
     <Action name="selectopaque" icon="" text="Select Opaque" whatsThis="" toolTip="Select Opaque" iconText="Select Opaque" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagecolorspaceconversion" icon="" text="&amp;Convert Image Color Space..." whatsThis="" toolTip="Convert Image Color Space" iconText="Convert Image Color Space" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="layercolorspaceconversion" icon="" text="&amp;Convert Layer Color Space..." whatsThis="" toolTip="Convert Layer Color Space" iconText="Convert Layer Color Space" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="dropshadow" icon="" text="Add Drop Shadow..." whatsThis="" toolTip="Add Drop Shadow" iconText="Add Drop Shadow" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="gmic" icon="" text="Apply G'Mic Action..." whatsThis="" toolTip="Apply G'Mic Action" iconText="Apply G'Mic Action" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="histogram" icon="" text="&amp;Histogram..." whatsThis="" toolTip="Histogram" iconText="Histogram" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagesize" icon="" text="Scale To New Size..." whatsThis="" toolTip="Scale To New Size" iconText="Scale To New Size" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

@@ -66,6 +66,12 @@ public:
     void forgetTileData(KisTileData *td);
 
     /**
+     * Retorns the metric of the total memory stored in the swap
+     * in *uncompressed* form!
+     */
+    qint64 totalMemoryMetric() const;
+
+    /**
      * Some debugging output
      */
     void debugStatistics();
@@ -78,6 +84,8 @@ private:
     KisMemoryWindow *m_swapSpace;
 
     QMutex m_lock;
+
+    qint64 m_memoryMetric;
 };
 
 #endif /* __KIS_SWAPPED_DATA_STORE_H */

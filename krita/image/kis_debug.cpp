@@ -18,6 +18,8 @@
 
 #include "kis_debug.h"
 
+#include <string>
+
 #include <QRect>
 #include <QString>
 #include <QImage>
@@ -44,4 +46,15 @@ void kis_debug_save_device_incremental(KisPaintDeviceSP device,
 
     qDebug() << "Dumping:" << filename;
     device->convertToQImage(0, saveRect).save(filename);
+}
+
+const char* __methodName(const char *_prettyFunction)
+{
+    std::string prettyFunction(_prettyFunction);
+
+    size_t colons = prettyFunction.find("::");
+    size_t begin = prettyFunction.substr(0,colons).rfind(" ") + 1;
+    size_t end = prettyFunction.rfind("(") - begin;
+
+    return std::string(prettyFunction.substr(begin,end) + "()").c_str();
 }

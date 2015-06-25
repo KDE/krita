@@ -1260,7 +1260,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                     sql += QLatin1Char('*');
             } else {
                 if (f->isExpression()) {
-                    sql += f->expression()->toString();
+                    sql += f->expression()->toString(driver);
                 } else {
                     if (!f->table()) //sanity check
                         return QString();
@@ -1495,9 +1495,9 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         QuerySchemaParameterValueListIterator *paramValuesItPtr = params.isEmpty() ? 0 : &paramValuesIt;
         if (wasWhere) {
 //TODO: () are not always needed
-            s_where = '(' + s_where + ") AND (" + querySchema.whereExpression()->toString(paramValuesItPtr) + ')';
+            s_where = '(' + s_where + ") AND (" + querySchema.whereExpression()->toString(driver, paramValuesItPtr) + ')';
         } else {
-            s_where = querySchema.whereExpression()->toString(paramValuesItPtr);
+            s_where = querySchema.whereExpression()->toString(driver, paramValuesItPtr);
         }
     }
     if (!s_where.isEmpty())

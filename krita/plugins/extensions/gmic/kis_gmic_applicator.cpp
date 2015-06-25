@@ -30,6 +30,7 @@
 #include <gmic.h>
 #include "kis_gmic_synchronize_layers_command.h"
 #include "kis_export_gmic_processing_visitor.h"
+#include "kis_gmic_synchronize_image_size_command.h"
 
 KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false)
 {
@@ -59,11 +60,11 @@ void KisGmicApplicator::preview()
     cancel();
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
+    emitSignals << ComplexSizeChangedSignal() << ModifiedSignal;
 
 
     m_applicator = new KisProcessingApplicator(m_image, m_node,
-            KisProcessingApplicator::RECURSIVE,
+            KisProcessingApplicator::RECURSIVE | KisProcessingApplicator::NO_UI_UPDATES,
             emitSignals, m_actionName);
     dbgPlugins << "Created applicator " << m_applicator;
 
@@ -92,6 +93,9 @@ void KisGmicApplicator::preview()
     connect(gmicCommand, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
 
     m_applicator->applyCommand(gmicCommand);
+
+    // synchronize Krita image size with biggest gmic layer size
+    m_applicator->applyCommand(new KisGmicSynchronizeImageSizeCommand(gmicLayers, m_image));
 
     // synchronize layer count
     m_applicator->applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);

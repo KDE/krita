@@ -30,7 +30,7 @@ class ManageBookmark : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ManageBookmark(QList<QString> nameList, KoTextEditor *editor, QWidget *parent = 0);
+    explicit ManageBookmark(const QList<QString> &nameList, KoTextEditor *editor, QWidget *parent = 0);
     QString bookmarkName() const;
     int bookmarkRow() const;
 
@@ -56,7 +56,7 @@ class ManageBookmarkDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit ManageBookmarkDialog(QList<QString> nameList, KoTextEditor *editor, QWidget *parent = 0);
+    explicit ManageBookmarkDialog(const QList<QString> &nameList, KoTextEditor *editor, QWidget *parent = 0);
     QString selectedBookmarkName();
 
 Q_SIGNALS:

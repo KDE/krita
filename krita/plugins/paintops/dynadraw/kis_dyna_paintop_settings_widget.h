@@ -19,10 +19,10 @@
 #ifndef KIS_DYNAPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_DYNAPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 
-class KisDynaPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisDynaPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 

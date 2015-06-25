@@ -38,6 +38,7 @@
 
 class KoID;
 class KisInputConfigurationPage;
+class KoConfigAuthorPage;
 
 /**
  *  "General"-tab for preferences dialog
@@ -63,7 +64,9 @@ public:
 
     GeneralTab(QWidget *parent = 0, const char *name = 0);
 
-    enumCursorStyle cursorStyle();
+    CursorStyle cursorStyle();
+    OutlineStyle outlineStyle();
+
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();
@@ -146,6 +149,8 @@ public:
   * "Performance"-tab for preferences dialog
  */
 
+class SliderAndSpinBoxSync;
+
 class WdgPerformanceSettings : public QWidget, public Ui::WdgPerformanceSettings
 {
     Q_OBJECT
@@ -163,8 +168,20 @@ class PerformanceTab : public WdgPerformanceSettings
 public:
     PerformanceTab(QWidget *parent = 0, const char *name = 0);
 
-public:
-    void setDefault();
+    ~PerformanceTab();
+
+    void load(bool requestDefault);
+    void save();
+
+private Q_SLOTS:
+
+    void selectSwapDir();
+
+private:
+    int realTilesRAM();
+
+private:
+    QVector<SliderAndSpinBoxSync*> m_syncs;
 };
 
 //=======================
@@ -291,6 +308,7 @@ protected:
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
+    KoConfigAuthorPage *m_authorPage;
 
 protected Q_SLOTS:
 

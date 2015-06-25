@@ -20,28 +20,24 @@
 #include "KoTemplateTree.h"
 
 #include <QDir>
-#include <QImage>
-#include <QPixmap>
 #include <QPrinter>
 
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kdebug.h>
 
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <stdlib.h>
 
 #include <KoTemplate.h>
 #include <KoTemplateGroup.h>
 #include <KoTemplates.h>
 
-KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
+KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath,
                                const KComponentData &componentData, bool readTree) :
-        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0),
+        m_templatesResourcePath(templatesResourcePath), m_componentData(componentData), m_defaultGroup(0),
         m_defaultTemplate(0)
 {
     if (readTree)
@@ -62,7 +58,7 @@ void KoTemplateTree::readTemplateTree()
 
 void KoTemplateTree::writeTemplateTree()
 {
-    QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
+    QString localDir = m_componentData.dirs()->saveLocation("data", m_templatesResourcePath);
 
     foreach (KoTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
@@ -139,7 +135,7 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 void KoTemplateTree::readGroups()
 {
 
-    QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
+    QStringList dirs = m_componentData.dirs()->findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);

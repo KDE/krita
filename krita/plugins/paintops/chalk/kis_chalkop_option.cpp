@@ -29,12 +29,13 @@ public:
 };
 
 KisChalkOpOption::KisChalkOpOption()
-    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
     m_options->hide();
 
+    setObjectName("KisChalkOpOption");
 
     // initialize values
     m_options->radiusSpinBox->setRange(0, 400);

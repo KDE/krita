@@ -544,7 +544,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
              t == KisTabletEvent::TabletReleaseEx)) {
 
             /**
-             * Eat events which do not correcpond to any mouse
+             * Eat events which do not correspond to any mouse
              * button. This can happen when the user assinged a stylus
              * key to e.g. some keyboard key
              */

@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -49,6 +50,8 @@ KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *disp
     , m_canvas(canvas)
 {
     m_layout = new QVBoxLayout(this);
+    m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(1);
     m_updateAllowed = true;
     
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
@@ -169,8 +172,10 @@ void KisColorSliderWidget::updateTimeout()
 void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
 {
     //qDebug()<<"check2";
+    QList<KisColorSliderInput*> visibleInputs;
     
     if (SlidersConfigArray[0]==true) {
+        visibleInputs.append(hsvH);
         hsvH->setVisible(true);
         connect(hsvH, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsvH, SLOT(update()));
@@ -190,6 +195,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[1]==true) {
+        visibleInputs.append(hsvS);
         hsvS->setVisible(true);
         connect(hsvS, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsvS, SLOT(update()));
@@ -209,6 +215,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[2]==true) {
+        visibleInputs.append(hsvV);
         hsvV->setVisible(true);
         connect(hsvV, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsvV, SLOT(update()));
@@ -228,6 +235,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[3]==true) {
+        visibleInputs.append(hslH);
         hslH->setVisible(true);
         connect(hslH, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hslH, SLOT(update()));
@@ -247,6 +255,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[4]==true) {
+        visibleInputs.append(hslS);
         hslS->setVisible(true);
         connect(hslS, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hslS, SLOT(update()));
@@ -266,6 +275,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[5]==true) {
+        visibleInputs.append(hslL);
         hslL->setVisible(true);
         connect(hslL, SIGNAL(updated()), this,  SLOT(update()));
         connect(this, SIGNAL(updated()), hslL, SLOT(update()));
@@ -285,6 +295,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[6]==true) {
+        visibleInputs.append(hsiH);
         hsiH->setVisible(true);
         connect(hsiH, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsiH, SLOT(update()));
@@ -304,6 +315,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[7]==true) {
+        visibleInputs.append(hsiS);
         hsiS->setVisible(true);
         connect(hsiS, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsiS, SLOT(update()));
@@ -323,6 +335,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[8]==true) {
+        visibleInputs.append(hsiI);
         hsiI->setVisible(true);
         connect(hsiI, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsiI, SLOT(update()));
@@ -342,6 +355,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[9]==true) {
+        visibleInputs.append(hsyH);
         hsyH->setVisible(true);
         connect(hsyH, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsyH, SLOT(update()));
@@ -361,6 +375,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[10]==true) {
+        visibleInputs.append(hsyS);
         hsyS->setVisible(true);
         connect(hsyS, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsyS, SLOT(update()));
@@ -380,6 +395,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
     }
 
     if (SlidersConfigArray[11]==true) {
+        visibleInputs.append(hsyY);
         hsyY->setVisible(true);
         connect(hsyY, SIGNAL(updated()), this, SLOT(update()));
         connect(this, SIGNAL(updated()), hsyY, SLOT(update()));
@@ -397,6 +413,21 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(toneUpdated(int, int)), hsyY, SLOT(toneUpdate(int, int)));
         disconnect(hsyY, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
+
+    QList<QLabel*> labels;
+    int labelWidth = 0;
+
+    Q_FOREACH (KisColorSliderInput* input, visibleInputs) {
+        Q_FOREACH (QLabel* label, input->findChildren<QLabel*>()) {
+            labels.append(label);
+            labelWidth = qMax(labelWidth, label->sizeHint().width());
+        }
+    }
+
+    Q_FOREACH (QLabel *label, labels) {
+        label->setMinimumWidth(labelWidth);
+    }
+
 
     updateTimeout();
 }

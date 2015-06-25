@@ -21,7 +21,9 @@
 #include <QObject>
 
 /**
- @author Adam Pigg <adam@piggz.co.uk>
+ @brief Helper for the scripting API to display user messages
+
+ Contains methods for display messages to the screen or console \n
 */
 class KRScriptDebug : public QObject
 {
@@ -32,7 +34,10 @@ public:
     ~KRScriptDebug();
 
 public Q_SLOTS:
+    //! Prints the given message to the console
     void print(const QString&);
+
+    //! Displays the given message and title in an information box
     void message(const QString &, const QString&);
 
 };

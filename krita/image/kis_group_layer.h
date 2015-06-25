@@ -47,6 +47,9 @@ public:
 
     QIcon icon() const;
 
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
+
     virtual void setImage(KisImageWSP image);
 
     virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
@@ -91,6 +94,9 @@ public:
      * \see setDefaultProjectionColor()
      */
     KoColor defaultProjectionColor() const;
+
+    bool passThroughMode() const;
+    void setPassThroughMode(bool value);
 
 protected:
     KisLayer* onlyMeaningfulChild() const;

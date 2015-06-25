@@ -64,7 +64,7 @@ public:
     /**
      * Return the list of documents currently being used for searching.
      */
-    QList<QTextDocument*> documents();
+    QList<QTextDocument*> documents() const;
     /**
      * Set the list of documents to use for searching.
      *

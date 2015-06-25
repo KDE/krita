@@ -17,6 +17,8 @@
  */
 
 #include "kis_merge_walker.h"
+#include "kis_projection_leaf.h"
+
 
 
 KisMergeWalker::KisMergeWalker(QRect cropRect,  Flags flags)
@@ -34,33 +36,33 @@ KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
     return m_flags == DEFAULT ? KisBaseRectsWalker::UPDATE : KisBaseRectsWalker::UPDATE_NO_FILTHY;
 }
 
-void KisMergeWalker::startTrip(KisNodeSP startWith)
+void KisMergeWalker::startTrip(KisProjectionLeafSP startLeaf)
 {
-    if(isMask(startWith)) {
-        startTripWithMask(startWith);
+    if(startLeaf->isMask()) {
+        startTripWithMask(startLeaf);
         return;
     }
 
-    visitHigherNode(startWith,
+    visitHigherNode(startLeaf,
                     m_flags == DEFAULT ? N_FILTHY : N_ABOVE_FILTHY);
 
-    KisNodeSP prevNode = startWith->prevSibling();
-    if(prevNode)
-        visitLowerNode(prevNode);
+    KisProjectionLeafSP prevLeaf = startLeaf->prevSibling();
+    if(prevLeaf)
+        visitLowerNode(prevLeaf);
 }
 
-void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
+void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask)
 {
     adjustMasksChangeRect(filthyMask);
 
-    KisNodeSP parentLayer = filthyMask->parent();
+    KisProjectionLeafSP parentLayer = filthyMask->parent();
     Q_ASSERT(parentLayer);
 
-    KisNodeSP nextNode = parentLayer->nextSibling();
-    KisNodeSP prevNode = parentLayer->prevSibling();
+    KisProjectionLeafSP nextLeaf = parentLayer->nextSibling();
+    KisProjectionLeafSP prevLeaf = parentLayer->prevSibling();
 
-    if (nextNode)
-        visitHigherNode(nextNode, N_ABOVE_FILTHY);
+    if (nextLeaf)
+        visitHigherNode(nextLeaf, N_ABOVE_FILTHY);
     else if (parentLayer->parent())
         startTrip(parentLayer->parent());
 
@@ -69,32 +71,32 @@ void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
         calculateNodePosition(parentLayer);
     registerNeedRect(parentLayer, positionToFilthy);
 
-    if(prevNode)
-        visitLowerNode(prevNode);
+    if(prevLeaf)
+        visitLowerNode(prevLeaf);
 }
 
-void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilthy)
+void KisMergeWalker::visitHigherNode(KisProjectionLeafSP leaf, NodePosition positionToFilthy)
 {
-    positionToFilthy |= calculateNodePosition(node);
+    positionToFilthy |= calculateNodePosition(leaf);
 
-    registerChangeRect(node, positionToFilthy);
+    registerChangeRect(leaf, positionToFilthy);
 
-    KisNodeSP nextNode = node->nextSibling();
-    if (nextNode)
-        visitHigherNode(nextNode, N_ABOVE_FILTHY);
-    else if (node->parent())
-        startTrip(node->parent());
+    KisProjectionLeafSP nextLeaf = leaf->nextSibling();
+    if (nextLeaf)
+        visitHigherNode(nextLeaf, N_ABOVE_FILTHY);
+    else if (leaf->parent())
+        startTrip(leaf->parent());
 
-    registerNeedRect(node, positionToFilthy);
+    registerNeedRect(leaf, positionToFilthy);
 }
 
-void KisMergeWalker::visitLowerNode(KisNodeSP node)
+void KisMergeWalker::visitLowerNode(KisProjectionLeafSP leaf)
 {
     NodePosition position =
-        N_BELOW_FILTHY | calculateNodePosition(node);
-    registerNeedRect(node, position);
+        N_BELOW_FILTHY | calculateNodePosition(leaf);
+    registerNeedRect(leaf, position);
 
-    KisNodeSP prevNode = node->prevSibling();
-    if (prevNode)
-        visitLowerNode(prevNode);
+    KisProjectionLeafSP prevLeaf = leaf->prevSibling();
+    if (prevLeaf)
+        visitLowerNode(prevLeaf);
 }

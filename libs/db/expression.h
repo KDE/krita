@@ -125,8 +125,12 @@ public:
 
     /*! \return string as a representation of this expression element by running recursive calls.
      \a param, if not 0, points to a list item containing value of a query parameter
-     (used in QueryParameterExpr). */
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0) = 0;
+     (used in QueryParameterExpr).
+     \a driver if present can be used to obtain information useful while generating native statement strings.
+     For example PostgreSQL uses ILIKE while other drivers use LIKE operator.
+     For generating KEXISQL \a driver is always 0.
+    @todo connection should be provided here as a context, not driver. */
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0) = 0;
 
     /*! Collects query parameters (messages and types) reculsively and saves them to params.
      The leaf nodes are objects of QueryParameterExpr class. */
@@ -147,7 +151,7 @@ public:
     static QString tokenToDebugString(int token);
 
     /*! \return string for token, like "<=" or ">" */
-    virtual QString tokenToString();
+    virtual QString tokenToString(const Driver *driver);
 
     int exprClass() const {
         return m_cl;
@@ -187,10 +191,10 @@ public:
     BaseExpr *arg(int n);
     int args();
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     virtual bool validate(ParseInfo& parseInfo);
-    virtual QString tokenToString();
+    virtual QString tokenToString(const Driver *driver);
 
     BaseExpr::List list;
 };
@@ -206,7 +210,7 @@ public:
     virtual UnaryExpr* copy() const;
     virtual Field::Type type();
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     BaseExpr *arg() const {
         return m_arg;
@@ -234,7 +238,7 @@ public:
     virtual BinaryExpr* copy() const;
     virtual Field::Type type();
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     BaseExpr *left() const {
         return m_larg;
@@ -243,7 +247,7 @@ public:
         return m_rarg;
     }
     virtual bool validate(ParseInfo& parseInfo);
-    virtual QString tokenToString();
+    virtual QString tokenToString(const Driver *driver);
 
     BaseExpr *m_larg;
     BaseExpr *m_rarg;
@@ -262,7 +266,7 @@ public:
     virtual ConstExpr* copy() const;
     virtual Field::Type type();
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     virtual bool validate(ParseInfo& parseInfo);
     QVariant value;
@@ -289,7 +293,7 @@ public:
     */
     void setType(Field::Type type);
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     virtual bool validate(ParseInfo& parseInfo);
 protected:
@@ -307,7 +311,7 @@ public:
     virtual VariableExpr* copy() const;
     virtual Field::Type type();
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
 
     /*! Validation. Sets field, tablePositionForField
@@ -351,7 +355,7 @@ public:
     virtual FunctionExpr* copy() const;
     virtual Field::Type type();
     virtual QString debugString();
-    virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+    virtual QString toString(const Driver *driver, QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     virtual bool validate(ParseInfo& parseInfo);
 

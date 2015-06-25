@@ -21,7 +21,7 @@
 #include "kis_vec.h"
 
 #include "kis_dynamic_sensor.h"
-//
+
 class KisDynamicSensorFade : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
@@ -45,7 +45,6 @@ public Q_SLOTS:
     virtual void fromXML(const QDomElement&);
 private:
     int m_counter;
-    int m_length;
     bool m_periodic;
 };
 

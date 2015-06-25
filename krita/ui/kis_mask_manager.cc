@@ -246,6 +246,10 @@ void KisMaskManager::duplicateMask()
     if (!activeMask()) return;
     if (!m_view->image()) return;
 
+    // If it's a global mask we shouldn't be able to duplicate
+    // TODO: Maybe add this check to KisSelectionMask function to know if it's global or not?
+    if(activeMask()->parent().data() == m_view->image()->rootLayer().data()) return;
+
     KisMaskSP newMask = dynamic_cast<KisMask*>(activeMask()->clone().data());
     newMask->setName(i18n("Duplication of ") + activeMask()->name());
     m_commandsAdapter->addNode(newMask, activeMask()->parent(), activeMask());

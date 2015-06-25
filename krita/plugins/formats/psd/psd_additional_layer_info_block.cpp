@@ -18,17 +18,40 @@
 
 #include "psd_additional_layer_info_block.h"
 
-#include <QBuffer>
+#include <QDomDocument>
 
-#include "psd_utils.h"
+#include <asl/kis_offset_on_exit_verifier.h>
+
+#include <asl/kis_asl_reader_utils.h>
+#include <asl/kis_asl_reader.h>
+#include <asl/kis_asl_writer_utils.h>
+#include <asl/kis_asl_writer.h>
+#include <asl/kis_asl_patterns_writer.h>
 
 
-PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock()
+PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader& header)
+    : m_header(header)
 {
 }
 
 bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 {
+    bool result = true;
+
+    try {
+        readImpl(io);
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        error = e.what();
+        result = false;
+    }
+
+    return result;
+}
+
+void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
+{
+    using namespace KisAslReaderUtils;
+
     QStringList longBlocks;
     if (m_header.version > 1) {
         longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
@@ -36,48 +59,36 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 
     while (!io->atEnd()) {
 
-        // read all the additional layer info 8BIM blocks
-        QByteArray b;
-        b = io->peek(4);
-        if (b.size() != 4 || QString(b) != "8BIM") {
-            error = "No 8BIM marker for additional layer info block";
-            return false;
-        }
-        else {
-            io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
+        {
+            const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
+            const quint32 refSignature2 = 0x38423634; // '8B64' in little-endian
+            if (!TRY_READ_SIGNATURE_2OPS_EX(io, refSignature1, refSignature2)) {
+                break;
+            }
         }
 
-        QString key(io->read(4));
-        if (key.size() != 4) {
-            error = "Could not read key for additional layer info block";
-            return false;
-        }
+        QString key = readFixedString(io);
         dbgFile << "found info block with key" << key;
+
+        quint64 blockSize = GARBAGE_VALUE_MARK;
+        if (longBlocks.contains(key)) {
+            SAFE_READ_EX(io, blockSize);
+        } else {
+            quint32 size32;
+            SAFE_READ_EX(io, size32);
+            blockSize = size32;
+        }
+
+        // offset verifier will correct the position on the exit from
+        // current namespace, including 'continue', 'return' and
+        // exceptions.
+        SETUP_OFFSET_VERIFIER(infoBlockEndVerifier, io, blockSize, 0);
+
         if (keys.contains(key)) {
             error = "Found duplicate entry for key ";
             continue;
         }
         keys << key;
-
-        quint64 size;
-        if (longBlocks.contains(key)) {
-            psdread(io, &size);
-        }
-        else {
-            quint32 _size;
-            psdread(io, &_size);
-            size = _size;
-        }
-
-        QByteArray data = io->read(size);
-        if (data.size() != (qint64)size) {
-            error = QString("Could not read full info block for key %1.").arg(key);
-            return false;
-        }
-
-        dbgFile << "\tRead layer info block" << key << "for size" << data.size();
-        QBuffer buf(&data);
-        buf.open(QBuffer::ReadOnly);
 
         if (key == "SoCo") {
 
@@ -140,50 +151,26 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 
         }
         else if (key == "lrFX") {
-//            if (!psdread(&buf, &layerEffects.version) || layerEffects.version != 0) {
-//                dbgFile << "Layer Effect version is not zero" << layerEffects.version;
-//                continue;
-//            }
-//            if (!psdread(&buf, &layerEffects.effects_count)
-//                    || layerEffects.effects_count < 6
-//                    || layerEffects.effects_count > 7) {
-//                dbgFile << "Wrong number of Layer Effects " << layerEffects.effects_count;
-//                continue;
-//            }
-//            for (int i = 0; i < layerEffects.effects_count; ++i) {
-//                QByteArray b;
-//                b = buf.peek(4);
-//                if (b.size() != 4 || QString(b) != "8BIM") {
-//                    error = "No 8BIM marker for lrFX block";
-//                    return false;
-//                }
-//                else {
-//                    buf.seek(buf.pos() + 4); // skip the 8BIM header we peeked ahead for
-//                }
-//                QString tag = QString(io->read(4));
-//                if (tag.size() != 4) {
-//                    error = "Could not read layer effect type tag";
-//                    return false;
-//                }
-
-//            }
-
+            // deprecated! use lfx2 instead!
         }
         else if (key == "tySh") {
         }
         else if (key == "luni") {
             // get the unicode layer name
-            psdread_unicodestring(&buf, unicodeLayerName);
+            unicodeLayerName = readUnicodeString(io);
             dbgFile << "unicodeLayerName" << unicodeLayerName;
         }
         else if (key == "lyid") {
 
         }
         else if (key == "lfx2") {
-
+            KisAslReader reader;
+            layerStyleXml = reader.readLfx2PsdSection(io);
         }
         else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
-
+            KisAslReader reader;
+            QDomDocument pattern = reader.readPsdSectionPattern(io, blockSize);
+            embeddedPatterns << pattern;
         }
         else if (key == "Anno") {
 
@@ -210,20 +197,32 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 
         }
         else if (key == "lsct") {
-            quint32 type;
-            if (!psdread(&buf, &type)) {
-                error = "Could not read group type";
-                return false;
+            quint32 dividerType = GARBAGE_VALUE_MARK;
+            SAFE_READ_EX(io, dividerType);
+            this->sectionDividerType = (psd_section_type)dividerType;
+
+            dbgFile << "Reading \"lsct\" block:";
+            dbgFile << ppVar(blockSize);
+            dbgFile << ppVar(dividerType);
+
+            if (blockSize >= 12) {
+                quint32 lsctSignature = GARBAGE_VALUE_MARK;
+                const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
+                SAFE_READ_SIGNATURE_EX(io, lsctSignature, refSignature1);
+
+                this->sectionDividerBlendMode = readFixedString(io);
+
+                dbgFile << ppVar(this->sectionDividerBlendMode);
             }
-            if (size >= 12) {
-                if (!psd_read_blendmode(io, sectionDividerBlendMode)) {
-                    error = QString("Could not read blend mode key. Got: %1").arg(sectionDividerBlendMode);
-                    return false;
-                }
+
+            // Animation
+            if (blockSize >= 14) {
+                /**
+                 * "I don't care
+                 *  I don't care, no... !" (c)
+                 */
             }
-            if (size >= 16) {
-                // Don't care: animation scene group
-            }
+
         }
         else if (key == "brst") {
 
@@ -327,11 +326,7 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
         else if (key == "FEid") {
 
         }
-
     }
-    return true;
-
-
 }
 
 bool PsdAdditionalLayerInfoBlock::write(QIODevice */*io*/, KisNodeSP /*node*/)
@@ -344,4 +339,61 @@ bool PsdAdditionalLayerInfoBlock::valid()
 {
 
     return true;
+}
+
+void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice* io, const QString &layerName)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("luni", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> layerNameSizeTag(io, 2);
+    KisAslWriterUtils::writeUnicodeString(layerName, io);
+}
+
+void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice* io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("lsct", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> sectionTypeSizeTag(io, 2);
+    SAFE_WRITE_EX(io, (quint32)sectionType);
+
+    QString realBlendModeKey = isPassThrough ? QString("pass") : blendModeKey;
+
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
+}
+
+void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("lfx2", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> lfx2SizeTag(io, 2);
+
+    try {
+        KisAslWriter writer;
+        writer.writePsdLfx2SectionEx(io, stylesXmlDoc);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qWarning() << "WARNING: Couldn't save layer style lfx2 block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
+}
+
+void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice* io, const QDomDocument &patternsXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("Patt", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> pattSizeTag(io, 2);
+
+    try {
+        KisAslPatternsWriter writer(patternsXmlDoc, io);
+        writer.writePatterns();
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qWarning() << "WARNING: Couldn't save layer style patterns block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
 }

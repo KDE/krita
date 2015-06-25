@@ -134,10 +134,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
 
     if(transaction) {
         delete transaction;
-        KisPainter p(dst);
-        p.setCompositeOp(COMPOSITE_COPY);
-        p.setSelection(selection);
-        p.bitBlt(applyRect.topLeft(), temporary, applyRect);
+        KisPainter::copyAreaOptimized(applyRect.topLeft(), temporary, dst, applyRect, selection);
     }
 }
 

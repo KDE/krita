@@ -29,6 +29,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
+#include <KoUnit.h>
 #include <kdebug.h>
 #include <FormulaEditor.h>
 

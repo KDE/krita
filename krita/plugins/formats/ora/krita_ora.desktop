@@ -2,7 +2,7 @@
 Categories=Qt;KDE;Office;Graphics;
 Comment=
 Exec=krita %u
-Icon=krita
+Icon=calligrakrita
 MimeType=image/openraster;
 Name=Krita
 Name[af]=Krita

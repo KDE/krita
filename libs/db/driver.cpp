@@ -67,6 +67,7 @@ DriverBehaviour::DriverBehaviour()
         , _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY(false)
         , SELECT_1_SUBQUERY_SUPPORTED(false)
         , TEXT_TYPE_MAX_LENGTH(0)
+        , LIKE_OPERATOR("LIKE")
 {
 }
 

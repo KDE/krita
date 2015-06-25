@@ -114,7 +114,6 @@ void DocumentManager::delayedNewDocument()
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
     }
-    KisPart::instance()->addDocument(d->document);
 
     if(d->newDocOptions.isEmpty())
     {
@@ -170,6 +169,8 @@ void DocumentManager::delayedNewDocument()
         d->document->resetURL();
     }
 
+    KisPart::instance()->addDocument(d->document);
+
     d->temporaryFile = true;
 
     emit documentChanged();
@@ -190,7 +191,7 @@ void DocumentManager::delayedOpenDocument()
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
     }
-    KisPart::instance()->addDocument(d->document);
+
 
     d->document->setModified(false);
     if (d->importingDocument)
@@ -198,6 +199,8 @@ void DocumentManager::delayedOpenDocument()
     else
         d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     d->recentFileManager->addRecent(d->openDocumentFilename);
+
+    KisPart::instance()->addDocument(d->document);
 
     d->temporaryFile = false;
 

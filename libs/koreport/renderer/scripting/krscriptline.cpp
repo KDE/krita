@@ -31,7 +31,7 @@ Line::~Line()
 }
 
 
-QColor Line::lineColor()
+QColor Line::lineColor() const
 {
     return m_line->m_lineColor->value().value<QColor>();
 }
@@ -41,7 +41,7 @@ void Line::setLineColor(const QColor& c)
     m_line->m_lineColor->setValue(c);
 }
 
-int Line::lineWeight()
+int Line::lineWeight() const
 {
     return m_line->m_lineWeight->value().toInt();
 }
@@ -51,7 +51,7 @@ void Line::setLineWeight(int w)
     m_line->m_lineWeight->setValue(w);
 }
 
-int Line::lineStyle()
+int Line::lineStyle() const
 {
     return m_line->m_lineStyle->value().toInt();
 }
@@ -63,7 +63,7 @@ void Line::setLineStyle(int s)
     m_line->m_lineStyle->setValue(s);
 }
 
-QPointF Line::startPosition()
+QPointF Line::startPosition() const
 {
     return m_line->m_start.toPoint();
 }
@@ -73,7 +73,7 @@ void Line::setStartPosition(const QPointF& p)
     m_line->m_start.setPointPos(p);
 }
 
-QPointF Line::endPosition()
+QPointF Line::endPosition() const
 {
     return m_line->m_end.toPoint();
 }

@@ -58,7 +58,6 @@
 #include "KoTextDocument.h"
 #include "KoTextSharedLoadingData.h"
 #include <KoOdfBibliographyConfiguration.h>
-#include <KoUnit.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>
 #include <KoInlineObjectRegistry.h>

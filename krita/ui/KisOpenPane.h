@@ -47,7 +47,7 @@ public:
      * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KisOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templateType = QString());
+    KisOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     virtual ~KisOpenPane();
 
     QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
@@ -90,9 +90,9 @@ protected:
     void initRecentDocs();
     /**
      * Populate the list with all templates the user can choose.
-     * @param templateType the template-type (group) that should be selected on creation.
+     * @param templatesResourcePath the template-type (group) that should be selected on creation.
      */
-    void initTemplates(const QString& templateType);
+    void initTemplates(const QString& templatesResourcePath);
 
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);

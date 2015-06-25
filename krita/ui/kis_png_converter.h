@@ -101,7 +101,7 @@ public:
      * @param doc the KisDocument related to the image, can be null if you don't have a KisDocument
      * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
      */
-    KisPNGConverter(KisDocument *doc);
+    KisPNGConverter(KisDocument *doc, bool batchMode = false);
     virtual ~KisPNGConverter();
 public:
     /**
@@ -140,6 +140,8 @@ private:
     KisImageWSP m_image;
     KisDocument *m_doc;
     bool m_stop;
+    bool m_batchMode;
+    QString m_path;
 };
 
 #endif

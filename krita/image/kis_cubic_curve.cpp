@@ -406,6 +406,19 @@ void KisCubicCurve::removePoint(int idx)
     d->data->invalidate();
 }
 
+bool KisCubicCurve::isNull() const
+{
+    const QList<QPointF> &points = d->data->points;
+
+    foreach (const QPointF &pt, points) {
+        if (!qFuzzyCompare(pt.x(), pt.y())) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 const QString& KisCubicCurve::name() const
 {
     return d->data->name;

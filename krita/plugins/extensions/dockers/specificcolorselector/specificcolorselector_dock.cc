@@ -18,6 +18,7 @@
 #include "specificcolorselector_dock.h"
 
 #include <klocale.h>
+#include <QLayout>
 
 #include <kis_layer.h>
 #include <KisViewManager.h>
@@ -35,6 +36,7 @@ SpecificColorSelectorDock::SpecificColorSelectorDock()
     , m_colorSelector(new KisSpecificColorSelectorWidget(this))
 {
     setWidget(m_colorSelector);
+    widget()->setContentsMargins(4,4,4,0);
 }
 
 void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)

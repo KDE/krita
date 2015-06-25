@@ -142,7 +142,7 @@ QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
     connect(m_optionsWidget->cmbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleIndexChanged(int)));
     connect(m_optionsWidget->m_buttonGroup, SIGNAL(buttonPressed(int)), this, SLOT(textTypeIndexChanged(int)));
 
-    configGroup = KGlobal::config()->group(toolId());
+    m_configGroup = KGlobal::config()->group(toolId());
 
     return widgets;
 }
@@ -156,13 +156,13 @@ KisPainter::FillStyle KisToolText::fillStyle()
 
 void KisToolText::textTypeIndexChanged(int index)
 {
-    configGroup.writeEntry("textType", index);
+    m_configGroup.writeEntry("textType", index);
 }
 
 
 void KisToolText::styleIndexChanged(int index)
 {
-    configGroup.writeEntry("styleType", index);
+    m_configGroup.writeEntry("styleType", index);
 }
 
 void KisToolText::slotActivateTextTool()
@@ -172,8 +172,8 @@ void KisToolText::slotActivateTextTool()
     KoToolManager::instance()->switchToolRequested(tool);
 
     //load config settings
-    textTypeIndexChanged(configGroup.readEntry("textType", 0));
-    styleIndexChanged(configGroup.readEntry("styleType", 0));
+    textTypeIndexChanged(m_configGroup.readEntry("textType", 0));
+    styleIndexChanged(m_configGroup.readEntry("styleType", 0));
 
 }
 

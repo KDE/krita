@@ -37,7 +37,7 @@ Section::~Section()
 {
 }
 
-QColor Section::backgroundColor()
+QColor Section::backgroundColor() const
 {
     return m_section->m_backgroundColor->value().value<QColor>();
 }
@@ -48,7 +48,7 @@ void   Section::setBackgroundColor(const QColor &c)
     m_section->m_backgroundColor->setValue(c);
 }
 
-qreal Section::height()
+qreal Section::height() const
 {
     return m_section->m_height->value().toDouble();
 }
@@ -58,7 +58,7 @@ void Section::setHeight(qreal h)
     m_section->m_height->setValue(h);
 }
 
-QString Section::name()
+QString Section::name() const
 {
     return m_section->objectName();
 }

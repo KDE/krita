@@ -39,6 +39,7 @@
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
 #include "kis_abstract_projection_plane.h"
+#include "kis_projection_leaf.h"
 
 
 /**
@@ -77,9 +78,11 @@ static KisNodeSPStaticRegistrar __registrar;
 struct KisNode::Private
 {
 public:
-    Private()
+    Private(KisNode *node)
             : graphListener(0)
-            , nodeProgressProxy(0) {
+            , nodeProgressProxy(0)
+            , projectionLeaf(new KisProjectionLeaf(node))
+    {
     }
 
     KisNodeWSP parent;
@@ -88,6 +91,8 @@ public:
     KisNodeProgressProxy *nodeProgressProxy;
     QReadWriteLock nodeSubgraphLock;
 
+
+    KisProjectionLeafSP projectionLeaf;
 
     const KisNode* findSymmetricClone(const KisNode *srcRoot,
                                       const KisNode *dstRoot,
@@ -159,7 +164,7 @@ void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot
 }
 
 KisNode::KisNode()
-        : m_d(new Private())
+        : m_d(new Private(this))
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
@@ -167,7 +172,7 @@ KisNode::KisNode()
 
 KisNode::KisNode(const KisNode & rhs)
         : KisBaseNode(rhs)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
@@ -220,10 +225,15 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
 KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
 {
     KIS_ASSERT_RECOVER_NOOP(0 && "KisNode::projectionPlane() is not defined!");
-    static KisAbstractProjectionPlaneSP plane = 
+    static KisAbstractProjectionPlaneSP plane =
         toQShared(new KisDumbProjectionPlane());
 
     return plane;
+}
+
+KisProjectionLeafSP KisNode::projectionLeaf() const
+{
+    return m_d->projectionLeaf;
 }
 
 bool KisNode::accept(KisNodeVisitor &v)

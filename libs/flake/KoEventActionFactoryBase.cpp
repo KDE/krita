@@ -40,7 +40,7 @@ KoEventActionFactoryBase::~KoEventActionFactoryBase()
     delete d;
 }
 
-QString KoEventActionFactoryBase::action()
+QString KoEventActionFactoryBase::action() const
 {
     return d->action;
 }

@@ -43,7 +43,12 @@ public Q_SLOTS:
     void savePreferences() const;
     void loadPreferences();
     void loadDefaultPreferences();
-    void hsxchange();
+
+    void changedColorDocker(int);
+    void useDifferentColorSpaceChecked(bool);
+    void changedACSColorSelectorType(int);
+    void changedACSShadeSelectorType(int);
+    void changedACSColorAlignment(bool);
 
 Q_SIGNALS:
     void settingsChanged() const;

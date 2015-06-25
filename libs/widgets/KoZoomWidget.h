@@ -64,12 +64,12 @@ Q_SIGNALS:
      * Nothing else happens except that this signal is emitted.
      */
     void zoomedToAll();
-    
+
 public Q_SLOTS:
-    void setZoomLevels(QStringList values);
-    void setCurrentZoomLevel(QString valueString);
+    void setZoomLevels(const QStringList &values);
+    void setCurrentZoomLevel(const QString &valueString);
     void setSliderValue(int value);
-    
+
    /**
     * Change status of "Use same aspect as pixels" button
     */

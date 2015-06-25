@@ -150,18 +150,17 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
                                                   const QRect &dstRect)
 {
     if (m_isIdentity) {
-        KisPainter gc(dstDev);
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBltOldData(dstRect.topLeft(), srcDev, dstRect);
+        KisPainter::copyAreaOptimizedOldData(dstRect.topLeft(), srcDev, dstDev, dstRect);
         return;
     }
 
     QRectF srcClipRect = srcDev->exactBounds();
+    if (srcClipRect.isEmpty()) return;
 
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
 
     KisRandomSubAccessorSP srcAcc = srcDev->createRandomSubAccessor();
-    KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG(0, 0);
+    KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG(dstRect.x(), dstRect.y());
 
     for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); ++y) {
         for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); ++x) {

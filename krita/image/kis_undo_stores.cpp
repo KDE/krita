@@ -72,6 +72,11 @@ void KisSurrogateUndoStore::redo()
     m_undoStack->redo();
 }
 
+void KisSurrogateUndoStore::purgeRedoState()
+{
+    m_undoStack->purgeRedoState();
+}
+
 void KisSurrogateUndoStore::undoAll()
 {
     while(m_undoStack->canUndo()) {
@@ -85,6 +90,7 @@ void KisSurrogateUndoStore::redoAll()
         m_undoStack->redo();
     }
 }
+
 
 /*****************************************************************/
 /*                KisDumbUndoStore                               */
@@ -123,5 +129,12 @@ void KisDumbUndoStore::endMacro()
 {
     /**
      * Roger that! :)
+     */
+}
+
+void KisDumbUndoStore::purgeRedoState()
+{
+    /**
+     * Erm... what? %)
      */
 }

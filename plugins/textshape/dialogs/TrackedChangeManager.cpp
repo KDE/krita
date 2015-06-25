@@ -46,13 +46,13 @@ void TrackedChangeManager::setModel(TrackedChangeModel* model)
     connect(widget.treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)));
 }
 
-void TrackedChangeManager::currentChanged(QModelIndex newIndex, QModelIndex previousIndex)
+void TrackedChangeManager::currentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex)
 {
     Q_UNUSED(previousIndex);
     emit currentChanged(newIndex);
 }
 
-void TrackedChangeManager::selectItem(QModelIndex newIndex)
+void TrackedChangeManager::selectItem(const QModelIndex &newIndex)
 {
     QModelIndex currentIndex = widget.treeView->currentIndex();
     widget.treeView->setCurrentIndex(newIndex);

@@ -225,6 +225,7 @@ private Q_SLOTS:
 
     void slotBlacklistCleanup();
     void slotCreateTemplate();
+    void slotCreateCopy();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
@@ -233,6 +234,8 @@ private Q_SLOTS:
     void openResourcesDirectory();
     void makeStatusBarVisible();
     void guiUpdateTimeout();
+    void changeAuthorProfile(const QString &profileName);
+    void slotUpdateAuthorProfileActions();
 
 private:
     void createActions();

@@ -28,6 +28,12 @@ KisToolPath::KisToolPath(KoCanvasBase * canvas)
 {
 }
 
+void KisToolPath::resetCursorStyle()
+{
+    DelegatedPathTool::resetCursorStyle();
+    overrideCursorIfNotEditable();
+}
+
 void KisToolPath::requestStrokeEnd()
 {
     localTool()->endPathWithoutLastPoint();

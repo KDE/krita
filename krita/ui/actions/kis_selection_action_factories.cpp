@@ -81,11 +81,7 @@ namespace ActionHelper {
     // TODO if the source is linked... copy from all linked layers?!?
 
     // Copy image data
-    KisPainter gc;
-    gc.begin(clip);
-    gc.setCompositeOp(COMPOSITE_COPY);
-    gc.bitBlt(0, 0, device, rc.x(), rc.y(), rc.width(), rc.height());
-    gc.end();
+    KisPainter::copyAreaOptimized(QPoint(), device, clip, rc);
 
     if (selection) {
         // Apply selection mask.
@@ -405,7 +401,6 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     if (rect.isEmpty()) return;
 
     KisDocument *doc = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(doc);
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -416,13 +411,11 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
             new KisPaintLayer(image.data(), clip->objectName(),
                               OPACITY_OPAQUE_U8, clip->colorSpace());
 
-    KisPainter p(layer->paintDevice());
-    p.setCompositeOp(COMPOSITE_COPY);
-    p.bitBlt(0, 0, clip, rect.x(), rect.y(), rect.width(), rect.height());
-    p.end();
+    KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);
 
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
+    KisPart::instance()->addDocument(doc);
 
     KisMainWindow *win = viewManager->mainWindow();
     KisView *view = KisPart::instance()->createView(doc, win->resourceManager(), win->actionCollection(), win);

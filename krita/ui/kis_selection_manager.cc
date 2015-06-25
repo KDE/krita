@@ -125,8 +125,19 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_copy = actionManager->createStandardAction(KStandardAction::Copy, this, SLOT(copy()));
     m_paste = actionManager->createStandardAction(KStandardAction::Paste, this, SLOT(paste()));
 
-    m_pasteNew  = new KisAction(i18n("Paste into &New Image"), this);
+    KisAction *copySharp = new KisAction(i18n("Copy (sharp)"), this);
+    copySharp->setActivationFlags(KisAction::PIXELS_SELECTED);
+    actionManager->addAction("copy_sharp", copySharp);
+    connect(copySharp, SIGNAL(triggered()), this, SLOT(copySharp()));
+
+    KisAction *cutSharp = new KisAction(i18n("Cut (sharp)"), this);
+    cutSharp->setActivationFlags(KisAction::PIXELS_SELECTED);
+    actionManager->addAction("cut_sharp", cutSharp);
+    connect(cutSharp, SIGNAL(triggered()), this, SLOT(cutSharp()));
+
+    m_pasteNew = new KisAction(i18n("Paste into &New Image"), this);
     actionManager->addAction("paste_new", m_pasteNew);
+    m_pasteNew->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
     m_pasteAt = new KisAction(i18n("Paste at cursor"), this);
@@ -151,6 +162,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
     m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
+    m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
@@ -391,6 +403,18 @@ void KisSelectionManager::copy()
 {
     KisCutCopyActionFactory factory;
     factory.run(false, false, m_view);
+}
+
+void KisSelectionManager::cutSharp()
+{
+    KisCutCopyActionFactory factory;
+    factory.run(true, true, m_view);
+}
+
+void KisSelectionManager::copySharp()
+{
+    KisCutCopyActionFactory factory;
+    factory.run(false, true, m_view);
 }
 
 void KisSelectionManager::copyMerged()

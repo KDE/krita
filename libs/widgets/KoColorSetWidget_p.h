@@ -41,8 +41,6 @@
 #include <kdebug.h>
 
 #include <KoColorSet.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 
 class KoColorPatch;
 

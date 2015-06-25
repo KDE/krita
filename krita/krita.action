@@ -88,7 +88,7 @@
     <Action name="convert_to_vector_selection" icon="" text="&amp;Convert to Vector Selection" whatsThis="" toolTip="Convert to Vector Selection" iconText="Convert to Vector Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="convert_shapes_to_vector_selection" icon="" text="Convert &amp;Shapes to Vector Selection" whatsThis="" toolTip="Convert Shapes to Vector Selection" iconText="Convert Shapes to Vector Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="toggle-selection-overlay-mode" icon="" text="&amp;Toggle Selection Display Mode" whatsThis="" toolTip="Toggle Selection Display Mode" iconText="Toggle Selection Display Mode" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="merge_selected_layers" icon="" text="&amp;Merge Selected Layers" whatsThis="" toolTip="Merge Selected Layers" iconText="Merge Selected Layers" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="merge_selected_layers" icon="" text="&amp;Merge Selected Layers" whatsThis="" toolTip="Merge Selected Layers" iconText="Merge Selected Layers" shortcut="Ctrl+Alt+E" defaultShortcut="Ctrl+Alt+E" isCheckable="false" statusTip=""/>
     <Action name="flatten_image" icon="" text="&amp;Flatten image" whatsThis="" toolTip="Flatten image" iconText="Flatten image" shortcut="Ctrl+Shift+E" defaultShortcut="Ctrl+Shift+E" isCheckable="false" statusTip=""/>
     <Action name="merge_layer" icon="" text="&amp;Merge with Layer Below" whatsThis="" toolTip="Merge with Layer Below" iconText="Merge with Layer Below" shortcut="Ctrl+E" defaultShortcut="Ctrl+E" isCheckable="false" statusTip=""/>
     <Action name="flatten_layer" icon="" text="&amp;Flatten Layer" whatsThis="" toolTip="Flatten Layer" iconText="Flatten Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -103,7 +103,7 @@
     <Action name="save_node_as_image" icon="document-save" text="Save Layer/Mask..." whatsThis="" toolTip="Save Layer/Mask" iconText="Save Layer/Mask" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="duplicatelayer" icon="edit-copy" text="&amp;Duplicate Layer or Mask" whatsThis="" toolTip="Duplicate Layer or Mask" iconText="Duplicate Layer or Mask" shortcut="Ctrl+J" defaultShortcut="Ctrl+J" isCheckable="false" statusTip=""/>
     <Action name="add_new_paint_layer" icon="document-new" text="&amp;Paint Layer" whatsThis="" toolTip="Paint Layer" iconText="Paint Layer" shortcut="Ins" defaultShortcut="Ins" isCheckable="false" statusTip=""/>
-    <Action name="add_new_group_layer" icon="folder-new" text="&amp;Group Layer" whatsThis="" toolTip="Group Layer" iconText="Group Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="add_new_group_layer" icon="folder-new" text="&amp;Group Layer" whatsThis="" toolTip="Group Layer" iconText="Group Layer" shortcut="Ctrl+G" defaultShortcut="Ctrl+G" isCheckable="false" statusTip=""/>
     <Action name="add_new_clone_layer" icon="edit-copy" text="&amp;Clone Layer" whatsThis="" toolTip="Clone Layer" iconText="Clone Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="add_new_shape_layer" icon="bookmark-new" text="&amp;Vector Layer" whatsThis="" toolTip="Vector Layer" iconText="Vector Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="add_new_adjustment_layer" icon="view-filter" text="&amp;Filter Layer..." whatsThis="" toolTip="Filter Layer" iconText="Filter Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -233,7 +233,7 @@
     <Action name="layercolorspaceconversion" icon="" text="&amp;Convert Layer Color Space..." whatsThis="" toolTip="Convert Layer Color Space" iconText="Convert Layer Color Space" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="gmic" icon="" text="Apply G'Mic Action..." whatsThis="" toolTip="Apply G'Mic Action" iconText="Apply G'Mic Action" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="histogram" icon="" text="&amp;Histogram..." whatsThis="" toolTip="Histogram" iconText="Histogram" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="imagesize" icon="" text="Scale To New Size..." whatsThis="" toolTip="Scale To New Size" iconText="Scale To New Size" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="imagesize" icon="" text="Scale To New Size..." whatsThis="" toolTip="Scale To New Size" iconText="Scale To New Size" shortcut="Ctrl+Alt+I" defaultShortcut="Ctrl+Alt+I" isCheckable="false" statusTip=""/>
     <Action name="canvassize" icon="" text="Size Canvas..." whatsThis="" toolTip="Size Canvas" iconText="Size Canvas" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="layersize" icon="" text="Scale &amp;Layer..." whatsThis="" toolTip="Scale Layer" iconText="Scale Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="selectionscale" icon="" text="&amp;Scale..." whatsThis="" toolTip="Scale" iconText="Scale" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

@@ -37,6 +37,10 @@ public:
     KisImageAnimationInterface(KisImage *image);
     ~KisImageAnimationInterface();
 
+    /**
+     * Returns currently active frame of the underlying image. Some strokes
+     * can override this value and it will report a different value.
+     */
     int currentTime() const;
 
     /**
@@ -53,10 +57,31 @@ public:
      */
     bool externalFrameActive() const;
 
+    /**
+     * Switches current frame (synchronously) and starts an
+     * asynchronous regeneration of the entire image.
+     */
     void switchCurrentTimeAsync(int frameId) const;
 
+    /**
+     * Returns a pointer to the current projection of the image. Do
+     * not store it anywhere, it can be changed easily.
+     */
     KisPaintDeviceSP frameProjection() const;
 
+    /**
+     * Start a backgroud thread that will recalculate some extra frame.
+     * The result will be reported using two types of signals:
+     *
+     * 1) KisImage::sigImageUpdated() will be emitted for every chunk
+     *    of updated area.
+     *
+     * 2) sigFrameReady() will be emitted in the end of the operation.
+     *    IMPORTANT: to get the result you must connect to this signal
+     *    with Qt::DirectConnection and fetch the result from
+     *    frameProjection().  After the signal handler is exited, the
+     *    data will no longer be available.
+     */
     void requestFrameRegeneration(int frameId, const QRegion &dirtyRegion);
 
 private:

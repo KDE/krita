@@ -121,6 +121,10 @@ void KisKeyframingTest::testRasterChannel()
             return m_time;
         }
 
+        bool externalFrameActive() const {
+            return false;
+        }
+
         void testingSetTime(int time) {
             m_time = time;
         }

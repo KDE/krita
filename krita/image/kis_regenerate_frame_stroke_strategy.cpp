@@ -28,7 +28,6 @@ struct KisRegenerateFrameStrokeStrategy::Private
 {
     int frameId;
     int previousFrameId;
-    bool populateCache;
     QRegion dirtyRegion;
     KisImageAnimationInterface *interface;
 };
@@ -36,13 +35,11 @@ struct KisRegenerateFrameStrokeStrategy::Private
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
                                                                    const QRegion &dirtyRegion,
-                                                                   bool populateCache,
                                                                    KisImageAnimationInterface *interface)
     : m_d(new Private)
 {
     m_d->frameId = frameId;
     m_d->dirtyRegion = dirtyRegion;
-    m_d->populateCache = populateCache;
     m_d->interface = interface;
 
     enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
@@ -56,8 +53,7 @@ KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()
 
 void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 {
-    m_d->previousFrameId = m_d->interface->currentTime();
-    m_d->interface->setCurrentTimeExplicitly(m_d->frameId);
+    m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
 
     if (!m_d->dirtyRegion.isEmpty()) {
         m_d->interface->updatesFacade()->refreshGraphAsync();
@@ -66,11 +62,11 @@ void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 
 void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
 {
-    m_d->interface->notifyFrameReady(m_d->populateCache);
-    m_d->interface->setCurrentTimeExplicitly(m_d->previousFrameId);
+    m_d->interface->notifyFrameReady();
+    m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
 }
 
 void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
 {
-    m_d->interface->setCurrentTimeExplicitly(m_d->previousFrameId);
+    m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
 }

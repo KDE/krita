@@ -25,7 +25,7 @@ class KisImageAnimationInterfaceTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void test();
+    void testFrameRegeneration();
 };
 
 #endif /* __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H */

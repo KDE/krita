@@ -24,10 +24,11 @@
 
 struct KisImageAnimationInterface::Private
 {
-    Private() : image(0), currentTime(0) {}
+    Private() : image(0), currentTime(0), externalFrameActive(false) {}
 
     KisImage *image;
     int currentTime;
+    bool externalFrameActive;
 };
 
 
@@ -46,11 +47,18 @@ int KisImageAnimationInterface::currentTime() const
     return m_d->currentTime;
 }
 
-void KisImageAnimationInterface::switchCurrentTime(int frameId) const
+bool KisImageAnimationInterface::externalFrameActive() const
+{
+    return m_d->externalFrameActive;
+}
+
+void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId) const
 {
     m_d->image->barrierLock();
     m_d->currentTime = frameId;
     m_d->image->unlock();
+
+    m_d->image->refreshGraphAsync();
 }
 
 KisPaintDeviceSP KisImageAnimationInterface::frameProjection() const
@@ -58,31 +66,33 @@ KisPaintDeviceSP KisImageAnimationInterface::frameProjection() const
     return m_d->image->projection();
 }
 
-void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRegion &dirtyRegion, bool populateCache)
+void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRegion &dirtyRegion)
 {
     KisStrokeStrategy *strategy =
         new KisRegenerateFrameStrokeStrategy(frameId,
                                              dirtyRegion,
-                                             populateCache,
                                              this);
 
     KisStrokeId stroke = m_d->image->startStroke(strategy);
     m_d->image->endStroke(stroke);
 }
 
-void KisImageAnimationInterface::requestFrame(int frameId, bool populateCache)
+void KisImageAnimationInterface::saveAndResetCurrentTime(int frameId, int *savedValue)
 {
-    requestFrameRegeneration(frameId, QRegion(), populateCache);
-}
-
-void KisImageAnimationInterface::setCurrentTimeExplicitly(int frameId)
-{
+    m_d->externalFrameActive = true;
+    *savedValue = m_d->currentTime;
     m_d->currentTime = frameId;
 }
 
-void KisImageAnimationInterface::notifyFrameReady(bool populateCache)
+void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 {
-    emit sigFrameReady(populateCache);
+    m_d->currentTime = *savedValue;
+    m_d->externalFrameActive = false;
+}
+
+void KisImageAnimationInterface::notifyFrameReady()
+{
+    emit sigFrameReady();
 }
 
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const

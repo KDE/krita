@@ -36,6 +36,7 @@ public:
     virtual bool wrapAroundMode() const = 0;
     virtual int currentLevelOfDetail() const = 0;
     virtual int currentTime() const = 0;
+    virtual bool externalFrameActive() const = 0;
 };
 
 

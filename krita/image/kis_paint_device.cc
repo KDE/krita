@@ -299,6 +299,7 @@ private:
         if (defaultBounds) {
             if (defaultBounds->currentLevelOfDetail()) {
                 if (!m_lodData) {
+                    // multithreading
                     m_lodData.reset(new Data(m_data));
                 }
 
@@ -309,6 +310,13 @@ private:
                 int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
                 Q_ASSERT(frames.contains(frameId));
                 return frames[frameId];
+            } else if (defaultBounds->externalFrameActive()) {
+                if (!m_externalFrameData) {
+                    // multithreading
+                    m_externalFrameData.reset(new Data(m_data));
+                }
+
+                return m_externalFrameData.data();
             }
         }
 
@@ -319,6 +327,7 @@ private:
         if (defaultBounds) {
             if (defaultBounds->currentLevelOfDetail()) {
                 if (!m_lodData) {
+                    // multithreading
                     m_lodData.reset(new Data(m_data));
                 }
 
@@ -329,6 +338,13 @@ private:
                 int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
                 Q_ASSERT(frames.contains(frameId));
                 return frames[frameId];
+            } else if (defaultBounds->externalFrameActive()) {
+                if (!m_externalFrameData) {
+                    // multithreading
+                    m_externalFrameData.reset(new Data(m_data));
+                }
+
+                return m_externalFrameData.data();
             }
         }
 
@@ -338,6 +354,7 @@ private:
 private:
     Data *m_data;
     mutable QScopedPointer<Data> m_lodData;
+    mutable QScopedPointer<Data> m_externalFrameData;
     QHash<int, Data*> frames;
     int nextFreeFrameId;
 };

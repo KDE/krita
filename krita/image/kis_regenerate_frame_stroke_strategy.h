@@ -31,7 +31,6 @@ class KisRegenerateFrameStrokeStrategy : public KisSimpleStrokeStrategy
 public:
     KisRegenerateFrameStrokeStrategy(int frameId,
                                      const QRegion &dirtyRegion,
-                                     bool populateCache,
                                      KisImageAnimationInterface *interface);
     ~KisRegenerateFrameStrokeStrategy();
 

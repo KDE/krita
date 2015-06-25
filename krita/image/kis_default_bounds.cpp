@@ -21,6 +21,8 @@
 #include "kis_global.h"
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
+#include "kis_image_animation_interface.h"
+
 
 const QRect KisDefaultBounds::infiniteRect =
     QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
@@ -33,6 +35,7 @@ const QRect KisDefaultBounds::infiniteRect =
 struct KisDefaultBounds::Private
 {
     KisImageWSP image;
+    KisImageAnimationInterface *animationInterface;
 };
 
 
@@ -40,6 +43,7 @@ KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
     : m_d(new Private())
 {
     m_d->image = image;
+    m_d->animationInterface = image ? image->animationInterface() : 0;
 }
 
 KisDefaultBounds::~KisDefaultBounds()
@@ -67,7 +71,12 @@ int KisDefaultBounds::currentLevelOfDetail() const
 
 int KisDefaultBounds::currentTime() const
 {
-    return m_d->image ? m_d->image->currentTime() : 0;
+    return m_d->animationInterface ? m_d->animationInterface->currentTime() : 0;
+}
+
+bool KisDefaultBounds::externalFrameActive() const
+{
+    return m_d->animationInterface ? m_d->animationInterface->externalFrameActive() : false;
 }
 
 /******************************************************************/

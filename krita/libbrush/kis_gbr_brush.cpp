@@ -287,6 +287,7 @@ bool KisGbrBrush::init()
         }
     }
     else {
+        qWarning() << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
         return false;
     }
 

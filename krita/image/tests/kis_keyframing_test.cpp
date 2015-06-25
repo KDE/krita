@@ -46,6 +46,10 @@ struct TestingKeyframingDefaultBounds : public KisDefaultBoundsBase {
         return m_time;
     }
 
+    bool externalFrameActive() const {
+        return false;
+    }
+
     void testingSetTime(int time) {
         m_time = time;
     }

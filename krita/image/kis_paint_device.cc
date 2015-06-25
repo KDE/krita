@@ -311,6 +311,7 @@ private:
         if (defaultBounds) {
             if (defaultBounds->currentLevelOfDetail()) {
                 if (!m_lodData) {
+                    // multithreading
                     m_lodData.reset(new Data(m_data));
                 }
 
@@ -321,6 +322,13 @@ private:
                 int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
                 Q_ASSERT(frames.contains(frameId));
                 return frames[frameId];
+            } else if (defaultBounds->externalFrameActive()) {
+                if (!m_externalFrameData) {
+                    // multithreading
+                    m_externalFrameData.reset(new Data(m_data));
+                }
+
+                return m_externalFrameData.data();
             }
         }
 
@@ -331,6 +339,7 @@ private:
         if (defaultBounds) {
             if (defaultBounds->currentLevelOfDetail()) {
                 if (!m_lodData) {
+                    // multithreading
                     m_lodData.reset(new Data(m_data));
                 }
 
@@ -341,6 +350,13 @@ private:
                 int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
                 Q_ASSERT(frames.contains(frameId));
                 return frames[frameId];
+            } else if (defaultBounds->externalFrameActive()) {
+                if (!m_externalFrameData) {
+                    // multithreading
+                    m_externalFrameData.reset(new Data(m_data));
+                }
+
+                return m_externalFrameData.data();
             }
         }
 
@@ -374,6 +390,7 @@ private:
 private:
     Data *m_data;
     mutable QScopedPointer<Data> m_lodData;
+    mutable QScopedPointer<Data> m_externalFrameData;
     QHash<int, Data*> frames;
     int nextFreeFrameId;
 };
@@ -1406,6 +1423,8 @@ quint32 KisPaintDevice::channelCount() const
 
 KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, const KisNodeWSP node)
 {
+    Q_ASSERT(!m_d->contentChannel);
+
     m_d->contentChannel = new KisRasterKeyframeChannel(id, node, this);
 
     connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframe*)), this, SLOT(keyframeAboutToBeAdded(KisKeyframe*)), Qt::DirectConnection);
@@ -1415,6 +1434,12 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, 
     connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframe*,int)), this, SLOT(keyframeAboutToBeMoved(KisKeyframe*, int)), Qt::DirectConnection);
     connect(m_d->contentChannel, SIGNAL(sigKeyframeMoved(KisKeyframe*,int)), this, SLOT(keyframeMoved(KisKeyframe*, int)), Qt::DirectConnection);
 
+    return m_d->contentChannel;
+}
+
+KisKeyframeChannel* KisPaintDevice::keyframeChannel() const
+{
+    Q_ASSERT(m_d->contentChannel);
     return m_d->contentChannel;
 }
 

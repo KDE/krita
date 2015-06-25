@@ -168,12 +168,14 @@ set(kritaimage_LIB_SRCS
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp
+   kis_image_animation_interface.cpp
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
    kis_projection_updates_filter.cpp
    kis_suspend_projection_updates_stroke_strategy.cpp
+   kis_regenerate_frame_stroke_strategy.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp

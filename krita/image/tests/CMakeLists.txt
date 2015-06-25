@@ -626,3 +626,9 @@ set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
 kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
 target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_image_animation_interface_test_SRCS kis_image_animation_interface_test.cpp )
+kde4_add_unit_test(KisImageAnimationInterfaceTest TESTNAME krita-image-ImageAnimationInterface-Test ${kis_image_animation_interface_test_SRCS})
+target_link_libraries(KisImageAnimationInterfaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+

@@ -214,7 +214,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
 
-        yres = 100.0;
+        yres = 100.0 / 72.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0) {
                 yres = attr.toDouble() / 72.0;

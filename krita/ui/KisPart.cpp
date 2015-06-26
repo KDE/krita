@@ -269,12 +269,6 @@ KisView *KisPart::createView(KisDocument *document, KoCanvasResourceManager *res
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     KisView *view  = new KisView(document, resourceManager, actionCollection, parent);
-
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    document->setModified(true);
-    document->setModified(false);
     QApplication::restoreOverrideCursor();
 
     addView(view);

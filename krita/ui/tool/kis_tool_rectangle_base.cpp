@@ -36,6 +36,7 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
     , m_isRatioForced(false)
     , m_isWidthForced(false)
     , m_isHeightForced(false)
+    , m_listenToModifiers(true)
     , m_forcedRatio(1.0)
     , m_forcedWidth(0)
     , m_forcedHeight(0)
@@ -46,22 +47,22 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
 QList<QPointer<QWidget> > KisToolRectangleBase::createOptionWidgets()
 {
   QList<QPointer<QWidget> > widgetsList = KoToolBase::createOptionWidgets();
-  
+
   widgetsList.append(new KisRectangleConstraintWidget(0, this));
-  
+
   return widgetsList;
 }
 
-void KisToolRectangleBase::constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height) 
+void KisToolRectangleBase::constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height)
 {
   m_isWidthForced = forceWidth;
   m_isHeightForced = forceHeight;
   m_isRatioForced = forceRatio;
-  
+
   m_forcedHeight = height;
   m_forcedWidth = width;
   m_forcedRatio = ratio;
-  
+
   // Avoid division by zero in size calculations
   if (ratio < 0.0001f) m_isRatioForced = false;
 }
@@ -81,6 +82,15 @@ void KisToolRectangleBase::deactivate()
     KisToolShape::deactivate();
 }
 
+void KisToolRectangleBase::listenToModifiers(bool listen)
+{
+    m_listenToModifiers = listen;
+}
+bool KisToolRectangleBase::listeningToModifiers()
+{
+    return m_listenToModifiers;
+}
+
 void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 {
     if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
@@ -93,21 +103,21 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 
     QPointF pos = convertToPixelCoord(event);
     m_dragStart = m_dragCenter = pos;
-    
+
     QSizeF area = QSizeF(0,0);
-    
+
     applyConstraints(area, false);
-    
+
     m_dragEnd.setX(m_dragStart.x() + area.width());
     m_dragEnd.setY(m_dragStart.y() + area.height());
-    
+
     event->accept();
 }
 
 bool KisToolRectangleBase::isFixedSize() {
   if (m_isWidthForced && m_isHeightForced) return true;
   if (m_isRatioForced && (m_isWidthForced || m_isHeightForced)) return true;
-  
+
   return false;
 }
 
@@ -118,12 +128,12 @@ void KisToolRectangleBase::applyConstraints(QSizeF &area, bool overrideRatio) {
   if (m_isHeightForced) {
     area.setHeight(m_forcedHeight);
   }
-  
+
   if (m_isHeightForced && m_isWidthForced) return;
-  
+
   if (m_isRatioForced || overrideRatio) {
     float ratio = m_isRatioForced ? m_forcedRatio : 1.0f;
-    
+
     if (m_isWidthForced) {
       area.setHeight(area.width() / ratio);
     } else {
@@ -136,12 +146,12 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    bool constraintToggle = (event->modifiers() & Qt::ShiftModifier);
-    bool translateMode = (event->modifiers() & Qt::AltModifier);
-    bool expandFromCenter = (event->modifiers() & Qt::ControlModifier);
-    
+    bool constraintToggle = (event->modifiers() & Qt::ShiftModifier) && m_listenToModifiers;
+    bool translateMode = (event->modifiers() & Qt::AltModifier) && m_listenToModifiers;
+    bool expandFromCenter = (event->modifiers() & Qt::ControlModifier) && m_listenToModifiers;
+
     bool fixedSize = isFixedSize() && !constraintToggle;
-    
+
     QPointF pos = convertToPixelCoord(event);
 
     if (fixedSize) {
@@ -151,20 +161,20 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
       m_dragStart += trans;
       m_dragEnd += trans;
     }
-    
+
     QPointF diag = pos - m_dragStart;
     QSizeF area = QSizeF(fabs(diag.x()), fabs(diag.y()));
-    
+
     bool overrideRatio = constraintToggle && !(m_isHeightForced || m_isWidthForced || m_isRatioForced);
     if (!constraintToggle || overrideRatio) {
       applyConstraints(area, overrideRatio);
     }
-    
+
     diag = QPointF(
       (diag.x() < 0) ? -area.width() : area.width(),
       (diag.y() < 0) ? -area.height() : area.height()
     );
-    
+
     // resize around center point?
     if (expandFromCenter && !fixedSize) {
       m_dragStart = m_dragCenter - diag / 2;
@@ -172,7 +182,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
     } else {
       m_dragEnd = m_dragStart + diag;
     }
-    
+
     updateArea();
 
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
@@ -235,7 +245,7 @@ void KisToolRectangleBase::updateArea() {
     bound = bound.normalized();
 
     canvas()->updateCanvas(convertToPt(bound).adjusted(-100, -100, +200, +200));
-    
+
     emit rectangleChanged(bound);
 }
 

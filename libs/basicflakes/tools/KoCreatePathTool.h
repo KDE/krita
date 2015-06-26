@@ -62,6 +62,14 @@ public:
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
 
+    /// For behavior as selection tool and with initial shift-key
+    virtual bool listeningToModifiers();
+
+    /**
+    * Returns true if path has been started
+    */
+    bool pathStarted();
+
 public Q_SLOTS:
     /// reimplemented
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -74,7 +82,7 @@ protected:
     /**
      * Add path shape to document.
      * This method can be overridden and change the behaviour of the tool. In that case the subclass takes ownership of pathShape.
-     * It gets only called, if there are two or more points in the path.
+     * It gets only called if there are two or more points in the path.
      */
     virtual void addPathShape(KoPathShape* pathShape);
 
@@ -99,4 +107,3 @@ private:
     Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))
 };
 #endif
-

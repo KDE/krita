@@ -447,18 +447,20 @@ void KisLayerManager::layerProperties()
 
         if (dlg.exec() == QDialog::Accepted) {
 
+            alayer->setName(dlg.layerName());
+
             KisSafeFilterConfigurationSP configAfter(dlg.configuration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                   = new KisChangeFilterCmd(alayer,
-                                             configBefore->name(),
-                                             xmlBefore,
-                                             configAfter->name(),
-                                             xmlAfter,
-                                             true);
+                        = new KisChangeFilterCmd(alayer,
+                                                 configBefore->name(),
+                                                 xmlBefore,
+                                                 configAfter->name(),
+                                                 xmlAfter,
+                                                 true);
                 // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);

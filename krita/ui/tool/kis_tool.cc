@@ -790,5 +790,13 @@ bool KisTool::selectionEditable()
     return editable;
 }
 
+void KisTool::listenToModifiers(bool listen)
+{
+}
+
+bool KisTool::listeningToModifiers()
+{
+    return false;
+}
 
 

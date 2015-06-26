@@ -239,6 +239,14 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
             }
 
             image->resizeImage(cropRect);
+
+            // since resizing the image can cause the cursor to end up on the canvas without a move event,
+            // it can get stuck in an overridden state until it is changed by another event,
+            // and we don't want that.
+            if (m_cursorSwitched) {
+                m_canvas->canvasWidget()->setCursor(m_oldCursor);
+                m_cursorSwitched = false;
+            }
         }
         break;
     }

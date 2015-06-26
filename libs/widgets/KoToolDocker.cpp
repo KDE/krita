@@ -196,8 +196,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
-
     KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
 

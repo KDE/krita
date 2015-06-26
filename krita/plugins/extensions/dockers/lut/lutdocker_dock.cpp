@@ -95,8 +95,6 @@ LutDockerDock::LutDockerDock()
     m_exposureCompressor.reset(new KisSignalCompressorWithParam<qreal>(40, boost::bind(&LutDockerDock::setCurrentExposureImpl, this, _1)));
     m_gammaCompressor.reset(new KisSignalCompressorWithParam<qreal>(40, boost::bind(&LutDockerDock::setCurrentGammaImpl, this, _1)));
 
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
     m_page = new QWidget(this);
     setupUi(m_page);
     setWidget(m_page);

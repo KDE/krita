@@ -43,6 +43,7 @@ KisAlternateInvocationAction::KisAlternateInvocationAction()
     shortcuts.insert(i18n("Primary Mode"), PrimaryAlternateModeShortcut);
     shortcuts.insert(i18n("Secondary Mode"), SecondaryAlternateModeShortcut);
 
+
     shortcuts.insert(i18n("Pick Foreground Color from Current Layer"), PickColorFgLayerModeShortcut);
     shortcuts.insert(i18n("Pick Background Color from Current Layer"), PickColorBgLayerModeShortcut);
 

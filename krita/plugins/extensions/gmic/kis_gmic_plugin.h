@@ -80,6 +80,7 @@ private:
 
     void waitForFilterFinish();
 
+    void startProgressReporting();
 
 private:
     KisGmicWidget * m_gmicWidget;

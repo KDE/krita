@@ -140,9 +140,9 @@ public:
 
         QList<KoResource*> resources;
         foreach (KoResource *resource, serverResources) {
-            KisPaintOpPreset *preset = static_cast<KisPaintOpPreset*>(resource);
+            KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
 
-            if( preset->paintOp().id() == m_paintopID) {
+            if (preset && preset->paintOp().id() == m_paintopID) {
                 resources.append(preset);
             }
         }

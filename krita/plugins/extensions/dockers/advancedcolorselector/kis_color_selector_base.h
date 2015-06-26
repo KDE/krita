@@ -106,6 +106,7 @@ private:
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;
     bool m_isPopup; //this instance is a popup
+    bool m_hideOnMouseClick;
     KisColorPreviewPopup* m_colorPreviewPopup;
 };
 

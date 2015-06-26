@@ -94,8 +94,12 @@ void KisGmicApplicator::preview()
 
     m_applicator->applyCommand(gmicCommand);
 
-    // synchronize Krita image size with biggest gmic layer size
-    m_applicator->applyCommand(new KisGmicSynchronizeImageSizeCommand(gmicLayers, m_image));
+
+    if (!selection)
+    {
+        // synchronize Krita image size with biggest gmic layer size
+        m_applicator->applyCommand(new KisGmicSynchronizeImageSizeCommand(gmicLayers, m_image));
+    }
 
     // synchronize layer count
     m_applicator->applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);

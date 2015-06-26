@@ -71,24 +71,24 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
 
 
     int widgetWidth = width();
-    int numPatchesInARow = widgetWidth/m_patchWidth;
+    int numPatchesInARow = qMax(widgetWidth/m_patchWidth, 1);
 
     int widgetHeight = height();
-    int numPatchesInACol = widgetHeight/m_patchHeight;
+    int numPatchesInACol = qMax(widgetHeight/m_patchHeight, 1);
 
-    for(int i=m_buttonList.size(); i<qMin(fieldCount(), m_colors.size()+m_buttonList.size()); i++) {
+    for(int i = m_buttonList.size(); i < qMin(fieldCount(), m_colors.size() + m_buttonList.size()); i++) {
         int row;
         int col;
-        if(m_direction==Vertical) {
-            row= i/numPatchesInARow;
-            col = i%numPatchesInARow;
+        if(m_direction == Vertical) {
+            row =  i /numPatchesInARow;
+            col = i % numPatchesInARow;
         }
         else {
-            row= i%numPatchesInACol;
-            col = i/numPatchesInACol;
+            row= i % numPatchesInACol;
+            col = i / numPatchesInACol;
         }
 
-        QColor qcolor = converter()->toQColor(m_colors.at(i-m_buttonList.size()));
+        QColor qcolor = converter()->toQColor(m_colors.at(i - m_buttonList.size()));
 
         painter.fillRect(col*m_patchWidth,
                          row*m_patchHeight,

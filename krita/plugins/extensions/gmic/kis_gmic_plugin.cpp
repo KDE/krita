@@ -385,8 +385,7 @@ void KisGmicPlugin::createViewportPreview(KisNodeListSP layers, KisGmicFilterSet
     dbgPlugins << "Unlocked image...";
 
     m_smallApplicator->start();
-    m_progressManager->initProgress();
-
+    startProgressReporting();
 }
 
 void KisGmicPlugin::startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting, Activity activity)
@@ -403,6 +402,15 @@ void KisGmicPlugin::startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSett
     // Note: do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
     // waitForDone would cause infinite hang
     dbgPlugins << valueToQString(m_currentActivity);
+    startProgressReporting();
+}
+
+void KisGmicPlugin::startProgressReporting()
+{
+    if (m_progressManager->inProgress())
+    {
+        m_progressManager->finishProgress();
+    }
     m_progressManager->initProgress();
 }
 

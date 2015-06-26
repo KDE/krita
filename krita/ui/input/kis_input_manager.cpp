@@ -988,4 +988,3 @@ void KisInputManager::profileChanged()
         kWarning() << "No Input Profile Found: canvas interaction will be impossible";
     }
 }
-

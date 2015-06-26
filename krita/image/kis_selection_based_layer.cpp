@@ -151,15 +151,13 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
         KisPaintDeviceSP projection,
         const QRect& rect) const
 {
-
-    KisPainter gc(projection);
-
     KisSelectionSP tempSelection;
 
     if (m_d->useSelectionInProjection) {
         tempSelection = fetchComposedInternalSelection(rect);
     }
 
+    projection->clear(rect);
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect, tempSelection);
 }
 

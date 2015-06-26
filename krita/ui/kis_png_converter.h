@@ -32,7 +32,7 @@
 #include "kis_annotation.h"
 #include <krita_export.h>
 
-
+class KoStore;
 class KisDocument;
 
 
@@ -133,6 +133,9 @@ public:
      * Retrieve the constructed image
      */
     KisImageWSP image();
+
+    static bool saveDeviceToStore(const QString &filename, KisImageWSP image, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
+
 public Q_SLOTS:
     virtual void cancel();
 private:

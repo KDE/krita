@@ -170,6 +170,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool.cc
     tool/kis_delegated_tool_policies.cpp
     tool/kis_tool_freehand.cc
+    tool/kis_speed_smoother.cpp
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
@@ -177,7 +178,6 @@ set(kritaui_LIB_SRCS
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
-    tool/kis_tool_select_base.cpp
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp

@@ -30,7 +30,7 @@
 #include <kis_open_raster_stack_load_visitor.h>
 #include <kis_open_raster_stack_save_visitor.h>
 #include <kis_paint_layer.h>
-
+#include "kis_png_converter.h"
 #include "ora_load_context.h"
 #include "ora_save_context.h"
 
@@ -115,15 +115,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
         store->close();
     }
 
-    if (store->open("mergedimage.png")) {
-        QImage mergedimage = image->projection()->convertToQImage(0);
-        KoStoreDevice io(store);
-        if (io.open(QIODevice::WriteOnly)) {
-            mergedimage.save(&io, "PNG");
-        }
-        io.close();
-        store->close();
-    }
+    KisPNGConverter::saveDeviceToStore("mergedimage.png", image, image->projection(), store);
 
     delete store;
     return KisImageBuilder_RESULT_OK;

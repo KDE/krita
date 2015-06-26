@@ -256,3 +256,13 @@ QRectF KisToolPolylineBase::dragBoundingRect()
     return rect;
 }
 
+void KisToolPolylineBase::listenToModifiers(bool listen)
+{
+    Q_UNUSED(listen)
+}
+
+bool KisToolPolylineBase::listeningToModifiers()
+{
+    //Never grab modifier keys
+    return false;
+}

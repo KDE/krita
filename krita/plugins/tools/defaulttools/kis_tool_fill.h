@@ -62,7 +62,8 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     virtual void resetCursorStyle();
-
+protected:
+    virtual bool wantsAutoScroll() const { return false; }
 private:
     void updateGUI();
 

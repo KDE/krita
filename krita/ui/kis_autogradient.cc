@@ -171,6 +171,5 @@ void KisAutogradient::slotChangedName()
 void KisAutogradient::paramChanged()
 {
     m_autogradientResource->updatePreview();
-    emit activatedResource(m_autogradientResource);
 }
 

@@ -70,6 +70,21 @@ public:
      */
     QString swapDir();
 
+    int numberOfOnionSkins() const;
+    void setNumberOfOnionSkins(int value);
+
+    int onionSkinTintFactor() const;
+    void setOnionSkinTintFactor(int value);
+
+    int onionSkinOpacity(int offset) const;
+    void setOnionSkinOpacity(int offset, int value);
+
+    QColor onionSkinTintColorBackward() const;
+    void setOnionSkinTintColorBackward(const QColor &value);
+
+    QColor onionSkinTintColorForward() const;
+    void setOnionSkinTintColorForward(const QColor &value);
+
 private:
     Q_DISABLE_COPY(KisImageConfig)
 

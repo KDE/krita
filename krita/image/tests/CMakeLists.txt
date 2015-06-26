@@ -631,4 +631,8 @@ target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST
 set(kis_image_animation_interface_test_SRCS kis_image_animation_interface_test.cpp )
 kde4_add_unit_test(KisImageAnimationInterfaceTest TESTNAME krita-image-ImageAnimationInterface-Test ${kis_image_animation_interface_test_SRCS})
 target_link_libraries(KisImageAnimationInterfaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+########### next target ###############
 
+set(kis_onion_skin_compositor_test_SRCS kis_onion_skin_compositor_test.cpp )
+kde4_add_unit_test(KisOnionSkinCompositorTest TESTNAME krita-image-OnionSkinCompositor-Test ${kis_onion_skin_compositor_test_SRCS})
+target_link_libraries(KisOnionSkinCompositorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

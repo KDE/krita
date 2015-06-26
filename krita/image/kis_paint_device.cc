@@ -1437,7 +1437,7 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, 
     return m_d->contentChannel;
 }
 
-KisKeyframeChannel* KisPaintDevice::keyframeChannel() const
+KisRasterKeyframeChannel* KisPaintDevice::keyframeChannel() const
 {
     Q_ASSERT(m_d->contentChannel);
     return m_d->contentChannel;

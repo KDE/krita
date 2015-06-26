@@ -281,6 +281,7 @@ set(kritaimage_LIB_SRCS
    kis_scalar_keyframe_channel.cpp
    kis_raster_keyframe_channel.cpp
    kis_animation_frame_cache.cpp
+   kis_onion_skin_compositor.cpp
 
    kis_psd_layer_style.cpp
    kis_layer_style_serializer.cpp

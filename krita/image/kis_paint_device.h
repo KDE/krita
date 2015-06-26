@@ -674,7 +674,7 @@ public:
      */
     KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id, const KisNodeWSP node);
 
-    KisKeyframeChannel* keyframeChannel() const;
+    KisRasterKeyframeChannel* keyframeChannel() const;
 
     /**
      * Creates a new frame on the device and returns an identifier for it

@@ -404,6 +404,7 @@ void TableViewData::init(
 void TableViewData::init()
 {
     d->itemSize = 0;
+    d->cursor = 0;
 }
 
 void TableViewData::deleteLater()

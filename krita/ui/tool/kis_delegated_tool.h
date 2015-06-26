@@ -120,7 +120,7 @@ public:
         return list;
     }
 
-private:
+protected:
     QScopedPointer<DelegateTool> m_localTool;
 };
 

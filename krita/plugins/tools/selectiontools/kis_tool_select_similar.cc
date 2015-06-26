@@ -2,6 +2,7 @@
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,7 +43,6 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
     if (rc.isEmpty()) {
         return;
     }
-
     // XXX: Multithread this!
     qint32 x, y, w, h;
     x = rc.x();
@@ -59,26 +59,26 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
         do {
             //if (dev->colorSpace()->hasAlpha())
             //    opacity = dev->colorSpace()->alpha(hiter->rawData());
-
             quint8 match = cs->difference(c, hiter->oldRawData());
-
             if (match <= fuzziness) {
                 *(selIter->rawData()) = MAX_SELECTED;
             }
-        } while (hiter->nextPixel() && selIter->nextPixel());
-
+        }
+        while (hiter->nextPixel() && selIter->nextPixel());
         hiter->nextRow();
         selIter->nextRow();
     }
 
 }
 
+
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     : KisToolSelectBase(canvas,
                         KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
                         i18n("Similar Color Selection")),
-      m_fuzziness(20)
+     m_fuzziness(20)
 {
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
 }
 
 void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -89,6 +89,7 @@ void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<Ko
 
 void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
+    KisToolSelectBase::beginPrimaryAction(event);
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
@@ -126,7 +127,8 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
     helper.selectPixelSelection(tmpSel, selectionAction());
 
-    QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();                        
+
 }
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
@@ -159,6 +161,19 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
     // load setting from config
     input->setValue(m_configGroup.readEntry("fuzziness", 20));
-
     return selectionWidget;
 }
+
+void KisToolSelectSimilar::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+      if(m_widgetHelper.optionWidget())
+      {
+          m_widgetHelper.slotSetAction(newSelectionAction);
+      }
+      m_selectionAction = (SelectionAction)newSelectionAction;
+      emit selectionActionChanged();
+    }
+}
+

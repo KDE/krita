@@ -261,6 +261,17 @@ protected:
 
     virtual QWidget* createOptionWidget();
 
+    /**
+     * To determine whether this tool will change its behavior when
+     * modifier keys are pressed
+     */
+    virtual bool listeningToModifiers();
+    /**
+     * Request that this tool no longer listen to modifier keys
+     * (Responding to the request is optional)
+     */
+    virtual void listenToModifiers(bool listen);
+
 protected:
     KisImageWSP image() const;
     QCursor cursor() const;
@@ -355,4 +366,3 @@ private:
 
 
 #endif // KIS_TOOL_H_
-

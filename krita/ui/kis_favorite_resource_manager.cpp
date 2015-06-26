@@ -166,13 +166,12 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     , m_blockUpdates(false)
     , m_initialized(false)
 {
+    KisConfig cfg;
+    m_maxPresets = cfg.favoritePresets();
     m_colorList = new ColorDataList();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
     rServer->addObserver(this);
-
-    KisConfig cfg;
-    m_maxPresets = cfg.favoritePresets();
 }
 
 KisFavoriteResourceManager::~KisFavoriteResourceManager()

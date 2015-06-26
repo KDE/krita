@@ -123,8 +123,6 @@ KisLayerBox::KisLayerBox()
 {
     KisConfig cfg;
 
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_opacityDelayTimer.setSingleShot(true);

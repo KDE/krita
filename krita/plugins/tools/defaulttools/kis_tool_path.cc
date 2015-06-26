@@ -50,6 +50,20 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
     DelegatedPathTool::mousePressEvent(event);
 }
 
+void KisToolPath::beginAlternateAction(KoPointerEvent *event, AlternateAction action) {
+ Q_UNUSED(action)
+ mousePressEvent(event);
+}
+void KisToolPath::continueAlternateAction(KoPointerEvent *event, AlternateAction action){
+ Q_UNUSED(action)
+ mouseMoveEvent(event);
+}
+
+void KisToolPath::endAlternateAction(KoPointerEvent *event, AlternateAction action) {
+ Q_UNUSED(action)
+ mouseReleaseEvent(event);
+}
+
 QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets = DelegatedPathTool::createOptionWidgets();

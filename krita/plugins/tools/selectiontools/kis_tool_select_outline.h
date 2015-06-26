@@ -4,6 +4,7 @@
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,19 +34,26 @@ class QPainterPath;
 class KisToolSelectOutline : public KisToolSelectBase
 {
 
+
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
+    Q_SIGNALS: void selectionActionChanged();
+
 public:
     KisToolSelectOutline(KoCanvasBase *canvas);
     virtual ~KisToolSelectOutline();
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
-
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
+
 
 public Q_SLOTS:
     virtual void deactivate();
+    void setSelectionAction(int newSelectionAction);
+
+protected:
+    using KisToolSelectBase::m_widgetHelper;
 
 private:
     void updateFeedback();
@@ -53,13 +61,10 @@ private:
 
     QPainterPath * m_paintPath;
     vQPointF m_points;
-
 };
-
 
 class KisToolSelectOutlineFactory : public KoToolFactoryBase
 {
-
 public:
     KisToolSelectOutlineFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectOutline") {

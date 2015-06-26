@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,22 +46,29 @@ private:
     KisToolSelectPath* const m_selectionTool;
 };
 
-struct __KisToolSelectBaseWrapper : public KisToolSelectBase {
-    __KisToolSelectBaseWrapper(KoCanvasBase *canvas,
-                               const QCursor &cursor)
-        : KisToolSelectBase(canvas, cursor, i18n("Path Selection"))
-    {
-    }
-};
-
-typedef KisDelegatedTool<__KisToolSelectBaseWrapper,
-                         __KisToolSelectPathLocalTool,
+typedef KisDelegatedTool<KisTool, __KisToolSelectPathLocalTool,
                          DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 
-class KisToolSelectPath : public DelegatedSelectPathTool
+struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
+        KisDelegatedSelectPathWrapper(KoCanvasBase *canvas,
+              const QCursor &cursor,
+              KisTool* delegateTool)
+        : DelegatedSelectPathTool(canvas, cursor, (__KisToolSelectPathLocalTool*) delegateTool)
+    {
+    }
+          bool listeningToModifiers();
+
+          // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")
+          // we will receive a primary action but no mousePressEvent.  Thus these events must be explicitly forwarded.
+          void beginPrimaryAction(KoPointerEvent *event);
+          void continuePrimaryAction(KoPointerEvent *event);
+          void endPrimaryAction(KoPointerEvent *event);
+};
+
+
+class KisToolSelectPath : public SelectionActionHandler<KisDelegatedSelectPathWrapper>
 {
     Q_OBJECT
-
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent* event);
@@ -68,14 +76,13 @@ public:
 protected:
     void requestStrokeCancellation();
     void requestStrokeEnd();
-
+    void setAlternateSelectionAction(SelectionAction action);
     friend class __KisToolSelectPathLocalTool;
     QList<QPointer<QWidget> > createOptionWidgets();
 };
 
 class KisToolSelectPathFactory : public KoToolFactoryBase
 {
-
 public:
     KisToolSelectPathFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectPath") {
@@ -96,4 +103,3 @@ public:
 
 
 #endif // KIS_TOOL_SELECT_PATH_H_
-

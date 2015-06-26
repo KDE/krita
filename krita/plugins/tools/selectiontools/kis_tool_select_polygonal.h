@@ -4,6 +4,7 @@
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,37 +26,41 @@
 
 #include "KoToolFactoryBase.h"
 #include "kis_tool_polyline_base.h"
+#include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 
 
-class KisToolSelectPolygonal : public KisToolPolylineBase
+class __KisToolSelectPolygonalLocal : public KisToolPolylineBase
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
-    KisToolSelectPolygonal(KoCanvasBase *canvas);
-    QWidget* createOptionWidget();
-    SelectionAction selectionAction() const;
-
-public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
-
-Q_SIGNALS:
-    void selectionActionChanged();
-
+    __KisToolSelectPolygonalLocal(KoCanvasBase *canvas);
+protected:
+    virtual SelectionMode selectionMode() const = 0;
+    virtual SelectionAction selectionAction() const = 0;
+    virtual bool antiAliasSelection() const = 0;
 private:
-    void keyPressEvent(QKeyEvent *event);
     void finishPolyline(const QVector<QPointF> &points);
 private:
-    KisSelectionToolConfigWidgetHelper m_widgetHelper;
-    SelectionAction m_selectionAction;
 };
+
+class KisToolSelectPolygonal : public SelectionActionHandler<__KisToolSelectPolygonalLocal>
+{
+    Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
+public:
+    KisToolSelectPolygonal(KoCanvasBase* canvas);
+
+    Q_SIGNALS: void selectionActionChanged();
+    public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+};
+
 
 
 class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 {
-
 public:
     KisToolSelectPolygonalFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectPolygonal") {

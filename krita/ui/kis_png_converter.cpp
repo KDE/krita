@@ -27,6 +27,8 @@
 #endif
 
 #include <KoConfig.h> // WORDS_BIGENDIAN
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <limits.h>
 #include <stdio.h>
@@ -523,7 +525,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (m_batchMode) {
+        if (!m_batchMode) {
             KisConfig cfg;
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {
@@ -808,6 +810,44 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 KisImageWSP KisPNGConverter::image()
 {
     return m_image;
+}
+
+bool KisPNGConverter::saveDeviceToStore(const QString &filename, KisImageWSP image, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData)
+{
+    if (store->open(filename)) {
+        KoStoreDevice io(store);
+        if (!io.open(QIODevice::WriteOnly)) {
+            dbgFile << "Could not open for writing:" << filename;
+            return false;
+        }
+        KisPNGConverter pngconv(0);
+        vKisAnnotationSP_it annotIt = 0;
+        KisMetaData::Store* metaDataStore = 0;
+        if (metaData) {
+            metaDataStore = new KisMetaData::Store(*metaData);
+        }
+        KisPNGOptions options;
+        options.compression = 0;
+        options.interlace = false;
+        options.tryToSaveAsIndexed = false;
+        options.alpha = true;
+        bool success = pngconv.buildFile(&io, image, dev, annotIt, annotIt, options, metaDataStore);
+        if (success != KisImageBuilder_RESULT_OK) {
+            dbgFile << "Saving PNG failed:" << filename;
+            delete metaDataStore;
+            return false;
+        }
+        delete metaDataStore;
+        io.close();
+        if (!store->close()) {
+            return false;
+        }
+    } else {
+        dbgFile << "Opening of data file failed :" << filename;
+        return false;
+    }
+    return true;
+
 }
 
 

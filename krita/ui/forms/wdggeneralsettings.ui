@@ -76,6 +76,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QFormLayout" name="formLayout_2">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::ExpandingFieldsGrow</enum>
+        </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
@@ -153,31 +156,31 @@
           </item>
          </layout>
         </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Window Background:</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <widget class="KColorButton" name="m_mdiColor">
           <property name="text">
            <string/>
           </property>
-          <property name="color" stdset="0">
+          <property name="color">
            <color>
             <red>0</red>
             <green>0</green>
             <blue>0</blue>
            </color>
           </property>
-          <property name="defaultColor" stdset="0">
+          <property name="defaultColor">
            <color>
             <red>0</red>
             <green>0</green>
             <blue>0</blue>
            </color>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Window Background:</string>
           </property>
          </widget>
         </item>
@@ -198,7 +201,32 @@
        </layout>
       </item>
      </layout>
-     <zorder></zorder>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Tool Options (needs restart)</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QRadioButton" name="m_radioToolOptionsInDocker">
+        <property name="text">
+         <string>In Docker</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
+        <property name="text">
+         <string>In Toolbar</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -245,7 +273,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -261,7 +289,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="3" column="1">
        <widget class="QSpinBox" name="m_undoStackSize">
         <property name="minimum">
          <number>0</number>
@@ -277,7 +305,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_3">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -293,7 +321,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="4" column="1">
        <widget class="QSpinBox" name="m_favoritePresetsSpinBox">
         <property name="minimum">
          <number>10</number>
@@ -303,31 +331,31 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="5" column="1">
        <widget class="QCheckBox" name="chkShowRootLayer">
         <property name="text">
          <string>Show root layer</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QCheckBox" name="m_backupFileCheckBox">
-        <property name="text">
-         <string>Create backup file </string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
+      <item row="7" column="1">
        <widget class="QCheckBox" name="m_hideSplashScreen">
         <property name="text">
          <string>Hide splash screen on startup</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
+      <item row="1" column="1">
        <widget class="QCheckBox" name="m_chkCompressKra">
         <property name="text">
          <string>Compress .kra files more (slows loading/saving)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="m_backupFileCheckBox">
+        <property name="text">
+         <string>Create backup file </string>
         </property>
        </widget>
       </item>

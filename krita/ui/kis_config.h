@@ -264,6 +264,9 @@ public:
     QString canvasState(bool defaultValue = false) const;
     void setCanvasState(const QString& state) const;
 
+    bool toolOptionsPopupDetached(bool defaultValue = false) const;
+    void setToolOptionsPopupDetached(bool detached) const;
+
     bool paintopPopupDetached(bool defaultValue = false) const;
     void setPaintopPopupDetached(bool detached) const;
 
@@ -450,6 +453,9 @@ public:
 
     bool compressKra(bool defaultValue = false) const;
     void setCompressKra(bool compress);
+
+    bool toolOptionsInDocker(bool defaultValue = false) const;
+    void setToolOptionsInDocker(bool inDocker);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

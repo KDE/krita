@@ -61,7 +61,7 @@ public:
      * Switches current frame (synchronously) and starts an
      * asynchronous regeneration of the entire image.
      */
-    void switchCurrentTimeAsync(int frameId) const;
+    void switchCurrentTimeAsync(int frameId);
 
     /**
      * Returns a pointer to the current projection of the image. Do
@@ -84,6 +84,8 @@ public:
      */
     void requestFrameRegeneration(int frameId, const QRegion &dirtyRegion);
 
+    QImage getCachedFrame(int time);
+
 private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;
@@ -94,6 +96,7 @@ private:
 
 Q_SIGNALS:
     void sigFrameReady();
+    void sigTimeChanged(int newTime);
 
 private:
     struct Private;

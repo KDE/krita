@@ -96,9 +96,6 @@ void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintCha
     m_d->contentChannel = paintDevice->createKeyframeChannel(KoID("content", "Content"), this);
 
     addKeyframeChannel(m_d->contentChannel);
-
-    connect(image(), SIGNAL(sigTimeAboutToChange(int)), this, SLOT(imageTimeAboutToChange(int)));
-    connect(image(), SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged(int)));
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -238,22 +235,6 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
-}
-
-void KisPaintLayer::imageTimeAboutToChange(int newTime)
-{
-    int oldTime = image()->currentTime();
-    if (m_d->contentChannel->frameIdAt(oldTime) != m_d->contentChannel->frameIdAt(newTime)) {
-        m_d->paintDevice->setDirty();
-    }
-}
-
-void KisPaintLayer::imageTimeChanged(int oldTime)
-{
-    int newTime = image()->currentTime();
-    if (m_d->contentChannel->frameIdAt(oldTime) != m_d->contentChannel->frameIdAt(newTime)) {
-        m_d->paintDevice->setDirty();
-    }
 }
 
 void KisPaintLayer::addNewFrame(int time, bool blank)

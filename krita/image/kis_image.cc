@@ -91,7 +91,6 @@
 
 #include "kis_layer_projection_plane.h"
 
-#include "kis_animation_frame_cache.h"
 
 // #define SANITY_CHECKS
 
@@ -149,9 +148,6 @@ public:
     bool startProjection;
 
     bool tryCancelCurrentStrokeAsync();
-
-    int time;
-    KisAnimationFrameCache *frameCache;
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
@@ -210,8 +206,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         m_d->scheduler->setResumeUpdatesStrokeStrategyFactory(
             boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), false));
     }
-
-    m_d->frameCache = new KisAnimationFrameCache();
 }
 
 KisImage::~KisImage()
@@ -229,7 +223,6 @@ KisImage::~KisImage()
      */
     m_d->rootLayer = 0;
 
-
     KisUpdateScheduler *scheduler = m_d->scheduler;
     m_d->scheduler = 0;
     delete scheduler;
@@ -243,8 +236,6 @@ KisImage::~KisImage()
     delete m_d->signalRouter;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
-
-    delete m_d->frameCache;
 
     delete m_d;
 
@@ -1688,37 +1679,6 @@ KisImageAnimationInterface* KisImage::animationInterface() const
 {
     return m_d->animationInterface;
 }
-
-int KisImage::currentTime()
-{
-    // TODO: remove this method and use animation interface directly
-    return m_d->animationInterface->currentTime();
-}
-
-void KisImage::seekToTime(int newTime)
-{
-    // TODO: remove this once we have a proper way to composite animation frames
-    QImage frame = convertToQImage(bounds(), profile());
-    m_d->frameCache->cacheFrame(m_d->time, frame);
-    //
-
-    emit sigTimeAboutToChange(newTime);
-
-    int oldTime = m_d->time;
-    m_d->time = newTime;
-
-    emit sigTimeChanged(oldTime);
-}
-
-QImage KisImage::getRenderedFrame(int time)
-{
-    QImage frame = m_d->frameCache->getFrame(time);
-
-    // TODO: handle cache misses
-
-    return frame;
-}
-
 
 #include "kis_image.moc"
 

@@ -20,7 +20,7 @@
 
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
-
+#include "kis_animation_frame_cache.h"
 
 struct KisImageAnimationInterface::Private
 {
@@ -29,6 +29,8 @@ struct KisImageAnimationInterface::Private
     KisImage *image;
     int currentTime;
     bool externalFrameActive;
+
+    KisAnimationFrameCache *frameCache;
 };
 
 
@@ -36,10 +38,12 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     : m_d(new Private)
 {
     m_d->image = image;
+    m_d->frameCache = new KisAnimationFrameCache();
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
 {
+    delete m_d->frameCache;
 }
 
 int KisImageAnimationInterface::currentTime() const
@@ -52,13 +56,20 @@ bool KisImageAnimationInterface::externalFrameActive() const
     return m_d->externalFrameActive;
 }
 
-void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId) const
+void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
 {
+    // TODO: remove once proper frame caching is implemented
+    QImage frameProjection = m_d->image->convertToQImage(m_d->image->bounds(), m_d->image->profile());
+    m_d->frameCache->cacheFrame(m_d->currentTime, frameProjection);
+    // </TODO>
+
     m_d->image->barrierLock();
     m_d->currentTime = frameId;
     m_d->image->unlock();
 
     m_d->image->refreshGraphAsync();
+
+    emit sigTimeChanged(frameId);
 }
 
 KisPaintDeviceSP KisImageAnimationInterface::frameProjection() const
@@ -98,4 +109,9 @@ void KisImageAnimationInterface::notifyFrameReady()
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const
 {
     return m_d->image;
+}
+
+QImage KisImageAnimationInterface::getCachedFrame(int time)
+{
+    return m_d->frameCache->getFrame(time);
 }

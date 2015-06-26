@@ -532,11 +532,6 @@ public:
 
     KisImageAnimationInterface *animationInterface() const;
 
-    int currentTime();
-    void seekToTime(int newTime);
-
-    QImage getRenderedFrame(int time);
-
 public:
     void startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
@@ -675,16 +670,6 @@ Q_SIGNALS:
      *
      */
     void sigNodeCollapsedChanged();
-
-    /**
-     * Emitted before the current time is changed
-     */
-    void sigTimeAboutToChange(int newTime);
-
-    /**
-     * Emitted after the current time is changed
-     */
-    void sigTimeChanged(int oldTime);
 
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();

@@ -147,10 +147,6 @@ public Q_SLOTS:
         return this;
     }
 
-private Q_SLOTS:
-    void imageTimeAboutToChange(int newTime);
-    void imageTimeChanged(int oldTime);
-
 protected:
     // override from KisLayer
     void copyOriginalToProjection(const KisPaintDeviceSP original,

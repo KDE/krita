@@ -25,6 +25,7 @@
 #include "KisViewManager.h"
 #include "kis_paint_layer.h"
 #include "kis_action_manager.h"
+#include "kis_image_animation_interface.h"
 
 #include "ui_wdg_animation.h"
 
@@ -114,7 +115,7 @@ void AnimationDocker::slotAddBlankFrame()
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
 
-        layer->addNewFrame(m_canvas->image()->currentTime(), true);
+        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), true);
     }
 }
 
@@ -128,7 +129,7 @@ void AnimationDocker::slotAddDuplicateFrame()
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
 
-        layer->addNewFrame(m_canvas->image()->currentTime(), false);
+        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), false);
     }
 }
 
@@ -142,7 +143,7 @@ void AnimationDocker::slotDeleteKeyframe()
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
 
-        layer->deleteKeyfame(m_canvas->image()->currentTime());
+        layer->deleteKeyfame(m_canvas->image()->animationInterface()->currentTime());
     }
 }
 
@@ -150,8 +151,8 @@ void AnimationDocker::slotPreviousFrame()
 {
     if (!m_canvas) return;
 
-    int time = m_canvas->image()->currentTime() - 1;
-    m_canvas->image()->seekToTime(time);
+    int time = m_canvas->image()->animationInterface()->currentTime() - 1;
+    m_canvas->image()->animationInterface()->switchCurrentTimeAsync(time);
 
     m_animationWidget->lblInfo->setText("Frame: " + QString::number(time));
 }
@@ -160,8 +161,8 @@ void AnimationDocker::slotNextFrame()
 {
     if (!m_canvas) return;
 
-    int time = m_canvas->image()->currentTime() + 1;
-    m_canvas->image()->seekToTime(time);
+    int time = m_canvas->image()->animationInterface()->currentTime() + 1;
+    m_canvas->image()->animationInterface()->switchCurrentTimeAsync(time);
 
     m_animationWidget->lblInfo->setText("Frame: " + QString::number(time));
 }

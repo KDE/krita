@@ -17,10 +17,12 @@
  */
 
 #include "kis_animation_player.h"
-#include "kis_canvas2.h"
 
 #include <QTimer>
 #include <QImage>
+
+#include "kis_canvas2.h"
+#include "kis_image_animation_interface.h"
 
 struct KisAnimationPlayer::Private
 {
@@ -83,7 +85,7 @@ bool KisAnimationPlayer::isPlaying()
 
 void KisAnimationPlayer::slotUpdate()
 {
-    m_d->frame = canvas()->image()->getRenderedFrame(m_d->currentFrame);
+    m_d->frame = canvas()->image()->animationInterface()->getCachedFrame(m_d->currentFrame);
     m_d->currentFrame++;
 
     if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;

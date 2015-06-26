@@ -21,6 +21,7 @@
 #include <QPainter>
 
 #include "kis_image.h"
+#include "kis_image_animation_interface.h"
 
 TimelineWidget::TimelineWidget(QWidget *parent)
     : QWidget(parent)
@@ -60,7 +61,7 @@ void TimelineWidget::paintEvent(QPaintEvent *e)
         }
     }
 
-    int x = m_timelineView->timeToPosition(m_image->currentTime()) + 4;
+    int x = m_timelineView->timeToPosition(m_image->animationInterface()->currentTime()) + 4;
     if (m_timelineView->isWithingView(x)) {
         painter.setPen(QPen(
             dark ? QColor(0, 0, 0, 128) : QColor(255, 255, 255, 128)
@@ -84,7 +85,7 @@ void TimelineWidget::setImage(KisImageWSP image)
     m_image = image;
 
     if (m_image) {
-        connect(m_image, SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
+        connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
     }
 }
 
@@ -111,7 +112,7 @@ void TimelineWidget::scrub(QMouseEvent *e)
 
     int time = m_timelineView->positionToTime(e->pos().x());
     if (time >= 0) {
-        m_image->seekToTime(time);
+        m_image->animationInterface()->switchCurrentTimeAsync(time);
     }
 
     e->accept();

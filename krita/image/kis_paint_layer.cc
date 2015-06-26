@@ -36,6 +36,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
+#include "kis_onion_skin_compositor.h"
 #include "kis_raster_keyframe_channel.h"
 
 struct KisPaintLayer::Private
@@ -120,7 +121,7 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
 
 bool KisPaintLayer::needProjection() const
 {
-    return hasTemporaryTarget();
+    return hasTemporaryTarget() || (m_d->contentChannel->keyframeCount() > 1);
 }
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
@@ -130,8 +131,15 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     lockTemporaryTarget();
 
     KisPainter gc(projection);
-    gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, rect);
+
+    if (m_d->contentChannel->keyframeCount() > 1) {
+        KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
+
+        compositor->composite(m_d->paintDevice, projection, rect);
+    } else {
+        gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(rect.topLeft(), original, rect);
+    }
 
     if (hasTemporaryTarget()) {
         setupTemporaryPainter(&gc);

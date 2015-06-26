@@ -321,6 +321,16 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
+    action = new KAction(i18n("Show Brush Editor"), this);
+    view->actionCollection()->addAction("show_brush_editor", action);
+    action->setShortcut(Qt::Key_F5);
+    connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
+
+    action = new KAction(i18n("Show Brush Presets"), this);
+    view->actionCollection()->addAction("show_brush_presets", action);
+    action->setShortcut(Qt::Key_F7);
+    connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
+
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(m_hMirrorButton);

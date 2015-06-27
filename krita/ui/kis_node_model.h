@@ -69,6 +69,7 @@ public:
     bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
     Qt::DropActions supportedDragActions() const;
     Qt::DropActions supportedDropActions() const;
+    bool isInitialized();
 
 Q_SIGNALS:
 

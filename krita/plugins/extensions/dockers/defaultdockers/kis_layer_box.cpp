@@ -473,7 +473,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 
 void KisLayerBox::slotModelReset()
 {
-    if(m_nodeModel->isInitialized()) {
+    if(m_nodeModel->hasDummiesFacade()) {
         QItemSelection selection;
         foreach(const KisNodeSP node, m_nodeManager->selectedNodes()) {
             const QModelIndex &idx = m_nodeModel->indexFromNode(node);

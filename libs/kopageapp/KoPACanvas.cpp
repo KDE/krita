@@ -22,6 +22,7 @@
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
 #include <KoZoomHandler.h>
+#include <KoPageLayout.h>
 
 #include "KoPADocument.h"
 #include "KoPAView.h"

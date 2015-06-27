@@ -38,6 +38,8 @@
 #include <KoGenStyles.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoText.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoInlineTextObjectManager.h>

@@ -21,6 +21,7 @@
 
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
+#include <KoGridData.h>
 #include <KoUnit.h>
 #include <KoText.h>
 

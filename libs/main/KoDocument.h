@@ -24,20 +24,12 @@
 #define KODOCUMENT_H
 
 #include <QDateTime>
-#include <QTransform>
 #include <QList>
 
-#include <kcomponentdata.h>
-
-#include <KoPageLayout.h>
 #include "komain_export.h"
-#include "KoGridData.h"
-#include "KoGuidesData.h"
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
-
-#include <klocale.h>
 
 class KUndo2Command;
 class KoPart;
@@ -49,6 +41,12 @@ class KoProgressUpdater;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
 class KoUnit;
+class KoPageLayout;
+class KoGridData;
+class KoGuidesData;
+class KoXmlWriter;
+
+class QDomDocument;
 
 class KoVersionInfo
 {

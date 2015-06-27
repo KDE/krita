@@ -40,6 +40,7 @@
 #include <kdesktopfile.h>
 #include <kmimetype.h>
 
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 

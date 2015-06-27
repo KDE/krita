@@ -25,6 +25,8 @@
 #include <KoToolProxy.h>
 #include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include "KoPACanvasBase.h"
 #include "KoPADocument.h"
 #include "KoPAPage.h"

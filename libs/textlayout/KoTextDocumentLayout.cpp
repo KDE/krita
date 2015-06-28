@@ -823,7 +823,7 @@ bool KoTextDocumentLayout::doLayout()
             d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, newRootArea);
-            updateProgress(rootArea->startTextFrameIterator());
+            updateProgress(d->layoutPosition->it);
 
             if (finished && !rootArea->footNoteCursorToNext()) {
                 d->provider->releaseAllAfter(rootArea);

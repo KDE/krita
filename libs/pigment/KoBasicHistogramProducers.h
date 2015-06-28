@@ -22,7 +22,6 @@
 #include "KoHistogramProducer.h"
 
 #include <QVector>
-#include <klocale.h>
 
 #include <KoConfig.h>
 
@@ -198,8 +197,7 @@ protected:
 class  PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
-    KoGenericRGBHistogramProducerFactory()
-            : KoHistogramProducerFactory(KoID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
+    KoGenericRGBHistogramProducerFactory();
     virtual ~KoGenericRGBHistogramProducerFactory() {}
     virtual KoHistogramProducerSP generate() {
         return KoHistogramProducerSP(new KoGenericRGBHistogramProducer());
@@ -235,8 +233,7 @@ protected:
 class /*PIGMENTCMS_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
-    KoGenericLabHistogramProducerFactory()
-            : KoHistogramProducerFactory(KoID("GENLABHISTO", i18n("Generic L*a*b* Histogram"))) {}
+    KoGenericLabHistogramProducerFactory();
     virtual ~KoGenericLabHistogramProducerFactory() {}
     virtual KoHistogramProducerSP generate() {
         return KoHistogramProducerSP(new KoGenericLabHistogramProducer());

@@ -394,7 +394,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
     KoTextBlockData blockData(block);
 
     QTextList *list = block.textList();
-
     if (list && blockData.hasCounterData()) {
         QTextListFormat listFormat = list->format();
         if (! blockData.counterText().isEmpty()) {

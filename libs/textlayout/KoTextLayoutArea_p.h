@@ -70,6 +70,7 @@ public:
         , continuedNoteFromPrevious(0)
         , footNoteCountInDoc(0)
         , acceptsPageBreak(false)
+        , acceptsColumnBreak(false)
         , virginPage(true)
         , verticalAlignOffset(0)
         , preregisteredFootNotesHeight(0)
@@ -117,6 +118,7 @@ public:
     int footNoteCountInDoc;
 
     bool acceptsPageBreak;
+    bool acceptsColumnBreak;
     bool virginPage;
     qreal verticalAlignOffset;
     QList<QRectF> blockRects;

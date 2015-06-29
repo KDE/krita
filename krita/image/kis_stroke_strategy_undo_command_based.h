@@ -95,6 +95,8 @@ protected:
                            KisStrokeJobData::Sequentiality sequentiality,
                            KisStrokeJobData::Exclusivity exclusivity);
 
+    virtual void postProcessToplevelCommand(KUndo2Command *command);
+
 private:
     void executeCommand(KUndo2CommandSP command, bool undo);
 

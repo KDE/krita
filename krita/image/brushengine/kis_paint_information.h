@@ -75,16 +75,25 @@ public:
 
     /**
      * Create a new KisPaintInformation object.
-
      */
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation,
+                        qreal tangentialPressure,
+                        qreal perspective,
+                        qreal time,
+                        qreal speed);
+
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation);
+
     KisPaintInformation(const QPointF & pos = QPointF(),
-                        qreal pressure = PRESSURE_DEFAULT,
-                        qreal xTilt = 0.0,
-                        qreal yTilt = 0.0,
-                        qreal rotation = 0.0,
-                        qreal tangentialPressure = 0.0,
-                        qreal perspective = 1.0,
-                        qreal time = 0.0);
+                        qreal pressure = PRESSURE_DEFAULT);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -198,7 +207,8 @@ public:
             qreal xTilt = 0.0, qreal yTilt = 0.0,
             qreal rotation = 0.0,
             qreal tangentialPressure = 0.0,
-            qreal perspective = 1.0);
+            qreal perspective = 1.0,
+            qreal speed = 0.0);
 
     void toXML(QDomDocument&, QDomElement&) const;
 

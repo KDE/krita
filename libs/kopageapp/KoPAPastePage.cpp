@@ -44,7 +44,7 @@ KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 
 bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), KGlobal::mainComponent() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->defaultStylesResourcePath() );
     KoPALoadingContext paContext(loadingContext, m_doc->resourceManager());
 
     QList<KoPAPageBase *> newMasterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );

@@ -85,6 +85,7 @@
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
 #include "kis_progress_widget.h"
+#include "kis_signal_compressor.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -112,7 +113,9 @@ public:
         , viewManager(0)
         , actionCollection(0)
         , paintingAssistantsDecoration(0)
-        , shown(false)
+        , isCurrent(false)
+        , showFloatingMessage(true)
+        , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
         tempActiveWidget = 0;
         documentDeleted = false;
@@ -151,7 +154,10 @@ public:
     KisNodeSP currentNode;
     KActionCollection* actionCollection;
     KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
-    bool shown;
+    bool isCurrent;
+    bool showFloatingMessage;
+    QPointer<KisFloatingMessage> savedFloatingMessage;
+    KisSignalCompressor floatingMessageCompressor;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -303,6 +309,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas->addDecoration(d->paintingAssistantsDecoration);
 
+    d->showFloatingMessage = cfg.showCanvasMessages();
 }
 
 KisView::~KisView()
@@ -311,8 +318,37 @@ KisView::~KisView()
     delete d;
 }
 
-void KisView::setShown() { d->shown = true; }
-bool KisView::shown() const { return d->shown; }
+void KisView::notifyCurrentStateChanged(bool isCurrent)
+{
+    d->isCurrent = isCurrent;
+
+    if (!d->isCurrent && d->savedFloatingMessage) {
+        d->savedFloatingMessage->removeMessage();
+    }
+}
+
+void KisView::setShowFloatingMessage(bool show)
+{
+    d->showFloatingMessage = show;
+}
+
+void KisView::showFloatingMessageImpl(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
+{
+    if (!d->viewManager) return;
+
+    if(d->isCurrent && d->showFloatingMessage && d->viewManager->qtMainWindow()) {
+        if (d->savedFloatingMessage) {
+            d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
+        } else {
+            d->savedFloatingMessage = new KisFloatingMessage(message, this->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
+            d->savedFloatingMessage->setShowOverParent(true);
+            d->savedFloatingMessage->setIcon(icon);
+
+            connect(&d->floatingMessageCompressor, SIGNAL(timeout()), d->savedFloatingMessage, SLOT(showMessage()));
+            d->floatingMessageCompressor.start();
+        }
+    }
+}
 
 void KisView::setViewManager(KisViewManager *view)
 {
@@ -782,12 +818,6 @@ void KisView::closeEvent(QCloseEvent *event)
 
     event->ignore();
 
-}
-
-void KisView::showEvent(QShowEvent *event)
-{
-    QWidget::showEvent(event);
-    QTimer::singleShot(10000, this, SLOT(setShown()));
 }
 
 bool KisView::queryClose()

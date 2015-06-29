@@ -1404,6 +1404,8 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 {
     KoStyleStack &styleStack = scontext.odfLoadingContext().styleStack();
 
+    d->stylesPrivate = StylePrivate();
+
     // The fo:color attribute specifies the foreground color of text.
     const QString color(styleStack.property(KoXmlNS::fo, "color"));
     if (!color.isEmpty()) {

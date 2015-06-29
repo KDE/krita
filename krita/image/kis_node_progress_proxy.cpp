@@ -34,6 +34,8 @@ struct KisNodeProgressProxy::Private {
         int old_percentage = percentage;
         if (value == maximum) {
             percentage = -1;
+        } else if (minimum == maximum && minimum == 0) {
+            percentage = 0;
         } else {
             percentage = (100 * (value - minimum)) / (maximum - minimum);
             percentage = qBound(0, percentage, 100);

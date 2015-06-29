@@ -29,10 +29,10 @@ Q_OBJECT
 
 Q_SIGNALS:
     void rectangleChanged(const QRectF &newRect);
-    
+
 public Q_SLOTS:
     void constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height);
-    
+
 public:
     enum ToolType {
         PAINT,
@@ -47,9 +47,11 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
     virtual void deactivate();
+    void listenToModifiers(bool listen);
+    bool listeningToModifiers();
 
     QList<QPointer<QWidget> > createOptionWidgets();
-    
+
 protected:
     virtual void finishRect(const QRectF&)=0;
 
@@ -57,14 +59,15 @@ protected:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     ToolType m_type;
-    
+
     bool m_isRatioForced;
     bool m_isWidthForced;
     bool m_isHeightForced;
+    bool m_listenToModifiers;
     float m_forcedRatio;
     float m_forcedWidth;
     float m_forcedHeight;
-    
+
     bool isFixedSize();
     void applyConstraints(QSizeF& area, bool overrideRatio);
 

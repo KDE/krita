@@ -110,7 +110,7 @@ void KisImagePipeBrushTest::testChangingBrushes()
     QVERIFY(brush->valid());
 
     qreal rotation = 0;
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation);
 
     for (int i = 0; i < 100; i++) {
         checkConsistency(brush);
@@ -133,7 +133,7 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
     qreal rotation = 0;
     qreal subPixelX = 0.0;
     qreal subPixelY = 0.0;
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation);
 
     for (int i = 0; i < 20; i++) {
         int maskWidth = brush->maskWidth(realScale, realAngle, subPixelX, subPixelY, info);
@@ -210,7 +210,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
     qreal rotation = 0;
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation);
 
     KisPaintDeviceSP layer = new KisPaintDevice(cs);
     KisPainter painter(layer);

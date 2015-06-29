@@ -34,7 +34,7 @@ void KisPaintInformationTest::testCreation()
 
 void KisPaintInformationTest::testSerialisation()
 {
-    KisPaintInformation test(QPointF(double(rand()) / RAND_MAX, double(rand()) / RAND_MAX), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX);
+    KisPaintInformation test(QPointF(double(rand()) / RAND_MAX, double(rand()) / RAND_MAX), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX);
 
     QDomDocument doc = QDomDocument("pi");
     QDomElement root = doc.createElement("pi");

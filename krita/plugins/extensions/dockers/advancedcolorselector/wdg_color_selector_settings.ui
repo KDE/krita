@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>658</width>
-    <height>828</height>
+    <height>838</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -283,7 +283,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Type Description goes here</string>
+        <string notr="true">Type Description goes here</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -315,7 +315,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="KisColorSpaceSelector" name="colorSpace">
+         <widget class="KisColorSpaceSelector" name="colorSpace" native="true">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -329,18 +329,6 @@
         </item>
        </layout>
       </widget>
-      <zorder>lumaCoefficientGroupbox</zorder>
-      <zorder>l_type</zorder>
-      <zorder>colorSelectorConfiguration</zorder>
-      <zorder>colorSelectorTypeComboBox</zorder>
-      <zorder>ACSTypeDescriptionLabel</zorder>
-      <zorder>l_lumaR</zorder>
-      <zorder>l_lumaG</zorder>
-      <zorder>l_lumaB</zorder>
-      <zorder>redlabel</zorder>
-      <zorder>greenlabel</zorder>
-      <zorder>bluelabel</zorder>
-      <zorder>useDifferentColorSpaceCheckbox</zorder>
      </widget>
      <widget class="QWidget" name="tab_general">
       <attribute name="title">
@@ -398,9 +386,9 @@
       <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>50</x>
          <y>90</y>
-         <width>141</width>
+         <width>131</width>
          <height>21</height>
         </rect>
        </property>
@@ -434,6 +422,19 @@
        </property>
        <property name="value">
         <number>260</number>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="hidePopupOnClickCheck">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>120</y>
+         <width>161</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Hide Popup on click.</string>
        </property>
       </widget>
      </widget>
@@ -598,7 +599,7 @@
           <x>320</x>
           <y>60</y>
           <width>196</width>
-          <height>103</height>
+          <height>115</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
@@ -1214,8 +1215,6 @@
         </property>
        </widget>
       </widget>
-      <zorder>HSL_title</zorder>
-      <zorder>commonColorsShow</zorder>
      </widget>
     </widget>
    </item>
@@ -1441,28 +1440,6 @@
        <string>Hue</string>
       </property>
      </widget>
-     <zorder>csl_hsyY</zorder>
-     <zorder>csl_hsvS</zorder>
-     <zorder>HSL_title</zorder>
-     <zorder>HSI_title</zorder>
-     <zorder>HSV_title</zorder>
-     <zorder>csl_hsiS</zorder>
-     <zorder>csl_hslL</zorder>
-     <zorder>HSY_title</zorder>
-     <zorder>csl_hsvH</zorder>
-     <zorder>csl_hsiI</zorder>
-     <zorder>csl_hsvV</zorder>
-     <zorder>csl_hslS</zorder>
-     <zorder>csl_hsyS</zorder>
-     <zorder>csl_hslH</zorder>
-     <zorder>csl_hsiH</zorder>
-     <zorder>csl_hsyH</zorder>
-     <zorder>advancedColorSelectorOptions</zorder>
-     <zorder>advancedColorSelectorOptions</zorder>
-     <zorder>advancedColorSelectorOptions</zorder>
-     <zorder>advancedColorSelectorOptions</zorder>
-     <zorder>advancedColorSelectorOptions</zorder>
-     <zorder>advancedColorSelectorOptions</zorder>
     </widget>
    </item>
    <item>
@@ -1482,15 +1459,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisColorSpaceSelector</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KTabWidget</class>
    <extends>QTabWidget</extends>
    <header>ktabwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisColorSpaceSelector</class>
-   <extends>QComboBox</extends>
-   <header>widgets/kis_color_space_selector.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSelectorComboBox</class>

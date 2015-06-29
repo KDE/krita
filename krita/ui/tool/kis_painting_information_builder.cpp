@@ -24,6 +24,7 @@
 #include "kis_config_notifier.h"
 
 #include "kis_cubic_curve.h"
+#include "kis_speed_smoother.h"
 
 
 /***********************************************************************/
@@ -35,11 +36,17 @@ const int KisPaintingInformationBuilder::LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
 
 KisPaintingInformationBuilder::KisPaintingInformationBuilder()
+    : m_speedSmoother(new KisSpeedSmoother())
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
 
     updateSettings();
+}
+
+KisPaintingInformationBuilder::~KisPaintingInformationBuilder()
+{
+
 }
 
 void KisPaintingInformationBuilder::updateSettings()
@@ -74,6 +81,11 @@ QPointF KisPaintingInformationBuilder::documentToImage(const QPointF &point)
     return point;
 }
 
+QPointF KisPaintingInformationBuilder::imageToView(const QPointF &point)
+{
+    return point;
+}
+
 qreal KisPaintingInformationBuilder::calculatePerspective(const QPointF &documentPoint)
 {
     Q_UNUSED(documentPoint);
@@ -88,6 +100,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
     QPointF imagePoint = documentToImage(adjusted);
     qreal perspective = calculatePerspective(adjusted);
+    qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
 
     return KisPaintInformation(imagePoint,
                                pressureToCurve(event->pressure()),
@@ -95,13 +108,15 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                                event->rotation(),
                                event->tangentialPressure(),
                                perspective,
-                               timeElapsed);
+                               timeElapsed,
+                               speed);
 }
 
 KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
                                                          const KoPointerEvent *event)
 {
     qreal perspective = calculatePerspective(imagePoint);
+    qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
 
     if (event) {
         return KisPaintInformation::createHoveringModeInfo(imagePoint,
@@ -109,7 +124,8 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                            event->xTilt(), event->yTilt(),
                                                            event->rotation(),
                                                            event->tangentialPressure(),
-                                                           perspective);
+                                                           perspective,
+                                                           speed);
     } else {
         return KisPaintInformation::createHoveringModeInfo(imagePoint);
     }
@@ -136,6 +152,11 @@ QPointF KisConverterPaintingInformationBuilder::documentToImage(const QPointF &p
     return m_converter->documentToImage(point);
 }
 
+QPointF KisConverterPaintingInformationBuilder::imageToView(const QPointF &point)
+{
+    return m_converter->documentToWidget(point);
+}
+
 /***********************************************************************/
 /*           KisToolFreehandPaintingInformationBuilder                        */
 /***********************************************************************/
@@ -150,6 +171,11 @@ KisToolFreehandPaintingInformationBuilder::KisToolFreehandPaintingInformationBui
 QPointF KisToolFreehandPaintingInformationBuilder::documentToImage(const QPointF &point)
 {
     return m_tool->convertToPixelCoord(point);
+}
+
+QPointF KisToolFreehandPaintingInformationBuilder::imageToView(const QPointF &point)
+{
+    return m_tool->pixelToView(point);
 }
 
 QPointF KisToolFreehandPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)

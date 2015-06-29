@@ -32,6 +32,7 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
+#include "kis_busy_progress_indicator.h"
 
 #include "kis_clone_layer.h"
 
@@ -81,6 +82,7 @@ public:
     Private(KisNode *node)
             : graphListener(0)
             , nodeProgressProxy(0)
+            , busyProgressIndicator(0)
             , projectionLeaf(new KisProjectionLeaf(node))
     {
     }
@@ -89,6 +91,7 @@ public:
     KisNodeGraphListener *graphListener;
     KisSafeReadNodeList nodes;
     KisNodeProgressProxy *nodeProgressProxy;
+    KisBusyProgressIndicator *busyProgressIndicator;
     QReadWriteLock nodeSubgraphLock;
 
 
@@ -193,8 +196,13 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    if (m_d->nodeProgressProxy)
+    if (m_d->busyProgressIndicator) {
+        m_d->busyProgressIndicator->deleteLater();
+    }
+
+    if (m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy->deleteLater();
+    }
 
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);
@@ -494,10 +502,21 @@ KisNodeProgressProxy* KisNode::nodeProgressProxy() const
     return 0;
 }
 
+KisBusyProgressIndicator* KisNode::busyProgressIndicator() const
+{
+    if (m_d->busyProgressIndicator) {
+        return m_d->busyProgressIndicator;
+    } else if (parent()) {
+        return parent()->busyProgressIndicator();
+    }
+    return 0;
+}
+
 void KisNode::createNodeProgressProxy()
 {
     if (!m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy = new KisNodeProgressProxy(this);
+        m_d->busyProgressIndicator = new KisBusyProgressIndicator(m_d->nodeProgressProxy);
     }
 }
 

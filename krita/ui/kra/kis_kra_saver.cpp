@@ -43,6 +43,7 @@
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
 #include <kis_psd_layer_style_resource.h>
+#include "kis_png_converter.h"
 
 #include "KisDocument.h"
 #include <string>
@@ -183,15 +184,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     }
 
     if (!autosave) {
-        if (store->open("mergedimage.png")) {
-            QImage mergedimage = image->projection()->convertToQImage(0);
-            KoStoreDevice io(store);
-            if (io.open(QIODevice::WriteOnly)) {
-                mergedimage.save(&io, "PNG");
-            }
-            io.close();
-            store->close();
-        }
+        KisPNGConverter::saveDeviceToStore("mergedimage.png", image, image->projection(), store);
     }
 
     saveAssistants(store, uri,external);

@@ -117,7 +117,6 @@ KoScriptingDocker::KoScriptingDocker(QWidget *parent)
     connect(filter, SIGNAL(textChanged(const QString&)), model, SLOT(setFilterRegExp(const QString&)));
     */
 
-    setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     setWidget(widget);
 
     connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotDoubleClicked()));

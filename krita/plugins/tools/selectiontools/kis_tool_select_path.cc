@@ -32,20 +32,21 @@
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-    : DelegatedSelectPathTool(canvas,
+    : SelectionActionHandler<KisDelegatedSelectPathWrapper>(canvas,
                               KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
-                              new __KisToolSelectPathLocalTool(canvas, this))
+			      i18n("Select path"),
+                              (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
 {
 }
 
 void KisToolSelectPath::requestStrokeEnd()
 {
-    localTool()->endPathWithoutLastPoint();
+     localTool()->endPathWithoutLastPoint();
 }
 
 void KisToolSelectPath::requestStrokeCancellation()
 {
-    localTool()->cancelPath();
+ localTool()->cancelPath();
 }
 
 void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
@@ -62,6 +63,30 @@ QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
     return widgetsList;
 }
 
+void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
+{
+    // We will turn off the ability to change the selection in the middle of drawing a path.
+    if (!m_localTool->listeningToModifiers()) {
+      SelectionActionHandler<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
+    }
+}
+
+
+bool KisDelegatedSelectPathWrapper::listeningToModifiers() {
+  return m_localTool->listeningToModifiers();
+}
+
+void KisDelegatedSelectPathWrapper::beginPrimaryAction(KoPointerEvent *event) {
+ mousePressEvent(event);
+}
+
+void KisDelegatedSelectPathWrapper::continuePrimaryAction(KoPointerEvent *event){
+ mouseMoveEvent(event);
+}
+
+void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
+ mouseReleaseEvent(event);
+}
 
  __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
      : KoCreatePathTool(canvas), m_selectionTool(parentTool)
@@ -118,5 +143,6 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
         helper.addSelectionShape(pathShape);
     }
 }
+
 
 #include "kis_tool_select_path.moc"

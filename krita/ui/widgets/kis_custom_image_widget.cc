@@ -221,6 +221,7 @@ void KisCustomImageWidget::createImage()
 {
     KisDocument *doc = createNewImage();
     if (doc) {
+        doc->setModified(false);
         emit documentSelected(doc);
     }
 }

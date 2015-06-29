@@ -100,7 +100,7 @@ void KisImageFromClipboard::createImage()
         }
 
     }
-
+    doc->setModified(true);
     emit documentSelected(doc);
 }
 

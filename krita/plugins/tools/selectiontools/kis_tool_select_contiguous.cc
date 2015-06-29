@@ -5,6 +5,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,13 +52,14 @@
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
         : KisToolSelectBase(canvas,
                             KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                            i18n("Contiguous Area Selection"))
+                            i18n("Contiguous Area Selection")),
+          m_fuzziness(20),
+          m_sizemod(0),
+          m_feather(0),
+          m_limitToCurrentLayer(false)
 {
-    setObjectName("tool_select_contiguous");
-    m_fuzziness = 20;
-    m_sizemod = 0;
-    m_feather = 0;
-    m_limitToCurrentLayer = false;
+    setObjectName("tool_select_contiguous");    
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -72,13 +74,14 @@ void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet
 
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 {
+
+    KisToolSelectBase::beginPrimaryAction(event);
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
         !(dev = currentNode()->projection()) ||
         !currentNode()->visible() ||
         !selectionEditable()) {
-
         event->ignore();
         return;
     }
@@ -110,7 +113,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     selection->pixelSelection()->invalidateOutlineCache();
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Contiguous Area"));
     helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
-
     QApplication::restoreOverrideCursor();
 }
 
@@ -205,8 +207,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
         feather->setValue(m_configGroup.readEntry("feather", 0));
         limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
-
-
     }
     return selectionWidget;
 }
@@ -218,5 +218,20 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     m_limitToCurrentLayer = (state == Qt::Checked);
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
+
+void KisToolSelectContiguous::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+        if(m_widgetHelper.optionWidget())
+        {
+            m_widgetHelper.slotSetAction(newSelectionAction);
+        }
+        m_selectionAction = (SelectionAction)newSelectionAction;
+        emit selectionActionChanged();
+    }
+}
+
+
 
 #include "kis_tool_select_contiguous.moc"

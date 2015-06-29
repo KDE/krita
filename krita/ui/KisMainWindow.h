@@ -234,7 +234,6 @@ public Q_SLOTS:
      */
     bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -349,6 +348,11 @@ private Q_SLOTS:
      * Hide the dockers
      */
     void toggleDockersVisibility(bool visible);
+
+    /**
+     * Handle theme changes from theme manager
+     */
+    void slotThemeChanged();
 
     void undo();
     void redo();

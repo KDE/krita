@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +24,7 @@
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
 #include "KoToolFactoryBase.h"
-#include "krita/ui/tool/kis_tool_select_base.h"
+#include "kis_tool_select_base.h"
 #include <KoIcon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -37,6 +38,8 @@ class KisToolSelectContiguous : public KisToolSelectBase
 {
 
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
+    Q_SIGNALS: void selectionActionChanged();
 
 public:
     KisToolSelectContiguous(KoCanvasBase *canvas);
@@ -47,12 +50,21 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event);
 
+protected:
+
+    virtual bool wantsAutoScroll() const { return false; }
+
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
     virtual void slotLimitToCurrentLayer(int);
+    //virtual bool antiAliasSelection();
+    void setSelectionAction(int newSelectionAction);
+
+protected:
+    using KisToolSelectBase::m_widgetHelper;
 
 private:
     int  m_fuzziness;
@@ -64,7 +76,6 @@ private:
 
 class KisToolSelectContiguousFactory : public KoToolFactoryBase
 {
-
 public:
     KisToolSelectContiguousFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectContiguous") {
@@ -80,8 +91,6 @@ public:
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectContiguous(canvas);
     }
-
 };
 
 #endif //__KIS_TOOL_SELECT_CONTIGUOUS_H__
-

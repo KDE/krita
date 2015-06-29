@@ -123,8 +123,6 @@ KisLayerBox::KisLayerBox()
 {
     KisConfig cfg;
 
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_opacityDelayTimer.setSingleShot(true);
@@ -260,7 +258,7 @@ KisLayerBox::KisLayerBox()
     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(updateUI()));
-    connect(m_nodeModel, SIGNAL(modelReset()), SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotModelReset()));
 
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");
@@ -321,7 +319,11 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
+    if(m_canvas == canvas)
+        return;
+
     setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0);
@@ -466,6 +468,24 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
     QModelIndex index = node ? m_nodeModel->indexFromNode(node) : QModelIndex();
 
     m_wdgLayerBox->listLayers->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+    updateUI();
+}
+
+void KisLayerBox::slotModelReset()
+{
+    if(m_nodeModel->hasDummiesFacade()) {
+        QItemSelection selection;
+        foreach(const KisNodeSP node, m_nodeManager->selectedNodes()) {
+            const QModelIndex &idx = m_nodeModel->indexFromNode(node);
+            if(idx.isValid()){
+                QItemSelectionRange selectionRange(idx);
+                selection << selectionRange;
+            }
+        }
+
+        m_wdgLayerBox->listLayers->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
+    }
+
     updateUI();
 }
 

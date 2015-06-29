@@ -54,9 +54,7 @@ class KoTextSharedLoadingData::Private
 {
 public:
     Private()
-    : footnotesConfiguration(KoOdfNotesConfiguration::Footnote)
-    , endnotesConfiguration(KoOdfNotesConfiguration::Endnote)
-    , defaultCharacterStyle(0)
+    : defaultCharacterStyle(0)
     , defaultParagraphStyle(0)
     {}
     ~Private() {
@@ -104,8 +102,6 @@ public:
     QList<KoSectionStyle *> sectionStylesToDelete;
     QList<KoTextTableTemplate *> tableTemplatesToDelete;
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
-    KoOdfNotesConfiguration footnotesConfiguration;
-    KoOdfNotesConfiguration endnotesConfiguration;
     KoOdfBibliographyConfiguration bibliographyConfiguration;
     KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
@@ -195,7 +191,7 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
 
     addOutlineStyle(shapeContext, styleManager);
 
-    addNotesConfiguration(shapeContext);
+    addNotesConfiguration(shapeContext, styleManager);
 
     addTableTemplate(shapeContext, styleManager);
 
@@ -637,16 +633,6 @@ KoSectionStyle *KoTextSharedLoadingData::sectionStyle(const QString &name, bool 
     return stylesDotXml ? d->sectionStylesDotXmlStyles.value(name) : d->sectionContentDotXmlStyles.value(name);
 }
 
-KoOdfNotesConfiguration KoTextSharedLoadingData::footnotesConfiguration() const
-{
-    return d->footnotesConfiguration;
-}
-
-KoOdfNotesConfiguration KoTextSharedLoadingData::endnotesConfiguration() const
-{
-    return d->endnotesConfiguration;
-}
-
 KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguration() const
 {
     return d->bibliographyConfiguration;
@@ -663,12 +649,27 @@ QList<KoShape *> KoTextSharedLoadingData::insertedShapes() const
     return d->insertedShapes;
 }
 
-void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context)
+void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context, KoStyleManager *styleManager)
 {
-    d->footnotesConfiguration =
-            context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote);
-    d->endnotesConfiguration =
-            context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Endnote);
+    KoOdfNotesConfiguration *footnotesConfiguration = new KoOdfNotesConfiguration(
+         context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
+    KoOdfNotesConfiguration *endnotesConfiguration = new KoOdfNotesConfiguration(
+         context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
+
+    footnotesConfiguration->setCitationBodyTextStyle(d->characterStylesDotXmlStyles.value(footnotesConfiguration->citationBodyTextStyleName()));
+
+    footnotesConfiguration->setCitationTextStyle(d->characterStylesDotXmlStyles.value(footnotesConfiguration->citationTextStyleName()));
+
+    footnotesConfiguration->setDefaultNoteParagraphStyle(d->paragraphStylesDotXmlStyles.value(footnotesConfiguration->defaultNoteParagraphStyleName()));
+
+    endnotesConfiguration->setCitationBodyTextStyle(d->characterStylesDotXmlStyles.value(endnotesConfiguration->citationBodyTextStyleName()));
+
+    endnotesConfiguration->setCitationTextStyle(d->characterStylesDotXmlStyles.value(endnotesConfiguration->citationTextStyleName()));
+
+    endnotesConfiguration->setDefaultNoteParagraphStyle(d->paragraphStylesDotXmlStyles.value(endnotesConfiguration->defaultNoteParagraphStyleName()));
+
+    styleManager->setNotesConfiguration(footnotesConfiguration);
+    styleManager->setNotesConfiguration(endnotesConfiguration);
 }
 
 void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext &context)

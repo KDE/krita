@@ -89,24 +89,27 @@ public:
      * The text:citation-style attribute specifies the text style to use for the footnote citation
      * within the footnote.
      */
-    QString citationTextStyle() const;
-    void setCitationTextStyle(const QString &citationTextStyle);
+    QString citationTextStyleName() const;
+    void *citationTextStyle() const;
+    void setCitationTextStyle(void *citationTextStyle);
 
     /**
      * Citation Body Text Style
      * The text:citation-body-style-name attribute specifies the text style to use for the
      * footnote citation in the text flow.
      */
-    QString citationBodyTextStyle() const;
-    void setCitationBodyTextStyle(const QString &citationBodyTextStyle);
+    QString citationBodyTextStyleName() const;
+    void *citationBodyTextStyle() const;
+    void setCitationBodyTextStyle(void *citationBodyTextStyle);
 
     /**
      * Default Note Paragraph Style
      * The default footnote paragraph style is only used for footnotes that are inserted into an existing
      * document. It is not used for footnotes that already exist.
      */
-    QString defaultNoteParagraphStyle() const;
-    void setDefaultNoteParagraphStyle(const QString &defaultNoteParagraphStyle);
+    QString defaultNoteParagraphStyleName() const;
+    void *defaultNoteParagraphStyle() const;
+    void setDefaultNoteParagraphStyle(void *defaultNoteParagraphStyle);
 
     /**
      * Master Page

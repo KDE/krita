@@ -41,6 +41,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotAlignChanged();
+    void keepTogetherChanged();
     void breakAfterChanged();
     void breakBeforeChanged();
     void thresholdValueChanged();
@@ -48,6 +49,7 @@ private Q_SLOTS:
 private:
     Ui::ParagraphLayout widget;
     bool m_alignmentInherited;
+    bool m_keepTogetherInherited;
     bool m_breakAfterInherited;
     bool m_breakBeforeInherited;
     bool m_orphanThresholdInherited;

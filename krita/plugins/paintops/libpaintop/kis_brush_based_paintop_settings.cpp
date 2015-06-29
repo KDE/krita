@@ -51,19 +51,43 @@ int KisBrushBasedPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
+                                                            OutlineMode mode,
+                                                            qreal additionalScale,
+                                                            bool forceOutline) const
 {
-    if (mode != CursorIsOutline) return QPainterPath();
+    QPainterPath path;
 
-    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline) {
+        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
 
-    if (!widget) {
-        return KisPaintOpSettings::brushOutline(info, mode);
+        if (!widget) {
+            return KisPaintOpSettings::brushOutline(info, mode);
+        }
+
+
+        KisBrushSP brush = widget->brush();
+        qreal finalScale = brush->scale() * additionalScale;
+
+        QPainterPath realOutline = brush->outline();
+
+        if (mode == CursorIsCircleOutline ||
+            (forceOutline && mode == CursorNoOutline)) {
+
+            QPainterPath ellipse;
+            ellipse.addEllipse(realOutline.boundingRect());
+            realOutline = ellipse;
+        }
+
+        path = outlineFetcher()->fetchOutline(info, this, realOutline, finalScale, brush->angle());
     }
 
-    KisBrushSP brush = widget->brush();
+    return path;
+}
 
-    return outlineFetcher()->fetchOutline(info, this, brush->outline(), brush->scale(), brush->angle());
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+{
+    return brushOutlineImpl(info, mode, 1.0);
 }
 
 bool KisBrushBasedPaintOpSettings::isValid() const

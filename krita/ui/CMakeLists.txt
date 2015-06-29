@@ -62,8 +62,10 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
+    dialogs/slider_and_spin_box_sync.cpp
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
+    dialogs/kis_dlg_png_import.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -93,7 +95,6 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
-    kis_embedded_pattern_manager.cpp
     kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
@@ -119,7 +120,7 @@ set(kritaui_LIB_SRCS
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
-    kis_paintop_options_widget.cpp
+    kis_paintop_settings_widget.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
@@ -170,6 +171,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool.cc
     tool/kis_delegated_tool_policies.cpp
     tool/kis_tool_freehand.cc
+    tool/kis_speed_smoother.cpp
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
@@ -177,7 +179,6 @@ set(kritaui_LIB_SRCS
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
-    tool/kis_tool_select_base.cpp
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
@@ -210,6 +211,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_integer_filter_widget.cc
     widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_popup.cpp
+    widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc
@@ -274,6 +276,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_asl_layer_style_serializer.cpp
     kis_psd_layer_style_resource.cpp
     canvas/kis_mirror_axis.cpp
 
@@ -371,6 +374,7 @@ endif()
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
@@ -518,6 +522,6 @@ install( FILES
 #    canvas/kis_perspective_grid_manager.h
     kis_paintop_option.h
     kis_paintop_options_model.h
-    kis_paintop_options_widget.h
+    kis_paintop_settings_widget.h
     processing/fill_processing_visitor.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

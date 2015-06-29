@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +28,7 @@
 
 #include <kis_debug.h>
 
-#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QFontMetrics>
 
@@ -56,7 +57,9 @@ KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const 
 
 void KisColorSliderInput::init()
 {
-    QGridLayout* m_layout = new QGridLayout(this);
+    QHBoxLayout* m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(1);
 
     QString m_name;
     switch (m_type){
@@ -75,26 +78,17 @@ void KisColorSliderInput::init()
     }
     
     QLabel* m_label = new QLabel(i18n("%1:", m_name), this);
-    //QFontMetrics font =  new QFontMetrics();
-    //font = m_label->fontMetrics();
-    int max_width = 60;
-    //m_label->setMaximumWidth(60);
-    m_label->setMinimumWidth(max_width);
-    m_label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-    m_layout->addWidget(m_label, 0, 0, Qt::AlignLeft);
+    m_layout->addWidget(m_label);
 
     m_hsvSlider = new KisHSVSlider(Qt::Horizontal, this, m_displayRenderer, m_canvas);
-    m_hsvSlider->setMaximumHeight(60);
-    m_hsvSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_layout->addWidget(m_hsvSlider, 0, 1);
+    m_hsvSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_layout->addWidget(m_hsvSlider);
     connect (m_hsvSlider,  SIGNAL(sliderPressed()), SLOT(sliderIn()));
     connect (m_hsvSlider,  SIGNAL(sliderReleased()), SLOT(sliderOut()));
 
     QWidget* m_input = createInput();
-    m_input->setMaximumHeight(60);
-    m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    m_layout->addWidget(m_input, 0, 2, Qt::AlignRight);
-    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_hsvSlider->setFixedHeight(m_input->sizeHint().height());
+    m_layout->addWidget(m_input);
 }
 
 KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas) : KisColorSliderInput(parent, color, type, displayRenderer, canvas),

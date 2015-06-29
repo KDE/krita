@@ -33,8 +33,6 @@ class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
 public:
     KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption);
     void activate();
-Q_SIGNALS:
-    void activatedResource(KoResource *r);
 private:
     KoSegmentGradient* m_autogradientResource;
 private Q_SLOTS:

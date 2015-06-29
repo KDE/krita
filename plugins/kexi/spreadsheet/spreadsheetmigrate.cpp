@@ -22,6 +22,8 @@
 
 #include <kexiutils/identifier.h>
 
+#include <sheets/Value.h>
+
 namespace KexiMigration
 {
 

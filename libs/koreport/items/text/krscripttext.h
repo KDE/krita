@@ -25,7 +25,9 @@ namespace Scripting
 {
 
 /**
- @author Adam Pigg <adam@piggz.co.uk>
+ @brief Text item script interface
+
+ The user facing interface for scripting report text items
 */
 class Text : public QObject
 {
@@ -36,45 +38,91 @@ public:
     ~Text();
 public Q_SLOTS:
 
-    /**Returns the source (column) that the field gets its data from*/
-    QString source();
-    /**Sets the source (column) for the field*/
-    void setSource(const QString&);
+    //! @returns the source (column) that the field gets its data from
+    QString source() const;
 
-    /**Gets/sets the horizontal alignment, -1 Left, 0 Center, +1 Right*/
-    int horizontalAlignment();
-    void setHorizonalAlignment(int);
+    //! Sets the source (column) for the field.
+    //! @param src new source for the item data
+    void setSource(const QString& src);
 
-    /**Gets/sets the vertical alignment, -1 Top, 0 Middle, +1 Bottom*/
-    int verticalAlignment();
-    void setVerticalAlignment(int);
+    //! @return the horizontal alignment as an integer
+    //! Valid values are left: -1, center: 0, right; 1
+    int horizontalAlignment() const;
 
-    QColor backgroundColor();
-    void setBackgroundColor(const QColor&);
+    //! Sets the horizontal alignment
+    //! Valid values for alignment are left: -1, center: 0, right; 1
+    //! @param align new horizontal alignment
+    void setHorizonalAlignment(int align);
 
-    QColor foregroundColor();
-    void setForegroundColor(const QColor&);
+    //! @return the vertical alignment
+    //! Valid values are top: -1, middle: 0, bottom: 1
+    int verticalAlignment() const;
 
-    int backgroundOpacity();
-    void setBackgroundOpacity(int);
+    //! Sets the vertical alignment
+    //! Valid values for aligmnt are top: -1, middle: 0, bottom: 1
+    //! @param align new vertical alignment
+    void setVerticalAlignment(int align);
 
-    QColor lineColor();
-    void setLineColor(const QColor&);
+    //! @return the background color of the lable
+    QColor backgroundColor() const;
 
-    int lineWeight();
-    void setLineWeight(int);
+    //! Set the background color of the label to the given color
+    //! @param color new background color as a QColor
+    void setBackgroundColor(const QColor& color);
 
-    /**Gets/sets the line style.  Valid values are those from Qt::PenStyle (0-5)*/
-    int lineStyle();
-    void setLineStyle(int);
+    //! @return the foreground (text) color of the label
+    QColor foregroundColor() const;
 
-    QPointF position();
-    void setPosition(const QPointF&);
+    //! Sets the foreground (text) color of the label to the given color
+    //! @param color new text color as a QColor
+    void setForegroundColor(const QColor& color);
 
-    QSizeF size();
-    void setSize(const QSizeF&);
+    //! @return the opacity of the label
+    int backgroundOpacity() const;
 
-    void loadFromFile(const QString&);
+    //! Sets the background opacity of the label
+    //! Valid values are in the range 0-100
+    //! @param opacity new opacity as a percentage
+    void setBackgroundOpacity(int opactity);
+
+    //! @return the border line color of the label
+    QColor lineColor() const;
+
+    //! Sets the border line color of the label to the given color
+    //! @param color new line color
+    void setLineColor(const QColor& color);
+
+    //! @return the border line weight (thickness) of the label
+    int lineWeight() const;
+
+    //! Sets the border line weight (thickness) of the label
+    //! @param weight in points
+    void setLineWeight(int weight);
+
+    //! @return the border line style of the label.  Values are from Qt::Penstyle range 0-5
+    int lineStyle() const;
+
+    //! Sets the border line style of the label to the given style in the range 0-5
+    //! @param style integer representation of Qt::Penstyle
+    void setLineStyle(int style);
+
+    //! @returns the position of the label in points
+    QPointF position() const;
+
+    //! Sets the position of the label to the given point coordinates
+    //! @param pos new position for item as QPointF
+    void setPosition(const QPointF& pos);
+
+    //! @returns the size of the label in points
+    QSizeF size() const;
+
+    //! Sets the size of the label to the given size in points
+    //! @param size new size for item as QSizeF
+    void setSize(const QSizeF& size);
+
+    //! Loads text from the given file into the item
+    //! @param path file to load from
+    void loadFromFile(const QString& path);
 private:
     KoReportItemText *m_text;
 };

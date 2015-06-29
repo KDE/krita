@@ -130,18 +130,15 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 {
     lockTemporaryTarget();
 
-    KisPainter gc(projection);
-
     if (m_d->contentChannel->keyframeCount() > 1) {
         KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
-
         compositor->composite(m_d->paintDevice, projection, rect);
     } else {
-        gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc.bitBlt(rect.topLeft(), original, rect);
+        KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
     }
 
     if (hasTemporaryTarget()) {
+        KisPainter gc(projection);
         setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
@@ -168,11 +165,10 @@ void KisPaintLayer::setImage(KisImageWSP image)
 KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    
+
     // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
-    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
-    
+
     return l;
 }
 
@@ -182,11 +178,8 @@ void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::Pro
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Inherit Alpha")) {
-            disableAlphaChannel(property.state.toBool());
-        }
     }
-    
+
     KisLayer::setSectionModelProperties(properties);
 }
 

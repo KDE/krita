@@ -30,8 +30,10 @@ public:
 };
 
 KisHairyShapeOption::KisHairyShapeOption()
-    : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisHairyShapeOption");
+
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
 

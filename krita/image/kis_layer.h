@@ -362,7 +362,7 @@ protected:
                         bool &rectVariesFlag) const;
 
     QRect applyMasks(const KisPaintDeviceSP source,
-                     const KisPaintDeviceSP destination,
+                     KisPaintDeviceSP destination,
                      const QRect &requestedRect,
                      KisNodeSP filthyNode, KisNodeSP lastNode) const;
 private:

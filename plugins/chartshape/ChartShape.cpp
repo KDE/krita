@@ -89,6 +89,7 @@
 #include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
 #include <KoTextDocument.h>
+#include <KoUnit.h>
 
 // KChart
 #include "Axis.h"

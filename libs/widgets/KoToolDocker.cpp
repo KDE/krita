@@ -196,8 +196,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
-
     KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
 
@@ -209,6 +207,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
+    d->housekeeperLayout->setContentsMargins(4,4,4,0);
     d->housekeeperWidget->setLayout(d->housekeeperLayout);
 
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);

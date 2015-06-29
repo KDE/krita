@@ -32,7 +32,7 @@ StarShapeConfigWidget::StarShapeConfigWidget()
     connect(widget.convex, SIGNAL(clicked()), this, SLOT(typeChanged()));
 }
 
-void StarShapeConfigWidget::setUnit(KoUnit unit)
+void StarShapeConfigWidget::setUnit(const KoUnit &unit)
 {
     widget.innerRadius->setUnit(unit);
     widget.outerRadius->setUnit(unit);

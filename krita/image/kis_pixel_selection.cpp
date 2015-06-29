@@ -525,9 +525,6 @@ void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QR
     QRect updateRect = rc & selectedExactRect();
 
     if (updateRect.isValid()) {
-        KisPainter painter(projection);
-        painter.setCompositeOp(COMPOSITE_COPY);
-        painter.bitBlt(updateRect.topLeft(), KisPaintDeviceSP(this), updateRect);
-        painter.end();
+        KisPainter::copyAreaOptimized(updateRect.topLeft(), KisPaintDeviceSP(this), projection, updateRect);
     }
 }

@@ -27,7 +27,6 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShape.h"
 #include "KoInsets.h"
-#include "KoUnit.h"
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
 #include <KoViewConverter.h>

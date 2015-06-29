@@ -445,6 +445,7 @@
 
 #include <db/connection.h>
 #include <db/queryschema.h>
+#include <db/queryschema_p.h>
 #include <db/field.h>
 #include <db/tableschema.h>
 
@@ -728,7 +729,7 @@ SELECT
     KexiDBDbg << "SELECT";
 //    parser->createSelect();
 //    parser->setOperation(Parser::OP_Select);
-    $$ = new QuerySchema();
+    $$ = QuerySchemaPrivate::createQuery(parser->db());
 }
 ;
 

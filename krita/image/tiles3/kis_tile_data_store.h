@@ -46,6 +46,18 @@ public:
 
     void debugPrintList();
 
+    struct MemoryStatistics {
+        qint64 totalMemorySize;
+        qint64 realMemorySize;
+        qint64 historicalMemorySize;
+
+        qint64 poolSize;
+
+        qint64 swapSize;
+    };
+
+    MemoryStatistics memoryStatistics();
+
     /**
      * Returns total number of tiles present: in memory
      * or in a swap file

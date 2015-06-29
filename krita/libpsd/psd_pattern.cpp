@@ -52,6 +52,7 @@ KoPattern *PsdPattern::pattern() const
 
 bool psd_write_pattern(QIODevice *io)
 {
+    Q_UNUSED(io);
     return false;
 }
 
@@ -173,6 +174,7 @@ bool psd_read_pattern(QIODevice *io)
                 }
 
                 per_channel_length = length;
+                Q_UNUSED(per_channel_length); // wtf!?
 
                 switch(pattern.color_mode) {
                 case Bitmap:

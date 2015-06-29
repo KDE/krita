@@ -818,6 +818,9 @@ public:
     QuerySchemaParameterList parameters();
 
 protected:
+    /*! @internal associates @a conn with this query so it's possible to find tables there. */
+    explicit QuerySchema(Connection *conn);
+
     void init();
 
     void computeFieldsExpanded();

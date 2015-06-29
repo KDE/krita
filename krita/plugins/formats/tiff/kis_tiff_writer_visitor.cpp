@@ -44,7 +44,7 @@
 
 namespace
 {
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& /*sample_format*/)
+    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_format)
     {
         qDebug() << cs->id();
         if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
@@ -55,11 +55,11 @@ namespace
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-//        if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
-//            color_type = PHOTOMETRIC_RGB;
-//            sample_format = SAMPLEFORMAT_IEEEFP;
-//            return true;
-//        }
+       if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
+           color_type = PHOTOMETRIC_RGB;
+           sample_format = SAMPLEFORMAT_IEEEFP;
+           return true;
+       }
         if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
@@ -241,7 +241,12 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
             }
             break;
         case PHOTOMETRIC_RGB: {
-                quint8 poses[] = { 2, 1, 0, 3};
+                quint8 poses[4];
+                if (sample_format == SAMPLEFORMAT_IEEEFP) {
+                    poses[2] = 2; poses[1] = 1; poses[0] = 0; poses[3] = 3;
+                } else {
+                    poses[0] = 2; poses[1] = 1; poses[2] = 0; poses[3] = 3;
+                }
                 r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }
             break;

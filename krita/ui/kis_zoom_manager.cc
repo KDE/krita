@@ -55,7 +55,7 @@ class KisZoomController : public KoZoomController
 {
 public:
     KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
-        : KoZoomController(co, zh, actionCollection, specialButtons, parent),
+        : KoZoomController(co, zh, actionCollection, false, specialButtons, parent),
           m_converter(zh)
     {
     }
@@ -177,6 +177,16 @@ void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
     m_verticalRuler->updateMouseCoordinate(pt.y());
 }
 
+bool KisZoomManager::horizontalRulerVisible() const
+{
+    return m_horizontalRuler->isVisible();
+}
+
+bool KisZoomManager::verticalRulerVisible() const
+{
+    return m_verticalRuler->isVisible();
+}
+
 void KisZoomManager::toggleShowRulers(bool show)
 {
     m_horizontalRuler->setVisible(show);
@@ -228,7 +238,8 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     qreal humanZoom = zoom * 100.0;
 
 // XXX: KOMVC -- this is very irritating in MDI mode
-    if (m_view->shown() && m_view->viewManager()) {
+
+    if (m_view->viewManager()) {
         m_view->viewManager()->
                 showFloatingMessage(
                     i18nc("floating message about zoom", "Zoom: %1 \%",

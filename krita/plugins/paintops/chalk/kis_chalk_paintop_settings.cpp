@@ -45,7 +45,7 @@ int KisChalkPaintOpSettings::rate() const
 QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
         qreal size = getInt(CHALK_RADIUS) * 2 + 1;
         path = ellipseOutline(size, size, 1.0, 0.0);
         path.translate(info.pos());

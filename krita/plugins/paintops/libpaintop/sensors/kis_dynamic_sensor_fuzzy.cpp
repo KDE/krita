@@ -26,11 +26,11 @@
 #include <QHBoxLayout>
 
 
-KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
+KisDynamicSensorFuzzy::KisDynamicSensorFuzzy()
+    : KisDynamicSensor(FUZZY)
 {
-    setMinimumLabel(QString());
-    setMaximumLabel(QString());
 }
+
 QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidget *ss)
 {
     QWidget *w = new QWidget(parent);

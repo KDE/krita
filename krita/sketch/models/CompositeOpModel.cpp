@@ -30,7 +30,7 @@
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
 #include <kis_paintop_registry.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
@@ -58,7 +58,7 @@ public:
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
-    QMap<KisPaintOpPreset*, KisPaintOpSettingsWidget*> settingsWidgets;
+    QMap<KisPaintOpPreset*, KisPaintOpConfigWidget*> settingsWidgets;
 
     qreal opacity;
     bool opacityEnabled;
@@ -403,7 +403,7 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
         if (preset && d->currentPreset.data() != preset.data()) {
             d->currentPreset = preset;
             if (!d->settingsWidgets.contains(preset.data())) {
-                d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createSettingsWidget(0);
+                d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createConfigWidget(0);
                 d->settingsWidgets[preset.data()]->setImage(d->view->image());
                 d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
             }

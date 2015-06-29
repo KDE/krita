@@ -39,27 +39,31 @@ Report::~Report()
 
 }
 
-QString Report::title()
+QString Report::title() const
 {
     return m_reportData->m_title;
 }
 
-QString Report::name()
+QString Report::name() const
 {
     return m_reportData->name();
 }
 
-QString Report::recordSource()
+QString Report::recordSource() const
 {
     return m_reportData->query();
 }
 
 QObject* Report::objectByName(const QString &n)
 {
+    if (m_scriptObjMap.contains(n)) {
+        return m_scriptObjMap[n];
+    }
+    
     QList<KoReportItemBase *>obs = m_reportData->objects();
     foreach(KoReportItemBase *o, obs) {
         if (o->entityName() == n) {
-                    
+
             if (o->typeName() == "line") {
                         return new Scripting::Line(dynamic_cast<KoReportItemLine*>(o));
             }
@@ -69,6 +73,7 @@ QObject* Report::objectByName(const QString &n)
                 if (plugin) {
                     QObject *obj = plugin->createScriptInstance(o);
                     if (obj) {
+                        m_scriptObjMap[n] = obj;
                         return obj;
                     }
                 }

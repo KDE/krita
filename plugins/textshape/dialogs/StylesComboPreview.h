@@ -43,11 +43,11 @@ public:
     void setAddButtonShown(bool show);
     bool isAddButtonShown() const;
 
-    void setPreview(QImage image);
+    void setPreview(const QImage &image);
 
 Q_SIGNALS:
     void resized();
-    void newStyleRequested(QString name);
+    void newStyleRequested(const QString &name);
     void clicked();
 
 protected:

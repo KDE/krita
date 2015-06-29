@@ -42,6 +42,9 @@ public:
     KisToolEllipse(KoCanvasBase * canvas);
     virtual ~KisToolEllipse();
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 protected:
     virtual void finishRect(const QRectF& rect);
 };

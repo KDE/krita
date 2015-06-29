@@ -17,6 +17,7 @@ set(kritagmic_parser_PART_SRCS
 ../kis_gmic_command.cpp
 ../kis_gmic_data.cpp
 ../kis_gmic_synchronize_layers_command.cpp
+../kis_gmic_synchronize_image_size_command.cpp
 ../kis_export_gmic_processing_visitor.cpp
 ../kis_import_gmic_processing_visitor.cpp
 )

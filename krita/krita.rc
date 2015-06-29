@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="66" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+name="Krita"
+version="72"
+xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
@@ -10,6 +14,7 @@
       <Action name="file_save"/>
       <Action name="file_save_as"/>
       <Action name="file_reload_file"/>
+      <Action name="file_reload_file"/>
       <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
@@ -18,6 +23,7 @@
       <Action name="save_incremental_version"/>
       <Action name="save_incremental_backup"/>
       <Action name="create_template"/>
+      <Action name="create_copy"/>
       <Separator/>
       <Action name="file_print"/>
       <Action name="file_print_preview"/>
@@ -51,15 +57,30 @@
       <text>&amp;View</text>
       <Action name="view_show_just_the_canvas"/>
       <Action name="fullscreen"/>
-      <Action name="mirror_canvas"/>
+      
       <Action name="wrap_around_mode"/>
       <Separator/>
-      <Action name="zoom"/>
-      <Action name="zoom_in"/>
-      <Action name="zoom_out"/>
+      <Menu name="Canvas">
+          <text>&amp;Canvas</text>
+          <Action name="mirror_canvas"/>
+          <Separator/>
+          <Action name="zoom_to_100pct" />
+          <Action name="rotate_canvas_right" />
+          <Action name="rotate_canvas_left" />
+          <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController. 
+                     It seems they are not being properly placed in the view manager since the MDI changes were implemented 
+	  <Action name="zoom_in"/>
+          <Action name="zoom_out"/>
+          -->
+
+
+      </Menu>
+      <!-- TODO: None of these actions are showing. There names must have been changed to something with the MDI changes?...
       <Action name="actual_pixels"/>
       <Action name="actual_size"/>
       <Action name="fit_to_canvas"/>
+      -->
+
       <Separator/>
       <Action name="view_ruler"/>
       <Action name="view_guidelines"/>
@@ -185,8 +206,6 @@
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
       <Action name="layer_style"/>
-      <Separator/>
-      <Action name="dropshadow"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>
@@ -261,7 +280,8 @@
       <Action name="options_configure"/>        
       <Separator/>    
       <Action name="manage_bundles"/> 
-      <Action name="switch_application_language"/>    
+      <Action name="switch_application_language"/>
+      <Action name="settings_active_author"/>
       <Separator/>
     </Menu>
     <Action name="window"/>

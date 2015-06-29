@@ -59,11 +59,13 @@
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
+#include "kis_memory_statistics_server.h"
 
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
 #include "kis_image_animation_interface.h"
+#include "kis_stroke_strategy.h"
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"
@@ -90,6 +92,8 @@
 #include "kis_projection_updates_filter.h"
 
 #include "kis_layer_projection_plane.h"
+
+#include "kis_update_time_monitor.h"
 
 
 // #define SANITY_CHECKS
@@ -206,6 +210,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         m_d->scheduler->setResumeUpdatesStrokeStrategyFactory(
             boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), false));
     }
+
+    connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }
 
 KisImage::~KisImage()
@@ -1321,6 +1327,16 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
      */
     requestStrokeEnd();
 
+    /**
+     * Some of the strokes can cancel their work with undoing all the
+     * changes they did to the paint devices. The problem is that undo
+     * stack will know nothing about it. Therefore, just notify it
+     * explicitly
+     */
+    if (strokeStrategy->clearsRedoOnStart()) {
+        m_d->undoStore->purgeRedoState();
+    }
+
     KisStrokeId id;
 
     if (m_d->scheduler) {
@@ -1366,6 +1382,8 @@ KisNodeSP KisImage::isolatedModeRoot() const
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
+    KisUpdateTimeMonitor::instance()->reportJobStarted(data);
+
     if (m_d->scheduler) {
         m_d->scheduler->addJob(id, data);
     }
@@ -1508,6 +1526,8 @@ void KisImage::enableUIUpdates()
 
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
+    KisUpdateTimeMonitor::instance()->reportUpdateFinished(rc);
+
     if (!m_d->disableUIUpdateSignals) {
         int lod = currentLevelOfDetail();
         QRect dirtyRect = !lod ? rc : KisLodTransform::upscaledRect(rc, lod);

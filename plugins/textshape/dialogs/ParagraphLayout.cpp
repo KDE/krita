@@ -31,6 +31,7 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     connect(widget.center, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
     connect(widget.justify, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
     connect(widget.left, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
+    connect(widget.keepTogether, SIGNAL(stateChanged(int)), this, SLOT(keepTogetherChanged()));
     connect(widget.breakAfter, SIGNAL(stateChanged(int)), this, SLOT(breakAfterChanged()));
     connect(widget.breakBefore, SIGNAL(stateChanged(int)), this, SLOT(breakBeforeChanged()));
     connect(widget.threshold, SIGNAL(valueChanged(int)), this, SLOT(thresholdValueChanged()));
@@ -59,6 +60,12 @@ void ParagraphLayout::breakAfterChanged()
    emit parStyleChanged();
 }
 
+void ParagraphLayout::keepTogetherChanged()
+{
+   m_keepTogetherInherited = false;
+   emit parStyleChanged();
+}
+
 void ParagraphLayout::breakBeforeChanged()
 {
     m_breakBeforeInherited = false;
@@ -83,6 +90,7 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
     }
 
     m_alignmentInherited = !style->hasProperty(QTextFormat::BlockAlignment);
+    m_keepTogetherInherited = !style->hasProperty(QTextFormat::BlockNonBreakableLines);
     m_breakAfterInherited = !style->hasProperty(KoParagraphStyle::BreakAfter);
     m_breakBeforeInherited = !style->hasProperty(KoParagraphStyle::BreakBefore);
     m_orphanThresholdInherited = !style->hasProperty(KoParagraphStyle::OrphanThreshold);
@@ -109,14 +117,16 @@ void ParagraphLayout::save(KoParagraphStyle *style)
         style->setAlignment(align);
     }
 
-        style->setNonBreakableLines(widget.keepTogether->isChecked());
-        if (!m_breakBeforeInherited){
+        if (!m_keepTogetherInherited) {
+            style->setNonBreakableLines(widget.keepTogether->isChecked());
+        }
+        if (!m_breakBeforeInherited) {
             if (widget.breakBefore->isChecked())
                 style->setBreakBefore(KoText::PageBreak);
             else
                 style->setBreakBefore(KoText::NoBreak);
         }
-        if (!m_breakAfterInherited){
+        if (!m_breakAfterInherited) {
             if (widget.breakAfter->isChecked())
                 style->setBreakAfter(KoText::PageBreak);
             else

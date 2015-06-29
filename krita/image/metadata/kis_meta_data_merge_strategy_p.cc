@@ -211,7 +211,10 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
             }
         }
     }
-    Q_ASSERT(scoreValues.size() >= 1);
+    if (scoreValues.size() < 1) {
+        warnKrita << "SmartMergeStrategy::election returned less than 1 scolre value";
+        return Value();
+    }
     const ScoreValue* bestSv = 0;
     double bestScore = -1.0;
     foreach(const ScoreValue& sv, scoreValues) {
@@ -220,8 +223,12 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
             bestSv = &sv;
         }
     }
-    Q_ASSERT(bestSv);
-    return bestSv->value;
+    if (bestSv) {
+        return bestSv->value;
+    }
+    else {
+        return Value();
+    }
 }
 
 void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const KisMetaData::Schema* schema, const QString & identifier) const
@@ -275,7 +282,10 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
             QList<QString> keys = store->keys();
             foreach(const QString & key, keys) {
                 if (!dst->containsEntry(key)) {
-                    dst->getEntry(key).value() = election(srcs, scores, key);
+                    Value v = election(srcs, scores, key);
+                    if (!v.type() == Value::Invalid) {
+                        dst->getEntry(key).value() = v;
+                    }
                 }
             }
         }

@@ -27,16 +27,15 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
     : m_readWindowEx(writeWindowSize / 4),
       m_writeWindowEx(writeWindowSize)
 {
-    if (!swapDir.isEmpty() && QDir::isAbsolutePath(swapDir)) {
-        QString swapFileTemplate = swapDir + QDir::separator() + SWP_PREFIX;
-        m_file.setFileTemplate(swapFileTemplate);
+    QString swapFileTemplate = (swapDir.isEmpty() ? QDir::tempPath() : swapDir) + QDir::separator() + SWP_PREFIX;
+    QDir d(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
+    if (!d.exists()) {
+        d.mkpath(swapDir.isEmpty() ? QDir::tempPath() : swapDir);
     }
-    else {
-        m_file.setPrefix(SWP_PREFIX);
-    }
-
-    m_file.setAutoRemove(true);
-    m_file.open();
+    m_file.setFileTemplate(swapFileTemplate);
+    bool res = m_file.open();
+    Q_ASSERT(res);
+    Q_ASSERT(!m_file.fileName().isEmpty());
 }
 
 KisMemoryWindow::~KisMemoryWindow()

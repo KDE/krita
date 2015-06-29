@@ -322,6 +322,9 @@ void KisFloatingMessage::startFade()
 
 void KisFloatingMessage::removeMessage()
 {
+    m_timer.stop();
+    m_fadeTimeLine.stop();
+
     hide();
     deleteLater();
 }

@@ -40,6 +40,10 @@
 #include <QMdiArea>
 #include <QMessageBox>
 #include <QDesktopWidget>
+#include <QFileDialog>
+
+#include <boost/bind.hpp>
+
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
@@ -54,6 +58,7 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 #include "KoID.h"
+#include <KoConfigAuthorPage.h>
 
 #include <klocale.h>
 #include <kvbox.h>
@@ -73,6 +78,8 @@
 #include "kis_factory2.h"
 #include "kis_color_manager.h"
 
+#include "slider_and_spin_box_sync.h"
+
 // for the performance update
 #include <kis_cubic_curve.h>
 
@@ -84,20 +91,21 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
-    m_cmbCursorShape->addItem(i18n("Tool Icon"));
-    m_cmbCursorShape->addItem(i18n("Crosshair"));
-    m_cmbCursorShape->addItem(i18n("Arrow"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline"));
     m_cmbCursorShape->addItem(i18n("No Cursor"));
+    m_cmbCursorShape->addItem(i18n("Tool Icon"));
+    m_cmbCursorShape->addItem(i18n("Arrow"));
     m_cmbCursorShape->addItem(i18n("Small Circle"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Crosshair"));
     m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
     m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Righthanded"));
-    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Lefthanded"));
 
-    m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
+    m_cmbOutlineShape->addItem(i18n("No Outline"));
+    m_cmbOutlineShape->addItem(i18n("Circle Outline"));
+    m_cmbOutlineShape->addItem(i18n("Preview Outline"));
+
+    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
+    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     int autosaveInterval = cfg.autoSaveInterval();
@@ -115,6 +123,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
     m_chkCompressKra->setChecked(cfg.compressKra());
+    m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
@@ -124,7 +133,8 @@ void GeneralTab::setDefault()
 {
     KisConfig cfg;
 
-    m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle(true));
+    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle(true));
+    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle(true));
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
     m_autosaveCheckBox->setChecked(cfg.autoSaveInterval(true) > 0);
     //convert to minutes
@@ -140,11 +150,17 @@ void GeneralTab::setDefault()
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
+    m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
 }
 
-enumCursorStyle GeneralTab::cursorStyle()
+CursorStyle GeneralTab::cursorStyle()
 {
-    return (enumCursorStyle)m_cmbCursorShape->currentIndex();
+    return (CursorStyle)m_cmbCursorShape->currentIndex();
+}
+
+OutlineStyle GeneralTab::outlineStyle()
+{
+    return (OutlineStyle)m_cmbOutlineShape->currentIndex();
 }
 
 bool GeneralTab::showRootLayer()
@@ -193,13 +209,24 @@ bool GeneralTab::compressKra()
     return m_chkCompressKra->isChecked();
 }
 
+bool GeneralTab::toolOptionsInDocker()
+{
+    return m_radioToolOptionsInDocker->isChecked();
+}
+
 void GeneralTab::getBackgroundImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
     dialog.setCaption(i18n("Select a Background Image"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setImageFilters();
+
     QString fn = dialog.url();
+    // dialog box was canceled or somehow no file was selected
+    if (fn.isEmpty()) {
+        return;
+    }
+
     QImage image(fn);
     if (image.isNull()) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("%1 is not a valid image file!", fn));
@@ -207,7 +234,6 @@ void GeneralTab::getBackgroundImage()
     else {
         m_backgroundimage->setText(fn);
     }
-
 }
 
 void GeneralTab::clearBackgroundImage()
@@ -466,21 +492,132 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
 
 //---------------------------------------------------------------------------------------------------
+#include "kis_image_config.h"
+#include "kis_acyclic_signal_connector.h"
+
+int getTotalRAM() {
+    KisImageConfig cfg;
+    return cfg.totalRAM();
+}
+
+int PerformanceTab::realTilesRAM()
+{
+    return intMemoryLimit->value() - intPoolLimit->value();
+}
+
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     : WdgPerformanceSettings(parent, name)
 {
-    // XXX: Make sure only profiles that fit the specified color model
-    // are shown in the profile combos
+    KisImageConfig cfg;
+    const int totalRAM = cfg.totalRAM();
+    lblTotalMemory->setText(i18n("%1 MiB", totalRAM));
 
-    KisConfig cfg;
+    sliderMemoryLimit->setSuffix(" %");
+    sliderMemoryLimit->setRange(1, 100, 2);
+    sliderMemoryLimit->setSingleStep(0.01);
 
-    m_maxTiles->setValue(cfg.maxTilesInMem());
+    sliderPoolLimit->setSuffix(" %");
+    sliderPoolLimit->setRange(0, 20, 2);
+    sliderMemoryLimit->setSingleStep(0.01);
+
+    sliderUndoLimit->setSuffix(" %");
+    sliderUndoLimit->setRange(0, 50, 2);
+    sliderMemoryLimit->setSingleStep(0.01);
+
+    intMemoryLimit->setMinimumWidth(80);
+    intPoolLimit->setMinimumWidth(80);
+    intUndoLimit->setMinimumWidth(80);
+
+
+    SliderAndSpinBoxSync *sync1 =
+        new SliderAndSpinBoxSync(sliderMemoryLimit,
+                                 intMemoryLimit,
+                                 getTotalRAM);
+
+    sync1->slotParentValueChanged();
+    m_syncs << sync1;
+
+    SliderAndSpinBoxSync *sync2 =
+        new SliderAndSpinBoxSync(sliderPoolLimit,
+                                 intPoolLimit,
+                                 boost::bind(&QSpinBox::value,
+                                             intMemoryLimit));
+
+
+    connect(intMemoryLimit, SIGNAL(valueChanged(int)), sync2, SLOT(slotParentValueChanged()));
+    sync2->slotParentValueChanged();
+    m_syncs << sync2;
+
+    SliderAndSpinBoxSync *sync3 =
+        new SliderAndSpinBoxSync(sliderUndoLimit,
+                                 intUndoLimit,
+                                 boost::bind(&PerformanceTab::realTilesRAM,
+                                             this));
+
+
+    connect(intPoolLimit, SIGNAL(valueChanged(int)), sync3, SLOT(slotParentValueChanged()));
+    sync3->slotParentValueChanged();
+    m_syncs << sync3;
+
+    sliderSwapSize->setSuffix(i18n(" GiB"));
+    sliderSwapSize->setRange(1, 64);
+    intSwapSize->setRange(1, 64);
+
+
+    KisAcyclicSignalConnector *swapSizeConnector = new KisAcyclicSignalConnector(this);
+
+    swapSizeConnector->connectForwardInt(sliderSwapSize, SIGNAL(valueChanged(int)),
+                                         intSwapSize, SLOT(setValue(int)));
+
+    swapSizeConnector->connectBackwardInt(intSwapSize, SIGNAL(valueChanged(int)),
+                                          sliderSwapSize, SLOT(setValue(int)));
+
+    lblSwapFileLocation->setText(cfg.swapDir());
+    connect(bnSwapFile, SIGNAL(clicked()), SLOT(selectSwapDir()));
+
+    load(false);
 }
 
-void PerformanceTab::setDefault()
+PerformanceTab::~PerformanceTab()
 {
-    KisConfig cfg;
-    m_maxTiles->setValue(cfg.maxTilesInMem(true));
+    qDeleteAll(m_syncs);
+}
+
+void PerformanceTab::load(bool requestDefault)
+{
+    KisImageConfig cfg;
+
+    sliderMemoryLimit->setValue(cfg.memoryHardLimitPercent(requestDefault));
+    sliderPoolLimit->setValue(cfg.memoryPoolLimitPercent(requestDefault));
+    sliderUndoLimit->setValue(cfg.memorySoftLimitPercent(requestDefault));
+
+    chkPerformanceLogging->setChecked(cfg.enablePerfLog(requestDefault));
+
+    sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
+    lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+}
+
+void PerformanceTab::save()
+{
+    KisImageConfig cfg;
+
+    cfg.setMemoryHardLimitPercent(sliderMemoryLimit->value());
+    cfg.setMemorySoftLimitPercent(sliderUndoLimit->value());
+    cfg.setMemoryPoolLimitPercent(sliderPoolLimit->value());
+
+    cfg.setEnablePerfLog(chkPerformanceLogging->isChecked());
+
+    cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
+
+    cfg.setSwapDir(lblSwapFileLocation->text());
+}
+
+void PerformanceTab::selectSwapDir()
+{
+    KisImageConfig cfg;
+    QString swapDir = cfg.swapDir();
+    swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
+    lblSwapFileLocation->setText(swapDir);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -553,7 +690,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg;
-
+#ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
@@ -574,6 +711,11 @@ void DisplaySettingsTab::setDefault()
         cmbFilterMode->setEnabled(true);
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode(true));
     }
+#else
+    grpOpenGL->setEnabled(false);
+    grpOpenGL->setChecked(false);
+#endif
+
     chkMoving->setChecked(cfg.scrollCheckers(true));
     intCheckSize->setValue(cfg.checkSize(true));
     colorChecks1->setColor(cfg.checkersColor1(true));
@@ -737,6 +879,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // General
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
+    page->setObjectName("general");
     page->setHeader(i18n("General"));
     page->setIcon(koIcon("configure"));
     addPage(page);
@@ -745,6 +888,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Display
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
+    page->setObjectName("display");
     page->setHeader(i18n("Display"));
     page->setIcon(koIcon("preferences-desktop-display"));
     addPage(page);
@@ -753,24 +897,25 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Color
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
+    page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
     page->setIcon(koIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
     // Performance
-#if 0
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
+    page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
-#endif
 
     // Grid
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
+    page->setObjectName("grid");
     page->setHeader(i18n("Grid"));
     page->setIcon(koIcon("grid"));
     addPage(page);
@@ -779,26 +924,36 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Tablet
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
+    page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
     page->setIcon(koIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
-
     // full-screen mode
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
+    page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
+
+    // Author profiles
+    m_authorPage = new KoConfigAuthorPage();
+    page = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
+    page->setObjectName("author");
+    page->setHeader(i18n("Author"));
+    page->setIcon(koIcon("user-identity"));
 
 
     // input settings
     m_inputConfiguration = new KisInputConfigurationPage();
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
+    page->setObjectName("canvasinput");
     page->setIcon(koIcon("input-tablet"));
+
     connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(cancelClicked()), m_inputConfiguration, SLOT(revertChanges()));
@@ -819,6 +974,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         connect(this, SIGNAL(okClicked()),      preferenceSet, SLOT(savePreferences()),        Qt::UniqueConnection);
     }
 
+
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 
 }
@@ -829,17 +985,30 @@ KisDlgPreferences::~KisDlgPreferences()
 
 void KisDlgPreferences::slotDefault()
 {
-    m_general->setDefault();
-    m_colorSettings->setDefault();
-#if 0
-    m_performanceSettings->setDefault();
-#endif
-#ifdef HAVE_OPENGL
-    m_displaySettings->setDefault();
-#endif
-    m_gridSettings->setDefault();
-    m_tabletSettings->setDefault();
-    m_fullscreenSettings->setDefault();
+    if (currentPage()->objectName() == "default") {
+        m_general->setDefault();
+    }
+    else if (currentPage()->objectName() == "display") {
+        m_displaySettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "colormanagement") {
+        m_colorSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "performance") {
+        m_performanceSettings->load(true);
+    }
+    else if (currentPage()->objectName() == "grid") {
+        m_gridSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "tablet") {
+        m_tabletSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "canvasonly") {
+        m_fullscreenSettings->setDefault();
+    }
+    else if (currentPage()->objectName() == "canvasinput") {
+        m_inputConfiguration->setDefaults();
+    }
 }
 
 bool KisDlgPreferences::editPreferences()
@@ -851,7 +1020,8 @@ bool KisDlgPreferences::editPreferences()
     if (baccept) {
         // General settings
         KisConfig cfg;
-        cfg.setCursorStyle(dialog->m_general->cursorStyle());
+        cfg.setNewCursorStyle(dialog->m_general->cursorStyle());
+        cfg.setNewOutlineStyle(dialog->m_general->outlineStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
@@ -862,6 +1032,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
+        cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         KisPart *part = KisPart::instance();
         if (part) {
             foreach(QPointer<KisDocument> doc, part->documents()) {
@@ -901,11 +1072,7 @@ bool KisDlgPreferences::editPreferences()
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
 
-#if 0
-        cfg.setMaxTilesInMem(dialog->m_performanceSettings->m_maxTiles->value());
-        // let the tile manager know
-        //KisTileManager::instance()->configChanged();
-#endif
+        dialog->m_performanceSettings->save();
 
 #ifdef HAVE_OPENGL
         if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
@@ -949,6 +1116,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
+
+        dialog->m_authorPage->apply();
 
     }
     delete dialog;

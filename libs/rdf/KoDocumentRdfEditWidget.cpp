@@ -37,6 +37,7 @@
 #include <klocale.h>
 // Qt
 #include <QComboBox>
+#include <QPointer>
 #include <QSortFilterProxyModel>
 
 

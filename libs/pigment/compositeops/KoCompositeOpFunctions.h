@@ -83,6 +83,42 @@ inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
     setLightness<HSXType>(dr, dg, db, lum);
 }
 
+template<class HSXType, class TReal>
+inline void cfDarkerColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    
+    TReal lum = getLightness<HSXType>(dr, dg, db);
+    TReal lum2 = getLightness<HSXType>(sr, sg, sb);
+    if (lum<lum2) {
+        sr = dr;
+        sg = dg;
+        sb = db;
+    }
+    else {
+        dr = sr;
+        dg = sg;
+        db = sb;
+    }
+
+}
+
+template<class HSXType, class TReal>
+inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    
+    TReal lum = getLightness<HSXType>(dr, dg, db);
+    TReal lum2 = getLightness<HSXType>(sr, sg, sb);
+    if (lum>lum2) {
+        sr = dr;
+        sg = dg;
+        sb = db;
+    }
+    else {
+        dr = sr;
+        dg = sg;
+        db = sb;
+    }
+
+}
+
 template<class T>
 inline T cfColorBurn(T src, T dst) {
     using namespace Arithmetic;
@@ -215,7 +251,7 @@ inline T cfVividLight(T src, T dst) {
     if(src < halfValue<T>()) {
         if(src == zeroValue<T>())
             return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
-            
+
         // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
         composite_type dsti = inv(dst);

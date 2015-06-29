@@ -35,6 +35,8 @@ private Q_SLOTS:
     void testRoundTripFillLayerColor();
     void testRoundTripFillLayerPattern();
 
+    void testRoundTripLayerStyles();
+
 };
 
 #endif

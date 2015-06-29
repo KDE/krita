@@ -32,7 +32,6 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
-#include <KoResourceTagStore.h>
 #include <KoFileDialog.h>
 #include <KoResource.h>
 #include <KoResourceServer.h>
@@ -253,38 +252,38 @@ void ResourceManager::slotCreateBundle()
     QStringList res = dlgCreateBundle.selectedBrushes();
     foreach(const QString &r, res) {
         KoResource *res = d->brushServer->resourceByFilename(r).data();
-        newBundle->addResource("kis_brushes", res->filename(), d->brushServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("kis_brushes", res->filename(), d->brushServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGradients();
     foreach(const QString &r, res) {
         KoResource *res = d->gradientServer->resourceByFilename(r);
-        newBundle->addResource("ko_gradients", res->filename(), d->gradientServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("ko_gradients", res->filename(), d->gradientServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPalettes();
     foreach(const QString &r, res) {
         KoResource *res = d->paletteServer->resourceByFilename(r);
-        newBundle->addResource("ko_palettes", res->filename(), d->paletteServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("ko_palettes", res->filename(), d->paletteServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPatterns();
     foreach(const QString &r, res) {
         KoResource *res = d->patternServer->resourceByFilename(r);
-        newBundle->addResource("ko_patterns", res->filename(), d->patternServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("ko_patterns", res->filename(), d->patternServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPresets();
     foreach(const QString &r, res) {
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
         KoResource *res = preset.data();
-        newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedWorkspaces();
     foreach(const QString &r, res) {
         KoResource *res = d->workspaceServer->resourceByFilename(r);
-        newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
     }
 
     newBundle->addMeta("fileName", bundlePath);

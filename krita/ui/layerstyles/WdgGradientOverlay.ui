@@ -144,7 +144,7 @@
              </item>
              <item>
               <property name="text">
-               <string>Angle</string>
+               <string comment="@item:inlistbox Gradient style">Angle</string>
               </property>
              </item>
              <item>
@@ -190,6 +190,9 @@
              </property>
              <property name="maximum">
               <number>180</number>
+             </property>
+             <property name="wrapping">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

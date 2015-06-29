@@ -23,7 +23,7 @@
 
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 #include <kis_pressure_size_option.h>
@@ -41,22 +41,22 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
 {
     m_sketchOption =  new KisSketchOpOption();
 
-    addPaintOpOption(m_sketchOption);
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption()));
-    addPaintOpOption(new KisAirbrushOption(false));
+    addPaintOpOption(m_sketchOption, i18n("Brush size"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()  , i18n("0%"), i18n("100%")), i18n("Line width"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")), i18n("Offset scale"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")), i18n("Density"));
+    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
 
     m_paintActionType = new KisPaintActionTypeOption();
     KisPropertiesConfiguration defaultSetting;
     defaultSetting.setProperty("PaintOpAction", BUILDUP);
     m_paintActionType->readOptionSetting(&defaultSetting);
 
-    addPaintOpOption(m_paintActionType);
+    addPaintOpOption(m_paintActionType, i18n("Painting Mode"));
 
     KisPropertiesConfiguration* reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer("");

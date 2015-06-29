@@ -43,7 +43,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
     QTabWidget *wdg = new QTabWidget;
     vlayout->addWidget(wdg);
 
-    KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), splash_screen_xpm);
+    KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), splash_screen_xpm, true);
     splash->setWindowFlags(Qt::Widget);
     splash->setFixedSize(splash->sizeHint());
     wdg->addTab(splash, i18n("About"));
@@ -131,7 +131,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
                            "<h1 align=\"center\">Your artwork</h1>"
                            "<p>What you create with Krita is your sole property. All your artwork is free for you to use as you like.</p>"
                            "<p>That means that Krita can be used commercially, for any purpose. There are no restrictions whatsoever.</p>"
-                           "<p>Krita’s GNU GPL license guarantees you this freedom. Nobody is ever permitted to take it away, in contrast"
+                           "<p>Krita’s GNU GPL license guarantees you this freedom. Nobody is ever permitted to take it away, in contrast "
                            "to trial or educational versions of commercial software that will forbid your work in commercial situations.</p>"
                            "<br/><hr/><pre>");
 

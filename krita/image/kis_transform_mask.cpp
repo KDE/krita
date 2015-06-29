@@ -34,7 +34,7 @@
 #include "kis_transaction.h"
 #include "kis_painter.h"
 
-#include <KoUpdater.h>
+#include "kis_busy_progress_indicator.h"
 #include "kis_perspectivetransform_worker.h"
 #include "kis_transform_mask_params_interface.h"
 #include "kis_recalculate_transform_mask_job.h"
@@ -215,7 +215,6 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      const QRect & rc,
                                      PositionToFilthy maskPos) const
 {
-    Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisTransformMask::decorateRect",
                "src must be != dst, because we cant create transactions "
                "during merge, as it breaks reentrancy");
@@ -249,15 +248,13 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
     } else {
-        KisPainter gc(dst);
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBlt(rc.topLeft(), m_d->staticCacheDevice, rc);
+        KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
         qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
@@ -266,6 +263,9 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 #endif /* DEBUG_RENDERING */
 
     }
+
+    KIS_ASSERT_RECOVER_NOOP(this->busyProgressIndicator());
+    this->busyProgressIndicator()->update();
 
     return rc;
 }

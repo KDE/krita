@@ -24,7 +24,6 @@
 
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
@@ -64,7 +63,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setActionGroup(actionGroup);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true, true);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     QToolButton *viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();

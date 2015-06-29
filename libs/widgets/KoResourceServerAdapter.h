@@ -89,7 +89,7 @@ protected:
  * The KoResourceServerAdapter provides adapter to a specific resource server
  * It provides a resource type independent interface to the server.
  */
-template <class T, class Policy = PointerStroragePolicy<T> >
+template <class T, class Policy = PointerStoragePolicy<T> >
     class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T, Policy>
 {
     typedef KoResourceServer<T, Policy> ServerType;
@@ -103,7 +103,7 @@ public:
         m_changeCounter = 0;
         m_oldChangeCounter = 0;
         m_enableFiltering = false;
-        m_resourceFilter.setTagStore(m_resourceServer->tagObject());
+        m_resourceFilter.setResourceServer(m_resourceServer);
     }
 
 

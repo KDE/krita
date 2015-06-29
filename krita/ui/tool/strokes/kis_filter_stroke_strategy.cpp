@@ -106,10 +106,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                  m_d->filterConfig.data(), helper.updater());
 
         if (m_d->secondaryTransaction) {
-            KisPainter p(targetDevice());
-            p.setCompositeOp(COMPOSITE_COPY);
-            p.setSelection(activeSelection());
-            p.bitBlt(rc.topLeft(), m_d->filterDevice, rc);
+            KisPainter::copyAreaOptimized(rc.topLeft(), m_d->filterDevice, targetDevice(), rc, activeSelection());
 
             // Free memory
             m_d->filterDevice->clear(rc);

@@ -346,7 +346,7 @@ QuerySchema* buildSelectQuery(
                 aliasVariable = e->toBinary()->right()->toVariable();
                 if (!aliasVariable) {
                     setError(i18n("Invalid alias definition for column \"%1\".",
-                                  columnExpr->toString())); //ok?
+                                  columnExpr->toString(0))); //ok?
                     break;
                 }
             }
@@ -372,7 +372,7 @@ QuerySchema* buildSelectQuery(
                 //take first (left) argument of the special binary expr, will be owned, do not destroy
                 e->toBinary()->m_larg = 0;
             } else {
-                setError(i18n("Invalid \"%1\" column definition.", e->toString())); //ok?
+                setError(i18n("Invalid \"%1\" column definition.", e->toString(0))); //ok?
                 break;
             }
 

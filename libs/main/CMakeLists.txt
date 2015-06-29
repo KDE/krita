@@ -40,7 +40,6 @@ set(komain_LIB_SRCS
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp
-    config/KoConfigAuthorPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
@@ -83,7 +82,6 @@ if (APPLE)
 endif ()
 
 kde4_add_ui_files( komain_LIB_SRCS
-   config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )

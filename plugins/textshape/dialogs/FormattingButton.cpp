@@ -133,7 +133,7 @@ void FormattingButton::setItemsBackground(const QColor &color)
     }
 }
 
-void FormattingButton::addItem(QPixmap pm, int id, QString toolTip)
+void FormattingButton::addItem(const QPixmap &pm, int id, const QString &toolTip)
 {
     //Note: Do not use 0 as the item id, because that will break the m_lastId functionality
     Q_ASSERT(id != 0);

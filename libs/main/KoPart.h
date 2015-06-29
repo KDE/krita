@@ -116,7 +116,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(KUrl url);
+    void addRecentURLToAllMainWindows(const KUrl &url);
 
     KoMainWindow *currentMainwindow() const;
 
@@ -186,10 +186,10 @@ public:
     // ------- startup/openpane etc ---------------
 
     /**
-     * Template type used. This is used by the start up widget to show
+     * Template resource path used. This is used by the start up widget to show
      * the correct templates.
      */
-    QString templateType() const;
+    QString templatesResourcePath() const;
 
 
     /**
@@ -207,10 +207,10 @@ public:
 protected:
 
     /**
-     * Set the template type used. This is used by the start up widget to show
+     * Set the templates resource path used. This is used by the start up widget to show
      * the correct templates.
      */
-    void setTemplateType(const QString& _templateType);
+    void setTemplatesResourcePath(const QString &templatesResourcePath);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -244,7 +244,7 @@ protected:
      * @param templateType the template-type (group) that should be selected on creation.
      */
     KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
+                               const QString& templatesResourcePath = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 

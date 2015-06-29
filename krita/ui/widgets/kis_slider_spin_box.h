@@ -112,11 +112,13 @@ public:
     ///Get the value, don't use value()
     int value();
 
-    ///Set the value, don't use setValue()
-    void setValue(int value);
-
     void setSingleStep(int value);
     void setPageStep(int value);
+
+public Q_SLOTS:
+
+    ///Set the value, don't use setValue()
+    void setValue(int value);
 
 protected:
     virtual QString valueString() const;

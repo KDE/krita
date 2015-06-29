@@ -27,7 +27,6 @@
 
 
 
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "KoGridData.h"
 #include "KoGuidesData.h"
@@ -47,6 +46,7 @@
 class QString;
 
 class KUndo2Command;
+class KoUnit;
 
 class KoColor;
 class KoColorSpace;
@@ -700,7 +700,7 @@ public:
     QString localFilePath() const;
     void setLocalFilePath( const QString &localFilePath );
 
-    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 

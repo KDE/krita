@@ -304,8 +304,8 @@ private Q_SLOTS:
 
     void ensureCursorVisible(bool moveView = true);
 
-    void createStyleFromCurrentBlockFormat(QString name);
-    void createStyleFromCurrentCharFormat(QString name);
+    void createStyleFromCurrentBlockFormat(const QString &name);
+    void createStyleFromCurrentCharFormat(const QString &name);
 
     void testSlot(bool);
 

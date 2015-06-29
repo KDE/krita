@@ -76,6 +76,10 @@ public Q_SLOTS:
 
     void cut();
     void copy();
+
+    void cutSharp();
+    void copySharp();
+
     void copyMerged();
     void paste();
     void pasteNew();

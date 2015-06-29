@@ -26,6 +26,7 @@
 //#define COMPRESSOR_VERSION 2
 
 KisSwappedDataStore::KisSwappedDataStore()
+    : m_memoryMetric(0)
 {
     KisImageConfig config;
     const quint64 maxSwapSize = config.maxSwapSize() * MiB;
@@ -78,6 +79,8 @@ void KisSwappedDataStore::swapOutTileData(KisTileData *td)
 
     td->releaseMemory();
     td->setSwapChunk(chunk);
+
+    m_memoryMetric += td->pixelSize();
 }
 
 void KisSwappedDataStore::swapInTileData(KisTileData *td)
@@ -95,6 +98,8 @@ void KisSwappedDataStore::swapInTileData(KisTileData *td)
     quint8 *ptr = m_swapSpace->getReadChunkPtr(chunk);
     m_compressor->decompressTileData(ptr, chunk.size(), td);
     m_allocator->freeChunk(chunk);
+
+    m_memoryMetric -= td->pixelSize();
 }
 
 void KisSwappedDataStore::forgetTileData(KisTileData *td)
@@ -103,6 +108,13 @@ void KisSwappedDataStore::forgetTileData(KisTileData *td)
 
     m_allocator->freeChunk(td->swapChunk());
     td->setSwapChunk(KisChunk());
+
+    m_memoryMetric -= td->pixelSize();
+}
+
+qint64 KisSwappedDataStore::totalMemoryMetric() const
+{
+    return m_memoryMetric;
 }
 
 void KisSwappedDataStore::debugStatistics()

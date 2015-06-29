@@ -40,7 +40,7 @@ void KisActionManagerTest::testUpdateGUI()
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
-    KisPart::instance()->addView(view, doc);
+    KisPart::instance()->addView(view);
     mainWindow->showView(view);
 
     view->setViewManager(viewManager);
@@ -74,7 +74,7 @@ void KisActionManagerTest::testCondition()
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
-    KisPart::instance()->addView(view, doc);
+    KisPart::instance()->addView(view);
     mainWindow->showView(view);
 
     view->setViewManager(viewManager);
@@ -118,7 +118,7 @@ void KisActionManagerTest::testTakeAction()
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
-    KisPart::instance()->addView(view, doc);
+    KisPart::instance()->addView(view);
     mainWindow->showView(view);
 
     view->setViewManager(viewManager);

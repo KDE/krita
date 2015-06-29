@@ -107,6 +107,8 @@ public:
                             QString defaultFilter = QString());
     void setHideNameFilterDetailsOption();
 
+    QStringList nameFilters() const;
+
     QStringList urls();
     QString url();
 

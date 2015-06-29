@@ -222,6 +222,14 @@ public:
 
     void emitUpdate(KoPAPageBase *page) {emit update(page);}
 
+    /**
+     * Sets where "defaultstyles.xml" can be found in the "data" locations.
+     * Needs to be set before the document is loaded.
+     * @param defaultStylesResourcePath the relative path from the data locations
+     */
+    void setDefaultStylesResourcePath(const QString &defaultStylesResourcePath);
+    QString defaultStylesResourcePath() const;
+
 public Q_SLOTS:
     /// reimplemented
     virtual void initEmpty();

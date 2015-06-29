@@ -38,13 +38,13 @@ public:
 
     void setModel(TrackedChangeModel *model);
 
-    void selectItem(QModelIndex newIndex);
+    void selectItem(const QModelIndex &newIndex);
 
 Q_SIGNALS:
-    void currentChanged(QModelIndex newIndex);
+    void currentChanged(const QModelIndex &newIndex);
 
 private Q_SLOTS:
-    void currentChanged(QModelIndex newIndex, QModelIndex previousIndex);
+    void currentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex);
 
 private:
     Ui::trackedChange widget;

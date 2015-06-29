@@ -42,6 +42,7 @@ set(koodf_LIB_SRCS
     KoTarStore.cpp
     KoDirectoryStore.cpp
     KoZipStore.cpp
+    KoLZF.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoEncryptedStore.cpp

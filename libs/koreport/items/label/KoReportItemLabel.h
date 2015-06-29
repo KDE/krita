@@ -30,9 +30,7 @@ namespace Scripting
 {
 class Label;
 }
-/**
- @author
-*/
+
 class KoReportItemLabel : public KoReportItemBase
 {
 public:
@@ -64,10 +62,10 @@ protected:
     void setText(const QString&);
     KRTextStyleData textStyle();
     KRLineStyleData lineStyle();
-    
+
 private:
     virtual void createProperties();
-    
+
     friend class Scripting::Label;
 };
 #endif

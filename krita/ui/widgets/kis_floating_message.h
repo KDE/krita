@@ -52,7 +52,6 @@ public:
 
     explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout,
                                 Priority priority, int alignment = Qt::AlignCenter | Qt::TextWordWrap);
-    void showMessage();
 
     /// Show message above parent widget instead of screen
     void setShowOverParent(bool show);
@@ -69,10 +68,12 @@ protected:
 
     void paintEvent(QPaintEvent *e);
 
-private Q_SLOTS:
-
-    void startFade();
+public Q_SLOTS:
+    void showMessage();
     void removeMessage();
+
+private Q_SLOTS:
+    void startFade();
     void updateOpacity(int value);
 private:
 

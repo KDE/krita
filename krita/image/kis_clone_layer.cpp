@@ -136,9 +136,7 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     QRect copyRect = rect;
     copyRect.translate(-m_d->x, -m_d->y);
 
-    KisPainter gc(projection);
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, copyRect);
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, copyRect);
 }
 
 void KisCloneLayer::setDirtyOriginal(const QRect &rect)

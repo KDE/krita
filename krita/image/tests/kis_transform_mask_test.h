@@ -34,6 +34,9 @@ private Q_SLOTS:
 
     void testMultipleMasks();
     void testMaskWithOffset();
+
+    void testWeirdFullUpdates();
+    void testTransformHiddenPartsOfTheGroup();
 };
 
 #endif /* __KIS_TRANSFORM_MASK_TEST_H */

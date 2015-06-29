@@ -43,6 +43,7 @@ public:
 
 public:
     using KoCanvasController::documentSize;
+    bool wrapAroundMode() const;
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);

@@ -20,6 +20,7 @@
 #include <QHash>
 #include <QSet>
 #include <QQueue>
+#include <QVector>
 
 class QDomDocument;
 class Command;
@@ -48,8 +49,13 @@ public:
 
     void dump();
     static QString toPlainText(const QString& htmlText);
-    static Component* findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName);
+    // finds the first filter that matches the filter category and name
+    static Command* findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName);
+    static Component* findFilterByPath(const Component* rootNode, const Component * path);
+
+
     static QList<Command* > findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType = QString());
+    static QVector<Command* > filtersByName(const Component* rootNode, const QString& filterName);
 
     static QDomDocument dumpFiltersToXML(const Component* rootNode);
 

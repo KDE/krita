@@ -27,9 +27,12 @@ class KoOdfNotesConfiguration::Private
 {
 public:
     KoOdfNotesConfiguration::NoteClass noteClass;
-    QString citationTextStyle;
-    QString citationBodyTextStyle;
-    QString defaultNoteParagraphStyle;
+    QString citationTextStyleName;
+    QString citationBodyTextStyleName;
+    QString defaultNoteParagraphStyleName;
+    void *citationTextStyle;
+    void *citationBodyTextStyle;
+    void *defaultNoteParagraphStyle;
     QString masterPageName;
     int startValue;
     KoOdfNumberDefinition numberFormat;
@@ -48,16 +51,20 @@ KoOdfNotesConfiguration::KoOdfNotesConfiguration(NoteClass noteClass)
     d->numberingScheme = BeginAtDocument;
     d->footnotesPosition = Page;
 
+    d->defaultNoteParagraphStyle = 0;
+    d->citationTextStyle = 0;
+    d->citationBodyTextStyle = 0;
+
     if (noteClass == KoOdfNotesConfiguration::Footnote) {
         d->numberFormat.setFormatSpecification(KoOdfNumberDefinition::Numeric);
-        d->defaultNoteParagraphStyle = "Footnote";
-        d->citationTextStyle = "Footnote Symbol";
-        d->citationBodyTextStyle = "Footnote anchor";
+        d->defaultNoteParagraphStyleName = "Footnote";
+        d->citationTextStyleName = "Footnote_20_Symbol";
+        d->citationBodyTextStyleName = "Footnote_20_anchor";
     } else {
         d->numberFormat.setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
-        d->defaultNoteParagraphStyle = "Endnote";
-        d->citationTextStyle = "Endnote Symbol";
-        d->citationBodyTextStyle = "Endnote anchor";
+        d->defaultNoteParagraphStyleName = "Endnote";
+        d->citationTextStyleName = "Endnote_20_Symbol";
+        d->citationBodyTextStyleName = "Endnote_20_anchor";
     }
 }
 
@@ -70,6 +77,9 @@ KoOdfNotesConfiguration::KoOdfNotesConfiguration(const KoOdfNotesConfiguration &
     : QObject(), d(new Private())
 {
     d->noteClass = other.d->noteClass;
+    d->citationTextStyleName = other.d->citationTextStyleName;
+    d->citationBodyTextStyleName = other.d->citationBodyTextStyleName;
+    d->defaultNoteParagraphStyleName = other.d->defaultNoteParagraphStyleName;
     d->citationTextStyle = other.d->citationTextStyle;
     d->citationBodyTextStyle = other.d->citationBodyTextStyle;
     d->defaultNoteParagraphStyle = other.d->defaultNoteParagraphStyle;
@@ -86,6 +96,9 @@ KoOdfNotesConfiguration::KoOdfNotesConfiguration(const KoOdfNotesConfiguration &
 KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConfiguration &other)
 {
     d->noteClass = other.d->noteClass;
+    d->citationTextStyleName = other.d->citationTextStyleName;
+    d->citationBodyTextStyleName = other.d->citationBodyTextStyleName;
+    d->defaultNoteParagraphStyleName = other.d->defaultNoteParagraphStyleName;
     d->citationTextStyle = other.d->citationTextStyle;
     d->citationBodyTextStyle = other.d->citationBodyTextStyle;
     d->defaultNoteParagraphStyle = other.d->defaultNoteParagraphStyle;
@@ -103,9 +116,9 @@ KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConf
 
 void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 {
-    d->citationTextStyle = element.attributeNS(KoXmlNS::text, "citation-style-name", d->citationTextStyle);
-    d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", d->citationBodyTextStyle);
-    d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", d->defaultNoteParagraphStyle);
+    d->citationTextStyleName = element.attributeNS(KoXmlNS::text, "citation-style-name", d->citationTextStyleName);
+    d->citationBodyTextStyleName = element.attributeNS(KoXmlNS::text, "citation-body-style-name", d->citationBodyTextStyleName);
+    d->defaultNoteParagraphStyleName = element.attributeNS(KoXmlNS::text, "default-style-name", d->defaultNoteParagraphStyleName);
     d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", d->masterPageName);
     d->startValue = qMax(1, element.attributeNS(KoXmlNS::text, "start-value", QString::number(d->startValue)).toInt());
 
@@ -158,9 +171,9 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
     else if (d->noteClass == Endnote) {
         writer->addAttribute("text:note-class", "endnote");
     }
-    if (!d->citationTextStyle.isNull()) {writer->addAttribute("text:citation-style-name", d->citationTextStyle); }
-    if (!d->citationBodyTextStyle.isNull()) {writer->addAttribute("text:citation-body-style-name", d->citationBodyTextStyle); }
-    if (!d->defaultNoteParagraphStyle.isNull()) {writer->addAttribute("text:default-style-name", d->defaultNoteParagraphStyle); }
+    if (!d->citationTextStyleName.isNull()) {writer->addAttribute("text:citation-style-name", d->citationTextStyleName); }
+    if (!d->citationBodyTextStyleName.isNull()) {writer->addAttribute("text:citation-body-style-name", d->citationBodyTextStyleName); }
+    if (!d->defaultNoteParagraphStyleName.isNull()) {writer->addAttribute("text:default-style-name", d->defaultNoteParagraphStyleName); }
     if (!d->masterPageName.isNull()) {writer->addAttribute("text:master-page-name", d->masterPageName); }
     if (d->startValue != 0) { writer->addAttribute("text:start-value", d->startValue); }
 
@@ -211,33 +224,47 @@ KoOdfNotesConfiguration::NoteClass KoOdfNotesConfiguration::noteClass() const
 }
 
 
-QString KoOdfNotesConfiguration::citationTextStyle() const
+void *KoOdfNotesConfiguration::citationTextStyle() const
 {
     return d->citationTextStyle;
 }
 
-void KoOdfNotesConfiguration::setCitationTextStyle(const QString &citationTextStyle)
+QString KoOdfNotesConfiguration::citationTextStyleName() const
+{
+    return d->citationTextStyleName;
+}
+
+void KoOdfNotesConfiguration::setCitationTextStyle(void *citationTextStyle)
 {
     d->citationTextStyle = citationTextStyle;
 }
 
-
-QString KoOdfNotesConfiguration::citationBodyTextStyle() const
+void *KoOdfNotesConfiguration::citationBodyTextStyle() const
 {
     return d->citationBodyTextStyle;
 }
 
-void KoOdfNotesConfiguration::setCitationBodyTextStyle(const QString &citationBodyTextStyle)
+QString KoOdfNotesConfiguration::citationBodyTextStyleName() const
+{
+    return d->citationBodyTextStyleName;
+}
+
+void KoOdfNotesConfiguration::setCitationBodyTextStyle(void *citationBodyTextStyle)
 {
     d->citationBodyTextStyle = citationBodyTextStyle;
 }
 
-QString KoOdfNotesConfiguration::defaultNoteParagraphStyle() const
+void *KoOdfNotesConfiguration::defaultNoteParagraphStyle() const
 {
     return d->defaultNoteParagraphStyle;
 }
 
-void KoOdfNotesConfiguration::setDefaultNoteParagraphStyle(const QString &defaultNoteParagraphStyle)
+QString KoOdfNotesConfiguration::defaultNoteParagraphStyleName() const
+{
+    return d->defaultNoteParagraphStyleName;
+}
+
+void KoOdfNotesConfiguration::setDefaultNoteParagraphStyle(void *defaultNoteParagraphStyle)
 {
     d->defaultNoteParagraphStyle = defaultNoteParagraphStyle;
 }

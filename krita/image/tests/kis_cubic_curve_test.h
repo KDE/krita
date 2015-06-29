@@ -36,6 +36,7 @@ private Q_SLOTS:
     void testComparison();
     void testSerialization();
     void testValue();
+    void testNull();
     void testTransfer();
 private:
     QPointF pt0, pt1, pt2, pt3, pt4, pt5;

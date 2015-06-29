@@ -29,7 +29,7 @@
  * The KoResourceServerObserver class provides a interface to observe a KoResourceServer.
  * To receive notifications it needs to be added to the resource server.
  */
-template <class T, class Policy = PointerStroragePolicy<T> >
+template <class T, class Policy = PointerStoragePolicy<T> >
 class KoResourceServerObserver
 {
 public:

@@ -30,8 +30,10 @@ public:
 };
 
 KisGridOpOption::KisGridOpOption()
-    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisGridOpOption");
+
     m_checkable = false;
     m_options = new KisGridOpOptionsWidget();
 

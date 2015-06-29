@@ -88,12 +88,14 @@ public:
         qDeleteAll(channelInfoRecords);
     }
 
+    QRect channelRect(ChannelInfo *channel) const;
+
     bool read(QIODevice* io);
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
     bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    bool write(QIODevice* io, KisNodeSP node);
-    bool writePixelData(QIODevice* io);
+    void write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType, const QDomDocument &stylesXmlDoc);
+    void writePixelData(QIODevice* io);
 
     bool valid();
 
@@ -109,6 +111,7 @@ public:
     QVector<ChannelInfo*> channelInfoRecords;
 
     QString blendModeKey;
+    bool isPassThrough;
 
     quint8 opacity;
     quint8 clipping;
@@ -150,13 +153,20 @@ public:
     PsdAdditionalLayerInfoBlock infoBlocks;
 
 private:
+    void writeTransparencyMaskPixelData(QIODevice *io);
+
+private:
 
     bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
-    KisNodeSP m_node;
+    KisPaintDeviceSP m_layerContentDevice;
+    KisNodeSP m_onlyTransparencyMask;
+    QRect m_onlyTransparencyMaskRect;
+    qint64 m_transparencyMaskSizeOffset;
+
     const PSDHeader m_header;
 };
 

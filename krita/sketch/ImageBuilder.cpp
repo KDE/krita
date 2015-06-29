@@ -86,10 +86,7 @@ void ImageBuilder::createImageFromClipboardDelayed()
         layer->setOpacity(OPACITY_OPAQUE_U8);
         QRect r = clipDevice->exactBounds();
 
-        KisPainter painter;
-        painter.begin(layer->paintDevice());
-        painter.setCompositeOp(COMPOSITE_COPY);
-        painter.bitBlt(QPoint(0, 0), clipDevice, r);
+        KisPainter::copyAreaOptimized(QPoint(), clipDevice, layer->paintDevice(), r);
         layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
     }
 }

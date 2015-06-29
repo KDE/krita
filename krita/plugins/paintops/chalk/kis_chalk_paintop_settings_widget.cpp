@@ -24,19 +24,18 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 
 KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpSettingsWidget(parent)
 {
-    m_chalkOption =  new KisChalkOpOption();
-
-    addPaintOpOption(m_chalkOption);
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisAirbrushOption(false));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    m_chalkOption = new KisChalkOpOption();
+    addPaintOpOption(m_chalkOption, i18n("Brush size"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 
 KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()

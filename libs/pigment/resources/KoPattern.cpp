@@ -106,12 +106,11 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
     int index = filename().lastIndexOf('.');
 
     if (index != -1)
-        fileExtension = filename().mid(index).toLower();
+        fileExtension = filename().mid(index + 1).toLower();
 
     bool result;
 
-
-    if (fileExtension == ".pat") {
+    if (fileExtension == "pat") {
         QByteArray data = dev->readAll();
         result = init(data);
     }
@@ -136,53 +135,66 @@ bool KoPattern::save()
 
 bool KoPattern::saveToDevice(QIODevice *dev) const
 {
-    // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
-    // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
-    // magic = "GPAT", as a single uint32, the docs are wrong here!
-    // name is UTF-8 (\0-terminated! The docs say nothing about this!)
-    // _All_ data in network order, it seems! (not mentioned in gimp-2.2.8/devel-docs/pat.txt!!)
-    // We only save RGBA at the moment
-    // Version is 1 for now...
+    QString fileExtension;
+    int index = filename().lastIndexOf('.');
 
-    GimpPatternHeader ph;
-    QByteArray utf8Name = name().toUtf8();
-    char const* name = utf8Name.data();
-    int nameLength = qstrlen(name);
+    if (index != -1)
+        fileExtension = filename().mid(index + 1).toLower();
 
-    ph.header_size = htonl(sizeof(GimpPatternHeader) + nameLength + 1); // trailing 0
-    ph.version = htonl(1);
-    ph.width = htonl(width());
-    ph.height = htonl(height());
-    ph.bytes = htonl(4);
-    ph.magic_number = htonl(GimpPatternMagic);
+    if (fileExtension == "pat") {
 
-    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
-    int wrote = dev->write(bytes);
-    bytes.clear();
+        // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
+        // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
+        // magic = "GPAT", as a single uint32, the docs are wrong here!
+        // name is UTF-8 (\0-terminated! The docs say nothing about this!)
+        // _All_ data in network order, it seems! (not mentioned in gimp-2.2.8/devel-docs/pat.txt!!)
+        // We only save RGBA at the moment
+        // Version is 1 for now...
 
-    if (wrote == -1)
-        return false;
+        GimpPatternHeader ph;
+        QByteArray utf8Name = name().toUtf8();
+        char const* name = utf8Name.data();
+        int nameLength = qstrlen(name);
 
-    wrote = dev->write(name, nameLength + 1); // Trailing 0 apparantly!
-    if (wrote == -1)
-        return false;
+        ph.header_size = htonl(sizeof(GimpPatternHeader) + nameLength + 1); // trailing 0
+        ph.version = htonl(1);
+        ph.width = htonl(width());
+        ph.height = htonl(height());
+        ph.bytes = htonl(4);
+        ph.magic_number = htonl(GimpPatternMagic);
 
-    int k = 0;
-    bytes.resize(width() * height() * 4);
-    for (qint32 y = 0; y < height(); ++y) {
-        for (qint32 x = 0; x < width(); ++x) {
-            // RGBA only
-            QRgb pixel = m_pattern.pixel(x, y);
-            bytes[k++] = static_cast<char>(qRed(pixel));
-            bytes[k++] = static_cast<char>(qGreen(pixel));
-            bytes[k++] = static_cast<char>(qBlue(pixel));
-            bytes[k++] = static_cast<char>(qAlpha(pixel));
+        QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
+        int wrote = dev->write(bytes);
+        bytes.clear();
+
+        if (wrote == -1)
+            return false;
+
+        wrote = dev->write(name, nameLength + 1); // Trailing 0 apparantly!
+        if (wrote == -1)
+            return false;
+
+        int k = 0;
+        bytes.resize(width() * height() * 4);
+        for (qint32 y = 0; y < height(); ++y) {
+            for (qint32 x = 0; x < width(); ++x) {
+                // RGBA only
+                QRgb pixel = m_pattern.pixel(x, y);
+                bytes[k++] = static_cast<char>(qRed(pixel));
+                bytes[k++] = static_cast<char>(qGreen(pixel));
+                bytes[k++] = static_cast<char>(qBlue(pixel));
+                bytes[k++] = static_cast<char>(qAlpha(pixel));
+            }
         }
-    }
 
-    wrote = dev->write(bytes);
-    if (wrote == -1)
-        return false;
+        wrote = dev->write(bytes);
+        if (wrote == -1)
+            return false;
+
+    }
+    else {
+        return m_pattern.save(dev, fileExtension.toUpper().toLatin1());
+    }
 
     return true;
 

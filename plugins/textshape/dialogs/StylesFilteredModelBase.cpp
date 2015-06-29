@@ -107,7 +107,7 @@ QModelIndex StylesFilteredModelBase::indexOf(const KoCharacterStyle &style) cons
     return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, style.styleId());
 }
 
-QImage StylesFilteredModelBase::stylePreview(int row, QSize size)
+QImage StylesFilteredModelBase::stylePreview(int row, const QSize &size)
 {
     if (row < 0) {
         return QImage();
@@ -116,7 +116,7 @@ QImage StylesFilteredModelBase::stylePreview(int row, QSize size)
 
 }
 /*
-QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, QSize size)
+QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, const QSize &size)
 {
     if (!index.isValid()) {
         return QImage();

@@ -26,7 +26,7 @@
 
 
 KisHatchingPressureThicknessOption::KisHatchingPressureThicknessOption()
-    : KisCurveOption(i18n("Thickness"), "Thickness", KisPaintOpOption::generalCategory(), false)
+    : KisCurveOption("Thickness", KisPaintOpOption::GENERAL, false)
 {
 }
 

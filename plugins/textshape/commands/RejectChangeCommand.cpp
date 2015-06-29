@@ -38,7 +38,7 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : KoTextCommandBase(parent),
+RejectChangeCommand::RejectChangeCommand (int changeId, const QList<QPair<int, int> > &changeRanges, QTextDocument *document, KUndo2Command* parent) : KoTextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),

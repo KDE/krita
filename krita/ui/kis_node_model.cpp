@@ -38,6 +38,8 @@
 #include <commands/kis_node_property_list_command.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_projection_leaf.h>
+
 
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -180,10 +182,14 @@ void KisNodeModel::setShowGlobalSelection(bool value)
 void KisNodeModel::updateSettings()
 {
     KisConfig cfg;
+    bool oldShowRootLayer = m_d->showRootLayer;
+    bool oldShowGlobalSelection = m_d->showGlobalSelection;
     m_d->showRootLayer = cfg.showRootLayer();
     m_d->showGlobalSelection = cfg.showGlobalSelection();
-    resetIndexConverter();
-    reset();
+    if(m_d->showRootLayer != oldShowRootLayer || m_d->showGlobalSelection != oldShowGlobalSelection) {
+        resetIndexConverter();
+        reset();
+    }
 }
 
 void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
@@ -235,6 +241,10 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
 
 void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {
+    KisDummiesFacadeBase *oldDummiesFacade;
+    KisShapeController *oldShapeController;
+    oldShapeController = m_d->shapeController;
+    oldDummiesFacade = m_d->dummiesFacade;
 
     m_d->shapeController = shapeController;
 
@@ -266,10 +276,14 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
 
-        connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotIsolatedModeChanged()));
+        if(m_d->image.isValid()) {
+            connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotIsolatedModeChanged()));
+        }
     }
 
-    reset();
+    if(m_d->dummiesFacade != oldDummiesFacade || m_d->shapeController != oldShapeController) {
+        reset();
+    }
 }
 
 void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
@@ -399,7 +413,15 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
-        return belongsToIsolatedGroup(node) ? QVariant() : Qt::gray;
+        return belongsToIsolatedGroup(node) &&
+            !node->projectionLeaf()->isDroppedMask() ? QVariant() : Qt::gray;
+    case Qt::FontRole: {
+        QFont baseFont;
+        if (node->projectionLeaf()->isDroppedMask()) {
+            baseFont.setStrikeOut(true);
+        }
+        return baseFont;
+    }
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
     case ProgressRole: {
@@ -524,6 +546,11 @@ Qt::DropActions KisNodeModel::supportedDragActions() const
 Qt::DropActions KisNodeModel::supportedDropActions() const
 {
     return Qt::MoveAction | Qt::CopyAction;
+}
+
+bool KisNodeModel::hasDummiesFacade()
+{
+    return m_d->dummiesFacade != 0;
 }
 
 QStringList KisNodeModel::mimeTypes() const

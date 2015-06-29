@@ -103,6 +103,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popupOnMouseClick(true),
     m_colorSpace(0),
     m_isPopup(false),
+    m_hideOnMouseClick(false),
     m_colorPreviewPopup(new KisColorPreviewPopup(this))
 {
     m_hideTimer->setInterval(0);
@@ -216,6 +217,9 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
 
     if (e->button() == Qt::MidButton) {
         e->accept();
+    } else if (m_isPopup && m_hideOnMouseClick==true && !m_hideTimer->isActive()) {
+        showColorPreview();
+        hide();
     }
 }
 
@@ -431,11 +435,21 @@ void KisColorSelectorBase::updateSettings()
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
-    bool onMouseOver = cfg.readEntry("popupOnMouseOver", false);
-    bool onMouseClick = cfg.readEntry("popupOnMouseClick", true);
-    setPopupBehaviour(onMouseOver, onMouseClick);
+
+   int zoomSelectorOptions =  (int) cfg.readEntry("zoomSelectorOptions", 0) ;
+   if (zoomSelectorOptions == 0)   {
+       setPopupBehaviour(false, true);   // middle mouse button click will open zoom selector
+   } else if (zoomSelectorOptions == 1)   {
+       setPopupBehaviour(true, false);   // move over will open the zoom selector
+   }
+   else
+   {
+        setPopupBehaviour(false, false); // do not show zoom selector
+   }
+
 
     if(m_isPopup) {
+        m_hideOnMouseClick = cfg.readEntry("hidePopupOnClickCheck", false);
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
     }
 

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +20,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QCheckBox>
+#include <QSpacerItem>
 
 #include <klocale.h>
 #include <kconfiggroup.h>
@@ -39,6 +41,7 @@
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     : QWidget(parent)
     , m_colorSpace(0)
+    , m_spacer(0)
     , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
     , m_customColorSpaceSelected(false)
     , m_displayRenderer(0)
@@ -46,10 +49,13 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 {
 
     m_layout = new QVBoxLayout(this);
+    m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(1);
     m_updateAllowed = true;
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
 
     m_colorspaceSelector = new KisColorSpaceSelector(this);
+    m_colorspaceSelector->layout()->setSpacing(1);
     connect(m_colorspaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(setCustomColorSpace(const KoColorSpace*)));
 
     m_chkShowColorSpaceSelector = new QCheckBox(i18n("Show Colorspace Selector"), this);
@@ -57,15 +63,13 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
+
     m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
     m_layout->addWidget(m_chkShowColorSpaceSelector);
     m_layout->addWidget(m_colorspaceSelector);
 
-    setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
-    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
-    c.setOpacity(OPACITY_OPAQUE_U8);
-    setColor(c);
-
+    m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_layout->addItem(m_spacer);
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
@@ -103,6 +107,8 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     }
     m_inputs.clear();
 
+    m_layout->removeItem(m_spacer);
+
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 
     KoColorDisplayRendererInterface *displayRenderer = m_displayRenderer ? m_displayRenderer : m_fallbackRenderer;
@@ -135,6 +141,21 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
             }
         }
     }
+
+    QList<QLabel*> labels;
+    int labelWidth = 0;
+
+    Q_FOREACH (KisColorInput* input, m_inputs) {
+        Q_FOREACH (QLabel* label, input->findChildren<QLabel*>()) {
+            labels.append(label);
+            labelWidth = qMax(labelWidth, label->sizeHint().width());
+        }
+    }
+
+    Q_FOREACH (QLabel *label, labels) {
+        label->setMinimumWidth(labelWidth);
+    }
+
     bool allChannels8Bit = true;
     foreach (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR && channel->channelValueType() != KoChannelInfo::UINT8) {
@@ -148,7 +169,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         connect(input, SIGNAL(updated()), this,  SLOT(update()));
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
-    m_layout->addStretch(10);
+    m_layout->addItem(m_spacer);
 
     m_colorspaceSelector->blockSignals(true);
     m_colorspaceSelector->setCurrentColorSpace(cs);

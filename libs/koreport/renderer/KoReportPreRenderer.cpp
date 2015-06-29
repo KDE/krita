@@ -78,9 +78,9 @@ public:
     ///Scripting Stuff
     KRScriptHandler *m_scriptHandler;
     void initEngine();
-    
+
     KoReportASyncItemManager* asyncManager;
-    
+
 private slots:
     void asyncItemsFinished();
 
@@ -103,7 +103,7 @@ KoReportPreRendererPrivate::KoReportPreRendererPrivate()
     m_maxHeight = m_maxWidth = 0.0;
     m_kodata = 0;
     asyncManager = new KoReportASyncItemManager(this);
-    
+
     connect(asyncManager, SIGNAL(finished()), this, SLOT(asyncItemsFinished()));
 }
 
@@ -295,7 +295,7 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
                                             createNewPage();
                                             m_kodata->moveNext();
                                         }
-                                        
+
                                         if (!keys[i].isEmpty())
                                             keyValues[i] = m_kodata->value(m_kodata->fieldNumber(keys[i])).toString();
 
@@ -336,7 +336,7 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
 
     int itemHeight = 0;
-    
+
     if (sectionData.objects().count() == 0)
         return intHeight;
 
@@ -344,13 +344,13 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
     foreach(KoReportItemBase *ob, objects) {
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
-        
+
         //ASync objects cannot alter the section height
         KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
-        
-        if (!async_ob) { 
+
+        if (!async_ob) {
             itemHeight = ob->renderSimpleData(0, 0, offset, itemData, m_scriptHandler);
-           
+
             if (itemHeight > intHeight) {
                 intHeight = itemHeight;
             }
@@ -395,7 +395,7 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
             KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
             if (async_ob){
                 //kDebug() << "async object";
-                asyncManager->addItem(async_ob, m_page, sec, offset, itemData, m_scriptHandler);
+                asyncManager->addItem(async_ob, m_page, sec, offset, async_ob->realItemData(itemData), m_scriptHandler);
             } else {
                 //kDebug() << "sync object";
                 itemHeight = ob->renderSimpleData(m_page, sec, offset, itemData, m_scriptHandler);
@@ -634,7 +634,7 @@ ORODocument* KoReportPreRenderer::generate()
 
         tb->setText(d->m_scriptHandler->evaluate(tb->text()).toString());
     }
-    
+
     d->asyncManager->startRendering();
 
     d->m_scriptHandler->displayErrors();

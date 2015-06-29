@@ -32,7 +32,7 @@ class AcceptChangeCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:
-    AcceptChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
+    AcceptChangeCommand(int changeId, const QList<QPair<int, int> > &changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
     ~AcceptChangeCommand();
 
     virtual void redo();

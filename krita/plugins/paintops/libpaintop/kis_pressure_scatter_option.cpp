@@ -37,7 +37,7 @@
 
 
 KisPressureScatterOption::KisPressureScatterOption()
-    : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::generalCategory(), false, 1.0, 0.0, 5.0)
+    : KisCurveOption("Scatter", KisPaintOpOption::GENERAL, false, 1.0, 0.0, 5.0)
 {
     m_axisX = true;
     m_axisY = true;

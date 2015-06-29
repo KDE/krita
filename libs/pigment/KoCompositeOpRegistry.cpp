@@ -51,6 +51,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[1], KoID(COMPOSITE_LINEAR_BURN, i18n("Linear Burn")));
     m_map.insert(m_categories[1], KoID(COMPOSITE_DARKEN     , i18n("Darken")));
     m_map.insert(m_categories[1], KoID(COMPOSITE_GAMMA_DARK , i18n("Gamma Dark")));
+    m_map.insert(m_categories[1], KoID(COMPOSITE_DARKER_COLOR     , i18n("Darker Color")));
 
     m_map.insert(m_categories[2], KoID(COMPOSITE_DODGE       , i18n("Color Dodge")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge")));
@@ -63,6 +64,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_LIGHTER_COLOR     , i18n("Lighter Color")));
 
     m_map.insert(m_categories[3], KoID(COMPOSITE_DIFF                 , i18n("Difference")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EQUIVALENCE          , i18n("Equivalence")));

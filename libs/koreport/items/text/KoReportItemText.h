@@ -30,9 +30,7 @@ namespace Scripting
 class Text;
 
 }
-/**
- @author
-*/
+
 class KoReportItemText : public KoReportItemBase
 {
 public:
@@ -70,10 +68,10 @@ protected:
     void setBottomPadding(qreal bp);
     qreal bottomPadding() const;
 
-    
+
     KRTextStyleData textStyle();
     KRLineStyleData lineStyle();
-    
+
 private:
     virtual void createProperties();
 

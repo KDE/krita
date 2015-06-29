@@ -187,9 +187,6 @@ private:
     /// remove tables and paragraphs that are keep-with-next
     void backtrackKeepWithNext(FrameIterator *cursor);
 
-    /// utility method to restartlayout of a block
-    QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
-
     bool layoutBlock(FrameIterator *cursor);
 
     bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);

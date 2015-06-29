@@ -279,6 +279,8 @@ KisMainWindow::KisMainWindow()
     setComponentData(KisFactory::componentData());
     KGlobal::setActiveComponent(KisFactory::componentData());
 
+    KisConfig cfg;
+
     d->viewManager = new KisViewManager(this, actionCollection());
     d->themeManager = new Digikam::ThemeManager(this);
 
@@ -309,11 +311,13 @@ KisMainWindow::KisMainWindow()
 
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
-    ToolDockerFactory toolDockerFactory;
-    d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-
     KoToolBoxFactory toolBoxFactory;
     createDockWidget(&toolBoxFactory);
+
+    if (cfg.toolOptionsInDocker()) {
+        ToolDockerFactory toolDockerFactory;
+        d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
+    }
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -496,6 +500,9 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();
 
         QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
+        subwin->setAttribute(Qt::WA_DeleteOnClose, true);
+        connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
+
         KisConfig cfg;
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
@@ -519,6 +526,7 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
 
+
         // XXX: should this be changed for the views in other windows as well?
         foreach(QPointer<KisView> koview, KisPart::instance()->views()) {
             KisViewManager *view = qobject_cast<KisViewManager*>(koview);
@@ -538,6 +546,15 @@ void KisMainWindow::slotPreferences()
 
         d->viewManager->showHideScrollbars();
     }
+}
+
+void KisMainWindow::slotThemeChanged()
+{
+    // save theme changes instantly
+    KConfigGroup group(KGlobal::config(), "theme");
+    group.writeEntry("Theme", d->themeManager->currentThemeName());
+
+    emit themeChanged();
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument */*doc*/)
@@ -667,7 +684,6 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
 {
     if (!newdoc) {
         newdoc = KisPart::instance()->createDocument();
-        KisPart::instance()->addDocument(newdoc);
     }
 
     d->firstTime = true;
@@ -679,6 +695,8 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
         delete newdoc;
         return false;
     }
+
+    KisPart::instance()->addDocument(newdoc);
     updateReloadFileAction(newdoc);
 
     KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
@@ -1132,6 +1150,9 @@ void KisMainWindow::slotFileOpen()
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
+    QStringList filters = dialog.nameFilters();
+    filters << i18n("All files (*.*)");
+    dialog.setNameFilters(filters);
     dialog.setHideNameFilterDetailsOption();
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 
@@ -1183,17 +1204,32 @@ int KisMainWindow::viewCount() const
 bool KisMainWindow::restoreWorkspace(const QByteArray &state)
 {
     QByteArray oldState = saveState();
+    const bool showTitlebars = KisConfig().showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
-    foreach(QDockWidget *docker, dockWidgets()) {
-        docker->hide();
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->hide();
+        dock->titleBarWidget()->setVisible(showTitlebars);
     }
 
-    bool success = QMainWindow::restoreState(state);
+    bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
-        QMainWindow::restoreState(oldState);
+        KXmlGuiWindow::restoreState(oldState);
+        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+            if (dock->titleBarWidget()) {
+                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+            }
+        }
         return false;
+    }
+
+
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
+        }
     }
 
     return success;
@@ -1228,28 +1264,34 @@ void KisMainWindow::slotDocumentInfo()
     delete dlg;
 }
 
-void KisMainWindow::slotFileCloseAll()
+bool KisMainWindow::slotFileCloseAll()
 {
     foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         if (subwin) {
-            subwin->close();
+            if(!subwin->close())
+                return false;
         }
     }
-    d->mdiArea->closeAllSubWindows();
+
     updateCaption();
+    return true;
 }
 
 void KisMainWindow::slotFileQuit()
 {
+    if(!slotFileCloseAll())
+        return;
+
+    close();
+
     foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
         if (mainWin != this) {
-            mainWin->slotFileCloseAll();
-            close();
+            if(!mainWin->slotFileCloseAll())
+                return;
+
+            mainWin->close();
         }
     }
-
-    slotFileCloseAll();
-    close();
 }
 
 void KisMainWindow::slotFilePrint()
@@ -1682,11 +1724,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (titleBar && locked)
             titleBar->setLocked(true);
 
-        if (titleBar) {
-            KisConfig cfg;
-            titleBar->setVisible(cfg.showDockerTitleBars());
-        }
-
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[factory->id()];
@@ -1719,12 +1756,12 @@ void KisMainWindow::forceDockTabFonts()
     }
 }
 
-QList<QDockWidget*> KisMainWindow::dockWidgets()
+QList<QDockWidget*> KisMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
 }
 
-QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 
@@ -1808,7 +1845,9 @@ void KisMainWindow::updateWindowMenu()
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QAction *action = docMenu->addAction(doc->url().prettyUrl());
+            QString title = doc->url().prettyUrl();
+            if (title.isEmpty()) title = doc->image()->objectName();
+            QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));
             d->documentMapper->setMapping(action, doc);
@@ -1965,7 +2004,6 @@ QPointer<KisView>KisMainWindow::activeKisView()
 
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
-    d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 
     KConfigGroup group(KGlobal::config(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
@@ -1978,6 +2016,13 @@ void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
         w->setFont(dockWidgetFont);
+    }
+
+    if (d->toolOptionsDocker) {
+        d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
+    }
+    else {
+        d->viewManager->paintOpBox()->newOptionWidgets(optionWidgetList);
     }
 }
 
@@ -2076,7 +2121,7 @@ void KisMainWindow::createActions()
 
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
@@ -2194,7 +2239,8 @@ void KisMainWindow::showDockerTitleBars(bool show)
 {
     foreach (QDockWidget *dock, dockWidgets()) {
         if (dock->titleBarWidget()) {
-            dock->titleBarWidget()->setVisible(show);
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));
         }
     }
 

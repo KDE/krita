@@ -140,9 +140,9 @@ public:
 
         QList<KoResource*> resources;
         foreach (KoResource *resource, serverResources) {
-            KisPaintOpPreset *preset = static_cast<KisPaintOpPreset*>(resource);
+            KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
 
-            if( preset->paintOp().id() == m_paintopID) {
+            if (preset && preset->paintOp().id() == m_paintopID) {
                 resources.append(preset);
             }
         }
@@ -250,9 +250,9 @@ KoResource* KisPresetChooser::currentResource()
     return m_chooser->currentResource();
 }
 
-void KisPresetChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
+void KisPresetChooser::showTaggingBar(bool show)
 {
-    m_chooser->showTaggingBar(showSearchBar, showOpBar);
+    m_chooser->showTaggingBar(show);
 }
 
 KoResourceItemChooser *KisPresetChooser::itemChooser()

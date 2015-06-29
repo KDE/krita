@@ -42,6 +42,9 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
+#include "kis_signal_compressor_with_param.h"
+
+
 KisImageManager::KisImageManager(KisViewManager * view)
         : m_view(view)
 {
@@ -189,6 +192,15 @@ void KisImageManager::slotImageProperties()
     delete dlg;
 }
 
+void updateImageBackgroundColor(KisImageSP image, const KColorDialog *dlg)
+{
+    QColor newColor = dlg->color();
+    KoColor bg = image->defaultProjectionColor();
+    bg.fromQColor(newColor);
+    image->setDefaultProjectionColor(bg);
+    image->refreshGraphAsync();
+}
+
 void KisImageManager::slotImageColor()
 {
     KisImageWSP image = m_view->image();
@@ -199,14 +211,19 @@ void KisImageManager::slotImageColor()
     dlg.setAlphaChannelEnabled(true);
 #endif
     KoColor bg = image->defaultProjectionColor();
-
     dlg.setColor(bg.toQColor());
     dlg.setButtons(KColorDialog::Ok | KColorDialog::Cancel);
+
+    KisSignalCompressor compressor(200, KisSignalCompressor::FIRST_INACTIVE);
+
+    boost::function<void ()> updateCall(boost::bind(updateImageBackgroundColor, image, &dlg));
+    SignalToFunctionProxy proxy(updateCall);
+
+    connect(&dlg, SIGNAL(colorSelected(const QColor&)), &compressor, SLOT(start()));
+    connect(&compressor, SIGNAL(timeout()), &proxy, SLOT(start()));
+
     if (dlg.exec() == KColorDialog::Accepted) {
-        QColor c = dlg.color();
-        bg.fromQColor(c);
-        image->setDefaultProjectionColor(bg);
-        image->refreshGraphAsync();
+        // TODO: undo!!!
     }
 }
 

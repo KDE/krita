@@ -53,12 +53,12 @@ bool psdwrite(QIODevice* io, quint32 v)
     return written == 4;
 }
 
-bool psdwrite(QIODevice* io, double v)
+bool psdwrite(QIODevice* io, double val)
 {
-    double val;
-    *((qint64*)&val) = qToBigEndian<qint64>(*((qint64*)&v));
-
-    quint64 write = io->write((char*)&val, 8);
+    Q_ASSERT(sizeof(double) == sizeof(qint64));
+    void *v = &val;
+    qint64 i = qToBigEndian<qint64>(*(qint64*)(v));
+    quint64 write = io->write((char*)&i, 8);
     if (write != 8) return false;
     return true;
 }
@@ -195,11 +195,12 @@ bool psdread(QIODevice* io, quint64* v)
 
 bool psdread(QIODevice* io, double* v)
 {
-    double val;
+    Q_ASSERT(sizeof(double) == sizeof(qint64));
+
+    qint64 val;
     quint64 read = io->read((char*)&val, 8);
     if (read != 8) return false;
-
-    *((qint64*)v) = qFromBigEndian<qint64>((quint8*)&val);
+    *(reinterpret_cast<qint64*>(v)) = qFromBigEndian<qint64>(val);
     return true;
 }
 

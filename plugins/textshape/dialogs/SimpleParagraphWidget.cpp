@@ -104,7 +104,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_sortedStylesModel);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
@@ -287,13 +287,13 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
             }
         }
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
-        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
         m_sortedStylesModel->styleApplied(style);
         widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexOf(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
         widget.paragraphStyleCombo->slotUpdatePreview();
-        connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+        connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
     }
 }
 
@@ -308,10 +308,10 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
     }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
     connect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
 }
 
@@ -340,7 +340,7 @@ void SimpleParagraphWidget::styleSelected(int index)
     emit doneWithFocus();
 }
 
-void SimpleParagraphWidget::styleSelected(QModelIndex &index)
+void SimpleParagraphWidget::styleSelected(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return;

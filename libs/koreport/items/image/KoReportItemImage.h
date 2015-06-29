@@ -36,9 +36,6 @@ namespace Scripting
 class Image;
 }
 
-/**
- @author
-*/
 class KoReportItemImage : public KoReportItemBase
 {
 public:
@@ -62,7 +59,7 @@ protected:
     QString mode() const;
     bool isInline() const;
     QByteArray inlineImageData() const;
-    
+
 private:
     virtual void createProperties();
 

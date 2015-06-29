@@ -40,6 +40,10 @@ public:
 
     void testingRereadConfig();
 
+    qint64 lastPoolMemoryMetric() const;
+    qint64 lastRealMemoryMetric() const;
+    qint64 lastHistoricalMemoryMetric() const;
+
 protected:
     static const qint32 MAX_NUM_CLONES;
     static const qint32 MAX_TIMEOUT;
@@ -61,11 +65,14 @@ protected:
 
     template<class Iter>
         void getLists(Iter *iter, QList<KisTileData*> &beggers,
-                      QList<KisTileData*> &donors, qint32 &memoryOccupied);
+                      QList<KisTileData*> &donors,
+                      qint32 &memoryOccupied,
+                      qint32 &statRealMemory,
+                      qint32 &statHistoricalMemory);
 
     bool processLists(QList<KisTileData*> &beggers,
                       QList<KisTileData*> &donors,
-                      qint32 memoryOccupied);
+                      qint32 &memoryOccupied);
 
 private:
     void debugTileStatistics();
@@ -76,6 +83,9 @@ protected:
     qint32 m_timeout;
     bool m_lastCycleHadWork;
     qint32 m_memoryLimit;
+    qint32 m_lastPoolMemoryMetric;
+    qint32 m_lastRealMemoryMetric;
+    qint32 m_lastHistoricalMemoryMetric;
 };
 
 

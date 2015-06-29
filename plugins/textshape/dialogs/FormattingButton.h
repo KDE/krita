@@ -39,7 +39,7 @@ public:
 
     void setNumColumns(int columns);
     void setItemsBackground(const QColor &color);
-    void addItem(QPixmap pm, int id, QString toolTip= QString());
+    void addItem(const QPixmap &pm, int id, const QString &toolTip = QString());
     void addAction(QAction *action);
     void addBlanks(int n);
     void addSeparator();

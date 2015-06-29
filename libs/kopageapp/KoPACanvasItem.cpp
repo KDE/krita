@@ -26,6 +26,7 @@
 
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
+#include <KoPageLayout.h>
 
 #include <kxmlguifactory.h>
 

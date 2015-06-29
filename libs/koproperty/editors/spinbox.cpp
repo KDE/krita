@@ -84,8 +84,18 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
 
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
     QVariant maxVal(prop->option("max", INT_MAX));
-    setMinimum(minVal.toInt());
-    setMaximum(maxVal.toInt());
+    QVariant step(prop->option("step", 1));
+    if (!minVal.isNull() && !maxVal.isNull() && !step.isNull()) {
+        setRange(minVal.toInt(), maxVal.toInt(), step.toInt());
+        setSliderEnabled(prop->option("slider", false).toBool());
+    }
+    else {
+        if (!minVal.isNull())
+            setMinimum(minVal.toInt());
+        if (!maxVal.isNull())
+            setMaximum(maxVal.toInt());
+    }
+
     QString minValueText(prop->option("minValueText").toString());
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);

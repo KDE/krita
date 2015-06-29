@@ -28,6 +28,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoProperties.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -121,7 +122,7 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
 
 bool KisPaintLayer::needProjection() const
 {
-    return hasTemporaryTarget() || (m_d->contentChannel->keyframeCount() > 1);
+    return hasTemporaryTarget() || (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled());
 }
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
@@ -132,7 +133,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
     KisPainter gc(projection);
 
-    if (m_d->contentChannel->keyframeCount() > 1) {
+    if (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
         KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
 
         compositor->composite(m_d->paintDevice, projection, rect);
@@ -172,7 +173,11 @@ KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() co
     // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
     l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
-    
+
+    if (m_d->contentChannel->keyframeCount() > 1) {
+        l << KisDocumentSectionModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
+    }
+
     return l;
 }
 
@@ -184,6 +189,9 @@ void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::Pro
         }
         else if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
+        }
+        else if (property.name == i18n("Onion skin")) {
+            setOnionSkinEnabled(property.state.toBool());
         }
     }
     
@@ -243,6 +251,16 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
+}
+
+bool KisPaintLayer::onionSkinEnabled() const
+{
+    return nodeProperties().boolProperty("onionskin", false);
+}
+
+void KisPaintLayer::setOnionSkinEnabled(bool state)
+{
+    nodeProperties().setProperty("onionskin", state);
 }
 
 void KisPaintLayer::addNewFrame(int time, bool blank)

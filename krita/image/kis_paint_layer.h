@@ -140,6 +140,16 @@ public:
      */
     void setAlphaLocked(bool lock);
 
+    /**
+     * @return true if onion skins should be rendered on this layer
+     */
+    bool onionSkinEnabled() const;
+
+    /**
+     * @param state whether onion skins should be rendered
+     */
+    void setOnionSkinEnabled(bool state);
+
 public Q_SLOTS:
 
     // KisIndirectPaintingSupport

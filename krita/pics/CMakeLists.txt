@@ -65,8 +65,8 @@ white64-krita.png
 width_icon.png
 width.png
 workspace-chooser.png
-onionA.png
-onionB.png
+onionOn.png
+onionOff.png
 mirrorAxis-HorizontalMove.png
 mirrorAxis-VerticalMove.png
 

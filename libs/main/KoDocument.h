@@ -57,7 +57,7 @@ class QDomDocument;
 //     referenced the same two pagelayout functions incorrectly.
 #if defined(_WIN32) || defined(_WIN64)
     #include <KoPageLayout.h>
-#elif
+#else
     class KoPageLayout;
 #endif
 

@@ -141,6 +141,11 @@ public:
      This is the case for MySQL.
      The default is 0. */
     uint TEXT_TYPE_MAX_LENGTH;
+
+    /*! "LIKE" by default, used to construct native expressions "x LIKE y" and "x NOT LIKE y".
+     LIKE is case-insensitive for MySQL, SQLite, and often on Sybase/MSSQL
+     while for PostgreSQL it's case-sensitive. So for PostgreSQL LIKE_OPERATOR == "ILIKE". */
+    QString LIKE_OPERATOR;
 };
 
 /*! Private driver's data members. Available for implementation. */

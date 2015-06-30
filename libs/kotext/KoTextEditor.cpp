@@ -796,6 +796,14 @@ void KoTextEditor::deleteChar()
         if (d->caret.atEnd())
             return;
 
+        // We alson need to refuse delete if we are at final pos in table cell
+        if (QTextTable *table = d->caret.currentTable()) {
+            QTextTableCell cell = table->cellAt(d->caret.position());
+            if (d->caret.position() == cell.lastCursorPosition().position()) {
+                return;
+            }
+        }
+
         // We also need to refuse delete if it will delete a note frame
         QTextCursor after(d->caret);
         after.movePosition(QTextCursor::NextCharacter);
@@ -814,6 +822,7 @@ void KoTextEditor::deleteChar()
         }
     }
 
+
     deleteChar(false);
 
     emit cursorPositionChanged();
@@ -828,6 +837,14 @@ void KoTextEditor::deletePreviousChar()
     if (!d->caret.hasSelection()) {
         if (d->caret.atStart())
             return;
+
+        // We also need to refuse delete if we are at first pos in table cell
+        if (QTextTable *table = d->caret.currentTable()) {
+            QTextTableCell cell = table->cellAt(d->caret.position());
+            if (d->caret.position() == cell.firstCursorPosition().position()) {
+                return;
+            }
+        }
 
         // We also need to refuse delete if it will delete a note frame
         QTextCursor after(d->caret);

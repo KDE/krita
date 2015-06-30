@@ -75,6 +75,7 @@ set(calligradb_LIB_SRCS
    transaction.cpp 
    indexschema.cpp 
    queryschema.cpp 
+   queryschema_p.cpp
    queryschemaparameter.cpp
    schemadata.cpp 
    global.cpp 

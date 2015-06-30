@@ -15,114 +15,128 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QListWidget" name="lstStyleSelector">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <property name="text">
-       <string>Styles</string>
-      </property>
+      <widget class="QCheckBox" name="chkMasterFxSwitch">
+       <property name="text">
+        <string>Enable Effects</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <property name="text">
-       <string>Blending Options</string>
-      </property>
+      <widget class="QListWidget" name="lstStyleSelector">
+       <item>
+        <property name="text">
+         <string>Styles</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Blending Options</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Drop Shadow</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Inner Shadow</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Outer Glow</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Inner Glow</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bevel and Emboss</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Contour</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Texture</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Satin</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Color Overlay</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Gradient Overlay</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Pattern Overlay</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Stroke</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>Drop Shadow</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Inner Shadow</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Outer Glow</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Inner Glow</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Bevel and Emboss</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Contour</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Texture</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Satin</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Color Overlay</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Gradient Overlay</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Pattern Overlay</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Stroke</string>
-      </property>
-      <property name="checkState">
-       <enum>Unchecked</enum>
-      </property>
-     </item>
-    </widget>
+    </layout>
    </item>
    <item>
     <widget class="QStackedWidget" name="stylesStack"/>
@@ -130,23 +144,23 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="bnNewStyle">
+      <widget class="QPushButton" name="btnNewStyle">
        <property name="text">
-        <string>Ne&amp;w Style ...</string>
+        <string>Ne&amp;w...</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnLoadStyle">
        <property name="text">
-        <string>&amp;Load Style...</string>
+        <string>&amp;Import...</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnSaveStyle">
        <property name="text">
-        <string>&amp;Save Style...</string>
+        <string>&amp;Export...</string>
        </property>
       </widget>
      </item>

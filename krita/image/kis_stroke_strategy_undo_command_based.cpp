@@ -59,6 +59,11 @@ KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
                             "After the stroke has been started, no copying must happen");
 }
 
+void KisStrokeStrategyUndoCommandBased::setUsedWhileUndoRedo(bool value)
+{
+    setClearsRedoOnStart(!value);
+}
+
 void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)
 {
     if(!command) return;

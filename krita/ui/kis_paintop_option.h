@@ -40,26 +40,25 @@ class KRITAUI_EXPORT KisPaintOpOption : public QObject
 {
     Q_OBJECT
 public:
-    static QString generalCategory();
-    static QString colorCategory();
-    static QString textureCategory();
 
-public:
+    enum PaintopCategory {
+        GENERAL,
+        COLOR,
+        TEXTURE,
+        FILTER
+    };
 
-    KisPaintOpOption(const QString & label, const QString& category, bool checked );
+    KisPaintOpOption(KisPaintOpOption::PaintopCategory category, bool checked);
     virtual ~KisPaintOpOption();
 
-    QString label() const;
-    QString category() const;
-    virtual bool isCheckable() {
-        return m_checkable;
-    }
+    KisPaintOpOption::PaintopCategory category() const;
+    virtual bool isCheckable() const;
 
     virtual bool isChecked() const;
     virtual void setChecked(bool checked);
 
     void setLocked(bool value);
-    bool isLocked () const;
+    bool isLocked() const;
 
     /**
      * Reimplement this to use the image in the option widget
@@ -73,8 +72,8 @@ public:
 
     QWidget* configurationPage() const;
 
-
 protected:
+
     void setConfigurationPage(QWidget * page);
 
 protected:
@@ -106,7 +105,6 @@ protected:
 
     bool m_checkable;
     bool m_locked;
-
 
 private:
 

@@ -57,13 +57,13 @@ public Q_SLOTS:
 Q_SIGNALS:
     void doneWithFocus();
     void paragraphStyleSelected(KoParagraphStyle *);
-    void newStyleRequested(QString name);
+    void newStyleRequested(const QString &name);
     void showStyleManager(int styleId);
 
 private Q_SLOTS:
     void listStyleChanged(int id);
     void styleSelected(int index);
-    void styleSelected(QModelIndex &index);
+    void styleSelected(const QModelIndex &index);
     void changeListLevel(int level);
 
 private:

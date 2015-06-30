@@ -100,7 +100,7 @@ public:
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
     QGraphicsItem *canvasItem;
-    QString templateType;
+    QString templatesResourcePath;
     KisOpenPane *startupWidget;
 
     KActionCollection *actionCollection;
@@ -195,7 +195,7 @@ KisPart* KisPart::instance()
 KisPart::KisPart()
     : d(new Private(this))
 {
-    setTemplateType("krita_template");
+    setTemplatesResourcePath(QLatin1String("krita/templates/"));
 
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
@@ -227,6 +227,7 @@ void KisPart::addDocument(KisDocument *document)
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
+        emit documentOpened('/'+objectName());
     }
 }
 
@@ -250,12 +251,16 @@ int KisPart::documentCount() const
 void KisPart::removeDocument(KisDocument *document)
 {
     d->documents.removeAll(document);
+    emit documentClosed('/'+objectName());
     document->deleteLater();
 }
 
 KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
+
+    addMainWindow(mw);
+
     return mw;
 }
 
@@ -263,20 +268,14 @@ KisView *KisPart::createView(KisDocument *document, KoCanvasResourceManager *res
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     KisView *view  = new KisView(document, resourceManager, actionCollection, parent);
-
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    document->setModified(true);
-    document->setModified(false);
     QApplication::restoreOverrideCursor();
 
-    addView(view, document);
+    addView(view);
 
     return view;
 }
 
-void KisPart::addView(KisView *view, KisDocument *document)
+void KisPart::addView(KisView *view)
 {
     if (!view)
         return;
@@ -285,15 +284,7 @@ void KisPart::addView(KisView *view, KisDocument *document)
         d->views.append(view);
     }
 
-    if (!d->documents.contains(document)) {
-        d->documents.append(document);
-    }
-
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-
-    if (d->views.size() == 1) {
-        documentOpened('/'+objectName());
-    }
 
     emit sigViewAdded(view);
 }
@@ -318,10 +309,6 @@ void KisPart::removeView(KisView *view)
         if (!found) {
             removeDocument(doc);
         }
-    }
-
-    if (d->views.isEmpty()) {
-        emit documentClosed('/'+objectName());
     }
 }
 
@@ -525,8 +512,8 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 {
 
 #ifndef NDEBUG
-    if (d->templateType.isEmpty())
-        kDebug(30003) << "showStartUpWidget called, but setTemplateType() never called. This will not show a lot";
+    if (d->templatesResourcePath.isEmpty())
+        kDebug(30003) << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
 #endif
 
     if (!alwaysShow) {
@@ -536,10 +523,10 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
             KUrl url(fullTemplateName);
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
-                QString appName = KGlobal::mainComponent().componentName();
-                QString desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/*/" + fullTemplateName);
+                const QString templatesResourcePath = this->templatesResourcePath();
+                QString desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + "*/" + fullTemplateName);
                 if (desktopfile.isEmpty()) {
-                    desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/" + fullTemplateName);
+                    desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + fullTemplateName);
                 }
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
@@ -562,7 +549,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     }
     const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
 
-    d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templateType);
+    d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templatesResourcePath);
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
     foreach(const CustomDocumentWidgetItem & item, widgetList) {
@@ -619,14 +606,17 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
     return widgetList;
 }
 
-void KisPart::setTemplateType(const QString& _templateType)
+void KisPart::setTemplatesResourcePath(const QString &templatesResourcePath)
 {
-    d->templateType = _templateType;
+    Q_ASSERT(!templatesResourcePath.isEmpty());
+    Q_ASSERT(templatesResourcePath.endsWith(QLatin1Char('/')));
+
+    d->templatesResourcePath = templatesResourcePath;
 }
 
-QString KisPart::templateType() const
+QString KisPart::templatesResourcePath() const
 {
-    return d->templateType;
+    return d->templatesResourcePath;
 }
 
 void KisPart::startCustomDocument(KisDocument* doc)

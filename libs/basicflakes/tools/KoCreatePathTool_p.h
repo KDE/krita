@@ -198,6 +198,7 @@ public:
         pointIsDragged(false),
         finishAfterThisPoint(false),
         hoveredPoint(0),
+        listeningToModifiers(false),
         angleSnapStrategy(0),
         angleSnappingDelta(15),
         angleSnapStatus(false),
@@ -214,6 +215,7 @@ public:
     PathConnectionPoint existingStartPoint; ///< an existing path point we started a new path at
     PathConnectionPoint existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
+    bool listeningToModifiers; //  Fine tune when to begin processing modifiers at the beginning of a stroke.
 
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
@@ -237,7 +239,7 @@ public:
         const QPointF &controlPoint = activePoint->controlPoint2();
         rect = rect.united(QRectF(point, controlPoint).normalized());
 
-        // when paiting the fist point we want the
+        // when painting the first point we want the
         // first control point to be painted as well
         if (isFirstPoint) {
             const QPointF &controlPoint = activePoint->controlPoint1();
@@ -262,11 +264,11 @@ public:
         uint grabSensitivity = q->grabSensitivity();
         qreal maxDistance = q->canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
 
-        foreach(KoShape *shape, shapes) {
-            KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+        foreach(KoShape *s, shapes) {
+            KoPathShape * path = dynamic_cast<KoPathShape*>(s);
             if (!path)
                 continue;
-            KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(shape);
+            KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(s);
             if (paramShape && paramShape->isParametricShape())
                 continue;
 
@@ -415,10 +417,10 @@ public:
 
         delete shape;
         shape=0;
-
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
+        listeningToModifiers = false;
     }
 
     void angleDeltaChanged(int value)

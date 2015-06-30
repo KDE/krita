@@ -447,6 +447,8 @@ void KisNodeManager::toggleIsolateMode(bool checked)
 
     if (checked) {
         KisNodeSP activeNode = this->activeNode();
+        // Transform masks don't have pixel data...
+        if (activeNode->inherits("KisTransformMask")) return;
         KIS_ASSERT_RECOVER_RETURN(activeNode);
 
         image->startIsolatedMode(activeNode);

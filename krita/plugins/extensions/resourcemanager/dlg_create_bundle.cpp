@@ -203,6 +203,8 @@ void DlgCreateBundle::selectSaveLocation()
 
 void DlgCreateBundle::addSelected()
 {
+    int row = m_ui->tableAvailable->currentRow();
+
     foreach(QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
@@ -226,10 +228,14 @@ void DlgCreateBundle::addSelected()
             m_selectedWorkspaces.append(item->data(Qt::UserRole).toString());
         }
     }
+
+    m_ui->tableAvailable->setCurrentRow(row);
 }
 
 void DlgCreateBundle::removeSelected()
 {
+    int row = m_ui->tableSelected->currentRow();
+
     foreach(QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
@@ -253,6 +259,8 @@ void DlgCreateBundle::removeSelected()
             m_selectedWorkspaces.removeAll(item->data(Qt::UserRole).toString());
         }
     }
+
+    m_ui->tableSelected->setCurrentRow(row);
 }
 
 QPixmap imageToIcon(const QImage &img) {

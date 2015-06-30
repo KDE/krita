@@ -19,3 +19,8 @@
 
 
 #include "KoReportASyncItemBase.h"
+
+QVariant KoReportASyncItemBase::realItemData(const QVariant& itemData) const
+{
+    return itemData;
+}

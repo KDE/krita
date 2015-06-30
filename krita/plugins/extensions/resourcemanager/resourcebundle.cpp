@@ -24,7 +24,6 @@
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceTagStore.h>
 
 #include <kglobal.h>
 
@@ -498,7 +497,7 @@ bool ResourceBundle::install()
                     gradientServer->addTag(res, name());
                 }
                 else {
-                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
                 }
                 
             }
@@ -584,7 +583,7 @@ bool ResourceBundle::install()
                     brushServer->addTag(res.data(), name());
                 }
                 else {
-                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
                 }
             }
         }
@@ -629,7 +628,7 @@ bool ResourceBundle::install()
                     paletteServer->addTag(res, name());
                 }
                 else {
-                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
                 }
             }
         }
@@ -673,7 +672,7 @@ bool ResourceBundle::install()
                     workspaceServer->addTag(res, name());
                 }
                 else {
-                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
                 }
                
             }
@@ -722,7 +721,7 @@ bool ResourceBundle::install()
                     paintoppresetServer->addTag(res.data(), name());
                 }
                 else {
-                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
                 }
                 
             }

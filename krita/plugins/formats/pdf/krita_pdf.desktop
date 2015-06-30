@@ -1,7 +1,7 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Exec=krita %u
-Icon=krita
+Icon=calligrakrita
 MimeType=application/pdf;
 Name=Krita
 Name[af]=Krita

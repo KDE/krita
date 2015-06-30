@@ -61,9 +61,16 @@ public:
 
     virtual QList< QPointer<QWidget> > createOptionWidgets();
 
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
 protected:
     void requestStrokeCancellation();
     void requestStrokeEnd();
+
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 
 private:
     friend class __KisToolPathLocalTool;
@@ -92,4 +99,3 @@ public:
 
 
 #endif // KIS_TOOL_PATH_H_
-

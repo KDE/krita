@@ -23,7 +23,6 @@
 
 #include <QList>
 #include <QStringList>
-#include <QPixmap>
 
 #include "krita_export.h"
 

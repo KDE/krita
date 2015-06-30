@@ -35,8 +35,11 @@ public:
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
-    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::generalCategory(), true)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
 {
+
+    setObjectName("KisSprayShapeOption");
+
     m_checkable = true;
     // save this to be able to restore it back
     m_maxSize = 1000;

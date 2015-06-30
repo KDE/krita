@@ -20,7 +20,14 @@
 
 #include <ksharedconfig.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
+
 #include <KoConfig.h>
+
+#include "kis_debug.h"
+#include <QThread>
+#include <QApplication>
+
 
 KisImageConfig::KisImageConfig()
     : m_config(KGlobal::config()->group(""))
@@ -29,7 +36,23 @@ KisImageConfig::KisImageConfig()
 
 KisImageConfig::~KisImageConfig()
 {
+    if (qApp->thread() != QThread::currentThread()) {
+        qDebug() << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
+        return;
+    }
+
     m_config.sync();
+}
+
+bool KisImageConfig::enablePerfLog(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("enablePerfLog", false) :false;
+}
+
+void KisImageConfig::setEnablePerfLog(bool value)
+{
+    m_config.writeEntry("enablePerfLog", value);
 }
 
 qreal KisImageConfig::transformMaskOffBoundsReadArea() const
@@ -85,9 +108,10 @@ void KisImageConfig::setSchedulerBalancingRatio(qreal value)
     m_config.writeEntry("schedulerBalancingRatio", value);
 }
 
-int KisImageConfig::maxSwapSize() const
+int KisImageConfig::maxSwapSize(bool requestDefault) const
 {
-    return m_config.readEntry("maxSwapSize", 4096); // in MiB
+    return !requestDefault ?
+        m_config.readEntry("maxSwapSize", 4096) : 4096; // in MiB
 }
 
 void KisImageConfig::setMaxSwapSize(int value)
@@ -117,22 +141,31 @@ void KisImageConfig::setSwapWindowSize(int value)
 
 int KisImageConfig::tilesHardLimit() const
 {
-    return totalRAM() * (memoryHardLimitPercent() - memoryPoolLimitPercent()) / 100;
+    qreal hp = qreal(memoryHardLimitPercent()) / 100.0;
+    qreal pp = qreal(memoryPoolLimitPercent()) / 100.0;
+
+    return totalRAM() * hp * (1 - pp);
 }
 
 int KisImageConfig::tilesSoftLimit() const
 {
-    return totalRAM() * (memorySoftLimitPercent() - memoryPoolLimitPercent()) / 100;
+    qreal sp = qreal(memorySoftLimitPercent()) / 100.0;
+
+    return tilesHardLimit() * sp;
 }
 
 int KisImageConfig::poolLimit() const
 {
-    return totalRAM() * memoryPoolLimitPercent() / 100;
+    qreal hp = qreal(memoryHardLimitPercent()) / 100.0;
+    qreal pp = qreal(memoryPoolLimitPercent()) / 100.0;
+
+    return totalRAM() * hp * pp;
 }
 
-qreal KisImageConfig::memoryHardLimitPercent() const
+qreal KisImageConfig::memoryHardLimitPercent(bool requestDefault) const
 {
-    return m_config.readEntry("memoryHardLimitPercent", 50.);
+    return !requestDefault ?
+        m_config.readEntry("memoryHardLimitPercent", 50.) : 50.;
 }
 
 void KisImageConfig::setMemoryHardLimitPercent(qreal value)
@@ -140,9 +173,10 @@ void KisImageConfig::setMemoryHardLimitPercent(qreal value)
     m_config.writeEntry("memoryHardLimitPercent", value);
 }
 
-qreal KisImageConfig::memorySoftLimitPercent() const
+qreal KisImageConfig::memorySoftLimitPercent(bool requestDefault) const
 {
-    return m_config.readEntry("memorySoftLimitPercent", 25.);
+    return !requestDefault ?
+        m_config.readEntry("memorySoftLimitPercent", 2.) : 2.;
 }
 
 void KisImageConfig::setMemorySoftLimitPercent(qreal value)
@@ -150,9 +184,10 @@ void KisImageConfig::setMemorySoftLimitPercent(qreal value)
     m_config.writeEntry("memorySoftLimitPercent", value);
 }
 
-qreal KisImageConfig::memoryPoolLimitPercent() const
+qreal KisImageConfig::memoryPoolLimitPercent(bool requestDefault) const
 {
-    return m_config.readEntry("memoryPoolLimitPercent", 20.);
+    return !requestDefault ?
+        m_config.readEntry("memoryPoolLimitPercent", 2.) : 2.;
 }
 
 void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
@@ -160,9 +195,16 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
     m_config.writeEntry("memoryPoolLimitPercent", value);
 }
 
-QString KisImageConfig::swapDir()
+QString KisImageConfig::swapDir(bool requestDefault)
 {
-    return m_config.readEntry("swaplocation", QString());
+    QString swap = KGlobal::dirs()->locateLocal("tmp", "krita");
+    return !requestDefault ?
+            m_config.readEntry("swaplocation", swap) : swap;
+}
+
+void KisImageConfig::setSwapDir(const QString &swapDir)
+{
+    m_config.writeEntry("swaplocation", swapDir);
 }
 
 int KisImageConfig::numberOfOnionSkins() const

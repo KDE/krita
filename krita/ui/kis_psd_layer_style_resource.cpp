@@ -21,17 +21,24 @@
 #include <QString>
 #include <QByteArray>
 #include <QFile>
+#include <QFileInfo>
 #include <QCryptographicHash>
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "kis_psd_layer_style.h"
+#include "kis_asl_layer_style_serializer.h"
+
+#include "kis_layer.h"
+
 
 KisPSDLayerStyleCollectionResource::KisPSDLayerStyleCollectionResource(const QString &filename)
     : KoResource(filename)
 {
-
+    if (!filename.isEmpty()) {
+        setName(QFileInfo(filename).fileName());
+    }
 }
 
 KisPSDLayerStyleCollectionResource::~KisPSDLayerStyleCollectionResource()
@@ -52,12 +59,18 @@ bool KisPSDLayerStyleCollectionResource::load()
     result = loadFromDevice(&file);
     file.close();
 
+    setName(QFileInfo(filename()).fileName());
+
     return result;
 }
 
 bool KisPSDLayerStyleCollectionResource::loadFromDevice(QIODevice *dev)
 {
-    m_layerStyles = KisPSDLayerStyle::readASL(dev);
+    KisAslLayerStyleSerializer serializer;
+    serializer.readFromDevice(dev);
+    m_layerStyles = serializer.styles();
+    setValid(true);
+
     return true;
 }
 
@@ -72,7 +85,13 @@ bool KisPSDLayerStyleCollectionResource::save()
 
 bool KisPSDLayerStyleCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    return KisPSDLayerStyle::writeASL(dev, m_layerStyles);
+    if (m_layerStyles.isEmpty()) return true;
+
+    KisAslLayerStyleSerializer serializer;
+    serializer.setStyles(m_layerStyles);
+    serializer.saveToDevice(dev);
+
+    return true;
 }
 
 QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
@@ -80,21 +99,73 @@ QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
     return QString(".asl");
 }
 
-KisPSDLayerStyleCollectionResource::StylesVector
-KisPSDLayerStyleCollectionResource::layerStyles() const
+KisPSDLayerStyleCollectionResource::StylesVector KisPSDLayerStyleCollectionResource::layerStyles() const
 {
     return m_layerStyles;
+}
+
+void KisPSDLayerStyleCollectionResource::setLayerStyles(StylesVector styles)
+{
+    m_layerStyles = styles;
+    setValid(!m_layerStyles.isEmpty());
 }
 
 QByteArray KisPSDLayerStyleCollectionResource::generateMD5() const
 {
     if (m_layerStyles.size() > 0) {
-        QByteArray ba;
-        QBuffer buf(&ba);
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
         saveToDevice(&buf);
         QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
+        md5.addData(buf.buffer());
         return md5.result();
     }
     return QByteArray();
+}
+
+void KisPSDLayerStyleCollectionResource::collectAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = dynamic_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        KisPSDLayerStyleSP clone = layer->layerStyle()->clone();
+        clone->setName(i18nc("Auto-generated layer style name for embedded styles (style itself)", "<%1> (embedded)", layer->name()));
+        m_layerStyles << clone;
+        setValid(true);
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        collectAllLayerStyles(child);
+        child = child->nextSibling();
+    }
+}
+
+void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = dynamic_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        QUuid uuid = layer->layerStyle()->uuid();
+
+        bool found = false;
+
+        foreach (KisPSDLayerStyleSP style, m_layerStyles) {
+            if (style->uuid() == uuid) {
+                layer->setLayerStyle(style->clone());
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            qWarning() << "WARNING: loading layer style for" << layer->name() << "failed! It requests unexistent style:" << uuid;
+        }
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        assignAllLayerStyles(child);
+        child = child->nextSibling();
+    }
 }

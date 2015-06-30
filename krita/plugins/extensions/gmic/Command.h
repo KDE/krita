@@ -71,6 +71,7 @@ public:
 
 private:
     QString mergeBlockToLine(const QStringList &block);
+    QString buildCommand(const QString &baseCommand);
 
 private:
     Component * m_parent;

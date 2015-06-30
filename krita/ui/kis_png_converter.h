@@ -30,7 +30,7 @@
 #include "kis_annotation.h"
 #include <krita_export.h>
 
-
+class KoStore;
 class KisDocument;
 
 
@@ -101,7 +101,7 @@ public:
      * @param doc the KisDocument related to the image, can be null if you don't have a KisDocument
      * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
      */
-    KisPNGConverter(KisDocument *doc);
+    KisPNGConverter(KisDocument *doc, bool batchMode = false);
     virtual ~KisPNGConverter();
 public:
     /**
@@ -131,6 +131,9 @@ public:
      * Retrieve the constructed image
      */
     KisImageWSP image();
+
+    static bool saveDeviceToStore(const QString &filename, KisImageWSP image, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
+
 public Q_SLOTS:
     virtual void cancel();
 private:
@@ -140,6 +143,8 @@ private:
     KisImageWSP m_image;
     KisDocument *m_doc;
     bool m_stop;
+    bool m_batchMode;
+    QString m_path;
 };
 
 #endif

@@ -37,6 +37,15 @@
 
 #include <KoTextBlockBorderData.h>
 
+//local type for temporary use in restartLayout
+struct LineKeeper
+{
+    int columns;
+    qreal lineWidth;
+    QPointF position;
+};
+
+
 class KoTextLayoutArea::Private
 {
 public:
@@ -54,6 +63,7 @@ public:
         , dropCapsDistance(0)
         , startOfArea(0)
         , endOfArea(0)
+        , copyEndOfArea(0)
         , footNoteCursorToNext(0)
         , footNoteCursorFromPrevious(0)
         , continuedNoteToNext(0)
@@ -99,6 +109,7 @@ public:
     QList<KoTextLayoutTableArea *> tableAreas;
     FrameIterator *startOfArea;
     FrameIterator *endOfArea;
+    FrameIterator *copyEndOfArea;
     FrameIterator *footNoteCursorToNext;
     FrameIterator *footNoteCursorFromPrevious;
     KoInlineNote *continuedNoteToNext;
@@ -122,6 +133,15 @@ public:
     QList<QTextFrame *> footNoteFrames;
     KoTextLayoutEndNotesArea *endNotesArea;
     QList<KoTextLayoutArea *> generatedDocAreas;
+
+    /// utility method to restart layout of a block
+    QTextLine restartLayout(QTextBlock &block, int lineTextStartOfLastKeep);
+    /// utility method to store remaining layout of a split block
+    void stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QList<LineKeeper> &stashedLines, QPointF &stashedCounterPosition);
+    /// utility method to recreate partial layout of a split block
+    QTextLine recreatePartialLayout(QTextBlock &block, QList<LineKeeper> stashedLines, QPointF &stashedCounterPosition, QTextLine &line);
+
+
 };
 
 #endif // KOTEXTLAYOUTAREA_P_H

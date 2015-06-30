@@ -72,7 +72,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->searchLine->setCompletedItems(d->searchCompletionItems);
     d->searchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(d->searchLine, SIGNAL(editTextChanged(QString)), d->textTimeout, SLOT(start()));
-    connect(d->searchLine, SIGNAL(returnPressed()), d->finder, SLOT(findNext()));
+    connect(d->searchLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
     connect(d->searchLine, SIGNAL(returnPressed(QString)), d->searchLine, SLOT(addToHistory(QString)));
     connect(d->searchLine, SIGNAL(cleared()), finder, SLOT(finished()));
     layout->addWidget(d->searchLine, 0, 2);
@@ -275,6 +275,18 @@ void KoFindToolbar::Private::replaceAll()
 void KoFindToolbar::Private::inputTimeout()
 {
     find(searchLine->currentText());
+}
+
+void KoFindToolbar::Private::returnPressed()
+{
+    // in case the timer is active there is a new word so search for the new word
+    // otherwise go to the next found match.
+    if (textTimeout->isActive()) {
+        find(searchLine->currentText());
+    }
+    else {
+        finder->findNext();
+    }
 }
 
 #include "KoFindToolbar.moc"

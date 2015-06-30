@@ -51,7 +51,7 @@ void Command::processCommandName(const QString& line)
     Q_ASSERT(splittedLine.size() == 2);
 
     QString commandName = splittedLine.at(0);
-    setName(commandName.remove(0, GIMP_COMMENT.size()).trimmed());
+    setName(commandName.trimmed());
 
     QStringList commands = splittedLine[1].split(",");
     Q_ASSERT(commands.size() == 2);
@@ -204,8 +204,8 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
 bool Command::processParameter(const QStringList& block)
 {
     QString parameterLine = mergeBlockToLine(block);
-    // remove gimp prefix and " :"
-    parameterLine = parameterLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
+    // remove " :"
+    parameterLine = parameterLine.remove(0, 2).trimmed();
 
     /* State: one parameter one line
      * one parameter n lines
@@ -380,17 +380,15 @@ int Command::columnCount() const
 }
 
 
-void Command::writeConfiguration(KisGmicFilterSetting* setting)
+QString Command::buildCommand(const QString &baseCommand)
 {
-    // example: -gimp_poster_edges 20,60,5,0,10,0,0
-    QString command = "-" + m_command + " ";
-    QString commandPreview = "-" + m_commandPreview + " ";
+    // build list of parameters
+    QString parameterList;
     foreach(Parameter * p, m_parameters)
     {
         if (!p->value().isNull())
         {
-            command.append(p->value() +",");
-            commandPreview.append(p->value() +",");
+            parameterList.append(p->value() +",");
         }
         else
         {
@@ -402,17 +400,28 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
         }
     }
 
-    if (command.endsWith(","))
+    if (parameterList.endsWith(","))
     {
-        command.chop(1);
+        parameterList.chop(1);
     }
 
-    if (commandPreview.endsWith(","))
+    QString command = "-" + baseCommand;
+    // some commands might contain presentational parameters only
+    if (!parameterList.isEmpty())
     {
-        commandPreview.chop(1);
+        command.append(" ");
+        command.append(parameterList);
     }
 
+    return command;
+}
+
+void Command::writeConfiguration(KisGmicFilterSetting* setting)
+{
+    QString command = buildCommand(m_command);
     setting->setGmicCommand(command);
+
+    QString commandPreview = buildCommand(m_commandPreview);
     setting->setPreviewGmicCommand(commandPreview);
 }
 
@@ -428,7 +437,7 @@ QString Command::mergeBlockToLine(const QStringList& block)
     for (int i = 1; i < block.size(); i++)
     {
         QString nextLine = block.at(i);
-        nextLine = nextLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
+        nextLine = nextLine.remove(0, 2).trimmed();
         result = result + nextLine;
     }
     return result;

@@ -23,13 +23,12 @@
 
 
 #include <kdebug.h>
-#include <KoResource.h>
-#include <QDomDocument>
 #include "kowidgets_export.h"
-#include <kconfiggroup.h>
-#include <KoConfig.h>
 
 class KoResourceServerBase;
+class KoResource;
+class QStringList;
+class QString;
 
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
@@ -42,16 +41,16 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions);
+    explicit KoResourceTagStore(KoResourceServerBase *resourceServer);
     ~KoResourceTagStore();
 
-    QStringList assignedTagsList(KoResource* resource) const;
+    QStringList assignedTagsList(const KoResource *resource) const;
 
     /// remote the given resource from the tagstore
     void removeResource(const KoResource *resource);
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
-    /// the tag is added bug unused
+    /// the tag is added but unused
     void addTag(KoResource* resource, const QString& tag);
 
     /// Remove the given tag for the given resource.
@@ -63,7 +62,7 @@ public:
     QStringList tagNamesList() const;
 
     /// Return a list of filenames for the given tag
-    QStringList searchTag(const QString& tag);
+    QStringList searchTag(const QString& query) const;
 
     void loadTags();
     void serializeTags();
@@ -81,17 +80,10 @@ private:
     QString adjustedFileName(const QString &fileName) const;
 
     /// Removes the adjustements before going to the server
-    QStringList removeAdjustedFileNames(QStringList fileNamesList);
+    QStringList removeAdjustedFileNames(QStringList fileNamesList) const;
 
-    QMultiHash<const KoResource*, QString> m_resourceToTag;
-    QHash<QString, int> m_tagList;
-
-    QString m_tagsXMLFile;
-    QString m_serverExtensions;
-
-    KConfigGroup m_config;
-
-    KoResourceServerBase *m_resourceServer;
+    class Private;
+    Private * const d;
 };
 
 

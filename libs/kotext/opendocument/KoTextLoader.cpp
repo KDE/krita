@@ -58,7 +58,6 @@
 #include "KoTextDocument.h"
 #include "KoTextSharedLoadingData.h"
 #include <KoOdfBibliographyConfiguration.h>
-#include <KoUnit.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>
 #include <KoInlineObjectRegistry.h>
@@ -329,20 +328,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
         cursor.setBlockFormat(format);
         d->openingSections.clear();
     }
-
-    KoOdfNotesConfiguration *notesConfiguration =
-            new KoOdfNotesConfiguration(d->context.odfLoadingContext()
-                                        .stylesReader()
-                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
-    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
-    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
-
-    notesConfiguration =
-            new KoOdfNotesConfiguration(d->context.odfLoadingContext()
-                                        .stylesReader()
-                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
-    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
-    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
             new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()

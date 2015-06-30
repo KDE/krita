@@ -94,7 +94,7 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
         notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
 
-    KoParagraphStyle *style = KoTextDocument(d->document).styleManager()->paragraphStyle(notesConfig->defaultNoteParagraphStyle());
+    KoParagraphStyle *style = static_cast<KoParagraphStyle *>(notesConfig->defaultNoteParagraphStyle());
     if (style) {
         QTextBlock block = cursor.block();
         QTextBlockFormat bf;
@@ -194,7 +194,7 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     } else if (d->type == KoInlineNote::Endnote) {
         notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
-    KoCharacterStyle *style = KoTextDocument(d->document).styleManager()->characterStyle(notesConfig->citationBodyTextStyle());
+    KoCharacterStyle *style = static_cast<KoCharacterStyle *>(notesConfig->citationBodyTextStyle());
     if (style) {
         style->applyStyle(format);
     }

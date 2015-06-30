@@ -416,6 +416,10 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->blockRects.clear();
     delete d->endNotesArea;
     d->endNotesArea=0;
+    if (d->endOfArea) {
+        delete d->copyEndOfArea;
+        d->copyEndOfArea = new FrameIterator(d->endOfArea);
+    }
     delete d->startOfArea;
     delete d->endOfArea;
     d->dropCapsWidth = 0;
@@ -637,36 +641,59 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 }
 
 
-//local type for temporary use in restartLayout
-struct LineKeeper
+QTextLine KoTextLayoutArea::Private::restartLayout(QTextBlock &block, int lineTextStartOfLastKeep)
 {
-    int columns;
-    qreal lineWidth;
-    QPointF position;
-};
-
-QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
-{
-    QList<LineKeeper> lineKeeps;
+    QTextLayout *layout = block.layout();
+    KoTextBlockData blockData(block);
+    QPointF stashedCounterPosition = blockData.counterPosition();
+    QList<LineKeeper> stashedLines;
     QTextLine line;
     for(int i = 0; i < layout->lineCount(); i++) {
         QTextLine l = layout->lineAt(i);
-        if (l.textStart() > lineTextStartOfLastKeep) {
+        if (l.textStart() >= lineTextStartOfLastKeep) {
             break;
         }
         LineKeeper lk;
         lk.lineWidth = l.width();
         lk.columns = l.textLength();
         lk.position = l.position();
-        lineKeeps.append(lk);
+        stashedLines.append(lk);
     }
     layout->clearLayout();
-    documentLayout()->allowPositionInlineObject(false);
     layout->beginLayout();
-    foreach(const LineKeeper &lk, lineKeeps) {
-        line = layout->createLine();
-        if (!line.isValid())
-            break;
+    line = layout->createLine();
+
+    return recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
+}
+
+void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QList<LineKeeper> &stashedLines, QPointF &stashedCounterPosition)
+{
+    QTextLayout *layout = block.layout();
+    KoTextBlockData blockData(block);
+    stashedCounterPosition = blockData.counterPosition();
+    QTextLine line;
+    for(int i = 0; i < layout->lineCount(); i++) {
+        QTextLine l = layout->lineAt(i);
+        if (l.textStart() < lineTextStartOfFirstKeep) {
+            continue;
+        }
+        LineKeeper lk;
+        lk.lineWidth = l.width();
+        lk.columns = l.textLength();
+        lk.position = l.position();
+        stashedLines.append(lk);
+    }
+}
+
+QTextLine KoTextLayoutArea::Private::recreatePartialLayout(QTextBlock &block, QList<LineKeeper> stashedLines, QPointF &stashedCounterPosition, QTextLine &line)
+{
+    QTextLayout *layout = block.layout();
+    KoTextBlockData blockData(block);
+    documentLayout->allowPositionInlineObject(false);
+    if (layout->lineCount() == 1) {
+        blockData.setCounterPosition(stashedCounterPosition);
+    }
+    foreach(const LineKeeper &lk, stashedLines) {
         line.setLineWidth(lk.lineWidth);
         if (lk.columns != line.textLength()) {
             // As setNumColumns might break differently we only use it if setLineWidth doesn't give
@@ -674,8 +701,12 @@ QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStart
             line.setNumColumns(lk.columns, lk.lineWidth);
         }
         line.setPosition(lk.position);
+
+        line = layout->createLine();
+        if (!line.isValid())
+            break;
     }
-    documentLayout()->allowPositionInlineObject(true);
+    documentLayout->allowPositionInlineObject(true);
     return line;
 }
 
@@ -707,6 +738,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     int dropCapsAffectsNMoreLines = 0;
     qreal dropCapsPositionAdjust = 0.0;
+    bool lastOfPreviousRun = (d->copyEndOfArea && d->copyEndOfArea->it.currentBlock() == block);
 
     KoText::Direction dir = pStyle.textProgressionDirection();
     if (dir == KoText::InheritDirection)
@@ -1101,6 +1133,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     layout->setTextOption(option);
 
+
+    // ==============
+    // Possibly store the old layout of lines in case we end up splitting the paragraph at the same position
+    // ==============
+    QList<LineKeeper> stashedLines;
+    QPointF stashedCounterPosition;
+    if (lastOfPreviousRun) {
+        // we have been layouted before, and the block ended on the following page so better
+        // stash the layout for later
+        d->stashRemainingLayout(block, d->copyEndOfArea->lineTextStart, stashedLines, stashedCounterPosition);
+    }
+
     // ==============
     // Setup line and possibly restart paragraph continuing from previous other area
     // ==============
@@ -1110,7 +1154,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = layout->createLine();
         cursor->fragmentIterator = block.begin();
     } else {
-        line = restartLayout(layout, cursor->lineTextStart);
+        line = d->restartLayout(block, cursor->lineTextStart);
         d->indent = d->extraTextIndent;
     }
 
@@ -1240,6 +1284,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 // we don't add a line here. That fixes the problem that e.g. the counter is before
                 // the page break and the text is after the page break
                 if (!virginPage() && softBreakPos == 0) {
+                    d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                     layout->endLayout();
                     return false;
                 }
@@ -1254,6 +1299,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // we don't add a line here. That fixes the problem that e.g. the counter is before
             // the page break and the text is after the page break
             if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 return false;
             }
@@ -1269,6 +1315,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             if (!virginPage() && pStyle.nonBreakableLines()) {
                 line.setPosition(QPointF(x(), d->maximalAllowedBottom));
                 cursor->lineTextStart = -1;
+                d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
@@ -1277,12 +1324,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                               && pStyle.orphanThreshold() > numBaselineShifts) {
                 line.setPosition(QPointF(x(), d->maximalAllowedBottom));
                 cursor->lineTextStart = -1;
+                d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
             }
             if (!virginPage() || anyLineAdded) {
                 line.setPosition(QPointF(x(), d->maximalAllowedBottom));
+                d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
@@ -1329,6 +1378,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         cursor->lineTextStart = line.textStart();
 
         if (softBreak) {
+            d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
             layout->endLayout();
             return false; // page-break means we need to start again on the next page
         }

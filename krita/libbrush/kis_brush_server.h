@@ -31,8 +31,8 @@
 class KoResource;
 class KoResourceLoaderThread;
 
-typedef KoResourceServer<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServer;
-typedef KoResourceServerAdapter<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
+typedef KoResourceServer<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServer;
+typedef KoResourceServerAdapter<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
 
 /**
  *

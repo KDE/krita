@@ -88,6 +88,7 @@ set(KRITA_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/image
 
+    ${CMAKE_SOURCE_DIR}/krita/libglobal
     ${CMAKE_SOURCE_DIR}/krita/libpsd
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
@@ -127,6 +128,7 @@ if(HAVE_OPENGL)
     endif()
 endif()
 
+add_subdirectory( libglobal )
 add_subdirectory( libpsd )
 add_subdirectory( image )
 add_subdirectory( libbrush )

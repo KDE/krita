@@ -26,10 +26,10 @@
 #include <QPolygonF>
 #include <QPen>
 
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_image_config.h"
 #include "kis_debug.h"
-
-
 
 
 namespace KritaUtils
@@ -314,6 +314,31 @@ namespace KritaUtils
         }
 
         return resultList;
+    }
+
+    quint8 mergeOpacity(quint8 opacity, quint8 parentOpacity)
+    {
+        if (parentOpacity != OPACITY_OPAQUE_U8) {
+            opacity = (int(opacity) * parentOpacity) / OPACITY_OPAQUE_U8;
+        }
+        return opacity;
+    }
+
+    QBitArray mergeChannelFlags(const QBitArray &childFlags, const QBitArray &parentFlags)
+    {
+        QBitArray flags = childFlags;
+
+        if (!flags.isEmpty() &&
+            !parentFlags.isEmpty() &&
+            flags.size() == parentFlags.size()) {
+
+            flags &= parentFlags;
+
+        } else if (!parentFlags.isEmpty()) {
+            flags = parentFlags;
+        }
+
+        return flags;
     }
 
 }

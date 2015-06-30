@@ -26,22 +26,26 @@
 #ifndef KORESOURCETAGGINGMANAGER_H
 #define KORESOURCETAGGINGMANAGER_H
 
-#include "KoTagFilterWidget.h"
-#include "KoTagChooserWidget.h"
+#include <QObject>
 
-#include "kowidgets_export.h"
+class QWidget;
+class QStringList;
+class QString;
+class QPoint;
 
-class KoResourceModelBase;
+class KoTagFilterWidget;
+class KoTagChooserWidget;
+class KoResourceModel;
 class KoResource;
 
-class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
+class KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingManager(KoResourceModelBase*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModel* model, QWidget* parent);
     ~KoResourceTaggingManager();
-    void showTaggingBar(bool showSearchBar, bool showOpBar);
+    void showTaggingBar(bool show);
     QStringList availableTags() const;
     QString currentTag();
     void contextMenuRequested(KoResource* currentResource, QPoint pos);

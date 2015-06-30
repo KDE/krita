@@ -24,8 +24,9 @@
 
 #include "kowidgets_export.h"
 
-#include <KoUnit.h>
 #include <QDoubleSpinBox>
+
+class KoUnit;
 
 /**
  * Spin box for double precision numbers with unit display.
@@ -62,7 +63,7 @@ public:
     /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
-    virtual void setUnit( KoUnit );
+    virtual void setUnit( const KoUnit &);
 
     /// @return the current value, converted in points
     double value( ) const;

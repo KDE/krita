@@ -34,9 +34,6 @@
 #include <klocale.h>
 
 #include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
 
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
@@ -135,7 +132,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true, true);
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));

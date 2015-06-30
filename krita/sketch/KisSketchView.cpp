@@ -37,7 +37,6 @@
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
 #include <KisImportExportManager.h>
-#include <KoUnit.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
@@ -340,7 +339,7 @@ void KisSketchView::documentChanged()
                                                                                     d->viewManager->actionCollection(),
                                                                                     QApplication::activeWindow()));
     d->view = view;
-    d->viewManager->setShowFloatingMessage(false);
+    d->view->setShowFloatingMessage(false);
     KisCanvasController *controller = dynamic_cast<KisCanvasController*>(d->viewManager->canvasBase()->canvasController());
 
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));

@@ -38,34 +38,10 @@ OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
 QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, KisImageWSP image)
 {
     QString filename = QString("data/layer%1.png").arg(m_id++);
-
-    if (m_store->open(filename)) {
-        KoStoreDevice io(m_store);
-        if (!io.open(QIODevice::WriteOnly)) {
-            dbgFile << "Could not open for writing:" << filename;
-            return "";
-        }
-        KisPNGConverter pngconv(0);
-        vKisAnnotationSP_it annotIt = 0;
-
-        KisMetaData::Store* store = new KisMetaData::Store(*metaData);
-        bool success = pngconv.buildFile(&io, image, dev, annotIt, annotIt, KisPNGOptions(), store);
-        if (success != KisImageBuilder_RESULT_OK) {
-            dbgFile << "Saving PNG failed:" << filename;
-            delete store;
-            return "";
-        }
-        delete store;
-        io.close();
-        if (!m_store->close()) {
-            return "";
-        }
-    } else {
-        dbgFile << "Opening of data file failed :" << filename;
-        return "";
+    if (KisPNGConverter::saveDeviceToStore(filename, image, dev, m_store, metaData)) {
+        return filename;
     }
-
-    return filename;
+    return "";
 }
 
 

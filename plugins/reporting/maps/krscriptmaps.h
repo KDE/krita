@@ -66,32 +66,13 @@ public Q_SLOTS:
      */
     void setSize(const QSizeF&);
 
-    /**
-     * Get the resize mode for the image
-     * @return resizeMode Clip or Stretch
-     */
-    QString resizeMode();
+    void setLatitude(qreal lat);
 
-    /**
-     * Sets the resize mode for the image
-     * @param ResizeMode "Stretch" or "Clip" default is to clip
-     */
-    void setResizeMode(const QString &);
+    void setLongitude(qreal lon);
 
-    /**
-     * Sets the data for the static image
-     * the data should be base64 encoded
-     * @param RawImageData
-     */
-    void setInlineImage(const QByteArray&);
+    void setZoom(int);
 
-    /**
-     * Get the data from a file (expected to be an image)
-     * the returned data will be base64 encoded
-     * @param Path location of file
-     * @return File data enoded in base64
-     */
-    void loadFromFile(const QVariant &);
+
 private:
     KoReportItemMaps *m_map;
 

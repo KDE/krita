@@ -109,8 +109,8 @@ public:
     /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
-    QImage stylePreview(int row, QSize size = QSize());
-//    QImage stylePreview(QModelIndex &index, QSize size = QSize());
+    QImage stylePreview(int row, const QSize &size = QSize());
+//    QImage stylePreview(QModelIndex &index, const QSize &size = QSize());
 
     /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
     void setCurrentParagraphStyle(int styleId);

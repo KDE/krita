@@ -33,8 +33,6 @@ class Parameter;
 
 class QTextStream;
 
-const static QString GIMP_COMMENT = "#@gimp";
-
 class KisGmicParser
 {
 

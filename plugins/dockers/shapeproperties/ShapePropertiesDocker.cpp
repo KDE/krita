@@ -28,6 +28,7 @@
 #include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoParameterShape.h>
+#include <KoUnit.h>
 
 #include <klocale.h>
 
@@ -47,7 +48,6 @@ ShapePropertiesDocker::ShapePropertiesDocker(QWidget *parent)
     : QDockWidget(i18n("Shape Properties"), parent),
     d( new Private() )
 {
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     d->widgetStack = new QStackedWidget();
     setWidget(d->widgetStack);
 }

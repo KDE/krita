@@ -317,7 +317,7 @@ void StyleManager::removeCharacterStyle(KoCharacterStyle* style)
     widget.characterStylePage->setStyleManager(m_styleManager); //updates style combos
 }
 
-void StyleManager::slotParagraphStyleSelected(QModelIndex index)
+void StyleManager::slotParagraphStyleSelected(const QModelIndex &index)
 {
     if (checkUniqueStyleName()) {
         KoParagraphStyle *paragraphStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(index, StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
@@ -328,7 +328,7 @@ void StyleManager::slotParagraphStyleSelected(QModelIndex index)
     }
 }
 
-void StyleManager::slotCharacterStyleSelected(QModelIndex index)
+void StyleManager::slotCharacterStyleSelected(const QModelIndex &index)
 {
     if (checkUniqueStyleName()) {
         KoCharacterStyle *characterStyle = m_characterProxyModel->data(index, StylesManagerModel::StylePointer).value<KoCharacterStyle*>();

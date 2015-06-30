@@ -48,7 +48,7 @@ public:
     virtual KisPainter::FillStyle fillStyle();
 
 private:
-    KConfigGroup configGroup;
+    KConfigGroup m_configGroup;
 
 private Q_SLOTS:
     void slotActivateTextTool();

@@ -77,14 +77,13 @@ struct KisTool::Private {
     Private()
         : currentPattern(0),
           currentGradient(0),
+          currentExposure(1.0),
           currentGenerator(0),
-#ifdef HAVE_OPENGL
           optionWidget(0),
+#ifdef HAVE_OPENGL
           cursorShader(0),
-          useGLToolOutlineWorkaround(false)
-#else
-          optionWidget(0)
 #endif
+          useGLToolOutlineWorkaround(false)
     {
     }
 
@@ -112,8 +111,10 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     , d(new Private)
 {
     d->cursor = cursor;
+    m_isActive = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
+    connect(this, SIGNAL(isActiveChanged()), SLOT(resetCursorStyle()));
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
@@ -166,26 +167,36 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    d->currentPattern = static_cast<KoPattern *>(canvas()->resourceManager()->
-                                                  resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
-    d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
-                                                           resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
+
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentPattern)) {
+        d->currentPattern = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
+    }
+
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentGradient)) {
+        d->currentGradient = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
+    }
 
     KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (preset && preset->settings()) {
         preset->settings()->activate();
     }
 
-    d->currentExposure = static_cast<float>(canvas()->resourceManager()->
-                                            resource(KisCanvasResourceProvider::HdrExposure).toDouble());
-    d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
-                                                               resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::HdrExposure)) {
+        d->currentExposure = static_cast<float>(canvas()->resourceManager()->resource(KisCanvasResourceProvider::HdrExposure).toDouble());
+    }
+
+    if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentGeneratorConfiguration)) {
+        d->currentGenerator = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
+    }
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
+
+    m_isActive = true;
+    emit isActiveChanged();
 }
 
 void KisTool::deactivate()
@@ -202,6 +213,9 @@ void KisTool::deactivate()
         qWarning() << "WARNING: KisTool::deactivate() failed to disconnect"
                    << "some signal connections. Your actions might be executed twice!";
     }
+
+    m_isActive = false;
+    emit isActiveChanged();
 }
 
 void KisTool::requestUndoDuringStroke()
@@ -243,9 +257,12 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
+        break;
+    case(KisCanvasResourceProvider::CurrentKritaNode):
+        resetCursorStyle();
+        break;
     default:
-        ;
-        // Do nothing
+        break; // Do nothing
     };
 }
 
@@ -446,10 +463,12 @@ KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
 
 void KisTool::activatePrimaryAction()
 {
+    resetCursorStyle();
 }
 
 void KisTool::deactivatePrimaryAction()
 {
+    resetCursorStyle();
 }
 
 void KisTool::beginPrimaryAction(KoPointerEvent *event)
@@ -679,10 +698,27 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
 void KisTool::resetCursorStyle()
 {
-    KisConfig cfg;
     useCursor(d->cursor);
 }
 
+bool KisTool::overrideCursorIfNotEditable()
+{
+    // override cursor for canvas iff this tool is active
+    // and we can't paint on the active layer
+    if (isActive()) {
+        KisNodeSP node = currentNode();
+        if (node && !node->isEditable()) {
+            canvas()->setCursor(Qt::ForbiddenCursor);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KisTool::isActive() const
+{
+    return m_isActive;
+}
 
 void KisTool::slotToggleFgBg()
 {
@@ -753,6 +789,14 @@ bool KisTool::selectionEditable()
     return editable;
 }
 
+void KisTool::listenToModifiers(bool listen)
+{
+}
+
+bool KisTool::listeningToModifiers()
+{
+    return false;
+}
 
 #include "kis_tool.moc"
 

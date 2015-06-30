@@ -31,6 +31,7 @@
 #include <KoFileDialog.h>
 #include <KisImportExportManager.h>
 
+
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator.h>
@@ -56,13 +57,15 @@
 #include <kis_transparency_mask.h>
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
+#include <kis_psd_layer_style.h>
+#include <kis_psd_layer_style_resource.h>
+#include "kis_resource_server_provider.h"
 
 #include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
-
 
 /*
 
@@ -211,7 +214,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
 
-        yres = 100.0;
+        yres = 100.0 / 72.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0) {
                 yres = attr.toDouble() / 72.0;
@@ -334,6 +337,44 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
     }
 
+
+    // layer styles
+    location = external ? QString() : uri;
+    location += m_d->imageName + LAYER_STYLES_PATH;
+    if (store->hasFile(location)) {
+        KisPSDLayerStyleCollectionResource *collection =
+            new KisPSDLayerStyleCollectionResource("Embedded Styles.asl");
+
+        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
+
+        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
+
+        store->open(location);
+        {
+            KoStoreDevice device(store);
+            device.open(QIODevice::ReadOnly);
+
+            /**
+             * ASL loading code cannot work with non-sequential IO devices,
+             * so convert the device beforehand!
+             */
+            QByteArray buf = device.readAll();
+            QBuffer raDevice(&buf);
+            raDevice.open(QIODevice::ReadOnly);
+            collection->loadFromDevice(&raDevice);
+        }
+        store->close();
+
+        if (collection->valid()) {
+            KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+            server->addResource(collection, false);
+
+            collection->assignAllLayerStyles(image->root());
+        } else {
+            qWarning() << "WARNING: Couldn't load layer styles library from .kra!";
+            delete collection;
+        }
+    }
 
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("title").isNull())
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
@@ -525,6 +566,27 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
+
+        if (element.hasAttribute(LAYER_STYLE_UUID)) {
+            QString uuidString = element.attribute(LAYER_STYLE_UUID);
+            QUuid uuid(uuidString);
+            if (!uuid.isNull()) {
+                KisPSDLayerStyleSP dumbLayerStyle(new KisPSDLayerStyle());
+                dumbLayerStyle->setUuid(uuid);
+                layer->setLayerStyle(dumbLayerStyle);
+            } else {
+                qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+            }
+        }
+    }
+
+    if (node->inherits("KisGroupLayer")) {
+        if (element.hasAttribute(PASS_THROUGH_MODE)) {
+            bool value = element.attribute(PASS_THROUGH_MODE, "0") != "0";
+
+            KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
+            group->setPassThroughMode(value);
+        }
     }
 
     if (node->inherits("KisPaintLayer")) {
@@ -611,8 +673,11 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     QString basePath = info.absolutePath();
 
     QString fullPath = basePath + QDir::separator() + filename;
-
+    // Entering the event loop to show the messagebox will delete the image, so up the ref by one
+    image->ref();
     if (!QFileInfo(fullPath).exists()) {
+
+        qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
             "@info",
             "The file associated to a file layer with the name \"%1\" is not found.<nl/><nl/>"
@@ -636,6 +701,8 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
                 filename = d.relativeFilePath(url);
             }
         }
+
+        qApp->restoreOverrideCursor();
     }
 
     KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);

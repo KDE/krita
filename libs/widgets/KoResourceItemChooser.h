@@ -27,13 +27,10 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
-#include <QAction>
-#include <QModelIndex>
-#include <QCompleter>
 
 #include "kowidgets_export.h"
-#include <KoConfig.h>
 
+class QModelIndex;
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
 class QToolButton;
@@ -47,34 +44,35 @@ class KoResource;
  */
 class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    explicit KoResourceItemChooser( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0 );
+    /// \p usePreview shows the aside preview with the resource's image
+    explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0, bool usePreview = false);
     ~KoResourceItemChooser();
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
-    void setColumnCount( int columnCount );
+    void setColumnCount(int columnCount);
 
     /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
-    void setRowCount( int rowCount );
+    void setRowCount(int rowCount);
 
     /// Sets the height of the view rows
-    void setRowHeight( int rowHeight );
+    void setRowHeight(int rowHeight);
 
     /// Sets the width of the view columns
-    void setColumnWidth( int columnWidth );
+    void setColumnWidth(int columnWidth);
 
     /// Sets a custom delegate for the view
-    void setItemDelegate( QAbstractItemDelegate * delegate );
+    void setItemDelegate(QAbstractItemDelegate *delegate);
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
     KoResource *currentResource() const;
 
     /// Sets the item representing the resource as selected
-    void setCurrentResource(KoResource* resource);
+    void setCurrentResource(KoResource *resource);
 
     /**
      * Sets the sected resource, does nothing if there is no valid item
@@ -83,10 +81,8 @@ public:
      */
     void setCurrentItem(int row, int column);
 
-    void showButtons( bool show );
+    void showButtons(bool show);
 
-    /// shows the aside preview with the resource's image
-    void showPreview(bool show);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
     /// determines whether the preview should tile the resource's image or not
@@ -95,14 +91,14 @@ public:
     void setGrayscalePreview(bool grayscale);
 
 
-    void showGetHotNewStuff( bool showDownload, bool showUpload);
+    void showGetHotNewStuff(bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.
-    void showTaggingBar( bool showSearchBar, bool showOpBar );
+    void showTaggingBar(bool show);
 
     ///Set a proxy model with will be used to filter the resources
-    void setProxyModel( QAbstractProxyModel* proxyModel );
+    void setProxyModel(QAbstractProxyModel *proxyModel);
 
-    void setKnsrcFile(const QString& knsrcFileArg);
+    void setKnsrcFile(const QString &knsrcFileArg);
     QSize viewSize() const;
 
     KoResourceItemView *itemView() const;
@@ -112,37 +108,42 @@ public:
 
     void setSynced(bool sync);
 
-    virtual bool eventFilter(QObject* object, QEvent* event);
+    virtual bool eventFilter(QObject *object, QEvent *event);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected( KoResource * resource );
+    void resourceSelected(KoResource *resource);
     void splitterMoved();
 public Q_SLOTS:
-    void slotButtonClicked( int button );
+    void slotButtonClicked(int button);
 
 private Q_SLOTS:
-    void activated ( const QModelIndex & index );
+    void activated(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
 
+    void slotBeforeResourcesLayoutReset(KoResource *activateAfterReset);
+    void slotAfterResourcesLayoutReset();
+
+    void updateView();
+
 protected:
-    virtual void showEvent(QShowEvent* event);
+    virtual void showEvent(QShowEvent *event);
 
 private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
 
-    void updateView();
 
-    virtual void resizeEvent(QResizeEvent* event);
+
+    virtual void resizeEvent(QResizeEvent *event);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid
-    KoResource* resourceFromModelIndex(const QModelIndex & index ) const;
+    KoResource *resourceFromModelIndex(const QModelIndex &index) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KO_RESOURCE_ITEM_CHOOSER

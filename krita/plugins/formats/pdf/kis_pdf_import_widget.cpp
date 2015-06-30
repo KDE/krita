@@ -52,8 +52,7 @@ KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * pare
 
     connect(intWidth, SIGNAL(valueChanged(int)), this, SLOT(updateHRes()));
     connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(updateHVer()));
-    connect(intHorizontal, SIGNAL(valueChanged(int)), this, SLOT(updateWidth()));
-    connect(intVertical, SIGNAL(valueChanged(int)), this, SLOT(updateHeight()));
+    connect(intResolution, SIGNAL(valueChanged(int)), this, SLOT(updateResolution()));
     connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(heightAspectRatio()));
     connect(intWidth, SIGNAL(valueChanged(int)), this, SLOT(widthAspectRatio()));
     connect(boolAllPages, SIGNAL(toggled(bool)), this, SLOT(selectAllPages(bool)));
@@ -131,33 +130,31 @@ void KisPDFImportWidget::updateMaxCanvasSize()
     m_maxWidthInch /= 72.;
     m_maxHeightInch /= 72.;
     dbgFile << m_maxWidthInch << "" << m_maxHeightInch;
-    updateWidth();
-    updateHeight();
+    updateResolution();
 }
 
-void KisPDFImportWidget::updateWidth()
+void KisPDFImportWidget::updateResolution()
 {
+    int resolution = intResolution->value();
     intWidth->blockSignals(true);
-    intWidth->setValue((int) ceil(m_maxWidthInch * intHorizontal->value()));
+    intWidth->setValue((int) ceil(m_maxWidthInch * resolution));
     intWidth->blockSignals(false);
-}
-void KisPDFImportWidget::updateHeight()
-{
     intHeight->blockSignals(true);
-    intHeight->setValue((int) ceil(m_maxHeightInch * intVertical->value()));
+    intHeight->setValue((int) ceil(m_maxHeightInch * resolution));
     intHeight->blockSignals(false);
 }
+
 void KisPDFImportWidget::updateHRes()
 {
-    intHorizontal->blockSignals(true);
-    intHorizontal->setValue((int)(intWidth->value() / m_maxWidthInch));
-    intHorizontal->blockSignals(false);
+    intResolution->blockSignals(true);
+    intResolution->setValue((int)(intWidth->value() / m_maxWidthInch));
+    intResolution->blockSignals(false);
 }
 void KisPDFImportWidget::updateHVer()
 {
-    intVertical->blockSignals(true);
-    intVertical->setValue((int)(intHeight->value() / m_maxHeightInch));
-    intVertical->blockSignals(false);
+    intResolution->blockSignals(true);
+    intResolution->setValue((int)(intHeight->value() / m_maxHeightInch));
+    intResolution->blockSignals(false);
 }
 void KisPDFImportWidget::heightAspectRatio()
 {

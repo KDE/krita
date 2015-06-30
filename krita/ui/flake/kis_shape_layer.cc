@@ -46,6 +46,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
 #include <KoImageCollection.h>
+#include <KoUnit.h>
 #include <KoOdf.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>

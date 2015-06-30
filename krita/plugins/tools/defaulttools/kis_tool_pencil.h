@@ -55,6 +55,9 @@ public:
     KisToolPencil(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
 
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+
 private:
     friend class __KisToolPencilLocalTool;
 };

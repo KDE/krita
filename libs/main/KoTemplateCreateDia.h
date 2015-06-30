@@ -42,12 +42,12 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KDialog
     Q_OBJECT
 
 private:
-    KoTemplateCreateDia( const char *templateType, const KComponentData &instance,
+    KoTemplateCreateDia( const QString &templatesResourcePath, const KComponentData &instance,
                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
     ~KoTemplateCreateDia();
 
 public:
-    static void createTemplate(const char *templateType, const char *suffix,
+    static void createTemplate(const QString &templatesResourcePath, const char *suffix,
                                const KComponentData &componentData,
                                KoDocument *document, QWidget *parent = 0);
 

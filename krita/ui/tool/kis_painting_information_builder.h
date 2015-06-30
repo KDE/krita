@@ -30,7 +30,7 @@ class KoPointerEvent;
 class KisTool;
 class KisToolFreehand;
 class KisCoordinatesConverter;
-
+class KisSpeedSmoother;
 
 class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 {
@@ -38,6 +38,7 @@ class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 
 public:
     KisPaintingInformationBuilder();
+    ~KisPaintingInformationBuilder();
 
     KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed);
 
@@ -53,6 +54,7 @@ protected Q_SLOTS:
 protected:
     virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
     virtual QPointF documentToImage(const QPointF &point);
+    virtual QPointF imageToView(const QPointF &point);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
 
 private:
@@ -70,6 +72,7 @@ private:
 private:
     QVector<qreal> m_pressureSamples;
     QPointF m_startPoint;
+    QScopedPointer<KisSpeedSmoother> m_speedSmoother;
 };
 
 class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder
@@ -81,6 +84,7 @@ public:
 
 protected:
     virtual QPointF documentToImage(const QPointF &point);
+    virtual QPointF imageToView(const QPointF &point);
 
 private:
     const KisCoordinatesConverter *m_converter;
@@ -95,6 +99,7 @@ public:
 
 protected:
     virtual QPointF documentToImage(const QPointF &point);
+    virtual QPointF imageToView(const QPointF &point);
     virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
 

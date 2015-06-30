@@ -30,7 +30,6 @@
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoUnit.h>
 
 #include <QRectF>
 #include <QTransform>

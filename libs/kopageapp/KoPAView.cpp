@@ -50,6 +50,8 @@
 #include <KoZoomController.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoSelection.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoMainWindow.h>
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
@@ -58,6 +60,7 @@
 #include <KoDrag.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
+#include <KoUnit.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"

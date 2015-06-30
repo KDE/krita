@@ -115,6 +115,10 @@ inline void KisTileData::setMementoed(bool value) {
     m_mementoFlag += value ? 1 : -1;
 }
 
+inline bool KisTileData::historical() const {
+    return mementoed() && numUsers() <= 1;
+}
+
 inline int KisTileData::age() const {
     return m_age;
 }

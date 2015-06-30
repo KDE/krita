@@ -91,6 +91,9 @@ KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store, qint32 memoryLimit
     m_store = store;
     m_timeout = MIN_TIMEOUT;
     m_lastCycleHadWork = false;
+    m_lastPoolMemoryMetric = 0;
+    m_lastRealMemoryMetric = 0;
+    m_lastHistoricalMemoryMetric = 0;
 
     if(memoryLimit >= 0) {
         m_memoryLimit = memoryLimit;
@@ -195,17 +198,42 @@ void KisTileDataPooler::run()
         QList<KisTileData*> donors;
         qint32 memoryOccupied;
 
-        getLists(iter, beggers, donors, memoryOccupied);
+        qint32 statRealMemory;
+        qint32 statHistoricalMemory;
+
+
+        getLists(iter, beggers, donors,
+                 memoryOccupied,
+                 statRealMemory,
+                 statHistoricalMemory);
 
         m_lastCycleHadWork =
             processLists(beggers, donors, memoryOccupied);
 
-        m_store->endIteration(iter);
+        m_lastPoolMemoryMetric = memoryOccupied;
+        m_lastRealMemoryMetric = statRealMemory;
+        m_lastHistoricalMemoryMetric = statHistoricalMemory;
 
+        m_store->endIteration(iter);
 
         DEBUG_TILE_STATISTICS();
         DEBUG_SIMPLE_ACTION("cycle finished");
     }
+}
+
+qint64 KisTileDataPooler::lastPoolMemoryMetric() const
+{
+    return m_lastPoolMemoryMetric;
+}
+
+qint64 KisTileDataPooler::lastRealMemoryMetric() const
+{
+    return m_lastRealMemoryMetric;
+}
+
+qint64 KisTileDataPooler::lastHistoricalMemoryMetric() const
+{
+    return m_lastHistoricalMemoryMetric;
 }
 
 inline int KisTileDataPooler::clonesMetric(KisTileData *td, int numClones) {
@@ -240,9 +268,13 @@ template<class Iter>
 void KisTileDataPooler::getLists(Iter *iter,
                                  QList<KisTileData*> &beggers,
                                  QList<KisTileData*> &donors,
-                                 qint32 &memoryOccupied)
+                                 qint32 &memoryOccupied,
+                                 qint32 &statRealMemory,
+                                 qint32 &statHistoricalMemory)
 {
     memoryOccupied = 0;
+    statRealMemory = 0;
+    statHistoricalMemory = 0;
 
     qint32 needMemoryTotal = 0;
     qint32 canDonorMemoryTotal = 0;
@@ -267,6 +299,13 @@ void KisTileDataPooler::getLists(Iter *iter,
         }
 
         memoryOccupied += clonesMetric(item);
+
+        // statistics gathering
+        if (item->historical()) {
+            statHistoricalMemory += item->pixelSize();
+        } else {
+            statRealMemory += item->pixelSize();
+        }
     }
 
     DEBUG_LISTS(memoryOccupied,
@@ -297,7 +336,7 @@ qint32 KisTileDataPooler::tryGetMemory(QList<KisTileData*> &donors,
 
 bool KisTileDataPooler::processLists(QList<KisTileData*> &beggers,
                                      QList<KisTileData*> &donors,
-                                     qint32 memoryOccupied)
+                                     qint32 &memoryOccupied)
 {
     bool hadWork = false;
 

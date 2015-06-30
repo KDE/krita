@@ -60,8 +60,10 @@ public Q_SLOTS:
     void slotSetSizemod(int);
     void slotSetFeather(int);
 
-
-
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
+protected:
+    virtual bool wantsAutoScroll() const { return false; }
 private:
     void updateGUI();
 

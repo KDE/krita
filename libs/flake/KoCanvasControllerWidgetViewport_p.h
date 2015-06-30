@@ -37,7 +37,7 @@ public:
     ~Viewport() {}
 
     void setCanvas(QWidget *canvas);
-    QWidget *canvas() {
+    QWidget *canvas() const {
         return m_canvas;
     }
     void setDocumentSize(const QSize &size);

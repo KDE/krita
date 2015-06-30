@@ -58,8 +58,10 @@ KoGlobal::KoGlobal()
         KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);
     }
 
-    // Add calligra styles dir
-    KGlobal::dirs()->addResourceType("styles", "data", "calligra/styles/");
+    // Fixes a bug where values from some config files are not picked up
+    // due to KGlobal::config() being initialized before paths have been set up above.
+    // NOTE: Values set without a sync() call before KoGlobal has been initialized will not stick
+    KGlobal::config()->reparseConfiguration();
 }
 
 KoGlobal::~KoGlobal()

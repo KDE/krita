@@ -19,22 +19,20 @@
 #ifndef KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
 #define KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
 
-#include "kis_paintop_options_widget.h"
+#include "kis_paintop_settings_widget.h"
 #include "kis_types.h"
 #include "kis_brush.h"
 #include <krita_export.h>
 
 class KisBrushOptionWidget;
 
-class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpOptionsWidget
+class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpSettingsWidget
 {
 public:
     KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
     virtual ~KisBrushBasedPaintopOptionWidget();
 
     void setPrecisionEnabled(bool value);
-    void addTextureOptions();
-    void addMirrorOption();
 
     KisBrushSP brush();
 

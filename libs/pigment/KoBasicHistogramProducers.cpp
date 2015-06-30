@@ -427,6 +427,11 @@ void KoGenericRGBHistogramProducer::addRegionToBin(const quint8 * pixels, const 
     }
 }
 
+KoGenericRGBHistogramProducerFactory::KoGenericRGBHistogramProducerFactory()
+    : KoHistogramProducerFactory(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")))
+{
+}
+
 // ------------ Generic L*a*b* ---------------------
 KoGenericLabHistogramProducer::KoGenericLabHistogramProducer()
     : KoBasicHistogramProducer(KoID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256)
@@ -506,4 +511,7 @@ void KoGenericLabHistogramProducer::addRegionToBin(const quint8 *pixels, const q
     delete[] dstPixels;
 }
 
-
+KoGenericLabHistogramProducerFactory::KoGenericLabHistogramProducerFactory()
+    : KoHistogramProducerFactory(KoID("GENLABHISTO", i18n("Generic L*a*b* Histogram")))
+{
+}

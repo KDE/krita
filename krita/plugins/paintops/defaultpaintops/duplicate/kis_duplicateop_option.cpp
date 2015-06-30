@@ -42,8 +42,10 @@ protected:
 
 
 KisDuplicateOpOption::KisDuplicateOpOption()
-    : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
 {
+    setObjectName("KisDuplicateOpOption");
+
     m_checkable = false;
     m_optionWidget = new KisDuplicateOpOptionsWidget();
 

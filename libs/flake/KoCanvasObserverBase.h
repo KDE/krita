@@ -55,7 +55,7 @@ public:
      * the currently observed canvas
      * @return observed canvas, can be 0
      */
-    KoCanvasBase* observedCanvas();
+    KoCanvasBase* observedCanvas() const;
 protected:
     /**
      * re-implement this method in your canvas observer. It will be called

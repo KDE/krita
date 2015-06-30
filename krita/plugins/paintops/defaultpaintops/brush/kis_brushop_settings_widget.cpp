@@ -39,6 +39,10 @@
 #include <kis_compositeop_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
+#include "kis_texture_option.h"
+#include "kis_curve_option_widget.h"
+#include <kis_pressure_mirror_option_widget.h>
+#include "kis_pressure_texture_strength_option.h"
 
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
@@ -48,29 +52,32 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     setPrecisionEnabled(true);
 
     // Brush tip options
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisFlowOpacityOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
-    addMirrorOption();
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisFlowOpacityOptionWidget(), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
+    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption()));
-    addPaintOpOption(new KisPressureSharpnessOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisPressureScatterOptionWidget());
+
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")), i18n("Softness"));
+    addPaintOpOption(new KisPressureSharpnessOptionWidget(), i18n("Sharpness"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
 
     // Colors options
-    addPaintOpOption(new KisColorSourceOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption()));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption()));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption()));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption()));
-    addPaintOpOption(new KisAirbrushOption(false));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    addPaintOpOption(new KisColorSourceOptionWidget(), i18n("Source"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption(), i18n("0.0"), i18n("1.0")), i18n("Darken"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18n("Foreground"), i18n("Background")), i18n("Mix"));
+    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
+    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
+    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18n("Value"));
+    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 
-    addTextureOptions();
+    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+
 }
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()

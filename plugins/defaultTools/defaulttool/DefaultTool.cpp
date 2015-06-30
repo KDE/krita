@@ -66,6 +66,8 @@
 
 #include <math.h>
 
+#include <QVector2D>
+
 #define HANDLE_DISTANCE 10
 
 class NopInteractionStrategy : public KoInteractionStrategy
@@ -288,7 +290,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
         }
         break;
     case KoFlake::TopRightHandle:
-        direction = koSelection()->absolutePosition(KoFlake::TopRightCorner) - selectionCenter;
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::TopRightCorner) - koSelection()->absolutePosition(KoFlake::TopLeftCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::TopRightCorner) - koSelection()->absolutePosition(KoFlake::BottomRightCorner)).normalized()).toPointF();
         break;
     case KoFlake::RightMiddleHandle:
         if (useEdgeRotation) {
@@ -301,7 +303,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
         }
         break;
     case KoFlake::BottomRightHandle:
-        direction = koSelection()->absolutePosition(KoFlake::BottomRightCorner) - selectionCenter;
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::BottomRightCorner) - koSelection()->absolutePosition(KoFlake::BottomLeftCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::BottomRightCorner) - koSelection()->absolutePosition(KoFlake::TopRightCorner)).normalized()).toPointF();
         break;
     case KoFlake::BottomMiddleHandle:
         if (useEdgeRotation) {
@@ -315,6 +317,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
         break;
     case KoFlake::BottomLeftHandle:
         direction = koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - selectionCenter;
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - koSelection()->absolutePosition(KoFlake::BottomRightCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - koSelection()->absolutePosition(KoFlake::TopLeftCorner)).normalized()).toPointF();
         break;
     case KoFlake::LeftMiddleHandle:
         if (useEdgeRotation) {
@@ -328,6 +331,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
         break;
     case KoFlake::TopLeftHandle:
         direction = koSelection()->absolutePosition(KoFlake::TopLeftCorner) - selectionCenter;
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::TopLeftCorner) - koSelection()->absolutePosition(KoFlake::TopRightCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::TopLeftCorner) - koSelection()->absolutePosition(KoFlake::BottomLeftCorner)).normalized()).toPointF();
         break;
     case KoFlake::NoHandle:
         return 0.0;

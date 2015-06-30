@@ -238,8 +238,9 @@ public:
     bool isPopupPaletteVisible();
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
 
-    // interafce for KisCanvasController only
+    // interface for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
+    bool wrapAroundViewingMode() const;
     void initializeImage();
     // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);

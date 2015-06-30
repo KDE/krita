@@ -446,18 +446,20 @@ void KisLayerManager::layerProperties()
 
         if (dlg.exec() == QDialog::Accepted) {
 
+            alayer->setName(dlg.layerName());
+
             KisSafeFilterConfigurationSP configAfter(dlg.configuration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                   = new KisChangeFilterCmd(alayer,
-                                             configBefore->name(),
-                                             xmlBefore,
-                                             configAfter->name(),
-                                             xmlAfter,
-                                             true);
+                        = new KisChangeFilterCmd(alayer,
+                                                 configBefore->name(),
+                                                 xmlBefore,
+                                                 configAfter->name(),
+                                                 xmlAfter,
+                                                 true);
                 // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
@@ -492,10 +494,10 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
           *srcDevice->compositionSourceColorSpace())) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
-        KisPainter gc(clone);
-        gc.setCompositeOp(COMPOSITE_COPY);
+
         QRect rc(srcDevice->extent());
-        gc.bitBlt(rc.topLeft(), srcDevice, rc);
+        KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
+
     } else {
         clone = new KisPaintDevice(*srcDevice);
     }

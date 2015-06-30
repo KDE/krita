@@ -221,6 +221,7 @@ void KisCustomImageWidget::createImage()
 {
     KisDocument *doc = createNewImage();
     if (doc) {
+        doc->setModified(false);
         emit documentSelected(doc);
     }
 }
@@ -328,8 +329,7 @@ void KisCustomImageWidget::fillPredefined()
 
     cmbPredefined->addItem("");
 
-    QString appName = KGlobal::mainComponent().componentName();
-    QStringList definitions = KGlobal::dirs()->findAllResources("data", appName + "/predefined_image_sizes/*", KStandardDirs::Recursive);
+    QStringList definitions = KGlobal::dirs()->findAllResources("data", "krita/predefined_image_sizes/*", KStandardDirs::Recursive);
     definitions.sort();
 
     if (!definitions.empty()) {
@@ -384,12 +384,11 @@ void KisCustomImageWidget::saveAsPredefined()
         return;
     }
     QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("data");
-    QString appName = KGlobal::mainComponent().componentName();
 
     QDir d;
-    d.mkpath(saveLocation + appName + "/predefined_image_sizes/");
+    d.mkpath(saveLocation + "krita/predefined_image_sizes/");
 
-    QFile f(saveLocation + appName + "/predefined_image_sizes/" + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
+    QFile f(saveLocation + "krita/predefined_image_sizes/" + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);
     KisPropertiesConfiguration *predefined = new KisPropertiesConfiguration();

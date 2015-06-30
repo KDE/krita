@@ -59,6 +59,8 @@ public:
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
     virtual QString itemDataSource() const;
+    virtual QVariant realItemData(const QVariant &itemData) const;
+
     void renderFinished();
 
     qreal longtitude() const;
@@ -71,19 +73,12 @@ public:
 
 protected:
     KoProperty::Property * m_controlSource;
-    KoProperty::Property* m_resizeMode;
-    KoProperty::Property* m_staticImage;
     KoProperty::Property* m_latitudeProperty;
     KoProperty::Property* m_longitudeProperty;
     KoProperty::Property* m_zoomProperty;
     KoProperty::Property* m_themeProperty;
 
-    void setMode(const QString&);
-    void setInlineImageData(QByteArray, const QString& = QString());
     void setColumn(const QString&);
-    QString mode() const;
-    bool isInline() const;
-    QByteArray inlineImageData() const;
 
     qreal m_longtitude;
     qreal m_latitude;
@@ -98,6 +93,10 @@ protected:
 private:
     virtual void createProperties();
     void deserializeData(const QVariant& serialized);
+
+    bool m_longDataSetFromScript;
+    bool m_latDataSetFromScript;
+    bool m_zoomDataSetFromScript;
 
     friend class Scripting::Maps;
 };

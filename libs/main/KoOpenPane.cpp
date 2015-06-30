@@ -126,7 +126,7 @@ public:
     KoSectionListItem* m_templatesSeparator;
 };
 
-KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templateType)
+KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templatesResourcePath)
         : QWidget(parent)
         , d(new KoOpenPanePrivate)
 {
@@ -150,7 +150,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
     initRecentDocs();
-    initTemplates(templateType);
+    initTemplates(templatesResourcePath);
 
     d->m_freeCustomWidgetIndex = 4;
 
@@ -224,14 +224,14 @@ void KoOpenPane::initRecentDocs()
     }
 }
 
-void KoOpenPane::initTemplates(const QString& templateType)
+void KoOpenPane::initTemplates(const QString& templatesResourcePath)
 {
     QTreeWidgetItem* selectItem = 0;
     QTreeWidgetItem* firstItem = 0;
     const int templateOffset = 1000;
 
-    if (!templateType.isEmpty()) {
-        KoTemplateTree templateTree(templateType.toLocal8Bit(), d->m_componentData, true);
+    if (!templatesResourcePath.isEmpty()) {
+        KoTemplateTree templateTree(templatesResourcePath, d->m_componentData, true);
 
         foreach (KoTemplateGroup *group, templateTree.groups()) {
             if (group->isHidden()) {

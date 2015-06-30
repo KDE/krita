@@ -31,6 +31,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
+#include "kis_signals_blocker.h"
 
 #include "kis_global.h"
 #include "KoPattern.h"
@@ -42,14 +43,13 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
-    m_itemChooser->showPreview(true);
+    m_itemChooser = new KoResourceItemChooser(adapter, this, true);
     m_itemChooser->setPreviewTiled(true);
     m_itemChooser->setPreviewOrientation(Qt::Horizontal);
     QString knsrcFile = "kritapatterns.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true, true);
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setSynced(true);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
@@ -76,6 +76,7 @@ KoResource *  KisPatternChooser::currentResource()
     if (!m_itemChooser->currentResource()) {
         KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
         if (rserver->resources().size() > 0) {
+            KisSignalsBlocker blocker(m_itemChooser);
             m_itemChooser->setCurrentResource(rserver->resources().first());
         }
     }

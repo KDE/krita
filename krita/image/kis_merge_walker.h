@@ -50,6 +50,7 @@ public:
 
 protected:
     KisMergeWalker() : m_flags(DEFAULT) {}
+    KisMergeWalker(Flags flags) : m_flags(flags) {}
 
     /**
      * Begins visiting nodes starting with @startWith.
@@ -58,25 +59,27 @@ protected:
      * Then it goes down to the bottom collecting needRects
      * for every branch.
      */
-    void startTrip(KisNodeSP startWith);
+    void startTrip(KisProjectionLeafSP startWith);
 
-    void startTripWithMask(KisNodeSP filthyMask);
+    using KisBaseRectsWalker::startTrip;
+
+    void startTripWithMask(KisProjectionLeafSP filthyMask);
 
 private:
     /**
-     * Visits a node @node and goes on crowling
+     * Visits a node @leaf and goes on crowling
      * towards the top of the graph, caling visitHigherNode() or
      * startTrip() one more time. After the top is reached
-     * returns back to the @node.
+     * returns back to the @leaf.
      */
-    void visitHigherNode(KisNodeSP node, NodePosition positionToFilthy);
+    void visitHigherNode(KisProjectionLeafSP leaf, NodePosition positionToFilthy);
 
     /**
-     * Visits a node @node and goes on crowling
+     * Visits a node @leaf and goes on crowling
      * towards the bottom of the graph, caling visitLowerNode() or
      * startTrip() one more time.
      */
-    void visitLowerNode(KisNodeSP node);
+    void visitLowerNode(KisProjectionLeafSP leaf);
 
 private:
     const Flags m_flags;

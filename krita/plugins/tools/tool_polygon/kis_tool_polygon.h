@@ -37,6 +37,8 @@ public:
     virtual ~KisToolPolygon();
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points);
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 };
 
 

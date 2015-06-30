@@ -19,12 +19,12 @@
 #ifndef KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
 #define KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 class KisCurveOpOption;
 class KisPropertiesConfiguration;
 
-class KisCurvePaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisCurvePaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
 private:
-    KisCurveOpOption * m_options;
+    KisCurveOpOption *m_curveOption;
 };
 
 

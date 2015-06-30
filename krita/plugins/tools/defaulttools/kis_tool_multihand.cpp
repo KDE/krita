@@ -185,6 +185,37 @@ void KisToolMultihand::initTransformations()
             transformations << m;
             m.reset();
         }
+
+    }
+    else if(m_transformMode == SNOWFLAKE) {
+        qreal angle = 0;
+        qreal angleStep = (2 * M_PI) / m_handsCount/4;
+
+        for(int i = 0; i < m_handsCount*4; i++) {
+           if ((i%2)==1) {
+
+               m.translate(m_axesPoint.x(), m_axesPoint.y());
+               m.rotateRadians(m_angle-angleStep);
+               m.rotateRadians(angle);
+               m.scale(-1,1);
+               m.rotateRadians(-m_angle+angleStep);
+               m.translate(-m_axesPoint.x(), -m_axesPoint.y());
+
+               transformations << m;
+               m.reset();
+               angle += angleStep*2;
+           } else {
+               m.translate(m_axesPoint.x(), m_axesPoint.y());
+               m.rotateRadians(m_angle-angleStep);
+               m.rotateRadians(angle);
+               m.rotateRadians(-m_angle+angleStep);
+               m.translate(-m_axesPoint.x(), -m_axesPoint.y());
+
+               transformations << m;
+               m.reset();
+               angle += angleStep*2;
+	        }
+        }
     }
     else /* if(m_transformationNode == TRANSLATE) */ {
         /**
@@ -210,7 +241,6 @@ void KisToolMultihand::initTransformations()
             m.translate(nx,ny);
             m.rotateRadians(-m_angle);
             m.translate(-m_axesPoint.x(), -m_axesPoint.y());
-
             transformations << m;
             m.reset();
         }
@@ -245,6 +275,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_transformModesComboBox->addItem(i18n("Symmetry"),int(SYMMETRY));
     m_transformModesComboBox->addItem(i18n("Mirror"),int(MIRROR));
     m_transformModesComboBox->addItem(i18n("Translate"),int(TRANSLATE));
+    m_transformModesComboBox->addItem(i18n("Snowflake"),int(SNOWFLAKE));
 
     connect(m_transformModesComboBox,SIGNAL(currentIndexChanged(int)),SLOT(slotSetTransformMode(int)));
     addOptionWidgetOption(m_transformModesComboBox);

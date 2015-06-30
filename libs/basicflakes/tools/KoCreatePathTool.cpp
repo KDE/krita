@@ -51,7 +51,7 @@ KoCreatePathTool::~KoCreatePathTool()
 void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoCreatePathTool);
-    if (d->shape) {
+    if (pathStarted()) {
         KoShapeStroke *stroke(createStroke());
         if (stroke) {
             d->shape->setStroke(stroke);
@@ -78,11 +78,10 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
             d->activePoint->paint(painter, d->handleRadius, paintFlags, onlyPaintActivePoints);
         }
 
-        // paint the first point
 
         // check if we have to color the first point
         if (d->mouseOverFirstPoint)
-            painter.setBrush(Qt::red);   // //TODO make configurable
+            painter.setBrush(Qt::red);     //TODO make configurable
         else
             painter.setBrush(Qt::white);   //TODO make configurable
 
@@ -128,16 +127,16 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
     const bool isOverFirstPoint = d->shape &&
         handleGrabRect(d->firstPoint->point()).contains(event->point);
-    const bool haveCloseModifier = event->modifiers() & Qt::ShiftModifier;
+    bool haveCloseModifier = (listeningToModifiers() && (event->modifiers() & Qt::ShiftModifier));
 
-    if (event->button() == Qt::RightButton || (event->button() == Qt::LeftButton && haveCloseModifier && !isOverFirstPoint)) {
+    if ((event->button() == Qt::RightButton) || ((event->button() == Qt::LeftButton) && haveCloseModifier && !isOverFirstPoint)) {
         endPathWithoutLastPoint();
         return;
     }
 
     d->finishAfterThisPoint = false;
 
-    if (d->shape) {
+    if (pathStarted()) {
         if (isOverFirstPoint) {
             d->activePoint->setPoint(d->firstPoint->point());
             canvas()->updateCanvas(d->shape->boundingRect());
@@ -204,6 +203,18 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->angleSnapStrategy->setStartPoint(d->activePoint->point());
 }
 
+bool KoCreatePathTool::listeningToModifiers()
+{
+  Q_D(KoCreatePathTool);
+  return d->listeningToModifiers;
+}
+
+bool KoCreatePathTool::pathStarted()
+{
+  Q_D(KoCreatePathTool);
+  return ((bool) d->shape);
+}
+
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     //remove handle
@@ -229,7 +240,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
         }
     }
 
-    if (! d->shape) {
+    if (!pathStarted()) {
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
         canvas()->snapGuide()->snap(event->point, event->modifiers());
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
@@ -268,6 +279,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     if (! d->shape || (event->buttons() & Qt::RightButton))
         return;
 
+    d->listeningToModifiers = true; // After the first press-and-release
     d->repaintActivePoint();
     d->pointIsDragged = false;
     KoPathPoint *lastActivePoint = d->activePoint;

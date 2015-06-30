@@ -25,7 +25,6 @@
 
 
 #include "kowidgets_export.h"
-#include <KoUnit.h>
 
 #include <QWidget>
 #include <QTextOption>
@@ -35,6 +34,7 @@ class QPaintEvent;
 class KoViewConverter;
 class KoCanvasBase;
 class KoRulerPrivate;
+class KoUnit;
 
 /**
  * Decorator widget to draw a single ruler around a canvas.

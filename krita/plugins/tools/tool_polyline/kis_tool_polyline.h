@@ -37,6 +37,9 @@ public:
 protected:
     QWidget* createOptionWidget();
     void finishPolyline(const QVector<QPointF>& points);
+
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 };
 
 

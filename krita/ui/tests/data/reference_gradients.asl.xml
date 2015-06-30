@@ -1,0 +1,373 @@
+<asl>
+ <node type="Descriptor" name="" classId="null">
+  <node key="Nm  " type="Text" value="Unnamed"/>
+  
+ </node>
+ <node type="Descriptor" name="" classId="Styl">
+  <node key="documentMode" type="Descriptor" name="" classId="documentMode"/>
+  <node key="Lefx" type="Descriptor" name="" classId="Lefx">
+   <node unit="#Prc" key="Scl " type="UnitFloat" value="100"/>
+   <node key="masterFXSwitch" type="Boolean" value="1"/>
+   <node key="OrGl" type="Descriptor" name="" classId="OrGl">
+    <node key="enab" type="Boolean" value="1"/>
+    <node typeId="BlnM" key="Md  " type="Enum" value="linearDodge"/>
+    <node key="Grad" type="Descriptor" name="Gradient" classId="Grdn">
+     <node key="Nm  " type="Text" value=""/>
+     <node typeId="GrdF" key="GrdF" type="Enum" value="CstS"/>
+     <node key="Intr" type="Double" value="4096"/>
+     <node key="Clrs" type="List">
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="255"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+     <node key="Trns" type="List">
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+    </node>
+    <node unit="#Prc" key="Opct" type="UnitFloat" value="75"/>
+    <node typeId="BETE" key="GlwT" type="Enum" value="SfBL"/>
+    <node unit="#Pxl" key="Ckmt" type="UnitFloat" value="0"/>
+    <node unit="#Pxl" key="blur" type="UnitFloat" value="21"/>
+    <node unit="#Prc" key="Nose" type="UnitFloat" value="0"/>
+    <node unit="#Prc" key="ShdN" type="UnitFloat" value="0"/>
+    <node key="AntA" type="Boolean" value="0"/>
+    <node key="TrnS" type="Descriptor" name="" classId="ShpC">
+     <node key="Nm  " type="Text" value="Linear"/>
+     <node key="Crv " type="List">
+      <node type="Descriptor" name="" classId="CrPt">
+       <node key="Hrzn" type="Double" value="0"/>
+       <node key="Vrtc" type="Double" value="0"/>
+      </node>
+      <node type="Descriptor" name="" classId="CrPt">
+       <node key="Hrzn" type="Double" value="255"/>
+       <node key="Vrtc" type="Double" value="255"/>
+      </node>
+     </node>
+    </node>
+    <node unit="#Prc" key="Inpr" type="UnitFloat" value="100"/>
+   </node>
+   <node key="IrGl" type="Descriptor" name="" classId="IrGl">
+    <node key="enab" type="Boolean" value="1"/>
+    <node typeId="BlnM" key="Md  " type="Enum" value="linearDodge"/>
+    <node key="Grad" type="Descriptor" name="Gradient" classId="Grdn">
+     <node key="Nm  " type="Text" value=""/>
+     <node typeId="GrdF" key="GrdF" type="Enum" value="CstS"/>
+     <node key="Intr" type="Double" value="4096"/>
+     <node key="Clrs" type="List">
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="255"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+     <node key="Trns" type="List">
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+    </node>
+    <node unit="#Prc" key="Opct" type="UnitFloat" value="75"/>
+    <node typeId="BETE" key="GlwT" type="Enum" value="SfBL"/>
+    <node unit="#Pxl" key="Ckmt" type="UnitFloat" value="0"/>
+    <node unit="#Pxl" key="blur" type="UnitFloat" value="21"/>
+    <node unit="#Prc" key="ShdN" type="UnitFloat" value="0"/>
+    <node unit="#Prc" key="Nose" type="UnitFloat" value="0"/>
+    <node key="AntA" type="Boolean" value="0"/>
+    <node typeId="IGSr" key="glwS" type="Enum" value="SrcE"/>
+    <node key="TrnS" type="Descriptor" name="" classId="ShpC">
+     <node key="Nm  " type="Text" value="Linear"/>
+     <node key="Crv " type="List">
+      <node type="Descriptor" name="" classId="CrPt">
+       <node key="Hrzn" type="Double" value="0"/>
+       <node key="Vrtc" type="Double" value="0"/>
+      </node>
+      <node type="Descriptor" name="" classId="CrPt">
+       <node key="Hrzn" type="Double" value="255"/>
+       <node key="Vrtc" type="Double" value="255"/>
+      </node>
+     </node>
+    </node>
+    <node unit="#Prc" key="Inpr" type="UnitFloat" value="100"/>
+   </node>
+   <node key="GrFl" type="Descriptor" name="" classId="GrFl">
+    <node key="enab" type="Boolean" value="1"/>
+    <node typeId="BlnM" key="Md  " type="Enum" value="Mltp"/>
+    <node unit="#Prc" key="Opct" type="UnitFloat" value="75"/>
+    <node key="Grad" type="Descriptor" name="Gradient" classId="Grdn">
+     <node key="Nm  " type="Text" value=""/>
+     <node typeId="GrdF" key="GrdF" type="Enum" value="CstS"/>
+     <node key="Intr" type="Double" value="4096"/>
+     <node key="Clrs" type="List">
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="255"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+     <node key="Trns" type="List">
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+    </node>
+    <node unit="#Ang" key="Angl" type="UnitFloat" value="90"/>
+    <node typeId="GrdT" key="Type" type="Enum" value="Lnr "/>
+    <node key="Rvrs" type="Boolean" value="0"/>
+    <node key="Algn" type="Boolean" value="1"/>
+    <node unit="#Prc" key="Scl " type="UnitFloat" value="100"/>
+    <node key="Ofst" type="Descriptor" name="" classId="Pnt ">
+     <node unit="#Prc" key="Hrzn" type="UnitFloat" value="0"/>
+     <node unit="#Prc" key="Vrtc" type="UnitFloat" value="0"/>
+    </node>
+    <node key="Dthr" type="Boolean" value="1"/>
+   </node>
+   <node key="FrFX" type="Descriptor" name="" classId="FrFX">
+    <node key="enab" type="Boolean" value="1"/>
+    <node typeId="FStl" key="Styl" type="Enum" value="OutF"/>
+    <node typeId="FrFl" key="PntT" type="Enum" value="GrFl"/>
+    <node typeId="BlnM" key="Md  " type="Enum" value="Mltp"/>
+    <node unit="#Prc" key="Opct" type="UnitFloat" value="75"/>
+    <node unit="#Pxl" key="Sz  " type="UnitFloat" value="21"/>
+    <node key="Grad" type="Descriptor" name="Gradient" classId="Grdn">
+     <node key="Nm  " type="Text" value=""/>
+     <node typeId="GrdF" key="GrdF" type="Enum" value="CstS"/>
+     <node key="Intr" type="Double" value="4096"/>
+     <node key="Clrs" type="List">
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="0"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="0"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="0"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="Clrt">
+       <node key="Clr " type="Descriptor" name="" classId="RGBC">
+        <node key="Rd  " type="Double" value="255"/>
+        <node key="Grn " type="Double" value="255"/>
+        <node key="Bl  " type="Double" value="255"/>
+       </node>
+       <node typeId="Clry" key="Type" type="Enum" value="UsrS"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+     <node key="Trns" type="List">
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="0"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="1228"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="2457"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+      <node type="Descriptor" name="" classId="TrnS">
+       <node unit="#Prc" key="Opct" type="UnitFloat" value="100"/>
+       <node key="Lctn" type="Integer" value="4096"/>
+       <node key="Mdpn" type="Integer" value="50"/>
+      </node>
+     </node>
+    </node>
+    <node unit="#Ang" key="Angl" type="UnitFloat" value="90"/>
+    <node typeId="GrdT" key="Type" type="Enum" value="Lnr "/>
+    <node key="Rvrs" type="Boolean" value="0"/>
+    <node unit="#Prc" key="Scl " type="UnitFloat" value="100"/>
+    <node key="Algn" type="Boolean" value="1"/>
+    <node key="Ofst" type="Descriptor" name="" classId="Pnt ">
+     <node unit="#Prc" key="Hrzn" type="UnitFloat" value="0"/>
+     <node unit="#Prc" key="Vrtc" type="UnitFloat" value="0"/>
+    </node>
+    <node key="Dthr" type="Boolean" value="1"/>
+   </node>
+  </node>
+ </node>
+</asl>

@@ -48,6 +48,8 @@ public:
     void undoAll();
     void redoAll();
 
+    void purgeRedoState();
+
 private:
     KUndo2Stack *m_undoStack;
 };
@@ -64,6 +66,7 @@ public:
     void addCommand(KUndo2Command *cmd);
     void beginMacro(const KUndo2MagicString& macroName);
     void endMacro();
+    void purgeRedoState();
 };
 
 #endif /* __KIS_UNDO_STORES_H */

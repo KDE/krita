@@ -36,7 +36,6 @@
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <QMessageBox>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
@@ -86,6 +85,7 @@
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
 #include "kis_progress_widget.h"
+#include "kis_signal_compressor.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -111,10 +111,11 @@ public:
         , canvas(0)
         , zoomManager(0)
         , viewManager(0)
-        , mirrorAxis(0)
         , actionCollection(0)
         , paintingAssistantsDecoration(0)
-        , shown(false)
+        , isCurrent(false)
+        , showFloatingMessage(true)
+        , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
         tempActiveWidget = 0;
         documentDeleted = false;
@@ -129,7 +130,6 @@ public:
         delete canvasController;
         delete canvas;
         delete viewConverter;
-        delete mirrorAxis;
     }
 
     KisUndoStackAction *undo;
@@ -152,10 +152,12 @@ public:
     KisZoomManager *zoomManager;
     KisViewManager *viewManager;
     KisNodeSP currentNode;
-    KisMirrorAxis* mirrorAxis;
     KActionCollection* actionCollection;
     KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
-    bool shown;
+    bool isCurrent;
+    bool showFloatingMessage;
+    QPointer<KisFloatingMessage> savedFloatingMessage;
+    KisSignalCompressor floatingMessageCompressor;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -219,6 +221,11 @@ public:
 
 };
 
+
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+#include <QGLContext>
+#endif
+
 KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private)
@@ -266,6 +273,23 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     grp.sync();
     d->canvas = new KisCanvas2(d->viewConverter, resourceManager, this, document->shapeController());
 
+/**
+ * Warn about Intel's broken video drivers
+ */
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+    QString renderer((const char*)glGetString(GL_RENDERER));
+    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Warning"),
+                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                      "If you experience problems like a black or blank screen,"
+                                      "please update your display driver to the latest version.\n\n"
+                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
+        cfg.writeEntry("WarnedAboutIntel", true);
+    }
+
+#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
+
     grp.writeEntry("CreatingCanvas", false);
     grp.sync();
 
@@ -285,6 +309,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas->addDecoration(d->paintingAssistantsDecoration);
 
+    d->showFloatingMessage = cfg.showCanvasMessages();
 }
 
 KisView::~KisView()
@@ -293,8 +318,37 @@ KisView::~KisView()
     delete d;
 }
 
-void KisView::setShown() { d->shown = true; }
-bool KisView::shown() const { return d->shown; }
+void KisView::notifyCurrentStateChanged(bool isCurrent)
+{
+    d->isCurrent = isCurrent;
+
+    if (!d->isCurrent && d->savedFloatingMessage) {
+        d->savedFloatingMessage->removeMessage();
+    }
+}
+
+void KisView::setShowFloatingMessage(bool show)
+{
+    d->showFloatingMessage = show;
+}
+
+void KisView::showFloatingMessageImpl(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
+{
+    if (!d->viewManager) return;
+
+    if(d->isCurrent && d->showFloatingMessage && d->viewManager->qtMainWindow()) {
+        if (d->savedFloatingMessage) {
+            d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
+        } else {
+            d->savedFloatingMessage = new KisFloatingMessage(message, this->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
+            d->savedFloatingMessage->setShowOverParent(true);
+            d->savedFloatingMessage->setIcon(icon);
+
+            connect(&d->floatingMessageCompressor, SIGNAL(timeout()), d->savedFloatingMessage, SLOT(showMessage()));
+            d->floatingMessageCompressor.start();
+        }
+    }
+}
 
 void KisView::setViewManager(KisViewManager *view)
 {
@@ -764,12 +818,6 @@ void KisView::closeEvent(QCloseEvent *event)
 
     event->ignore();
 
-}
-
-void KisView::showEvent(QShowEvent *event)
-{
-    QWidget::showEvent(event);
-    QTimer::singleShot(10000, this, SLOT(setShown()));
 }
 
 bool KisView::queryClose()

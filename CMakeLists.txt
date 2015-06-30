@@ -400,6 +400,27 @@ macro_optional_find_package(KChart 2.6.0)
 macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
 
 ##
+## Test for KDb
+##
+macro_optional_find_package(KDb 1.0.0)
+macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
+                            "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
+
+##
+## Test for KReport
+##
+macro_optional_find_package(KReport 2.96.0)
+macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
+                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+
+##
+## Test for KProperty
+##
+macro_optional_find_package(KProperty 2.96.0)
+macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with editor widget"
+                                  "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
+
+##
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
@@ -912,6 +933,12 @@ calligra_drop_product_on_bad_condition( APP_KRITA
     SHARED_MIME_INFO_FOUND "SharedMimeInfo not found"
     Boost_SYSTEM_FOUND "boost-system devel not found"
     REQUIRED_Xinput_FOUND "Xinput devel not found "
+)
+
+calligra_drop_product_on_bad_condition( APP_KEXI
+    KDb_FOUND "KDb not found"
+    KReport_FOUND "KReport not found"
+    KProperty_FOUND "KProperty not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_ACTIVE

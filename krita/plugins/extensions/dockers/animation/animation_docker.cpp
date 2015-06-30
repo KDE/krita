@@ -26,6 +26,7 @@
 #include "kis_paint_layer.h"
 #include "kis_action_manager.h"
 #include "kis_image_animation_interface.h"
+#include "kis_onion_skin_dialog.h"
 
 #include "ui_wdg_animation.h"
 
@@ -33,6 +34,7 @@ AnimationDocker::AnimationDocker()
     : QDockWidget(i18n("Animation"))
     , m_canvas(0)
     , m_animationWidget(new Ui_WdgAnimation)
+    , m_onionSkinOptions(new KisOnionSkinDialog())
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -70,6 +72,8 @@ AnimationDocker::AnimationDocker()
     connect(m_addBlankFrameAction, SIGNAL(triggered()), this, SLOT(slotAddBlankFrame()));
     connect(m_addDuplicateFrameAction, SIGNAL(triggered()), this, SLOT(slotAddDuplicateFrame()));
     connect(m_deleteKeyframeAction, SIGNAL(triggered()), this, SLOT(slotDeleteKeyframe()));
+
+    connect(m_animationWidget->btnOnionSkinOptions, SIGNAL(clicked()), this, SLOT(slotOnionSkinOptions()));
 }
 
 void AnimationDocker::setCanvas(KoCanvasBase * canvas)
@@ -147,6 +151,11 @@ void AnimationDocker::slotDeleteKeyframe()
     }
 }
 
+void AnimationDocker::slotOnionSkinOptions()
+{
+    m_onionSkinOptions->show();
+}
+
 void AnimationDocker::slotPreviousFrame()
 {
     if (!m_canvas) return;
@@ -189,6 +198,9 @@ void AnimationDocker::slotUpdateIcons()
     m_addBlankFrameAction->setIcon(themedIcon("addblankframe"));
     m_addDuplicateFrameAction->setIcon(themedIcon("addduplicateframe"));
     m_deleteKeyframeAction->setIcon(themedIcon("deletekeyframe"));
+
+    m_animationWidget->btnOnionSkinOptions->setIcon(themedIcon("onion_skin_options"));
+    m_animationWidget->btnOnionSkinOptions->setIconSize(QSize(22, 22));
 
     m_animationWidget->btnPreviousFrame->setIconSize(QSize(22, 22));
     m_animationWidget->btnPlay->setIconSize(QSize(22, 22));

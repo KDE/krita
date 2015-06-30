@@ -95,6 +95,7 @@ dark_playpause.png
 dark_addblankframe.png
 dark_addduplicateframe.png
 dark_deletekeyframe.png
+dark_onion_skin_options.png
 
 light_select.png
 light_pattern.png
@@ -121,7 +122,7 @@ light_addblankframe.png
 light_addduplicateframe.png
 light_deletekeyframe.png
 light_timeline_keyframe.png
-
+light_onion_skin_options.png
 
 tool_transform/dark_transform_icons_cage.png
 tool_transform/dark_transform_icons_liquify_erase.png

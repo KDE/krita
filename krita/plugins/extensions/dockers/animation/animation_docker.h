@@ -26,9 +26,9 @@
 #include <kis_mainwindow_observer.h>
 #include "kis_action.h"
 
-
 class KisCanvas2;
 class Ui_WdgAnimation;
+class KisOnionSkinDialog;
 
 class AnimationDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
@@ -50,10 +50,14 @@ private slots:
 
     void slotUpdateIcons();
 
+    void slotOnionSkinOptions();
+
 private:
 
     KisCanvas2 *m_canvas;
     Ui_WdgAnimation *m_animationWidget;
+
+    KisOnionSkinDialog *m_onionSkinOptions;
 
     KisAction *m_previousFrameAction;
     KisAction *m_nextFrameAction;

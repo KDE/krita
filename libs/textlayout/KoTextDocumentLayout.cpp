@@ -734,7 +734,10 @@ RootAreaConstraint constraintsForPosition(QTextFrame::iterator it, bool previous
         }
         constraints.newPageForced = table->frameFormat().intProperty(KoTableStyle::BreakBefore) == KoText::PageBreak;
     }
- 
+
+    if (!constraints.masterPageName.isEmpty()) {
+        constraints.newPageForced = true;
+    }
     if (previousIsValid && !constraints.newPageForced) {
         it--;
         block = it.currentBlock();

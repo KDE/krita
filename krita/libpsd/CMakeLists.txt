@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-set(libkispsd_LIB_SRCS
+set(kritapsd_LIB_SRCS
     psd_utils.cpp
     psd.cpp
     compression.cpp
@@ -17,20 +17,20 @@ set(libkispsd_LIB_SRCS
     asl/kis_asl_writer.cpp
 )
 
-kde4_add_library(libkispsd SHARED ${libkispsd_LIB_SRCS} )
+kde4_add_library(kritapsd SHARED ${kritapsd_LIB_SRCS} )
 
 if (WIN32)
-    target_link_libraries(libkispsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS})
+    target_link_libraries(kritapsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS})
 else (WIN32)
-    target_link_libraries(libkispsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+    target_link_libraries(kritapsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 endif (WIN32)
 
-target_link_libraries(libkispsd LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(kritapsd LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 
-set_target_properties(libkispsd PROPERTIES
+set_target_properties(kritapsd PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS libkispsd  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritapsd  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

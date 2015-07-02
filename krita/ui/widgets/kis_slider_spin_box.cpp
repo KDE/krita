@@ -62,6 +62,7 @@ public:
     int singleStep;
     QSpinBox* dummySpinBox;
     Style style;
+    bool blockUpdateSignalOnDrag;
 };
 
 KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d)
@@ -369,7 +370,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&
             !(d->downButtonDown || d->upButtonDown)) {
-        setInternalValue(valueForX(e->pos().x(),e->modifiers()));
+        setInternalValue(valueForX(e->pos().x(),e->modifiers()), d->blockUpdateSignalOnDrag);
         update();
     }
 }
@@ -655,6 +656,12 @@ void KisAbstractSliderSpinBox::setExponentRatio(qreal dbl)
     d->exponentRatio = dbl;
 }
 
+void KisAbstractSliderSpinBox::setBlockUpdateSignalOnDrag(bool blockUpdateSignal)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->blockUpdateSignalOnDrag = blockUpdateSignal;
+}
+
 void KisAbstractSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 {
     event->accept();
@@ -667,6 +674,11 @@ void KisAbstractSliderSpinBox::editLostFocus()
     if (!d->edit->hasFocus()) {
         hideEdit();
     }
+}
+
+void KisAbstractSliderSpinBox::setInternalValue(int value)
+{
+    setInternalValue(value, false);
 }
 
 class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
@@ -735,7 +747,7 @@ int KisSliderSpinBox::value()
 
 void KisSliderSpinBox::setValue(int value)
 {
-    setInternalValue(value);
+    setInternalValue(value, false);
     update();
 }
 
@@ -756,11 +768,14 @@ void KisSliderSpinBox::setPageStep(int value)
     Q_UNUSED(value);
 }
 
-void KisSliderSpinBox::setInternalValue(int _value)
+void KisSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal)
 {
     Q_D(KisAbstractSliderSpinBox);
     d->value = qBound(d->minimum, _value, d->maximum);
-    emit(valueChanged(value()));
+
+    if(!blockUpdateSignal) {
+        emit(valueChanged(value()));
+    }
 }
 
 class KisDoubleSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
@@ -839,7 +854,7 @@ qreal KisDoubleSliderSpinBox::value()
 void KisDoubleSliderSpinBox::setValue(qreal value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    setInternalValue(d->value = qRound(value * d->factor));
+    setInternalValue(d->value = qRound(value * d->factor), false);
     update();
 }
 
@@ -855,11 +870,14 @@ QString KisDoubleSliderSpinBox::valueString() const
     return QString::number((qreal)d->value / d->factor, 'f', d->validator->decimals());
 }
 
-void KisDoubleSliderSpinBox::setInternalValue(int _value)
+void KisDoubleSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal)
 {
     Q_D(KisAbstractSliderSpinBox);
     d->value = qBound(d->minimum, _value, d->maximum);
-    emit(valueChanged(value()));
+
+    if(!blockUpdateSignal) {
+        emit(valueChanged(value()));
+    }
 }
 
 

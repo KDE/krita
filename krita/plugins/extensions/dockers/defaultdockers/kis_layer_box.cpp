@@ -332,6 +332,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         disconnect(m_nodeManager, 0, this, 0);
         disconnect(m_nodeModel, 0, m_nodeManager, 0);
         disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
+        m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -402,13 +403,11 @@ void KisLayerBox::unsetCanvas()
         m_newLayerMenu->clear();
     }
     setCanvas(0);
-    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::notifyImageDeleted()
 {
     setCanvas(0);
-    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::updateUI()

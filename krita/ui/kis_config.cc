@@ -991,6 +991,17 @@ void KisConfig::setCanvasState(const QString& state) const
     }
 }
 
+bool KisConfig::toolOptionsPopupDetached(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("ToolOptionsPopupDetached", false));
+}
+
+void KisConfig::setToolOptionsPopupDetached(bool detached) const
+{
+    m_cfg.writeEntry("ToolOptionsPopupDetached", detached);
+}
+
+
 bool KisConfig::paintopPopupDetached(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("PaintopPopupDetached", false));
@@ -1535,6 +1546,16 @@ bool KisConfig::compressKra(bool defaultValue) const
 void KisConfig::setCompressKra(bool compress)
 {
     m_cfg.writeEntry("compressLayersInKra", compress);
+}
+
+bool KisConfig::toolOptionsInDocker(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("ToolOptionsInDocker", false));
+}
+
+void KisConfig::setToolOptionsInDocker(bool inDocker)
+{
+    m_cfg.writeEntry("ToolOptionsInDocker", inDocker);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const

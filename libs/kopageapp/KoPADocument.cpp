@@ -38,6 +38,8 @@
 #include <KoGenStyles.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoText.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoInlineTextObjectManager.h>
@@ -68,6 +70,7 @@ public:
     QPointer<KoUpdater> odfProgressUpdater;
     QPointer<KoUpdater> odfMasterPageProgressUpdater;
     QPointer<KoUpdater> odfPageProgressUpdater;
+    QString defaultStylesResourcePath;
 };
 
 KoPADocument::KoPADocument(KoPart *part)
@@ -141,7 +144,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
     if (d->odfProgressUpdater) {
         d->odfProgressUpdater->setProgress(0);
     }
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), KGlobal::mainComponent());
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), defaultStylesResourcePath());
     KoPALoadingContext paContext(loadingContext, resourceManager());
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -828,6 +831,21 @@ void KoPADocument::setRulersVisible(bool visible)
 bool KoPADocument::rulersVisible() const
 {
     return d->rulersVisible;
+}
+
+// TODO: the property "defaultStylesResourcePath" for each and every document
+// is not nice to have. Instead the info about that path (and similar data like?)
+// should be noted at some central component that all document objects etc. know
+// about and where the app which uses these classes can configure the path to
+// its needs
+void KoPADocument::setDefaultStylesResourcePath(const QString& defaultStylesResourcePath)
+{
+    d->defaultStylesResourcePath = defaultStylesResourcePath;
+}
+
+QString KoPADocument::defaultStylesResourcePath() const
+{
+    return d->defaultStylesResourcePath;
 }
 
 int KoPADocument::pageCount() const

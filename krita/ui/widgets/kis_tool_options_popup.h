@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,43 +16,38 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifndef PARAGRAPHLAYOUT_H
-#define PARAGRAPHLAYOUT_H
-
-#include <ui_ParagraphLayout.h>
+#ifndef KIS_TOOL_OPTIONS_POPUP_H
+#define KIS_TOOL_OPTIONS_POPUP_H
 
 #include <QWidget>
+#include <QPointer>
 
-class KoParagraphStyle;
-
-class ParagraphLayout : public QWidget
+class KisToolOptionsPopup : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ParagraphLayout(QWidget *parent);
+    explicit KisToolOptionsPopup(QWidget *parent = 0);
+    virtual ~KisToolOptionsPopup();
 
-    void setDisplay(KoParagraphStyle *style);
+    bool detached() const;
 
-    void save(KoParagraphStyle *style);
+    void newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
 
 Q_SIGNALS:
-    void parStyleChanged();
 
-private Q_SLOTS:
-    void slotAlignChanged();
-    void keepTogetherChanged();
-    void breakAfterChanged();
-    void breakBeforeChanged();
-    void thresholdValueChanged();
+public Q_SLOTS:
+
+    void switchDetached(bool show = true);
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *);
+    void hideEvent(QHideEvent *);
+    void showEvent(QShowEvent *);
 
 private:
-    Ui::ParagraphLayout widget;
-    bool m_alignmentInherited;
-    bool m_keepTogetherInherited;
-    bool m_breakAfterInherited;
-    bool m_breakBeforeInherited;
-    bool m_orphanThresholdInherited;
+
+    struct Private;
+    Private *const d;
 };
 
-#endif
+#endif // KIS_TOOL_OPTIONS_POPUP_H

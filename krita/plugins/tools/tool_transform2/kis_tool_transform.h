@@ -229,6 +229,7 @@ private:
 
 
     bool tryInitTransformModeFromNode(KisNodeSP node);
+    bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args);
     void initTransformMode(ToolTransformArgs::TransformMode mode);
     void initGuiAfterTransformMode();
 

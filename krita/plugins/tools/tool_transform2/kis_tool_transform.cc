@@ -658,6 +658,26 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
     return result;
 }
 
+bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args)
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+
+    if (lastCommand &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand,
+                                                      args)) {
+
+        image()->undoAdapter()->undoLastCommand();
+        // FIXME: can we make it async?
+        image()->waitForDone();
+
+        result = true;
+    }
+
+    return result;
+}
+
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
@@ -829,6 +849,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
+    ToolTransformArgs fetchedArgs;
+    const bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs);
+
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
             !currentNode->paintDevice();
@@ -867,7 +890,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initThumbnailImage(previewDevice);
     updateSelectionPath();
 
-    if (!tryInitTransformModeFromNode(currentNode)) {
+    if (fetchedFromCommand) {
+        m_currentArgs = fetchedArgs;
+        initGuiAfterTransformMode();
+    } else if (!tryInitTransformModeFromNode(currentNode)) {
         initTransformMode(mode);
     }
 

@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <KoServiceLocator.h>
 #include <QFile>
+#include <QApplication>
 
 #include <limits.h> // UINT_MAX
 

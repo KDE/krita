@@ -51,6 +51,7 @@ class KoCanvasController;
 class KisViewManager;
 class KisCanvasResourceProvider;
 class KisPopupButton;
+class KisToolOptionsPopup;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpConfigWidget;
@@ -106,6 +107,10 @@ public:
     ~KisPaintopBox();
 
     void restoreResource(KoResource* resource);
+    /**
+     * Update the option widgets to the argument ones, removing the currently set widgets.
+     */
+    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
 
 public Q_SLOTS:
 
@@ -165,26 +170,27 @@ private Q_SLOTS:
     void slotUpdateSelectionIcon();
 
 private:
-    KisCanvasResourceProvider*           m_resourceProvider;
-    QHBoxLayout*                         m_layout;
-    QWidget*                             m_paintopWidget;
-    KisPaintOpConfigWidget*            m_optionWidget;
-    KisPopupButton*                      m_settingsWidget;
-    KisPopupButton*                      m_presetWidget;
-    KisPopupButton*                      m_brushChooser;
-    KisCompositeOpComboBox*              m_cmbCompositeOp;
-    QToolButton*                         m_eraseModeButton;
-    QToolButton*                         m_alphaLockButton;
-    QToolButton*                         hMirrorButton;
-    QToolButton*                         vMirrorButton;
-    KisPaintOpPresetsPopup*              m_presetsPopup;
-    KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
-    KisViewManager*                      m_viewManager;
-    KisPopupButton*                      m_workspaceWidget;
-    KisWidgetChooser*                    m_sliderChooser[3];
+    KisCanvasResourceProvider*          m_resourceProvider;
+    QHBoxLayout*                        m_layout;
+    QWidget*                            m_paintopWidget;
+    KisPaintOpConfigWidget*             m_optionWidget;
+    KisPopupButton*                     m_toolOptionsPopupButton;
+    KisPopupButton*                     m_brushEditorPopupButton;
+    KisPopupButton*                     m_presetSelectorPopupButton;
+    KisCompositeOpComboBox*             m_cmbCompositeOp;
+    QToolButton*                        m_eraseModeButton;
+    QToolButton*                        m_alphaLockButton;
+    QToolButton*                        m_hMirrorButton;
+    QToolButton*                        m_vMirrorButton;
+    KisToolOptionsPopup*                m_toolOptionsPopup;
+    KisPaintOpPresetsPopup*             m_presetsPopup;
+    KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup;
+    KisViewManager*                     m_viewManager;
+    KisPopupButton*                     m_workspaceWidget;
+    KisWidgetChooser*                   m_sliderChooser[3];
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
-    KisFavoriteResourceManager*          m_favoriteResourceManager;
-    QToolButton*                         m_reloadButton;
+    KisFavoriteResourceManager*         m_favoriteResourceManager;
+    QToolButton*                        m_reloadButton;
 
 
     QString             m_prevCompositeOpID;

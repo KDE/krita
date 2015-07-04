@@ -116,7 +116,23 @@ public:
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
 
+    struct ExtraData {
+        virtual ~ExtraData();
+    };
 
+    /**
+     * \return user-defined object associated with the command
+     *
+     * \see setExtraData()
+     */
+    ExtraData* extraData() const;
+
+    /**
+     * The user can assign an arbitrary object associated with the
+     * command. The \p data object is owned by the command. If you assign
+     * the object twice, the first one will be destroyed.
+     */
+    void setExtraData(ExtraData *data);
 
 private:
     Q_DISABLE_COPY(KUndo2Command)

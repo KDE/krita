@@ -279,6 +279,8 @@ KisMainWindow::KisMainWindow()
     setComponentData(KisFactory::componentData());
     KGlobal::setActiveComponent(KisFactory::componentData());
 
+    KisConfig cfg;
+
     d->viewManager = new KisViewManager(this, actionCollection());
     d->themeManager = new Digikam::ThemeManager(this);
 
@@ -309,11 +311,13 @@ KisMainWindow::KisMainWindow()
 
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
-    ToolDockerFactory toolDockerFactory;
-    d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-
     KoToolBoxFactory toolBoxFactory;
     createDockWidget(&toolBoxFactory);
+
+    if (cfg.toolOptionsInDocker()) {
+        ToolDockerFactory toolDockerFactory;
+        d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
+    }
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -1995,7 +1999,6 @@ QPointer<KisView>KisMainWindow::activeKisView()
 
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
-    d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 
     KConfigGroup group(KGlobal::config(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
@@ -2008,6 +2011,13 @@ void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
         w->setFont(dockWidgetFont);
+    }
+
+    if (d->toolOptionsDocker) {
+        d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
+    }
+    else {
+        d->viewManager->paintOpBox()->newOptionWidgets(optionWidgetList);
     }
 }
 

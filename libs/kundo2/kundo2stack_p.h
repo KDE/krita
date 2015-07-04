@@ -69,6 +69,8 @@ public:
     QString actionText;
     KUndo2MagicString text;
     int id;
+
+    QScopedPointer<KUndo2Command::ExtraData> extraData;
 };
 
 #ifndef QT_NO_UNDOSTACK

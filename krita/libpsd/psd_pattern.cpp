@@ -88,7 +88,7 @@ bool psd_read_pattern(QIODevice *io)
 
     // Now load the virtual memory array
     psdread(io, &pattern.version);
-    if (!pattern.version == 3) return false;
+    if (pattern.version != 3) return false;
     quint32 vm_array_length;
     psdread(io, &vm_array_length);
     psdread(io, &pattern.top);

@@ -48,6 +48,9 @@
 #include <KoUnit.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentInfoDlg.h>
+#include <KoPageLayout.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 
 #include <kmimetype.h>
 #include <kfileitem.h>

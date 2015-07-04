@@ -186,8 +186,13 @@ bool KisProjectionLeaf::visible() const
 {
     // TODO: check opacity as well!
 
-    bool hiddenByParentPassThrough =
-        m_d->checkParentPassThrough() && !m_d->node->parent()->visible();
+    bool hiddenByParentPassThrough = false;
+
+    KisNodeSP node = m_d->node->parent();
+    while (node && node->projectionLeaf()->m_d->checkThisPassThrough()) {
+        hiddenByParentPassThrough |= !node->visible();
+        node = node->parent();
+    }
 
     return m_d->node->visible(false) &&
         !m_d->checkThisPassThrough() &&

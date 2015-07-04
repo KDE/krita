@@ -38,6 +38,7 @@ class QRectF;
 struct RootAreaConstraint {
     QString masterPageName;
     int visiblePageNumber;
+    bool newPageForced;
 };
 
 /**

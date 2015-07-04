@@ -712,26 +712,44 @@ void KoTextDocumentLayout::layout()
     }
 }
 
-RootAreaConstraint constraintsForPosition (const QTextFrame::iterator &it) {
+RootAreaConstraint constraintsForPosition(QTextFrame::iterator it, bool previousIsValid)
+{
     RootAreaConstraint constraints;
     constraints.masterPageName = QString::null;
     constraints.visiblePageNumber = -1;
-    QTextBlock firstBlock = it.currentBlock();
-    QTextTable *firstTable = qobject_cast<QTextTable*>(it.currentFrame());
-    if (firstBlock.isValid()) {
-        constraints.masterPageName = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
-        bool ok;
-        int num = firstBlock.blockFormat().property(KoParagraphStyle::PageNumber).toInt(&ok);
-        if (ok)
-            constraints.visiblePageNumber = num;
+    constraints.newPageForced = false;
+    QTextBlock block = it.currentBlock();
+    QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+    if (block.isValid()) {
+        constraints.masterPageName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
+        if (block.blockFormat().hasProperty(KoParagraphStyle::PageNumber)) {
+            constraints.visiblePageNumber = block.blockFormat().intProperty(KoParagraphStyle::PageNumber);
+        }
+        constraints.newPageForced = block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) == KoText::PageBreak;
     }
-    if (firstTable) {
-        constraints.masterPageName = firstTable->frameFormat().property(KoTableStyle::MasterPageName).toString();
-        bool ok;
-        int num = firstTable->frameFormat().property(KoTableStyle::PageNumber).toInt(&ok);
-        if (ok)
-            constraints.visiblePageNumber = num;
+    if (table) {
+        constraints.masterPageName = table->frameFormat().stringProperty(KoTableStyle::MasterPageName);
+        if (table->frameFormat().hasProperty(KoTableStyle::PageNumber)) {
+            constraints.visiblePageNumber = table->frameFormat().intProperty(KoTableStyle::PageNumber);
+        }
+        constraints.newPageForced = table->frameFormat().intProperty(KoTableStyle::BreakBefore) == KoText::PageBreak;
     }
+
+    if (!constraints.masterPageName.isEmpty()) {
+        constraints.newPageForced = true;
+    }
+    if (previousIsValid && !constraints.newPageForced) {
+        it--;
+        block = it.currentBlock();
+        table = qobject_cast<QTextTable*>(it.currentFrame());
+        if (block.isValid()) {
+            constraints.newPageForced = block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) == KoText::PageBreak;
+        }
+        if (table) {
+            constraints.newPageForced = table->frameFormat().intProperty(KoTableStyle::BreakAfter) == KoText::PageBreak;
+        }
+    }
+
     return constraints;
 }
 
@@ -756,7 +774,7 @@ bool KoTextDocumentLayout::doLayout()
         }
 
         // Build our request for our rootArea provider
-        RootAreaConstraint constraints = constraintsForPosition(d->layoutPosition->it);
+        RootAreaConstraint constraints = constraintsForPosition(d->layoutPosition->it, currentAreaNumber > 0);
 
         // Request a new root-area. If NULL is returned then layouting is finished.
         bool newRootArea = false;
@@ -823,7 +841,7 @@ bool KoTextDocumentLayout::doLayout()
             d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, newRootArea);
-            updateProgress(rootArea->startTextFrameIterator());
+            updateProgress(d->layoutPosition->it);
 
             if (finished && !rootArea->footNoteCursorToNext()) {
                 d->provider->releaseAllAfter(rootArea);

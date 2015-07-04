@@ -225,6 +225,9 @@
              <property name="maximum">
               <number>180</number>
              </property>
+             <property name="wrapping">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">

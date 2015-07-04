@@ -24,20 +24,12 @@
 #define KODOCUMENT_H
 
 #include <QDateTime>
-#include <QTransform>
 #include <QList>
 
-#include <kcomponentdata.h>
-
-#include <KoPageLayout.h>
 #include "komain_export.h"
-#include "KoGridData.h"
-#include "KoGuidesData.h"
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
-
-#include <klocale.h>
 
 class KUndo2Command;
 class KoPart;
@@ -49,6 +41,25 @@ class KoProgressUpdater;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
 class KoUnit;
+class KoGridData;
+class KoGuidesData;
+class KoXmlWriter;
+
+class QDomDocument;
+
+// MSVC seems to need to know the declaration of the classes
+// we pass references of in, when used by external modules
+// e.g.
+//     when building chartshapecore.lib, the forward-declaration
+//     appraoch lead to unresolved externals warnings when it used
+//     the pagelayout functions.
+//     Also when building calligra_shape_formular.dll - FormulaDocument
+//     referenced the same two pagelayout functions incorrectly.
+#if defined(_WIN32) || defined(_WIN64)
+    #include <KoPageLayout.h>
+#else
+    class KoPageLayout;
+#endif
 
 class KoVersionInfo
 {

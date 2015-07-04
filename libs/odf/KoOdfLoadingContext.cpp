@@ -71,7 +71,7 @@ public:
     KoXmlDocument doc; // the doc needs to be kept around so it is possible to access the styles
 };
 
-KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore* store, const KComponentData &componentData)
+KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore* store, const QString &defaultStylesResourcePath)
         : d(new Private(stylesReader, store))
 {
     // Ideally this should be done by KoDocument and passed as argument here...
@@ -79,10 +79,11 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
     QString dummy;
     (void)oasisStore.loadAndParse("tar:/META-INF/manifest.xml", d->manifestDoc, dummy);
 
-    if (componentData.isValid()) {
+    if (!defaultStylesResourcePath.isEmpty()) {
+        Q_ASSERT(defaultStylesResourcePath.endsWith(QLatin1Char('/')));
         const QString fileName =
             QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                   componentData.componentName()+"/styles/defaultstyles.xml");
+                                   defaultStylesResourcePath + "defaultstyles.xml");
         if ( ! fileName.isEmpty() ) {
             QFile file( fileName );
             QString errorMessage;

@@ -284,8 +284,7 @@ void PaletteDockerDock::removeColor()
         return;
     }
     int i = index.row()*m_model->columnCount()+index.column();
-    KoColorSetEntry entry = m_currentColorSet->getColor(i);
-    m_currentColorSet->remove(entry);
+    m_currentColorSet->removeAt(i);
     m_currentColorSet->save();
     setColorSet(m_currentColorSet); // update model
 }

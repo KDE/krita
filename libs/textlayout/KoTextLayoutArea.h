@@ -144,6 +144,12 @@ public:
     /// Areas that accept page breaks return true, default is false;
     bool acceptsPageBreak() const;
 
+    /// Set if Area accepts column breaks, default is false;
+    void setAcceptsColumnBreak(bool accept);
+
+    /// Areas that accept column breaks return true, default is false;
+    bool acceptsColumnBreak() const;
+
     /// Should be set to true when first starting layouting page
     /// Should be set to false when we add anything during layout
     void setVirginPage(bool virgin);
@@ -186,9 +192,6 @@ protected:
 private:
     /// remove tables and paragraphs that are keep-with-next
     void backtrackKeepWithNext(FrameIterator *cursor);
-
-    /// utility method to restartlayout of a block
-    QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
 
     bool layoutBlock(FrameIterator *cursor);
 

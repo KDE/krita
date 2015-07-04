@@ -42,6 +42,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 

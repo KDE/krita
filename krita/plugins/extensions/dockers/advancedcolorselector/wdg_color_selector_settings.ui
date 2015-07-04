@@ -74,7 +74,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_typeshape">
       <attribute name="title">
@@ -283,7 +283,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Type Description goes here</string>
+        <string notr="true">Type Description goes here</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -315,7 +315,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="KisColorSpaceSelector" name="colorSpace">
+         <widget class="KisColorSpaceSelector" name="colorSpace" native="true">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -1459,15 +1459,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisColorSpaceSelector</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KTabWidget</class>
    <extends>QTabWidget</extends>
    <header>ktabwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisColorSpaceSelector</class>
-   <extends>QComboBox</extends>
-   <header>widgets/kis_color_space_selector.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSelectorComboBox</class>

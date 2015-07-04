@@ -64,6 +64,7 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QPluginLoader>
 
 #include <stdlib.h>
 

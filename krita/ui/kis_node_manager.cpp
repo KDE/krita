@@ -192,7 +192,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
     m_d->layerManager->setView(imageView);
 
     if (m_d->imageView) {
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         shapeController->disconnect(SIGNAL(sigActivateNode(KisNodeSP)), this);
         m_d->imageView->image()->disconnect(this);
@@ -201,7 +201,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
     m_d->imageView = imageView;
 
     if (m_d->imageView) {
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));

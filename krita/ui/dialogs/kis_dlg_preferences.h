@@ -77,6 +77,7 @@ public:
     int favoritePresets();
     bool showCanvasMessages();
     bool compressKra();
+    bool toolOptionsInDocker();
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();

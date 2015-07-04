@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterChainLink.h"
 #include "KoFilterVertex.h"
 
+#include <QPluginLoader>
 #include <QMetaMethod>
 #include <kdebug.h>
 

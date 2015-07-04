@@ -23,6 +23,7 @@
 #include <KoTemplateCreateDia.h>
 
 #include <QFile>
+#include <QDir>
 #include <QLabel>
 #include <QRadioButton>
 #include <QPushButton>

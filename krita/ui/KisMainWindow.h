@@ -235,7 +235,6 @@ public Q_SLOTS:
      */
     bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */

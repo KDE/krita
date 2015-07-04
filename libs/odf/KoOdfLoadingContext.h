@@ -21,8 +21,6 @@
 #ifndef KOODFLOADINGCONTEXT_H
 #define KOODFLOADINGCONTEXT_H
 
-#include <kcomponentdata.h>
-
 #include "koodf_export.h"
 #include "KoOdfStylesReader.h"
 
@@ -49,8 +47,9 @@ public:
      *
      * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
+     * @param defaultStylesResourcePath resource path to "defaultstyles.xml", empty if none
      */
-    explicit KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore *store, const KComponentData &componentData = KComponentData());
+    explicit KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore *store, const QString &defaultStylesResourcePath = QString());
     virtual ~KoOdfLoadingContext();
 
     /**

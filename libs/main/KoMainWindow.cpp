@@ -40,6 +40,7 @@
 #include "KoDockerManager.h"
 #include "KoPart.h"
 #include <KoPageLayoutDialog.h>
+#include <KoPageLayout.h>
 #include "KoApplication.h"
 #include <KoIcon.h>
 #include <KoConfig.h>

@@ -30,6 +30,7 @@
 #include <KoJsonTrader.h>
 
 #include <QPluginLoader>
+#include <QCoreApplication>
 
 #include <limits.h> // UINT_MAX
 

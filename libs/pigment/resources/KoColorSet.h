@@ -33,8 +33,7 @@ struct KoColorSetEntry {
     KoColor color;
     QString name;
     bool operator==(const KoColorSetEntry& rhs) const {
-        //FIXME return color == rhs.color && name == rhs.name;
-        return name == rhs.name;
+        return color == rhs.color && name == rhs.name;
     }
 };
 
@@ -85,6 +84,7 @@ public:
 
     void add(const KoColorSetEntry &);
     void remove(const KoColorSetEntry &);
+    void removeAt(quint32 index);
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
 

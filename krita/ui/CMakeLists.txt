@@ -210,6 +210,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_integer_filter_widget.cc
     widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_popup.cpp
+    widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc

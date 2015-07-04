@@ -182,10 +182,14 @@ void KisNodeModel::setShowGlobalSelection(bool value)
 void KisNodeModel::updateSettings()
 {
     KisConfig cfg;
+    bool oldShowRootLayer = m_d->showRootLayer;
+    bool oldShowGlobalSelection = m_d->showGlobalSelection;
     m_d->showRootLayer = cfg.showRootLayer();
     m_d->showGlobalSelection = cfg.showGlobalSelection();
-    resetIndexConverter();
-    reset();
+    if(m_d->showRootLayer != oldShowRootLayer || m_d->showGlobalSelection != oldShowGlobalSelection) {
+        resetIndexConverter();
+        reset();
+    }
 }
 
 void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
@@ -227,6 +231,10 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
 
 void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {
+    KisDummiesFacadeBase *oldDummiesFacade;
+    KisShapeController *oldShapeController;
+    oldShapeController = m_d->shapeController;
+    oldDummiesFacade = m_d->dummiesFacade;
 
     m_d->shapeController = shapeController;
 
@@ -258,10 +266,14 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
 
-        connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotIsolatedModeChanged()));
+        if(m_d->image.isValid()) {
+            connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotIsolatedModeChanged()));
+        }
     }
 
-    reset();
+    if(m_d->dummiesFacade != oldDummiesFacade || m_d->shapeController != oldShapeController) {
+        reset();
+    }
 }
 
 void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
@@ -524,6 +536,11 @@ Qt::DropActions KisNodeModel::supportedDragActions() const
 Qt::DropActions KisNodeModel::supportedDropActions() const
 {
     return Qt::MoveAction | Qt::CopyAction;
+}
+
+bool KisNodeModel::hasDummiesFacade()
+{
+    return m_d->dummiesFacade != 0;
 }
 
 QStringList KisNodeModel::mimeTypes() const

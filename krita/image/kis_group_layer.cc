@@ -338,4 +338,46 @@ void KisGroupLayer::setY(qint32 y)
     }
 }
 
+struct ExtentPolicy
+{
+    inline QRect operator() (const KisNode *node) {
+        return node->extent();
+    }
+};
+
+struct ExactBoundsPolicy
+{
+    inline QRect operator() (const KisNode *node) {
+        return node->exactBounds();
+    }
+};
+
+template <class MetricPolicy>
+QRect collectRects(const KisNode *node, MetricPolicy policy, bool skipFirst = true)
+{
+    QRect accumulator;
+
+    const KisNode *child = node->firstChild();
+    while (child) {
+        accumulator |= policy(child);
+        child = child->nextSibling();
+    }
+
+    return accumulator;
+}
+
+QRect KisGroupLayer::extent() const
+{
+    return m_d->passThroughMode ?
+        collectRects(this, ExtentPolicy()) :
+        KisLayer::extent();
+}
+
+QRect KisGroupLayer::exactBounds() const
+{
+    return m_d->passThroughMode ?
+        collectRects(this, ExactBoundsPolicy()) :
+        KisLayer::exactBounds();
+}
+
 #include "kis_group_layer.moc"

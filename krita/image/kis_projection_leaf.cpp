@@ -61,7 +61,7 @@ KisProjectionLeafSP KisProjectionLeaf::parent() const
 {
     KisNodeSP node = m_d->node->parent();
 
-    if (node && Private::checkPassThrough(node)) {
+    while (node && Private::checkPassThrough(node)) {
         node = node->parent();
     }
 
@@ -103,8 +103,10 @@ KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
         node = m_d->node->prevSibling();
     }
 
-    if (!node && m_d->checkParentPassThrough()) {
-        node = m_d->node->parent()->prevSibling();
+    const KisProjectionLeaf *leaf = this;
+    while (!node && leaf->m_d->checkParentPassThrough()) {
+        leaf = leaf->node()->parent()->projectionLeaf().data();
+        node = leaf->node()->prevSibling();
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -114,7 +116,7 @@ KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
 {
     KisNodeSP node = m_d->node->nextSibling();
 
-    if (node && Private::checkPassThrough(node) && node->firstChild()) {
+    while (node && Private::checkPassThrough(node) && node->firstChild()) {
         node = node->firstChild();
     }
 

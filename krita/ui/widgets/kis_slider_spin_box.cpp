@@ -100,6 +100,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->fastSliderStep = 5;
     d->slowFactor = 0.1;
     d->shiftMode = false;
+    d->blockUpdateSignalOnDrag = false;
 
     setExponentRatio(1.0);
 

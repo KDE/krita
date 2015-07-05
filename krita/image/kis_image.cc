@@ -1440,6 +1440,10 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
 {
     if (!root) root = m_d->rootLayer;
 
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
+    }
+
     if (m_d->scheduler) {
         m_d->scheduler->fullRefresh(root, rc, cropRect);
     }
@@ -1470,6 +1474,10 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 {
     if (!root) root = m_d->rootLayer;
 
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
+    }
+
     if (m_d->scheduler) {
         m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
     }
@@ -1478,6 +1486,10 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
 {
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
+
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    }
 
     if (m_d->scheduler) {
         m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
@@ -1576,6 +1588,10 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
         && m_d->projectionUpdatesFilter->filter(this, node, rect)) {
 
         return;
+    }
+
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(node, rect, false);
     }
 
     /**

@@ -32,8 +32,6 @@
 #include "kis_shared.h"
 #include "kis_default_bounds_base.h"
 
-#include "kis_raster_keyframe_channel.h"
-
 #include <krita_export.h>
 
 class KUndo2Command;
@@ -50,6 +48,8 @@ class KoColorProfile;
 
 class KisDataManager;
 class KisPaintDeviceWriter;
+class KisKeyframe;
+class KisRasterKeyframeChannel;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 

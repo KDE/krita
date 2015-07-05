@@ -22,6 +22,8 @@
 
 #include <QMap>
 
+const KoID KisKeyframeChannel::Content = KoID("content", i18n("Content"));
+
 struct KisKeyframeChannel::Private
 {
     QMap<int, KisKeyframe*> keys;

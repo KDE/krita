@@ -103,7 +103,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (to == -1 || cur.block().position() + cur.block().length() <= to) { // End of the block is inside selection.
+        if (to == -1 || cur.block().position() + cur.block().length() - 1 <= to) { // End of the block is inside selection.
             foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(cur.blockFormat())) {
                 if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name()) {
                     sectionNamesStack.pop();

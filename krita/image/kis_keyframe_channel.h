@@ -26,6 +26,7 @@
 #include "krita_export.h"
 #include "kis_keyframe.h"
 #include "KoXmlReader.h"
+#include "kis_time_range.h"
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
@@ -53,6 +54,8 @@ public:
     KisKeyframe *keyframeAt(int time);
     KisKeyframe *activeKeyframeAt(int time) const;
     KisKeyframe *nextKeyframeAfter(int time) const;
+
+    KisTimeRange affectedFrames(int time) const;
 
     int keyframeCount() const;
     QList<KisKeyframe*> keyframes() const;

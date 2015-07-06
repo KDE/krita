@@ -343,5 +343,39 @@ void KisKeyframingTest::testRasterFrameFetching()
     QVERIFY(fetched5 == blank);
 }
 
+void KisKeyframingTest::testAffectedFrames()
+{
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
+    KisTimeRange range;
+
+    channel->addKeyframe(10);
+    channel->addKeyframe(20);
+    channel->addKeyframe(30);
+
+    // At a keyframe
+    range = channel->affectedFrames(20);
+    QCOMPARE(range.start(), 20);
+    QCOMPARE(range.end(), 29);
+    QCOMPARE(range.isInfinite(), false);
+
+    // Between frames
+    range = channel->affectedFrames(25);
+    QCOMPARE(range.start(), 20);
+    QCOMPARE(range.end(), 29);
+    QCOMPARE(range.isInfinite(), false);
+
+    // Before first frame
+    range = channel->affectedFrames(5);
+    QCOMPARE(range.start(), 0);
+    QCOMPARE(range.end(), 19);
+    QCOMPARE(range.isInfinite(), false);
+
+    // After last frame
+    range = channel->affectedFrames(35);
+    QCOMPARE(range.start(), 30);
+    QCOMPARE(range.isInfinite(), true);
+
+}
+
 QTEST_KDEMAIN(KisKeyframingTest, NoGUI)
 #include "kis_keyframing_test.moc"

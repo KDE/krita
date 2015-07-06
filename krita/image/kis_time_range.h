@@ -55,9 +55,8 @@ public:
         return m_end >= m_start ? m_end - m_start + 1 : 0;
     }
 
-    inline bool isInfinity() const {
-        return m_end == std::numeric_limits<int>::min() &&
-            m_start == std::numeric_limits<int>::max();
+    inline bool isInfinite() const {
+        return m_end == std::numeric_limits<int>::min();
     }
 
     inline bool isValid() const {
@@ -68,8 +67,8 @@ public:
         return KisTimeRange(start, end, true);
     }
 
-    static inline KisTimeRange infinity() {
-        return KisTimeRange(std::numeric_limits<int>::max(), std::numeric_limits<int>::min(), true);
+    static inline KisTimeRange infinite(int start) {
+        return KisTimeRange(start, std::numeric_limits<int>::min(), true);
     }
 
 private:

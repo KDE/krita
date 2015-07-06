@@ -133,6 +133,6 @@ void KisImageAnimationInterface::notifyNodeChanged(KisNode *node,
         //       range
         emit sigFramesChanged(KisTimeRange(currentTime, 1));
     } else {
-        emit sigFramesChanged(KisTimeRange::infinity());
+        emit sigFramesChanged(KisTimeRange::infinite(0));
     }
 }

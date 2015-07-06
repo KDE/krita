@@ -124,6 +124,27 @@ KisKeyframe *KisKeyframeChannel::nextKeyframeAfter(int time) const
     return i.value();
 }
 
+KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
+{
+    QMap<int, KisKeyframe*>::const_iterator active = activeKeyIterator(time);
+    QMap<int, KisKeyframe*>::const_iterator next = active + 1;
+
+    int from;
+
+    if (active == m_d->keys.begin()) {
+        // First key affects even the frames before it
+        from = 0;
+    } else {
+        from = active.key();
+    }
+
+    if (next == m_d->keys.end()) {
+        return KisTimeRange::infinite(from);
+    } else {
+        return KisTimeRange::fromTime(from, next.key() - 1);
+    }
+}
+
 int KisKeyframeChannel::keyframeCount() const
 {
     return m_d->keys.count();

@@ -39,9 +39,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node)
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
-{
-    delete m_d;
-}
+{}
 
 QString KisKeyframeChannel::id() const
 {
@@ -197,6 +195,11 @@ QMap<int, KisKeyframe*>::const_iterator KisKeyframeChannel::activeKeyIterator(in
     if (i != keys.begin()) i--;
 
     return i;
+}
+
+void KisKeyframeChannel::destroyKeyframe(KisKeyframe *key)
+{
+     Q_UNUSED(key);
 }
 
 #include "kis_keyframe_channel.moc"

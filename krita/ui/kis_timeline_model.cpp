@@ -41,9 +41,7 @@ KisTimelineModel::KisTimelineModel(QObject *parent)
 }
 
 KisTimelineModel::~KisTimelineModel()
-{
-    delete m_d;
-}
+{}
 
 void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {

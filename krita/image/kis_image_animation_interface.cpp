@@ -21,6 +21,7 @@
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
 #include "kis_animation_frame_cache.h"
+#include "kis_keyframe_channel.h"
 
 struct KisImageAnimationInterface::Private
 {

@@ -38,9 +38,7 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNode
 }
 
 KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
-{
-    delete m_d;
-}
+{}
 
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
@@ -70,7 +68,7 @@ bool KisRasterKeyframeChannel::fetchFrame(KisPaintDeviceSP targetDevice, int tim
 
 KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
 {
-    int srcFrame = (copySrc != 0) ? srcFrame = copySrc->value() : 0;
+    int srcFrame = (copySrc != 0) ? copySrc->value() : 0;
 
     quint32 frameId = (quint32)m_d->paintDevice->createFrame((copySrc != 0), srcFrame);
     KisKeyframe *keyframe = new KisKeyframe(this, time, frameId);
@@ -80,6 +78,8 @@ KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfram
 
 bool KisRasterKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
 {
+    Q_UNUSED(key);
+
     // Raster content must have at least one keyframe at all times
     return keys().count() > 1;
 }
@@ -121,9 +121,13 @@ qreal KisRasterKeyframeChannel::maxScalarValue() const
 
 qreal KisRasterKeyframeChannel::scalarValue(const KisKeyframe *keyframe) const
 {
+    Q_UNUSED(keyframe);
+
     return 0;
 }
 
 void KisRasterKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value)
 {
+    Q_UNUSED(keyframe);
+    Q_UNUSED(value);
 }

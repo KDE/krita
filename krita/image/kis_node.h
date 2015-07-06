@@ -22,7 +22,6 @@
 
 #include "kis_undo_adapter.h"
 #include "kis_base_node.h"
-#include "kis_keyframe_channel.h"
 
 #include "krita_export.h"
 
@@ -39,6 +38,7 @@ class KisNodeProgressProxy;
 class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
+class KisKeyframeChannel;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent

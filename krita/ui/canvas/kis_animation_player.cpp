@@ -51,9 +51,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas, KisCoordinatesConvert
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
-{
-    delete m_d;
-}
+{}
 
 void KisAnimationPlayer::setFramerate(float fps) {
     m_d->fps = fps;

@@ -30,9 +30,7 @@ KisAnimationFrameCache::KisAnimationFrameCache()
 {}
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
-{
-    delete m_d;
-}
+{}
 
 QImage KisAnimationFrameCache::getFrame(int time)
 {

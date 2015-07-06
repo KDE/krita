@@ -61,7 +61,7 @@ public:
 
 private:
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 };
 
 Q_DECLARE_METATYPE(KisKeyframe*)

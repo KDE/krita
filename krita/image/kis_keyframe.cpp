@@ -22,8 +22,8 @@
 struct KisKeyframe::Private
 {
     KisKeyframeChannel *channel;
-    quintptr data;
     int time;
+    quintptr data;
 
     Private(KisKeyframeChannel *channel, int time, quintptr data)
         : channel(channel), time(time), data(data)
@@ -41,9 +41,7 @@ KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value)
 {}
 
 KisKeyframe::~KisKeyframe()
-{
-    delete m_d;
-}
+{}
 
 quint32 KisKeyframe::value() const
 {

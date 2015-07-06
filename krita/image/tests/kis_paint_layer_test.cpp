@@ -38,6 +38,7 @@
 #include "kis_layer_projection_plane.h"
 #include "kis_psd_layer_style.h"
 #include "filter/kis_filter_registry.h"
+#include "kis_keyframe_channel.h"
 
 void KisPaintLayerTest::testProjection()
 {

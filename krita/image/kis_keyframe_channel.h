@@ -81,7 +81,7 @@ protected:
 
     virtual KisKeyframe * createKeyframe(int time, const KisKeyframe *copySrc) = 0;
     virtual bool canDeleteKeyframe(KisKeyframe *key) = 0;
-    virtual void destroyKeyframe(KisKeyframe *key) {}
+    virtual void destroyKeyframe(KisKeyframe *key);
 
     virtual KisKeyframe * loadKeyframe(KoXmlNode keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const = 0;
@@ -90,7 +90,7 @@ private:
     KisKeyframe * insertKeyframe(int time, const KisKeyframe *copySrc);
 
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 };
 
 #endif // KIS_KEYFRAME_CHANNEL_H

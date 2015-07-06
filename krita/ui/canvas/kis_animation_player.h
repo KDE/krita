@@ -51,7 +51,7 @@ protected:
 
 private:
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 };
 
 

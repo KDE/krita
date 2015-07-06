@@ -106,6 +106,9 @@ KisOnionSkinCompositor::KisOnionSkinCompositor()
     m_d->refreshConfig();
 }
 
+KisOnionSkinCompositor::~KisOnionSkinCompositor()
+{}
+
 void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect& rect)
 {
     int time = sourceDevice->defaultBounds()->currentTime();

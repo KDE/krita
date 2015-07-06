@@ -79,7 +79,7 @@ private slots:
 
 private:
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 
     QModelIndex getChannelIndex(KisKeyframeChannel *channel, int column) const;
     void connectAllChannels(KisNodeDummy *nodeDummy, bool needConnect);

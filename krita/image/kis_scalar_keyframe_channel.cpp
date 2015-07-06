@@ -39,9 +39,7 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP no
 }
 
 KisScalarKeyframeChannel::~KisScalarKeyframeChannel()
-{
-    delete m_d;
-}
+{}
 
 bool KisScalarKeyframeChannel::hasScalarValue() const
 {

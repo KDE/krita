@@ -35,9 +35,10 @@ public slots:
 
 private:
     KisOnionSkinCompositor();
+    ~KisOnionSkinCompositor();
 
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 
 };
 

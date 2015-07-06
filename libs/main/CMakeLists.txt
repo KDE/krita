@@ -87,7 +87,7 @@ kde4_add_ui_files( komain_LIB_SRCS
 )
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
-target_link_libraries(komain ${extra_libs}
+target_link_libraries(komain
     ${KDE4_KFILE_LIBRARY}
     kowidgets
     kotextlayout

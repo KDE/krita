@@ -4,17 +4,11 @@ configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversi
 # generate calligragitversion.h
 configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
 
-include_directories( ${QT_INCLUDES} ${KDE4_INCLUDES})
-
 set(koversion_LIB_SRCS
     calligraversion.cpp
 )
 
 kde4_add_library(koversion SHARED ${koversion_LIB_SRCS})
-
-target_link_libraries(koversion ${QT_QTCORE_LIBRARY} )
-
-target_link_libraries(koversion LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} )
 
 set_target_properties(koversion PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

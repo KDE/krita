@@ -125,13 +125,15 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QString> whiteList;
     foreach(QPluginLoader *loader, serviceNames) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
-        QObject *plugin = factory->create<QObject>(owner, QVariantList());
+        QObject *plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
             whiteList << pluginName;
-            //qDebug() << "Loaded plugin" << loader->fileName();
-            delete plugin;
+//             qDebug() << "Loaded plugin" << loader->fileName() << owner;
+            if (!owner) {
+                delete plugin;
+            }
         } else {
             qWarning() << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
         }

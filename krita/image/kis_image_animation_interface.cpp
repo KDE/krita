@@ -115,3 +115,23 @@ QImage KisImageAnimationInterface::getCachedFrame(int time)
 {
     return m_d->frameCache->getFrame(time);
 }
+
+void KisImageAnimationInterface::notifyNodeChanged(KisNode *node,
+                                                   const QRect &rect,
+                                                   bool recursive)
+{
+    // TODO: handle 'recursive'
+
+    KisKeyframeChannel *channel =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    if (!recursive && channel) {
+        const int currentTime = m_d->currentTime;
+
+        // TODO: check which frames are affected and emit corresponding
+        //       range
+        emit sigFramesChanged(KisTimeRange(currentTime, 1));
+    } else {
+        emit sigFramesChanged(KisTimeRange::infinity());
+    }
+}

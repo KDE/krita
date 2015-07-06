@@ -16,17 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
-#define __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
+#include "kis_time_range.h"
 
-#include <QtTest/QtTest>
 
-class KisImageAnimationInterfaceTest : public QObject
-{
-    Q_OBJECT
-private slots:
-    void testFrameRegeneration();
-    void testFramesChangedSignal();
+struct KisTimeRangeStaticRegistrar {
+    KisTimeRangeStaticRegistrar() {
+        qRegisterMetaType<KisTimeRange>("KisTimeRange");
+    }
 };
 
-#endif /* __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H */
+static KisTimeRangeStaticRegistrar __registrar;

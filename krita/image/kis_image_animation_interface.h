@@ -24,6 +24,7 @@
 
 #include "kis_types.h"
 #include "krita_export.h"
+#include "kis_time_range.h"
 
 
 class KisUpdatesFacade;
@@ -86,6 +87,8 @@ public:
 
     QImage getCachedFrame(int time);
 
+    void notifyNodeChanged(KisNode *node, const QRect &rect, bool recursive);
+
 private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;
@@ -97,6 +100,7 @@ private:
 Q_SIGNALS:
     void sigFrameReady();
     void sigTimeChanged(int newTime);
+    void sigFramesChanged(KisTimeRange range);
 
 private:
     struct Private;

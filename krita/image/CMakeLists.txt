@@ -169,6 +169,7 @@ set(kritaimage_LIB_SRCS
    kis_histogram.cc
    kis_image_interfaces.cpp
    kis_image_animation_interface.cpp
+   kis_time_range.cpp
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp

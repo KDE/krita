@@ -27,6 +27,7 @@
 
 #include "kis_image_animation_interface.h"
 #include "kis_signal_compressor_with_param.h"
+#include "kis_raster_keyframe_channel.h"
 
 
 void checkFrame(KisImageAnimationInterface *i, int frameId, bool externalFrameActive, const QRect &rc)
@@ -125,6 +126,28 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
 
     // current frame is still unchanged
     checkFrame(i, 0, false, rc1 | rc2);
+}
+
+void KisImageAnimationInterfaceTest::testFramesChangedSignal()
+{
+    QRect refRect(QRect(0,0,512,512));
+    TestUtil::MaskParent p(refRect);
+
+    KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
+    p.image->addNode(layer2);
+
+    KisImageAnimationInterface *i = p.image->animationInterface();
+    KisPaintDeviceSP dev1 = p.layer->paintDevice();
+    KisPaintDeviceSP dev2 = layer2->paintDevice();
+
+    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange)));
+
+    i->notifyNodeChanged(layer2.data(), QRect(), false);
+
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+
+    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange(0, 1));
 }
 
 QTEST_KDEMAIN(KisImageAnimationInterfaceTest, GUI)

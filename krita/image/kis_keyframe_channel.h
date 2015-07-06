@@ -32,6 +32,11 @@ class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
     Q_OBJECT
 
 public:
+    // Standard Keyframe Ids
+
+    static const KoID Content;
+
+public:
     KisKeyframeChannel(const KoID& id, KisNodeWSP node);
     ~KisKeyframeChannel();
 

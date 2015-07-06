@@ -95,7 +95,7 @@ void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintCha
 
     m_d->paintChannelFlags = paintChannelFlags;
 
-    m_d->contentChannel = paintDevice->createKeyframeChannel(KoID("content", "Content"), this);
+    m_d->contentChannel = paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
 
     addKeyframeChannel(m_d->contentChannel);
 }

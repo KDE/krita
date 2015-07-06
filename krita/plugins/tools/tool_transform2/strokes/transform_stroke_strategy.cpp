@@ -19,6 +19,7 @@
 #include "transform_stroke_strategy.h"
 
 #include <QMutexLocker>
+#include "kundo2commandextradata.h"
 
 #include "kis_node_progress_proxy.h"
 
@@ -31,7 +32,6 @@
 #include <kis_transform_mask.h>
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
-
 
 
 class ModifyTransformMaskCommand : public KUndo2Command {
@@ -306,7 +306,7 @@ void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &c
     }
 }
 
-struct TransformExtraData : public KUndo2Command::ExtraData
+struct TransformExtraData : public KUndo2CommandExtraData
 {
     ToolTransformArgs savedTransformArgs;
 };

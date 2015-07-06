@@ -80,6 +80,7 @@
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
+#include "kis_crop_saved_extra_data.h"
 
 #include "kis_layer_projection_plane.h"
 
@@ -433,10 +434,16 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     emitSignals << ComplexSizeChangedSignal(newRect, newRect.size());
     emitSignals << ModifiedSignal;
 
+    KisCropSavedExtraData *extraData =
+        new KisCropSavedExtraData(cropLayers ?
+                                  KisCropSavedExtraData::CROP_IMAGE :
+                                  KisCropSavedExtraData::RESIZE_IMAGE,
+                                  newRect);
+
     KisProcessingApplicator applicator(this, m_d->rootLayer,
                                        KisProcessingApplicator::RECURSIVE |
                                        KisProcessingApplicator::NO_UI_UPDATES,
-                                       emitSignals, actionName);
+                                       emitSignals, actionName, extraData);
 
     if (cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
@@ -468,9 +475,13 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
+    KisCropSavedExtraData *extraData =
+        new KisCropSavedExtraData(KisCropSavedExtraData::CROP_LAYER,
+                                  newRect, node);
+
     KisProcessingApplicator applicator(this, node,
                                        KisProcessingApplicator::RECURSIVE,
-                                       emitSignals, actionName);
+                                       emitSignals, actionName, extraData);
 
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);

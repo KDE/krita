@@ -171,6 +171,7 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
+   kis_crop_saved_extra_data.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp

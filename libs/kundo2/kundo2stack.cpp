@@ -405,16 +405,12 @@ bool KUndo2Command::isMerged()
     return !m_mergeCommandsVector.isEmpty();
 }
 
-KUndo2Command::ExtraData::~ExtraData()
-{
-}
-
-KUndo2Command::ExtraData* KUndo2Command::extraData() const
+KUndo2CommandExtraData* KUndo2Command::extraData() const
 {
     return d->extraData.data();
 }
 
-void KUndo2Command::setExtraData(ExtraData *data)
+void KUndo2Command::setExtraData(KUndo2CommandExtraData *data)
 {
     d->extraData.reset(data);
 }

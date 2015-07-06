@@ -20,24 +20,56 @@
 
 #include <QMap>
 
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
+
 struct KisAnimationFrameCache::Private
 {
     QMap<int, QImage> frames;
+    KisImage *image;
+
+    Private(KisImage *image)
+        : image(image)
+    {}
 };
 
-KisAnimationFrameCache::KisAnimationFrameCache()
-    : m_d(new Private())
-{}
+KisAnimationFrameCache::KisAnimationFrameCache(KisImage *image, KisImageAnimationInterface *interface)
+    : m_d(new Private(image))
+{
+    // Note: we can't get the animation interface through image, since it's not fully initialized yet.
+
+    connect(interface, SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
+    connect(interface, SIGNAL(sigFrameReady()), this, SLOT(frameReady()), Qt::DirectConnection);
+}
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
 {}
 
 QImage KisAnimationFrameCache::getFrame(int time)
 {
+    if (!m_d->frames.contains(time)) {
+        m_d->image->animationInterface()->requestFrameRegeneration(time, m_d->image->bounds());
+    }
+
     return m_d->frames.value(time);
 }
 
-void KisAnimationFrameCache::cacheFrame(int time, QImage frame)
+void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
 {
-    m_d->frames.insert(time, frame);
+    if (!range.isValid()) return;
+
+    int end = range.isInfinite() ?
+        (m_d->frames.constEnd().key()) : // TODO: better way to determine the "last" frame?
+        (range.end());
+
+    for (int t=range.start(); t <= end; t++) {
+        // TODO: invalidate
+        m_d->frames.remove(t);
+    }
+}
+
+void KisAnimationFrameCache::frameReady()
+{
+    QImage projection = m_d->image->animationInterface()->frameProjection()->convertToQImage(m_d->image->profile(), m_d->image->bounds());
+    m_d->frames.insert(m_d->image->animationInterface()->currentTime(), projection);
 }

@@ -39,7 +39,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     : m_d(new Private)
 {
     m_d->image = image;
-    m_d->frameCache = new KisAnimationFrameCache();
+    m_d->frameCache = new KisAnimationFrameCache(image, this);
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -59,11 +59,6 @@ bool KisImageAnimationInterface::externalFrameActive() const
 
 void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
 {
-    // TODO: remove once proper frame caching is implemented
-    QImage frameProjection = m_d->image->convertToQImage(m_d->image->bounds(), m_d->image->profile());
-    m_d->frameCache->cacheFrame(m_d->currentTime, frameProjection);
-    // </TODO>
-
     m_d->image->barrierLock();
     m_d->currentTime = frameId;
     m_d->image->unlock();
@@ -137,6 +132,8 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    const QRect &rect,
                                                    bool recursive)
 {
+    if (externalFrameActive()) return;
+
     KisKeyframeChannel *channel =
         node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 

@@ -20,24 +20,34 @@
 #define KIS_ANIMATION_FRAME_CACHE_H
 
 #include <QImage>
+#include <QObject>
 
 #include <krita_export.h>
+#include "kis_time_range.h"
 
-class KisAnimationFrameCache
+class KisImage;
+class KisImageAnimationInterface;
+
+class KisAnimationFrameCache : QObject
 {
+    Q_OBJECT
 
 public:
 
-    KisAnimationFrameCache();
+    KisAnimationFrameCache(KisImage *image, KisImageAnimationInterface *interface);
     ~KisAnimationFrameCache();
 
     QImage getFrame(int time);
-    void cacheFrame(int time, QImage frame);
 
 private:
 
     struct Private;
     QScopedPointer<Private> m_d;
+
+private slots:
+    void framesChanged(const KisTimeRange &range, const QRect &rect);
+    void frameReady();
+
 };
 
 #endif

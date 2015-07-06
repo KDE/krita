@@ -153,7 +153,7 @@ public:
      * @param id internal name for channel
      * @return keyframe channel with the id, or null if not found
      */
-    KisKeyframeChannel *getKeyframeChannel(const QString &id);
+    KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
     /**
      * The rendering of the image may not always happen in the order

@@ -19,6 +19,7 @@
 #ifndef __KIS_TIME_RANGE_H
 #define __KIS_TIME_RANGE_H
 
+#include <algorithm>
 #include <limits>
 #include <QMetaType>
 #include <boost/operators.hpp>
@@ -41,6 +42,24 @@ public:
 
     bool operator==(const KisTimeRange &rhs) const {
         return rhs.m_start == m_start && rhs.m_end == m_end;
+    }
+
+    KisTimeRange& operator|=(const KisTimeRange &rhs) {
+        if (!isValid()) {
+            m_start = rhs.start();
+        } else if (rhs.isValid()) {
+            m_start = std::min(m_start, rhs.start());
+        }
+
+        if (rhs.isInfinite() || isInfinite()) {
+            m_end = std::numeric_limits<int>::min();
+        } else if (!isValid()) {
+            m_end = rhs.end();
+        } else {
+            m_end = std::max(m_end, rhs.end());
+        }
+
+        return *this;
     }
 
     inline int start() const {

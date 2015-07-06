@@ -87,7 +87,7 @@ public:
 
     QImage getCachedFrame(int time);
 
-    void notifyNodeChanged(KisNode *node, const QRect &rect, bool recursive);
+    void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
 
 private:
     // interface for:
@@ -100,7 +100,7 @@ private:
 Q_SIGNALS:
     void sigFrameReady();
     void sigTimeChanged(int newTime);
-    void sigFramesChanged(KisTimeRange range);
+    void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
 
 private:
     struct Private;

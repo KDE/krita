@@ -245,7 +245,7 @@ QList<KisKeyframeChannel*> KisNode::keyframeChannels() const
     return m_d->keyframeChannels.values();
 }
 
-KisKeyframeChannel * KisNode::getKeyframeChannel(const QString &id)
+KisKeyframeChannel * KisNode::getKeyframeChannel(const QString &id) const
 {
     QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
     if (i == m_d->keyframeChannels.end()) return 0;

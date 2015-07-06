@@ -117,22 +117,39 @@ QImage KisImageAnimationInterface::getCachedFrame(int time)
     return m_d->frameCache->getFrame(time);
 }
 
-void KisImageAnimationInterface::notifyNodeChanged(KisNode *node,
-                                                   const QRect &rect,
-                                                   bool recursive)
+void calculateAffectedFramesRecursive(const KisNode *node, int time, KisTimeRange &range)
 {
-    // TODO: handle 'recursive'
-
     KisKeyframeChannel *channel =
         node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-    if (!recursive && channel) {
+    if (channel) {
+        range |= channel->affectedFrames(time);
+    }
+
+    KisNodeSP child = node->firstChild();
+    while (child) {
+        calculateAffectedFramesRecursive(child, time, range);
+        child = child->nextSibling();
+    }
+}
+
+void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
+                                                   const QRect &rect,
+                                                   bool recursive)
+{
+    KisKeyframeChannel *channel =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    if (recursive) {
+        KisTimeRange range;
+        calculateAffectedFramesRecursive(node, currentTime(), range);
+
+        emit sigFramesChanged(range, rect);
+    } else if (channel) {
         const int currentTime = m_d->currentTime;
 
-        // TODO: check which frames are affected and emit corresponding
-        //       range
-        emit sigFramesChanged(KisTimeRange(currentTime, 1));
+        emit sigFramesChanged(channel->affectedFrames(currentTime), rect);
     } else {
-        emit sigFramesChanged(KisTimeRange::infinite(0));
+        emit sigFramesChanged(KisTimeRange::infinite(0), rect);
     }
 }

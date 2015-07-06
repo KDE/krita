@@ -133,6 +133,7 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     QRect refRect(QRect(0,0,512,512));
     TestUtil::MaskParent p(refRect);
 
+    KisPaintLayerSP layer1 = p.layer;
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
@@ -140,14 +141,38 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
 
-    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange)));
+    KisKeyframeChannel *channel = dev2->keyframeChannel();
+    channel->addKeyframe(10);
+    channel->addKeyframe(20);
+
+    p.image->animationInterface()->switchCurrentTimeAsync(15);
+
+    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange,QRect)));
+
+    i->notifyNodeChanged(layer1.data(), QRect(), false);
+
+    QCOMPARE(spy.count(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange::infinite(0));
 
     i->notifyNodeChanged(layer2.data(), QRect(), false);
 
     QCOMPARE(spy.count(), 1);
-    QList<QVariant> arguments = spy.takeFirst();
+    arguments = spy.takeFirst();
+    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange(10, 10));
 
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange(0, 1));
+    // Recursive
+
+    channel = dev1->keyframeChannel();
+    channel->addKeyframe(13);
+
+    spy.clear();
+    i->notifyNodeChanged(p.image->root().data(), QRect(), true);
+
+    QCOMPARE(spy.count(), 1);
+    arguments = spy.takeFirst();
+    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange::infinite(10));
+
 }
 
 QTEST_KDEMAIN(KisImageAnimationInterfaceTest, GUI)

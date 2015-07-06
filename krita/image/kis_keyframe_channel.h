@@ -78,8 +78,8 @@ signals:
     void sigKeyframeMoved(KisKeyframe *keyframe, int fromTime);
 
 protected:
-    QMap<int, KisKeyframe *> keys();
-    const QMap<int, KisKeyframe *> constKeys() const;
+    QMap<int, KisKeyframe *> &keys();
+    const QMap<int, KisKeyframe *> &constKeys() const;
     QMap<int, KisKeyframe*>::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframe * createKeyframe(int time, const KisKeyframe *copySrc) = 0;

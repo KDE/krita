@@ -184,12 +184,12 @@ void KisKeyframeChannel::loadXML(KoXmlNode channelNode)
     }
 }
 
-QMap<int, KisKeyframe *> KisKeyframeChannel::keys()
+QMap<int, KisKeyframe *>& KisKeyframeChannel::keys()
 {
     return m_d->keys;
 }
 
-const QMap<int, KisKeyframe *> KisKeyframeChannel::constKeys() const
+const QMap<int, KisKeyframe *>& KisKeyframeChannel::constKeys() const
 {
     return m_d->keys;
 }
@@ -210,10 +210,9 @@ KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *co
 
 QMap<int, KisKeyframe*>::const_iterator KisKeyframeChannel::activeKeyIterator(int time) const
 {
-    const QMap<int, KisKeyframe *> keys = constKeys();
-    QMap<int, KisKeyframe*>::const_iterator i = keys.upperBound(time);
+    QMap<int, KisKeyframe*>::const_iterator i = m_d->keys.upperBound(time);
 
-    if (i != keys.begin()) i--;
+    if (i != m_d->keys.begin()) i--;
 
     return i;
 }

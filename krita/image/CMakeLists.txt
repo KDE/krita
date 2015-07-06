@@ -172,6 +172,7 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
+   kis_crop_saved_extra_data.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp
@@ -301,8 +302,8 @@ set(einspline_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

@@ -37,6 +37,7 @@
 #include <QTemporaryFile>
 
 #include <unistd.h>
+#include <stdio.h>
 
 SQLiteVacuum::SQLiteVacuum(const QString& filePath)
         : m_filePath(filePath)
@@ -198,13 +199,14 @@ void SQLiteVacuum::dumpProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     QFileInfo fi(m_filePath);
     const uint origSize = fi.size();
 
-    if (!QFile::rename(m_tmpFilePath, fi.absoluteFilePath())) {
+    const    QByteArray oldName(QFile::encodeName(m_tmpFilePath)), newName(QFile::encodeName(fi.absoluteFilePath()));
+    if (0 != ::rename(oldName.constData(), newName.constData())) {
         kWarning() << "Rename" << m_tmpFilePath << "to" << fi.absoluteFilePath() << "failed.";
         m_result = false;
     }
 
     if (m_result == true) {
-        const uint newSize = fi.size();
+        const uint newSize = QFileInfo(m_filePath).size();
         const uint decrease = 100 - 100 * newSize / origSize;
         KMessageBox::information(0,
             i18nc("@info", "The database has been compacted. Current size decreased by %1% to %2.",

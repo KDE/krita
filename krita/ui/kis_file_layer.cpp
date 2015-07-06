@@ -145,8 +145,9 @@ void KisFileLayer::slotLoadingFinished(KisImageSP importedImage)
     else if (m_scalingMethod == ToImageSize) {
         QSize sz = importedImage->size();
         sz.scale(image()->size(), Qt::KeepAspectRatio);
-        qreal xscale =  sz.width() / importedImage->width();
-        qreal yscale = sz.height() / importedImage->height();
+        qreal xscale =  (qreal)sz.width() / (qreal)importedImage->width();
+        qreal yscale = (qreal)sz.height() / (qreal)importedImage->height();
+
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }

@@ -16,18 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PROJECTION_LEAF_TEST_H
-#define __KIS_PROJECTION_LEAF_TEST_H
+#include "kis_crop_saved_extra_data.h"
 
-#include <QtTest/QtTest>
+#include "kis_node.h"
 
-class KisProjectionLeafTest : public QObject
+
+KisCropSavedExtraData::KisCropSavedExtraData(Type type,
+                                             QRect cropRect,
+                                             KisNodeSP cropNode)
+    : m_type(type),
+      m_cropRect(cropRect),
+      m_cropNode(cropNode)
 {
-    Q_OBJECT
-private slots:
-    void test();
-    void testPassThrough();
-    void testNestedPassThrough();
-};
+}
 
-#endif /* __KIS_PROJECTION_LEAF_TEST_H */
+KisCropSavedExtraData::~KisCropSavedExtraData()
+{
+}

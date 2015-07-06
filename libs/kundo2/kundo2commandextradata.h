@@ -16,18 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PROJECTION_LEAF_TEST_H
-#define __KIS_PROJECTION_LEAF_TEST_H
+#ifndef __KUNDO2COMMANDEXTRADATA_H
+#define __KUNDO2COMMANDEXTRADATA_H
 
-#include <QtTest/QtTest>
+#include "kundo2_export.h"
 
-class KisProjectionLeafTest : public QObject
+
+class KUNDO2_EXPORT KUndo2CommandExtraData
 {
-    Q_OBJECT
-private slots:
-    void test();
-    void testPassThrough();
-    void testNestedPassThrough();
+public:
+    virtual ~KUndo2CommandExtraData();
 };
 
-#endif /* __KIS_PROJECTION_LEAF_TEST_H */
+#endif /* __KUNDO2COMMANDEXTRADATA_H */

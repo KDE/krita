@@ -777,7 +777,6 @@ private:
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
-    static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
 
     void requestProjectionUpdateImpl(KisNode *node,
                                      const QRect& rect,

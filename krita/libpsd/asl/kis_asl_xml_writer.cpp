@@ -265,7 +265,7 @@ QString KisAslXmlWriter::writePattern(const QString &key, const KoPattern *patte
 
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    pattern->saveToDevice(&buffer);
+    pattern->savePatToDevice(&buffer);
 
     QDomCDATASection dataSection = m_d->document.createCDATASection(qCompress(buffer.buffer()).toBase64());
 

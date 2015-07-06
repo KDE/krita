@@ -26,8 +26,6 @@
 #include <QStack>
 #include <QPair>
 
-#include <kdemacros.h>
-
 #include "koodf_export.h"
 #include <KoXmlReader.h>
 

@@ -255,7 +255,7 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         d->lockable = false;
     } else {
         d->collapsable = d->collapsableSet;
-        d->collapseButton->setVisible(true);
+        d->collapseButton->setVisible(d->collapsableSet);
         d->lockButton->setVisible(true);
         d->lockable = true;
     }

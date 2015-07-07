@@ -8,7 +8,7 @@ set(kritappmimport_PART_SRCS
 
 kde4_add_plugin(kritappmimport ${kritappmimport_PART_SRCS})
 
-target_link_libraries(kritappmimport kritaui )
+target_link_libraries(kritappmimport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritappmimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

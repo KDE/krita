@@ -93,7 +93,7 @@ kde4_add_ui_files(musicshape_LIB_SRCS
 
 kde4_add_plugin(calligra_shape_music ${musicshape_LIB_SRCS})
 
-target_link_libraries(calligra_shape_music flake)
+target_link_libraries(calligra_shape_music flake ${KDE4_KFILE_LIBS})
 install(TARGETS calligra_shape_music DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

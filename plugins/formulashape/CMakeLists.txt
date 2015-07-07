@@ -108,7 +108,7 @@ kde4_add_ui_files( formulashape_PART_SRCS
 
 kde4_add_plugin(calligra_shape_formular ${formulashape_PART_SRCS})
 
-target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
+target_link_libraries(calligra_shape_formular kformula ${KDE4_KFILE_LIBS} ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

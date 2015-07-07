@@ -22,7 +22,7 @@
 #include <QIODevice>
 #include <KoPattern.h>
 
-class LIBKISPSD_EXPORT PsdPattern
+class KRITAPSD_EXPORT PsdPattern
 {
 public:
     PsdPattern();

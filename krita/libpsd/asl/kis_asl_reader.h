@@ -25,7 +25,7 @@ class QDomDocument;
 class QIODevice;
 
 
-class LIBKISPSD_EXPORT KisAslReader
+class KRITAPSD_EXPORT KisAslReader
 {
 public:
     QDomDocument readFile(QIODevice *device);

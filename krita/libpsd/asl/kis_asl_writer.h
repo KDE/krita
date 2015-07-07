@@ -25,7 +25,7 @@ class QDomDocument;
 class QIODevice;
 
 
-class LIBKISPSD_EXPORT KisAslWriter
+class KRITAPSD_EXPORT KisAslWriter
 {
 public:
     void writeFile(QIODevice *device, const QDomDocument &doc);

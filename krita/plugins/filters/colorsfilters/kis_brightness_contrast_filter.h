@@ -26,7 +26,7 @@
 #include "filter/kis_color_transformation_filter.h"
 #include "kis_config_widget.h"
 #include "ui_wdg_brightness_contrast.h"
-#include <filter/kis_filter_configuration.h>
+#include <filter/kis_color_transformation_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -45,7 +45,7 @@ public:
     }
 };
 
-class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration
+class KisBrightnessContrastFilterConfiguration : public KisColorTransformationConfiguration
 {
     
 public:

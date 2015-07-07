@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý lukast.dev@gmail.com
+ *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "kis_bcontrast_benchmark.h"
+#include "kis_level_filter_benchmark.h"
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
@@ -31,6 +31,7 @@
 
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
+#include "filter/kis_color_transformation_configuration.h"
 #include "filter/kis_filter.h"
 
 #include "kis_processing_information.h"
@@ -39,38 +40,44 @@
 #include <kis_iterator_ng.h>
 #include "krita_utils.h"
 
-void KisBContrastBenchmark::initTestCase()
+void KisLevelFilterBenchmark::initTestCase()
 {
-    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
+    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_device = new KisPaintDevice(m_colorSpace);
     m_color = KoColor(m_colorSpace);
-    
+
+    QColor qcolor(Qt::red);
     srand(31524744);
-    
+
     int r,g,b;
 
-    KisSequentialIterator it(m_device, QRect(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT));
+    KisSequentialIterator it(m_device, QRect(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT));
     do {
         r = rand() % 255;
         g = rand() % 255;
         b = rand() % 255;
-        
+
         m_color.fromQColor(QColor(r,g,b));
         memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
     } while (it.nextPixel());
-    
 }
 
-void KisBContrastBenchmark::cleanupTestCase()
+void KisLevelFilterBenchmark::cleanupTestCase()
 {
 }
 
-
-void KisBContrastBenchmark::benchmarkFilter()
+void KisLevelFilterBenchmark::benchmarkFilter()
 {
-    KisFilterSP filter = KisFilterRegistry::instance()->value("brightnesscontrast");
-    KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
+    KisFilterSP filter = KisFilterRegistry::instance()->value("levels");
+    //KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
 
+    KisColorTransformationConfiguration * kfc= new KisColorTransformationConfiguration("levels", 1);
+
+    kfc->setProperty("blackvalue", 75);
+    kfc->setProperty("whitevalue", 231);
+    kfc->setProperty("gammavalue", 1.0);
+    kfc->setProperty("outblackvalue", 0);
+    kfc->setProperty("outwhitevalue", 255);
     // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -96,5 +103,5 @@ void KisBContrastBenchmark::benchmarkFilter()
 
 
 
-QTEST_KDEMAIN(KisBContrastBenchmark, GUI)
-#include "kis_bcontrast_benchmark.moc"
+QTEST_KDEMAIN(KisLevelFilterBenchmark, GUI)
+#include "kis_level_filter_benchmark.moc"

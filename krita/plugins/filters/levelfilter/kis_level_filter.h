@@ -22,7 +22,6 @@
 #define _KIS_LEVEL_FILTER_H_
 
 #include "filter/kis_color_transformation_filter.h"
-#include "filter/kis_filter_configuration.h"
 #include "kis_config_widget.h"
 #include "ui_wdg_level.h"
 

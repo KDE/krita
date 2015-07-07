@@ -41,6 +41,7 @@
 #include "kis_processing_information.h"
 #include "kis_selection.h"
 #include "kis_types.h"
+#include "filter/kis_color_transformation_configuration.h"
 
 KisLevelFilter::KisLevelFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
@@ -271,7 +272,7 @@ void KisLevelConfigWidget::slotAutoLevel(void)
 
 KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
 {
-    KisFilterConfiguration * config = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
+    KisColorTransformationConfiguration * config = new KisColorTransformationConfiguration(KisLevelFilter::id().id(), 1);
 
     config->setProperty("blackvalue", m_page.blackspin->value());
     config->setProperty("whitevalue", m_page.whitespin->value());

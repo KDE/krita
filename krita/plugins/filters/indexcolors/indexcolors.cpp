@@ -27,7 +27,7 @@
 #include <kis_global.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
-#include <filter/kis_filter_configuration.h>
+#include <filter/kis_color_transformation_configuration.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 
 #include "kiswdgindexcolors.h"
@@ -87,7 +87,7 @@ KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent
 
 KisFilterConfiguration* KisFilterIndexColors::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 0);
 
     PaletteGeneratorConfig palCfg; // Default constructor is factory config
     config->setProperty("paletteGen",     palCfg.toByteArray());

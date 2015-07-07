@@ -55,7 +55,7 @@
 #include <kis_canvas_resource_provider.h>
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
-        : KisFilterConfiguration("brightnesscontrast", 1)
+        : KisColorTransformationConfiguration("brightnesscontrast", 1)
 {
 }
 

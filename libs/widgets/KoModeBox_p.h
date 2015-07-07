@@ -148,9 +148,9 @@ private:
         RightSide
     };
 
-    QIcon createTextIcon(const KoToolButton button);
-    QIcon createSimpleIcon(const KoToolButton button);
-    void addItem(const KoToolButton button);
+    QIcon createTextIcon(const KoToolButton &button) const;
+    QIcon createSimpleIcon(const KoToolButton &button) const;
+    void addItem(const KoToolButton &button);
 
 private:
     class Private;

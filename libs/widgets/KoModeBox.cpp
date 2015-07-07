@@ -257,7 +257,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
     }
 }
 
-QIcon KoModeBox::createTextIcon(const KoToolButton button)
+QIcon KoModeBox::createTextIcon(const KoToolButton &button) const
 {
     QSize iconSize = d->tabBar->iconSize();
     QFont smallFont  = KGlobalSettings::generalFont();
@@ -320,7 +320,7 @@ QIcon KoModeBox::createTextIcon(const KoToolButton button)
     return QIcon(QPixmap::fromImage(pm));
 }
 
-QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
+QIcon KoModeBox::createSimpleIcon(const KoToolButton &button) const
 {
     QSize iconSize = d->tabBar->iconSize();
 
@@ -344,7 +344,7 @@ QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
     return QIcon(QPixmap::fromImage(pm));
 }
 
-void KoModeBox::addItem(const KoToolButton button)
+void KoModeBox::addItem(const KoToolButton &button)
 {
     QWidget *oldwidget = d->addedWidgets[button.buttonGroupId];
     QWidget *widget;

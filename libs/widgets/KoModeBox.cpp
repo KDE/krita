@@ -160,7 +160,6 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
-    connect(d->tabBar, SIGNAL(currentChanged(int)), d->stack, SLOT(setCurrentIndex(int)));
     connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)),

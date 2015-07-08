@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,27 +15,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PSD_PATTERN_H
-#define PSD_PATTERN_H
+#ifndef _KIS_COLOR_TRANSFORMATION_CONFIGURATION_H_
+#define _KIS_COLOR_TRANSFORMATION_CONFIGURATION_H_
 
-#include "psd.h"
-#include <QIODevice>
-#include <KoPattern.h>
+#include "filter/kis_filter_configuration.h"
+#include "krita_export.h"
 
-class KRITAPSD_EXPORT PsdPattern
+class KoColorSpace;
+class KisColorTransformationFilter;
+
+class KRITAIMAGE_EXPORT KisColorTransformationConfiguration : public KisFilterConfiguration
 {
 public:
-    PsdPattern();
-    ~PsdPattern();
+    KisColorTransformationConfiguration(const QString & name, qint32 version);
+    virtual ~KisColorTransformationConfiguration();
 
-    void setPattern(KoPattern *pattern);
-    KoPattern *pattern() const;
+    KoColorTransformation *colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter * filter) const;
 
-    bool psd_write_pattern(QIODevice* io);
-    bool psd_read_pattern(QIODevice* io);
 private:
     struct Private;
-    Private * const d;
+    Private* const d;
 };
 
-#endif // PSD_PATTERN_H
+#endif /* _KIS_COLOR_TRANSFORMATION_CONFIGURATION_H_ */

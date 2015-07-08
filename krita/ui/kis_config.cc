@@ -1550,7 +1550,7 @@ void KisConfig::setCompressKra(bool compress)
 
 bool KisConfig::toolOptionsInDocker(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("ToolOptionsInDocker", false));
+    return (defaultValue ? true : m_cfg.readEntry("ToolOptionsInDocker", true));
 }
 
 void KisConfig::setToolOptionsInDocker(bool inDocker)

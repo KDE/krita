@@ -16,18 +16,46 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PROJECTION_LEAF_TEST_H
-#define __KIS_PROJECTION_LEAF_TEST_H
+#ifndef __KIS_CROP_SAVED_EXTRA_DATA_H
+#define __KIS_CROP_SAVED_EXTRA_DATA_H
 
-#include <QtTest/QtTest>
+#include <QRect>
 
-class KisProjectionLeafTest : public QObject
+#include "kundo2commandextradata.h"
+#include "kis_types.h"
+#include "krita_export.h"
+
+
+class KRITAIMAGE_EXPORT KisCropSavedExtraData : public KUndo2CommandExtraData
 {
-    Q_OBJECT
-private slots:
-    void test();
-    void testPassThrough();
-    void testNestedPassThrough();
+public:
+    enum Type {
+        CROP_IMAGE,
+        RESIZE_IMAGE,
+        CROP_LAYER
+    };
+
+public:
+
+    KisCropSavedExtraData(Type type, QRect cropRect, KisNodeSP cropNode = 0);
+    ~KisCropSavedExtraData();
+
+    inline Type type() const {
+        return m_type;
+    }
+
+    inline QRect cropRect() const {
+        return m_cropRect;
+    }
+
+    inline KisNodeSP cropNode() const {
+        return m_cropNode;
+    }
+
+private:
+    Type m_type;
+    QRect m_cropRect;
+    KisNodeSP m_cropNode;
 };
 
-#endif /* __KIS_PROJECTION_LEAF_TEST_H */
+#endif /* __KIS_CROP_SAVED_EXTRA_DATA_H */

@@ -184,11 +184,9 @@ int KisNodeDummiesGraph::dummiesCount() const
 
 KisNodeDummy* KisNodeDummiesGraph::nodeToDummy(KisNodeSP node)
 {
-    Q_ASSERT(m_dummiesMap.contains(node));
-    if (m_dummiesMap.contains(node)) {
-        return m_dummiesMap[node];
-    }
-    else {
+    KIS_ASSERT_RECOVER(m_dummiesMap.contains(node)) {
         return 0;
     }
+
+    return m_dummiesMap[node];
 }

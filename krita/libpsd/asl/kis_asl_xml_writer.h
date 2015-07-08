@@ -33,7 +33,7 @@ class KoStopGradient;
 class KoSegmentGradient;
 
 
-class LIBKISPSD_EXPORT KisAslXmlWriter
+class KRITAPSD_EXPORT KisAslXmlWriter
 {
 public:
     KisAslXmlWriter();

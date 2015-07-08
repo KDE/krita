@@ -50,6 +50,13 @@ public:
 
     void setExponentRatio(qreal dbl);
 
+    /**
+     * If set to block, it informs inheriting classes that they shouldn't emit signals
+     * if the update comes from a mouse dragging the slider.
+     * Set this to true when dragging the slider and updates during the drag are not needed.
+     */
+    void setBlockUpdateSignalOnDrag(bool block);
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
     virtual QSize minimumSize() const;
@@ -74,7 +81,11 @@ protected:
     int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
     virtual QString valueString() const = 0;
-    virtual void setInternalValue(int value) = 0;
+    /**
+     * Sets the slider internal value. Inheriting classes should respect blockUpdateSignal
+     * so that, in specific cases, we have a performance improvement. See setIgnoreMouseMoveEvents.
+     */
+    virtual void setInternalValue(int value, bool blockUpdateSignal) = 0;
 
 protected Q_SLOTS:
     void contextMenuEvent(QContextMenuEvent * event);
@@ -88,6 +99,9 @@ protected:
     void paint(QPainter& painter);
     void paintPlastique(QPainter& painter);
     void paintBreeze(QPainter& painter);
+
+private:
+    void setInternalValue(int value);
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
@@ -122,7 +136,7 @@ public Q_SLOTS:
 
 protected:
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool blockUpdateSignal);
 Q_SIGNALS:
     void valueChanged(int value);
 };
@@ -150,7 +164,7 @@ public:
     void setSingleStep(qreal value);
 protected:
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool blockUpdateSignal);
 Q_SIGNALS:
     void valueChanged(qreal value);
 };

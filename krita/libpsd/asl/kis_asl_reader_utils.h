@@ -40,7 +40,7 @@ namespace KisAslReaderUtils {
  * most of the time, based on the offset values written in PSD.
  */
 
-struct LIBKISPSD_EXPORT ASLParseException : public std::runtime_error
+struct KRITAPSD_EXPORT ASLParseException : public std::runtime_error
 {
     ASLParseException(const QString &msg)
         : std::runtime_error(msg.toAscii().data())
@@ -112,10 +112,10 @@ namespace KisAslReaderUtils {
  * - unicode string (length (4 bytes) + null-terminated unicode string (var)
  */
 
-LIBKISPSD_EXPORT QString readFixedString(QIODevice *device);
-LIBKISPSD_EXPORT QString readVarString(QIODevice *device);
-LIBKISPSD_EXPORT QString readPascalString(QIODevice *device);
-LIBKISPSD_EXPORT QString readUnicodeString(QIODevice *device);
+KRITAPSD_EXPORT QString readFixedString(QIODevice *device);
+KRITAPSD_EXPORT QString readVarString(QIODevice *device);
+KRITAPSD_EXPORT QString readPascalString(QIODevice *device);
+KRITAPSD_EXPORT QString readUnicodeString(QIODevice *device);
 
 }
 

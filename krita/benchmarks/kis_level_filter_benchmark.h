@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,27 +15,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PSD_PATTERN_H
-#define PSD_PATTERN_H
 
-#include "psd.h"
-#include <QIODevice>
-#include <KoPattern.h>
+#ifndef KIS_LEVEL_FILTER_BENCHMARK_H
+#define KIS_LEVEL_FILTER_BENCHMARK_H
 
-class KRITAPSD_EXPORT PsdPattern
+#include <QtTest>
+#include <kis_types.h>
+#include <KoColor.h>
+
+class KisPaintDevice;
+class KoColorSpace;
+class KoColor;
+
+class KisLevelFilterBenchmark : public QObject
 {
-public:
-    PsdPattern();
-    ~PsdPattern();
+    Q_OBJECT
 
-    void setPattern(KoPattern *pattern);
-    KoPattern *pattern() const;
-
-    bool psd_write_pattern(QIODevice* io);
-    bool psd_read_pattern(QIODevice* io);
 private:
-    struct Private;
-    Private * const d;
+    const KoColorSpace * m_colorSpace;
+    KisPaintDeviceSP m_device;
+    KoColor m_color;
+
+private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
+
+    void benchmarkFilter();
 };
 
-#endif // PSD_PATTERN_H
+#endif // KIS_LEVEL_FILTER_BENCHMARK_H

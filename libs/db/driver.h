@@ -289,6 +289,7 @@ public:
     //! \return a list of property names available for this driver.
     QList<QByteArray> propertyNames() const;
 
+    //! @return a structure that provides detailed information about driver's default behaviour.
     const DriverBehaviour* behaviour() const { return beh; }
 
 protected:

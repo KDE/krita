@@ -193,8 +193,9 @@ public:
      * <ul>
      * <li>if default pixel is transparent, then exact bounds
      *     of actual pixel data are returned
-     * <li>if default pixel is not transparent, then extent() of
-     *     the device is returned.
+     * <li>if default pixel is not transparent, then the union
+     *     (defaultBounds()->bounds() | nonDefaultPixelArea()) is
+     *     returned
      * </ul>
      * \see calculateExactBounds()
      */

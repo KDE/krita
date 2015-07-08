@@ -795,16 +795,30 @@ private:
 };
 
 template <class ComparePixelOp>
-QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startRect, ComparePixelOp compareOp)
+QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startRect, const QRect &endRect, ComparePixelOp compareOp)
 {
+    if (startRect == endRect) return startRect;
+
     // Solution n°2
-    qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
+    int  x, y, w, h;
+    int boundLeft, boundTop, boundRight, boundBottom;
+    int endDirN, endDirE, endDirS, endDirW;
 
+    startRect.getRect(&x, &y, &w, &h);
 
-    x = boundX2 = startRect.x();
-    y = boundY2 = startRect.y();
-    w = boundW2 = startRect.width();
-    h = boundH2 = startRect.height();
+    if (endRect.isEmpty()) {
+        endDirS = startRect.bottom();
+        endDirN = startRect.top();
+        endDirE = startRect.right();
+        endDirW = startRect.left();
+        startRect.getCoords(&boundLeft, &boundTop, &boundRight, &boundBottom);
+    } else {
+        endDirS = endRect.top() - 1;
+        endDirN = endRect.bottom() + 1;
+        endDirE = endRect.left() - 1;
+        endDirW = endRect.right() + 1;
+        endRect.getCoords(&boundLeft, &boundTop, &boundRight, &boundBottom);
+    }
 
     // XXX: a small optimization is possible by using H/V line iterators in the first
     //      and third cases, at the cost of making the code a bit more complex
@@ -813,11 +827,11 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
 
     bool found = false;
     {
-        for (qint32 y2 = y; y2 < y + h ; ++y2) {
+        for (qint32 y2 = y; y2 <= endDirS; ++y2) {
             for (qint32 x2 = x; x2 < x + w || found; ++ x2) {
                 accessor->moveTo(x2, y2);
                 if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
-                    boundY2 = y2;
+                    boundTop = y2;
                     found = true;
                     break;
                 }
@@ -831,17 +845,17 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
      * reason to check that 3 more times. They will not appear in the
      * meantime. Just return an empty bounding rect.
      */
-    if (!found) {
+    if (!found && endRect.isEmpty()) {
         return QRect();
     }
 
     found = false;
 
-    for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
+    for (qint32 y2 = y + h - 1; y2 >= endDirN ; --y2) {
         for (qint32 x2 = x + w - 1; x2 >= x || found; --x2) {
             accessor->moveTo(x2, y2);
             if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
-                boundH2 = y2 - boundY2 + 1;
+                boundBottom = y2;
                 found = true;
                 break;
             }
@@ -851,11 +865,11 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
     found = false;
 
     {
-        for (qint32 x2 = x; x2 < x + w ; ++x2) {
+        for (qint32 x2 = x; x2 <= endDirE ; ++x2) {
             for (qint32 y2 = y; y2 < y + h || found; ++y2) {
                 accessor->moveTo(x2, y2);
                 if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
-                    boundX2 = x2;
+                    boundLeft = x2;
                     found = true;
                     break;
                 }
@@ -869,11 +883,11 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
     // Look for right edge )
     {
 
-        for (qint32 x2 = x + w - 1; x2 >= x; --x2) {
+        for (qint32 x2 = x + w - 1; x2 >= endDirW; --x2) {
             for (qint32 y2 = y + h -1; y2 >= y || found; --y2) {
                 accessor->moveTo(x2, y2);
                 if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
-                    boundW2 = x2 - boundX2 + 1;
+                    boundRight = x2;
                     found = true;
                     break;
                 }
@@ -882,39 +896,43 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
         }
     }
 
-    return QRect(boundX2, boundY2, boundW2, boundH2);
+    return QRect(boundLeft, boundTop,
+                 boundRight - boundLeft + 1,
+                 boundBottom - boundTop + 1);
 }
 
 }
 
 QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
 {
-    QRect rc = extent();
+    QRect startRect = extent();
+    QRect endRect;
 
     quint8 defaultOpacity = m_d->colorSpace()->opacityU8(defaultPixel());
     if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
         if (!nonDefaultOnly) {
             /**
-             * We will not calculate exact bounds for the device,
-             * that is knows to be at least not smaller than image.
-             * It isn't worth it.
+             * We will calculate exact bounds only outside of the
+             * image bounds, and that'll be nondefault area only.
              */
 
-            return rc;
+            endRect = defaultBounds()->bounds();
+            nonDefaultOnly = true;
+
         } else {
-            rc = region().boundingRect();
+            startRect = region().boundingRect();
         }
     }
 
     if (nonDefaultOnly) {
         Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel());
-        rc = Impl::calculateExactBoundsImpl(this, rc, compareOp);
+        endRect = Impl::calculateExactBoundsImpl(this, startRect, endRect, compareOp);
     } else {
         Impl::CheckFullyTransparent compareOp(m_d->colorSpace());
-        rc = Impl::calculateExactBoundsImpl(this, rc, compareOp);
+        endRect = Impl::calculateExactBoundsImpl(this, startRect, endRect, compareOp);
     }
 
-    return rc;
+    return endRect;
 }
 
 

@@ -451,21 +451,23 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
-            bool masterPageNameChanged = false;
             QString masterPageName = table->frameFormat().property(KoTableStyle::MasterPageName).toString();
-            if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
-                masterPageNameChanged = true;
+            bool masterPageNameChanged = !masterPageName.isEmpty();
+            if (masterPageNameChanged) {
                 cursor->masterPageName = masterPageName;
             }
 
-            if (!virginPage() && acceptsPageBreak() && (masterPageNameChanged ||
-                   ((table->frameFormat().intProperty(KoTableStyle::BreakBefore) & KoText::PageBreak)))) {
-                d->endOfArea = new FrameIterator(cursor);
-                setBottom(d->y + d->footNotesHeight);
-                if (!d->blockRects.isEmpty()) {
-                    d->blockRects.last().setBottom(d->y);
+            if (!virginPage()) {
+                int breaktype = table->frameFormat().intProperty(KoTableStyle::BreakBefore);
+                if ((acceptsPageBreak() && (masterPageNameChanged || (breaktype == KoText::PageBreak)))
+                    || (acceptsColumnBreak() && (breaktype == KoText::ColumnBreak))) {
+                    d->endOfArea = new FrameIterator(cursor);
+                    setBottom(d->y + d->footNotesHeight);
+                    if (!d->blockRects.isEmpty()) {
+                        d->blockRects.last().setBottom(d->y);
+                    }
+                    return false;
                 }
-                return false;
             }
 
             // Let's create KoTextLayoutTableArea and let that handle the table
@@ -543,6 +545,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
                 area->setVirginPage(virginPage());
                 area->setAcceptsPageBreak(acceptsPageBreak());
+                area->setAcceptsColumnBreak(acceptsColumnBreak());
                 area->setReferenceRect(left(), right(), d->y, maximumAllowedBottom());
                 QTextLayout *blayout = block.layout();
                 blayout->beginLayout();
@@ -573,22 +576,23 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             } else {
                 // FIXME this doesn't work for cells inside tables. We probably should make it more
                 // generic to handle such cases too.
-                bool masterPageNameChanged = false;
                 QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
-                if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
-                    masterPageNameChanged = true;
+                bool masterPageNameChanged = !masterPageName.isEmpty();
+                if (masterPageNameChanged) {
                     cursor->masterPageName = masterPageName;
                 }
 
-                if (!virginPage() && acceptsPageBreak() &&
-                    (masterPageNameChanged ||
-                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak))) {
-                    d->endOfArea = new FrameIterator(cursor);
-                    setBottom(d->y + d->footNotesHeight);
-                    if (!d->blockRects.isEmpty()) {
-                        d->blockRects.last().setBottom(d->y);
+                if (!virginPage()) {
+                    int breaktype = block.blockFormat().intProperty(KoParagraphStyle::BreakBefore);
+                    if ((acceptsPageBreak() && (masterPageNameChanged || (breaktype == KoText::PageBreak)))
+                        ||(acceptsColumnBreak() && (breaktype == KoText::ColumnBreak))) {
+                        d->endOfArea = new FrameIterator(cursor);
+                        setBottom(d->y + d->footNotesHeight);
+                        if (!d->blockRects.isEmpty()) {
+                            d->blockRects.last().setBottom(d->y);
+                        }
+                        return false;
                     }
-                    return false;
                 }
 
                 if (layoutBlock(cursor) == false) {
@@ -603,8 +607,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
                 d->extraTextIndent = 0;
 
-                if (acceptsPageBreak()
-                    && (block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) & KoText::PageBreak)) {
+                int breaktype = block.blockFormat().intProperty(KoParagraphStyle::BreakAfter);
+                if ((acceptsPageBreak() && (breaktype & KoText::PageBreak))
+                    || (acceptsColumnBreak() && (breaktype & KoText::ColumnBreak))) {
                     Q_ASSERT(!cursor->it.atEnd());
                     QTextFrame::iterator nextIt = cursor->it;
                     ++nextIt;
@@ -1475,6 +1480,16 @@ void KoTextLayoutArea::setAcceptsPageBreak(bool accept)
 bool KoTextLayoutArea::acceptsPageBreak() const
 {
     return d->acceptsPageBreak;
+}
+
+void KoTextLayoutArea::setAcceptsColumnBreak(bool accept)
+{
+    d->acceptsColumnBreak = accept;
+}
+
+bool KoTextLayoutArea::acceptsColumnBreak() const
+{
+    return d->acceptsColumnBreak;
 }
 
 void KoTextLayoutArea::setVirginPage(bool virgin)

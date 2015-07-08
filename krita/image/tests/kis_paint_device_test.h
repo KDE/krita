@@ -51,6 +51,7 @@ private Q_SLOTS:
     void testExactBoundsWeirdNullAlphaCase();
     void benchmarkExactBoundsNullDefaultPixel();
     void testNonDefaultPixelArea();
+    void testExactBoundsNonTransparent();
 
     void testReadBytesWrapAround();
     void testWrappedRandomAccessor();

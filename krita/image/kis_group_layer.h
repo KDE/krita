@@ -98,6 +98,9 @@ public:
     bool passThroughMode() const;
     void setPassThroughMode(bool value);
 
+    QRect extent() const;
+    QRect exactBounds() const;
+
 protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;

@@ -19,6 +19,7 @@
 #include "transform_stroke_strategy.h"
 
 #include <QMutexLocker>
+#include "kundo2commandextradata.h"
 
 #include "kis_node_progress_proxy.h"
 
@@ -31,7 +32,6 @@
 #include <kis_transform_mask.h>
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
-
 
 
 class ModifyTransformMaskCommand : public KUndo2Command {
@@ -185,6 +185,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     ClearSelectionData *csd = dynamic_cast<ClearSelectionData*>(data);
 
     if(td) {
+        m_savedTransformArgs = td->config;
+
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();
             KisPaintDeviceSP device = td->node->paintDevice();
@@ -301,5 +303,56 @@ void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &c
         painter.setProgress(mergeUpdater);
         painter.bitBlt(mergeRect.topLeft(), src, mergeRect);
         painter.end();
+    }
+}
+
+struct TransformExtraData : public KUndo2CommandExtraData
+{
+    ToolTransformArgs savedTransformArgs;
+};
+
+void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
+{
+    TransformExtraData *data = new TransformExtraData();
+    data->savedTransformArgs = m_savedTransformArgs;
+
+    command->setExtraData(data);
+}
+
+bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args)
+{
+    const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
+
+    if (data) {
+        *args = data->savedTransformArgs;
+    }
+
+    return bool(data);
+}
+
+void TransformStrokeStrategy::initStrokeCallback()
+{
+    KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+    if (m_selection) {
+        m_selection->setVisible(false);
+    }
+}
+
+void TransformStrokeStrategy::finishStrokeCallback()
+{
+    if (m_selection) {
+        m_selection->setVisible(true);
+    }
+
+    KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+}
+
+void TransformStrokeStrategy::cancelStrokeCallback()
+{
+    KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+
+    if (m_selection) {
+        m_selection->setVisible(true);
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,27 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PSD_PATTERN_H
-#define PSD_PATTERN_H
 
-#include "psd.h"
-#include <QIODevice>
-#include <KoPattern.h>
+#include "kis_crop_saved_extra_data.h"
 
-class KRITAPSD_EXPORT PsdPattern
+#include "kis_node.h"
+
+
+KisCropSavedExtraData::KisCropSavedExtraData(Type type,
+                                             QRect cropRect,
+                                             KisNodeSP cropNode)
+    : m_type(type),
+      m_cropRect(cropRect),
+      m_cropNode(cropNode)
 {
-public:
-    PsdPattern();
-    ~PsdPattern();
+}
 
-    void setPattern(KoPattern *pattern);
-    KoPattern *pattern() const;
-
-    bool psd_write_pattern(QIODevice* io);
-    bool psd_read_pattern(QIODevice* io);
-private:
-    struct Private;
-    Private * const d;
-};
-
-#endif // PSD_PATTERN_H
+KisCropSavedExtraData::~KisCropSavedExtraData()
+{
+}

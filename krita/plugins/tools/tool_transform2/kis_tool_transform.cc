@@ -658,6 +658,28 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
     return result;
 }
 
+bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode)
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+
+    if (lastCommand &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args) &&
+        args->mode() == mode) {
+
+        args->saveContinuedState();
+
+        image()->undoAdapter()->undoLastCommand();
+        // FIXME: can we make it async?
+        image()->waitForDone();
+
+        result = true;
+    }
+
+    return result;
+}
+
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
@@ -829,6 +851,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
+    ToolTransformArgs fetchedArgs;
+    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode);
+
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
             !currentNode->paintDevice();
@@ -867,7 +892,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initThumbnailImage(previewDevice);
     updateSelectionPath();
 
-    if (!tryInitTransformModeFromNode(currentNode)) {
+    if (fetchedFromCommand) {
+        m_currentArgs = fetchedArgs;
+        initGuiAfterTransformMode();
+    } else if (!tryInitTransformModeFromNode(currentNode)) {
         initTransformMode(mode);
     }
 
@@ -904,9 +932,14 @@ void KisToolTransform::cancelStroke()
 {
     if (!m_strokeData.strokeId()) return;
 
-    image()->cancelStroke(m_strokeData.strokeId());
-    m_strokeData.clear();
-    m_changesTracker.reset();
+    if (m_currentArgs.continuedTransform()) {
+        m_currentArgs.restoreContinuedState();
+        endStroke();
+    } else {
+        image()->cancelStroke(m_strokeData.strokeId());
+        m_strokeData.clear();
+        m_changesTracker.reset();
+    }
 }
 
 void KisToolTransform::commitChanges()
@@ -1041,8 +1074,25 @@ void KisToolTransform::slotApplyTransform()
 
 void KisToolTransform::slotResetTransform()
 {
-    initTransformMode(m_currentArgs.mode());
-    slotEditingFinished();
+    if (m_currentArgs.continuedTransform()) {
+        ToolTransformArgs::TransformMode savedMode = m_currentArgs.mode();
+
+        if (m_currentArgs.continuedTransform()->mode() == savedMode) {
+            m_currentArgs.restoreContinuedState();
+            initGuiAfterTransformMode();
+            slotEditingFinished();
+
+        } else {
+            cancelStroke();
+            image()->waitForDone();
+            startStroke(savedMode);
+
+            KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
+        }
+    } else {
+        initTransformMode(m_currentArgs.mode());
+        slotEditingFinished();
+    }
 }
 
 void KisToolTransform::slotRestartTransform()

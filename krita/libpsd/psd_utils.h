@@ -28,26 +28,26 @@
 class QIODevice;
 class QString;
 
-bool LIBKISPSD_EXPORT psdwrite(QIODevice* io, quint8 v);
-bool LIBKISPSD_EXPORT psdwrite(QIODevice* io, quint16 v);
-bool LIBKISPSD_EXPORT psdwrite(QIODevice* io, qint16 v);
-bool LIBKISPSD_EXPORT psdwrite(QIODevice* io, quint32 v);
-bool LIBKISPSD_EXPORT psdwrite(QIODevice* io, const QString &s);
-bool LIBKISPSD_EXPORT psdwrite(QIODevice* io, double v);
-bool LIBKISPSD_EXPORT psdwrite_pascalstring(QIODevice* io, const QString &s);
-bool LIBKISPSD_EXPORT psdwrite_pascalstring(QIODevice* io, const QString &s, int padding);
-bool LIBKISPSD_EXPORT psdpad(QIODevice* io, quint32 padding);
+bool KRITAPSD_EXPORT psdwrite(QIODevice* io, quint8 v);
+bool KRITAPSD_EXPORT psdwrite(QIODevice* io, quint16 v);
+bool KRITAPSD_EXPORT psdwrite(QIODevice* io, qint16 v);
+bool KRITAPSD_EXPORT psdwrite(QIODevice* io, quint32 v);
+bool KRITAPSD_EXPORT psdwrite(QIODevice* io, const QString &s);
+bool KRITAPSD_EXPORT psdwrite(QIODevice* io, double v);
+bool KRITAPSD_EXPORT psdwrite_pascalstring(QIODevice* io, const QString &s);
+bool KRITAPSD_EXPORT psdwrite_pascalstring(QIODevice* io, const QString &s, int padding);
+bool KRITAPSD_EXPORT psdpad(QIODevice* io, quint32 padding);
 
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, quint8* v);
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, quint16* v);
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, qint16* v);
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, quint32* v);
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, qint32* v);
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, quint64* v);
-bool LIBKISPSD_EXPORT psdread(QIODevice* io, double* v);
-bool LIBKISPSD_EXPORT psdread_pascalstring(QIODevice* io, QString& s, int padding);
-bool LIBKISPSD_EXPORT psdread_unicodestring(QIODevice* io, QString &s);
-bool LIBKISPSD_EXPORT psd_read_blendmode(QIODevice* io, QString &blendModeKey);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, quint8* v);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, quint16* v);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, qint16* v);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, quint32* v);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, qint32* v);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, quint64* v);
+bool KRITAPSD_EXPORT psdread(QIODevice* io, double* v);
+bool KRITAPSD_EXPORT psdread_pascalstring(QIODevice* io, QString& s, int padding);
+bool KRITAPSD_EXPORT psdread_unicodestring(QIODevice* io, QString &s);
+bool KRITAPSD_EXPORT psd_read_blendmode(QIODevice* io, QString &blendModeKey);
 
 
 #endif // PSD_UTILS_H

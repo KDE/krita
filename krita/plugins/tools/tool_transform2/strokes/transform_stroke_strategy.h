@@ -76,7 +76,15 @@ public:
     KisSelectionSP realSelection() const;
 
 
+    void initStrokeCallback();
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
+
+    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args);
+
+protected:
+    void postProcessToplevelCommand(KUndo2Command *command);
 
 private:
     KoUpdaterPtr fetchUpdater(KisNodeSP node);
@@ -108,6 +116,9 @@ private:
 
     KisPaintDeviceSP m_previewDevice;
     KisTransformMaskSP writeToTransformMask;
+
+
+    ToolTransformArgs m_savedTransformArgs;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

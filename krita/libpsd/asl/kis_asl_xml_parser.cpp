@@ -366,7 +366,7 @@ bool tryParseDescriptor(const QDomElement &el,
             QBuffer buffer(&patternData);
             buffer.open(QIODevice::ReadOnly);
 
-            pattern->loadFromDevice(&buffer);
+            pattern->loadPatFromDevice(&buffer);
 
             catcher.addPattern(path, pattern.data());
         } else {

@@ -14,7 +14,6 @@ set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
     KoOdfManifestEntry.cpp
-    KoDom.cpp
     KoDocumentInfo.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
@@ -76,7 +75,6 @@ install( FILES
     KoOdf.h
     KoXmlNS.h
     KoOdfManifestEntry.h
-    KoDom.h
     KoGenStyle.h
     KoGenStyles.h
     KoFontFace.h

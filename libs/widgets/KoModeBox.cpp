@@ -169,8 +169,8 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
             this, SLOT(setCurrentLayer(const KoCanvasController *,const KoShapeLayer *)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(updateShownTools(QList<QString>)));
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
-            this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+            SIGNAL(addedTool(KoToolButton,KoCanvasController*)),
+            this, SLOT(toolAdded(KoToolButton,KoCanvasController*)));
 
     connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
          this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));

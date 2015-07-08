@@ -82,8 +82,8 @@ KoToolBox::KoToolBox()
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
-            this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+            SIGNAL(addedTool(KoToolButton,KoCanvasController*)),
+            this, SLOT(toolAdded(KoToolButton,KoCanvasController*)));
 
     QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }

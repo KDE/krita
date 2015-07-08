@@ -23,27 +23,44 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 
+QMap<KisImageWSP, KisAnimationFrameCache*> KisAnimationFrameCache::caches;
+
 struct KisAnimationFrameCache::Private
 {
     QMap<int, QImage> frames;
-    KisImage *image;
+    KisImageWSP image;
 
-    Private(KisImage *image)
+    Private(KisImageWSP image)
         : image(image)
     {}
 };
 
-KisAnimationFrameCache::KisAnimationFrameCache(KisImage *image, KisImageAnimationInterface *interface)
+KisAnimationFrameCacheSP KisAnimationFrameCache::getFrameCache(KisImageWSP image)
+{
+    KisAnimationFrameCache *cache;
+
+    QMap<KisImageWSP, KisAnimationFrameCache*>::iterator it = caches.find(image);
+    if (it == caches.end()) {
+        cache = new KisAnimationFrameCache(image);
+        caches.insert(image, cache);
+    } else {
+        cache = it.value();
+    }
+
+    return cache;
+}
+
+KisAnimationFrameCache::KisAnimationFrameCache(KisImageWSP image)
     : m_d(new Private(image))
 {
-    // Note: we can't get the animation interface through image, since it's not fully initialized yet.
-
-    connect(interface, SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
-    connect(interface, SIGNAL(sigFrameReady()), this, SLOT(frameReady()), Qt::DirectConnection);
+    connect(image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
+    connect(image->animationInterface(), SIGNAL(sigFrameReady()), this, SLOT(frameReady()), Qt::DirectConnection);
 }
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
-{}
+{
+    caches.remove(m_d->image);
+}
 
 QImage KisAnimationFrameCache::getFrame(int time)
 {

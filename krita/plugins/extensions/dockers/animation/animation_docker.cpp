@@ -26,6 +26,7 @@
 #include "kis_paint_layer.h"
 #include "kis_action_manager.h"
 #include "kis_image_animation_interface.h"
+#include "kis_animation_player.h"
 #include "kis_onion_skin_dialog.h"
 
 #include "ui_wdg_animation.h"

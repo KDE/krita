@@ -63,6 +63,8 @@
 #include "kis_exposure_gamma_correction_interface.h"
 #include "KisView.h"
 #include "kis_canvas_controller.h"
+#include "kis_animation_player.h"
+#include "kis_animation_frame_cache.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -127,6 +129,7 @@ public:
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
 
     KisAnimationPlayer *animationPlayer;
+    KisAnimationFrameCacheSP frameCache;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
@@ -439,6 +442,7 @@ void KisCanvas2::initializeImage()
     KisImageWSP image = m_d->view->image();
 
     m_d->coordinatesConverter->setImage(image);
+    m_d->frameCache = KisAnimationFrameCache::getFrameCache(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
@@ -869,6 +873,11 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 void KisCanvas2::setCursor(const QCursor &cursor)
 {
     canvasWidget()->setCursor(cursor);
+}
+
+KisAnimationFrameCacheSP KisCanvas2::frameCache()
+{
+    return m_d->frameCache;
 }
 
 KisAnimationPlayer *KisCanvas2::animationPlayer()

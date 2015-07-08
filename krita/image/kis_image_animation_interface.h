@@ -85,8 +85,6 @@ public:
      */
     void requestFrameRegeneration(int frameId, const QRegion &dirtyRegion);
 
-    QImage getCachedFrame(int time);
-
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
 
 private:

@@ -158,6 +158,9 @@ typedef QVector<KisAnnotationSP> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
+class KisAnimationFrameCache;
+typedef KisSharedPtr<KisAnimationFrameCache> KisAnimationFrameCacheSP;
+
 // Repeat iterators
 class KisHLineIterator2;
 template<class T> class KisRepeatHLineIteratorPixelBase;

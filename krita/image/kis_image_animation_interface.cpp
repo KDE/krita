@@ -20,7 +20,6 @@
 
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
-#include "kis_animation_frame_cache.h"
 #include "kis_keyframe_channel.h"
 
 struct KisImageAnimationInterface::Private
@@ -30,8 +29,6 @@ struct KisImageAnimationInterface::Private
     KisImage *image;
     int currentTime;
     bool externalFrameActive;
-
-    KisAnimationFrameCache *frameCache;
 };
 
 
@@ -39,12 +36,10 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     : m_d(new Private)
 {
     m_d->image = image;
-    m_d->frameCache = new KisAnimationFrameCache(image, this);
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
 {
-    delete m_d->frameCache;
 }
 
 int KisImageAnimationInterface::currentTime() const
@@ -105,11 +100,6 @@ void KisImageAnimationInterface::notifyFrameReady()
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const
 {
     return m_d->image;
-}
-
-QImage KisImageAnimationInterface::getCachedFrame(int time)
-{
-    return m_d->frameCache->getFrame(time);
 }
 
 void calculateAffectedFramesRecursive(const KisNode *node, int time, KisTimeRange &range)

@@ -34,8 +34,6 @@
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
 
-#include "kis_animation_player.h"
-
 class KoToolProxy;
 class KoColorProfile;
 
@@ -48,6 +46,7 @@ struct KisExposureGammaCorrectionInterface;
 class KisPaintingAssistantsDecoration;
 class KisView;
 class KisInputManager;
+class KisAnimationPlayer;
 
 enum KisCanvasType {
     QPAINTER,
@@ -173,6 +172,7 @@ public: // KisCanvas2 methods
 
     void setCursor(const QCursor &cursor);
 
+    KisAnimationFrameCacheSP frameCache();
     KisAnimationPlayer *animationPlayer();
     void startPlayback();
     void stopPlayback();

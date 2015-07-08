@@ -22,19 +22,24 @@
 #include <QImage>
 #include <QObject>
 
+#include "kis_types.h"
+#include "kis_shared.h"
 #include <krita_export.h>
+
 #include "kis_time_range.h"
 
 class KisImage;
 class KisImageAnimationInterface;
 
-class KisAnimationFrameCache : QObject
+class KisAnimationFrameCache : public QObject, public KisShared
 {
     Q_OBJECT
 
 public:
 
-    KisAnimationFrameCache(KisImage *image, KisImageAnimationInterface *interface);
+    static KisAnimationFrameCacheSP getFrameCache(KisImageWSP image);
+
+    KisAnimationFrameCache(KisImageWSP image);
     ~KisAnimationFrameCache();
 
     QImage getFrame(int time);
@@ -43,6 +48,7 @@ private:
 
     struct Private;
     QScopedPointer<Private> m_d;
+    static QMap<KisImageWSP, KisAnimationFrameCache*> caches;
 
 private slots:
     void framesChanged(const KisTimeRange &range, const QRect &rect);

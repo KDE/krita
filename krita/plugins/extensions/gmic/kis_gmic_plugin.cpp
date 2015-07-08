@@ -96,7 +96,17 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
     m_blacklistPath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
+    dumpCompiletimeFeatures();
 
+}
+
+KisGmicPlugin::~KisGmicPlugin()
+{
+    delete m_gmicWidget;
+}
+
+void KisGmicPlugin::dumpCompiletimeFeatures()
+{
     dbgPlugins << "<features>";
 #ifdef gmic_is_parallel
     dbgPlugins << "PTHREADS ON";
@@ -128,13 +138,8 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     #endif
 #endif
     dbgPlugins << "</features>";
-
 }
 
-KisGmicPlugin::~KisGmicPlugin()
-{
-    delete m_gmicWidget;
-}
 
 void KisGmicPlugin::setupDefinitionPaths()
 {
@@ -262,6 +267,7 @@ void KisGmicPlugin::slotCloseGmicDialog()
         m_smallPreviewRequestCounter = 0;
         m_onCanvasPreviewRequestCounter = 0;
         m_filteringIsRunning = false;
+        m_gmicCustomCommands.clear();
     }
 }
 

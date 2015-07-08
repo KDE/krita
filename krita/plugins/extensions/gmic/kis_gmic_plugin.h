@@ -82,6 +82,9 @@ private:
 
     void startProgressReporting();
 
+    // debug function
+    void dumpCompiletimeFeatures();
+
 private:
     KisGmicWidget * m_gmicWidget;
     KisGmicApplicator * m_gmicApplicator;

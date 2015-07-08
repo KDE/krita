@@ -19,7 +19,11 @@
 #include "kis_speed_smoother.h"
 
 #include <boost/circular_buffer.hpp>
+#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
+#else
+#include <QTime>
+#endif
 #include <QPointF>
 
 #include "kis_debug.h"
@@ -59,7 +63,11 @@ struct KisSpeedSmoother::Private
     DistanceBuffer distances;
 
     QPointF lastPoint;
+#if QT_VERSION >= 0x040700
     QElapsedTimer timer;
+#else
+    QTime timer;
+#endif
     qreal lastSpeed;
 };
 
@@ -80,7 +88,11 @@ qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt)
         return 0.0;
     }
 
+#if QT_VERSION >= 0x040700
     qreal time = qreal(m_d->timer.nsecsElapsed()) / 1000000;
+#else
+    qreal time = qreal(m_d->timer.elapsed());
+#endif
     qreal dist = kisDistance(pt, m_d->lastPoint);
     m_d->lastPoint = pt;
 

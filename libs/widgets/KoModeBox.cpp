@@ -405,7 +405,7 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
     d->addedButtons.clear();
 
     int newIndex = -1;
-    foreach (const KoToolButton button, d->buttons) {
+    foreach (const KoToolButton &button, d->buttons) {
         QString toolCodes = button.visibilityCode;
         if (button.buttonGroupId == d->activeId) {
             newIndex = d->addedButtons.length();
@@ -429,7 +429,7 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
             addItem(button);
             continue;
         } else {
-           foreach (const QString shapeCode, codes) {
+           foreach (const QString &shapeCode, codes) {
                 if (toolCodes.contains(shapeCode)) {
                     addItem(button);
                     break;

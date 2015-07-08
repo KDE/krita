@@ -86,6 +86,9 @@ protected:
     virtual bool canDeleteKeyframe(KisKeyframe *key) = 0;
     virtual void destroyKeyframe(KisKeyframe *key);
 
+    virtual QRect affectedRect(KisKeyframe *key) = 0;
+    virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
+
     virtual KisKeyframe * loadKeyframe(KoXmlNode keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const = 0;
 

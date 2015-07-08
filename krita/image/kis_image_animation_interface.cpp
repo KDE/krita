@@ -131,12 +131,17 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
         KisTimeRange range;
         calculateAffectedFramesRecursive(node, currentTime(), range);
 
-        emit sigFramesChanged(range, rect);
+        invalidateFrames(range, rect);
     } else if (channel) {
         const int currentTime = m_d->currentTime;
 
-        emit sigFramesChanged(channel->affectedFrames(currentTime), rect);
+        invalidateFrames(channel->affectedFrames(currentTime), rect);
     } else {
-        emit sigFramesChanged(KisTimeRange::infinite(0), rect);
+        invalidateFrames(KisTimeRange::infinite(0), rect);
     }
+}
+
+void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+    emit sigFramesChanged(range, rect);
 }

@@ -696,6 +696,13 @@ public:
     void deleteFrame(int frame);
 
     /**
+     * Get the bounds of a given frame
+     * @param frameId ID of the frame
+     * @return bounds
+     */
+    QRect frameBounds(int frameId);
+
+    /**
      * Return a list of IDs for the frames contained in this paint device
      * @return list of frame IDs
      */
@@ -810,14 +817,6 @@ private:
      * in the colorspace of this paint device.
      */
     QVector<qint32> channelSizes() const;
-
-private Q_SLOTS:
-    void keyframeAboutToBeAdded(KisKeyframe *keyframe);
-    void keyframeAdded(KisKeyframe *keyframe);
-    void keyframeAboutToBeRemoved(KisKeyframe *keyframe);
-    void keyframeRemoved(KisKeyframe *keyframe);
-    void keyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
-    void keyframeMoved(KisKeyframe *keyframe, int fromTime);
 
 protected:
     friend class KisSelectionTest;

@@ -81,3 +81,8 @@ void KisNodeGraphListener::notifySelectionChanged()
 void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QRect& /*rect*/)
 {
 }
+
+void KisNodeGraphListener::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+
+}

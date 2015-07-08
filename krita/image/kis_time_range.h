@@ -82,6 +82,14 @@ public:
         return m_end >= m_start;
     }
 
+    inline bool contains(int time) const {
+        if (m_end == std::numeric_limits<int>::min()) {
+            return m_start <= time;
+        }
+
+        return m_start <= time && time <= m_end;
+    }
+
     static inline KisTimeRange fromTime(int start, int end) {
         return KisTimeRange(start, end, true);
     }

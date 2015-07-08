@@ -64,10 +64,15 @@ KisKeyframe *KisKeyframeChannel::addKeyframe(int time)
 bool KisKeyframeChannel::deleteKeyframe(KisKeyframe *keyframe)
 {
     if (canDeleteKeyframe(keyframe)) {
+        QRect rect = affectedRect(keyframe);
+        KisTimeRange range = affectedFrames(keyframe->time());
+
         emit sigKeyframeAboutToBeRemoved(keyframe);
         m_d->keys.remove(keyframe->time());
         destroyKeyframe(keyframe);
         emit sigKeyframeRemoved(keyframe);
+
+        requestUpdate(range, rect);
 
         delete keyframe;
 
@@ -82,6 +87,9 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int newTime)
     KisKeyframe *other = keyframeAt(newTime);
     if (other) return false;
 
+    KisTimeRange rangeSrc = affectedFrames(keyframe->time());
+    QRect rectSrc = affectedRect(keyframe);
+
     emit sigKeyframeAboutToBeMoved(keyframe, newTime);
 
     m_d->keys.remove(keyframe->time());
@@ -90,6 +98,12 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int newTime)
     m_d->keys.insert(newTime, keyframe);
 
     emit sigKeyframeMoved(keyframe, oldTime);
+
+    KisTimeRange rangeDst = affectedFrames(keyframe->time());
+    QRect rectDst = affectedRect(keyframe);
+
+    requestUpdate(rangeSrc, rectSrc);
+    requestUpdate(rangeDst, rectDst);
 
     return true;
 }
@@ -205,6 +219,10 @@ KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *co
     m_d->keys.insert(time, keyframe);
     emit sigKeyframeAdded(keyframe);
 
+    QRect rect = affectedRect(keyframe);
+    KisTimeRange range = affectedFrames(time);
+    requestUpdate(range, rect);
+
     return keyframe;
 }
 
@@ -220,6 +238,11 @@ QMap<int, KisKeyframe*>::const_iterator KisKeyframeChannel::activeKeyIterator(in
 void KisKeyframeChannel::destroyKeyframe(KisKeyframe *key)
 {
      Q_UNUSED(key);
+}
+
+void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)
+{
+    m_d->node->invalidateFrames(range, rect);
 }
 
 #include "kis_keyframe_channel.moc"

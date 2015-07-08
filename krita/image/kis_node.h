@@ -19,6 +19,7 @@
 #define _KIS_NODE_H
 
 #include "kis_types.h"
+#include "kis_time_range.h"
 
 #include "kis_undo_adapter.h"
 #include "kis_base_node.h"
@@ -127,6 +128,13 @@ public:
      * node, if propagate is true;
      */
     virtual void setDirty(const QRegion &region);
+
+    /**
+     * Informs that the frames in the given range are no longer valid
+     * and need to be recached.
+     * @param range frames to invalidate
+     */
+    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
     /**
      * \return a pointer to a KisAbstractProjectionPlane interface of

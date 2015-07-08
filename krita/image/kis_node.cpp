@@ -562,4 +562,11 @@ void KisNode::setDirty(const QRect & rect)
     }
 }
 
+void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->invalidateFrames(range, rect);
+    }
+}
+
 #include "kis_node.moc"

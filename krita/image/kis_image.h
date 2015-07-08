@@ -90,6 +90,7 @@ public: // KisNodeGraphListener implementation
     void nodeChanged(KisNode * node);
     void notifySelectionChanged();
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
+    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc);

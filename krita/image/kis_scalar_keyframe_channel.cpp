@@ -86,6 +86,11 @@ void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframe *key)
     m_d->values.remove(key->value());
 }
 
+QRect KisScalarKeyframeChannel::affectedRect(KisKeyframe *key)
+{
+    return QRect();
+}
+
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const
 {
     keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);

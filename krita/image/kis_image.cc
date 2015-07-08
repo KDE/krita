@@ -1612,6 +1612,11 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
     }
 }
 
+void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+    m_d->animationInterface->invalidateFrames(range, rect);
+}
+
 QList<KisLayerComposition*> KisImage::compositions()
 {
     return m_d->compositions;

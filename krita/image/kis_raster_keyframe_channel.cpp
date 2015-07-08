@@ -89,6 +89,41 @@ void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key)
     m_d->paintDevice->deleteFrame(key->value());
 }
 
+QRect KisRasterKeyframeChannel::affectedRect(KisKeyframe *key)
+{
+    QMap<int, KisKeyframe *>::iterator it = keys().find(key->time());
+    QRect rect;
+
+    // Calculate changed area as the union of the current and previous keyframe.
+    // This makes sure there are no artifacts left over from the previous frame
+    // where the new one doesn't cover the area.
+
+    if (it == keys().begin()) {
+        // Using the *next* keyframe at the start of the timeline avoids artifacts
+        // when deleting or moving the first key
+        it++;
+    } else {
+        it--;
+    }
+
+    if (it != keys().end()) {
+        rect = m_d->paintDevice->frameBounds(it.value()->value());
+    }
+
+    rect |= m_d->paintDevice->frameBounds(key->value());
+
+    return rect;
+}
+
+void KisRasterKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)
+{
+    KisKeyframeChannel::requestUpdate(range, rect);
+
+    if (range.contains(m_d->paintDevice->defaultBounds()->currentTime())) {
+        m_d->paintDevice->setDirty(rect);
+    }
+}
+
 void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const
 {
     keyframeElement.setAttribute("frame", keyframe->value());

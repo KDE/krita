@@ -264,6 +264,16 @@ struct KisPaintDevice::Private
         }
     }
 
+    QRect frameBounds(int frameId)
+    {
+        Data *data = frames[frameId];
+
+        QRect extent = data->dataManager->extent();
+        extent.translate(data->x, data->y);
+
+        return extent;
+    }
+
     const QList<int> frameIds() const
     {
         return frames.keys();
@@ -1437,13 +1447,6 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, 
 
     m_d->contentChannel = new KisRasterKeyframeChannel(id, node, this);
 
-    connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframe*)), this, SLOT(keyframeAboutToBeAdded(KisKeyframe*)), Qt::DirectConnection);
-    connect(m_d->contentChannel, SIGNAL(sigKeyframeAdded(KisKeyframe*)), this, SLOT(keyframeAdded(KisKeyframe*)), Qt::DirectConnection);
-    connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)), this, SLOT(keyframeAboutToBeRemoved(KisKeyframe*)), Qt::DirectConnection);
-    connect(m_d->contentChannel, SIGNAL(sigKeyframeRemoved(KisKeyframe*)), this, SLOT(keyframeRemoved(KisKeyframe*)), Qt::DirectConnection);
-    connect(m_d->contentChannel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframe*,int)), this, SLOT(keyframeAboutToBeMoved(KisKeyframe*, int)), Qt::DirectConnection);
-    connect(m_d->contentChannel, SIGNAL(sigKeyframeMoved(KisKeyframe*,int)), this, SLOT(keyframeMoved(KisKeyframe*, int)), Qt::DirectConnection);
-
     return m_d->contentChannel;
 }
 
@@ -1476,6 +1479,11 @@ QList<int> KisPaintDevice::frames()
 void KisPaintDevice::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
 {
     m_d->fetchFrame(frameId, targetDevice);
+}
+
+QRect KisPaintDevice::frameBounds(int frameId)
+{
+    return m_d->frameBounds(frameId);
 }
 
 const KoColorSpace* KisPaintDevice::colorSpace() const
@@ -1553,52 +1561,6 @@ QRegion KisPaintDevice::syncLodCache(int levelOfDetail)
     }
 
     return dirtyRegion;
-}
-
-void KisPaintDevice::keyframeAboutToBeAdded(KisKeyframe *keyframe)
-{
-    if (keyframe->affects(defaultBounds()->currentTime())) {
-        setDirty();
-    }
-}
-
-void KisPaintDevice::keyframeAdded(KisKeyframe *keyframe)
-{
-    if (keyframe->affects(defaultBounds()->currentTime())) {
-        setDirty();
-    }
-}
-
-void KisPaintDevice::keyframeAboutToBeRemoved(KisKeyframe *keyframe)
-{
-    if (keyframe->affects(defaultBounds()->currentTime())) {
-        setDirty();
-    }
-}
-
-void KisPaintDevice::keyframeRemoved(KisKeyframe *keyframe)
-{
-    if (keyframe->affects(defaultBounds()->currentTime())) {
-        setDirty();
-    }
-}
-
-void KisPaintDevice::keyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime)
-{
-    int time = defaultBounds()->currentTime();
-
-    if (keyframe->affects(time) || keyframe->wouldAffect(time, toTime)) {
-        setDirty();
-    }
-}
-
-void KisPaintDevice::keyframeMoved(KisKeyframe *keyframe, int fromTime)
-{
-    int time = defaultBounds()->currentTime();
-
-    if (keyframe->affects(time) || keyframe->wouldAffect(time, fromTime)) {
-        setDirty();
-    }
 }
 
 #include "kis_paint_device.moc"

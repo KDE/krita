@@ -57,6 +57,10 @@ protected:
     KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc);
     bool canDeleteKeyframe(KisKeyframe *key);
     void destroyKeyframe(KisKeyframe *key);
+
+    QRect affectedRect(KisKeyframe *key);
+    void requestUpdate(const KisTimeRange &range, const QRect &rect);
+
     void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const;
     KisKeyframe *loadKeyframe(KoXmlNode keyframeNode);
 

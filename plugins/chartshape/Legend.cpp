@@ -37,7 +37,6 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>

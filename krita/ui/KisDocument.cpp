@@ -27,11 +27,6 @@
 #include "KisPart.h"
 #include "KisView.h"
 
-#include "KoOdfStylesReader.h"
-#include "KoOdfReadStore.h"
-#include "KoOdfWriteStore.h"
-#include "KoXmlNS.h"
-
 #include <KoCanvasBase.h>
 #include <KoColor.h>
 #include <KoColorProfile.h>

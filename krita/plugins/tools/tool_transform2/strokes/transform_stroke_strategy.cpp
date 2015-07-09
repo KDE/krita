@@ -115,6 +115,7 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
     }
 
     Q_ASSERT(m_previewDevice);
+    m_savedRootNode = rootNode;
 }
 
 TransformStrokeStrategy::~TransformStrokeStrategy()
@@ -309,22 +310,25 @@ void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &c
 struct TransformExtraData : public KUndo2CommandExtraData
 {
     ToolTransformArgs savedTransformArgs;
+    KisNodeSP rootNode;
 };
 
 void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
     TransformExtraData *data = new TransformExtraData();
     data->savedTransformArgs = m_savedTransformArgs;
+    data->rootNode = m_savedRootNode;
 
     command->setExtraData(data);
 }
 
-bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args)
+bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode)
 {
     const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
 
     if (data) {
         *args = data->savedTransformArgs;
+        *rootNode = data->rootNode;
     }
 
     return bool(data);

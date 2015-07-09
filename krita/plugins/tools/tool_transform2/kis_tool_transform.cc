@@ -658,15 +658,17 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
     return result;
 }
 
-bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode)
+bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode)
 {
     bool result = false;
 
     const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+    KisNodeSP oldRootNode;
 
     if (lastCommand &&
-        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args) &&
-        args->mode() == mode) {
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode) &&
+        args->mode() == mode &&
+        oldRootNode == currentNode) {
 
         args->saveContinuedState();
 
@@ -852,7 +854,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     }
 
     ToolTransformArgs fetchedArgs;
-    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode);
+    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode, currentNode);
 
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||

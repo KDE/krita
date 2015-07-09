@@ -79,7 +79,7 @@ public:
     }
 
     inline bool isValid() const {
-        return m_end >= m_start;
+        return (m_end >= m_start) || (m_end == std::numeric_limits<int>::min() && m_start >= 0);
     }
 
     inline bool contains(int time) const {

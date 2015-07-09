@@ -79,9 +79,10 @@ KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time
 void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
 {
     if (!range.isValid()) return;
+    if (m_d->frames.isEmpty()) return;
 
     int end = range.isInfinite() ?
-        (m_d->frames.constEnd().key()) : // TODO: better way to determine the "last" frame?
+        ((m_d->frames.constEnd() - 1).key()) : // TODO: better way to determine the "last" frame?
         (range.end());
 
     for (int t=range.start(); t <= end; t++) {

@@ -22,6 +22,7 @@
 #include <QImage>
 #include <QObject>
 
+#include "krita_export.h"
 #include "kis_types.h"
 #include "kis_shared.h"
 #include <krita_export.h>
@@ -31,7 +32,7 @@
 class KisImage;
 class KisImageAnimationInterface;
 
-class KisAnimationFrameCache : public QObject, public KisShared
+class KRITAUI_EXPORT KisAnimationFrameCache : public QObject, public KisShared
 {
     Q_OBJECT
 
@@ -43,6 +44,17 @@ public:
     ~KisAnimationFrameCache();
 
     QImage getFrame(int time);
+
+    enum CacheStatus {
+        Cached,
+        Dirty,
+        Uncached
+    };
+
+    CacheStatus frameStatus(int time) const;
+
+signals:
+    void changed();
 
 private:
 

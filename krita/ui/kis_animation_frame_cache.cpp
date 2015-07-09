@@ -71,6 +71,11 @@ QImage KisAnimationFrameCache::getFrame(int time)
     return m_d->frames.value(time);
 }
 
+KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time) const
+{
+    return (m_d->frames.contains(time)) ? Cached : Uncached;
+}
+
 void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
 {
     if (!range.isValid()) return;
@@ -83,10 +88,14 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
         // TODO: invalidate
         m_d->frames.remove(t);
     }
+
+    emit changed();
 }
 
 void KisAnimationFrameCache::frameReady()
 {
     QImage projection = m_d->image->animationInterface()->frameProjection()->convertToQImage(m_d->image->profile(), m_d->image->bounds());
     m_d->frames.insert(m_d->image->animationInterface()->currentTime(), projection);
+
+    emit changed();
 }

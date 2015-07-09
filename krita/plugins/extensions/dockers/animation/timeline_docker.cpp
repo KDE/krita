@@ -50,13 +50,13 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(canvas != 0);
+    m_timelineWidget->setCanvas(m_canvas);
 
     if(m_canvas) {
         KisDocument *doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_model->setDummiesFacade(kritaDummiesFacade, m_canvas->image(), kritaShapeController);
-        m_timelineWidget->setImage(m_canvas->image());
     }
 }
 
@@ -65,7 +65,7 @@ void TimelineDocker::unsetCanvas()
     setEnabled(false);
     m_canvas = 0;
     m_model->setDummiesFacade(0, 0, 0);
-    m_timelineWidget->setImage(0);
+    m_timelineWidget->setCanvas(0);
 }
 
 #include "timeline_docker.moc"

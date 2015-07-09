@@ -21,11 +21,14 @@
 #include <QPainter>
 
 #include "kis_image.h"
+#include "kis_canvas2.h"
 #include "kis_image_animation_interface.h"
+#include "kis_animation_frame_cache.h"
 
 TimelineWidget::TimelineWidget(QWidget *parent)
     : QWidget(parent)
     , m_timelineView(new TimelineView(this))
+    , m_canvas(0)
     , m_image(0)
 {
     m_layout = new QVBoxLayout(this);
@@ -41,17 +44,24 @@ void TimelineWidget::paintEvent(QPaintEvent *e)
 {
     if (!m_image) return;
 
+    QPainter painter(this);
+
     QColor background = palette().background().color();
     bool dark = background.value() > 100;
 
-    QPainter painter(this);
+    drawRuler(painter, e, dark);
+    drawPlayhead(painter, e, dark);
+}
 
+void TimelineWidget::drawRuler(QPainter &painter, QPaintEvent *e, bool dark)
+{
     int t0 = m_timelineView->positionToTime(e->rect().left());
     int t1 = m_timelineView->positionToTime(e->rect().right());
 
     painter.setPen(QPen(QColor(128, 128, 128, 128)));
     for (int t=t0; t<=t1; t++) {
         int x = m_timelineView->timeToPosition(t);
+        int xNext = m_timelineView->timeToPosition(t + 1);
         if (!m_timelineView->isWithingView(x)) continue;
 
         if (t % 10 == 0) {
@@ -59,8 +69,15 @@ void TimelineWidget::paintEvent(QPaintEvent *e)
         } else {
             painter.drawLine(x, 4, x, 12);
         }
-    }
 
+        if (m_cache->frameStatus(t) == KisAnimationFrameCache::Cached) {
+            painter.fillRect(QRect(x, 0, xNext - x, 4), QColor(128, 128, 128, 128));
+        }
+    }
+}
+
+void TimelineWidget::drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark)
+{
     int x = m_timelineView->timeToPosition(m_image->animationInterface()->currentTime()) + 4;
     if (m_timelineView->isWithingView(x)) {
         painter.setPen(QPen(
@@ -75,17 +92,30 @@ void TimelineWidget::imageTimeChanged()
     update();
 }
 
-void TimelineWidget::setImage(KisImageWSP image)
+void TimelineWidget::cacheChanged()
+{
+    update();
+}
+
+void TimelineWidget::setCanvas(KisCanvas2 *canvas)
 {
     if (m_image) {
         disconnect(m_image, 0, this, 0);
+        disconnect(m_cache, 0, this, 0);
+
         m_timelineView->reset();
     }
 
-    m_image = image;
+    m_canvas = canvas;
+    m_image = canvas->image();
+    m_cache = canvas->frameCache();
 
     if (m_image) {
         connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
+    }
+
+    if (m_cache) {
+        connect(m_cache.data(), SIGNAL(changed()), this, SLOT(cacheChanged()));
     }
 }
 

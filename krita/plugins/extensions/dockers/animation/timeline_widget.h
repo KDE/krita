@@ -27,6 +27,8 @@
 #include "kis_types.h"
 #include "timeline_view.h"
 
+class KisCanvas2;
+
 class TimelineWidget : public QWidget
 {
     Q_OBJECT
@@ -35,22 +37,28 @@ public:
     TimelineWidget(QWidget *parent);
 
     void setModel(QAbstractItemModel *model);
-    void setImage(KisImageWSP image);
+    void setCanvas(KisCanvas2 *canvas);
 
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
 
-
 private slots:
     void imageTimeChanged();
+    void cacheChanged();
 
 private:
     void scrub(QMouseEvent *e);
 
     QVBoxLayout *m_layout;
     TimelineView *m_timelineView;
+
+    KisCanvas2 *m_canvas;
     KisImageWSP m_image;
+    KisAnimationFrameCacheSP m_cache;
+
+    void drawRuler(QPainter &painter, QPaintEvent *e, bool dark);
+    void drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark);
 };
 
 #endif

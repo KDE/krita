@@ -175,6 +175,7 @@ KisNodeManager::KisNodeManager(KisViewManager *view)
     m_d->mergeSelectedLayers = new KisAction(i18n("&Merge Selected Layers"), this);
     m_d->mergeSelectedLayers->setActivationFlags(KisAction::ACTIVE_LAYER);
     view->actionManager()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
+    m_d->mergeSelectedLayers->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_E));
     connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
 
 }
@@ -287,8 +288,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
                          "KisPaintLayer", koIcon("document-new"),
                          Qt::Key_Insert);
 
-    NEW_LAYER_ACTION("add_new_group_layer", i18n("&Group Layer"),
-                     "KisGroupLayer", koIcon("folder-new"));
+    NEW_LAYER_ACTION_KEY("add_new_group_layer", i18n("&Group Layer"),
+                     "KisGroupLayer", koIcon("folder-new"),
+                     Qt::ControlModifier + Qt::Key_G);
 
     NEW_LAYER_ACTION("add_new_clone_layer", i18n("&Clone Layer"),
                      "KisCloneLayer", koIcon("edit-copy"));

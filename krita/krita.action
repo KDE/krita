@@ -234,7 +234,7 @@
     <Action name="gmic" icon="" text="Apply G'Mic Action..." whatsThis="" toolTip="Apply G'Mic Action" iconText="Apply G'Mic Action" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="histogram" icon="" text="&amp;Histogram..." whatsThis="" toolTip="Histogram" iconText="Histogram" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagesize" icon="" text="Scale To New Size..." whatsThis="" toolTip="Scale To New Size" iconText="Scale To New Size" shortcut="Ctrl+Alt+I" defaultShortcut="Ctrl+Alt+I" isCheckable="false" statusTip=""/>
-    <Action name="canvassize" icon="" text="Size Canvas..." whatsThis="" toolTip="Size Canvas" iconText="Size Canvas" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="canvassize" icon="" text="Size Canvas..." whatsThis="" toolTip="Size Canvas" iconText="Size Canvas" shortcut="Ctrl+Alt+C" defaultShortcut="Ctrl+Alt+C" isCheckable="false" statusTip=""/>
     <Action name="layersize" icon="" text="Scale &amp;Layer..." whatsThis="" toolTip="Scale Layer" iconText="Scale Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="selectionscale" icon="" text="&amp;Scale..." whatsThis="" toolTip="Scale" iconText="Scale" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagesplit" icon="" text="Image Split " whatsThis="" toolTip="Image Split" iconText="Image Split" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -242,7 +242,7 @@
     <Action name="growselection" icon="" text="Grow Selection..." whatsThis="" toolTip="Grow Selection" iconText="Grow Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="shrinkselection" icon="" text="Shrink Selection..." whatsThis="" toolTip="Shrink Selection" iconText="Shrink Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="borderselection" icon="" text="Border Selection..." whatsThis="" toolTip="Border Selection" iconText="Border Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="featherselection" icon="" text="Feather Selection..." whatsThis="" toolTip="Feather Selection" iconText="Feather Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="featherselection" icon="" text="Feather Selection..." whatsThis="" toolTip="Feather Selection" iconText="Feather Selection" shortcut="Shift+F6" defaultShortcut="Shift+F6" isCheckable="false" statusTip=""/>
     <Action name="smoothselection" icon="" text="Smooth" whatsThis="" toolTip="Smooth" iconText="Smooth" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="offsetimage" icon="" text="&amp;Offset Image..." whatsThis="" toolTip="Offset Image" iconText="Offset Image" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="offsetlayer" icon="" text="&amp;Offset Layer..." whatsThis="" toolTip="Offset Layer" iconText="Offset Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

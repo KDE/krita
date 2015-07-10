@@ -19,7 +19,8 @@
 #define KIS_NODE_GRAPH_LISTENER_H_
 
 #include "krita_export.h"
-#include "kis_time_range.h"
+
+class KisTimeRange;
 class KisNode;
 class QRect;
 

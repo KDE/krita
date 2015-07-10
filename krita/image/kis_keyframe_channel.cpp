@@ -19,6 +19,7 @@
 #include "kis_keyframe_channel.h"
 #include "KoID.h"
 #include "kis_node.h"
+#include "kis_time_range.h"
 
 #include <QMap>
 

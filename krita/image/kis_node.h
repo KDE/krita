@@ -19,7 +19,6 @@
 #define _KIS_NODE_H
 
 #include "kis_types.h"
-#include "kis_time_range.h"
 
 #include "kis_undo_adapter.h"
 #include "kis_base_node.h"
@@ -40,6 +39,7 @@ class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
 class KisKeyframeChannel;
+class KisTimeRange;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent

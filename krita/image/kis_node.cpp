@@ -43,6 +43,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_projection_leaf.h"
 
 #include "kis_keyframe_channel.h"
+#include "kis_time_range.h"
 
 /**
  *The link between KisProjection ans KisImageUpdater

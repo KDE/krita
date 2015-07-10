@@ -19,6 +19,9 @@
 
 #include "kis_node_graph_listener.h"
 
+#include "kis_time_range.h"
+
+
 struct KisNodeGraphListener::Private
 {
     Private() : sequenceNumber(0) {}

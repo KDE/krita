@@ -22,6 +22,7 @@
 
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
 
 QMap<KisImageWSP, KisAnimationFrameCache*> KisAnimationFrameCache::caches;
 

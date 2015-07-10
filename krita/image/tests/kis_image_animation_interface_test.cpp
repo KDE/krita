@@ -28,6 +28,7 @@
 #include "kis_image_animation_interface.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_raster_keyframe_channel.h"
+#include "kis_time_range.h"
 
 
 void checkFrame(KisImageAnimationInterface *i, int frameId, bool externalFrameActive, const QRect &rc)

@@ -21,6 +21,8 @@
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
 #include "kis_keyframe_channel.h"
+#include "kis_time_range.h"
+
 
 struct KisImageAnimationInterface::Private
 {

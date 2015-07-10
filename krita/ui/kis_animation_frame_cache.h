@@ -27,10 +27,10 @@
 #include "kis_shared.h"
 #include <krita_export.h>
 
-#include "kis_time_range.h"
-
 class KisImage;
 class KisImageAnimationInterface;
+class KisTimeRange;
+
 
 class KRITAUI_EXPORT KisAnimationFrameCache : public QObject, public KisShared
 {

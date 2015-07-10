@@ -24,6 +24,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_node.h"
+#include "kis_time_range.h"
 
 #include <KoColorSpaceRegistry.h>
 

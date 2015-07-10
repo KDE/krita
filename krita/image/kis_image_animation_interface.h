@@ -24,10 +24,9 @@
 
 #include "kis_types.h"
 #include "krita_export.h"
-#include "kis_time_range.h"
-
 
 class KisUpdatesFacade;
+class KisTimeRange;
 
 
 class KRITAIMAGE_EXPORT KisImageAnimationInterface : public QObject

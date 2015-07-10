@@ -19,6 +19,7 @@
 #include "kis_node.h"
 
 #include "kis_paint_device.h"
+#include "kis_time_range.h"
 
 struct KisRasterKeyframeChannel::Private
 {

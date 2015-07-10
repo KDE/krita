@@ -804,7 +804,6 @@ public:
 
     // for text and CDATA
     QString data() const;
-    void setData(const QString& data);
 
     // reference from within the packed doc
     KoXmlPackedDocument* packedDoc;
@@ -1008,11 +1007,6 @@ QList< QPair<QString, QString> > KoXmlNodeData::attributeFullNames() const
 QString KoXmlNodeData::data() const
 {
     return textData;
-}
-
-void KoXmlNodeData::setData(const QString& d)
-{
-    textData = d;
 }
 
 bool KoXmlNodeData::setContent(QXmlStreamReader* reader, QString* errorMsg, int* errorLine, int* errorColumn)

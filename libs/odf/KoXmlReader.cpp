@@ -2111,10 +2111,10 @@ KoXmlElement KoXmlDocument::documentElement() const
 {
     d->loadChildren();
 
-    for (KoXmlNodeData* node = d->first; node;) {
-        if (node->nodeType == KoXmlNode::ElementNode)
+    for (KoXmlNodeData* node = d->first; node; node = node->next) {
+        if (node->nodeType == KoXmlNode::ElementNode) {
             return KoXmlElement(node);
-        else node = node->next;
+        }
     }
 
     return KoXmlElement();
@@ -2127,10 +2127,7 @@ KoXmlDocumentType KoXmlDocument::doctype() const
 
 QString KoXmlDocument::nodeName() const
 {
-    if (d->emptyDocument)
-        return QLatin1String("#document");
-    else
-        return QString();
+    return (d->emptyDocument) ? QLatin1String("#document") : QString();
 }
 
 void KoXmlDocument::clear()

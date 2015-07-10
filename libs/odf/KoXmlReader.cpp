@@ -944,15 +944,12 @@ void KoXmlNodeData::appendChild(KoXmlNodeData* node)
 
 void KoXmlNodeData::setAttribute(const QString& name, const QString& value)
 {
-    attr[ name ] = value;
+    attr.insert(name, value);
 }
 
 QString KoXmlNodeData::attribute(const QString& name, const QString& def) const
 {
-    if (attr.contains(name))
-        return attr[ name ];
-    else
-        return def;
+    return attr.value(name, def);
 }
 
 bool KoXmlNodeData::hasAttribute(const QString& name) const

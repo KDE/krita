@@ -1872,7 +1872,7 @@ bool KoXmlElement::operator!= (const KoXmlElement& element) const
 
 QString KoXmlElement::tagName() const
 {
-    return isElement() ? ((KoXmlNodeData*)d)->tagName : QString();
+    return isElement() ? d->tagName : QString();
 }
 
 QString KoXmlElement::text() const

@@ -19,19 +19,20 @@
 #ifndef KIS_ANIMATION_PLAYER_H
 #define KIS_ANIMATION_PLAYER_H
 
-#include <QWidget>
+#include <QScopedPointer>
+#include <QObject>
 
-#include "kis_qpainter_canvas.h"
-#include "kis_coordinates_converter.h"
+#include "krita_export.h"
+
 
 class KisCanvas2;
 
-class KRITAIMAGE_EXPORT KisAnimationPlayer : public KisQPainterCanvas
+class KRITAUI_EXPORT KisAnimationPlayer : public QObject
 {
     Q_OBJECT
 
 public:
-    KisAnimationPlayer(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent);
+    KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer();
 
     void setFramerate(float fps);
@@ -41,13 +42,8 @@ public:
     void stop();
     bool isPlaying();
 
-    void resizeEvent(QResizeEvent *e);
-
 public slots:
     void slotUpdate();
-
-protected:
-    void drawImage(QPainter & gc, const QRect &updateWidgetRect) const;
 
 private:
     struct Private;

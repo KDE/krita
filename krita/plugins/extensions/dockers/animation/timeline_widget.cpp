@@ -55,6 +55,8 @@ void TimelineWidget::paintEvent(QPaintEvent *e)
 
 void TimelineWidget::drawRuler(QPainter &painter, QPaintEvent *e, bool dark)
 {
+    Q_UNUSED(dark);
+
     int t0 = m_timelineView->positionToTime(e->rect().left());
     int t1 = m_timelineView->positionToTime(e->rect().right());
 

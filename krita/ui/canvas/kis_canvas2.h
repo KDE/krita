@@ -174,8 +174,8 @@ public: // KisCanvas2 methods
 
     KisAnimationFrameCacheSP frameCache();
     KisAnimationPlayer *animationPlayer();
-    void startPlayback();
-    void stopPlayback();
+
+    void refetchDataFromImage();
 
 Q_SIGNALS:
     void imageChanged(KisImageWSP image);

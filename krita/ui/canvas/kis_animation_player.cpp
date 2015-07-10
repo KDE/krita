@@ -19,10 +19,10 @@
 #include "kis_animation_player.h"
 
 #include <QTimer>
-#include <QImage>
 
 #include "kis_canvas2.h"
 #include "kis_animation_frame_cache.h"
+
 
 struct KisAnimationPlayer::Private
 {
@@ -40,9 +40,8 @@ public:
     KisCanvas2 *canvas;
 };
 
-KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent)
-    : KisQPainterCanvas(canvas, coordinatesConverter, parent)
-    , m_d(new Private())
+KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
+    : m_d(new Private())
 {
     m_d->playing = false;
     m_d->fps = 15;
@@ -77,6 +76,8 @@ void KisAnimationPlayer::stop()
 {
     m_d->timer->stop();
     m_d->playing = false;
+
+    m_d->canvas->refetchDataFromImage();
 }
 
 bool KisAnimationPlayer::isPlaying()
@@ -86,36 +87,10 @@ bool KisAnimationPlayer::isPlaying()
 
 void KisAnimationPlayer::slotUpdate()
 {
-    if (canvas()->frameCache()->uploadFrame(m_d->currentFrame)) {
+    if (m_d->canvas->frameCache()->uploadFrame(m_d->currentFrame)) {
         m_d->canvas->updateCanvas();
     }
 
     m_d->currentFrame++;
     if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
-}
-
-void KisAnimationPlayer::drawImage(QPainter &gc, const QRect &updateWidgetRect) const
-{
-    KisCoordinatesConverter *converter = coordinatesConverter();
-
-    QTransform imageTransform = converter->viewportToWidgetTransform();
-    gc.setTransform(imageTransform);
-    gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    QRectF viewportRect = converter->widgetToViewport(updateWidgetRect);
-    QRectF imageRect = converter->widgetToImage(updateWidgetRect);
-
-    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    gc.drawImage(viewportRect, m_d->frame, imageRect);
-}
-
-void KisAnimationPlayer::resizeEvent(QResizeEvent *e)
-{
-    QSize size(e->size());
-    if (size.width() <= 0) {
-        size.setWidth(1);
-    }
-    if (size.height() <= 0) {
-        size.setHeight(1);
-    }
 }

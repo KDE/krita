@@ -182,12 +182,12 @@ void AnimationDocker::slotPlayPause()
     if (!m_canvas) return;
 
     if (m_canvas->animationPlayer()->isPlaying()) {
-        m_canvas->stopPlayback();
+        m_canvas->animationPlayer()->stop();
     } else {
         m_canvas->animationPlayer()->setFramerate(m_animationWidget->doubleFramerate->value());
         m_canvas->animationPlayer()->setRange(m_animationWidget->spinFromFrame->value(), m_animationWidget->spinToFrame->value());
 
-        m_canvas->startPlayback();
+        m_canvas->animationPlayer()->play();
     }
 }
 

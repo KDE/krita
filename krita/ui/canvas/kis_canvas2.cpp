@@ -42,6 +42,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
+#include "kis_image_barrier_locker.h"
 #include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
@@ -142,8 +143,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     createCanvas(cfg.useOpenGL());
 
-    m_d->animationPlayer = new KisAnimationPlayer(this, m_d->coordinatesConverter, 0);
-    m_d->animationPlayer->setPrescaledProjection(m_d->prescaledProjection);
+    m_d->animationPlayer = new KisAnimationPlayer(this);
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -807,15 +807,18 @@ void KisCanvas2::slotConfigChanged()
 
 }
 
+void KisCanvas2::refetchDataFromImage()
+{
+    KisImageSP image = this->image();
+    KisImageBarrierLocker l(image);
+    startUpdateInPatches(image->bounds());
+}
+
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
 {
     if (m_d->displayColorConverter->monitorProfile() == monitorProfile) return;
 
     m_d->displayColorConverter->setMonitorProfile(monitorProfile);
-
-    KisImageWSP image = this->image();
-
-    image->barrierLock();
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
@@ -833,9 +836,7 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
                                                     m_d->displayColorConverter->conversionFlags());
     }
 
-    startUpdateInPatches(image->bounds());
-
-    image->unlock();
+    refetchDataFromImage();
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
@@ -884,16 +885,6 @@ KisAnimationFrameCacheSP KisCanvas2::frameCache()
 KisAnimationPlayer *KisCanvas2::animationPlayer()
 {
     return m_d->animationPlayer;
-}
-
-void KisCanvas2::startPlayback()
-{
-    m_d->animationPlayer->play();
-}
-
-void KisCanvas2::stopPlayback()
-{
-    m_d->animationPlayer->stop();
 }
 
 void KisCanvas2::slotSelectionChanged()

@@ -66,6 +66,11 @@ public:
     virtual ~KisOpenGLImageTextures();
 
     /**
+     * \return the image associated with the textures
+     */
+    KisImageSP image() const;
+
+    /**
      * Set the color profile of the display device.
      * @param profile The color profile of the display device
      */

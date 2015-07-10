@@ -106,6 +106,11 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     glDeleteTextures(1, &m_checkerTexture);
 }
 
+KisImageSP KisOpenGLImageTextures::image() const
+{
+    return m_image;
+}
+
 bool KisOpenGLImageTextures::imageCanShareTextures()
 {
     KisConfig cfg;

@@ -31,6 +31,8 @@ class KisImage;
 class KisImageAnimationInterface;
 class KisTimeRange;
 
+class KisOpenGLImageTextures;
+typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KRITAUI_EXPORT KisAnimationFrameCache : public QObject, public KisShared
 {
@@ -38,12 +40,13 @@ class KRITAUI_EXPORT KisAnimationFrameCache : public QObject, public KisShared
 
 public:
 
-    static KisAnimationFrameCacheSP getFrameCache(KisImageWSP image);
+    static KisAnimationFrameCacheSP getFrameCache(KisOpenGLImageTexturesSP textures);
 
-    KisAnimationFrameCache(KisImageWSP image);
+    KisAnimationFrameCache(KisOpenGLImageTexturesSP textures);
     ~KisAnimationFrameCache();
 
     QImage getFrame(int time);
+    bool uploadFrame(int time);
 
     enum CacheStatus {
         Cached,
@@ -60,7 +63,6 @@ private:
 
     struct Private;
     QScopedPointer<Private> m_d;
-    static QMap<KisImageWSP, KisAnimationFrameCache*> caches;
 
 private slots:
     void framesChanged(const KisTimeRange &range, const QRect &rect);

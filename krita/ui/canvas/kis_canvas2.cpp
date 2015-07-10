@@ -391,6 +391,8 @@ void KisCanvas2::createOpenGLCanvas()
                                                                         m_d->displayColorConverter->renderingIntent(),
                                                                         m_d->displayColorConverter->conversionFlags());
 
+    m_d->frameCache = KisAnimationFrameCache::getFrameCache(m_d->openGLImageTextures);
+
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     canvasWidget->setDisplayFilter(m_d->displayColorConverter->displayFilter());
 
@@ -442,7 +444,6 @@ void KisCanvas2::initializeImage()
     KisImageWSP image = m_d->view->image();
 
     m_d->coordinatesConverter->setImage(image);
-    m_d->frameCache = KisAnimationFrameCache::getFrameCache(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
@@ -887,22 +888,11 @@ KisAnimationPlayer *KisCanvas2::animationPlayer()
 
 void KisCanvas2::startPlayback()
 {
-    // Warning: duct tape ahead
-
-    m_d->animationPlayer->setParent(m_d->canvasWidget->widget()->parentWidget());
-    m_d->animationPlayer->setGeometry(m_d->canvasWidget->widget()->geometry());
-
-    m_d->canvasWidget->widget()->hide();
-    m_d->animationPlayer->show();
-
     m_d->animationPlayer->play();
 }
 
 void KisCanvas2::stopPlayback()
 {
-    m_d->animationPlayer->hide();
-    m_d->canvasWidget->widget()->show();
-
     m_d->animationPlayer->stop();
 }
 

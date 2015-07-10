@@ -36,6 +36,8 @@ public:
     int firstFrame;
     int lastFrame;
     float fps;
+
+    KisCanvas2 *canvas;
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent)
@@ -44,6 +46,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas, KisCoordinatesConvert
 {
     m_d->playing = false;
     m_d->fps = 15;
+    m_d->canvas = canvas;
 
     m_d->timer = new QTimer(this);
 
@@ -83,12 +86,12 @@ bool KisAnimationPlayer::isPlaying()
 
 void KisAnimationPlayer::slotUpdate()
 {
-    m_d->frame = canvas()->frameCache()->getFrame(m_d->currentFrame);
+    if (canvas()->frameCache()->uploadFrame(m_d->currentFrame)) {
+        m_d->canvas->updateCanvas();
+    }
+
     m_d->currentFrame++;
-
     if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
-
-    update();
 }
 
 void KisAnimationPlayer::drawImage(QPainter &gc, const QRect &updateWidgetRect) const

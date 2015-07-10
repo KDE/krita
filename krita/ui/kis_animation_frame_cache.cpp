@@ -20,30 +20,43 @@
 
 #include <QMap>
 
+#include "kis_debug.h"
+
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
 
-QMap<KisImageWSP, KisAnimationFrameCache*> KisAnimationFrameCache::caches;
+#include "opengl/kis_opengl_image_textures.h"
 
 struct KisAnimationFrameCache::Private
 {
-    QMap<int, QImage> frames;
+    Private(KisOpenGLImageTexturesSP _textures)
+        : textures(_textures)
+    {
+        image = textures->image();
+    }
+
+    KisOpenGLImageTexturesSP textures;
     KisImageWSP image;
 
-    Private(KisImageWSP image)
-        : image(image)
-    {}
+    QMap<int, KisOpenGLUpdateInfoSP> openGlFrames;
+
+
+    // TODO: verify that we don't have any leak here!
+    typedef QMap<KisOpenGLImageTexturesSP, KisAnimationFrameCache*> CachesMap;
+    static CachesMap caches;
 };
 
-KisAnimationFrameCacheSP KisAnimationFrameCache::getFrameCache(KisImageWSP image)
+KisAnimationFrameCache::Private::CachesMap KisAnimationFrameCache::Private::caches;
+
+KisAnimationFrameCacheSP KisAnimationFrameCache::getFrameCache(KisOpenGLImageTexturesSP textures)
 {
     KisAnimationFrameCache *cache;
 
-    QMap<KisImageWSP, KisAnimationFrameCache*>::iterator it = caches.find(image);
-    if (it == caches.end()) {
-        cache = new KisAnimationFrameCache(image);
-        caches.insert(image, cache);
+    Private::CachesMap::iterator it = Private::caches.find(textures);
+    if (it == Private::caches.end()) {
+        cache = new KisAnimationFrameCache(textures);
+        Private::caches.insert(textures, cache);
     } else {
         cache = it.value();
     }
@@ -51,44 +64,56 @@ KisAnimationFrameCacheSP KisAnimationFrameCache::getFrameCache(KisImageWSP image
     return cache;
 }
 
-KisAnimationFrameCache::KisAnimationFrameCache(KisImageWSP image)
-    : m_d(new Private(image))
+KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures)
+    : m_d(new Private(textures))
 {
-    connect(image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
-    connect(image->animationInterface(), SIGNAL(sigFrameReady()), this, SLOT(frameReady()), Qt::DirectConnection);
+    connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
+    connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady()), this, SLOT(frameReady()), Qt::DirectConnection);
 }
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
 {
-    caches.remove(m_d->image);
+    Private::caches.remove(m_d->textures);
 }
 
-QImage KisAnimationFrameCache::getFrame(int time)
+bool KisAnimationFrameCache::uploadFrame(int time)
 {
-    if (!m_d->frames.contains(time)) {
+    bool frameExists = m_d->openGlFrames.contains(time);
+
+    if (!frameExists) {
         m_d->image->animationInterface()->requestFrameRegeneration(time, m_d->image->bounds());
+    } else {
+        m_d->textures->recalculateCache(m_d->openGlFrames[time]);
     }
 
-    return m_d->frames.value(time);
+    return frameExists;
 }
 
 KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time) const
 {
-    return (m_d->frames.contains(time)) ? Cached : Uncached;
+    return (m_d->openGlFrames.contains(time)) ? Cached : Uncached;
+}
+
+template <typename K, typename V>
+K lastKeyValue(const QMap<K,V> &map, K defaultValue = K())
+{
+    return !map.isEmpty() ? (--map.constEnd()).key() : defaultValue;
 }
 
 void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
 {
+    Q_UNUSED(rect);
+
     if (!range.isValid()) return;
-    if (m_d->frames.isEmpty()) return;
+    if (m_d->openGlFrames.isEmpty()) return;
 
     int end = range.isInfinite() ?
-        ((m_d->frames.constEnd() - 1).key()) : // TODO: better way to determine the "last" frame?
-        (range.end());
+        lastKeyValue(m_d->openGlFrames, range.start()) :
+        range.end();
 
     for (int t=range.start(); t <= end; t++) {
         // TODO: invalidate
-        m_d->frames.remove(t);
+        m_d->openGlFrames.remove(t);
     }
 
     emit changed();
@@ -96,8 +121,11 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
 
 void KisAnimationFrameCache::frameReady()
 {
-    QImage projection = m_d->image->animationInterface()->frameProjection()->convertToQImage(m_d->image->profile(), m_d->image->bounds());
-    m_d->frames.insert(m_d->image->animationInterface()->currentTime(), projection);
+    int currentTime = m_d->image->animationInterface()->currentTime();
+    KisOpenGLUpdateInfoSP info =
+        m_d->textures->updateCache(m_d->image->bounds());
+
+    m_d->openGlFrames.insert(currentTime, info);
 
     emit changed();
 }

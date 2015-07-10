@@ -44,6 +44,11 @@ public:
 
 public slots:
     void slotUpdate();
+    void slotCancelPlayback();
+
+private:
+    void connectCancelSignals();
+    void disconnectCancelSignals();
 
 private:
     struct Private;

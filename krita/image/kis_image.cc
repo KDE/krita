@@ -1336,7 +1336,9 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
      * However this is purely their choice whether to end a stroke
      * or not.
      */
-    requestStrokeEnd();
+    if (strokeStrategy->requestsOtherStrokesToEnd()) {
+        requestStrokeEnd();
+    }
 
     /**
      * Some of the strokes can cancel their work with undoing all the
@@ -1381,7 +1383,7 @@ void KisImage::stopIsolatedMode()
 
     // TODO: Substitute notifyProjectionUpdated() with this code
     // when update optimization is implemented
-    // 
+    //
     // QRect updateRect = bounds() | oldRootNode->extent();
     // oldRootNode->setDirty(updateRect);
 }

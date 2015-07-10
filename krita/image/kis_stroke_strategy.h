@@ -62,6 +62,16 @@ public:
      */
     bool clearsRedoOnStart() const;
 
+    /**
+     * Returns true if the other currently running strokes should be
+     * politely asked to exit. The default value is 'true'.
+     *
+     * The only known exception right now is
+     * KisRegenerateFrameStrokeStrategy which does not requests ending
+     * of any actions, since it performs purely background action.
+     */
+    bool requestsOtherStrokesToEnd() const;
+
     QString id() const;
     KUndo2MagicString name() const;
 
@@ -89,6 +99,7 @@ protected:
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
     void setClearsRedoOnStart(bool value);
+    void setRequestsOtherStrokesToEnd(bool value);
 
 protected:
     /**
@@ -102,6 +113,7 @@ private:
     bool m_needsIndirectPainting;
     QString m_indirectPaintingCompositeOp;
     bool m_clearsRedoOnStart;
+    bool m_requestsOtherStrokesToEnd;
 
     QString m_id;
     KUndo2MagicString m_name;

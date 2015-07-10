@@ -20,8 +20,10 @@
 
 #include <QTimer>
 
+#include "kis_image.h"
 #include "kis_canvas2.h"
 #include "kis_animation_frame_cache.h"
+#include "kis_signal_auto_connection.h"
 
 
 struct KisAnimationPlayer::Private
@@ -38,6 +40,8 @@ public:
     float fps;
 
     KisCanvas2 *canvas;
+
+    QVector<KisSignalAutoConnectionSP> cancelStrokeConnections;
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
@@ -65,15 +69,42 @@ void KisAnimationPlayer::setRange(int firstFrame, int lastFrame)
     m_d->lastFrame = lastFrame;
 }
 
+void KisAnimationPlayer::connectCancelSignals()
+{
+    m_d->cancelStrokeConnections.append(
+        toQShared(new KisSignalAutoConnection(
+                      m_d->canvas->image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
+                      this, SLOT(slotCancelPlayback()))));
+
+    m_d->cancelStrokeConnections.append(
+        toQShared(new KisSignalAutoConnection(
+                      m_d->canvas->image().data(), SIGNAL(sigStrokeCancellationRequested()),
+                      this, SLOT(slotCancelPlayback()))));
+
+    m_d->cancelStrokeConnections.append(
+        toQShared(new KisSignalAutoConnection(
+                      m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
+                      this, SLOT(slotCancelPlayback()))));
+}
+
+void KisAnimationPlayer::disconnectCancelSignals()
+{
+    m_d->cancelStrokeConnections.clear();
+}
+
 void KisAnimationPlayer::play()
 {
     m_d->playing = true;
     m_d->currentFrame = m_d->firstFrame;
     m_d->timer->start(1000 / m_d->fps);
+
+    connectCancelSignals();
 }
 
 void KisAnimationPlayer::stop()
 {
+    disconnectCancelSignals();
+
     m_d->timer->stop();
     m_d->playing = false;
 
@@ -93,4 +124,9 @@ void KisAnimationPlayer::slotUpdate()
 
     m_d->currentFrame++;
     if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
+}
+
+void KisAnimationPlayer::slotCancelPlayback()
+{
+    stop();
 }

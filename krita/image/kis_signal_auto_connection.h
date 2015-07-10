@@ -20,6 +20,7 @@
 #define __KIS_SIGNAL_AUTO_CONNECTOR_H
 
 #include <QObject>
+#include <QPointer>
 
 /**
  * A special wrapper class that represents a connection between two QObject objects.

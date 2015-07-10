@@ -45,6 +45,8 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
     enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
     enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+
+    setRequestsOtherStrokesToEnd(false);
 }
 
 KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()

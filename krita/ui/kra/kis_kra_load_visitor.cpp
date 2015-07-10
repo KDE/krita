@@ -91,7 +91,7 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
     m_name = name;
     m_store->pushDirectory();
     if (m_name.startsWith("/")) {
-        m_name = m_name.remove(0, 1);
+        m_name.remove(0, 1);
     }
     if (!m_store->enterDirectory(m_name)) {
         dbgFile << "Could not enter directory" << m_name << ", probably an old-style file with 'part' added.";

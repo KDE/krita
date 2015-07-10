@@ -2109,7 +2109,8 @@ bool KoXmlDocument::operator!=(const KoXmlDocument& doc) const
 
 KoXmlElement KoXmlDocument::documentElement() const
 {
-    d->loadChildren();
+    if (!d->loaded)
+        d->loadChildren();
 
     for (KoXmlNodeData* node = d->first; node; node = node->next) {
         if (node->nodeType == KoXmlNode::ElementNode) {

@@ -106,18 +106,19 @@ void TimelineWidget::setCanvas(KisCanvas2 *canvas)
         disconnect(m_cache, 0, this, 0);
 
         m_timelineView->reset();
+        m_image = 0;
     }
 
     m_canvas = canvas;
-    m_image = canvas->image();
-    m_cache = canvas->frameCache();
 
-    if (m_image) {
-        connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
-    }
+    if (m_canvas) {
+        m_image = m_canvas->image();
+        m_cache = m_canvas->frameCache();
 
-    if (m_cache) {
-        connect(m_cache.data(), SIGNAL(changed()), this, SLOT(cacheChanged()));
+        if (m_image && m_cache) {
+            connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
+            connect(m_cache.data(), SIGNAL(changed()), this, SLOT(cacheChanged()));
+        }
     }
 }
 

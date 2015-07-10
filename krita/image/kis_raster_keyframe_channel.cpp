@@ -39,7 +39,8 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNode
 }
 
 KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
-{}
+{
+}
 
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {

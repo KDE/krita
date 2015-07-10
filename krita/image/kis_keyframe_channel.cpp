@@ -33,7 +33,7 @@ struct KisKeyframeChannel::Private
 };
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node)
-    : QObject(node.data()), m_d(new Private)
+    : m_d(new Private)
 {
     m_d->id = id;
     m_d->node = node;

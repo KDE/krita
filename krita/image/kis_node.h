@@ -174,6 +174,15 @@ public:
     virtual KisProjectionLeafSP projectionLeaf() const;
 
 protected:
+
+    /**
+     * Add a keyframe channel for this node. The channel will be added
+     * to the common hash table which will be available to the UI.
+     *
+     * WARNING: the \p channel object *NOT* become owned by the node!
+     *          The caller must ensure manually that the lifetime of
+     *          the object coincide with the lifetime of the node.
+     */
     void addKeyframeChannel(KisKeyframeChannel* channel);
 
 protected:

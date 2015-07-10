@@ -186,6 +186,7 @@ struct KisPaintDevice::Private
 
     KisPaintDevice *q;
     KisNodeWSP parent;
+    QScopedPointer<KisRasterKeyframeChannel> contentChannel;
     KisDefaultBoundsBaseSP defaultBounds;
     QScopedPointer<KisPaintDeviceStrategy> basicStrategy;
     QScopedPointer<KisPaintDeviceWrappedStrategy> wrappedStrategy;
@@ -282,8 +283,6 @@ struct KisPaintDevice::Private
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
 
     QRegion syncLodData(int newLod);
-
-    KisRasterKeyframeChannel *contentChannel;
 
 private:
     QRegion syncWholeDevice();
@@ -420,7 +419,6 @@ private:
 KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
-      contentChannel(0),
       m_data(new Data(paintDevice)),
       nextFreeFrameId(0)
 {
@@ -1472,16 +1470,14 @@ quint32 KisPaintDevice::channelCount() const
 KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, const KisNodeWSP node)
 {
     Q_ASSERT(!m_d->contentChannel);
-
-    m_d->contentChannel = new KisRasterKeyframeChannel(id, node, this);
-
-    return m_d->contentChannel;
+    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, node, this));
+    return m_d->contentChannel.data();
 }
 
 KisRasterKeyframeChannel* KisPaintDevice::keyframeChannel() const
 {
     Q_ASSERT(m_d->contentChannel);
-    return m_d->contentChannel;
+    return m_d->contentChannel.data();
 }
 
 int KisPaintDevice::createFrame(bool copy, int copySrc)

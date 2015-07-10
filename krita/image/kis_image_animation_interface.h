@@ -95,6 +95,8 @@ private:
     void notifyFrameReady();
     KisUpdatesFacade* updatesFacade() const;
 
+    void blockFrameInvalidation(bool value);
+
 Q_SIGNALS:
     void sigFrameReady();
     void sigTimeChanged(int newTime);

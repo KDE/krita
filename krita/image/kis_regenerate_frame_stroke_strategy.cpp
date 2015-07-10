@@ -26,6 +26,7 @@
 
 struct KisRegenerateFrameStrokeStrategy::Private
 {
+    Type type;
     int frameId;
     int previousFrameId;
     QRegion dirtyRegion;
@@ -38,6 +39,8 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
                                                                    KisImageAnimationInterface *interface)
     : m_d(new Private)
 {
+    m_d->type = EXTERNAL_FRAME;
+
     m_d->frameId = frameId;
     m_d->dirtyRegion = dirtyRegion;
     m_d->interface = interface;
@@ -49,26 +52,56 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     setRequestsOtherStrokesToEnd(false);
 }
 
+KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)
+    : m_d(new Private)
+{
+    m_d->type = CURRENT_FRAME;
+
+    m_d->frameId = 0;
+    m_d->dirtyRegion = QRegion();
+    m_d->interface = interface;
+
+    enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+
+    // switching frames is a distinct user action, so it should
+    // cancel the playback or any action easily
+    setRequestsOtherStrokesToEnd(true);
+}
+
 KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()
 {
 }
 
 void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 {
-    m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
-
-    if (!m_d->dirtyRegion.isEmpty()) {
+    if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
+        if (!m_d->dirtyRegion.isEmpty()) {
+            m_d->interface->updatesFacade()->refreshGraphAsync();
+        }
+    } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->blockFrameInvalidation(true);
         m_d->interface->updatesFacade()->refreshGraphAsync();
     }
 }
 
 void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
 {
-    m_d->interface->notifyFrameReady();
-    m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+    if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->notifyFrameReady();
+        m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+    } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->blockFrameInvalidation(false);
+    }
 }
 
 void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
 {
-    m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+    if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+    } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->blockFrameInvalidation(false);
+    }
 }

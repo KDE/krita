@@ -26,11 +26,18 @@
 
 struct KisImageAnimationInterface::Private
 {
-    Private() : image(0), currentTime(0), externalFrameActive(false) {}
+    Private()
+        : image(0),
+          currentTime(0),
+          externalFrameActive(false),
+          frameInvalidationBlocked(false)
+    {
+    }
 
     KisImage *image;
     int currentTime;
     bool externalFrameActive;
+    bool frameInvalidationBlocked;
 };
 
 
@@ -60,7 +67,11 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
     m_d->currentTime = frameId;
     m_d->image->unlock();
 
-    m_d->image->refreshGraphAsync();
+    KisStrokeStrategy *strategy =
+        new KisRegenerateFrameStrokeStrategy(this);
+
+    KisStrokeId stroke = m_d->image->startStroke(strategy);
+    m_d->image->endStroke(stroke);
 
     emit sigTimeChanged(frameId);
 }
@@ -124,7 +135,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    const QRect &rect,
                                                    bool recursive)
 {
-    if (externalFrameActive()) return;
+    if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
 
     KisKeyframeChannel *channel =
         node->getKeyframeChannel(KisKeyframeChannel::Content.id());
@@ -146,4 +157,9 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
 void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
 {
     emit sigFramesChanged(range, rect);
+}
+
+void KisImageAnimationInterface::blockFrameInvalidation(bool value)
+{
+    m_d->frameInvalidationBlocked = value;
 }

@@ -29,9 +29,31 @@ class KisImageAnimationInterface;
 class KisRegenerateFrameStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
+    enum Type {
+        EXTERNAL_FRAME,
+        CURRENT_FRAME
+    };
+
+
+public:
+    /**
+     * Constructs a strategy that refreshes an external frame in the
+     * background without ending/cancelling any running actions
+     */
     KisRegenerateFrameStrokeStrategy(int frameId,
                                      const QRegion &dirtyRegion,
                                      KisImageAnimationInterface *interface);
+
+    /**
+     * Regenerates current frame without affecting the frames cache.
+     * Used for redrawing the image after switching frames.
+     *
+     * NOTE: in contrast to the other c-tor, refreshing current frame
+     *       *does* end all the running stroke, because it is not a
+     *       background action, but a distinct user action.
+     */
+    KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface);
+
     ~KisRegenerateFrameStrokeStrategy();
 
     void initStrokeCallback();

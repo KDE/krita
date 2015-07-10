@@ -35,7 +35,6 @@ const QRect KisDefaultBounds::infiniteRect =
 struct KisDefaultBounds::Private
 {
     KisImageWSP image;
-    KisImageAnimationInterface *animationInterface;
 };
 
 
@@ -43,7 +42,6 @@ KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
     : m_d(new Private())
 {
     m_d->image = image;
-    m_d->animationInterface = image ? image->animationInterface() : 0;
 }
 
 KisDefaultBounds::~KisDefaultBounds()
@@ -71,12 +69,14 @@ int KisDefaultBounds::currentLevelOfDetail() const
 
 int KisDefaultBounds::currentTime() const
 {
-    return m_d->animationInterface ? m_d->animationInterface->currentTime() : 0;
+    KisImageAnimationInterface *interface = m_d->image ? m_d->image->animationInterface() : 0;
+    return interface ? interface->currentTime() : 0;
 }
 
 bool KisDefaultBounds::externalFrameActive() const
 {
-    return m_d->animationInterface ? m_d->animationInterface->externalFrameActive() : false;
+    KisImageAnimationInterface *interface = m_d->image ? m_d->image->animationInterface() : 0;
+    return interface ? interface->externalFrameActive() : false;
 }
 
 /******************************************************************/

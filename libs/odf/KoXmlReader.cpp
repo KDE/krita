@@ -1712,11 +1712,9 @@ KoXmlNode KoXmlNode::namedItem(const QString& name) const
     if (!d->loaded)
         d->loadChildren();
 
-    KoXmlNodeData* node = d->first;
-    while (node) {
+    for (KoXmlNodeData* node = d->first; node; node = node->next) {
         if (node->nodeName() == name)
             return KoXmlNode(node);
-        node = node->next;
     }
 
     // not found
@@ -1728,15 +1726,13 @@ KoXmlNode KoXmlNode::namedItemNS(const QString& nsURI, const QString& name) cons
     if (!d->loaded)
         d->loadChildren();
 
-    KoXmlNodeData* node = d->first;
-    while (node) {
+    for (KoXmlNodeData* node = d->first; node; node = node->next) {
         if (node->nodeType == KoXmlNode::ElementNode
                  && node->localName == name
                  && node->namespaceURI == nsURI
                  ) {
             return KoXmlNode(node);
         }
-        node = node->next;
     }
 
     // not found

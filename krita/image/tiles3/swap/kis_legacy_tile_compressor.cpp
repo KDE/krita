@@ -30,22 +30,24 @@ KisLegacyTileCompressor::~KisLegacyTileCompressor()
 {
 }
 
-void KisLegacyTileCompressor::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
+bool KisLegacyTileCompressor::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tile->pixelSize());
 
     const qint32 bufferSize = maxHeaderLength() + 1;
     quint8 *headerBuffer = new quint8[bufferSize];
 
-    writeHeader(tile, headerBuffer);
+    bool retval = writeHeader(tile, headerBuffer);
 
     store.write((char *)headerBuffer, strlen((char *)headerBuffer));
 
     tile->lockForRead();
-    store.write((char *)tile->data(), tileDataSize);
+    retval = store.write((char *)tile->data(), tileDataSize);
     tile->unlock();
 
     delete[] headerBuffer;
+
+    return retval;
 }
 
 bool KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *dm)
@@ -112,7 +114,7 @@ inline qint32 KisLegacyTileCompressor::maxHeaderLength()
     return LEGACY_MAGIC_NUMBER;
 }
 
-inline void KisLegacyTileCompressor::writeHeader(KisTileSP tile,
+inline bool KisLegacyTileCompressor::writeHeader(KisTileSP tile,
                                                  quint8 *buffer)
 {
     qint32 x, y;
@@ -120,4 +122,6 @@ inline void KisLegacyTileCompressor::writeHeader(KisTileSP tile,
 
     tile->extent().getRect(&x, &y, &width, &height);
     sprintf((char *)buffer, "%d,%d,%d,%d\n", x, y, width, height);
+
+    return true;
 }

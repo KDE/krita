@@ -35,7 +35,7 @@ KisTileCompressor2::~KisTileCompressor2()
     delete m_compression;
 }
 
-void KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
+bool KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tile->pixelSize());
     prepareStreamingBuffer(tileDataSize);
@@ -48,8 +48,16 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
     tile->unlock();
 
     QString header = getHeader(tile, bytesWritten);
-    store.write(header.toLatin1());
-    store.write(m_streamingBuffer.data(), bytesWritten);
+    bool retval = true;
+    retval = store.write(header.toLatin1());
+    if (!retval) {
+        warnFile << "Failed to write the tile header";
+    }
+    retval = store.write(m_streamingBuffer.data(), bytesWritten);
+    if (!retval) {
+        warnFile << "Failed to write the tile datak";
+    }
+    return retval;
 }
 
 bool KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)

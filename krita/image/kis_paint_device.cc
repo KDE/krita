@@ -321,8 +321,10 @@ private:
         if (defaultBounds) {
             if (defaultBounds->currentLevelOfDetail()) {
                 if (!m_lodData) {
-                    // multithreading
-                    m_lodData.reset(new Data(m_data));
+                    QMutexLocker l(&m_dataSwitchLock);
+                    if (!m_lodData) {
+                        m_lodData.reset(new Data(m_data));
+                    }
                 }
 
                 return m_lodData.data();
@@ -331,11 +333,14 @@ private:
             if (contentChannel && contentChannel->keyframeCount() > 1) {
                 int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
                 Q_ASSERT(frames.contains(frameId));
+
                 return frames[frameId];
             } else if (defaultBounds->externalFrameActive()) {
                 if (!m_externalFrameData) {
-                    // multithreading
-                    m_externalFrameData.reset(new Data(m_data));
+                    QMutexLocker l(&m_dataSwitchLock);
+                    if (!m_externalFrameData) {
+                        m_externalFrameData.reset(new Data(m_data));
+                    }
                 }
 
                 return m_externalFrameData.data();
@@ -349,8 +354,10 @@ private:
         if (defaultBounds) {
             if (defaultBounds->currentLevelOfDetail()) {
                 if (!m_lodData) {
-                    // multithreading
-                    m_lodData.reset(new Data(m_data));
+                    QMutexLocker l(&m_dataSwitchLock);
+                    if (!m_lodData) {
+                        m_lodData.reset(new Data(m_data));
+                    }
                 }
 
                 return m_lodData.data();
@@ -362,8 +369,10 @@ private:
                 return frames[frameId];
             } else if (defaultBounds->externalFrameActive()) {
                 if (!m_externalFrameData) {
-                    // multithreading
-                    m_externalFrameData.reset(new Data(m_data));
+                    QMutexLocker l(&m_dataSwitchLock);
+                    if (!m_externalFrameData) {
+                        m_externalFrameData.reset(new Data(m_data));
+                    }
                 }
 
                 return m_externalFrameData.data();
@@ -401,6 +410,7 @@ private:
     Data *m_data;
     mutable QScopedPointer<Data> m_lodData;
     mutable QScopedPointer<Data> m_externalFrameData;
+    mutable QMutex m_dataSwitchLock;
     QHash<int, Data*> frames;
     int nextFreeFrameId;
 };

@@ -787,7 +787,6 @@ public:
     QString text();
 
     // node manipulation
-    void appendChild(KoXmlNodeData* child);
     void clear();
 
     // attributes
@@ -926,19 +925,6 @@ QString KoXmlNodeData::nodeName() const
 
     // should not happen
     return QString();
-}
-
-void KoXmlNodeData::appendChild(KoXmlNodeData* node)
-{
-    node->parent = this;
-    if (!last)
-        first = last = node;
-    else {
-        last->next = node;
-        node->prev = last;
-        node->next = 0;
-        last = node;
-    }
 }
 
 void KoXmlNodeData::setAttribute(const QString& name, const QString& value)

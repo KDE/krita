@@ -19,6 +19,8 @@
 #ifndef __KIS_TIME_RANGE_H
 #define __KIS_TIME_RANGE_H
 
+#include "krita_export.h"
+
 #include <algorithm>
 #include <limits>
 #include <QMetaType>
@@ -111,6 +113,8 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisTimeRange);
+
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisTimeRange &r);
 
 
 #endif /* __KIS_TIME_RANGE_H */

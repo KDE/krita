@@ -18,6 +18,8 @@
 
 #include "kis_time_range.h"
 
+#include <QDebug>
+
 
 struct KisTimeRangeStaticRegistrar {
     KisTimeRangeStaticRegistrar() {
@@ -26,3 +28,10 @@ struct KisTimeRangeStaticRegistrar {
 };
 
 static KisTimeRangeStaticRegistrar __registrar;
+
+QDebug operator<<(QDebug dbg, const KisTimeRange &r)
+{
+    dbg.nospace() << "KisTimeRange(" << r.start() << ", " << r.end() << ")";
+
+    return dbg.space();
+}

@@ -156,12 +156,12 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Footnote");
-    setParent(d->defaultParagraphStyle);
+    style->setParentStyle(d->defaultParagraphStyle);
     add(style);
     d->footNotesConfiguration->setDefaultNoteParagraphStyle(style);
     style = new KoParagraphStyle();
     style->setName("Endnote");
-    setParent(d->defaultParagraphStyle);
+    style->setParentStyle(d->defaultParagraphStyle);
     add(style);
     d->endNotesConfiguration->setDefaultNoteParagraphStyle(style);
     KoCharacterStyle *cStyle = new KoCharacterStyle();

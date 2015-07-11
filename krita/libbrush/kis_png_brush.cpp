@@ -53,6 +53,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     // fails with "libpng error: IDAT: CRC error"
     QByteArray data = dev->readAll();
     QBuffer buf(&data);
+    buf.open(QIODevice::ReadOnly);
     QImageReader reader(&buf, "PNG");
 
     if (!reader.canRead()) {

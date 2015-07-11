@@ -78,7 +78,6 @@
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoDocumentEntry.h>
-#include <KoOdfStylesReader.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>

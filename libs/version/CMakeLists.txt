@@ -12,10 +12,6 @@ set(koversion_LIB_SRCS
 add_library(koversion SHARED ${koversion_LIB_SRCS})
 generate_export_header(koversion BASE_NAME koversion)
 
-target_link_libraries(koversion Qt5::Core )
-
-target_link_libraries(koversion LINK_INTERFACE_LIBRARIES Qt5::Core )
-
 set_target_properties(koversion PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )

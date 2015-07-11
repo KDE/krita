@@ -61,7 +61,7 @@ ki18n_wrap_ui(kopageapp_LIB_SRCS
 
 add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp komain kotextlayout)
+target_link_libraries(kopageapp komain kotextlayout ${KDE4_KIO_LIBS})
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kopageapp PROPERTIES

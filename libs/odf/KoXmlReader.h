@@ -209,7 +209,6 @@ public:
     virtual ~KoXmlText();
 
     QString data() const;
-    void setData(const QString& data);
     virtual bool isText() const;
 
 private:

@@ -26,19 +26,19 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef LIBKISPSD_EXPORT
-# if defined(MAKE_LIBKISPSD_LIB)
+#ifndef KRITAPSD_EXPORT
+# if defined(MAKE_KRITAPSD_LIB)
 /* We are building this library */
-#  define LIBKISPSD_EXPORT KDE_EXPORT
+#  define KRITAPSD_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define LIBKISPSD_EXPORT KDE_IMPORT
+#  define KRITAPSD_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define LIBKISPSD_EXPORT KDE_EXPORT
+#define KRITAPSD_EXPORT KDE_EXPORT
 
 #endif
 

@@ -78,6 +78,8 @@ class KActionCollection;
 #ifndef QT_NO_UNDOCOMMAND
 
 #include "kundo2magicstring.h"
+#include "kundo2commandextradata.h"
+
 
 class KUNDO2_EXPORT KUndo2Command
 {
@@ -116,23 +118,19 @@ public:
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
 
-    struct ExtraData {
-        virtual ~ExtraData();
-    };
-
     /**
      * \return user-defined object associated with the command
      *
      * \see setExtraData()
      */
-    ExtraData* extraData() const;
+    KUndo2CommandExtraData* extraData() const;
 
     /**
      * The user can assign an arbitrary object associated with the
      * command. The \p data object is owned by the command. If you assign
      * the object twice, the first one will be destroyed.
      */
-    void setExtraData(ExtraData *data);
+    void setExtraData(KUndo2CommandExtraData *data);
 
 private:
     Q_DISABLE_COPY(KUndo2Command)

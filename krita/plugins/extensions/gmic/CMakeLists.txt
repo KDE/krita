@@ -163,14 +163,14 @@ set(kritagmic_PART_SRCS
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
 add_library(kritagmic MODULE ${kritagmic_PART_SRCS})
-target_link_libraries(kritagmic kritaui gmic Qt5::Xml ${ZLIB_LIBRARIES})
+target_link_libraries(kritagmic kritaui gmic Qt5::Xml Qt5::Network ${ZLIB_LIBRARIES})
 kcoreaddons_desktop_to_json(kritagmic kritagmic.desktop)
 
 # gmicparser for debugging purposes
 
 set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
 add_executable(gmicparser ${gmicparser_PART_SRCS})
-target_link_libraries(gmicparser Qt5::Core Qt5::Gui kritaui gmic ${ZLIB_LIBRARIES})
+target_link_libraries(gmicparser Qt5::Core Qt5::Gui Qt5::Network kritaui gmic ${ZLIB_LIBRARIES})
 
 ########### install files ###############
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)

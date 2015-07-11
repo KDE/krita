@@ -10,7 +10,7 @@ ki18n_wrap_ui(kritapdfimport_PART_SRCS pdfimportwidgetbase.ui )
 add_library(kritapdfimport MODULE ${kritapdfimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritapdfimport krita_pdf_import.desktop)
 
-target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY} )
+target_link_libraries(kritapdfimport kritaui ${KDE4_KIO_LIBS} ${POPPLER_LIBRARY} )
 
 install(TARGETS kritapdfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############

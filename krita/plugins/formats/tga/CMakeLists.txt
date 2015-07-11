@@ -21,7 +21,7 @@ ki18n_wrap_ui(kritatgaimport_PART_SRCS )
 add_library(kritatgaimport MODULE ${kritatgaimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritatgaimport krita_tga_import.desktop)
 
-target_link_libraries(kritatgaimport kritaui)
+target_link_libraries(kritatgaimport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritatgaimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

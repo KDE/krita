@@ -15,7 +15,8 @@ set(thesaurustool_SRCS
 add_library(calligra_textediting_thesaurus MODULE ${thesaurustool_SRCS})
 kcoreaddons_desktop_to_json(calligra_textediting_thesaurus calligra_textediting_thesaurus.desktop)
 
-target_link_libraries(calligra_textediting_thesaurus kotext)
+target_link_libraries(calligra_textediting_thesaurus kotext ${KDE4_KFILE_LIBS}
+${KDE4_KIO_LIBS})
 
 install(TARGETS calligra_textediting_thesaurus  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

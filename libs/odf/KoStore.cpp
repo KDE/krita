@@ -308,7 +308,7 @@ QByteArray KoStore::read(qint64 max)
 
 qint64 KoStore::write(const QByteArray& data)
 {
-    return write(data.data(), data.size());   // see below
+    return write(data.constData(), data.size());   // see below
 }
 
 qint64 KoStore::read(char *_buffer, qint64 _len)

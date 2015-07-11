@@ -31,7 +31,7 @@ class KoAbstractGradient;
 template<class T> class QSharedPointer;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
-class LIBKISPSD_EXPORT KisAslObjectCatcher
+class KRITAPSD_EXPORT KisAslObjectCatcher
 {
 public:
     KisAslObjectCatcher();

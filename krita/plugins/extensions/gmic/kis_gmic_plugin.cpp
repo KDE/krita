@@ -95,7 +95,17 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
     m_blacklistPath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
+    dumpCompiletimeFeatures();
 
+}
+
+KisGmicPlugin::~KisGmicPlugin()
+{
+    delete m_gmicWidget;
+}
+
+void KisGmicPlugin::dumpCompiletimeFeatures()
+{
     dbgPlugins << "<features>";
 #ifdef gmic_is_parallel
     dbgPlugins << "PTHREADS ON";
@@ -127,13 +137,8 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     #endif
 #endif
     dbgPlugins << "</features>";
-
 }
 
-KisGmicPlugin::~KisGmicPlugin()
-{
-    delete m_gmicWidget;
-}
 
 void KisGmicPlugin::setupDefinitionPaths()
 {
@@ -196,6 +201,11 @@ void KisGmicPlugin::slotShowGmicDialog()
     m_gmicApplicator = new KisGmicApplicator();
     connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
 
+    m_smallApplicator = new KisGmicSmallApplicator;
+    connect(m_smallApplicator , SIGNAL(gmicFinished(bool,int,QString)), this, SLOT(slotGmicFinished(bool,int,QString)));
+    connect(m_smallApplicator , SIGNAL(previewFinished(bool)), this, SLOT(slotViewportPreviewFinished(bool)));
+
+
     setupDefinitionPaths();
     parseGmicCommandDefinitions(m_definitionFilePaths);
 
@@ -238,29 +248,31 @@ void KisGmicPlugin::slotCloseGmicDialog()
 {
     dbgPlugins << "progress manager: " << m_progressManager;
 
-    m_gmicWidget = 0;
-    if (m_gmicApplicator)
-    {
-        m_gmicApplicator->cancel();
-    }
-
-    delete m_gmicApplicator;
-    m_gmicApplicator = 0;
-
-    delete m_progressManager;
-    m_progressManager = 0;
-
-    //reset state
+    // reset state 
     {
         m_gmicWidget = 0;
-        m_gmicApplicator = 0;
-        m_smallApplicator = 0;
+
+        if (m_gmicApplicator)
+        {
+            m_gmicApplicator->cancel();
+        }
+
+        delete m_progressManager;
         m_progressManager = 0;
-        m_currentActivity = INIT;
+
+        delete m_gmicApplicator;
+        m_gmicApplicator = 0;
+
+        dbgPlugins << "Deleting " << m_smallApplicator;
+        delete m_smallApplicator;
+        m_smallApplicator = 0;
+
+        setActivity(INIT);
         m_requestFinishAndClose = false;
         m_smallPreviewRequestCounter = 0;
         m_onCanvasPreviewRequestCounter = 0;
         m_filteringIsRunning = false;
+        m_gmicCustomCommands.clear();
     }
 }
 
@@ -283,7 +295,7 @@ void KisGmicPlugin::slotPreviewGmicCommand(KisGmicFilterSetting* setting)
 
     if (setting->previewSize() !=  ON_CANVAS)
     {
-        createViewportPreview(layers, setting);
+        renderViewportPreview(layers, setting);
     }
     else
     {
@@ -356,8 +368,7 @@ void KisGmicPlugin::parseGmicCommandDefinitions(const QStringList& gmicDefinitio
     }
 }
 
-
-void KisGmicPlugin::createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting)
+void KisGmicPlugin::renderViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting)
 {
     if (m_filteringIsRunning)
     {
@@ -365,26 +376,25 @@ void KisGmicPlugin::createViewportPreview(KisNodeListSP layers, KisGmicFilterSet
         waitForFilterFinish();
     }
 
-    m_smallPreviewRequestCounter++;
-
-    setActivity(SMALL_PREVIEW);
-    m_smallApplicator = new KisGmicSmallApplicator;
-    dbgPlugins << "created m_smallApplicator " << m_smallApplicator << " and locking image!";
-    m_view->image()->lock();
-    QRect canvasRect = m_view->image()->bounds();
     QSize previewSize;
     if (m_gmicWidget && m_gmicWidget->previewWidget()) {
         previewSize = m_gmicWidget->previewWidget()->size();
     }
+    else
+    {
+        return;
+    }
 
-    m_smallApplicator->setProperties(canvasRect,previewSize, layers, setting, m_gmicCustomCommands);
-    connect(m_smallApplicator , SIGNAL(gmicFinished(bool,int,QString)), this, SLOT(slotGmicFinished(bool,int,QString)));
-    connect(m_smallApplicator , SIGNAL(previewReady()), this, SLOT(slotPreviewReady()));
+    m_smallPreviewRequestCounter++;
+    dbgPlugins << "Current number of small preview requests: " << m_smallPreviewRequestCounter;
+    setActivity(SMALL_PREVIEW);
 
+    m_view->image()->lock();
+    QRect canvasRect = m_view->image()->bounds();
     m_view->image()->unlock();
     dbgPlugins << "Unlocked image...";
 
-    m_smallApplicator->start();
+    m_smallApplicator->render(canvasRect,previewSize, layers, setting, m_gmicCustomCommands);
     startProgressReporting();
 }
 
@@ -512,13 +522,6 @@ void KisGmicPlugin::gmicFailed(const QString& msg)
         slotCancelOnCanvasPreview();
     }
 
-    if (m_currentActivity == SMALL_PREVIEW)
-    {
-        dbgPlugins << "Deleting " << m_smallApplicator;
-        delete m_smallApplicator;
-        m_smallApplicator = 0;
-    }
-
     QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry! G'Mic failed, reason:") + msg);
 }
 
@@ -534,14 +537,20 @@ void KisGmicPlugin::slotRequestFinishAndClose()
     }
 }
 
-void KisGmicPlugin::slotPreviewReady()
+void KisGmicPlugin::slotViewportPreviewFinished(bool successfully)
 {
-    if (m_currentActivity == SMALL_PREVIEW && m_smallApplicator) {
-        slotPreviewSmallWindow(m_smallApplicator->preview());
+    if (m_smallApplicator)
+    {
+        if (successfully)
+        {
+            slotPreviewSmallWindow(m_smallApplicator->preview());
+        }
+        else
+        {
+            dbgPlugins << "Viewport preview generation failed!";
+        }
 
-        dbgPlugins << "Deleting " << m_smallApplicator;
-        delete m_smallApplicator;
-        m_smallApplicator = 0;
+        setActivity(INIT);
     }
 }
 
@@ -555,18 +564,11 @@ void KisGmicPlugin::setActivity(KisGmicPlugin::Activity activity)
 
 void KisGmicPlugin::waitForFilterFinish()
 {
-    dbgPlugins << "starting local event loop!";
+    dbgPlugins << "Starting local event loop!";
     QEventLoop localEventLoop;
     connect(this, SIGNAL(filteringFinished()), &localEventLoop, SLOT(quit()));
     localEventLoop.exec();
-
-#if 0
-    while (m_filteringIsRunning)
-    {
-        QCoreApplication::processEvents();
-    }
-#endif
-
+    dbgPlugins << "Done";
 }
 
 

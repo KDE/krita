@@ -37,7 +37,7 @@
 
 #include "kis_selection.h"
 #include <kis_iterator_ng.h>
-
+#include "krita_utils.h"
 
 void KisBContrastBenchmark::initTestCase()
 {
@@ -84,8 +84,13 @@ void KisBContrastBenchmark::benchmarkFilter()
         kfc->fromXML(s);
     }
 
+    QSize size = KritaUtils::optimalPatchSize();
+    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(QRect(0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), size);
+
     QBENCHMARK{
-        filter->process(m_device, QRect(0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), kfc);
+        foreach(const QRect &rc, rects) {
+            filter->process(m_device, rc, kfc);
+        }
     }
 }
 

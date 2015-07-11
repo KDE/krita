@@ -26,9 +26,9 @@ add_library(kritajpegimport MODULE ${kritajpegimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritajpegimport krita_jpeg_import.desktop)
 
 if(LCMS2_FOUND)
-    target_link_libraries(kritajpegimport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegimport kritaui ${KDE4_KIO_LIBS} jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 else()
-    target_link_libraries(kritajpegimport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegimport kritaui ${KDE4_KIO_LIBS} jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 endif()
 
 install(TARGETS kritajpegimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
@@ -46,9 +46,9 @@ add_library(kritajpegexport MODULE ${kritajpegexport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritajpegexport krita_jpeg_export.desktop)
 
 if(LCMS2_FOUND)
-    target_link_libraries(kritajpegexport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegexport kritaui  ${KDE4_KIO_LIBS} jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 else()
-    target_link_libraries(kritajpegexport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegexport kritaui  ${KDE4_KIO_LIBS} jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 endif()
 
 install(TARGETS kritajpegexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

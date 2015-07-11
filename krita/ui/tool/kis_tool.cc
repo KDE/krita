@@ -792,6 +792,7 @@ bool KisTool::selectionEditable()
 
 void KisTool::listenToModifiers(bool listen)
 {
+    Q_UNUSED(listen);
 }
 
 bool KisTool::listeningToModifiers()

@@ -20,7 +20,7 @@
  * this software.
  */
 
-#include <filter/kis_filter_configuration.h>
+#include "filter/kis_color_transformation_configuration.h"
 
 #include "kiswdgindexcolors.h"
 #include "palettegeneratorconfig.h"
@@ -124,7 +124,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
 
 KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("indexcolors", 1);
+    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration("indexcolors", 1);
 
     PaletteGeneratorConfig palCfg;
 

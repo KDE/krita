@@ -6,6 +6,7 @@ add_library(kritathumbnail MODULE ${kritathumbnail_SRCS})
 
 target_link_libraries(kritathumbnail
     koodf
+    ${KDE4_KIO_LIBS}
 )
 
 install(TARGETS kritathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})

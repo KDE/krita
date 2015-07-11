@@ -30,6 +30,7 @@
 #include <QTime>
 #endif
 #include <kis_iterator_ng.h>
+#include "kis_color_transformation_configuration.h"
 
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
 {
@@ -52,7 +53,14 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
     }
 
     const KoColorSpace * cs = device->colorSpace();
-    KoColorTransformation* colorTransformation = createTransformation(cs, config);
+    KoColorTransformation * colorTransformation = 0;
+    const KisColorTransformationConfiguration * colorTransformationConfiguration = dynamic_cast<const KisColorTransformationConfiguration*>(config);
+    if (colorTransformationConfiguration) {
+        colorTransformation = colorTransformationConfiguration->colorTransformation(cs, this);
+    }
+    else {
+        colorTransformation = createTransformation(cs, config);
+    }
     if (!colorTransformation) return;
 
     KisSequentialIterator it(device, applyRect);
@@ -66,6 +74,8 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
         if (progressUpdater) progressUpdater->setValue(p += conseq);
 
     } while(it.nextPixels(conseq));
-    delete colorTransformation;
+    if (!colorTransformationConfiguration) {
+        delete colorTransformation;
+    }
 
 }

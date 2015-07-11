@@ -22,9 +22,9 @@ set(kritapsd_LIB_SRCS
 kde4_add_library(kritapsd SHARED ${kritapsd_LIB_SRCS} )
 
 if (WIN32)
-    target_link_libraries(kritapsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS})
+    target_link_libraries(kritapsd pigmentcms kritaglobal KF5::KDELibs4Support ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS})
 else (WIN32)
-    target_link_libraries(kritapsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+    target_link_libraries(kritapsd pigmentcms kritaglobal KF5::KDELibs4Support ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 endif (WIN32)
 
 target_link_libraries(kritapsd LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})

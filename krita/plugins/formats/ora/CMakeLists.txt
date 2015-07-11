@@ -13,7 +13,7 @@ set(kritaoraimport_PART_SRCS
 add_library(kritaoraimport MODULE ${kritaoraimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaoraimport krita_ora_import.desktop)
 
-target_link_libraries(kritaoraimport kritaui )
+target_link_libraries(kritaoraimport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritaoraimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
@@ -27,7 +27,7 @@ set(kritaoraexport_PART_SRCS
 add_library(kritaoraexport MODULE ${kritaoraexport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaoraexport krita_ora_export.desktop)
 
-target_link_libraries(kritaoraexport kritaui )
+target_link_libraries(kritaoraexport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritaoraexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

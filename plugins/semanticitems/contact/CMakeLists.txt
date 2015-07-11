@@ -22,7 +22,7 @@ if (KF5Contacts_FOUND AND KF5Akonadi_FOUND)
    )
 endif ()
 
-target_link_libraries(calligra_semanticitem_contact   ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_contact   ${KORDF_LIBS} KF5::KDELibs4Support)
 kcoreaddons_desktop_to_json(calligra_semanticitem_contact calligra_semanticitem_contact.desktop)
 
 install(TARGETS calligra_semanticitem_contact  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

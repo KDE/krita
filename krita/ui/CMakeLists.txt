@@ -443,7 +443,8 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${X11_X11_LIB}
-                              ${X11_Xinput_LIB})
+                              ${X11_Xinput_LIB}
+                              KF5::KDELibs4Support)
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
@@ -469,8 +470,7 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush KF5::KDELibs4Support ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

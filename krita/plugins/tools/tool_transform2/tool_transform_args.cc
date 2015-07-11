@@ -95,6 +95,8 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
     }
+
+    m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
 }
 
 void ToolTransformArgs::clear()
@@ -408,4 +410,24 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
     }
 
     return args;
+}
+
+void ToolTransformArgs::saveContinuedState()
+{
+    m_continuedTransformation.reset();
+    m_continuedTransformation.reset(new ToolTransformArgs(*this));
+}
+
+void ToolTransformArgs::restoreContinuedState()
+{
+    QScopedPointer<ToolTransformArgs> tempTransformation(
+        new ToolTransformArgs(*m_continuedTransformation));
+
+    *this = *tempTransformation;
+    m_continuedTransformation.swap(tempTransformation);
+}
+
+const ToolTransformArgs* ToolTransformArgs::continuedTransform() const
+{
+    return m_continuedTransformation.data();
 }

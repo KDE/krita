@@ -34,7 +34,7 @@ namespace KisAslWriterUtils {
 /**
  * Exception that is emitted when any write error appear.
  */
-struct LIBKISPSD_EXPORT ASLWriteException : public std::runtime_error
+struct KRITAPSD_EXPORT ASLWriteException : public std::runtime_error
 {
     ASLWriteException(const QString &msg)
         : std::runtime_error(msg.toAscii().data())
@@ -53,12 +53,12 @@ struct LIBKISPSD_EXPORT ASLWriteException : public std::runtime_error
 
 namespace KisAslWriterUtils {
 
-LIBKISPSD_EXPORT void writeRect(const QRect &rect, QIODevice *device);
-LIBKISPSD_EXPORT void writeUnicodeString(const QString &value, QIODevice *device);
-LIBKISPSD_EXPORT void writeVarString(const QString &value, QIODevice *device);
-LIBKISPSD_EXPORT void writePascalString(const QString &value, QIODevice *device);
-LIBKISPSD_EXPORT void writeFixedString(const QString &value, QIODevice *device);
-LIBKISPSD_EXPORT QString getPatternUuidLazy(const KoPattern *pattern);
+KRITAPSD_EXPORT void writeRect(const QRect &rect, QIODevice *device);
+KRITAPSD_EXPORT void writeUnicodeString(const QString &value, QIODevice *device);
+KRITAPSD_EXPORT void writeVarString(const QString &value, QIODevice *device);
+KRITAPSD_EXPORT void writePascalString(const QString &value, QIODevice *device);
+KRITAPSD_EXPORT void writeFixedString(const QString &value, QIODevice *device);
+KRITAPSD_EXPORT QString getPatternUuidLazy(const KoPattern *pattern);
 
 /**
  * Align the pointer \p pos by alignment. Grow the pointer

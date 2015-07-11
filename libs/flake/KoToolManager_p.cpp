@@ -103,7 +103,7 @@ void Connector::selectionChanged()
 }
 
 //   ************ ToolAction **********
-ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent)
+ToolAction::ToolAction(KoToolManager* toolManager, const QString &id, const QString &name, QObject *parent)
     : QAction(name, parent),
     m_toolManager(toolManager),
     m_toolID(id)

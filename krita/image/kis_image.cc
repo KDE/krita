@@ -80,6 +80,7 @@
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
+#include "kis_crop_saved_extra_data.h"
 
 #include "kis_layer_projection_plane.h"
 
@@ -433,10 +434,16 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     emitSignals << ComplexSizeChangedSignal(newRect, newRect.size());
     emitSignals << ModifiedSignal;
 
+    KisCropSavedExtraData *extraData =
+        new KisCropSavedExtraData(cropLayers ?
+                                  KisCropSavedExtraData::CROP_IMAGE :
+                                  KisCropSavedExtraData::RESIZE_IMAGE,
+                                  newRect);
+
     KisProcessingApplicator applicator(this, m_d->rootLayer,
                                        KisProcessingApplicator::RECURSIVE |
                                        KisProcessingApplicator::NO_UI_UPDATES,
-                                       emitSignals, actionName);
+                                       emitSignals, actionName, extraData);
 
     if (cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
@@ -468,9 +475,13 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
+    KisCropSavedExtraData *extraData =
+        new KisCropSavedExtraData(KisCropSavedExtraData::CROP_LAYER,
+                                  newRect, node);
+
     KisProcessingApplicator applicator(this, node,
                                        KisProcessingApplicator::RECURSIVE,
-                                       emitSignals, actionName);
+                                       emitSignals, actionName, extraData);
 
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
@@ -880,25 +891,25 @@ qint32 KisImage::nHiddenLayers() const
     return visitor.count();
 }
 
-QRect KisImage::realNodeExtent(KisNodeSP rootNode, QRect currentRect)
+QRect realNodeExactBounds(KisNodeSP rootNode, QRect currentRect = QRect())
 {
     KisNodeSP node = rootNode->firstChild();
 
     while(node) {
-        currentRect |= realNodeExtent(node, currentRect);
+        currentRect |= realNodeExactBounds(node, currentRect);
         node = node->nextSibling();
     }
 
     // TODO: it would be better to count up changeRect inside
     // node's extent() method
-    currentRect |= rootNode->projectionPlane()->changeRect(rootNode->extent());
+    currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
 
     return currentRect;
 }
 
 void KisImage::refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea)
 {
-    QRect realNodeRect = realNodeExtent(rootNode);
+    QRect realNodeRect = realNodeExactBounds(rootNode);
     if (!preparedArea.contains(realNodeRect)) {
 
         QRegion dirtyRegion = realNodeRect;
@@ -919,8 +930,8 @@ void KisImage::flatten()
     refreshHiddenArea(oldRootLayer, bounds());
 
     lock();
-    KisPaintDeviceSP projectionCopy =
-        new KisPaintDevice(*oldRootLayer->projection());
+    KisPaintDeviceSP projectionCopy = new KisPaintDevice(oldRootLayer->projection()->colorSpace());
+    projectionCopy->makeCloneFrom(oldRootLayer->projection(), oldRootLayer->exactBounds());
     unlock();
 
     KisPaintLayerSP flattenLayer =

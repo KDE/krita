@@ -29,12 +29,12 @@ public:
     {
     }
 
-    qint64 write(const QByteArray &data) {
-        return m_store->write(data);
+    bool write(const QByteArray &data) {
+        return (m_store->write(data) == data.length());
     }
 
-    qint64 write(const char* data, qint64 length) {
-        return m_store->write(data, length);
+    bool write(const char* data, qint64 length) {
+        return (m_store->write(data, length) == length);
     }
 
     KoStore *m_store;

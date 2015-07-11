@@ -13,7 +13,6 @@ set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
     KoOdfManifestEntry.cpp
-    KoDom.cpp
     KoDocumentInfo.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
@@ -59,7 +58,7 @@ add_library(koodf SHARED ${koodf_LIB_SRCS})
 add_dependencies(koodf writeodf.h-target)
 
 target_link_libraries(koodf KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::KDELibs4Support Qt5::Xml)
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES KF5::KIOWidgets KF5::KDELibs4Support Qt5::Xml)
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES Qt5::Xml)
 if( Qca-qt5_FOUND )
     target_link_libraries(koodf qca-qt5)
 endif()
@@ -75,7 +74,6 @@ install( FILES
     KoOdf.h
     KoXmlNS.h
     KoOdfManifestEntry.h
-    KoDom.h
     KoGenStyle.h
     KoGenStyles.h
     KoFontFace.h

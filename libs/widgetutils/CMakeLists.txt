@@ -17,7 +17,7 @@ generate_export_header(kowidgetutils BASE_NAME kowidgetutils)
 
 # KDE is only used for i18n
 target_link_libraries(kowidgetutils Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets KF5::KDELibs4Support)
-target_link_libraries(kowidgetutils LINK_INTERFACE_LIBRARIES Qt5::Core Qt5::Gui Qt5::Xml KF5::KDELibs4Support)
+target_link_libraries(kowidgetutils LINK_INTERFACE_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml)
 
 set_target_properties(kowidgetutils
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

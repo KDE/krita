@@ -85,36 +85,42 @@ void printNodes(KisNodeSP node, const QString &prefix = "")
     }
 }
 
-void printLeafsBackward(KisProjectionLeafSP leaf, const QString &prefix = "")
+void printLeafsBackward(KisProjectionLeafSP leaf, QList<QString> &refNodes, const QString &prefix = "")
 {
     qDebug() << prefix << leaf->node()->name();
+    QCOMPARE(leaf->node()->name(), refNodes.takeFirst());
 
     KisProjectionLeafSP prevLeaf = leaf->lastChild();
     while(prevLeaf) {
-        printLeafsBackward(prevLeaf, QString("\"\"%1").arg(prefix));
+        printLeafsBackward(prevLeaf, refNodes, QString("\"\"%1").arg(prefix));
         prevLeaf = prevLeaf->prevSibling();
+    }
+
+    if (prefix == "") {
+        QVERIFY(refNodes.isEmpty());
     }
 }
 
-void printLeafsForward(KisProjectionLeafSP leaf, const QString &prefix = "")
+void printLeafsForward(KisProjectionLeafSP leaf, QList<QString> &refNodes, const QString &prefix = "")
 {
     qDebug() << prefix << leaf->node()->name();
+    QCOMPARE(leaf->node()->name(), refNodes.takeFirst());
 
     KisProjectionLeafSP prevLeaf = leaf->firstChild();
     while(prevLeaf) {
-        printLeafsForward(prevLeaf, QString("\"\"%1").arg(prefix));
+        printLeafsForward(prevLeaf, refNodes, QString("\"\"%1").arg(prefix));
         prevLeaf = prevLeaf->nextSibling();
     }
 }
 
-void printParents(KisProjectionLeafSP leaf, const QString &prefix = "")
+void printParents(KisProjectionLeafSP leaf, QList<QString> &refNodes, const QString &prefix = "")
 {
     qDebug() << prefix << leaf->node()->name();
-
+    QCOMPARE(leaf->node()->name(), refNodes.takeFirst());
 
     leaf = leaf->parent();
     if (leaf) {
-        printParents(leaf, QString("\"\"%1").arg(prefix));
+        printParents(leaf, refNodes, QString("\"\"%1").arg(prefix));
     }
 }
 
@@ -145,19 +151,140 @@ void KisProjectionLeafTest::testPassThrough()
 
     qDebug() << "== Nodes";
     printNodes(t.image->root());
-    qDebug() << "== Leafs backward";
-    printLeafsBackward(t.image->root()->projectionLeaf());
-    qDebug() << "== Leafs forward";
-    printLeafsForward(t.image->root()->projectionLeaf());
 
-    qDebug() << "== Parents for paint4";
-    printParents(paint4->projectionLeaf());
+    {
+        qDebug() << "== Leafs backward";
 
-    qDebug() << "== Parents for paint3";
-    printParents(paint3->projectionLeaf());
+        QList<QString> refNodes;
+        refNodes << "root"
+                 << "selection"
+                 << "paint1"
+                 << "tmask1"
+                 << "group1" << "paint4" << "paint3" << "paint2"
+                 << "blur1"
+                 << "clone1";
 
-    qDebug() << "== Parents for group1";
-    printParents(group1->projectionLeaf());
+        printLeafsBackward(t.image->root()->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Leafs forward";
+
+        QList<QString> refNodes;
+        refNodes << "root"
+                 << "clone1"
+                 << "blur1"
+                 << "paint2" << "paint3" << "paint4" << "group1"
+                 << "paint1"
+                 << "tmask1"
+                 << "selection";
+
+        printLeafsForward(t.image->root()->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for paint4";
+        QList<QString> refNodes;
+        refNodes << "paint4" << "root";
+        printParents(paint4->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for paint3";
+        QList<QString> refNodes;
+        refNodes << "paint3" << "root";
+        printParents(paint3->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for group1";
+        QList<QString> refNodes;
+        refNodes << "group1" << "root";
+        printParents(group1->projectionLeaf(), refNodes);
+    }
+}
+
+void KisProjectionLeafTest::testNestedPassThrough()
+{
+    TestImage t;
+
+    KisGroupLayerSP group1 = new KisGroupLayer(t.image, "group1", OPACITY_OPAQUE_U8);
+    KisGroupLayerSP group2 = new KisGroupLayer(t.image, "group2", OPACITY_OPAQUE_U8);
+    KisGroupLayerSP group3 = new KisGroupLayer(t.image, "group3", OPACITY_OPAQUE_U8);
+
+    KisPaintLayerSP paint4 = new KisPaintLayer(t.image, "paint4", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP paint5 = new KisPaintLayer(t.image, "paint5", OPACITY_OPAQUE_U8);
+
+    group1->setPassThroughMode(true);
+    group2->setPassThroughMode(true);
+    group3->setPassThroughMode(true);
+
+    t.image->addNode(group1, t.image->root(), t.findBlur1());
+    t.image->addNode(group2, group1);
+    t.image->addNode(paint4, group2);
+
+    t.image->addNode(group3, t.image->root(), t.findBlur1());
+    t.image->addNode(paint5, group3);
+
+    //checkNode(t.image->root(), "");
+
+    qDebug() << "== Nodes";
+    printNodes(t.image->root());
+
+    {
+        qDebug() << "== Leafs backward";
+
+        QList<QString> refNodes;
+        refNodes << "root"
+                 << "selection"
+                 << "paint1"
+                 << "tmask1"
+                 << "group1" << "group2" <<"paint4"
+                 << "group3" << "paint5"
+                 << "blur1"
+                 << "clone1";
+
+        printLeafsBackward(t.image->root()->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Leafs forward";
+
+        QList<QString> refNodes;
+        refNodes << "root"
+                 << "clone1"
+                 << "blur1"
+
+                 << "paint5" << "group3"
+                 << "paint4" << "group2" << "group1"
+
+                 << "paint1"
+                 << "tmask1"
+                 << "selection";
+
+        printLeafsForward(t.image->root()->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for paint4";
+        QList<QString> refNodes;
+        refNodes << "paint4" << "root";
+        printParents(paint4->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for paint5";
+        QList<QString> refNodes;
+        refNodes << "paint5" << "root";
+        printParents(paint5->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for group1";
+        QList<QString> refNodes;
+        refNodes << "group1" << "root";
+        printParents(group1->projectionLeaf(), refNodes);
+    }
 }
 
 QTEST_KDEMAIN(KisProjectionLeafTest, GUI)

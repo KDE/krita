@@ -290,6 +290,7 @@ void KisApplication::clearConfig()
 
 void KisApplication::askClearConfig()
 {
+#if QT_VERSION >= 0x040800
     Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
     bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
 
@@ -302,6 +303,7 @@ void KisApplication::askClearConfig()
             clearConfig();
         }
     }
+#endif
 }
 
 bool KisApplication::start()

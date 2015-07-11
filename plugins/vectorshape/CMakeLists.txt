@@ -20,7 +20,7 @@ set ( VectorShape_SRCS
 add_library(calligra_shape_vector MODULE ${VectorShape_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_vector calligra_shape_vector.desktop)
 
-target_link_libraries(calligra_shape_vector flake kovectorimage Qt5::Svg)
+target_link_libraries(calligra_shape_vector flake kovectorimage KF5::KDELibs4Support Qt5::Svg)
 
 install(TARGETS calligra_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

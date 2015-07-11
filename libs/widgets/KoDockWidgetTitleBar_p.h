@@ -40,9 +40,6 @@ class KoDockWidgetTitleBar::Private
 public:
     Private(KoDockWidgetTitleBar* thePublic)
         : thePublic(thePublic),
-            openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
-            closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
-            lockIcon(koIcon("object-unlocked")),
             collapsable(true),
             collapsableSet(true),
             lockable(true),
@@ -50,12 +47,6 @@ public:
             preCollapsedWidth(-1),
             locked(false)
     {
-        if (openIcon.isNull())
-            openIcon = koIcon("arrow-down");
-        if (closeIcon.isNull())
-            closeIcon = koIcon("arrow-right");
-
-
     }
 
     KoDockWidgetTitleBar* thePublic;

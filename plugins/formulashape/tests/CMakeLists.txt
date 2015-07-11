@@ -49,4 +49,4 @@ kde4_add_ui_files( TestCursor_SRCS
 )
 
 kde4_add_unit_test(TestCursor TESTNAME kformula-Cursor  ${TestCursor_SRCS})
-target_link_libraries(TestCursor kformula Qt5::Test)
+target_link_libraries(TestCursor kformula KF5::KIOWidgets Qt5::Test)

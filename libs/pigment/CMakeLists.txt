@@ -135,6 +135,7 @@ target_link_libraries(
     pigmentcms
     koplugin
     ${EXTRA_LIBRARIES}
+    KF5::KDELibs4Support
     Qt5::Gui
     Qt5::Xml
     ${WIN32_PLATFORM_NET_LIBS}

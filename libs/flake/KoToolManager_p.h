@@ -67,11 +67,11 @@ public:
     void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(const QCursor &cursor);
     void switchBackRequested();
-    void selectionChanged(QList<KoShape*> shapes);
+    void selectionChanged(const QList<KoShape*> &shapes);
     void currentLayerChanged(const KoShapeLayer *layer);
     void updateToolForProxy();
     void switchToolTemporaryRequested(const QString &id);
-    CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device);
+    CanvasData *createCanvasData(KoCanvasController *controller, const KoInputDevice &device);
 
     /**
      * Request a switch from to the param input device.
@@ -154,7 +154,7 @@ public Q_SLOTS:
     void selectionChanged();
 
 Q_SIGNALS:
-    void selectionChanged(QList<KoShape*> shape);
+    void selectionChanged(const QList<KoShape*> &shape);
 
 private:
     KoShapeManager *m_shapeManager;
@@ -166,7 +166,7 @@ class ToolAction : public QAction
 {
     Q_OBJECT
 public:
-    ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent);
+    ToolAction(KoToolManager* toolManager, const QString &id, const QString &name, QObject *parent);
     virtual ~ToolAction();
 
 private Q_SLOTS:

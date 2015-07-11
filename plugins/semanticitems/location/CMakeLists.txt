@@ -29,7 +29,7 @@ target_link_libraries(calligra_semanticitem_location ${MARBLE_LIBRARIES})
 target_link_libraries(calligra_semanticitem_location LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif()
 
-target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF5::KDELibs4Support)
 kcoreaddons_desktop_to_json(calligra_semanticitem_location calligra_semanticitem_location.desktop)
 
 install(TARGETS calligra_semanticitem_location  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

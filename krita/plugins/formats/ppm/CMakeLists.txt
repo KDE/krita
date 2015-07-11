@@ -9,7 +9,7 @@ set(kritappmimport_PART_SRCS
 add_library(kritappmimport MODULE ${kritappmimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritappmimport krita_ppm_import.desktop)
 
-target_link_libraries(kritappmimport kritaui )
+target_link_libraries(kritappmimport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritappmimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

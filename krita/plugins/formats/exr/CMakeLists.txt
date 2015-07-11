@@ -19,7 +19,7 @@ add_library(kritaexrimport MODULE ${kritaexrimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaexrimport krita_exr_import.desktop)
 
 
-target_link_libraries(kritaexrimport kritaui ${OPENEXR_LIBRARIES} )
+target_link_libraries(kritaexrimport kritaui ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
@@ -35,7 +35,7 @@ ki18n_wrap_ui(kritaexrexport_PART_SRCS exr_export_widget.ui )
 add_library(kritaexrexport MODULE ${kritaexrexport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaexrexport krita_exr_export.desktop)
 
-target_link_libraries(kritaexrexport kritaui ${OPENEXR_LIBRARIES} )
+target_link_libraries(kritaexrexport kritaui ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

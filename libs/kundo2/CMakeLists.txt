@@ -5,7 +5,7 @@ set(kundo2_LIB_SRCS
 	kundo2view.cpp
 	kundo2model.cpp
 	kundo2magicstring.cpp
-
+	kundo2commandextradata.cpp
 )
 
 add_library(kundo2 SHARED ${kundo2_LIB_SRCS})

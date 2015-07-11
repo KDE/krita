@@ -99,10 +99,10 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 
 add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
+target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
+
 if(GHNS)
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::NewStuff)
-else()
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
+    target_link_libraries(kowidgets KF5::NewStuff)
 endif ()
 
 if(X11_FOUND)

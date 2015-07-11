@@ -39,7 +39,6 @@
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 #include <KoShapeLoadingContext.h>
 
 // KoChart

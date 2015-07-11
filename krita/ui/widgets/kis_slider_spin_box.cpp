@@ -100,6 +100,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->fastSliderStep = 5;
     d->slowFactor = 0.1;
     d->shiftMode = false;
+    d->blockUpdateSignalOnDrag = false;
 
     setExponentRatio(1.0);
 
@@ -347,6 +348,8 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
                !(d->upButtonDown || d->downButtonDown)) {
         //Snap to percentage for progress area
         setInternalValue(valueForX(e->pos().x(),e->modifiers()));
+    } else { // Confirm the last known value, since we might be ignoring move events
+        setInternalValue(d->value);
     }
 
     d->upButtonDown = false;

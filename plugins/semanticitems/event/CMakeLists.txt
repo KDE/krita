@@ -22,7 +22,7 @@ if (KF5CalendarCore_FOUND AND KF5Akonadi_FOUND)
    )
 endif ()
 
-target_link_libraries(calligra_semanticitem_event   ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_event   ${KORDF_LIBS} KF5::KDELibs4Support)
 kcoreaddons_desktop_to_json(calligra_semanticitem_event calligra_semanticitem_event.desktop)
 
 install(TARGETS calligra_semanticitem_event  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

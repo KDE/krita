@@ -14,7 +14,7 @@ add_library(kritajp2import MODULE ${kritajp2import_PART_SRCS})
 kcoreaddons_desktop_to_json(kritajp2import krita_jp2_import.desktop)
 
 
-target_link_libraries(kritajp2import kritaui ${OPENJPEG_LIBRARIES} )
+target_link_libraries(kritajp2import kritaui ${KDE4_KIO_LIBS} ${OPENJPEG_LIBRARIES} )
 
 install(TARGETS kritajp2import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
@@ -31,7 +31,7 @@ add_library(kritajp2export MODULE ${kritajp2export_PART_SRCS})
 kcoreaddons_desktop_to_json(kritajp2export krita_jp2_export.desktop)
 
 
-target_link_libraries(kritajp2export kritaui ${OPENJPEG_LIBRARIES} )
+target_link_libraries(kritajp2export kritaui ${KDE4_KIO_LIBS} ${OPENJPEG_LIBRARIES} )
 
 install(TARGETS kritajp2export  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

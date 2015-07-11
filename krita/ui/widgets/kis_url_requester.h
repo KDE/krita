@@ -63,6 +63,11 @@ public:
     void setMimeTypeFilters(const QStringList &filterList,
                             QString defaultFilter = QString());
 
+    /**
+     * Sets the name filter, same as KoFileDialog::setNameFilter
+     */
+    void setNameFilter(const QString &filter);
+
 public Q_SLOTS:
     void slotSelectFile();
 
@@ -80,6 +85,7 @@ private:
     KoFileDialog::DialogType m_mode;
     QStringList m_mime_filter_list;
     QString m_mime_default_filter;
+    QString m_nameFilter;
 };
 
 #endif // KIS_URL_REQUESTER_H

@@ -174,7 +174,8 @@ add_library(calligra_shape_text MODULE ${textshape_SRCS})
 
 kcoreaddons_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
 
-target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets ${EXTRA_LIBS})
+target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets
+${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS})
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif()

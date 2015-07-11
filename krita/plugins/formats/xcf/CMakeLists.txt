@@ -21,7 +21,7 @@ set(kritaxcfimport_PART_SRCS
 add_library(kritaxcfimport MODULE ${kritaxcfimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritaxcfimport krita_xcf_import.desktop)
 
-target_link_libraries(kritaxcfimport kritaui )
+target_link_libraries(kritaxcfimport kritaui ${KDE4_KIO_LIBS})
 
 if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})

@@ -27,7 +27,7 @@ class QIODevice;
 class KoPattern;
 
 
-class LIBKISPSD_EXPORT KisAslPatternsWriter
+class KRITAPSD_EXPORT KisAslPatternsWriter
 {
 public:
     KisAslPatternsWriter(const QDomDocument &doc, QIODevice *device);

@@ -9,6 +9,7 @@ set(kundo2_LIB_SRCS
 )
 
 add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
+generate_export_header(kundo2 BASE_NAME kundo2)
 
 target_link_libraries(kundo2 KF5::KDELibs4Support Qt5::Core Qt5::Widgets)
 
@@ -18,7 +19,7 @@ set_target_properties(kundo2 PROPERTIES
 install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
-    kundo2_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kundo2_export.h
     kundo2stack.h
     kundo2qstack.h
     kundo2group.h

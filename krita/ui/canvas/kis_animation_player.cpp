@@ -24,7 +24,8 @@
 #include "kis_canvas2.h"
 #include "kis_animation_frame_cache.h"
 #include "kis_signal_auto_connection.h"
-
+#include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
 
 struct KisAnimationPlayer::Private
 {
@@ -59,16 +60,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
 KisAnimationPlayer::~KisAnimationPlayer()
 {}
 
-void KisAnimationPlayer::setFramerate(float fps) {
-    m_d->fps = fps;
-}
-
-void KisAnimationPlayer::setRange(int firstFrame, int lastFrame)
-{
-    m_d->firstFrame = firstFrame;
-    m_d->lastFrame = lastFrame;
-}
-
 void KisAnimationPlayer::connectCancelSignals()
 {
     m_d->cancelStrokeConnections.append(
@@ -94,8 +85,15 @@ void KisAnimationPlayer::disconnectCancelSignals()
 
 void KisAnimationPlayer::play()
 {
-    m_d->playing = true;
+    const KisTimeRange &range = m_d->canvas->image()->animationInterface()->currentRange();
+    if (!range.isValid()) return;
+
+    m_d->fps = m_d->canvas->image()->animationInterface()->framerate();
+    m_d->firstFrame = range.start();
+    m_d->lastFrame = range.end();
     m_d->currentFrame = m_d->firstFrame;
+
+    m_d->playing = true;
     m_d->timer->start(1000 / m_d->fps);
 
     connectCancelSignals();

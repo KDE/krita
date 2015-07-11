@@ -87,6 +87,15 @@ public:
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
+    /**
+     * The current time range selected by user.
+     * @return current time range
+     */
+    const KisTimeRange &currentRange() const;
+    void setRange(const KisTimeRange range);
+
+    float framerate();
+    void setFramerate(float fps);
 private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;

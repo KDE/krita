@@ -28,6 +28,7 @@
 #include "kis_image_animation_interface.h"
 #include "kis_animation_player.h"
 #include "kis_onion_skin_dialog.h"
+#include "kis_time_range.h"
 
 #include "ui_wdg_animation.h"
 
@@ -75,6 +76,10 @@ AnimationDocker::AnimationDocker()
     connect(m_deleteKeyframeAction, SIGNAL(triggered()), this, SLOT(slotDeleteKeyframe()));
 
     connect(m_animationWidget->btnOnionSkinOptions, SIGNAL(clicked()), this, SLOT(slotOnionSkinOptions()));
+
+    connect(m_animationWidget->spinFromFrame, SIGNAL(valueChanged(int)), this, SLOT(slotUIRangeChanged()));
+    connect(m_animationWidget->spinToFrame, SIGNAL(valueChanged(int)), this, SLOT(slotUIRangeChanged()));
+    connect(m_animationWidget->doubleFramerate, SIGNAL(valueChanged(double)), this, SLOT(slotUIFramerateChanged()));
 }
 
 void AnimationDocker::setCanvas(KoCanvasBase * canvas)
@@ -90,6 +95,13 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    if (m_canvas && m_canvas->image()) {
+        KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+        m_animationWidget->spinFromFrame->setValue(animation->currentRange().start());
+        m_animationWidget->spinToFrame->setValue(animation->currentRange().end());
+        m_animationWidget->doubleFramerate->setValue(animation->framerate());
+    }
 }
 
 void AnimationDocker::unsetCanvas()
@@ -97,6 +109,7 @@ void AnimationDocker::unsetCanvas()
     setEnabled(false);
     m_canvas = 0;
 }
+
 void AnimationDocker::setMainWindow(KisViewManager *view)
 {
     KisActionManager *actionManager = view->actionManager();
@@ -110,6 +123,7 @@ void AnimationDocker::setMainWindow(KisViewManager *view)
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
 }
+
 void AnimationDocker::slotAddBlankFrame()
 {
     if (!m_canvas) return;
@@ -152,6 +166,23 @@ void AnimationDocker::slotDeleteKeyframe()
     }
 }
 
+void AnimationDocker::slotUIRangeChanged()
+{
+    if (!m_canvas || !m_canvas->image()) return;
+
+    int fromTime = m_animationWidget->spinFromFrame->value();
+    int toTime = m_animationWidget->spinToFrame->value();
+
+    m_canvas->image()->animationInterface()->setRange(KisTimeRange(fromTime, toTime));
+}
+
+void AnimationDocker::slotUIFramerateChanged()
+{
+    if (!m_canvas || !m_canvas->image()) return;
+
+    m_canvas->image()->animationInterface()->setFramerate(m_animationWidget->doubleFramerate->value());
+}
+
 void AnimationDocker::slotOnionSkinOptions()
 {
     m_onionSkinOptions->show();
@@ -184,9 +215,6 @@ void AnimationDocker::slotPlayPause()
     if (m_canvas->animationPlayer()->isPlaying()) {
         m_canvas->animationPlayer()->stop();
     } else {
-        m_canvas->animationPlayer()->setFramerate(m_animationWidget->doubleFramerate->value());
-        m_canvas->animationPlayer()->setRange(m_animationWidget->spinFromFrame->value(), m_animationWidget->spinToFrame->value());
-
         m_canvas->animationPlayer()->play();
     }
 }

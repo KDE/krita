@@ -35,9 +35,6 @@ public:
     KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer();
 
-    void setFramerate(float fps);
-    void setRange(int firstFrame, int lastFrame);
-
     void play();
     void stop();
     bool isPlaying();

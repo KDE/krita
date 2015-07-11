@@ -48,6 +48,9 @@ private slots:
     void slotAddDuplicateFrame();
     void slotDeleteKeyframe();
 
+    void slotUIRangeChanged();
+    void slotUIFramerateChanged();
+
     void slotUpdateIcons();
 
     void slotOnionSkinOptions();

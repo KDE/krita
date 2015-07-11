@@ -38,6 +38,9 @@ struct KisImageAnimationInterface::Private
     int currentTime;
     bool externalFrameActive;
     bool frameInvalidationBlocked;
+
+    KisTimeRange currentRange;
+    float framerate;
 };
 
 
@@ -45,6 +48,9 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     : m_d(new Private)
 {
     m_d->image = image;
+
+    m_d->framerate = 24;
+    m_d->currentRange = KisTimeRange::fromTime(0, 100);
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -54,6 +60,25 @@ KisImageAnimationInterface::~KisImageAnimationInterface()
 int KisImageAnimationInterface::currentTime() const
 {
     return m_d->currentTime;
+}
+
+const KisTimeRange& KisImageAnimationInterface::currentRange() const
+{
+    return m_d->currentRange;
+}
+
+void KisImageAnimationInterface::setRange(const KisTimeRange range) {
+    m_d->currentRange = range;
+}
+
+float KisImageAnimationInterface::framerate()
+{
+    return m_d->framerate;
+}
+
+void KisImageAnimationInterface::setFramerate(float fps)
+{
+    m_d->framerate = fps;
 }
 
 bool KisImageAnimationInterface::externalFrameActive() const

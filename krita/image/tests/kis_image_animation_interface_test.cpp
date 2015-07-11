@@ -147,6 +147,7 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     channel->addKeyframe(20);
 
     p.image->animationInterface()->switchCurrentTimeAsync(15);
+    p.image->waitForDone();
 
     QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange,QRect)));
 

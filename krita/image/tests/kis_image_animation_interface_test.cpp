@@ -146,10 +146,13 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     channel->addKeyframe(10);
     channel->addKeyframe(20);
 
+    // check switching a frame doesn't invalidate cache
+    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange,QRect)));
+
     p.image->animationInterface()->switchCurrentTimeAsync(15);
     p.image->waitForDone();
 
-    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange,QRect)));
+    QCOMPARE(spy.count(), 0);
 
     i->notifyNodeChanged(layer1.data(), QRect(), false);
 

@@ -4,8 +4,8 @@
 # See https://mail.kde.org/pipermail/kde-buildsystem/2015-June/010819.html
 # extend range of affected cmake versions as needed
 if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1.3 AND
-   NOT ${CMAKE_VERSION} VERSION_GREATER 3.2.2)
-    message(WARNING "Skipping krita/image/tests, CMake in at least versions 3.1.3 - 3.2.2 seems to have a problem with automoc")
+   NOT ${CMAKE_VERSION} VERSION_GREATER 3.2.3)
+    message(WARNING "Skipping krita/image/tests, CMake in at least versions 3.1.3 - 3.2.3 seems to have a problem with automoc")
     return()
 endif()
 

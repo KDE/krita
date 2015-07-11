@@ -22,23 +22,26 @@
 #include "krita_export.h"
 
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 
 #include "kis_timeline_model.h"
 #include "timeline_widget.h"
 
 class KisCanvas2;
 class Ui_WdgTimeline;
+class KisAction;
 
-class TimelineDocker : public QDockWidget, public KoCanvasObserverBase {
+class TimelineDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     TimelineDocker();
     QString observerName() { return "TimelineDocker"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
+    void setMainWindow(KisViewManager *kisview);
 
 private slots:
+    void toggleOnionSkin();
 
 private:
 
@@ -46,6 +49,8 @@ private:
 
     KisTimelineModel *m_model;
     TimelineWidget *m_timelineWidget;
+
+    KisAction *m_toggleOnionSkinAction;
 };
 
 

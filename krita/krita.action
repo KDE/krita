@@ -339,6 +339,7 @@
     <Action name="add_blank_frame" icon="" text="Add blank frame" whatsThis="" toolTip="Add blank frame" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="add_duplicate_frame" icon="" text="Add duplicate frame" whatsThis="" toolTip="Add duplicate frame" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="delete_keyframe" icon="" text="Delete keyframe" whatsThis="" toolTip="" iconText="Delete keyframe" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="toggle_onion_skin" icon="" text="Toggle onion skin" whatsThis="" toolTip="" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="" icon="show_tool_options" text="Show Tool Options" whatsThis="" toolTip="Show Tool Options" iconText="Show Tool Options" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="" icon="show_tool_options" text="Show Brush Editor" whatsThis="" toolTip="Show Brush Editor" iconText="Show Brush Editor" shortcut="i" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="" icon="show_tool_options" text="Show Brush Presets" whatsThis="" toolTip="Show Brush Presets" iconText="Show Brush Presets" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

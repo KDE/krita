@@ -27,6 +27,8 @@
 #include "KisDocument.h"
 #include "kis_dummies_facade.h"
 #include "kis_shape_controller.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 TimelineDocker::TimelineDocker()
     : QDockWidget(i18n("Timeline"))
@@ -37,6 +39,11 @@ TimelineDocker::TimelineDocker()
 
     m_model = new KisTimelineModel(this);
     m_timelineWidget->setModel(m_model);
+
+    m_toggleOnionSkinAction = new KisAction(i18n("Toggle onion skin"), this);
+    m_toggleOnionSkinAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+
+    connect(m_toggleOnionSkinAction, SIGNAL(triggered()), this, SLOT(toggleOnionSkin()));
 }
 
 void TimelineDocker::setCanvas(KoCanvasBase * canvas)
@@ -66,6 +73,26 @@ void TimelineDocker::unsetCanvas()
     m_canvas = 0;
     m_model->setDummiesFacade(0, 0, 0);
     m_timelineWidget->setCanvas(0);
+}
+
+void TimelineDocker::setMainWindow(KisViewManager *view)
+{
+    KisActionManager *actionManager = view->actionManager();
+    actionManager->addAction("toggle_onion_skin", m_toggleOnionSkinAction);
+}
+
+void TimelineDocker::toggleOnionSkin()
+{
+    if (!m_canvas) return;
+
+    KisNodeSP node = m_canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    if (node->inherits("KisPaintLayer")) {
+        KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
+        layer->setOnionSkinEnabled(!layer->onionSkinEnabled());
+        m_canvas->image()->refreshGraphAsync();
+    }
 }
 
 #include "timeline_docker.moc"

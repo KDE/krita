@@ -14,7 +14,8 @@ set(thesaurustool_SRCS
 
 kde4_add_plugin(calligra_textediting_thesaurus ${thesaurustool_SRCS})
 
-target_link_libraries(calligra_textediting_thesaurus kotext)
+target_link_libraries(calligra_textediting_thesaurus kotext ${KDE4_KFILE_LIBS}
+${KDE4_KIO_LIBS})
 
 install(TARGETS calligra_textediting_thesaurus  DESTINATION ${PLUGIN_INSTALL_DIR})
 

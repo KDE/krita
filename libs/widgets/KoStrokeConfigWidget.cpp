@@ -31,16 +31,11 @@
 // Own
 #include "KoStrokeConfigWidget.h"
 
-// Posix
-#include <math.h>
-
 // Qt
-#include <QWidget>
 #include <QMenu>
 #include <QLabel>
 #include <QToolButton>
 #include <QButtonGroup>
-#include <QBuffer>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSizePolicy>
@@ -55,11 +50,6 @@
 #include <KoUnitDoubleSpinBox.h>
 #include <KoMarkerSelector.h>
 #include <KoColorPopupAction.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
 #include <KoMarker.h>
 #include <KoShapeStroke.h>
 #include <KoPathShape.h>

@@ -46,12 +46,12 @@ public:
     {
     }
 
-    qint64 write(const QByteArray &data) {
-        return m_store->write(data);
+    bool write(const QByteArray &data) {
+        return (m_store->write(data) == data.size());
     }
 
-    qint64 write(const char* data, qint64 length) {
-        return m_store->write(data, length);
+    bool write(const char* data, qint64 length) {
+        return (m_store->write(data, length) == length);
     }
 
     KoStore *m_store;
@@ -784,6 +784,46 @@ void KisPaintDeviceTest::testNonDefaultPixelArea()
     // device's size
     QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
     QCOMPARE(dev->nonDefaultPixelArea(), fillRect | QRect(100,100,1,1));
+}
+
+void KisPaintDeviceTest::testExactBoundsNonTransparent()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 1000, 1000, cs, "merge test");
+    KisPaintLayerSP layer = new KisPaintLayer(image, "bla", 125);
+    KisPaintDeviceSP dev = layer->paintDevice();
+
+    QVERIFY(dev);
+
+    QRect imageRect(0,0,1000,1000);
+
+    KoColor defPixel(Qt::red, cs);
+    dev->setDefaultPixel(defPixel.data());
+
+    QCOMPARE(dev->exactBounds(), imageRect);
+    QVERIFY(dev->nonDefaultPixelArea().isEmpty());
+
+    KoColor fillPixel(Qt::white, cs);
+
+    dev->fill(imageRect, KoColor(Qt::white, cs));
+    QCOMPARE(dev->exactBounds(), imageRect);
+    QCOMPARE(dev->nonDefaultPixelArea(), imageRect);
+
+    dev->fill(QRect(1000,0, 1, 1000), KoColor(Qt::white, cs));
+    QCOMPARE(dev->exactBounds(), QRect(0,0,1001,1000));
+    QCOMPARE(dev->nonDefaultPixelArea(), QRect(0,0,1001,1000));
+
+    dev->fill(QRect(0,1000, 1000, 1), KoColor(Qt::white, cs));
+    QCOMPARE(dev->exactBounds(), QRect(0,0,1001,1001));
+    QCOMPARE(dev->nonDefaultPixelArea(), QRect(0,0,1001,1001));
+
+    dev->fill(QRect(0,-1, 1000, 1), KoColor(Qt::white, cs));
+    QCOMPARE(dev->exactBounds(), QRect(0,-1,1001,1002));
+    QCOMPARE(dev->nonDefaultPixelArea(), QRect(0,-1,1001,1002));
+
+    dev->fill(QRect(-1,0, 1, 1000), KoColor(Qt::white, cs));
+    QCOMPARE(dev->exactBounds(), QRect(-1,-1,1002,1002));
+    QCOMPARE(dev->nonDefaultPixelArea(), QRect(-1,-1,1002,1002));
 }
 
 KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)

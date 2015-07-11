@@ -160,7 +160,6 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
-    connect(d->tabBar, SIGNAL(currentChanged(int)), d->stack, SLOT(setCurrentIndex(int)));
     connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)),
@@ -169,8 +168,8 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
             this, SLOT(setCurrentLayer(const KoCanvasController *,const KoShapeLayer *)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(updateShownTools(QList<QString>)));
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
-            this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+            SIGNAL(addedTool(KoToolButton,KoCanvasController*)),
+            this, SLOT(toolAdded(KoToolButton,KoCanvasController*)));
 
     connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
          this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
@@ -257,7 +256,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
     }
 }
 
-QIcon KoModeBox::createTextIcon(const KoToolButton button)
+QIcon KoModeBox::createTextIcon(const KoToolButton &button) const
 {
     QSize iconSize = d->tabBar->iconSize();
     QFont smallFont  = KGlobalSettings::generalFont();
@@ -320,7 +319,7 @@ QIcon KoModeBox::createTextIcon(const KoToolButton button)
     return QIcon(QPixmap::fromImage(pm));
 }
 
-QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
+QIcon KoModeBox::createSimpleIcon(const KoToolButton &button) const
 {
     QSize iconSize = d->tabBar->iconSize();
 
@@ -344,7 +343,7 @@ QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
     return QIcon(QPixmap::fromImage(pm));
 }
 
-void KoModeBox::addItem(const KoToolButton button)
+void KoModeBox::addItem(const KoToolButton &button)
 {
     QWidget *oldwidget = d->addedWidgets[button.buttonGroupId];
     QWidget *widget;
@@ -405,7 +404,7 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
     d->addedButtons.clear();
 
     int newIndex = -1;
-    foreach (const KoToolButton button, d->buttons) {
+    foreach (const KoToolButton &button, d->buttons) {
         QString toolCodes = button.visibilityCode;
         if (button.buttonGroupId == d->activeId) {
             newIndex = d->addedButtons.length();
@@ -429,7 +428,7 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
             addItem(button);
             continue;
         } else {
-           foreach (const QString shapeCode, codes) {
+           foreach (const QString &shapeCode, codes) {
                 if (toolCodes.contains(shapeCode)) {
                     addItem(button);
                     break;

@@ -23,8 +23,8 @@
 class KRITAIMAGE_EXPORT KisPaintDeviceWriter {
 public:
     virtual ~KisPaintDeviceWriter() {}
-    virtual qint64 write(const QByteArray &data) = 0;
-    virtual qint64 write(const char* data, qint64 length) = 0;
+    virtual bool write(const QByteArray &data) = 0;
+    virtual bool write(const char* data, qint64 length) = 0;
 };
 
 

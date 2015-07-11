@@ -81,7 +81,7 @@ public:
     void cancelStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
 
-    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args);
+    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command);
@@ -119,6 +119,7 @@ private:
 
 
     ToolTransformArgs m_savedTransformArgs;
+    KisNodeSP m_savedRootNode;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

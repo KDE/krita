@@ -140,10 +140,10 @@ get_NUBasis_dfuncs_s (NUBasis* restrict basis, double x,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
   return i;
 }
@@ -172,10 +172,10 @@ get_NUBasis_dfuncs_si (NUBasis* restrict basis, int i,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 }
 
 
@@ -202,17 +202,17 @@ get_NUBasis_d2funcs_s (NUBasis* restrict basis, double x,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
-  d2bfuncs[0] = 6.0 * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
-  d2bfuncs[1] = 6.0 * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
+  d2bfuncs[0] = 6.0f * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
+  d2bfuncs[1] = 6.0f * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
 		        dxInv[3*(i+1)+2]* dxInv[3*(i+2)+1]*b1[1]);
-  d2bfuncs[2] = 6.0 * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
+  d2bfuncs[2] = 6.0f * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
 		        dxInv[3*(i+2)+1]*(dxInv[3*(i+1)+2] + dxInv[3*(i+2)+2])*b1[1]);
-  d2bfuncs[3] = 6.0 * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
+  d2bfuncs[3] = 6.0f * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
 
   return i;
 }
@@ -241,17 +241,17 @@ get_NUBasis_d2funcs_si (NUBasis* restrict basis, int i,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
-  d2bfuncs[0] = 6.0 * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
-  d2bfuncs[1] = 6.0 * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
+  d2bfuncs[0] = 6.0f * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
+  d2bfuncs[1] = 6.0f * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
 		        dxInv[3*(i+1)+2]* dxInv[3*(i+2)+1]*b1[1]);
-  d2bfuncs[2] = 6.0 * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
+  d2bfuncs[2] = 6.0f * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
 		        dxInv[3*(i+2)+1]*(dxInv[3*(i+1)+2] + dxInv[3*(i+2)+2])*b1[1]);
-  d2bfuncs[3] = 6.0 * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
+  d2bfuncs[3] = 6.0f * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
 }
 
 
@@ -331,10 +331,10 @@ get_NUBasis_dfuncs_d (NUBasis* restrict basis, double x,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
   return i;
 }
@@ -363,10 +363,10 @@ get_NUBasis_dfuncs_di (NUBasis* restrict basis, int i,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 }
 
 
@@ -393,17 +393,17 @@ get_NUBasis_d2funcs_d (NUBasis* restrict basis, double x,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
-  d2bfuncs[0] = 6.0 * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
-  d2bfuncs[1] = 6.0 * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
+  d2bfuncs[0] = 6.0f * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
+  d2bfuncs[1] = 6.0f * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
 		        dxInv[3*(i+1)+2]* dxInv[3*(i+2)+1]*b1[1]);
-  d2bfuncs[2] = 6.0 * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
+  d2bfuncs[2] = 6.0f * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
 		        dxInv[3*(i+2)+1]*(dxInv[3*(i+1)+2] + dxInv[3*(i+2)+2])*b1[1]);
-  d2bfuncs[3] = 6.0 * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
+  d2bfuncs[3] = 6.0f * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
 
   return i;
 }
@@ -433,17 +433,17 @@ get_NUBasis_d2funcs_di (NUBasis* restrict basis, int i,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
-  d2bfuncs[0] = 6.0 * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
-  d2bfuncs[1] = 6.0 * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
+  d2bfuncs[0] = 6.0f * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
+  d2bfuncs[1] = 6.0f * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
 		        dxInv[3*(i+1)+2]* dxInv[3*(i+2)+1]*b1[1]);
-  d2bfuncs[2] = 6.0 * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
+  d2bfuncs[2] = 6.0f * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
 		        dxInv[3*(i+2)+1]*(dxInv[3*(i+1)+2] + dxInv[3*(i+2)+2])*b1[1]);
-  d2bfuncs[3] = 6.0 * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
+  d2bfuncs[3] = 6.0f * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
 }
 
 
@@ -514,10 +514,10 @@ get_NUBasis_dfuncs_sse_s (NUBasis* restrict basis, double x,
 		 (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs.s[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs.s[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs.s[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs.s[2] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs.s[3] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs.s[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs.s[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs.s[2] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs.s[3] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
   *funcs  =  bfuncs.v;
   *dfuncs = dbfuncs.v;
@@ -549,17 +549,17 @@ get_NUBasis_d2funcs_sse_s (NUBasis* restrict basis, double x,
 		 (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bfuncs.s[3] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbfuncs.s[0]  = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbfuncs.s[1]  =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbfuncs.s[2]  =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbfuncs.s[3]  =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs.s[0]  = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbfuncs.s[1]  =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbfuncs.s[2]  =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbfuncs.s[3]  =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
-  d2bfuncs.s[0] = 6.0 * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
-  d2bfuncs.s[1] = 6.0 * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
+  d2bfuncs.s[0] = 6.0f * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
+  d2bfuncs.s[1] = 6.0f * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
 			 dxInv[3*(i+1)+2]* dxInv[3*(i+2)+1]*b1[1]);
-  d2bfuncs.s[2] = 6.0 * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
+  d2bfuncs.s[2] = 6.0f * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
 			 dxInv[3*(i+2)+1]*(dxInv[3*(i+1)+2] + dxInv[3*(i+2)+2])*b1[1]);
-  d2bfuncs.s[3] = 6.0 * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
+  d2bfuncs.s[3] = 6.0f * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
 
   *funcs   =   bfuncs.v;
   *dfuncs  =  dbfuncs.v;
@@ -626,10 +626,10 @@ get_NUBasis_dfuncs_sse_d (NUBasis* restrict basis, double x,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bf23.s[1] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
 
-  dbf01.s[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbf01.s[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbf23.s[0] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbf23.s[1] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbf01.s[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbf01.s[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbf23.s[0] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbf23.s[1] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
 
   *f01   =   bf01.v;   *f23 =   bf23.v;
   *df01  =  dbf01.v;  *df23 =  dbf23.v;
@@ -663,17 +663,17 @@ get_NUBasis_d2funcs_sse_d (NUBasis* restrict basis, double x,
 	       (xVals[i2+3]-x) * dxInv[3*(i+2)+2] * b2[2]);
   bf23.s[1] = (x-xVals[i2])    * dxInv[3*(i+2)+2] * b2[2]; 
   
-  dbf01.s[0] = -3.0 * (dxInv[3*(i  )+2] * b2[0]);
-  dbf01.s[1] =  3.0 * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
-  dbf23.s[0] =  3.0 * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
-  dbf23.s[1] =  3.0 * (dxInv[3*(i+2)+2] * b2[2]);
+  dbf01.s[0] = -3.0f * (dxInv[3*(i  )+2] * b2[0]);
+  dbf01.s[1] =  3.0f * (dxInv[3*(i  )+2] * b2[0] - dxInv[3*(i+1)+2] * b2[1]);
+  dbf23.s[0] =  3.0f * (dxInv[3*(i+1)+2] * b2[1] - dxInv[3*(i+2)+2] * b2[2]);
+  dbf23.s[1] =  3.0f * (dxInv[3*(i+2)+2] * b2[2]);
   
-  d2bf01.s[0] = 6.0 * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
-  d2bf01.s[1] = 6.0 * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
+  d2bf01.s[0] = 6.0f * (+dxInv[3*(i+0)+2]* dxInv[3*(i+1)+1]*b1[0]);
+  d2bf01.s[1] = 6.0f * (-dxInv[3*(i+1)+1]*(dxInv[3*(i+0)+2]+dxInv[3*(i+1)+2])*b1[0] +
 		       dxInv[3*(i+1)+2]* dxInv[3*(i+2)+1]*b1[1]);
-  d2bf23.s[0] = 6.0 * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
+  d2bf23.s[0] = 6.0f * (+dxInv[3*(i+1)+2]* dxInv[3*(i+1)+1]*b1[0] -
 		       dxInv[3*(i+2)+1]*(dxInv[3*(i+1)+2] + dxInv[3*(i+2)+2])*b1[1]);
-  d2bf23.s[1] = 6.0 * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
+  d2bf23.s[1] = 6.0f * (+dxInv[3*(i+2)+2]* dxInv[3*(i+2)+1]*b1[1]);
   
   *f01   =   bf01.v;    *f23 =   bf23.v;
   *df01  =  dbf01.v;   *df23 =  dbf23.v;

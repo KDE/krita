@@ -353,7 +353,7 @@ struct ExactBoundsPolicy
 };
 
 template <class MetricPolicy>
-QRect collectRects(const KisNode *node, MetricPolicy policy, bool skipFirst = true)
+QRect collectRects(const KisNode *node, MetricPolicy policy)
 {
     QRect accumulator;
 

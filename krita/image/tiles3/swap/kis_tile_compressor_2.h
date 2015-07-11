@@ -29,7 +29,7 @@ public:
     KisTileCompressor2();
     virtual ~KisTileCompressor2();
 
-    void writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
+    bool writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
     bool readTile(QIODevice *io, KisTiledDataManager *dm);
 
 

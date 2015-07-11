@@ -125,7 +125,20 @@ void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP comman
     }
 }
 
+void KisStrokeStrategyUndoCommandBased::setCommandExtraData(KUndo2CommandExtraData *data)
+{
+    if (m_undoAdapter && m_macroCommand) {
+        qWarning() << "WARNING: KisStrokeStrategyUndoCommandBased::setCommandExtraData():"
+                   << "the extra data is set while the stroke has already been started!"
+                   << "The result is undefined, continued actions may not work!";
+    }
+
+    m_commandExtraData.reset(data);
+}
+
 void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command *command)
 {
-    Q_UNUSED(command);
+    if (m_commandExtraData) {
+        command->setExtraData(m_commandExtraData.take());
+    }
 }

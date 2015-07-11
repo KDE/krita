@@ -28,7 +28,6 @@
 #include "commands_new/kis_saved_commands.h"
 
 
-
 class KisStrokeJob;
 class KisPostExecutionUndoAdapter;
 
@@ -77,6 +76,20 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
     /**
+     * Set extra data that will be assigned to the command
+     * represecting this action. Using extra data has the following
+     * restrictions:
+     *
+     * 1) The \p data must be set *before* the stroke has been started.
+     *    Setting the \p data after the stroke has been started with
+     *    image->startStroke(strokeId) leads to an undefined behaviour.
+     *
+     * 2) \p data becomes owned by the strategy/command right after
+     *    setting it. Don't try to change it afterwards.
+     */
+    void setCommandExtraData(KUndo2CommandExtraData *data);
+
+    /**
      * The undo-command-based is a low-level strategy, so it allows
      * changing its wraparound mode status.
      *
@@ -105,6 +118,8 @@ private:
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
     KisPostExecutionUndoAdapter *m_undoAdapter;
+
+    QScopedPointer<KUndo2CommandExtraData> m_commandExtraData;
 
     // protects done commands only
     QMutex m_mutex;

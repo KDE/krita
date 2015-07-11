@@ -29,7 +29,7 @@ target_link_libraries(calligra_semanticitem_location ${MARBLE_LIBRARIES})
 target_link_libraries(calligra_semanticitem_location LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif()
 
-target_link_libraries(calligra_semanticitem_location ${KDE4_KDECORE_LIBS}  ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_location ${KDE4_KFILE_LIBS} ${KDE4_KDECORE_LIBS} ${KORDF_LIBS})
 
 
 install(TARGETS calligra_semanticitem_location  DESTINATION ${PLUGIN_INSTALL_DIR})

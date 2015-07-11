@@ -51,11 +51,13 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
     KisAction *action  = new KisAction(i18n("Scale Image To New Size..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("imagesize", action);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_I));
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
     action = new KisAction(i18n("Resize Canvas..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("canvassize", action);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
     connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
     action = new KisAction(i18n("Scale &Layer to new Size..."), this);

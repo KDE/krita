@@ -308,7 +308,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int nCh)
-        : KisFilterConfiguration("perchannel", 1)
+        : KisColorTransformationConfiguration("perchannel", 1)
 {
     initDefaultCurves(m_curves, nCh);
     updateTransfers();

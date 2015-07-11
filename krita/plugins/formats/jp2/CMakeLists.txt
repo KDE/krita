@@ -14,7 +14,7 @@ kde4_add_plugin(kritajp2import ${kritajp2import_PART_SRCS})
 
 
 
-target_link_libraries(kritajp2import kritaui ${OPENJPEG_LIBRARIES} )
+target_link_libraries(kritajp2import kritaui ${KDE4_KIO_LIBS} ${OPENJPEG_LIBRARIES} )
 
 install(TARGETS kritajp2import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -30,7 +30,7 @@ kde4_add_ui_files(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
 kde4_add_plugin(kritajp2export ${kritajp2export_PART_SRCS})
 
 
-target_link_libraries(kritajp2export kritaui ${OPENJPEG_LIBRARIES} )
+target_link_libraries(kritajp2export kritaui ${KDE4_KIO_LIBS} ${OPENJPEG_LIBRARIES} )
 
 install(TARGETS kritajp2export  DESTINATION ${PLUGIN_INSTALL_DIR})
 

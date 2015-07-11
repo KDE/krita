@@ -21,7 +21,7 @@
 #include <QByteArray>
 #include "libkispsd_export.h"
 
-class LIBKISPSD_EXPORT Compression
+class KRITAPSD_EXPORT Compression
 {
 public:
 

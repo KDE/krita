@@ -41,7 +41,8 @@ void KisTileCompressorsTest::doRoundTrip(KisAbstractTileCompressor *compressor)
     KoStoreFake fakeStore;
     KisFakePaintDeviceWriter writer(&fakeStore);
     
-    compressor->writeTile(tile11, writer);
+    bool retval = compressor->writeTile(tile11, writer);
+    Q_ASSERT(retval);
     tile11 = 0;
 
     fakeStore.startReading();

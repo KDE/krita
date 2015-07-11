@@ -44,8 +44,10 @@
 #include <KoFileDialog.h>
 #include <kfiledialog.h> // For kisurlrequester...
 
+const static int DELAY = 250;
+
 KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command)
-    :   KisConfigWidget(0, 0, 250),
+    :   KisConfigWidget(0, 0, DELAY),
         m_commandDefinition(command)
 {
     createSettingsWidget(CreateRole);
@@ -349,7 +351,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 {
                     urlRequester = new KisUrlRequester;
                     urlRequester->setMode(KoFileDialog::OpenFile);
-                    urlRequester->setMimeTypeFilters(QStringList(i18n("All Files")));
+                    urlRequester->setNameFilter(i18n("All files (*)"));
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);

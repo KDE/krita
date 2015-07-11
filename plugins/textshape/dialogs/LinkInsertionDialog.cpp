@@ -67,7 +67,7 @@ LinkInsertionDialog::LinkInsertionDialog(KoTextEditor* editor, QWidget* parent)
     dlg.bookmarkLinkURL->clearEditText();
     connect(dlg.hyperlinkURL, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
     connect(dlg.hyperlinkText, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
-    connect(dlg.bookmarkLinkURL, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
+    connect(dlg.bookmarkLinkURL, SIGNAL(editTextChanged(QString)), this, SLOT(enableDisableButtons(QString)));
     connect(dlg.bookmarkLinkText, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
 
     connect(dlg.linkTypesTab, SIGNAL(currentChanged(int)), this, SLOT(checkInsertEnableValidity(int)));

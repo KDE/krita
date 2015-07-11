@@ -19,7 +19,7 @@ kde4_add_ui_files(kritatgaimport_PART_SRCS )
 
 kde4_add_plugin(kritatgaimport ${kritatgaimport_PART_SRCS})
 
-target_link_libraries(kritatgaimport kritaui)
+target_link_libraries(kritatgaimport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritatgaimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

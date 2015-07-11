@@ -17,19 +17,19 @@ target_link_libraries(TestKoXmlVector ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 set(TestKoGenStyles_SRCS TestKoGenStyles.cpp )
 kde4_add_unit_test(TestKoGenStyles TESTNAME libs-odf-TestKoGenStyles ${TestKoGenStyles_SRCS})
-target_link_libraries(TestKoGenStyles koodf ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoGenStyles koodf ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestOdfSettings_SRCS TestOdfSettings.cpp )
 kde4_add_unit_test(TestOdfSettings TESTNAME libs-odf-TestOdfSettings ${TestOdfSettings_SRCS})
-target_link_libraries(TestOdfSettings koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestOdfSettings koodf ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestKoOdfLoadingContext_SRCS TestKoOdfLoadingContext.cpp )
 kde4_add_unit_test(TestKoOdfLoadingContext TESTNAME libs-odf-TestKoOdfLoadingContext ${TestKoOdfLoadingContext_SRCS})
-target_link_libraries(TestKoOdfLoadingContext koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoOdfLoadingContext koodf ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -77,18 +77,18 @@ target_link_libraries(TestStorage koodf ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}
 
 set(TestKoUnit_SRCS TestKoUnit.cpp)
 kde4_add_unit_test(TestKoUnit TESTNAME libs-koodf-TestKoUnit ${TestKoUnit_SRCS})
-target_link_libraries(TestKoUnit koodf ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoUnit koodf ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestNumberStyle_SRCS TestNumberStyle.cpp )
 kde4_add_unit_test(TestNumberStyle TESTNAME libs-odf-TestNumberStyle ${TestNumberStyle_SRCS})
-target_link_libraries(TestNumberStyle koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestNumberStyle koodf ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestKoElementReference_SRCS TestKoElementReference.cpp)
 kde4_add_unit_test(TestKoElementReference TESTNAME libs-koodf-TestKoElementReference ${TestKoElementReference_SRCS})
-target_link_libraries(TestKoElementReference koodf ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoElementReference koodf ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### end ###############

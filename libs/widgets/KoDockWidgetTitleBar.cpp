@@ -71,7 +71,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
     d->collapseButton->setStyleSheet("border: 0");
 
-    d->lockIcon = themedIcon("docker_lock_b");
+    d->lockIcon = themedIcon("docker_lock_a");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
     d->lockButton->setCheckable(true);
     d->lockButton->setIcon(d->lockIcon);
@@ -255,7 +255,7 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         d->lockable = false;
     } else {
         d->collapsable = d->collapsableSet;
-        d->collapseButton->setVisible(true);
+        d->collapseButton->setVisible(d->collapsableSet);
         d->lockButton->setVisible(true);
         d->lockable = true;
     }

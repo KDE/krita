@@ -24,9 +24,9 @@ set(kritapsdimport_PART_SRCS
 
 kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
 if (WIN32)
-	target_link_libraries(kritapsdimport kritaui kritapsd ${WIN32_PLATFORM_NET_LIBS})
+	target_link_libraries(kritapsdimport kritaui kritapsd ${KDE4_KIO_LIBS} ${WIN32_PLATFORM_NET_LIBS})
 else ()
-	target_link_libraries(kritapsdimport kritaui kritapsd )
+	target_link_libraries(kritapsdimport kritaui kritapsd ${KDE4_KIO_LIBS})
 endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})

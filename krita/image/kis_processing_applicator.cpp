@@ -180,7 +180,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  KisNodeSP node,
                                                  ProcessingFlags flags,
                                                  KisImageSignalVector emitSignals,
-                                                 const KUndo2MagicString &name)
+                                                 const KUndo2MagicString &name,
+                                                 KUndo2CommandExtraData *extraData)
     : m_image(image),
       m_node(node),
       m_flags(flags),
@@ -193,6 +194,10 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);
+    }
+
+    if (extraData) {
+        strategy->setCommandExtraData(extraData);
     }
 
     m_strokeId = m_image->startStroke(strategy);

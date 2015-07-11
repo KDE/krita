@@ -71,6 +71,7 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("featherselection");
     addAction("featherselection", action);
+    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F6));
 
     addUIFactory(new KisOperationUIWidgetFactory<WdgFeatherSelection>("featherselection"));
     addOperation(new FeatherSelectionOperation);

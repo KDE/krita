@@ -467,7 +467,7 @@ qint64 readPattern(QIODevice *device,
         QString fileName = QString("%1.pat").arg(patternUuid);
         QImage patternImage = readVirtualArrayList(device, numPlanes);
         KoPattern realPattern(patternImage, patternName, fileName);
-        realPattern.saveToDevice(&patternBuf);
+        realPattern.savePatToDevice(&patternBuf);
     }
 
     /**

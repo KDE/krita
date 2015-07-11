@@ -167,6 +167,8 @@ private:
     QRectF leftHandleRect(QRectF cropBorderRect);
     void drawDecorationLine(QPainter *p, DecorationLine *decorLine, QRectF rect);
 
+    bool tryContinueLastCropAction();
+
 private:
     QPoint m_dragStart;
 

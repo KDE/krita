@@ -12,7 +12,7 @@ List of known bugs:
 [postponed ]* separate included gmic code to stand-alone library and link dynamically : 
 [postponed ]  ,upstream changes in gmic are needed; does not support source or binary compatibility; visibility not set for exported symbols correctly
 
-* if the gmic filter outputs layer smaller than original, it supposed to be centered to canvas size, not bitblt(0,0,image->rect) 
+[done] * if the gmic filter outputs layer smaller than original, it supposed to be centered to canvas size, not bitblt(0,0,image->rect) 
 * what to do with selections for small preview?
 [done] * sometimes small preview blocks the UI because it takes too long  => progress bar
 * resizing the preview has to work (Small, Tiny, Large, ...)
@@ -24,7 +24,7 @@ List of known bugs:
 * tiny, small, normal, large behaves exactly same for now
 * "Preview mode" only 1st output works 
 * missing: Favorite presets group
-* missing: button for expanding all folders
+[done] * missing: button for expanding all folders
 * missing: Available filters information 
 * scrollbars for filter settings that are huge! currently text is horizontally downscaled and unreadable
 [done] * gmic is located under Layer -> Apply Gmic action, it supposed to be in Filters 

@@ -12,10 +12,6 @@ set(koversion_LIB_SRCS
 
 kde4_add_library(koversion SHARED ${koversion_LIB_SRCS})
 
-target_link_libraries(koversion ${QT_QTCORE_LIBRARY} )
-
-target_link_libraries(koversion LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} )
-
 set_target_properties(koversion PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )

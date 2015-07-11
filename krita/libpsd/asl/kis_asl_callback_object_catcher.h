@@ -43,7 +43,7 @@ typedef boost::function<void (KoAbstractGradientSP)> ASLCallbackGradient;
 typedef boost::function<void ()> ASLCallbackNewStyle;
 
 
-class LIBKISPSD_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
+class KRITAPSD_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
 {
 public:
     KisAslCallbackObjectCatcher();

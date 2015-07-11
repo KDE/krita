@@ -28,7 +28,7 @@ public:
     KisLegacyTileCompressor();
     virtual ~KisLegacyTileCompressor();
 
-    void writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
+    bool writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
     bool readTile(QIODevice *stream, KisTiledDataManager *dm);
 
 
@@ -48,7 +48,7 @@ private:
      * should be maxHeaderLength() + 1 bytes at least
      * (to fit terminating '\0')
      */
-    void writeHeader(KisTileSP tile, quint8 *buffer);
+    bool writeHeader(KisTileSP tile, quint8 *buffer);
 };
 
 #endif /* __KIS_LEGACY_TILE_COMPRESSOR_H */

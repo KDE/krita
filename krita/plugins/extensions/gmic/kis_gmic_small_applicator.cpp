@@ -17,6 +17,7 @@
  */
 
 #include <QRect>
+
 #include "kis_gmic_small_applicator.h"
 
 #include "kis_gmic_command.h"
@@ -30,80 +31,162 @@
 
 KisGmicSmallApplicator::KisGmicSmallApplicator(QObject *parent)
     : QThread(parent),
-      m_setting(0),
-      m_gmicFinishedSuccessfully(true)
+      m_setting(0)
 {
     m_gmicData = KisGmicDataSP(new KisGmicData());
+    m_abort = false;
+    m_restart = false;
 }
 
 KisGmicSmallApplicator::~KisGmicSmallApplicator()
 {
+    m_mutex.lock();
+    m_abort = true;
+    m_condition.wakeOne();
+    m_mutex.unlock();
     wait();
+
     dbgPlugins << "Destroying KisGmicSmallApplicator: " << this;
 }
 
-void KisGmicSmallApplicator::setProperties(const QRect& canvasRect, const QSize& previewSize, KisNodeListSP layers, KisGmicFilterSetting* settings, const QByteArray& customCommands)
+void KisGmicSmallApplicator::render(const QRect& canvasRect, const QSize& previewSize, KisNodeListSP layers, KisGmicFilterSetting* settings, const QByteArray& customCommands)
 {
+    QMutexLocker locker(&m_mutex);
+
     m_canvasRect = canvasRect;
     m_previewSize = previewSize;
     m_layers = layers;
     m_setting = settings;
     m_gmicCustomCommands = customCommands;
+
+    dbgPlugins << "Rendering " << m_setting->gmicCommand();
+
+    if (!isRunning())
+    {
+        start();
+    }
+    else
+    {
+        m_restart = true;
+        m_condition.wakeOne();
+    }
 }
+
 
 
 void KisGmicSmallApplicator::run()
 {
-    qreal aspectRatio = (qreal)m_canvasRect.width() / m_canvasRect.height();
-
-    int previewWidth = m_previewSize.width();
-    int previewHeight = qRound(previewWidth / aspectRatio);
-    QRect previewRect = QRect(QPoint(0,0), QSize(previewWidth, previewHeight));
-
-    KisNodeListSP previewKritaNodes = createPreviewThumbnails(m_layers, previewRect.size(), m_canvasRect);
-
-    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
-    gmicLayers->assign(previewKritaNodes->size());
-
-    KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);
-    for (int i = 0; i < previewKritaNodes->size(); i++)
+    forever
     {
-        exportVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
-    }
+        if (m_abort)
+        {
+            return;
+        }
 
-    QString gmicCommand = m_setting->previewGmicCommand();
-    if (gmicCommand.isEmpty())
-    {
-        gmicCommand = m_setting->gmicCommand();
-    }
+        m_mutex.lock();
+        qreal aspectRatio = (qreal)m_canvasRect.width() / m_canvasRect.height();
+        int previewWidth = m_previewSize.width();
+        int previewHeight = qRound(previewWidth / aspectRatio);
+        QRect previewRect = QRect(QPoint(0,0), QSize(previewWidth, previewHeight));
+        KisNodeListSP previewKritaNodes = createPreviewThumbnails(m_layers, previewRect.size(), m_canvasRect);
+        QString gmicCommand = m_setting->previewGmicCommand();
+        if (gmicCommand.isEmpty())
+        {
+            gmicCommand = m_setting->gmicCommand();
+        }
 
-    KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicData, m_gmicCustomCommands);
-    connect(&gmicCmd, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool, int, QString)));
+        QByteArray gmicCustomCommands = m_gmicCustomCommands;
+        m_mutex.unlock();
 
-    gmicCmd.redo();
-    if (!gmicCmd.isSuccessfullyDone())
-    {
-        dbgPlugins << "G'MIC command for small preview failed!";
-        return;
-    }
 
-    KisGmicSynchronizeLayersCommand syncCmd(previewKritaNodes, gmicLayers, 0);
-    syncCmd.redo();
+        while(true)
+        {
+            if (m_abort)
+            {
+                return;
+            }
 
-    KisImportGmicProcessingVisitor importVisitor(previewKritaNodes, gmicLayers, previewRect, 0);
-    for (int i = 0; i < previewKritaNodes->size(); i++)
-    {
-        importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
-    }
+            QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
+            gmicLayers->assign(previewKritaNodes->size());
 
-    if (previewKritaNodes->size() > 0)
-    {
-        m_preview = previewKritaNodes->at(0)->paintDevice();
-        emit previewReady();
-    }
-    else
-    {
-        // TODO: show error preview
+            KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);
+            for (int i = 0; i < previewKritaNodes->size(); i++)
+            {
+                exportVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
+            }
+
+            if (m_restart)
+            {
+                dbgPlugins << "Restarting at " << __LINE__;
+                break;
+            }
+
+            m_mutex.lock();
+            m_gmicData->reset();
+            m_mutex.unlock();
+
+            KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicData, gmicCustomCommands);
+            connect(&gmicCmd, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool, int, QString)));
+
+            gmicCmd.redo();
+            if (!gmicCmd.isSuccessfullyDone())
+            {
+                dbgPlugins << "G'MIC command for small preview failed!";
+                break;
+            }
+
+            if (m_restart)
+            {
+                dbgPlugins << "Restarting at " << __LINE__;
+                break;
+            }
+
+            KisGmicSynchronizeLayersCommand syncCmd(previewKritaNodes, gmicLayers, 0);
+            syncCmd.redo();
+
+            if (m_restart)
+            {
+                dbgPlugins << "Restarting at " << __LINE__;
+                break;
+            }
+
+            KisImportGmicProcessingVisitor importVisitor(previewKritaNodes, gmicLayers, previewRect, 0);
+            for (int i = 0; i < previewKritaNodes->size(); i++)
+            {
+                importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
+            }
+
+            if (m_restart)
+            {
+                dbgPlugins << "Restarting at " << __LINE__;
+                break;
+            }
+
+            if (previewKritaNodes->size() > 0)
+            {
+                m_mutex.lock();
+                m_preview = previewKritaNodes->at(0)->paintDevice();
+                m_mutex.unlock();
+
+                dbgPlugins << "Emiting previewFinished(true)";
+                emit previewFinished(true);
+            }
+            else
+            {
+                dbgPlugins << "Emiting previewFinished(false)";
+                emit previewFinished(false);
+            }
+
+            break;
+        }
+
+        m_mutex.lock();
+        if (!m_restart)
+        {
+            m_condition.wait(&m_mutex);
+        }
+        m_restart = false;
+        m_mutex.unlock();
     }
 }
 
@@ -125,6 +208,6 @@ float KisGmicSmallApplicator::progress() const
 }
 
 KisPaintDeviceSP KisGmicSmallApplicator::preview()
-{
+{   QMutexLocker locker(&m_mutex);
     return m_preview;
 }

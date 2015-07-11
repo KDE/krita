@@ -292,7 +292,7 @@ private:
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
-    Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
+    Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape*> &shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
     QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);

@@ -103,7 +103,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (to == -1 || cur.block().position() + cur.block().length() <= to) { // End of the block is inside selection.
+        if (to == -1 || cur.block().position() + cur.block().length() - 1 <= to) { // End of the block is inside selection.
             foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(cur.blockFormat())) {
                 if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name()) {
                     sectionNamesStack.pop();
@@ -386,15 +386,16 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
 void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
 {
     QBuffer rdfXmlData;
-    KoXmlWriter *rdfXmlWriter = new KoXmlWriter(&rdfXmlData);
-    rdfXmlWriter->startDocument("rdf");
-    rdfXmlWriter->startElement("rdf");
-    rdf->saveOdf(context, rdfXmlWriter);
-    rdfXmlWriter->endElement();
-    rdfXmlWriter->endDocument();
-    KoXmlDocument *xmlReader = new KoXmlDocument;
-    xmlReader->setContent(rdfXmlData.data(), true);
-    KoXmlElement mainElement = xmlReader->documentElement();
+    KoXmlWriter rdfXmlWriter(&rdfXmlData);
+    rdfXmlWriter.startDocument("rdf");
+    rdfXmlWriter.startElement("rdf");
+    rdf->saveOdf(context, &rdfXmlWriter);
+    rdfXmlWriter.endElement();
+    rdfXmlWriter.endDocument();
+
+    KoXmlDocument xmlReader;
+    xmlReader.setContent(rdfXmlData.data(), true);
+    KoXmlElement mainElement = xmlReader.documentElement();
     foreach (const Attribute &attributeNameNS, mainElement.attributeFullNames()) {
         QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
                                                 .arg(attributeNameNS.second);
@@ -402,7 +403,6 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
             attributeName.prepend("xml");
         tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
     }
-    delete(rdfXmlWriter);
 }
 
 /*

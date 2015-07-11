@@ -26,7 +26,7 @@ class QIODevice;
 class KisAslObjectCatcher;
 
 
-class LIBKISPSD_EXPORT KisAslXmlParser
+class KRITAPSD_EXPORT KisAslXmlParser
 {
 public:
     void parseXML(const QDomDocument &doc, KisAslObjectCatcher &catcher);

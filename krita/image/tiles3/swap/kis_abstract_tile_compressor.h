@@ -45,7 +45,7 @@ public:
      *
      * \see compressTile()
      */
-    virtual void writeTile(KisTileSP tile, KisPaintDeviceWriter &store) = 0;
+    virtual bool writeTile(KisTileSP tile, KisPaintDeviceWriter &store) = 0;
 
     /**
      * Decompresses the \a tile from the \a stream.

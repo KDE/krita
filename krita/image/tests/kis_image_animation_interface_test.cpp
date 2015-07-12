@@ -31,11 +31,11 @@
 #include "kis_time_range.h"
 
 
-void checkFrame(KisImageAnimationInterface *i, int frameId, bool externalFrameActive, const QRect &rc)
+void checkFrame(KisImageAnimationInterface *i, KisImageSP image, int frameId, bool externalFrameActive, const QRect &rc)
 {
     QCOMPARE(i->currentTime(), frameId);
     QCOMPARE(i->externalFrameActive(), externalFrameActive);
-    QCOMPARE(i->frameProjection()->exactBounds(), rc);
+    QCOMPARE(image->projection()->exactBounds(), rc);
 }
 
 void KisImageAnimationInterfaceTest::testFrameRegeneration()
@@ -64,7 +64,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
         QCOMPARE(dev2->exactBounds(), rc2);
 
         p.image->refreshGraph();
-        checkFrame(i, 0, false, rc1 | rc2);
+        checkFrame(i, p.image, 0, false, rc1 | rc2);
     }
 
     // switch/create frame 10
@@ -90,20 +90,20 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
         QCOMPARE(dev2->exactBounds(), rc4);
 
         p.image->refreshGraph();
-        checkFrame(i, 10, false, rc3 | rc4);
+        checkFrame(i, p.image, 10, false, rc3 | rc4);
     }
 
 
     // check external frame (frame 0)
     {
-        SignalToFunctionProxy proxy1(boost::bind(checkFrame, i, 0, true, rc1 | rc2));
+        SignalToFunctionProxy proxy1(boost::bind(checkFrame, i, p.image, 0, true, rc1 | rc2));
         connect(i, SIGNAL(sigFrameReady()), &proxy1, SLOT(start()), Qt::DirectConnection);
         i->requestFrameRegeneration(0, QRegion(refRect));
         QTest::qWait(200);
     }
 
     // current frame (flame 10) is still unchanged
-    checkFrame(i, 10, false, rc3 | rc4);
+    checkFrame(i, p.image, 10, false, rc3 | rc4);
 
     // switch back to frame 0
     i->switchCurrentTimeAsync(0);
@@ -114,19 +114,19 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
         QCOMPARE(dev1->exactBounds(), rc1);
         QCOMPARE(dev2->exactBounds(), rc2);
 
-        checkFrame(i, 0, false, rc1 | rc2);
+        checkFrame(i, p.image, 0, false, rc1 | rc2);
     }
 
     // check external frame (frame 10)
     {
-        SignalToFunctionProxy proxy2(boost::bind(checkFrame, i, 10, true, rc3 | rc4));
+        SignalToFunctionProxy proxy2(boost::bind(checkFrame, i, p.image, 10, true, rc3 | rc4));
         connect(i, SIGNAL(sigFrameReady()), &proxy2, SLOT(start()), Qt::DirectConnection);
         i->requestFrameRegeneration(10, QRegion(refRect));
         QTest::qWait(200);
     }
 
     // current frame is still unchanged
-    checkFrame(i, 0, false, rc1 | rc2);
+    checkFrame(i, p.image, 0, false, rc1 | rc2);
 }
 
 void KisImageAnimationInterfaceTest::testFramesChangedSignal()

@@ -76,11 +76,6 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
     emit sigTimeChanged(frameId);
 }
 
-KisPaintDeviceSP KisImageAnimationInterface::frameProjection() const
-{
-    return m_d->image->projection();
-}
-
 void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRegion &dirtyRegion)
 {
     KisStrokeStrategy *strategy =

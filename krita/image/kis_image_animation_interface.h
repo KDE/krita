@@ -64,12 +64,6 @@ public:
     void switchCurrentTimeAsync(int frameId);
 
     /**
-     * Returns a pointer to the current projection of the image. Do
-     * not store it anywhere, it can be changed easily.
-     */
-    KisPaintDeviceSP frameProjection() const;
-
-    /**
      * Start a backgroud thread that will recalculate some extra frame.
      * The result will be reported using two types of signals:
      *

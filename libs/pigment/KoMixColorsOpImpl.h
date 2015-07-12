@@ -32,6 +32,55 @@ public:
     }
     virtual ~KoMixColorsOpImpl() { }
     virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
+        mixColorsImpl(ArrayOfPointers(colors), weights, nColors, dst);
+    }
+
+    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
+        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), weights, nColors, dst);
+    }
+
+private:
+    struct ArrayOfPointers {
+        ArrayOfPointers(const quint8 * const* colors)
+            : m_colors(colors)
+        {
+        }
+
+        const quint8* getPixel() const {
+            return *m_colors;
+        }
+
+        void nextPixel() {
+            m_colors++;
+        }
+
+    private:
+        const quint8 * const * m_colors;
+    };
+
+    struct PointerToArray {
+        PointerToArray(const quint8 *colors, int pixelSize)
+            : m_colors(colors),
+              m_pixelSize(pixelSize)
+        {
+        }
+
+        const quint8* getPixel() const {
+            return m_colors;
+        }
+
+        void nextPixel() {
+            m_colors += m_pixelSize;
+        }
+
+    private:
+        const quint8 *m_colors;
+        const int m_pixelSize;
+    };
+
+
+    template<class AbstractSource>
+    void mixColorsImpl(AbstractSource source, const qint16 *weights, quint32 nColors, quint8 *dst) const {
         // Create and initialize to 0 the array of totals
         typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totals[_CSTrait::channels_nb];
         typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totalAlpha = 0;
@@ -41,7 +90,7 @@ public:
         // Compute the total for each channel by summing each colors multiplied by the weightlabcache
 
         while (nColors--) {
-            const typename _CSTrait::channels_type* color = _CSTrait::nativeArray(*colors);
+            const typename _CSTrait::channels_type* color = _CSTrait::nativeArray(source.getPixel());
             typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype alphaTimesWeight;
 
             if (_CSTrait::alpha_pos != -1) {
@@ -59,7 +108,7 @@ public:
             }
 
             totalAlpha += alphaTimesWeight;
-            colors++;
+            source.nextPixel();
             weights++;
         }
 

@@ -1384,53 +1384,63 @@ void KisPaintDeviceTest::testCacheState()
     pool.waitForDone();
 }
 
+struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
+    TestingLodDefaultBounds(const QRect &bounds = QRect(0,0,100,100))
+        : m_lod(0), m_bounds(bounds) {}
+
+    QRect bounds() const {
+        return m_bounds;
+    }
+    bool wrapAroundMode() const {
+        return false;
+    }
+
+    int currentLevelOfDetail() const {
+        return m_lod;
+    }
+
+    int currentTime() const {
+        return 0;
+    }
+    bool externalFrameActive() const {
+        return false;
+    }
+
+    void testingSetLevelOfDetail(int lod) {
+        m_lod = lod;
+    }
+
+private:
+    int m_lod;
+    QRect m_bounds;
+};
+
+void fillGradientDevice(KisPaintDeviceSP dev, const QRect &rect, bool flat = false)
+{
+    if (flat) {
+        dev->fill(rect, KoColor(Qt::red, dev->colorSpace()));
+    } else {
+        // fill device with a gradient
+        KisSequentialIterator it(dev, rect);
+        do {
+            QColor c((10 * it.x()) & 0xFF, (10 * it.y()) & 0xFF, 0, 255);
+            KoColor color(c, dev->colorSpace());
+            memcpy(it.rawData(), color.data(), dev->pixelSize());
+        } while (it.nextPixel());
+    }
+}
+
 void KisPaintDeviceTest::testLodDevice()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
-        TestingLodDefaultBounds() : m_lod(0) {}
-
-        QRect bounds() const {
-            return QRect(0,0,100,100);
-        }
-        bool wrapAroundMode() const {
-            return false;
-        }
-
-        int currentLevelOfDetail() const {
-            return m_lod;
-        }
-
-        int currentTime() const {
-            return 0;
-        }
-        bool externalFrameActive() const {
-            return false;
-        }
-
-        void testingSetLevelOfDetail(int lod) {
-            m_lod = lod;
-        }
-
-    private:
-        int m_lod;
-    };
-
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     TestingLodDefaultBounds *bounds = new TestingLodDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-
     // fill device with a gradient
     QRect rect = dev->defaultBounds()->bounds();
-    for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
-        for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
-            QColor c((10 * x) % 255, (10 * y) % 255, 0, 255);
-            dev->setPixel(x, y, c);
-        }
-    }
+    fillGradientDevice(dev, rect);
 
     QImage result;
 
@@ -1473,6 +1483,78 @@ void KisPaintDeviceTest::testLodDevice()
     result = dev->convertToQImage(0,0,0,100,100);
     /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
                                   "lod", "lod1-offset-6-14"));
+}
+
+void KisPaintDeviceTest::benchmarkLod1Generation()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestingLodDefaultBounds *bounds = new TestingLodDefaultBounds(QRect(0,0,6000,4000));
+    dev->setDefaultBounds(bounds);
+
+    // fill device with a gradient
+    QRect rect = dev->defaultBounds()->bounds();
+    fillGradientDevice(dev, rect, true);
+
+    QBENCHMARK {
+        bounds->testingSetLevelOfDetail(1);
+        dev->syncLodCache(1);
+    }
+}
+
+void KisPaintDeviceTest::benchmarkLod2Generation()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestingLodDefaultBounds *bounds = new TestingLodDefaultBounds(QRect(0,0,6000,4000));
+    dev->setDefaultBounds(bounds);
+
+    // fill device with a gradient
+    QRect rect = dev->defaultBounds()->bounds();
+    fillGradientDevice(dev, rect, true);
+
+    QBENCHMARK {
+        bounds->testingSetLevelOfDetail(2);
+        dev->syncLodCache(2);
+    }
+}
+
+void KisPaintDeviceTest::benchmarkLod3Generation()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestingLodDefaultBounds *bounds = new TestingLodDefaultBounds(QRect(0,0,3000,2000));
+    dev->setDefaultBounds(bounds);
+
+    // fill device with a gradient
+    QRect rect = dev->defaultBounds()->bounds();
+    fillGradientDevice(dev, rect, true);
+
+    QBENCHMARK {
+        bounds->testingSetLevelOfDetail(3);
+        dev->syncLodCache(3);
+    }
+}
+
+void KisPaintDeviceTest::benchmarkLod4Generation()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestingLodDefaultBounds *bounds = new TestingLodDefaultBounds(QRect(0,0,3000,2000));
+    dev->setDefaultBounds(bounds);
+
+    // fill device with a gradient
+    QRect rect = dev->defaultBounds()->bounds();
+    fillGradientDevice(dev, rect, true);
+
+    QBENCHMARK {
+        bounds->testingSetLevelOfDetail(4);
+        dev->syncLodCache(4);
+    }
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

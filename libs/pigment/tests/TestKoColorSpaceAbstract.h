@@ -10,6 +10,7 @@ private Q_SLOTS:
     void testMixColorsOpU8();
     void testMixColorsOpF32();
     void testMixColorsOpU8NoAlpha();
+    void testMixColorsOpU8NoAlphaLinear();
 };
 
 #endif

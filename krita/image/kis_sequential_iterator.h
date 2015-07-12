@@ -26,11 +26,33 @@
 #include "kis_iterator_ng.h"
 
 
+struct DevicePolicy {
+    DevicePolicy(KisPaintDeviceSP dev) : m_dev(dev) {}
+
+    template <typename Convertible>
+    DevicePolicy(Convertible sel) : m_dev(sel) {}
+
+    KisHLineConstIteratorSP createConstIterator(const QRect &rect) {
+        return m_dev->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
+    }
+
+    KisHLineIteratorSP createIterator(const QRect &rect) {
+        return m_dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
+    }
+
+    int pixelSize() const {
+        return m_dev->pixelSize();
+    }
+
+    KisPaintDeviceSP m_dev;
+};
+
+template <class SourcePolicy = DevicePolicy>
 struct ReadOnlyIteratorPolicy {
     typedef KisHLineConstIteratorSP IteratorTypeSP;
 
-    ReadOnlyIteratorPolicy(KisPaintDeviceSP dev, const QRect &rect) {
-        m_iter = dev->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
+    ReadOnlyIteratorPolicy(SourcePolicy source, const QRect &rect) {
+        m_iter = source.createConstIterator(rect);
     }
 
     ALWAYS_INLINE void updatePointersCache() {
@@ -53,11 +75,12 @@ private:
     const quint8 *m_oldRawData;
 };
 
+template <class SourcePolicy = DevicePolicy>
 struct WritableIteratorPolicy {
     typedef KisHLineIteratorSP IteratorTypeSP;
 
-    WritableIteratorPolicy(KisPaintDeviceSP dev, const QRect &rect) {
-        m_iter = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
+    WritableIteratorPolicy(SourcePolicy source, const QRect &rect) {
+        m_iter = source.createIterator(rect);
     }
 
     ALWAYS_INLINE void updatePointersCache() {
@@ -104,13 +127,13 @@ private:
  * const.
  */
 
-template <class IteratorPolicy>
+template <class IteratorPolicy, class SourcePolicy = DevicePolicy>
 class KisSequentialIteratorBase
 {
 public:
-    KisSequentialIteratorBase(KisPaintDeviceSP dev, const QRect &rect)
-        : m_policy(dev, rect),
-          m_pixelSize(dev->pixelSize()),
+    KisSequentialIteratorBase(SourcePolicy source, const QRect &rect)
+        : m_policy(source, rect),
+          m_pixelSize(source.pixelSize()),
           m_rowsLeft(rect.height() - 1),
           m_columnOffset(0)
     {
@@ -191,7 +214,7 @@ private:
     int m_columnOffset;
 };
 
-typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy> KisSequentialConstIterator;
-typedef KisSequentialIteratorBase<WritableIteratorPolicy> KisSequentialIterator;
+typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<> > KisSequentialConstIterator;
+typedef KisSequentialIteratorBase<WritableIteratorPolicy<> > KisSequentialIterator;
 
 #endif /* __KIS_SEQUENTIAL_ITERATOR_H */

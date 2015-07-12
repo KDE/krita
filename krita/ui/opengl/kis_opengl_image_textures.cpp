@@ -245,18 +245,29 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     const QRect bounds = m_image->bounds();
     const int levelOfDetail = m_image->currentLevelOfDetail();
 
+    QRect alignedUpdateRect = updateRect;
+    QRect alignedBounds = bounds;
+
+    if (levelOfDetail) {
+        alignedUpdateRect = KisLodTransform::alignedRect(alignedUpdateRect, levelOfDetail);
+        alignedBounds = KisLodTransform::alignedRect(alignedBounds, levelOfDetail);
+    }
 
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
-            QRect tileRect = calculateTileRect(col, row);
-            QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
+            const QRect tileRect = calculateTileRect(col, row);
+            const QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
+
+            QRect alignedTileTextureRect = levelOfDetail ?
+                KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
+                tileTextureRect;
 
             KisTextureTileUpdateInfoSP tileInfo(
                 new KisTextureTileUpdateInfo(col, row,
-                                             tileTextureRect,
-                                             updateRect,
-                                             bounds,
+                                             alignedTileTextureRect,
+                                             alignedUpdateRect,
+                                             alignedBounds,
                                              levelOfDetail));
             // Don't update empty tiles
             if (tileInfo->valid()) {

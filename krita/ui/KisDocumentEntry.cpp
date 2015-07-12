@@ -71,14 +71,17 @@ bool KisDocumentEntry::isEmpty() const {
  * @return name of the associated service
  */
 QString KisDocumentEntry::name() const {
-    return m_loader->fileName(); //QT5TODO: should return servicename
+    QJsonObject json = m_loader->metaData().value("MetaData").toObject();
+    json = json.value("KPlugin").toObject();
+    return json.value("Name").toString();
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KisDocumentEntry::mimeTypes() const {
-    return QStringList(); //QT5TODO: m_loader->serviceTypes();
+    QJsonObject json = m_loader->metaData().value("MetaData").toObject();
+    return json.value("MimeType").toString().split(';', QString::SkipEmptyParts);
 }
 
 /**

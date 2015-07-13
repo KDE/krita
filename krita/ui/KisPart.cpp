@@ -41,6 +41,7 @@
 #include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
+#include "dialogs/KisShortcutsDialog.h"
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -55,7 +56,6 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kshortcutsdialog.h>
 #include <kshortcut.h>
 
 #include <QDialog>
@@ -432,12 +432,15 @@ void KisPart::configureShortcuts()
         d->loadActions();
     }
 
-    KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
-// QT5TODO: KDialog is deprecated so the buttons don't exist anymore
-//     dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
+    // In kdelibs4 a hack was used to hide the shortcut schemes widget in the
+    // normal shortcut editor KShortcutsDialog from kdelibs, by setting the
+    // bottom buttons oneself. This does not work anymore (as the buttons are
+    // no longer exposed), so for now running with a plain copy of the sources
+    // of KShortcutsDialog, where the schemes editor is disabled directly.
+    // Not nice, but then soon custom Krita-specific shortcut handling is
+    // planned anyway.
+    KisShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
     dlg.addCollection(d->actionCollection);
-//     dlg.setButtonText(KDialog::User1, i18n("Print"));
-//     dlg.setButtonIcon(KDialog::User1, KIcon("document-print"));
     dlg.configure();
 
     foreach(KisMainWindow *mainWindow, d->mainWindows) {

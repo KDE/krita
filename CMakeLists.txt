@@ -193,7 +193,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      WidgetsAddons ThreadWeaver
                                      Completion IconThemes Sonnet
                                      Parts KIO
-                                     XmlGui Kross Wallet
+                                     XmlGui Kross Wallet GlobalAccel
                                      Emoticons ConfigWidgets KDELibs4Support
     OPTIONAL_COMPONENTS
         NotifyConfig

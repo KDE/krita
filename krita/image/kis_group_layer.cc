@@ -144,7 +144,7 @@ KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
 {
     KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
 
-    if (prevGroup) {
+    if (prevGroup && canMergeAndKeepBlendOptions(prevLayer)) {
         KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
 
         KisNodeSP child, cloned;

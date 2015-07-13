@@ -959,17 +959,12 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
-    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
     QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
     // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
     KisLayerSP mergedLayer = layer->createMergedLayer(prevLayer);
     Q_CHECK_PTR(mergedLayer);
-
-    mergedLayer->setCompositeOp(COMPOSITE_OVER);
-    mergedLayer->setChannelFlags(layer->channelFlags());
-    mergedLayer->disableAlphaChannel(prevAlphaDisabled);
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -1025,13 +1020,33 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
     refreshHiddenArea(layer, bounds());
 
+    bool resetComposition = false;
+
+    KisPaintDeviceSP mergedDevice;
+
     lock();
-    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
+    if (layer->layerStyle()) {
+        mergedDevice = new KisPaintDevice(layer->colorSpace());
+        mergedDevice->prepareClone(layer->projection());
+
+        QRect updateRect = layer->projection()->extent() | bounds();
+
+        KisPainter gc(mergedDevice);
+        layer->projectionPlane()->apply(&gc, updateRect);
+
+        resetComposition = true;
+
+    } else {
+        mergedDevice = new KisPaintDevice(*layer->projection());
+    }
     unlock();
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
-    newLayer->setCompositeOp(layer->compositeOp()->id());
 
+    if (!resetComposition) {
+        newLayer->setCompositeOp(layer->compositeOp()->id());
+        newLayer->setChannelFlags(layer->channelFlags());
+    }
 
     undoAdapter()->beginMacro(kundo2_i18n("Flatten Layer"));
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));

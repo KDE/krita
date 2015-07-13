@@ -32,6 +32,13 @@ private Q_SLOTS:
     void testConvertImageColorSpace();
     void testGlobalSelection();
     void testLayerComposition();
+
+    void testFlattenLayer();
+    void testMergeDown();
+    void testMergeDownDestinationInheritsAlpha();
+    void testMergeDownDestinationCustomCompositeOp();
+    void testMergeDownDestinationSameCompositeOpLayerStyle();
+    void testMergeDownDestinationSameCompositeOp();
 };
 
 #endif

@@ -64,6 +64,10 @@ private Q_SLOTS:
     void testCacheState();
 
     void testLodDevice();
+    void benchmarkLod1Generation();
+    void benchmarkLod2Generation();
+    void benchmarkLod3Generation();
+    void benchmarkLod4Generation();
 };
 
 #endif

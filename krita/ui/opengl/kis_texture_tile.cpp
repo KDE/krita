@@ -125,6 +125,9 @@ void KisTextureTile::bindToActiveTexture()
 
 void KisTextureTile::setNeedsMipmapRegeneration()
 {
+    // TODO: when a switch for LoD is implemented, put it there to
+    //       allow mipmapping in that case
+
     if (m_filter == TrilinearFilterMode ||
         m_filter == HighQualityFiltering) {
 

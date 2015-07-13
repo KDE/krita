@@ -35,6 +35,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
+#include <KoMixColorsOp.h>
+
 
 #include "kis_global.h"
 #include "kis_types.h"
@@ -405,6 +407,10 @@ private:
                 *colorSpace() == *srcData->colorSpace;
     }
 
+    struct StrategyPolicy;
+    typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialConstIterator;
+    typedef KisSequentialIteratorBase<WritableIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialIterator;
+
 private:
     Data *m_data;
     mutable QScopedPointer<Data> m_lodData;
@@ -490,6 +496,28 @@ QRegion KisPaintDevice::Private::syncLodData(int newLod)
     return dirtyRegion;
 }
 
+struct KisPaintDevice::Private::StrategyPolicy {
+    StrategyPolicy(KisPaintDevice::Private::KisPaintDeviceStrategy *strategy,
+                   KisDataManager *dataManager)
+        : m_strategy(strategy), m_dataManager(dataManager) {}
+
+    KisHLineConstIteratorSP createConstIterator(const QRect &rect) {
+        return m_strategy->createHLineConstIteratorNG(m_dataManager, rect.x(), rect.y(), rect.width());
+    }
+
+    KisHLineIteratorSP createIterator(const QRect &rect) {
+        return m_strategy->createHLineIteratorNG(m_dataManager, rect.x(), rect.y(), rect.width());
+    }
+
+    int pixelSize() const {
+        return m_dataManager->pixelSize();
+    }
+
+
+    KisPaintDeviceStrategy *m_strategy;
+    KisDataManager *m_dataManager;
+};
+
 QRegion KisPaintDevice::Private::syncWholeDevice()
 {
     KIS_ASSERT_RECOVER(m_lodData) { return QRegion(); }
@@ -507,11 +535,39 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
     QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
     if (!srcRect.isValid() || !dstRect.isValid()) return QRegion();
 
-
-    KisHLineConstIteratorSP srcIt = currentStrategy()->createHLineConstIteratorNG(m_data->dataManager.data(), srcRect.x(), srcRect.y(), srcRect.width());
-    KisHLineIteratorSP dstIt = currentStrategy()->createHLineIteratorNG(m_lodData->dataManager.data(), dstRect.x(), dstRect.y(), dstRect.width());
+    KIS_ASSERT_RECOVER_NOOP(srcRect.width() / srcStepSize == dstRect.width());
 
     const int pixelSize = m_data->dataManager->pixelSize();
+
+    int rowsAccumulated = 0;
+    int columnsAccumulated = 0;
+
+    KoMixColorsOp *mixOp = colorSpace()->mixColorsOp();
+
+    QScopedArrayPointer<quint8> blendData(new quint8[srcStepSize * srcRect.width() * pixelSize]);
+    quint8 *blendDataPtr = blendData.data();
+    int blendDataOffset = 0;
+
+    const int srcCellSize = srcStepSize * srcStepSize;
+    const int srcCellStride = srcCellSize * pixelSize;
+    const int srcStepStride = srcStepSize * pixelSize;
+    const int srcColumnStride = (srcStepSize - 1) * srcStepStride;
+
+    QScopedArrayPointer<qint16> weights(new qint16[srcCellSize]);
+
+    {
+        const qint16 averageWeight = qCeil(255.0 / srcCellSize);
+        const qint16 extraWeight = averageWeight * srcCellSize - 255;
+        KIS_ASSERT_RECOVER_NOOP(extraWeight == 1);
+
+        for (int i = 0; i < srcCellSize - 1; i++) {
+            weights[i] = averageWeight;
+        }
+        weights[srcCellSize - 1] = averageWeight - extraWeight;
+    }
+
+    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), m_data->dataManager.data()), srcRect);
+    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager.data()), dstRect);
 
     int rowsRemaining = srcRect.height();
     while (rowsRemaining > 0) {
@@ -519,18 +575,42 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
         int colsRemaining = srcRect.width();
         while (colsRemaining > 0) {
 
-            memcpy(dstIt->rawData(), srcIt->rawDataConst(), pixelSize);
+            memcpy(blendDataPtr, srcIntIt.rawDataConst(), pixelSize);
+            blendDataPtr += pixelSize;
+            columnsAccumulated++;
 
-            srcIt->nextPixels(srcStepSize);
-            dstIt->nextPixel();
-            colsRemaining -= srcStepSize;
+            if (columnsAccumulated >= srcStepSize) {
+                blendDataPtr += srcColumnStride;
+                columnsAccumulated = 0;
+            }
+
+            srcIntIt.nextPixel();
+            colsRemaining--;
         }
 
-        for (int i = 0; i < srcStepSize; i++) {
-            srcIt->nextRow();
+        rowsAccumulated++;
+
+        if (rowsAccumulated >= srcStepSize) {
+
+            // blend and write the final data
+            blendDataPtr = blendData.data();
+            for (int i = 0; i < dstRect.width(); i++) {
+                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
+
+                blendDataPtr += srcCellStride;
+                dstIntIt.nextPixel();
+            }
+
+            // reset counters
+            rowsAccumulated = 0;
+            blendDataPtr = blendData.data();
+            blendDataOffset = 0;
+        } else {
+            blendDataOffset += srcStepStride;
+            blendDataPtr = blendData.data() + blendDataOffset;
         }
-        dstIt->nextRow();
-        rowsRemaining -= srcStepSize;
+
+        rowsRemaining--;
     }
 
     QRegion dirtyRegion(dstRect);

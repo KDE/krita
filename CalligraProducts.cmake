@@ -459,7 +459,6 @@ calligra_define_productset(KRITA "Full Krita"
     OPTIONAL
         # extras
         FILEMANAGER_PROPERTIES
-        FILEMANAGER_THUMBNAIL
         FILEMANAGER_QUICKPRINT
         # plugins
         PLUGIN_ARTISTICTEXTSHAPE

@@ -27,16 +27,10 @@
 #include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticItemRegistry.h"
 
-#include <KoView.h>
-#include <KoDocument.h>
 #include <KoTextDocument.h>
 #include <KoTextRdfCore.h>
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
-#include <KoDocumentResourceManager.h>
-#include <KoSelection.h>
-#include <KoTextShapeDataBase.h>
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
 #include <KoInlineObject.h>
@@ -44,7 +38,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 #include <KoTextMeta.h>
-#include <KoShapeController.h>
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -22,7 +22,6 @@
 #define PAGEVARIABLE_H
 
 #include <KoVariable.h>
-#include <KoTextShapeData.h>
 #include <KoTextPage.h>
 #include <KoOdfNumberDefinition.h>
 

@@ -38,7 +38,6 @@
 #include <KoTextDocument.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <KoTextShapeData.h>
 
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"

@@ -768,19 +768,24 @@ void KisLayerManager::mergeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (!layer->prevSibling()) return;
-    KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
-    if (!prevLayer) return;
+    QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+    if (selectedNodes.size() > 1) {
+        image->mergeMultipleLayers(selectedNodes, layer);
+    } else {
+        if (!layer->prevSibling()) return;
+        KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+        if (!prevLayer) return;
 
-    if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
-        image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
+            image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        }
+        else {
+            const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
+            if (!strategy) return;
+            image->mergeDown(layer, strategy);
+        }
     }
-    else {
-        const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
-        if (!strategy) return;
-        image->mergeDown(layer, strategy);
 
-    }
     m_view->updateGUI();
 }
 

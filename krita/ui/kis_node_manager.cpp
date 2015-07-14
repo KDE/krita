@@ -93,7 +93,6 @@ struct KisNodeManager::Private {
     KisMaskManager * maskManager;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
-    KisAction *mergeSelectedLayers;
 
     QList<KisNodeSP> selectedNodes;
 
@@ -171,13 +170,6 @@ KisNodeManager::KisNodeManager(KisViewManager *view)
     m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
 
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
-
-    m_d->mergeSelectedLayers = new KisAction(i18n("&Merge Selected Layers"), this);
-    m_d->mergeSelectedLayers->setActivationFlags(KisAction::ACTIVE_LAYER);
-    view->actionManager()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
-    m_d->mergeSelectedLayers->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_E));
-    connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
-
 }
 
 KisNodeManager::~KisNodeManager()
@@ -907,92 +899,9 @@ void KisNodeManager::activatePreviousNode()
     }
 }
 
-QList<KisNodeSP> hideLayers(KisNodeSP root, QList<KisNodeSP> selectedNodes)
+void KisNodeManager::mergeLayer()
 {
-    QList<KisNodeSP> alreadyHidden;
-
-    foreach(KisNodeSP node, root->childNodes(QStringList(), KoProperties())) {
-        if (!selectedNodes.contains(node)) {
-            if (node->visible()) {
-                node->setVisible(false);
-            }
-            else {
-                alreadyHidden << node;
-            }
-        }
-        if (node->childCount() > 0) {
-            hideLayers(node, selectedNodes);
-        }
-    }
-
-    return alreadyHidden;
-}
-
-void showNodes(KisNodeSP root, QList<KisNodeSP> keepHiddenNodes)
-{
-    foreach(KisNodeSP node, root->childNodes(QStringList(), KoProperties())) {
-        if (!keepHiddenNodes.contains(node)) {
-            node->setVisible(true);
-        }
-        if (node->childCount() > 0) {
-            showNodes(node, keepHiddenNodes);
-        }
-    }
-}
-
-void KisNodeManager::mergeLayerDown()
-{
-    if (m_d->selectedNodes.size() > 1) {
-
-        QList<KisNodeSP> selectedNodes = m_d->selectedNodes;
-        KisLayerSP l = activeLayer();
-
-        // hide every layer that's not in the list of selected nodes
-        QList<KisNodeSP> alreadyHiddenNodes = hideLayers(m_d->imageView->image()->root(), selectedNodes);
-
-        // render and copy the projection
-        m_d->imageView->image()->refreshGraph();
-        m_d->imageView->image()->waitForDone();
-
-        // Copy the projections
-        KisPaintDeviceSP dev = new KisPaintDevice(*m_d->imageView->image()->projection().data());
-        // place the projection in a layer
-        KisPaintLayerSP flattenLayer = new KisPaintLayer(m_d->imageView->image(), i18n("Merged"), OPACITY_OPAQUE_U8, dev);
-
-        // start a big macro
-        m_d->commandsAdapter->beginMacro(kundo2_i18n("Merge Selected Nodes"));
-
-        // Add the new merged node on top of the active node -- checking whether the parent is in the selection
-        KisNodeSP parent = l->parent();
-        while (selectedNodes.contains(parent)) {
-            parent = parent->parent();
-        }
-        if (parent == l->parent()) {
-            m_d->commandsAdapter->addNode(flattenLayer, parent, l);
-        }
-        else {
-            m_d->commandsAdapter->addNode(flattenLayer, parent, parent->lastChild());
-        }
-
-        // remove all nodes in the selection but the active node
-        removeSelectedNodes(selectedNodes);
-
-        m_d->commandsAdapter->endMacro();
-
-        // And unhide
-        showNodes(m_d->imageView->image()->root(), alreadyHiddenNodes);
-
-        m_d->imageView->image()->refreshGraph();
-        m_d->imageView->image()->waitForDone();
-        m_d->imageView->image()->notifyLayersChanged();
-        m_d->imageView->image()->setModified();
-
-        slotNonUiActivatedNode(flattenLayer);
-
-    }
-    else {
-        m_d->layerManager->mergeLayer();
-    }
+    m_d->layerManager->mergeLayer();
 }
 
 void KisNodeManager::rotate(double radians)

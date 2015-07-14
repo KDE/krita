@@ -499,5 +499,30 @@ void KisImageTest::testMergeDownDestinationSameCompositeOp()
     }
 }
 
+void KisImageTest::testMergeMultiple()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergemultiple", "imagetest");
+
+    QList<KisNodeSP> selectedNodes;
+
+    selectedNodes << p.layer2
+                  << p.group1
+                  << p.layer6;
+
+    {
+        KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+    }
+}
+
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

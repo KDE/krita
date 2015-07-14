@@ -39,6 +39,8 @@ private Q_SLOTS:
     void testMergeDownDestinationCustomCompositeOp();
     void testMergeDownDestinationSameCompositeOpLayerStyle();
     void testMergeDownDestinationSameCompositeOp();
+
+    void testMergeMultiple();
 };
 
 #endif

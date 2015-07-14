@@ -60,7 +60,7 @@ struct FLAKE_EXPORT KoShapeTemplate {
      * The properties which, when passed to the KoShapeFactoryBase::createShape() method
      * result in the shape this template represents.
      */
-    KoProperties *properties;
+    const KoProperties *properties;
 };
 
 /**
@@ -225,10 +225,10 @@ public:
      * This method should also set this factories shapeId on the shape using KoShape::setShapeId()
      * The default implementation just ignores 'params' and calls createDefaultShape()
      * @return a new shape
-     * @param params the properties object is the same as added in the addTemplate() call
+     * @param params the parameters to use when creating the shape
      * @param documentResources the resources manager that has all the document wide
      *      resources which can be used to create the object.
-     * @see createDefaultShape() newDocumentResourceManager()
+     * @see createDefaultShape() newDocumentResourceManager() addTemplate()
      * @see KoShapeTemplate::properties
      */
     virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
@@ -246,8 +246,9 @@ public:
 protected:
 
     /**
-     * Add a template with the properties of a speficic type of shape this factory can generate
-     * using the createShape() method.
+     * Add a template with the properties of a specific type of shape this factory can generate
+     * using the createShape() method. The factory will take ownership of the properties object
+     * to which the member @p properties of @p params points to and destroy it only in its own destructor.
      * @param params the new template this factory knows to produce
      */
     void addTemplate(const KoShapeTemplate &params);

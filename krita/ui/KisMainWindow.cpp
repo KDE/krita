@@ -128,6 +128,7 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#include "kis_animation_exporter.h"
 
 #include "calligraversion.h"
 
@@ -225,6 +226,7 @@ public:
     KisAction *printAction;
     KisAction *printActionPreview;
     KisAction *exportPdf;
+    KisAction *exportAnimation;
     KisAction *closeAll;
 //    KisAction *reloadFile;
     KisAction *importFile;
@@ -1427,6 +1429,19 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
     return printJob;
 }
 
+void KisMainWindow::exportAnimation()
+{
+    if (!activeView()) return;
+
+    KisDocument *document = activeView()->document();
+    if (!document) return;
+
+    KisAnimationExporterUI exporter(this);
+    exporter.exportSequence(document);
+
+    activeView()->canvasBase()->refetchDataFromImage();
+}
+
 void KisMainWindow::slotConfigureKeys()
 {
     KisPart::instance()->configureShortcuts();
@@ -2086,6 +2101,11 @@ void KisMainWindow::createActions()
     d->exportPdf->setIcon(koIcon("application-pdf"));
     actionManager->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
+
+    d->exportAnimation  = new KisAction(i18nc("@action:inmenu", "Export animation..."));
+    d->exportAnimation->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager->addAction("file_export_animation", d->exportAnimation);
+    connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
 
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
 

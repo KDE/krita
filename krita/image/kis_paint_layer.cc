@@ -258,7 +258,12 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
 
 void KisPaintLayer::addNewFrame(int time, bool blank)
 {
-    m_d->contentChannel->addKeyframe(time);
+    if (blank) {
+        m_d->contentChannel->addKeyframe(time);
+    } else {
+        KisKeyframe *keyframe = m_d->contentChannel->activeKeyframeAt(time);
+        m_d->contentChannel->copyKeyframe(keyframe, time);
+    }
 }
 
 void KisPaintLayer::deleteKeyfame(int time)

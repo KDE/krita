@@ -613,7 +613,7 @@ target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST
 ########### next target ###############
 
 set(kis_layer_styles_test_SRCS kis_layer_styles_test.cpp )
-kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-plugins-kis_layer_styles_test  ${kis_layer_styles_test_SRCS})
+kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-image-LayerStylesTest  ${kis_layer_styles_test_SRCS})
 target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############

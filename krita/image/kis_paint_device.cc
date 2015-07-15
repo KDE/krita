@@ -225,7 +225,7 @@ struct KisPaintDevice::Private
     {
         Data *data;
 
-        if (frames.count() == 0) {
+        if (frames.isEmpty()) {
             data = m_data;
         } else if (copy) {
             Data *srcData = frames[copySrc];
@@ -248,6 +248,10 @@ struct KisPaintDevice::Private
         return frameId;
     }
 
+    /**
+     * Creates a frame with a specified \p frameId and puts it into
+     * the store.  Used while loading frames form file.
+     */
     void forceCreateFrame(int frameId)
     {
         if (nextFreeFrameId <= frameId) nextFreeFrameId = frameId + 1;
@@ -258,9 +262,8 @@ struct KisPaintDevice::Private
 
     void deleteFrame(int frame)
     {
-        Data *data = frames[frame];
-        frames.remove(frame);
-        delete data;
+        KIS_ASSERT_RECOVER_RETURN(frames.contains(frame));
+        delete frames.take(frame);
 
         if (frames.count() == 1) {
             m_data = frames.begin().value();
@@ -287,8 +290,6 @@ struct KisPaintDevice::Private
     QRegion syncLodData(int newLod);
 
 private:
-    QRegion syncWholeDevice();
-
     struct Data {
         Data(KisPaintDevice *paintDevice)
             : cache(paintDevice),
@@ -318,69 +319,49 @@ private:
     };
 
 private:
-    inline Data* currentData() {
-        if (defaultBounds) {
-            if (defaultBounds->currentLevelOfDetail()) {
-                if (!m_lodData) {
-                    QMutexLocker l(&m_dataSwitchLock);
-                    if (!m_lodData) {
-                        m_lodData.reset(new Data(m_data));
-                    }
-                }
 
-                return m_lodData.data();
-            }
+    QRegion syncWholeDevice(Data *srcData);
 
-            if (contentChannel && contentChannel->keyframeCount() > 1) {
-                int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-                Q_ASSERT(frames.contains(frameId));
+    inline Data* currentNonLodData() const {
+        Data *data = m_data;
+        if (!defaultBounds) return data;
 
-                return frames[frameId];
-            } else if (defaultBounds->externalFrameActive()) {
+        if (contentChannel && contentChannel->keyframeCount() > 1) {
+            int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
+            KIS_ASSERT_RECOVER(frames.contains(frameId)) { return data; }
+            data = frames[frameId];
+
+        } else if (defaultBounds->externalFrameActive()) {
+            if (!m_externalFrameData) {
+                QMutexLocker l(&m_dataSwitchLock);
                 if (!m_externalFrameData) {
-                    QMutexLocker l(&m_dataSwitchLock);
-                    if (!m_externalFrameData) {
-                        m_externalFrameData.reset(new Data(m_data));
-                    }
+                    m_externalFrameData.reset(new Data(m_data));
                 }
-
-                return m_externalFrameData.data();
             }
+            data = m_externalFrameData.data();
         }
 
-        return m_data;
+        return data;
     }
 
-    inline const Data* currentData() const {
-        if (defaultBounds) {
-            if (defaultBounds->currentLevelOfDetail()) {
+    inline Data* currentData() const {
+        Data *data = m_data;
+
+        if (!defaultBounds) return data;
+
+        if (defaultBounds->currentLevelOfDetail()) {
+            if (!m_lodData) {
+                QMutexLocker l(&m_dataSwitchLock);
                 if (!m_lodData) {
-                    QMutexLocker l(&m_dataSwitchLock);
-                    if (!m_lodData) {
-                        m_lodData.reset(new Data(m_data));
-                    }
+                    m_lodData.reset(new Data(m_data));
                 }
-
-                return m_lodData.data();
             }
-
-            if (contentChannel && contentChannel->keyframeCount() > 1) {
-                int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-                Q_ASSERT(frames.contains(frameId));
-                return frames[frameId];
-            } else if (defaultBounds->externalFrameActive()) {
-                if (!m_externalFrameData) {
-                    QMutexLocker l(&m_dataSwitchLock);
-                    if (!m_externalFrameData) {
-                        m_externalFrameData.reset(new Data(m_data));
-                    }
-                }
-
-                return m_externalFrameData.data();
-            }
+            data = m_lodData.data();
+        } else {
+            data = currentNonLodData();
         }
 
-        return m_data;
+        return data;
     }
 
     void prepareCloneImpl(KisPaintDeviceSP src, Data *srcData)
@@ -459,30 +440,32 @@ inline int coordToLodCoord(int x, int lod) {
 
 QRegion KisPaintDevice::Private::syncLodData(int newLod)
 {
+    Data *srcData = currentNonLodData();
+
     if (!m_lodData) {
-        m_lodData.reset(new Data(m_data));
+        m_lodData.reset(new Data(srcData));
     }
 
-    int expectedX = coordToLodCoord(m_data->x, newLod);
-    int expectedY = coordToLodCoord(m_data->y, newLod);
+    int expectedX = coordToLodCoord(srcData->x, newLod);
+    int expectedY = coordToLodCoord(srcData->y, newLod);
 
     /**
      * We compare color spaces as pure pointers, because they must be
      * exactly the same, since they come from the common source.
      */
     if (m_lodData->levelOfDetail != newLod ||
-        m_lodData->colorSpace != m_data->colorSpace ||
+        m_lodData->colorSpace != srcData->colorSpace ||
         m_lodData->x != expectedX ||
         m_lodData->y != expectedY) {
 
-        if (m_lodData->dataManager->pixelSize() != m_data->dataManager->pixelSize()) {
+        if (m_lodData->dataManager->pixelSize() != srcData->dataManager->pixelSize()) {
             m_lodData->dataManager =
-                new KisDataManager(m_data->dataManager->pixelSize(),
-                                   m_data->dataManager->defaultPixel());
+                new KisDataManager(srcData->dataManager->pixelSize(),
+                                   srcData->dataManager->defaultPixel());
         }
 
         m_lodData->levelOfDetail = newLod;
-        m_lodData->colorSpace = m_data->colorSpace;
+        m_lodData->colorSpace = srcData->colorSpace;
 
         m_lodData->x = expectedX;
         m_lodData->y = expectedY;
@@ -490,7 +473,7 @@ QRegion KisPaintDevice::Private::syncLodData(int newLod)
         // FIXME: different kind of synchronization
     }
 
-    QRegion dirtyRegion = syncWholeDevice();
+    QRegion dirtyRegion = syncWholeDevice(srcData);
     m_lodData->cache.invalidate();
 
     return dirtyRegion;
@@ -518,7 +501,7 @@ struct KisPaintDevice::Private::StrategyPolicy {
     KisDataManager *m_dataManager;
 };
 
-QRegion KisPaintDevice::Private::syncWholeDevice()
+QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
 {
     KIS_ASSERT_RECOVER(m_lodData) { return QRegion(); }
 
@@ -528,7 +511,7 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
     int srcStepSize = 1 << lod;
 
     // FIXME:
-    QRect rcFIXME= m_data->dataManager->extent().translated(m_data->x, m_data->y);
+    QRect rcFIXME= srcData->dataManager->extent().translated(srcData->x, srcData->y);
     if (!rcFIXME.isValid()) return QRegion();
 
     QRect srcRect = KisLodTransform::alignedRect(rcFIXME, lod);
@@ -537,7 +520,7 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
 
     KIS_ASSERT_RECOVER_NOOP(srcRect.width() / srcStepSize == dstRect.width());
 
-    const int pixelSize = m_data->dataManager->pixelSize();
+    const int pixelSize = srcData->dataManager->pixelSize();
 
     int rowsAccumulated = 0;
     int columnsAccumulated = 0;
@@ -566,7 +549,7 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
         weights[srcCellSize - 1] = averageWeight - extraWeight;
     }
 
-    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), m_data->dataManager.data()), srcRect);
+    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager.data()), srcRect);
     InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager.data()), dstRect);
 
     int rowsRemaining = srcRect.height();

@@ -26,9 +26,8 @@ target_link_libraries(KoResourceTaggingTest  kowidgets Qt5::Test)
 
 ########### next target ###############
 
-# QT5TODO: needs first porting to new ThreadWeaver API
-# set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
-# kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
-# target_link_libraries(KoProgressUpdaterTest kowidgets KF5::ThreadWeaver Qt5::Test)
+set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
+kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
+target_link_libraries(KoProgressUpdaterTest kowidgets KF5::ThreadWeaver Qt5::Test)
 
 ########### end ###############

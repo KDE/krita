@@ -19,6 +19,8 @@
 #include "kis_sync_lod_cache_stroke_strategy.h"
 
 #include <kis_image.h>
+#include <kundo2magicstring.h>
+
 
 
 struct KisSyncLodCacheStrokeStrategy::Private
@@ -29,7 +31,8 @@ struct KisSyncLodCacheStrokeStrategy::Private
 };
 
 KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image)
-    : m_d(new Private)
+    : KisSimpleStrokeStrategy("SyncLodCacheStroke", kundo2_noi18n("internal_sync_lod_cache")),
+      m_d(new Private)
 {
     m_d->image = image;
     enableJob(JOB_INIT, true);

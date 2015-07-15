@@ -223,6 +223,13 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
 void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
 {
     m_d->strokesQueue->setDesiredLevelOfDetail(lod);
+
+    /**
+     * The queue might have started an internal stroke for
+     * cache synchronization. Process the queues to execute
+     * it if needed.
+     */
+    processQueues();
 }
 
 int KisUpdateScheduler::currentLevelOfDetail() const

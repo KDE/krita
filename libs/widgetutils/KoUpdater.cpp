@@ -21,7 +21,6 @@
 
 #include "KoUpdater.h"
 
-#include "KoProgressUpdater.h"
 #include "KoUpdaterPrivate_p.h"
 
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)

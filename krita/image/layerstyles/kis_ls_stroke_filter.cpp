@@ -22,7 +22,6 @@
 
 #include <QBitArray>
 
-#include <KoUpdater.h>
 #include <KoPattern.h>
 
 #include <KoAbstractGradient.h>

@@ -20,7 +20,6 @@
 #include "kis_gmic_command.h"
 #include <kis_debug.h>
 #include <kis_processing_visitor.h>
-#include <KoUpdater.h>
 
 #include <QString>
 #include <QFile>

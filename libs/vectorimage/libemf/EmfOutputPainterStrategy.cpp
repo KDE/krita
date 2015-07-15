@@ -1234,7 +1234,7 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
     case RGN_AND:
         m_painter->setClipPath( *m_path, Qt::IntersectClip );
         break;
-    // QT5TODO: Qt::UniteClip got removed, see https://bugreports.qt.io/browse/QTBUG-20140
+    // QT5TODO: T477 Qt::UniteClip got removed, see https://bugreports.qt.io/browse/QTBUG-20140
 //     case RGN_OR:
 //         m_painter->setClipPath( *m_path, Qt::UniteClip );
 //         break;

@@ -256,7 +256,7 @@ namespace VSyncWorkaround {
 }
 
 #elif defined Q_OS_WIN
-// QT5TODO
+// QT5TODO: T360
 //#include <GL/wglew.h>
 namespace VSyncWorkaround {
     bool tryDisableVSync(QWidget *) {

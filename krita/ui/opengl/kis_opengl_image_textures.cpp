@@ -401,7 +401,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     dbgUI << "Choosing texture format:";
 
-// QT5TODO    
+// QT5TODO: T360
 #ifdef HAVE_GLEW
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {

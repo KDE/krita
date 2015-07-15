@@ -296,7 +296,7 @@ void SpellCheck::runQueue()
 
 void SpellCheck::configureSpellCheck()
 {
-    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(/* QT5TODO: was KGlobal::config().data(),*/ 0);
+    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
     connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
     dialog->exec();
     delete dialog;

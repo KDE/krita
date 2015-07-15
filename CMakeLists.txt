@@ -440,7 +440,7 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 ##
 ## Test for soprano
 ##
-# QT5TODO: find Qt5 version of Soprano
+# QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
 # macro_optional_find_package(Soprano)
 set(Soprano_FOUND FALSE)
 macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")

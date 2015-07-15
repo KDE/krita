@@ -141,6 +141,11 @@ KisKeyframe *KisKeyframeChannel::nextKeyframeAfter(int time) const
 
 KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
 {
+    return identicalFrames(time);
+}
+
+KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
+{
     QMap<int, KisKeyframe*>::const_iterator active = activeKeyIterator(time);
     QMap<int, KisKeyframe*>::const_iterator next = active + 1;
 

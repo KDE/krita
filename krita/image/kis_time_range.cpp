@@ -19,7 +19,8 @@
 #include "kis_time_range.h"
 
 #include <QDebug>
-
+#include "kis_keyframe_channel.h"
+#include "kis_node.h"
 
 struct KisTimeRangeStaticRegistrar {
     KisTimeRangeStaticRegistrar() {
@@ -34,4 +35,26 @@ QDebug operator<<(QDebug dbg, const KisTimeRange &r)
     dbg.nospace() << "KisTimeRange(" << r.start() << ", " << r.end() << ")";
 
     return dbg.space();
+}
+
+void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive)
+{
+    KisKeyframeChannel *channel =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    if (channel) {
+        if (exclusive) {
+            // Intersection
+            range &= channel->affectedFrames(time);
+        } else {
+            // Union
+            range |= channel->affectedFrames(time);
+        }
+    }
+
+    KisNodeSP child = node->firstChild();
+    while (child) {
+        calculateTimeRangeRecursive(child, time, range, exclusive);
+        child = child->nextSibling();
+    }
 }

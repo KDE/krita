@@ -125,7 +125,20 @@ void KisAnimationFrameCache::frameReady()
     KisOpenGLUpdateInfoSP info =
         m_d->textures->updateCache(m_d->image->bounds());
 
-    m_d->openGlFrames.insert(currentTime, info);
+    KisTimeRange identicalRange = KisTimeRange::infinite(0);
+    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), currentTime, identicalRange, true);
+
+    int end;
+    if (!identicalRange.isInfinite()) {
+        end = identicalRange.end();
+    } else {
+        end = std::max(identicalRange.start(), lastKeyValue(m_d->openGlFrames, 0));
+        end = std::max(end, m_d->image->animationInterface()->currentRange().end());
+    }
+
+    for (int t = identicalRange.start(); t <= end; t++) {
+        m_d->openGlFrames.insert(t, info);
+    }
 
     emit changed();
 }

@@ -25,9 +25,9 @@
 #include <limits>
 #include <QMetaType>
 #include <boost/operators.hpp>
+#include "kis_types.h"
 
-
-class KisTimeRange : public boost::equality_comparable<KisTimeRange>
+class KRITAIMAGE_EXPORT KisTimeRange : public boost::equality_comparable<KisTimeRange>
 {
 public:
     inline KisTimeRange()
@@ -59,6 +59,26 @@ public:
             m_end = rhs.end();
         } else {
             m_end = std::max(m_end, rhs.end());
+        }
+
+        return *this;
+    }
+
+    KisTimeRange& operator&=(const KisTimeRange &rhs) {
+        if (!isValid()) {
+            return *this;
+        } else if (!rhs.isValid()) {
+            m_start = rhs.start();
+            m_end = rhs.end();
+            return *this;
+        } else {
+            m_start = std::max(m_start, rhs.start());
+        }
+
+        if (isInfinite()) {
+            m_end = rhs.end();
+        } else if (!rhs.isInfinite()) {
+            m_end = std::min(m_end, rhs.end());
         }
 
         return *this;
@@ -99,6 +119,8 @@ public:
     static inline KisTimeRange infinite(int start) {
         return KisTimeRange(start, std::numeric_limits<int>::min(), true);
     }
+
+    static void calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive);
 
 private:
     inline KisTimeRange(int start, int end, bool)

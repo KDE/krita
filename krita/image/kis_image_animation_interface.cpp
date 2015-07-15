@@ -135,22 +135,6 @@ KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const
     return m_d->image;
 }
 
-void calculateAffectedFramesRecursive(const KisNode *node, int time, KisTimeRange &range)
-{
-    KisKeyframeChannel *channel =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
-
-    if (channel) {
-        range |= channel->affectedFrames(time);
-    }
-
-    KisNodeSP child = node->firstChild();
-    while (child) {
-        calculateAffectedFramesRecursive(child, time, range);
-        child = child->nextSibling();
-    }
-}
-
 void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    const QRect &rect,
                                                    bool recursive)
@@ -161,10 +145,10 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
         node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
     if (recursive) {
-        KisTimeRange range;
-        calculateAffectedFramesRecursive(node, currentTime(), range);
+        KisTimeRange affectedRange;
+        KisTimeRange::calculateTimeRangeRecursive(node, currentTime(), affectedRange, false);
 
-        invalidateFrames(range, rect);
+        invalidateFrames(affectedRange, rect);
     } else if (channel) {
         const int currentTime = m_d->currentTime;
 

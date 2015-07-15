@@ -57,7 +57,20 @@ public:
     KisKeyframe *activeKeyframeAt(int time) const;
     KisKeyframe *nextKeyframeAfter(int time) const;
 
+    /**
+     * Get the set of frames affected by any changes to the value
+     * of the active keyframe at the given time.
+     */
     KisTimeRange affectedFrames(int time) const;
+
+    /**
+     * Get a set of frames for which the channel gives identical
+     * results, compared to the given frame.
+     *
+     * Note: this set may be different than the set of affected frames
+     * (eg. due to interpolation, once implemented)
+     */
+    KisTimeRange identicalFrames(int time) const;
 
     int keyframeCount() const;
     QList<KisKeyframe*> keyframes() const;

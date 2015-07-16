@@ -73,6 +73,7 @@
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
+#include "kis_animation_cache_populator.h"
 
 #include "kis_color_manager.h"
 
@@ -86,6 +87,7 @@ public:
         , canvasItem(0)
         , startupWidget(0)
         , actionCollection(0)
+        , animationCachePopulator(new KisAnimationCachePopulator())
     {
     }
 
@@ -107,6 +109,7 @@ public:
 
     void loadActions();
 
+    QScopedPointer<KisAnimationCachePopulator> animationCachePopulator;
 };
 
 
@@ -202,6 +205,10 @@ KisPart::KisPart()
     Q_UNUSED(KisResourceServerProvider::instance());
     Q_UNUSED(KisColorManager::instance());
 
+    QThread *thread = new QThread(this);
+    d->animationCachePopulator->moveToThread(thread);
+    connect(thread, SIGNAL(started()), d->animationCachePopulator.data(), SLOT(slotStart()));
+    thread->start();
 }
 
 KisPart::~KisPart()

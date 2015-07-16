@@ -41,6 +41,7 @@ class KRITAUI_EXPORT KisAnimationFrameCache : public QObject, public KisShared
 public:
 
     static KisAnimationFrameCacheSP getFrameCache(KisOpenGLImageTexturesSP textures);
+    static const QList<KisAnimationFrameCache*> caches();
 
     KisAnimationFrameCache(KisOpenGLImageTexturesSP textures);
     ~KisAnimationFrameCache();
@@ -55,6 +56,8 @@ public:
     };
 
     CacheStatus frameStatus(int time) const;
+
+    KisImageWSP image();
 
 signals:
     void changed();

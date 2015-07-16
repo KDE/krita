@@ -64,6 +64,11 @@ KisAnimationFrameCacheSP KisAnimationFrameCache::getFrameCache(KisOpenGLImageTex
     return cache;
 }
 
+const QList<KisAnimationFrameCache *> KisAnimationFrameCache::caches()
+{
+    return Private::caches.values();
+}
+
 KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures)
     : m_d(new Private(textures))
 {
@@ -92,6 +97,11 @@ bool KisAnimationFrameCache::uploadFrame(int time)
 KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time) const
 {
     return (m_d->openGlFrames.contains(time)) ? Cached : Uncached;
+}
+
+KisImageWSP KisAnimationFrameCache::image()
+{
+    return m_d->image;
 }
 
 template <typename K, typename V>

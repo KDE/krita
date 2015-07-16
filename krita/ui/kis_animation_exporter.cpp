@@ -171,7 +171,7 @@ void KisAnimationExporter::startExport()
 {
     m_d->exporting = true;
     m_d->currentFrame = m_d->firstFrame;
-    connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady()), this, SLOT(frameReadyToCopy()), Qt::DirectConnection);
+    connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(frameReadyToCopy(int)), Qt::DirectConnection);
 
     m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
 }
@@ -185,9 +185,9 @@ void KisAnimationExporter::stopExport()
     disconnect(m_d->image->animationInterface(), 0, this, 0);
 }
 
-void KisAnimationExporter::frameReadyToCopy()
+void KisAnimationExporter::frameReadyToCopy(int time)
 {
-    if (m_d->image->animationInterface()->currentTime() != m_d->currentFrame) return;
+    if (time != m_d->currentFrame) return;
 
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), m_d->image->projection(), m_d->tmpDevice, rc);

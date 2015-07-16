@@ -127,7 +127,7 @@ void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 
 void KisImageAnimationInterface::notifyFrameReady()
 {
-    emit sigFrameReady();
+    emit sigFrameReady(m_d->currentTime);
 }
 
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const

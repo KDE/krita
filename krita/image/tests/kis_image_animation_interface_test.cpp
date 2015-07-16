@@ -97,7 +97,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     // check external frame (frame 0)
     {
         SignalToFunctionProxy proxy1(boost::bind(checkFrame, i, p.image, 0, true, rc1 | rc2));
-        connect(i, SIGNAL(sigFrameReady()), &proxy1, SLOT(start()), Qt::DirectConnection);
+        connect(i, SIGNAL(sigFrameReady(int)), &proxy1, SLOT(start()), Qt::DirectConnection);
         i->requestFrameRegeneration(0, QRegion(refRect));
         QTest::qWait(200);
     }
@@ -120,7 +120,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     // check external frame (frame 10)
     {
         SignalToFunctionProxy proxy2(boost::bind(checkFrame, i, p.image, 10, true, rc3 | rc4));
-        connect(i, SIGNAL(sigFrameReady()), &proxy2, SLOT(start()), Qt::DirectConnection);
+        connect(i, SIGNAL(sigFrameReady(int)), &proxy2, SLOT(start()), Qt::DirectConnection);
         i->requestFrameRegeneration(10, QRegion(refRect));
         QTest::qWait(200);
     }

@@ -66,7 +66,7 @@ private:
 
 private slots:
     void framesChanged(const KisTimeRange &range, const QRect &rect);
-    void frameReady();
+    void frameReady(int time);
 
 };
 

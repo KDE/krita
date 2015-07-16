@@ -101,7 +101,7 @@ private:
     void blockFrameInvalidation(bool value);
 
 Q_SIGNALS:
-    void sigFrameReady();
+    void sigFrameReady(int time);
     void sigTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
 

@@ -62,7 +62,7 @@ signals:
     void sigFrameReadyToSave();
 
 private slots:
-    void frameReadyToCopy();
+    void frameReadyToCopy(int time);
     void frameReadyToSave();
 
 private:

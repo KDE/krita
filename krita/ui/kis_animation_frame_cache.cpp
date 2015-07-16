@@ -68,7 +68,7 @@ KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures
     : m_d(new Private(textures))
 {
     connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
-    connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady()), this, SLOT(frameReady()), Qt::DirectConnection);
+    connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(frameReady(int)), Qt::DirectConnection);
 }
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
@@ -119,14 +119,13 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
     emit changed();
 }
 
-void KisAnimationFrameCache::frameReady()
+void KisAnimationFrameCache::frameReady(int time)
 {
-    int currentTime = m_d->image->animationInterface()->currentTime();
     KisOpenGLUpdateInfoSP info =
         m_d->textures->updateCache(m_d->image->bounds());
 
     KisTimeRange identicalRange = KisTimeRange::infinite(0);
-    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), currentTime, identicalRange, true);
+    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), time, identicalRange, true);
 
     int end;
     if (!identicalRange.isInfinite()) {

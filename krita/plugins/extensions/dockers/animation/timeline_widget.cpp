@@ -80,7 +80,7 @@ void TimelineWidget::drawRuler(QPainter &painter, QPaintEvent *e, bool dark)
 
 void TimelineWidget::drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark)
 {
-    int x = m_timelineView->timeToPosition(m_image->animationInterface()->currentTime()) + 4;
+    int x = m_timelineView->timeToPosition(m_image->animationInterface()->currentUITime()) + 4;
     if (m_timelineView->isWithingView(x)) {
         painter.setPen(QPen(
             dark ? QColor(0, 0, 0, 128) : QColor(255, 255, 255, 128)

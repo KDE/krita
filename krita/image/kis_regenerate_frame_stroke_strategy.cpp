@@ -22,6 +22,7 @@
 #include "kis_image_interfaces.h"
 #include "kis_image_animation_interface.h"
 #include "kis_node.h"
+#include "kis_image.h"
 
 
 struct KisRegenerateFrameStrokeStrategy::Private
@@ -77,7 +78,10 @@ KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()
 void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 {
     if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->image()->disableUIUpdates();
+
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
+
         if (!m_d->dirtyRegion.isEmpty()) {
             m_d->interface->updatesFacade()->refreshGraphAsync();
         }
@@ -92,6 +96,8 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->notifyFrameReady();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+
+        m_d->interface->image()->enableUIUpdates();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
     }
@@ -101,6 +107,7 @@ void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
 {
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+        m_d->interface->image()->enableUIUpdates();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
     }

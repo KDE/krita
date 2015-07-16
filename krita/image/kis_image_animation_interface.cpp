@@ -29,6 +29,7 @@ struct KisImageAnimationInterface::Private
     Private()
         : image(0),
           currentTime(0),
+          currentUITime(0),
           externalFrameActive(false),
           frameInvalidationBlocked(false)
     {
@@ -36,6 +37,7 @@ struct KisImageAnimationInterface::Private
 
     KisImage *image;
     int currentTime;
+    int currentUITime;
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
@@ -62,6 +64,11 @@ int KisImageAnimationInterface::currentTime() const
     return m_d->currentTime;
 }
 
+int KisImageAnimationInterface::currentUITime() const
+{
+    return m_d->currentUITime;
+}
+
 const KisTimeRange& KisImageAnimationInterface::currentRange() const
 {
     return m_d->currentRange;
@@ -81,6 +88,11 @@ void KisImageAnimationInterface::setFramerate(float fps)
     m_d->framerate = fps;
 }
 
+KisImageWSP KisImageAnimationInterface::image() const
+{
+    return m_d->image;
+}
+
 bool KisImageAnimationInterface::externalFrameActive() const
 {
     return m_d->externalFrameActive;
@@ -90,6 +102,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
 {
     m_d->image->barrierLock();
     m_d->currentTime = frameId;
+    m_d->currentUITime = frameId;
     m_d->image->unlock();
 
     KisStrokeStrategy *strategy =

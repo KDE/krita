@@ -95,21 +95,16 @@ protected:
         QScopedPointer<FreehandStrokeStrategy> stroke(
             new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, painterInfo, kundo2_noi18n("Freehand Stroke")));
 
-        return m_useLod ? stroke->createLodClone(1) : stroke.take();
+        return stroke.take();
     }
 
     virtual void addPaintingJobs(KisImageWSP image,
-                                 KisResourcesSnapshotSP resources,
-                                 KisPainter *painter)
+                                 KisResourcesSnapshotSP resources)
     {
-        addPaintingJobs(image, resources, painter, 0);
+        addPaintingJobs(image, resources, 0);
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter, int iteration) {
-
-        Q_ASSERT(painter == m_painterInfo->painter);
-        Q_UNUSED(painter);
-
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, int iteration) {
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
@@ -125,7 +120,7 @@ protected:
             new FreehandStrokeStrategy::Data(resources->currentNode(),
                                              0, pi1, pi2));
 
-        image->addJob(strokeId(), m_useLod ? data->createLodClone(1) : data.take());
+        image->addJob(strokeId(), data.take());
     }
 
 private:
@@ -165,18 +160,27 @@ void FreehandStrokeTest::testAutoTextured38()
     tester.test();
 }
 
-void FreehandStrokeTest::testAutobrushStrokeLod()
-{
-    FreehandStrokeTester tester("autobrush_300px.kpp", true);
-    tester.test();
-}
-
 void FreehandStrokeTest::testMixDullCompositioning()
 {
     FreehandStrokeTester tester("Mix_dull.kpp");
     tester.setFlipLineDirection(true);
     tester.setPaintColor(Qt::red);
     tester.test();
+}
+
+void FreehandStrokeTest::testAutobrushStrokeLod()
+{
+    FreehandStrokeTester tester("Basic_tip_default.kpp", true);
+    tester.testSimpleStroke();
+}
+
+void FreehandStrokeTest::testPredefinedBrushStrokeLod()
+{
+    qsrand(QTime::currentTime().msec());
+
+    FreehandStrokeTester tester("testing_predefined_lod_spc13.kpp", true);
+    //FreehandStrokeTester tester("testing_predefined_lod.kpp", true);
+    tester.testSimpleStroke();
 }
 
 QTEST_KDEMAIN(FreehandStrokeTest, GUI)

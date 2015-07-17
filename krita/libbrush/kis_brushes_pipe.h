@@ -53,20 +53,20 @@ public:
         return m_brushes.last();
     }
 
-    BrushType* currentBrush(const KisPaintInformation& info) const {
+    BrushType* currentBrush(const KisPaintInformation& info) {
         return !m_brushes.isEmpty() ? m_brushes.at(chooseNextBrush(info)) : 0;
     }
 
-    int brushIndex(const KisPaintInformation& info) const {
+    int brushIndex(const KisPaintInformation& info) {
         return chooseNextBrush(info);
     }
 
-    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
+    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) {
         BrushType *brush = currentBrush(info);
         return brush ? brush->maskWidth(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
-    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
+    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) {
         BrushType *brush = currentBrush(info);
         return brush ? brush->maskHeight(scale, angle, subPixelX, subPixelY, info) : 0;
     }
@@ -96,8 +96,8 @@ public:
         return false;
     }
 
-    void notifyCachedDabPainted() {
-        updateBrushIndexes();
+    void notifyCachedDabPainted(const KisPaintInformation& info) {
+        updateBrushIndexes(info);
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
@@ -110,7 +110,7 @@ public:
 
 
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
-        updateBrushIndexes();
+        updateBrushIndexes(info);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -123,7 +123,7 @@ public:
 
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
-        updateBrushIndexes();
+        updateBrushIndexes(info);
         return device;
     }
 
@@ -133,8 +133,15 @@ public:
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
         (void) chooseNextBrush(info);
-        updateBrushIndexes();
+        updateBrushIndexes(info);
     }
+
+    /**
+     * Is called by the paint op when a paintop starts a stroke. The
+     * brushes are shared among different strokes, so sometimes the
+     * brush should be reset.
+     */
+    virtual void notifyStrokeStarted() = 0;
 
 protected:
     void addBrush(BrushType *brush) {
@@ -149,14 +156,14 @@ protected:
      * The method is const, so no internal counters of the brush should
      * change during its execution
      */
-    virtual int chooseNextBrush(const KisPaintInformation& info) const = 0;
+    virtual int chooseNextBrush(const KisPaintInformation& info) = 0;
 
     /**
      * Updates internal counters of the brush *after* a dab has been
      * painted on the canvas. Some incremental switching of the brushes
      * may me implemented in this method.
      */
-    virtual void updateBrushIndexes() = 0;
+    virtual void updateBrushIndexes(const KisPaintInformation& info) = 0;
 
 protected:
     QVector<BrushType*> m_brushes;

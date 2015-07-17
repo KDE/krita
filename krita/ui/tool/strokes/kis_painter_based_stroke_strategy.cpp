@@ -95,7 +95,9 @@ void KisPainterBasedStrokeStrategy::init()
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
     : KisSimpleStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
-      m_undoEnabled(true)
+      m_transaction(rhs.m_transaction),
+      m_undoEnabled(true),
+      m_useMergeID(rhs.m_useMergeID)
 {
     foreach(PainterInfo *info, rhs.m_painterInfos) {
         m_painterInfos.append(new PainterInfo(*info));

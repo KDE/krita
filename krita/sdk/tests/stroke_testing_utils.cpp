@@ -146,6 +146,11 @@ void utils::StrokeTester::setBaseFuzziness(int value)
     m_baseFuzziness = value;
 }
 
+void utils::StrokeTester::testSimpleStroke()
+{
+    testOneStroke(false, true, false, true);
+}
+
 void utils::StrokeTester::test()
 {
     testOneStroke(false, false, false);
@@ -256,7 +261,6 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
     for (int i = 0; i < m_numIterations; i++) {
         modifyResourceManager(manager, image, i);
 
-        KisPainter *painter = new KisPainter();
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
                                      image->rootLayer()->firstChild(),
@@ -273,7 +277,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
         KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, image);
         m_strokeId = image->startStroke(stroke);
-        addPaintingJobs(image, resources, painter, i);
+        addPaintingJobs(image, resources, i);
 
         if(!cancelled) {
             image->endStroke(m_strokeId);
@@ -330,19 +334,17 @@ void utils::StrokeTester::initImage(KisImageWSP image, KisNodeSP activeNode)
 
 void utils::StrokeTester::addPaintingJobs(KisImageWSP image,
                                           KisResourcesSnapshotSP resources,
-                                          KisPainter *painter, int iteration)
+                                          int iteration)
 {
     Q_UNUSED(iteration);
-    addPaintingJobs(image, resources, painter);
+    addPaintingJobs(image, resources);
 }
 
 void utils::StrokeTester::addPaintingJobs(KisImageWSP image,
-                                          KisResourcesSnapshotSP resources,
-                                          KisPainter *painter)
+                                          KisResourcesSnapshotSP resources)
 {
     Q_UNUSED(image);
     Q_UNUSED(resources);
-    Q_UNUSED(painter);
 }
 
 void utils::StrokeTester::beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode)

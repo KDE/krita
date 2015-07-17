@@ -62,6 +62,7 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
+   brushengine/kis_random_source.cpp
    brushengine/kis_paintop.cc
    brushengine/kis_paintop_factory.cpp
    brushengine/kis_paintop_preset.cpp

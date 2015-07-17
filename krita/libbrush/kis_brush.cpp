@@ -418,8 +418,13 @@ qreal KisBrush::autoSpacingCoeff() const
     return d->autoSpacingCoeff;
 }
 
-void KisBrush::notifyCachedDabPainted()
+void KisBrush::notifyStrokeStarted()
 {
+}
+
+void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
+{
+    Q_UNUSED(info);
 }
 
 void KisBrush::prepareBrushPyramid() const

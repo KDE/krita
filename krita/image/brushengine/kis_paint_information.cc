@@ -50,6 +50,7 @@ struct KisPaintInformation::Private {
         time(time_),
         speed(speed_),
         isHoveringMode(isHoveringMode_),
+        randomSource(new KisRandomSource()),
         currentDistanceInfo(0)
     {
     }
@@ -78,6 +79,7 @@ struct KisPaintInformation::Private {
         time = rhs.time;
         speed = rhs.speed;
         isHoveringMode = rhs.isHoveringMode;
+        randomSource = rhs.randomSource;
         currentDistanceInfo = rhs.currentDistanceInfo;
 
         if (rhs.drawingAngleOverride) {
@@ -96,6 +98,7 @@ struct KisPaintInformation::Private {
     qreal time;
     qreal speed;
     bool isHoveringMode;
+    KisRandomSourceSP randomSource;
 
     QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
@@ -361,6 +364,21 @@ qreal KisPaintInformation::currentTime() const
     return d->time;
 }
 
+KisRandomSourceSP KisPaintInformation::randomSource() const
+{
+    return d->randomSource;
+}
+
+void KisPaintInformation::forkRandomSource() const
+{
+    d->randomSource = new KisRandomSource(*d->randomSource);
+}
+
+void KisPaintInformation::shareRandomSourceFrom(const KisPaintInformation &rhs) const
+{
+    d->randomSource = rhs.d->randomSource;
+}
+
 QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
 {
 #ifdef NDEBUG
@@ -393,6 +411,8 @@ KisPaintInformation KisPaintInformation::mixOnlyPosition(qreal t, const KisPaint
                                basePi.perspective(),
                                basePi.currentTime(),
                                basePi.drawingSpeed());
+
+    result.shareRandomSourceFrom(basePi);
 
     return result;
 }
@@ -427,6 +447,8 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
+
+    result.shareRandomSourceFrom(pi1);
 
     return result;
 }

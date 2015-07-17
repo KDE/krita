@@ -85,6 +85,8 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
         m_brush = brushOption.brush();
     }
 
+    m_brush->notifyStrokeStarted();
+
     m_precisionOption.readOptionSetting(settings);
     m_dabCache = new KisDabCache(m_brush);
     m_dabCache->setPrecisionOption(&m_precisionOption);

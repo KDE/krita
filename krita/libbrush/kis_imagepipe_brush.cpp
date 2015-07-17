@@ -23,6 +23,12 @@
 
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
+public:
+    KisImageBrushesPipe()
+        : m_isInitialized(false)
+    {
+    }
+
 
     /*
        pre and post are split because:
@@ -71,7 +77,8 @@ protected:
     }
 
     static int selectPost(KisParasite::SelectionMode mode,
-                          int index, int rank) {
+                          int index, int rank,
+                          const KisPaintInformation& info) {
 
         switch (mode) {
         case KisParasite::Constant: break;
@@ -79,7 +86,7 @@ protected:
             index = (index + 1) % rank;
             break;
         case KisParasite::Random:
-            index = int(float(rank) * KRandom::random() / RAND_MAX);
+            index = info.randomSource()->generate(0, rank);
             break;
         case KisParasite::Pressure:
         case KisParasite::Angular:
@@ -95,8 +102,13 @@ protected:
         return index;
     }
 
-    int chooseNextBrush(const KisPaintInformation& info) const {
+    int chooseNextBrush(const KisPaintInformation& info) {
         quint32 brushIndex = 0;
+
+        if (!m_isInitialized) {
+            updateBrushIndexes(info);
+            m_isInitialized = true;
+        }
 
         for (int i = 0; i < m_parasite.dim; i++) {
             int index = selectPre(m_parasite.selection[i],
@@ -109,11 +121,12 @@ protected:
         return brushIndex;
     }
 
-    void updateBrushIndexes() {
+    void updateBrushIndexes(const KisPaintInformation& info) {
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
                                              m_parasite.index[i],
-                                             m_parasite.rank[i]);
+                                             m_parasite.rank[i],
+                                             info);
         }
     }
 
@@ -149,8 +162,13 @@ public:
         return true;
     }
 
+    void notifyStrokeStarted() {
+        m_isInitialized = false;
+    }
+
 private:
     KisPipeBrushParasite m_parasite;
+    bool m_isInitialized;
 };
 
 
@@ -326,9 +344,14 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     return m_d->brushesPipe.saveToDevice(dev);
 }
 
-void KisImagePipeBrush::notifyCachedDabPainted()
+void KisImagePipeBrush::notifyStrokeStarted()
 {
-    m_d->brushesPipe.notifyCachedDabPainted();
+    m_d->brushesPipe.notifyStrokeStarted();
+}
+
+void KisImagePipeBrush::notifyCachedDabPainted(const KisPaintInformation& info)
+{
+    m_d->brushesPipe.notifyCachedDabPainted(info);
 }
 
 void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,

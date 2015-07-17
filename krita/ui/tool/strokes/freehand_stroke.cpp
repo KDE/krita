@@ -55,7 +55,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs)
     : KisPainterBasedStrokeStrategy(rhs),
-      m_d(new Private())
+      m_d(new Private(*rhs.m_d))
 {
 }
 

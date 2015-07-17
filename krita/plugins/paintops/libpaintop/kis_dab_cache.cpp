@@ -247,7 +247,7 @@ KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const SavedDabParameters &p
         *dstDabRect = correctDabRectWhenFetchedFromCache(*dstDabRect, m_d->dab->bounds().size());
     }
 
-    m_d->brush->notifyCachedDabPainted();
+    m_d->brush->notifyCachedDabPainted(info);
     return m_d->dab;
 }
 

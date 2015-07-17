@@ -106,14 +106,19 @@ public:
             switch(type) {
             case Data::POINT:
                 pi1 = t.map(rhs.pi1);
+                pi1.forkRandomSource();
                 break;
             case Data::LINE:
                 pi1 = t.map(rhs.pi1);
                 pi2 = t.map(rhs.pi2);
+                pi1.forkRandomSource();
+                pi2.forkRandomSource();
                 break;
             case Data::CURVE:
                 pi1 = t.map(rhs.pi1);
                 pi2 = t.map(rhs.pi2);
+                pi1.forkRandomSource();
+                pi2.forkRandomSource();
                 control1 = t.map(rhs.control1);
                 control2 = t.map(rhs.control2);
                 break;

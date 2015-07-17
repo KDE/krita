@@ -330,6 +330,11 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
+    KisAction *trimToImage = new KisAction(themedIcon("trim-to-image"), i18n("Trim to Image Size"), this);
+    trimToImage->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager->addAction("trim_to_image", trimToImage);
+    connect(trimToImage, SIGNAL(triggered()), this, SLOT(trimToImage()));
+
     m_layerStyle  = new KisAction(i18n("Layer Style..."), this);
     m_layerStyle->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_layerStyle->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
@@ -374,6 +379,14 @@ void KisLayerManager::imageResizeToActiveLayer()
                       "Layer is empty "),
                 QIcon(), 2000, KisFloatingMessage::Low);
         }
+    }
+}
+
+void KisLayerManager::trimToImage()
+{
+    KisImageWSP image = m_view->image();
+    if (image) {
+        image->cropImage(image->bounds());
     }
 }
 

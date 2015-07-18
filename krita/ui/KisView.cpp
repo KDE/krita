@@ -222,11 +222,6 @@ public:
 
 };
 
-
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-#include <QGLContext>
-#endif
-
 KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private)

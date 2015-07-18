@@ -31,6 +31,8 @@
 #include "KoTextLayoutRootArea.h"
 #include "FrameIterator.h"
 
+#include <stdint.h>
+
 #include <klocale.h>
 
 #include <QCache>

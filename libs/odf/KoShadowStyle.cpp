@@ -30,7 +30,7 @@ public:
     KoShadowStylePrivate();
     ~KoShadowStylePrivate();
 
-    QList<KoShadowStyle::ShadowData> shadows;
+    QVector<KoShadowStyle::ShadowData> shadows;
 };
 
 KoShadowStylePrivate::KoShadowStylePrivate()
@@ -138,7 +138,7 @@ bool KoShadowStyle::loadOdf (const QString &data)
 
 int KoShadowStyle::shadowCount() const
 {
-    return d->shadows.length();
+    return d->shadows.size();
 }
 
 QString KoShadowStyle::saveOdf() const

@@ -94,8 +94,6 @@ bool KoShadowStyle::loadOdf (const QString &data)
     if (data == QLatin1String("none"))
         return true;
 
-    QList<KoShadowStyle::ShadowData> shadow_datas;
-
     const QStringList sub_shadows = data.split(QLatin1Char(','));
     foreach (const QString &shadow, sub_shadows) {
         QStringList words = shadow.split(QLatin1Char(' '), QString::SkipEmptyParts);

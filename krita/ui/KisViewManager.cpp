@@ -1154,10 +1154,6 @@ void KisViewManager::showStatusBar(bool toggled)
     }
 }
 
-#if defined HAVE_OPENGL && defined Q_OS_WIN32
-#include <QGLContext>
-#endif
-
 void KisViewManager::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;

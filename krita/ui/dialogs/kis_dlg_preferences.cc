@@ -44,11 +44,6 @@
 
 #include <boost/bind.hpp>
 
-
-#ifdef HAVE_OPENGL
-#include <qgl.h>
-#endif
-
 #include <KisDocument.h>
 #include <KoColorProfile.h>
 #include <KisApplication.h>
@@ -64,7 +59,6 @@
 #include <kvbox.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>
-
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -631,7 +625,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {       
+    if (!KisOpenGL::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -691,7 +685,7 @@ void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg;
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {
+    if (!KisOpenGL::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);

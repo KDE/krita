@@ -19,11 +19,12 @@
 #include "opengl/kis_opengl.h"
 
 #ifdef HAVE_OPENGL
-
-#include <QApplication>
-#include <QGLContext>
+#include <QOpenGLContext>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
+#endif
+
+#include <QApplication>
 #include <QOffscreenSurface>
 #include <QDir>
 #include <QFile>
@@ -37,13 +38,17 @@
 
 namespace
 {
+#ifdef HAVE_OPENGL
     QOffscreenSurface *SharedSurface = 0;
     QOpenGLContext *SharedContext = 0;
+#endif
     bool NeedsFenceWorkaround = false;
 }
 
+
 void KisOpenGL::initialize()
 {
+#ifdef HAVE_OPENGL
     dbgUI << "OpenGL: initializing";
 
     KisConfig cfg;;
@@ -72,7 +77,7 @@ void KisOpenGL::initialize()
         SharedContext->makeCurrent(SharedSurface);
     }
 
-    QOpenGLFunctions *f =  QOpenGLContext::currentContext()->functions();
+    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
 
     QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
     log.open(QFile::WriteOnly);
@@ -94,6 +99,9 @@ void KisOpenGL::initialize()
     if ((isOnX11 && renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
+#else
+    NeedsFenceWorkaround = false;
+#endif
 }
 
 
@@ -107,5 +115,8 @@ bool KisOpenGL::needsFenceWorkaround()
     return NeedsFenceWorkaround;
 }
 
-#endif // HAVE_OPENGL
-
+bool KisOpenGL::hasOpenGL()
+{
+    // QT5TODO: figure out runtime whether we have opengl...
+    return true;
+}

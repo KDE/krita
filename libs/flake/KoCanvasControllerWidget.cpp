@@ -46,7 +46,7 @@
 #include <KoConfig.h>
 
 #ifdef HAVE_OPENGL
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #endif
 
 #include <math.h>
@@ -68,7 +68,7 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         QWidget *canvasWidget = canvas->canvasWidget();
         if (canvasWidget) {
 #ifdef HAVE_OPENGL
-            if (qobject_cast<QGLWidget*>(canvasWidget) != 0) {
+            if (qobject_cast<QOpenGLWidget*>(canvasWidget) != 0) {
                 isCanvasOpenGL = true;
             }
 #endif

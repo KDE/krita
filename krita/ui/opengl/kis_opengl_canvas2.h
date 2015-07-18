@@ -63,7 +63,7 @@ public: // QWidget
 
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     virtual void inputMethodEvent(QInputMethodEvent *event);
-    virtual void paintEvent(QPaintEvent* event);
+    //virtual void paintEvent(QPaintEvent* event);
 
 public:
 

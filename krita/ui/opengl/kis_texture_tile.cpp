@@ -139,7 +139,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
             m_glBuffer->bind();
             m_glBuffer->allocate(updateInfo.patchPixelsLength());
 
-            void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+            void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
             memcpy(vid, fd, updateInfo.patchPixelsLength());
             m_glBuffer->unmap();
 
@@ -173,7 +173,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
             quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
             m_glBuffer->allocate(size);
 
-            void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+            void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
             memcpy(vid, fd, size);
             m_glBuffer->unmap();
 
@@ -305,14 +305,14 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
 {
     if (m_useBuffer) {
         if (!m_glBuffer) {
-            m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
-            m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
+            m_glBuffer = new QOpenGLBuffer(QOpenGLBuffer::PixelUnpackBuffer);
+            m_glBuffer->setUsagePattern(QOpenGLBuffer::DynamicDraw);
             m_glBuffer->create();
             m_glBuffer->bind();
             m_glBuffer->allocate(size);
         }
 
-        void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+        void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
         memcpy(vid, data, size);
         m_glBuffer->unmap();
 

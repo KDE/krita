@@ -22,8 +22,6 @@
 
 #include <KoConfig.h>
 
-#ifdef HAVE_OPENGL
-
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #endif
@@ -32,7 +30,6 @@
 
 #include "krita_export.h"
 
-class QOpenGLWidget;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -43,6 +40,8 @@ class KRITAUI_EXPORT KisOpenGL
 public:
 
     static void initialize();
+
+    static bool hasOpenGL();
 
     /**
      * @brief supportsGLSL13
@@ -61,8 +60,6 @@ private:
 
 
 };
-
-#endif // HAVE_OPENGL
 
 #endif // KIS_OPENGL_H_
 

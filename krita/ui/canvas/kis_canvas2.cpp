@@ -67,8 +67,10 @@
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
-#include <QGLFormat>
 #endif
+
+#include "opengl/kis_opengl.h"
+
 
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
@@ -400,7 +402,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL()) {
+        if (KisOpenGL::hasOpenGL()) {
             createOpenGLCanvas();
             if (cfg.canvasState() == "OPENGL_FAILED") {
                 // Creating the opengl canvas failed, fall back

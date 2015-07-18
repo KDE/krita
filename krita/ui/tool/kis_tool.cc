@@ -23,9 +23,8 @@
 #include <QPolygonF>
 #include <QTransform>
 #ifdef HAVE_OPENGL
-#include <QGLShaderProgram>
-#include <QGLFramebufferObject>
-#include <QGLContext>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLContext>
 #endif
 
 #include <klocale.h>
@@ -100,7 +99,7 @@ struct KisTool::Private {
     QWidget* optionWidget;
 
 #ifdef HAVE_OPENGL
-    QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
+    QOpenGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
     int cursorShaderModelViewProjectionUniform;
 #endif
 
@@ -613,9 +612,9 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         painter->beginNativePainting();
 
         if (d->cursorShader == 0) {
-            d->cursorShader = new QGLShaderProgram();
-            d->cursorShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
-            d->cursorShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
+            d->cursorShader = new QOpenGLShaderProgram();
+            d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
+            d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
             d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
             if (! d->cursorShader->link()) {
                 qDebug() << "OpenGL error" << glGetError();

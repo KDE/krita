@@ -102,23 +102,23 @@ namespace VSyncWorkaround {
             // clear error state
             while (glGetError()) {}
 
-            const QGLContext *ctx = QGLContext::currentContext();
-            if (ctx) {
-                qt_glGetStringi glGetStringi = (qt_glGetStringi)ctx->getProcAddress(QLatin1String("glGetStringi"));
+            const QOpenGLContext *ctx = QOpenGLContext::currentContext();
+//            if (ctx) {
+//                qt_glGetStringi glGetStringi = (qt_glGetStringi)ctx->getProcAddress(QLatin1String("glGetStringi"));
 
-                GLint numExtensions;
-                glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+//                GLint numExtensions;
+//                glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
 
-                for (int i = 0; i < numExtensions; ++i) {
-                    const char *str = reinterpret_cast<const char *>(glGetStringi(GL_EXTENSIONS, i));
+//                for (int i = 0; i < numExtensions; ++i) {
+//                    const char *str = reinterpret_cast<const char *>(glGetStringi(GL_EXTENSIONS, i));
 
-                    m_offsets << m_extensions.size();
+//                    m_offsets << m_extensions.size();
 
-                    while (*str != 0)
-                        m_extensions.append(*str++);
-                    m_extensions.append(' ');
-                }
-            }
+//                    while (*str != 0)
+//                        m_extensions.append(*str++);
+//                    m_extensions.append(' ');
+//                }
+//            }
         }
     }
 

@@ -74,7 +74,7 @@ public:
     /**
      * Change the actual canvas widget used by the current canvas. This allows the canvas widget
      * to be changed while keeping the current KoCanvasBase canvas and its associated resources as
-     * they are. This might be used, for example, to switch from a QWidget to a QGLWidget canvas.
+     * they are. This might be used, for example, to switch from a QWidget to a QOpenGLWidget canvas.
      * @param widget the new canvas widget.
      */
     virtual void changeCanvasWidget(QWidget *widget);

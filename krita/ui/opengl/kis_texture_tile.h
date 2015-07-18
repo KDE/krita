@@ -29,7 +29,7 @@
 
 #if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
 #define USE_PIXEL_BUFFERS
-#include <QGLBuffer>
+#include <QOpenGLBuffer>
 #endif
 
 
@@ -120,7 +120,7 @@ private:
 
 #ifdef USE_PIXEL_BUFFERS
     void createTextureBuffer(const char*data, int size);
-    QGLBuffer *m_glBuffer;
+    QOpenGLBuffer *m_glBuffer;
 #endif
 
     QRect m_tileRectInImagePixels;

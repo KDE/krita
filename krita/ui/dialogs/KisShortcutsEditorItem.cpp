@@ -102,12 +102,12 @@ QVariant KShortcutsEditorItem::data(int column, int role) const
         case LocalAlternate:
         case GlobalPrimary:
         case GlobalAlternate:
-            return keySequence(column);
+            return qVariantFromValue(keySequence(column));
 #if 0
         case ShapeGesture:
-            return KGestureMap::self()->shapeGesture(m_action).shapeName();
+            return qVariantFromValue(KGestureMap::self()->shapeGesture(m_action).shapeName());
         case RockerGesture:
-            return KGestureMap::self()->rockerGesture(m_action).rockerName();
+            return qVariantFromValue(KGestureMap::self()->rockerGesture(m_action).rockerName());
 #endif
         default:
             break;
@@ -157,7 +157,7 @@ QVariant KShortcutsEditorItem::data(int column, int role) const
         case LocalAlternate:
         case GlobalPrimary:
         case GlobalAlternate:
-            return keySequence(column);
+            return qVariantFromValue(keySequence(column));
 #if 0
         case ShapeGesture: { //scoping for "ret"
             QVariant ret;
@@ -182,13 +182,13 @@ QVariant KShortcutsEditorItem::data(int column, int role) const
 
         switch (column) {
         case LocalPrimary:
-            return primarySequence(defaultShortcuts);
+            return qVariantFromValue(primarySequence(defaultShortcuts));
         case LocalAlternate:
-            return alternateSequence(defaultShortcuts);
+            return qVariantFromValue(alternateSequence(defaultShortcuts));
         case GlobalPrimary:
-            return primarySequence(defaultGlobalShortcuts);
+            return qVariantFromValue(primarySequence(defaultGlobalShortcuts));
         case GlobalAlternate:
-            return alternateSequence(defaultGlobalShortcuts);
+            return qVariantFromValue(alternateSequence(defaultGlobalShortcuts));
 #if 0
         case ShapeGesture: {
             QVariant ret;

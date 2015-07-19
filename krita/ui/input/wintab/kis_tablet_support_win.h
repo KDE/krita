@@ -44,7 +44,7 @@ public:
 public:
     static void init();
     static void setButtonsConverter(ButtonsConverter *buttonsConverter);
-    bool eventFilter(const QByteArray &eventType, void *message, long *result);
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 };
 
 #endif // KIS_TABLET_SUPPORT_WIN_H

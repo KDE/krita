@@ -25,7 +25,6 @@
 
 // Calligra
 #include "KoOdfStylesReader.h"
-#include "KoStyleStack.h"
 
 using namespace KoChart;
 

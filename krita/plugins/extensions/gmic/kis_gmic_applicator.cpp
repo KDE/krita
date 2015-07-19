@@ -25,7 +25,6 @@
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_image.h"
 #include <kis_selection.h>
-#include <KoUpdater.h>
 
 #include <gmic.h>
 #include "kis_gmic_synchronize_layers_command.h"

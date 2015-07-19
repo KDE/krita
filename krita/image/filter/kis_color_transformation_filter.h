@@ -41,6 +41,8 @@ public:
      * Create the color transformation that will be applied on the device.
      */
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const = 0;
+
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

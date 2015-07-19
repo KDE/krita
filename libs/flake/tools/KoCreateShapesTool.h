@@ -67,15 +67,15 @@ public:
 
     /**
      * Set the shape properties that the create controller will use for the next shape it will
-     * create.
+     * create. The tool does not take ownership of the object.
      * @param properties the properties or 0 if the default shape should be created.
      */
-    void setShapeProperties(KoProperties *properties);
+    void setShapeProperties(const KoProperties *properties);
     /**
      * return the properties to be used for creating the next shape
      * @return the properties to be used for creating the next shape
      */
-    KoProperties const *shapeProperties();
+    const KoProperties *shapeProperties();
 
 protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);

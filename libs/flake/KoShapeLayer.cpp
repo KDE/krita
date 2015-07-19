@@ -23,8 +23,6 @@
 #include "KoShapeLoadingContext.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include <KoXmlNS.h>
 
 KoShapeLayer::KoShapeLayer()

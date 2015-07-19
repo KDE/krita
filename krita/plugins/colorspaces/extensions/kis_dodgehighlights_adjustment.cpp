@@ -42,16 +42,17 @@ class KisDodgeHighlightsAdjustment : public KoColorTransformation
 public:
     KisDodgeHighlightsAdjustment(){}
 
- 	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
- 	{
- 		const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    {
+        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
         float value_red, value_green, value_blue;
+        const float factor(1.0 + exposure * (0.33333));
         while(nPixels > 0) {
 
-            value_red = (1.0 + exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red);
-            value_green = (1.0 + exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green);
-            value_blue = (1.0 + exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue);
+            value_red = factor * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red);
+            value_green = factor * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green);
+            value_blue = factor * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue);
             
             dst->red = KoColorSpaceMaths< float, _channel_type_>::scaleToA(value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_green);

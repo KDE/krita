@@ -65,6 +65,8 @@
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
 #include "kis_stroke_strategy.h"
+#include "kis_image_barrier_locker.h"
+
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"
@@ -948,6 +950,133 @@ void KisImage::flatten()
     setModified();
 }
 
+bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes)
+{
+    foreach (KisNodeSP node, nodes) {
+        if (node == src) continue;
+
+        KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
+
+        if (clone && KisNodeSP(clone->copyFrom()) == src) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void KisImage::safeRemoveMultipleNodes(QList<KisNodeSP> nodes)
+{
+    while (!nodes.isEmpty()) {
+        QList<KisNodeSP>::iterator it = nodes.begin();
+
+        while (it != nodes.end()) {
+            if (!checkIsSourceForClone(*it, nodes)) {
+                KisNodeSP node = *it;
+                undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node));
+                it = nodes.erase(it);
+            } else {
+                ++it;
+            }
+        }
+
+    }
+}
+
+bool checkIsChildOf(KisNodeSP node, const QList<KisNodeSP> &parents)
+{
+    QList<KisNodeSP> nodeParents;
+
+    KisNodeSP parent = node->parent();
+    while (parent) {
+        nodeParents << parent;
+        parent = parent->parent();
+    }
+
+    foreach(KisNodeSP perspectiveParent, parents) {
+        if (nodeParents.contains(perspectiveParent)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void filterMergableNodes(QList<KisNodeSP> &nodes)
+{
+    QList<KisNodeSP>::iterator it = nodes.begin();
+
+    while (it != nodes.end()) {
+        if (!dynamic_cast<KisLayer*>(it->data()) ||
+            checkIsChildOf(*it, nodes)) {
+
+            qDebug() << "Skipping node" << ppVar((*it)->name());
+            it = nodes.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
+{
+    filterMergableNodes(mergedNodes);
+
+    if (mergedNodes.size() <= 1) return KisNodeSP();
+
+    foreach (KisNodeSP layer, mergedNodes) {
+        refreshHiddenArea(layer, bounds());
+    }
+
+    KisPaintDeviceSP mergedDevice = new KisPaintDevice(colorSpace());
+    KisPainter gc(mergedDevice);
+
+    {
+        KisImageBarrierLocker l(this);
+
+        foreach (KisNodeSP layer, mergedNodes) {
+            QRect rc = layer->exactBounds() | bounds();
+            layer->projectionPlane()->apply(&gc, rc);
+        }
+    }
+
+    const QString mergedLayerSuffix = i18n("Merged");
+    QString mergedLayerName = mergedNodes.first()->name();
+
+    if (!mergedLayerName.endsWith(mergedLayerSuffix)) {
+        mergedLayerName = QString("%1 %2")
+            .arg(mergedLayerName).arg(mergedLayerSuffix);
+    }
+
+    KisNodeSP newLayer = new KisPaintLayer(this, mergedLayerName, OPACITY_OPAQUE_U8, mergedDevice);
+
+
+    undoAdapter()->beginMacro(kundo2_i18n("Merge Selected Nodes"));
+
+    if (!putAfter) {
+        putAfter = mergedNodes.last();
+    }
+
+    // Add the new merged node on top of the active node -- checking
+    // whether the parent is going to be deleted
+    KisNodeSP parent = putAfter->parent();
+    while (mergedNodes.contains(parent)) {
+        parent = parent->parent();
+    }
+
+    if (parent == putAfter->parent()) {
+        undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, putAfter));
+    } else {
+        undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, parent->lastChild()));
+    }
+
+    safeRemoveMultipleNodes(mergedNodes);
+
+    undoAdapter()->endMacro();
+
+    return newLayer;
+}
+
 KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
     if (!layer->prevSibling()) return 0;
@@ -959,17 +1088,12 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
-    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
     QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
     // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
     KisLayerSP mergedLayer = layer->createMergedLayer(prevLayer);
     Q_CHECK_PTR(mergedLayer);
-
-    mergedLayer->setCompositeOp(COMPOSITE_OVER);
-    mergedLayer->setChannelFlags(layer->channelFlags());
-    mergedLayer->disableAlphaChannel(prevAlphaDisabled);
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -1025,13 +1149,33 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
     refreshHiddenArea(layer, bounds());
 
+    bool resetComposition = false;
+
+    KisPaintDeviceSP mergedDevice;
+
     lock();
-    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
+    if (layer->layerStyle()) {
+        mergedDevice = new KisPaintDevice(layer->colorSpace());
+        mergedDevice->prepareClone(layer->projection());
+
+        QRect updateRect = layer->projection()->extent() | bounds();
+
+        KisPainter gc(mergedDevice);
+        layer->projectionPlane()->apply(&gc, updateRect);
+
+        resetComposition = true;
+
+    } else {
+        mergedDevice = new KisPaintDevice(*layer->projection());
+    }
     unlock();
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
-    newLayer->setCompositeOp(layer->compositeOp()->id());
 
+    if (!resetComposition) {
+        newLayer->setCompositeOp(layer->compositeOp()->id());
+        newLayer->setChannelFlags(layer->channelFlags());
+    }
 
     undoAdapter()->beginMacro(kundo2_i18n("Flatten Layer"));
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));

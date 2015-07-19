@@ -365,6 +365,8 @@ protected:
                      KisPaintDeviceSP destination,
                      const QRect &requestedRect,
                      KisNodeSP filthyNode, KisNodeSP lastNode) const;
+
+    bool canMergeAndKeepBlendOptions(KisLayerSP otherLayer);
 private:
     friend class KisLayerProjectionPlane;
     friend class KisTransformMask;

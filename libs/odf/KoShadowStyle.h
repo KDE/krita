@@ -87,6 +87,8 @@ private:
     QSharedDataPointer<KoShadowStylePrivate> d;
 };
 
+Q_DECLARE_TYPEINFO(KoShadowStyle::ShadowData, Q_MOVABLE_TYPE);
+
 Q_DECLARE_METATYPE(KoShadowStyle)
 
 #endif

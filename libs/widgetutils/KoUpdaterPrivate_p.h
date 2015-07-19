@@ -24,6 +24,7 @@
 #include "KoProgressUpdater.h"
 
 #include <QTime>
+#include <QVector>
 
 /**
  * KoUpdaterPrivate is the gui-thread side of KoUpdater. Communication
@@ -70,6 +71,7 @@ public:
         int value;
 
         explicit TimePoint(int value_) :time(QTime::currentTime()), value(value_) {}
+        TimePoint() {}
     };
 
     void addPoint(int value) {
@@ -78,7 +80,7 @@ public:
         }
     }
 
-    QList<TimePoint> getPoints() const {
+    const QVector<TimePoint> & getPoints() const {
         return m_points;
     }
 
@@ -110,7 +112,9 @@ private:
     bool m_hasOutput;
 
     KoProgressUpdater *m_parent;
-    QList<TimePoint> m_points;
+    QVector<TimePoint> m_points;
 };
+
+Q_DECLARE_TYPEINFO(KoUpdaterPrivate::TimePoint, Q_MOVABLE_TYPE);
 
 #endif

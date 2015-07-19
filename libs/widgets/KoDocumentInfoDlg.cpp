@@ -39,10 +39,7 @@
 #include <kdialog.h>
 #include <kurl.h>
 
-#include <QLabel>
 #include <QLineEdit>
-#include <QTextEdit>
-#include <QPixmap>
 #include <QDateTime>
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem

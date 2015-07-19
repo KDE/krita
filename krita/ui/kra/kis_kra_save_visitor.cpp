@@ -399,7 +399,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
     bool retval = backend->saveTo(metadata, &buffer);
 
     if (!retval) {
-        m_errorMessages << i18n("The metadata backend failed to save the metadata for %!", node->name());
+        m_errorMessages << i18n("The metadata backend failed to save the metadata for %1", node->name());
     }
     else {
         QByteArray data = buffer.data();

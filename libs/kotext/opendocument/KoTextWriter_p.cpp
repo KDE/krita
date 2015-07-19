@@ -709,7 +709,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 }
             }
         }
-    }
+     }
 
     if (to !=-1 && to < block.position() + block.length()) {
         foreach (KoInlineObject* inlineObject, *currentPairedInlineObjectsStack) {
@@ -770,7 +770,6 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     }
 
 
-    openTagRegion(KoTextWriter::Private::Table, tableTagInformation);
 
     int firstColumn = 0;
     int lastColumn = table->columns() -1;
@@ -781,7 +780,17 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         firstRow = table->cellAt(from).row();
         lastColumn = table->cellAt(to).column();
         lastRow = table->cellAt(to).row();
+
+        if (firstColumn == lastColumn && firstRow == lastRow && from >= table->firstPosition()) {
+            // we only selected something inside a single cell so don't save a table
+            writeBlocks(table->document(), from, to, listStyles, table);
+            return;
+        }
     }
+
+
+    openTagRegion(KoTextWriter::Private::Table, tableTagInformation);
+
     for (int c = firstColumn ; c <= lastColumn; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;

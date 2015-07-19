@@ -346,7 +346,7 @@ void ShapeCollectionDocker::activateShapeCreationToolFromQuick(const QModelIndex
     if(canvasController) {
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_quickView->model()->data(index, Qt::UserRole).toString();
-        KoProperties* properties = static_cast<CollectionItemModel*>(m_quickView->model())->properties(index);
+        const KoProperties* properties = static_cast<CollectionItemModel*>(m_quickView->model())->properties(index);
 
         tool->setShapeId(id);
         tool->setShapeProperties(properties);
@@ -365,7 +365,7 @@ void ShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)
     if(canvasController) {
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
-        KoProperties* properties = static_cast<CollectionItemModel*>(m_collectionView->model())->properties(index);
+        const KoProperties* properties = static_cast<CollectionItemModel*>(m_collectionView->model())->properties(index);
 
         tool->setShapeId(id);
         tool->setShapeProperties(properties);

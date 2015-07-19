@@ -464,7 +464,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
          */
 
         if (!w) w = qApp->widgetAt(globalPos);
-        if (!w) w = QWidget::find(msg.hwnd);
+        if (!w) w = qApp->activeWindow();
 
         QWidget *parentOverride = 0;
 

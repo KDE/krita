@@ -78,6 +78,7 @@ private Q_SLOTS:
     void mergeLayer();
 
     void imageResizeToActiveLayer();
+    void trimToImage();
 
     void layerProperties();
 

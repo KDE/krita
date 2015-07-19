@@ -20,7 +20,6 @@
 #define KOOPENPANE_H
 
 #include <QWidget>
-#include <QPixmap>
 #include <QList>
 
 class KoOpenPanePrivate;

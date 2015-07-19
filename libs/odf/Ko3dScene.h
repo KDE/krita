@@ -129,6 +129,8 @@ private:
     Private * const d;
 };
 
+Q_DECLARE_TYPEINFO(Ko3dScene::Lightsource, Q_MOVABLE_TYPE);
+
 
 /** Try to load a 3d scene from an element and return a pointer to a
  * Ko3dScene if it succeeded.

@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="73"
+version="74"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
@@ -120,6 +120,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="imagecolorspaceconversion"/>
       <Action name="duplicate_image"/>
       <Separator/>
+      <Action name="trim_to_image"/>
       <Action name="resizeimagetolayer"/>
       <Action name="resizeimagetoselection"/>
       <Separator/>

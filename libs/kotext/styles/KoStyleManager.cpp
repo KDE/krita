@@ -46,10 +46,7 @@
 
 #include <kundo2stack.h>
 
-#include <QTimer>
 #include <QUrl>
-#include <QPixmap>
-#include <QMap>
 #include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>

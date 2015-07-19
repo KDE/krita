@@ -408,6 +408,17 @@ public:
      */
     KisLayerSP flattenLayer(KisLayerSP layer);
 
+    /**
+     * Removes \p nodes in a safe way, that is handling clone layers
+     * reincarnation correctly
+     */
+    void safeRemoveMultipleNodes(QList<KisNodeSP> nodes);
+
+    /**
+     * Merges layers in \p mergedLayers and creates a new layer above
+     * \p putAfter
+     */
+    KisNodeSP mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
     /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.

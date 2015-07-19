@@ -33,7 +33,6 @@
 // KChart
 #include "TableSource.h"
 
-class KoStyleStack;
 class KoodfStylesReader;
 
 namespace KChart {

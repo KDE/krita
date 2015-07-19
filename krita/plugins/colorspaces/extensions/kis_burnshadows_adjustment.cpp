@@ -46,10 +46,10 @@ public:
  	{
         const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
-        float factor, value_red, value_green, value_blue, new_value_red, new_value_green, new_value_blue;
+        float value_red, value_green, value_blue, new_value_red, new_value_green, new_value_blue;
+        const float factor(exposure * 0.333333);
         while (nPixels > 0) {
 
-            factor = exposure * 0.333333;
             value_red =  KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red);
             value_green =  KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green);
             value_blue =  KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue);

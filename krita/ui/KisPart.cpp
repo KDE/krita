@@ -45,7 +45,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
-#include <kdeprintdialog.h>
 #include <knotification.h>
 #include <kdialog.h>
 #include <kdesktopfile.h>

@@ -60,7 +60,7 @@ public:
     QString transform;
 
     // Lightsources (these are children of the element, not attributes)
-    QList<Lightsource> lights;
+    QVector<Lightsource> lights;
 };
 
 

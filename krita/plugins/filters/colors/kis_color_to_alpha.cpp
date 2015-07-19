@@ -35,7 +35,8 @@
 #include "kis_wdg_color_to_alpha.h"
 #include <kis_iterator_ng.h>
 
-KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
+KisFilterColorToAlpha::KisFilterColorToAlpha()
+    : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -63,8 +64,8 @@ inline void inverseOver(const int numChannels, const int *channelIndex,
     for (int i = 0; i < numChannels; i++) {
         const int idx = channelIndex[i];
         dst[idx] =
-            KoColorSpaceMaths<channel_type>::clamp(
-                (static_cast<composite_type>(dst[idx]) - baseColor[idx]) / dstOpacity + baseColor[idx]);
+                KoColorSpaceMaths<channel_type>::clamp(
+                    (static_cast<composite_type>(dst[idx]) - baseColor[idx]) / dstOpacity + baseColor[idx]);
     }
 }
 
@@ -87,12 +88,12 @@ void applyToIterator(const int numChannels, const int *channelIndex,
         qreal newOpacity = diff >= threshold ? 1.0 : diff / thresholdF;
 
         if(newOpacity < cs->opacityF(dst_uint8)) {
-          cs->setOpacity(dst_uint8, newOpacity, 1);
+            cs->setOpacity(dst_uint8, newOpacity, 1);
         }
 
         inverseOver<channel_type, composite_type>(numChannels, channelIndex,
-                                                    dst, baseColorData,
-                                                    newOpacity);
+                                                  dst, baseColorData,
+                                                  newOpacity);
 
         progressHelper.step();
     } while(it.nextPixel());
@@ -129,10 +130,10 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
         if (info->channelType() != KoChannelInfo::COLOR) continue;
 
         KoChannelInfo::enumChannelValueType currentValueType =
-            info->channelValueType();
+                info->channelValueType();
 
         if (valueType != KoChannelInfo::OTHER &&
-            valueType != currentValueType) {
+                valueType != currentValueType) {
 
             qWarning() << "Cannot apply a Color-to-Alpha filter to a heterogeneous colorspace";
             return;
@@ -170,9 +171,19 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
                                         it, baseColor,
                                         threshold, cs, progressHelper);
         break;
+    case KoChannelInfo::FLOAT16:
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+        applyToIterator<half, half>(channelIndex.size(), channelIndex.data(),
+                                    it, baseColor,
+                                    threshold, cs, progressHelper);
+        break;
+
+#endif
     case KoChannelInfo::INT8: /* !UNSUPPORTED! */
     case KoChannelInfo::INT16: /* !UNSUPPORTED! */
-    case KoChannelInfo::FLOAT16: /* !UNSUPPORTED! */
+
     case KoChannelInfo::OTHER:
         qWarning() << "Color To Alpha: Unsupported channel type:" << valueType;
     }

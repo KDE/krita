@@ -29,7 +29,6 @@
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_paint_layer.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoUpdater.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 

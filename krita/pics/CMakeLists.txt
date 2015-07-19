@@ -93,6 +93,7 @@ dark_selection-mode_mask.png
 dark_symmetry-horizontal.png
 dark_symmetry-vertical.png
 dark_krita_tool_editpath.png
+dark_trim-to-image.png
 
 
 light_select.png
@@ -113,7 +114,7 @@ light_selection-mode_mask.png
 light_symmetry-vertical.png
 light_symmetry-horizontal.png
 light_krita_tool_editpath.png
-
+light_trim-to-image.png
 
 
 tool_transform/dark_transform_icons_cage.png

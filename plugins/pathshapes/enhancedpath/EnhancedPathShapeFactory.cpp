@@ -373,8 +373,9 @@ void EnhancedPathShapeFactory::addCallout()
     t.family = "funny";
     t.toolTip = i18n("A callout");
     t.iconName = koIconName("callout-shape");
-    t.properties = dataToProperties(modifiers, commands, handles, formulae);
-    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
+    KoProperties* properties = dataToProperties(modifiers, commands, handles, formulae);
+    properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
+    t.properties = properties;
 
     addTemplate(t);
 }
@@ -418,8 +419,9 @@ void EnhancedPathShapeFactory::addSmiley()
     t.family = "funny";
     t.toolTip = i18n("Smiley");
     t.iconName = koIconName("smiley-shape");
-    t.properties = dataToProperties(modifiers, commands, handles, formulae);
-    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
+    KoProperties* properties = dataToProperties(modifiers, commands, handles, formulae);
+    properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
+    t.properties = properties;
 
     addTemplate(t);
 }
@@ -497,8 +499,9 @@ void EnhancedPathShapeFactory::addCircularArrow()
     t.family = "arrow";
     t.toolTip = i18n("A circular-arrow");
     t.iconName = koIconName("circular-arrow-shape");
-    t.properties = dataToProperties(modifiers, commands, handles, formulae);
-    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
+    KoProperties* properties = dataToProperties(modifiers, commands, handles, formulae);
+    properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
+    t.properties = properties;
     addTemplate(t);
 }
 
@@ -541,9 +544,10 @@ void EnhancedPathShapeFactory::addGearhead()
     t.family = "funny";
     t.toolTip = i18n("A gearhead");
     t.iconName = koIconName("gearhead-shape");
-    t.properties = dataToProperties(QString(), commands, ListType(), ComplexType());
-    t.properties->setProperty("background", QVariant::fromValue<QColor>(QColor(Qt::blue)));
-    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 40, 90));
+    KoProperties* properties = dataToProperties(QString(), commands, ListType(), ComplexType());
+    properties->setProperty("background", QVariant::fromValue<QColor>(QColor(Qt::blue)));
+    properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 40, 90));
+    t.properties = properties;
     addTemplate(t);
 }
 

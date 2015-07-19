@@ -36,7 +36,7 @@ struct KOTEXT_EXPORT KoInlineObjectTemplate {
      * The properties which, when passed to the KoInlineObjectFactoryBase::createInlineObject() method
      * result in the object this template represents.
      */
-    KoProperties *properties;
+    const KoProperties *properties;
 };
 
 /**

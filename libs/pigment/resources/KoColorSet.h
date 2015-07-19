@@ -22,12 +22,9 @@
 #include <QObject>
 #include <QColor>
 #include <QVector>
-#include <QPixmap>
 
 #include "KoResource.h"
 #include "KoColor.h"
-
-class QPixmap;
 
 struct KoColorSetEntry {
     KoColor color;

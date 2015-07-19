@@ -171,6 +171,358 @@ void KisImageTest::testLayerComposition()
     QVERIFY(!layer2->visible());
 }
 
+#include "testutil.h"
+#include "kis_group_layer.h"
+#include "kis_transparency_mask.h"
+#include "kis_psd_layer_style.h"
+
+struct FlattenTestImage
+{
+    FlattenTestImage()
+        : refRect(0,0,512,512)
+        , p(refRect)
+    {
+
+        image = p.image;
+
+        layer1 = p.layer;
+
+        layer5 = new KisPaintLayer(p.image, "paint5", 0.4 * OPACITY_OPAQUE_U8);
+        layer5->disableAlphaChannel(true);
+
+        layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
+        tmask = new KisTransparencyMask();
+
+        // check channel flags
+        // make addition composite op
+        group1 = new KisGroupLayer(p.image, "group1", OPACITY_OPAQUE_U8);
+        layer3 = new KisPaintLayer(p.image, "paint3", OPACITY_OPAQUE_U8);
+        layer4 = new KisPaintLayer(p.image, "paint4", OPACITY_OPAQUE_U8);
+
+        layer6 = new KisPaintLayer(p.image, "paint6", OPACITY_OPAQUE_U8);
+
+        layer7 = new KisPaintLayer(p.image, "paint7", OPACITY_OPAQUE_U8);
+        layer8 = new KisPaintLayer(p.image, "paint8", OPACITY_OPAQUE_U8);
+        layer7->setCompositeOp(COMPOSITE_ADD);
+        layer8->setCompositeOp(COMPOSITE_ADD);
+
+        QRect rect1(100, 100, 100, 100);
+        QRect rect2(150, 150, 150, 150);
+        QRect tmaskRect(200,200,100,100);
+
+        QRect rect3(400, 100, 100, 100);
+        QRect rect4(500, 100, 100, 100);
+
+        QRect rect5(50, 50, 100, 100);
+
+        QRect rect6(50, 250, 100, 100);
+
+        QRect rect7(50, 350, 50, 50);
+        QRect rect8(50, 400, 50, 50);
+
+        layer1->paintDevice()->fill(rect1, KoColor(Qt::red, p.image->colorSpace()));
+
+        layer2->paintDevice()->fill(rect2, KoColor(Qt::green, p.image->colorSpace()));
+        tmask->testingInitSelection(tmaskRect);
+
+        layer3->paintDevice()->fill(rect3, KoColor(Qt::blue, p.image->colorSpace()));
+        layer4->paintDevice()->fill(rect4, KoColor(Qt::yellow, p.image->colorSpace()));
+        layer5->paintDevice()->fill(rect5, KoColor(Qt::green, p.image->colorSpace()));
+
+        layer6->paintDevice()->fill(rect6, KoColor(Qt::cyan, p.image->colorSpace()));
+
+        layer7->paintDevice()->fill(rect7, KoColor(Qt::red, p.image->colorSpace()));
+        layer8->paintDevice()->fill(rect8, KoColor(Qt::green, p.image->colorSpace()));
+
+        KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+        style->dropShadow()->setEffectEnabled(true);
+        style->dropShadow()->setDistance(10.0);
+        style->dropShadow()->setSpread(80.0);
+        style->dropShadow()->setSize(10);
+        style->dropShadow()->setNoise(0);
+        style->dropShadow()->setKnocksOut(false);
+        style->dropShadow()->setOpacity(80.0);
+        layer2->setLayerStyle(style);
+
+        layer2->setCompositeOp(COMPOSITE_ADD);
+        group1->setCompositeOp(COMPOSITE_ADD);
+
+        p.image->addNode(layer5);
+
+        p.image->addNode(layer2);
+        p.image->addNode(tmask, layer2);
+
+        p.image->addNode(group1);
+        p.image->addNode(layer3, group1);
+        p.image->addNode(layer4, group1);
+
+        p.image->addNode(layer6);
+
+        p.image->addNode(layer7);
+        p.image->addNode(layer8);
+
+        p.image->initialRefreshGraph();
+
+        // qDebug() << ppVar(layer1->exactBounds());
+        // qDebug() << ppVar(layer5->exactBounds());
+        // qDebug() << ppVar(layer2->exactBounds());
+        // qDebug() << ppVar(group1->exactBounds());
+        // qDebug() << ppVar(layer3->exactBounds());
+        // qDebug() << ppVar(layer4->exactBounds());
+
+        TestUtil::ExternalImageChecker chk("flatten", "imagetest");
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    QRect refRect;
+    TestUtil::MaskParent p;
+
+    KisImageSP image;
+    KisPaintLayerSP layer1;
+
+    KisPaintLayerSP layer2;
+    KisTransparencyMaskSP tmask;
+
+    KisGroupLayerSP group1;
+    KisPaintLayerSP layer3;
+    KisPaintLayerSP layer4;
+
+    KisPaintLayerSP layer5;
+
+    KisPaintLayerSP layer6;
+
+    KisPaintLayerSP layer7;
+    KisPaintLayerSP layer8;
+};
+
+void KisImageTest::testFlattenLayer()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker chk("flatten", "imagetest");
+
+    {
+        QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
+
+        KisLayerSP newLayer = p.image->flattenLayer(p.layer2);
+        p.image->waitForDone();
+
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer2_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+    }
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
+
+        KisLayerSP newLayer = p.image->flattenLayer(p.group1);
+        p.image->waitForDone();
+
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "02_group1_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(newLayer->exactBounds(), QRect(400, 100, 200, 100));
+    }
+
+    {
+        QCOMPARE(p.layer5->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.layer5->alphaChannelDisabled(), true);
+
+        KisLayerSP newLayer = p.image->flattenLayer(p.layer5);
+        p.image->waitForDone();
+
+        QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "03_layer5_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(50, 50, 100, 100));
+
+        QCOMPARE(newLayer->alphaChannelDisabled(), true);
+    }
+}
+
+#include <metadata/kis_meta_data_merge_strategy_registry.h>
+
+void KisImageTest::testMergeDown()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergedown_simple", "imagetest");
+
+
+    {
+        QCOMPARE(p.layer5->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.layer5->alphaChannelDisabled(), true);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.layer5, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer5_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+
+    {
+        QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.layer2->alphaChannelDisabled(), false);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.layer2, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "02_layer2_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(100, 100, 213, 217));
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.group1->alphaChannelDisabled(), false);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.group1, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "03_group1_mergedown_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(100, 100, 500, 217));
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+}
+
+void KisImageTest::testMergeDownDestinationInheritsAlpha()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergedown_dst_inheritsalpha", "imagetest");
+
+    {
+        QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.layer2->alphaChannelDisabled(), false);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.layer2, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer2_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(50,50, 263, 267));
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+}
+
+void KisImageTest::testMergeDownDestinationCustomCompositeOp()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergedown_dst_customop", "imagetest");
+
+    {
+        QCOMPARE(p.layer6->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.layer6->alphaChannelDisabled(), false);
+
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.group1->alphaChannelDisabled(), false);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.layer6, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer6_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+}
+
+void KisImageTest::testMergeDownDestinationSameCompositeOpLayerStyle()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergedown_sameop_ls", "imagetest");
+
+    {
+        QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.group1->alphaChannelDisabled(), false);
+
+        QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.layer2->alphaChannelDisabled(), false);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.group1, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_group1_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(197, 100, 403, 217));
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+}
+
+void KisImageTest::testMergeDownDestinationSameCompositeOp()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergedown_sameop_fastpath", "imagetest");
+
+    {
+        QCOMPARE(p.layer8->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.layer8->alphaChannelDisabled(), false);
+
+        QCOMPARE(p.layer7->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(p.layer7->alphaChannelDisabled(), false);
+
+        KisLayerSP newLayer = p.image->mergeDown(p.layer8, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_ADD);
+        QCOMPARE(newLayer->exactBounds(), QRect(50, 350, 50, 100));
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+}
+
+void KisImageTest::testMergeMultiple()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergemultiple", "imagetest");
+
+    QList<KisNodeSP> selectedNodes;
+
+    selectedNodes << p.layer2
+                  << p.group1
+                  << p.layer6;
+
+    {
+        KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+    }
+}
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

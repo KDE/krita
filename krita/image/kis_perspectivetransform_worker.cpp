@@ -26,7 +26,6 @@
 #include <QVector3D>
 #include <QPolygonF>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoColor.h>
 #include <KoCompositeOpRegistry.h>

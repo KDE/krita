@@ -124,7 +124,10 @@ struct KisAnimationCachePopulator::Private
 
     bool tryRequestGeneration(KisAnimationFrameCacheSP cache)
     {
-        KisImageAnimationInterface *animation = cache->image()->animationInterface();
+        KisImageSP image = cache->image();
+        if (!image) return false;
+
+        KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->currentRange();
 
         if (currentRange.isValid()) {
@@ -136,10 +139,10 @@ struct KisAnimationCachePopulator::Private
                 if (!cache->frameStatus(t) == KisAnimationFrameCache::Cached) {
                     connect(animation, SIGNAL(sigFrameReady(int)), q, SLOT(slotFrameReady(int)));
 
-                    requestImage = cache->image();
+                    requestImage = image;
                     requestedFrame = t;
 
-                    animation->requestFrameRegeneration(t, cache->image()->bounds());
+                    animation->requestFrameRegeneration(t, image->bounds());
                     return true;
                 }
             }
@@ -172,7 +175,11 @@ void KisAnimationCachePopulator::slotTimer()
 void KisAnimationCachePopulator::slotFrameReady(int frame)
 {
     if (frame == m_d->requestedFrame) {
-        disconnect(m_d->requestImage->animationInterface(), 0, this, 0);
+        KisImageSP image = m_d->requestImage;
+        if (image) {
+            disconnect(m_d->requestImage->animationInterface(), 0, this, 0);
+        }
+
         m_d->generateIfIdle();
     }
 }

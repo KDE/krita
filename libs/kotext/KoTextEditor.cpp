@@ -981,19 +981,20 @@ void KoTextEditor::insertTable(int rows, int columns)
     blockFormat.setProperty(KoParagraphStyle::HiddenByTable, true);
     cursor.setBlockFormat(blockFormat);
 
-    // Format the cells a bit.
+    // Define the initial cell format
+    QTextTableCellFormat format;
+    KoTableCellStyle cellStyle;
+    cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setPadding(5);
+    cellStyle.applyStyle(format);
+
+    // Apply formatting to all cells
     for (int row = 0; row < table->rows(); ++row) {
         for (int col = 0; col < table->columns(); ++col) {
             QTextTableCell cell = table->cellAt(row, col);
-            QTextTableCellFormat format;
-            KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setPadding(5);
-
-            cellStyle.applyStyle(format);
             cell.setFormat(format);
         }
     }

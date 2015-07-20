@@ -39,6 +39,8 @@ struct KisAnimationCachePopulator::Private
      */
     int idleCounter;
     static const int IDLE_COUNT_THRESHOLD = 5;
+    static const int IDLE_CHECK_INTERVAL = 500;
+    static const int GENERATION_TIMEOUT = 1000;
 
     KisImageWSP requestImage;
     int requestedFrame;
@@ -68,16 +70,21 @@ struct KisAnimationCachePopulator::Private
 
     void generateIfIdle()
     {
+        bool waitingForIdle = idleCounter < IDLE_COUNT_THRESHOLD;
         bool idle;
 
-        if (timer.isActive()) {
+        if (requestImage) {
+            disconnectImage();
+        }
+
+        if (waitingForIdle) {
             if (checkIdle()) {
                 idleCounter++;
             } else {
                 idleCounter = 0;
             }
 
-            idle = (idleCounter > IDLE_COUNT_THRESHOLD);
+            idle = (idleCounter >= IDLE_COUNT_THRESHOLD);
         } else {
             idle = checkIdle();
         }
@@ -85,13 +92,15 @@ struct KisAnimationCachePopulator::Private
         if (idle) {
             bool requested = tryRequestGeneration();
             if (requested) {
-                timer.stop();
+                timer.setInterval(GENERATION_TIMEOUT);
+                timer.start();
                 return;
             }
         }
 
-        if (!timer.isActive()) {
+        if (!waitingForIdle) {
             idleCounter = 0;
+            timer.setInterval(IDLE_CHECK_INTERVAL);
             timer.start();
         }
     }
@@ -150,6 +159,15 @@ struct KisAnimationCachePopulator::Private
 
         return false;
     }
+
+    void disconnectImage()
+    {
+        KisImageSP image = requestImage;
+        if (image) {
+            disconnect(requestImage->animationInterface(), 0, q, 0);
+        }
+        requestImage = 0;
+    }
 };
 
 KisAnimationCachePopulator::KisAnimationCachePopulator()
@@ -175,11 +193,6 @@ void KisAnimationCachePopulator::slotTimer()
 void KisAnimationCachePopulator::slotFrameReady(int frame)
 {
     if (frame == m_d->requestedFrame) {
-        KisImageSP image = m_d->requestImage;
-        if (image) {
-            disconnect(m_d->requestImage->animationInterface(), 0, this, 0);
-        }
-
         m_d->generateIfIdle();
     }
 }

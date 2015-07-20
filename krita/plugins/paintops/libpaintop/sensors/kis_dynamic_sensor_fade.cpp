@@ -36,7 +36,8 @@ KisDynamicSensorFade::KisDynamicSensorFade()
 
 qreal KisDynamicSensorFade::value(const KisPaintInformation&  pi)
 {
-    Q_UNUSED(pi);
+    if (pi.isHoveringMode()) return 1.0;
+
     if (m_counter > m_length) {
         if (m_periodic) {
             reset();

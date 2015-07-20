@@ -25,7 +25,6 @@
 #include <QTransform>
 #include "kis_algebra_2d.h"
 
-#include "kis_paint_device.h"
 #include "kis_lod_transform.h"
 
 

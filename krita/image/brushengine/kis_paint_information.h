@@ -189,7 +189,7 @@ public:
 
     // creates a non-shared copy of a rendom source, keeping the seed
     // the same
-    void forkRandomSource() const;
+    void forkForLod(int levelOfDetail) const;
 
     // fetch the random source from \rhs and make it shared among the
     // two objects

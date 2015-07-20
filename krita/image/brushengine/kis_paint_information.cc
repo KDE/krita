@@ -24,7 +24,7 @@
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
 #include "kis_algebra_2d.h"
-
+#include "kis_lod_transform.h"
 
 
 struct KisPaintInformation::Private {
@@ -51,7 +51,8 @@ struct KisPaintInformation::Private {
         speed(speed_),
         isHoveringMode(isHoveringMode_),
         randomSource(new KisRandomSource()),
-        currentDistanceInfo(0)
+        currentDistanceInfo(0),
+        levelOfDetail(0)
     {
     }
 
@@ -85,6 +86,8 @@ struct KisPaintInformation::Private {
         if (rhs.drawingAngleOverride) {
             drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
         }
+
+        levelOfDetail = rhs.levelOfDetail;
     }
 
 
@@ -102,6 +105,8 @@ struct KisPaintInformation::Private {
 
     QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
+
+    int levelOfDetail;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
         currentDistanceInfo = di;
@@ -336,7 +341,13 @@ qreal KisPaintInformation::drawingDistance() const
     }
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
-    return diff.length();
+    qreal length = diff.length();
+
+    if (d->levelOfDetail) {
+        length *= KisLodTransform::lodToInvScale(d->levelOfDetail);
+    }
+
+    return length;
 }
 
 qreal KisPaintInformation::drawingSpeed() const
@@ -369,9 +380,10 @@ KisRandomSourceSP KisPaintInformation::randomSource() const
     return d->randomSource;
 }
 
-void KisPaintInformation::forkRandomSource() const
+void KisPaintInformation::forkForLod(int levelOfDetail) const
 {
     d->randomSource = new KisRandomSource(*d->randomSource);
+    d->levelOfDetail = levelOfDetail;
 }
 
 void KisPaintInformation::shareRandomSourceFrom(const KisPaintInformation &rhs) const
@@ -447,7 +459,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
-
+    result.d->levelOfDetail = pi1.d->levelOfDetail;
     result.shareRandomSourceFrom(pi1);
 
     return result;

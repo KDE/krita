@@ -33,7 +33,8 @@ public:
         m_transform = QTransform::fromScale(scale, scale);
     }
 
-    KisLodTransform(KisPaintDeviceSP device) {
+    template <class PaintDeviceTypeSP>
+    KisLodTransform(PaintDeviceTypeSP device) {
         qreal scale = lodToScale(device->defaultBounds()->currentLevelOfDetail());
         m_transform = QTransform::fromScale(scale, scale);
     }
@@ -42,7 +43,12 @@ public:
         return 1.0 / (1 << qMax(0, levelOfDetail));
     }
 
-    static qreal lodToScale(KisPaintDeviceSP device) {
+    static qreal lodToInvScale(int levelOfDetail) {
+        return 1 << qMax(0, levelOfDetail);
+    }
+
+    template <class PaintDeviceTypeSP>
+    static qreal lodToScale(PaintDeviceTypeSP device) {
         return lodToScale(device->defaultBounds()->currentLevelOfDetail());
     }
 

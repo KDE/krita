@@ -105,6 +105,11 @@ public:
     qreal getNextPointPosition(const QPointF &start,
                                const QPointF &end);
 
+    /**
+     * \return true if at least one dab has been painted with this
+     *         distance information
+     */
+    bool isStarted() const;
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,

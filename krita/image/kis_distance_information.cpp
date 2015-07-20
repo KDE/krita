@@ -124,6 +124,11 @@ const KisPaintInformation& KisDistanceInformation::lastPaintInformation() const
     return m_d->lastPaintInformation;
 }
 
+bool KisDistanceInformation::isStarted() const
+{
+    return m_d->lastPaintInfoValid;
+}
+
 void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
                                                 const KisSpacingInformation &spacing)
 {

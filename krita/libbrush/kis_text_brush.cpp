@@ -137,6 +137,8 @@ protected:
 
 private:
     void updateBrushIndexesImpl() {
+        if (m_text.isEmpty()) return;
+
         if (m_charIndex >= m_text.size()) {
             m_charIndex = 0;
         }

@@ -661,7 +661,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
 //    }
 
     if (previous) {
-        if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        if (!d->caret.hasSelection() && d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
             movePosition(QTextCursor::PreviousCharacter);
             if (d->caret.block().length() <= 1) {
                 movePosition(QTextCursor::NextCharacter);
@@ -669,7 +669,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
                 return; // it becomes just a cursor movement;
         }
     } else {
-        if (d->caret.block().length() > 1) {
+        if (!d->caret.hasSelection() && d->caret.block().length() > 1) {
             QTextCursor tmpCursor = d->caret;
             tmpCursor.movePosition(QTextCursor::NextCharacter);
             if (tmpCursor.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {

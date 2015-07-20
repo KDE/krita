@@ -540,13 +540,19 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Variable"));
+    KUndo2Command *topCommand = cmd;
+    if (!cmd) {
+        topCommand = beginEditBlock(kundo2_i18n("Insert Variable"));
+    }
 
-    int startPosition = d->caret.position();
+    if (d->caret.hasSelection()) {
+        deleteChar(false, topCommand);
+    }
+    d->caret.beginEditBlock();
+
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
         d->newLine(0);
-        startPosition = d->caret.position();
     }
 
     QTextCharFormat format = d->caret.charFormat();
@@ -554,20 +560,14 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
+    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
 
-    int endPosition = d->caret.position();
-    d->caret.setPosition(startPosition);
-    d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, kundo2_i18n("Key Press"), format, format, false);
-    d->caret.clearSelection();
-
-    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, cmd);
-
+    d->caret.endEditBlock();
+ 
     if (!cmd) {
-        addCommand(insertInlineObjectCommand);
+        addCommand(topCommand);
+        endEditBlock();
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 
     emit cursorPositionChanged();
 }

@@ -53,8 +53,8 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
-FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs)
-    : KisPainterBasedStrokeStrategy(rhs),
+FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail)
+    : KisPainterBasedStrokeStrategy(rhs, levelOfDetail),
       m_d(new Private(*rhs.m_d))
 {
 }
@@ -119,9 +119,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    Q_UNUSED(levelOfDetail);
-
-    FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this);
+    FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
     clone->setUndoEnabled(false);
     return clone;
 }

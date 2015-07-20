@@ -40,7 +40,7 @@ public:
     public:
         PainterInfo();
         PainterInfo(const QPointF &lastPosition, int lastTime);
-        PainterInfo(const PainterInfo &rhs);
+        PainterInfo(const PainterInfo &rhs, int levelOfDetail);
         ~PainterInfo();
 
         KisPainter *painter;
@@ -73,7 +73,7 @@ protected:
     void setUndoEnabled(bool value);
 
 protected:
-    KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs);
+    KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail);
 
 private:
     void init();

@@ -85,6 +85,7 @@ public:
     KisDistanceInformation();
     KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
     KisDistanceInformation(const KisDistanceInformation &rhs);
+    KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
 
     ~KisDistanceInformation();

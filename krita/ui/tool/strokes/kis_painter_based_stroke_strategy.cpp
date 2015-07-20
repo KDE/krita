@@ -42,9 +42,9 @@ KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const QPointF &lastPosit
 {
 }
 
-KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const PainterInfo &rhs)
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const PainterInfo &rhs, int levelOfDetail)
     : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation(*rhs.dragDistance))
+      dragDistance(new KisDistanceInformation(*rhs.dragDistance, levelOfDetail))
 {
 }
 
@@ -92,7 +92,7 @@ void KisPainterBasedStrokeStrategy::init()
     enableJob(KisSimpleStrokeStrategy::JOB_RESUME);
 }
 
-KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
+KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail)
     : KisSimpleStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
       m_transaction(rhs.m_transaction),
@@ -100,7 +100,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
       m_useMergeID(rhs.m_useMergeID)
 {
     foreach(PainterInfo *info, rhs.m_painterInfos) {
-        m_painterInfos.append(new PainterInfo(*info));
+        m_painterInfos.append(new PainterInfo(*info, levelOfDetail));
     }
 
     KIS_ASSERT_RECOVER_NOOP(

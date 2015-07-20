@@ -131,6 +131,12 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
 
 void KisAnimationFrameCache::frameReady(int time)
 {
+    if (time != m_d->image->animationInterface()->currentTime()) {
+        qWarning() << "WARNING: KisAnimationFrameCache::frameReady image's time doesn't coincide with the requested time!";
+        qWarning() << "    "  << ppVar(m_d->image->animationInterface()->currentTime()) << ppVar(time);
+    }
+
+
     KisOpenGLUpdateInfoSP info =
         m_d->textures->updateCache(m_d->image->bounds());
 

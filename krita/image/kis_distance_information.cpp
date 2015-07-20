@@ -67,8 +67,7 @@ KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs
 KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail)
     : m_d(new Private(*rhs.m_d))
 {
-    KIS_ASSERT_RECOVER_NOOP(m_d->lastDabInfoValid &&
-                            !m_d->lastPaintInfoValid &&
+    KIS_ASSERT_RECOVER_NOOP(!m_d->lastPaintInfoValid &&
                             "The distance information "
                             "should be cloned before the "
                             "actual painting is started");

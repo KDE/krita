@@ -36,17 +36,22 @@ find_path(FFTW3_INCLUDE_DIR
     NAMES fftw3.h
 )
 
-find_path(FFTW3_LIBRARY_DIR
-	NAMES libfftw3f-3.lib
-)
 
-set (FFTW3_LIBRARIES ${FFTW3_LIBRARY_DIR}/lib/libfftw3f-3.lib 
-                     ${FFTW3_LIBRARY_DIR}/lib/libfftw3l-3.lib 
-                     ${FFTW3_LIBRARY_DIR}/lib/libfftw3-3.lib )
+find_library(
+    FFTW3_LIBRARY
+    NAMES libfftw3-3 libfftw3f-3 libfftw3l-3
+    DOC "Libraries to link against for FFT Support")
 
-if(FFTW3_INCLUDE_DIR AND FFTW3_LIBRARY_DIR)
-	set (FFTW3_FOUND true)
-	message(STATUS "Correctly found FFTW3")
+if (FFTW3_LIBRARY)
+    set(FFTW3_LIBRARY_DIR ${FFTW3_LIBRARY})
 endif()
 
+set (FFTW3_LIBRARIES ${FFTW3_LIBRARY})
+
+if(FFTW3_INCLUDE_DIR AND FFTW3_LIBRARY_DIR)
+ set (FFTW3_FOUND true)
+ message(STATUS "Correctly found FFTW3")
+else()
+  message(STATUS "Could not find FFTW3")
+endif()
 endif()

@@ -20,11 +20,11 @@
 #ifndef _KIS_MASK_GENERATOR_H_
 #define _KIS_MASK_GENERATOR_H_
 
+#include "kis_brush_mask_applicator_base.h" // vc.h must come first
 #include <KoID.h>
 #include <klocale.h>
 
 #include "krita_export.h"
-#include "kis_brush_mask_applicator_base.h"
 
 class QDomElement;
 class QDomDocument;

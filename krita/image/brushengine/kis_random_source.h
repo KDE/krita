@@ -34,11 +34,13 @@ public:
 
     ~KisRandomSource();
 
-    int min() const;
-    int max() const;
+    qint64 min() const;
+    qint64 max() const;
 
-    int generate() const;
+    qint64 generate() const;
+
     int generate(int min, int max) const;
+    qreal generateNormalized() const;
 
 private:
     struct Private;

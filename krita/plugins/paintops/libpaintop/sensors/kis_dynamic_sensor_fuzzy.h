@@ -46,9 +46,7 @@ public:
 
     KisDynamicSensorFuzzy();
     virtual ~KisDynamicSensorFuzzy() {}
-    qreal value(const KisPaintInformation &info) {
-        return !info.isHoveringMode() ? rand() / (qreal)RAND_MAX : 1.0;
-    }
+    qreal value(const KisPaintInformation &info);
 
 public Q_SLOTS:
     void setRotationModeEnabled(int state);

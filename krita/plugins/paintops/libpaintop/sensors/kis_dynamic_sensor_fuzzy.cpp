@@ -57,6 +57,18 @@ void KisDynamicSensorFuzzy::setRotationModeEnabled(int state)
 {
     m_rotationModeEnabled = state;
 }
+
+qreal KisDynamicSensorFuzzy::value(const KisPaintInformation &info) {
+
+    qreal result = 1.0;
+
+    if (!info.isHoveringMode()) {
+        result = info.randomSource()->generateNormalized();
+    }
+
+    return result;
+}
+
 void KisDynamicSensorFuzzy::toXML(QDomDocument &doc, QDomElement &e) const
 {
     KisDynamicSensor::toXML(doc, e);

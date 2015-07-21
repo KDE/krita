@@ -65,17 +65,17 @@ KisRandomSource::~KisRandomSource()
 {
 }
 
-int KisRandomSource::min() const
+qint64 KisRandomSource::min() const
 {
     return m_d->uniformSource.min();
 }
 
-int KisRandomSource::max() const
+qint64 KisRandomSource::max() const
 {
     return m_d->uniformSource.max();
 }
 
-int KisRandomSource::generate() const
+qint64 KisRandomSource::generate() const
 {
     return m_d->uniformSource();
 }
@@ -86,4 +86,10 @@ int KisRandomSource::generate(int min, int max) const
     return smallint(m_d->uniformSource);
 }
 
+qreal KisRandomSource::generateNormalized() const
+{
+    const qint64 v = m_d->uniformSource();
+    const qint64 max = m_d->uniformSource.max();
 
+    return qreal(v) / max;
+}

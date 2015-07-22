@@ -175,7 +175,7 @@ QList<KisKeyframe*> KisKeyframeChannel::keyframes() const
     return m_d->keys.values();
 }
 
-QDomElement KisKeyframeChannel::toXML(QDomDocument doc) const
+QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
 {
     QDomElement channelElement = doc.createElement("channel");
 
@@ -185,7 +185,7 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc) const
         QDomElement keyframeElement = doc.createElement("keyframe");
         keyframeElement.setAttribute("time", keyframe->time());
 
-        saveKeyframe(keyframe, keyframeElement);
+        saveKeyframe(keyframe, keyframeElement, layerFilename);
 
         channelElement.appendChild(keyframeElement);
     }
@@ -193,9 +193,16 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc) const
     return channelElement;
 }
 
-void KisKeyframeChannel::loadXML(KoXmlNode channelNode)
+void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
 {
-    for (KoXmlNode keyframeNode = channelNode.firstChild(); !keyframeNode .isNull(); keyframeNode  = keyframeNode .nextSibling()) {
+    // Make sure we're starting from scratch
+    KisKeyframe *keyframe;
+    foreach (keyframe, m_d->keys) {
+        destroyKeyframe(keyframe);
+    }
+    m_d->keys.clear();
+
+    for (QDomElement keyframeNode = channelNode.firstChildElement(); !keyframeNode.isNull(); keyframeNode = keyframeNode.nextSiblingElement()) {
         if (keyframeNode.nodeName().toUpper() != "KEYFRAME") continue;
 
         KisKeyframe *keyframe = loadKeyframe(keyframeNode);

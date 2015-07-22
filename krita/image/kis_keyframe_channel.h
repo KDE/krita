@@ -20,12 +20,12 @@
 #define KIS_KEYFRAME_CHANNEL_H
 
 #include <QVariant>
+#include <QDomElement>
 
 #include "kis_types.h"
 #include "KoID.h"
 #include "krita_export.h"
 #include "kis_keyframe.h"
-#include "KoXmlReader.h"
 
 class KisTimeRange;
 
@@ -81,8 +81,8 @@ public:
     virtual qreal scalarValue(const KisKeyframe *keyframe) const = 0;
     virtual void setScalarValue(KisKeyframe *keyframe, qreal value) = 0;
 
-    QDomElement toXML(QDomDocument doc) const;
-    void loadXML(KoXmlNode channelNode);
+    virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
+    virtual void loadXML(const QDomElement &channelNode);
 
 signals:
     void sigKeyframeAboutToBeAdded(KisKeyframe *keyframe);
@@ -104,8 +104,8 @@ protected:
     virtual QRect affectedRect(KisKeyframe *key) = 0;
     virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
-    virtual KisKeyframe * loadKeyframe(KoXmlNode keyframeNode) = 0;
-    virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const = 0;
+    virtual KisKeyframe * loadKeyframe(const QDomElement &keyframeNode) = 0;
+    virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:
     KisKeyframe * insertKeyframe(int time, const KisKeyframe *copySrc);

@@ -47,11 +47,16 @@ public:
      */
     bool fetchFrame(KisPaintDeviceSP targetDevice, int time, int offset);
 
+    QString frameFilename(int frameId) const;
+
     bool hasScalarValue() const;
     qreal minScalarValue() const;
     qreal maxScalarValue() const;
     qreal scalarValue(const KisKeyframe *keyframe) const;
     void setScalarValue(KisKeyframe *keyframe, qreal value);
+
+    QDomElement toXML(QDomDocument doc, const QString &layerFilename);
+    void loadXML(const QDomElement &channelNode);
 
 protected:
     KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc);
@@ -61,10 +66,13 @@ protected:
     QRect affectedRect(KisKeyframe *key);
     void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
-    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const;
-    KisKeyframe *loadKeyframe(KoXmlNode keyframeNode);
+    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename);
+    KisKeyframe *loadKeyframe(const QDomElement &keyframeNode);
 
 private:
+    void setFrameFilename(int frameId, const QString &filename);
+    QString chooseFrameFilename(int frameId, const QString &layerFilename);
+
     struct Private;
     QScopedPointer<Private> m_d;
 };

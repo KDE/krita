@@ -55,6 +55,8 @@
 #include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
+#include "kis_raster_keyframe_channel.h"
+
 using namespace KRA;
 
 KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
@@ -250,8 +252,33 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     KisConfig cfg;
     m_store->setCompressionEnabled(cfg.compressKra());
 
+    QList<int> frames = device->frames();
+
+    if (frames.count() <= 1) {
+        savePaintDeviceFrame(device, -1, location);
+    } else {
+        KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();
+
+        for (int i = 0; i < frames.count(); i++) {
+            int id = frames[i];
+
+            QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
+            Q_ASSERT(!frameFilename.isEmpty());
+
+            if (!savePaintDeviceFrame(device, id, frameFilename)) {
+                return false;
+            }
+        }
+    }
+
+    m_store->setCompressionEnabled(true);
+    return true;
+}
+
+bool KisKraSaveVisitor::savePaintDeviceFrame(KisPaintDeviceSP device, int frameId, QString location)
+{
     if (m_store->open(location)) {
-        if (!device->write(*m_writer)) {
+        if (!device->write(*m_writer, frameId)) {
             device->disconnect();
             m_store->close();
             return false;
@@ -260,36 +287,10 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
         m_store->close();
     }
     if (m_store->open(location + ".defaultpixel")) {
-        m_store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
+        m_store->write((char*)device->defaultPixel(frameId), device->colorSpace()->pixelSize());
         m_store->close();
     }
 
-    if (device->frames().count() > 1) {
-        QList<int> frames = device->frames();
-
-        for (int i = 0; i < frames.count(); i++) {
-            int id = frames[i];
-            m_store->open(location + ".f" + QString::number(id));
-            if(!device->write(*m_writer, id)) {
-                device->disconnect();
-                m_store->close();
-                return false;
-            }
-            m_store->close();
-        }
-
-        QByteArray framelist;
-        for (int i = 0; i < frames.count(); i++) {
-            int id = frames[i];
-            framelist.append(QString::number(id).toLatin1());
-            framelist.append("\n");
-        }
-        m_store->open(location + ".frames");
-        m_store->write(framelist);
-        m_store->close();
-    }
-
-    m_store->setCompressionEnabled(true);
     return true;
 }
 
@@ -417,8 +418,13 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
 {
 
-    QString location = m_external ? QString() : m_uri;
     Q_ASSERT(m_nodeFileNames.contains(node));
-    location += m_name + LAYER_PATH + m_nodeFileNames[node] + suffix;
+    return getLocation(m_nodeFileNames[node], suffix);
+}
+
+QString KisKraSaveVisitor::getLocation(const QString &filename, const QString& suffix)
+{
+    QString location = m_external ? QString() : m_uri;
+    location += m_name + LAYER_PATH + filename + suffix;
     return location;
 }

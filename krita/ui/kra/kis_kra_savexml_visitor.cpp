@@ -317,6 +317,8 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
+    QString filename = LAYER + QString::number(m_count);
+
     el.setAttribute(CHANNEL_FLAGS, flagsToString(layer->channelFlags()));
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
@@ -324,7 +326,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(VISIBLE, layer->visible());
     el.setAttribute(LOCKED, layer->userLocked());
     el.setAttribute(NODE_TYPE, layerType);
-    el.setAttribute(FILE_NAME, LAYER + QString::number(m_count));
+    el.setAttribute(FILE_NAME, filename);
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
@@ -349,7 +351,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     foreach (KisKeyframeChannel *channel, keyframeChannels) {
         if (channel->keyframes().count() == 0) continue;
 
-        QDomElement channelElement = channel->toXML(m_doc);
+        QDomElement channelElement = channel->toXML(m_doc, filename);
         keyframesElement.appendChild(channelElement);
     }
 

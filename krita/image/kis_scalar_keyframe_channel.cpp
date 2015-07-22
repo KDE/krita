@@ -91,12 +91,12 @@ QRect KisScalarKeyframeChannel::affectedRect(KisKeyframe *key)
     return QRect();
 }
 
-void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const
+void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
     keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);
 }
 
-KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(KoXmlNode keyframeNode)
+KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toUInt();
     QVariant value = keyframeNode.toElement().attribute("value");

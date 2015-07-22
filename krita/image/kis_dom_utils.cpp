@@ -51,6 +51,18 @@ void saveValue(QDomElement *parent, const QString &tag, const QRect &rc)
     e.setAttribute("h", Private::numberToString(rc.height()));
 }
 
+void saveValue(QDomElement *parent, const QString &tag, const QPoint &pt)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "point");
+
+    e.setAttribute("x", Private::numberToString(pt.x()));
+    e.setAttribute("y", Private::numberToString(pt.y()));
+}
+
 void saveValue(QDomElement *parent, const QString &tag, const QPointF &pt)
 {
     QDomDocument doc = parent->ownerDocument();
@@ -160,6 +172,16 @@ bool loadValue(const QDomElement &e, QRect *rc)
     rc->setY(Private::stringToInt(e.attribute("y", "0")));
     rc->setWidth(Private::stringToInt(e.attribute("w", "0")));
     rc->setHeight(Private::stringToInt(e.attribute("h", "0")));
+
+    return true;
+}
+
+bool loadValue(const QDomElement &e, QPoint *pt)
+{
+    if (!Private::checkType(e, "point")) return false;
+
+    pt->setX(Private::stringToInt(e.attribute("x", "0")));
+    pt->setY(Private::stringToInt(e.attribute("y", "0")));
 
     return true;
 }

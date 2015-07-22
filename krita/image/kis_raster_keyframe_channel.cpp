@@ -17,6 +17,7 @@
  */
 #include "kis_raster_keyframe_channel.h"
 #include "kis_node.h"
+#include "kis_dom_utils.h"
 
 #include "kis_paint_device.h"
 #include "kis_time_range.h"
@@ -28,6 +29,7 @@ struct KisRasterKeyframeChannel::Private
   {}
 
   KisPaintDeviceWSP paintDevice;
+  QMap<int, QString> frameFilenames;
 };
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNodeWSP node, const KisPaintDeviceWSP paintDevice)
@@ -66,6 +68,34 @@ bool KisRasterKeyframeChannel::fetchFrame(KisPaintDeviceSP targetDevice, int tim
     m_d->paintDevice->fetchFrame(i.value()->value(), targetDevice);
 
     return true;
+}
+
+QString KisRasterKeyframeChannel::frameFilename(int frameId) const
+{
+    return m_d->frameFilenames.value(frameId, QString());
+}
+
+void KisRasterKeyframeChannel::setFrameFilename(int frameId, const QString &filename)
+{
+    Q_ASSERT(!m_d->frameFilenames.contains(frameId));
+    m_d->frameFilenames.insert(frameId, filename);
+}
+
+QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString &layerFilename)
+{
+    QString filename;
+
+    int firstFrame = constKeys().begin().value()->value();
+    if (frameId == firstFrame) {
+        // Use legacy naming convention for first keyframe
+        filename = layerFilename;
+    } else {
+        filename = layerFilename + ".f" + QString::number(frameId);
+    }
+
+    setFrameFilename(frameId, filename);
+
+    return filename;
 }
 
 KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
@@ -126,17 +156,45 @@ void KisRasterKeyframeChannel::requestUpdate(const KisTimeRange &range, const QR
     }
 }
 
-void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const
+QDomElement KisRasterKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
 {
-    keyframeElement.setAttribute("frame", keyframe->value());
+    m_d->frameFilenames.clear();
+
+    return KisKeyframeChannel::toXML(doc, layerFilename);
 }
 
-KisKeyframe * KisRasterKeyframeChannel::loadKeyframe(KoXmlNode keyframeNode)
+void KisRasterKeyframeChannel::loadXML(const QDomElement &channelNode)
 {
-    int time = keyframeNode.toElement().attribute("time").toUInt();
-    int frameId = keyframeNode.toElement().attribute("frame").toInt();
+    m_d->frameFilenames.clear();
 
-    m_d->paintDevice->forceCreateFrame(frameId);
+    KisKeyframeChannel::loadXML(channelNode);
+}
+
+void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename)
+{
+    int frameId = keyframe->value();
+
+    QString filename = frameFilename(frameId);
+    if (filename.isEmpty()) {
+        filename = chooseFrameFilename(frameId, layerFilename);
+    }
+    keyframeElement.setAttribute("frame", filename);
+
+    QPoint offset = QPoint(m_d->paintDevice->x(frameId), m_d->paintDevice->y(frameId));
+    KisDomUtils::saveValue(&keyframeElement, "offset", offset);
+}
+
+KisKeyframe *KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
+{
+    int time = keyframeNode.attribute("time").toUInt();
+    int frameId = m_d->paintDevice->createFrame(false, 0);
+
+    QPoint offset;
+    KisDomUtils::loadValue(keyframeNode, "offset", &offset);
+    m_d->paintDevice->move(offset, frameId);
+
+    QString frameFilename = keyframeNode.attribute("frame");
+    setFrameFilename(frameId, frameFilename);
 
     return new KisKeyframe(this, time, frameId);
 }

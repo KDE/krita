@@ -41,8 +41,8 @@ protected:
 
     QRect affectedRect(KisKeyframe *key);
 
-    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement) const;
-    KisKeyframe *loadKeyframe(KoXmlNode keyframeNode);
+    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename);
+    KisKeyframe *loadKeyframe(const QDomElement &keyframeNode);
 
 private:
     struct Private;

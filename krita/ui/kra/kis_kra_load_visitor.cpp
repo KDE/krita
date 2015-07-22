@@ -54,6 +54,7 @@
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
 #include "kis_dom_utils.h"
+#include "kis_raster_keyframe_channel.h"
 
 using namespace KRA;
 
@@ -335,8 +336,31 @@ QStringList KisKraLoadVisitor::errorMessages() const
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
     // Layer data
+
+    QList<int> frames = device->frames();
+    if (frames.count() <= 1) {
+        return loadPaintDeviceFrame(device, -1, location);
+    } else {
+        KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();
+
+        for (int i = 0; i < frames.count(); i++) {
+            int id = frames[i];
+            QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
+            Q_ASSERT(!frameFilename.isEmpty());
+
+            if (!loadPaintDeviceFrame(device, id, frameFilename)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, int frameId, const QString &location)
+{
     if (m_store->open(location)) {
-        if (!device->read(m_store->device())) {
+        if (!device->read(m_store->device(), frameId)) {
             m_errorMessages << i18n("Could not read pixel data: %1.", location);
             device->disconnect();
             m_store->close();
@@ -352,35 +376,10 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         if (m_store->size() == pixelSize) {
             quint8 *defPixel = new quint8[pixelSize];
             m_store->read((char*)defPixel, pixelSize);
-            device->setDefaultPixel(defPixel);
+            device->setDefaultPixel(defPixel, frameId);
             delete[] defPixel;
         }
         m_store->close();
-    }
-
-    if (m_store->open(location + ".frames")) {
-        QList<int> frames;
-
-        while (!m_store->device()->atEnd()) {
-            QByteArray line = m_store->device()->readLine();
-            int id = QString(line).toInt();
-            frames.append(id);
-        }
-        m_store->close();
-
-        for (int i = 0; i < frames.count(); i++) {
-            int id = frames[i];
-            m_store->open(location + ".f" + QString::number(id));
-
-            if (!device->read(m_store->device(), id)) {
-                m_errorMessages << i18n("Could not read frame: %1 at %2.", id, location);
-                device->disconnect();
-                m_store->close();
-                return false;
-            }
-
-            m_store->close();
-        }
     }
 
     return true;
@@ -505,7 +504,12 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)
 {
+    return getLocation(m_layerFilenames[node], suffix);
+}
+
+QString KisKraLoadVisitor::getLocation(const QString &filename, const QString& suffix)
+{
     QString location = m_external ? QString() : m_uri;
-    location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
+    location += m_name + LAYER_PATH + filename + suffix;
     return location;
 }

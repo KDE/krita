@@ -607,12 +607,16 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         m_d->selectedNodes.append(node);
     }
 
-    for (KoXmlNode child = element.firstChildElement(); !child.isNull(); child = child.nextSibling()) {
+    QDomDocument qDom;
+    KoXml::asQDomElement(qDom, element);
+    QDomElement qElement = qDom.firstChildElement();
+
+    for (QDomElement child = qElement.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toUpper() == "KEYFRAMES") {
-            for (KoXmlNode channelElement = child.firstChildElement(); !channelElement.isNull(); channelElement = channelElement.nextSibling()) {
+            for (QDomElement channelElement = child.firstChildElement(); !channelElement.isNull(); channelElement = channelElement.nextSiblingElement()) {
                 if (channelElement.nodeName().toUpper() != "CHANNEL") continue;
 
-                QString id = channelElement.toElement().attribute("name");
+                QString id = channelElement.attribute("name");
                 KisKeyframeChannel *channel = node->getKeyframeChannel(id);
                 if (!channel) continue;
 

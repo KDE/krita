@@ -25,6 +25,7 @@
 #include <QList>
 #include <QHash>
 #include <QIODevice>
+#include <qmath.h>
 
 #include <klocale.h>
 
@@ -246,25 +247,19 @@ struct KisPaintDevice::Private
         return frameId;
     }
 
-    /**
-     * Creates a frame with a specified \p frameId and puts it into
-     * the store.  Used while loading frames form file.
-     */
-    void forceCreateFrame(int frameId)
-    {
-        if (nextFreeFrameId <= frameId) nextFreeFrameId = frameId + 1;
-
-        Data *data = new Data(m_data);
-        frames.insert(frameId, data);
-    }
-
     void deleteFrame(int frame)
     {
         KIS_ASSERT_RECOVER_RETURN(frames.contains(frame));
-        delete frames.take(frame);
+        Data *data = frames.take(frame);
+
+        // If we don't have two or more frames, we keep the data in m_data
 
         if (frames.count() == 1) {
             m_data = frames.begin().value();
+        }
+
+        if (frames.count() > 0) {
+            delete data;
         }
     }
 
@@ -1563,11 +1558,6 @@ KisRasterKeyframeChannel* KisPaintDevice::keyframeChannel() const
 int KisPaintDevice::createFrame(bool copy, int copySrc)
 {
     return m_d->createFrame(copy, copySrc);
-}
-
-void KisPaintDevice::forceCreateFrame(int frameId)
-{
-    m_d->forceCreateFrame(frameId);
 }
 
 void KisPaintDevice::deleteFrame(int frame)

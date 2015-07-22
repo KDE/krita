@@ -108,7 +108,7 @@ public:
     /**
      * Overridden from KisPaintDevice to handle outline cache moves
      */
-    void move(const QPoint& pt);
+    void move(const QPoint& pt, int frameId=-1);
     using KisPaintDevice::move;
 
     bool isEmpty() const;

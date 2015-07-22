@@ -293,9 +293,9 @@ void KisPixelSelection::invert()
     m_d->invalidateThumbnailImage();
 }
 
-void KisPixelSelection::move(const QPoint &pt)
+void KisPixelSelection::move(const QPoint &pt, int frameId)
 {
-    QPoint offset = pt - QPoint(x(), y());
+    QPoint offset = pt - QPoint(x(frameId), y(frameId));
 
     if (m_d->outlineCacheValid) {
         m_d->outlineCache.translate(offset);
@@ -307,7 +307,7 @@ void KisPixelSelection::move(const QPoint &pt)
             m_d->thumbnailImageTransform;
     }
 
-    KisPaintDevice::move(pt);
+    KisPaintDevice::move(pt, frameId);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const

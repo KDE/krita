@@ -198,17 +198,15 @@ struct KisPaintDevice::Private
     inline const KoColorSpace* colorSpace() const { return currentData()->colorSpace; }
     inline void setColorSpace(const KoColorSpace *cs) { currentData()->colorSpace = cs; }
 
-    inline KisDataManagerSP dataManager() const { return currentData()->dataManager; }
-    inline KisDataManagerSP dataManager(int frame) const { return frames[frame]->dataManager; }
+    inline KisDataManagerSP dataManager(int frameId=-1) const { return data(frameId)->dataManager; }
     inline void setDataManager(KisDataManagerSP dm) { currentData()->dataManager = dm;  }
 
-    inline qint32 x() const { return currentData()->x; }
-    inline qint32 y() const { return currentData()->y; }
-    inline void setX(qint32 x) { currentData()->x = x; }
-    inline void setY(qint32 y) { currentData()->y = y; }
+    inline qint32 x(int frameId=-1) const {return data(frameId)->x;}
+    inline qint32 y(int frameId=-1) const {return data(frameId)->y;}
+    inline void setX(qint32 x, int frameId=-1) { data(frameId)->x = x; }
+    inline void setY(qint32 y, int frameId=-1) { data(frameId)->y = y; }
 
-    inline PaintDeviceCache* cache() { return &currentData()->cache; }
-    inline PaintDeviceCache* cache(int frame) { return &frames[frame]->cache; }
+    inline PaintDeviceCache* cache(int frameId=-1) { return &data(frameId)->cache; }
 
     void prepareClone(KisPaintDeviceSP src)
     {
@@ -342,6 +340,14 @@ private:
         }
 
         return data;
+    }
+
+    inline Data* data(int frameId=-1) const {
+        if (frameId < 0) {
+            return currentData();
+        } else {
+            return frames[frameId];
+        }
     }
 
     inline Data* currentData() const {
@@ -772,14 +778,14 @@ KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
     return m_d->defaultBounds;
 }
 
-void KisPaintDevice::move(const QPoint &pt)
+void KisPaintDevice::move(const QPoint &pt, int frameId)
 {
-    m_d->currentStrategy()->move(pt);
+    m_d->currentStrategy()->move(pt, frameId);
 }
 
-void KisPaintDevice::move(qint32 x, qint32 y)
+void KisPaintDevice::move(qint32 x, qint32 y, int frameId)
 {
-    move(QPoint(x, y));
+    move(QPoint(x, y), frameId);
 }
 
 void KisPaintDevice::setX(qint32 x)
@@ -792,14 +798,14 @@ void KisPaintDevice::setY(qint32 y)
     move(QPoint(m_d->x(), y));
 }
 
-qint32 KisPaintDevice::x() const
+qint32 KisPaintDevice::x(int frameId) const
 {
-    return m_d->x();
+    return m_d->x(frameId);
 }
 
-qint32 KisPaintDevice::y() const
+qint32 KisPaintDevice::y(int frameId) const
 {
-    return m_d->y();
+    return m_d->y(frameId);
 }
 
 void KisPaintDevice::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
@@ -1024,15 +1030,24 @@ void KisPaintDevice::purgeDefaultPixels()
     dm->purge(dm->extent());
 }
 
-void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
+void KisPaintDevice::setDefaultPixel(const quint8 *defPixel, int frameId)
 {
-    m_d->dataManager()->setDefaultPixel(defPixel);
-    m_d->cache()->invalidate();
+    if (frameId < 0) {
+        m_d->dataManager()->setDefaultPixel(defPixel);
+        m_d->cache()->invalidate();
+    } else {
+        m_d->dataManager(frameId)->setDefaultPixel(defPixel);
+        m_d->cache(frameId)->invalidate();
+    }
 }
 
-const quint8 *KisPaintDevice::defaultPixel() const
+const quint8 *KisPaintDevice::defaultPixel(int frameId) const
 {
-    return m_d->dataManager()->defaultPixel();
+    if (frameId < 0) {
+        return m_d->dataManager()->defaultPixel();
+    } else {
+        return m_d->dataManager(frameId)->defaultPixel();
+    }
 }
 
 void KisPaintDevice::clear()
@@ -1057,29 +1072,31 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
     m_d->currentStrategy()->fill(QRect(x, y, w, h), fillPixel);
 }
 
-bool KisPaintDevice::write(KisPaintDeviceWriter &store)
-{
-    // FIXME: SANITY_CHECK
-    return m_d->dataManager()->write(store);
-}
-
-bool KisPaintDevice::read(QIODevice *stream)
-{
-    // FIXME: SANITY_CHECK
-    bool retval = m_d->dataManager()->read(stream);
-    m_d->cache()->invalidate();
-    return retval;
-}
 
 bool KisPaintDevice::write(KisPaintDeviceWriter &store, int frame)
 {
-    return m_d->dataManager(frame)->write(store);
+    // FIXME: SANITY_CHECK
+    if (frame < 0) {
+        return m_d->dataManager()->write(store);
+    } else {
+        return m_d->dataManager(frame)->write(store);
+    }
 }
 
 bool KisPaintDevice::read(QIODevice *stream, int frame)
 {
-    bool retval = m_d->dataManager(frame)->read(stream);
-    m_d->cache(frame)->invalidate();
+    bool retval;
+
+    // FIXME: SANITY_CHECK
+
+    if (frame < 0) {
+        retval = m_d->dataManager()->read(stream);
+        m_d->cache()->invalidate();
+    } else {
+        retval = m_d->dataManager(frame)->read(stream);
+        m_d->cache(frame)->invalidate();
+    }
+
     return retval;
 }
 

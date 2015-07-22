@@ -109,15 +109,12 @@ public:
     /**
      * Write the pixels of this paint device into the specified file store.
      */
-    virtual bool write(KisPaintDeviceWriter &store);
+    bool write(KisPaintDeviceWriter &store, int frame=-1);
 
     /**
      * Fill this paint device with the pixels from the specified file store.
      */
-    virtual bool read(QIODevice *stream);
-
-    bool write(KisPaintDeviceWriter &store, int frame);
-    bool read(QIODevice *stream, int frame);
+    bool read(QIODevice *stream, int frame=-1);
 
 public:
 
@@ -140,22 +137,22 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    void move(qint32 x, qint32 y);
+    void move(qint32 x, qint32 y, int frameId=-1);
 
     /**
      * Convenience method for the above. Can be overridden in subclasses.
      */
-    virtual void move(const QPoint& pt);
+    virtual void move(const QPoint& pt, int frameId=-1);
 
     /**
      * The X offset of the paint device
      */
-    qint32 x() const;
+    qint32 x(int frameId=-1) const;
 
     /**
      * The Y offset of the paint device
      */
-    qint32 y() const;
+    qint32 y(int frameId=-1) const;
 
     /**
      * set the X offset of the paint device
@@ -258,13 +255,16 @@ public:
     /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
+     * If frame ID is given, set default pixel for that frame. Otherwise use active frame.
      */
-    void setDefaultPixel(const quint8 *defPixel);
+    void setDefaultPixel(const quint8 *defPixel, int frameId=-1);
 
     /**
      * Get a pointer to the default pixel.
+     * If the frame parameter is given, get the default pixel of
+     * specified frame. Otherwise use currently active frame.
      */
-    const quint8 *defaultPixel() const;
+    const quint8 *defaultPixel(int frameId=-1) const;
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to

@@ -39,7 +39,7 @@ class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
     Q_OBJECT
 public:
 
-    explicit KisTextureOption(QObject *parent = 0);
+    explicit KisTextureOption();
     virtual ~KisTextureOption();
 
 public Q_SLOTS:
@@ -60,9 +60,7 @@ private:
 class PAINTOP_EXPORT KisTextureProperties
 {
 public:
-    KisTextureProperties()
-        : pattern(0)
-    {}
+    KisTextureProperties(int levelOfDetail);
 
     enum TexturingMode {
         MULTIPLY,
@@ -81,7 +79,7 @@ public:
 
 private:
 
-    qreal scale;
+    qreal m_scale;
     int offsetX;
     int offsetY;
     TexturingMode texturingMode;
@@ -90,6 +88,8 @@ private:
     int cutoffLeft;
     int cutoffRight;
     int cutoffPolicy;
+
+    int m_levelOfDetail;
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;

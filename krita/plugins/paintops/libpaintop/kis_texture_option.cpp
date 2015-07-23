@@ -49,6 +49,8 @@
 #include <kis_gradient_slider.h>
 #include "kis_embedded_pattern_manager.h"
 #include "kis_algebra_2d.h"
+#include "kis_lod_transform.h"
+
 
 #include <time.h>
 
@@ -134,7 +136,7 @@ public:
     QCheckBox *chkInvert;
 };
 
-KisTextureOption::KisTextureOption(QObject *)
+KisTextureOption::KisTextureOption()
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
 {
     setObjectName("KisTextureOption");
@@ -260,6 +262,12 @@ void KisTextureOption::resetGUI(KoResource* res)
     m_optionWidget->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
 }
 
+KisTextureProperties::KisTextureProperties(int levelOfDetail)
+    : pattern(0),
+      m_levelOfDetail(levelOfDetail)
+{
+}
+
 void KisTextureProperties::recalculateMask()
 {
     if (!pattern) return;
@@ -268,11 +276,13 @@ void KisTextureProperties::recalculateMask()
 
     QImage mask = pattern->pattern();
 
-    if (mask.format() != QImage::Format_RGB32 ||
-            mask.format() != QImage::Format_ARGB32) {
+    if ((mask.format() != QImage::Format_RGB32) |
+        (mask.format() != QImage::Format_ARGB32)) {
 
         mask = mask.convertToFormat(QImage::Format_ARGB32);
     }
+
+    qreal scale = m_scale * KisLodTransform::lodToScale(m_levelOfDetail);
 
     if (!qFuzzyCompare(scale, 0.0)) {
         QTransform tf;
@@ -343,7 +353,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     }
 
     enabled = setting->getBool("Texture/Pattern/Enabled", false);
-    scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
+    m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
     offsetX = setting->getInt("Texture/Pattern/OffsetX");
     offsetY = setting->getInt("Texture/Pattern/OffsetY");
     texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);

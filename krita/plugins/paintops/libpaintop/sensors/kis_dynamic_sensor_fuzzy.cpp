@@ -31,24 +31,7 @@ KisDynamicSensorFuzzy::KisDynamicSensorFuzzy()
 {
 }
 
-QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidget *ss)
-{
-    QWidget *w = new QWidget(parent);
-
-    QCheckBox *rotationModeEnabled = new QCheckBox(i18n("Positive and\nNegative\nRotation"), w);
-
-    connect(rotationModeEnabled, SIGNAL(stateChanged(int)), SLOT(setRotationModeEnabled(int)));
-    connect(rotationModeEnabled, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
-
-    rotationModeEnabled->setChecked(m_rotationModeEnabled);
-
-    QVBoxLayout* l = new QVBoxLayout(w);
-    l->addWidget(rotationModeEnabled);
-
-    w->setLayout(l);
-    return w;
-}
-bool KisDynamicSensorFuzzy::rotationModeEnabled() const
+bool KisDynamicSensorFuzzy::isAdditive() const
 {
     return m_rotationModeEnabled;
 }
@@ -60,10 +43,14 @@ void KisDynamicSensorFuzzy::setRotationModeEnabled(int state)
 
 qreal KisDynamicSensorFuzzy::value(const KisPaintInformation &info) {
 
-    qreal result = 1.0;
+    qreal result = !m_rotationModeEnabled ? 1.0 : 0.0;
 
     if (!info.isHoveringMode()) {
         result = info.randomSource()->generateNormalized();
+
+        if (m_rotationModeEnabled) {
+            result = 2.0 * result - 1.0;
+        }
     }
 
     return result;

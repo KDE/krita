@@ -19,6 +19,8 @@
 #include "kis_dynamic_sensor.h"
 #include <QDomElement>
 
+#include "kis_algebra_2d.h"
+
 #include "sensors/kis_dynamic_sensors.h"
 #include "sensors/kis_dynamic_sensor_distance.h"
 #include "sensors/kis_dynamic_sensor_drawing_angle.h"
@@ -402,8 +404,9 @@ qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
 {
     qreal val = value(info);
     if (m_customCurve) {
-        int offset = qRound(256.0 * val);
-        return m_curve.floatTransfer(257)[qBound(0, offset, 256)];
+        int offset = qRound(256.0 * qAbs(val));
+        qreal newValue =  m_curve.floatTransfer(257)[qBound(0, offset, 256)];
+        return KisAlgebra2D::copysign(newValue, val);
     }
     else {
         return val;
@@ -434,6 +437,11 @@ bool KisDynamicSensor::hasCustomCurve() const
 bool KisDynamicSensor::dependsOnCanvasRotation() const
 {
     return true;
+}
+
+bool KisDynamicSensor::isAdditive() const
+{
+    return false;
 }
 
 void KisDynamicSensor::setActive(bool active)

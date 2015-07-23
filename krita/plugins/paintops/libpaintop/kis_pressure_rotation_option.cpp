@@ -31,7 +31,6 @@ KisPressureRotationOption::KisPressureRotationOption()
           m_canvasAxisXMirrored(false),
           m_canvasAxisYMirrored(false)
 {
-
 }
 
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const
@@ -53,23 +52,7 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
         1.0 - computeValue(info) :
         0.5 + computeValue(info);
 
-    /* Special Case for Fuzzy Sensor to provide for Positive and Negative Rotation */
-    KisDynamicSensorFuzzy *s = dynamic_cast<KisDynamicSensorFuzzy*>(sensor(FUZZY, true).data());
-    if (s && s->isActive()) {
-        if (s->rotationModeEnabled()) {
-            return rand()%2 == 0?fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI):
-                                 ((2.0*M_PI)-fmod(rotationCoeff * 2.0 * M_PI + baseAngle, -2.0 * M_PI));
-
-        }
-        else {
-            return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
-        }
-    }
-    else { //If Fuzzy is not selected at all
-        return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
-    }
-
-
+    return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
  }
 
 void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -79,6 +62,11 @@ void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurati
 
     m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
     m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
+
+    KisDynamicSensorFuzzy *s = dynamic_cast<KisDynamicSensorFuzzy*>(sensor(FUZZY, true).data());
+    if (s) {
+        s->setRotationModeEnabled(true);
+    }
 }
 
 void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)

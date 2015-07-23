@@ -326,12 +326,29 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
     }
     else {
         qreal t = 1.0;
+
+        QVector<KisDynamicSensorSP> additiveSensors;
+
         foreach (KisDynamicSensorSP s, m_sensorMap.values()) {
-            ////qDebug() << "\tTesting" << s->name() << s->isActive();
             if (s->isActive()) {
-                t *= s->parameter(info);
+                if (!s->isAdditive()) {
+                    t *= s->parameter(info);
+                } else {
+                    // additive sensors should be
+                    // processed in the end
+                    additiveSensors.append(s);
+                }
             }
         }
+
+        // add up addivite sensors to the result
+        foreach (KisDynamicSensorSP s, additiveSensors) {
+            qreal t0 = t;
+            qreal v = s->parameter(info);
+
+            t = fmod(t + v, 1.0);
+        }
+
         if (m_separateCurveValue) {
             return t;
         }

@@ -174,6 +174,8 @@ public:
 
     virtual bool dependsOnCanvasRotation() const;
 
+    virtual bool isAdditive() const;
+
     inline DynamicSensorType sensorType() const { return m_type; }
 
 

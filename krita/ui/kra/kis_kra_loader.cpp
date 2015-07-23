@@ -117,6 +117,7 @@ public:
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     QList<KisPaintingAssistant*> assistants;
+    QMap<KisNode*, QString> keyframeFilenames;
     QStringList errorMessages;
 };
 
@@ -385,6 +386,61 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     loadAssistants(store, uri, external);
 }
 
+void KisKraLoader::loadKeyframes(KoStore *store, const QString uri, bool external)
+{
+    QMap<KisNode*, QString>::iterator it;
+
+    for (it = m_d->keyframeFilenames.begin(); it != m_d->keyframeFilenames.end(); it++) {
+        KisNodeSP node = it.key();
+        QString filename = it.value();
+
+        QString location =
+                (external ? QString() : uri)
+                + m_d->imageName + LAYER_PATH + filename;
+
+        loadNodeKeyframes(store, location, node);
+    }
+}
+
+void KisKraLoader::loadNodeKeyframes(KoStore *store, const QString &location, KisNodeSP node)
+{
+    if (!store->open(location)) {
+        m_d->errorMessages << i18n("Could not load keyframes from %1.", location);
+        return;
+    }
+
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    KoXmlDocument doc = KoXmlDocument(true);
+
+    bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
+    store->close();
+
+    if (!ok) {
+        m_d->errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, errorLine, errorColumn, i18n(errorMsg.toUtf8()));
+        return;
+    }
+
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, doc.documentElement());
+    QDomElement root = dom.firstChildElement();
+
+    for (QDomElement child = root.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+        if (child.nodeName().toUpper() == "CHANNEL") {
+            QString id = child.attribute("name");
+            KisKeyframeChannel *channel = node->getKeyframeChannel(id);
+
+            if (!channel) {
+                m_d->errorMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);
+                continue;
+            }
+
+            channel->loadXML(child);
+        }
+    }
+}
+
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
@@ -607,23 +663,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         m_d->selectedNodes.append(node);
     }
 
-    QDomDocument qDom;
-    KoXml::asQDomElement(qDom, element);
-    QDomElement qElement = qDom.firstChildElement();
-
-    for (QDomElement child = qElement.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-        if (child.nodeName().toUpper() == "KEYFRAMES") {
-            for (QDomElement channelElement = child.firstChildElement(); !channelElement.isNull(); channelElement = channelElement.nextSiblingElement()) {
-                if (channelElement.nodeName().toUpper() != "CHANNEL") continue;
-
-                QString id = channelElement.attribute("name");
-                KisKeyframeChannel *channel = node->getKeyframeChannel(id);
-                if (!channel) continue;
-
-                channel->loadXML(channelElement);
-            }
-            break;
-        }
+    if (element.hasAttribute(KEYFRAME_FILE)) {
+        m_d->keyframeFilenames.insert(node.data(), element.attribute(KEYFRAME_FILE));
     }
 
     return node;

@@ -54,6 +54,8 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
+    void loadKeyframes(KoStore *store, const QString uri, bool external);
+
     vKisNodeSP selectedNodes() const;
 
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here
@@ -92,6 +94,8 @@ private:
     KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem, KisNodeSP parent);
 
     KisNodeSP loadFileLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, quint32 opacity);
+
+    void loadNodeKeyframes(KoStore *store, const QString &location, KisNodeSP node);
 
     void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 

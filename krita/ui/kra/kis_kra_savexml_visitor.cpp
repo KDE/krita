@@ -164,6 +164,12 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
         m_nodeFileNames[i.key()] = i.value();
     }
 
+    i = QMapIterator<const KisNode*, QString>(visitor.keyframeFileNames());
+    while (i.hasNext()) {
+        i.next();
+        m_keyframeFileNames[i.key()] = i.value();
+    }
+
     return success;
 }
 
@@ -343,19 +349,24 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
         }
     }
 
-
-    QDomElement keyframesElement = m_doc.createElement("keyframes");
-    el.appendChild(keyframesElement);
-
+    bool saveKeyframes = false;
     QList<KisKeyframeChannel*> keyframeChannels = layer->keyframeChannels();
     foreach (KisKeyframeChannel *channel, keyframeChannels) {
-        if (channel->keyframes().count() == 0) continue;
+        if (channel->keyframeCount() > 0) {
+            if (channel->inherits("KisRasterKeyframeChannel") && channel->keyframeCount() <= 1) continue;
 
-        QDomElement channelElement = channel->toXML(m_doc, filename);
-        keyframesElement.appendChild(channelElement);
+            saveKeyframes = true;
+            break;
+        }
     }
 
-    m_nodeFileNames[layer] = LAYER + QString::number(m_count);
+    if (saveKeyframes) {
+        QString keyframeFile = filename + ".keyframes.xml";
+        m_keyframeFileNames[layer] = keyframeFile;
+        el.setAttribute(KEYFRAME_FILE, keyframeFile);
+    }
+
+    m_nodeFileNames[layer] = filename;
 
     dbgFile << "Saved layer "
             << layer->name()
@@ -404,6 +415,12 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         while (i.hasNext()) {
             i.next();
             m_nodeFileNames[i.key()] = i.value();
+        }
+
+        i = QMapIterator<const KisNode*, QString>(visitor.keyframeFileNames());
+        while (i.hasNext()) {
+            i.next();
+            m_keyframeFileNames[i.key()] = i.value();
         }
 
         return success;

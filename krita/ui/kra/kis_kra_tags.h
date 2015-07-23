@@ -105,6 +105,7 @@ const QString Y_TRANSLATION = "y_translation";
 const QString ACTIVE = "active";
 const QString LAYER_STYLE_UUID = "layerstyle";
 const QString PASS_THROUGH_MODE = "passthrough";
+const QString KEYFRAME_FILE = "keyframes";
 }
 
 

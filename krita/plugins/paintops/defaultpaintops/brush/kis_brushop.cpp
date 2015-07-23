@@ -129,7 +129,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
     m_opacityOption.setFlow(m_flowOption.apply(info));
     m_opacityOption.apply(painter(), info);
-    m_colorSource->selectColor(m_mixOption.apply(info));
+    m_colorSource->selectColor(m_mixOption.apply(info), info);
     m_darkenOption.apply(m_colorSource, info);
 
     if (m_hsvTransformation) {

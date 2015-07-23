@@ -113,6 +113,11 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     saveLayer(element, PAINT_LAYER, layer);
     element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
+
+    if (layer->getKeyframeChannel(KisKeyframeChannel::Content.id())->keyframeCount() > 1) {
+        element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
+    }
+
     return element;
 }
 

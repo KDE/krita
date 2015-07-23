@@ -28,12 +28,6 @@
 #include <KoColor.h>
 
 #include <QtGlobal>
-#ifdef Q_OS_WIN
-// quoting DRAND48(3) man-page:
-// These functions are declared obsolete by  SVID  3,
-// which  states  that rand(3) should be used instead.
-#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
-#endif
 
 
 KisPressureScatterOption::KisPressureScatterOption()
@@ -103,11 +97,11 @@ QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal w
     qreal diameter = qMax(width, height);
     qreal sensorValue = computeValue(info);
 
-    qreal jitter = (2.0 * drand48() - 1.0) * diameter * sensorValue;
+    qreal jitter = (2.0 * info.randomSource()->generateNormalized() - 1.0) * diameter * sensorValue;
     QPointF result(0.0, 0.0);
 
     if (m_axisX && m_axisY) {
-        qreal jitterY = (2.0 * drand48() - 1.0) * diameter * sensorValue;
+        qreal jitterY = (2.0 * info.randomSource()->generateNormalized() - 1.0) * diameter * sensorValue;
         result = QPointF(jitter, jitterY);
         return info.pos() + result;
     }

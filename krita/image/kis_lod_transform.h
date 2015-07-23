@@ -24,19 +24,18 @@
 
 class KisLodTransform {
 public:
-    KisLodTransform(qreal lodScale) {
-        m_transform = QTransform::fromScale(lodScale, lodScale);
-    }
-
     KisLodTransform(int levelOfDetail) {
         qreal scale = lodToScale(levelOfDetail);
         m_transform = QTransform::fromScale(scale, scale);
+        m_levelOfDetail = levelOfDetail;
     }
 
     template <class PaintDeviceTypeSP>
     KisLodTransform(PaintDeviceTypeSP device) {
-        qreal scale = lodToScale(device->defaultBounds()->currentLevelOfDetail());
+        int levelOfDetail = device->defaultBounds()->currentLevelOfDetail();
+        qreal scale = lodToScale(levelOfDetail);
         m_transform = QTransform::fromScale(scale, scale);
+        m_levelOfDetail = levelOfDetail;
     }
 
     static qreal lodToScale(int levelOfDetail) {
@@ -63,6 +62,7 @@ public:
     KisPaintInformation map(KisPaintInformation pi) const {
         QPointF pos = pi.pos();
         pi.setPos(m_transform.map(pos));
+        pi.setLevelOfDetail(m_levelOfDetail);
         return pi;
     }
 
@@ -167,6 +167,7 @@ private:
 
 private:
     QTransform m_transform;
+    int m_levelOfDetail;
 };
 
 #endif /* __KIS_LOD_TRANSFORM_H */

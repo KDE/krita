@@ -187,13 +187,12 @@ public:
     // random source for generating in-stroke effects
     KisRandomSourceSP randomSource() const;
 
-    // creates a non-shared copy of a rendom source, keeping the seed
-    // the same
-    void forkForLod(int levelOfDetail) const;
+    // the stroke should initialize random source of all the used
+    // paint info objects, otherwise it shows a warning
+    void setRandomSource(KisRandomSourceSP value);
 
-    // fetch the random source from \rhs and make it shared among the
-    // two objects
-    void shareRandomSourceFrom(const KisPaintInformation &rhs) const;
+    // set level of detail which info object has been generated for
+    void setLevelOfDetail(int levelOfDetail) const;
 
     /**
      * The paint information may be generated not only during real

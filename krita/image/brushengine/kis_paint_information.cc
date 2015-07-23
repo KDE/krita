@@ -50,7 +50,7 @@ struct KisPaintInformation::Private {
         time(time_),
         speed(speed_),
         isHoveringMode(isHoveringMode_),
-        randomSource(new KisRandomSource()),
+        randomSource(0),
         currentDistanceInfo(0),
         levelOfDetail(0)
     {
@@ -377,18 +377,22 @@ qreal KisPaintInformation::currentTime() const
 
 KisRandomSourceSP KisPaintInformation::randomSource() const
 {
+    if (!d->randomSource) {
+        qWarning() << "WARNING: accessing a paint info object without a random source!";
+        d->randomSource = new KisRandomSource();
+    }
+
     return d->randomSource;
 }
 
-void KisPaintInformation::forkForLod(int levelOfDetail) const
+void KisPaintInformation::setRandomSource(KisRandomSourceSP value)
 {
-    d->randomSource = new KisRandomSource(*d->randomSource);
-    d->levelOfDetail = levelOfDetail;
+    d->randomSource = value;
 }
 
-void KisPaintInformation::shareRandomSourceFrom(const KisPaintInformation &rhs) const
+void KisPaintInformation::setLevelOfDetail(int levelOfDetail) const
 {
-    d->randomSource = rhs.d->randomSource;
+    d->levelOfDetail = levelOfDetail;
 }
 
 QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
@@ -424,8 +428,7 @@ KisPaintInformation KisPaintInformation::mixOnlyPosition(qreal t, const KisPaint
                                basePi.currentTime(),
                                basePi.drawingSpeed());
 
-    result.shareRandomSourceFrom(basePi);
-
+    result.setRandomSource(basePi.randomSource());
     return result;
 }
 
@@ -460,7 +463,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
     result.d->levelOfDetail = pi1.d->levelOfDetail;
-    result.shareRandomSourceFrom(pi1);
+    result.setRandomSource(pi1.randomSource());
 
     return result;
 }

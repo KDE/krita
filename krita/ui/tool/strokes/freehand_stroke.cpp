@@ -25,8 +25,12 @@
 
 #include "kis_update_time_monitor.h"
 
+#include "kis_stroke_random_source.h"
+
+
 struct FreehandStrokeStrategy::Private
 {
+    KisStrokeRandomSource randomSource;
 };
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -57,6 +61,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs
     : KisPainterBasedStrokeStrategy(rhs, levelOfDetail),
       m_d(new Private(*rhs.m_d))
 {
+    m_d->randomSource.setLevelOfDetail(levelOfDetail);
 }
 
 FreehandStrokeStrategy::~FreehandStrokeStrategy()
@@ -81,15 +86,21 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     PainterInfo *info = painterInfos()[d->painterInfoId];
 
     KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
+    KisRandomSourceSP rnd = m_d->randomSource.source();
 
     switch(d->type) {
     case Data::POINT:
+        d->pi1.setRandomSource(rnd);
         info->painter->paintAt(d->pi1, info->dragDistance);
         break;
     case Data::LINE:
+        d->pi1.setRandomSource(rnd);
+        d->pi2.setRandomSource(rnd);
         info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
         break;
     case Data::CURVE:
+        d->pi1.setRandomSource(rnd);
+        d->pi2.setRandomSource(rnd);
         info->painter->paintBezierCurve(d->pi1,
                                         d->control1,
                                         d->control2,

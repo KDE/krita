@@ -67,6 +67,9 @@
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
+#include "kis_dom_utils.h"
+#include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
 
 /*
 
@@ -272,6 +275,10 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                     image->setDefaultProjectionColor(color);
                 }
             }
+
+            if (e.tagName().toLower() == "animation") {
+                loadAnimationMetadata(e, image);
+            }
         }
 
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
@@ -474,6 +481,31 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             m_d->assistants.append(assistant);
         }
         loadedAssistant++;
+    }
+}
+
+void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageWSP image)
+{
+    QDomDocument qDom;
+    KoXml::asQDomElement(qDom, element);
+    QDomElement qElement = qDom.firstChildElement();
+
+    float framerate;
+    KisTimeRange range;
+    int currentTime;
+
+    KisImageAnimationInterface *animation = image->animationInterface();
+
+    if (KisDomUtils::loadValue(qElement, "framerate", &framerate)) {
+        animation->setFramerate(framerate);
+    }
+
+    if (KisDomUtils::loadValue(qElement, "range", &range)) {
+        animation->setRange(range);
+    }
+
+    if (KisDomUtils::loadValue(qElement, "currentTime", &currentTime)) {
+        animation->switchCurrentTimeAsync(currentTime);
     }
 }
 

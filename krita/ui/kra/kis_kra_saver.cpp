@@ -37,6 +37,7 @@
 
 #include <kis_annotation.h>
 #include <kis_image.h>
+#include <kis_image_animation_interface.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
@@ -48,6 +49,7 @@
 
 #include "KisDocument.h"
 #include <string>
+#include "kis_dom_utils.h"
 
 
 using namespace KRA;
@@ -109,6 +111,13 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     saveBackgroundColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
+
+    QDomElement animationElement = doc.createElement("animation");
+    KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
+    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->currentRange());
+    KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
+    imageElement.appendChild(animationElement);
+
     return imageElement;
 }
 

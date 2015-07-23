@@ -29,6 +29,8 @@
 #include "kis_debug.h"
 
 
+class KisTimeRange;
+
 
 namespace KisDomUtils {
 
@@ -104,6 +106,7 @@ void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const 
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QPointF &pt);
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QVector3D &pt);
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QTransform &t);
+void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range);
 
 /**
  * Save a value of a scalar type into an XML tree. A child for \p parent
@@ -171,6 +174,7 @@ bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QPoint *pt);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QPointF *pt);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QVector3D *pt);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QTransform *t);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, KisTimeRange *range);
 
 namespace Private {
     bool KRITAIMAGE_EXPORT checkType(const QDomElement &e, const QString &expectedType);

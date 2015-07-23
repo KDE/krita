@@ -69,6 +69,8 @@ private:
     // this needs to be private, for neatness sake
     void loadAssistants(KoStore* store, const QString & uri, bool external);
 
+    void loadAnimationMetadata(const KoXmlElement& element, KisImageWSP image);
+
     KisNodeSP loadNodes(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent);
 
     KisNodeSP loadNode(const KoXmlElement& elem, KisImageWSP image, KisNodeSP parent);

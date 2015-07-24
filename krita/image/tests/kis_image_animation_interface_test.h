@@ -20,6 +20,10 @@
 #define __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
 
 #include <QtTest/QtTest>
+#include <QImage>
+
+#include "kis_types.h"
+#include "kis_image.h"
 
 class KisImageAnimationInterfaceTest : public QObject
 {
@@ -27,6 +31,14 @@ class KisImageAnimationInterfaceTest : public QObject
 private slots:
     void testFrameRegeneration();
     void testFramesChangedSignal();
+
+    void testAnimationCompositionBug();
+
+    void slotFrameDone();
+
+private:
+    KisImageSP m_image;
+    QImage m_compositedFrame;
 };
 
 #endif /* __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H */

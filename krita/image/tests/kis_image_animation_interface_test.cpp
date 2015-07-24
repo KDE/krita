@@ -180,4 +180,36 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
 
 }
 
+void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
+{
+    QRect rect(QRect(0,0,512,512));
+    TestUtil::MaskParent p(rect);
+
+    KisPaintLayerSP layer1 = p.layer;
+    KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
+    p.image->addNode(layer2);
+
+    layer1->paintDevice()->fill(rect, KoColor(Qt::red, layer1->paintDevice()->colorSpace()));
+    layer2->paintDevice()->fill(QRect(128,128,128,128), KoColor(Qt::black, layer2->paintDevice()->colorSpace()));
+    layer2->addNewFrame(10, true);
+    p.image->refreshGraph();
+
+    m_image = p.image;
+    connect(p.image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameDone()), Qt::DirectConnection);
+    p.image->animationInterface()->requestFrameRegeneration(5, rect);
+    QTest::qWait(200);
+
+    KisPaintDeviceSP tmpDevice = new KisPaintDevice(p.image->colorSpace());
+    tmpDevice->fill(rect, KoColor(Qt::red, tmpDevice->colorSpace()));
+    tmpDevice->fill(QRect(128,128,128,128), KoColor(Qt::black, tmpDevice->colorSpace()));
+    QImage expected = tmpDevice->createThumbnail(512, 512);
+
+    QVERIFY(m_compositedFrame == expected);
+}
+
+void KisImageAnimationInterfaceTest::slotFrameDone()
+{
+    m_compositedFrame = m_image->projection()->createThumbnail(512, 512);
+}
+
 QTEST_KDEMAIN(KisImageAnimationInterfaceTest, GUI)

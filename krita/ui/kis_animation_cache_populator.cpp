@@ -38,18 +38,29 @@ struct KisAnimationCachePopulator::Private
      * Counts up the number of subsequent times Krita has been detected idle.
      */
     int idleCounter;
-    static const int IDLE_COUNT_THRESHOLD = 5;
+    static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
     static const int GENERATION_TIMEOUT = 1000;
+    static const int GENERATION_CHECK_INTERVAL = 10;
 
     KisImageWSP requestImage;
     int requestedFrame;
 
+    enum State {
+        WaitingForIdle,
+        WaitingForFrame,
+        BetweenFrames
+    };
+    State state;
+
     Private(KisAnimationCachePopulator *q)
         : q(q),
           idleCounter(0),
-          requestedFrame(-1)
-    {}
+          requestedFrame(-1),
+          state(WaitingForIdle)
+    {
+        timer.setInterval(IDLE_CHECK_INTERVAL);
+    }
 
     bool checkIdle()
     {
@@ -68,40 +79,34 @@ struct KisAnimationCachePopulator::Private
         return true;
     }
 
+    void frameReceived()
+    {
+        disconnectImage();
+        enterState(BetweenFrames);
+    }
+
     void generateIfIdle()
     {
-        bool waitingForIdle = idleCounter < IDLE_COUNT_THRESHOLD;
-        bool idle;
-
-        if (requestImage) {
+        if (state == WaitingForFrame) {
+            // Request timed out
             disconnectImage();
+            enterState(WaitingForIdle);
         }
 
-        if (waitingForIdle) {
-            if (checkIdle()) {
-                idleCounter++;
-            } else {
-                idleCounter = 0;
-            }
-
-            idle = (idleCounter >= IDLE_COUNT_THRESHOLD);
+        if (checkIdle()) {
+            idleCounter++;
         } else {
-            idle = checkIdle();
+            enterState(WaitingForIdle);
         }
 
-        if (idle) {
+        if (idleCounter >= IDLE_COUNT_THRESHOLD) {
             bool requested = tryRequestGeneration();
             if (requested) {
-                timer.setInterval(GENERATION_TIMEOUT);
-                timer.start();
+                enterState(WaitingForFrame);
                 return;
+            } else {
+                enterState(WaitingForIdle);
             }
-        }
-
-        if (!waitingForIdle) {
-            idleCounter = 0;
-            timer.setInterval(IDLE_CHECK_INTERVAL);
-            timer.start();
         }
     }
 
@@ -168,6 +173,26 @@ struct KisAnimationCachePopulator::Private
         }
         requestImage = 0;
     }
+
+    void enterState(State newState)
+    {
+        state = newState;
+
+        switch (state) {
+        case WaitingForFrame:
+            timer.setInterval(GENERATION_TIMEOUT);
+            break;
+        case BetweenFrames:
+            timer.setInterval(GENERATION_CHECK_INTERVAL);
+            break;
+        default:
+            timer.setInterval(IDLE_CHECK_INTERVAL);
+            break;
+        }
+
+        idleCounter = 0;
+        timer.start();
+    }
 };
 
 KisAnimationCachePopulator::KisAnimationCachePopulator()
@@ -181,7 +206,6 @@ KisAnimationCachePopulator::~KisAnimationCachePopulator()
 
 void KisAnimationCachePopulator::slotStart()
 {
-    m_d->timer.setInterval(500);
     m_d->timer.start();
 }
 
@@ -193,7 +217,7 @@ void KisAnimationCachePopulator::slotTimer()
 void KisAnimationCachePopulator::slotFrameReady(int frame)
 {
     if (frame == m_d->requestedFrame) {
-        m_d->generateIfIdle();
+        m_d->frameReceived();
     }
 }
 

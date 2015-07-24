@@ -176,6 +176,8 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolLine::updateStroke()
 {
+    if (!m_strokeIsRunning) return;
+
     m_helper->repaintLine(canvas()->resourceManager(),
                           image(),
                           currentNode(),

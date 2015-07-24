@@ -95,6 +95,11 @@ void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shap
    configGroup = KGlobal::config()->group(toolId());
 }
 
+void KisToolLine::deactivate()
+{
+    cancelStroke();
+}
+
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();

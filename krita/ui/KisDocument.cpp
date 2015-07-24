@@ -1056,6 +1056,8 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
     KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
     f.close();
 
+    if (!mime) return mimeType;
+
     return mime->name();
 }
 

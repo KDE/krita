@@ -155,12 +155,11 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     QMutexLocker locker(&m_d->mutex);
 
-    bool useLodN = m_d->canUseLodN();
-
     KisStrokeSP stroke;
     KisStrokeStrategy* lodBuddyStrategy;
 
-    if (useLodN && m_d->desiredLevelOfDetail &&
+    if (m_d->desiredLevelOfDetail &&
+        m_d->canUseLodN() &&
         (lodBuddyStrategy =
          strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
 

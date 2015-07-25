@@ -34,6 +34,9 @@
 #include "kis_simple_update_queue.h"
 #include "scheduler_utils.h"
 
+#include "lod_override.h"
+
+
 
 void KisSimpleUpdateQueueTest::testJobProcessing()
 {
@@ -72,7 +75,7 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     queue.addUpdateJob(paintLayer, dirtyRect4, imageRect);
 
     {
-        TestingLodSetter setter(image, 1);
+        TestUtil::LodOverride l(1, image);
         queue.addUpdateJob(paintLayer, dirtyRect5, imageRect);
     }
 
@@ -171,7 +174,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
     KisWalkersList& walkersList = queue.getWalkersList();
 
     {
-        TestingLodSetter setter(image, 1);
+        TestUtil::LodOverride l(1, image);
         queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect);
         QCOMPARE(walkersList[0]->checksumValid(), true);
         QCOMPARE(walkersList[0]->levelOfDetail(), 1);
@@ -180,7 +183,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
     adjustmentLayer->setFilter(configuration);
 
     {
-        TestingLodSetter setter(image, 1);
+        TestUtil::LodOverride l(1, image);
         QCOMPARE(walkersList[0]->checksumValid(), false);
     }
 
@@ -189,14 +192,14 @@ void KisSimpleUpdateQueueTest::testChecksum()
     KisTestableUpdaterContext context(2);
 
     {
-        TestingLodSetter setter(image, 1);
+        TestUtil::LodOverride l(1, image);
         queue.processQueue(context);
     }
 
     jobs = context.getJobs();
 
     {
-        TestingLodSetter setter(image, 1);
+        TestUtil::LodOverride l(1, image);
         QCOMPARE(jobs[0]->walker()->checksumValid(), true);
     }
 }

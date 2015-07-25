@@ -181,6 +181,14 @@ private:
 
 struct KisPaintDevice::Private
 {
+    /**
+     * Used when the paint device is loading to ensure no lod/animation
+     * interferes the process.
+     */
+    static const KisDefaultBoundsSP transitionalDefaultBounds;
+
+public:
+
     class KisPaintDeviceStrategy;
     class KisPaintDeviceWrappedStrategy;
 
@@ -317,7 +325,6 @@ private:
 
     inline Data* currentNonLodData() const {
         Data *data = m_data;
-        if (!defaultBounds) return data;
 
         if (contentChannel && contentChannel->keyframeCount() > 1) {
             int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
@@ -347,8 +354,6 @@ private:
 
     inline Data* currentData() const {
         Data *data = m_data;
-
-        if (!defaultBounds) return data;
 
         if (defaultBounds->currentLevelOfDetail()) {
             if (!m_lodData) {
@@ -401,6 +406,8 @@ private:
     QHash<int, Data*> frames;
     int nextFreeFrameId;
 };
+
+const KisDefaultBoundsSP KisPaintDevice::Private::transitionalDefaultBounds = new KisDefaultBounds();
 
 #include "kis_paint_device_strategies.h"
 
@@ -645,8 +652,13 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     Q_ASSERT(colorSpace);
     setObjectName(name);
 
+    // temporary def. bounds object for the initialization phase only
+    m_d->defaultBounds = m_d->transitionalDefaultBounds;
+
     if (!defaultBounds) {
-        defaultBounds = new KisDefaultBounds();
+        // Reuse transitionalDefaultBounds here. Change if you change
+        // semantics of transitionalDefaultBounds
+        defaultBounds = m_d->transitionalDefaultBounds;
     }
 
     m_d->setColorSpace(colorSpace);
@@ -676,6 +688,9 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     , m_d(new Private(this))
 {
     if (this != &rhs) {
+        // temporary def. bounds object for the initialization phase only
+        m_d->defaultBounds = m_d->transitionalDefaultBounds;
+
         m_d->setColorSpace(rhs.m_d->colorSpace());
         Q_ASSERT(m_d->colorSpace());
 

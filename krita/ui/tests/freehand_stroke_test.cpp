@@ -62,7 +62,7 @@ protected:
         Q_UNUSED(activeNode);
 
         if (m_useLod) {
-            image->testingSetLevelOfDetailsEnabled(true);
+            //image->testingSetLevelOfDetailsEnabled(true);
         }
     }
 

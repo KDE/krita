@@ -31,6 +31,9 @@
 
 #include "scheduler_utils.h"
 
+#include "lod_override.h"
+
+
 void KisUpdaterContextTest::testJobInterference()
 {
     KisTestableUpdaterContext context(3);
@@ -44,6 +47,7 @@ void KisUpdaterContextTest::testJobInterference()
 
     image->lock();
     image->addNode(paintLayer);
+    image->unlock();
 
     QRect dirtyRect1(0,0,50,100);
     KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
@@ -77,9 +81,9 @@ void KisUpdaterContextTest::testJobInterference()
 
     // not overlapping job, conflicting LOD --- forbidden
     {
-        image->setDesiredLevelOfDetail(1);
-        image->testingSetLevelOfDetailsEnabled(true);
-        QCOMPARE(image->currentLevelOfDetail(), 1);
+        TestUtil::LodOverride l(1, image);
+
+        QCOMPARE(paintLayer->paintDevice()->defaultBounds()->currentLevelOfDetail(), 1);
 
         QRect dirtyRect(60,0,100,100);
         KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
@@ -88,9 +92,6 @@ void KisUpdaterContextTest::testJobInterference()
         context.lock();
         QVERIFY(!context.isJobAllowed(walker));
         context.unlock();
-
-        image->setDesiredLevelOfDetail(0);
-        image->testingSetLevelOfDetailsEnabled(false);
     }
 }
 

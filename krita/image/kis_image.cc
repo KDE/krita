@@ -129,8 +129,6 @@ public:
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted;
-    int testingDesiredLevelOfDetail;
-    bool testingLevelOfDetailsEnabled;
 
     KisNameServer *nserver;
 
@@ -172,8 +170,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->perspectiveGrid = 0;
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
-    m_d->testingDesiredLevelOfDetail = 0;
-    m_d->testingLevelOfDetailsEnabled = false;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
     m_d->animationInterface = new KisImageAnimationInterface(this);
@@ -1702,9 +1698,6 @@ bool KisImage::wrapAroundModeActive() const
 
 void KisImage::setDesiredLevelOfDetail(int lod)
 {
-    // TODO: remove
-    m_d->testingDesiredLevelOfDetail = lod;
-
     if (m_d->scheduler) {
         m_d->scheduler->setDesiredLevelOfDetail(lod);
     }
@@ -1712,16 +1705,7 @@ void KisImage::setDesiredLevelOfDetail(int lod)
 
 int KisImage::currentLevelOfDetail() const
 {
-    if (m_d->testingLevelOfDetailsEnabled) {
-        return m_d->testingDesiredLevelOfDetail;
-    }
-
     return m_d->scheduler ? m_d->scheduler->currentLevelOfDetail() : 0;
-}
-
-void KisImage::testingSetLevelOfDetailsEnabled(bool value)
-{
-    m_d->testingLevelOfDetailsEnabled = value;
 }
 
 void KisImage::notifyNodeCollpasedChanged()

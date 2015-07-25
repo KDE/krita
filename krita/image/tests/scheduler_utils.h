@@ -218,25 +218,4 @@ inline int cancelSeqNo(KisStrokeJob *job) {
     return pointer->seqNo();
 }
 
-class TestingLodSetter
-{
-public:
-    TestingLodSetter(KisImageSP image, int lod)
-        : m_image(image),
-          m_lod(lod)
-    {
-        m_image->setDesiredLevelOfDetail(m_lod);
-        m_image->testingSetLevelOfDetailsEnabled(true);
-    }
-
-    ~TestingLodSetter() {
-        m_image->setDesiredLevelOfDetail(0);
-        m_image->testingSetLevelOfDetailsEnabled(false);
-    }
-
-private:
-    KisImageSP m_image;
-    int m_lod;
-};
-
 #endif /* __SCHEDULER_UTILS_H */

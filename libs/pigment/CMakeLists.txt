@@ -79,8 +79,8 @@ set(pigmentcms_SRCS
 )
 
 
-set(PIGMENT_INSTALL_FILES 
-        pigment_export.h
+set(PIGMENT_INSTALL_FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/pigment_export.h
         DebugPigment.h
         KoBasicHistogramProducers.h
         KoChannelInfo.h
@@ -125,6 +125,10 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 endif()
 
 add_library(pigmentcms SHARED ${pigmentcms_SRCS})
+generate_export_header(pigmentcms
+    BASE_NAME pigment
+    EXPORT_MACRO_NAME PIGMENTCMS_EXPORT
+)
 
 if (HAVE_VC)
     target_link_libraries(pigmentcms KF5::KDELibs4Support)

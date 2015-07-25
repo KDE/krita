@@ -31,7 +31,7 @@ set(TestKoColorSpaceAbstract_test_SRCS TestKoColorSpaceAbstract.cpp )
 
 kde4_add_unit_test(TestKoColorSpaceAbstract TESTNAME libs-pigment-TestKoColorSpaceAbstract  ${TestKoColorSpaceAbstract_test_SRCS})
 
-target_link_libraries(TestKoColorSpaceAbstract  pigmentcms Qt5::Test)
+target_link_libraries(TestKoColorSpaceAbstract  pigmentcms KF5::KDELibs4Support Qt5::Test)
 
 ########### next target ###############
 

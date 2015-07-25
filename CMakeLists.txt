@@ -800,6 +800,7 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${KOVERSION_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/pigment
+                   ${CMAKE_BINARY_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${Boost_INCLUDE_DIRS}

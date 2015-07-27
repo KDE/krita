@@ -33,7 +33,7 @@
 #include <QFile>
 #include <QDir>
 
-#include "fftw3.h"
+#include <fftw3.h>
 
 template<class _IteratorFactory_> class KisConvolutionWorkerFFT;
 class KisConvolutionWorkerFFTLock

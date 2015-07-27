@@ -53,7 +53,7 @@ struct KisStrokesQueue::Private {
     bool canUseLodN() const;
     StrokesQueueIterator findNewLod0Pos();
     StrokesQueueIterator findNewLodNPos(KisStrokeSP lodN);
-    bool shouldWrapInSuspendStroke() const;
+    bool shouldWrapInSuspendUpdatesStroke() const;
 
     void switchDesiredLevelOfDetail();
     bool hasUnfinishedStrokes() const;
@@ -101,7 +101,7 @@ bool KisStrokesQueue::Private::canUseLodN() const
     return true;
 }
 
-bool KisStrokesQueue::Private::shouldWrapInSuspendStroke() const
+bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
 {
     foreach (KisStrokeSP stroke, strokesQueue) {
         if (stroke->type() == KisStroke::RESUME) {
@@ -174,7 +174,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
         stroke->setLodBuddy(buddy);
         m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
 
-        if (m_d->shouldWrapInSuspendStroke()) {
+        if (m_d->shouldWrapInSuspendUpdatesStroke()) {
             KisStrokeStrategy *strategy;
 
             strategy = m_d->suspendUpdatesStrokeStrategyFactory();

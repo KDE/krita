@@ -152,28 +152,27 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     return jobAdded;
 }
 
-void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
+void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, rc, cropRect, KisBaseRectsWalker::UPDATE);
+    addJob(node, rc, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE);
 }
 
-void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
+void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, rc, cropRect, KisBaseRectsWalker::UPDATE_NO_FILTHY);
+    addJob(node, rc, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
 }
 
-void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
+void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, rc, cropRect, KisBaseRectsWalker::FULL_REFRESH);
+    addJob(node, rc, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
 }
 
 void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc,
                                   const QRect& cropRect,
+                                  int levelOfDetail,
                                   KisBaseRectsWalker::UpdateType type)
 {
-    int levelOfDetail = node->projection()->defaultBounds()->currentLevelOfDetail();
-
-    if(trySplitJob(node, rc, cropRect, type)) return;
+    if(trySplitJob(node, rc, cropRect, levelOfDetail, type)) return;
     if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) return;
 
     KisBaseRectsWalkerSP walker;
@@ -231,6 +230,7 @@ qint32 KisSimpleUpdateQueue::sizeMetric() const
 
 bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
                                        const QRect& cropRect,
+                                       int levelOfDetail,
                                        KisBaseRectsWalker::UpdateType type)
 {
     if(rc.width() <= m_patchWidth || rc.height() <= m_patchHeight)
@@ -249,7 +249,7 @@ bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
             QRect maxPatchRect(j * m_patchWidth, i * m_patchHeight,
                                m_patchWidth, m_patchHeight);
             QRect patchRect = rc & maxPatchRect;
-            addJob(node, patchRect, cropRect, type);
+            addJob(node, patchRect, cropRect, levelOfDetail, type);
         }
     }
     return true;

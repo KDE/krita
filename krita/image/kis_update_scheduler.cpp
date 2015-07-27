@@ -137,19 +137,19 @@ void KisUpdateScheduler::progressUpdate()
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addUpdateJob(node, rc, cropRect);
+    m_d->updatesQueue->addUpdateJob(node, rc, cropRect, currentLevelOfDetail());
     processQueues();
 }
 
 void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addUpdateNoFilthyJob(node, rc, cropRect);
+    m_d->updatesQueue->addUpdateNoFilthyJob(node, rc, cropRect, currentLevelOfDetail());
     processQueues();
 }
 
 void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addFullRefreshJob(root, rc, cropRect);
+    m_d->updatesQueue->addFullRefreshJob(root, rc, cropRect, currentLevelOfDetail());
     processQueues();
 }
 

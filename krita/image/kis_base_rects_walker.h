@@ -142,8 +142,17 @@ public:
 
         KisProjectionLeafSP startLeaf = m_startNode->projectionLeaf();
 
-        // FIXME: remove it and/or change to a warning!
-        Q_ASSERT(m_levelOfDetail == getNodeLevelOfDetail(startLeaf));
+        int calculatedLevelOfDetail = getNodeLevelOfDetail(startLeaf);
+
+        if (m_levelOfDetail != calculatedLevelOfDetail) {
+            qWarning() << "WARNING: KisBaseRectsWalker::recalculate()"
+                       << "The levelOfDetail has changes with time,"
+                       << "which couldn't have happened!"
+                       << ppVar(m_levelOfDetail)
+                       << ppVar(calculatedLevelOfDetail);
+
+            m_levelOfDetail = calculatedLevelOfDetail;
+        }
 
         if(startLeaf->isStillInGraph()) {
             collectRects(m_startNode, requestedRect);
@@ -423,6 +432,14 @@ protected:
 
 private:
     inline int getNodeLevelOfDetail(KisProjectionLeafSP leaf) {
+        while (!leaf->projection()) {
+            leaf = leaf->parent();
+        }
+
+        KIS_ASSERT_RECOVER(leaf->projection()) {
+            return 0;
+        }
+
         return leaf->projection()->defaultBounds()->currentLevelOfDetail();
     }
 

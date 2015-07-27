@@ -37,7 +37,10 @@ public:
 
     void play();
     void stop();
+    void displayFrame(int time);
+
     bool isPlaying();
+    int currentTime();
 
 public slots:
     void slotUpdate();
@@ -46,6 +49,7 @@ public slots:
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();
+    void uploadFrame();
 
 private:
     struct Private;

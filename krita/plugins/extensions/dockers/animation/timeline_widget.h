@@ -41,6 +41,8 @@ public:
 
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+
     void paintEvent(QPaintEvent *e);
 
 private slots:
@@ -48,7 +50,7 @@ private slots:
     void cacheChanged();
 
 private:
-    void scrub(QMouseEvent *e);
+    void scrub(QMouseEvent *e, bool preview);
 
     QVBoxLayout *m_layout;
     TimelineView *m_timelineView;

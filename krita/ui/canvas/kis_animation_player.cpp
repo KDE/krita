@@ -114,14 +114,31 @@ bool KisAnimationPlayer::isPlaying()
     return m_d->playing;
 }
 
+int KisAnimationPlayer::currentTime()
+{
+    return m_d->currentFrame;
+}
+
+void KisAnimationPlayer::displayFrame(int time)
+{
+    m_d->playing = true;
+    m_d->currentFrame = time;
+    uploadFrame();
+}
+
 void KisAnimationPlayer::slotUpdate()
+{
+    m_d->currentFrame++;
+    if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
+
+    uploadFrame();
+}
+
+void KisAnimationPlayer::uploadFrame()
 {
     if (m_d->canvas->frameCache()->uploadFrame(m_d->currentFrame)) {
         m_d->canvas->updateCanvas();
     }
-
-    m_d->currentFrame++;
-    if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
 }
 
 void KisAnimationPlayer::slotCancelPlayback()

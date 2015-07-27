@@ -24,6 +24,7 @@
 #include "kis_canvas2.h"
 #include "kis_image_animation_interface.h"
 #include "kis_animation_frame_cache.h"
+#include "kis_animation_player.h"
 
 TimelineWidget::TimelineWidget(QWidget *parent)
     : QWidget(parent)
@@ -80,7 +81,11 @@ void TimelineWidget::drawRuler(QPainter &painter, QPaintEvent *e, bool dark)
 
 void TimelineWidget::drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark)
 {
-    int x = m_timelineView->timeToPosition(m_image->animationInterface()->currentUITime()) + 4;
+    int time = m_canvas->animationPlayer()->isPlaying() ?
+                m_canvas->animationPlayer()->currentTime() :
+                m_image->animationInterface()->currentUITime();
+
+    int x = m_timelineView->timeToPosition(time) + 4;
     if (m_timelineView->isWithingView(x)) {
         painter.setPen(QPen(
             dark ? QColor(0, 0, 0, 128) : QColor(255, 255, 255, 128)
@@ -129,23 +134,34 @@ void TimelineWidget::setModel(QAbstractItemModel *model)
 
 void TimelineWidget::mousePressEvent(QMouseEvent *e)
 {
-    scrub(e);
+    scrub(e, true);
 }
 
 void TimelineWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->buttons() == Qt::LeftButton) {
-        scrub(e);
+        scrub(e, true);
     }
 }
 
-void TimelineWidget::scrub(QMouseEvent *e)
+void TimelineWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+    scrub(e, false);
+}
+
+void TimelineWidget::scrub(QMouseEvent *e, bool preview)
 {
     if (!m_image) return;
 
     int time = m_timelineView->positionToTime(e->pos().x());
     if (time >= 0) {
-        m_image->animationInterface()->switchCurrentTimeAsync(time);
+        if (preview) {
+            m_canvas->animationPlayer()->displayFrame(time);
+            update();
+        } else {
+            m_image->animationInterface()->switchCurrentTimeAsync(time);
+            m_canvas->animationPlayer()->stop();
+        }
     }
 
     e->accept();

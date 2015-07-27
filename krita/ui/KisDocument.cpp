@@ -1051,12 +1051,21 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
     int accuracy = 0;
 
     QFile f(url.toLocalFile());
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open file to check the mimetype" << url;
+    }
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
     KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
     f.close();
 
-    if (!mime) return mimeType;
+    if (!mime) {
+        return mimeType;
+    }
+
+    // Checking the content failed as well, so let's fall back on the extension again
+    if (mime->name() == "application/octet-stream") {
+        return mimeType;
+    }
 
     return mime->name();
 }
@@ -1272,7 +1281,6 @@ bool KisDocument::openFile()
 
     // for images, always check content.
     typeName = checkImageMimeTypes(typeName, u);
-
 
     //kDebug(30003) << "mimetypes 4:" << typeName;
 

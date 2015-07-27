@@ -255,7 +255,9 @@ void KisKeyframeChannel::destroyKeyframe(KisKeyframe *key)
 
 void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)
 {
-    m_d->node->invalidateFrames(range, rect);
+    if (m_d->node) {
+        m_d->node->invalidateFrames(range, rect);
+    }
 }
 
 #include "kis_keyframe_channel.moc"

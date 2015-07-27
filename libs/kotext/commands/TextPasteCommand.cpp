@@ -25,6 +25,7 @@
 #include <KoTextDocument.h>
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
+#include <KoParagraphStyle.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -94,6 +95,10 @@ void TextPasteCommand::redo()
             KoOdf::DocumentType odfType = KoOdf::Text;
             if (!m_mimeData->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
+            }
+
+            if (editor->blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+                editor->insertText("");
             }
 
             if (m_pasteAsText) {

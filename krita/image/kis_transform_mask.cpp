@@ -253,7 +253,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else {
+    } else if (m_d->staticCacheDevice) {
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING

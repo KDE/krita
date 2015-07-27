@@ -915,7 +915,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
 
             // there may be a markup range on this line that extends to the next line
             if (markIt != markEnd && markIt->firstChar < line.textStart() + line.textLength()
-                && line.textStart() + line.textLength()<=block.length()) {
+                && line.textStart() + line.textLength() <= block.length()) {
                 if (!blockData.isMarkupsLayoutValid(KoTextBlockData::Misspell)) {
                     if (markIt->firstChar > line.textStart()) {
                         markIt->startX = line.cursorToX(markIt->firstChar);
@@ -923,7 +923,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                 }
                 qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.cursorToX(0);
 
-                painter->drawLine(QPointF(x1, y), QPointF(line.position().x() + line.naturalTextWidth(), y));
+                painter->drawLine(QPointF(x1, y), QPointF(line.cursorToX(line.textStart() + line.textLength()), y));
 
                 // since it extends to next line we don't increment the iterator
             }

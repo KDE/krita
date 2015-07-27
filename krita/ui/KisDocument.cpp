@@ -1054,6 +1054,10 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
     KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
     f.close();
 
+    if (!mime) {
+        return mimeType;
+    }
+
     // Checking the content failed as well, so let's fall back on the extension again
     if (mime->name() == "application/octet-stream") {
         return mimeType;

@@ -45,7 +45,7 @@ include_directories(
 )
 
 if(FFTW3_FOUND)
-  include_directories(${FFTW3_INCLUDE_DIRS})
+  include_directories(${FFTW3_INCLUDE_DIR})
 endif()
 
 if(HAVE_VC)

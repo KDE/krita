@@ -80,7 +80,7 @@ showPropType(PropType x)
     case PROP_MODE: return ("Mode");
     case PROP_VISIBLE: return ("Visible");
     case PROP_LINKED: return ("Linked");
-    case PROP_PRESERVE_TRANSPARENCY: return ("PreserveTransparency");
+    case PROP_LOCK_ALPHA: return ("LockAlpha");
     case PROP_APPLY_MASK: return ("ApplyMask");
     case PROP_EDIT_MASK: return ("EditMask");
     case PROP_SHOW_MASK: return ("ShowMask");
@@ -97,6 +97,11 @@ showPropType(PropType x)
     case PROP_USER_UNIT: return ("UserUnit");
     case PROP_VECTORS: return ("Vectors");
     case PROP_TEXT_LAYER_FLAGS: return ("TextLayerFlags");
+    case PROP_SAMPLE_POINTS: return ("SamplePoints");
+    case PROP_LOCK_CONTENT: return ("LockContent");
+    case PROP_GROUP_ITEM: return ("GroupItem");
+    case PROP_ITEM_PATH: return ("ItemPath");
+    case PROP_GROUP_ITEM_FLAGS: return ("GroupItemFlags");
     default: sprintf(buf,"(PropType:%d)",(int)x);
              return buf;
   }

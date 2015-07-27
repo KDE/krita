@@ -19,7 +19,7 @@
 #ifndef XCFTOOLS_H
 #define XCFTOOLS_H
 
-#include <config.h>
+#include "config.h"
 #include "enums.h"
 #include <stddef.h>
 #include <stdio.h>
@@ -37,11 +37,6 @@ void nls_init(void);
 #if HAVE_INTTYPES_H
 # define __STDC_FORMAT_MACROS
 # include <inttypes.h>
-#elif defined(_MSC_VER)
-# include <stdint.h> // KDEWin
-# define PRIX32 "I32X"
-# define PRIu32 "I32u"
-# define PRIXPTR "IX"
 #else
 /* These legacy fall-backs will probably work on every system
  * that does not supply a inttypes.h ... */
@@ -186,6 +181,9 @@ struct xcfLayer {
   uint32_t propptr ;
   struct xcfTiles pixels ;
   struct xcfTiles mask ;
+  int isGroup ;
+  unsigned pathLength ;
+  unsigned *path ;
 }; 
 
 extern struct xcfImage {

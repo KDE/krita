@@ -75,6 +75,83 @@ void KisImageTest::benchmarkCreation()
     }
 }
 
+#include "testutil.h"
+#include "kis_stroke_strategy.h"
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
+
+
+class ForbiddenLodStrokeStrategy : public KisStrokeStrategy
+{
+public:
+    ForbiddenLodStrokeStrategy(boost::function<void()> lodCallback)
+        : m_lodCallback(lodCallback)
+    {
+    }
+
+    KisStrokeStrategy* createLodClone(int levelOfDetail) {
+        Q_UNUSED(levelOfDetail);
+        m_lodCallback();
+        return 0;
+    }
+
+private:
+    boost::function<void()> m_lodCallback;
+};
+
+void notifyVar(bool *value) {
+    *value = true;
+}
+
+void KisImageTest::testBlockLevelOfDetail()
+{
+    TestUtil::MaskParent p;
+
+    QCOMPARE(p.image->currentLevelOfDetail(), 0);
+
+    p.image->setDesiredLevelOfDetail(1);
+    p.image->waitForDone();
+
+    QCOMPARE(p.image->currentLevelOfDetail(), 0);
+
+    {
+        bool lodCreated = false;
+        KisStrokeId id = p.image->startStroke(
+            new ForbiddenLodStrokeStrategy(
+                boost::bind(&notifyVar, &lodCreated)));
+        p.image->endStroke(id);
+        p.image->waitForDone();
+
+        QVERIFY(lodCreated);
+    }
+
+    p.image->blockLevelOfDetail();
+
+    {
+        bool lodCreated = false;
+        KisStrokeId id = p.image->startStroke(
+            new ForbiddenLodStrokeStrategy(
+                boost::bind(&notifyVar, &lodCreated)));
+        p.image->endStroke(id);
+        p.image->waitForDone();
+
+        QVERIFY(!lodCreated);
+    }
+
+    p.image->unblockLevelOfDetail(1);
+
+    {
+        bool lodCreated = false;
+        KisStrokeId id = p.image->startStroke(
+            new ForbiddenLodStrokeStrategy(
+                boost::bind(&notifyVar, &lodCreated)));
+        p.image->endStroke(id);
+        p.image->waitForDone();
+
+        QVERIFY(lodCreated);
+    }
+}
+
 void KisImageTest::testConvertImageColorSpace()
 {
     const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();

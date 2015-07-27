@@ -22,21 +22,25 @@
 #include "kis_image.h"
 
 
-class KisImageBarrierLocker {
+template <typename ImagePointer>
+class KisImageBarrierLockerImpl {
 public:
-    inline KisImageBarrierLocker(KisImageSP image)
+    inline KisImageBarrierLockerImpl(ImagePointer image)
         : m_image(image)
     {
         m_image->barrierLock();
     }
 
-    inline ~KisImageBarrierLocker() {
+    inline ~KisImageBarrierLockerImpl() {
         m_image->unlock();
     }
 
 private:
-    KisImageBarrierLocker(const KisImageBarrierLocker &rhs);
-    KisImageSP m_image;
+    KisImageBarrierLockerImpl(const KisImageBarrierLockerImpl<ImagePointer> &rhs);
+    ImagePointer m_image;
 };
+
+typedef KisImageBarrierLockerImpl<KisImageSP> KisImageBarrierLocker;
+typedef KisImageBarrierLockerImpl<KisImage*> KisImageBarrierLockerRaw;
 
 #endif /* __KIS_IMAGE_BARRIER_LOCKER_H */

@@ -95,6 +95,8 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
+#include "kis_image_barrier_locker.h"
+
 
 
 // #define SANITY_CHECKS
@@ -148,6 +150,7 @@ public:
 
     KisCompositeProgressProxy *compositeProgressProxy;
 
+    int blockLevelOfDetail;
 
     bool tryCancelCurrentStrokeAsync();
 };
@@ -159,6 +162,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 {
     setObjectName(name);
     dbgImage << "creating" << name;
+
+    m_d->blockLevelOfDetail = 0;
 
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -1653,13 +1658,48 @@ bool KisImage::wrapAroundModeActive() const
 
 void KisImage::setDesiredLevelOfDetail(int lod)
 {
+    if (m_d->blockLevelOfDetail) {
+        qWarning() << "WARNING: KisImage::setDesiredLevelOfDetail()"
+                   << "was called while LoD functionality was being blocked!";
+        return;
+    }
+
     m_d->scheduler->setDesiredLevelOfDetail(lod);
 }
 
 int KisImage::currentLevelOfDetail() const
 {
+    if (m_d->blockLevelOfDetail) {
+        return 0;
+    }
+
     return m_d->scheduler->currentLevelOfDetail();
 }
+
+void KisImage::blockLevelOfDetail()
+{
+    KisImageBarrierLockerRaw l(this);
+    if (!m_d->blockLevelOfDetail) {
+        m_d->scheduler->setDesiredLevelOfDetail(0);
+    }
+    m_d->blockLevelOfDetail++;
+}
+
+bool KisImage::unblockLevelOfDetail(int newLevelOfDetail)
+{
+    KisImageBarrierLockerRaw l(this);
+    m_d->blockLevelOfDetail--;
+
+    if (!m_d->blockLevelOfDetail) {
+        m_d->scheduler->setDesiredLevelOfDetail(newLevelOfDetail);
+    }
+
+    return m_d->blockLevelOfDetail;
+}
+
+bool KisImage::levelOfDetailBlocked() const
+{
+    return m_d->blockLevelOfDetail;
 }
 
 void KisImage::notifyNodeCollpasedChanged()

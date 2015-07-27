@@ -524,6 +524,22 @@ public:
     void setDesiredLevelOfDetail(int lod);
 
     /**
+     * Blocks usage of level of detail functionality. After this method
+     * has been called, no new strokes will use LoD.
+     */
+    void blockLevelOfDetail();
+
+    /**
+     * \see blockLevelOfDetail()
+     */
+    bool unblockLevelOfDetail(int newLevelOfDetail);
+
+    /**
+     * \see blockLevelOfDetail()
+     */
+    bool levelOfDetailBlocked() const;
+
+    /**
      * Notifies that the node collapsed state has changed
      */
     void notifyNodeCollpasedChanged();

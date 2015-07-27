@@ -79,9 +79,6 @@ public:
     bool verticalRulerVisible() const;
 
 private:
-    void nofityLevelOfDetailChange(qreal zoom);
-
-private:
 
     QPointer<KisView> m_view;
     KoZoomHandler * m_zoomHandler;

@@ -181,6 +181,19 @@ void KisCoordinatesConverter::setZoom(qreal zoom)
     recalculateTransformations();
 }
 
+qreal KisCoordinatesConverter::effectiveZoom() const
+{
+    qreal scaleX, scaleY;
+    this->imageScale(&scaleX, &scaleY);
+
+    if (scaleX != scaleY) {
+        qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
+    }
+
+    // zoom by average of x and y
+    return 0.5 * (scaleX + scaleY);
+}
+
 QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;

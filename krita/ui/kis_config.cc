@@ -1198,6 +1198,15 @@ void KisConfig::setFavoritePresets(const int value)
     m_cfg.writeEntry("numFavoritePresets", value);
 }
 
+bool KisConfig::levelOfDetailEnabled(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("levelOfDetailEnabled", false));
+}
+
+void KisConfig::setLevelOfDetailEnabled(bool value)
+{
+    m_cfg.writeEntry("levelOfDetailEnabled", value);
+}
 
 KisConfig::OcioColorManagementMode
 KisConfig::ocioColorManagementMode(bool defaultValue) const

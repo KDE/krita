@@ -131,6 +131,8 @@ public:
 
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
+
+    bool lodAllowedInCanvas;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
@@ -140,8 +142,11 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
+    m_d->lodAllowedInCanvas = cfg.levelOfDetailEnabled();
 
     createCanvas(cfg.useOpenGL());
+
+    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
 
     m_d->animationPlayer = new KisAnimationPlayer(this);
 
@@ -465,6 +470,7 @@ void KisCanvas2::connectCurrentCanvas()
     startResizingImage();
 
     emit imageChanged(image);
+    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
 }
 
 void KisCanvas2::disconnectCurrentCanvas()
@@ -743,7 +749,23 @@ void KisCanvas2::notifyZoomChanged()
         m_d->prescaledProjection->notifyZoomChanged();
     }
 
+    notifyLevelOfDetailChange();
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
+}
+
+void KisCanvas2::notifyLevelOfDetailChange()
+{
+    if (!m_d->lodAllowedInCanvas) return;
+
+    KisImageSP image = this->image();
+
+    const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
+
+    KisConfig cfg;
+    const int maxLod = cfg.numMipmapLevels();
+
+    int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
+    image->setDesiredLevelOfDetail(lod);
 }
 
 void KisCanvas2::preScale()
@@ -929,6 +951,34 @@ bool KisCanvas2::wrapAroundViewingMode() const
         return !(infinityDecoration->visible());
     }
     return false;
+}
+
+void KisCanvas2::setLodAllowedInCanvas(bool value)
+{
+#ifdef HAVE_OPENGL
+    m_d->lodAllowedInCanvas =
+        value &&
+        m_d->currentCanvasIsOpenGL &&
+        KisOpenGL::supportsGLSL13();
+#else
+    Q_UNUSED(value);
+    m_d->lodAllowedInCanvas = false;
+#endif
+
+    KisImageSP image = this->image();
+
+    if (m_d->lodAllowedInCanvas != !image->levelOfDetailBlocked()) {
+        image->setLevelOfDetailBlocked(!m_d->lodAllowedInCanvas);
+        notifyLevelOfDetailChange();
+    }
+
+    KisConfig cfg;
+    cfg.setLevelOfDetailEnabled(m_d->lodAllowedInCanvas);
+}
+
+bool KisCanvas2::lodAllowedInCanvas() const
+{
+    return m_d->lodAllowedInCanvas;
 }
 
 KoGuidesData *KisCanvas2::guidesData()

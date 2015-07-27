@@ -1676,25 +1676,15 @@ int KisImage::currentLevelOfDetail() const
     return m_d->scheduler->currentLevelOfDetail();
 }
 
-void KisImage::blockLevelOfDetail()
+void KisImage::setLevelOfDetailBlocked(bool value)
 {
     KisImageBarrierLockerRaw l(this);
-    if (!m_d->blockLevelOfDetail) {
+
+    if (value && !m_d->blockLevelOfDetail) {
         m_d->scheduler->setDesiredLevelOfDetail(0);
     }
-    m_d->blockLevelOfDetail++;
-}
 
-bool KisImage::unblockLevelOfDetail(int newLevelOfDetail)
-{
-    KisImageBarrierLockerRaw l(this);
-    m_d->blockLevelOfDetail--;
-
-    if (!m_d->blockLevelOfDetail) {
-        m_d->scheduler->setDesiredLevelOfDetail(newLevelOfDetail);
-    }
-
-    return m_d->blockLevelOfDetail;
+    m_d->blockLevelOfDetail = value;
 }
 
 bool KisImage::levelOfDetailBlocked() const

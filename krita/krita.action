@@ -8,6 +8,7 @@
     <Action name="rotate_canvas_right" icon="" text="Rotate Canvas Right" whatsThis="" toolTip="Rotate Canvas Right" iconText="Rotate Canvas Right" shortcut="Ctrl+]" defaultShortcut="Ctrl+]" isCheckable="false" statusTip=""/>
     <Action name="rotate_canvas_left" icon="" text="Rotate Canvas Left" whatsThis="" toolTip="Rotate Canvas Left" iconText="Rotate Canvas Left" shortcut="Ctrl+[" defaultShortcut="Ctrl+[" isCheckable="false" statusTip=""/>
     <Action name="wrap_around_mode" icon="" text="Wrap Around Mode" whatsThis="" toolTip="Wrap Around Mode" iconText="Wrap Around Mode" shortcut="W" defaultShortcut="W" isCheckable="false" statusTip=""/>
+    <Action name="level_of_detail_mode" icon="" text="Fast Preview Mode (LOD)" whatsThis="" toolTip="Fast Preview Mode (LOD)" iconText="Fast Preview Mode (LOD)" shortcut="Shift+L" defaultShortcut="Shift+L" isCheckable="true" statusTip=""/>
     <Action name="showStatusBar" icon="" text="Hide Status Bar" whatsThis="" toolTip="Shows or hides the status bar" iconText="Hide Status Bar" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
     <Action name="view_show_just_the_canvas" icon="" text="Show Canvas Only" whatsThis="" toolTip="Shows just the canvas or the whole window" iconText="Show Canvas Only" shortcut="Tab" defaultShortcut="Tab" isCheckable="false" statusTip=""/>
     <Action name="edit_blacklist_cleanup" icon="" text="Cleanup removed files..." whatsThis="" toolTip="Cleanup removed files" iconText="Cleanup removed files" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

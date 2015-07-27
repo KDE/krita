@@ -19,6 +19,7 @@
 #ifndef __KIS_LOD_TRANSFORM_H
 #define __KIS_LOD_TRANSFORM_H
 
+#include <QtCore/qmath.h>
 #include <QTransform>
 #include <kis_paint_information.h>
 
@@ -36,6 +37,10 @@ public:
         qreal scale = lodToScale(levelOfDetail);
         m_transform = QTransform::fromScale(scale, scale);
         m_levelOfDetail = levelOfDetail;
+    }
+
+    static int scaleToLod(qreal scale, int maxLod) {
+        return qMin(maxLod, qMax(0, qFloor(log2(1.0 / scale))));
     }
 
     static qreal lodToScale(int levelOfDetail) {

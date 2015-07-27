@@ -44,6 +44,7 @@ public:
 public:
     using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
+    bool levelOfDetailMode() const;
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);
@@ -52,6 +53,7 @@ public Q_SLOTS:
     void rotateCanvasLeft15();
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
+    void slotToggleLevelOfDetailMode(bool value);
 
 Q_SIGNALS:
     void documentSizeChanged();

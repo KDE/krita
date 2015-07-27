@@ -125,7 +125,7 @@ void KisImageTest::testBlockLevelOfDetail()
         QVERIFY(lodCreated);
     }
 
-    p.image->blockLevelOfDetail();
+    p.image->setLevelOfDetailBlocked(true);
 
     {
         bool lodCreated = false;
@@ -138,7 +138,8 @@ void KisImageTest::testBlockLevelOfDetail()
         QVERIFY(!lodCreated);
     }
 
-    p.image->unblockLevelOfDetail(1);
+    p.image->setLevelOfDetailBlocked(false);
+    p.image->setDesiredLevelOfDetail(1);
 
     {
         bool lodCreated = false;

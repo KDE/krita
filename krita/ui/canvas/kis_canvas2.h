@@ -241,6 +241,10 @@ public:
     // interface for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
+
+    void setLodAllowedInCanvas(bool value);
+    bool lodAllowedInCanvas() const;
+
     void initializeImage();
     // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);
@@ -257,6 +261,8 @@ private:
     void createQPainterCanvas();
     void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
+
+    void notifyLevelOfDetailChange();
 
 private:
 

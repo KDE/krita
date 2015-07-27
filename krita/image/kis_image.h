@@ -527,15 +527,10 @@ public:
      * Blocks usage of level of detail functionality. After this method
      * has been called, no new strokes will use LoD.
      */
-    void blockLevelOfDetail();
+    void setLevelOfDetailBlocked(bool value);
 
     /**
-     * \see blockLevelOfDetail()
-     */
-    bool unblockLevelOfDetail(int newLevelOfDetail);
-
-    /**
-     * \see blockLevelOfDetail()
+     * \see setLevelOfDetailBlocked()
      */
     bool levelOfDetailBlocked() const;
 

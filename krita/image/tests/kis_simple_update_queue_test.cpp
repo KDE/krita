@@ -69,14 +69,14 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     KisTestableSimpleUpdateQueue queue;
 
-    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
-    queue.addUpdateJob(paintLayer, dirtyRect2, imageRect);
-    queue.addUpdateJob(paintLayer, dirtyRect3, imageRect);
-    queue.addUpdateJob(paintLayer, dirtyRect4, imageRect);
+    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect, 0);
+    queue.addUpdateJob(paintLayer, dirtyRect2, imageRect, 0);
+    queue.addUpdateJob(paintLayer, dirtyRect3, imageRect, 0);
+    queue.addUpdateJob(paintLayer, dirtyRect4, imageRect, 0);
 
     {
         TestUtil::LodOverride l(1, image);
-        queue.addUpdateJob(paintLayer, dirtyRect5, imageRect);
+        queue.addUpdateJob(paintLayer, dirtyRect5, imageRect, 1);
     }
 
     queue.processQueue(context);
@@ -125,10 +125,10 @@ void KisSimpleUpdateQueueTest::testSplit(bool useFullRefresh)
     KisWalkersList& walkersList = queue.getWalkersList();
 
     if(!useFullRefresh) {
-        queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
+        queue.addUpdateJob(paintLayer, dirtyRect1, imageRect, 0);
     }
     else {
-        queue.addFullRefreshJob(paintLayer, dirtyRect1, imageRect);
+        queue.addFullRefreshJob(paintLayer, dirtyRect1, imageRect, 0);
     }
 
     QCOMPARE(walkersList.size(), 4);
@@ -175,7 +175,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
 
     {
         TestUtil::LodOverride l(1, image);
-        queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect);
+        queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect, 1);
         QCOMPARE(walkersList[0]->checksumValid(), true);
         QCOMPARE(walkersList[0]->levelOfDetail(), 1);
     }
@@ -224,10 +224,10 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
     KisTestableSimpleUpdateQueue queue;
     KisWalkersList& walkersList = queue.getWalkersList();
 
-    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
-    queue.addFullRefreshJob(paintLayer, dirtyRect2, imageRect);
-    queue.addFullRefreshJob(paintLayer, dirtyRect3, imageRect);
-    queue.addUpdateNoFilthyJob(paintLayer, dirtyRect1, imageRect);
+    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect, 0);
+    queue.addFullRefreshJob(paintLayer, dirtyRect2, imageRect, 0);
+    queue.addFullRefreshJob(paintLayer, dirtyRect3, imageRect, 0);
+    queue.addUpdateNoFilthyJob(paintLayer, dirtyRect1, imageRect, 0);
 
     QCOMPARE(walkersList.size(), 3);
 

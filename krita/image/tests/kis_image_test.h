@@ -29,6 +29,7 @@ class KisImageTest : public QObject
 private Q_SLOTS:
 
     void layerTests();
+    void benchmarkCreation();
     void testConvertImageColorSpace();
     void testGlobalSelection();
     void testLayerComposition();

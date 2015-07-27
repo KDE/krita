@@ -89,7 +89,7 @@ QTransform createTestingTransform() {
 
 KisDocument* createCompleteDocument()
 {
-    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
+    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 
     KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
@@ -212,7 +212,7 @@ KisDocument* createCompleteDocument()
 
 KisDocument *createEmptyDocument()
 {
-    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
+    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 
     KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 

@@ -65,7 +65,7 @@ void KisStrokeBenchmark::initTestCase()
     int width = TEST_IMAGE_WIDTH;
     int height = TEST_IMAGE_HEIGHT;
 
-    m_image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
+    m_image = new KisImage(0, width, height, m_colorSpace, "stroke sample image");
     m_layer = new KisPaintLayer(m_image, "temporary for stroke sample", OPACITY_OPAQUE_U8, m_colorSpace);
 
 

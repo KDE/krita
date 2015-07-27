@@ -36,6 +36,9 @@
 #include <kis_debug.h>
 #include <kis_layer_composition.h>
 
+#include "kis_undo_stores.h"
+
+
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
 
@@ -49,6 +52,27 @@ void KisImageTest::layerTests()
     image->addNode(layer);
 
     QVERIFY(image->rootLayer()->firstChild()->objectName() == layer->objectName());
+}
+
+void KisImageTest::benchmarkCreation()
+{
+    const QRect imageRect(0,0,3000,2000);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QList<KisImageSP> images;
+    QList<KisSurrogateUndoStore*> stores;
+
+
+    QBENCHMARK {
+        for (int i = 0; i < 10; i++) {
+            stores << new KisSurrogateUndoStore();
+        }
+
+        for (int i = 0; i < 10; i++) {
+            KisImageSP image = new KisImage(stores.takeLast(), imageRect.width(), imageRect.height(), cs, "test image");
+            images << image;
+        }
+    }
 }
 
 void KisImageTest::testConvertImageColorSpace()

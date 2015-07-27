@@ -69,7 +69,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
      * Initialize image and painter
      */
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, HUGE_IMAGE_SIZE, HUGE_IMAGE_SIZE, colorSpace, "stroke sample image", true);
+    KisImageSP image = new KisImage(0, HUGE_IMAGE_SIZE, HUGE_IMAGE_SIZE, colorSpace, "stroke sample image");
     KisLayerSP layer = new KisPaintLayer(image, "temporary for stroke sample", OPACITY_OPAQUE_U8, colorSpace);
     KisLayerSP layerExtra = new KisPaintLayer(image, "temporary for threading", OPACITY_OPAQUE_U8, colorSpace);
 

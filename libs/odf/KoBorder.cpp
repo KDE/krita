@@ -55,6 +55,8 @@ KoBorder::BorderData::BorderData()
     , innerPen(QPen())
     , spacing(0)
 {
+    outerPen.setWidthF(0.0f);
+    innerPen.setWidthF(0.0f);
 }
 
 bool KoBorder::BorderData::operator==(const KoBorder::BorderData& other) const
@@ -75,7 +77,7 @@ bool KoBorder::BorderData::operator==(const KoBorder::BorderData& other) const
         // compare the rest of the values.
         if (outerPen != other.outerPen)
             return false;
-        
+
         // If the border style == BorderDouble, then compare a couple
         // of other values too.
         if (style == BorderDouble) {
@@ -122,19 +124,19 @@ bool KoBorder::operator==(const KoBorder &other) const
     if (d.data() == other.d.data())
         return true;
 
-    
+
     if (d->data.size() != other.d->data.size())
         return false;
 
     KoBorder::BorderSide key;
-    
+
     foreach (key, d->data.keys()) {
         if (!other.d->data.contains(key))
             return false;
         if (!(other.d->data[key] == d->data[key]))
             return false;
     }
-    
+
     return true;
 }
 

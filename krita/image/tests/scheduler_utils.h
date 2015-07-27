@@ -140,9 +140,11 @@ class KisTestingStrokeStrategy : public KisStrokeStrategy
 public:
     KisTestingStrokeStrategy(const QString &prefix = QString(),
                              bool exclusive = false,
-                             bool inhibitServiceJobs = false)
+                             bool inhibitServiceJobs = false,
+                             bool forceAllowInitJob = false)
         : m_prefix(prefix),
           m_inhibitServiceJobs(inhibitServiceJobs),
+          m_forceAllowInitJob(forceAllowInitJob),
           m_cancelSeqNo(0)
     {
         setExclusive(exclusive);
@@ -152,13 +154,14 @@ public:
         : KisStrokeStrategy(rhs),
           m_prefix(rhs.m_prefix),
           m_inhibitServiceJobs(rhs.m_inhibitServiceJobs),
+          m_forceAllowInitJob(rhs.m_forceAllowInitJob),
           m_cancelSeqNo(rhs.m_cancelSeqNo)
     {
         m_prefix = QString("clone%1_%2").arg(levelOfDetail).arg(m_prefix);
     }
 
     KisStrokeJobStrategy* createInitStrategy() {
-        return !m_inhibitServiceJobs ?
+        return m_forceAllowInitJob || !m_inhibitServiceJobs ?
             new KisNoopDabStrategy(m_prefix + "init") : 0;
     }
 
@@ -197,8 +200,8 @@ public:
 private:
     QString m_prefix;
     bool m_inhibitServiceJobs;
+    int m_forceAllowInitJob;
     int m_cancelSeqNo;
-    int m_supportsLevelOfDetail;
 };
 
 inline QString getJobName(KisStrokeJob *job) {

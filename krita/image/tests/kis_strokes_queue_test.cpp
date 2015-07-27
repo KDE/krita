@@ -367,9 +367,20 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
     VERIFY_EMPTY(jobs[2]);
 }
 
+#include <boost/functional/factory.hpp>
+#include <boost/bind.hpp>
+
 void KisStrokesQueueTest::testStrokesLevelOfDetail()
 {
     KisStrokesQueue queue;
+
+    queue.setSuspendUpdatesStrokeStrategyFactory(
+        boost::bind(
+        boost::factory<KisTestingStrokeStrategy*>(), "susp_u_", false, true, true));
+
+    queue.setResumeUpdatesStrokeStrategyFactory(
+        boost::bind(
+        boost::factory<KisTestingStrokeStrategy*>(), "resu_u_", false, true, true));
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
@@ -415,7 +426,23 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
 
     jobs = context.getJobs();
     COMPARE_WALKER(jobs[0], walker);
-    COMPARE_NAME(jobs[1], "lod_dab");
+    COMPARE_NAME(jobs[1], "susp_u_init");
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    context.clear();
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "lod_dab");
+    VERIFY_EMPTY(jobs[1]);
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    context.clear();
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "resu_u_init");
+    VERIFY_EMPTY(jobs[1]);
     QCOMPARE(queue.needsExclusiveAccess(), false);
 
     context.clear();

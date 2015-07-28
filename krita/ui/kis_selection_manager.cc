@@ -246,6 +246,11 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     actionManager->addAction("convert_shapes_to_vector_selection", action);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
 
+    action = new KisAction(i18nc("@action:inmenu", "&Convert to Shape"), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    actionManager->addAction("convert_selection_to_shape", action);
+    connect(action, SIGNAL(triggered()), SLOT(convertToShape())); 
+
     m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
     actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode);
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
@@ -473,6 +478,12 @@ void KisSelectionManager::convertToVectorSelection()
 void KisSelectionManager::convertShapesToVectorSelection()
 {
     KisShapesToVectorSelectionActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::convertToShape()
+{
+    KisSelectionToShapeActionFactory factory;
     factory.run(m_view);
 }
 

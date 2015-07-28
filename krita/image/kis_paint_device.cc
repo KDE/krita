@@ -326,10 +326,16 @@ private:
     inline Data* currentNonLodData() const {
         Data *data = m_data;
 
-        if (contentChannel && contentChannel->keyframeCount() > 1) {
-            int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-            KIS_ASSERT_RECOVER(frames.contains(frameId)) { return data; }
-            data = frames[frameId];
+        if (contentChannel) {
+            if (contentChannel->keyframeCount() > 1) {
+                int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
+                KIS_ASSERT_RECOVER(frames.contains(frameId)) { return data; }
+                data = frames[frameId];
+            }
+            // Just skipping setting it twice...
+            // else {
+            //     data = m_data;
+            // }
 
         } else if (defaultBounds->externalFrameActive()) {
             if (!m_externalFrameData) {

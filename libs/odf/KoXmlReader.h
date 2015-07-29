@@ -51,6 +51,7 @@ class KoXmlCDATASection;
 class KoXmlDocumentType;
 class KoXmlDocument;
 class KoXmlNodeData;
+class KoXmlDocumentData;
 
 /**
  * The office-text-content-prelude type.
@@ -259,6 +260,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
+    friend class KoXmlDocumentData;
     explicit KoXmlDocumentType(KoXmlNodeData*);
 };
 
@@ -315,8 +317,7 @@ public:
 
 private:
     friend class KoXmlNode;
-    KoXmlDocumentType dt;
-    explicit KoXmlDocument(KoXmlNodeData*);
+    explicit KoXmlDocument(KoXmlDocumentData*);
 };
 
 #endif // KOXML_USE_QDOM

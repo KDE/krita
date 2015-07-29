@@ -321,6 +321,8 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     if (!dev->putChar('\n'))
         return false;
 
+    KoResource::saveToDevice(dev);
+
     // <gbr brushes>
     return m_d->brushesPipe.saveToDevice(dev);
 }

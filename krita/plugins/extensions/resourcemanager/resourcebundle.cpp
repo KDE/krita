@@ -41,6 +41,8 @@
 #include <QStringList>
 #include <QMessageBox>
 
+#include <KoHashGeneratorProvider.h>
+#include <KoHashGenerator.h>
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
 #include <kis_paintop_preset.h>
@@ -54,13 +56,13 @@
 
 
 ResourceBundle::ResourceBundle(QString const& fileName)
-    : KoResource(fileName)
+    : KoResource(fileName),
+      m_bundleVersion("1")
 {
     setName(QFileInfo(fileName).baseName());
 
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
-
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
@@ -114,6 +116,7 @@ bool ResourceBundle::load()
             return false;
         }
 
+        bool versionFound = false;
         if (resourceStore->open("meta.xml")) {
             KoXmlDocument doc;
             if (!doc.setContent(resourceStore->device())) {
@@ -172,6 +175,10 @@ bool ResourceBundle::load()
                             m_metadata.insert(e.attribute("meta:name"), e.attribute("meta:value"));
                         }
                     }
+                    else if(e.tagName() == "meta:bundle-version") {
+                        m_metadata.insert("bundle-version", e.firstChild().toText().data());
+                        versionFound = true;
+                    }
                 }
             }
             resourceStore->close();
@@ -191,6 +198,12 @@ bool ResourceBundle::load()
         }
         else {
             qWarning() << "Could not open preview.png";
+        }
+
+        // If no version is found it's an old bundle with md5 hashes to fix, so we need to recreate the bundle
+        if(!versionFound) {
+            m_metadata.insert("bundle-version", "1");
+            recreateBundle(resourceStore);
         }
 
         m_installed = true;
@@ -226,7 +239,7 @@ bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &re
     QBuffer buf;
 
     QFileInfo fi(resource->filename());
-    if (fi.exists() && fi.isReadable() && !fi.isWritable()) {
+    if (fi.exists() && fi.isReadable()) {
 
         QFile f(resource->filename());
         if (!f.open(QFile::ReadOnly)) {
@@ -242,16 +255,8 @@ bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &re
         buf.setBuffer(&ba);
     }
     else {
-
-        if (!buf.open(QBuffer::WriteOnly)) {
-            qWarning() << "Could not open buffer";
-            return false;
-        }
-        if (!resource->saveToDevice(&buf)) {
-            qWarning() << "Could not save resource to buffer";
-            return false;
-        }
-        buf.close();
+        qWarning() << "Could not find the resource " << resource->filename() << " or it isn't readable";
+        return false;
     }
 
     if (!buf.open(QBuffer::ReadOnly)) {
@@ -387,51 +392,10 @@ bool ResourceBundle::save()
         store->close();
     }
 
-    {
-        store->open("META-INF/manifest.xml");
-        QBuffer buf;
-        buf.open(QBuffer::WriteOnly);
-        m_manifest.save(&buf);
-        buf.close();
-        store->write(buf.data());
-        store->close();
-    }
+    saveManifest(store);
 
-    {
-        QBuffer buf;
+    saveMetadata(store);
 
-        store->open("meta.xml");
-        buf.open(QBuffer::WriteOnly);
-
-        KoXmlWriter metaWriter(&buf);
-        metaWriter.startDocument("office:document-meta");
-        metaWriter.startElement("meta:meta");
-
-        writeMeta("meta:generator", "generator", &metaWriter);
-        writeMeta("dc:author", "author", &metaWriter);
-        writeMeta("dc:title", "filename", &metaWriter);
-        writeMeta("dc:description", "description", &metaWriter);
-        writeMeta("meta:initial-creator", "author", &metaWriter);
-        writeMeta("dc:creator", "author", &metaWriter);
-        writeMeta("meta:creation-date", "created", &metaWriter);
-        writeMeta("meta:dc-date", "updated", &metaWriter);
-        writeUserDefinedMeta("email", &metaWriter);
-        writeUserDefinedMeta("license", &metaWriter);
-        writeUserDefinedMeta("website", &metaWriter);
-        foreach (const QString &tag, m_bundletags) {
-            metaWriter.startElement("meta:meta-userdefined");
-            metaWriter.addAttribute("meta:name", "tag");
-            metaWriter.addAttribute("meta:value", tag);
-            metaWriter.endElement();
-        }
-
-        metaWriter.endElement(); // meta:meta
-        metaWriter.endDocument();
-
-        buf.close();
-        store->write(buf.data());
-    }
-    store->close();
     store->finalize();
 
     return true;
@@ -728,17 +692,17 @@ bool ResourceBundle::install()
         }
     }
     m_installed = true;
-//    if(!md5Mismatch.isEmpty()){
-//        QString message = i18n("The following resources had mismatching MD5 sums. They may have gotten corrupted, for example, during download.");
-//        QMessageBox bundleFeedback;
-//        bundleFeedback.setIcon(QMessageBox::Warning);
-//        foreach (QString name, md5Mismatch) {
-//            message.append("\n");
-//            message.append(name);
-//        }
-//        bundleFeedback.setText(message);
-//        bundleFeedback.exec();
-//    }
+    if(!md5Mismatch.isEmpty()){
+        QString message = i18n("The following resources had mismatching MD5 sums. They may have gotten corrupted, for example, during download.");
+        QMessageBox bundleFeedback;
+        bundleFeedback.setIcon(QMessageBox::Warning);
+        foreach (QString name, md5Mismatch) {
+            message.append("\n");
+            message.append(name);
+        }
+        bundleFeedback.setText(message);
+        bundleFeedback.exec();
+    }
     return true;
 }
 
@@ -895,20 +859,6 @@ void ResourceBundle::setThumbnail(QString filename)
     }
 }
 
-
-QByteArray ResourceBundle::generateMD5() const
-{
-    QFile f(filename());
-    if (f.exists()) {
-        f.open(QFile::ReadOnly);
-        QByteArray ba = f.readAll();
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-        return md5.result();
-    }
-    return QByteArray();
-}
-
 void ResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer)
 {
     if (m_metadata.contains(metaKey)) {
@@ -931,4 +881,105 @@ void ResourceBundle::writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *w
 void ResourceBundle::setInstalled(bool install)
 {
     m_installed = install;
+}
+
+void ResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
+{
+    QBuffer buf;
+
+    store->open("meta.xml");
+    buf.open(QBuffer::WriteOnly);
+
+    KoXmlWriter metaWriter(&buf);
+    metaWriter.startDocument("office:document-meta");
+    metaWriter.startElement("meta:meta");
+
+    writeMeta("meta:generator", "generator", &metaWriter);
+
+    metaWriter.startElement("meta:bundle-version");
+    metaWriter.addTextNode(m_bundleVersion.toUtf8());
+    metaWriter.endElement();
+
+    writeMeta("dc:author", "author", &metaWriter);
+    writeMeta("dc:title", "filename", &metaWriter);
+    writeMeta("dc:description", "description", &metaWriter);
+    writeMeta("meta:initial-creator", "author", &metaWriter);
+    writeMeta("dc:creator", "author", &metaWriter);
+    writeMeta("meta:creation-date", "created", &metaWriter);
+    writeMeta("meta:dc-date", "updated", &metaWriter);
+    writeUserDefinedMeta("email", &metaWriter);
+    writeUserDefinedMeta("license", &metaWriter);
+    writeUserDefinedMeta("website", &metaWriter);
+    foreach (const QString &tag, m_bundletags) {
+        metaWriter.startElement("meta:meta-userdefined");
+        metaWriter.addAttribute("meta:name", "tag");
+        metaWriter.addAttribute("meta:value", tag);
+        metaWriter.endElement();
+    }
+
+    metaWriter.endElement(); // meta:meta
+    metaWriter.endDocument();
+
+    buf.close();
+    store->write(buf.data());
+    store->close();
+}
+
+void ResourceBundle::saveManifest(QScopedPointer<KoStore> &store)
+{
+    store->open("META-INF/manifest.xml");
+    QBuffer buf;
+    buf.open(QBuffer::WriteOnly);
+    m_manifest.save(&buf);
+    buf.close();
+    store->write(buf.data());
+    store->close();
+}
+
+void ResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
+{
+    // Save a copy of the unmodified bundle, so that if anything goes bad the user doesn't lose it
+    QFile file(filename());
+    file.copy(filename() + ".old");
+
+    QString newStoreName = filename() + ".tmp";
+    QScopedPointer<KoStore> store(KoStore::createStore(newStoreName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
+    KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+    ResourceBundleManifest newManifest;
+
+    addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+
+    foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+        oldStore->open(ref.resourcePath);
+        store->open(ref.resourcePath);
+
+        QByteArray data = oldStore->device()->readAll();
+        oldStore->close();
+        store->write(data);
+        store->close();
+        QByteArray result = generator->generateHash(data);
+        newManifest.addResource(ref.fileTypeName, ref.resourcePath, ref.tagList, result);
+    }
+
+    m_manifest = newManifest;
+
+    if (!m_thumbnail.isNull()) {
+        QByteArray byteArray;
+        QBuffer buffer(&byteArray);
+        m_thumbnail.save(&buffer, "PNG");
+        if (!store->open("preview.png")) qWarning() << "Could not open preview.png";
+        if (store->write(byteArray) != buffer.size()) qWarning() << "Could not write preview.png";
+        store->close();
+    }
+
+    saveManifest(store);
+    saveMetadata(store);
+
+    store->finalize();
+
+    // Remove the current bundle and then move the tmp one to be the correct one
+    file.setFileName(filename());
+    file.remove();
+    file.setFileName(newStoreName);
+    file.rename(filename());
 }

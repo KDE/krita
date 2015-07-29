@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QPoint>
 #include <QFileInfo>
-#include <QCryptographicHash>
 #include <QBuffer>
 
 #include <kis_debug.h>
@@ -332,18 +331,6 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
-}
-
-QByteArray KisBrush::generateMD5() const
-{
-    if (!filename().isNull() && !filename().startsWith("bundle://") && QFileInfo(filename()).exists()) {
-        QFile f(filename());
-        f.open(QFile::ReadOnly);
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(f.readAll());
-        return md5.result();
-    }
-    return QByteArray();
 }
 
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const

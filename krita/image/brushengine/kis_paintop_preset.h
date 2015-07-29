@@ -103,10 +103,6 @@ public:
         bool m_isDirty;
     };
 
-protected:
-
-    virtual QByteArray generateMD5() const;
-
 private:
 
     struct Private;

@@ -63,7 +63,7 @@ public:
      *@return true if saving the resource succeeded.
      */
     virtual bool save() = 0;
-    virtual bool saveToDevice(QIODevice* dev) const = 0;
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @returns a QImage thumbnail image representing this resource.
@@ -100,7 +100,7 @@ public:
 protected:
 
     /// override generateMD5 and in your resource subclass
-    virtual QByteArray generateMD5() const = 0;
+    virtual QByteArray generateMD5() const;
 
     /// call this when the contents of the resource change so the md5 needs to be recalculated
     void setMD5(const QByteArray &md5);

@@ -40,10 +40,6 @@ public:
     void setDockerState(const QByteArray& state);
     QByteArray dockerState();
 
-protected:
-
-    virtual QByteArray generateMD5() const;
-
 private:
     QByteArray m_dockerState;
 };

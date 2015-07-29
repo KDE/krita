@@ -345,7 +345,6 @@ public:
     bool isPiercedApprox() const;
 
 protected:
-    virtual QByteArray generateMD5() const;
 
     void resetBoundary();
 

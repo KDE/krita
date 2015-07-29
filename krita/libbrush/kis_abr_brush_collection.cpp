@@ -32,7 +32,6 @@
 #include <QDebug>
 #include <QString>
 #include <QBuffer>
-#include <QCryptographicHash>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -544,10 +543,6 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     qint32 layer_ID;
 
     QByteArray ba = dev->readAll();
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(ba);
-    setMD5(md5.result());
-
     QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);

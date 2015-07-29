@@ -390,6 +390,8 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
         return false;
     }
 
+    KoResource::saveToDevice(dev);
+
     return true;
 }
 

@@ -28,7 +28,6 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <QCryptographicHash>
 #include <QPoint>
 #include <QSize>
 #include <QImage>
@@ -155,6 +154,8 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     wrote = dev->write(bytes);
     if (wrote == -1)
         return false;
+
+    KoResource::saveToDevice(dev);
 
     return true;
 }
@@ -390,23 +391,5 @@ KoPattern* KoPattern::clone() const
 QImage KoPattern::pattern() const
 {
     return m_pattern;
-}
-
-QByteArray KoPattern::generateMD5() const
-{
-    if (!pattern().isNull()) {
-        QImage im = m_pattern.convertToFormat(QImage::Format_ARGB32);
-#if QT_VERSION >= 0x040700
-        QByteArray ba = QByteArray::fromRawData((const char*)im.constBits(), im.byteCount());
-#else
-        QByteArray ba = QByteArray::fromRawData((const char*)im.bits(), im.byteCount());
-#endif
-
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-
-        return md5.result();
-    }
-    return QByteArray();
 }
 

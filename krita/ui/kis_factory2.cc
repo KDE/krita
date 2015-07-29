@@ -32,11 +32,15 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
+#include <KoHashGeneratorProvider.h>
+
 #include <kis_debug.h>
 
 #include "kis_aboutdata.h"
 
 #include "KisPart.h"
+
+#include "kis_md5_generator.h"
 
 
 KAboutData* KisFactory::s_aboutData = 0;
@@ -45,6 +49,7 @@ KComponentData* KisFactory::s_componentData = 0;
 KisFactory::KisFactory()
 {
     (void)componentData();
+    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
 
 KisFactory::~KisFactory()

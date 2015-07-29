@@ -77,10 +77,6 @@ public:
     qreal randomness() const;
     qreal density() const;
 
-protected:
-
-    virtual QByteArray generateMD5() const;
-
 private:
 
     QImage createBrushPreview();

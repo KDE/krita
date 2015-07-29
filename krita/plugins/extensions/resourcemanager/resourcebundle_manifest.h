@@ -30,14 +30,16 @@ public:
 
     struct ResourceReference {
 
-        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QByteArray &_md5) {
+        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QString &_fileTypeName, const QByteArray &_md5) {
             resourcePath = _resourcePath;
             tagList = _tagList;
+            fileTypeName = _fileTypeName;
             md5sum = _md5;
         }
 
         QString resourcePath;
         QList<QString> tagList;
+        QString fileTypeName;
         QByteArray md5sum;
     };
 

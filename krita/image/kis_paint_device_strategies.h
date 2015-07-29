@@ -37,10 +37,10 @@ public:
     virtual ~KisPaintDeviceStrategy() {
     }
 
-    virtual void move(const QPoint& pt, int frameId=-1) {
-        m_d->setX(pt.x(), frameId);
-        m_d->setY(pt.y(), frameId);
-        m_d->cache(frameId)->invalidate();
+    virtual void move(const QPoint& pt) {
+        m_d->setX(pt.x());
+        m_d->setY(pt.y());
+        m_d->cache()->invalidate();
     }
 
     virtual QRect extent() const {
@@ -213,9 +213,7 @@ public:
         return m_wrapRect;
     }
 
-    void move(const QPoint& pt, int frameId=-1) {
-        // FIXME: only works on current frame
-
+    void move(const QPoint& pt) {
         QPoint offset (pt.x() - m_device->x(), pt.y() - m_device->y());
 
         QRect exactBoundsBeforeMove = m_device->exactBounds();

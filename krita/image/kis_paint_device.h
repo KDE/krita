@@ -137,22 +137,22 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    void move(qint32 x, qint32 y, int frameId=-1);
+    void move(qint32 x, qint32 y);
 
     /**
      * Convenience method for the above. Can be overridden in subclasses.
      */
-    virtual void move(const QPoint& pt, int frameId=-1);
+    virtual void move(const QPoint& pt);
 
     /**
      * The X offset of the paint device
      */
-    qint32 x(int frameId=-1) const;
+    qint32 x() const;
 
     /**
      * The Y offset of the paint device
      */
-    qint32 y(int frameId=-1) const;
+    qint32 y() const;
 
     /**
      * set the X offset of the paint device
@@ -443,7 +443,7 @@ public:
      * Changes the profile of the colorspace of this paint device to the given
      * profile. If the given profile is 0, nothing happens.
      */
-    void setProfile(const KoColorProfile * profile);
+    bool setProfile(const KoColorProfile * profile);
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
@@ -681,7 +681,7 @@ public:
      * Creates a new frame on the device and returns an identifier for it
      * @return frame id
      */
-    int createFrame(bool copy, int copySrc);
+    int createFrame(bool copy, int copySrc, const QPoint &offset);
 
     /**
      * Create a new frame with given id. This should not normally be used
@@ -702,6 +702,8 @@ public:
      * @return bounds
      */
     QRect frameBounds(int frameId);
+
+    QPoint frameOffset(int frameId) const;
 
     /**
      * Return a list of IDs for the frames contained in this paint device

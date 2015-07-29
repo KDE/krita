@@ -398,11 +398,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         m_store->close();
         // Create a colorspace with the embedded profile
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
-        const KoColorSpace *cs =
-            KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), profile);
-        // replace the old colorspace
-        if (cs) {
-            device->setDataManager(device->dataManager(), cs);
+        if (device->setProfile(profile)) {
             return true;
         }
     }

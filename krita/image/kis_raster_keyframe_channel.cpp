@@ -102,7 +102,7 @@ KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfram
 {
     int srcFrame = (copySrc != 0) ? copySrc->value() : 0;
 
-    quint32 frameId = (quint32)m_d->paintDevice->createFrame((copySrc != 0), srcFrame);
+    quint32 frameId = (quint32)m_d->paintDevice->createFrame((copySrc != 0), srcFrame, QPoint());
     KisKeyframe *keyframe = new KisKeyframe(this, time, frameId);
 
     return keyframe;
@@ -180,18 +180,19 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement k
     }
     keyframeElement.setAttribute("frame", filename);
 
-    QPoint offset = QPoint(m_d->paintDevice->x(frameId), m_d->paintDevice->y(frameId));
+    QPoint offset = m_d->paintDevice->frameOffset(frameId);
     KisDomUtils::saveValue(&keyframeElement, "offset", offset);
 }
 
 KisKeyframe *KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.attribute("time").toUInt();
-    int frameId = m_d->paintDevice->createFrame(false, 0);
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
-    m_d->paintDevice->move(offset, frameId);
+
+
+    int frameId = m_d->paintDevice->createFrame(false, 0, offset);
 
     QString frameFilename = keyframeNode.attribute("frame");
     setFrameFilename(frameId, frameFilename);

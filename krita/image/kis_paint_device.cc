@@ -57,127 +57,16 @@
 #include "tiles3/kis_random_accessor.h"
 
 #include "kis_default_bounds.h"
-#include "kis_lock_free_cache.h"
+
 #include "kis_lod_transform.h"
 
 #include "kis_raster_keyframe_channel.h"
 
-class PaintDeviceCache
-{
-public:
-    PaintDeviceCache(KisPaintDevice *paintDevice)
-        : m_paintDevice(paintDevice),
-          m_exactBoundsCache(paintDevice),
-          m_nonDefaultPixelAreaCache(paintDevice),
-          m_regionCache(paintDevice)
-    {
-    }
 
-    PaintDeviceCache(const PaintDeviceCache &rhs)
-        : m_paintDevice(rhs.m_paintDevice),
-          m_exactBoundsCache(rhs.m_paintDevice),
-          m_nonDefaultPixelAreaCache(rhs.m_paintDevice),
-          m_regionCache(rhs.m_paintDevice)
-    {
-    }
+#include "kis_paint_device_cache.h"
 
-    void setupCache() {
-        invalidate();
-    }
 
-    void invalidate() {
-        m_thumbnailsValid = false;
-        m_exactBoundsCache.invalidate();
-        m_nonDefaultPixelAreaCache.invalidate();
-        m_regionCache.invalidate();
-    }
-
-    QRect exactBounds() {
-        return m_exactBoundsCache.getValue();
-    }
-
-    QRect nonDefaultPixelArea() {
-        return m_nonDefaultPixelAreaCache.getValue();
-    }
-
-    QRegion region() {
-        return m_regionCache.getValue();
-    }
-
-    QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
-        QImage thumbnail;
-
-        if(m_thumbnailsValid) {
-            thumbnail = findThumbnail(w, h);
-        }
-        else {
-            m_thumbnails.clear();
-            m_thumbnailsValid = true;
-        }
-
-        if(thumbnail.isNull()) {
-            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), renderingIntent, conversionFlags);
-            cacheThumbnail(w, h, thumbnail);
-        }
-
-        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
-        return thumbnail;
-    }
-
-private:
-    inline QImage findThumbnail(qint32 w, qint32 h) {
-        QImage resultImage;
-        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h)) {
-            resultImage = m_thumbnails[w][h];
-        }
-        return resultImage;
-    }
-
-    inline void cacheThumbnail(qint32 w, qint32 h, QImage image) {
-        m_thumbnails[w][h] = image;
-    }
-
-private:
-    KisPaintDevice *m_paintDevice;
-
-    struct ExactBoundsCache : KisLockFreeCache<QRect> {
-        ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
-
-        QRect calculateNewValue() const {
-            return m_paintDevice->calculateExactBounds(false);
-        }
-    private:
-        KisPaintDevice *m_paintDevice;
-    };
-
-    struct NonDefaultPixelCache : KisLockFreeCache<QRect> {
-        NonDefaultPixelCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
-
-        QRect calculateNewValue() const {
-            return m_paintDevice->calculateExactBounds(true);
-        }
-    private:
-        KisPaintDevice *m_paintDevice;
-    };
-
-    struct RegionCache : KisLockFreeCache<QRegion> {
-        RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
-
-        QRegion calculateNewValue() const {
-            return m_paintDevice->dataManager()->region();
-        }
-    private:
-        KisPaintDevice *m_paintDevice;
-    };
-
-    ExactBoundsCache m_exactBoundsCache;
-    NonDefaultPixelCache m_nonDefaultPixelAreaCache;
-    RegionCache m_regionCache;
-
-    bool m_thumbnailsValid;
-    QMap<int, QMap<int, QImage> > m_thumbnails;
-};
-
+#include "kis_paint_device_data.h"
 
 struct KisPaintDevice::Private
 {
@@ -204,18 +93,19 @@ public:
 
     KisPaintDeviceStrategy* currentStrategy();
 
-    inline const KoColorSpace* colorSpace() const { return currentData()->colorSpace; }
-    inline void setColorSpace(const KoColorSpace *cs) { currentData()->colorSpace = cs; }
+    inline const KoColorSpace* colorSpace() const { return currentData()->colorSpace(); }
+    inline void setColorSpace(const KoColorSpace *cs) { currentData()->setColorSpace(cs); }
 
-    inline KisDataManagerSP dataManager(int frameId=-1) const { return data(frameId)->dataManager; }
-    inline void setDataManager(KisDataManagerSP dm) { currentData()->dataManager = dm;  }
+    inline KisDataManagerSP dataManager(int frameId=-1) const { return data(frameId)->dataManager(); }
+    inline void setDataManager(KisDataManagerSP dm) { currentData()->setDataManager(dm);  }
 
-    inline qint32 x(int frameId=-1) const {return data(frameId)->x;}
-    inline qint32 y(int frameId=-1) const {return data(frameId)->y;}
-    inline void setX(qint32 x, int frameId=-1) { data(frameId)->x = x; }
-    inline void setY(qint32 y, int frameId=-1) { data(frameId)->y = y; }
+    inline qint32 x() const {return currentData()->x();}
+    inline qint32 y() const {return currentData()->y();}
+    inline void setX(qint32 x) { currentData()->setX(x); }
+    inline void setY(qint32 y) { currentData()->setY(y); }
 
-    inline PaintDeviceCache* cache(int frameId=-1) { return &data(frameId)->cache; }
+    inline KisPaintDeviceCache* cache(int frameId=-1) { return data(frameId)->cache(); }
+
 
     void prepareClone(KisPaintDeviceSP src)
     {
@@ -228,25 +118,21 @@ public:
         return fastBitBltPossibleImpl(src->m_d->currentData());
     }
 
-    int createFrame(bool copy, int copySrc)
+    int createFrame(bool copy, int copySrc, const QPoint &offset)
     {
         Data *data;
 
         if (frames.isEmpty()) {
             data = m_data;
         } else if (copy) {
-            Data *srcData = frames[copySrc];
-
-            data = new Data(q);
-            data->x = srcData->x;
-            data->y = srcData->y;
-            data->colorSpace = srcData->colorSpace;
-
-            data->dataManager = new KisDataManager(*(srcData->dataManager.data()));
-
-            data->cache.setupCache();
+            data = new Data(frames[copySrc], true);
         } else {
-            data = new Data(m_data);
+            data = new Data(m_data, false);
+        }
+
+        if (!offset.isNull()) {
+            data->setX(offset.x());
+            data->setY(offset.y());
         }
 
         int frameId = nextFreeFrameId++;
@@ -275,10 +161,15 @@ public:
     {
         Data *data = frames[frameId];
 
-        QRect extent = data->dataManager->extent();
-        extent.translate(data->x, data->y);
+        QRect extent = data->dataManager()->extent();
+        extent.translate(data->x(), data->y());
 
         return extent;
+    }
+
+    QPoint frameOffset(int frameId) const {
+        Data *data = frames[frameId];
+        return QPoint(data->x(), data->y());
     }
 
     const QList<int> frameIds() const
@@ -291,33 +182,7 @@ public:
     QRegion syncLodData(int newLod);
 
 private:
-    struct Data {
-        Data(KisPaintDevice *paintDevice)
-            : cache(paintDevice),
-              x(0), y(0),
-              colorSpace(0),
-              levelOfDetail(0)
-        {
-        }
-
-        Data(const Data *rhs)
-            : dataManager(new KisDataManager(rhs->dataManager->pixelSize(), rhs->dataManager->defaultPixel())),
-              cache(rhs->cache),
-              x(rhs->x),
-              y(rhs->y),
-              colorSpace(rhs->colorSpace),
-              levelOfDetail(rhs->levelOfDetail)
-        {
-            cache.setupCache();
-        }
-
-        KisDataManagerSP dataManager;
-        PaintDeviceCache cache;
-        qint32 x;
-        qint32 y;
-        const KoColorSpace* colorSpace;
-        qint32 levelOfDetail;
-    };
+    typedef KisPaintDeviceData Data;
 
 private:
 
@@ -341,7 +206,7 @@ private:
             if (!m_externalFrameData) {
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_externalFrameData) {
-                    m_externalFrameData.reset(new Data(m_data));
+                    m_externalFrameData.reset(new Data(m_data, false));
                 }
             }
             data = m_externalFrameData.data();
@@ -365,7 +230,7 @@ private:
             if (!m_lodData) {
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_lodData) {
-                    m_lodData.reset(new Data(m_data));
+                    m_lodData.reset(new Data(m_data, false));
                 }
             }
             data = m_lodData.data();
@@ -379,25 +244,25 @@ private:
     void prepareCloneImpl(KisPaintDeviceSP src, Data *srcData)
     {
         q->clear();
-        setX(srcData->x);
-        setY(srcData->y);
+        setX(srcData->x());
+        setY(srcData->y());
 
-        if(!(*colorSpace() == *srcData->colorSpace)) {
-            if (colorSpace()->pixelSize() != srcData->colorSpace->pixelSize()) {
-                setDataManager(new KisDataManager(srcData->colorSpace->pixelSize(), srcData->dataManager->defaultPixel()));
+        if(!(*colorSpace() == *srcData->colorSpace())) {
+            if (colorSpace()->pixelSize() != srcData->colorSpace()->pixelSize()) {
+                setDataManager(new KisDataManager(srcData->colorSpace()->pixelSize(), srcData->dataManager()->defaultPixel()));
                 cache()->setupCache();
             }
 
-            setColorSpace(srcData->colorSpace);
+            setColorSpace(srcData->colorSpace());
         }
-        q->setDefaultPixel(srcData->dataManager->defaultPixel());
+        q->setDefaultPixel(srcData->dataManager()->defaultPixel());
         q->setDefaultBounds(src->defaultBounds());
     }
 
     bool fastBitBltPossibleImpl(Data *srcData)
     {
-        return x() == srcData->x && y() == srcData->y &&
-                *colorSpace() == *srcData->colorSpace;
+        return x() == srcData->x() && y() == srcData->y() &&
+            *colorSpace() == *srcData->colorSpace();
     }
 
     struct StrategyPolicy;
@@ -457,38 +322,38 @@ QRegion KisPaintDevice::Private::syncLodData(int newLod)
     Data *srcData = currentNonLodData();
 
     if (!m_lodData) {
-        m_lodData.reset(new Data(srcData));
+        m_lodData.reset(new Data(srcData, false));
     }
 
-    int expectedX = coordToLodCoord(srcData->x, newLod);
-    int expectedY = coordToLodCoord(srcData->y, newLod);
+    int expectedX = coordToLodCoord(srcData->x(), newLod);
+    int expectedY = coordToLodCoord(srcData->y(), newLod);
 
     /**
      * We compare color spaces as pure pointers, because they must be
      * exactly the same, since they come from the common source.
      */
-    if (m_lodData->levelOfDetail != newLod ||
-        m_lodData->colorSpace != srcData->colorSpace ||
-        m_lodData->x != expectedX ||
-        m_lodData->y != expectedY) {
+    if (m_lodData->levelOfDetail() != newLod ||
+        m_lodData->colorSpace() != srcData->colorSpace() ||
+        m_lodData->x() != expectedX ||
+        m_lodData->y() != expectedY) {
 
-        if (m_lodData->dataManager->pixelSize() != srcData->dataManager->pixelSize()) {
-            m_lodData->dataManager =
-                new KisDataManager(srcData->dataManager->pixelSize(),
-                                   srcData->dataManager->defaultPixel());
+        if (m_lodData->dataManager()->pixelSize() != srcData->dataManager()->pixelSize()) {
+            m_lodData->setDataManager(
+                new KisDataManager(srcData->dataManager()->pixelSize(),
+                                   srcData->dataManager()->defaultPixel()));
         }
 
-        m_lodData->levelOfDetail = newLod;
-        m_lodData->colorSpace = srcData->colorSpace;
+        m_lodData->setLevelOfDetail(newLod);
+        m_lodData->setColorSpace(srcData->colorSpace());
 
-        m_lodData->x = expectedX;
-        m_lodData->y = expectedY;
+        m_lodData->setX(expectedX);
+        m_lodData->setY(expectedY);
 
         // FIXME: different kind of synchronization
     }
 
     QRegion dirtyRegion = syncWholeDevice(srcData);
-    m_lodData->cache.invalidate();
+    m_lodData->cache()->invalidate();
 
     return dirtyRegion;
 }
@@ -519,13 +384,13 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
 {
     KIS_ASSERT_RECOVER(m_lodData) { return QRegion(); }
 
-    m_lodData->dataManager->clear();
+    m_lodData->dataManager()->clear();
 
-    int lod = m_lodData->levelOfDetail;
+    int lod = m_lodData->levelOfDetail();
     int srcStepSize = 1 << lod;
 
     // FIXME:
-    QRect rcFIXME= srcData->dataManager->extent().translated(srcData->x, srcData->y);
+    QRect rcFIXME= srcData->dataManager()->extent().translated(srcData->x(), srcData->y());
     if (!rcFIXME.isValid()) return QRegion();
 
     QRect srcRect = KisLodTransform::alignedRect(rcFIXME, lod);
@@ -534,7 +399,7 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
 
     KIS_ASSERT_RECOVER_NOOP(srcRect.width() / srcStepSize == dstRect.width());
 
-    const int pixelSize = srcData->dataManager->pixelSize();
+    const int pixelSize = srcData->dataManager()->pixelSize();
 
     int rowsAccumulated = 0;
     int columnsAccumulated = 0;
@@ -563,8 +428,8 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
         weights[srcCellSize - 1] = averageWeight - extraWeight;
     }
 
-    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager.data()), srcRect);
-    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager.data()), dstRect);
+    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager().data()), srcRect);
+    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager().data()), dstRect);
 
     int rowsRemaining = srcRect.height();
     while (rowsRemaining > 0) {
@@ -618,11 +483,11 @@ void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDev
 {
     Data *data = frames[frameId];
 
-    QRect extent = data->dataManager->extent();
-    extent.translate(data->x, data->y);
+    QRect extent = data->dataManager()->extent();
+    extent.translate(data->x(), data->y());
 
     targetDevice->m_d->prepareCloneImpl(q, data);
-    targetDevice->m_d->currentStrategy()->fastBitBltRough(data->dataManager, extent);
+    targetDevice->m_d->currentStrategy()->fastBitBltRough(data->dataManager(), extent);
 }
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -794,14 +659,14 @@ KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
     return m_d->defaultBounds;
 }
 
-void KisPaintDevice::move(const QPoint &pt, int frameId)
+void KisPaintDevice::move(const QPoint &pt)
 {
-    m_d->currentStrategy()->move(pt, frameId);
+    m_d->currentStrategy()->move(pt);
 }
 
-void KisPaintDevice::move(qint32 x, qint32 y, int frameId)
+void KisPaintDevice::move(qint32 x, qint32 y)
 {
-    move(QPoint(x, y), frameId);
+    move(QPoint(x, y));
 }
 
 void KisPaintDevice::setX(qint32 x)
@@ -814,14 +679,14 @@ void KisPaintDevice::setY(qint32 y)
     move(QPoint(m_d->x(), y));
 }
 
-qint32 KisPaintDevice::x(int frameId) const
+qint32 KisPaintDevice::x() const
 {
-    return m_d->x(frameId);
+    return m_d->x();
 }
 
-qint32 KisPaintDevice::y(int frameId) const
+qint32 KisPaintDevice::y() const
 {
-    return m_d->y(frameId);
+    return m_d->y();
 }
 
 void KisPaintDevice::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
@@ -1190,16 +1055,21 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
 
 }
 
-void KisPaintDevice::setProfile(const KoColorProfile * profile)
+bool KisPaintDevice::setProfile(const KoColorProfile * profile)
 {
-    if (profile == 0) return;
+    bool result = false;
+    if (!profile) return result;
+
     m_d->cache()->invalidate();
     const KoColorSpace * dstSpace =
             KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (dstSpace) {
         m_d->setColorSpace(dstSpace);
+        emit profileChanged(profile);
+        result = true;
     }
-    emit profileChanged(profile);
+
+    return result;
 }
 
 void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * colorSpace)
@@ -1576,9 +1446,9 @@ KisRasterKeyframeChannel* KisPaintDevice::keyframeChannel() const
     return m_d->contentChannel.data();
 }
 
-int KisPaintDevice::createFrame(bool copy, int copySrc)
+int KisPaintDevice::createFrame(bool copy, int copySrc, const QPoint &offset)
 {
-    return m_d->createFrame(copy, copySrc);
+    return m_d->createFrame(copy, copySrc, offset);
 }
 
 void KisPaintDevice::deleteFrame(int frame)
@@ -1599,6 +1469,11 @@ void KisPaintDevice::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
 QRect KisPaintDevice::frameBounds(int frameId)
 {
     return m_d->frameBounds(frameId);
+}
+
+QPoint KisPaintDevice::frameOffset(int frameId) const
+{
+    return m_d->frameOffset(frameId);
 }
 
 const KoColorSpace* KisPaintDevice::colorSpace() const

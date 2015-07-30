@@ -71,7 +71,10 @@ public:
 private:
 
     bool savePaintDevice(KisPaintDeviceSP device, QString location);
-    bool savePaintDeviceFrame(KisPaintDeviceSP device, int frameId, QString location);
+
+    template<class DevicePolicy>
+    bool savePaintDeviceFrame(KisPaintDeviceSP device, QString location, DevicePolicy policy);
+
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);

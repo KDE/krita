@@ -55,6 +55,7 @@
 #include "kis_shape_selection.h"
 #include "kis_dom_utils.h"
 #include "kis_raster_keyframe_channel.h"
+#include "kis_paint_device_frames_interface.h"
 
 using namespace KRA;
 
@@ -333,13 +334,40 @@ QStringList KisKraLoadVisitor::errorMessages() const
     return m_errorMessages;
 }
 
+struct SimpleDevicePolicy
+{
+    bool read(KisPaintDeviceSP dev, QIODevice *stream) {
+        return dev->read(stream);
+    }
+
+    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+        return dev->setDefaultPixel(defaultPixel);
+    }
+};
+
+struct FramedDevicePolicy
+{
+    FramedDevicePolicy(int frameId)
+        :  m_frameId(frameId) {}
+
+    bool read(KisPaintDeviceSP dev, QIODevice *stream) {
+        return dev->framesInterface()->readFrame(stream, m_frameId);
+    }
+
+    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+        return dev->framesInterface()->setFrameDefaultPixel(defaultPixel, m_frameId);
+    }
+
+    int m_frameId;
+};
+
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
     // Layer data
 
-    QList<int> frames = device->frames();
+    QList<int> frames = device->framesInterface()->frames();
     if (frames.count() <= 1) {
-        return loadPaintDeviceFrame(device, -1, location);
+        return loadPaintDeviceFrame(device, location, SimpleDevicePolicy());
     } else {
         KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();
 
@@ -348,7 +376,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
             QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
             Q_ASSERT(!frameFilename.isEmpty());
 
-            if (!loadPaintDeviceFrame(device, id, frameFilename)) {
+            if (!loadPaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
                 return false;
             }
         }
@@ -357,10 +385,11 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
     return true;
 }
 
-bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, int frameId, const QString &location)
+template<class DevicePolicy>
+bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy)
 {
     if (m_store->open(location)) {
-        if (!device->read(m_store->device(), frameId)) {
+        if (!policy.read(device, m_store->device())) {
             m_errorMessages << i18n("Could not read pixel data: %1.", location);
             device->disconnect();
             m_store->close();
@@ -376,7 +405,7 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, int frameI
         if (m_store->size() == pixelSize) {
             quint8 *defPixel = new quint8[pixelSize];
             m_store->read((char*)defPixel, pixelSize);
-            device->setDefaultPixel(defPixel, frameId);
+            policy.setDefaultPixel(device, defPixel);
             delete[] defPixel;
         }
         m_store->close();

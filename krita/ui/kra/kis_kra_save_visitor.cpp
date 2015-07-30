@@ -56,6 +56,8 @@
 #include "flake/kis_shape_selection.h"
 
 #include "kis_raster_keyframe_channel.h"
+#include "kis_paint_device_frames_interface.h"
+
 
 using namespace KRA;
 
@@ -244,6 +246,32 @@ QStringList KisKraSaveVisitor::errorMessages() const
     return m_errorMessages;
 }
 
+struct SimpleDevicePolicy
+{
+    bool write(KisPaintDeviceSP dev, KisPaintDeviceWriter &store) {
+        return dev->write(store);
+    }
+
+    const quint8* defaultPixel(KisPaintDeviceSP dev) const {
+        return dev->defaultPixel();
+    }
+};
+
+struct FramedDevicePolicy
+{
+    FramedDevicePolicy(int frameId)
+        :  m_frameId(frameId) {}
+
+    bool write(KisPaintDeviceSP dev, KisPaintDeviceWriter &store) {
+        return dev->framesInterface()->writeFrame(store, m_frameId);
+    }
+
+    const quint8* defaultPixel(KisPaintDeviceSP dev) const {
+        return dev->framesInterface()->frameDefaultPixel(m_frameId);
+    }
+
+    int m_frameId;
+};
 
 bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
@@ -252,10 +280,10 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     KisConfig cfg;
     m_store->setCompressionEnabled(cfg.compressKra());
 
-    QList<int> frames = device->frames();
+    QList<int> frames = device->framesInterface()->frames();
 
     if (frames.count() <= 1) {
-        savePaintDeviceFrame(device, -1, location);
+        savePaintDeviceFrame(device, location, SimpleDevicePolicy());
     } else {
         KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();
 
@@ -265,7 +293,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
             QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
             Q_ASSERT(!frameFilename.isEmpty());
 
-            if (!savePaintDeviceFrame(device, id, frameFilename)) {
+            if (!savePaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
                 return false;
             }
         }
@@ -275,10 +303,12 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     return true;
 }
 
-bool KisKraSaveVisitor::savePaintDeviceFrame(KisPaintDeviceSP device, int frameId, QString location)
+
+template<class DevicePolicy>
+bool KisKraSaveVisitor::savePaintDeviceFrame(KisPaintDeviceSP device, QString location, DevicePolicy policy)
 {
     if (m_store->open(location)) {
-        if (!device->write(*m_writer, frameId)) {
+        if (!policy.write(device, *m_writer)) {
             device->disconnect();
             m_store->close();
             return false;
@@ -287,7 +317,7 @@ bool KisKraSaveVisitor::savePaintDeviceFrame(KisPaintDeviceSP device, int frameI
         m_store->close();
     }
     if (m_store->open(location + ".defaultpixel")) {
-        m_store->write((char*)device->defaultPixel(frameId), device->colorSpace()->pixelSize());
+        m_store->write((char*)policy.defaultPixel(device), device->colorSpace()->pixelSize());
         m_store->close();
     }
 

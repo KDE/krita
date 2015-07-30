@@ -20,7 +20,9 @@
 #include "kis_dom_utils.h"
 
 #include "kis_paint_device.h"
+#include "kis_paint_device_frames_interface.h"
 #include "kis_time_range.h"
+
 
 struct KisRasterKeyframeChannel::Private
 {
@@ -63,7 +65,7 @@ bool KisRasterKeyframeChannel::fetchFrame(KisPaintDeviceSP targetDevice, int tim
 
     if (offset != 0 || i == constKeys().end()) return false;
 
-    m_d->paintDevice->fetchFrame(i.value()->value(), targetDevice);
+    m_d->paintDevice->framesInterface()->fetchFrame(i.value()->value(), targetDevice);
 
     return true;
 }
@@ -100,7 +102,7 @@ KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfram
 {
     int srcFrame = (copySrc != 0) ? copySrc->value() : 0;
 
-    quint32 frameId = (quint32)m_d->paintDevice->createFrame((copySrc != 0), srcFrame, QPoint());
+    quint32 frameId = (quint32)m_d->paintDevice->framesInterface()->createFrame((copySrc != 0), srcFrame, QPoint());
     KisKeyframe *keyframe = new KisKeyframe(this, time, frameId);
 
     return keyframe;
@@ -116,7 +118,7 @@ bool KisRasterKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
 
 void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key)
 {
-    m_d->paintDevice->deleteFrame(key->value());
+    m_d->paintDevice->framesInterface()->deleteFrame(key->value());
 }
 
 QRect KisRasterKeyframeChannel::affectedRect(KisKeyframe *key)
@@ -137,10 +139,10 @@ QRect KisRasterKeyframeChannel::affectedRect(KisKeyframe *key)
     }
 
     if (it != keys().end()) {
-        rect = m_d->paintDevice->frameBounds(it.value()->value());
+        rect = m_d->paintDevice->framesInterface()->frameBounds(it.value()->value());
     }
 
-    rect |= m_d->paintDevice->frameBounds(key->value());
+    rect |= m_d->paintDevice->framesInterface()->frameBounds(key->value());
 
     return rect;
 }
@@ -178,7 +180,7 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement k
     }
     keyframeElement.setAttribute("frame", filename);
 
-    QPoint offset = m_d->paintDevice->frameOffset(frameId);
+    QPoint offset = m_d->paintDevice->framesInterface()->frameOffset(frameId);
     KisDomUtils::saveValue(&keyframeElement, "offset", offset);
 }
 
@@ -190,7 +192,7 @@ KisKeyframe *KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeN
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
 
 
-    int frameId = m_d->paintDevice->createFrame(false, 0, offset);
+    int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset);
 
     QString frameFilename = keyframeNode.attribute("frame");
     setFrameFilename(frameId, frameFilename);

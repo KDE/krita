@@ -51,6 +51,8 @@ class KisPaintDeviceWriter;
 class KisKeyframe;
 class KisRasterKeyframeChannel;
 
+class KisPaintDeviceFramesInterface;
+
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 
@@ -117,12 +119,12 @@ public:
     /**
      * Write the pixels of this paint device into the specified file store.
      */
-    bool write(KisPaintDeviceWriter &store, int frame=-1);
+    bool write(KisPaintDeviceWriter &store);
 
     /**
      * Fill this paint device with the pixels from the specified file store.
      */
-    bool read(QIODevice *stream, int frame=-1);
+    bool read(QIODevice *stream);
 
 public:
 
@@ -265,14 +267,14 @@ public:
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      * If frame ID is given, set default pixel for that frame. Otherwise use active frame.
      */
-    void setDefaultPixel(const quint8 *defPixel, int frameId=-1);
+    void setDefaultPixel(const quint8 *defPixel);
 
     /**
      * Get a pointer to the default pixel.
      * If the frame parameter is given, get the default pixel of
      * specified frame. Otherwise use currently active frame.
      */
-    const quint8 *defaultPixel(int frameId=-1) const;
+    const quint8 *defaultPixel() const;
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to
@@ -686,45 +688,9 @@ public:
     KisRasterKeyframeChannel* keyframeChannel() const;
 
     /**
-     * Creates a new frame on the device and returns an identifier for it
-     * @return frame id
+     * An interface to modify/load/save frames stored inside this device
      */
-    int createFrame(bool copy, int copySrc, const QPoint &offset);
-
-    /**
-     * Create a new frame with given id. This should not normally be used
-     * except when loading an image.
-     * @param frameId ID to use
-     */
-    void forceCreateFrame(int frameId);
-
-    /**
-     * Delete the frame with given id
-     * @param frame frame ID
-     */
-    void deleteFrame(int frame);
-
-    /**
-     * Get the bounds of a given frame
-     * @param frameId ID of the frame
-     * @return bounds
-     */
-    QRect frameBounds(int frameId);
-
-    QPoint frameOffset(int frameId) const;
-
-    /**
-     * Return a list of IDs for the frames contained in this paint device
-     * @return list of frame IDs
-     */
-    QList<int> frames();
-
-    /**
-     * Copy the given frame into the target device
-     * @param frameId ID of the frame to be copied
-     * @param targetDevice paint device to copy to
-     */
-    void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+    KisPaintDeviceFramesInterface* framesInterface();
 
 public:
 
@@ -830,6 +796,9 @@ private:
 
     void emitColorSpaceChanged();
     void emitProfileChanged();
+
+private:
+    friend class KisPaintDeviceFramesInterface;
 
 protected:
     friend class KisSelectionTest;

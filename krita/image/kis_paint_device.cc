@@ -61,11 +61,10 @@
 
 #include "kis_raster_keyframe_channel.h"
 
-
 #include "kis_paint_device_cache.h"
-
-
 #include "kis_paint_device_data.h"
+#include "kis_paint_device_frames_interface.h"
+
 
 struct KisPaintDevice::Private
 {
@@ -89,6 +88,7 @@ public:
     KisDefaultBoundsBaseSP defaultBounds;
     QScopedPointer<KisPaintDeviceStrategy> basicStrategy;
     QScopedPointer<KisPaintDeviceWrappedStrategy> wrappedStrategy;
+    QScopedPointer<KisPaintDeviceFramesInterface> framesInterface;
 
     KisPaintDeviceStrategy* currentStrategy();
 
@@ -1024,23 +1024,15 @@ void KisPaintDevice::purgeDefaultPixels()
     dm->purge(dm->extent());
 }
 
-void KisPaintDevice::setDefaultPixel(const quint8 *defPixel, int frameId)
+void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
 {
-    if (frameId < 0) {
-        m_d->dataManager()->setDefaultPixel(defPixel);
-        m_d->cache()->invalidate();
-    } else {
-        m_d->setFrameDefaultPixel(defPixel, frameId);
-    }
+    m_d->dataManager()->setDefaultPixel(defPixel);
+    m_d->cache()->invalidate();
 }
 
-const quint8 *KisPaintDevice::defaultPixel(int frameId) const
+const quint8 *KisPaintDevice::defaultPixel() const
 {
-    if (frameId < 0) {
-        return m_d->dataManager()->defaultPixel();
-    } else {
-        return m_d->frameDefaultPixel(frameId);
-    }
+    return m_d->dataManager()->defaultPixel();
 }
 
 void KisPaintDevice::clear()
@@ -1066,28 +1058,17 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 }
 
 
-bool KisPaintDevice::write(KisPaintDeviceWriter &store, int frame)
+bool KisPaintDevice::write(KisPaintDeviceWriter &store)
 {
-    // FIXME: SANITY_CHECK
-    if (frame < 0) {
-        return m_d->dataManager()->write(store);
-    } else {
-        return m_d->writeFrame(store, frame);
-    }
+    return m_d->dataManager()->write(store);
 }
 
-bool KisPaintDevice::read(QIODevice *stream, int frame)
+bool KisPaintDevice::read(QIODevice *stream)
 {
     bool retval;
 
-    // FIXME: SANITY_CHECK
-
-    if (frame < 0) {
-        retval = m_d->dataManager()->read(stream);
-        m_d->cache()->invalidate();
-    } else {
-        retval = m_d->readFrame(stream, frame);
-    }
+    retval = m_d->dataManager()->read(stream);
+    m_d->cache()->invalidate();
 
     return retval;
 }
@@ -1465,6 +1446,9 @@ quint32 KisPaintDevice::channelCount() const
 
 KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, const KisNodeWSP node)
 {
+    Q_ASSERT(!m_d->framesInterface);
+    m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
+
     Q_ASSERT(!m_d->contentChannel);
     m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, node, this));
 
@@ -1478,36 +1462,6 @@ KisRasterKeyframeChannel* KisPaintDevice::keyframeChannel() const
 {
     Q_ASSERT(m_d->contentChannel);
     return m_d->contentChannel.data();
-}
-
-int KisPaintDevice::createFrame(bool copy, int copySrc, const QPoint &offset)
-{
-    return m_d->createFrame(copy, copySrc, offset);
-}
-
-void KisPaintDevice::deleteFrame(int frame)
-{
-    m_d->deleteFrame(frame);
-}
-
-QList<int> KisPaintDevice::frames()
-{
-    return m_d->frameIds();
-}
-
-void KisPaintDevice::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
-{
-    m_d->fetchFrame(frameId, targetDevice);
-}
-
-QRect KisPaintDevice::frameBounds(int frameId)
-{
-    return m_d->frameBounds(frameId);
-}
-
-QPoint KisPaintDevice::frameOffset(int frameId) const
-{
-    return m_d->frameOffset(frameId);
 }
 
 const KoColorSpace* KisPaintDevice::colorSpace() const
@@ -1585,6 +1539,74 @@ QRegion KisPaintDevice::syncLodCache(int levelOfDetail)
     }
 
     return dirtyRegion;
+}
+
+KisPaintDeviceFramesInterface* KisPaintDevice::framesInterface()
+{
+    return m_d->framesInterface.data();
+}
+
+/******************************************************************/
+/*               KisPaintDeviceFramesInterface                    */
+/******************************************************************/
+
+KisPaintDeviceFramesInterface::KisPaintDeviceFramesInterface(KisPaintDevice *parentDevice)
+    : q(parentDevice)
+{
+}
+
+QList<int> KisPaintDeviceFramesInterface::frames()
+{
+    return q->m_d->frameIds();
+}
+
+int KisPaintDeviceFramesInterface::createFrame(bool copy, int copySrc, const QPoint &offset)
+{
+    return q->m_d->createFrame(copy, copySrc, offset);
+}
+
+void KisPaintDeviceFramesInterface::deleteFrame(int frame)
+{
+    q->m_d->deleteFrame(frame);
+}
+
+void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+{
+    q->m_d->fetchFrame(frameId, targetDevice);
+}
+
+QRect KisPaintDeviceFramesInterface::frameBounds(int frameId)
+{
+    return q->m_d->frameBounds(frameId);
+}
+
+QPoint KisPaintDeviceFramesInterface::frameOffset(int frameId) const
+{
+    return q->m_d->frameOffset(frameId);
+}
+
+void KisPaintDeviceFramesInterface::setFrameDefaultPixel(const quint8 *defPixel, int frameId)
+{
+    KIS_ASSERT_RECOVER_RETURN(frameId >= 0);
+    q->m_d->setFrameDefaultPixel(defPixel, frameId);
+}
+
+const quint8* KisPaintDeviceFramesInterface::frameDefaultPixel(int frameId) const
+{
+    KIS_ASSERT_RECOVER(frameId >= 0) { return (quint8*)"deadbeef"; }
+    return q->m_d->frameDefaultPixel(frameId);
+}
+
+bool KisPaintDeviceFramesInterface::writeFrame(KisPaintDeviceWriter &store, int frameId)
+{
+    KIS_ASSERT_RECOVER(frameId >= 0) { return false; }
+    return q->m_d->writeFrame(store, frameId);
+}
+
+bool KisPaintDeviceFramesInterface::readFrame(QIODevice *stream, int frameId)
+{
+    KIS_ASSERT_RECOVER(frameId >= 0) { return false; }
+    return q->m_d->readFrame(stream, frameId);
 }
 
 #include "kis_paint_device.moc"

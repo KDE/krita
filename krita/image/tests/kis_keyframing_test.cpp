@@ -20,6 +20,7 @@
 #include <qtest_kde.h>
 #include <qsignalspy.h>
 
+#include "kis_paint_device_frames_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
@@ -143,7 +144,7 @@ void KisKeyframingTest::testRasterChannel()
 
     QCOMPARE(channel->hasScalarValue(), false);
     QCOMPARE(channel->keyframes().length(), 1);
-    QCOMPARE(dev->frames().count(), 1);
+    QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QCOMPARE(channel->frameIdAt(0), 0);
     QVERIFY(channel->keyframeAt(0) != 0);
 
@@ -153,7 +154,7 @@ void KisKeyframingTest::testRasterChannel()
 
     KisKeyframe * key_10 = channel->addKeyframe(10);
     QCOMPARE(channel->keyframes().length(), 2);
-    QCOMPARE(dev->frames().count(), 2);
+    QCOMPARE(dev->framesInterface()->frames().count(), 2);
     QVERIFY(channel->frameIdAt(10) != 0);
 
     dev->fill(0, 0, 512, 512, red);
@@ -189,22 +190,22 @@ void KisKeyframingTest::testRasterChannel()
 
     // Delete keyrame
     QCOMPARE(channel->keyframes().count(), 3);
-    QCOMPARE(dev->frames().count(), 3);
+    QCOMPARE(dev->framesInterface()->frames().count(), 3);
 
     channel->deleteKeyframe(key_0);
     QCOMPARE(channel->keyframes().count(), 2);
-    QCOMPARE(dev->frames().count(), 2);
+    QCOMPARE(dev->framesInterface()->frames().count(), 2);
     QVERIFY(channel->keyframeAt(0) == 0);
 
     channel->deleteKeyframe(key_20);
     QCOMPARE(channel->keyframes().count(), 1);
-    QCOMPARE(dev->frames().count(), 1);
+    QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QVERIFY(channel->keyframeAt(20) == 0);
 
     // Last remaining keyframe cannot be deleted
     channel->deleteKeyframe(key_10);
     QCOMPARE(channel->keyframes().count(), 1);
-    QCOMPARE(dev->frames().count(), 1);
+    QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QVERIFY(channel->keyframeAt(10) != 0);
 
     // Fetching current keyframe before the first one should

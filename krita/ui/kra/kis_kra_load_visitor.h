@@ -63,7 +63,10 @@ public:
 private:
 
     bool loadPaintDevice(KisPaintDeviceSP device, const QString& location);
-    bool loadPaintDeviceFrame(KisPaintDeviceSP device, int frameId, const QString& location);
+
+    template<class DevicePolicy>
+    bool loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy);
+
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
     bool loadMetaData(KisNode* node);

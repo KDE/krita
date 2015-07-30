@@ -38,7 +38,7 @@ public:
 
     int timeToPosition(int time) const;
     int positionToTime(int x) const;
-    bool isWithingView(int x) const;
+    bool isWithingView(int time) const;
 
     void setModel(QAbstractItemModel *model);
 

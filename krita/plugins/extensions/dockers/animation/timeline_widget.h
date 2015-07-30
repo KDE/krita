@@ -45,6 +45,9 @@ public:
 
     void paintEvent(QPaintEvent *e);
 
+    int timeToPosition(int time) const;
+    int positionToTime(int x) const;
+
 private slots:
     void imageTimeChanged();
     void cacheChanged();
@@ -53,6 +56,7 @@ private:
     void scrub(QMouseEvent *e, bool preview);
 
     QVBoxLayout *m_layout;
+    QTreeView *m_layerTree;
     TimelineView *m_timelineView;
 
     KisCanvas2 *m_canvas;

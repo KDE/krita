@@ -36,6 +36,7 @@ TimelineView::TimelineView(QWidget *parent)
     setSelectionMode(SingleSelection);
     setSelectionBehavior(SelectItems);
     header()->hide();
+    setItemsExpandable(false);
 }
 
 QModelIndex TimelineView::indexAt(const QPoint &point) const
@@ -178,8 +179,9 @@ int TimelineView::positionToTime(int x) const
     return (x - columnViewportPosition(1)) / 8;
 }
 
-bool TimelineView::isWithingView(int x) const
+bool TimelineView::isWithingView(int time) const
 {
+    int x = timeToPosition(time);
     return x >= columnViewportPosition(1) && x < viewport()->width();
 }
 
@@ -191,6 +193,8 @@ void TimelineView::setModel(QAbstractItemModel *newModel)
 
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged()));
     // Note: QTreeView already handles deletions, so we don't need to connect those
+
+    setColumnWidth(0, 1);
 }
 
 void TimelineView::rowsChanged()

@@ -19,6 +19,9 @@
 #include "timeline_widget.h"
 
 #include <QPainter>
+#include <QHeaderView>
+#include <QScrollBar>
+#include <QSplitter>
 
 #include "kis_image.h"
 #include "kis_canvas2.h"
@@ -28,17 +31,39 @@
 
 TimelineWidget::TimelineWidget(QWidget *parent)
     : QWidget(parent)
+    , m_layerTree(new QTreeView(this))
     , m_timelineView(new TimelineView(this))
     , m_canvas(0)
     , m_image(0)
 {
     m_layout = new QVBoxLayout(this);
+    QSplitter *splitter = new QSplitter(this);
 
+    // Leave space at top for the ruler
     m_layout->insertSpacing(0, 16);
-    m_layout->addWidget(m_timelineView);
+
+    m_layout->addWidget(splitter);
+    splitter->addWidget(m_layerTree);
+    splitter->addWidget(m_timelineView);
+    splitter->setStretchFactor(0, 1);
+    splitter->setStretchFactor(1, 6);
 
     m_timelineView->setFrameShape(QFrame::NoFrame);
     m_timelineView->viewport()->setAutoFillBackground(false);
+
+    m_layerTree->header()->hide();
+    m_layerTree->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_layerTree->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    connect(m_timelineView->verticalScrollBar(), SIGNAL(valueChanged(int)),
+            m_layerTree->verticalScrollBar(), SLOT(setValue(int)));
+    connect(m_layerTree->verticalScrollBar(), SIGNAL(valueChanged(int)),
+            m_timelineView->verticalScrollBar(), SLOT(setValue(int)));
+
+    connect(m_layerTree, SIGNAL(collapsed(QModelIndex)), m_timelineView, SLOT(collapse(QModelIndex)));
+    connect(m_layerTree, SIGNAL(expanded(QModelIndex)), m_timelineView, SLOT(expand(QModelIndex)));
+
+    connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(update()));
 }
 
 void TimelineWidget::paintEvent(QPaintEvent *e)
@@ -58,14 +83,14 @@ void TimelineWidget::drawRuler(QPainter &painter, QPaintEvent *e, bool dark)
 {
     Q_UNUSED(dark);
 
-    int t0 = m_timelineView->positionToTime(e->rect().left());
-    int t1 = m_timelineView->positionToTime(e->rect().right());
+    int t0 = positionToTime(e->rect().left());
+    int t1 = positionToTime(e->rect().right());
 
     painter.setPen(QPen(QColor(128, 128, 128, 128)));
     for (int t=t0; t<=t1; t++) {
-        int x = m_timelineView->timeToPosition(t);
-        int xNext = m_timelineView->timeToPosition(t + 1);
-        if (!m_timelineView->isWithingView(x)) continue;
+        int x = timeToPosition(t);
+        int xNext = timeToPosition(t + 1);
+        if (!m_timelineView->isWithingView(t)) continue;
 
         if (t % 10 == 0) {
             painter.drawLine(x, e->rect().top(), x, e->rect().bottom());
@@ -85,8 +110,8 @@ void TimelineWidget::drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark)
                 m_canvas->animationPlayer()->currentTime() :
                 m_image->animationInterface()->currentUITime();
 
-    int x = m_timelineView->timeToPosition(time) + 4;
-    if (m_timelineView->isWithingView(x)) {
+    int x = timeToPosition(time) + 4;
+    if (m_timelineView->isWithingView(time)) {
         painter.setPen(QPen(
             dark ? QColor(0, 0, 0, 128) : QColor(255, 255, 255, 128)
         ));
@@ -129,7 +154,10 @@ void TimelineWidget::setCanvas(KisCanvas2 *canvas)
 
 void TimelineWidget::setModel(QAbstractItemModel *model)
 {
+    m_layerTree->setModel(model);
     m_timelineView->setModel(model);
+
+    m_layerTree->hideColumn(1);
 }
 
 void TimelineWidget::mousePressEvent(QMouseEvent *e)
@@ -153,7 +181,7 @@ void TimelineWidget::scrub(QMouseEvent *e, bool preview)
 {
     if (!m_image) return;
 
-    int time = m_timelineView->positionToTime(e->pos().x());
+    int time = positionToTime(e->pos().x());
     if (time >= 0) {
         if (preview) {
             m_canvas->animationPlayer()->displayFrame(time);
@@ -165,6 +193,16 @@ void TimelineWidget::scrub(QMouseEvent *e, bool preview)
     }
 
     e->accept();
+}
+
+int TimelineWidget::timeToPosition(int time) const
+{
+    return m_timelineView->timeToPosition(time) + m_timelineView->pos().x();
+}
+
+int TimelineWidget::positionToTime(int x) const
+{
+    return m_timelineView->positionToTime(x - m_timelineView->pos().x());
 }
 
 #include "timeline_widget.moc"

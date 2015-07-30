@@ -214,6 +214,11 @@ public Q_SLOTS:
      */
     void switchToolRequested(const QString &id);
 
+    /**
+     * Request change input device
+     * @param id the id of the input device
+     */
+    void switchInputDeviceRequested(const KoInputDevice &id);
 
     /**
      * a new tool has become known to mankind

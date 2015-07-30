@@ -36,8 +36,6 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNode
     : KisKeyframeChannel(id, node),
       m_d(new Private(paintDevice))
 {
-    // Raster channels always have at least one frame (representing a static image)
-    addKeyframe(0);
 }
 
 KisRasterKeyframeChannel::~KisRasterKeyframeChannel()

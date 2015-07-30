@@ -631,43 +631,6 @@ void KisPaintDeviceTest::testDeviceDuplication()
 
 }
 
-void KisPaintDeviceTest::testSharedDataManager()
-{
-    QRect fillRect(0,0,100,100);
-    quint8 fillPixel[4]={255,255,255,255};
-    QRect clearRect(10,10,20,20);
-    QImage srcImage;
-    QImage dstImage;
-
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP srcDevice = new KisPaintDevice(cs);
-
-    srcDevice->setX(10);
-    srcDevice->setY(20);
-
-    srcDevice->fill(fillRect.left(), fillRect.top(),
-                 fillRect.width(), fillRect.height(),fillPixel);
-
-    KisPaintDeviceSP dstDevice = new KisPaintDevice(srcDevice->dataManager(), srcDevice);
-
-
-    QVERIFY(srcDevice->extent() == dstDevice->extent());
-    QVERIFY(srcDevice->exactBounds() == dstDevice->exactBounds());
-    QVERIFY(srcDevice->defaultBounds() == dstDevice->defaultBounds());
-    QVERIFY(srcDevice->x() == dstDevice->x());
-    QVERIFY(srcDevice->y() == dstDevice->y());
-
-    srcImage = srcDevice->convertToQImage(0);
-    dstImage = dstDevice->convertToQImage(0);
-    QVERIFY(srcImage == dstImage);
-
-    srcDevice->clear(clearRect);
-
-    srcImage = srcDevice->convertToQImage(0);
-    dstImage = dstDevice->convertToQImage(0);
-    QVERIFY(srcImage == dstImage);
-}
-
 void KisPaintDeviceTest::testTranslate()
 {
     QRect fillRect(0,0,64,64);

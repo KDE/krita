@@ -76,7 +76,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(const KoColorSpace * colorSpace, const QString& name = QString());
+    explicit KisPaintDevice(const KoColorSpace * colorSpace, const QString& name = QString());
 
     /**
      * Create a new paint device with the specified colorspace. The
@@ -89,7 +89,15 @@ public:
      */
     KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
 
-    KisPaintDevice(const KisPaintDevice& rhs);
+    /**
+     * Creates a copy of this device.
+     *
+     * If \p copyFrames is false, the newly created device clones the
+     * current frame of \p rhs only (default and efficient
+     * behavior). If \p copyFrames is true, the new device is a deep
+     * copy of the source with all the frames included.
+     */
+    KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false);
     virtual ~KisPaintDevice();
 
 protected:
@@ -807,8 +815,7 @@ public:
 
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);
-    void init(KisDataManagerSP explicitDataManager,
-              const KoColorSpace *colorSpace,
+    void init(const KoColorSpace *colorSpace,
               KisDefaultBoundsBaseSP defaultBounds,
               KisNodeWSP parent, const QString& name);
 
@@ -820,6 +827,9 @@ private:
      * in the colorspace of this paint device.
      */
     QVector<qint32> channelSizes() const;
+
+    void emitColorSpaceChanged();
+    void emitProfileChanged();
 
 protected:
     friend class KisSelectionTest;

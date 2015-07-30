@@ -20,7 +20,31 @@
 #define __KIS_PAINT_DEVICE_DATA_H
 
 #include "KoAlwaysInline.h"
+#include "kundo2command.h"
 
+
+struct DirectDataAccessPolicy {
+    DirectDataAccessPolicy(KisDataManager *dataManager)
+        : m_dataManager(dataManager) {}
+
+    KisHLineConstIteratorSP createConstIterator(const QRect &rect) {
+        const int xOffset = 0;
+        const int yOffset = 0;
+        return new KisHLineIterator2(m_dataManager, rect.x(), rect.y(), rect.width(), xOffset, yOffset, false);
+    }
+
+    KisHLineIteratorSP createIterator(const QRect &rect) {
+        const int xOffset = 0;
+        const int yOffset = 0;
+        return new KisHLineIterator2(m_dataManager, rect.x(), rect.y(), rect.width(), xOffset, yOffset, true);
+    }
+
+    int pixelSize() const {
+        return m_dataManager->pixelSize();
+    }
+
+    KisDataManager *m_dataManager;
+};
 
 class KisPaintDeviceData
 {
@@ -46,17 +70,143 @@ public:
             m_cache.setupCache();
         }
 
-    KUndo2Command* convertDataColorSpace(const KoColorSpace *cs);
+    void init(const KoColorSpace *cs, KisDataManagerSP dataManager) {
+        m_colorSpace = cs;
+        m_dataManager = dataManager;
+        m_cache.setupCache();
+    }
+
+    class ChangeColorSpaceCommand : public KUndo2Command {
+    public:
+        ChangeColorSpaceCommand(KisPaintDeviceData *data,
+                                KisDataManagerSP oldDm, KisDataManagerSP newDm,
+                                const KoColorSpace *oldCs, const KoColorSpace *newCs,
+                                KUndo2Command *parent)
+            : KUndo2Command(parent),
+              m_firstRun(true),
+              m_data(data),
+              m_oldDm(oldDm),
+              m_newDm(newDm),
+              m_oldCs(oldCs),
+              m_newCs(newCs)
+        {
+        }
+
+        void forcedRedo() {
+            m_data->m_dataManager = m_newDm;
+            m_data->m_colorSpace = m_newCs;
+            m_data->m_cache.setupCache();
+        }
+
+        void redo() {
+            KUndo2Command::redo();
+
+            if (!m_firstRun) {
+                m_firstRun = false;
+                return;
+            }
+
+            forcedRedo();
+        }
+
+        void undo() {
+            m_data->m_dataManager = m_oldDm;
+            m_data->m_colorSpace = m_oldCs;
+            m_data->m_cache.setupCache();
+
+            KUndo2Command::undo();
+        }
+
+    private:
+        bool m_firstRun;
+
+        KisPaintDeviceData *m_data;
+        KisDataManagerSP m_oldDm;
+        KisDataManagerSP m_newDm;
+        const KoColorSpace *m_oldCs;
+        const KoColorSpace *m_newCs;
+    };
+
+    void assignColorSpace(const KoColorSpace *dstColorSpace) {
+        KIS_ASSERT_RECOVER_RETURN(m_colorSpace->pixelSize() == dstColorSpace->pixelSize());
+
+        m_colorSpace = dstColorSpace;
+        m_cache.invalidate();
+    }
+
+    void convertDataColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand) {
+        typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<DirectDataAccessPolicy>, DirectDataAccessPolicy> InternalSequentialConstIterator;
+        typedef KisSequentialIteratorBase<WritableIteratorPolicy<DirectDataAccessPolicy>, DirectDataAccessPolicy> InternalSequentialIterator;
+
+        if (m_colorSpace == dstColorSpace || *m_colorSpace == *dstColorSpace) {
+            return;
+        }
+
+        QRect rc = m_dataManager->region().boundingRect();
+
+        const int dstPixelSize = dstColorSpace->pixelSize();
+        QScopedArrayPointer<quint8> dstDefaultPixel(new quint8[dstPixelSize]);
+        memset(dstDefaultPixel.data(), 0, dstPixelSize);
+        m_colorSpace->convertPixelsTo(m_dataManager->defaultPixel(), dstDefaultPixel.data(), dstColorSpace, 1, renderingIntent, conversionFlags);
+
+        KisDataManagerSP dstDataManager = new KisDataManager(dstPixelSize, dstDefaultPixel.data());
+
+
+        if (!rc.isEmpty()) {
+            InternalSequentialConstIterator srcIt(DirectDataAccessPolicy(m_dataManager.data()), rc);
+            InternalSequentialIterator dstIt(DirectDataAccessPolicy(dstDataManager.data()), rc);
+
+            int nConseqPixels = 0;
+
+            do {
+                nConseqPixels = srcIt.nConseqPixels();
+
+                const quint8 *srcData = srcIt.rawDataConst();
+                quint8 *dstData = dstIt.rawData();
+
+                m_colorSpace->convertPixelsTo(srcData, dstData,
+                                              dstColorSpace,
+                                              nConseqPixels,
+                                              renderingIntent, conversionFlags);
+
+
+            } while(srcIt.nextPixels(nConseqPixels) &&
+                    dstIt.nextPixels(nConseqPixels));
+        }
+
+        // becomes owned by the parent
+        ChangeColorSpaceCommand *cmd =
+            new ChangeColorSpaceCommand(this,
+                                        m_dataManager, dstDataManager,
+                                        m_colorSpace, dstColorSpace,
+                                        parentCommand);
+        cmd->forcedRedo();
+    }
+
+    void prepareClone(const KisPaintDeviceData *srcData, bool copyContent = false) {
+        m_x = srcData->x();
+        m_y = srcData->y();
+
+        if (copyContent) {
+            m_dataManager = new KisDataManager(*srcData->dataManager());
+        } else if (m_dataManager->pixelSize() !=
+                   srcData->dataManager()->pixelSize()) {
+            // NOTE: we don't check default pixel value! it is the task of
+            //       the higher level!
+
+            m_dataManager = new KisDataManager(srcData->dataManager()->pixelSize(), srcData->dataManager()->defaultPixel());
+            m_cache.setupCache();
+        } else {
+            m_dataManager->clear();
+        }
+
+        m_levelOfDetail = srcData->levelOfDetail();
+        m_colorSpace = srcData->colorSpace();
+        m_cache.invalidate();
+    }
 
     ALWAYS_INLINE KisDataManagerSP dataManager() const {
         return m_dataManager;
-    }
-    ALWAYS_INLINE void setDataManager(KisDataManagerSP value) {
-        m_dataManager = value;
-    }
-
-    ALWAYS_INLINE void invalidateCache() {
-        m_cache.invalidate();
     }
 
     ALWAYS_INLINE KisPaintDeviceCache* cache() {
@@ -79,9 +229,6 @@ public:
 
     ALWAYS_INLINE const KoColorSpace* colorSpace() const {
         return m_colorSpace;
-    }
-    ALWAYS_INLINE void setColorSpace(const KoColorSpace *value) {
-        m_colorSpace = value;
     }
 
     ALWAYS_INLINE qint32 levelOfDetail() const {

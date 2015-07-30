@@ -51,6 +51,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
 
     setRequestsOtherStrokesToEnd(false);
+    setClearsRedoOnStart(false);
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)

@@ -45,7 +45,6 @@ private Q_SLOTS:
     void testBltPerformance();
     void testColorSpaceConversion();
     void testDeviceDuplication();
-    void testSharedDataManager();
     void testTranslate();
     void testOpacity();
     void testExactBoundsWeirdNullAlphaCase();

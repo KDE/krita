@@ -36,6 +36,9 @@ KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image)
 {
     m_d->image = image;
     enableJob(JOB_INIT, true);
+
+    setRequestsOtherStrokesToEnd(false);
+    setClearsRedoOnStart(false);
 }
 
 KisSyncLodCacheStrokeStrategy::~KisSyncLodCacheStrokeStrategy()

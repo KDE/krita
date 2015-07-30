@@ -104,6 +104,7 @@ public:
     };
 
     TestingDataObjects testingGetDataObjects() const;
+    QList<KisPaintDeviceData*> testingGetDataObjectsList() const;
 
 private:
     KisPaintDevice *q;

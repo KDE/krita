@@ -316,7 +316,9 @@ private:
     QList<Data*> allDataObjects() const {
         QList<Data*> dataObjects;
 
-        dataObjects << m_data;
+        if (m_frames.isEmpty()) {
+            dataObjects << m_data;
+        }
         dataObjects << m_lodData.data();
         dataObjects << m_externalFrameData.data();
         dataObjects << m_frames.values();
@@ -1626,6 +1628,11 @@ KisPaintDeviceFramesInterface::testingGetDataObjects() const
     objects.m_currentData = q->m_d->currentData();
 
     return objects;
+}
+
+QList<KisPaintDeviceData*> KisPaintDeviceFramesInterface::testingGetDataObjectsList() const
+{
+    return q->m_d->allDataObjects();
 }
 
 #include "kis_paint_device.moc"

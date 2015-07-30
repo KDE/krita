@@ -1655,6 +1655,15 @@ void KisPaintDeviceTest::testFramesLeaking()
     QVERIFY(!o.m_externalFrameData);
     QVERIFY(o.m_currentData == o.m_frames[0]);
     QCOMPARE(o.m_frames.size(), 1);
+
+    // ensure all the objects in the list of all objects are unique
+    QList<KisPaintDeviceData*> allObjects = i->testingGetDataObjectsList();
+    QSet<KisPaintDeviceData*> uniqueObjects;
+    foreach(KisPaintDeviceData *obj, allObjects) {
+        if (!obj) continue;
+        QVERIFY(!uniqueObjects.contains(obj));
+        uniqueObjects.insert(obj);
+    }
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

@@ -68,7 +68,7 @@ void KisImageManager::setup(KisActionManager *actionManager)
     actionManager->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
-    action  = new KisAction(koIcon("document-new"), i18n("as Paint Layer..."), this);
+    action  = new KisAction(themedIcon("document-new"), i18n("as Paint Layer..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_paint_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));

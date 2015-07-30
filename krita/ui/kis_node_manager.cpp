@@ -239,13 +239,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     m_d->layerManager->setup(actionManager);
     m_d->maskManager->setup(actionCollection, actionManager);
 
-    KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Layer Horizontally"), this);
+    KisAction * action  = new KisAction(themedIcon("symmetry-horizontal"), i18n("Mirror Layer Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("mirrorNodeX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Layer Vertically"), this);
+    action  = new KisAction(themedIcon("symmetry-vertical"), i18n("Mirror Layer Vertically"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("mirrorNodeY", action);
@@ -276,7 +276,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
 
     NEW_LAYER_ACTION_KEY("add_new_paint_layer", i18n("&Paint Layer"),
-                         "KisPaintLayer", koIcon("document-new"),
+                         "KisPaintLayer", themedIcon("document-new"),
                          Qt::Key_Insert);
 
     NEW_LAYER_ACTION_KEY("add_new_group_layer", i18n("&Group Layer"),
@@ -314,7 +314,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
             this, SLOT(createNode(const QString &)));
 
     CONVERT_NODE_ACTION("convert_to_paint_layer", i18n("to &Paint Layer"),
-                        "KisPaintLayer", koIcon("document-new"));
+                        "KisPaintLayer", themedIcon("document-new"));
 
     CONVERT_NODE_ACTION("convert_to_selection_mask", i18n("to &Selection Mask"),
                         "KisSelectionMask", koIcon("edit-paste"));

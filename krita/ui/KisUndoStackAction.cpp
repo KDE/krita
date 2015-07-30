@@ -34,7 +34,7 @@ KisUndoStackAction::KisUndoStackAction(KUndo2Stack* stack, Type type)
         connect(this, SIGNAL(triggered()), stack, SLOT(undo()));
         connect(stack, SIGNAL(canUndoChanged(bool)), this, SLOT(setEnabled(bool)));
         connect(stack, SIGNAL(undoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
-        setIcon(koIcon("edit-undo"));
+        setIcon(themedIcon("edit-undo"));
         setText(i18n("Undo"));
         setShortcuts(KStandardShortcut::undo());
         setEnabled(stack->canUndo());
@@ -42,7 +42,7 @@ KisUndoStackAction::KisUndoStackAction(KUndo2Stack* stack, Type type)
         connect(this, SIGNAL(triggered()), stack, SLOT(redo()));
         connect(stack, SIGNAL(canRedoChanged(bool)), this, SLOT(setEnabled(bool)));
         connect(stack, SIGNAL(redoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
-        setIcon(koIcon("edit-redo"));
+        setIcon(themedIcon("edit-redo"));
         setText(i18n("Redo"));
         setShortcuts(KStandardShortcut::redo());
         setEnabled(stack->canRedo());

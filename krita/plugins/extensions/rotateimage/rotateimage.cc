@@ -65,12 +65,12 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     addAction("rotateImageCCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
-    action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Image Horizontally"), this);
+    action  = new KisAction(themedIcon("symmetry-horizontal"), i18n("Mirror Image Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("mirrorImageHorizontal", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageHorizontal()));
 
-    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Image Vertically"), this);
+    action  = new KisAction(themedIcon("symmetry-vertical"), i18n("Mirror Image Vertically"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("mirrorImageVertical", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageVertical()));

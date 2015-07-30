@@ -2184,7 +2184,7 @@ void KisMainWindow::createActions()
     actionCollection()->addAction("windows_previous", d->mdiPreviousWindow);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-    d->newWindow = new KisAction(koIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
+    d->newWindow = new KisAction(themedIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
     actionManager->addAction("view_newwindow", d->newWindow);
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 

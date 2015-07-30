@@ -143,6 +143,18 @@ tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
 tool_transform/light_transform_icons_penPressure.png
 
+Breeze-dark/dark_document-new.svg
+Breeze-dark/dark_edit-undo.svg
+Breeze-dark/dark_edit-redo.svg
+Breeze-dark/dark_window-new.svg
+Breeze-dark/dark_configure.svg
+
+Breeze-light/light_document-new.svg
+Breeze-light/light_edit-undo.svg
+Breeze-light/light_edit-redo.svg
+Breeze-light/light_window-new.svg
+Breeze-light/light_configure.svg
+
 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)

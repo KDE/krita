@@ -29,36 +29,8 @@
 
 #include <KoColorSpaceRegistry.h>
 
-struct TestingKeyframingDefaultBounds : public KisDefaultBoundsBase {
-    TestingKeyframingDefaultBounds() : m_time(0) {}
+#include "testing_timed_default_bounds.h"
 
-    QRect bounds() const {
-        return QRect(0,0,100,100);
-    }
-
-    bool wrapAroundMode() const {
-        return false;
-    }
-
-    int currentLevelOfDetail() const {
-        return 0;
-    }
-
-    int currentTime() const {
-        return m_time;
-    }
-
-    bool externalFrameActive() const {
-        return false;
-    }
-
-    void testingSetTime(int time) {
-        m_time = time;
-    }
-
-private:
-    int m_time;
-};
 
 void KisKeyframingTest::initTestCase()
 {
@@ -135,7 +107,7 @@ void KisKeyframingTest::testScalarChannel()
 
 void KisKeyframingTest::testRasterChannel()
 {
-    TestingKeyframingDefaultBounds *bounds = new TestingKeyframingDefaultBounds();
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
@@ -284,7 +256,7 @@ void KisKeyframingTest::testChannelSignals()
 
 void KisKeyframingTest::testRasterFrameFetching()
 {
-    TestingKeyframingDefaultBounds *bounds = new TestingKeyframingDefaultBounds();
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPaintDeviceSP devTarget = new KisPaintDevice(cs);

@@ -1520,5 +1520,142 @@ void KisPaintDeviceTest::benchmarkLod4Generation()
     }
 }
 
+#include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_paint_device_frames_interface.h"
+#include "testing_timed_default_bounds.h"
+
+void KisPaintDeviceTest::testFramesLeaking()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    QVERIFY(channel);
+
+    KisPaintDeviceFramesInterface *i = dev->framesInterface();
+    QVERIFY(i);
+
+    QCOMPARE(i->frames().size(), 1);
+
+    KisPaintDeviceFramesInterface::TestingDataObjects o;
+
+    // Itinial state: one frame, m_data shared
+    o = i->testingGetDataObjects();
+    QVERIFY(o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_data);
+    QCOMPARE(o.m_frames.size(), 1);
+    QVERIFY(o.m_frames.begin().value() == o.m_data);
+
+    // add keyframe at position 10
+    channel->addKeyframe(10);
+
+    // two frames, m_data is null
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[0]);
+    QCOMPARE(o.m_frames.size(), 2);
+
+    // add keyframe at position 20
+    channel->addKeyframe(20);
+
+    // three frames, m_data is null, current frame is 0
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[0]);
+    QCOMPARE(o.m_frames.size(), 3);
+
+    // switch to frame 10
+    bounds->testingSetTime(10);
+
+    // three frames, m_data is null, current frame is 10
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[1]);
+    QCOMPARE(o.m_frames.size(), 3);
+
+    // switch to frame 20
+    bounds->testingSetTime(20);
+
+    // three frames, m_data is null, current frame is 20
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[2]);
+    QCOMPARE(o.m_frames.size(), 3);
+
+    // switch to frame 15
+    bounds->testingSetTime(15);
+
+    // three frames, m_data is null, current frame is 10
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[1]);
+    QCOMPARE(o.m_frames.size(), 3);
+
+    KisKeyframe *key;
+
+    // deletion of frame 0 is forbidden
+    key = channel->keyframeAt(0);
+    QVERIFY(key);
+    QVERIFY(!channel->deleteKeyframe(key));
+
+    // delete keyframe at position 11
+    key = channel->activeKeyframeAt(11);
+    QVERIFY(key);
+    QCOMPARE(key->time(), 10);
+    QVERIFY(channel->deleteKeyframe(key));
+
+    // two frames, m_data is null, current frame is 0
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[0]);
+    QCOMPARE(o.m_frames.size(), 2);
+
+    // deletion of frame 0 is forbidden
+    key = channel->activeKeyframeAt(11);
+    QVERIFY(key);
+    QCOMPARE(key->time(), 0);
+    QVERIFY(!channel->deleteKeyframe(key));
+
+    // nothing changed
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[0]);
+    QCOMPARE(o.m_frames.size(), 2);
+
+    // delete keyframe at position 20
+    key = channel->activeKeyframeAt(20);
+    QVERIFY(key);
+    QCOMPARE(key->time(), 20);
+    QVERIFY(channel->deleteKeyframe(key));
+
+    // one keyframe is left at position 0, m_data is shared
+    o = i->testingGetDataObjects();
+    QVERIFY(o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QVERIFY(o.m_currentData == o.m_frames[0]);
+    QCOMPARE(o.m_frames.size(), 1);
+}
+
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"

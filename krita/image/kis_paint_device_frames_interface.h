@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+class KisPaintDeviceData;
 class KisPaintDeviceWriter;
 
 
@@ -88,6 +89,21 @@ public:
      */
     bool readFrame(QIODevice *stream, int frameId);
 
+
+    struct TestingDataObjects {
+        typedef KisPaintDeviceData Data;
+        typedef QHash<int, Data*> FramesHash;
+
+        Data *m_data;
+        Data *m_lodData;
+        Data *m_externalFrameData;
+
+        FramesHash m_frames;
+
+        Data *m_currentData;
+    };
+
+    TestingDataObjects testingGetDataObjects() const;
 
 private:
     KisPaintDevice *q;

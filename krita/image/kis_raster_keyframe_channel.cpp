@@ -113,7 +113,7 @@ bool KisRasterKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
     Q_UNUSED(key);
 
     // Raster content must have at least one keyframe at all times
-    return keys().count() > 1;
+    return keys().count() > 1 && key->time() != 0;
 }
 
 void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key)

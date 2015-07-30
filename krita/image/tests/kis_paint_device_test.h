@@ -67,6 +67,8 @@ private Q_SLOTS:
     void benchmarkLod2Generation();
     void benchmarkLod3Generation();
     void benchmarkLod4Generation();
+
+    void testFramesLeaking();
 };
 
 #endif

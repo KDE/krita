@@ -169,10 +169,6 @@ public:
             data = new Data(srcData, false);
         }
 
-        if (m_frames.count() > 1) {
-            m_data = 0;
-        }
-
         if (!offset.isNull()) {
             data->setX(offset.x());
             data->setY(offset.y());
@@ -180,6 +176,10 @@ public:
 
         int frameId = nextFreeFrameId++;
         m_frames.insert(frameId, data);
+
+        if (m_frames.count() > 1) {
+            m_data = 0;
+        }
 
         return frameId;
     }
@@ -193,7 +193,9 @@ public:
 
         if (m_frames.count() == 1) {
             m_data = m_frames.begin().value();
-        } else if (m_frames.count() > 0) {
+        }
+
+        if (m_frames.count() > 0) {
             delete data;
         }
     }
@@ -325,6 +327,9 @@ private:
     struct StrategyPolicy;
     typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialConstIterator;
     typedef KisSequentialIteratorBase<WritableIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialIterator;
+
+private:
+    friend class KisPaintDeviceFramesInterface;
 
 private:
     Data *m_data;
@@ -1607,6 +1612,20 @@ bool KisPaintDeviceFramesInterface::readFrame(QIODevice *stream, int frameId)
 {
     KIS_ASSERT_RECOVER(frameId >= 0) { return false; }
     return q->m_d->readFrame(stream, frameId);
+}
+
+KisPaintDeviceFramesInterface::TestingDataObjects
+KisPaintDeviceFramesInterface::testingGetDataObjects() const
+{
+    TestingDataObjects objects;
+
+    objects.m_data = q->m_d->m_data;
+    objects.m_lodData = q->m_d->m_lodData.data();
+    objects.m_externalFrameData = q->m_d->m_externalFrameData.data();
+    objects.m_frames = q->m_d->m_frames;
+    objects.m_currentData = q->m_d->currentData();
+
+    return objects;
 }
 
 #include "kis_paint_device.moc"

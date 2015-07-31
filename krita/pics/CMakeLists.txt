@@ -143,17 +143,25 @@ tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
 tool_transform/light_transform_icons_penPressure.png
 
-Breeze-dark/dark_document-new.svg
-Breeze-dark/dark_edit-undo.svg
-Breeze-dark/dark_edit-redo.svg
-Breeze-dark/dark_window-new.svg
 Breeze-dark/dark_configure.svg
+Breeze-dark/dark_document-new.svg
+Breeze-dark/dark_edit-redo.svg
+Breeze-dark/dark_edit-undo.svg
+Breeze-dark/dark_media-playback-start.svg
+Breeze-dark/dark_media-playback-stop.svg
+Breeze-dark/dark_media-record.svg
+Breeze-dark/dark_window-new.svg
+Breeze-dark/dark_document-edit.svg
 
-Breeze-light/light_document-new.svg
-Breeze-light/light_edit-undo.svg
-Breeze-light/light_edit-redo.svg
-Breeze-light/light_window-new.svg
 Breeze-light/light_configure.svg
+Breeze-light/light_document-new.svg
+Breeze-light/light_edit-redo.svg
+Breeze-light/light_edit-undo.svg
+Breeze-light/light_media-playback-start.svg
+Breeze-light/light_media-playback-stop.svg
+Breeze-light/light_media-record.svg
+Breeze-light/light_window-new.svg
+Breeze-light/light_document-edit.svg
 
 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 

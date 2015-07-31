@@ -152,6 +152,10 @@ Breeze-dark/dark_media-playback-stop.svg
 Breeze-dark/dark_media-record.svg
 Breeze-dark/dark_window-new.svg
 Breeze-dark/dark_document-edit.svg
+Breeze-dark/dark_edit-delete.svg
+Breeze-dark/dark_list-add.svg
+Breeze-dark/dark_document-export.svg
+Breeze-dark/dark_tools-wizard.svg
 
 Breeze-light/light_configure.svg
 Breeze-light/light_document-new.svg
@@ -162,6 +166,10 @@ Breeze-light/light_media-playback-stop.svg
 Breeze-light/light_media-record.svg
 Breeze-light/light_window-new.svg
 Breeze-light/light_document-edit.svg
+Breeze-light/light_edit-delete.svg
+Breeze-light/light_list-add.svg
+Breeze-light/light_document-export.svg
+Breeze-light/light_tools-wizard.svg
 
 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 

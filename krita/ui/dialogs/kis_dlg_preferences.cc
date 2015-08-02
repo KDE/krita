@@ -102,6 +102,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbOutlineShape->addItem(i18n("No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));
     m_cmbOutlineShape->addItem(i18n("Preview Outline"));
+    m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());

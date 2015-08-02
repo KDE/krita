@@ -49,18 +49,14 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     if (!config) return;
 
     if (progressUpdater) progressUpdater->setProgress(0);
-    
-    // Benchmark
-    QTime timer, timerE;
-    
+
     QString userChosenHeightChannel = config->getString(PHONG_HEIGHT_CHANNEL, "FAIL");
+    bool m_usenormalmap = config->getBool(USE_NORMALMAP_IS_ENABLED);    
 
     if (userChosenHeightChannel == "FAIL") {
         qDebug("FIX YOUR FILTER");
         return;
     }
-    
-    timer.start();
 
     KoChannelInfo *m_heightChannel = 0;
 
@@ -69,6 +65,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
             m_heightChannel = channel;
         }
     }
+
     if (!m_heightChannel) {
         m_heightChannel = device->colorSpace()->channels().first();
     }
@@ -76,8 +73,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
 
     QRect inputArea = applyRect;
     QRect outputArea = applyRect;
-    
-    inputArea.adjust(-1, -1, 1, 1);
+    if (m_usenormalmap==false) {
+        inputArea.adjust(-1, -1, 1, 1);
+    }
 
     quint32 posup;
     quint32 posdown;
@@ -98,9 +96,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     const quint32   bytesToFillBumpmapArea   = pixelsOfOutputArea * pixelSize;
     QVector<quint8> bumpmap(bytesToFillBumpmapArea);
     quint8         *bumpmapDataPointer       = bumpmap.data();
-    quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(),
-                                                                                            device->colorSpace()->channels());
+    quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(), device->colorSpace()->channels());
     PhongPixelProcessor tileRenderer(pixelsOfInputArea, config);
+    
 
     if (progressUpdater) progressUpdater->setProgress(2);
 
@@ -119,33 +117,59 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                                              inputArea.width()
                                              );
 
-    for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
-        do {
-            const quint8 *data = iterator->oldRawData();
-            tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
-            curPixel++;
+    if (m_usenormalmap==false) {
+        for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
+            do {
+                const quint8 *data = iterator->oldRawData();
+                tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
+                curPixel++;
+            }
+            while (iterator->nextPixel());
+            iterator->nextRow();
         }
-        while (iterator->nextPixel());
-        iterator->nextRow();
-    }
+        if (progressUpdater) progressUpdater->setProgress(50);
 
-    if (progressUpdater) progressUpdater->setProgress(50);
+        const int tileHeightMinus1 = inputArea.height() - 1;
+        const int tileWidthMinus1 = inputArea.width() - 1;
+    
+        // Foreach INNER pixel in tile
+        for (int y = 1; y < tileHeightMinus1; ++y) {
+            for (int x = 1; x < tileWidthMinus1; ++x) {
+                posup   = (y + 1) * inputArea.width() + x;
+                posdown = (y - 1) * inputArea.width() + x;
+                posleft  = y * inputArea.width() + x - 1;
+                posright = y * inputArea.width() + x + 1;
+             
 
-    const int tileHeightMinus1 = inputArea.height() - 1;
-    const int tileWidthMinus1 = inputArea.width() - 1;
+               memcpy(bumpmapDataPointer,
+                      tileRenderer.IlluminatePixelFromHeightmap(posup, posdown, posleft, posright).data(),
+                      pixelSize);
+            
+               bumpmapDataPointer += pixelSize;
+            }
+        }
+    } else {
+        for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
+            do {
+                const quint8 *data = iterator->oldRawData();
+                tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
+                QVector <float> current_pixel_values(4);
+                device->colorSpace()->normalisedChannelsValue(data, current_pixel_values );
 
-    // Foreach INNER pixel in tile
-    for (int y = 1; y < tileHeightMinus1; ++y) {
-        for (int x = 1; x < tileWidthMinus1; ++x) {
-            posup   = (y + 1) * inputArea.width() + x;
-            posdown = (y - 1) * inputArea.width() + x;
-            posleft  = y * inputArea.width() + x - 1;
-            posright = y * inputArea.width() + x + 1;
-
-            memcpy(bumpmapDataPointer,
-                   tileRenderer.testingHeightmapIlluminatePixel(posup, posdown, posleft, posright).data(),
-                   pixelSize);
-            bumpmapDataPointer += pixelSize;
+                //qDebug()<< "Vector:" << current_pixel_values[2] << "," << current_pixel_values[1] << "," << current_pixel_values[0];
+                memcpy(bumpmapDataPointer,
+                      tileRenderer.IlluminatePixelFromNormalmap(current_pixel_values[2], current_pixel_values[1], current_pixel_values[0]).data(),
+                      pixelSize);
+                
+                curPixel++;
+                //pointer that crashes here, but not in the other if statement.
+                bumpmapDataPointer += pixelSize;
+                
+                
+                
+            }
+            while (iterator->nextPixel());
+            iterator->nextRow();
         }
     }
 
@@ -171,6 +195,7 @@ KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPai
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, 0.5);
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY, 0.3);
     config->setProperty(PHONG_SHINYNESS_EXPONENT, 2);
+    config->setProperty(USE_NORMALMAP_IS_ENABLED, false);
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, true);
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, true);
     // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1

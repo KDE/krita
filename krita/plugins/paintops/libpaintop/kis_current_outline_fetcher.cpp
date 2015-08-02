@@ -76,7 +76,8 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
                                                     const KisPaintOpSettings *settings,
                                                     const QPainterPath &originalOutline,
                                                     qreal additionalScale,
-                                                    qreal additionalRotation) const
+                                                    qreal additionalRotation,
+                                                    bool tilt, qreal tiltcenterx, qreal tiltcentery) const
 {
     if (d->isDirty) {
         if (d->sizeOption) {
@@ -108,18 +109,20 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         d->lastUpdateTime.restart();
     }
 
-    if (d->sizeOption) {
+    if (d->sizeOption && tilt == false) {
         if (!d->sizeOption->isRandom() || needsUpdate) {
             d->lastSizeApplied = d->sizeOption->apply(info);
         }
         scale *= d->lastSizeApplied;
     }
 
-    if (d->rotationOption) {
+    if (d->rotationOption && tilt == false) {
         if (!d->rotationOption->isRandom() || needsUpdate) {
             d->lastRotationApplied = d->rotationOption->apply(info);
         }
         rotation += d->lastRotationApplied;
+    } else if (d->rotationOption && tilt == true) {
+        rotation += settings->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     }
 
     qreal xFlip = 1.0;
@@ -143,10 +146,14 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         }
     }
 
+
     QTransform rot;
     rot.rotateRadians(-rotation);
 
     QPointF hotSpot = originalOutline.boundingRect().center();
+    if (tilt==true) { 
+        hotSpot.setX(tiltcenterx);hotSpot.setY(tiltcentery);
+    }
     QTransform T1 = QTransform::fromTranslate(-hotSpot.x(), -hotSpot.y());
     QTransform T2 = QTransform::fromTranslate(info.pos().x(), info.pos().y());
     QTransform S  = QTransform::fromScale(xFlip * scale, yFlip * scale);

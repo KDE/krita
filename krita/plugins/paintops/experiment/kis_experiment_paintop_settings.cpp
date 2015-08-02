@@ -31,17 +31,33 @@ bool KisExperimentPaintOpSettings::paintIncremental()
 QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
 
         QRectF ellipse(0, 0, 3, 3);
         ellipse.translate(-ellipse.center());
         path.addEllipse(ellipse);
 
+
         ellipse.setRect(0,0, 12, 12);
         ellipse.translate(-ellipse.center());
         path.addEllipse(ellipse);
 
+        QPainterPath tiltLine;
+        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,3.0));
+        tiltAngle.setLength(50.0 * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-2.0);
+        tiltLine.moveTo(tiltAngle.p1());
+        tiltLine.lineTo(tiltAngle.p2());
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+2.0);
+        tiltLine.lineTo(tiltAngle.p2());
+        tiltLine.lineTo(tiltAngle.p1());
+
+        if (mode == CursorTiltOutline) {
+            path.addPath(tiltLine);
+        }
+
         path.translate(info.pos());
+        
     }
     return path;
 }

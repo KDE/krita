@@ -36,6 +36,7 @@ KisHairyPaintOpSettings::KisHairyPaintOpSettings()
 
 QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
+// if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorIsTiltOutline || mode == CursorIsColorOutline)//
     return brushOutlineImpl(info, mode, getDouble(HAIRY_BRISTLE_SCALE));
 }
 

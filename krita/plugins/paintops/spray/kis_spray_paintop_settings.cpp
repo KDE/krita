@@ -51,11 +51,26 @@ int KisSprayPaintOpSettings::rate() const
 QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
         qreal width = getInt(SPRAY_DIAMETER);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
         path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));
+        
+        QPainterPath tiltLine;
+        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,width));
+        tiltAngle.setLength(qMax(width*0.5, 50.0) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-2.0);
+        tiltLine.moveTo(tiltAngle.p1());
+        tiltLine.lineTo(tiltAngle.p2());
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+2.0);
+        tiltLine.lineTo(tiltAngle.p2());
+        tiltLine.lineTo(tiltAngle.p1());
+        
         path = outlineFetcher()->fetchOutline(info, this, path);
+        
+        if (mode == CursorTiltOutline) {
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
+        }
     }
     return path;
 }

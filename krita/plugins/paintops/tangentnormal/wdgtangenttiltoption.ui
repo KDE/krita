@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgTangentTiltOptions</class>
+ <widget class="QWidget" name="WdgTangentTiltOptions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>425</width>
+    <height>264</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>255</horstretch>
+    <verstretch>255</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>425</width>
+    <height>260</height>
+   </size>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="TangentEncoding">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Tangent Encoding</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QFormLayout" name="swizzlebox">
+        <property name="labelAlignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="RedLabel">
+          <property name="text">
+           <string>Red:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboGreen">
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <item>
+           <property name="text">
+            <string extracomment="Positive horizontal axis">+ X</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Negative horizontal axis">- X</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Positive vertical axis">+ Y</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Negative vertical axis">- Y</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Postive height axis">+ Z</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="negative height axis">- Z</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="GreenLabel">
+          <property name="text">
+           <string>Green:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboRed">
+          <item>
+           <property name="text">
+            <string extracomment="Positive horizontal axis">+ X</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Negative horizontal axis">- X</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Positive vertical axis">+ Y</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Negative vertical axis">- Y</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Postive height axis">+ Z</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="negative height axis">- Z</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="BlueLabel">
+          <property name="text">
+           <string>Blue:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="comboBlue">
+          <property name="currentIndex">
+           <number>4</number>
+          </property>
+          <item>
+           <property name="text">
+            <string extracomment="Positive horizontal axis">+ X</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Negative horizontal axis">- X</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Positive vertical axis">+ Y</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Negative vertical axis">- Y</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Postive height axis">+ Z</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="negative height axis">- Z</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="KisNormalPreviewWidget" name="TangentTiltPreview">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text">
+         <string notr="true" extracomment="this is a frame that could contain a preview of the swizzle chosen"/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="TiltOptions">
+     <property name="title">
+      <string>Tilt Options</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="optionTilt">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the tilt of the tablet to determine the normals.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Tilt</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="optionDirection">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the drawing direction to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Direction</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QRadioButton" name="optionRotation">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the rotation sensor availeble in certain pens to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Rotation</string>
+          </property>
+         </widget>
+        </item>
+	<item row="0" column="3">
+         <widget class="QRadioButton" name="optionMix">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mix Tilt and Drawing angle to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Direction/Tilt Mix</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+	 <widget class="KisDoubleSliderSpinBox" name="sliderElevationSensitivity" native="true">
+	  <property name="sizePolicy">
+	   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+	    <horstretch>0</horstretch>
+	    <verstretch>0</verstretch>
+	   </sizepolicy>
+	  </property>
+	 </widget>
+	</item>
+	<item row="2" column="0">
+         <widget class="QLabel" name="L_mix">
+          <property name="text">
+           <string>Direction/Tilt Mix Value</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="sliderMixValue" native="true">
+	  <property name="sizePolicy">
+	   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+	    <horstretch>0</horstretch>
+	    <verstretch>0</verstretch>
+	   </sizepolicy>
+	  </property>
+	 </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="L_elevation">
+          <property name="text">
+           <string>Elevation Sensitivity</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisNormalPreviewWidget</class>
+   <extends>QLabel</extends>
+   <header>kis_normal_preview_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+  <connections>
+   <connection>
+    <sender>optionMix</sender>
+    <signal>toggled(bool)</signal>
+    <receiver>sliderMixValue</receiver>
+    <slot>setVisible(bool)</slot>
+   </connection>
+   <connection>
+    <sender>optionMix</sender>
+    <signal>toggled(bool)</signal>
+    <receiver>L_mix</receiver>
+    <slot>setVisible(bool)</slot>
+   </connection>
+  </connections>
+</ui>

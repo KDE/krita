@@ -97,7 +97,7 @@
 #include "kis_update_time_monitor.h"
 #include "kis_image_barrier_locker.h"
 
-
+#include "kis_time_range.h"
 
 // #define SANITY_CHECKS
 
@@ -285,6 +285,8 @@ void KisImage::nodeChanged(KisNode* node)
     KisNodeGraphListener::nodeChanged(node);
     requestStrokeEnd();
     m_d->signalRouter->emitNodeChanged(node);
+
+    invalidateFrames(KisTimeRange::infinite(0), QRect());
 }
 
 KisSelectionSP KisImage::globalSelection() const

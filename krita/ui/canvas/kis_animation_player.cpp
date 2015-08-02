@@ -107,6 +107,8 @@ void KisAnimationPlayer::stop()
     m_d->playing = false;
 
     m_d->canvas->refetchDataFromImage();
+
+    emit sigPlaybackStopped();
 }
 
 bool KisAnimationPlayer::isPlaying()
@@ -138,6 +140,7 @@ void KisAnimationPlayer::uploadFrame()
 {
     if (m_d->canvas->frameCache()->uploadFrame(m_d->currentFrame)) {
         m_d->canvas->updateCanvas();
+        emit sigFrameChanged();
     }
 }
 

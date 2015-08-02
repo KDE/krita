@@ -134,6 +134,7 @@ void TimelineWidget::setCanvas(KisCanvas2 *canvas)
     if (m_image) {
         disconnect(m_image, 0, this, 0);
         disconnect(m_cache, 0, this, 0);
+        disconnect(m_canvas->animationPlayer(), 0, this, 0);
 
         m_timelineView->reset();
         m_image = 0;
@@ -148,6 +149,8 @@ void TimelineWidget::setCanvas(KisCanvas2 *canvas)
         if (m_image && m_cache) {
             connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)), this, SLOT(imageTimeChanged()));
             connect(m_cache.data(), SIGNAL(changed()), this, SLOT(cacheChanged()));
+            connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(imageTimeChanged()));
+            connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(imageTimeChanged()));
         }
     }
 }

@@ -46,6 +46,10 @@ public slots:
     void slotUpdate();
     void slotCancelPlayback();
 
+signals:
+    void sigFrameChanged();
+    void sigPlaybackStopped();
+
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();

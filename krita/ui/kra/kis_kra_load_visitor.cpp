@@ -365,8 +365,14 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
 {
     // Layer data
 
-    QList<int> frames = device->framesInterface()->frames();
-    if (frames.count() <= 1) {
+    KisPaintDeviceFramesInterface *frameInterface = device->framesInterface();
+    QList<int> frames;
+
+    if (frameInterface) {
+        frames = device->framesInterface()->frames();
+    }
+
+    if (!frameInterface || frames.count() <= 1) {
         return loadPaintDeviceFrame(device, location, SimpleDevicePolicy());
     } else {
         KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();

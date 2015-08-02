@@ -280,9 +280,14 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     KisConfig cfg;
     m_store->setCompressionEnabled(cfg.compressKra());
 
-    QList<int> frames = device->framesInterface()->frames();
+    KisPaintDeviceFramesInterface *frameInterface = device->framesInterface();
+    QList<int> frames;
 
-    if (frames.count() <= 1) {
+    if (frameInterface) {
+        frames = frameInterface->frames();
+    }
+
+    if (!frameInterface || frames.count() <= 1) {
         savePaintDeviceFrame(device, location, SimpleDevicePolicy());
     } else {
         KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();

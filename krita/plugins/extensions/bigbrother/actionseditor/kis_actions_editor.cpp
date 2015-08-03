@@ -42,7 +42,7 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->setupUi(this);
 
     // Setup buttons
-    m_form->bnAdd->setIcon(koIcon("list-add"));
+    m_form->bnAdd->setIcon(themedIcon("list-add"));
     QSignalMapper* mapper = new QSignalMapper(this);
     connect(mapper, SIGNAL(mapped(QString)), SLOT(slotCreateAction(QString)));
     QMenu* addMenu = new QMenu;
@@ -54,16 +54,16 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->bnAdd->setMenu(addMenu);
     
 
-    m_form->bnDelete->setIcon(koIcon("list-remove"));
+    m_form->bnDelete->setIcon(themedIcon("edit-delete"));
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
 
-    m_form->bnRaise->setIcon(koIcon("go-up"));
+    m_form->bnRaise->setIcon(themedIcon("arrow-up"));
     connect(m_form->bnRaise, SIGNAL(released()), SLOT(slotBtnRaise()));
 
-    m_form->bnLower->setIcon(koIcon("go-down"));
+    m_form->bnLower->setIcon(themedIcon("arrow-down"));
     connect(m_form->bnLower, SIGNAL(released()), SLOT(slotBtnLower()));
 
-    m_form->bnDuplicate->setIcon(koIcon("edit-copy"));
+    m_form->bnDuplicate->setIcon(themedIcon("edit-copy"));
     connect(m_form->bnDuplicate, SIGNAL(released()), SLOT(slotBtnDuplicate()));
 
     // Setup actions list

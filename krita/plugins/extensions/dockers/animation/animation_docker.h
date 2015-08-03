@@ -55,6 +55,8 @@ private slots:
 
     void slotOnionSkinOptions();
 
+    void slotTimeChanged();
+
 private:
 
     KisCanvas2 *m_canvas;

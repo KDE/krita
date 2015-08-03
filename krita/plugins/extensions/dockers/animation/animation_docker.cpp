@@ -92,6 +92,8 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
+        m_canvas->image()->animationInterface()->disconnect(this);
+        m_canvas->animationPlayer()->disconnect(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -101,6 +103,12 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         m_animationWidget->spinFromFrame->setValue(animation->currentRange().start());
         m_animationWidget->spinToFrame->setValue(animation->currentRange().end());
         m_animationWidget->doubleFramerate->setValue(animation->framerate());
+
+        connect(animation, SIGNAL(sigTimeChanged(int)), this, SLOT(slotTimeChanged()));
+        connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotTimeChanged()));
+        connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(slotTimeChanged()));
+
+        slotTimeChanged();
     }
 }
 
@@ -188,14 +196,21 @@ void AnimationDocker::slotOnionSkinOptions()
     m_onionSkinOptions->show();
 }
 
+void AnimationDocker::slotTimeChanged()
+{
+    int time = m_canvas->animationPlayer()->isPlaying() ?
+                m_canvas->animationPlayer()->currentTime() :
+                m_canvas->image()->animationInterface()->currentUITime();
+
+    m_animationWidget->lblInfo->setText("Frame: " + QString::number(time));
+}
+
 void AnimationDocker::slotPreviousFrame()
 {
     if (!m_canvas) return;
 
     int time = m_canvas->image()->animationInterface()->currentTime() - 1;
     m_canvas->image()->animationInterface()->switchCurrentTimeAsync(time);
-
-    m_animationWidget->lblInfo->setText("Frame: " + QString::number(time));
 }
 
 void AnimationDocker::slotNextFrame()
@@ -204,8 +219,6 @@ void AnimationDocker::slotNextFrame()
 
     int time = m_canvas->image()->animationInterface()->currentTime() + 1;
     m_canvas->image()->animationInterface()->switchCurrentTimeAsync(time);
-
-    m_animationWidget->lblInfo->setText("Frame: " + QString::number(time));
 }
 
 void AnimationDocker::slotPlayPause()

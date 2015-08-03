@@ -24,6 +24,7 @@
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColor.h>
 
 #include "KisDocument.h"
 #include "kis_image.h"
@@ -33,6 +34,9 @@
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
 
+#include "kis_image_animation_interface.h"
+#include "kis_keyframe_channel.h"
+#include "kis_time_range.h"
 
 void KisKraLoaderTest::initTestCase()
 {
@@ -106,6 +110,62 @@ void KisKraLoaderTest::testObligeSingleChild()
 void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
 {
     testObligeSingleChildImpl(false);
+}
+
+void KisKraLoaderTest::testLoadAnimated()
+{
+    KisDocument *doc = KisPart::instance()->createDocument();
+    doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test_animation.kra");
+    KisImageWSP image = doc->image();
+
+    KisNodeSP node1 = image->root()->firstChild();
+    KisNodeSP node2 = node1->nextSibling();
+
+    QVERIFY(node1->inherits("KisPaintLayer"));
+    QVERIFY(node2->inherits("KisPaintLayer"));
+
+    KisPaintLayerSP layer1 = qobject_cast<KisPaintLayer*>(node1.data());
+    KisPaintLayerSP layer2 = qobject_cast<KisPaintLayer*>(node2.data());
+    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *channel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    QCOMPARE(channel1->keyframeCount(), 3);
+    QCOMPARE(channel2->keyframeCount(), 1);
+
+    QCOMPARE(image->animationInterface()->framerate(), 17.0f);
+    QCOMPARE(image->animationInterface()->currentRange(), KisTimeRange::fromTime(15, 45));
+    QCOMPARE(image->animationInterface()->currentTime(), 19);
+
+    KisPaintDeviceSP dev = layer1->paintDevice();
+
+    const KoColorSpace *cs = dev->colorSpace();
+    KoColor transparent(Qt::transparent, cs);
+    KoColor white(Qt::white, cs);
+    KoColor red(Qt::red, cs);
+
+    image->animationInterface()->switchCurrentTimeAsync(0);
+    image->waitForDone();
+
+    QCOMPARE(dev->exactBounds(), QRect(506, 378, 198, 198));
+    QCOMPARE(dev->x(), -26);
+    QCOMPARE(dev->y(), -128);
+    QVERIFY(!memcmp(dev->defaultPixel(), transparent.data(), cs->pixelSize()));
+
+    image->animationInterface()->switchCurrentTimeAsync(20);
+    image->waitForDone();
+
+    QCOMPARE(dev->nonDefaultPixelArea(), QRect(615, 416, 129, 129));
+    QCOMPARE(dev->x(), 502);
+    QCOMPARE(dev->y(), 224);
+    QVERIFY(!memcmp(dev->defaultPixel(), white.data(), cs->pixelSize()));
+
+    image->animationInterface()->switchCurrentTimeAsync(30);
+    image->waitForDone();
+
+    QCOMPARE(dev->nonDefaultPixelArea(), QRect(729, 452, 45, 44));
+    QCOMPARE(dev->x(), 645);
+    QCOMPARE(dev->y(), -10);
+    QVERIFY(!memcmp(dev->defaultPixel(), red.data(), cs->pixelSize()));
 }
 
 

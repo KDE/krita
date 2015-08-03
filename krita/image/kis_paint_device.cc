@@ -169,10 +169,8 @@ public:
             data = new Data(srcData, false);
         }
 
-        if (!offset.isNull()) {
-            data->setX(offset.x());
-            data->setY(offset.y());
-        }
+        data->setX(offset.x());
+        data->setY(offset.y());
 
         int frameId = nextFreeFrameId++;
         m_frames.insert(frameId, data);

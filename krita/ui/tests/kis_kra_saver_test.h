@@ -37,6 +37,8 @@ private Q_SLOTS:
 
     void testRoundTripLayerStyles();
 
+    void testRoundTripAnimation();
+
 };
 
 #endif

@@ -140,7 +140,7 @@ public:
      * Informs that the current world time should be changed.
      * Might be caused by e.g. undo operation
      */
-    void requestFrameSwitch(int time);
+    void requestTimeSwitch(int time);
 
     /**
      * \return a pointer to a KisAbstractProjectionPlane interface of

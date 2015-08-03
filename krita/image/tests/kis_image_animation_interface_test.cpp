@@ -212,4 +212,42 @@ void KisImageAnimationInterfaceTest::slotFrameDone()
     m_compositedFrame = m_image->projection()->createThumbnail(512, 512);
 }
 
+void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
+{
+        QRect refRect(QRect(0,0,512,512));
+    TestUtil::MaskParent p(refRect);
+
+    KisPaintLayerSP layer1 = p.layer;
+
+    KisImageAnimationInterface *i = p.image->animationInterface();
+    KisPaintDeviceSP dev1 = p.layer->paintDevice();
+
+    KisKeyframeChannel *channel = dev1->keyframeChannel();
+    channel->addKeyframe(10);
+    channel->addKeyframe(20);
+
+
+    QCOMPARE(i->currentTime(), 0);
+
+    i->requestTimeSwitchWithUndo(15);
+    QTest::qWait(100);
+    p.image->waitForDone();
+    QCOMPARE(i->currentTime(), 15);
+
+    i->requestTimeSwitchWithUndo(16);
+    QTest::qWait(100);
+    p.image->waitForDone();
+    QCOMPARE(i->currentTime(), 16);
+
+    p.undoStore->undo();
+    QTest::qWait(100);
+    p.image->waitForDone();
+    QCOMPARE(i->currentTime(), 15);
+
+    p.undoStore->undo();
+    QTest::qWait(100);
+    p.image->waitForDone();
+    QCOMPARE(i->currentTime(), 0);
+}
+
 QTEST_KDEMAIN(KisImageAnimationInterfaceTest, GUI)

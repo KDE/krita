@@ -719,7 +719,7 @@ public:
      * be changed. And the requests is forwarded to the image if
      * needed.
      */
-    void requestFrameSwitch(int time);
+    void requestTimeSwitch(int time);
 
 public:
 

@@ -190,7 +190,7 @@ void TimelineWidget::scrub(QMouseEvent *e, bool preview)
             m_canvas->animationPlayer()->displayFrame(time);
             update();
         } else {
-            m_image->animationInterface()->switchCurrentTimeAsync(time);
+            m_image->animationInterface()->requestTimeSwitchWithUndo(time);
             m_canvas->animationPlayer()->stop();
         }
     }

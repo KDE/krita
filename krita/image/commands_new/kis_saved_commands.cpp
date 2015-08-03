@@ -84,6 +84,23 @@ KisSavedCommand::KisSavedCommand(KUndo2CommandSP command,
 {
 }
 
+int KisSavedCommand::id() const
+{
+    return m_command->id();
+}
+
+bool KisSavedCommand::mergeWith(const KUndo2Command* command)
+{
+    const KisSavedCommand *other =
+        dynamic_cast<const KisSavedCommand*>(command);
+
+    if (other) {
+        command = other->m_command.data();
+    }
+
+    return m_command->mergeWith(command);
+}
+
 void KisSavedCommand::addCommands(KisStrokeId id, bool undo)
 {
     strokesFacade()->

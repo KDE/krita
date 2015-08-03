@@ -23,6 +23,10 @@
 #include "kis_keyframe_channel.h"
 #include "kis_time_range.h"
 
+#include "kis_post_execution_undo_adapter.h"
+#include "commands_new/kis_switch_current_time_command.h"
+
+
 
 struct KisImageAnimationInterface::Private
 {
@@ -100,7 +104,16 @@ bool KisImageAnimationInterface::externalFrameActive() const
     return m_d->externalFrameActive;
 }
 
-void KisImageAnimationInterface::requestFrameSwitchNonGUI(int time)
+void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
+{
+    KisSwitchCurrentTimeCommand *cmd =
+        new KisSwitchCurrentTimeCommand(m_d->image, time);
+
+    cmd->redo();
+    m_d->image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+}
+
+void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time)
 {
     emit sigInternalRequestTimeSwitch(time);
 }

@@ -101,6 +101,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_set_layer_style_command.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
+   commands_new/kis_switch_current_time_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp

@@ -95,7 +95,7 @@ public:
 
     virtual void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
-    virtual void requestFrameSwitch(int time);
+    virtual void requestTimeSwitch(int time);
 
     /**
      * Returns the sequence of the graph.

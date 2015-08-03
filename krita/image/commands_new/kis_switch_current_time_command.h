@@ -16,33 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
-#define __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
+#ifndef __KIS_SWITCH_CURRENT_TIME_COMMAND_H
+#define __KIS_SWITCH_CURRENT_TIME_COMMAND_H
 
-#include <QtTest/QtTest>
-#include <QImage>
-
+#include "krita_export.h"
 #include "kis_types.h"
-#include "kis_image.h"
 
-class KisImageAnimationInterfaceTest : public QObject
+#include <kundo2command.h>
+
+
+class KRITAIMAGE_EXPORT KisSwitchCurrentTimeCommand : public KUndo2Command
 {
-    Q_OBJECT
-private slots:
-    void testFrameRegeneration();
-    void testFramesChangedSignal();
+public:
+    KisSwitchCurrentTimeCommand(KisImageSP image, int newTime, KUndo2Command *parent = 0);
+    ~KisSwitchCurrentTimeCommand();
 
-    void testAnimationCompositionBug();
+    void redo();
+    void undo();
 
-    void testSwitchFrameWithUndo();
-
-
-
-    void slotFrameDone();
+    int id() const;
+    bool mergeWith(const KUndo2Command* command);
 
 private:
-    KisImageSP m_image;
-    QImage m_compositedFrame;
+    KisImageWSP m_image;
+    int m_oldTime;
+    int m_newTime;
 };
 
-#endif /* __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H */
+#endif /* __KIS_SWITCH_CURRENT_TIME_COMMAND_H */

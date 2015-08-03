@@ -63,7 +63,9 @@ public:
      */
     bool externalFrameActive() const;
 
-    void requestFrameSwitchNonGUI(int time);
+    void requestTimeSwitchWithUndo(int time);
+
+    void requestTimeSwitchNonGUI(int time);
 
 public Q_SLOTS:
     /**

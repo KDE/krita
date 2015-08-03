@@ -778,10 +778,10 @@ void KisPaintDevice::setDirty(const QVector<QRect> rects)
         m_d->parent->setDirty(rects);
 }
 
-void KisPaintDevice::requestFrameSwitch(int time)
+void KisPaintDevice::requestTimeSwitch(int time)
 {
     if (m_d->parent.isValid()) {
-        m_d->parent->requestFrameSwitch(time);
+        m_d->parent->requestTimeSwitch(time);
     }
 }
 

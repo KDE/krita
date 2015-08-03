@@ -20,6 +20,7 @@
 
 #include "kis_pixel_selection.h"
 #include "kis_paint_device.h"
+#include "kis_paint_device_frames_interface.h"
 #include "kis_datamanager.h"
 
 #include <config-tiles.h> // For the next define
@@ -47,6 +48,13 @@ public:
     QPainterPath savedOutlineCache;
     KUndo2Command *flattenUndoCommand;
     bool resetSelectionOutlineCache;
+
+    int transactionTime;
+    int transactionFrameId;
+
+    void possiblySwitchCurrentTime();
+    KisDataManagerSP dataManager();
+    void moveDevice(const QPoint newOffset);
 };
 
 
@@ -65,47 +73,78 @@ void KisTransactionData::init(KisPaintDeviceSP device)
 {
     m_d->device = device;
     DEBUG_ACTION("Transaction started");
-    m_d->memento = device->dataManager()->getMemento();
+
     m_d->oldOffset = QPoint(device->x(), device->y());
     m_d->firstRedo = true;
     m_d->transactionFinished = false;
     m_d->flattenUndoCommand = 0;
+
+    m_d->transactionTime = device->defaultBounds()->currentTime();
+    m_d->transactionFrameId = device->framesInterface() ? device->framesInterface()->currentFrameId() : -1;
+    m_d->memento = m_d->dataManager()->getMemento();
 }
 
 KisTransactionData::~KisTransactionData()
 {
     Q_ASSERT(m_d->memento);
-    m_d->device->dataManager()->purgeHistory(m_d->memento);
+    m_d->dataManager()->purgeHistory(m_d->memento);
 
     delete m_d;
+}
+
+KisDataManagerSP KisTransactionData::Private::dataManager()
+{
+    KisDataManagerSP dm = transactionFrameId >= 0 ?
+        device->framesInterface()->frameDataManager(transactionFrameId) :
+        device->dataManager();
+    return dm;
+}
+
+void KisTransactionData::Private::moveDevice(const QPoint newOffset)
+{
+    if (transactionFrameId >= 0) {
+        device->framesInterface()->setFrameOffset(transactionFrameId, newOffset);
+    } else {
+        device->move(newOffset);
+    }
 }
 
 void KisTransactionData::endTransaction()
 {
     if(!m_d->transactionFinished) {
+        // make sure the time didn't change during the transaction
+        KIS_ASSERT_RECOVER_RETURN(
+            m_d->transactionTime == m_d->device->defaultBounds()->currentTime());
+
         DEBUG_ACTION("Transaction ended");
         m_d->transactionFinished = true;
-        m_d->device->dataManager()->commit();
+        m_d->dataManager()->commit();
         m_d->newOffset = QPoint(m_d->device->x(), m_d->device->y());
     }
 }
 
 void KisTransactionData::startUpdates()
 {
-    QRect rc;
-    QRect mementoExtent = m_d->memento->extent();
+    if (m_d->transactionFrameId ==
+        m_d->device->framesInterface()->currentFrameId()) {
 
-    if (m_d->newOffset == m_d->oldOffset) {
-        rc = mementoExtent.translated(m_d->device->x(), m_d->device->y());
+        QRect rc;
+        QRect mementoExtent = m_d->memento->extent();
+
+        if (m_d->newOffset == m_d->oldOffset) {
+            rc = mementoExtent.translated(m_d->device->x(), m_d->device->y());
+        } else {
+            QRect totalExtent =
+                m_d->dataManager()->extent() | mementoExtent;
+
+            rc = totalExtent.translated(m_d->oldOffset) |
+                totalExtent.translated(m_d->newOffset);
+        }
+
+        m_d->device->setDirty(rc);
     } else {
-        QRect totalExtent =
-            m_d->device->dataManager()->extent() | mementoExtent;
-
-        rc = totalExtent.translated(m_d->oldOffset) |
-            totalExtent.translated(m_d->newOffset);
+        m_d->device->framesInterface()->invalidateFrameCache(m_d->transactionFrameId);
     }
-
-    m_d->device->setDirty(rc);
 }
 
 void KisTransactionData::possiblyNotifySelectionChanged()
@@ -131,6 +170,13 @@ void KisTransactionData::possiblyResetOutlineCache()
     }
 }
 
+void KisTransactionData::Private::possiblySwitchCurrentTime()
+{
+    if (device->defaultBounds()->currentTime() == transactionTime) return;
+
+    device->requestFrameSwitch(transactionTime);
+}
+
 void KisTransactionData::redo()
 {
     //KUndo2QStack calls redo(), so the first call needs to be blocked
@@ -149,12 +195,13 @@ void KisTransactionData::redo()
     DEBUG_ACTION("Redo()");
 
     Q_ASSERT(m_d->memento);
-    m_d->device->dataManager()->rollforward(m_d->memento);
+    m_d->dataManager()->rollforward(m_d->memento);
 
     if (m_d->newOffset != m_d->oldOffset) {
-        m_d->device->move(m_d->newOffset);
+        m_d->moveDevice(m_d->newOffset);
     }
 
+    m_d->possiblySwitchCurrentTime();
     startUpdates();
     possiblyNotifySelectionChanged();
 }
@@ -163,14 +210,15 @@ void KisTransactionData::undo()
 {
     DEBUG_ACTION("Undo()");
     Q_ASSERT(m_d->memento);
-    m_d->device->dataManager()->rollback(m_d->memento);
+    m_d->dataManager()->rollback(m_d->memento);
 
     if (m_d->newOffset != m_d->oldOffset) {
-        m_d->device->move(m_d->oldOffset);
+        m_d->moveDevice(m_d->oldOffset);
     }
 
     restoreSelectionOutlineCache(true);
 
+    m_d->possiblySwitchCurrentTime();
     startUpdates();
     possiblyNotifySelectionChanged();
 }

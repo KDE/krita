@@ -30,6 +30,8 @@ private Q_SLOTS:
     void testUndo();
     void testRedo();
     void testDeviceMove();
+
+    void testUndoWithUnswitchedFrames();
 };
 
 #endif

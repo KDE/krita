@@ -63,11 +63,15 @@ public:
      */
     bool externalFrameActive() const;
 
+    void requestFrameSwitchNonGUI(int time);
+
+public Q_SLOTS:
     /**
      * Switches current frame (synchronously) and starts an
      * asynchronous regeneration of the entire image.
      */
     void switchCurrentTimeAsync(int frameId);
+public:
 
     /**
      * Start a backgroud thread that will recalculate some extra frame.
@@ -112,6 +116,8 @@ Q_SIGNALS:
     void sigFrameReady(int time);
     void sigTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
+
+    void sigInternalRequestTimeSwitch(int frameId);
 
 private:
     struct Private;

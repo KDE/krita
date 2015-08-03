@@ -1588,6 +1588,11 @@ void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
     m_d->animationInterface->invalidateFrames(range, rect);
 }
 
+void KisImage::requestFrameSwitch(int time)
+{
+    m_d->animationInterface->requestFrameSwitchNonGUI(time);
+}
+
 QList<KisLayerComposition*> KisImage::compositions()
 {
     return m_d->compositions;

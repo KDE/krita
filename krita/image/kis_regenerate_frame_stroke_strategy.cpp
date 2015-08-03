@@ -70,6 +70,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnima
     // switching frames is a distinct user action, so it should
     // cancel the playback or any action easily
     setRequestsOtherStrokesToEnd(true);
+    setClearsRedoOnStart(false);
 }
 
 KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()

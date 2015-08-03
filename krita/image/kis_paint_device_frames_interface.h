@@ -24,6 +24,8 @@
 
 class KisPaintDeviceData;
 class KisPaintDeviceWriter;
+class KisDataManager;
+typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 
 class KRITAIMAGE_EXPORT KisPaintDeviceFramesInterface
@@ -89,6 +91,30 @@ public:
      */
     bool readFrame(QIODevice *stream, int frameId);
 
+
+    /**
+     * Returns frameId of the currently active frame.
+     * Should be used by Undo framework only!
+     */
+    int currentFrameId() const;
+
+    /**
+     * Returns the data manager of the specified frame.
+     * Should be used by Undo framework only!
+     */
+    KisDataManagerSP frameDataManager(int frameId) const;
+
+    /**
+     * Resets the cache object associated with the frame.
+     * Should be used by Undo framework only!
+     */
+    void invalidateFrameCache(int frameId);
+
+    /**
+     * Sets the offset for \p frameId.
+     * Should be used by Undo framework only!
+     */
+    void setFrameOffset(int frameId, const QPoint &offset);
 
     struct TestingDataObjects {
         typedef KisPaintDeviceData Data;

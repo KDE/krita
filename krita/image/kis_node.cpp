@@ -570,4 +570,11 @@ void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)
     }
 }
 
+void KisNode::requestFrameSwitch(int time)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestFrameSwitch(time);
+    }
+}
+
 #include "kis_node.moc"

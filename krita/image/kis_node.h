@@ -137,6 +137,12 @@ public:
     void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
     /**
+     * Informs that the current world time should be changed.
+     * Might be caused by e.g. undo operation
+     */
+    void requestFrameSwitch(int time);
+
+    /**
      * \return a pointer to a KisAbstractProjectionPlane interface of
      *         the node. This interface is used by the image merging
      *         framework to get information and to blending for the

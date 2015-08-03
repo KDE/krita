@@ -714,6 +714,13 @@ public:
 
     virtual void setDirty(const QVector<QRect> rects);
 
+    /**
+     * Called by KisTransactionData when it thinks current time should
+     * be changed. And the requests is forwarded to the image if
+     * needed.
+     */
+    void requestFrameSwitch(int time);
+
 public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);

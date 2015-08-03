@@ -155,6 +155,23 @@ public:
         return fastBitBltPossibleImpl(src->m_d->currentData());
     }
 
+    int currentFrameId() const {
+        KIS_ASSERT_RECOVER(contentChannel) { return -1; }
+        return !defaultBounds->currentLevelOfDetail() ?
+            contentChannel->frameIdAt(defaultBounds->currentTime()) :
+            -1;
+    }
+
+    KisDataManagerSP frameDataManager(int frameId) const {
+        Data *data = m_frames[frameId];
+        return data->dataManager();
+    }
+
+    void invalidateFrameCache(int frameId) {
+        Data *data = m_frames[frameId];
+        return data->cache()->invalidate();
+    }
+
     int createFrame(bool copy, int copySrc, const QPoint &offset)
     {
         Data *data;
@@ -211,6 +228,12 @@ public:
     QPoint frameOffset(int frameId) const {
         Data *data = m_frames[frameId];
         return QPoint(data->x(), data->y());
+    }
+
+    void setFrameOffset(int frameId, const QPoint &offset) {
+        Data *data = m_frames[frameId];
+        data->setX(offset.x());
+        data->setY(offset.y());
     }
 
     const QList<int> frameIds() const
@@ -753,6 +776,13 @@ void KisPaintDevice::setDirty(const QVector<QRect> rects)
     m_d->cache()->invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty(rects);
+}
+
+void KisPaintDevice::requestFrameSwitch(int time)
+{
+    if (m_d->parent.isValid()) {
+        m_d->parent->requestFrameSwitch(time);
+    }
 }
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)
@@ -1612,6 +1642,30 @@ bool KisPaintDeviceFramesInterface::readFrame(QIODevice *stream, int frameId)
 {
     KIS_ASSERT_RECOVER(frameId >= 0) { return false; }
     return q->m_d->readFrame(stream, frameId);
+}
+
+int KisPaintDeviceFramesInterface::currentFrameId() const
+{
+    return q->m_d->currentFrameId();
+}
+
+KisDataManagerSP KisPaintDeviceFramesInterface::frameDataManager(int frameId) const
+{
+    KIS_ASSERT_RECOVER(frameId >= 0) { return q->m_d->dataManager(); }
+    return q->m_d->frameDataManager(frameId);
+}
+
+void KisPaintDeviceFramesInterface::invalidateFrameCache(int frameId)
+{
+    KIS_ASSERT_RECOVER_RETURN(frameId >= 0);
+
+    return q->m_d->invalidateFrameCache(frameId);
+}
+
+void KisPaintDeviceFramesInterface::setFrameOffset(int frameId, const QPoint &offset)
+{
+    KIS_ASSERT_RECOVER_RETURN(frameId >= 0);
+    return q->m_d->setFrameOffset(frameId, offset);
 }
 
 KisPaintDeviceFramesInterface::TestingDataObjects

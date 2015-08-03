@@ -53,6 +53,8 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
 
     m_d->framerate = 24;
     m_d->currentRange = KisTimeRange::fromTime(0, 100);
+
+    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int)), SLOT(switchCurrentTimeAsync(int)));
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -96,6 +98,11 @@ KisImageWSP KisImageAnimationInterface::image() const
 bool KisImageAnimationInterface::externalFrameActive() const
 {
     return m_d->externalFrameActive;
+}
+
+void KisImageAnimationInterface::requestFrameSwitchNonGUI(int time)
+{
+    emit sigInternalRequestTimeSwitch(time);
 }
 
 void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)

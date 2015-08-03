@@ -32,7 +32,7 @@ class KisNormalPreviewWidget : public QLabel
 {
     Q_OBJECT
 public:
-    KisNormalPreviewWidget(QWidget* parent);
+    KisNormalPreviewWidget(QWidget* parent = 0);
     ~KisNormalPreviewWidget();
 
 public Q_SLOTS:

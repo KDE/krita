@@ -27,7 +27,7 @@
 #include <kstandarddirs.h>
 #include "kis_factory2.h"
 
-KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent = 0)
+KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent)
         : QLabel(parent)
 {
     m_redChannel = 0;

@@ -236,7 +236,7 @@
         <item row="0" column="2">
          <widget class="QRadioButton" name="optionRotation">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the rotation sensor availeble in certain pens to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the rotation sensor available in certain pens to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string>Rotation</string>

@@ -161,7 +161,7 @@ KisApplication::KisApplication(const QString &key)
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Breeze");
-        //setStyle("Oxygen");
+        setStyle("Oxygen");
     }
 
 }

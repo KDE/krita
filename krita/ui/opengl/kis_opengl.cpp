@@ -43,6 +43,7 @@ namespace
     QOpenGLContext *SharedContext = 0;
 #endif
     bool NeedsFenceWorkaround = false;
+    int glVersion = 0;
 }
 
 
@@ -51,18 +52,31 @@ void KisOpenGL::initialize()
 #ifdef HAVE_OPENGL
     dbgUI << "OpenGL: initializing";
 
-    KisConfig cfg;;
+    KisConfig cfg;
 
     QSurfaceFormat format;
-    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setProfile(QSurfaceFormat::CompatibilityProfile);
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
     format.setVersion(3, 2);
-    if (cfg.disableDoubleBuffering()) {
+    // if (cfg.disableDoubleBuffering()) {
+    if (false) {
         format.setSwapBehavior(QSurfaceFormat::SingleBuffer);
+    }
+    else {
+        format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     }
     format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
+}
+
+int KisOpenGL::initializeContext(QOpenGLContext* s) {
+    KisConfig cfg;
+    dbgUI << "OpenGL: Opening new context";
+
+    // Double check we were given the version we requested
+    QSurfaceFormat format = s->format();
+    glVersion = 100 * format.majorVersion() + format.minorVersion();
 
     if (!SharedSurface) {
         SharedSurface = new QOffscreenSurface();
@@ -71,8 +85,9 @@ void KisOpenGL::initialize()
     }
 
     if (!SharedContext) {
-        SharedContext = new QOpenGLContext(qApp);
+        SharedContext = new QOpenGLContext;
         SharedContext->setFormat(format);
+        SharedContext->setShareContext(s);
         SharedContext->create();
         SharedContext->makeCurrent(SharedSurface);
     }
@@ -102,6 +117,7 @@ void KisOpenGL::initialize()
 #else
     NeedsFenceWorkaround = false;
 #endif
+    return glVersion;
 }
 
 bool KisOpenGL::supportsFenceSync()
@@ -112,6 +128,7 @@ bool KisOpenGL::supportsFenceSync()
 
 bool KisOpenGL::supportsGLSL13()
 {
+    // return glVersion > 300;
     return true; // QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0; -- we force 3.2 for now, since that has glFenceSync
 }
 

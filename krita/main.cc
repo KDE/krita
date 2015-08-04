@@ -44,6 +44,7 @@
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
+#include "opengl/kis_opengl.h"
 
 #if defined Q_OS_WIN
 #include <Windows.h>
@@ -165,6 +166,10 @@ extern "C" int main(int argc, char **argv)
     app.installNativeEventFilter(&tabletSupportX11);
 #endif
 
+
+#if defined HAVE_OPENGL
+    KisOpenGL::initialize();
+#endif
 
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting

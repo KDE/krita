@@ -37,6 +37,10 @@
 #include <QFile>
 #include <QOpenGLShaderProgram>
 #include <QTransform>
+#include <QtGui/QOpenGLShaderProgram>
+#include <QtGui/QOpenGLFramebufferObject>
+#include <qt5/QtWidgets/QOpenGLWidget>
+#include <qt5/QtGui/QOpenGLFunctions>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -159,7 +163,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     , d(new Private())
 {
 
-    initializeOpenGLFunctions();
+    QSurfaceFormat format;
+    format.setDepthBufferSize(24);
+    setFormat(format);
 
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
@@ -177,9 +183,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
-
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
-
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
@@ -191,10 +194,12 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     d->displayFilter = displayFilter;
-    d->canvasInitialized = false;
-//    initializeDisplayShader();
-    initializeCheckerShader();
-    d->canvasInitialized = true;
+    if (d->canvasInitialized) {
+        d->canvasInitialized = false;
+        initializeDisplayShader();
+        initializeCheckerShader();
+        d->canvasInitialized = true;
+    }
 }
 
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
@@ -227,11 +232,18 @@ void KisOpenGLCanvas2::initializeGL()
 //            }
 //        }
 //    }
+    KisConfig cfg;
+    qDebug() << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    int glVersion = KisOpenGL::initializeContext(context());
+    qDebug() << "OpenGL: Context gives version" << glVersion;
+    initializeOpenGLFunctions();
+    VSyncWorkaround::tryDisableVSync(context());
 
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
-//    initializeDisplayShader();
+    initializeDisplayShader();
 
-//    Sync::init();
+    Sync::init();
 
     d->canvasInitialized = true;
 }
@@ -249,17 +261,19 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
+    QPainter gc(this);
+    gc.beginNativePainting();
     renderCanvasGL();
 
-    QPainter gc(this);
+    if (d->glSyncObject) {
+        Sync::deleteSync(d->glSyncObject);
+    }
+    d->glSyncObject = Sync::getSync();
+    gc.endNativePainting();
+
     renderDecorations(&gc);
     gc.end();
 
-//    if (d->glSyncObject) {
-//        Sync::deleteSync(d->glSyncObject);
-//    }
-
-//    d->glSyncObject = Sync::getSync();
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg;
@@ -270,8 +284,7 @@ void KisOpenGLCanvas2::paintGL()
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-//    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
-    return false;
+    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
 }
 
 inline void rectToVertices(QVector3D* vertices, const QRectF &rc)

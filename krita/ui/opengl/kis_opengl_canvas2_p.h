@@ -67,10 +67,8 @@ namespace VSyncWorkaround {
             qDebug() << "Swap control extension found.";
             typedef WId (*k_glXGetCurrentDrawable)(void);
             typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
-            typedef int (*k_glXQueryDrawable)(Display *, WId, int, unsigned int *);
             k_glXGetCurrentDrawable kis_glXGetCurrentDrawable = (k_glXGetCurrentDrawable)ctx->getProcAddress("glXGetCurrentDrawable");
             kis_glXSwapIntervalEXT glXSwapIntervalEXT = (kis_glXSwapIntervalEXT)ctx->getProcAddress("glXSwapIntervalEXT");
-            k_glXQueryDrawable kis_glXQueryDrawable = (k_glXQueryDrawable)ctx->getProcAddress("glXQueryDrawable");
             WId wid = kis_glXGetCurrentDrawable();
 
             if (glXSwapIntervalEXT) {
@@ -80,6 +78,8 @@ namespace VSyncWorkaround {
                 unsigned int swap = 1;
 
 #ifdef GLX_SWAP_INTERVAL_EXT
+                typedef int (*k_glXQueryDrawable)(Display *, WId, int, unsigned int *);
+                k_glXQueryDrawable kis_glXQueryDrawable = (k_glXQueryDrawable)ctx->getProcAddress("glXQueryDrawable");
                 kis_glXQueryDrawable(dpy, wid, GLX_SWAP_INTERVAL_EXT, &swap);
 #endif
 

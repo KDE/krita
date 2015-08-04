@@ -20,6 +20,8 @@
 
 #ifdef HAVE_OPENGL
 #include <QOpenGLWidget>
+#include <QtGui/QOpenGLFunctions>
+#include <QtGui/QOpenGLContext>
 
 #include <QMessageBox>
 
@@ -51,8 +53,10 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
+    , m_glFuncs(0)
     , m_allChannelsSelected(true)
     , m_useOcio(false)
+    , m_initialized(false)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
@@ -75,18 +79,24 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
+    , m_glFuncs(0)
     , m_allChannelsSelected(true)
     , m_useOcio(false)
+    , m_initialized(false)
 {
     Q_ASSERT(renderingIntent < 4);
+}
+
+void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f) {
+    m_glFuncs = f;
 
     getTextureSize(&m_texturesInfo);
-
-    glGenTextures(1, &m_checkerTexture);
+    m_glFuncs->glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
     recalculateCache(info);
+    m_initialized = true;
 }
 
 KisOpenGLImageTextures::~KisOpenGLImageTextures()
@@ -101,7 +111,7 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     }
 
     destroyImageTextureTiles();
-    glDeleteTextures(1, &m_checkerTexture);
+    m_glFuncs->glDeleteTextures(1, &m_checkerTexture);
 }
 
 bool KisOpenGLImageTextures::imageCanShareTextures()
@@ -164,6 +174,11 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     KisConfig config;
     KisTextureTile::FilterMode mode = (KisTextureTile::FilterMode)config.openGLFilteringMode();
 
+    if (QOpenGLContext::currentContext()) {
+    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+    m_initialized = true;
+    qDebug()  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
+
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
             QRect tileRect = calculateTileRect(col, row);
@@ -173,9 +188,14 @@ void KisOpenGLImageTextures::createImageTextureTiles()
                                                       emptyTileData,
                                                       mode,
                                                       cfg.useOpenGLTextureBuffer(),
-                                                      cfg.numMipmapLevels());
+                                                      cfg.numMipmapLevels(),
+                                                      f);
             m_textureTiles.append(tile);
         }
+    }
+    }
+    else {
+        qDebug() << "Tried to init texture tiles without a current OpenGL Context.";
     }
 }
 
@@ -260,6 +280,11 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 
 void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 {
+    if (!m_initialized) {
+        qDebug() << "OpenGL: Tried to edit image texture cache before it was initialized.";
+        return;
+    }
+
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
@@ -275,35 +300,51 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
 
-    glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
+    if (m_glFuncs) {
+        qDebug() << "Attaching checker texture" << checkerTexture();
+        m_glFuncs->glBindTexture(GL_TEXTURE_2D, checkerTexture());
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        m_glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        m_glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        m_glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        m_glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        m_glFuncs->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    QImage img = checkImage;
-    if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
-        img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
+        QImage img = checkImage;
+        if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
+            img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
+        }
+        m_glFuncs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
+    #if QT_VERSION >= 0x040700
+                    0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
+    #else
+                    0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
+    #endif
     }
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-#if QT_VERSION >= 0x040700
-                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
-#else
-                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
-#endif
+    else {
+        qDebug() << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
+    }
 
 }
 
-GLuint KisOpenGLImageTextures::checkerTexture() const
+GLuint KisOpenGLImageTextures::checkerTexture()
 {
-    return m_checkerTexture;
+    if (m_glFuncs) {
+        if (m_checkerTexture == 0) {
+            m_glFuncs->glGenTextures(1, &m_checkerTexture);
+        }
+        return m_checkerTexture;
+    }
+    else {
+        return 0;
+    }
 }
 
 void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
+    if(m_textureTiles.isEmpty()) return;
+
     foreach(KisTextureTile *tile, m_textureTiles) {
         tile->setUseBuffer(useBuffer);
         tile->setNumMipmapLevels(NumMipmapLevels);
@@ -353,7 +394,13 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     const GLint preferredTextureSize = cfg.openGLTextureSize();
 
     GLint maxTextureSize;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    if (m_glFuncs) {
+        m_glFuncs->glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    }
+    else {
+        qDebug() << "OpenGL: Tried to read texture size before OpenGL was initialized.";
+        maxTextureSize = GL_MAX_TEXTURE_SIZE;
+    }
 
     texturesInfo->width = qMin(preferredTextureSize, maxTextureSize);
     texturesInfo->height = qMin(preferredTextureSize, maxTextureSize);

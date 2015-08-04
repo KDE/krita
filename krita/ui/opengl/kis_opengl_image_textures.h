@@ -34,6 +34,7 @@
 #include "opengl/kis_texture_tile.h"
 
 class KisOpenGLImageTextures;
+class QOpenGLFunctions;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorProfile;
@@ -73,6 +74,12 @@ public:
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
+    /**
+     * Complete initialization can only happen once an OpenGL context has been created.
+     * @param f Pointer to OpenGL functions. They must already be ininitialized.
+     */
+    void initGL(QOpenGLFunctions *f);
+
     void setChannelFlags(const QBitArray &channelFlags);
 
     bool internalColorManagementActive() const;
@@ -89,7 +96,7 @@ public:
      * pattern on which the image is rendered.
      */
     void generateCheckerTexture(const QImage & checkImage);
-    GLuint checkerTexture() const;
+    GLuint checkerTexture();
 
     void updateConfig(bool useBuffer, int NumMipmapLevels);
 
@@ -107,10 +114,12 @@ public:
     }
 
     inline KisTextureTile* getTextureTileCR(int col, int row) {
-        int tile = row * m_numCols + col;
-        KIS_ASSERT_RECOVER_RETURN_VALUE(m_textureTiles.size() > tile, 0);
-
-        return m_textureTiles[tile];
+        if (m_initialized) {
+            int tile = row * m_numCols + col;
+            KIS_ASSERT_RECOVER_RETURN_VALUE(m_textureTiles.size() > tile, 0);
+            return m_textureTiles[tile];
+        }
+        return 0;
     }
 
     inline KisTextureTile* getTextureTile(int x, int y) {
@@ -146,7 +155,7 @@ private:
 
     QRect calculateTileRect(int col, int row) const;
 
-    static void getTextureSize(KisGLTexturesInfo *texturesInfo);
+    void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
 
@@ -178,12 +187,14 @@ private:
     int m_numCols;
     QVector<KisTextureTile*> m_textureTiles;
 
+    QOpenGLFunctions *m_glFuncs;
     QBitArray m_channelFlags;
     bool m_allChannelsSelected;
     bool m_onlyOneChannelSelected;
     int m_selectedChannelIndex;
 
     bool m_useOcio;
+    bool m_initialized;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

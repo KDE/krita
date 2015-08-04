@@ -32,6 +32,7 @@
 #include <QOpenGLBuffer>
 #endif
 
+class QOpenGLFunctions;
 
 struct KisGLTexturesInfo {
 
@@ -68,7 +69,7 @@ public:
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                    const QByteArray &fillData, FilterMode mode,
-                   bool useBuffer, int numMipmapLevels);
+                   bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f);
     ~KisTextureTile();
 
     void setUseBuffer(bool useBuffer) {

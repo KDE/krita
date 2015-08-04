@@ -239,6 +239,7 @@ void KisOpenGLCanvas2::initializeGL()
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
+    d->openGLImageTextures->initGL((QOpenGLFunctions *)this);
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
     initializeDisplayShader();
@@ -448,7 +449,10 @@ void KisOpenGLCanvas2::drawImage()
             KisTextureTile *tile =
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
-            KIS_ASSERT_RECOVER_BREAK(tile);
+            if (!tile) {
+                qWarning() << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                continue;
+            }
 
             /*
              * We create a float rect here to workaround Qt's

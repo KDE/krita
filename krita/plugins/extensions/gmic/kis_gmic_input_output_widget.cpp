@@ -55,8 +55,8 @@ KisFilterPreviewWidget* KisGmicInputOutputWidget::previewWidget()
 
 void KisGmicInputOutputWidget::createMainLayout()
 {
-    zoomInButton->setIcon(koIcon("zoom-in"));
-    zoomOutButton->setIcon(koIcon("zoom-out"));
+    zoomInButton->setIcon(themedIcon("zoom-in"));
+    zoomOutButton->setIcon(themedIcon("zoom-out"));
 
     QStringList outputModeStrings = QStringList()
             << i18n("In place (default)")

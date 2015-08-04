@@ -50,10 +50,10 @@ KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags fl
     d->profileModel = new KisInputProfileModel(this);
     d->ui->profileList->setModel(d->profileModel);
 
-    d->ui->removeButton->setIcon(koIcon("list-remove"));
-    d->ui->duplicateButton->setIcon(koIcon("edit-copy"));
-    d->ui->renameButton->setIcon(koIcon("edit-rename"));
-    d->ui->resetButton->setIcon(koIcon("process-stop"));
+    d->ui->removeButton->setIcon(themedIcon("edit-delete"));
+    d->ui->duplicateButton->setIcon(themedIcon("edit-copy"));
+    d->ui->renameButton->setIcon(themedIcon("document-edit"));
+    d->ui->resetButton->setIcon(themedIcon("view-refresh"));
 
     connect(d->ui->removeButton, SIGNAL(clicked(bool)), SLOT(removeButtonClicked()));
     connect(d->ui->duplicateButton, SIGNAL(clicked(bool)), SLOT(duplicateButtonClicked()));

@@ -142,6 +142,7 @@ tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
 tool_transform/light_transform_icons_penPressure.png
 
+Breeze-dark/dark_applications-system.svg
 Breeze-dark/dark_arrow-down.svg
 Breeze-dark/dark_arrow-left.svg
 Breeze-dark/dark_arrow-right.svg
@@ -162,19 +163,28 @@ Breeze-dark/dark_edit-undo.svg
 Breeze-dark/dark_folder-documents.svg
 Breeze-dark/dark_folder-pictures.svg
 Breeze-dark/dark_go-home.svg
+Breeze-dark/dark_im-user.svg
 Breeze-dark/dark_list-add.svg
 Breeze-dark/dark_locked.svg
 Breeze-dark/dark_media-playback-start.svg
 Breeze-dark/dark_media-playback-stop.svg
 Breeze-dark/dark_media-record.svg
+Breeze-dark/dark_preferences-desktop-color.svg
+Breeze-dark/dark_preferences-desktop-display.svg
 Breeze-dark/dark_tools-wizard.svg
 Breeze-dark/dark_unlocked.svg
 Breeze-dark/dark_view-filter.svg
+Breeze-dark/dark_view-grid.svg
 Breeze-dark/dark_view-refresh.svg
 Breeze-dark/dark_window-close.svg
 Breeze-dark/dark_window-new.svg
+Breeze-dark/dark_zoom-in.svg
 Breeze-dark/dark_zoom-original.svg
+Breeze-dark/dark_zoom-out.svg
+Breeze-dark/dark_bookmarks.svg
+Breeze-dark/dark_folder.svg
 
+Breeze-light/light_applications-system.svg
 Breeze-light/light_arrow-down.svg
 Breeze-light/light_arrow-left.svg
 Breeze-light/light_arrow-right.svg
@@ -195,18 +205,26 @@ Breeze-light/light_edit-undo.svg
 Breeze-light/light_folder-documents.svg
 Breeze-light/light_folder-pictures.svg
 Breeze-light/light_go-home.svg
+Breeze-light/light_im-user.svg
 Breeze-light/light_list-add.svg
 Breeze-light/light_locked.svg
 Breeze-light/light_media-playback-start.svg
 Breeze-light/light_media-playback-stop.svg
 Breeze-light/light_media-record.svg
+Breeze-light/light_preferences-desktop-color.svg
+Breeze-light/light_preferences-desktop-display.svg
 Breeze-light/light_tools-wizard.svg
 Breeze-light/light_unlocked.svg
 Breeze-light/light_view-filter.svg
+Breeze-light/light_view-grid.svg
 Breeze-light/light_view-refresh.svg
 Breeze-light/light_window-close.svg
 Breeze-light/light_window-new.svg
+Breeze-light/light_zoom-in.svg
 Breeze-light/light_zoom-original.svg
+Breeze-light/light_zoom-out.svg
+Breeze-light/light_bookmarks.svg
+Breeze-light/light_folder.svg
 
 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 

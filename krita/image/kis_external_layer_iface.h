@@ -42,7 +42,7 @@ public:
             : KisLayer(image, name, opacity) {}
 
     virtual QIcon icon() const {
-        return koIcon("system-run");
+        return themedIcon("view-refresh");
     }
 
     virtual void resetCache() {

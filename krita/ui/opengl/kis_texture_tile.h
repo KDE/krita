@@ -86,10 +86,6 @@ public:
         return m_tileRectInImagePixels;
     }
 
-    inline GLuint textureId() {
-        return m_textureId;
-    }
-
     inline QRect textureRectInImagePixels() {
         return m_textureRectInImagePixels;
     }
@@ -100,7 +96,6 @@ public:
 
     inline void setTextureParameters()
     {
-
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);

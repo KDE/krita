@@ -103,7 +103,7 @@ KisTextureTile::~KisTextureTile()
 
 void KisTextureTile::bindToActiveTexture()
 {
-    glBindTexture(GL_TEXTURE_2D, textureId());
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     if (m_needsMipmapRegeneration) {
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -313,7 +313,6 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
             m_glBuffer->bind();
             m_glBuffer->allocate(size);
         }
-
         void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
         memcpy(vid, data, size);
         m_glBuffer->unmap();

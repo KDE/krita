@@ -39,8 +39,84 @@ struct KisAnimationFrameCache::Private
     KisOpenGLImageTexturesSP textures;
     KisImageWSP image;
 
-    QMap<int, KisOpenGLUpdateInfoSP> openGlFrames;
+    struct Frame
+    {
+        KisOpenGLUpdateInfoSP openGlFrame;
+        int length;
 
+        Frame(KisOpenGLUpdateInfoSP info, int length)
+            : openGlFrame(info), length(length)
+        {}
+    };
+
+    QMap<int, Frame*> frames;
+
+    Frame * getFrame(int time)
+    {
+        if (frames.isEmpty()) return 0;
+
+        QMap<int, Frame*>::iterator it = frames.upperBound(time);
+        if (it != frames.begin()) it--;
+
+        int start = it.key();
+        int length = it.value()->length;
+
+        if (length == -1) {
+            if (start <= time) return it.value();
+        } else {
+            int end = start + length - 1;
+            if (start <= time && time <= end) return it.value();
+        }
+
+        return 0;
+    }
+
+    void addFrame(KisOpenGLUpdateInfoSP info, const KisTimeRange& range)
+    {
+        invalidate(range);
+
+        int length = range.isInfinite() ? -1 : range.end() - range.start() + 1;
+        Frame *frame = new Frame(info, length);
+
+        frames.insert(range.start(), frame);
+    }
+
+    void invalidate(const KisTimeRange& range)
+    {
+        QMap<int, Frame*>::iterator it = frames.lowerBound(range.start());
+        if (it.key() != range.start()) it--;
+
+        while (it != frames.end()) {
+            Frame *frame = it.value();
+            int start = it.key();
+            int length = it.value()->length;
+            bool frameIsInfinite = (length == -1);
+            int end = start + length - 1;
+
+            if (start >= range.start()) {
+                if (!range.isInfinite() && start > range.end()) {
+                    break;
+                }
+
+                if (!range.isInfinite() && (frameIsInfinite || end > range.end())) {
+                    // Reinsert with a later start
+                    int newStart = range.end() + 1;
+                    int newLength = frameIsInfinite ? -1 : (end - newStart + 1);
+                    frames.insert(newStart, new Frame(frame->openGlFrame, newLength));
+                }
+
+                it = frames.erase(it);
+                delete frame;
+                continue;
+
+            } else if (frameIsInfinite || end >= range.start()) {
+                int newEnd = range.start() - 1;
+                frame->length = newEnd - start + 1;
+            }
+
+            it++;
+        }
+    }
 
     // TODO: verify that we don't have any leak here!
     typedef QMap<KisOpenGLImageTexturesSP, KisAnimationFrameCache*> CachesMap;
@@ -83,20 +159,21 @@ KisAnimationFrameCache::~KisAnimationFrameCache()
 
 bool KisAnimationFrameCache::uploadFrame(int time)
 {
-    bool frameExists = m_d->openGlFrames.contains(time);
+    Private::Frame *frame = m_d->getFrame(time);
 
-    if (!frameExists) {
+    if (!frame) {
         m_d->image->animationInterface()->requestFrameRegeneration(time, m_d->image->bounds());
     } else {
-        m_d->textures->recalculateCache(m_d->openGlFrames[time]);
+        m_d->textures->recalculateCache(frame->openGlFrame);
     }
 
-    return frameExists;
+    return frame != 0;
 }
 
 KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time) const
 {
-    return (m_d->openGlFrames.contains(time)) ? Cached : Uncached;
+    Private::Frame *frame = m_d->getFrame(time);
+    return (frame) ? Cached : Uncached;
 }
 
 KisImageWSP KisAnimationFrameCache::image()
@@ -104,27 +181,13 @@ KisImageWSP KisAnimationFrameCache::image()
     return m_d->image;
 }
 
-template <typename K, typename V>
-K lastKeyValue(const QMap<K,V> &map, K defaultValue = K())
-{
-    return !map.isEmpty() ? (--map.constEnd()).key() : defaultValue;
-}
-
 void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
 {
     Q_UNUSED(rect);
 
     if (!range.isValid()) return;
-    if (m_d->openGlFrames.isEmpty()) return;
 
-    int end = range.isInfinite() ?
-        lastKeyValue(m_d->openGlFrames, range.start()) :
-        range.end();
-
-    for (int t=range.start(); t <= end; t++) {
-        // TODO: invalidate
-        m_d->openGlFrames.remove(t);
-    }
+    m_d->invalidate(range);
 
     emit changed();
 }
@@ -136,24 +199,13 @@ void KisAnimationFrameCache::frameReady(int time)
         qWarning() << "    "  << ppVar(m_d->image->animationInterface()->currentTime()) << ppVar(time);
     }
 
-
     KisOpenGLUpdateInfoSP info =
         m_d->textures->updateCache(m_d->image->bounds());
 
     KisTimeRange identicalRange = KisTimeRange::infinite(0);
     KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), time, identicalRange, true);
 
-    int end;
-    if (!identicalRange.isInfinite()) {
-        end = identicalRange.end();
-    } else {
-        end = std::max(identicalRange.start(), lastKeyValue(m_d->openGlFrames, 0));
-        end = std::max(end, m_d->image->animationInterface()->currentRange().end());
-    }
-
-    for (int t = identicalRange.start(); t <= end; t++) {
-        m_d->openGlFrames.insert(t, info);
-    }
+    m_d->addFrame(info, identicalRange);
 
     emit changed();
 }

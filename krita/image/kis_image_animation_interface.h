@@ -107,6 +107,7 @@ public:
 private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;
+    friend class KisAnimationFrameCacheTest;
     void saveAndResetCurrentTime(int frameId, int *savedValue);
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();

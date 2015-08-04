@@ -50,6 +50,12 @@ public:
     static bool supportsGLSL13();
 
     /**
+     * @brief supportsFilter
+     * @return True if OpenGL provides fence sync methods.
+     */
+    static bool supportsFenceSync();
+
+    /**
      * Returns true if we have a driver that has bugged support to sync objects (a fence)
      * and false otherwise.
      */

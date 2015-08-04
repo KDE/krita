@@ -104,6 +104,11 @@ void KisOpenGL::initialize()
 #endif
 }
 
+bool KisOpenGL::supportsFenceSync()
+{
+    // return glVersion > 302;
+    return true;
+}
 
 bool KisOpenGL::supportsGLSL13()
 {

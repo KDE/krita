@@ -86,12 +86,12 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setupScratchPad(resourceProvider, Qt::white);
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlayRect(QRect(25, 25, 200, 200));
-    m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(koIcon("newlayer"));
+    m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(themedIcon("document-new"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
-    m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(koIcon("krita_tool_gradient"));
-    m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(koIcon("krita_tool_color_fill"));
-    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(koIcon("edit-clear"));
-    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(koIconNeededWithSubs("paint the preset icon","krita_paintop_icon","krita_tool_freehand"));
+    m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(themedIcon("krita_tool_gradient"));
+    m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(themedIcon("krita_tool_color_fill"));
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(themedIcon("edit-delete"));
+    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(themedIcon("krita_tool_freehand"));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));

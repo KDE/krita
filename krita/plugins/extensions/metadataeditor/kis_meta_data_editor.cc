@@ -135,7 +135,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     tableView->verticalHeader()->setVisible(false);
     tableView->resizeColumnsToContents();
     KPageWidgetItem *page = new KPageWidgetItem(tableView, i18n("List"));
-    page->setIcon(koIcon("format-list-unordered"));
+    page->setIcon(themedIcon("format-list-unordered"));
     addPage(page);
 }
 

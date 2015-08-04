@@ -44,8 +44,8 @@ KisMouseInputEditor::KisMouseInputEditor(QWidget *parent)
     d->ui->setupUi(popup);
     d->ui->mouseButton->setType(KisInputButton::MouseType);
 
-    d->ui->clearModifiersButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
-    d->ui->clearMouseButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
+    d->ui->clearModifiersButton->setIcon(themedIcon("edit-clear"));
+    d->ui->clearMouseButton->setIcon(themedIcon("edit-clear"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

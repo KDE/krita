@@ -65,7 +65,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                                              m_texturesInfo);
 
     f->glGenTextures(1, &m_textureId);
-    f->glBindTexture(GL_TEXTURE_2D, textureId());
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
 

@@ -125,7 +125,8 @@ void KisTransactionData::endTransaction()
 
 void KisTransactionData::startUpdates()
 {
-    if (m_d->transactionFrameId ==
+    if (m_d->transactionFrameId == -1 ||
+        m_d->transactionFrameId ==
         m_d->device->framesInterface()->currentFrameId()) {
 
         QRect rc;

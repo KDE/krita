@@ -41,15 +41,15 @@ public:
 
     /**
      * Creates a new frame on the device and returns an identifier for it.
-     * @return frame id
+     * @return frame id of the newly created frame
      */
-    int createFrame(bool copy, int copySrc, const QPoint &offset);
+    int createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand);
 
     /**
      * Delete the frame with given id
      * @param frame frame ID
      */
-    void deleteFrame(int frame);
+    void deleteFrame(int frame, KUndo2Command *parentCommand);
 
     /**
      * Copy the given frame into the target device

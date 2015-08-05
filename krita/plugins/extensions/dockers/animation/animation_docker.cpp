@@ -29,6 +29,10 @@
 #include "kis_animation_player.h"
 #include "kis_onion_skin_dialog.h"
 #include "kis_time_range.h"
+#include "kundo2command.h"
+#include "kis_post_execution_undo_adapter.h"
+
+
 
 #include "ui_wdg_animation.h"
 
@@ -142,7 +146,9 @@ void AnimationDocker::slotAddBlankFrame()
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
 
-        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), true);
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
+        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), true, cmd);
+        m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
     }
 }
 
@@ -156,7 +162,9 @@ void AnimationDocker::slotAddDuplicateFrame()
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
 
-        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), false);
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
+        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), false, cmd);
+        m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
     }
 }
 
@@ -170,7 +178,9 @@ void AnimationDocker::slotDeleteKeyframe()
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
 
-        layer->deleteKeyfame(m_canvas->image()->animationInterface()->currentTime());
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Delete Keyframe"));
+        layer->deleteKeyfame(m_canvas->image()->animationInterface()->currentTime(), cmd);
+        m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
     }
 }
 

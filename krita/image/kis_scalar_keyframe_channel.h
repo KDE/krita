@@ -32,12 +32,12 @@ public:
     qreal minScalarValue() const;
     qreal maxScalarValue() const;
     qreal scalarValue(const KisKeyframe *keyframe) const;
-    void setScalarValue(KisKeyframe *keyframe, qreal value);
+    void setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
 protected:
-    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc);
+    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand);
     bool canDeleteKeyframe(KisKeyframe *key);
-    void destroyKeyframe(KisKeyframe *key);
+    void destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand);
 
     QRect affectedRect(KisKeyframe *key);
 

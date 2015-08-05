@@ -258,14 +258,16 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->fill(QRect(100, 100, 50, 50), KoColor(Qt::black, cs));
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::red, cs).data());
 
-    layer1->addNewFrame(10, true);
+    KUndo2Command parentCommand;
+
+    layer1->addNewFrame(10, true, &parentCommand);
     image->animationInterface()->switchCurrentTimeAsync(10);
     image->waitForDone();
     layer1->paintDevice()->fill(QRect(200, 50, 10, 10), KoColor(Qt::black, cs));
     layer1->paintDevice()->move(25, 15);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::green, cs).data());
 
-    layer1->addNewFrame(20, true);
+    layer1->addNewFrame(20, true, &parentCommand);
     image->animationInterface()->switchCurrentTimeAsync(20);
     image->waitForDone();
     layer1->paintDevice()->fill(QRect(150, 200, 30, 30), KoColor(Qt::black, cs));

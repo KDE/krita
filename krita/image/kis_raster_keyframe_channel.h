@@ -53,15 +53,15 @@ public:
     qreal minScalarValue() const;
     qreal maxScalarValue() const;
     qreal scalarValue(const KisKeyframe *keyframe) const;
-    void setScalarValue(KisKeyframe *keyframe, qreal value);
+    void setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand);
 
     QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     void loadXML(const QDomElement &channelNode);
 
 protected:
-    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc);
+    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand);
     bool canDeleteKeyframe(KisKeyframe *key);
-    void destroyKeyframe(KisKeyframe *key);
+    void destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand);
 
     QRect affectedRect(KisKeyframe *key);
     void requestUpdate(const KisTimeRange &range, const QRect &rect);

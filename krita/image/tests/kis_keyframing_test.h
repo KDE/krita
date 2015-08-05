@@ -31,6 +31,8 @@ private slots:
     void initTestCase();
 
     void testScalarChannel();
+    void testScalarChannelUndoRedo();
+
     void testRasterChannel();
     void testChannelSignals();
     void testRasterFrameFetching();

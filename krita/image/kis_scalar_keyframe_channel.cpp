@@ -18,6 +18,8 @@
 
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_node.h"
+#include "kundo2command.h"
+
 
 struct KisScalarKeyframeChannel::Private
 {
@@ -30,6 +32,9 @@ public:
     qreal maxValue;
     QMap<int, qreal> values;
     int firstFreeIndex;
+
+    struct InsertValueCommand;
+    struct SetValueCommand;
 };
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node, qreal minValue, qreal maxValue)
@@ -61,38 +66,116 @@ qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframe *keyframe) const
     return m_d->values[keyframe->value()];
 }
 
-void KisScalarKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value)
+struct KisScalarKeyframeChannel::Private::SetValueCommand : public KUndo2Command
 {
-    m_d->values[keyframe->value()] = value;
+    SetValueCommand(KisScalarKeyframeChannel::Private *d, int index, qreal oldValue, qreal newValue, KUndo2Command *parentCommand)
+        : KUndo2Command(parentCommand),
+          m_d(d),
+          m_index(index),
+          m_oldValue(oldValue),
+          m_newValue(newValue)
+    {
+    }
+
+    void redo() {
+        m_d->values[m_index] = m_newValue;
+    }
+
+    void undo() {
+        m_d->values[m_index] = m_oldValue;
+    }
+
+private:
+    KisScalarKeyframeChannel::Private *m_d;
+    int m_index;
+    qreal m_oldValue;
+    qreal m_newValue;
+};
+
+void KisScalarKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand)
+{
+    QScopedPointer<KUndo2Command> tempCommand;
+    if (!parentCommand) {
+        tempCommand.reset(new KUndo2Command());
+        parentCommand = tempCommand.data();
+    }
+
+    int index = keyframe->value();
+    KUndo2Command *cmd = new Private::SetValueCommand(m_d.data(), index, m_d->values[index], value, parentCommand);
+    cmd->redo();
 }
 
-KisKeyframe *KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
+struct KisScalarKeyframeChannel::Private::InsertValueCommand : public KUndo2Command
+{
+    InsertValueCommand(KisScalarKeyframeChannel::Private *d, int index, qreal value, bool insert, KUndo2Command *parentCommand)
+        : KUndo2Command(parentCommand),
+          m_d(d),
+          m_index(index),
+          m_value(value),
+          m_insert(insert)
+    {
+    }
+
+    void redo() {
+        doSwap(m_insert);
+    }
+
+    void undo() {
+        doSwap(!m_insert);
+    }
+
+private:
+    void doSwap(bool insert) {
+        if (insert) {
+            m_d->values[m_index] = m_value;
+        } else {
+            m_d->values.remove(m_index);
+        }
+    }
+
+private:
+    KisScalarKeyframeChannel::Private *m_d;
+    int m_index;
+    qreal m_value;
+    bool m_insert;
+};
+
+KisKeyframe *KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand)
 {
     qreal value = (copySrc != 0) ? scalarValue(copySrc) : 0;
     int index = m_d->firstFreeIndex++;
 
-    m_d->values[index] = value;
+    KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, value, true, parentCommand);
+    cmd->redo();
 
     return new KisKeyframe(this, time, index);
 }
 
 bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
 {
+    Q_UNUSED(key);
     return true;
 }
 
-void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframe *key)
+void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand)
 {
-    m_d->values.remove(key->value());
+    int index = key->value();
+
+    KIS_ASSERT_RECOVER_RETURN(m_d->values.contains(index));
+
+    KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, m_d->values[index], false, parentCommand);
+    cmd->redo();
 }
 
 QRect KisScalarKeyframeChannel::affectedRect(KisKeyframe *key)
 {
+    Q_UNUSED(key);
     return QRect();
 }
 
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
+    Q_UNUSED(layerFilename);
     keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);
 }
 
@@ -101,7 +184,8 @@ KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeN
     int time = keyframeNode.toElement().attribute("time").toUInt();
     QVariant value = keyframeNode.toElement().attribute("value");
 
-    KisKeyframe *keyframe = createKeyframe(time, 0);
+    KUndo2Command tempParentCommand;
+    KisKeyframe *keyframe = createKeyframe(time, 0, &tempParentCommand);
     setScalarValue(keyframe, value.toReal());
 
     return keyframe;

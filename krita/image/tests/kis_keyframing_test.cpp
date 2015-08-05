@@ -26,6 +26,8 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_time_range.h"
+#include "kundo2command.h"
+
 
 #include <KoColorSpaceRegistry.h>
 
@@ -101,6 +103,46 @@ void KisKeyframingTest::testScalarChannel()
     channel->deleteKeyframe(key);
 
     QVERIFY(channel->keyframeAt(10) == 0);
+
+    delete channel;
+}
+
+void KisKeyframingTest::testScalarChannelUndoRedo()
+{
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
+    KisKeyframe *key;
+    bool ok;
+
+    QCOMPARE(channel->hasScalarValue(), true);
+    QCOMPARE(channel->minScalarValue(), -17.0);
+    QCOMPARE(channel->maxScalarValue(),  31.0);
+
+    QVERIFY(channel->keyframeAt(0) == 0);
+
+    // Adding new keyframe
+
+    KUndo2Command addCmd;
+
+    key = channel->addKeyframe(42, &addCmd);
+    channel->setScalarValue(key, 7.0, &addCmd);
+
+    key = channel->keyframeAt(42);
+    QCOMPARE(channel->scalarValue(key), 7.0);
+
+    addCmd.undo();
+
+    KisKeyframe *newKey = 0;
+
+    newKey = channel->keyframeAt(42);
+    QVERIFY(!newKey);
+
+    addCmd.redo();
+
+    newKey = channel->keyframeAt(42);
+    QVERIFY(newKey);
+
+    QCOMPARE(channel->scalarValue(key), 7.0);
+    QCOMPARE(channel->scalarValue(newKey), 7.0);
 
     delete channel;
 }

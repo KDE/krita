@@ -113,7 +113,6 @@ public:
         m_externalFrameData.reset();
 
         if (!m_frames.isEmpty()) {
-            qDeleteAll(m_frames);
             m_frames.clear();
         }
 
@@ -138,7 +137,8 @@ public:
                 FramesHash::const_iterator end = rhs->m_frames.constEnd();
 
                 for (; it != end; ++it) {
-                    m_frames.insert(it.key(), new KisPaintDeviceData(it.value(), true));
+                    DataSP data = toQShared(new KisPaintDeviceData(it.value().data(), true));
+                    m_frames.insert(it.key(), data);
                 }
             }
         }
@@ -163,26 +163,71 @@ public:
     }
 
     KisDataManagerSP frameDataManager(int frameId) const {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         return data->dataManager();
     }
 
     void invalidateFrameCache(int frameId) {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         return data->cache()->invalidate();
     }
 
-    int createFrame(bool copy, int copySrc, const QPoint &offset)
+private:
+    typedef KisPaintDeviceData Data;
+    typedef QSharedPointer<Data> DataSP;
+    typedef QHash<int, DataSP> FramesHash;
+
+    class FrameInsertionCommand : public KUndo2Command {
+    public:
+
+        FrameInsertionCommand(FramesHash *hash, DataSP data, int frameId, bool insert, KUndo2Command *parentCommand)
+            : KUndo2Command(parentCommand),
+              m_hash(hash),
+              m_data(data),
+              m_frameId(frameId),
+              m_insert(insert)
+        {
+        }
+
+        void redo() {
+            doSwap(m_insert);
+        }
+
+        void undo() {
+            doSwap(!m_insert);
+        }
+
+    private:
+        void doSwap(bool insert) {
+            if (insert) {
+                m_hash->insert(m_frameId, m_data);
+            } else {
+                DataSP deletedData = m_hash->take(m_frameId);
+            }
+        }
+
+    private:
+        FramesHash *m_hash;
+        DataSP m_data;
+        int m_frameId;
+        bool m_insert;
+    };
+
+public:
+
+    int createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand)
     {
+        KIS_ASSERT_RECOVER(parentCommand) { return -1; }
+
         Data *data;
 
         if (m_frames.isEmpty()) {
             data = m_data;
+            m_data = 0;
         } else if (copy) {
-            data = new Data(m_frames[copySrc], true);
+            data = new Data(m_frames[copySrc].data(), true);
         } else {
-            Q_ASSERT(m_data || !m_frames.isEmpty());
-            Data *srcData = m_data ? m_data : m_frames.begin().value();
+            Data *srcData = m_frames.begin().value().data();
             data = new Data(srcData, false);
         }
 
@@ -190,34 +235,41 @@ public:
         data->setY(offset.y());
 
         int frameId = nextFreeFrameId++;
-        m_frames.insert(frameId, data);
 
-        if (m_frames.count() > 1) {
-            m_data = 0;
-        }
+        KUndo2Command *cmd =
+            new FrameInsertionCommand(&m_frames,
+                                      toQShared(data),
+                                      frameId, true,
+                                      parentCommand);
+
+        cmd->redo();
 
         return frameId;
     }
 
-    void deleteFrame(int frame)
+    void deleteFrame(int frame, KUndo2Command *parentCommand)
     {
         KIS_ASSERT_RECOVER_RETURN(m_frames.contains(frame));
-        Data *data = m_frames.take(frame);
+        KIS_ASSERT_RECOVER_RETURN(parentCommand);
 
-        // If we don't have two or more frames, we keep the data in m_data
+        KUndo2Command *cmd =
+            new FrameInsertionCommand(&m_frames,
+                                      m_frames[frame],
+                                      frame, false,
+                                      parentCommand);
+        cmd->redo();
 
-        if (m_frames.count() == 1) {
-            m_data = m_frames.begin().value();
-        }
-
-        if (m_frames.count() > 0) {
-            delete data;
+        if (m_frames.isEmpty()) {
+            // the original m_data will be deleted by shared poiter
+            // when the command will be destroyed, so just create a
+            // new one for m_data
+            m_data = new Data(q);
         }
     }
 
     QRect frameBounds(int frameId)
     {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
 
         QRect extent = data->dataManager()->extent();
         extent.translate(data->x(), data->y());
@@ -226,12 +278,12 @@ public:
     }
 
     QPoint frameOffset(int frameId) const {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         return QPoint(data->x(), data->y());
     }
 
     void setFrameOffset(int frameId, const QPoint &offset) {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         data->setX(offset.x());
         data->setY(offset.y());
     }
@@ -243,33 +295,30 @@ public:
 
     bool readFrame(QIODevice *stream, int frameId) {
         bool retval = false;
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         retval = data->dataManager()->read(stream);
         data->cache()->invalidate();
         return retval;
     }
 
     bool writeFrame(KisPaintDeviceWriter &store, int frameId) {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         return data->dataManager()->write(store);
     }
 
     void setFrameDefaultPixel(const quint8 *defPixel, int frameId) {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         data->dataManager()->setDefaultPixel(defPixel);
     }
 
     const quint8* frameDefaultPixel(int frameId) const {
-        Data *data = m_frames[frameId];
+        Data *data = m_frames[frameId].data();
         return data->dataManager()->defaultPixel();
     }
 
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
 
     QRegion syncLodData(int newLod);
-
-private:
-    typedef KisPaintDeviceData Data;
 
 private:
 
@@ -282,12 +331,13 @@ private:
             if (contentChannel->keyframeCount() > 1) {
                 int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
                 KIS_ASSERT_RECOVER(m_frames.contains(frameId)) { return data; }
-                data = m_frames[frameId];
+                data = m_frames[frameId].data();
+            } else {
+                data = m_frames.begin().value().data();
             }
-            // Just skipping setting it twice...
-            // else {
-            //     data = m_data;
-            // }
+
+            // sanity check!
+            KIS_ASSERT_RECOVER_NOOP(!m_data);
 
         } else if (defaultBounds->externalFrameActive()) {
             if (!m_externalFrameData) {
@@ -342,7 +392,10 @@ private:
         }
         dataObjects << m_lodData.data();
         dataObjects << m_externalFrameData.data();
-        dataObjects << m_frames.values();
+
+        foreach (DataSP value, m_frames.values()) {
+            dataObjects << value.data();
+        }
 
         return dataObjects;
     }
@@ -359,8 +412,6 @@ private:
     mutable QScopedPointer<Data> m_lodData;
     mutable QScopedPointer<Data> m_externalFrameData;
     mutable QMutex m_dataSwitchLock;
-
-    typedef QHash<int, Data*> FramesHash;
 
     FramesHash m_frames;
     int nextFreeFrameId;
@@ -380,11 +431,8 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 
 KisPaintDevice::Private::~Private()
 {
-    if (m_frames.count() > 0) {
-        qDeleteAll(m_frames);
-    } else {
-        delete m_data;
-    }
+    delete m_data;
+    m_frames.clear();
 }
 
 KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::currentStrategy()
@@ -564,7 +612,7 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
 
 void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
 {
-    Data *data = m_frames[frameId];
+    Data *data = m_frames[frameId].data();
 
     QRect extent = data->dataManager()->extent();
     extent.translate(data->x(), data->y());
@@ -1488,7 +1536,8 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, 
     m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, node, this));
 
     // Raster channels always have at least one frame (representing a static image)
-    m_d->contentChannel->addKeyframe(0);
+    KUndo2Command tempParentCommand;
+    m_d->contentChannel->addKeyframe(0, &tempParentCommand);
 
     return m_d->contentChannel.data();
 }
@@ -1595,14 +1644,14 @@ QList<int> KisPaintDeviceFramesInterface::frames()
     return q->m_d->frameIds();
 }
 
-int KisPaintDeviceFramesInterface::createFrame(bool copy, int copySrc, const QPoint &offset)
+int KisPaintDeviceFramesInterface::createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand)
 {
-    return q->m_d->createFrame(copy, copySrc, offset);
+    return q->m_d->createFrame(copy, copySrc, offset, parentCommand);
 }
 
-void KisPaintDeviceFramesInterface::deleteFrame(int frame)
+void KisPaintDeviceFramesInterface::deleteFrame(int frame, KUndo2Command *parentCommand)
 {
-    q->m_d->deleteFrame(frame);
+    return q->m_d->deleteFrame(frame, parentCommand);
 }
 
 void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
@@ -1676,7 +1725,16 @@ KisPaintDeviceFramesInterface::testingGetDataObjects() const
     objects.m_data = q->m_d->m_data;
     objects.m_lodData = q->m_d->m_lodData.data();
     objects.m_externalFrameData = q->m_d->m_externalFrameData.data();
-    objects.m_frames = q->m_d->m_frames;
+
+    typedef KisPaintDevice::Private::FramesHash FramesHash;
+
+    FramesHash::iterator it = q->m_d->m_frames.begin();
+    FramesHash::iterator end = q->m_d->m_frames.end();
+
+    for (; it != end; ++it) {
+        objects.m_frames.insert(it.key(), it.value().data());
+    }
+
     objects.m_currentData = q->m_d->currentData();
 
     return objects;

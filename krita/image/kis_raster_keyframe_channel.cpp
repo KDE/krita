@@ -22,6 +22,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_time_range.h"
+#include "kundo2command.h"
 
 
 struct KisRasterKeyframeChannel::Private
@@ -98,12 +99,15 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
     return filename;
 }
 
-KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc)
+
+
+KisKeyframe *KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand)
 {
     int srcFrame = (copySrc != 0) ? copySrc->value() : 0;
 
-    quint32 frameId = (quint32)m_d->paintDevice->framesInterface()->createFrame((copySrc != 0), srcFrame, QPoint());
-    KisKeyframe *keyframe = new KisKeyframe(this, time, frameId);
+    int frameId = m_d->paintDevice->framesInterface()->createFrame((copySrc != 0), srcFrame, QPoint(), parentCommand);
+
+    KisKeyframe *keyframe = new KisKeyframe(this, time, (quint32)frameId);
 
     return keyframe;
 }
@@ -116,9 +120,9 @@ bool KisRasterKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
     return keys().count() > 1 && key->time() != 0;
 }
 
-void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key)
+void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand)
 {
-    m_d->paintDevice->framesInterface()->deleteFrame(key->value());
+    m_d->paintDevice->framesInterface()->deleteFrame(key->value(), parentCommand);
 }
 
 QRect KisRasterKeyframeChannel::affectedRect(KisKeyframe *key)
@@ -191,8 +195,8 @@ KisKeyframe *KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeN
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
 
-
-    int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset);
+    KUndo2Command tempCommand;
+    int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);
 
     QString frameFilename = keyframeNode.attribute("frame");
     setFrameFilename(frameId, frameFilename);
@@ -222,8 +226,9 @@ qreal KisRasterKeyframeChannel::scalarValue(const KisKeyframe *keyframe) const
     return 0;
 }
 
-void KisRasterKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value)
+void KisRasterKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand)
 {
     Q_UNUSED(keyframe);
     Q_UNUSED(value);
+    Q_UNUSED(parentCommand);
 }

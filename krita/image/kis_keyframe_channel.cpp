@@ -20,6 +20,8 @@
 #include "KoID.h"
 #include "kis_node.h"
 #include "kis_time_range.h"
+#include "kundo2command.h"
+
 
 #include <QMap>
 
@@ -30,6 +32,65 @@ struct KisKeyframeChannel::Private
     QMap<int, KisKeyframe*> keys;
     KisNodeWSP node;
     KoID id;
+};
+
+struct KisKeyframeChannel::InsertFrameCommand : public KUndo2Command
+{
+    InsertFrameCommand(KisKeyframeChannel *channel, KisKeyframe *keyframe, bool insert, KUndo2Command *parentCommand)
+        : KUndo2Command(parentCommand),
+          m_channel(channel),
+          m_keyframe(keyframe),
+          m_insert(insert)
+    {
+    }
+
+    void redo() {
+        doSwap(m_insert);
+    }
+
+    void undo() {
+        doSwap(!m_insert);
+    }
+
+private:
+    void doSwap(bool insert) {
+        if (insert) {
+            m_channel->insertKeyframeImpl(m_keyframe);
+        } else {
+            m_channel->deleteKeyframeImpl(m_keyframe);
+        }
+    }
+
+private:
+    KisKeyframeChannel *m_channel;
+    KisKeyframe *m_keyframe;
+    bool m_insert;
+};
+
+struct KisKeyframeChannel::MoveFrameCommand : public KUndo2Command
+{
+    MoveFrameCommand(KisKeyframeChannel *channel, KisKeyframe *keyframe, int oldTime, int newTime, KUndo2Command *parentCommand)
+        : KUndo2Command(parentCommand),
+          m_channel(channel),
+          m_keyframe(keyframe),
+          m_oldTime(oldTime),
+          m_newTime(newTime)
+    {
+    }
+
+    void redo() {
+        m_channel->moveKeyframeImpl(m_keyframe, m_newTime);
+    }
+
+    void undo() {
+        m_channel->moveKeyframeImpl(m_keyframe, m_oldTime);
+    }
+
+private:
+    KisKeyframeChannel *m_channel;
+    KisKeyframe *m_keyframe;
+    int m_oldTime;
+    int m_newTime;
 };
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node)
@@ -57,36 +118,59 @@ KisNodeWSP KisKeyframeChannel::node() const
     return m_d->node;
 }
 
-KisKeyframe *KisKeyframeChannel::addKeyframe(int time)
-{
-    return insertKeyframe(time, 0);
-}
-
-bool KisKeyframeChannel::deleteKeyframe(KisKeyframe *keyframe)
-{
-    if (canDeleteKeyframe(keyframe)) {
-        QRect rect = affectedRect(keyframe);
-        KisTimeRange range = affectedFrames(keyframe->time());
-
-        emit sigKeyframeAboutToBeRemoved(keyframe);
-        m_d->keys.remove(keyframe->time());
-        destroyKeyframe(keyframe);
-        emit sigKeyframeRemoved(keyframe);
-
-        requestUpdate(range, rect);
-
-        delete keyframe;
-
-        return true;
+#define LAZY_INITIALIZE_PARENT_COMMAND(cmd)       \
+    QScopedPointer<KUndo2Command> __tempCommand;  \
+    if (!parentCommand) {                         \
+        __tempCommand.reset(new KUndo2Command()); \
+        cmd = __tempCommand.data();               \
     }
 
-    return false;
+KisKeyframe *KisKeyframeChannel::addKeyframe(int time, KUndo2Command *parentCommand)
+{
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+    return insertKeyframe(time, 0, parentCommand);
 }
 
-bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int newTime)
+void KisKeyframeChannel::deleteKeyframeImpl(KisKeyframe *keyframe)
 {
-    KisKeyframe *other = keyframeAt(newTime);
-    if (other) return false;
+    QRect rect = affectedRect(keyframe);
+    KisTimeRange range = affectedFrames(keyframe->time());
+
+    emit sigKeyframeAboutToBeRemoved(keyframe);
+    m_d->keys.remove(keyframe->time());
+    emit sigKeyframeRemoved(keyframe);
+
+    requestUpdate(range, rect);
+}
+
+
+bool KisKeyframeChannel::deleteKeyframe(KisKeyframe *keyframe, KUndo2Command *parentCommand)
+{
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    bool result = false;
+
+    if (canDeleteKeyframe(keyframe)) {
+
+        Q_ASSERT(parentCommand);
+
+        KUndo2Command *cmd = new InsertFrameCommand(this, keyframe, false, parentCommand);
+        cmd->redo();
+        destroyKeyframe(keyframe, parentCommand);
+
+        // FIXME: leak!
+        // delete keyframe;
+
+        result = true;
+    }
+
+    return result;
+}
+
+void KisKeyframeChannel::moveKeyframeImpl(KisKeyframe *keyframe, int newTime)
+{
+    KIS_ASSERT_RECOVER_RETURN(keyframe);
+    KIS_ASSERT_RECOVER_RETURN(!keyframeAt(newTime));
 
     KisTimeRange rangeSrc = affectedFrames(keyframe->time());
     QRect rectSrc = affectedRect(keyframe);
@@ -105,13 +189,25 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int newTime)
 
     requestUpdate(rangeSrc, rectSrc);
     requestUpdate(rangeDst, rectDst);
+}
+
+bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int newTime, KUndo2Command *parentCommand)
+{
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    KisKeyframe *other = keyframeAt(newTime);
+    if (other) return false;
+
+    KUndo2Command *cmd = new MoveFrameCommand(this, keyframe, keyframe->time(), newTime, parentCommand);
+    cmd->redo();
 
     return true;
 }
 
-KisKeyframe *KisKeyframeChannel::copyKeyframe(const KisKeyframe *keyframe, int newTime)
+KisKeyframe *KisKeyframeChannel::copyKeyframe(const KisKeyframe *keyframe, int newTime, KUndo2Command *parentCommand)
 {
-    return insertKeyframe(newTime, keyframe);
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+    return insertKeyframe(newTime, keyframe, parentCommand);
 }
 
 KisKeyframe *KisKeyframeChannel::keyframeAt(int time)
@@ -198,7 +294,8 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
     // Make sure we're starting from scratch
     KisKeyframe *keyframe;
     foreach (keyframe, m_d->keys) {
-        destroyKeyframe(keyframe);
+        KUndo2Command tempParentCommand;
+        destroyKeyframe(keyframe, &tempParentCommand);
     }
     m_d->keys.clear();
 
@@ -221,12 +318,9 @@ const QMap<int, KisKeyframe *>& KisKeyframeChannel::constKeys() const
     return m_d->keys;
 }
 
-KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *copySrc)
+void KisKeyframeChannel::insertKeyframeImpl(KisKeyframe *keyframe)
 {
-    KisKeyframe *keyframe = keyframeAt(time);
-    if (keyframe) return keyframe;
-
-    keyframe = createKeyframe(time, copySrc);
+    const int time = keyframe->time();
 
     emit sigKeyframeAboutToBeAdded(keyframe);
     m_d->keys.insert(time, keyframe);
@@ -235,6 +329,18 @@ KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *co
     QRect rect = affectedRect(keyframe);
     KisTimeRange range = affectedFrames(time);
     requestUpdate(range, rect);
+}
+
+KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand)
+{
+    KisKeyframe *keyframe = keyframeAt(time);
+    if (keyframe) return keyframe;
+
+    Q_ASSERT(parentCommand);
+    keyframe = createKeyframe(time, copySrc, parentCommand);
+
+    KUndo2Command *cmd = new InsertFrameCommand(this, keyframe, true, parentCommand);
+    cmd->redo();
 
     return keyframe;
 }
@@ -246,11 +352,6 @@ QMap<int, KisKeyframe*>::const_iterator KisKeyframeChannel::activeKeyIterator(in
     if (i != m_d->keys.begin()) i--;
 
     return i;
-}
-
-void KisKeyframeChannel::destroyKeyframe(KisKeyframe *key)
-{
-     Q_UNUSED(key);
 }
 
 void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)

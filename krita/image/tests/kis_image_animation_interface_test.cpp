@@ -185,13 +185,15 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
     QRect rect(QRect(0,0,512,512));
     TestUtil::MaskParent p(rect);
 
+    KUndo2Command parentCommand;
+
     KisPaintLayerSP layer1 = p.layer;
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
     layer1->paintDevice()->fill(rect, KoColor(Qt::red, layer1->paintDevice()->colorSpace()));
     layer2->paintDevice()->fill(QRect(128,128,128,128), KoColor(Qt::black, layer2->paintDevice()->colorSpace()));
-    layer2->addNewFrame(10, true);
+    layer2->addNewFrame(10, true, &parentCommand);
     p.image->refreshGraph();
 
     m_image = p.image;

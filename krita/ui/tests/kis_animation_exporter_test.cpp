@@ -18,8 +18,10 @@ void KisAnimationExporterTest::testAnimationExport()
     document->setCurrentImage(p.image);
     const KoColorSpace *cs = p.image->colorSpace();
 
-    p.layer->addNewFrame(1, true);
-    p.layer->addNewFrame(2, true);
+    KUndo2Command parentCommand;
+
+    p.layer->addNewFrame(1, true, &parentCommand);
+    p.layer->addNewFrame(2, true, &parentCommand);
     p.image->animationInterface()->setRange(KisTimeRange::fromTime(0, 2));
 
     KisPaintDeviceSP dev = p.layer->paintDevice();

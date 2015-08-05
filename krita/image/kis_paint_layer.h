@@ -92,9 +92,8 @@ public:
     KisDocumentSectionModel::PropertyList sectionModelProperties() const;
     void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
-    void addNewFrame(int time, bool blank);
-
-    void deleteKeyfame(int time);
+    void addNewFrame(int time, bool blank, KUndo2Command *parentCommand);
+    void deleteKeyfame(int time, KUndo2Command *parentCommand);
 
 public:
 

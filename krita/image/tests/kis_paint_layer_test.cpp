@@ -116,7 +116,9 @@ void KisPaintLayerTest::testKeyframing()
     QVERIFY(contentChannel != 0);
     QCOMPARE(contentChannel->keyframeCount(), 1);
 
-    layer->addNewFrame(7, true);
+    KUndo2Command parentCommand;
+
+    layer->addNewFrame(7, true, &parentCommand);
     QCOMPARE(contentChannel->keyframeCount(), 2);
     QVERIFY(contentChannel->keyframeAt(0) != contentChannel->keyframeAt(7));
 

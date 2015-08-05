@@ -73,12 +73,18 @@ bool TimelineView::viewportEvent(QEvent *e)
             if (mouseEvent->button() == Qt::LeftButton) {
                 QModelIndex index = indexAt(mouseEvent->pos());
 
-                if (selectionModel()->isSelected(index)) {
-                    m_dragStart = mouseEvent->pos().x();
-                    m_canStartDrag = true;
+                if (index.isValid()) {
+                    QTreeView::viewportEvent(e);
+
+                    if (selectionModel()->isSelected(index)) {
+                        m_dragStart = mouseEvent->pos().x();
+                        m_canStartDrag = true;
+                    }
+                    return true;
                 }
             }
-        } break;
+            return false;
+        }
 
         case QEvent::MouseMove: {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(e);
@@ -93,7 +99,8 @@ bool TimelineView::viewportEvent(QEvent *e)
                 viewport()->update();
                 return true;
             }
-        } break;
+            return false;
+        }
 
         case QEvent::MouseButtonRelease: {
             if (m_isDragging) {
@@ -113,13 +120,16 @@ bool TimelineView::viewportEvent(QEvent *e)
 
             m_canStartDrag = false;
             m_isDragging = false;
+
+            return false;
         }
 
-        default: break;
+        default:
+            return QTreeView::viewportEvent(e);
         }
     }
 
-    return QTreeView::viewportEvent(e);
+    return false;
 }
 
 int TimelineView::getKeyframeAt(const QModelIndex &channelIndex, int x) const

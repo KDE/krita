@@ -37,10 +37,10 @@
 #include <QFile>
 #include <QOpenGLShaderProgram>
 #include <QTransform>
-#include <QtGui/QOpenGLShaderProgram>
-#include <QtGui/QOpenGLFramebufferObject>
-#include <qt5/QtWidgets/QOpenGLWidget>
-#include <qt5/QtGui/QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLFramebufferObject>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>

@@ -16,7 +16,6 @@ install(TARGETS kritatooldyna  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 # TODO
-install( FILES  krita_tool_dyna.png dark_krita_tool_dyna.png light_krita_tool_dyna.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooldyna.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

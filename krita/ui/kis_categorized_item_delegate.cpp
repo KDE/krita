@@ -52,7 +52,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
         QStyledItemDelegate::paint(painter, sovi, index);
         if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
-            const KIcon icon = locked ? koIcon(koIconName("locked")) : koIcon(koIconName("unlocked"));
+            const KIcon icon = locked ? themedIcon(koIconName("locked")) : themedIcon(koIconName("unlocked"));
             QPixmap pixmap = icon.pixmap(QSize(sovi.rect.height() - 8, sovi.rect.height() -8));
             painter->drawPixmap(sovi.rect.width() - pixmap.width(), sovi.rect.y() + 4, pixmap);
         }

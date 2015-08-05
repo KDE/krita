@@ -499,7 +499,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         KisPaintingAssistant::drawPath(_gc, path);
     }
 
-    QPixmap iconDelete = koIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconDelete = themedIcon("edit-delete").pixmap(16, 16);
     QPixmap iconSnapOn = koIcon("visible").pixmap(16, 16);
     QPixmap iconSnapOff = koIcon("novisible").pixmap(16, 16);
     QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
@@ -727,9 +727,9 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
         specialSpacer->setFixedSize(0, 0);
         m_optionsWidget->layout()->addWidget(specialSpacer);
 
-        m_options.loadButton->setIcon(koIcon("document-open"));
-        m_options.saveButton->setIcon(koIcon("document-save"));
-        m_options.deleteButton->setIcon(koIcon("edit-delete"));
+        m_options.loadButton->setIcon(themedIcon("document-open"));
+        m_options.saveButton->setIcon(themedIcon("document-save"));
+        m_options.deleteButton->setIcon(themedIcon("edit-delete"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);

@@ -38,7 +38,7 @@ KisEffectMask::KisEffectMask(const KisEffectMask& rhs)
 
 QIcon KisEffectMask::icon() const
 {
-    return koIcon("bookmarks");
+    return themedIcon("bookmarks");
 }
 
 #include "kis_effect_mask.moc"

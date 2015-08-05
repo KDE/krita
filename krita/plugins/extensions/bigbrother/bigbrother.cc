@@ -84,23 +84,23 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
 
         KisAction* action = 0;
         // Open and play action
-        action  = new KisAction(koIcon("media-playback-start"), i18n("Open and play..."), this);
+        action  = new KisAction(themedIcon("media-playback-start"), i18n("Open and play..."), this);
         addAction("Macro_Open_Play", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenPlay()));
 
         // Open and edit action
-        action  = new KisAction(koIcon("document-edit"), i18n("Open and edit..."), this);
+        action  = new KisAction(themedIcon("document-edit"), i18n("Open and edit..."), this);
         addAction("Macro_Open_Edit", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenEdit()));
 
         // Start recording action
-        m_startRecordingMacroAction = new KisAction(koIcon("media-record"), i18n("Start recording macro"), this);
+        m_startRecordingMacroAction = new KisAction(themedIcon("media-record"), i18n("Start recording macro"), this);
         m_startRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
         connect(m_startRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStartRecordingMacro()));
 
         // Save recorded action
-        m_stopRecordingMacroAction  = new KisAction(koIcon("media-playback-stop"), i18n("Stop recording actions"), this);
+        m_stopRecordingMacroAction  = new KisAction(themedIcon("media-playback-stop"), i18n("Stop recording actions"), this);
         m_stopRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction);
         connect(m_stopRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStopRecordingMacro()));

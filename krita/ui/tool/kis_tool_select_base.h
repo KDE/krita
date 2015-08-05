@@ -103,7 +103,6 @@ public:
         Q_ASSERT(canvas);
 
         m_widgetHelper.createOptionWidget(canvas, this->toolId());
-        m_widgetHelper.optionWidget()->disableAntiAliasSelectionOption();
         return m_widgetHelper.optionWidget();
     }
 

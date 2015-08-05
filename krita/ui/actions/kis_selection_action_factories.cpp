@@ -37,6 +37,7 @@
 #include <KoShapeOdfSaveHelper.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
+#include <KoShapeStroke.h>
 
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
@@ -59,6 +60,8 @@
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
 #include "KisPart.h"
+#include "kis_shape_layer.h"
+#include <kis_shape_controller.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -507,3 +510,26 @@ void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
     KisShapeSelectionPaste paste(view);
     paste.paste(KoOdf::Text, mimeData);
 }
+
+void KisSelectionToShapeActionFactory::run(KisViewManager *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (!selection->outlineCacheValid()) {
+
+        return;
+    }
+
+    QPainterPath selectionOutline = selection->outlineCache();
+    QTransform transform = view->canvasBase()->coordinatesConverter()->imageToDocumentTransform();
+
+    KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(selectionOutline));
+    shape->setShapeId(KoPathShapeId);
+    
+    KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    KoShapeStroke* border = new KoShapeStroke(1.0, fgColor.toQColor());
+    shape->setStroke(border);
+
+    view->document()->shapeController()->addShape(shape);
+}
+

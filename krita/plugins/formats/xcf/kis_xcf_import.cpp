@@ -51,10 +51,6 @@ extern "C" {
 #include "xcftools.h"
 #include "pixels.h"
 
-    extern struct Tile *
-    getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
-    struct rect want);
-
 #define GET_RED(x) (x >> RED_SHIFT)
 #define GET_GREEN(x) (x >> GREEN_SHIFT)
 #define GET_BLUE(x) (x >> BLUE_SHIFT)

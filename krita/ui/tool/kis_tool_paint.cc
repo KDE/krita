@@ -670,13 +670,21 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     if (isOutlineEnabled() &&
         (mode() == KisTool::GESTURE_MODE ||
          ((cfg.newOutlineStyle() == OUTLINE_FULL ||
-           cfg.newOutlineStyle() == OUTLINE_CIRCLE) &&
+           cfg.newOutlineStyle() == OUTLINE_CIRCLE ||
+           cfg.newOutlineStyle() == OUTLINE_TILT ||
+           cfg.newOutlineStyle() == OUTLINE_COLOR ) &&
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
-        outlineMode = cfg.newOutlineStyle() == OUTLINE_CIRCLE ?
-            KisPaintOpSettings::CursorIsCircleOutline :
-            KisPaintOpSettings::CursorIsOutline;
+        if(cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
+            outlineMode = KisPaintOpSettings::CursorIsCircleOutline;
+        } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
+            outlineMode = KisPaintOpSettings::CursorTiltOutline;
+        } else if(cfg.newOutlineStyle() == OUTLINE_COLOR) {
+            outlineMode = KisPaintOpSettings::CursorColorOutline;
+        } else {
+            outlineMode = KisPaintOpSettings::CursorIsOutline;
+        }
     }
 
     m_outlineDocPoint = outlineDocPoint;

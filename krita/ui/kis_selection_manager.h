@@ -95,7 +95,8 @@ public Q_SLOTS:
     void reselect();
     void convertToVectorSelection();
     void convertShapesToVectorSelection();
-
+    void convertToShape();
+    
     void copySelectionToNewLayer();
     void toggleDisplaySelection();
 

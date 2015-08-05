@@ -750,31 +750,32 @@ class KoXmlNodeData
 {
 public:
 
-    KoXmlNodeData();
+    explicit KoXmlNodeData(unsigned long initialRefCount = 1);
     ~KoXmlNodeData();
 
     // generic properties
-    KoXmlNode::NodeType nodeType;
-    QString tagName;
-    QString namespaceURI;
-    QString prefix;
-    QString localName;
+    KoXmlNode::NodeType nodeType: 3;
+    bool loaded: 1;
 
 #ifdef KOXML_COMPACT
     unsigned nodeDepth;
 #endif
 
-    // reference counting
-    unsigned long count;
+    QString tagName;
+    QString namespaceURI;
+    QString prefix;
+    QString localName;
+
     void ref() {
-        ++count;
+        ++refCount;
     }
     void unref() {
-        if (this == &null) return; if (!--count) delete this;
+        if (!--refCount) {
+            delete this;
+        }
     }
 
     // type information
-    bool emptyDocument;
     QString nodeName() const;
 
     // for tree and linked-list
@@ -808,12 +809,7 @@ public:
     KoXmlPackedDocument* packedDoc;
     unsigned long nodeIndex;
 
-    // for document node
-    bool setContent(QXmlStreamReader *reader,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-
     // used when doing on-demand (re)parse
-    bool loaded;
     void loadChildren(int depth = 1);
     void unloadChildren();
 
@@ -824,24 +820,27 @@ public:
     // compatibility
     void asQDomNode(QDomDocument& ownerDoc) const;
 
-    // to read the xml with or without spaces
-    bool stripSpaces;
-
 private:
     QHash<QString, QString> attr;
     QHash<KoXmlStringPair, QString> attrNS;
     QString textData;
+    // reference counting
+    unsigned long refCount;
     friend class KoXmlElement;
 };
 
 KoXmlNodeData KoXmlNodeData::null;
 
-KoXmlNodeData::KoXmlNodeData() : nodeType(KoXmlNode::NullNode),
+
+KoXmlNodeData::KoXmlNodeData(unsigned long initialRefCount)
+    : nodeType(KoXmlNode::NullNode)
+    , loaded(false)
 #ifdef KOXML_COMPACT
-        nodeDepth(0),
+    , nodeDepth(0)
 #endif
-        count(1), emptyDocument(true), parent(0), prev(0), next(0), first(0), last(0),
-        packedDoc(0), nodeIndex(0), loaded(false), stripSpaces(true)
+    , parent(0), prev(0), next(0), first(0), last(0)
+    , packedDoc(0), nodeIndex(0)
+    , refCount(initialRefCount)
 {
 }
 
@@ -995,36 +994,6 @@ QString KoXmlNodeData::data() const
     return textData;
 }
 
-bool KoXmlNodeData::setContent(QXmlStreamReader* reader, QString* errorMsg, int* errorLine, int* errorColumn)
-{
-    if (nodeType != KoXmlNode::DocumentNode)
-        return false;
-
-    clear();
-    nodeType = KoXmlNode::DocumentNode;
-
-    // sanity checks
-    if (!reader) return false;
-
-    delete packedDoc;
-    packedDoc = new KoXmlPackedDocument;
-    packedDoc->processNamespace = reader->namespaceProcessing();
-
-    ParseError error = parseDocument(*reader, *packedDoc, stripSpaces);
-    if (error.error) {
-        // parsing error has occurred
-        if (errorMsg) *errorMsg = error.errorMsg;
-        if (errorLine) *errorLine = error.errorLine;
-        if (errorColumn)  *errorColumn = error.errorColumn;
-        return false;
-    }
-
-    // initially load
-    loadChildren();
-
-    return true;
-}
-
 #ifdef KOXML_COMPACT
 
 void KoXmlNodeData::loadChildren(int depth)
@@ -1104,7 +1073,6 @@ void KoXmlNodeData::loadChildren(int depth)
             dat->localName = localName;
             dat->prefix = prefix;
             dat->namespaceURI = qname.nsURI;
-            dat->count = 1;
             dat->parent = this;
             dat->prev = lastDat;
             dat->next = 0;
@@ -1472,12 +1440,85 @@ void KoXmlNodeData::dump()
     printf("  first : %p\n", (void*)first);
     printf("  last : %p\n", (void*)last);
 
-    printf("  count: %ld\n", count);
+    printf("  refCount: %ld\n", refCount);
 
     if (loaded)
         printf("  loaded: TRUE\n");
     else
         printf("  loaded: FALSE\n");
+}
+
+
+// ==================================================================
+//
+//         KoXmlNodeData
+//
+// ==================================================================
+
+class KoXmlDocumentData : public KoXmlNodeData
+{
+public:
+
+    KoXmlDocumentData(unsigned long initialRefCount = 1);
+    ~KoXmlDocumentData();
+
+    bool setContent(QXmlStreamReader *reader,
+                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
+
+    KoXmlDocumentType dt;
+
+    bool emptyDocument :1;
+    // to read the xml with or without spaces
+    bool stripSpaces :1;
+};
+
+#define KOXMLDOCDATA(d)  static_cast<KoXmlDocumentData*>(d)
+
+
+KoXmlDocumentData::KoXmlDocumentData(unsigned long initialRefCount)
+    : KoXmlNodeData(initialRefCount)
+    , emptyDocument(true)
+    , stripSpaces(true)
+{
+}
+
+KoXmlDocumentData::~KoXmlDocumentData()
+{
+}
+
+bool KoXmlDocumentData::setContent(QXmlStreamReader* reader, QString* errorMsg, int* errorLine, int* errorColumn)
+{
+    // sanity checks
+    if (!reader) return false;
+
+    if (nodeType != KoXmlNode::DocumentNode)
+        return false;
+
+    clear();
+    nodeType = KoXmlNode::DocumentNode;
+
+    packedDoc = new KoXmlPackedDocument;
+    packedDoc->processNamespace = reader->namespaceProcessing();
+
+    ParseError error = parseDocument(*reader, *packedDoc, stripSpaces);
+    if (error.error) {
+        // parsing error has occurred
+        if (errorMsg) *errorMsg = error.errorMsg;
+        if (errorLine) *errorLine = error.errorLine;
+        if (errorColumn)  *errorColumn = error.errorColumn;
+        return false;
+    }
+
+    // initially load
+    loadChildren();
+
+    KoXmlNodeData *typeData = new KoXmlNodeData(0);
+    typeData->nodeType = KoXmlNode::DocumentTypeNode;
+    typeData->tagName = packedDoc->docType;
+    typeData->parent = this;
+    dt = KoXmlDocumentType(typeData);
+
+    return true;
 }
 
 // ==================================================================
@@ -1490,16 +1531,13 @@ void KoXmlNodeData::dump()
 KoXmlNode::KoXmlNode()
 {
     d = &KoXmlNodeData::null;
+    d->ref();
 }
 
 // Destroys this node
 KoXmlNode::~KoXmlNode()
 {
-    if (d)
-        if (d != &KoXmlNodeData::null)
-            d->unref();
-
-    d = 0;
+    d->unref();
 }
 
 // Creates a copy of another node
@@ -1519,9 +1557,11 @@ KoXmlNode::KoXmlNode(KoXmlNodeData* data)
 // Creates a shallow copy of another node
 KoXmlNode& KoXmlNode::operator=(const KoXmlNode & node)
 {
-    d->unref();
-    d = node.d;
-    d->ref();
+    if (this != &node) {
+        d->unref();
+        d = node.d;
+        d->ref();
+    }
     return *this;
 }
 
@@ -1607,7 +1647,10 @@ KoXmlDocument KoXmlNode::ownerDocument() const
     KoXmlNodeData* node = d;
     while (node->parent) node = node->parent;
 
-    return KoXmlDocument(node);
+    if (node->nodeType == DocumentNode) {
+        return KoXmlDocument(static_cast<KoXmlDocumentData*>(node));
+    }
+    return KoXmlDocument();
 }
 
 KoXmlNode KoXmlNode::parentNode() const
@@ -1777,12 +1820,10 @@ KoXmlCDATASection KoXmlNode::toCDATASection() const
 
 KoXmlDocument KoXmlNode::toDocument() const
 {
-    if (isDocument())
-        return KoXmlDocument(d);
-
-    KoXmlDocument newDocument;
-    newDocument.d->emptyDocument = false;
-    return newDocument;
+    if (isDocument()) {
+        return KoXmlDocument(static_cast<KoXmlDocumentData*>(d));
+    }
+    return KoXmlDocument();
 }
 
 void KoXmlNode::load(int depth)
@@ -1808,19 +1849,12 @@ void KoXmlNode::asQDomNode(QDomDocument& ownerDoc) const
 // ==================================================================
 
 // Creates an empty element
-KoXmlElement::KoXmlElement(): KoXmlNode(new KoXmlNodeData)
+KoXmlElement::KoXmlElement(): KoXmlNode()
 {
-    // because referenced also once in KoXmlNode constructor
-    d->unref();
 }
 
 KoXmlElement::~KoXmlElement()
 {
-    if (d)
-        if (d != &KoXmlNodeData::null)
-            d->unref();
-
-    d = 0;
 }
 
 // Creates a shallow copy of another element
@@ -1923,19 +1957,12 @@ bool KoXmlElement::hasAttributeNS(const QString& namespaceURI,
 //
 // ==================================================================
 
-KoXmlText::KoXmlText(): KoXmlNode(new KoXmlNodeData)
+KoXmlText::KoXmlText(): KoXmlNode()
 {
-    // because referenced also once in KoXmlNode constructor
-    d->unref();
 }
 
 KoXmlText::~KoXmlText()
 {
-    if (d)
-        if (d != &KoXmlNodeData::null)
-            d->unref();
-
-    d = 0;
 }
 
 KoXmlText::KoXmlText(const KoXmlText& text): KoXmlNode(text.d)
@@ -1970,19 +1997,15 @@ KoXmlText& KoXmlText::operator=(const KoXmlText & element)
 
 KoXmlCDATASection::KoXmlCDATASection(): KoXmlText()
 {
-    d->nodeType = KoXmlNode::CDATASectionNode;
 }
 
 KoXmlCDATASection::KoXmlCDATASection(const KoXmlCDATASection& cdata)
         : KoXmlText(cdata)
 {
-    *this = cdata;
 }
 
 KoXmlCDATASection::~KoXmlCDATASection()
 {
-    d->unref();
-    d = 0;
 }
 
 KoXmlCDATASection::KoXmlCDATASection(KoXmlNodeData* cdata):
@@ -2007,16 +2030,12 @@ KoXmlCDATASection& KoXmlCDATASection::operator=(const KoXmlCDATASection & cdata)
 //
 // ==================================================================
 
-KoXmlDocumentType::KoXmlDocumentType(): KoXmlNode(new KoXmlNodeData)
+KoXmlDocumentType::KoXmlDocumentType(): KoXmlNode()
 {
-    // because referenced also once in KoXmlNode constructor
-    d->unref();
 }
 
 KoXmlDocumentType::~KoXmlDocumentType()
 {
-    d->unref();
-    d = 0;
 }
 
 KoXmlDocumentType::KoXmlDocumentType(const KoXmlDocumentType& dt):
@@ -2045,24 +2064,19 @@ KoXmlDocumentType& KoXmlDocumentType::operator=(const KoXmlDocumentType & dt)
 //
 // ==================================================================
 
-KoXmlDocument::KoXmlDocument(bool stripSpaces): KoXmlNode()
+KoXmlDocument::KoXmlDocument(bool stripSpaces): KoXmlNode(new KoXmlDocumentData(0))
 {
-    d->emptyDocument = false;
-    d->stripSpaces = stripSpaces;
+    KOXMLDOCDATA(d)->emptyDocument = false;
+    KOXMLDOCDATA(d)->stripSpaces = stripSpaces;
 }
 
 KoXmlDocument::~KoXmlDocument()
 {
-    if (d)
-        if (d != &KoXmlNodeData::null)
-            d->unref();
-
-    d = 0;
 }
 
-KoXmlDocument::KoXmlDocument(KoXmlNodeData* data): KoXmlNode(data)
+KoXmlDocument::KoXmlDocument(KoXmlDocumentData* data): KoXmlNode(data)
 {
-    d->emptyDocument = true;
+    KOXMLDOCDATA(d)->emptyDocument = true;
 }
 
 // Creates a copy of another document
@@ -2105,18 +2119,20 @@ KoXmlElement KoXmlDocument::documentElement() const
 
 KoXmlDocumentType KoXmlDocument::doctype() const
 {
-    return dt;
+    return KOXMLDOCDATA(d)->dt;
 }
 
 QString KoXmlDocument::nodeName() const
 {
-    return (d->emptyDocument) ? QLatin1String("#document") : QString();
+    return (KOXMLDOCDATA(d)->emptyDocument) ? QString::fromLatin1("#document") : QString();
 }
 
 void KoXmlDocument::clear()
 {
-    KoXmlNode::clear();
-    d->emptyDocument = false;
+    d->unref();
+    KoXmlDocumentData *dat = new KoXmlDocumentData;
+    dat->emptyDocument = false;
+    d = dat;
 }
 
 namespace {
@@ -2134,21 +2150,15 @@ bool KoXmlDocument::setContent(QXmlStreamReader *reader,
                                QString* errorMsg, int* errorLine, int* errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
-        bool stripSpaces = d->stripSpaces;
+        const bool stripSpaces = KOXMLDOCDATA(d)->stripSpaces;
         d->unref();
-        d = new KoXmlNodeData;
-        d->nodeType = KoXmlNode::DocumentNode;
-        d->stripSpaces = stripSpaces;
+        KoXmlDocumentData *dat = new KoXmlDocumentData;
+        dat->nodeType = KoXmlNode::DocumentNode;
+        dat->stripSpaces = stripSpaces;
+        d = dat;
     }
 
-    dt = KoXmlDocumentType();
-
-    bool result = d->setContent(reader, errorMsg, errorLine, errorColumn);
-    if (result && !isNull()) {
-        dt.d->nodeType = KoXmlNode::DocumentTypeNode;
-        dt.d->tagName = d->packedDoc->docType;
-        dt.d->parent = d;
-    }
+    const bool result = KOXMLDOCDATA(d)->setContent(reader, errorMsg, errorLine, errorColumn);
 
     return result;
 }
@@ -2164,11 +2174,12 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
                                QString* errorMsg, int* errorLine, int* errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
-        bool stripSpaces = d->stripSpaces;
+        const bool stripSpaces = KOXMLDOCDATA(d)->stripSpaces;
         d->unref();
-        d = new KoXmlNodeData;
-        d->nodeType = KoXmlNode::DocumentNode;
-        d->stripSpaces = stripSpaces;
+        KoXmlDocumentData *dat = new KoXmlDocumentData;
+        dat->nodeType = KoXmlNode::DocumentNode;
+        dat->stripSpaces = stripSpaces;
+        d = dat;
     }
 
     if (!device->isOpen()) device->open(QIODevice::ReadOnly);
@@ -2177,13 +2188,7 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
     DumbEntityResolver entityResolver;
     reader.setEntityResolver(&entityResolver);
 
-    dt = KoXmlDocumentType();
-    bool result = d->setContent(&reader, errorMsg, errorLine, errorColumn);
-    {
-        dt.d->nodeType = KoXmlNode::DocumentTypeNode;
-        dt.d->tagName = d->packedDoc->docType;
-        dt.d->parent = d;
-    }
+    const bool result = KOXMLDOCDATA(d)->setContent(&reader, errorMsg, errorLine, errorColumn);
 
     return result;
 }
@@ -2200,11 +2205,12 @@ bool KoXmlDocument::setContent(const QString& text, bool namespaceProcessing,
                                QString *errorMsg, int *errorLine, int *errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
-        bool stripSpaces = d->stripSpaces;
+        const bool stripSpaces = KOXMLDOCDATA(d)->stripSpaces;
         d->unref();
-        d = new KoXmlNodeData;
-        d->nodeType = KoXmlNode::DocumentNode;
-        d->stripSpaces = stripSpaces;
+        KoXmlDocumentData *dat = new KoXmlDocumentData;
+        dat->nodeType = KoXmlNode::DocumentNode;
+        dat->stripSpaces = stripSpaces;
+        d = dat;
     }
 
     QXmlStreamReader reader(text);
@@ -2212,13 +2218,7 @@ bool KoXmlDocument::setContent(const QString& text, bool namespaceProcessing,
     DumbEntityResolver entityResolver;
     reader.setEntityResolver(&entityResolver);
 
-    dt = KoXmlDocumentType();
-    bool result = d->setContent(&reader, errorMsg, errorLine, errorColumn);
-    if (result && !isNull()) {
-        dt.d->nodeType = KoXmlNode::DocumentTypeNode;
-        dt.d->tagName = d->packedDoc->docType;
-        dt.d->parent = d;
-    }
+    const bool result = KOXMLDOCDATA(d)->setContent(&reader, errorMsg, errorLine, errorColumn);
 
     return result;
 }
@@ -2231,7 +2231,7 @@ bool KoXmlDocument::setContent(const QString& text,
 
 void  KoXmlDocument::setWhitespaceStripping(bool stripSpaces)
 {
-    d->stripSpaces = stripSpaces;
+    KOXMLDOCDATA(d)->stripSpaces = stripSpaces;
 }
 
 

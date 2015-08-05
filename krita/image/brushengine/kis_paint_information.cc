@@ -79,7 +79,8 @@ struct KisPaintInformation::Private {
         speed = rhs.speed;
         isHoveringMode = rhs.isHoveringMode;
         currentDistanceInfo = rhs.currentDistanceInfo;
-
+        canvasRotation = rhs.canvasRotation;
+        canvasMirroredH = rhs.canvasMirroredH;
         if (rhs.drawingAngleOverride) {
             drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
         }
@@ -96,6 +97,8 @@ struct KisPaintInformation::Private {
     qreal time;
     qreal speed;
     bool isHoveringMode;
+    int canvasRotation;
+    bool canvasMirroredH;
 
     QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
@@ -194,6 +197,7 @@ bool KisPaintInformation::isHoveringMode() const
     return d->isHoveringMode;
 }
 
+
 KisPaintInformation
 KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
         qreal pressure,
@@ -201,7 +205,9 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
         qreal rotation,
         qreal tangentialPressure,
         qreal perspective,
-        qreal speed)
+        qreal speed,
+	    int canvasrotation,
+	    bool canvasMirroredH)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -210,7 +216,36 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
                              tangentialPressure,
                              perspective, 0, speed);
     info.d->isHoveringMode = true;
+    info.d->canvasRotation = canvasrotation;
+    info.d->canvasMirroredH = canvasMirroredH;
     return info;
+}
+
+
+int KisPaintInformation::canvasRotation() const
+{
+    return d->canvasRotation;
+}
+
+void KisPaintInformation::setCanvasRotation(int rot)
+{
+    if (rot<0) {
+        d->canvasRotation= 360- abs(rot % 360);
+    } else {
+        d->canvasRotation= rot % 360;
+    }
+    
+} 
+
+bool KisPaintInformation::canvasMirroredH() const
+{
+    return d->canvasMirroredH;
+}
+
+void KisPaintInformation::setCanvasHorizontalMirrorState(bool mir)
+{
+    d->canvasMirroredH = mir;
+    
 }
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
@@ -427,6 +462,8 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
+    result.d->canvasRotation = pi2.canvasRotation();
+    result.d->canvasMirroredH = pi2.canvasMirroredH();
 
     return result;
 }

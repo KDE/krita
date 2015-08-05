@@ -77,7 +77,7 @@ KisSelectionMask::~KisSelectionMask()
 }
 
 QIcon KisSelectionMask::icon() const {
-    return koIcon("edit-paste");
+    return themedIcon("edit-paste");
 }
 
 void KisSelectionMask::setSelection(KisSelectionSP selection)

@@ -121,6 +121,7 @@ const QString COMPOSITE_TANGENT_NORMALMAP    = "tangent_normalmap";
 
 const QString COMPOSITE_COLORIZE     = "colorize";
 const QString COMPOSITE_BUMPMAP      = "bumpmap";
+const QString COMPOSITE_COMBINE_NORMAL = "combine_normal";
 const QString COMPOSITE_CLEAR        = "clear";
 const QString COMPOSITE_DISSOLVE     = "dissolve";
 const QString COMPOSITE_DISPLACE     = "displace";

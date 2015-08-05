@@ -71,6 +71,7 @@ public:
     bool isChecked() const;
     bool isCurveUsed() const;
     bool isSameCurveUsed() const;
+    bool isRandom() const;
 
     void setSeparateCurveValue(bool separateCurveValue);
 

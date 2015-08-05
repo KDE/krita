@@ -144,11 +144,11 @@ KisLayerBox::KisLayerBox()
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
-    actions << m_viewModeMenu->addAction(koIcon("view-list-text"),
+    actions << m_viewModeMenu->addAction(themedIcon("view-list-text"),
                                          i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(koIcon("view-list-details"),
+    actions << m_viewModeMenu->addAction(themedIcon("view-list-details"),
                                          i18n("Detailed View"), this, SLOT(slotDetailedView()));
-    actions << m_viewModeMenu->addAction(koIcon("view-preview"),
+    actions << m_viewModeMenu->addAction(themedIcon("view-preview"),
                                          i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
 
     for (int i = 0, n = actions.count(); i < n; ++i) {
@@ -160,7 +160,7 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_wdgLayerBox->bnViewMode->setIcon(koIcon("view-choose"));
+    m_wdgLayerBox->bnViewMode->setIcon(themedIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
     m_wdgLayerBox->bnDelete->setIcon(themedIcon("deletelayer"));

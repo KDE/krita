@@ -35,6 +35,10 @@
  *
  * Usage: construct a KisBoundary, and then run a generateBoundary(w, h) on it. After that,
  * you can use the KisBoundaryPainter::paint method to let it paint the outline, or get a pixmap.
+ *
+ * If you are debugging the brush outlines, be aware that the pipeline for this
+ * data is somewhat complex, involving such user classes:
+ * KisBoundary, KisBrush, KisBrushBasedPaintOpSettings, KisTool, KisCurrentOutlineFetcher
  **/
 class BRUSH_EXPORT KisBoundary
 {

@@ -123,7 +123,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
             return d->action->shortcutIndexes().key(d->shortcuts.at(index.row())->mode());
 
         case 3:
-            return koIcon("edit-delete");
+            return themedIcon("edit-delete");
 
         default:
             break;

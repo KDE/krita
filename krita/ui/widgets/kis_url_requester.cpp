@@ -33,7 +33,7 @@ KisUrlRequester::KisUrlRequester(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    m_ui->btnSelectFile->setIcon(koIcon("folder"));
+    m_ui->btnSelectFile->setIcon(themedIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
     connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));

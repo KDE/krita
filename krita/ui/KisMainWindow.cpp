@@ -554,6 +554,34 @@ void KisMainWindow::slotThemeChanged()
     KConfigGroup group(KGlobal::config(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());
 
+    // reload action icons!
+    foreach (QAction *action, actionCollection()->actions()) {
+        QIcon icon = action->icon();
+        if (icon.isNull()) continue;
+
+        QString iconName = icon.name();
+        if (iconName.isNull()) continue;
+
+        QString realIconName;
+
+        if (iconName.startsWith("dark_")) {
+            realIconName = iconName.mid(5);
+        }
+
+        if (iconName.startsWith("light_")) {
+            realIconName = iconName.mid(6);
+        }
+
+        if (!realIconName.isNull()) {
+            QIcon newIcon = themedIcon(realIconName);
+            if (!newIcon.isNull()) {
+                action->setIcon(newIcon);
+            } else {
+                qWarning() << "WARNING: Couldn't load themed icon:" << realIconName;
+            }
+        }
+    }
+
     emit themeChanged();
 }
 
@@ -2078,7 +2106,7 @@ void KisMainWindow::createActions()
 
     d->exportPdf  = new KisAction(i18nc("@action:inmenu", "Export as PDF..."));
     d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->exportPdf->setIcon(koIcon("application-pdf"));
+    d->exportPdf->setIcon(themedIcon("application-pdf"));
     actionManager->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
@@ -2095,18 +2123,18 @@ void KisMainWindow::createActions()
 //    actionManager->addAction("file_reload_file", d->reloadFile);
 //    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->importFile  = new KisAction(koIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
+    d->importFile  = new KisAction(themedIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
     actionManager->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KisAction(koIcon("document-export"), i18nc("@action:inmenu", "E&xport..."));
+    d->exportFile  = new KisAction(themedIcon("document-export"), i18nc("@action:inmenu", "E&xport..."));
     d->exportFile->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KisAction(koIcon("document-properties"), i18nc("@action:inmenu", "Document Information"));
+    d->showDocumentInfo  = new KisAction(themedIcon("configure"), i18nc("@action:inmenu", "Document Information"));
     d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
@@ -2156,7 +2184,7 @@ void KisMainWindow::createActions()
     actionCollection()->addAction("windows_previous", d->mdiPreviousWindow);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-    d->newWindow = new KisAction(koIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
+    d->newWindow = new KisAction(themedIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
     actionManager->addAction("view_newwindow", d->newWindow);
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 

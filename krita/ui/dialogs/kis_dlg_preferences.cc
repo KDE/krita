@@ -102,6 +102,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbOutlineShape->addItem(i18n("No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));
     m_cmbOutlineShape->addItem(i18n("Preview Outline"));
+    m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
@@ -270,7 +271,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
-    m_page->bnAddColorProfile->setIcon(koIcon("document-open"));
+    m_page->bnAddColorProfile->setIcon(themedIcon("document-open"));
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
@@ -881,7 +882,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setObjectName("general");
     page->setHeader(i18n("General"));
-    page->setIcon(koIcon("configure"));
+    page->setIcon(themedIcon("configure"));
     addPage(page);
     m_general = new GeneralTab(vbox);
 
@@ -890,7 +891,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setObjectName("display");
     page->setHeader(i18n("Display"));
-    page->setIcon(koIcon("preferences-desktop-display"));
+    page->setIcon(themedIcon("preferences-desktop-display"));
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
 
@@ -899,7 +900,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
-    page->setIcon(koIcon("preferences-desktop-color"));
+    page->setIcon(themedIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
@@ -908,7 +909,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
-    page->setIcon(koIcon("preferences-system-performance"));
+    page->setIcon(themedIcon("applications-system"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 
@@ -917,7 +918,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setObjectName("grid");
     page->setHeader(i18n("Grid"));
-    page->setIcon(koIcon("grid"));
+    page->setIcon(themedIcon("view-grid"));
     addPage(page);
     m_gridSettings = new GridSettingsTab(vbox);
 
@@ -935,7 +936,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
-    page->setIcon(koIcon("preferences-system-performance"));
+    page->setIcon(themedIcon("folder-pictures"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
@@ -944,7 +945,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
     page->setObjectName("author");
     page->setHeader(i18n("Author"));
-    page->setIcon(koIcon("user-identity"));
+    page->setIcon(themedIcon("im-user"));
 
 
     // input settings
@@ -952,7 +953,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
     page->setObjectName("canvasinput");
-    page->setIcon(koIcon("input-tablet"));
+    page->setIcon(themedIcon("applications-system"));
 
     connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));

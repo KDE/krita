@@ -55,7 +55,7 @@ void KisGridManager::setup(KisActionManager* actionManager)
 //     KisConfig config;
 //     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
-    m_toggleGrid = new KisAction(koIcon("view-grid"), i18n("Show Grid"), 0);
+    m_toggleGrid = new KisAction(themedIcon("view-grid"), i18n("Show Grid"), 0);
     m_toggleGrid->setCheckable(true);
     m_toggleGrid->setActivationFlags(KisAction::ACTIVE_NODE);
     m_toggleGrid->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Apostrophe));

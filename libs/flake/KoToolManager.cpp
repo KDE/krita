@@ -855,6 +855,12 @@ void KoToolManager::switchToolRequested(const QString & id)
     d->switchTool(id, false);
 }
 
+void KoToolManager::switchInputDeviceRequested(const KoInputDevice &id)
+{
+    if (!d->canvasData) return;
+    d->switchInputDevice(id);
+}
+
 void KoToolManager::switchToolTemporaryRequested(const QString &id)
 {
     d->switchTool(id, true);

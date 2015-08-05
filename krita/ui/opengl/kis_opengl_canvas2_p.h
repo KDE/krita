@@ -39,7 +39,7 @@
 #include <QVector>
 #include <QLibrary>
 #include <QX11Info>
-#include <qt5/QtGui/QOpenGLContext>
+#include <QOpenGLContext>
 #include <QApplication>
 
 #ifndef GL_NUM_EXTENSIONS

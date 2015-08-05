@@ -1,13 +1,8 @@
 install(FILES  
-AboutKrita.png
 arrow-down.png
 arrow-right.png
 broken-preset.png
-deletelayer.png
 delete.png
-eraser-toggle.png
-duplicatelayer.png
-folder.png
 height_icon.png
 height.png
 hi16-add_dialog.png
@@ -18,7 +13,6 @@ linked.png
 local_selection_active.png
 local_selection_inactive.png
 locked.png
-newlayer.png
 novisible.png
 offset_horizontal.png
 offset_vertical.png
@@ -28,8 +22,6 @@ paintop_settings_02.png
 paintop_settings_disabled.png
 portrait.png
 ratio_icon.png
-removefromfolder.png
-reload_preset.png
 selection_add.png
 selection_exclude.png
 selection_intersect.png
@@ -54,13 +46,6 @@ layer-style-disabled.png
 unlinked.png
 unlocked.png
 visible.png
-white128-krita.png
-white16-krita.png
-white22-krita.png
-white256-krita.png
-white32-krita.png
-white48-krita.png
-white64-krita.png
 width_icon.png
 width.png
 workspace-chooser.png

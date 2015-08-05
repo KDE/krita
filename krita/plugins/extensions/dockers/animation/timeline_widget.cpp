@@ -48,6 +48,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 6);
 
+    m_layerTree->setFrameShape(QFrame::NoFrame);
+    m_layerTree->viewport()->setAutoFillBackground(false);
     m_timelineView->setFrameShape(QFrame::NoFrame);
     m_timelineView->viewport()->setAutoFillBackground(false);
 

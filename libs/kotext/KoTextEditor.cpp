@@ -2,8 +2,9 @@
  * Copyright (C) 2009-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2015 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2015 Soma Schliszka <soma.schliszka@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -410,10 +411,12 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
                     int selectionColumnSpan;
                     if (!cell1.isValid() || !cell2.isValid()) {
                         // entire table
+                        visitor.visitTable(table, KoTextVisitor::Entirely);
                         selectionRow = selectionColumn = 0;
                         selectionRowSpan = table->rows();
                         selectionColumnSpan = table->columns();
                     } else {
+                        visitor.visitTable(table, KoTextVisitor::Partly);
                         d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
                     }
 
@@ -422,6 +425,7 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
                              selectionColumnSpan; c++) {
                             QTextTableCell cell = table->cellAt(r,c);
                             if (!cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                                visitor.visitTableCell(&cell, KoTextVisitor::Partly);
                                 recursivelyVisitSelection(cell.begin(), visitor);
                             } else {
                                 visitor.nonVisit();
@@ -432,8 +436,10 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
                         }
                     }
                 } else {
+                    visitor.visitTable(table, KoTextVisitor::Partly);
                     // And the selection is simple
                     if (!cell1.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                        visitor.visitTableCell(&cell1, KoTextVisitor::Entirely);
                         recursivelyVisitSelection(cell1.begin(), visitor);
                     } else {
                         visitor.nonVisit();

@@ -41,7 +41,7 @@ QVariant CompositionModel::data(const QModelIndex& index, int role) const
             }
             case Qt::DecorationRole:
             {
-                return koIcon("tools-wizard");
+                return themedIcon("tools-wizard");
             }
             case Qt::CheckStateRole: {
                 return m_compositions.at(index.row())->isExportEnabled() ? Qt::Checked : Qt::Unchecked;

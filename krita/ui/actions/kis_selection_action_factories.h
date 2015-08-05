@@ -113,5 +113,11 @@ struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoPara
     void run(KisViewManager *view);
 };
 
+struct KRITAUI_EXPORT KisSelectionToShapeActionFactory : public KisNoParameterActionFactory {
+    KisSelectionToShapeActionFactory() : KisNoParameterActionFactory("selection-to-shape-action") {}
+    void run(KisViewManager *view);
+};
+
+
 
 #endif /* __KIS_SELECTION_ACTION_FACTORIES_H */

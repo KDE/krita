@@ -91,13 +91,13 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_model = new TasksetModel(this);
     tasksetView->setModel(m_model);
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
-    recordButton->setIcon(koIcon("media-record"));
+    recordButton->setIcon(themedIcon("media-record"));
     recordButton->setCheckable(true);
-    clearButton->setIcon(koIcon("edit-delete"));
-    saveButton->setIcon(koIcon("document-save"));
+    clearButton->setIcon(themedIcon("edit-delete"));
+    saveButton->setIcon(themedIcon("document-save"));
     saveButton->setEnabled(false);
 
-    chooserButton->setIcon(koIcon("document-multiple"));
+    chooserButton->setIcon(themedIcon("edit-copy"));
 
     KGlobal::dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");

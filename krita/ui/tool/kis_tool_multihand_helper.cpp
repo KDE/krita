@@ -66,8 +66,18 @@ void KisToolMultihandHelper::paintAt(const QVector<PainterInfo*> &painterInfos,
         const QTransform &transform = d->transformations[i];
 
         KisPaintInformation __pi = pi;
+        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
+        rotateme.setAngle(__pi.canvasRotation());
+        QLineF rotated = transform.map(rotateme);
+        
         __pi.setPos(transform.map(__pi.pos()));
-
+        __pi.setCanvasRotation(rotated.angle());
+        
+        if (__pi.canvasMirroredH()) {
+            __pi.setCanvasRotation(180-__pi.canvasRotation());
+            __pi.setCanvasRotation(__pi.canvasRotation()+180);
+        }
+        
         paintAt(painterInfos[i], __pi);
     }
 }
@@ -85,6 +95,24 @@ void KisToolMultihandHelper::paintLine(const QVector<PainterInfo*> &painterInfos
         KisPaintInformation __pi2 = pi2;
         __pi1.setPos(transform.map(__pi1.pos()));
         __pi2.setPos(transform.map(__pi2.pos()));
+        
+        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
+        rotateme.setAngle(__pi1.canvasRotation());
+        QLineF rotated = transform.map(rotateme);
+        __pi1.setCanvasRotation(rotated.angle());
+
+        rotateme.setAngle(__pi2.canvasRotation());
+        rotated = transform.map(rotateme);
+        __pi2.setCanvasRotation(rotated.angle());
+
+        //check mirroring
+        if (__pi2.canvasMirroredH()) {
+            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
+            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);            
+            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
+            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
+        }
+        
 
         paintLine(painterInfos[i], __pi1, __pi2);
     }
@@ -105,6 +133,23 @@ void KisToolMultihandHelper::paintBezierCurve(const QVector<PainterInfo*> &paint
         KisPaintInformation __pi2 = pi2;
         __pi1.setPos(transform.map(__pi1.pos()));
         __pi2.setPos(transform.map(__pi2.pos()));
+        
+        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
+        rotateme.setAngle(__pi1.canvasRotation());
+        QLineF rotated = transform.map(rotateme);
+        __pi1.setCanvasRotation(rotated.angle());
+        
+        rotateme.setAngle(__pi2.canvasRotation());
+        rotated = transform.map(rotateme);
+        __pi2.setCanvasRotation(rotated.angle());
+        
+        if (__pi2.canvasMirroredH()) {
+            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
+            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);            
+            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
+            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
+        }
+        
 
         QPointF __control1 = transform.map(control1);
         QPointF __control2 = transform.map(control2);

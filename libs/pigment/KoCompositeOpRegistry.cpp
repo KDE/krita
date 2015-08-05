@@ -85,6 +85,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[4], KoID(COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean")));
 
     m_map.insert(m_categories[5], KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Map")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_DISSOLVE  , i18n("Dissolve")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_RED  , i18n("Copy Red")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_GREEN, i18n("Copy Green")));

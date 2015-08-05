@@ -29,7 +29,9 @@
 
 #ifdef Q_OS_WIN
 #include <float.h>
+#ifndef __MINGW32__
 #define isnan _isnan
+#endif
 #endif
 
 struct KisCageTransformWorker::Private

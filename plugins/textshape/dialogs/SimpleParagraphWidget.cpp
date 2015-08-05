@@ -217,21 +217,6 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
     };
     Finally finally(this);
 
-    QTextLayout *layout = block.layout();
-    if (layout) {
-        switch(layout->textOption().textDirection())
-        {
-        case Qt::LeftToRight:
-             widget.changeTextDirection->setChecked(false);
-             break;
-        case Qt::RightToLeft:
-            widget.changeTextDirection->setChecked(true);
-            break;
-        default:
-              break;
-            }
-    }
-
     setCurrentFormat(m_currentBlock.blockFormat());
 }
 

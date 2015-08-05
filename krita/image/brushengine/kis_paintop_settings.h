@@ -129,7 +129,9 @@ public:
     enum OutlineMode {
         CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
         CursorIsCircleOutline,
-        CursorNoOutline
+        CursorNoOutline,
+        CursorTiltOutline,
+        CursorColorOutline
     };
 
     /**

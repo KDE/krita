@@ -91,10 +91,10 @@ DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
         m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)));
     }
 
-    m_ui->bnAdd->setIcon(koIcon("arrow-right"));
+    m_ui->bnAdd->setIcon(themedIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
 
-    m_ui->bnRemove->setIcon(koIcon("arrow-left"));
+    m_ui->bnRemove->setIcon(themedIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->cmbResourceTypes->addItem(i18n("Brushes"), QString("brushes"));

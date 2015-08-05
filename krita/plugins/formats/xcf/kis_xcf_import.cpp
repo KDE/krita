@@ -58,7 +58,6 @@ extern "C" {
 #define GET_ALPHA(x) (x >> ALPHA_SHIFT)
 }
 
-
 struct Layer {
     KisLayerSP layer;
     int depth;
@@ -89,7 +88,6 @@ void addLayers(const QVector<Layer> &layers, KisImageSP image, int depth)
         }
     }
 }
-
 
 K_PLUGIN_FACTORY_WITH_JSON(XCFImportFactory, "krita_xcf_import.json", registerPlugin<KisXCFImport>();)
 

@@ -76,14 +76,14 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
             painter->drawImage(offset, image);
         }
         else {
-            QIcon   icon = koIcon("image-missing");
+            QIcon   icon = themedIcon("edit-delete");
             QRect   rect = boundingRect().toRect();
             QPixmap img  = icon.pixmap(rect.size());
             painter->drawPixmap(rect, img, img.rect());
         }
     }
     else {
-        QIcon   icon = koIcon("image-loading");
+        QIcon   icon = themedIcon("folder-pictures");
         QRect   rect = boundingRect().toRect();
         QPixmap img  = icon.pixmap(rect.size());
         painter->drawPixmap(rect, img, img.rect());

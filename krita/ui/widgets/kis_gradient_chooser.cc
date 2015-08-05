@@ -75,11 +75,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     QWidget* buttonWidget = new QWidget(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
 
-    QPushButton* addGradient = new QPushButton(koIcon("list-add"), i18n("Add..."), this);
+    QPushButton* addGradient = new QPushButton(themedIcon("list-add"), i18n("Add..."), this);
     connect(addGradient, SIGNAL(clicked()), this, SLOT(addGradient()));
     buttonLayout->addWidget(addGradient);
 
-    m_editGradient = new QPushButton(koIcon("configure"), i18n("Edit..."));
+    m_editGradient = new QPushButton(themedIcon("configure"), i18n("Edit..."));
     m_editGradient->setEnabled(false);
     connect(m_editGradient, SIGNAL(clicked()), this, SLOT(editGradient()));
     buttonLayout->addWidget(m_editGradient);

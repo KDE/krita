@@ -43,8 +43,8 @@ KisWheelInputEditor::KisWheelInputEditor(QWidget *parent)
     d->ui->setupUi(popup);
     d->ui->wheelButton->setType(KisInputButton::WheelType);
 
-    d->ui->clearModifiersButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
-    d->ui->clearWheelButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
+    d->ui->clearModifiersButton->setIcon(themedIcon("edit-clear"));
+    d->ui->clearWheelButton->setIcon(themedIcon("edit-clear"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

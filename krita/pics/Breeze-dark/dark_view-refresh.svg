@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   id="svg4183"
+   version="1.1"
+   inkscape:version="0.91pre2 r"
+   sodipodi:docname="view-refresh.svg">
+  <defs
+     id="defs4185" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="32"
+     inkscape:cx="12.411922"
+     inkscape:cy="11.712125"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="672"
+     inkscape:window-x="-4"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="false"
+     borderlayer="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4103" />
+    <sodipodi:guide
+       position="2,20.000017"
+       orientation="18,0"
+       id="guide4095" />
+    <sodipodi:guide
+       position="2,2.0000174"
+       orientation="0,18"
+       id="guide4097" />
+    <sodipodi:guide
+       position="20,2.0000174"
+       orientation="-18,0"
+       id="guide4099" />
+    <sodipodi:guide
+       position="20,20.000017"
+       orientation="0,-18"
+       id="guide4101" />
+    <sodipodi:guide
+       position="3,19.000017"
+       orientation="16,0"
+       id="guide4103" />
+    <sodipodi:guide
+       position="3,3.0000174"
+       orientation="0,16"
+       id="guide4105" />
+    <sodipodi:guide
+       position="19,3.0000174"
+       orientation="-1,6.123234e-17"
+       id="guide4107" />
+    <sodipodi:guide
+       position="19,19.000017"
+       orientation="0,-16"
+       id="guide4109" />
+    <sodipodi:guide
+       position="10.292994,3.0001395"
+       orientation="0,1.414012"
+       id="guide4266" />
+    <sodipodi:guide
+       position="6,3.0001"
+       orientation="-3,-3"
+       id="guide4124" />
+    <sodipodi:guide
+       position="3,6.0001"
+       orientation="-5,5"
+       id="guide4126" />
+    <sodipodi:guide
+       position="8,11.0001"
+       orientation="3,3"
+       id="guide4128" />
+    <sodipodi:guide
+       position="14,11.0001"
+       orientation="-3,-3"
+       id="guide4132" />
+    <sodipodi:guide
+       position="11,14.0001"
+       orientation="-5,5"
+       id="guide4134" />
+    <sodipodi:guide
+       position="16,19.0001"
+       orientation="3,3"
+       id="guide4136" />
+    <sodipodi:guide
+       position="19,16.0001"
+       orientation="5,-5"
+       id="guide4138" />
+    <sodipodi:guide
+       position="10,5.4139578"
+       orientation="1.4139404,0"
+       id="guide4167" />
+    <sodipodi:guide
+       position="12,4.0000174"
+       orientation="-1.4139404,0"
+       id="guide4171" />
+    <sodipodi:guide
+       position="10,4.4139578"
+       orientation="1.4139404,0"
+       id="guide4135" />
+    <sodipodi:guide
+       position="10,3.0000174"
+       orientation="0,2"
+       id="guide4137" />
+    <sodipodi:guide
+       position="12,3.0000174"
+       orientation="-1.4139404,0"
+       id="guide4139" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4188">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1030.3622)">
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="m 11,1049.3622 c -4.431966,0 -8,-3.568 -8,-8 0,-1.4417 0.382871,-2.7893 1.044922,-3.9551 l 0.738281,0.7383 C 4.285829,1039.1083 4,1040.1997 4,1041.3622 c 0,3.878 3.12203,7 7,7 1.162509,0 2.25389,-0.2858 3.216797,-0.7832 l 0.738281,0.7383 c -1.165789,0.662 -2.513364,1.0449 -3.955078,1.0449 z m 6.955078,-4.0449 -0.738281,-0.7383 C 17.714172,1043.6161 18,1042.5247 18,1041.3622 c 0,-3.878 -3.12203,-7 -7,-7 -1.16251,0 -2.25389,0.2858 -3.216797,0.7832 l -0.738281,-0.7383 c 1.165789,-0.662 2.513364,-1.0449 3.955078,-1.0449 4.431966,0 8,3.568 8,8 0,1.4417 -0.382871,2.7893 -1.044922,3.9551 z"
+       id="rect4085"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="color:#000000;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4336"
+       width="1"
+       height="4"
+       x="-726.45117"
+       y="737.3905"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
+    <rect
+       style="color:#000000;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4336-5"
+       width="1"
+       height="4"
+       x="-731.69507"
+       y="746.88037"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
+  </g>
+</svg>

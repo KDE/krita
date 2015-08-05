@@ -24,6 +24,7 @@
 */
 const quint8 PHONG_TOTAL_ILLUMINANTS = 4;
 const QString PHONG_HEIGHT_CHANNEL = "heightChannel";
+const QString USE_NORMALMAP_IS_ENABLED = "useNormalMapIsEnabled";
 const QString PHONG_ILLUMINANT_IS_ENABLED[] =
 {"illuminantIsEnabled0",
 "illuminantIsEnabled1",

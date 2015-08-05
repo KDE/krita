@@ -150,18 +150,18 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
-    m_selectAll = new KisAction(koIcon("edit-select-all"), i18n("Select &All"), this);
+    m_selectAll = new KisAction(themedIcon("select-all"), i18n("Select &All"), this);
     actionManager->addAction("select_all", m_selectAll);
     m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    m_deselect = new KisAction(koIcon("edit-select-all"), i18n("Deselect"), this);
+    m_deselect = new KisAction(themedIcon("select-all"), i18n("Deselect"), this);
     m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     actionManager->addAction("deselect", m_deselect);
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
-    m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
+    m_clear = new KisAction(themedIcon("select-clear"), i18n("Clear"), this);
     m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
@@ -245,6 +245,11 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     action->setActivationFlags(KisAction::SHAPES_SELECTED);
     actionManager->addAction("convert_shapes_to_vector_selection", action);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
+
+    action = new KisAction(i18nc("@action:inmenu", "&Convert to Shape"), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    actionManager->addAction("convert_selection_to_shape", action);
+    connect(action, SIGNAL(triggered()), SLOT(convertToShape())); 
 
     m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
     actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode);
@@ -473,6 +478,12 @@ void KisSelectionManager::convertToVectorSelection()
 void KisSelectionManager::convertShapesToVectorSelection()
 {
     KisShapesToVectorSelectionActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::convertToShape()
+{
+    KisSelectionToShapeActionFactory factory;
     factory.run(m_view);
 }
 

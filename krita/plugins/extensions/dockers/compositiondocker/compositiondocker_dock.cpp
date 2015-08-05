@@ -55,9 +55,9 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
     compositionView->installEventFilter(this);
-    deleteButton->setIcon(koIcon("edit-delete"));
-    saveButton->setIcon(koIcon("list-add"));
-    exportButton->setIcon(koIcon("document-export"));
+    deleteButton->setIcon(themedIcon("edit-delete"));
+    saveButton->setIcon(themedIcon("list-add"));
+    exportButton->setIcon(themedIcon("document-export"));
 
     deleteButton->setToolTip(i18n("Delete Composition"));
     saveButton->setToolTip(i18n("New Composition"));

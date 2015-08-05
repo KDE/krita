@@ -122,11 +122,11 @@ PaletteDockerDock::PaletteDockerDock( )
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_wdgPaletteDock->setupUi(mainWidget);
-    m_wdgPaletteDock->bnAdd->setIcon(koIcon("list-add"));
+    m_wdgPaletteDock->bnAdd->setIcon(themedIcon("list-add"));
     m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnAddDialog->setIcon(koIcon("hi16-add_dialog"));
+    m_wdgPaletteDock->bnAddDialog->setIcon(themedIcon("document-new"));
     m_wdgPaletteDock->bnAddDialog->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnRemove->setIcon(koIcon("list-remove"));
+    m_wdgPaletteDock->bnRemove->setIcon(themedIcon("edit-delete"));
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);

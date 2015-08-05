@@ -190,16 +190,16 @@ ImageDockerDock::ImageDockerDock():
     m_proxyModel->setSourceModel(m_model);
     m_proxyModel->setDynamicSortFilter(true);
 
-    m_ui->bnBack->setIcon(koIcon("go-previous"));
-    m_ui->bnUp->setIcon(koIcon("go-up"));
-    m_ui->bnHome->setIcon(koIcon("go-home"));
-    m_ui->bnImgPrev->setIcon(koIcon("go-previous"));
-    m_ui->bnImgNext->setIcon(koIcon("go-next"));
-    m_ui->bnImgClose->setIcon(koIcon("window-close"));
+    m_ui->bnBack->setIcon(themedIcon("arrow-left"));
+    m_ui->bnUp->setIcon(themedIcon("arrow-up"));
+    m_ui->bnHome->setIcon(themedIcon("go-home"));
+    m_ui->bnImgPrev->setIcon(themedIcon("arrow-left"));
+    m_ui->bnImgNext->setIcon(themedIcon("arrow-right"));
+    m_ui->bnImgClose->setIcon(themedIcon("window-close"));
     m_ui->thumbView->setScene(m_imageStripScene);
     m_ui->treeView->setModel(m_proxyModel);
     m_ui->cmbImg->setModel(m_imgListModel);
-    m_ui->bnPopup->setIcon(koIcon("zoom-original"));
+    m_ui->bnPopup->setIcon(themedIcon("zoom-original"));
     m_ui->bnPopup->setPopupWidget(m_popupUi);
 
     m_popupUi->zoomSlider->setRange(5, 500);
@@ -214,12 +214,12 @@ ImageDockerDock::ImageDockerDock():
 
     installEventFilter(this);
 
-    m_ui->cmbPath->addItem(koIcon("folder-image"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    m_ui->cmbPath->addItem(koIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    m_ui->cmbPath->addItem(koIcon("user-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    m_ui->cmbPath->addItem(themedIcon("folder-pictures"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    m_ui->cmbPath->addItem(themedIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    m_ui->cmbPath->addItem(themedIcon("go-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
 
     foreach(const QFileInfo &info, QDir::drives()) {
-        m_ui->cmbPath->addItem(koIcon("drive-harddisk"), info.absolutePath());
+        m_ui->cmbPath->addItem(themedIcon("drive-harddisk"), info.absolutePath());
     }
 
     connect(m_ui->cmbPath, SIGNAL(activated(const QString&)), SLOT(slotChangeRoot(const QString&)));

@@ -49,7 +49,7 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     addAction("rotateimage", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-    action  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate image 90 degrees Clockwise", "Rotate Image 90° Clockwise"), this);
+    action  = new KisAction(themedIcon("object-rotate-right"), i18nc("rotate image 90 degrees Clockwise", "Rotate Image 90° Clockwise"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImageCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
@@ -59,17 +59,17 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     addAction("rotateImage180", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-    action  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees Counter-Clockwise", "Rotate Image 90° Counter-Clockwise"), this);
+    action  = new KisAction(themedIcon("object-rotate-left"), i18nc("rotate image 90 degrees Counter-Clockwise", "Rotate Image 90° Counter-Clockwise"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImageCCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
-    action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Image Horizontally"), this);
+    action  = new KisAction(themedIcon("symmetry-horizontal"), i18n("Mirror Image Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("mirrorImageHorizontal", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageHorizontal()));
 
-    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Image Vertically"), this);
+    action  = new KisAction(themedIcon("symmetry-vertical"), i18n("Mirror Image Vertically"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("mirrorImageVertical", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageVertical()));
@@ -86,13 +86,13 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     addAction("rotateLayer180", action);
     connect(action, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotate180()));
 
-    action  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer 90° to the Right"), this);
+    action  = new KisAction(themedIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer 90° to the Right"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("rotateLayerCW90", action);
     connect(action, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateRight90()));
 
-    action  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer 90° to the Left"), this);
+    action  = new KisAction(themedIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer 90° to the Left"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("rotateLayerCCW90", action);

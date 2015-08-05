@@ -118,7 +118,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopupButton = new KisPopupButton(this);
-        m_toolOptionsPopupButton->setIcon(koIcon("configure"));
+        m_toolOptionsPopupButton->setIcon(themedIcon("configure"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
     }
@@ -139,7 +139,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     KisAction* eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    eraseAction->setIcon(koIcon("eraser-toggle"));
+    eraseAction->setIcon(themedIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
@@ -153,7 +153,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     KisAction* reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
     reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    reloadAction->setIcon(koIcon("reload_preset"));
+    reloadAction->setIcon(themedIcon("view-refresh"));
     m_reloadButton->setDefaultAction(reloadAction);
     m_viewManager->actionCollection()->addAction("reload_preset_action", reloadAction);
 
@@ -252,7 +252,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_workspaceWidget = new KisPopupButton(this);
-    m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
+    m_workspaceWidget->setIcon(themedIcon("view-choose"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(iconsize, iconsize);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));

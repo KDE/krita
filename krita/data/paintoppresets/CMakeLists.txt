@@ -106,6 +106,11 @@ Splat_wet_cells.kpp
 Splatter_thin.kpp
 Sponge_texture.kpp
 Spray_splat.kpp
+Tangent_normal_basic.kpp
+Tangent_normal_drawing_angle.kpp
+Tangent_normal_hairy.kpp
+Tangent_normal_pixel.kpp
+Tangent_normal_y_inverted.kpp
 Texture_fuzzy.kpp
 Texture_hair.kpp
 Texture_leaves_fuzzy.kpp

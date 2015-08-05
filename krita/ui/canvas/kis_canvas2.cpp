@@ -242,6 +242,16 @@ qreal KisCanvas2::rotationAngle() const
     return m_d->coordinatesConverter->rotationAngle();
 }
 
+bool KisCanvas2::xAxisMirrored() const
+{
+    return m_d->coordinatesConverter->xAxisMirrored();
+}
+
+bool KisCanvas2::yAxisMirrored() const
+{
+    return m_d->coordinatesConverter->yAxisMirrored();
+}
+
 void KisCanvas2::channelSelectionChanged()
 {
     KisImageWSP image = this->image();

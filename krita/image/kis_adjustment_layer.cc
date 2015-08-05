@@ -118,7 +118,7 @@ void KisAdjustmentLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *u
 
 QIcon KisAdjustmentLayer::icon() const
 {
-    return koIcon("view-filter");
+    return themedIcon("view-filter");
 }
 
 KisDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const

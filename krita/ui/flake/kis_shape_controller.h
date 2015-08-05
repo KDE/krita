@@ -72,7 +72,7 @@ Q_SIGNALS:
     void selectionContentChanged();
     void currentLayerChanged(const KoShapeLayer*);
 
-protected:
+public:
     void addShape(KoShape* shape);
     void removeShape(KoShape* shape);
 

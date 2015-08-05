@@ -36,43 +36,6 @@ install(TARGETS kritadefaulttools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES
-    krita_tool_color_fill.png
-    krita_tool_color_picker.png
-    krita_tool_move.png
-    krita_tool_gradient.png
-    krita_tool_line.png
-    krita_tool_rectangle.png
-    krita_tool_ellipse.png
-    krita_tool_freehandvector.png
-    krita_tool_multihand.png
-    krita_tool_measure.png
-    krita_draw_path.png
-    
-    dark_krita_draw_path.png
-    dark_krita_tool_color_fill.png
-    dark_krita_tool_color_picker.png
-    dark_krita_tool_ellipse.png
-    dark_krita_tool_freehand.png
-    dark_krita_tool_freehandvector.png
-    dark_krita_tool_gradient.png
-    dark_krita_tool_line.png
-    dark_krita_tool_measure.png
-    dark_krita_tool_move.png
-    dark_krita_tool_multihand.png
-    dark_krita_tool_rectangle.png
-    
-    light_krita_draw_path.png
-    light_krita_tool_color_fill.png
-    light_krita_tool_color_picker.png
-    light_krita_tool_ellipse.png
-    light_krita_tool_freehand.png
-    light_krita_tool_freehandvector.png
-    light_krita_tool_gradient.png
-    light_krita_tool_line.png
-    light_krita_tool_measure.png
-    light_krita_tool_move.png
-    light_krita_tool_multihand.png
-    light_krita_tool_rectangle.png
 # cursors
     tool_rectangle_cursor.png
     tool_ellipse_cursor.png

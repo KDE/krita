@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Tangent Normal Brush
+Name[ca]=Pinzell de tangent normal
+Name[nl]=Rakend normaal penseel
+Name[pt]=Pincel da Normal à Tangente
+Name[pt_BR]=Pincel da normal à tangente
+Name[sv]=Tangensnormalpensel
+Name[uk]=Дотичний нормальний пензель
+Name[x-test]=xxTangent Normal Brushxx
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritatangentnormalpaintop
+X-Krita-Version=28

@@ -192,6 +192,9 @@ public Q_SLOTS:
 
     /// canvas rotation in degrees
     qreal rotationAngle() const;
+    /// Bools indicating canvasmirroring.
+    bool xAxisMirrored() const;
+    bool yAxisMirrored() const;
 
     void channelSelectionChanged();
 

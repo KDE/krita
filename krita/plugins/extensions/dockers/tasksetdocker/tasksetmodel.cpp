@@ -42,7 +42,7 @@ QVariant TasksetModel::data(const QModelIndex& index, int role) const
             {
                 const QIcon icon = m_actions.at(index.row())->icon();
                 if (icon.isNull()) {
-                    return koIcon("tools-wizard");
+                    return themedIcon("tools-wizard");
                 }
                 return icon;
             }

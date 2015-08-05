@@ -2,6 +2,7 @@
  *  Copyright (c) 2013 Digia Plc and/or its subsidiary(-ies).
  *  Copyright (c) 2013 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +33,9 @@
 #include <input/kis_extended_modifiers_mapper.h>
 #include <input/kis_tablet_debugger.h>
 
+// For "inline tool switches"
+#include <KoToolManager.h>
+#include <KoInputDevice.h>
 #include "kis_screen_size_choice_dialog.h"
 
 /**
@@ -60,6 +64,9 @@ typedef int  (API *PtrWTPacketsPeek)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
 typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
+/**
+ * Definitions at http://www.wacomeng.com/windows/docs/Wintab_v140.htm
+ */
 static PtrWTInfo ptrWTInfo = 0;
 static PtrWTPacketsGet ptrWTPacketsGet = 0;
 static PtrWTPacketsPeek ptrWTPacketsPeek = 0;
@@ -73,10 +80,10 @@ enum { QT_TABLET_NPACKETQSIZE = 128 };
 static PACKET globalPacketBuf[QT_TABLET_NPACKETQSIZE];  // our own tablet packet queue.
 
 /**
- * Global variables to handle the Tablet Context
+ * Variables to handle the Tablet Context
  */
-HCTX qt_tablet_context = 0;
-bool qt_tablet_tilt_support;
+static HCTX qt_tablet_context = 0;
+static bool qt_tablet_tilt_support;
 
 /**
  * The widget that got the latest tablet press.
@@ -86,7 +93,7 @@ bool qt_tablet_tilt_support;
  * press event allows to ensure that exactly the same widget would get
  * the release.
  */
-QPointer<QWidget> kis_tablet_pressed = 0;
+static QPointer<QWidget> kis_tablet_pressed = 0;
 
 /**
  * The hash taple of available cursor, containing information about
@@ -94,7 +101,20 @@ QPointer<QWidget> kis_tablet_pressed = 0;
  */
 typedef QHash<quint64, QTabletDeviceData> QTabletCursorInfo;
 Q_GLOBAL_STATIC(QTabletCursorInfo, tCursorInfo)
-QTabletDeviceData currentTabletPointer;
+static QTabletDeviceData currentTabletPointer;
+
+/**
+ * This is an inelegant solution to record pen / eraser switches.
+ * On the Surface Pro 3 we are only notified of cursor changes at the last minute.
+ * The recommended way to handle switches is WT_CSRCHANGE, but that doesn't work
+ * unless we save packet ID information, and we cannot change the structure of the
+ * PACKETDATA due to Qt restrictions.
+ *
+ * Furthermore, WT_CSRCHANGE only ever appears *after* we receive the packet.
+ */
+static UINT currentCursor = 0;
+static bool dialogOpen = false;  //< KisTabletSupportWin is not a Q_OBJECT and can't accept dialog signals
+static bool inlineSwitching = false;  //< Only enable this on SP3 or other devices with the same issue.
 
 /**
  * This is a default implementation of a class for converting the
@@ -205,6 +225,10 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 
     Q_ASSERT(!tCursorInfo()->contains(uniqueId));
 
+    if (dialogOpen) {
+        return;
+    }
+
     /* browse WinTab's many info items to discover pressure handling. */
     AXIS np;
     LOGCONTEXT lc;
@@ -258,8 +282,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 
     {
         KisScreenSizeChoiceDialog dlg(0,
-                                      qtDesktopRect,
-                                      wintabDesktopRect);
+                                      wintabDesktopRect,
+                                      qtDesktopRect);
 
         KisExtendedModifiersMapper mapper;
         KisExtendedModifiersMapper::ExtendedModifiers modifiers =
@@ -269,10 +293,12 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
             (!dlg.canUseDefaultSettings() &&
              qtDesktopRect != wintabDesktopRect)) {
 
+            dialogOpen = true;
             dlg.exec();
         }
 
         desktopRect = dlg.screenRect();
+        dialogOpen = false;
     }
 
     tdd.sysOrgX = desktopRect.x();
@@ -289,9 +315,7 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         qDebug() << ppVar(tdd.minY) << ppVar(tdd.maxY);
         qDebug() << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
         qDebug().nospace() << "# csr type: 0x" << hex << csr_type;
-    }
 
-    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
         LOGCONTEXT lcMine;
 
         /* get default region */
@@ -333,9 +357,9 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 /**
  * Updates the current cursor of the stylus
  */
-static void tabletUpdateCursor(QTabletDeviceData &tdd, const UINT currentCursor)
+static void tabletChangeCursor(QTabletDeviceData &tdd, const UINT newCursor)
 {
-    switch (currentCursor % 3) { // %3 for dual track
+    switch (newCursor % 3) { // %3 for dual track
     case 0:
         tdd.currentPointerType = QTabletEvent::Cursor;
         break;
@@ -348,8 +372,74 @@ static void tabletUpdateCursor(QTabletDeviceData &tdd, const UINT currentCursor)
     default:
         tdd.currentPointerType = QTabletEvent::UnknownPointer;
     }
+    qDebug() << "WinTab: updating cursor type" << ppVar(newCursor);
+    currentCursor = newCursor;
 }
 
+
+/**
+ * Logic to handle a tablet device entering proximity or when switching tools.
+ */
+static void tabletUpdateCursor(const UINT newCursor)
+{
+    UINT csr_physid;
+    ptrWTInfo(WTI_CURSORS + newCursor, CSR_PHYSID, &csr_physid);
+    UINT csr_type;
+    ptrWTInfo(WTI_CURSORS + newCursor, CSR_TYPE, &csr_type);
+    const UINT deviceIdMask = 0xFF6; // device type mask && device color mask
+    quint64 uniqueId = (csr_type & deviceIdMask);
+    uniqueId = (uniqueId << 32) | csr_physid;
+
+    const QTabletCursorInfo *const globalCursorInfo = tCursorInfo();
+    bool isInit = !globalCursorInfo->contains(uniqueId);
+    if (isInit) {
+        tabletInit(uniqueId, csr_type, qt_tablet_context);
+    }
+
+    // Check tablet name to enable Surface Pro 3 workaround.
+    #ifdef UNICODE
+    UINT nameLength = ptrWTInfo(WTI_DEVICES, DVC_NAME, 0);
+    TCHAR* dvcName = new TCHAR[nameLength + 1];
+    ptrWTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+    QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
+    delete dvcName;
+    qDebug() << "DVC_NAME =" << qDvcName;
+    if (qDvcName == QString::fromLatin1("N-trig DuoSense device")) {
+        inlineSwitching = true;
+    } else {
+        inlineSwitching = false;
+    }
+    #endif
+
+    currentTabletPointer = globalCursorInfo->value(uniqueId);
+    tabletChangeCursor(currentTabletPointer, newCursor);
+
+    BYTE logicalButtons[32];
+    memset(logicalButtons, 0, 32);
+    ptrWTInfo(WTI_CURSORS + newCursor, CSR_SYSBTNMAP, &logicalButtons);
+    currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
+    currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
+    currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
+
+
+    if (isInit && KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        qDebug() << "--------------------------";
+        qDebug() << "--- Tablet buttons map ---";
+        for (int i = 0; i < 16; i++) {
+            qDebug() << "( 1 <<" << 2*i << ")" << "->" << logicalButtons[2*i]
+                     << "( 1 <<" << 2*i+1 << ")" << "->" << logicalButtons[2*i+1];
+        }
+        qDebug() << "--------------------------";
+    }
+
+}
+
+
+/**
+ * Qt generates spoofed mouse events for certain rejected tablet events.
+ * When those mouse events are unnecessary we catch and remove them
+ * with this event filter.
+ */
 class EventEater : public QObject {
 public:
     EventEater(QObject *p) : QObject(p), m_eventType(QEvent::None) {}
@@ -534,6 +624,20 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                      << "Twist:" << ort.orTwist;
         }
 
+        /**
+         * Workaround to deal with "inline" tool switches.
+         * These are caused by the eraser trigger button on the Surface Pro 3.
+         * We shoot out a tabletUpdateCursor request and a switchInputDevice request.
+         */
+        if (inlineSwitching && !dialogOpen && (localPacketBuf[i].pkCursor != currentCursor)) {
+
+            tabletUpdateCursor(localPacketBuf[i].pkCursor);
+            KoInputDevice id(QTabletEvent::TabletDevice(currentTabletPointer.currentDevice),
+                             QTabletEvent::PointerType(currentTabletPointer.currentPointerType),
+                             currentTabletPointer.llId);
+            KoToolManager::instance()->switchInputDeviceRequested(id);
+        }
+
         KisTabletEvent e(t, localPos, globalPos, hiResGlobal, currentTabletPointer.currentDevice,
                          currentTabletPointer.currentPointerType, prsNew, tiltX, tiltY,
                          tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
@@ -620,51 +724,18 @@ bool KisTabletSupportWin::nativeEventFilter(const QByteArray &/*eventType*/, voi
             mouseEnteredFlag = true;
         }
         break;
-    case WT_PROXIMITY:
-            if (ptrWTPacketsPeek && ptrWTInfo) {
-                const bool enteredProximity = LOWORD(msg->lParam) != 0;
-                PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
-                const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, proximityBuffer);
-                if (totalPacks > 0) {
-                    const UINT currentCursor = proximityBuffer[0].pkCursor;
 
-                    UINT csr_physid;
-                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &csr_physid);
-                    UINT csr_type;
-                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_TYPE, &csr_type);
-                    const UINT deviceIdMask = 0xFF6; // device type mask && device color mask
-                    quint64 uniqueId = (csr_type & deviceIdMask);
-                    uniqueId = (uniqueId << 32) | csr_physid;
-
-                    // initialising and updating the cursor should be done in response to
-                    // WT_CSRCHANGE. We do it in WT_PROXIMITY because some wintab never send
-                    // the event WT_CSRCHANGE even if asked with CXO_CSRMESSAGES
-                    const QTabletCursorInfo *const globalCursorInfo = tCursorInfo();
-                    if (!globalCursorInfo->contains(uniqueId))
-                        tabletInit(uniqueId, csr_type, qt_tablet_context);
-
-                    currentTabletPointer = globalCursorInfo->value(uniqueId);
-                    tabletUpdateCursor(currentTabletPointer, currentCursor);
-
-                    BYTE logicalButtons[32];
-                    memset(logicalButtons, 0, 32);
-                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
-
-                    currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
-                    currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
-                    currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
-
-                    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                        qDebug() << "--------------------------";
-                        qDebug() << "--- Tablet buttons map ---";
-                        for (int i = 0; i < 32; i++) {
-                            qDebug() << "( 1 <<" << i << ")" << "->" << logicalButtons[i];
-                        }
-                        qDebug() << "--------------------------";
-                    }
-                }
+    case WT_PROXIMITY: {
+        const bool enteredProximity = (LOWORD(msg->lParam) != 0);
+        if (ptrWTPacketsPeek && ptrWTInfo && enteredProximity) {
+            PACKET proximityBuffer; // we are only interested in the first packet in this case.
+            const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, &proximityBuffer);
+            if (totalPacks == 1) {
+                tabletUpdateCursor(proximityBuffer.pkCursor);
             }
+        }
         break;
+    }
     case WT_PACKET: {
         Q_ASSERT(qt_tablet_context);
 

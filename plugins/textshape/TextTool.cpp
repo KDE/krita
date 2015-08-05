@@ -1912,6 +1912,21 @@ void TextTool::updateActions()
 
     //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
+
+    if (bf.hasProperty(KoParagraphStyle::TextProgressionDirection)) {
+        switch(bf.intProperty(KoParagraphStyle::TextProgressionDirection))
+        {
+        case KoText::RightLeftTopBottom:
+            m_actionChangeDirection->setChecked(true);
+            break;
+        case KoText::LeftRightTopBottom:
+        default:
+            m_actionChangeDirection->setChecked(false);
+            break;
+        }
+    } else {
+        m_actionChangeDirection->setChecked(textEditor->block().text().isRightToLeft());
+    }
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
         bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft);
         if ((bf.alignment() == Qt::AlignLeading) ^ revert)
@@ -3019,6 +3034,8 @@ void TextTool::debugTextStyles()
 
 void TextTool::textDirectionChanged()
 {
+    if (!m_allowActions || !m_textEditor.data()) return;
+
     QTextBlockFormat blockFormat;
     if (m_actionChangeDirection->isChecked()) {
         blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);

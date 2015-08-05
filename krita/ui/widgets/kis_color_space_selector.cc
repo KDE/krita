@@ -61,15 +61,15 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnInstallProfile->setIcon(koIcon("document-open"));
+    d->colorSpaceSelector->bnInstallProfile->setIcon(themedIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon(koIcon("download"));
+    d->colorSpaceSelector->bnDownloadProfile->setIcon(themedIcon("download"));
     d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
     d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
     d->colorSpaceSelector->bnDownloadProfile->hide();
 
-    d->colorSpaceSelector->bnUploadProfile->setIcon(koIcon("go-up"));
+    d->colorSpaceSelector->bnUploadProfile->setIcon(themedIcon("arrow-up"));
     d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
     d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
     d->colorSpaceSelector->bnUploadProfile->hide();

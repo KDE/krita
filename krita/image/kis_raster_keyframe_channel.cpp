@@ -53,7 +53,7 @@ int KisRasterKeyframeChannel::frameIdAt(int time) const
 
 bool KisRasterKeyframeChannel::fetchFrame(KisPaintDeviceSP targetDevice, int time, int offset)
 {
-    QMap<int, KisKeyframe*>::const_iterator i = activeKeyIterator(time);
+    KeyframesMap::const_iterator i = activeKeyIterator(time);
 
     while (offset > 0 && i != constKeys().end()) {
         offset--;
@@ -127,7 +127,7 @@ void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframe *key, KUndo2Command *
 
 QRect KisRasterKeyframeChannel::affectedRect(KisKeyframe *key)
 {
-    QMap<int, KisKeyframe *>::iterator it = keys().find(key->time());
+    KeyframesMap::iterator it = keys().find(key->time());
     QRect rect;
 
     // Calculate changed area as the union of the current and previous keyframe.

@@ -111,7 +111,6 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
     KisKeyframe *key;
-    bool ok;
 
     QCOMPARE(channel->hasScalarValue(), true);
     QCOMPARE(channel->minScalarValue(), -17.0);
@@ -157,7 +156,7 @@ void KisKeyframingTest::testRasterChannel()
     KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
 
     QCOMPARE(channel->hasScalarValue(), false);
-    QCOMPARE(channel->keyframes().length(), 1);
+    QCOMPARE(channel->keyframeCount(), 1);
     QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QCOMPARE(channel->frameIdAt(0), 0);
     QVERIFY(channel->keyframeAt(0) != 0);
@@ -167,7 +166,7 @@ void KisKeyframingTest::testRasterChannel()
     // New keyframe
 
     KisKeyframe * key_10 = channel->addKeyframe(10);
-    QCOMPARE(channel->keyframes().length(), 2);
+    QCOMPARE(channel->keyframeCount(), 2);
     QCOMPARE(dev->framesInterface()->frames().count(), 2);
     QVERIFY(channel->frameIdAt(10) != 0);
 
@@ -203,22 +202,22 @@ void KisKeyframingTest::testRasterChannel()
     QVERIFY(thumb1c == thumb1b);
 
     // Delete keyrame
-    QCOMPARE(channel->keyframes().count(), 3);
+    QCOMPARE(channel->keyframeCount(), 3);
     QCOMPARE(dev->framesInterface()->frames().count(), 3);
 
     channel->deleteKeyframe(key_0);
-    QCOMPARE(channel->keyframes().count(), 2);
+    QCOMPARE(channel->keyframeCount(), 2);
     QCOMPARE(dev->framesInterface()->frames().count(), 2);
     QVERIFY(channel->keyframeAt(0) == 0);
 
     channel->deleteKeyframe(key_20);
-    QCOMPARE(channel->keyframes().count(), 1);
+    QCOMPARE(channel->keyframeCount(), 1);
     QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QVERIFY(channel->keyframeAt(20) == 0);
 
     // Last remaining keyframe cannot be deleted
     channel->deleteKeyframe(key_10);
-    QCOMPARE(channel->keyframes().count(), 1);
+    QCOMPARE(channel->keyframeCount(), 1);
     QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QVERIFY(channel->keyframeAt(10) != 0);
 

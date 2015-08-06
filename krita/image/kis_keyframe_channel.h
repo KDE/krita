@@ -73,7 +73,11 @@ public:
     KisTimeRange identicalFrames(int time) const;
 
     int keyframeCount() const;
-    QList<KisKeyframe*> keyframes() const;
+
+    int keyframeRowIndexOf(KisKeyframe *keyframe) const;
+    KisKeyframe* keyframeAtRow(int row) const;
+
+    int keyframeInsertionRow(int time) const;
 
     virtual bool hasScalarValue() const = 0;
     virtual qreal minScalarValue() const = 0;
@@ -93,9 +97,11 @@ signals:
     void sigKeyframeMoved(KisKeyframe *keyframe, int fromTime);
 
 protected:
-    QMap<int, KisKeyframe *> &keys();
-    const QMap<int, KisKeyframe *> &constKeys() const;
-    QMap<int, KisKeyframe*>::const_iterator activeKeyIterator(int time) const;
+    typedef QMap<int, KisKeyframeSP> KeyframesMap;
+
+    KeyframesMap &keys();
+    const KeyframesMap &constKeys() const;
+    KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframe* createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand) = 0;
     virtual bool canDeleteKeyframe(KisKeyframe *key) = 0;
@@ -108,9 +114,9 @@ protected:
     virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:
-    void insertKeyframeImpl(KisKeyframe *keyframe);
-    void deleteKeyframeImpl(KisKeyframe *keyframe);
-    void moveKeyframeImpl(KisKeyframe *keyframe, int newTime);
+    void insertKeyframeImpl(KisKeyframeSP keyframe);
+    void deleteKeyframeImpl(KisKeyframeSP keyframe);
+    void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
 
     struct InsertFrameCommand;
     struct MoveFrameCommand;

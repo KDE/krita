@@ -47,11 +47,13 @@ void KisAnimationFrameCacheTest::testCache()
     image->addNode(layer2);
     image->addNode(layer3);
 
-    layer2->addNewFrame(10, true);
-    layer2->addNewFrame(20, true);
-    layer2->addNewFrame(30, true);
+    KUndo2Command parentCommand;
 
-    layer3->addNewFrame(17, true);
+    layer2->addNewFrame(10, true, &parentCommand);
+    layer2->addNewFrame(20, true, &parentCommand);
+    layer2->addNewFrame(30, true, &parentCommand);
+
+    layer3->addNewFrame(17, true, &parentCommand);
 
     KisOpenGLImageTexturesSP glTex = KisOpenGLImageTextures::getImageTextures(image, 0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
     KisAnimationFrameCacheSP cache = new KisAnimationFrameCache(glTex);

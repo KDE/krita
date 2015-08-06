@@ -104,9 +104,8 @@ QModelIndex KisTimelineModel::index(int row, int column, const QModelIndex &pare
             return QModelIndex();
         } else {
             KisKeyframeChannel *channel = qobject_cast<KisKeyframeChannel*>(parentObj);
-            QList<KisKeyframe*> keyframes = channel->keyframes();
-            if (row >= keyframes.count()) return QModelIndex();
-            KisKeyframe *keyframe = keyframes.at(row);
+            if (row >= channel->keyframeCount()) return QModelIndex();
+            KisKeyframe *keyframe = channel->keyframeAtRow(row);
             return createIndex(row, column, keyframe);
         }
     } else { // KisNodeDummy
@@ -162,7 +161,7 @@ int KisTimelineModel::rowCount(const QModelIndex &parent) const
             return 0;
         } else {
             KisKeyframeChannel *channel = qobject_cast<KisKeyframeChannel*>(parentObj);
-            return channel->keyframes().count();
+            return channel->keyframeCount();
         }
     } else { // KisNodeDummy
         KisNodeSP parentNode = nodeFromIndex(parent);
@@ -268,8 +267,7 @@ void KisTimelineModel::slotKeyframeAboutToBeRemoved(KisKeyframe *keyframe)
 {
     QModelIndex parent = getChannelIndex(keyframe->channel(), 1);
 
-    QList<KisKeyframe*> keyframes = keyframe->channel()->keyframes();
-    int row = keyframes.indexOf(keyframe);
+    int row = keyframe->channel()->keyframeRowIndexOf(keyframe);
 
     beginRemoveRows(parent, row, row);
 }
@@ -284,8 +282,7 @@ void KisTimelineModel::slotKeyframeAboutToBeMoved(KisKeyframe *keyframe, int toT
 {
     QModelIndex parent = getChannelIndex(keyframe->channel(), 1);
 
-    QList<KisKeyframe*> keyframes = keyframe->channel()->keyframes();
-    int rowFrom = keyframes.indexOf(keyframe);
+    int rowFrom = keyframe->channel()->keyframeRowIndexOf(keyframe);
     int rowTo = getInsertionPointByTime(keyframe->channel(), toTime);
 
     if (rowTo == rowFrom || rowTo == rowFrom + 1) {
@@ -311,13 +308,7 @@ void KisTimelineModel::slotKeyframeMoved(KisKeyframe *keyframe)
 
 int KisTimelineModel::getInsertionPointByTime(KisKeyframeChannel *channel, int time)
 {
-    QList<KisKeyframe*> keyframes = channel->keyframes();
-
-    for (int i=0; i < keyframes.count(); i++) {
-        if (keyframes[i]->time() > time) return i;
-    }
-
-    return keyframes.count();
+    return channel->keyframeInsertionRow(time);
 }
 
 QModelIndex KisTimelineModel::getChannelIndex(KisKeyframeChannel *channel, int column) const

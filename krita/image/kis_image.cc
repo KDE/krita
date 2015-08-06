@@ -1018,9 +1018,40 @@ void filterMergableNodes(QList<KisNodeSP> &nodes)
     }
 }
 
+void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes)
+{
+    QList<KisNodeSP>::iterator it = std::find(inputNodes.begin(), inputNodes.end(), root);
+
+    if (it != inputNodes.end()) {
+        outputNodes << *it;
+        inputNodes.erase(it);
+    }
+
+    if (inputNodes.isEmpty()) {
+        return;
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        sortMergableNodes(child, inputNodes, outputNodes);
+        child = child->nextSibling();
+    }
+
+    /**
+     * By the end of recursion \p inputNodes must be empty
+     */
+    KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
+}
+
 KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
 {
     filterMergableNodes(mergedNodes);
+
+    {
+        QList<KisNodeSP> tempNodes;
+        qSwap(mergedNodes, tempNodes);
+        sortMergableNodes(m_d->rootLayer, tempNodes, mergedNodes);
+    }
 
     if (mergedNodes.size() <= 1) return KisNodeSP();
 

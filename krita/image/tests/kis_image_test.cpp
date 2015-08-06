@@ -506,22 +506,50 @@ void KisImageTest::testMergeMultiple()
     TestUtil::ExternalImageChecker img("flatten", "imagetest");
     TestUtil::ExternalImageChecker chk("mergemultiple", "imagetest");
 
-    QList<KisNodeSP> selectedNodes;
+    {
+        QList<KisNodeSP> selectedNodes;
 
-    selectedNodes << p.layer2
-                  << p.group1
-                  << p.layer6;
+        selectedNodes << p.layer2
+                      << p.group1
+                      << p.layer6;
+
+        {
+            KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+            p.image->waitForDone();
+
+            QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+            QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+            QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+            QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        }
+    }
+
+    p.p.undoStore->undo();
+    p.image->waitForDone();
+
+
+    // Test reversed order, the result must be the same
 
     {
-        KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
-        p.image->waitForDone();
+        QList<KisNodeSP> selectedNodes;
 
-        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
-        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+        selectedNodes << p.layer6
+                      << p.group1
+                      << p.layer2;
 
-        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
-        QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        {
+            KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+            p.image->waitForDone();
+
+            QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+            QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+            QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+            QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        }
     }
+
 }
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)

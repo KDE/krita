@@ -441,6 +441,7 @@ private:
 
 private slots:
     void initializeGeometry();
+    void showManual();
 
 private:
     class Private;

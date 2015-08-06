@@ -73,6 +73,9 @@
 #include <KisView.h>
 
 
+typedef void (*kis_glLogicOp)(int);
+
+
 struct KisTool::Private {
     Private()
         : currentPattern(0),
@@ -608,7 +611,8 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
 #ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
+    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+    if (canvasWidget && !d->useGLToolOutlineWorkaround && ctx)  {
         painter->beginNativePainting();
 
         if (d->cursorShader == 0) {
@@ -617,7 +621,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
             d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
             d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
             if (! d->cursorShader->link()) {
-                qDebug() << "OpenGL error" << glGetError();
+                qDebug() << "OpenGL error" << canvasWidget->glGetError();
                 qFatal("Failed linking cursor shader");
             }
             Q_ASSERT(d->cursorShader->isLinked());
@@ -641,10 +645,15 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         modelMatrix = projectionMatrix * modelMatrix;
         d->cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
 
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        // XXX: not in ES 2.0 -- in that case, we should not go here. it seems to be in 3.1 core profile, but my book is very unclear
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
+        canvasWidget->glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+        // XXX: glLogicOp not in ES 2.0 -- in that case, it would be better to use another method.
+        // It is defined in 3.1 core profile onward.
+        canvasWidget->glEnable(GL_COLOR_LOGIC_OP);
+        kis_glLogicOp ptr_glLogicOp = (kis_glLogicOp)ctx->getProcAddress("glLogicOp");  //Doing this lookup in a loop is a bit expensive.
+        if (ptr_glLogicOp) {
+            ptr_glLogicOp(GL_XOR);
+        }
+
 
         // setup the array of vertices
         QVector<QVector3D> vertices;
@@ -658,12 +667,12 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
             d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
             d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
 
-            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+            canvasWidget->glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
             vertices.clear();
         }
 
-        glDisable(GL_COLOR_LOGIC_OP);
+        canvasWidget->glDisable(GL_COLOR_LOGIC_OP);
 
         d->cursorShader->release();
 

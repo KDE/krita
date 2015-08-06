@@ -43,9 +43,11 @@ public:
     /// Request OpenGL version 3.2
     static void initialize();
 
-    static bool hasOpenGL();
     /// Initialize shared OpenGL context
     static int initializeContext(QOpenGLContext* s);
+
+    /// Check for OpenGL
+    static bool hasOpenGL();
 
     /**
      * @brief supportsGLSL13

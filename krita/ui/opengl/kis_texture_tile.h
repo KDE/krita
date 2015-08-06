@@ -32,7 +32,6 @@
 #include <QOpenGLBuffer>
 #endif
 
-class QOpenGLFunctions;
 
 struct KisGLTexturesInfo {
 
@@ -96,14 +95,16 @@ public:
 
     inline void setTextureParameters()
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, m_numMipmapLevels);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
+        if(f) {
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, m_numMipmapLevels);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
 
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            f->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        }
     }
 
 
@@ -127,6 +128,7 @@ private:
     bool m_needsMipmapRegeneration;
     bool m_useBuffer;
     int m_numMipmapLevels;
+    QOpenGLFunctions *f;
     Q_DISABLE_COPY(KisTextureTile)
 };
 

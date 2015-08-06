@@ -128,16 +128,15 @@ namespace VSyncWorkaround {
 }
 
 #elif defined Q_OS_WIN
-// QT5TODO: T360
-//#include <GL/wglew.h>
 namespace VSyncWorkaround {
-    bool tryDisableVSync(QWidget *) {
+    bool tryDisableVSync(QOpenGLContext *ctx) {
         bool retval = false;
 
-#ifdef WGL_EXT_swap_control
-        if (WGLEW_EXT_swap_control) {
-            wglSwapIntervalEXT(0);
-            int interval = wglGetSwapIntervalEXT();
+        if (ctx->hasExtension("WGL_EXT_swap_control")) {
+            typedef void (*wglSwapIntervalEXT)(int);
+            typedef int  (*wglGetSwapIntervalEXT)(void);
+            ((wglSwapIntervalEXT)ctx->getProcAddress("wglSwapIntervalEXT"))(0);
+            int interval = ((wglGetSwapIntervalEXT)ctx->getProcAddress("wglGetSwapIntervalEXT"))();
 
             if (interval) {
                 qWarning() << "Failed to disable VSync with WGLEW_EXT_swap_control";
@@ -145,12 +144,8 @@ namespace VSyncWorkaround {
 
             retval = !interval;
         } else {
-            qWarning() << "WGL_EXT_swap_control extension is not available";
+            qWarning() << "WGL_EXT_swap_control extension is not available. Found extensions" << ctx->extensions();
         }
-#else
-        qWarning() << "GLEW WGL_EXT_swap_control extension is not compiled in";
-#endif
-
         return retval;
     }
 }
@@ -158,13 +153,12 @@ namespace VSyncWorkaround {
 #else  // !defined Q_OS_LINUX && !defined Q_OS_WIN
 
 namespace VSyncWorkaround {
-    bool tryDisableVSync(QWidget *) {
+  bool tryDisableVSync(QOpenGLContext *) {
         return false;
     }
 }
 #endif // defined Q_OS_LINUX
 
-#include <QGLFormat>
 namespace Sync {
     //For checking sync status
     enum SyncStatus {

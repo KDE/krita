@@ -20,8 +20,8 @@
 #include "kis_texture_tile.h"
 
 #ifdef HAVE_OPENGL
-#include <QtCore/QDebug>
-#include <QtGui/QOpenGLFunctions>
+#include <QDebug>
+#include <QOpenGLFunctions>
 
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F
@@ -42,7 +42,7 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                                const QByteArray &fillData, FilterMode filter,
-                               bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f)
+                               bool useBuffer, int numMipmapLevels, QOpenGLFunctions *fcn)
 
     : m_textureId(0)
 #ifdef USE_PIXEL_BUFFERS
@@ -54,6 +54,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     , m_needsMipmapRegeneration(false)
     , m_useBuffer(useBuffer)
     , m_numMipmapLevels(numMipmapLevels)
+    , f(fcn)
 {
     const GLvoid *fd = fillData.constData();
 
@@ -98,15 +99,15 @@ KisTextureTile::~KisTextureTile()
         delete m_glBuffer;
     }
 #endif
-    glDeleteTextures(1, &m_textureId);
+    f->glDeleteTextures(1, &m_textureId);
 }
 
 void KisTextureTile::bindToActiveTexture()
 {
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     if (m_needsMipmapRegeneration) {
-        glGenerateMipmap(GL_TEXTURE_2D);
+        f->glGenerateMipmap(GL_TEXTURE_2D);
         m_needsMipmapRegeneration = false;
     }
 }
@@ -122,7 +123,8 @@ void KisTextureTile::setNeedsMipmapRegeneration()
 
 void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 {
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    f->initializeOpenGLFunctions();
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
 
@@ -150,7 +152,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-        glTexImage2D(GL_TEXTURE_2D, 0,
+        f->glTexImage2D(GL_TEXTURE_2D, 0,
                      m_texturesInfo->internalFormat,
                      m_texturesInfo->width,
                      m_texturesInfo->height, 0,
@@ -184,7 +186,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
+        f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
                         m_texturesInfo->format,
@@ -224,7 +226,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = 0;
         int end = patchOffset.y() - 1;
         for (int i = start; i <= end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
@@ -240,7 +242,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = patchOffset.y() + patchSize.height();
         int end = tileSize.height() - 1;
         for (int i = start; i < end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
@@ -265,7 +267,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = 0;
         int end = patchOffset.x() - 1;
         for (int i = start; i <= end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
@@ -290,7 +292,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = patchOffset.x() + patchSize.width();
         int end = tileSize.width() - 1;
         for (int i = start; i <= end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,

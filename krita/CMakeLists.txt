@@ -112,9 +112,6 @@ include_directories(${KRITA_INCLUDES})
 
 if(HAVE_OPENGL)
     include_directories(${OPENGL_INCLUDE_DIR})
-    if(HAVE_GLEW)
-        include_directories(${GLEW_INCLUDE_DIRS})
-    endif()
 endif()
 
 add_subdirectory( libglobal )

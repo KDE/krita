@@ -20,8 +20,8 @@
 
 #ifdef HAVE_OPENGL
 #include <QOpenGLWidget>
-#include <QtGui/QOpenGLFunctions>
-#include <QtGui/QOpenGLContext>
+#include <QOpenGLFunctions>
+#include <QOpenGLContext>
 
 #include <QMessageBox>
 
@@ -174,8 +174,10 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     KisConfig config;
     KisTextureTile::FilterMode mode = (KisTextureTile::FilterMode)config.openGLFilteringMode();
 
-    if (QOpenGLContext::currentContext()) {
-    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+    if (ctx) {
+    QOpenGLFunctions *f = ctx->functions();
+
     m_initialized = true;
     qDebug()  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
 
@@ -434,7 +436,8 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 
 void KisOpenGLImageTextures::updateTextureFormat()
 {
-    if (!m_image) return;
+    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+    if (!(m_image && ctx)) return;
 
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
@@ -449,15 +452,14 @@ void KisOpenGLImageTextures::updateTextureFormat()
     dbgUI << "Choosing texture format:";
 
 // QT5TODO: T360
-#ifdef HAVE_GLEW
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
 
-            if (GLEW_ARB_texture_float) {
+            if (ctx->hasExtension("GL_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
             }
-            else if (GLEW_ATI_texture_float){
+            else if (ctx->hasExtension("GL_ATI_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
@@ -467,7 +469,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             haveBuiltInOpenExr = true;
 #endif
 
-            if (haveBuiltInOpenExr && GLEW_ARB_half_float_pixel) {
+            if (haveBuiltInOpenExr && ctx->hasExtension("GLEW_ARB_half_float_pixel")) {
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
                 destinationColorDepthId = Float16BitsColorDepthID;
                 dbgUI << "Pixel type half";
@@ -479,10 +481,10 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_RGBA;
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
-            if (GLEW_ARB_texture_float) {
+            if (ctx->hasExtension("GLEW_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
-            } else if (GLEW_ATI_texture_float) {
+            } else if (ctx->hasExtension("GLEW_ATI_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
             }
@@ -509,7 +511,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
             dbgUI << "Using conversion to 16 bits rgba";
         }
     }
-#endif
 
     if (!m_internalColorManagementActive &&
         colorModelId != destinationColorModelId) {

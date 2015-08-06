@@ -124,17 +124,14 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisPaintDeviceSP forwardTintDevice = m_d->setUpTintDevice(m_d->forwardTintColor, sourceDevice->colorSpace());
 
     KisPainter gcDest(targetDevice);
-    gcDest.setCompositeOp(sourceDevice->colorSpace()->compositeOp(COMPOSITE_OVER));
+    gcDest.setCompositeOp(sourceDevice->colorSpace()->compositeOp(COMPOSITE_BEHIND));
 
-    targetDevice->clear(rect);
 
-    for (int offset = m_d->numberOfSkins; offset > 0; offset--) {
+    for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         m_d->compositeFrame(keyframes, time, -offset, gcFrame, gcDest, backwardTintDevice, rect);
         m_d->compositeFrame(keyframes, time,  offset, gcFrame, gcDest, forwardTintDevice, rect);
     }
 
-    gcDest.setOpacity(255);
-    gcDest.bitBlt(rect.topLeft(), sourceDevice, rect);
 }
 
 void KisOnionSkinCompositor::configChanged()

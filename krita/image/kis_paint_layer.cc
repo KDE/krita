@@ -131,17 +131,17 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 {
     lockTemporaryTarget();
 
-    if (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
-        KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
-        compositor->composite(m_d->paintDevice, projection, rect);
-    } else {
-        KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
-    }
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 
     if (hasTemporaryTarget()) {
         KisPainter gc(projection);
         setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
+    }
+
+    if (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
+        KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
+        compositor->composite(m_d->paintDevice, projection, rect);
     }
 
     unlockTemporaryTarget();

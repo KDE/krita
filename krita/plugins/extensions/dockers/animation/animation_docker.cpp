@@ -23,7 +23,6 @@
 #include <klocale.h>
 #include <KoIcon.h>
 #include "KisViewManager.h"
-#include "kis_paint_layer.h"
 #include "kis_action_manager.h"
 #include "kis_image_animation_interface.h"
 #include "kis_animation_player.h"
@@ -31,6 +30,7 @@
 #include "kis_time_range.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
+#include "kis_keyframe_channel.h"
 
 
 
@@ -143,11 +143,11 @@ void AnimationDocker::slotAddBlankFrame()
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
 
-    if (node->inherits("KisPaintLayer")) {
-        KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
-
+    KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (rasterChannel) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
-        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), true, cmd);
+        int time = m_canvas->image()->animationInterface()->currentTime();
+        rasterChannel->addKeyframe(time, cmd);
         m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
     }
 }
@@ -159,11 +159,13 @@ void AnimationDocker::slotAddDuplicateFrame()
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
 
-    if (node->inherits("KisPaintLayer")) {
-        KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
-
+    KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (rasterChannel) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
-        layer->addNewFrame(m_canvas->image()->animationInterface()->currentTime(), false, cmd);
+        int time = m_canvas->image()->animationInterface()->currentTime();
+
+        KisKeyframe *keyframe = rasterChannel->activeKeyframeAt(time);
+        rasterChannel->copyKeyframe(keyframe, time, cmd);
         m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
     }
 }
@@ -175,12 +177,16 @@ void AnimationDocker::slotDeleteKeyframe()
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
 
-    if (node->inherits("KisPaintLayer")) {
-        KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
+    KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (rasterChannel) {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
+        int time = m_canvas->image()->animationInterface()->currentTime();
 
-        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Delete Keyframe"));
-        layer->deleteKeyfame(m_canvas->image()->animationInterface()->currentTime(), cmd);
-        m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+        KisKeyframe *keyframe = rasterChannel->keyframeAt(time);
+        if (keyframe) {
+            rasterChannel->deleteKeyframe(keyframe, cmd);
+            m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+        }
     }
 }
 

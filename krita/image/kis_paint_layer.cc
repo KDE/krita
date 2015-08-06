@@ -256,22 +256,4 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     nodeProperties().setProperty("onionskin", state);
 }
 
-void KisPaintLayer::addNewFrame(int time, bool blank, KUndo2Command *parentCommand)
-{
-    if (blank) {
-        m_d->contentChannel->addKeyframe(time, parentCommand);
-    } else {
-        KisKeyframe *keyframe = m_d->contentChannel->activeKeyframeAt(time);
-        m_d->contentChannel->copyKeyframe(keyframe, time, parentCommand);
-    }
-}
-
-void KisPaintLayer::deleteKeyfame(int time, KUndo2Command *parentCommand)
-{
-    KisKeyframe *key = m_d->contentChannel->keyframeAt(time);
-    if (!key) return;
-
-    m_d->contentChannel->deleteKeyframe(key, parentCommand);
-}
-
 #include "kis_paint_layer.moc"

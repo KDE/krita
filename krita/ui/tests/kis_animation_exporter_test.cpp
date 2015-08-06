@@ -9,6 +9,8 @@
 #include "kis_image_animation_interface.h"
 #include "KoColor.h"
 #include "kis_time_range.h"
+#include "kis_keyframe_channel.h"
+
 
 void KisAnimationExporterTest::testAnimationExport()
 {
@@ -20,8 +22,10 @@ void KisAnimationExporterTest::testAnimationExport()
 
     KUndo2Command parentCommand;
 
-    p.layer->addNewFrame(1, true, &parentCommand);
-    p.layer->addNewFrame(2, true, &parentCommand);
+    KisKeyframeChannel *rasterChannel = p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    rasterChannel->addKeyframe(1, &parentCommand);
+    rasterChannel->addKeyframe(2, &parentCommand);
     p.image->animationInterface()->setRange(KisTimeRange::fromTime(0, 2));
 
     KisPaintDeviceSP dev = p.layer->paintDevice();

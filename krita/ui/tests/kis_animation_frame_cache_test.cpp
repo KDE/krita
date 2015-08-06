@@ -25,6 +25,8 @@
 #include "kis_image_animation_interface.h"
 #include "opengl/kis_opengl_image_textures.h"
 #include "kis_time_range.h"
+#include "kis_keyframe_channel.h"
+
 
 void verifyRangeIsCachedStatus(KisAnimationFrameCacheSP cache, int start, int end, KisAnimationFrameCache::CacheStatus status)
 {
@@ -49,11 +51,13 @@ void KisAnimationFrameCacheTest::testCache()
 
     KUndo2Command parentCommand;
 
-    layer2->addNewFrame(10, true, &parentCommand);
-    layer2->addNewFrame(20, true, &parentCommand);
-    layer2->addNewFrame(30, true, &parentCommand);
+    KisKeyframeChannel *rasterChannel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    rasterChannel2->addKeyframe(10, &parentCommand);
+    rasterChannel2->addKeyframe(20, &parentCommand);
+    rasterChannel2->addKeyframe(30, &parentCommand);
 
-    layer3->addNewFrame(17, true, &parentCommand);
+    KisKeyframeChannel *rasterChannel3 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    rasterChannel3->addKeyframe(17, &parentCommand);
 
     KisOpenGLImageTexturesSP glTex = KisOpenGLImageTextures::getImageTextures(image, 0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
     KisAnimationFrameCacheSP cache = new KisAnimationFrameCache(glTex);

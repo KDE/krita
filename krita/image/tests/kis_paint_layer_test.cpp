@@ -118,7 +118,8 @@ void KisPaintLayerTest::testKeyframing()
 
     KUndo2Command parentCommand;
 
-    layer->addNewFrame(7, true, &parentCommand);
+    KisKeyframeChannel *rasterChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    rasterChannel->addKeyframe(7, &parentCommand);
     QCOMPARE(contentChannel->keyframeCount(), 2);
     QVERIFY(contentChannel->keyframeAt(0) != contentChannel->keyframeAt(7));
 

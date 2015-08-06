@@ -193,7 +193,9 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
 
     layer1->paintDevice()->fill(rect, KoColor(Qt::red, layer1->paintDevice()->colorSpace()));
     layer2->paintDevice()->fill(QRect(128,128,128,128), KoColor(Qt::black, layer2->paintDevice()->colorSpace()));
-    layer2->addNewFrame(10, true, &parentCommand);
+
+    KisKeyframeChannel *rasterChannel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    rasterChannel->addKeyframe(10, &parentCommand);
     p.image->refreshGraph();
 
     m_image = p.image;

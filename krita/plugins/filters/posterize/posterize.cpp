@@ -36,7 +36,7 @@
 #include <kis_global.h>
 
 #include <KoColorSpaceMaths.h>
-#include <filter/kis_color_transformation_configuration.h>
+#include <filter/kis_filter_configuration.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 
 K_PLUGIN_FACTORY(PosterizeFactory, registerPlugin<Posterize>();)
@@ -80,7 +80,7 @@ KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, 
 
 KisFilterConfiguration* KisFilterPosterize::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("steps", 16);
     return config;
 }

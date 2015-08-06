@@ -38,7 +38,7 @@
 #include "KoBasicHistogramProducers.h"
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
-#include <filter/kis_color_transformation_configuration.h>
+#include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <KisDocument.h>
@@ -82,7 +82,7 @@ KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSp
 
 KisFilterConfiguration *KisDesaturateFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("type", 0);
     return config;
 }
@@ -109,7 +109,7 @@ KisDesaturateConfigWidget::~KisDesaturateConfigWidget()
 
 KisPropertiesConfiguration * KisDesaturateConfigWidget::configuration() const
 {
-    KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisDesaturateFilter::id().id(), 0);
+    KisFilterConfiguration* c = new KisFilterConfiguration(KisDesaturateFilter::id().id(), 0);
     c->setProperty("type", m_group->checkedId());
     return c;
 }

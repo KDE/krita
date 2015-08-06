@@ -21,12 +21,17 @@
 #include "kis_node_dummies_graph.h"
 #include "kis_keyframe_channel.h"
 #include "kis_dummies_facade_base.h"
+#include "kundo2command.h"
+#include "kis_post_execution_undo_adapter.h"
+
+
 
 struct KisTimelineModel::Private
 {
     Private();
 
     bool skipNoopMove;
+    KisImageWSP image;
 };
 
 KisTimelineModel::Private::Private()
@@ -52,6 +57,7 @@ void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, 
     }
 
     KisNodeModel::setDummiesFacade(newDummiesFacade, image, shapeController);
+    m_d->image = image;
 
     if (newDummiesFacade) {
         connectAllChannels(dummiesFacade()->rootDummy(), true);
@@ -216,9 +222,16 @@ bool KisTimelineModel::setData(const QModelIndex &index, const QVariant &value, 
     if (obj->inherits("KisKeyframe")) {
         KisKeyframe *keyframe = qobject_cast<KisKeyframe*>(obj);
 
-        switch (role) {
-        case KisTimelineModel::TimeRole:
-            return keyframe->channel()->moveKeyframe(keyframe, value.toInt());
+        if (role == KisTimelineModel::TimeRole) {
+            bool result = false;
+
+            QScopedPointer<KUndo2Command> cmd(new KUndo2Command(kundo2_i18n("Move Keyframe")));
+            result = keyframe->channel()->moveKeyframe(keyframe, value.toInt(), cmd.data());
+            if (result) {
+                m_d->image->postExecutionUndoAdapter()->addCommand(toQShared(cmd.take()));
+            }
+
+            return result;
         }
     }
 

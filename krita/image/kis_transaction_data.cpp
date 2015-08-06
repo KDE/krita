@@ -51,6 +51,7 @@ public:
 
     int transactionTime;
     int transactionFrameId;
+    KisDataManagerSP savedDataManager;
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
@@ -81,23 +82,18 @@ void KisTransactionData::init(KisPaintDeviceSP device)
 
     m_d->transactionTime = device->defaultBounds()->currentTime();
     m_d->transactionFrameId = device->framesInterface() ? device->framesInterface()->currentFrameId() : -1;
-    m_d->memento = m_d->dataManager()->getMemento();
+    m_d->savedDataManager = m_d->transactionFrameId >= 0 ?
+        m_d->device->framesInterface()->frameDataManager(m_d->transactionFrameId) :
+        m_d->device->dataManager();
+    m_d->memento = m_d->savedDataManager->getMemento();
 }
 
 KisTransactionData::~KisTransactionData()
 {
     Q_ASSERT(m_d->memento);
-    m_d->dataManager()->purgeHistory(m_d->memento);
+    m_d->savedDataManager->purgeHistory(m_d->memento);
 
     delete m_d;
-}
-
-KisDataManagerSP KisTransactionData::Private::dataManager()
-{
-    KisDataManagerSP dm = transactionFrameId >= 0 ?
-        device->framesInterface()->frameDataManager(transactionFrameId) :
-        device->dataManager();
-    return dm;
 }
 
 void KisTransactionData::Private::moveDevice(const QPoint newOffset)
@@ -118,7 +114,7 @@ void KisTransactionData::endTransaction()
 
         DEBUG_ACTION("Transaction ended");
         m_d->transactionFinished = true;
-        m_d->dataManager()->commit();
+        m_d->savedDataManager->commit();
         m_d->newOffset = QPoint(m_d->device->x(), m_d->device->y());
     }
 }
@@ -136,7 +132,7 @@ void KisTransactionData::startUpdates()
             rc = mementoExtent.translated(m_d->device->x(), m_d->device->y());
         } else {
             QRect totalExtent =
-                m_d->dataManager()->extent() | mementoExtent;
+                m_d->savedDataManager->extent() | mementoExtent;
 
             rc = totalExtent.translated(m_d->oldOffset) |
                 totalExtent.translated(m_d->newOffset);
@@ -197,7 +193,7 @@ void KisTransactionData::redo()
     DEBUG_ACTION("Redo()");
 
     Q_ASSERT(m_d->memento);
-    m_d->dataManager()->rollforward(m_d->memento);
+    m_d->savedDataManager->rollforward(m_d->memento);
 
     if (m_d->newOffset != m_d->oldOffset) {
         m_d->moveDevice(m_d->newOffset);
@@ -212,7 +208,7 @@ void KisTransactionData::undo()
 {
     DEBUG_ACTION("Undo()");
     Q_ASSERT(m_d->memento);
-    m_d->dataManager()->rollback(m_d->memento);
+    m_d->savedDataManager->rollback(m_d->memento);
 
     if (m_d->newOffset != m_d->oldOffset) {
         m_d->moveDevice(m_d->oldOffset);

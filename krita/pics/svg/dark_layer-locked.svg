@@ -14,8 +14,8 @@
    width="18"
    height="18"
    id="svg6190"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="light_locked.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="dark_layer-locked.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -25,16 +25,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
      id="namedview4440"
      showgrid="false"
      inkscape:zoom="10.727273"
-     inkscape:cx="8.8144341"
+     inkscape:cx="-2.9313283"
      inkscape:cy="10.381746"
-     inkscape:window-x="584"
-     inkscape:window-y="194"
-     inkscape:window-maximized="0"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg6190" />
   <metadata
      id="metadata6196">
@@ -1444,74 +1444,17 @@
     </linearGradient>
   </defs>
   <g
-     style="display:inline"
-     id="g5733"
-     transform="matrix(1.0566015,0,0,1.0566015,-2152.9922,-809.51739)"
-     inkscape:export-filename="C:\Users\angel\Desktop\rect4645.png"
+     inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
-    <rect
-       y="767.36218"
-       x="2040"
-       height="4"
-       width="4"
-       id="rect5735"
-       style="fill:#808080;fill-opacity:1;stroke:none" />
-    <rect
-       style="fill:#e6e6e6;fill-opacity:1;stroke:none"
-       id="rect5737"
-       width="4"
-       height="4"
-       x="2044"
-       y="767.36218" />
-    <rect
-       y="767.36218"
-       x="2048"
-       height="4"
-       width="4"
-       id="rect5739"
-       style="fill:#808080;fill-opacity:1;stroke:none" />
-    <rect
-       style="fill:#e6e6e6;fill-opacity:1;stroke:none"
-       id="rect5741"
-       width="4"
-       height="4"
-       x="2040"
-       y="771.36218" />
-    <rect
-       y="771.36218"
-       x="2044"
-       height="4"
-       width="4"
-       id="rect5743"
-       style="fill:#808080;fill-opacity:1;stroke:none" />
-    <rect
-       style="fill:#e6e6e6;fill-opacity:1;stroke:none"
-       id="rect5745"
-       width="4"
-       height="4"
-       x="2048"
-       y="771.36218" />
-    <rect
-       y="775.36218"
-       x="2040"
-       height="4"
-       width="4"
-       id="rect5747"
-       style="fill:#808080;fill-opacity:1;stroke:none" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
-       id="rect5749"
-       width="4"
-       height="4"
-       x="2044"
-       y="775.36218" />
-    <rect
-       y="775.36218"
-       x="2048"
-       height="4"
-       width="4"
-       id="rect5751"
-       style="fill:#808080;fill-opacity:1;stroke:none" />
+     inkscape:export-filename="C:\Users\angel\Desktop\rect4645.png"
+     style="fill:#373737;fill-opacity:1;display:inline"
+     transform="matrix(1.1171015,0,0,1.1171015,-2310.0558,-841.298)"
+     id="g6090">
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#373737;fill-opacity:1;stroke:none"
+       d="m 2086.6562,1438.0312 c -0.2444,0 -1.4102,0.035 -2.4062,0.9063 -0.8791,0.7693 -1.61,2.1534 -1.7812,4.4687 l -0.4688,0 0,6.4688 9.25,0 0,-6.4688 -0.4688,0 c -0.1615,-2.3174 -0.896,-3.7002 -1.7812,-4.4687 -1.003,-0.8708 -2.1082,-0.9063 -2.3438,-0.9063 z m 0,1.5 c 0.2356,0 0.7732,0.01 1.375,0.5313 0.5237,0.4546 1.1352,1.3669 1.2813,3.3437 l -5.3437,0 c 0.1541,-1.9767 0.7303,-2.889 1.25,-3.3437 0.5972,-0.5227 1.1974,-0.5313 1.4374,-0.5313 z"
+       transform="matrix(1.0822288,0,0,1.0822288,-182.41382,-802.76004)"
+       id="path6092" />
   </g>
 </svg>

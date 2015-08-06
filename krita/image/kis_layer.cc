@@ -217,7 +217,7 @@ KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
         l << KisDocumentSectionModel::Property(i18n("Layer Style"), koIcon("layer-style-enabled"), koIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
     }
 
-    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), themedIcon("transparency-disabled"), themedIcon("transparency-enabled"), alphaChannelDisabled());
 
     return l;
 }

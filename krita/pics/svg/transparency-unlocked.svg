@@ -11,11 +11,14 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="18"
-   height="18"
+   width="22"
+   height="22"
    id="svg6190"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="alpha_unlocked.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="transparency_unlocked.svg"
+   inkscape:export-filename="../transparency_unlocked.png"
+   inkscape:export-xdpi="89"
+   inkscape:export-ydpi="89">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -25,17 +28,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
      id="namedview4440"
-     showgrid="false"
-     inkscape:zoom="10.727273"
-     inkscape:cx="8.8144341"
-     inkscape:cy="10.381746"
-     inkscape:window-x="584"
-     inkscape:window-y="194"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg6190" />
+     showgrid="true"
+     inkscape:zoom="21.454546"
+     inkscape:cx="-5.8959603"
+     inkscape:cy="9.9156443"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6190">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4469"
+       empspacing="2" />
+  </sodipodi:namedview>
   <metadata
      id="metadata6196">
     <rdf:RDF>
@@ -44,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1445,7 +1453,7 @@
   </defs>
   <g
      style="display:inline"
-     transform="matrix(1.0566015,0,0,1.0566015,-2152.9922,-809.51739)"
+     transform="matrix(1.75,0,0,1.75,-3568.9999,-1341.8838)"
      id="g5767"
      inkscape:export-filename="C:\Users\angel\Desktop\rect4645.png"
      inkscape:export-xdpi="90"
@@ -1513,19 +1521,12 @@
        height="4"
        x="2048"
        y="775.36218" />
-  </g>
-  <g
-     inkscape:export-ydpi="90"
-     inkscape:export-xdpi="90"
-     inkscape:export-filename="C:\Users\angel\Desktop\rect4645.png"
-     style="fill:#1a1a1a;fill-opacity:1;display:inline"
-     transform="matrix(0.78524171,0,0,0.78524171,-1621.1839,-589.10869)"
-     id="g6030">
-    <path
-       inkscape:connector-curvature="0"
-       style="fill:#1a1a1a;fill-opacity:1;stroke:none"
-       d="m 2086.6562,1438.0312 c -0.2444,0 -1.4102,0.035 -2.4062,0.9063 -0.8791,0.7693 -1.61,2.1534 -1.7812,4.4687 l -0.4688,0 0,6.4688 9.25,0 0,-6.4688 -0.4688,0 c -0.1615,-2.3174 -0.896,-3.7002 -1.7812,-4.4687 -1.003,-0.8708 -2.1082,-0.9063 -2.3438,-0.9063 z m 0,1.5 c 0.2356,0 0.7732,0.01 1.375,0.5313 0.5237,0.4546 1.1352,1.3669 1.2813,3.3437 l -5.3437,0 c 0.1541,-1.9767 0.7303,-2.889 1.25,-3.3437 0.5972,-0.5227 1.1974,-0.5313 1.4374,-0.5313 z"
-       transform="matrix(1.0822288,0,0,1.0822288,-182.41382,-802.76004)"
-       id="path6032" />
+    <rect
+       y="775.36218"
+       x="2044"
+       height="4"
+       width="4"
+       id="rect5776-7"
+       style="display:inline;fill:#e6e6e6;fill-opacity:1;stroke:none" />
   </g>
 </svg>

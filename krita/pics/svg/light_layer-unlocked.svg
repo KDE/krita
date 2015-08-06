@@ -15,7 +15,7 @@
    height="18"
    id="svg6190"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="dark_novisible.svg">
+   sodipodi:docname="light_layer-unlocked.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -30,7 +30,7 @@
      id="namedview4440"
      showgrid="false"
      inkscape:zoom="10.727273"
-     inkscape:cx="6.3494122"
+     inkscape:cx="-2.9313283"
      inkscape:cy="10.381746"
      inkscape:window-x="0"
      inkscape:window-y="152"
@@ -1443,26 +1443,12 @@
          id="stop6939-0-70" />
     </linearGradient>
   </defs>
-  <g
-     id="g6094"
-     transform="matrix(0.12291847,0,0,0.12603935,-303.93578,-86.833524)"
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#cacaca;fill-opacity:1;stroke:none;display:inline"
+     d="m 8.9618841,0.65135443 0,1.76939997 c 0.3243,0 0.8905,0.051 1.5112999,0.5898 0.6177,0.5361 1.336,1.61 1.5114,3.9441 l -6.3032999,0 -1.7694,0 -0.553,0 0,7.6304996 10.9110999,0 0,-7.6304996 -0.516,0 c -0.1891,-2.7355 -1.0568,-4.3647 -2.1012,-5.2712 C 10.577384,0.74975443 9.3865841,0.65985443 8.9618841,0.65135443 z"
+     id="path5731"
      inkscape:export-filename="C:\Users\angel\Desktop\rect4645.png"
      inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90"
-     style="fill:#373737;fill-opacity:1;display:inline">
-    <path
-       id="path6096"
-       d="m 1907.7499,1500.3622 c 0.521,-2.1216 2.3741,-3.8996 4.6563,-4.7997 -0.3589,0.6096 -0.5624,1.3039 -0.5624,2.0625 0,2.2659 1.8278,4.0938 4.0937,4.0938 2.2659,0 4.125,-1.8279 4.125,-4.0938 0,-0.7586 -0.2348,-1.4529 -0.5937,-2.0625 2.2836,0.8998 4.1662,2.6772 4.6874,4.7997 0,-5 -4.1016,-8 -8.2032,-8 -4.1015,0 -8.2031,3 -8.2031,8 z"
-       style="fill:#373737;fill-opacity:1;stroke:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccsssccsc"
-       transform="matrix(7.9340301,0,0,7.9340301,-12656.858,-11128.75)" />
-    <path
-       sodipodi:nodetypes="ccsc"
-       inkscape:connector-curvature="0"
-       style="fill:#373737;fill-opacity:1;stroke:none"
-       d="m 1907.7499,1500.3622 c 3.0762,2 13.3301,2 16.4063,0 0,-5 -4.1016,-8 -8.2032,-8 -4.1015,0 -8.2031,3 -8.2031,8 z"
-       id="path6098"
-       transform="matrix(7.9340301,0,0,7.9340301,-12656.858,-11128.75)" />
-  </g>
+     inkscape:export-ydpi="90" />
 </svg>

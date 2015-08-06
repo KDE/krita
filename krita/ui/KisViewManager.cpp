@@ -367,9 +367,6 @@ KisViewManager::~KisViewManager()
     }
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
-    if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
-    }
     delete d;
 }
 

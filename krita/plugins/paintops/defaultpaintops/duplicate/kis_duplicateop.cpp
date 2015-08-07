@@ -107,7 +107,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     KisPaintDeviceSP realSourceDevice;
 
-    if (m_cloneFromProjection) {
+    if (m_cloneFromProjection && m_image) {
         realSourceDevice = m_image->projection();
     }
     else {

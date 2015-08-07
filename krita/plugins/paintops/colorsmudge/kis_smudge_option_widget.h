@@ -20,6 +20,7 @@
 
 #include <kis_curve_option_widget.h>
 
+
 class QComboBox;
 
 class KisSmudgeOptionWidget: public KisCurveOptionWidget
@@ -30,6 +31,8 @@ public:
     KisSmudgeOptionWidget();
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    void updateBrushPierced(bool pierced);
 
 private Q_SLOTS:
     void slotCurrentIndexChanged(int index);

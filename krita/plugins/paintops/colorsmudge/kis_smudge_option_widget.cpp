@@ -29,14 +29,17 @@
 #include "kis_smudge_option.h"
 
 
-KisSmudgeOptionWidget::KisSmudgeOptionWidget():
-    KisCurveOptionWidget(new KisSmudgeOption(), i18n("0.0"), i18n("1.0"))
+KisSmudgeOptionWidget::KisSmudgeOptionWidget()
+    : KisCurveOptionWidget(new KisSmudgeOption(), i18n("0.0"), i18n("1.0"))
 {
     setObjectName("KisSmudgeOptionWidget");
 
     mCbSmudgeMode = new QComboBox();
     mCbSmudgeMode->addItem(i18n("Smearing"), KisSmudgeOption::SMEARING_MODE);
-    mCbSmudgeMode->addItem(i18n("Dulling") , KisSmudgeOption::DULLING_MODE);
+    mCbSmudgeMode->addItem("dulling-placeholder" , KisSmudgeOption::DULLING_MODE);
+
+    // the text for the second item is initialized here
+    updateBrushPierced(false);
 
     QHBoxLayout* h = new QHBoxLayout();
     h->addWidget(new QLabel(i18n("Smudge mode:")));
@@ -67,4 +70,18 @@ void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfiguration* 
 
     KisSmudgeOption::Mode mode = static_cast<KisSmudgeOption*>(curveOption())->getMode();
     mCbSmudgeMode->setCurrentIndex(mode == KisSmudgeOption::SMEARING_MODE ? 0 : 1);
+}
+
+void KisSmudgeOptionWidget::updateBrushPierced(bool pierced)
+{
+    QString dullingText = i18n("Dulling");
+    QString toolTip;
+
+    if (pierced) {
+        dullingText += i18n(" (caution, pierced brush!)");
+        toolTip = i18nc("@info:tooltip", "The brush has a few transparent pixels in its center, so dulling mode may work in unstable. Use \"Smearing\" mode in case of a trouble");
+    }
+
+    mCbSmudgeMode->setItemText(1, dullingText);
+    mCbSmudgeMode->setToolTip(toolTip);
 }

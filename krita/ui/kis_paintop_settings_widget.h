@@ -63,6 +63,9 @@ private Q_SLOTS:
     void slotLockPropertiesSave();
     void slotEntryChecked(const QModelIndex &index);
 
+protected:
+    virtual void notifyPageChanged();
+
 private:
     
     struct Private;

@@ -179,7 +179,7 @@ void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement k
     keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);
 }
 
-KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
+KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toUInt();
     QVariant value = keyframeNode.toElement().attribute("value");
@@ -188,5 +188,5 @@ KisKeyframe *KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeN
     KisKeyframe *keyframe = createKeyframe(time, 0, &tempParentCommand);
     setScalarValue(keyframe, value.toReal());
 
-    return keyframe;
+    return toQShared(keyframe);
 }

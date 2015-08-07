@@ -347,19 +347,12 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFile
 
 void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
 {
-    // Make sure we're starting from scratch
-    foreach (KisKeyframeSP keyframe, m_d->keys) {
-        KUndo2Command tempParentCommand;
-        destroyKeyframe(keyframe.data(), &tempParentCommand);
-    }
-    m_d->keys.clear();
-
     for (QDomElement keyframeNode = channelNode.firstChildElement(); !keyframeNode.isNull(); keyframeNode = keyframeNode.nextSiblingElement()) {
         if (keyframeNode.nodeName().toUpper() != "KEYFRAME") continue;
 
-        KisKeyframe *keyframe = loadKeyframe(keyframeNode);
+        KisKeyframeSP keyframe = loadKeyframe(keyframeNode);
 
-        m_d->keys.insert(keyframe->time(), toQShared(keyframe));
+        m_d->keys.insert(keyframe->time(), keyframe);
     }
 }
 

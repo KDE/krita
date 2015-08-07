@@ -67,7 +67,7 @@ protected:
     void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
     void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename);
-    KisKeyframe *loadKeyframe(const QDomElement &keyframeNode);
+    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
 
 private:
     void setFrameFilename(int frameId, const QString &filename);

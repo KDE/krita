@@ -188,20 +188,37 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement k
     KisDomUtils::saveValue(&keyframeElement, "offset", offset);
 }
 
-KisKeyframe *KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
+KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.attribute("time").toUInt();
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
-
-    KUndo2Command tempCommand;
-    int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);
-
     QString frameFilename = keyframeNode.attribute("frame");
-    setFrameFilename(frameId, frameFilename);
 
-    return new KisKeyframe(this, time, frameId);
+    KisKeyframeSP keyframe;
+
+    if (m_d->frameFilenames.isEmpty()) {
+        // First keyframe loaded: use the existing frame
+
+        Q_ASSERT(keyframeCount() == 1);
+        keyframe = constKeys().begin().value();
+
+        // Remove from keys. It will get reinserted with new time once we return
+        keys().remove(keyframe->time());
+
+        keyframe->setTime(time);
+        m_d->paintDevice->move(offset);
+    } else {
+        KUndo2Command tempCommand;
+        int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);
+
+        keyframe = toQShared(new KisKeyframe(this, time, frameId));
+    }
+
+    setFrameFilename(keyframe->value(), frameFilename);
+
+    return keyframe;
 }
 
 bool KisRasterKeyframeChannel::hasScalarValue() const

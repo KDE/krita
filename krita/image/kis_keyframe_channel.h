@@ -110,7 +110,7 @@ protected:
     virtual QRect affectedRect(KisKeyframe *key) = 0;
     virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
-    virtual KisKeyframe * loadKeyframe(const QDomElement &keyframeNode) = 0;
+    virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:

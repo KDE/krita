@@ -552,5 +552,74 @@ void KisImageTest::testMergeMultiple()
 
 }
 
+void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
+{
+    QRect refRect;
+    TestUtil::MaskParent p;
+
+    KisPaintLayerSP layer1;
+    KisPaintLayerSP layer2;
+    KisPaintLayerSP layer3;
+
+    const KoColorSpace *cs2 = useProjectionColorSpace ?
+        p.image->colorSpace() : KoColorSpaceRegistry::instance()->lab16();
+
+    const KoColorSpace *cs3 = KoColorSpaceRegistry::instance()->rgb16();
+
+    if (swapSpaces) {
+        qSwap(cs2, cs3);
+    }
+
+    qDebug() << "Testing testMergeCrossColorSpaceImpl:";
+    qDebug() << "    " << ppVar(cs2);
+    qDebug() << "    " << ppVar(cs3);
+
+    layer1 = p.layer;
+    layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8, cs2);
+    layer3 = new KisPaintLayer(p.image, "paint3", OPACITY_OPAQUE_U8, cs3);
+
+    QRect rect1(100, 100, 100, 100);
+    QRect rect2(150, 150, 150, 150);
+    QRect rect3(250, 250, 200, 200);
+
+    layer1->paintDevice()->fill(rect1, KoColor(Qt::red, layer1->colorSpace()));
+    layer2->paintDevice()->fill(rect2, KoColor(Qt::green, layer2->colorSpace()));
+    layer3->paintDevice()->fill(rect3, KoColor(Qt::blue, layer3->colorSpace()));
+
+    p.image->addNode(layer2);
+    p.image->addNode(layer3);
+
+    p.image->initialRefreshGraph();
+
+
+    {
+        KisLayerSP newLayer = p.image->mergeDown(layer3, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QCOMPARE(newLayer->colorSpace(), p.image->colorSpace());
+
+        p.undoStore->undo();
+    }
+
+    {
+        layer2->disableAlphaChannel(true);
+
+        KisLayerSP newLayer = p.image->mergeDown(layer3, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QCOMPARE(newLayer->colorSpace(), p.image->colorSpace());
+
+        p.undoStore->undo();
+    }
+}
+
+void KisImageTest::testMergeCrossColorSpace()
+{
+    testMergeCrossColorSpaceImpl(true, false);
+    testMergeCrossColorSpaceImpl(true, true);
+    testMergeCrossColorSpaceImpl(false, false);
+    testMergeCrossColorSpaceImpl(false, true);
+}
+
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

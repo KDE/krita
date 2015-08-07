@@ -48,6 +48,24 @@ KisTimelineModel::KisTimelineModel(QObject *parent)
 KisTimelineModel::~KisTimelineModel()
 {}
 
+void KisTimelineModel::beginMacro(const KUndo2MagicString& macroName)
+{
+    KisImageSP image = m_d->image;
+
+    if (image) {
+        image->undoAdapter()->beginMacro(macroName);
+    }
+}
+
+void KisTimelineModel::endMacro()
+{
+    KisImageSP image = m_d->image;
+
+    if (image) {
+        image->undoAdapter()->endMacro();
+    }
+}
+
 void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {
     if(dummiesFacade()) {

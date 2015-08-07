@@ -23,12 +23,15 @@
 
 #include "keyframe_channel_delegate.h"
 
+class KisTimelineModel;
+class TimelineWidget;
+
 class TimelineView : public QTreeView
 {
     Q_OBJECT
 
 public:
-    TimelineView(QWidget *parent);
+    TimelineView(QWidget *parent, TimelineWidget *timelineWidget);
 
     QModelIndex indexAt(const QPoint &point) const;
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
@@ -49,6 +52,7 @@ private slots:
     void rowsChanged();
 
 private:
+    TimelineWidget *m_timelineWidget;
     KeyframeChannelDelegate *m_channelDelegate;
 
     bool m_canStartDrag;

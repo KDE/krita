@@ -32,7 +32,7 @@
 TimelineWidget::TimelineWidget(QWidget *parent)
     : QWidget(parent)
     , m_layerTree(new QTreeView(this))
-    , m_timelineView(new TimelineView(this))
+    , m_timelineView(new TimelineView(this, this))
     , m_canvas(0)
     , m_image(0)
 {
@@ -188,16 +188,23 @@ void TimelineWidget::scrub(QMouseEvent *e, bool preview)
 
     int time = positionToTime(e->pos().x());
     if (time >= 0) {
-        if (preview) {
-            m_canvas->animationPlayer()->displayFrame(time);
-            update();
-        } else {
-            m_image->animationInterface()->requestTimeSwitchWithUndo(time);
-            m_canvas->animationPlayer()->stop();
-        }
+        scrubTo(time, preview);
     }
 
     e->accept();
+}
+
+void TimelineWidget::scrubTo(int time, bool preview)
+{
+    if (!m_image) return;
+
+    if (preview) {
+        m_canvas->animationPlayer()->displayFrame(time);
+        update();
+    } else {
+        m_image->animationInterface()->requestTimeSwitchWithUndo(time);
+        m_canvas->animationPlayer()->stop();
+    }
 }
 
 int TimelineWidget::timeToPosition(int time) const

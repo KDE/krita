@@ -48,6 +48,8 @@ public:
     int timeToPosition(int time) const;
     int positionToTime(int x) const;
 
+    void scrubTo(int time, bool preview);
+
 private slots:
     void imageTimeChanged();
     void cacheChanged();

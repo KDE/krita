@@ -24,9 +24,12 @@
 #include <QDebug>
 
 #include "kis_timeline_model.h"
+#include "timeline_widget.h"
+#include "kundo2magicstring.h"
 
-TimelineView::TimelineView(QWidget *parent)
+TimelineView::TimelineView(QWidget *parent, TimelineWidget *timelineWidget)
     : QTreeView(parent)
+    , m_timelineWidget(timelineWidget)
     , m_channelDelegate(new KeyframeChannelDelegate(this, this))
 {
     setItemDelegateForColumn(1, m_channelDelegate);
@@ -96,6 +99,12 @@ bool TimelineView::viewportEvent(QEvent *e)
 
             if (m_isDragging) {
                 m_dragOffset = mouseEvent->pos().x() - m_dragStart;
+
+                int oldTime = selectionModel()->selectedIndexes().first().data(KisTimelineModel::TimeRole).toInt();
+                int oldPos = timeToPosition(oldTime);
+                int newTime = positionToTime(oldPos + m_dragOffset);
+                m_timelineWidget->scrubTo(newTime, true);
+
                 viewport()->update();
                 return true;
             }
@@ -103,8 +112,14 @@ bool TimelineView::viewportEvent(QEvent *e)
         }
 
         case QEvent::MouseButtonRelease: {
+            m_canStartDrag = false;
+
             if (m_isDragging) {
                 QModelIndexList selected = selectionModel()->selectedIndexes();
+
+                KisTimelineModel *timelineModel = qobject_cast<KisTimelineModel*>(model());
+
+                timelineModel->beginMacro(kundo2_i18n("Move keyframes"));
 
                 for (int i=0; i<selected.size(); i++) {
                     QModelIndex item = selected[i];
@@ -116,10 +131,14 @@ bool TimelineView::viewportEvent(QEvent *e)
                         model()->setData(item, newTime, KisTimelineModel::TimeRole);
                     }
                 }
-            }
 
-            m_canStartDrag = false;
-            m_isDragging = false;
+                int time = selected.first().data(KisTimelineModel::TimeRole).toInt();
+                m_timelineWidget->scrubTo(time, false);
+                timelineModel->endMacro();
+
+                m_isDragging = false;
+                return true;
+            }
 
             return false;
         }

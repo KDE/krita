@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Normalize Filter
 Name[ca]=Filtre de normalització
+Name[et]=Normaliseerimisfilter
 Name[nl]=Normalisatiefilter
 Name[pt]=Filtro de Normalização
 Name[pt_BR]=Filtro de normalização
@@ -10,6 +11,7 @@ Name[uk]=Фільтр нормалізації
 Name[x-test]=xxNormalize Filterxx
 Comment=Normalize the color channels.
 Comment[ca]=Normalitza els canals de color.
+Comment[et]=Värvikanalite normaliseerimine.
 Comment[nl]=De kleurkanalen normaliseren.
 Comment[pt]=Normalizar os canais de cores.
 Comment[pt_BR]=Normaliza os canais de cores.

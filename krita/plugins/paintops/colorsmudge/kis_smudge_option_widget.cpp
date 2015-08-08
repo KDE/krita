@@ -79,7 +79,7 @@ void KisSmudgeOptionWidget::updateBrushPierced(bool pierced)
 
     if (pierced) {
         dullingText += i18n(" (caution, pierced brush!)");
-        toolTip = i18nc("@info:tooltip", "The brush has a few transparent pixels in its center, so dulling mode may work in unstable. Use \"Smearing\" mode in case of a trouble");
+        toolTip = i18nc("@info:tooltip", "This brush has transparent pixels in its center. \"Dulling\" mode may give unstable results. Consider using \"Smearing\" mode instead.");
     }
 
     mCbSmudgeMode->setItemText(1, dullingText);

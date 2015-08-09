@@ -96,7 +96,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-    : QWidget(parent)
+    : QWidget(parent),
+      m_stampBrushWidget(0),
+      m_clipboardBrushWidget(0)
 {
     setObjectName(name);
 

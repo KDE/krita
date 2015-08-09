@@ -151,7 +151,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
     QGridLayout *layout = new QGridLayout(this);
 
-    d->buttonLayout = new QGridLayout(this);
+    d->buttonLayout = new QGridLayout();
 
     QPushButton *button = new QPushButton(this);
     button->setIcon(koIcon("document-open"));

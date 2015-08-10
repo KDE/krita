@@ -902,7 +902,17 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     }
 
     m_strokeData = StrokeData(image()->startStroke(strategy));
-    clearDevices(m_transaction.rootNode(), m_workRecursively);
+
+    bool haveInvisibleNodes = clearDevices(m_transaction.rootNode(), m_workRecursively);
+    if (haveInvisibleNodes) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Invisible sublayers will also be transformed. Lock layers if you do not want them to be transformed "),
+                QIcon(), 4000, KisFloatingMessage::Low);
+    }
+
 
     Q_ASSERT(m_changesTracker.isEmpty());
     commitChanges();
@@ -957,15 +967,18 @@ void KisToolTransform::slotTrackerChangedConfig()
     updateOptionWidget();
 }
 
-void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
+bool KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
 {
-    if (!node->isEditable()) return;
+    bool haveInvisibleNodes = false;
+    if (!node->isEditable(false)) return haveInvisibleNodes;
+
+    haveInvisibleNodes = !node->visible(false);
 
     if (recursive) {
         // simple tail-recursive iteration
         KisNodeSP prevNode = node->lastChild();
         while(prevNode) {
-            clearDevices(prevNode, recursive);
+            haveInvisibleNodes |= clearDevices(prevNode, recursive);
             prevNode = prevNode->prevSibling();
         }
     }
@@ -979,6 +992,8 @@ void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
      * applicable nodes right in the beginning of the processing
      */
     m_strokeData.addClearedNode(node);
+
+    return haveInvisibleNodes;
 }
 
 void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)

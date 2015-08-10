@@ -211,7 +211,7 @@ public Q_SLOTS:
     void imageTooBigRequested(bool value);
 
 private:
-    void clearDevices(KisNodeSP node, bool recursive);
+    bool clearDevices(KisNodeSP node, bool recursive);
     void transformDevices(KisNodeSP node, bool recursive);
 
     void startStroke(ToolTransformArgs::TransformMode mode);

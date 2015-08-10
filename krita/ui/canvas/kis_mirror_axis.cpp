@@ -25,6 +25,8 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QPaintEngine>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 #include <KoIcon.h>
 
@@ -147,13 +149,16 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-//QT5TODO: T360
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
+    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+    bool hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
+                           (ctx->hasExtension("GL_ARB_multisample")));
+
     // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
     // So instead, use native OpenGL anti-aliasing when available.
-    if(gc.paintEngine()->type() == QPaintEngine::OpenGL2 && GLEW_ARB_multisample) {
+    if (hasMultisample) {
         gc.beginNativePainting();
-        glEnable(GL_MULTISAMPLE);
+        ctx->functions()->glEnable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
 #endif
@@ -210,11 +215,10 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         }
     }
 
-//QT5TODO: T360
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    if(gc.paintEngine()->type() == QPaintEngine::OpenGL2 && GLEW_ARB_multisample) {
+#if defined(HAVE_OPENGL)
+    if (hasMultisample) {
         gc.beginNativePainting();
-        glDisable(GL_MULTISAMPLE);
+        ctx->functions()->glDisable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
 #endif

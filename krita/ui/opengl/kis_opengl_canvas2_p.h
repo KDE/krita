@@ -139,7 +139,7 @@ namespace VSyncWorkaround {
             int interval = ((wglGetSwapIntervalEXT)ctx->getProcAddress("wglGetSwapIntervalEXT"))();
 
             if (interval) {
-                qWarning() << "Failed to disable VSync with WGLEW_EXT_swap_control";
+                qWarning() << "Failed to disable VSync with WGL_EXT_swap_control";
             }
 
             retval = !interval;

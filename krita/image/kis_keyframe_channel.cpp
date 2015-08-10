@@ -235,16 +235,6 @@ KisKeyframe *KisKeyframeChannel::activeKeyframeAt(int time) const
     return activeKeyIterator(time).value().data();
 }
 
-KisKeyframe *KisKeyframeChannel::nextKeyframeAfter(int time) const
-{
-    const KeyframesMap keys = constKeys();
-    KeyframesMap::const_iterator i = keys.upperBound(time);
-
-    if (i == keys.end()) return 0;
-
-    return i.value().data();
-}
-
 KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
 {
     return identicalFrames(time);

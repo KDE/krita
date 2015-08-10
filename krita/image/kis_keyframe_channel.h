@@ -55,7 +55,6 @@ public:
 
     KisKeyframe *keyframeAt(int time);
     KisKeyframe *activeKeyframeAt(int time) const;
-    KisKeyframe *nextKeyframeAfter(int time) const;
 
     /**
      * Get the set of frames affected by any changes to the value

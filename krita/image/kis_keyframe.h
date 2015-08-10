@@ -42,23 +42,6 @@ public:
     void setTime(int time);
     KisKeyframeChannel *channel() const;
 
-    /**
-     * Returns true if the are no other keyframes between this keyframe and the given time.
-     * Note: if the keyframe is not actually on the channel, pretend it is.
-     * This may be the case during the handling of key insertion/removal signals.
-     * @param time time to check against
-     * @return true if the key is active at the given time
-     */
-    bool affects(int time) const;
-
-    /**
-     * Same as affects, except we pretend the key has the given time
-     * @param time time to check against
-     * @param newTime pretended keyframe time
-     * @return true if the key would be active at the given time
-     */
-    bool wouldAffect(int time, int newTime) const;
-
 private:
     struct Private;
     QScopedPointer<Private> m_d;

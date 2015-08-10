@@ -73,16 +73,4 @@ KisKeyframeChannel *KisKeyframe::channel() const
     return m_d->channel;
 }
 
-bool KisKeyframe::affects(int time) const
-{
-    return wouldAffect(time, this->time());
-}
-
-bool KisKeyframe::wouldAffect(int time, int newTime) const
-{
-    // TODO: think through corner cases..
-    KisKeyframe *nextKey = m_d->channel->nextKeyframeAfter(newTime);
-    return (newTime <= time && (!nextKey || time < nextKey->time()));
-}
-
 #include "kis_keyframe.moc"

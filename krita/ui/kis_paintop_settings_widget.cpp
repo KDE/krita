@@ -162,7 +162,14 @@ void KisPaintOpSettingsWidget::changePage(const QModelIndex& index)
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
     }
+
+    notifyPageChanged();
 }
+
+void KisPaintOpSettingsWidget::notifyPageChanged()
+{
+}
+
 void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
 {
     KisOptionInfo info;

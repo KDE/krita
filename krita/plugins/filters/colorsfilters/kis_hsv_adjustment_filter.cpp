@@ -19,7 +19,7 @@
 
 #include "kis_hsv_adjustment_filter.h"
 
-#include <filter/kis_color_transformation_configuration.h>
+#include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -59,7 +59,7 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
 
 KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("h", 0);
     config->setProperty("s", 0);
     config->setProperty("v", 0);
@@ -96,7 +96,7 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
 
 KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
 {
-    KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
+    KisFilterConfiguration* c = new KisFilterConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
     c->setProperty("h", m_page->hue->value());
     c->setProperty("s", m_page->saturation->value());
     c->setProperty("v", m_page->value->value());

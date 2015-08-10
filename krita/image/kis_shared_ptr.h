@@ -278,6 +278,10 @@ public:
         }
     }
 
+    inline ~KisWeakSharedPtr() {
+        detach();
+    }
+
     inline KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) {
         attach(o);
         return *this;

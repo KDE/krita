@@ -14,8 +14,8 @@
    width="18"
    height="18"
    id="svg6190"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="light_novisible.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="dark_novisible.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -25,12 +25,12 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
+     inkscape:window-width="778"
      inkscape:window-height="480"
      id="namedview4440"
      showgrid="false"
      inkscape:zoom="10.727273"
-     inkscape:cx="8.8144341"
+     inkscape:cx="6.3494122"
      inkscape:cy="10.381746"
      inkscape:window-x="0"
      inkscape:window-y="152"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1449,18 +1449,18 @@
      inkscape:export-filename="C:\Users\angel\Desktop\rect4645.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90"
-     style="fill:#1a1a1a;fill-opacity:1;display:inline">
+     style="fill:#373737;fill-opacity:1;display:inline">
     <path
        id="path6096"
        d="m 1907.7499,1500.3622 c 0.521,-2.1216 2.3741,-3.8996 4.6563,-4.7997 -0.3589,0.6096 -0.5624,1.3039 -0.5624,2.0625 0,2.2659 1.8278,4.0938 4.0937,4.0938 2.2659,0 4.125,-1.8279 4.125,-4.0938 0,-0.7586 -0.2348,-1.4529 -0.5937,-2.0625 2.2836,0.8998 4.1662,2.6772 4.6874,4.7997 0,-5 -4.1016,-8 -8.2032,-8 -4.1015,0 -8.2031,3 -8.2031,8 z"
-       style="fill:#1a1a1a;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsssccsc"
        transform="matrix(7.9340301,0,0,7.9340301,-12656.858,-11128.75)" />
     <path
        sodipodi:nodetypes="ccsc"
        inkscape:connector-curvature="0"
-       style="fill:#1a1a1a;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        d="m 1907.7499,1500.3622 c 3.0762,2 13.3301,2 16.4063,0 0,-5 -4.1016,-8 -8.2032,-8 -4.1015,0 -8.2031,3 -8.2031,8 z"
        id="path6098"
        transform="matrix(7.9340301,0,0,7.9340301,-12656.858,-11128.75)" />

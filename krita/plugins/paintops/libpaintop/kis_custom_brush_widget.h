@@ -35,12 +35,12 @@ const double DEFAULT_SPACING = 0.25;
 
 class KoResource;
 
-class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
+class KisWdgCustomBrush : public QDialog, public Ui::KisWdgCustomBrush
 {
     Q_OBJECT
 
 public:
-    KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
+    KisWdgCustomBrush(QWidget *parent) : QDialog(parent) {
         setupUi(this);
     }
 };
@@ -53,8 +53,6 @@ public:
     virtual ~KisCustomBrushWidget();
     KisBrushSP brush();
 
-    void setImage(KisImageWSP image);
-
 protected:
     virtual void showEvent(QShowEvent *);
 
@@ -65,15 +63,14 @@ private Q_SLOTS:
     void slotUpdateUseColorAsMask(bool useColorAsMask);
 
 Q_SIGNALS:
-
-    void sigBrushChanged();
+    void sigNewPredefinedBrush(KoResource *);
 
 private:
     void createBrush();
 
-    bool m_brushCreated;
     KisImageWSP m_image;
     KisBrushSP m_brush;
+
     QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
 

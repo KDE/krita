@@ -106,8 +106,6 @@ private:
     KisAutoBrushWidget * m_autoBrushWidget;
     KisBrushChooser * m_brushChooser;
     KisTextBrushChooser * m_textBrushWidget;
-    KisCustomBrushWidget * m_customBrushWidget;
-    KisClipboardBrushWidget* m_clipboardBrushWidget;
 
     KisPrecisionOption m_precisionOption;
 };

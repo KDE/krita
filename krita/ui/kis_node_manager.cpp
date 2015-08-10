@@ -340,7 +340,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     actionManager->addAction("split_alpha_into_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaIntoMask()));
 
-    action  = new KisAction(koIcon("transparency-enabled"), i18n("Write as Alpha"), this);
+    action  = new KisAction(themedIcon("transparency-enabled"), i18n("Write as Alpha"), this);
     action->setActivationFlags(KisAction::ACTIVE_TRANSPARENCY_MASK);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("split_alpha_write", action);

@@ -242,7 +242,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, const QDomElement &data) : Q
                 } else if (pagetype == "custom") {
                     m_pageSize->setValue("custom");
                     m_customHeight->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-height", "")));
-                    m_customWidth->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-widtht", "")));
+                    m_customWidth->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-width", "")));
                 } else if (pagetype == "label") {
                     //TODO
                 }

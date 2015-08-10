@@ -157,10 +157,10 @@ private:
 
 private:
 
-    bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
+    bool readRGB(KisPaintDeviceSP dev ,QIODevice *io);
+    bool readCMYK(KisPaintDeviceSP dev ,QIODevice *io);
+    bool readLAB(KisPaintDeviceSP dev ,QIODevice *io);
+    bool readGray(KisPaintDeviceSP dev ,QIODevice *io);
 
     KisPaintDeviceSP m_layerContentDevice;
     KisNodeSP m_onlyTransparencyMask;

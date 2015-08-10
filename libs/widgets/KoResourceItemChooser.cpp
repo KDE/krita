@@ -90,12 +90,15 @@ public:
     QScrollArea *previewScroller;
     QLabel *previewLabel;
     QSplitter *splitter;
+    QGridLayout *buttonLayout;
     bool tiledPreview;
     bool grayscalePreview;
     bool synced;
     bool updatesBlocked;
 
     KoResource *savedResourceWhileReset;
+
+    QList<QAbstractButton*> customButtons;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent, bool usePreview)
@@ -148,21 +151,21 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
     QGridLayout *layout = new QGridLayout(this);
 
-    QGridLayout *buttonLayout = new QGridLayout;
+    d->buttonLayout = new QGridLayout();
 
     QPushButton *button = new QPushButton(this);
     button->setIcon(koIcon("document-open"));
     button->setToolTip(i18nc("@info:tooltip", "Import resource"));
     button->setEnabled(true);
     d->buttonGroup->addButton(button, Button_Import);
-    buttonLayout->addWidget(button, 0, 0);
+    d->buttonLayout->addWidget(button, 0, 0);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("trash-empty"));
     button->setToolTip(i18nc("@info:tooltip", "Delete resource"));
     button->setEnabled(false);
     d->buttonGroup->addButton(button, Button_Remove);
-    buttonLayout->addWidget(button, 0, 1);
+    d->buttonLayout->addWidget(button, 0, 1);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("download"));
@@ -170,7 +173,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     button->setEnabled(true);
     button->hide();
     d->buttonGroup->addButton(button, Button_GhnsDownload);
-    buttonLayout->addWidget(button, 0, 3);
+    d->buttonLayout->addWidget(button, 0, 3);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("go-up"));
@@ -178,15 +181,15 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     button->setEnabled(false);
     button->hide();
     d->buttonGroup->addButton(button, Button_GhnsUpload);
-    buttonLayout->addWidget(button, 0, 4);
+    d->buttonLayout->addWidget(button, 0, 4);
 
     connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    buttonLayout->setColumnStretch(0, 1);
-    buttonLayout->setColumnStretch(1, 1);
-    buttonLayout->setColumnStretch(2, 2);
-    buttonLayout->setSpacing(0);
-    buttonLayout->setMargin(0);
+    d->buttonLayout->setColumnStretch(0, 1);
+    d->buttonLayout->setColumnStretch(1, 1);
+    d->buttonLayout->setColumnStretch(2, 2);
+    d->buttonLayout->setSpacing(0);
+    d->buttonLayout->setMargin(0);
 
     d->viewModeButton = new QToolButton(this);
     d->viewModeButton->setIcon(koIcon("view-choose"));
@@ -199,7 +202,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->addWidget(d->viewModeButton, 0, 1);
     layout->addWidget(d->splitter, 1, 0, 1, 2);
     layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 2);
-    layout->addLayout(buttonLayout, 3, 0, 1, 2);
+    layout->addLayout(d->buttonLayout, 3, 0, 1, 2);
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
@@ -289,8 +292,18 @@ void KoResourceItemChooser::showButtons(bool show)
     foreach (QAbstractButton * button, d->buttonGroup->buttons()) {
         show ? button->show() : button->hide();
     }
+
+    foreach(QAbstractButton *button, d->customButtons) {
+        show ? button->show() : button->hide();
+    }
 }
 
+void KoResourceItemChooser::addCustomButton(QAbstractButton *button, int cell)
+{
+    d->buttonLayout->addWidget(button, 0, cell);
+    d->buttonLayout->setColumnStretch(2, 1);
+    d->buttonLayout->setColumnStretch(3, 1);
+}
 void KoResourceItemChooser::showGetHotNewStuff(bool showDownload, bool showUpload)
 {
 #ifdef GHNS

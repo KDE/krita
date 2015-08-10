@@ -334,6 +334,15 @@ public:
 
     virtual void setHasColor(bool hasColor);
 
+    /**
+     * Returns true if the brush has a bunch of pixels almost
+     * fully transparent in the very center. If the brush is pierced,
+     * then dulling mode may not work correctly due to empty samples.
+     *
+     * WARNING: this method is relatively expensive since it iterates
+     *          up to 100 pixels of the brush.
+     */
+    bool isPiercedApprox() const;
 
 protected:
     virtual QByteArray generateMD5() const;

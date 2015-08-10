@@ -28,6 +28,8 @@ class QCheckBox;
 
 class KisDoubleSliderSpinBox;
 class KisSpacingSelectionWidget;
+class KisCustomBrushWidget;
+class KisClipboardBrushWidget;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -46,6 +48,7 @@ public:
 
     void setBrush(KisBrushSP _brush);
     void setBrushSize(qreal xPixels, qreal yPixels);
+    void setImage(KisImageWSP image);
 
 private Q_SLOTS:
 
@@ -55,6 +58,9 @@ private Q_SLOTS:
     void slotSpacingChanged();
     void slotSetItemUseColorAsMask(bool);
     void slotActivatedBrush(KoResource *);
+    void slotOpenStampBrush();
+    void slotOpenClipboardBrush();
+    void slotNewPredefinedBrush(KoResource *);
     void update(KoResource *);
 
 Q_SIGNALS:
@@ -72,6 +78,9 @@ private:
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;
     KoResourceItemChooser* m_itemChooser;
+    KisImageWSP m_image;
+    KisCustomBrushWidget* m_stampBrushWidget;
+    KisClipboardBrushWidget* m_clipboardBrushWidget;
 
 };
 

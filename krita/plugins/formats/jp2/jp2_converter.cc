@@ -90,6 +90,9 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     opj_set_default_decoder_parameters(&parameters);
     // Determine the type
     parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
+    if (parameters.decod_format == -1) {
+        return KisImageBuilder_RESULT_UNSUPPORTED;
+    }
     // open the file
     QFile fp(uri.toLocalFile());
     fp.open(QIODevice::ReadOnly);
@@ -484,9 +487,6 @@ int jp2Converter::getFileFormat(const KUrl& uri) const
     } else if (extension == "jpt") {
         return JPT_CFMT;
     }
-#ifndef NDEBUG
-    qFatal("Unsupported extension");
-#endif
     return -1;
 }
 

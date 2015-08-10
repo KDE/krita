@@ -12,8 +12,6 @@ landscape.png
 linked.png
 local_selection_active.png
 local_selection_inactive.png
-locked.png
-novisible.png
 offset_horizontal.png
 offset_vertical.png
 paintop_presets_disabled.png
@@ -35,8 +33,6 @@ shear_vertical.png
 sidebaricon.png
 tablet.png
 tool_screenshot.png
-transparency-disabled.png
-transparency-enabled.png
 transparency-locked.png
 transparency-unlocked.png
 passthrough-enabled.png
@@ -44,8 +40,6 @@ passthrough-disabled.png
 layer-style-enabled.png
 layer-style-disabled.png
 unlinked.png
-unlocked.png
-visible.png
 width_icon.png
 width.png
 workspace-chooser.png
@@ -60,7 +54,19 @@ dark_selection-mode_mask.png
 dark_symmetry-horizontal.png
 dark_symmetry-vertical.png
 dark_trim-to-image.png
+dark_layer-locked.png
+dark_layer-unlocked.png
+dark_novisible.png
+dark_visible.png
+dark_transparency-enabled.png
+dark_transparency-disabled.png
 
+light_transparency-enabled.png
+light_transparency-disabled.png
+light_layer-locked.png
+light_layer-unlocked.png
+light_novisible.png
+light_visible.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png

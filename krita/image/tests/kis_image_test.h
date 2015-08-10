@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testMergeDownDestinationSameCompositeOp();
 
     void testMergeMultiple();
+    void testMergeCrossColorSpace();
 };
 
 #endif

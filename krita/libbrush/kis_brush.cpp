@@ -255,6 +255,39 @@ void KisBrush::setHasColor(bool hasColor)
     d->hasColor = hasColor;
 }
 
+bool KisBrush::isPiercedApprox() const
+{
+    QImage image = brushTipImage();
+
+    qreal w = image.width();
+    qreal h = image.height();
+
+    qreal xPortion = qMin(0.1, 5.0 / w);
+    qreal yPortion = qMin(0.1, 5.0 / h);
+
+    int x0 = std::floor((0.5 - xPortion) * w);
+    int x1 = std::ceil((0.5 + xPortion) * w);
+
+    int y0 = std::floor((0.5 - yPortion) * h);
+    int y1 = std::ceil((0.5 + yPortion) * h);
+
+    const int maxNumSamples = (x1 - x0 + 1) * (y1 - y0 + 1);
+    const int failedPixelsThreshold = 0.1 * maxNumSamples;
+    const int thresholdValue = 0.95 * 255;
+    int failedPixels = 0;
+
+    for (int y = y0; y <= y1; y++) {
+        for (int x = x0; x <= x1; x++) {
+            QRgb pixel = image.pixel(x,y);
+
+            if (qRed(pixel) > thresholdValue) {
+                failedPixels++;
+            }
+        }
+    }
+
+    return failedPixels > failedPixelsThreshold;
+}
 
 bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 {

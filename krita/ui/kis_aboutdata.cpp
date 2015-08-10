@@ -255,6 +255,8 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Martin Renold"), ki18n("MyPaint shade selector"));
     aboutData->addCredit(ki18n("Sander Koning"), ki18n("Icon Management"));
 
+    aboutData->addCredit(ki18n("Pasquale D'Antuono"), ki18n("Donor"));
+
     aboutData->addCredit(ki18n("マイキ"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("4lun"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("A. Agarossi"), ki18n("Krita 2.9 Kickstarter Backer"));

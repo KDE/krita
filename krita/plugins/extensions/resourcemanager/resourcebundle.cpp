@@ -97,6 +97,7 @@ bool ResourceBundle::load()
 
         m_metadata.clear();
 
+        bool toRecreate = false;
         if (resourceStore->open("META-INF/manifest.xml")) {
             if (!m_manifest.load(resourceStore->device())) {
                 qWarning() << "Could not open manifest for bundle" << filename();
@@ -107,10 +108,18 @@ bool ResourceBundle::load()
             foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Bundle is broken. File" << ref.resourcePath << "is missing";
-                    return false;
+                    toRecreate = true;
                 }
-                resourceStore->close();
+                else {
+                    resourceStore->close();
+                }
             }
+
+
+            if(toRecreate) {
+                qWarning() << "Due to missing files and wrong entries in the manifest, " << filename() << " will be recreated.";
+            }
+
         } else {
             qWarning() << "Could not load META-INF/manifest.xml";
             return false;
@@ -200,9 +209,17 @@ bool ResourceBundle::load()
             qWarning() << "Could not open preview.png";
         }
 
-        // If no version is found it's an old bundle with md5 hashes to fix, so we need to recreate the bundle
+        /*
+         * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
+         * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
+         */
         if(!versionFound) {
             m_metadata.insert("bundle-version", "1");
+            qWarning() << filename() << " has an old version and possibly wrong resources md5, so it will be recreated.";
+            toRecreate = true;
+        }
+
+        if(toRecreate) {
             recreateBundle(resourceStore);
         }
 
@@ -950,7 +967,10 @@ void ResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
     foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
-        oldStore->open(ref.resourcePath);
+        // Wrong manifest entry found, skip it
+        if(!oldStore->open(ref.resourcePath))
+            continue;
+
         store->open(ref.resourcePath);
 
         QByteArray data = oldStore->device()->readAll();

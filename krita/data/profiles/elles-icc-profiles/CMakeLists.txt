@@ -47,4 +47,4 @@ install(FILES
     WideRGB-elle-V4-g10.icc
     WideRGB-elle-V4-g22.icc
     WideRGB-elle-V4-srgbtrc.icc
-DESTINATION ${DATA_INSTALL_DIR}/color/icc/krita)
+DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)

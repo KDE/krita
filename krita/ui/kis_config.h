@@ -312,6 +312,9 @@ public:
     bool hideToolbarFullscreen(bool defaultValue = false) const;
     void setHideToolbarFullscreen(const bool value) const;
 
+    bool fullscreenMode(bool defaultValue = false) const;
+    void setFullscreenMode(const bool value) const;
+
     QStringList favoriteCompositeOps(bool defaultValue = false) const;
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 

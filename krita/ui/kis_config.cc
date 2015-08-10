@@ -1152,6 +1152,16 @@ void KisConfig::setHideToolbarFullscreen(const bool value) const
     m_cfg.writeEntry("hideToolbarFullscreen", value);
 }
 
+bool KisConfig::fullscreenMode(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("fullscreenMode", true));
+}
+
+void KisConfig::setFullscreenMode(const bool value) const
+{
+    m_cfg.writeEntry("fullscreenMode", value);
+}
+
 QStringList KisConfig::favoriteCompositeOps(bool defaultValue) const
 {
     return (defaultValue ? QStringList() : m_cfg.readEntry("favoriteCompositeOps", QStringList()));

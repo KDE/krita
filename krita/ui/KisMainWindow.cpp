@@ -1507,6 +1507,9 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
+    KisConfig cfg;
+    cfg.setFullscreenMode(fullScreen);
+
     if (fullScreen) {
         setWindowState(windowState() | Qt::WindowFullScreen);   // set
     } else {

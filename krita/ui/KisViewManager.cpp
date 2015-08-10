@@ -1179,7 +1179,7 @@ void KisViewManager::showJustTheCanvas(bool toggled)
         }
     }
 
-    if (cfg.hideTitlebarFullscreen()) {
+    if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {

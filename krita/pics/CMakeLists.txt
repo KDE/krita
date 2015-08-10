@@ -183,6 +183,7 @@ tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
 tool_transform/light_transform_icons_penPressure.png
 
+Breeze-dark/dark_application-exit.svg
 Breeze-dark/dark_application-pdf.svg
 Breeze-dark/dark_applications-system.svg
 Breeze-dark/dark_arrow-down.svg
@@ -193,6 +194,7 @@ Breeze-dark/dark_bookmarks.svg
 Breeze-dark/dark_configure-shortcuts.svg
 Breeze-dark/dark_configure-toolbars.svg
 Breeze-dark/dark_configure.svg
+Breeze-dark/dark_dialog-close.svg
 Breeze-dark/dark_dialog-warning.svg
 Breeze-dark/dark_document-edit.svg
 Breeze-dark/dark_document-export.svg
@@ -243,6 +245,7 @@ Breeze-dark/dark_tools-wizard.svg
 Breeze-dark/dark_unlocked.svg
 Breeze-dark/dark_view-choose.svg
 Breeze-dark/dark_view-filter.svg
+Breeze-dark/dark_view-fullscreen.svg
 Breeze-dark/dark_view-grid.svg
 Breeze-dark/dark_view-list-details.svg
 Breeze-dark/dark_view-list-text.svg
@@ -254,6 +257,7 @@ Breeze-dark/dark_zoom-in.svg
 Breeze-dark/dark_zoom-original.svg
 Breeze-dark/dark_zoom-out.svg
 
+Breeze-light/light_application-exit.svg
 Breeze-light/light_application-pdf.svg
 Breeze-light/light_applications-system.svg
 Breeze-light/light_arrow-down.svg
@@ -264,6 +268,7 @@ Breeze-light/light_bookmarks.svg
 Breeze-light/light_configure-shortcuts.svg
 Breeze-light/light_configure-toolbars.svg
 Breeze-light/light_configure.svg
+Breeze-light/light_dialog-close.svg
 Breeze-light/light_dialog-warning.svg
 Breeze-light/light_document-edit.svg
 Breeze-light/light_document-export.svg
@@ -314,6 +319,7 @@ Breeze-light/light_tools-wizard.svg
 Breeze-light/light_unlocked.svg
 Breeze-light/light_view-choose.svg
 Breeze-light/light_view-filter.svg
+Breeze-light/light_view-fullscreen.svg
 Breeze-light/light_view-grid.svg
 Breeze-light/light_view-list-details.svg
 Breeze-light/light_view-list-text.svg

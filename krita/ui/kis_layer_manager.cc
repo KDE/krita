@@ -543,7 +543,9 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     parent = activeNode;
     above = parent->lastChild();
 
-    while (parent && !parent->allowAsChild(node)) {
+    while (parent &&
+           (!parent->allowAsChild(node) || parent->userLocked())) {
+
         above = parent;
         parent = parent->parent();
     }

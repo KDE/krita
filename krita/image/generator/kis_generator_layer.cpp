@@ -111,7 +111,6 @@ void KisGeneratorLayer::update()
                                     processRect.topLeft(),
                                     0);
 
-    filterConfig->setChannelFlags(channelFlags());
     f->generate(dstCfg, processRect.size(), filterConfig.data());
 
 

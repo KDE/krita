@@ -175,7 +175,11 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
     }
     else {
         QImage image;
-        result = image.load(dev, fileExtension.toUpper().toLatin1());
+        // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+        // fails with "libpng error: IDAT: CRC error"
+        QByteArray data = dev->readAll();
+        QBuffer buffer(&data);
+        result = image.load(&buffer, fileExtension.toUpper().toLatin1());
         setPatternImage(image);
     }
 

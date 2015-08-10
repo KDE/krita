@@ -537,12 +537,13 @@ struct MaskParent
     MaskParent(const QRect &_imageRect = QRect(0,0,512,512))
         : imageRect(_imageRect) {
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-        image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+        undoStore = new KisSurrogateUndoStore();
+        image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "test image");
         layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
         image->addNode(layer);
     }
 
-
+    KisSurrogateUndoStore *undoStore;
     const QRect imageRect;
     KisImageSP image;
     KisPaintLayerSP layer;

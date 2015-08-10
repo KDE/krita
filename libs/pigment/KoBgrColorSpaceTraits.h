@@ -80,6 +80,9 @@ struct KoBgrU8Traits : public KoBgrTraits<quint8> {
 struct KoBgrU16Traits : public KoBgrTraits<quint16> {
 };
 
+struct KoBgrU32Traits : public KoBgrTraits<quint32> {
+};
+
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>

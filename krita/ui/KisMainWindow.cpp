@@ -399,6 +399,11 @@ KisMainWindow::KisMainWindow()
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
+    // KDE libss 4' help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
+    QAction *helpAction = actionCollection()->action("help_contents");
+    helpAction->disconnect();
+    connect(helpAction, SIGNAL(triggered()), this, SLOT(showManual()));
+
 
 #if 0
     //check for colliding shortcuts
@@ -2288,6 +2293,11 @@ void KisMainWindow::initializeGeometry()
         }
     }
     restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+}
+
+void KisMainWindow::showManual()
+{
+    QDesktopServices::openUrl(QUrl("https://userbase.kde.org/Special:MyLanguage/Krita/Manual"));
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

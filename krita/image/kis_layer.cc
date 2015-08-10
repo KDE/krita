@@ -217,7 +217,7 @@ KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
         l << KisDocumentSectionModel::Property(i18n("Layer Style"), koIcon("layer-style-enabled"), koIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
     }
 
-    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), themedIcon("transparency-disabled"), themedIcon("transparency-enabled"), alphaChannelDisabled());
 
     return l;
 }
@@ -311,7 +311,9 @@ bool KisLayer::canMergeAndKeepBlendOptions(KisLayerSP otherLayer)
         this->compositeOpId() == otherLayer->compositeOpId() &&
         this->opacity() == otherLayer->opacity() &&
         this->channelFlags() == otherLayer->channelFlags() &&
-        !this->layerStyle() && !otherLayer->layerStyle();
+        !this->layerStyle() && !otherLayer->layerStyle() &&
+        (this->colorSpace() == otherLayer->colorSpace() ||
+         *this->colorSpace() == *otherLayer->colorSpace());
 }
 
 KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
@@ -329,7 +331,11 @@ KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
 
     if (!keepBlendingOptions) {
 
-        mergedDevice = new KisPaintDevice(this->colorSpace(), "merged");
+        KisNodeSP parentNode = parent();
+        const KoColorSpace *dstCs = parentNode && parentNode->colorSpace() ?
+            parentNode->colorSpace() : my_image->colorSpace();
+
+        mergedDevice = new KisPaintDevice(dstCs, "merged");
         KisPainter gc(mergedDevice);
 
         //Copy the pixels of previous layer with their actual alpha value

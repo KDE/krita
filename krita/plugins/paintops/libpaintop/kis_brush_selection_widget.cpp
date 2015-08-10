@@ -59,14 +59,6 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Predefined"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
-    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Stamp"), 0);
-    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Stamp"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
-
-    m_clipboardBrushWidget = new KisClipboardBrushWidget(0, i18n("Clipboard"), 0);
-    connect(m_clipboardBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Clipboard"), m_clipboardBrushWidget, CLIPBOARDBRUSH, KoGroupButton::GroupCenter);
-
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
@@ -114,12 +106,6 @@ KisBrushSP KisBrushSelectionWidget::brush() const
     case PREDEFINEDBRUSH:
         theBrush = m_brushChooser->brush();
         break;
-    case CUSTOMBRUSH:
-        theBrush = m_customBrushWidget->brush();
-        break;
-    case CLIPBOARDBRUSH:
-        theBrush = m_clipboardBrushWidget->brush();
-        break;
     case TEXTBRUSH:
         theBrush = m_textBrushWidget->brush();
         break;
@@ -163,7 +149,7 @@ void KisBrushSelectionWidget::setTextBrush(bool on)
 
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
-    m_customBrushWidget->setImage(image);
+    m_brushChooser->setImage(image);
 }
 
 void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)

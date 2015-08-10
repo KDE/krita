@@ -506,22 +506,119 @@ void KisImageTest::testMergeMultiple()
     TestUtil::ExternalImageChecker img("flatten", "imagetest");
     TestUtil::ExternalImageChecker chk("mergemultiple", "imagetest");
 
-    QList<KisNodeSP> selectedNodes;
+    {
+        QList<KisNodeSP> selectedNodes;
 
-    selectedNodes << p.layer2
-                  << p.group1
-                  << p.layer6;
+        selectedNodes << p.layer2
+                      << p.group1
+                      << p.layer6;
+
+        {
+            KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+            p.image->waitForDone();
+
+            QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+            QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+            QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+            QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        }
+    }
+
+    p.p.undoStore->undo();
+    p.image->waitForDone();
+
+
+    // Test reversed order, the result must be the same
 
     {
-        KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+        QList<KisNodeSP> selectedNodes;
+
+        selectedNodes << p.layer6
+                      << p.group1
+                      << p.layer2;
+
+        {
+            KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+            p.image->waitForDone();
+
+            QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+            QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+
+            QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+            QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        }
+    }
+
+}
+
+void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
+{
+    QRect refRect;
+    TestUtil::MaskParent p;
+
+    KisPaintLayerSP layer1;
+    KisPaintLayerSP layer2;
+    KisPaintLayerSP layer3;
+
+    const KoColorSpace *cs2 = useProjectionColorSpace ?
+        p.image->colorSpace() : KoColorSpaceRegistry::instance()->lab16();
+
+    const KoColorSpace *cs3 = KoColorSpaceRegistry::instance()->rgb16();
+
+    if (swapSpaces) {
+        qSwap(cs2, cs3);
+    }
+
+    qDebug() << "Testing testMergeCrossColorSpaceImpl:";
+    qDebug() << "    " << ppVar(cs2);
+    qDebug() << "    " << ppVar(cs3);
+
+    layer1 = p.layer;
+    layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8, cs2);
+    layer3 = new KisPaintLayer(p.image, "paint3", OPACITY_OPAQUE_U8, cs3);
+
+    QRect rect1(100, 100, 100, 100);
+    QRect rect2(150, 150, 150, 150);
+    QRect rect3(250, 250, 200, 200);
+
+    layer1->paintDevice()->fill(rect1, KoColor(Qt::red, layer1->colorSpace()));
+    layer2->paintDevice()->fill(rect2, KoColor(Qt::green, layer2->colorSpace()));
+    layer3->paintDevice()->fill(rect3, KoColor(Qt::blue, layer3->colorSpace()));
+
+    p.image->addNode(layer2);
+    p.image->addNode(layer3);
+
+    p.image->initialRefreshGraph();
+
+
+    {
+        KisLayerSP newLayer = p.image->mergeDown(layer3, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
         p.image->waitForDone();
 
-        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
-        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
+        QCOMPARE(newLayer->colorSpace(), p.image->colorSpace());
 
-        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
-        QCOMPARE(newLayer->exactBounds(), QRect(50, 100, 550, 250));
+        p.undoStore->undo();
     }
+
+    {
+        layer2->disableAlphaChannel(true);
+
+        KisLayerSP newLayer = p.image->mergeDown(layer3, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        p.image->waitForDone();
+
+        QCOMPARE(newLayer->colorSpace(), p.image->colorSpace());
+
+        p.undoStore->undo();
+    }
+}
+
+void KisImageTest::testMergeCrossColorSpace()
+{
+    testMergeCrossColorSpaceImpl(true, false);
+    testMergeCrossColorSpaceImpl(true, true);
+    testMergeCrossColorSpaceImpl(false, false);
+    testMergeCrossColorSpaceImpl(false, true);
 }
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)

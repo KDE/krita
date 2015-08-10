@@ -60,17 +60,13 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
 
     m_brush = 0;
-    m_brushCreated = false;
 
-    connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
-    connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
+    connect(this, SIGNAL(accepted()), SLOT(slotAddPredefined()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
-
-    slotUpdateCurrentBrush();
 }
 
 KisCustomBrushWidget::~KisCustomBrushWidget()
@@ -85,10 +81,7 @@ KisBrushSP KisCustomBrushWidget::brush()
 
 void KisCustomBrushWidget::showEvent(QShowEvent *)
 {
-    if (!m_brushCreated) {
-        slotUpdateCurrentBrush(0);
-        m_brushCreated = true;
-    }
+    slotUpdateCurrentBrush(0);
 }
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
@@ -104,7 +97,6 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
             preview->setPixmap(QPixmap::fromImage(m_brush->image()));
         }
     }
-    emit sigBrushChanged();
 }
 
 void KisCustomBrushWidget::slotSpacingChanged()
@@ -113,7 +105,6 @@ void KisCustomBrushWidget::slotSpacingChanged()
         m_brush->setSpacing(spacingWidget->spacing());
         m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     }
-    emit sigBrushChanged();
 }
 
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
@@ -122,7 +113,6 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         preview->setPixmap(QPixmap::fromImage(m_brush->image()));
     }
-    emit sigBrushChanged();
 }
 
 
@@ -173,21 +163,16 @@ void KisCustomBrushWidget::slotAddPredefined()
         }
 
         m_rServerAdapter->addResource(resource);
+        emit sigNewPredefinedBrush(resource);
     }
+
+    close();
 }
 
 void KisCustomBrushWidget::createBrush()
 {
     if (!m_image)
         return;
-
-    if (m_brush) {
-        // don't delete shared pointer, please
-        bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(m_brush.data());
-        if (!removedCorrectly) {
-            kWarning() << "Brush was not removed correctly for the resource server";
-        }
-    }
 
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
@@ -262,13 +247,6 @@ void KisCustomBrushWidget::createBrush()
     m_brush->setFilename(TEMPORARY_FILENAME);
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);
-
-    KisBrushServer::instance()->brushServer()->addResource(m_brush.data() , false);
-}
-
-void KisCustomBrushWidget::setImage(KisImageWSP image)
-{
-    m_image = image;
 }
 
 

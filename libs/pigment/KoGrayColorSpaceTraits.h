@@ -60,6 +60,10 @@ struct KoGrayU8Traits : public KoGrayTraits<quint8> {
 struct KoGrayU16Traits : public KoGrayTraits<quint16> {
 };
 
+struct KoGrayU32Traits : public KoGrayTraits<quint32> {
+};
+
+
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>

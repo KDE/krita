@@ -38,12 +38,12 @@ const double DEFAULT_CLIPBOARD_BRUSH_SPACING = 0.25;
 class KisClipboard;
 class KoResource;
 
-class KisWdgClipboardBrush : public QWidget, public Ui::KisWdgClipboardBrush
+class KisWdgClipboardBrush : public QDialog, public Ui::KisWdgClipboardBrush
 {
     Q_OBJECT
 
 public:
-    KisWdgClipboardBrush(QWidget* parent) : QWidget(parent) {
+    KisWdgClipboardBrush(QWidget* parent) : QDialog(parent) {
         setupUi(this);
     }
 };
@@ -54,26 +54,24 @@ class KisClipboardBrushWidget : public KisWdgClipboardBrush
 public:
     KisClipboardBrushWidget(QWidget* parent, const QString& caption, KisImageWSP image);
     virtual ~KisClipboardBrushWidget();
-    KisBrushSP brush();
 
 private Q_SLOTS:
-    void slotUseBrushClicked();
+    void slotCreateBrush();
     void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
-    void slotSaveBrush();
+    void slotAddPredefined();
 
 protected:
     void showEvent(QShowEvent *);
 
 Q_SIGNALS:
-    void sigBrushChanged();
+    void sigNewPredefinedBrush(KoResource *);
 
 private:
     KisClipboard* m_clipboard;
     KisPaintDeviceSP pd;
     KisImageWSP m_image;
     KisBrushSP m_brush;
-    bool m_brushCreated;
     QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
 

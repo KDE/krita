@@ -39,6 +39,7 @@
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 
+
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
@@ -51,7 +52,9 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
     addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
-    addPaintOpOption(new KisSmudgeOptionWidget(), i18n("Smudge Length"));
+    m_smudgeOptionWidget = new KisSmudgeOptionWidget();
+
+    addPaintOpOption(m_smudgeOptionWidget, i18n("Smudge Length"));
     addPaintOpOption(new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0")), i18n("Smudge Radius"));
     addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
 
@@ -76,4 +79,10 @@ KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() cons
     return config;
 }
 
+void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
+{
+    KisBrushSP brush = this->brush();
+    bool pierced =  brush ? brush->isPiercedApprox() : false;
+    m_smudgeOptionWidget->updateBrushPierced(pierced);
+}
 

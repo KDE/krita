@@ -5,4 +5,4 @@ install(FILES
     scRGB.icm
     cmyk.icm
     krita25_lcms-builtin-sRGB_g100-truegamma.icc
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)
+    DESTINATION ${DATA_INSTALL_DIR}/color/icc/krita)

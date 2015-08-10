@@ -33,6 +33,7 @@
 class QModelIndex;
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
+class QAbstractButton;
 class QToolButton;
 class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
@@ -82,6 +83,8 @@ public:
     void setCurrentItem(int row, int column);
 
     void showButtons(bool show);
+
+    void addCustomButton(QAbstractButton *button, int cell);
 
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);

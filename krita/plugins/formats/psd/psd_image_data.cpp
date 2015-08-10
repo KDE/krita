@@ -380,7 +380,6 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
                 KoBgrU8Traits::setBlue(it->rawData(), blue);
 
             }
-
             else if (m_channelSize == 2) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
@@ -393,8 +392,6 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
                 KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
-
-            // XXX see implementation Openexr
             else if (m_channelSize == 4) {
 
                 quint32 red = ntohl(reinterpret_cast<const quint32 *>(channelBytes.constData())[col]);

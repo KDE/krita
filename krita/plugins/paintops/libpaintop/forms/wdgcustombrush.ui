@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KisWdgCustomBrush</class>
- <widget class="QWidget" name="KisWdgCustomBrush">
+ <widget class="QDialog" name="KisWdgCustomBrush">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -257,18 +257,22 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="brushButton">
-         <property name="text">
-          <string>Use as Tip</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="addButton">
-         <property name="text">
-          <string>Add to Predefined Tips</string>
-         </property>
-        </widget>
+       <widget class="QDialogButtonBox" name="buttonBox">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>240</y>
+          <width>341</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
        </item>
       </layout>
      </item>
@@ -285,5 +289,18 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+ <connection>
+ <sender>buttonBox</sender>
+ <signal>accepted()</signal>
+ <receiver>KisWdgCustomBrush</receiver>
+ <slot>accept()</slot>
+</connection>
+  <connection>
+  <sender>buttonBox</sender>
+  <signal>rejected()</signal>
+  <receiver>KisWdgCustomBrush</receiver>
+  <slot>reject()</slot>
+ </connection>
+</connections>
 </ui>

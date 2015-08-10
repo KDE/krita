@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KisWdgClipboardBrush</class>
- <widget class="QWidget" name="KisWdgClipboardBrush">
+ <widget class="QDialog" name="KisWdgClipboardBrush">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -148,23 +148,22 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="saveBrush">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Add to Predefined Tips</string>
-         </property>
-        </widget>
+       <widget class="QDialogButtonBox" name="buttonBox">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>240</y>
+          <width>341</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
        </item>
       </layout>
      </item>
@@ -181,5 +180,18 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+ <connection>
+ <sender>buttonBox</sender>
+ <signal>accepted()</signal>
+ <receiver>KisWdgClipboardBrush</receiver>
+ <slot>accept()</slot>
+</connection>
+  <connection>
+  <sender>buttonBox</sender>
+  <signal>rejected()</signal>
+  <receiver>KisWdgClipboardBrush</receiver>
+  <slot>reject()</slot>
+ </connection>
+ </connections>
 </ui>

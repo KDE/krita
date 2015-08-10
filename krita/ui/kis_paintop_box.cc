@@ -36,7 +36,7 @@
 #include <kactioncollection.h>
 #include <kacceleratormanager.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoResourceSelector.h>
@@ -114,18 +114,18 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopupButton = new KisPopupButton(this);
-        m_toolOptionsPopupButton->setIcon(themedIcon("configure"));
+        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
     }
 
     m_brushEditorPopupButton = new KisPopupButton(this);
-    m_brushEditorPopupButton->setIcon(themedIcon("paintop_settings_02"));
+    m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
     m_brushEditorPopupButton->setFixedSize(iconsize, iconsize);
 
     m_presetSelectorPopupButton = new KisPopupButton(this);
-    m_presetSelectorPopupButton->setIcon(themedIcon("paintop_settings_01"));
+    m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
     m_presetSelectorPopupButton->setFixedSize(iconsize, iconsize);
 
@@ -135,7 +135,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     KisAction* eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    eraseAction->setIcon(themedIcon("draw-eraser"));
+    eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
@@ -149,7 +149,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     KisAction* reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
     reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    reloadAction->setIcon(themedIcon("view-refresh"));
+    reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_reloadButton->setDefaultAction(reloadAction);
     m_viewManager->actionCollection()->addAction("reload_preset_action", reloadAction);
 
@@ -158,7 +158,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_alphaLockButton->setCheckable(true);
     KisAction* alphaLockAction = new KisAction(i18n("Preserve Alpha"), m_alphaLockButton);
     alphaLockAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    alphaLockAction->setIcon(koIcon("transparency-unlocked"));
+    alphaLockAction->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
     alphaLockAction->setCheckable(true);
     m_alphaLockButton->setDefaultAction(alphaLockAction);
     m_viewManager->actionCollection()->addAction("preserve_alpha", alphaLockAction);
@@ -168,7 +168,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setCheckable(true);
 
     m_hMirrorAction = new KisAction(i18n("Set horizontal mirror mode"), m_hMirrorButton);
-    m_hMirrorAction->setIcon(themedIcon("symmetry-horizontal"));
+    m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
     m_hMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_hMirrorAction->setCheckable(true);
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
@@ -180,7 +180,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_vMirrorAction = new KisAction(i18n("Set vertical mirror mode"), m_vMirrorButton);
     m_vMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_vMirrorAction->setIcon(themedIcon("symmetry-vertical"));
+    m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
     m_vMirrorAction->setCheckable(true);
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
     m_viewManager->actionCollection()->addAction("vmirror_action", m_vMirrorAction);
@@ -248,7 +248,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_workspaceWidget = new KisPopupButton(this);
-    m_workspaceWidget->setIcon(themedIcon("view-choose"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(iconsize, iconsize);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
@@ -1055,9 +1055,9 @@ void KisPaintopBox::slotUnsetEraseMode()
 void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 {
     if (checked) {
-        m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-locked"));
+        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-locked"));
     } else {
-        m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-unlocked"));
+        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
     }
     toggleHighlightedButton(m_alphaLockButton);
     m_resourceProvider->setGlobalAlphaLock(checked);
@@ -1156,6 +1156,6 @@ void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
 
 void KisPaintopBox::slotUpdateSelectionIcon()
 {
-    m_hMirrorAction->setIcon(themedIcon("symmetry-horizontal"));
-    m_vMirrorAction->setIcon(themedIcon("symmetry-vertical"));
+    m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
+    m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
 }

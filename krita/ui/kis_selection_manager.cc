@@ -155,7 +155,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    m_deselect = new KisAction(themedIcon("select-all"), i18n("Deselect"), this);
+    m_deselect = new KisAction(themedIcon("select-clear"), i18n("Deselect"), this);
     m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     actionManager->addAction("deselect", m_deselect);
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));

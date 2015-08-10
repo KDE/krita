@@ -96,7 +96,6 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f) {
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
     recalculateCache(info);
-    m_initialized = true;
 }
 
 KisOpenGLImageTextures::~KisOpenGLImageTextures()
@@ -164,6 +163,9 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
+    if (lastCol == 0) {
+      return;
+    }
 
     m_numCols = lastCol + 1;
 
@@ -217,7 +219,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
 
     QRect updateRect = rect & m_image->bounds();
-    if (updateRect.isEmpty()) return info;
+    if (updateRect.isEmpty() || !(m_initialized)) return info;
 
     /**
      * Why the rect is artificial? That's easy!

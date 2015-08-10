@@ -6,6 +6,8 @@
 #else
 #define HAVE_INTTYPES_H 1
 #endif
+#else
+#define HAVE_INTTYPES_H 1
 #endif
 
 #define PACKAGE_STRING "krita"

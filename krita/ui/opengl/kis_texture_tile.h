@@ -26,6 +26,7 @@
 
 #include <QRect>
 #include <QRectF>
+#include <QOpenGLFunctions>
 
 #if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
 #define USE_PIXEL_BUFFERS

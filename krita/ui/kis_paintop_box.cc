@@ -77,8 +77,6 @@
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
 
-
-
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
@@ -122,12 +120,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_brushEditorPopupButton = new KisPopupButton(this);
-    m_brushEditorPopupButton->setIcon(koIcon("paintop_settings_02"));
+    m_brushEditorPopupButton->setIcon(themedIcon("paintop_settings_02"));
     m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
     m_brushEditorPopupButton->setFixedSize(iconsize, iconsize);
 
     m_presetSelectorPopupButton = new KisPopupButton(this);
-    m_presetSelectorPopupButton->setIcon(koIcon("paintop_settings_01"));
+    m_presetSelectorPopupButton->setIcon(themedIcon("paintop_settings_01"));
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
     m_presetSelectorPopupButton->setFixedSize(iconsize, iconsize);
 

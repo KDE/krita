@@ -315,6 +315,7 @@ set(kritaui_LIB_SRCS
     KisView.cpp
 
     thememanager.cpp
+    kis_icon_utils.cpp
 
     kis_mainwindow_observer.cpp
     KisViewManager.cpp

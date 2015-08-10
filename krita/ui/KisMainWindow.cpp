@@ -128,6 +128,8 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#include "kis_icon_utils.h"
+
 
 #include "calligraversion.h"
 
@@ -561,30 +563,7 @@ void KisMainWindow::slotThemeChanged()
 
     // reload action icons!
     foreach (QAction *action, actionCollection()->actions()) {
-        QIcon icon = action->icon();
-        if (icon.isNull()) continue;
-
-        QString iconName = icon.name();
-        if (iconName.isNull()) continue;
-
-        QString realIconName;
-
-        if (iconName.startsWith("dark_")) {
-            realIconName = iconName.mid(5);
-        }
-
-        if (iconName.startsWith("light_")) {
-            realIconName = iconName.mid(6);
-        }
-
-        if (!realIconName.isNull()) {
-            QIcon newIcon = themedIcon(realIconName);
-            if (!newIcon.isNull()) {
-                action->setIcon(newIcon);
-            } else {
-                qWarning() << "WARNING: Couldn't load themed icon:" << realIconName;
-            }
-        }
+        KisIconUtils::updateIcon(action);
     }
 
     emit themeChanged();

@@ -131,6 +131,7 @@
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_icon_utils.h"
 
 
 class StatusBarItem
@@ -1226,17 +1227,6 @@ void KisViewManager::openResourcesDirectory()
 void KisViewManager::updateIcons()
 {
 #if QT_VERSION >= 0x040700
-    QColor background = mainWindow()->palette().background().color();
-
-    bool useDarkIcons = background.value() > 100;
-    QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
-
-    QStringList whitelist;
-    whitelist << "ToolBox" << "KisLayerBox";
-
-    QStringList blacklistedIcons;
-    blacklistedIcons << "editpath" << "artistictext-tool" << "view-choose";
-
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
@@ -1245,9 +1235,6 @@ void KisViewManager::updateIcons()
             if (titlebar) {
                 titlebar->updateIcons();
             }
-            if (!whitelist.contains(dock->objectName())) {
-                continue;
-            }
 
             QObjectList objects;
             objects.append(dock);
@@ -1255,16 +1242,7 @@ void KisViewManager::updateIcons()
                 QObject* object = objects.takeFirst();
                 objects.append(object->children());
 
-                QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
-                if (button && !button->icon().name().isEmpty()) {
-                    QString name = button->icon().name(); name = name.remove("dark_").remove("light_");
-
-                    if (!blacklistedIcons.contains(name)) {
-                        QString iconName = prefix + name;
-                        KIcon icon = koIcon(iconName.toLatin1());
-                        button->setIcon(icon);
-                    }
-                }
+                KisIconUtils::updateIconCommon(object);
             }
         }
     }

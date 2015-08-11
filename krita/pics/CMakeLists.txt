@@ -232,7 +232,9 @@ Breeze-dark/dark_bookmarks.svg
 Breeze-dark/dark_configure-shortcuts.svg
 Breeze-dark/dark_configure-toolbars.svg
 Breeze-dark/dark_configure.svg
+Breeze-dark/dark_dialog-cancel.svg
 Breeze-dark/dark_dialog-close.svg
+Breeze-dark/dark_dialog-ok.svg
 Breeze-dark/dark_dialog-warning.svg
 Breeze-dark/dark_document-edit.svg
 Breeze-dark/dark_document-export.svg
@@ -269,8 +271,10 @@ Breeze-dark/dark_locked.svg
 Breeze-dark/dark_media-playback-start.svg
 Breeze-dark/dark_media-playback-stop.svg
 Breeze-dark/dark_media-record.svg
+Breeze-dark/dark_object-locked.svg
 Breeze-dark/dark_object-rotate-left.svg
 Breeze-dark/dark_object-rotate-right.svg
+Breeze-dark/dark_object-unlocked.svg
 Breeze-dark/dark_preferences-desktop-color.svg
 Breeze-dark/dark_preferences-desktop-display.svg
 Breeze-dark/dark_preferences-desktop-locale.svg
@@ -306,7 +310,9 @@ Breeze-light/light_bookmarks.svg
 Breeze-light/light_configure-shortcuts.svg
 Breeze-light/light_configure-toolbars.svg
 Breeze-light/light_configure.svg
+Breeze-light/light_dialog-cancel.svg
 Breeze-light/light_dialog-close.svg
+Breeze-light/light_dialog-ok.svg
 Breeze-light/light_dialog-warning.svg
 Breeze-light/light_document-edit.svg
 Breeze-light/light_document-export.svg
@@ -343,8 +349,10 @@ Breeze-light/light_locked.svg
 Breeze-light/light_media-playback-start.svg
 Breeze-light/light_media-playback-stop.svg
 Breeze-light/light_media-record.svg
+Breeze-light/light_object-locked.svg
 Breeze-light/light_object-rotate-left.svg
 Breeze-light/light_object-rotate-right.svg
+Breeze-light/light_object-unlocked.svg
 Breeze-light/light_preferences-desktop-color.svg
 Breeze-light/light_preferences-desktop-display.svg
 Breeze-light/light_preferences-desktop-locale.svg

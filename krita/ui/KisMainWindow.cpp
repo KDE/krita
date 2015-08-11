@@ -317,15 +317,23 @@ KisMainWindow::KisMainWindow()
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
+
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
     }
 
+
+    QMap<QString, QAction*> dockwidgetActions;
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        createDockWidget(factory);
+        QDockWidget *dw = createDockWidget(factory);
+        dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
     }
+    foreach(QString title, dockwidgetActions.keys()) {
+        d->dockWidgetMenu->addAction(dockwidgetActions[title]);
+    }
+
 
     foreach (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -1715,7 +1723,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
         addDockWidget(side, dockWidget);
-        d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
         if (!visible) {
             dockWidget->hide();
         }

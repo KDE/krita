@@ -94,7 +94,7 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
     if (m_image) {
         createBrush();
         if (m_brush) {
-            preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+            preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
         }
     }
 }
@@ -111,7 +111,7 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
-        preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+        preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
     }
 }
 

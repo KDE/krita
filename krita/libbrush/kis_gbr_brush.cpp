@@ -138,10 +138,9 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     : KisBrush(rhs)
-    , d(new Private)
+    , d(new Private(*rhs.d))
 {
     setName(rhs.name());
-    *d = *rhs.d;
     d->data = QByteArray();
     setValid(rhs.valid());
 }

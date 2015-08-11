@@ -1,3 +1,4 @@
+include_directories(${KUNDO2_INCLUDES})
 
 set(kundo2_LIB_SRCS
 	kundo2stack.cpp

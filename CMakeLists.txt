@@ -823,7 +823,8 @@ include_directories(${KOVERSION_INCLUDES})
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
-set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
+set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2
+                    ${CMAKE_BINARY_DIR}/libs/kundo2)
 
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf

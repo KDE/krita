@@ -20,7 +20,7 @@
 #ifndef KOFILEDIALOG_H
 #define KOFILEDIALOG_H
 
-#include "kowidgets_export.h"
+#include "kowidgetutils_export.h"
 
 #include <QFileDialog>
 #include <QString>
@@ -33,7 +33,7 @@
  * Wrapper around QFileDialog providing native file dialogs
  * on KDE/Gnome/Windows/OSX/etc.
  */
-class KOWIDGETS_EXPORT KoFileDialog : public QObject
+class KOWIDGETUTILS_EXPORT KoFileDialog : public QObject
 {
     Q_OBJECT
 

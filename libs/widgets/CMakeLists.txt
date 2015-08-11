@@ -37,7 +37,6 @@ set(kowidgets_LIB_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
     KoGlobal.cpp
-    KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -147,7 +146,6 @@ install( FILES
     KoZoomHandler.h
     KoZoomMode.h
     KoGlobal.h
-    KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
@@ -176,14 +174,3 @@ install( FILES
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
-
-set(filedialogtester_SRCS
-    KoFileDialogTester.cpp
-    main.cpp
-)
-ki18n_wrap_ui(filedialogtester_SRCS
-    KoFileDialogTester.ui
-)
-
-add_executable(filedialogtester ${filedialogtester_SRCS})
-target_link_libraries(filedialogtester kowidgets)

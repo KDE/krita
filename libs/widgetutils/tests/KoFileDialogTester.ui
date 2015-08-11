@@ -148,7 +148,7 @@
       <item>
        <widget class="QCheckBox" name="chkHideNameFilterDetailsOption">
         <property name="text">
-         <string>hide name filter details option</string>
+         <string>Hide name filter details option</string>
         </property>
        </widget>
       </item>

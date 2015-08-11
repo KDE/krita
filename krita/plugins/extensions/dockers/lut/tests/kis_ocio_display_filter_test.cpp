@@ -76,7 +76,7 @@ void KisOcioDisplayFilterTest::test()
                 KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
 
     KisImageSP image = utils::createImage(0, QSize(100, 100));
-    image->convertImageColorSpace(paintingCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    image->convertImageColorSpace(paintingCS, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image->waitForDone();
 
 dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());

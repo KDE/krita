@@ -178,8 +178,8 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
     projection.setMonitorProfile(0,
-                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                 KoColorConversionTransformation::InternalConversionFlags);
+                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::internalConversionFlags());
     projection.setImage(image);
 
     // pixel-for-pixel, at 100% zoom
@@ -213,8 +213,8 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
     projection.setMonitorProfile(0,
-                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                 KoColorConversionTransformation::InternalConversionFlags);
+                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::internalConversionFlags());
     projection.setImage(image);
 
     testProjectionScenario(projection, &converter, "120dpi");
@@ -245,8 +245,8 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
     projection.setMonitorProfile(0,
-                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                 KoColorConversionTransformation::InternalConversionFlags);
+                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::internalConversionFlags());
     projection.setImage(image);
 
     // Emulate "Use same aspect as pixels"
@@ -302,8 +302,8 @@ public:
 
         projection.setCoordinatesConverter(&converter);
         projection.setMonitorProfile(0,
-                                     KoColorConversionTransformation::InternalRenderingIntent,
-                                     KoColorConversionTransformation::InternalConversionFlags);
+                                     KoColorConversionTransformation::internalRenderingIntent(),
+                                     KoColorConversionTransformation::internalConversionFlags());
         projection.setImage(image);
         projection.notifyCanvasSizeChanged(QSize(100,100));
         projection.notifyZoomChanged();

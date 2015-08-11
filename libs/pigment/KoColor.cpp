@@ -103,7 +103,7 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 KoColor::KoColor(const KoColor & rhs)
@@ -161,8 +161,8 @@ void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation
 void KoColor::convertTo(const KoColorSpace * cs)
 {
     convertTo(cs,
-              KoColorConversionTransformation::InternalRenderingIntent,
-              KoColorConversionTransformation::InternalConversionFlags);
+              KoColorConversionTransformation::internalRenderingIntent(),
+              KoColorConversionTransformation::internalConversionFlags());
 }
 
 void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
@@ -229,7 +229,7 @@ void KoColor::dump() const
 
 void KoColor::fromKoColor(const KoColor& src)
 {
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 const KoColorProfile *  KoColor::profile() const

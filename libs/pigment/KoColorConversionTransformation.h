@@ -80,11 +80,11 @@ public:
      * following default values should be used.
      */
 
-    static Intent InternalRenderingIntent;
-    static ConversionFlags InternalConversionFlags;
+    static Intent internalRenderingIntent() { return IntentPerceptual; }
+    static ConversionFlags internalConversionFlags() { return BlackpointCompensation; }
 
-    static Intent AdjustmentRenderingIntent;
-    static ConversionFlags AdjustmentConversionFlags;
+    static Intent adjustmentRenderingIntent() { return IntentPerceptual; }
+    static ConversionFlags adjustmentConversionFlags() { return ConversionFlags(BlackpointCompensation | NoWhiteOnWhiteFixup); }
 
 public:
     KoColorConversionTransformation(const KoColorSpace* srcCs,

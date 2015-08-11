@@ -1353,8 +1353,8 @@ QImage KisImage::convertToQImage(qint32 x,
     KisPaintDeviceSP dev = projection();
     if (!dev) return QImage();
     QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h,
-                                        KoColorConversionTransformation::InternalRenderingIntent,
-                                        KoColorConversionTransformation::InternalConversionFlags);
+                                        KoColorConversionTransformation::internalRenderingIntent(),
+                                        KoColorConversionTransformation::internalConversionFlags());
 
     return image;
 }
@@ -1414,8 +1414,8 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
         delete [] imageRow;
 
         QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
-                                                     KoColorConversionTransformation::InternalRenderingIntent,
-                                                     KoColorConversionTransformation::InternalConversionFlags);
+                                                     KoColorConversionTransformation::internalRenderingIntent(),
+                                                     KoColorConversionTransformation::internalConversionFlags());
 
         delete [] scaledImageData;
 

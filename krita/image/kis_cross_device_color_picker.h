@@ -122,8 +122,8 @@ private:
         Traits::template sampleData<useOldData>(m_accessor, m_data, m_srcCS);
 
         m_srcCS->convertPixelsTo(m_data, dst, m_dstCS, 1,
-                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                 KoColorConversionTransformation::InternalConversionFlags);
+                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::internalConversionFlags());
     }
 
 private:

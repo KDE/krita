@@ -132,8 +132,8 @@ public:
         } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
             convertPixelsTo(src, dst, dstCs, nPixels,
-                            KoColorConversionTransformation::InternalRenderingIntent,
-                            KoColorConversionTransformation::InternalConversionFlags);
+                            KoColorConversionTransformation::internalRenderingIntent(),
+                            KoColorConversionTransformation::internalConversionFlags());
         }
     }
 
@@ -143,8 +143,8 @@ public:
         } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->lab16();
             srcCs->convertPixelsTo(src, dst, this, nPixels,
-                                   KoColorConversionTransformation::InternalRenderingIntent,
-                                   KoColorConversionTransformation::InternalConversionFlags);
+                                   KoColorConversionTransformation::internalRenderingIntent(),
+                                   KoColorConversionTransformation::internalConversionFlags());
         }
     }
 
@@ -154,8 +154,8 @@ public:
         } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->rgb16();
             convertPixelsTo(src, dst, dstCs, nPixels,
-                            KoColorConversionTransformation::InternalRenderingIntent,
-                            KoColorConversionTransformation::InternalConversionFlags);
+                            KoColorConversionTransformation::internalRenderingIntent(),
+                            KoColorConversionTransformation::internalConversionFlags());
         }
     }
 
@@ -165,8 +165,8 @@ public:
         } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb16();
             srcCs->convertPixelsTo(src, dst, this, nPixels,
-                                   KoColorConversionTransformation::InternalRenderingIntent,
-                                   KoColorConversionTransformation::InternalConversionFlags);
+                                   KoColorConversionTransformation::internalRenderingIntent(),
+                                   KoColorConversionTransformation::internalConversionFlags());
         }
     }
 

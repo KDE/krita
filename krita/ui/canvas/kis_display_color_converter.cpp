@@ -53,8 +53,8 @@ struct KisDisplayColorConverter::Private
           paintingColorSpace(0),
           monitorColorSpace(0),
           monitorProfile(0),
-          renderingIntent(KoColorConversionTransformation::InternalRenderingIntent),
-          conversionFlags(KoColorConversionTransformation::InternalConversionFlags),
+          renderingIntent(KoColorConversionTransformation::internalRenderingIntent()),
+          conversionFlags(KoColorConversionTransformation::internalConversionFlags()),
           displayFilter(0),
           intermediateColorSpace(0),
           displayRenderer(new DisplayRenderer(_q, _resourceManager))

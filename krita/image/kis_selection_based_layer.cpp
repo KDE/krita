@@ -262,8 +262,8 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
 
     return originalDevice && originalSelection ?
            originalDevice->createThumbnail(w, h,
-                                           KoColorConversionTransformation::InternalRenderingIntent,
-                                           KoColorConversionTransformation::InternalConversionFlags) :
+                                           KoColorConversionTransformation::internalRenderingIntent(),
+                                           KoColorConversionTransformation::internalConversionFlags()) :
            QImage();
 }
 

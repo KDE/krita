@@ -307,8 +307,8 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
                                                alignedImageRect.y(),
                                                alignedImageRect.width(),
                                                alignedImageRect.height(),
-                                               KoColorConversionTransformation::InternalRenderingIntent,
-                                               KoColorConversionTransformation::InternalConversionFlags);
+                                               KoColorConversionTransformation::internalRenderingIntent(),
+                                               KoColorConversionTransformation::internalConversionFlags());
 
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
@@ -367,7 +367,7 @@ QImage KisScratchPad::cutoutOverlay() const
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
     QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
-    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     QImage scaledImage = rawImage.scaled(m_cutoutOverlay.size(),
                                          Qt::IgnoreAspectRatio,

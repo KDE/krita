@@ -36,8 +36,8 @@ void KisColorSpaceConvertVisitorTest::testCreation()
     KisImageSP image = new KisImage(0, 100, 100, lab, "test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, lab);
     KisColorSpaceConvertVisitor test(image, lab, rgb,
-                                     KoColorConversionTransformation::InternalRenderingIntent,
-                                     KoColorConversionTransformation::InternalConversionFlags);
+                                     KoColorConversionTransformation::internalRenderingIntent(),
+                                     KoColorConversionTransformation::internalConversionFlags());
     layer->accept(test);
     QVERIFY(layer->colorSpace()->colorModelId() == rgb->colorModelId());
 }

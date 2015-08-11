@@ -116,8 +116,8 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         doc->image()->waitForDone();
 
         return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
-                                                           KoColorConversionTransformation::InternalRenderingIntent,
-                                                           KoColorConversionTransformation::InternalConversionFlags);
+                                                           KoColorConversionTransformation::internalRenderingIntent(),
+                                                           KoColorConversionTransformation::internalConversionFlags());
     }
     else if (mimetype == "application/x-krita-node" ||
              mimetype == "application/zip") {

@@ -255,8 +255,8 @@ void KisUndoModel::addImage(int idx)
         KisImageWSP historyImage = m_canvas->viewManager()->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
         QImage image = paintDevice->createThumbnail(32, 32,
-                                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                                    KoColorConversionTransformation::InternalConversionFlags);
+                                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                                    KoColorConversionTransformation::internalConversionFlags());
         m_imageMap[currentCommand] = image;
     }
 

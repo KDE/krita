@@ -342,8 +342,8 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
 
     return originalDevice ?
            originalDevice->createThumbnail(w, h,
-                                           KoColorConversionTransformation::InternalRenderingIntent,
-                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
+                                           KoColorConversionTransformation::internalRenderingIntent(),
+                                           KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
 
 void KisMask::testingInitSelection(const QRect &rect)

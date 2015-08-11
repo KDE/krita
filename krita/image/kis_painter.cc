@@ -170,8 +170,8 @@ void KisPainter::init()
     d->mirrorVerticaly = false;
     d->isOpacityUnit = true;
     d->paramInfo = KoCompositeOp::ParameterInfo();
-    d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
-    d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
+    d->renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
+    d->conversionFlags = KoColorConversionTransformation::internalConversionFlags();
 }
 
 KisPainter::~KisPainter()

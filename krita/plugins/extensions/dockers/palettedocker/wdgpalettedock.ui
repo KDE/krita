@@ -2,24 +2,23 @@
 <ui version="4.0">
  <class>WdgPaletteDock</class>
  <widget class="QWidget" name="WdgPaletteDock">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>256</width>
+    <height>219</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>1</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <widget class="QTableView" name="paletteView">
+    <widget class="KoTableView" name="paletteView">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -116,6 +115,11 @@
    <class>KisPopupButton</class>
    <extends>QPushButton</extends>
    <header>kis_popup_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoTableView</class>
+   <extends>QTableView</extends>
+   <header location="global">KoTableView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

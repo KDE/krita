@@ -20,7 +20,8 @@
 #define KOTABLEVIEW_H
 
 #include <QTableView>
-#include <KoIconToolTip.h>
+
+#include "kowidgets_export.h"
 
 class QEvent;
 class QModelIndex;
@@ -28,7 +29,7 @@ class QModelIndex;
 /**
  * @brief The KoTableView class provides a QTableView with fixed columns or rows
  */
-class KoTableView: public QTableView
+class KOWIDGETS_EXPORT KoTableView: public QTableView
 {
     Q_OBJECT
 

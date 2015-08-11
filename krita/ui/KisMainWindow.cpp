@@ -314,7 +314,8 @@ KisMainWindow::KisMainWindow()
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
     KoToolBoxFactory toolBoxFactory;
-    createDockWidget(&toolBoxFactory);
+    QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
+    toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
@@ -1714,12 +1715,10 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
         addDockWidget(side, dockWidget);
-        if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
-            d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
-            if (!visible)
-                dockWidget->hide();
+        d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
+        if (!visible) {
+            dockWidget->hide();
         }
-
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;

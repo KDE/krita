@@ -34,6 +34,9 @@
 
 #include "psd_additional_layer_info_block.h"
 
+#include <boost/function.hpp>
+
+
 class QIODevice;
 
 enum psd_layer_type {
@@ -156,6 +159,9 @@ private:
     void writeTransparencyMaskPixelData(QIODevice *io);
 
 private:
+
+    typedef boost::function<void(int, const QMap<quint16, QByteArray>&, int, quint8*)> PixelFunc;
+    bool readCommon(KisPaintDeviceSP dev, QIODevice *io, PixelFunc pixelFunc);
 
     bool readRGB(KisPaintDeviceSP dev ,QIODevice *io);
     bool readCMYK(KisPaintDeviceSP dev ,QIODevice *io);

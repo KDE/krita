@@ -59,21 +59,12 @@
 # endif
 #endif
 
-#ifndef BRUSH_EXPORT
-# ifdef MAKE_KRITALIBBRUSH_LIB
-#  define BRUSH_EXPORT KDE_EXPORT
-# else
-#  define BRUSH_EXPORT KDE_IMPORT
-# endif
-#endif
-
 #else // not windows
 
 #define KRITASKETCH_EXPORT KDE_EXPORT
 #define KRITAUI_EXPORT KDE_EXPORT
 #define KRITAIMAGE_EXPORT KDE_EXPORT
 #define PAINTOP_EXPORT KDE_EXPORT
-#define BRUSH_EXPORT KDE_EXPORT
 
 #endif /* not windows */
 

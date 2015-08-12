@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "KoGenericRegistry.h"
 
-#include <krita_export.h>
+#include <kritabrush_export.h>
 
 #include "kis_brush.h"
 #include "kis_brush_factory.h"

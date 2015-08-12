@@ -19,7 +19,6 @@ set(kritaxcfimport_PART_SRCS
     ${XCFTOOLS_SOURCE_DIR}/enums.c
     ${XCFTOOLS_SOURCE_DIR}/flatspec.c
     ${XCFTOOLS_SOURCE_DIR}/flatten.c  
-    ${XCFTOOLS_SOURCE_DIR}/palette.c
     )
 
 kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})

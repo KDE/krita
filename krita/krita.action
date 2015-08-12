@@ -131,17 +131,6 @@
     <Action name="image_color" icon="format-stroke-color" text="Image Background Color and Transparency..." whatsThis="" toolTip="Change the background color of the image" iconText="Image Background Color and Transparency" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="view_grid" icon="view-grid" text="Show Grid" whatsThis="" toolTip="Show Grid" iconText="Show Grid" shortcut="Ctrl+Shift+'" defaultShortcut="Ctrl+Shift+'" isCheckable="false" statusTip=""/>
     <Action name="view_snap_to_grid" icon="" text="Snap To Grid" whatsThis="" toolTip="Snap To Grid" iconText="Snap To Grid" shortcut="Ctrl+Shift+;" defaultShortcut="Ctrl+Shift+;" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_1x1" icon="" text="1x1" whatsThis="" toolTip="1x1" iconText="1x1" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_2x2" icon="" text="2x2" whatsThis="" toolTip="2x2" iconText="2x2" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_4x4" icon="" text="4x4" whatsThis="" toolTip="4x4" iconText="4x4" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_5x5" icon="" text="5x5" whatsThis="" toolTip="5x5" iconText="5x5" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_8x8" icon="" text="8x8" whatsThis="" toolTip="8x8" iconText="8x8" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_10x10" icon="" text="10x10" whatsThis="" toolTip="10x10" iconText="10x10" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_16x16" icon="" text="16x16" whatsThis="" toolTip="16x16" iconText="16x16" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_20x20" icon="" text="20x20" whatsThis="" toolTip="20x20" iconText="20x20" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_32x32" icon="" text="32x32" whatsThis="" toolTip="32x32" iconText="32x32" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_40x40" icon="" text="40x40" whatsThis="" toolTip="40x40" iconText="40x40" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_64x64" icon="" text="64x64" whatsThis="" toolTip="64x64" iconText="64x64" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="view_toggle_perspective_grid" icon="" text="Show Perspective Grid" whatsThis="" toolTip="Show Perspective Grid" iconText="Show Perspective Grid" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
     <Action name="view_clear_perspective_grid" icon="" text="Clear Perspective Grid" whatsThis="" toolTip="Clear Perspective Grid" iconText="Clear Perspective Grid" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="view_toggle_painting_assistants" icon="" text="Hide Painting Assistants" whatsThis="" toolTip="Hide Painting Assistants" iconText="Hide Painting Assistants" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>

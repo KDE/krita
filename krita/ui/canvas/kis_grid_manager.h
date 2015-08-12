@@ -53,34 +53,12 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void toggleSnapToGrid();
-    void fastConfig1x1();
-    void fastConfig2x2();
-    void fastConfig5x5();
-    void fastConfig10x10();
-    void fastConfig20x20();
-    void fastConfig40x40();
-    void fastConfig4x4();
-    void fastConfig8x8();
-    void fastConfig16x16();
-    void fastConfig32x32();
-    void fastConfig64x64();
 
 private:
     void setFastConfig(int size);
 
     KisAction *m_toggleGrid;
     KisAction* m_toggleSnapToGrid;
-    KisAction* m_gridFastConfig1x1;
-    KisAction* m_gridFastConfig2x2;
-    KisAction* m_gridFastConfig5x5;
-    KisAction* m_gridFastConfig10x10;
-    KisAction* m_gridFastConfig20x20;
-    KisAction* m_gridFastConfig40x40;
-    KisAction* m_gridFastConfig4x4;
-    KisAction* m_gridFastConfig8x8;
-    KisAction* m_gridFastConfig16x16;
-    KisAction* m_gridFastConfig32x32;
-    KisAction* m_gridFastConfig64x64;
 
     QPointer<KisView> m_imageView;
     KisGridDecoration* m_gridDecoration;

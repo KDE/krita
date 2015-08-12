@@ -576,6 +576,11 @@ KisDocument::KisDocument()
     init();
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
+
+    gridData().setShowGrid(false);
+    KisConfig cfg;
+    gridData().setGrid(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+
 }
 
 KisDocument::~KisDocument()

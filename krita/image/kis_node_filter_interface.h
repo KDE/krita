@@ -19,7 +19,7 @@
 #ifndef _KIS_NODE_FILTER_INTERFACE_H_
 #define _KIS_NODE_FILTER_INTERFACE_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <kis_types.h>
 #include "filter/kis_filter_configuration.h"
 

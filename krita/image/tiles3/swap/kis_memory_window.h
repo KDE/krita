@@ -19,7 +19,7 @@
 #ifndef __KIS_MEMORY_WINDOW_H
 #define __KIS_MEMORY_WINDOW_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QTemporaryFile>
 

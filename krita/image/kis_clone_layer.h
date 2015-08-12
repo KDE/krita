@@ -23,7 +23,7 @@
 #include "kis_layer.h"
 #include "kis_indirect_painting_support.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_clone_info.h"
 
 class KisNodeVisitor;

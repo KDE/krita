@@ -23,7 +23,7 @@
 #include<QVector>
 #include<QVariant>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QPointF;
 

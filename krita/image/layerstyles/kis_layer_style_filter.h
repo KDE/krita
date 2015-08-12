@@ -21,6 +21,7 @@
 
 #include "kis_types.h"
 #include "kis_shared.h"
+#include "kritaimage_export.h"
 
 #include <QScopedPointer>
 
@@ -28,7 +29,7 @@ class KisPSDLayerStyle;
 class KisLayerStyleFilterEnvironment;
 
 
-class KDE_EXPORT KisLayerStyleFilter : public KisShared
+class KRITAIMAGE_EXPORT KisLayerStyleFilter : public KisShared
 {
 public:
     KisLayerStyleFilter(const KoID &id);

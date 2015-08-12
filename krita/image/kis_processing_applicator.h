@@ -19,7 +19,7 @@
 #ifndef __KIS_PROCESSING_APPLICATOR_H
 #define __KIS_PROCESSING_APPLICATOR_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include "kis_stroke_job_strategy.h"

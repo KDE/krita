@@ -22,12 +22,13 @@
 #include <QSharedPointer>
 
 #include "kis_layer_style_filter.h"
+#include <kritaimage_export.h>
 
 struct psd_layer_effects_bevel_emboss;
 struct psd_layer_effects_context;
 
 
-class KDE_EXPORT KisLsBevelEmbossFilter : public KisLayerStyleFilter
+class KRITAIMAGE_EXPORT KisLsBevelEmbossFilter : public KisLayerStyleFilter
 {
 public:
     KisLsBevelEmbossFilter();

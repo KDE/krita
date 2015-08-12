@@ -30,7 +30,7 @@ typedef Eigen::Matrix<qreal, 9, 9> Matrix9qreal;
 typedef Eigen::Matrix<qreal, 9, 1> Vector9qreal;
 typedef Eigen::Hyperplane<qreal, 2> LineEquation;
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QRect;
 

@@ -22,7 +22,7 @@
 #include <KoColorConversionTransformation.h>
 #include <KoColorSpace.h>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"

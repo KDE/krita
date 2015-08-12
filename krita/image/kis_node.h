@@ -23,7 +23,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_base_node.h"
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QVector>
 

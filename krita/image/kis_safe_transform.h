@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class QTransform;
 class QRect;

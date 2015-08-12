@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KRITA_EXPORT_H
-#define KRITA_EXPORT_H
+#ifndef KRITAIMAGE_EXPORT_H
+#define KRITAIMAGE_EXPORT_H
 
 #include <kdemacros.h>
 
@@ -56,4 +56,4 @@
 #  define KRITAIMAGE_TEST_EXPORT
 #endif
 
-#endif /* KRITA_EXPORT_H */
+#endif /* KRITAIMAGE_EXPORT_H */

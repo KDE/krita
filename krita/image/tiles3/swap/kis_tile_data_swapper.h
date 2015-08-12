@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QThread>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 class KisTileDataStore;

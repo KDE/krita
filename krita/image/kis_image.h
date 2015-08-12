@@ -36,7 +36,7 @@
 #include "kis_default_bounds.h"
 #include "kis_image_interfaces.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KisDocument;
 class KoColorSpace;

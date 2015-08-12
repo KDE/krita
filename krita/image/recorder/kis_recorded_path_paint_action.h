@@ -26,7 +26,7 @@
 class KisPaintInformation;
 class KisPainter;
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 /**
  * This class will record the painting of a bezier curve.

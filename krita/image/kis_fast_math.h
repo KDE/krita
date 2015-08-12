@@ -22,7 +22,7 @@
 #ifndef _KIS_IMAGE_FAST_
 #define _KIS_IMAGE_FAST_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * This namespace countains fast but inaccurate version of mathematical function.

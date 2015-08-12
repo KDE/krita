@@ -35,7 +35,7 @@ class KoCompositeOp;
 class KisNodeVisitor;
 class KisUndoAdapter;
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * A KisBaseNode is the base class for all components of an image:

@@ -19,7 +19,7 @@
 #ifndef _KISBASEACCESSOR_H_
 #define _KISBASEACCESSOR_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <kis_shared.h>
 
 class KRITAIMAGE_EXPORT KisBaseConstAccessor : public KisShared

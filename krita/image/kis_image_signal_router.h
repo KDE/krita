@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <QVector>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 #include "kis_group_layer.h"
 

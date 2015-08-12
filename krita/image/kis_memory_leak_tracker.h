@@ -20,7 +20,7 @@
 #define _KIS_MEMORY_LEAK_TRACKER_H_
 
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <config-memory-leak-tracker.h>
 

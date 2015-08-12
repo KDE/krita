@@ -22,7 +22,6 @@
 #include <kundo2command.h>
 
 #include "kis_types.h"
-#include <krita_export.h>
 
 #include "kis_transaction_data.h"
 #include "kis_paint_device.h"

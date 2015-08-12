@@ -21,7 +21,7 @@
 #define KIS_PROGRESS_UPDATER_H
 
 #include <KoProgressUpdater.h>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KRITAIMAGE_EXPORT KisProgressInterface
 {

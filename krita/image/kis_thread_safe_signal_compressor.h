@@ -20,7 +20,7 @@
 #define __KIS_THREAD_SAFE_SIGNAL_COMPRESSOR_H
 
 #include <QObject>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include "kis_signal_compressor.h"
 

@@ -20,7 +20,7 @@
 #define KIS_PAINTOP_FACTORY_H_
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include <QObject>
 #include <QString>
 #include <QStringList>

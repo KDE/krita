@@ -19,7 +19,7 @@
 #ifndef __KIS_CHUNK_LIST_H
 #define __KIS_CHUNK_LIST_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QLinkedList>
 

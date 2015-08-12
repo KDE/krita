@@ -30,7 +30,7 @@
 #include "kis_types.h"
 #include "kis_base_processor.h"
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * Basic interface of a Krita filter.

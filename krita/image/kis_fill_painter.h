@@ -28,7 +28,7 @@
 #include "kis_types.h"
 #include "kis_selection.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KoPattern;
 class KisFilterConfiguration;

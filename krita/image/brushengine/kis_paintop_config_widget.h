@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTOP_CONFIG_WIDGET_H_
 #define KIS_PAINTOP_CONFIG_WIDGET_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include "kis_config_widget.h"
 #include "kis_image.h"

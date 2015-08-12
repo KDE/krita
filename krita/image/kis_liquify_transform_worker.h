@@ -22,7 +22,7 @@
 #include <QScopedPointer>
 #include <boost/operators.hpp>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <kis_types.h>
 
 class QImage;

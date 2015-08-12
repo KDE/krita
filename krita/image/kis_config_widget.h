@@ -20,7 +20,7 @@
 #define _KIS_CONFIG_WIDGET_H_
 
 #include <QWidget>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <QTimer>
 

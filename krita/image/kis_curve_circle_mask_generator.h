@@ -19,7 +19,7 @@
 #ifndef _KIS_CURVE_CIRCLE_MASK_GENERATOR_H_
 #define _KIS_CURVE_CIRCLE_MASK_GENERATOR_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include "kis_mask_generator.h"
 #include <QList>

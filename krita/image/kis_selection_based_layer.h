@@ -25,7 +25,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_indirect_painting_support.h"
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_node_filter_interface.h"
 
 class KisFilterConfiguration;

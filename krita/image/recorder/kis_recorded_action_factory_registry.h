@@ -23,7 +23,7 @@
 
 class KisRecordedActionFactory;
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KRITAIMAGE_EXPORT KisRecordedActionFactoryRegistry : public KoGenericRegistry<KisRecordedActionFactory*>
 {

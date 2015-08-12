@@ -18,7 +18,7 @@
 #ifndef KIS_SELECTION_COMPONENT_H
 #define KIS_SELECTION_COMPONENT_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <QTransform>
 

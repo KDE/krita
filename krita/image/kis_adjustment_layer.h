@@ -32,7 +32,7 @@
 #define KIS_ADJUSTMENT_LAYER_H_
 
 #include <QObject>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_selection_based_layer.h"
 
 

@@ -19,7 +19,7 @@
 #define KIS_GENERATOR_LAYER_H_
 
 #include "kis_selection_based_layer.h"
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <QScopedPointer>
 

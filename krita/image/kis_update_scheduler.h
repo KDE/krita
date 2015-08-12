@@ -20,7 +20,7 @@
 #define __KIS_UPDATE_SCHEDULER_H
 
 #include <QObject>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include "kis_image_interfaces.h"

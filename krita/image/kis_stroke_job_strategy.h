@@ -19,7 +19,7 @@
 #ifndef __KIS_STROKE_JOB_STRATEGY_H
 #define __KIS_STROKE_JOB_STRATEGY_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 class KRITAIMAGE_EXPORT KisStrokeJobData

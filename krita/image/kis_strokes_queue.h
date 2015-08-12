@@ -19,7 +19,7 @@
 #ifndef __KIS_STROKES_QUEUE_H
 #define __KIS_STROKES_QUEUE_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"

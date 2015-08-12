@@ -40,4 +40,19 @@
 
 #endif /* not windows */
 
+/* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
+#ifdef COMPILING_TESTS
+#  if defined _WIN32 || defined _WIN64
+#    if defined(MAKE_KRITALIBPAINTOP_LIB)
+#      define PAINTOP_TEST_EXPORT KDE_EXPORT
+#    else
+#       define PAINTOP_TEST_EXPORT KDE_IMPORT
+#    endif
+#  else /* not windows */
+#    define PAINTOP_TEST_EXPORT KDE_EXPORT
+#  endif
+#else /* not compiling tests */
+#  define PAINTOP_TEST_EXPORT
+#endif
+
 #endif /* KRITAPAINTOP_EXPORT_H */

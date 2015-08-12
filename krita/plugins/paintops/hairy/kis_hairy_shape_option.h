@@ -20,7 +20,6 @@
 #define KIS_HAIRY_SHAPE_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString HAIRY_RADIUS = "Hairy/radius";
 const QString HAIRY_SIGMA = "Hairy/sigma";

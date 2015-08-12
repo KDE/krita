@@ -20,7 +20,6 @@
 #define KIS_GRIDOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString GRID_WIDTH = "Grid/gridWidth";
 const QString GRID_HEIGHT = "Grid/gridHeight";

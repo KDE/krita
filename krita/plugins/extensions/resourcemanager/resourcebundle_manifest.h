@@ -21,7 +21,6 @@
 #include <QPair>
 #include <QMap>
 #include <QMultiMap>
-#include "krita_export.h"
 
 
 class  ResourceBundleManifest

@@ -19,7 +19,7 @@
 #ifndef __KIS_CURRENT_OUTLINE_FETCHER_H
 #define __KIS_CURRENT_OUTLINE_FETCHER_H
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 #include <QFlags>
 #include <QScopedPointer>

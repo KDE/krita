@@ -20,7 +20,7 @@
 #define KIS_COLOR_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 const QString COLOROP_HUE = "ColorOption/hue";
 const QString COLOROP_SATURATION = "ColorOption/saturation";

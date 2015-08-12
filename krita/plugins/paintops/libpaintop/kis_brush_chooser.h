@@ -19,7 +19,7 @@
 #define KIS_BRUSH_CHOOSER_H_
 
 #include <QLabel>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 #include <kis_brush.h>
 
 class KisDoubleSliderSpinBox;

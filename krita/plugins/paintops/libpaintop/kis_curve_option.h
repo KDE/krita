@@ -28,7 +28,7 @@
 #include "kis_global.h"
 #include "kis_paintop_option.h"
 #include "kis_paint_information.h"
-#include "krita_export.h"
+#include "kritapaintop_export.h"
 #include "kis_dynamic_sensor.h"
 
 class KisDynamicSensor;

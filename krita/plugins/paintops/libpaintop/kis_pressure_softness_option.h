@@ -22,7 +22,7 @@
 
 #include "kis_curve_option.h"
 #include <kis_paint_information.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 /**
  * This option is responsible to deliver values suitable for softness

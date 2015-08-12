@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <QResizeEvent>
-#include "krita_export.h"
+#include "kritapaintop_export.h"
 #include "ui_wdgautobrush.h"
 #include <kis_auto_brush.h>
 

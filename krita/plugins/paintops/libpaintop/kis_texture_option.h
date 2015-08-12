@@ -20,7 +20,7 @@
 #ifndef KIS_TEXTURE_OPTION_H
 #define KIS_TEXTURE_OPTION_H
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 #include <kis_paint_device.h>
 #include <kis_types.h>

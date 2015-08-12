@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KRITALIBCOLOR_EXPORT_H
-#define KRITALIBCOLOR_EXPORT_H
+#ifndef KRITACOLOR_EXPORT_H
+#define KRITACOLOR_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>

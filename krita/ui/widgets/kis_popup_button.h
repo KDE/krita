@@ -22,7 +22,7 @@
 
 #include <QPushButton>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 /**
  * This class is a convenience class for a button that

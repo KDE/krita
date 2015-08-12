@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QObject;
 class QStringList;

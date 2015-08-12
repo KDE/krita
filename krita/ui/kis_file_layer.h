@@ -18,7 +18,7 @@
 #ifndef KIS_FILE_LAYER_H
 #define KIS_FILE_LAYER_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"

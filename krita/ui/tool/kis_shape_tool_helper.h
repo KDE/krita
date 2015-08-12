@@ -18,7 +18,7 @@
 #ifndef KIS_SHAPE_TOOL_HELPER_H
 #define KIS_SHAPE_TOOL_HELPER_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <QRectF>
 

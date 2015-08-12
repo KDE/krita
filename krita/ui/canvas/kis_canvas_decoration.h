@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_image.h>
 #include <kis_canvas2.h>
 #include <KisView.h>

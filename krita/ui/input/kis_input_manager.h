@@ -20,7 +20,7 @@
 #define KIS_INPUTMANAGER_H
 
 #include <QObject>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QPointF;
 class QTabletEvent;

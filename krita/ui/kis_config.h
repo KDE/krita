@@ -28,7 +28,7 @@
 
 #include "kis_global.h"
 #include "kis_properties_configuration.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KoColorProfile;
 class KoColorSpace;

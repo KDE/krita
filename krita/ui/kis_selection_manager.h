@@ -25,7 +25,7 @@
 #
 #include "KisDocument.h"
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisActionManager;
 class KisAction;

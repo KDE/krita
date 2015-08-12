@@ -23,7 +23,7 @@
 
 #include <kis_categorized_list_model.h>
 #include <kis_paintop_option.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <QString>
 

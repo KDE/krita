@@ -37,7 +37,7 @@
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
 #include "kis_config.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 
 class QToolButton;

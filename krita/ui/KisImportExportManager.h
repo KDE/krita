@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterChain.h"
 #include "KisFilterGraph.h"
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 class KisDocument;
 class KoProgressUpdater;
 

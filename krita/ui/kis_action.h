@@ -20,7 +20,7 @@
 #define KIS_ACTION_H
 
 #include <kaction.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kdebug.h>
 
 class KisActionManager;

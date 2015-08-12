@@ -19,7 +19,7 @@
 #ifndef __FREEHAND_STROKE_H
 #define __FREEHAND_STROKE_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kis_painter_based_stroke_strategy.h"

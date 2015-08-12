@@ -29,7 +29,7 @@
 #include "KoHistogramProducer.h"
 #include "kis_histogram.h"
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 
 class KoChannelInfo;

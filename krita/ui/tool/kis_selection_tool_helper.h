@@ -18,7 +18,7 @@
 #ifndef KIS_SELECTION_TOOL_HELPER_H
 #define KIS_SELECTION_TOOL_HELPER_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include "kundo2magicstring.h"
 #include "kis_layer.h"

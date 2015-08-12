@@ -21,7 +21,7 @@
 #define KIS_APPLICATION_H
 
 #include <qtsingleapplication/qtsingleapplication.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KisMainWindow;
 class KisApplicationPrivate;

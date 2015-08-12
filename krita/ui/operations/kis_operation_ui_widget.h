@@ -21,7 +21,7 @@
 #define KIS_OPERATION_UI_WIDGET_H
 
 #include <QWidget>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisOperationConfiguration;
 

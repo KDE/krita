@@ -20,7 +20,7 @@
 #define __KIS_OPERATION_CONFIGURATION_H
 
 #include <QString>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_properties_configuration.h"
 
 

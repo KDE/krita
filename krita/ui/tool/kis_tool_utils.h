@@ -22,7 +22,7 @@
 
 #include <KoColor.h>
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 
 namespace KisToolUtils {

@@ -25,7 +25,7 @@
 #include <QPainter>
 
 #include "kis_types.h"
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_action_manager.h"
 #include "kis_action.h"
 

@@ -19,7 +19,7 @@
 #ifndef __KIS_ICON_UTILS_H
 #define __KIS_ICON_UTILS_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QIcon;
 class QAbstractButton;

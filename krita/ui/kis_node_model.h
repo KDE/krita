@@ -19,7 +19,7 @@
 #define KIS_NODE_MODEL
 
 #include <KisDocumentSectionModel.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include <kis_types.h>
 
 class KisDummiesFacadeBase;

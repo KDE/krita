@@ -20,7 +20,7 @@
 
 #include <QList>
 #include <QCheckBox>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include <QScrollArea>
 #include <QVector>

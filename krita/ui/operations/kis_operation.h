@@ -21,7 +21,7 @@
 
 #include <QString>
 #include <kundo2magicstring.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_properties_configuration.h"
 #include "operations/kis_operation_configuration.h"
 

@@ -484,6 +484,7 @@ if (APPLE)
 endif ()
 
 install( FILES
+    kritaui_export.h
     canvas/kis_canvas2.h
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h

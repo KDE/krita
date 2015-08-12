@@ -21,7 +21,7 @@
 #include <KoResource.h>
 #include <QVector>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_psd_layer_style.h"
 
 /**

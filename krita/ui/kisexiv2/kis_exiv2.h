@@ -22,7 +22,7 @@
 
 #include <metadata/kis_meta_data_value.h>
 #include <exiv2/value.hpp>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 /// Convert an exiv value to a KisMetaData value
 KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray);

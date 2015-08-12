@@ -24,7 +24,7 @@
 
 class QPixmap;
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KRITAUI_EXPORT KisSplashScreen : public QWidget, public Ui::WdgSplash
 {

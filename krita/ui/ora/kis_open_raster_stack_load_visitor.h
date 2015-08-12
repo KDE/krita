@@ -21,7 +21,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QDomElement;
 

@@ -22,7 +22,7 @@
 
 #include <KoResource.h>
 #include <kis_properties_configuration.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 /// Resource for storing of workspaces
 class KRITAUI_EXPORT KisWorkspaceResource : public KoResource , public KisPropertiesConfiguration

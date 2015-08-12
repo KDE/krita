@@ -41,7 +41,7 @@
 #include <kis_painting_assistant.h>
 #include <kis_debug.h>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QString;
 

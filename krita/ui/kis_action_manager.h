@@ -20,7 +20,7 @@
 #ifndef KIS_ACTION_MANAGER_H
 #define KIS_ACTION_MANAGER_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <QPointer>
 

@@ -22,7 +22,7 @@
 #include <vector>
 #include <knuminput.h>
 #include <kis_config_widget.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KisDelayedActionDoubleInput : public KDoubleNumInput
 {

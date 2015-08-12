@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KIS_FILTERGRAPH_H
 #define KIS_FILTERGRAPH_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "KisFilterChain.h"
 #include "KisFilterVertex.h"
 #include <QByteArray>

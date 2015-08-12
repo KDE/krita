@@ -20,7 +20,7 @@
 #define __KIS_EXPOSURE_GAMMA_CORRECTION_INTERFACE_H
 
 #include <QtGlobal>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 /**
  * A special interface for OCIO filter providing functionality for the

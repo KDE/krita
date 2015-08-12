@@ -20,7 +20,7 @@
 
 #include <qglobal.h>
 #include <QSharedPointer>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 
 

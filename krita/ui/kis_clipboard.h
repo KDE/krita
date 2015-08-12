@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QSize>
 #include "kis_types.h"
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QImage;
 class QRect;

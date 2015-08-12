@@ -41,7 +41,7 @@
 #include <GL/glu.h>
 #endif
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QGLWidget;
 

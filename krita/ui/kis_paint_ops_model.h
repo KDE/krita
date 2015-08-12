@@ -23,7 +23,7 @@
 
 #include <QAbstractListModel>
 #include <QPixmap>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_categorized_list_model.h"
 #include "kis_paintop_factory.h"
 

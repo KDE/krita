@@ -282,7 +282,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
-        QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen: %1", i + 1));
+        QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen %1:", i + 1));
         monitorProfileGrid->addWidget(lbl, i, 0);
         m_monitorProfileLabels << lbl;
         SqueezedComboBox *cmb = new SqueezedComboBox();
@@ -441,7 +441,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     }
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
-        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen: %1", i + 1));
+        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen %1:", i + 1));
         m_monitorProfileWidgets[i]->setCurrent(csf->defaultProfile());
     }
 }

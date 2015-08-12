@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef LIBKISPSD_EXPORT_H
-#define LIBKISPSD_EXPORT_H
+#ifndef KRITAPSD_EXPORT_H
+#define KRITAPSD_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>

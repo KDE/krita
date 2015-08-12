@@ -200,7 +200,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));  
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KisAction(i18n("Fill with Background Color"), this);
@@ -215,6 +215,26 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillPattern->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_pattern", m_fillPattern);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
+
+    m_fillForegroundColorOpacity  = new KisAction(i18n("Fill with Foreground Color (Opacity)"), this);
+    m_fillForegroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillForegroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_foreground_color_opacity", m_fillForegroundColorOpacity);
+    m_fillForegroundColorOpacity->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Backspace));
+    connect(m_fillForegroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillForegroundColorOpacity()));
+
+    m_fillBackgroundColorOpacity  = new KisAction(i18n("Fill with Background Color (Opacity)"), this);
+    m_fillBackgroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillBackgroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_background_color_opacity", m_fillBackgroundColorOpacity);
+    m_fillBackgroundColorOpacity->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backspace));
+    connect(m_fillBackgroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillBackgroundColorOpacity()));
+
+    m_fillPatternOpacity  = new KisAction(i18n("Fill with Pattern (Opacity)"), this);
+    m_fillPatternOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillPatternOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_pattern_opacioty", m_fillPatternOpacity);
+    connect(m_fillPatternOpacity, SIGNAL(triggered()), this, SLOT(fillPatternOpacity()));
 
     m_strokeShapes  = new KisAction(i18nc("@action:inmenu", "Stro&ke selected shapes"), this);
     m_strokeShapes->setActivationFlags(KisAction::SHAPES_SELECTED);
@@ -509,6 +529,24 @@ void KisSelectionManager::fillPattern()
 {
     KisFillActionFactory factory;
     factory.run("pattern", m_view);
+}
+
+void KisSelectionManager::fillForegroundColorOpacity()
+{
+    KisFillActionFactory  factory;
+    factory.run("fg_opacity", m_view);
+}
+
+void KisSelectionManager::fillBackgroundColorOpacity()
+{
+    KisFillActionFactory factory;
+    factory.run("bg_opacity", m_view);
+}
+
+void KisSelectionManager::fillPatternOpacity()
+{
+    KisFillActionFactory factory;
+    factory.run("pattern_opacity", m_view);
 }
 
 void KisSelectionManager::copySelectionToNewLayer()

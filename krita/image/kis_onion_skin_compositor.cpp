@@ -67,17 +67,16 @@ struct KisOnionSkinCompositor::Private
         return tintDevice;
     }
 
-    void compositeFrame(KisRasterKeyframeChannel *keyframes, int time, int offset, KisPainter &gcFrame, KisPainter &gcDest, KisPaintDeviceSP tintSource, const QRect &rect)
+    void compositeFrame(KisRasterKeyframeChannel *keyframes, KisKeyframeSP keyframe, KisPainter &gcFrame, KisPainter &gcDest, KisPaintDeviceSP tintSource, int opacity, const QRect &rect)
     {
-        bool ok = keyframes->fetchFrame(gcFrame.device(), time, offset);
+        if (keyframe.isNull()) return;
 
-        if (ok) {
-            gcFrame.bitBlt(rect.topLeft(), tintSource, rect);
+        keyframes->fetchFrame(keyframe, gcFrame.device());
 
-            int opacity = skinOpacity(offset);
-            gcDest.setOpacity(opacity);
-            gcDest.bitBlt(rect.topLeft(), gcFrame.device(), rect);
-        }
+        gcFrame.bitBlt(rect.topLeft(), tintSource, rect);
+
+        gcDest.setOpacity(opacity);
+        gcDest.bitBlt(rect.topLeft(), gcFrame.device(), rect);
     }
 
     void refreshConfig()
@@ -111,7 +110,6 @@ KisOnionSkinCompositor::~KisOnionSkinCompositor()
 
 void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect& rect)
 {
-    int time = sourceDevice->defaultBounds()->currentTime();
     KisRasterKeyframeChannel *keyframes = sourceDevice->keyframeChannel();
 
     KisPaintDeviceSP frameDevice = new KisPaintDevice(sourceDevice->colorSpace());
@@ -126,10 +124,22 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisPainter gcDest(targetDevice);
     gcDest.setCompositeOp(sourceDevice->colorSpace()->compositeOp(COMPOSITE_BEHIND));
 
+    KisKeyframeSP keyframeBck;
+    KisKeyframeSP keyframeFwd;
+
+    int time = sourceDevice->defaultBounds()->currentTime();
+    keyframeBck = keyframeFwd = keyframes->activeKeyframeAt(time);
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
-        m_d->compositeFrame(keyframes, time, -offset, gcFrame, gcDest, backwardTintDevice, rect);
-        m_d->compositeFrame(keyframes, time,  offset, gcFrame, gcDest, forwardTintDevice, rect);
+        if (!keyframeBck.isNull()) {
+            keyframeBck = keyframes->previousKeyframe(keyframeBck);
+            m_d->compositeFrame(keyframes, keyframeBck, gcFrame, gcDest, backwardTintDevice, m_d->skinOpacity(-offset), rect);
+        }
+
+        if (!keyframeFwd.isNull()) {
+            keyframeFwd = keyframes->nextKeyframe(keyframeFwd);
+            m_d->compositeFrame(keyframes, keyframeFwd, gcFrame, gcDest, forwardTintDevice, m_d->skinOpacity(offset), rect);
+        }
     }
 
 }

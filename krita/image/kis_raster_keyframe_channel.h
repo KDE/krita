@@ -45,7 +45,7 @@ public:
      * @param time time to determine base keyframe
      * @param offset number of keyframes to offset from base keyframe
      */
-    bool fetchFrame(KisPaintDeviceSP targetDevice, int time, int offset);
+    void fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice);
 
     QString frameFilename(int frameId) const;
 

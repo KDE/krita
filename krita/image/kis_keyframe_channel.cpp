@@ -230,9 +230,30 @@ KisKeyframe *KisKeyframeChannel::keyframeAt(int time)
     return 0;
 }
 
-KisKeyframe *KisKeyframeChannel::activeKeyframeAt(int time) const
+KisKeyframeSP KisKeyframeChannel::activeKeyframeAt(int time) const
 {
-    return activeKeyIterator(time).value().data();
+    return activeKeyIterator(time).value();
+}
+
+KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe)
+{
+    KeyframesMap::iterator i = m_d->keys.find(keyframe->time());
+    if (i == m_d->keys.end()) return KisKeyframeSP(0);
+
+    i++;
+
+    if (i == m_d->keys.end()) return KisKeyframeSP(0);
+    return i.value();
+}
+
+KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe)
+{
+    KeyframesMap::iterator i = m_d->keys.find(keyframe->time());
+    if (i == m_d->keys.begin() || i == m_d->keys.end()) return KisKeyframeSP(0);
+    i--;
+
+    if (i == m_d->keys.begin()) return KisKeyframeSP(0);
+    return i.value();
 }
 
 KisTimeRange KisKeyframeChannel::affectedFrames(int time) const

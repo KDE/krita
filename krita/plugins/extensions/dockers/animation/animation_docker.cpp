@@ -164,8 +164,8 @@ void AnimationDocker::slotAddDuplicateFrame()
         KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
         int time = m_canvas->image()->animationInterface()->currentTime();
 
-        KisKeyframe *keyframe = rasterChannel->activeKeyframeAt(time);
-        rasterChannel->copyKeyframe(keyframe, time, cmd);
+        KisKeyframeSP keyframe = rasterChannel->activeKeyframeAt(time);
+        rasterChannel->copyKeyframe(keyframe.data(), time, cmd);
         m_canvas->image()->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
     }
 }

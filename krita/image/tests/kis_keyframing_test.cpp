@@ -304,7 +304,6 @@ void KisKeyframingTest::testRasterFrameFetching()
     dev->setDefaultBounds(bounds);
 
     KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
-    bool ok;
 
     channel->addKeyframe(0);
     channel->addKeyframe(10);
@@ -324,36 +323,21 @@ void KisKeyframingTest::testRasterFrameFetching()
 
     bounds->testingSetTime(10);
 
-    ok = channel->fetchFrame(devTarget, 50, 0);
-    QCOMPARE(ok, true);
-    QImage fetched3 = devTarget->createThumbnail(50, 50);
+    KisKeyframeSP keyframe = channel->activeKeyframeAt(0);
+    channel->fetchFrame(keyframe, devTarget);
+    QImage fetched1 = devTarget->createThumbnail(50, 50);
 
-    ok = channel->fetchFrame(devTarget, 50, -1);
-    QCOMPARE(ok, true);
+    keyframe = channel->activeKeyframeAt(10);
+    channel->fetchFrame(keyframe, devTarget);
     QImage fetched2 = devTarget->createThumbnail(50, 50);
 
-    ok = channel->fetchFrame(devTarget, 50, -2);
-    QCOMPARE(ok, true);
-    QImage fetched1 = devTarget->createThumbnail(50, 50);
+    keyframe = channel->activeKeyframeAt(50);
+    channel->fetchFrame(keyframe, devTarget);
+    QImage fetched3 = devTarget->createThumbnail(50, 50);
 
     QVERIFY(fetched1 == frame1);
     QVERIFY(fetched2 == frame2);
     QVERIFY(fetched3 == frame3);
-
-    // Fetching frames before or after one exists
-
-    devTarget->clear();
-    QImage blank = devTarget->createThumbnail(50, 50);
-
-    ok = channel->fetchFrame(devTarget, 50, -3);
-    QCOMPARE(ok, false);
-    QImage fetched4 = devTarget->createThumbnail(50, 50);
-    QVERIFY(fetched4 == blank);
-
-    ok = channel->fetchFrame(devTarget, 50, 1);
-    QCOMPARE(ok, false);
-    QImage fetched5 = devTarget->createThumbnail(50, 50);
-    QVERIFY(fetched5 == blank);
 }
 
 void KisKeyframingTest::testAffectedFrames()

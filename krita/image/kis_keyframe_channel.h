@@ -54,7 +54,10 @@ public:
     KisKeyframe *copyKeyframe(const KisKeyframe *keyframe, int newTime, KUndo2Command *parentCommand = 0);
 
     KisKeyframe *keyframeAt(int time);
-    KisKeyframe *activeKeyframeAt(int time) const;
+    KisKeyframeSP activeKeyframeAt(int time) const;
+
+    KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe);
+    KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe);
 
     /**
      * Get the set of frames affected by any changes to the value

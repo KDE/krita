@@ -56,6 +56,11 @@ void KisRasterKeyframeChannel::fetchFrame(KisKeyframeSP keyframe, KisPaintDevice
     m_d->paintDevice->framesInterface()->fetchFrame(keyframe->value(), targetDevice);
 }
 
+QRect KisRasterKeyframeChannel::frameExtents(KisKeyframeSP keyframe)
+{
+    return m_d->paintDevice->framesInterface()->frameBounds(keyframe->value());
+}
+
 QString KisRasterKeyframeChannel::frameFilename(int frameId) const
 {
     return m_d->frameFilenames.value(frameId, QString());

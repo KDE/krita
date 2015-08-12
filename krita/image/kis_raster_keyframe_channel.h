@@ -47,6 +47,8 @@ public:
      */
     void fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice);
 
+    QRect frameExtents(KisKeyframeSP keyframe);
+
     QString frameFilename(int frameId) const;
 
     bool hasScalarValue() const;

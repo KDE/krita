@@ -220,12 +220,14 @@ const QBitArray& KisPaintLayer::channelLockFlags() const
 QRect KisPaintLayer::extent() const
 {
     QRect rect = temporaryTarget() ? temporaryTarget()->extent() : QRect();
+    if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::extent();
 }
 
 QRect KisPaintLayer::exactBounds() const
 {
     QRect rect = temporaryTarget() ? temporaryTarget()->exactBounds() : QRect();
+    if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::exactBounds();
 }
 
@@ -253,6 +255,11 @@ bool KisPaintLayer::onionSkinEnabled() const
 
 void KisPaintLayer::setOnionSkinEnabled(bool state)
 {
+    if (state == false && onionSkinEnabled()) {
+        // Turning off onionskins shrinks our extent. Let's clean up the onion skins first
+        setDirty(KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice));
+    }
+
     nodeProperties().setProperty("onionskin", state);
 }
 

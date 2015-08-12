@@ -144,6 +144,36 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
 
 }
 
+QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
+{
+    QRect rect;
+    KisKeyframeSP keyframeBck;
+    KisKeyframeSP keyframeFwd;
+
+    KisRasterKeyframeChannel *channel = device->keyframeChannel();
+    keyframeBck = keyframeFwd = channel->activeKeyframeAt(device->defaultBounds()->currentTime());
+
+    for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
+        if (!keyframeBck.isNull()) {
+            keyframeBck = channel->previousKeyframe(keyframeBck);
+
+            if (!keyframeBck.isNull()) {
+                rect |= channel->frameExtents(keyframeBck);
+            }
+        }
+
+        if (!keyframeFwd.isNull()) {
+            keyframeFwd = channel->nextKeyframe(keyframeFwd);
+
+            if (!keyframeFwd.isNull()) {
+                rect |= channel->frameExtents(keyframeFwd);
+            }
+        }
+    }
+
+    return rect;
+}
+
 void KisOnionSkinCompositor::configChanged()
 {
     m_d->refreshConfig();

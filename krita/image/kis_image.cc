@@ -1508,15 +1508,18 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     return id;
 }
 
-void KisImage::startIsolatedMode(KisNodeSP node)
+bool KisImage::startIsolatedMode(KisNodeSP node)
 {
-    barrierLock();
+    if (!tryBarrierLock()) return false;
+
     unlock();
 
     m_d->isolatedRootNode = node;
     emit sigIsolatedModeChanged();
 
     notifyProjectionUpdated(bounds());
+
+    return true;
 }
 
 void KisImage::stopIsolatedMode()

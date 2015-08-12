@@ -524,7 +524,7 @@ public:
     void notifyNodeCollpasedChanged();
 
 public:
-    void startIsolatedMode(KisNodeSP node);
+    bool startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
     KisNodeSP isolatedModeRoot() const;
 

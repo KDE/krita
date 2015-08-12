@@ -885,7 +885,7 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo*
             channelInfo->channelOffset += rleLength;
         }
         else {
-            QString error = "Unsupported Compression mode: " + channelInfo->compressionType;
+            QString error = QString("Unsupported Compression mode: %1").arg(channelInfo->compressionType);
             dbgFile << "ERROR: fetchChannelsBytes:" << error;
             throw KisAslReaderUtils::ASLParseException(error);
         }

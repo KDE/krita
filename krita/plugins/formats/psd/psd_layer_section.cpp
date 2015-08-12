@@ -17,6 +17,8 @@
  */
 #include "psd_layer_section.h"
 
+#include <boost/bind.hpp>
+
 #include <QIODevice>
 
 #include <KoColorSpace.h>
@@ -68,39 +70,8 @@ bool PSDLayerMaskSection::read(QIODevice* io)
     return retval;
 }
 
-bool PSDLayerMaskSection::readImpl(QIODevice* io)
+bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice* io)
 {
-    dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
-
-    layerMaskBlockSize = 0;
-    if (m_header.version == 1) {
-        quint32 _layerMaskBlockSize = 0;
-        if (!psdread(io, &_layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io->bytesAvailable()) {
-            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
-                .arg(_layerMaskBlockSize).arg(io->bytesAvailable());
-            return false;
-        }
-        layerMaskBlockSize = _layerMaskBlockSize;
-    }
-    else if (m_header.version == 2) {
-        if (!psdread(io, &layerMaskBlockSize) || layerMaskBlockSize > (quint64)io->bytesAvailable()) {
-            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
-                .arg(layerMaskBlockSize).arg(io->bytesAvailable());
-            return false;
-        }
-    }
-
-    quint64 start = io->pos();
-
-    dbgFile << "layer + mask section size" << layerMaskBlockSize;
-
-    if (layerMaskBlockSize == 0) {
-        dbgFile << "No layer + mask info, so no layers, only a background layer";
-        return true;
-    }
-
-    KIS_ASSERT_RECOVER(m_header.version == 1) { return false; }
-
     quint32 layerInfoSectionSize = 0;
     SAFE_READ_EX(io, layerInfoSectionSize);
 
@@ -108,7 +79,6 @@ bool PSDLayerMaskSection::readImpl(QIODevice* io)
         qWarning() << "WARNING: layerInfoSectionSize is NOT even! Fixing...";
         layerInfoSectionSize++;
     }
-
 
     {
         SETUP_OFFSET_VERIFIER(layerInfoSectionTag, io, layerInfoSectionSize, 0);
@@ -224,6 +194,46 @@ bool PSDLayerMaskSection::readImpl(QIODevice* io)
         }
     }
 
+    return true;
+}
+
+bool PSDLayerMaskSection::readImpl(QIODevice* io)
+{
+    dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
+
+    layerMaskBlockSize = 0;
+    if (m_header.version == 1) {
+        quint32 _layerMaskBlockSize = 0;
+        if (!psdread(io, &_layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io->bytesAvailable()) {
+            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
+                .arg(_layerMaskBlockSize).arg(io->bytesAvailable());
+            return false;
+        }
+        layerMaskBlockSize = _layerMaskBlockSize;
+    }
+    else if (m_header.version == 2) {
+        if (!psdread(io, &layerMaskBlockSize) || layerMaskBlockSize > (quint64)io->bytesAvailable()) {
+            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
+                .arg(layerMaskBlockSize).arg(io->bytesAvailable());
+            return false;
+        }
+    }
+
+    quint64 start = io->pos();
+
+    dbgFile << "layer + mask section size" << layerMaskBlockSize;
+
+    if (layerMaskBlockSize == 0) {
+        dbgFile << "No layer + mask info, so no layers, only a background layer";
+        return true;
+    }
+
+    KIS_ASSERT_RECOVER(m_header.version == 1) { return false; }
+
+    if (!readLayerInfoImpl(io)) {
+        return false;
+    }
+
     quint32 globalMaskBlockLength;
     if (!psdread(io, &globalMaskBlockLength)) {
         error = "Could not read global mask info block";
@@ -255,7 +265,21 @@ bool PSDLayerMaskSection::readImpl(QIODevice* io)
         }
     }
 
-    // second try to read additional sections
+    // global additional sections
+
+    /**
+     * Newer versions of PSD have layers info block wrapped into
+     * 'Lr16' or 'Lr32' additional section, while the main block is
+     * absent.
+     *
+     * Here we pass the callback which should be used when such
+     * additional section is recognized.
+     *
+     * NOTE: atm, we do not support ZIP compression, which is used in
+     *       this block, so we just comment it out for now!
+     */
+    // globalInfoSection.setExtraLayerInfoBlockHandler(boost::bind(&PSDLayerMaskSection::readLayerInfoImpl, this, _1));
+
     globalInfoSection.read(io);
 
     /* put us after this section so reading the next section will work even if we mess up */

@@ -34,6 +34,11 @@ PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader& header
 {
 }
 
+void PsdAdditionalLayerInfoBlock::setExtraLayerInfoBlockHandler(ExtraLayerInfoBlockHandler handler)
+{
+    m_layerInfoBlockHandler = handler;
+}
+
 bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 {
     bool result = true;
@@ -90,7 +95,14 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
         }
         keys << key;
 
-        if (key == "SoCo") {
+        if (key == "Lr16" || key == "Lr32") {
+            if (m_layerInfoBlockHandler) {
+                int offset = m_header.version > 1 ? 8 : 4;
+                io->seek(io->pos() - offset);
+                m_layerInfoBlockHandler(io);
+            }
+        }
+        else if (key == "SoCo") {
 
         }
         else if (key == "GdFl") {

@@ -39,9 +39,9 @@
 
 #include <asl/kis_offset_keeper.h>
 #include <asl/kis_asl_writer_utils.h>
+#include <asl/kis_asl_reader_utils.h>
 
 #include "psd_pixel_utils.h"
-
 
 
 // Just for pretty debug messages
@@ -747,33 +747,22 @@ bool PSDLayerRecord::valid()
 bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
 {
     dbgFile << "Reading pixel data for layer" << layerName << "pos" << io->pos();
-    switch (m_header.colormode) {
-    case Bitmap:
-        error = "Unsupported color mode: bitmap";
-        return false; // Not supported;
-    case Indexed:
-        error = "Unsupported color mode: indexed";
-        return false; // Not supported;
-    case MultiChannel:
-        error = "Unsupported color mode: indexed";
-        return false; // Not supported
-    case DuoTone:
-        error = "Unsupported color mode: Duotone";
-        return false; // Not supported
-    case Grayscale:
-        return readCommon(device, io, &PsdPixelUtils::readGrayPixelCommon);
-    case RGB:
-        return readCommon(device, io, &PsdPixelUtils::readRgbPixelCommon);
-    case CMYK:
-        return readCommon(device, io, &PsdPixelUtils::readCmykPixelCommon);
-    case Lab:
-        return readCommon(device, io, &PsdPixelUtils::readLabPixelCommon);
-    case UNKNOWN:
-    default:
+
+    const int channelSize = m_header.channelDepth / 8;
+    const QRect layerRect = QRect(left,
+                                  top,
+                                  right - left,
+                                  bottom - top);
+
+    try {
+        PsdPixelUtils::readChannels(io, device, m_header.colormode, channelSize, layerRect, channelInfoRecords);
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        device->clear();
+        error = e.what();
         return false;
     }
 
-    return false;
+    return true;
 }
 
 QRect PSDLayerRecord::channelRect(ChannelInfo *channel) const
@@ -854,80 +843,6 @@ bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *
 
     // the position of the io device will be restored by
     // KisOffsetKeeper automagically
-
-    return true;
-}
-
-#include <asl/kis_asl_reader_utils.h>
-
-QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo*> channelInfoRecords,
-                                            int row, int width, int channelSize)
-{
-    const int uncompressedLength = width * channelSize;
-
-    QMap<quint16, QByteArray> channelBytes;
-
-    foreach(ChannelInfo *channelInfo, channelInfoRecords) {
-        // user supplied masks are ignored here
-        if (channelInfo->channelId < -1) continue;
-
-        io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
-
-        if (channelInfo->compressionType == Compression::Uncompressed) {
-            channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
-            channelInfo->channelOffset += uncompressedLength;
-        }
-        else if (channelInfo->compressionType == Compression::RLE) {
-            int rleLength = channelInfo->rleRowLengths[row];
-            QByteArray compressedBytes = io->read(rleLength);
-            QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
-            channelBytes.insert(channelInfo->channelId, uncompressedBytes);
-            channelInfo->channelOffset += rleLength;
-        }
-        else {
-            QString error = QString("Unsupported Compression mode: %1").arg(channelInfo->compressionType);
-            dbgFile << "ERROR: fetchChannelsBytes:" << error;
-            throw KisAslReaderUtils::ASLParseException(error);
-        }
-    }
-
-    return channelBytes;
-}
-
-bool PSDLayerRecord::readCommon(KisPaintDeviceSP dev, QIODevice *io, PixelFunc pixelFunc)
-{
-    KisOffsetKeeper keeper(io);
-
-    qint64 width = right - left;
-
-    if (width <= 0) {
-        dbgFile << "Empty layer";
-        return true;
-    }
-
-    const int channelSize = m_header.channelDepth / 8;
-
-    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
-    for (int row = top ; row < bottom; row++)
-    {
-
-        QMap<quint16, QByteArray> channelBytes;
-
-        try {
-            channelBytes = fetchChannelsBytes(io, channelInfoRecords,
-                                             row - top, width, channelSize);
-        } catch (KisAslReaderUtils::ASLParseException &e) {
-            dev->clear();
-            error = e.what();
-            return false;
-        }
-
-        for (qint64 col = 0; col < width; col++){
-            pixelFunc(channelSize, channelBytes, col, it->rawData());
-            it->nextPixel();
-        }
-        it->nextRow();
-    }
 
     return true;
 }

@@ -160,9 +160,6 @@ private:
 
 private:
 
-    typedef boost::function<void(int, const QMap<quint16, QByteArray>&, int, quint8*)> PixelFunc;
-    bool readCommon(KisPaintDeviceSP dev, QIODevice *io, PixelFunc pixelFunc);
-
     bool readRGB(KisPaintDeviceSP dev ,QIODevice *io);
     bool readCMYK(KisPaintDeviceSP dev ,QIODevice *io);
     bool readLAB(KisPaintDeviceSP dev ,QIODevice *io);

@@ -24,7 +24,7 @@
 #include "kis_layer_style_filter.h"
 #include <kritaimage_export.h>
 
-struct psd_layer_effects_shadow_base;
+class psd_layer_effects_shadow_base;
 
 
 class KRITAIMAGE_EXPORT KisLsDropShadowFilter : public KisLayerStyleFilter

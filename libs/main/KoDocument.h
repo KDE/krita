@@ -58,7 +58,7 @@ class QDomDocument;
 #if defined(_WIN32) || defined(_WIN64)
     #include <KoPageLayout.h>
 #else
-    class KoPageLayout;
+    struct KoPageLayout;
 #endif
 
 class KoVersionInfo

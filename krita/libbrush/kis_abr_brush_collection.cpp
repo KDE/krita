@@ -33,7 +33,6 @@
 #include <QString>
 #include <QBuffer>
 
-#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColor.h>
@@ -160,19 +159,19 @@ static bool abr_reach_8BIM_section(QDataStream & abr, const QString name)
         r = abr.readRawData(tag, 4);
 
         if (r != 4) {
-            qDebug() << "Error: Cannot read 8BIM tag ";
+            qWarning() << "Error: Cannot read 8BIM tag ";
             return false;
         }
 
         if (strncmp(tag, "8BIM", 4)) {
-            qDebug() << "Error: Start tag not 8BIM but " << (int)tag[0] << (int)tag[1] << (int)tag[2] << (int)tag[3] << " at position " << abr.device()->pos();
+            qWarning() << "Error: Start tag not 8BIM but " << (int)tag[0] << (int)tag[1] << (int)tag[2] << (int)tag[3] << " at position " << abr.device()->pos();
             return false;
         }
 
         r = abr.readRawData(tagname, 4);
 
         if (r != 4) {
-            qDebug() << "Error: Cannot read 8BIM tag name";
+            qWarning() << "Error: Cannot read 8BIM tag name";
             return false;
         }
         tagname[4] = '\0';
@@ -303,7 +302,6 @@ static QString abr_read_ucs2_text(QDataStream & abr)
 
 quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
-    qDebug() << "abr_brush_load_v6()" << filename;
     Q_UNUSED(image_ID);
     qint32 brush_size = 0;
     qint32 brush_end = 0;
@@ -397,8 +395,6 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
 
 qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
-    qDebug() << "abr_brush_load_v12()" << filename;
-
     Q_UNUSED(image_ID);
     short brush_type;
     qint32 brush_size;

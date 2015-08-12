@@ -28,7 +28,6 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 
-#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColor.h>

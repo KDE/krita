@@ -27,14 +27,6 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined(_WIN32) || defined(_WIN64)
 
-#ifndef KRITASKETCH_EXPORT
-# ifdef MAKE_KRITASKETCHLIB_LIB
-#  define KRITASKETCH_EXPORT KDE_EXPORT
-# else
-#  define KRITASKETCH_EXPORT KDE_IMPORT
-# endif
-#endif
-
 #ifndef KRITAIMAGE_EXPORT
 # ifdef MAKE_KRITAIMAGE_LIB
 #  define KRITAIMAGE_EXPORT KDE_EXPORT
@@ -45,7 +37,6 @@
 
 #else // not windows
 
-#define KRITASKETCH_EXPORT KDE_EXPORT
 #define KRITAIMAGE_EXPORT KDE_EXPORT
 
 #endif /* not windows */

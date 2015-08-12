@@ -99,6 +99,31 @@ KisImageWSP PSDSaver::image()
     return m_image;
 }
 
+#include "kis_sequential_iterator.h"
+
+
+bool checkIfHasTransparency(KisPaintDeviceSP dev)
+{
+    const QRect deviceBounds = dev->exactBounds();
+    const QRect imageBounds = dev->defaultBounds()->bounds();
+
+    if (deviceBounds.isEmpty() ||
+        (deviceBounds & imageBounds) != imageBounds) {
+
+        return true;
+    }
+
+    const KoColorSpace *cs = dev->colorSpace();
+    KisSequentialConstIterator it(dev, deviceBounds);
+
+    do {
+        if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
+            return true;
+        }
+    } while(it.nextPixel());
+
+    return false;
+}
 
 KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 {
@@ -214,7 +239,11 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // LAYER AND MASK DATA
     // Only save layers and masks if there is more than one layer
     dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << f.pos();
-    if (m_image->rootLayer()->childCount() > 1) {
+
+    bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
+        checkIfHasTransparency(m_image->rootLayer()->firstChild()->projection());
+
+    if (haveLayers) {
 
         PSDLayerMaskSection layerSection(header);
         layerSection.hasTransparency = true;

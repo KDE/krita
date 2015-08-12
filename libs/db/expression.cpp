@@ -991,7 +991,7 @@ FunctionExpr::FunctionExpr(const QString& name_, NArgExpr* args_)
 FunctionExpr::FunctionExpr(const FunctionExpr& expr)
         : BaseExpr(0/*undefined*/)
         , name(expr.name)
-        , args(expr.args ? args->copy() : 0)
+        , args(expr.args ? expr.args->copy() : 0)
 {
     if (args)
         args->setParent(this);

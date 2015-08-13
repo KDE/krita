@@ -24,6 +24,7 @@
 #include "kis_image_patch.h"
 #include "kis_shared.h"
 #include "opengl/kis_opengl.h"
+#include "kritaui_export.h"
 
 #include "kis_ui_types.h"
 

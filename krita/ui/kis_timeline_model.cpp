@@ -249,6 +249,8 @@ bool KisTimelineModel::setData(const QModelIndex &index, const QVariant &value, 
                 m_d->image->postExecutionUndoAdapter()->addCommand(toQShared(cmd.take()));
             }
 
+            emit dataChanged(index, index);
+
             return result;
         }
     }

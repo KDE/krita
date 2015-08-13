@@ -22,6 +22,7 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QScrollBar>
 
 #include "kis_timeline_model.h"
 #include "timeline_widget.h"
@@ -40,6 +41,7 @@ TimelineView::TimelineView(QWidget *parent, TimelineWidget *timelineWidget)
     setSelectionBehavior(SelectItems);
     header()->hide();
     setItemsExpandable(false);
+
 }
 
 QModelIndex TimelineView::indexAt(const QPoint &point) const
@@ -151,6 +153,11 @@ bool TimelineView::viewportEvent(QEvent *e)
     return false;
 }
 
+void TimelineView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    resizeColumnToContents(1);
+}
+
 int TimelineView::getKeyframeAt(const QModelIndex &channelIndex, int x) const
 {
     return findKeyframe(channelIndex, x, true);
@@ -228,6 +235,7 @@ void TimelineView::setModel(QAbstractItemModel *newModel)
 
 void TimelineView::rowsChanged()
 {
+    resizeColumnToContents(1);
     viewport()->update();
 }
 

@@ -43,7 +43,13 @@ TimelineWidget::TimelineWidget(QWidget *parent)
     m_layout->insertSpacing(0, 16);
 
     m_layout->addWidget(splitter);
-    splitter->addWidget(m_layerTree);
+
+    QWidget *leftColumn = new QWidget(splitter);
+    QVBoxLayout *leftVBox = new QVBoxLayout(leftColumn);
+    leftColumn->setLayout(leftVBox);
+    leftVBox->addWidget(m_layerTree);
+
+    splitter->addWidget(leftColumn);
     splitter->addWidget(m_timelineView);
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 6);
@@ -52,6 +58,14 @@ TimelineWidget::TimelineWidget(QWidget *parent)
     m_layerTree->viewport()->setAutoFillBackground(false);
     m_timelineView->setFrameShape(QFrame::NoFrame);
     m_timelineView->viewport()->setAutoFillBackground(false);
+
+    m_timelineView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    leftColumn->setContentsMargins(0,0,0,0);
+    leftVBox->setSpacing(0);
+    leftVBox->setContentsMargins(0,0,0,0);
+    m_timelineView->horizontalScrollBar()->adjustSize();
+    leftVBox->addSpacing(m_timelineView->horizontalScrollBar()->height());
 
     m_layerTree->header()->hide();
     m_layerTree->setSelectionMode(QAbstractItemView::SingleSelection);

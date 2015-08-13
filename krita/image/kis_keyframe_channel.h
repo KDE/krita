@@ -56,8 +56,8 @@ public:
     KisKeyframe *keyframeAt(int time);
     KisKeyframeSP activeKeyframeAt(int time) const;
 
-    KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe);
-    KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe);
+    KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
+    KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
 
     /**
      * Get the set of frames affected by any changes to the value

@@ -235,7 +235,7 @@ KisKeyframeSP KisKeyframeChannel::activeKeyframeAt(int time) const
     return activeKeyIterator(time).value();
 }
 
-KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe)
+KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe) const
 {
     KeyframesMap::iterator i = m_d->keys.find(keyframe->time());
     if (i == m_d->keys.end()) return KisKeyframeSP(0);
@@ -246,7 +246,7 @@ KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe)
     return i.value();
 }
 
-KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe)
+KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe) const
 {
     KeyframesMap::iterator i = m_d->keys.find(keyframe->time());
     if (i == m_d->keys.begin() || i == m_d->keys.end()) return KisKeyframeSP(0);

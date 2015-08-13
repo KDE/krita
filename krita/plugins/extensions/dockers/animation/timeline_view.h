@@ -48,6 +48,9 @@ public:
 protected:
     bool viewportEvent(QEvent *e);
 
+protected slots:
+    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+
 private slots:
     void rowsChanged();
 

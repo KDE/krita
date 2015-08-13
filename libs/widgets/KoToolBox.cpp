@@ -315,7 +315,7 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
                                    toolbuttonSize);
 
         QList<int> sizes;
-        sizes << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
+        sizes << 12 << 14 << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
         foreach(int i, sizes) {
             d->contextIconSizes.insert(d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize())), i);
         }

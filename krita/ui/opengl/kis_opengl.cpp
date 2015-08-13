@@ -68,9 +68,11 @@ void KisOpenGL::initialize()
     }
     format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
+#endif
 }
 
 int KisOpenGL::initializeContext(QOpenGLContext* s) {
+#ifdef HAVE_OPENGL
     KisConfig cfg;
     dbgUI << "OpenGL: Opening new context";
 
@@ -115,6 +117,7 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
         NeedsFenceWorkaround = true;
     }
 #else
+    Q_UNUSED(s);
     NeedsFenceWorkaround = false;
 #endif
     return glVersion;

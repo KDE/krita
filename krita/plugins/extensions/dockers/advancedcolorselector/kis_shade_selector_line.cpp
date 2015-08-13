@@ -110,7 +110,14 @@ void KisShadeSelectorLine::fromString(const QString& string)
 
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 {
-    m_realPixelCache = new KisPaintDevice(m_parentProxy->colorSpace());
+
+    if (m_cachedColorSpace != m_parentProxy->colorSpace()) {
+        m_realPixelCache = new KisPaintDevice(m_parentProxy->colorSpace());
+        m_cachedColorSpace = m_parentProxy->colorSpace();
+    }
+    else {
+        m_realPixelCache->clear();
+    }
 
     int patchCount;
     int patchSpacing;

@@ -30,6 +30,7 @@
 
 #include <netinet/in.h> // htonl
 
+#include <asl/kis_asl_writer_utils.h>
 #include <asl/kis_asl_reader_utils.h>
 
 #include "psd_layer_record.h"
@@ -349,4 +350,176 @@ void readChannels(QIODevice *io,
         throw KisAslReaderUtils::ASLParseException(error);
     }
 }
+
+void writeChannelDataRLE(QIODevice *io, const quint8 *plane, const int channelSize, const QRect &rc, const qint64 sizeFieldOffset, const qint64 rleBlockOffset, const bool writeCompressionType)
+{
+    typedef KisAslWriterUtils::OffsetStreamPusher<quint32> Pusher;
+    QScopedPointer<Pusher> channelBlockSizeExternalTag;
+    if (sizeFieldOffset >= 0) {
+        channelBlockSizeExternalTag.reset(new Pusher(io, 0, sizeFieldOffset));
+    }
+
+    if (writeCompressionType) {
+        SAFE_WRITE_EX(io, (quint16)Compression::RLE);
+    }
+
+    const bool externalRleBlock = rleBlockOffset >= 0;
+
+    // the start of RLE sizes block
+    const qint64 channelRLESizePos = externalRleBlock ? rleBlockOffset : io->pos();
+
+    {
+        QScopedPointer<KisOffsetKeeper> rleOffsetKeeper;
+
+        if (externalRleBlock) {
+            rleOffsetKeeper.reset(new KisOffsetKeeper(io));
+            io->seek(rleBlockOffset);
+        }
+
+        // write zero's for the channel lengths block
+        for(int i = 0; i < rc.height(); ++i) {
+            // XXX: choose size for PSB!
+            const quint16 fakeRLEBLockSize = 0;
+            SAFE_WRITE_EX(io, fakeRLEBLockSize);
+        }
+    }
+
+    quint32 stride = channelSize * rc.width();
+    for (qint32 row = 0; row < rc.height(); ++row) {
+
+        QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+        QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+
+        KisAslWriterUtils::OffsetStreamPusher<quint16> rleExternalTag(io, 0, channelRLESizePos + row * sizeof(quint16));
+
+        if (io->write(compressed) != compressed.size()) {
+            throw KisAslWriterUtils::ASLWriteException("Failed to write image data");
+        }
+    }
+}
+
+inline void preparePixelForWrite(quint8 *dataPlane,
+                                 int numPixels,
+                                 int channelSize,
+                                 int channelId,
+                                 psd_color_mode colorMode)
+{
+    // if the bitdepth > 8, place the bytes in the right order
+    // if cmyk, invert the pixel value
+    if (channelSize == 1) {
+        if (channelId >= 0 && (colorMode == CMYK || colorMode == CMYK64)) {
+            for (int i = 0; i < numPixels; ++i) {
+                dataPlane[i] = 255 - dataPlane[i];
+            }
+        }
+    }
+    else if (channelSize == 2) {
+        quint16 val;
+        for (int i = 0; i < numPixels; ++i) {
+            quint16 *pixelPtr = reinterpret_cast<quint16*>(dataPlane) + i;
+
+            val = *pixelPtr;
+            val = ntohs(val);
+            if (channelId >= 0 && (colorMode == CMYK || colorMode == CMYK64)) {
+                val = quint16_MAX - val;
+            }
+            *pixelPtr = val;
+        }
+    }
+    else if (channelSize == 4) {
+        quint32 val;
+        for (int i = 0; i < numPixels; ++i) {
+            quint32 *pixelPtr = reinterpret_cast<quint32*>(dataPlane) + i;
+
+            val = *pixelPtr;
+            val = ntohl(val);
+            if (channelId >= 0 && (colorMode == CMYK || colorMode == CMYK64)) {
+                val = quint16_MAX - val;
+            }
+            *pixelPtr = val;
+        }
+    }
+}
+
+void writePixelDataCommon(QIODevice *io,
+                          KisPaintDeviceSP dev,
+                          const QRect &rc,
+                          psd_color_mode colorMode,
+                          int channelSize,
+                          bool alphaFirst,
+                          const bool writeCompressionType,
+                          QVector<ChannelWritingInfo> &writingInfoList)
+{
+    // Empty rects must be processed separately on a higher level!
+    KIS_ASSERT_RECOVER_RETURN(!rc.isEmpty());
+
+    QVector<quint8* > tmp = dev->readPlanarBytes(rc.x() - dev->x(), rc.y() - dev->y(), rc.width(), rc.height());
+    const KoColorSpace *colorSpace = dev->colorSpace();
+
+    QVector<quint8*> planes;
+
+    { // prepare 'planes' array
+
+        quint8 *alphaPlanePtr = 0;
+
+        QList<KoChannelInfo*> origChannels = colorSpace->channels();
+        foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
+            int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
+
+            quint8 *holder = 0;
+            qSwap(holder, tmp[channelIndex]);
+
+            if (ch->channelType() == KoChannelInfo::ALPHA) {
+                qSwap(holder, alphaPlanePtr);
+            } else {
+                planes.append(holder);
+            }
+        }
+
+        if (alphaPlanePtr) {
+            if (alphaFirst) {
+                planes.insert(0, alphaPlanePtr);
+                KIS_ASSERT_RECOVER_NOOP(writingInfoList.first().channelId == -1);
+            } else {
+                planes.append(alphaPlanePtr);
+                KIS_ASSERT_RECOVER_NOOP(
+                    (writingInfoList.size() == planes.size() - 1) ||
+                    (writingInfoList.last().channelId == -1));
+            }
+        }
+
+        // now planes are holding pointers to quint8 arrays
+        tmp.clear();
+    }
+
+    KIS_ASSERT_RECOVER_RETURN(planes.size() >= writingInfoList.size());
+
+    const int numPixels = rc.width() * rc.height();
+
+    // write down the planes
+
+    try {
+        for (int i = 0; i < writingInfoList.size(); i++) {
+            const ChannelWritingInfo &info = writingInfoList[i];
+
+            dbgFile << "\tWriting channel" << i << "psd channel id" << info.channelId;
+
+            preparePixelForWrite(planes[i], numPixels, channelSize, info.channelId, colorMode);
+
+            dbgFile << "\t\tchannel start" << ppVar(io->pos());
+
+            writeChannelDataRLE(io, planes[i], channelSize, rc, info.sizeFieldOffset, info.rleBlockOffset, writeCompressionType);
+        }
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qDeleteAll(planes);
+        planes.clear();
+
+        throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
+    }
+
+    qDeleteAll(planes);
+    planes.clear();
+}
+
 }

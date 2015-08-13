@@ -587,36 +587,6 @@ void PSDLayerRecord::write(QIODevice* io,
     }
 }
 
-void writeChannelDataRLE(QIODevice *io, const quint8 *plane, const int channelSize, const QRect &rc, const qint64 sizeFieldOffset)
-{
-    KisAslWriterUtils::OffsetStreamPusher<quint32> channelBlockSizeExternalTag(io, 0, sizeFieldOffset);
-
-    SAFE_WRITE_EX(io, (quint16)Compression::RLE);
-
-    // the start of RLE sizes block
-    const qint64 channelRLESizePos = io->pos();
-
-    // write zero's for the channel lengths block
-    for(int i = 0; i < rc.height(); ++i) {
-        // XXX: choose size for PSB!
-        const quint16 fakeRLEBLockSize = 0;
-        SAFE_WRITE_EX(io, fakeRLEBLockSize);
-    }
-
-    quint32 stride = channelSize * rc.width();
-    for (qint32 row = 0; row < rc.height(); ++row) {
-
-        QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
-        QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
-
-        KisAslWriterUtils::OffsetStreamPusher<quint16> rleExternalTag(io, 0, channelRLESizePos + row * sizeof(quint16));
-
-        if (io->write(compressed) != compressed.size()) {
-            throw KisAslWriterUtils::ASLWriteException("Failed to write image data");
-        }
-    }
-}
-
 void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
 {
     if (m_onlyTransparencyMask) {
@@ -626,11 +596,20 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
         QByteArray buffer(m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
         device->readBytes((quint8*)buffer.data(), m_onlyTransparencyMaskRect);
 
-        writeChannelDataRLE(io, (quint8*)buffer.data(), 1, m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset);
+        PsdPixelUtils::writeChannelDataRLE(io, (quint8*)buffer.data(), 1, m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset, -1, true);
     }
 }
 
 void PSDLayerRecord::writePixelData(QIODevice *io)
+{
+    try {
+        writePixelDataImpl(io);
+    }  catch (KisAslWriterUtils::ASLWriteException &e) {
+        throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
+    }
+}
+
+void PSDLayerRecord::writePixelDataImpl(QIODevice *io)
 {
     dbgFile << "writing pixel data for layer" << layerName << "at" << io->pos();
 
@@ -638,104 +617,34 @@ void PSDLayerRecord::writePixelData(QIODevice *io)
     const QRect rc(left, top, right - left, bottom - top);
 
     if (rc.isEmpty()) {
-        try {
-            dbgFile << "Layer is empty! Writing placeholder information.";
+        dbgFile << "Layer is empty! Writing placeholder information.";
 
-            for (int i = 0; i < nChannels; i++) {
-                const ChannelInfo *channelInfo = channelInfoRecords[i];
-                KisAslWriterUtils::OffsetStreamPusher<quint32> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
-                SAFE_WRITE_EX(io, (quint16)Compression::Uncompressed);
-            }
-
-            writeTransparencyMaskPixelData(io);
-
-        } catch (KisAslWriterUtils::ASLWriteException &e) {
-            throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
+        for (int i = 0; i < nChannels; i++) {
+            const ChannelInfo *channelInfo = channelInfoRecords[i];
+            KisAslWriterUtils::OffsetStreamPusher<quint32> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
+            SAFE_WRITE_EX(io, (quint16)Compression::Uncompressed);
         }
+
+        writeTransparencyMaskPixelData(io);
 
         return;
     }
 
     // now write all the channels in display order
     dbgFile << "layer" << layerName;
-    QVector<quint8* > tmp = dev->readPlanarBytes(rc.x() - dev->x(), rc.y() - dev->y(), rc.width(), rc.height());
 
-    // then reorder the planes to fit the psd model -- alpha first, then display order
-    QVector<quint8*> planes;
-    QList<KoChannelInfo*> origChannels = dev->colorSpace()->channels();
+    const int channelSize = m_header.channelDepth / 8;
+    const psd_color_mode colorMode = m_header.colormode;
 
-    foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
-
-        quint8 *holder = tmp[channelIndex];
-        tmp[channelIndex] = 0;
-
-        if (ch->channelType() == KoChannelInfo::ALPHA) {
-            planes.insert(0, holder);
-        } else {
-            planes.append(holder);
-        }
+    QVector<PsdPixelUtils::ChannelWritingInfo> writingInfoList;
+    foreach (const ChannelInfo *channelInfo, channelInfoRecords) {
+        writingInfoList <<
+            PsdPixelUtils::ChannelWritingInfo(channelInfo->channelId,
+                                              channelInfo->channelInfoPosition);
     }
 
-    // now planes are holding pointers to quint8 arrays
-    tmp.clear();
-
-    try {
-        // here's where we save the total size of the channel data
-        for (int channelInfoIndex = 0; channelInfoIndex  < nChannels; ++channelInfoIndex) {
-
-            const ChannelInfo *channelInfo = channelInfoRecords[channelInfoIndex];
-
-            dbgFile << "\tWriting channel" << channelInfoIndex << "psd channel id" << channelInfo->channelId;
-
-            // if the bitdepth > 8, place the bytes in the right order
-            // if cmyk, invert the pixel value
-            if (m_header.channelDepth == 8) {
-                if (channelInfo->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
-                    for (int i = 0; i < rc.width() * rc.height(); ++i) {
-                        planes[channelInfoIndex][i] = 255 - planes[channelInfoIndex][i];
-                    }
-                }
-            }
-            else if (m_header.channelDepth == 16) {
-                quint16 val;
-                for (int i = 0; i < rc.width() * rc.height(); ++i) {
-                    val = reinterpret_cast<quint16*>(planes[channelInfoIndex])[i];
-                    val = ntohs(val);
-                    if (channelInfo->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
-                        val = quint16_MAX - val;
-                    }
-                    reinterpret_cast<quint16*>(planes[channelInfoIndex])[i] = val;
-                }
-            }
-            else if (m_header.channelDepth == 32) {
-                quint32 val;
-                for (int i = 0; i < rc.width() * rc.height(); ++i) {
-                    val = reinterpret_cast<quint32*>(planes[channelInfoIndex])[i];
-                    val = ntohl(val);
-                    if (channelInfo->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
-                        val = quint16_MAX - val;
-                    }
-                    reinterpret_cast<quint32*>(planes[channelInfoIndex])[i] = val;
-                }
-            }
-
-            dbgFile << "\t\tchannel start" << ppVar(io->pos());
-
-            writeChannelDataRLE(io, planes[channelInfoIndex], m_header.channelDepth / 8, rc, channelInfo->channelInfoPosition);
-        }
-
-        writeTransparencyMaskPixelData(io);
-
-    } catch (KisAslWriterUtils::ASLWriteException &e) {
-        qDeleteAll(planes);
-        planes.clear();
-
-        throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
-    }
-
-    qDeleteAll(planes);
-    planes.clear();
+    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, true, true, writingInfoList);
+    writeTransparencyMaskPixelData(io);
 }
 
 bool PSDLayerRecord::valid()

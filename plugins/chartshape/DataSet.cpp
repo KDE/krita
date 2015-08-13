@@ -289,8 +289,7 @@ KChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     // Don't show markers unless we turn them on
     ma.setVisible(false);
     // The marker size is specified in pixels, but scaled by the painter's zoom level
-// QT5TODO: what happened to this in latest KChart 2.6.0?
-//     ma.setMarkerSizeMode(KChart::MarkerAttributes::AbsoluteSizeScaled);
+    ma.setMarkerSizeMode(KChart::MarkerAttributes::AbsoluteSizeScaled);
     return ma;
 }
 
@@ -842,8 +841,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
             // Whereas the maximum size is relative to 1/4 * min(dw, dh),
             // with dw, dh being the width and height of the diagram
             bubbleWidth *= 0.25;
-// QT5TODO: what happened to this in latest KChart 2.6.0?
-//             ma.setMarkerSizeMode(KChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
+            ma.setMarkerSizeMode(KChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
             ma.setMarkerSize(QSizeF(bubbleWidth, bubbleWidth));
         }
         ma.setVisible(true);

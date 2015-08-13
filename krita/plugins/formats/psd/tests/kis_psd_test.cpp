@@ -247,6 +247,93 @@ void KisPSDTest::testOpeningFromOpenCanvas()
     QVERIFY(doc->image()->root()->firstChild());
 }
 
+void KisPSDTest::testOpeningAllFormats()
+{
+    QDir dirSources(QString(FILES_DATA_DIR) + QDir::separator() + "format_set/");
+
+    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+        Q_ASSERT(sourceFileInfo.exists());
+
+        if (sourceFileInfo.isHidden() || sourceFileInfo.isDir()) {
+            continue;
+        }
+
+        if (sourceFileInfo.fileName() != "sl_cmyk_8b.psd") {
+            continue;
+        }
+
+        //qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());
+
+        QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+
+        if (!doc->image()) {
+            qCritical() << "FAILED to open" << sourceFileInfo.fileName();
+            continue;
+        }
+
+        // just check visually if the file loads fine
+        KIS_DUMP_DEVICE_2(doc->image()->projection(), QRect(0,0,100,100), sourceFileInfo.fileName(), "dd");
+    }
+}
+
+void KisPSDTest::testSavingAllFormats()
+{
+    QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
+    QDir dirSources(path);
+
+    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+        Q_ASSERT(sourceFileInfo.exists());
+
+        if (sourceFileInfo.isHidden() || sourceFileInfo.isDir()) {
+            continue;
+        }
+
+        if (sourceFileInfo.fileName() != "sl_rgb_8b.psd") {
+            //continue;
+        }
+
+        qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());
+
+        QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+
+        if (!doc->image()) {
+            qCritical() << "FAILED to open" << sourceFileInfo.fileName();
+            continue;
+        }
+
+        QString baseName = sourceFileInfo.fileName();
+
+        QString originalName = QString("%1_0orig").arg(baseName);
+        QString resultName = QString("%1_1result").arg(baseName);
+        QString tempPsdName = QString("%1_3interm.psd").arg(baseName);
+
+        QImage refImage = doc->image()->projection()->convertToQImage(0, QRect(0,0,100,100));
+
+        // uncomment to do a visual check
+        // KIS_DUMP_DEVICE_2(doc->image()->projection(), QRect(0,0,100,100), originalName, "dd");
+
+        doc->setBackupFile(false);
+        doc->setOutputMimeType("image/vnd.adobe.photoshop");
+        QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + tempPsdName);
+
+        qDebug() << "Saving" << ppVar(dstFileInfo.fileName());
+
+        bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
+        QVERIFY(retval);
+
+        {
+            QSharedPointer<KisDocument> doc = openPsdDocument(dstFileInfo);
+            QVERIFY(doc->image());
+
+            // uncomment to do a visual check
+            //KIS_DUMP_DEVICE_2(doc->image()->projection(), QRect(0,0,100,100), resultName, "dd");
+
+            QImage resultImage = doc->image()->projection()->convertToQImage(0, QRect(0,0,100,100));
+            QCOMPARE(resultImage, refImage);
+        }
+    }
+}
+
 
 QTEST_KDEMAIN(KisPSDTest, GUI)
 

@@ -299,9 +299,15 @@ void KisLayer::setImage(KisImageWSP image)
     m_d->image = image;
     for (uint i = 0; i < childCount(); ++i) {
         // Only layers know about the image
-        KisLayer * layer = dynamic_cast<KisLayer*>(at(i).data());
-        if (layer)
+        KisLayer *layer = dynamic_cast<KisLayer*>(at(i).data());
+        if (layer) {
             layer->setImage(image);
+        }
+        // We lied, through the defaultBounds, masks also know about the image
+        KisMask *mask = dynamic_cast<KisMask*>(at(i).data());
+        if (mask) {
+            mask->setImage(image);
+        }
     }
 }
 

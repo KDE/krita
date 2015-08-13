@@ -83,6 +83,8 @@ public:
 
     virtual ~KisMask();
 
+    void setImage(KisImageWSP image);
+
     bool allowAsChild(KisNodeSP node) const;
 
     /**

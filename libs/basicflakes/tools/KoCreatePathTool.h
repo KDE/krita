@@ -95,6 +95,7 @@ protected:
     void endPath();
     void endPathWithoutLastPoint();
     void cancelPath();
+    void removeLastPoint();
 
     /// reimplemented
     virtual QList<QPointer<QWidget> > createOptionWidgets();

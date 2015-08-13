@@ -42,6 +42,7 @@ public:
     using KoCreatePathTool::endPathWithoutLastPoint;
     using KoCreatePathTool::endPath;
     using KoCreatePathTool::cancelPath;
+    using KoCreatePathTool::removeLastPoint;
 
 private:
     KisToolPath* const m_parentTool;
@@ -61,6 +62,7 @@ public:
 
     virtual QList< QPointer<QWidget> > createOptionWidgets();
 
+    bool eventFilter(QObject *obj, QEvent *event);
     void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);

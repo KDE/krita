@@ -1066,8 +1066,54 @@ void reparentSelectionMasks(KisLayerSP newLayer, const QVector<KisSelectionMaskS
     }
 }
 
+KisNodeSP tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes)
+{
+    if (mergedNodes.isEmpty()) return 0;
+
+    QList<KisSelectionMaskSP> selectionMasks;
+
+    foreach (KisNodeSP node, mergedNodes) {
+        KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(node.data());
+        if (!mask) return 0;
+
+        selectionMasks.append(mask);
+    }
+
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(selectionMasks.first()->parent().data());
+    KIS_ASSERT_RECOVER(parentLayer) { return 0; }
+
+    KisSelectionSP selection = new KisSelection();
+
+    foreach (KisMaskSP mask, selectionMasks) {
+        selection->pixelSelection()->applySelection(
+            mask->selection()->pixelSelection(), SELECTION_ADD);
+    }
+
+    image->undoAdapter()->beginMacro(kundo2_i18n("Merge Selection Masks"));
+
+    KisSelectionMaskSP mergedMask = new KisSelectionMask(image);
+    mergedMask->initSelection(parentLayer);
+
+    image->undoAdapter()->addCommand(new KisImageLayerAddCommand(image, mergedMask, parentLayer, parentLayer->lastChild()));
+    mergedMask->setSelection(selection);
+    image->undoAdapter()->addCommand(new KisActivateSelectionMaskCommand(mergedMask, true));
+
+    image->safeRemoveMultipleNodes(mergedNodes);
+
+    image->undoAdapter()->endMacro();
+
+    return mergedMask;
+}
+
 KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
 {
+    {
+        KisNodeSP mask;
+        if ((mask = tryMergeSelectionMasks(this, mergedNodes))) {
+            return mask;
+        }
+    }
+
     filterMergableNodes(mergedNodes);
 
     {

@@ -88,6 +88,9 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
+#include <QtCore>
+#include <boost/bind.hpp>
+
 
 
 // #define SANITY_CHECKS
@@ -105,6 +108,10 @@
 class KisImage::KisImagePrivate
 {
 public:
+    KisImagePrivate(KisImage *_q) : q(_q) {}
+
+    KisImage *q;
+
     quint32 lockCount;
     KisPerspectiveGrid* perspectiveGrid;
 
@@ -143,12 +150,14 @@ public:
     bool startProjection;
 
     bool tryCancelCurrentStrokeAsync();
+
+    void notifyProjectionUpdatedInPatches(const QRect &rc);
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
         : QObject(0)
         , KisShared()
-        , m_d(new KisImagePrivate())
+        , m_d(new KisImagePrivate(this))
 {
     setObjectName(name);
     dbgImage << "creating" << name;
@@ -1596,6 +1605,22 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     return id;
 }
 
+void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
+{
+    KisImageConfig imageConfig;
+    int patchWidth = imageConfig.updatePatchWidth();
+    int patchHeight = imageConfig.updatePatchHeight();
+
+    for (int y = 0; y < rc.height(); y += patchHeight) {
+        for (int x = 0; x < rc.width(); x += patchWidth) {
+            QRect patchRect(x, y, patchWidth, patchHeight);
+            patchRect &= rc;
+
+            QtConcurrent::run(boost::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
+        }
+    }
+}
+
 bool KisImage::startIsolatedMode(KisNodeSP node)
 {
     if (!tryBarrierLock()) return false;
@@ -1605,7 +1630,9 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
     m_d->isolatedRootNode = node;
     emit sigIsolatedModeChanged();
 
-    notifyProjectionUpdated(bounds());
+    // the GUI uses our thread to do the color space conversion so we
+    // need to emit this signal in multiple threads
+    m_d->notifyProjectionUpdatedInPatches(bounds());
 
     return true;
 }
@@ -1619,11 +1646,13 @@ void KisImage::stopIsolatedMode()
 
     emit sigIsolatedModeChanged();
 
-    notifyProjectionUpdated(bounds());
+    // the GUI uses our thread to do the color space conversion so we
+    // need to emit this signal in multiple threads
+    m_d->notifyProjectionUpdatedInPatches(bounds());
 
     // TODO: Substitute notifyProjectionUpdated() with this code
     // when update optimization is implemented
-    // 
+    //
     // QRect updateRect = bounds() | oldRootNode->extent();
     // oldRootNode->setDirty(updateRect);
 }

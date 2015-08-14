@@ -38,6 +38,7 @@ class KisColorOptionsWidget;
 
 class PAINTOP_EXPORT KisColorOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     KisColorOption();
     ~KisColorOption();
@@ -57,7 +58,14 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+private Q_SLOTS:
+
+    void setEnabled(bool);
+
 private:
+
+
     KisColorOptionsWidget * m_options;
 };
 

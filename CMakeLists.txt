@@ -655,8 +655,8 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 ##
 ## Test for Okular
 ##
-macro_optional_find_package(Okular 1.0.0)
-macro_log_feature(Okular_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
+macro_optional_find_package(Okular5 1.0.0)
+macro_log_feature(Okular5_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
 
 ##
 ## Test for librevenge
@@ -946,11 +946,11 @@ calligra_drop_product_on_bad_condition( APP_ACTIVE
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
-    Okular_FOUND "Okular devel not found"
+    Okular5_FOUND "Okular devel not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
-    Okular_FOUND "Okular devel not found"
+    Okular5_FOUND "Okular devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE

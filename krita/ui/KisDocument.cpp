@@ -1202,7 +1202,7 @@ bool KisDocument::importDocument(const KUrl & _url)
 }
 
 
-bool KisDocument::openUrl(const KUrl & _url)
+bool KisDocument::openUrl(const KUrl & _url, KisDocument::OpenUrlFlags flags)
 {
     kDebug(30003) << "url=" << _url.url();
     d->lastErrorMessage.clear();
@@ -1249,7 +1249,9 @@ bool KisDocument::openUrl(const KUrl & _url)
         setModified(true);
     }
     else {
-        KisPart::instance()->addRecentURLToAllMainWindows(_url);
+        if( !(flags & OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES) ) {
+            KisPart::instance()->addRecentURLToAllMainWindows(_url);
+        }
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).

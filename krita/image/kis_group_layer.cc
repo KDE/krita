@@ -359,7 +359,9 @@ QRect collectRects(const KisNode *node, MetricPolicy policy)
 
     const KisNode *child = node->firstChild();
     while (child) {
-        accumulator |= policy(child);
+        if (!qobject_cast<const KisMask*>(child)) {
+            accumulator |= policy(child);
+        }
         child = child->nextSibling();
     }
 

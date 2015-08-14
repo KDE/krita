@@ -61,7 +61,7 @@ class PAINTOP_EXPORT KisTextureProperties
 {
 public:
     KisTextureProperties()
-        : pattern(0)
+        : m_pattern(0)
     {}
 
     enum TexturingMode {
@@ -69,7 +69,7 @@ public:
         SUBTRACT
     };
 
-    bool enabled;
+    bool m_enabled;
 
     /**
      * @brief apply combine the texture map with the dab
@@ -81,15 +81,15 @@ public:
 
 private:
 
-    qreal scale;
-    int offsetX;
-    int offsetY;
-    TexturingMode texturingMode;
-    bool invert;
-    KoPattern *pattern;
-    int cutoffLeft;
-    int cutoffRight;
-    int cutoffPolicy;
+    qreal m_scale;
+    int m_offsetX;
+    int m_offsetY;
+    TexturingMode m_texturingMode;
+    bool m_invert;
+    KoPattern *m_pattern;
+    int m_cutoffLeft;
+    int m_cutoffRight;
+    int m_cutoffPolicy;
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;

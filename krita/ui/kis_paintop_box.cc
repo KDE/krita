@@ -839,7 +839,7 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
         {
             // remember brush size. set the eraser size to the normal brush size if not set
             normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
-            if (!eraserBrushSize)
+            if (qFuzzyIsNull(eraserBrushSize))
                 eraserBrushSize = normalBrushSize;
         }
         else
@@ -866,7 +866,7 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
 
 
     //update value in UI (this is the main place the value is 'stored' in memory)
-    int updateSize = checked ? eraserBrushSize : normalBrushSize;
+    qreal updateSize = checked ? eraserBrushSize : normalBrushSize;
     m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
     m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
     m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);

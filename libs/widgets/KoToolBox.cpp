@@ -116,7 +116,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     button->setCheckable(true);
     button->setAutoRaise(true);
 
-    int toolbuttonSize = 16; // QApplication::style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, 0);
+    int toolbuttonSize = 14; // QApplication::style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, 0);
     KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
     button->setIconSize(QSize(iconSize, iconSize));

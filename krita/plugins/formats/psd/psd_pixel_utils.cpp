@@ -37,6 +37,10 @@
 #include <asl/kis_offset_keeper.h>
 #include "kis_iterator_ng.h"
 
+#include "config_psd.h"
+#ifdef HAVE_ZLIB
+#include "zlib.h"
+#endif
 
 namespace PsdPixelUtils {
 
@@ -114,7 +118,7 @@ void readGrayPixel(const QMap<quint16, QByteArray> &channelBytes,
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     channels_type opacity = unitValue;
     if (channelBytes.contains(-1)) {
-        opacity = channelBytes[-1].constData()[col];
+        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
     }
 
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
@@ -135,7 +139,7 @@ void readRgbPixel(const QMap<quint16, QByteArray> &channelBytes,
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     channels_type opacity = unitValue;
     if (channelBytes.contains(-1)) {
-        opacity = channelBytes[-1].constData()[col];
+        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
     }
 
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
@@ -160,7 +164,7 @@ void readCmykPixel(const QMap<quint16, QByteArray> &channelBytes,
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     channels_type opacity = unitValue;
     if (channelBytes.contains(-1)) {
-        opacity = channelBytes[-1].constData()[col];
+        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
     }
 
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
@@ -187,7 +191,7 @@ void readLabPixel(const QMap<quint16, QByteArray> &channelBytes,
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     channels_type opacity = unitValue;
     if (channelBytes.contains(-1)) {
-        opacity = channelBytes[-1].constData()[col];
+        opacity = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[-1].constData())[col]);
     }
 
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
@@ -254,6 +258,99 @@ void readLabPixelCommon(int channelSize,
     }
 }
 
+/**********************************************************************/
+/* Two functions copied from the abandoned PSDParse library (GPL)     */
+/* See: http://www.telegraphics.com.au/svn/psdparse/trunk/psd_zip.c   */
+/* Created by Patrick in 2007.02.02, libpsd@graphest.com              */
+/* Modifications by Toby Thain <toby@telegraphics.com.au>             */
+/**********************************************************************/
+
+typedef bool psd_status;
+typedef quint8 psd_uchar;
+typedef int psd_int;
+typedef quint8 Bytef;
+
+psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, 
+                                        psd_uchar *dst_buf, psd_int dst_len)
+{
+#ifdef HAVE_ZLIB
+    z_stream stream;
+    psd_int state;
+
+    memset(&stream, 0, sizeof(z_stream));
+    stream.data_type = Z_BINARY;
+
+    stream.next_in = (Bytef *)src_buf;
+    stream.avail_in = src_len;
+    stream.next_out = (Bytef *)dst_buf;
+    stream.avail_out = dst_len;
+
+    if(inflateInit(&stream) != Z_OK)
+        return 0;
+
+    do {
+        state = inflate(&stream, Z_PARTIAL_FLUSH);
+        if(state == Z_STREAM_END)
+            break;
+        if(state == Z_DATA_ERROR || state != Z_OK)
+            break;
+    }  while (stream.avail_out > 0);
+
+    if (state != Z_STREAM_END && state != Z_OK)
+        return 0;
+
+    return 1;
+
+#endif /* HAVE_ZLIB */
+
+    return 0;
+}
+
+psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, 
+                                     psd_uchar *dst_buf, psd_int dst_len, 
+                                     psd_int row_size, psd_int color_depth)
+{
+    psd_status status;
+    int len;
+    psd_uchar * buf;
+
+    status = psd_unzip_without_prediction(src_buf, src_len, dst_buf, dst_len);
+    if(!status)
+        return status;
+
+    buf = dst_buf;
+    do {
+        len = row_size;
+        if (color_depth == 16)
+        {
+            while(--len)
+            {
+                buf[2] += buf[0] + ((buf[1] + buf[3]) >> 8);
+                buf[3] += buf[1];
+                buf += 2;
+            }
+            buf += 2;
+            dst_len -= row_size * 2;
+        }
+        else
+        {
+            while(--len)
+            {
+                *(buf + 1) += *buf;
+                buf ++;
+            }
+            buf ++;
+            dst_len -= row_size;
+        }
+    } while(dst_len > 0);
+
+    return 1;
+}
+
+/**********************************************************************/
+/* End of third party block                                           */
+/**********************************************************************/
+
 QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo*> channelInfoRecords,
                                             int row, int width, int channelSize)
 {
@@ -304,19 +401,62 @@ void readCommon(KisPaintDeviceSP dev,
         return;
     }
 
-    KisHLineIteratorSP it = dev->createHLineIteratorNG(layerRect.left(), layerRect.top(), layerRect.width());
+    if (infoRecords.first()->compressionType == Compression::ZIP ||
+        infoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
 
-    for (int i = 0 ; i < layerRect.height(); i++) {
+        const int numPixels = channelSize * layerRect.width() * layerRect.height();
+
         QMap<quint16, QByteArray> channelBytes;
 
-        channelBytes = fetchChannelsBytes(io, infoRecords,
-                                          i, layerRect.width(), channelSize);
+        foreach (ChannelInfo *info, infoRecords) {
+            io->seek(info->channelDataStart);
+            QByteArray compressedBytes = io->read(info->channelDataLength);
+            QByteArray uncompressedBytes(numPixels, 0);
 
-        for (qint64 col = 0; col < layerRect.width(); col++){
-            pixelFunc(channelSize, channelBytes, col, it->rawData());
-            it->nextPixel();
+            bool status = false;
+            if (infoRecords.first()->compressionType == Compression::ZIP) {
+                status = psd_unzip_without_prediction((quint8*)compressedBytes.data(), compressedBytes.size(),
+                                                      (quint8*)uncompressedBytes.data(), uncompressedBytes.size());
+            } else {
+                status = psd_unzip_with_prediction((quint8*)compressedBytes.data(), compressedBytes.size(),
+                                                   (quint8*)uncompressedBytes.data(), uncompressedBytes.size(),
+                                                   layerRect.width(), channelSize * 8);
+            }
+
+            if (!status) {
+                QString error = QString("Failed to unzip channel data: id = %1, compression = %2").arg(info->channelId).arg(info->compressionType);
+                dbgFile << "ERROR:" << error;
+                dbgFile << "      " << ppVar(info->channelId);
+                dbgFile << "      " << ppVar(info->channelDataStart);
+                dbgFile << "      " << ppVar(info->channelDataLength);
+                dbgFile << "      " << ppVar(info->compressionType);
+                throw KisAslReaderUtils::ASLParseException(error);
+            }
+
+            channelBytes.insert(info->channelId, uncompressedBytes);
         }
-        it->nextRow();
+
+        KisSequentialIterator it(dev, layerRect);
+        int col = 0;
+        do {
+            pixelFunc(channelSize, channelBytes, col, it.rawData());
+            col++;
+        } while(it.nextPixel());
+
+    } else {
+        KisHLineIteratorSP it = dev->createHLineIteratorNG(layerRect.left(), layerRect.top(), layerRect.width());
+        for (int i = 0 ; i < layerRect.height(); i++) {
+            QMap<quint16, QByteArray> channelBytes;
+
+            channelBytes = fetchChannelsBytes(io, infoRecords,
+                                              i, layerRect.width(), channelSize);
+
+            for (qint64 col = 0; col < layerRect.width(); col++){
+                pixelFunc(channelSize, channelBytes, col, it->rawData());
+                it->nextPixel();
+            }
+            it->nextRow();
+        }
     }
 }
 

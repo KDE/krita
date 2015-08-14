@@ -249,7 +249,8 @@ void KisPSDTest::testOpeningFromOpenCanvas()
 
 void KisPSDTest::testOpeningAllFormats()
 {
-    QDir dirSources(QString(FILES_DATA_DIR) + QDir::separator() + "format_set/");
+    QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
+    QDir dirSources(path);
 
     foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         Q_ASSERT(sourceFileInfo.exists());
@@ -258,8 +259,8 @@ void KisPSDTest::testOpeningAllFormats()
             continue;
         }
 
-        if (sourceFileInfo.fileName() != "sl_cmyk_8b.psd") {
-            continue;
+        if (sourceFileInfo.fileName() != "ml_cmyk_16b.psd") {
+            //continue;
         }
 
         //qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());

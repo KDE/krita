@@ -95,7 +95,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
         }
         keys << key;
 
-        if (key == "Lr16" || key == "Lr32") {
+        // TODO: Loading of 32 bit files is not supported yet
+
+        if (key == "Lr16"/* || key == "Lr32"*/) {
             if (m_layerInfoBlockHandler) {
                 int offset = m_header.version > 1 ? 8 : 4;
                 io->seek(io->pos() - offset);

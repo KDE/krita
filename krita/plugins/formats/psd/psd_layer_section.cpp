@@ -274,11 +274,8 @@ bool PSDLayerMaskSection::readImpl(QIODevice* io)
      *
      * Here we pass the callback which should be used when such
      * additional section is recognized.
-     *
-     * NOTE: atm, we do not support ZIP compression, which is used in
-     *       this block, so we just comment it out for now!
      */
-    // globalInfoSection.setExtraLayerInfoBlockHandler(boost::bind(&PSDLayerMaskSection::readLayerInfoImpl, this, _1));
+    globalInfoSection.setExtraLayerInfoBlockHandler(boost::bind(&PSDLayerMaskSection::readLayerInfoImpl, this, _1));
 
     globalInfoSection.read(io);
 

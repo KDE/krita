@@ -91,10 +91,9 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
         return JCS_RGB;
     }
-    if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16")) {
+    if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYKAU16")) {
         return JCS_CMYK;
     }
-    QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
     return JCS_UNKNOWN;
 }
 
@@ -113,11 +112,12 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDocument *doc)
+KisJPEGConverter::KisJPEGConverter(KisDocument *doc, bool batchMode)
 {
     m_doc = doc;
     m_job = 0;
     m_stop = false;
+    m_batchMode = batchMode;
 }
 
 KisJPEGConverter::~KisJPEGConverter()
@@ -475,9 +475,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
+
     if (color_type == JCS_UNKNOWN) {
+        if (!m_batchMode) {
+            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
+        }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         delete tmp;
+        cs = KoColorSpaceRegistry::instance()->rgb8();
         color_type = JCS_RGB;
     }
 
@@ -485,6 +490,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         const KoColorSpace* dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         KUndo2Command *tmp = layer->paintDevice()->convertTo(dst);
         delete tmp;
+        cs = dst;
         color_type = JCS_RGB;
     }
 

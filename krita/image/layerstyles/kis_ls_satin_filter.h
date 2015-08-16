@@ -22,11 +22,12 @@
 #include <QSharedPointer>
 
 #include "kis_layer_style_filter.h"
+#include <kritaimage_export.h>
 
-struct psd_layer_effects_shadow_base;
+class psd_layer_effects_shadow_base;
 
 
-class KDE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
+class KRITAIMAGE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
 {
 public:
     KisLsSatinFilter();

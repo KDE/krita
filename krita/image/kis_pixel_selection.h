@@ -25,7 +25,7 @@
 #include "kis_paint_device.h"
 #include "kis_selection_component.h"
 #include "kis_selection.h"
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 
 /**

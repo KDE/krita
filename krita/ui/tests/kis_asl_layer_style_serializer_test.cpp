@@ -80,7 +80,7 @@ void KisAslLayerStyleSerializerTest::testReading()
 
     CMP(outerGlow, effectEnabled, true);
     CMP(outerGlow, blendMode, COMPOSITE_SCREEN);
-    CMP(outerGlow, color, QColor(255,255,189.997));
+    CMP(outerGlow, color, QColor(255, 255, 189));
     CMP(outerGlow, opacity, 43);
     CMP(outerGlow, spread, 23);
     CMP(outerGlow, size, 109);
@@ -95,7 +95,7 @@ void KisAslLayerStyleSerializerTest::testReading()
 
     CMP(innerGlow, effectEnabled, true);
     CMP(innerGlow, blendMode, COMPOSITE_SCREEN);
-    CMP(innerGlow, color, QColor(255,255,189.997));
+    CMP(innerGlow, color, QColor(255, 255, 189));
     CMP(innerGlow, opacity, 55);
     CMP(innerGlow, spread, 21);
     CMP(innerGlow, size, 128);
@@ -144,13 +144,13 @@ void KisAslLayerStyleSerializerTest::testReading()
     CMP(stroke, size, 13);
     CMP(stroke, fillType, psd_fill_solid_color);
     CMP(stroke, position, psd_stroke_outside);
-    CMP(stroke, color, QColor(210.0, 33.7665, 87.6887));
+    CMP(stroke, color, QColor(210, 33, 87));
 
     CMP(bevelAndEmboss, effectEnabled, true);
 
     CMP(bevelAndEmboss, highlightBlendMode, COMPOSITE_SCREEN);
     CMP(bevelAndEmboss, highlightOpacity, 75);
-    CMP(bevelAndEmboss, highlightColor, QColor(255.0, 255.0, 255.0));
+    CMP(bevelAndEmboss, highlightColor, QColor(255, 255, 255));
 
     CMP(bevelAndEmboss, shadowBlendMode, COMPOSITE_MULT);
     CMP(bevelAndEmboss, shadowOpacity, 75);

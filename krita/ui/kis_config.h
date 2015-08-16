@@ -28,7 +28,7 @@
 
 #include "kis_global.h"
 #include "kis_properties_configuration.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KoColorProfile;
 class KoColorSpace;
@@ -311,6 +311,9 @@ public:
 
     bool hideToolbarFullscreen(bool defaultValue = false) const;
     void setHideToolbarFullscreen(const bool value) const;
+
+    bool fullscreenMode(bool defaultValue = false) const;
+    void setFullscreenMode(const bool value) const;
 
     QStringList favoriteCompositeOps(bool defaultValue = false) const;
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;

@@ -22,7 +22,7 @@
 
 #include <Qt>
 #include <QList>
-#include <krita_export.h>
+#include <kritaui_export.h>
 class KisAbstractInputAction;
 
 

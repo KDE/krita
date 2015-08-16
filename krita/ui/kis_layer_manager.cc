@@ -102,7 +102,7 @@
 #include "kis_abstract_projection_plane.h"
 #include "commands_new/kis_set_layer_style_command.h"
 #include "kis_post_execution_undo_adapter.h"
-
+#include "kis_selection_mask.h"
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor
@@ -543,7 +543,9 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     parent = activeNode;
     above = parent->lastChild();
 
-    while (parent && !parent->allowAsChild(node)) {
+    while (parent &&
+           (!parent->allowAsChild(node) || parent->userLocked())) {
+
         above = parent;
         parent = parent->parent();
     }
@@ -773,6 +775,30 @@ void KisLayerManager::flattenImage()
     }
 }
 
+inline bool isSelectionMask(KisNodeSP node) {
+    return dynamic_cast<KisSelectionMask*>(node.data());
+}
+
+bool tryMergeSelectionMasks(KisNodeSP currentNode, KisImageSP image)
+{
+    bool result = false;
+
+    KisNodeSP prevNode = currentNode->prevSibling();
+    if (isSelectionMask(currentNode) &&
+        prevNode && isSelectionMask(prevNode)) {
+
+        QList<KisNodeSP> mergedNodes;
+        mergedNodes.append(currentNode);
+        mergedNodes.append(prevNode);
+
+        image->mergeMultipleLayers(mergedNodes, currentNode);
+
+        result = true;
+    }
+
+    return result;
+}
+
 void KisLayerManager::mergeLayer()
 {
     KisImageWSP image = m_view->image();
@@ -784,7 +810,9 @@ void KisLayerManager::mergeLayer()
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, layer);
-    } else {
+
+    } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
+
         if (!layer->prevSibling()) return;
         KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;

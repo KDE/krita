@@ -128,6 +128,8 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#include "kis_icon_utils.h"
+
 
 #include "calligraversion.h"
 
@@ -312,17 +314,26 @@ KisMainWindow::KisMainWindow()
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
     KoToolBoxFactory toolBoxFactory;
-    createDockWidget(&toolBoxFactory);
+    QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
+    toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
+
 
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
     }
 
+
+    QMap<QString, QAction*> dockwidgetActions;
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        createDockWidget(factory);
+        QDockWidget *dw = createDockWidget(factory);
+        dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
     }
+    foreach(QString title, dockwidgetActions.keys()) {
+        d->dockWidgetMenu->addAction(dockwidgetActions[title]);
+    }
+
 
     foreach (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -561,30 +572,7 @@ void KisMainWindow::slotThemeChanged()
 
     // reload action icons!
     foreach (QAction *action, actionCollection()->actions()) {
-        QIcon icon = action->icon();
-        if (icon.isNull()) continue;
-
-        QString iconName = icon.name();
-        if (iconName.isNull()) continue;
-
-        QString realIconName;
-
-        if (iconName.startsWith("dark_")) {
-            realIconName = iconName.mid(5);
-        }
-
-        if (iconName.startsWith("light_")) {
-            realIconName = iconName.mid(6);
-        }
-
-        if (!realIconName.isNull()) {
-            QIcon newIcon = themedIcon(realIconName);
-            if (!newIcon.isNull()) {
-                action->setIcon(newIcon);
-            } else {
-                qWarning() << "WARNING: Couldn't load themed icon:" << realIconName;
-            }
-        }
+        KisIconUtils::updateIcon(action);
     }
 
     emit themeChanged();
@@ -1507,6 +1495,9 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
+    KisConfig cfg;
+    cfg.setFullscreenMode(fullScreen);
+
     if (fullScreen) {
         setWindowState(windowState() | Qt::WindowFullScreen);   // set
     } else {
@@ -1732,12 +1723,9 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
         addDockWidget(side, dockWidget);
-        if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
-            d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
-            if (!visible)
-                dockWidget->hide();
+        if (!visible) {
+            dockWidget->hide();
         }
-
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;

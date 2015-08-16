@@ -21,7 +21,7 @@
 #define _KIS_COLOR_TRANSFORMATION_FILTER_H_
 
 #include "kis_filter.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * This is a base class for filters that implement a filter for

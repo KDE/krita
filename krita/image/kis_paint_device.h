@@ -32,7 +32,7 @@
 #include "kis_shared.h"
 #include "kis_default_bounds_base.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KUndo2Command;
 class QRect;

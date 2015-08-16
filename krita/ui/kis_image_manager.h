@@ -22,7 +22,7 @@
 #include <QPointer>
 
 #include <kurl.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisViewManager;
 class KisFilterStrategy;

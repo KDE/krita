@@ -19,7 +19,6 @@
 #define KIS_CHALKOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString CHALK_RADIUS = "Chalk/radius";
 const QString CHALK_INK_DEPLETION = "Chalk/inkDepletion";

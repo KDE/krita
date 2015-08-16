@@ -19,7 +19,6 @@
 #define KIS_EXPERIMENTOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString EXPERIMENT_DISPLACEMENT_ENABLED = "Experiment/displacementEnabled";
 const QString EXPERIMENT_DISPLACEMENT_VALUE = "Experiment/displacement";

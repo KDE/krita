@@ -20,7 +20,7 @@
 #define KIS_LAYER_COMMAND_H_
 
 #include <kundo2command.h>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_types.h"
 
 class KisLayer;

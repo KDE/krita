@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_selection.h"
 
 class QKeyEvent;

@@ -21,7 +21,7 @@
 #define KIS_PAINTOP_OPTION_H
 
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_properties_configuration.h>
 #include <kis_locked_properties_proxy.h>
 

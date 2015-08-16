@@ -20,7 +20,7 @@
 #define KIS_ABSTRACT_INPUT_ACTION_H
 
 #include <QHash>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QPointF;
 class QEvent;

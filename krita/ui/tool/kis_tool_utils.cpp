@@ -20,6 +20,7 @@
 #include <KoColorSpace.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
+#include <kis_group_layer.h>
 
 namespace KisToolUtils {
 
@@ -55,11 +56,11 @@ namespace KisToolUtils {
             KoColor color(layer->projection()->colorSpace());
             layer->projection()->pixel(point.x(), point.y(), &color);
 
-            if(color.opacityU8() != OPACITY_TRANSPARENT_U8) {
-                if (layer->inherits("KisGroupLayer") && (!editableOnly || layer->isEditable())) {
-                    // if this is a group and the pixel is transparent,
-                    // don't even enter it
+            KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(layer.data());
 
+            if ((group && group->passThroughMode()) ||  color.opacityU8() != OPACITY_TRANSPARENT_U8) {
+                if (layer->inherits("KisGroupLayer") && (!editableOnly || layer->isEditable())) {
+                    // if this is a group and the pixel is transparent, don't even enter it
                     foundNode = findNode(node->lastChild(), point, wholeGroup, editableOnly);
                 }
                 else {

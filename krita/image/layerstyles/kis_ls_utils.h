@@ -23,7 +23,7 @@
 
 
 struct psd_layer_effects_context;
-struct psd_layer_effects_shadow_base;
+class psd_layer_effects_shadow_base;
 struct psd_layer_effects_overlay_base;
 class KisLayerStyleFilterEnvironment;
 class KoPattern;

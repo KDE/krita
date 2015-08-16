@@ -20,7 +20,7 @@
 #define KIS_TOOL_SHAPE_H_
 
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

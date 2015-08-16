@@ -106,6 +106,7 @@ void KisWdgGenerator::setConfiguration(const KisFilterConfiguration * config)
         if (item->generator->id() == config->name()) {
             // match!
             slotGeneratorActivated(i);
+            d->uiWdgGenerators.lstGenerators->setCurrentRow(i);
             KisConfigWidget * wdg = dynamic_cast<KisConfigWidget*>(d->centralWidget);
             if (wdg) {
                 wdg->setConfiguration(config);

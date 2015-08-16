@@ -19,7 +19,7 @@
 #ifndef __KIS_NU_BSPLINE_2D_H
 #define __KIS_NU_BSPLINE_2D_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <QScopedPointer>
 #include <QVector>

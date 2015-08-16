@@ -19,7 +19,7 @@
 #ifndef __KIS_GAUSSIAN_KERNEL_H
 #define __KIS_GAUSSIAN_KERNEL_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include <Eigen/Core>

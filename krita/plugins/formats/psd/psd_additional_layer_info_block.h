@@ -30,6 +30,9 @@
 #include <kis_paint_device.h>
 #include <kis_node.h>
 
+#include <boost/function.hpp>
+
+
 #include "psd.h"
 #include "psd_header.h"
 
@@ -255,6 +258,11 @@ class PsdAdditionalLayerInfoBlock
 {
 public:
     PsdAdditionalLayerInfoBlock(const PSDHeader& header);
+
+    typedef boost::function<bool(QIODevice*)> ExtraLayerInfoBlockHandler;
+
+    void setExtraLayerInfoBlockHandler(ExtraLayerInfoBlockHandler handler);
+
     bool read(QIODevice* io);
     bool write(QIODevice* io, KisNodeSP node);
 
@@ -280,6 +288,8 @@ public:
 private:
     void readImpl(QIODevice* io);
 
+private:
+    ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;
 };
 
 #endif // PSD_ADDITIONAL_LAYER_INFO_BLOCK_H

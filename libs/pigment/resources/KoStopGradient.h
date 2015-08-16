@@ -64,8 +64,6 @@ public:
 
 protected:
 
-    virtual QByteArray generateMD5() const;
-
     QList<KoGradientStop> m_stops;
     QPointF m_start;
     QPointF m_stop;

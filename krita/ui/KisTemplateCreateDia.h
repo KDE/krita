@@ -23,7 +23,7 @@
 #define KIS_TEMPLATE_CREATE_DIA_H
 
 #include <kdialog.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QString;
 class QPixmap;

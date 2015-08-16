@@ -19,7 +19,7 @@
 #ifndef KIS_URL_REQUESTER_H
 #define KIS_URL_REQUESTER_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include <QWidget>
 #include <QString>

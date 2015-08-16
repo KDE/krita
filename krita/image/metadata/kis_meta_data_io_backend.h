@@ -19,7 +19,7 @@
 #ifndef _KIS_META_DATA_IO_BACKEND_H_
 #define _KIS_META_DATA_IO_BACKEND_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <KoGenericRegistry.h>
 

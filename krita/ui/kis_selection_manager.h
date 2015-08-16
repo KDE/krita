@@ -25,7 +25,7 @@
 #
 #include "KisDocument.h"
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisActionManager;
 class KisAction;
@@ -92,6 +92,9 @@ public Q_SLOTS:
     void fillForegroundColor();
     void fillBackgroundColor();
     void fillPattern();
+    void fillForegroundColorOpacity();
+    void fillBackgroundColorOpacity();
+    void fillPatternOpacity();
     void reselect();
     void convertToVectorSelection();
     void convertShapesToVectorSelection();
@@ -157,6 +160,9 @@ private:
     KisAction *m_fillForegroundColor;
     KisAction *m_fillBackgroundColor;
     KisAction *m_fillPattern;
+    KisAction *m_fillForegroundColorOpacity;
+    KisAction *m_fillBackgroundColorOpacity;
+    KisAction *m_fillPatternOpacity;
     KisAction *m_imageResizeToSelection;
     KisAction *m_strokeShapes;
     KisAction *m_toggleDisplaySelection;

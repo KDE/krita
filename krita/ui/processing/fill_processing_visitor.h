@@ -24,9 +24,10 @@
 #include <QPoint>
 #include <kis_selection.h>
 #include <kis_resources_snapshot.h>
+#include <kritaui_export.h>
 
 
-class KDE_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
+class KRITAUI_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     FillProcessingVisitor(const QPoint &startPoint,

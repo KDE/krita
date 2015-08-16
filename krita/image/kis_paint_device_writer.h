@@ -18,7 +18,7 @@
 #ifndef KIS_PAINT_DEVICE_WRITER_H
 #define KIS_PAINT_DEVICE_WRITER_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KRITAIMAGE_EXPORT KisPaintDeviceWriter {
 public:

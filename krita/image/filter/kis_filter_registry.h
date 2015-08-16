@@ -25,7 +25,7 @@
 #include "kis_types.h"
 #include "KoGenericRegistry.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QString;
 class KisFilterConfiguration;

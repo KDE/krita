@@ -20,7 +20,7 @@
 #define KIS_COLOR_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 const QString COLOROP_HUE = "ColorOption/hue";
 const QString COLOROP_SATURATION = "ColorOption/saturation";
@@ -38,6 +38,7 @@ class KisColorOptionsWidget;
 
 class PAINTOP_EXPORT KisColorOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     KisColorOption();
     ~KisColorOption();
@@ -57,7 +58,14 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+private Q_SLOTS:
+
+    void setEnabled(bool);
+
 private:
+
+
     KisColorOptionsWidget * m_options;
 };
 

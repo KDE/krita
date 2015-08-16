@@ -20,7 +20,7 @@
 #define _KIS_HLINE_ITERATOR_H_
 
 #include "kis_base_iterator.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_iterator_ng.h"
 
 class KRITAIMAGE_EXPORT KisHLineIterator2 : public KisHLineIteratorNG, public KisBaseIterator {

@@ -23,7 +23,7 @@
 
 #include "kundo2commandextradata.h"
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 class KRITAIMAGE_EXPORT KisCropSavedExtraData : public KUndo2CommandExtraData

@@ -22,7 +22,7 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_painter.h"
 #include "kis_default_bounds.h"
 

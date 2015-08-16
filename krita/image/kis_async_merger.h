@@ -19,7 +19,7 @@
 #ifndef __KIS_ASYNC_MERGER_H
 #define __KIS_ASYNC_MERGER_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
 

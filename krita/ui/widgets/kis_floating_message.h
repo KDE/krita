@@ -31,7 +31,7 @@
 #include <QTimer>
 #include <QTimeLine>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 /**
  * @brief The KisFloatingMessage class shows the given message in a semi-transparent

@@ -23,7 +23,7 @@
 
 #include <QStyleOptionSpinBox>
 #include <QStyleOptionProgressBar>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisAbstractSliderSpinBoxPrivate;
 class KisSliderSpinBoxPrivate;

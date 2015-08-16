@@ -21,7 +21,7 @@
 #include <QList>
 #include <QMap>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QVariant;
 

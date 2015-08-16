@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_types.h"
 #include "kis_undo_store.h"
 

@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_COMMAND_H_
 #define KIS_NODE_COMMAND_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <kundo2command.h>
 #include "kis_types.h"
 

@@ -19,7 +19,7 @@
 #ifndef __KIS_RUNNABLE_H
 #define __KIS_RUNNABLE_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisRunnable
 {

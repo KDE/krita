@@ -19,7 +19,7 @@
 #ifndef _KIS_AUTOBRUSH_RESOURCE_H_
 #define _KIS_AUTOBRUSH_RESOURCE_H_
 
-#include "krita_export.h"
+#include "kritabrush_export.h"
 #include "kis_brush.h"
 
 class KisMaskGenerator;
@@ -76,10 +76,6 @@ public:
     const KisMaskGenerator* maskGenerator() const;
     qreal randomness() const;
     qreal density() const;
-
-protected:
-
-    virtual QByteArray generateMD5() const;
 
 private:
 

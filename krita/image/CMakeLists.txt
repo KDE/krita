@@ -99,6 +99,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_set_layer_style_command.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
+   commands_new/kis_activate_selection_mask_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
@@ -380,7 +381,7 @@ install( FILES
     kis_shared_ptr.h
     kis_transaction.h
     kis_types.h
-    krita_export.h
+    kritaimage_export.h
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h

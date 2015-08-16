@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QString>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 namespace KisMetaData
 {

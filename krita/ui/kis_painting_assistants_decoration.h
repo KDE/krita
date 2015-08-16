@@ -24,7 +24,7 @@
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_painting_assistant.h"
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisView;
 

@@ -20,7 +20,7 @@
 #define KIS_NODE_VISITOR_H_
 
 #include "kis_node.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KisPaintLayer;
 class KisGroupLayer;

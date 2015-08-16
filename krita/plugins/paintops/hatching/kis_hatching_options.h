@@ -20,7 +20,6 @@
 #define KIS_HATCHING_OPTIONS_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 
 class KisHatchingOptionsWidget;

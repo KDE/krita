@@ -99,6 +99,31 @@ KisImageWSP PSDSaver::image()
     return m_image;
 }
 
+#include "kis_sequential_iterator.h"
+
+
+bool checkIfHasTransparency(KisPaintDeviceSP dev)
+{
+    const QRect deviceBounds = dev->exactBounds();
+    const QRect imageBounds = dev->defaultBounds()->bounds();
+
+    if (deviceBounds.isEmpty() ||
+        (deviceBounds & imageBounds) != imageBounds) {
+
+        return true;
+    }
+
+    const KoColorSpace *cs = dev->colorSpace();
+    KisSequentialConstIterator it(dev, deviceBounds);
+
+    do {
+        if (cs->opacityU8(it.rawDataConst()) != OPACITY_OPAQUE_U8) {
+            return true;
+        }
+    } while(it.nextPixel());
+
+    return false;
+}
 
 KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 {
@@ -117,11 +142,17 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         return KisImageBuilder_RESULT_NOT_LOCAL;
     }
 
+    const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
+        checkIfHasTransparency(m_image->rootLayer()->firstChild()->projection());
+
     // HEADER
     PSDHeader header;
     header.signature = "8BPS";
     header.version = 1;
-    header.nChannels = m_image->colorSpace()->channelCount();
+    header.nChannels = haveLayers ?
+        m_image->colorSpace()->channelCount() :
+        m_image->colorSpace()->colorChannelCount();
+
     header.width = m_image->width();
     header.height = m_image->height();
 
@@ -214,7 +245,8 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // LAYER AND MASK DATA
     // Only save layers and masks if there is more than one layer
     dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << f.pos();
-    if (m_image->rootLayer()->childCount() > 1) {
+
+    if (haveLayers) {
 
         PSDLayerMaskSection layerSection(header);
         layerSection.hasTransparency = true;
@@ -233,7 +265,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // IMAGE DATA
     dbgFile << "Saving composited image" << f.pos();
     PSDImageData imagedata(&header);
-    if (!imagedata.write(&f, m_image->projection())) {
+    if (!imagedata.write(&f, m_image->projection(), haveLayers)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
         return KisImageBuilder_RESULT_FAILURE;
     }

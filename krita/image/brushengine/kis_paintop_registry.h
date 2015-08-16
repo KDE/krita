@@ -30,7 +30,7 @@
 #include "kis_paintop_preset.h"
 #include <kis_threaded_text_rendering_workaround.h>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 
 class KisPaintOp;

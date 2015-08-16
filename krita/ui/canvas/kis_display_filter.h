@@ -23,7 +23,7 @@
 #include <QSharedPointer>
 
 #include <opengl/kis_opengl.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_exposure_gamma_correction_interface.h"
 
 

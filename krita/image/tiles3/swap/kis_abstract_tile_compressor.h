@@ -19,7 +19,7 @@
 #ifndef __KIS_ABSTRACT_TILE_COMPRESSOR_H
 #define __KIS_ABSTRACT_TILE_COMPRESSOR_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "../kis_tile.h"
 #include "../kis_tiled_data_manager.h"
 

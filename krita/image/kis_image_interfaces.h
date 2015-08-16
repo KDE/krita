@@ -20,7 +20,7 @@
 #define __KIS_IMAGE_INTERFACES_H
 
 #include "kis_types.h"
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QRect;
 class KisStrokeStrategy;

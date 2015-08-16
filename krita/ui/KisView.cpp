@@ -468,7 +468,7 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView::dropEvent(QDropEvent *event)
 {
-    KisImageSP kisimage = image();
+    KisImageWSP kisimage = image();
     Q_ASSERT(kisimage);
 
     QPoint cursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();

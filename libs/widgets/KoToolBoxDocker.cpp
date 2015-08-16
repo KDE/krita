@@ -26,7 +26,8 @@
 
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
-    : m_toolBox(toolBox)
+    : QDockWidget(i18n("Toolbox"))
+    , m_toolBox(toolBox)
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(toolBox);

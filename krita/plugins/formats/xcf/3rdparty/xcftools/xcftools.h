@@ -41,7 +41,7 @@ void nls_init(void);
 /* These legacy fall-backs will probably work on every system
  * that does not supply a inttypes.h ... */
 typedef unsigned char     uint8_t ;
-typedef unsigned long int uint32_t, uintptr_t ;
+typedef unsigned long int uint32_t;
 typedef signed char       int8_t ;
 typedef signed long int   int32_t ;
 # define PRIX32 "lX"

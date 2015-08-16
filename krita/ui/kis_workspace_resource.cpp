@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
-#include <QCryptographicHash>
 
 
 #define WORKSPACE_VERSION 1
@@ -65,6 +64,8 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 
     QTextStream textStream(dev);
     doc.save(textStream, 4);
+
+    KoResource::saveToDevice(dev);
 
     return true;
 
@@ -124,16 +125,5 @@ void KisWorkspaceResource::setDockerState(const QByteArray& state)
 
 QByteArray KisWorkspaceResource::dockerState()
 {
-    return m_dockerState;
-}
-
-QByteArray KisWorkspaceResource::generateMD5() const
-{
-    if (!m_dockerState.isEmpty()) {
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(m_dockerState);
-        return md5.result();
-    }
-
     return m_dockerState;
 }

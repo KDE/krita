@@ -23,7 +23,7 @@
 #define KIS_COMPOSITEOP_WIDGETS_H_
 
 #include <QComboBox>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_categorized_list_view.h"
 
 class KAction;

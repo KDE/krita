@@ -21,7 +21,7 @@
 #define KIS_ITEM_CHOOSER_H_
 
 #include <QWidget>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <KoID.h>
 
 class KoAbstractResourceServerAdapter;

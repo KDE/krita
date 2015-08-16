@@ -20,7 +20,7 @@
 #ifndef _KIS_COLOR_SOURCE_OPTION_H
 #define _KIS_COLOR_SOURCE_OPTION_H
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 #include <QList>
 
 class KisColorSource;

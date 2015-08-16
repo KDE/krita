@@ -23,7 +23,7 @@
 #include "recorder/kis_recorded_paint_action.h"
 #include "kis_types.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 /**
  * This class will record the painting of a bezier curve.

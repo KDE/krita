@@ -21,7 +21,7 @@
 #define KIS_DOCUMENT_SECTION_VIEW_H
 
 #include <QTreeView>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QStyleOptionViewItem;
 class KisDocumentSectionModel;

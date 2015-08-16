@@ -19,7 +19,7 @@
 #ifndef __KIS_DAB_CACHE_H
 #define __KIS_DAB_CACHE_H
 
-#include "krita_export.h"
+#include "kritapaintop_export.h"
 #include "kis_brush.h"
 
 class KisColorSource;

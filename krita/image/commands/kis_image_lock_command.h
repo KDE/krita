@@ -20,8 +20,6 @@
 #ifndef KIS_IMAGE_LOCK_COMMAND_H_
 #define KIS_IMAGE_LOCK_COMMAND_H_
 
-#include <krita_export.h>
-
 #include "kis_types.h"
 #include "kis_image_command.h"
 

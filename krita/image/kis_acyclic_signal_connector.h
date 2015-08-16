@@ -20,7 +20,7 @@
 #define __KIS_ACYCLIC_SIGNAL_CONNECTOR_H
 
 #include <QObject>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 /**

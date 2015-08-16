@@ -21,7 +21,7 @@
 #ifndef _KIS_RANDOM_GENERATOR_H_
 #define _KIS_RANDOM_GENERATOR_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <QtGlobal>
 

@@ -21,7 +21,7 @@
 
 #include <QList>
 #include <QObject>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include "kis_serializable_configuration.h"
 #include "kis_types.h"

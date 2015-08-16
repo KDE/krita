@@ -28,7 +28,7 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KoStore;
 class KisDocument;

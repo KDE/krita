@@ -19,7 +19,7 @@
 #ifndef __KIS_IMAGE_LAYER_REMOVE_COMMAND_H
 #define __KIS_IMAGE_LAYER_REMOVE_COMMAND_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 #include "kis_image_command.h"
 

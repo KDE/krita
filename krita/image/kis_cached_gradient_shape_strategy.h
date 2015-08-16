@@ -20,7 +20,7 @@
 #define __KIS_CACHED_GRADIENT_SHAPE_STRATEGY_H
 
 #include "kis_gradient_shape_strategy.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QScopedPointer>
 

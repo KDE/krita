@@ -28,7 +28,7 @@
 #include "kis_shared.h"
 #include "kis_paint_information.h"
 
-#include "krita_export.h"
+#include "kritabrush_export.h"
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;

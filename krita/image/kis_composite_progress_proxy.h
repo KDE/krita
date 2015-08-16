@@ -21,7 +21,7 @@
 
 #include <QList>
 #include <KoProgressProxy.h>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 class KRITAIMAGE_EXPORT KisCompositeProgressProxy : public KoProgressProxy

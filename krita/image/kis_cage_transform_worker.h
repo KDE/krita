@@ -20,7 +20,7 @@
 #define __KIS_CAGE_TRANSFORM_WORKER_H
 
 #include <QScopedPointer>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <kis_types.h>
 
 class QImage;

@@ -19,7 +19,7 @@
 #ifndef __KIS_POST_EXECUTION_UNDO_ADAPTER_H
 #define __KIS_POST_EXECUTION_UNDO_ADAPTER_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_types.h"
 
 class KUndo2MagicString;

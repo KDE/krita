@@ -18,7 +18,6 @@
 #define KIS_HAIRY_INK_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString HAIRY_INK_DEPLETION_ENABLED = "HairyInk/enabled";
 const QString HAIRY_INK_AMOUNT = "HairyInk/inkAmount";

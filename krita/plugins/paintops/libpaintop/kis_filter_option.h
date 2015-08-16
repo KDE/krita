@@ -22,7 +22,7 @@
 
 #include "kis_paintop_option.h"
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class QGridLayout;
 class KoID;

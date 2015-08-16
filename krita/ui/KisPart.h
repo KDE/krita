@@ -30,7 +30,7 @@
 #include <kurl.h>
 #include <kxmlguiclient.h>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include <KisMainWindow.h>
 

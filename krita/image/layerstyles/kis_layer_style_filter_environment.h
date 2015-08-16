@@ -22,7 +22,7 @@
 #include <QScopedPointer>
 #include <QRect>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KisPainter;
 class KisLayer;
@@ -30,7 +30,7 @@ class QPainterPath;
 class QBitArray;
 
 
-class KDE_EXPORT KisLayerStyleFilterEnvironment
+class KRITAIMAGE_EXPORT KisLayerStyleFilterEnvironment
 {
 public:
     KisLayerStyleFilterEnvironment(KisLayer *sourceLayer);

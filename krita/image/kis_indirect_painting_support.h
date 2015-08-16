@@ -20,7 +20,7 @@
 #ifndef KIS_INDIRECT_PAINTING_SUPPORT_H_
 #define KIS_INDIRECT_PAINTING_SUPPORT_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 #include "kis_node.h"
 

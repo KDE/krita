@@ -26,7 +26,7 @@ class KisSerializableConfigurationFactory;
 class QString;
 class KLocalizedString;
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager
 {

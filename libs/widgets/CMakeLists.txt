@@ -84,6 +84,7 @@ set(kowidgets_LIB_SRCS
     KoDocumentInfoPropsPage.cpp
 
     KoGlobal.cpp
+    KoTableView.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

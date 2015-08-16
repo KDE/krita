@@ -32,7 +32,7 @@
 #include "kis_shared.h"
 #include "kis_image.h"
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class QWidget;
 

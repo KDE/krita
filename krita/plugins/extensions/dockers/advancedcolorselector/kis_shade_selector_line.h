@@ -25,6 +25,7 @@
 class KisCanvas2;
 class KisShadeSelectorLineComboBox;
 class KisColorSelectorBaseProxy;
+class KoColorSpace;
 
 class KisShadeSelectorLineBase : public QWidget {
 public:
@@ -75,6 +76,7 @@ private:
 
     KoColor m_realColor;
     KisPaintDeviceSP m_realPixelCache;
+    const KoColorSpace *m_cachedColorSpace;
 
     bool m_gradient;
     int m_patchCount;

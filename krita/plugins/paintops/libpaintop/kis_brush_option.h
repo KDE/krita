@@ -23,6 +23,7 @@
 
 #include "kis_brush.h"
 #include <kis_threaded_text_rendering_workaround.h>
+#include <kritapaintop_export.h>
 
 class KisPropertiesConfiguration;
 

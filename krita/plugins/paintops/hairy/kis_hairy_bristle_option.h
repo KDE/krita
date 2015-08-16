@@ -20,7 +20,6 @@
 #define KIS_HAIRY_BRISTLE_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString HAIRY_BRISTLE_USE_MOUSEPRESSURE = "HairyBristle/useMousePressure";
 const QString HAIRY_BRISTLE_SCALE = "HairyBristle/scale";

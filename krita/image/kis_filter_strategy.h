@@ -26,7 +26,7 @@
 #include "kis_types.h"
 #include "KoGenericRegistry.h"
 #include "KoID.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisFilterStrategy
 {

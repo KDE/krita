@@ -26,7 +26,7 @@
 class KisPainter;
 class KoColor;
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 /**
  * Base class for paint action.

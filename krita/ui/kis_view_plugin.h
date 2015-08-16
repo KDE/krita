@@ -20,7 +20,7 @@
 #ifndef KIS_VIEW_PLUGIN_H
 #define KIS_VIEW_PLUGIN_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "operations/kis_operation_ui_factory.h"
 
 class KisOperation;

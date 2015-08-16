@@ -22,7 +22,7 @@
 #include "kis_paintop_settings_widget.h"
 #include "kis_types.h"
 #include "kis_brush.h"
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class KisBrushOptionWidget;
 

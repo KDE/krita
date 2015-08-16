@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_paint_information.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_default_bounds.h"

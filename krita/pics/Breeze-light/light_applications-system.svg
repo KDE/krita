@@ -13,8 +13,8 @@
    height="22"
    id="svg3613"
    version="1.1"
-   inkscape:version="0.91pre2 r"
-   sodipodi:docname="applications-system.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="light_configure-shortcuts.svg">
   <defs
      id="defs3615" />
   <sodipodi:namedview
@@ -25,15 +25,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="8"
-     inkscape:cx="-21.611725"
+     inkscape:cx="-45.986725"
      inkscape:cy="-4.0441868"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="716"
-     inkscape:window-x="-4"
-     inkscape:window-y="25"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      borderlayer="true">
@@ -81,7 +81,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>

@@ -39,8 +39,7 @@ public:
     
     void setActionList(const QStringList actions);
     QStringList actionList();
-protected:
-    virtual QByteArray generateMD5() const;
+
 private:
 
     QStringList m_actions;

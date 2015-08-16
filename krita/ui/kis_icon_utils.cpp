@@ -55,14 +55,14 @@ KIcon loadIcon(const QString &name) {
         realName = name;
     }
 
-    QIcon icon(realName);
+    KIcon icon(realName);
 
     // fallback
     if (icon.isNull()) {
-        icon = QIcon(name);
+        return KIcon(name);
     }
 
-    return KIcon(icon);
+    return icon;
 }
 
 bool adjustIcon(QIcon *icon)

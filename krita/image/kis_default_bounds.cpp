@@ -47,6 +47,11 @@ KisDefaultBounds::~KisDefaultBounds()
     delete m_d;
 }
 
+void KisDefaultBounds::setImage(KisImageWSP image)
+{
+    m_d->image = image;
+}
+
 QRect KisDefaultBounds::bounds() const
 {
     /**
@@ -86,7 +91,6 @@ QRect KisSelectionDefaultBounds::bounds() const
     QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->extent() : QRect();
     return additionalRect | KisDefaultBounds::bounds();
 }
-
 
 /******************************************************************/
 /*                   KisSelectionEmptyBounds                      */

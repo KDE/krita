@@ -26,6 +26,7 @@
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
 #include "kis_liquify_properties.h"
+#include <kritatooltransform_export.h>
 
 
 #include <QScopedPointer>
@@ -39,7 +40,7 @@ class QDomElement;
  * memory.
  */
 
-class KDE_EXPORT ToolTransformArgs
+class KRITATOOLTRANSFORM_TEST_EXPORT ToolTransformArgs
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,

@@ -18,7 +18,7 @@
 #ifndef KIS_SET_GLOBAL_SELECTION_COMMAND_H
 #define KIS_SET_GLOBAL_SELECTION_COMMAND_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <kundo2command.h>
 #include "kis_types.h"
 

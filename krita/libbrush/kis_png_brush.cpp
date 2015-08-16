@@ -23,7 +23,6 @@
 #include <QImageReader>
 #include <QByteArray>
 #include <QBuffer>
-#include <QCryptographicHash>
 
 KisPngBrush::KisPngBrush(const QString& filename)
     : KisBrush(filename)
@@ -109,7 +108,12 @@ bool KisPngBrush::save()
 
 bool KisPngBrush::saveToDevice(QIODevice *dev) const
 {
-    return brushTipImage().save(dev, "PNG");
+    if(brushTipImage().save(dev, "PNG")) {
+        KoResource::saveToDevice(dev);
+        return true;
+    }
+
+    return false;
 }
 
 QString KisPngBrush::defaultFileExtension() const

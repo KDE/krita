@@ -225,8 +225,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     KisEmbeddedPatternManager::saveEmbeddedPattern(setting, pattern);
 }
 
-
-
 void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
@@ -262,11 +260,11 @@ void KisTextureOption::resetGUI(KoResource* res)
 
 void KisTextureProperties::recalculateMask()
 {
-    if (!pattern) return;
+    if (!m_pattern) return;
 
     m_mask = 0;
 
-    QImage mask = pattern->pattern();
+    QImage mask = m_pattern->pattern();
 
     if (mask.format() != QImage::Format_RGB32 ||
             mask.format() != QImage::Format_ARGB32) {
@@ -274,9 +272,9 @@ void KisTextureProperties::recalculateMask()
         mask = mask.convertToFormat(QImage::Format_ARGB32);
     }
 
-    if (!qFuzzyCompare(scale, 0.0)) {
+    if (!qFuzzyCompare(m_scale, 0.0)) {
         QTransform tf;
-        tf.scale(scale, scale);
+        tf.scale(m_scale, m_scale);
         QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
@@ -305,15 +303,15 @@ void KisTextureProperties::recalculateMask()
             const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
             float maskValue = (grayValue / 255.0) * alpha + (1 - alpha);
 
-            if (invert) {
+            if (m_invert) {
                 maskValue = 1 - maskValue;
             }
 
-            if (cutoffPolicy == 1 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
+            if (m_cutoffPolicy == 1 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
                 // mask out the dab if it's outside the pattern's cuttoff points
                 maskValue = OPACITY_TRANSPARENT_F;
             }
-            else if (cutoffPolicy == 2 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
+            else if (m_cutoffPolicy == 2 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
                 maskValue = OPACITY_OPAQUE_F;
             }
 
@@ -330,27 +328,27 @@ void KisTextureProperties::recalculateMask()
 void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
-        enabled = false;
+        m_enabled = false;
         return;
     }
 
-    pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    m_pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
-    if (!pattern) {
+    if (!m_pattern) {
         qWarning() << "WARNING: Couldn't load the pattern for a stroke";
-        enabled = false;
+        m_enabled = false;
         return;
     }
 
-    enabled = setting->getBool("Texture/Pattern/Enabled", false);
-    scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
-    offsetX = setting->getInt("Texture/Pattern/OffsetX");
-    offsetY = setting->getInt("Texture/Pattern/OffsetY");
-    texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
-    invert = setting->getBool("Texture/Pattern/Invert");
-    cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
-    cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
-    cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
+    m_enabled = setting->getBool("Texture/Pattern/Enabled", false);
+    m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
+    m_offsetX = setting->getInt("Texture/Pattern/OffsetX");
+    m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
+    m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
+    m_invert = setting->getBool("Texture/Pattern/Invert");
+    m_cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
+    m_cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
+    m_cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
 
     m_strengthOption.readOptionSetting(setting);
     m_strengthOption.resetAllSensors();
@@ -360,13 +358,13 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
 
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
 {
-    if (!enabled) return;
+    if (!m_enabled) return;
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();
 
-    int x = offset.x() % m_maskBounds.width() - offsetX;
-    int y = offset.y() % m_maskBounds.height() - offsetY;
+    int x = offset.x() % m_maskBounds.width() - m_offsetX;
+    int y = offset.y() % m_maskBounds.height() - m_offsetY;
 
     KisFillPainter fillPainter(fillDevice);
     fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, m_maskBounds);
@@ -378,7 +376,7 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
-            if (texturingMode == MULTIPLY) {
+            if (m_texturingMode == MULTIPLY) {
                 dab->colorSpace()->multiplyAlpha(dabData, quint8(*iter->oldRawData() * pressure), 1);
             }
             else {

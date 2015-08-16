@@ -24,6 +24,9 @@
 #include <QDebug>
 #include <QImage>
 
+#include "KoHashGenerator.h"
+#include "KoHashGeneratorProvider.h"
+
 struct KoResource::Private {
     QString name;
     QString filename;
@@ -52,6 +55,13 @@ KoResource::KoResource(const KoResource &rhs)
 {
 }
 
+bool KoResource::saveToDevice(QIODevice *dev) const
+{
+    d->md5 = QByteArray();
+
+    return true;
+}
+
 QImage KoResource::image() const
 {
     return d->image;
@@ -73,6 +83,12 @@ QByteArray KoResource::md5() const
 void KoResource::setMD5(const QByteArray &md5)
 {
     d->md5 = md5;
+}
+
+QByteArray KoResource::generateMD5() const
+{
+    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+    return hashGenerator->generateHash(d->filename);
 }
 
 QString KoResource::filename() const

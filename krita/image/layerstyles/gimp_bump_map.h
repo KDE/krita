@@ -70,8 +70,8 @@ struct bumpmap_vals_t
     const bool tiled;
 };
 
-void KDE_EXPORT bumpmap (KisPixelSelectionSP device,
-                         const QRect &selectionRect,
-                         const bumpmap_vals_t &bmvals);
+void KRITAIMAGE_EXPORT bumpmap (KisPixelSelectionSP device,
+                                const QRect &selectionRect,
+                                const bumpmap_vals_t &bmvals);
 
 #endif /* __GIMP_BUMP_MAP_H */

@@ -21,7 +21,7 @@
 #ifndef KIS_PAINTOP_LIST_WIDGET_H_
 #define KIS_PAINTOP_LIST_WIDGET_H_
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_categorized_list_view.h"
 
 class KisPaintOpFactory;

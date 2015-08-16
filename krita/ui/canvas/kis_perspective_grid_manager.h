@@ -24,7 +24,7 @@
 #include "kis_canvas_decoration.h"
 #include <QPainter>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisPerspectiveGridDecoration;
 class KAction;

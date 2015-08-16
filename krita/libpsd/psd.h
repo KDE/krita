@@ -31,7 +31,7 @@
 #include <KoAbstractGradient.h>
 
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 #include "kis_debug.h"
 
@@ -1077,12 +1077,13 @@ struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
     // using psd_layer_effects_overlay_base::patternPhase;
 
 private:
-    int m_scale;
+    // These are unused
+    /*int m_scale;
     bool m_alignWithLayer;
     KoPattern *m_pattern;
 
     int m_horizontalPhase;
-    int m_verticalPhase;
+    int m_verticalPhase;*/
 };
 
 struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base

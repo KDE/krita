@@ -19,7 +19,6 @@
 #define KIS_PARTICLEOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString PARTICLE_COUNT = "Particle/count";
 const QString PARTICLE_GRAVITY = "Particle/gravity";

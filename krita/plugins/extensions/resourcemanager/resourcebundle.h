@@ -28,6 +28,8 @@
 #include "KoResource.h"
 #include "resourcebundle_manifest.h"
 
+class KoStore;
+
 /**
  * @brief The ResourceBundle class
  * @details Describe the resource bundles as KoResources
@@ -107,12 +109,29 @@ public:
 
     void setThumbnail(QString);
 
+    /**
+     * @brief saveMetadata: saves bundle metadata
+     * @param store bundle where to save the metadata
+     */
+    void saveMetadata(QScopedPointer<KoStore> &store);
+
+    /**
+     * @brief saveManifest: saves bundle manifest
+     * @param store bundle where to save the manifest
+     */
+    void saveManifest(QScopedPointer<KoStore> &store);
+
+    /**
+     * @brief recreateBundle
+     * It recreates the bundle by copying the old bundle information to a new store
+     * and recalculating the md5 of each resource.
+     * @param oldStore the old store to be recreated.
+     */
+    void recreateBundle(QScopedPointer<KoStore> &oldStore);
+
+
     QStringList resourceTypes();
     QList<KoResource*> resources(const QString &resType);
-
-protected:
-
-    virtual QByteArray generateMD5() const;
 
 private:
 
@@ -131,6 +150,7 @@ private:
     QList<QByteArray> m_palettesMd5Installed;
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
+    QString m_bundleVersion;
     
 };
 

@@ -23,7 +23,6 @@
 
 #include <KoColor.h>
 
-#include <QCryptographicHash>
 #include <QBuffer>
 #include <QByteArray>
 
@@ -143,11 +142,6 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     }
 
     return image;
-}
-
-QByteArray KoAbstractGradient::generateMD5() const
-{
-    return QByteArray();
 }
 
 void KoAbstractGradient::updatePreview()

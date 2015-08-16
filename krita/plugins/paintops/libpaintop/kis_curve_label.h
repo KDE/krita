@@ -18,7 +18,7 @@
 #ifndef _KIS_CURVE_LABEL_H_
 #define _KIS_CURVE_LABEL_H_
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class QString;
 class QImage;

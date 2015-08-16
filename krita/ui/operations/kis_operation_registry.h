@@ -19,7 +19,7 @@
 #ifndef __KIS_OPERATION_REGISTRY_H
 #define __KIS_OPERATION_REGISTRY_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <KoGenericRegistry.h>
 #include "kis_operation.h"
 

@@ -22,7 +22,7 @@
 #define KIS_TABLET_SUPPORT_WIN_H
 
 #include <Qt>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <QAbstractNativeEventFilter>
 

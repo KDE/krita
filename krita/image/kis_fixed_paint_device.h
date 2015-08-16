@@ -18,7 +18,7 @@
 #ifndef KIS_FIXED_PAINT_DEVICE_H
 #define KIS_FIXED_PAINT_DEVICE_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include <KoColorSpace.h>
 #include "kis_global.h"
 #include "kis_shared.h"

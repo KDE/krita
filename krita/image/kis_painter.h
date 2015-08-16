@@ -33,7 +33,7 @@
 #include "kis_distance_information.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QPen;
 class KUndo2Command;

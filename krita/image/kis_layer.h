@@ -26,7 +26,7 @@
 #include <QMetaType>
 #include <QObject>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include "KisDocumentSectionModel.h"
 

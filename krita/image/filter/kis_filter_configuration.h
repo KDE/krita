@@ -23,7 +23,7 @@
 #include "kis_properties_configuration.h"
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * KisFilterConfiguration does inherit neither KisShared or QSharedData

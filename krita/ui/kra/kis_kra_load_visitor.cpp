@@ -460,7 +460,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         if (!result) {
             m_errorMessages << i18n("Could not load raster selection %1.", location);
         }
-
+        pixelSelection->invalidateOutlineCache();
     }
 
     // Shape selection
@@ -476,7 +476,6 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         if (!result) {
             m_errorMessages << i18n("Could not load vector selection %1.", location);
         }
-
     }
     return result;
 }

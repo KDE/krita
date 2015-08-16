@@ -22,7 +22,7 @@
 #include <QString>
 #include <QVector>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_types.h"
 
 class KUndo2Command;

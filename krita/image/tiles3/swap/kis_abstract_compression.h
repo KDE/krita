@@ -19,7 +19,8 @@
 #ifndef __KIS_ABSTRACT_COMPRESSION_H
 #define __KIS_ABSTRACT_COMPRESSION_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
+#include <QtGlobal>
 
 /**
  * Base class for compression operations

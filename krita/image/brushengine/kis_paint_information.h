@@ -24,7 +24,7 @@
 
 #include "kis_global.h"
 #include "kis_vec.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_distance_information.h"
 
 class QDomDocument;

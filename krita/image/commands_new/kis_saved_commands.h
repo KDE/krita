@@ -21,7 +21,6 @@
 
 #include <kundo2command.h>
 #include "kis_types.h"
-#include "krita_export.h"
 #include "kis_stroke_job_strategy.h"
 
 class KisStrokesFacade;

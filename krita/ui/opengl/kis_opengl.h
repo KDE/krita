@@ -29,7 +29,7 @@
 #include <QtGlobal>
 class QOpenGLContext;
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 
 /**

@@ -21,7 +21,7 @@
 
 #include <QList>
 #include <QString>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 namespace KisMetaData
 {

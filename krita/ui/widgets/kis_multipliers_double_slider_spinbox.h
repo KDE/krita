@@ -22,7 +22,7 @@
 
 #include <QWidget>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisDoubleSliderSpinBox;
 

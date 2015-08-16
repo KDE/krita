@@ -27,7 +27,7 @@
 #include <KoColorProfile.h>
 
 #include <kis_types.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include "widgets/kis_floating_message.h"
 

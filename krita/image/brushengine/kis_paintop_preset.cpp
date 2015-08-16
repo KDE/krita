@@ -26,7 +26,6 @@
 #include <QImageReader>
 #include <QDomDocument>
 #include <QBuffer>
-#include <QCryptographicHash>
 
 #include <KoInputDevice.h>
 
@@ -316,23 +315,6 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 
 }
 
-QByteArray KisPaintOpPreset::generateMD5() const
-{
-    QByteArray ba;
-    QBuffer buf(&ba);
-    buf.open(QBuffer::WriteOnly);
-    saveToDevice(&buf);
-    buf.close();
-
-    if (!ba.isEmpty()) {
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-        return md5.result();
-    }
-
-    return ba;
-}
-
 bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 {
     QImageWriter writer(dev, "PNG");
@@ -354,6 +336,8 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     }
 
     m_d->dirtyPreset = false;
+
+    KoResource::saveToDevice(dev);
 
     return writer.write(img);
 

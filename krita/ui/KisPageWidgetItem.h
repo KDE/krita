@@ -21,7 +21,7 @@
 #ifndef KISPAGEWIDGETITEM_H
 #define KISPAGEWIDGETITEM_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QWidget;
 class QString;

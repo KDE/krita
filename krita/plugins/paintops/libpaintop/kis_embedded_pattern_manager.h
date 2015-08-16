@@ -19,14 +19,14 @@
 #ifndef __KIS_EMBEDDED_PATTERN_MANAGER_H
 #define __KIS_EMBEDDED_PATTERN_MANAGER_H
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class KoPattern;
 class KoAbstractGradient;
 class KisPropertiesConfiguration;
 
 
-class KRITAUI_EXPORT KisEmbeddedPatternManager
+class PAINTOP_TEST_EXPORT KisEmbeddedPatternManager
 {
 public:
     static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);

@@ -21,7 +21,7 @@
 #define _KIS_VLINE_ITERATOR_H_
 
 #include "kis_base_iterator.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_iterator_ng.h"
 
 class KRITAIMAGE_EXPORT KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator {

@@ -19,8 +19,6 @@
 #ifndef KIS_PAINTDEVICE_CONVERT_TYPE_COMMAND_H
 #define KIS_PAINTDEVICE_CONVERT_TYPE_COMMAND_H
 
-#include <krita_export.h>
-
 #include <kundo2command.h>
 #include <QSize>
 #include <QBitArray>

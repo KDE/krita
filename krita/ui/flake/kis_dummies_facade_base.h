@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KisNodeDummy;
 

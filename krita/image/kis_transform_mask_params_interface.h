@@ -19,7 +19,7 @@
 #ifndef __KIS_TRANSFORM_MASK_PARAMS_INTERFACE_H
 #define __KIS_TRANSFORM_MASK_PARAMS_INTERFACE_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include <QScopedPointer>

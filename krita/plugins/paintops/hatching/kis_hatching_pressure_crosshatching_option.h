@@ -21,7 +21,6 @@
 
 #include "kis_curve_option.h"
 #include <kis_paint_information.h>
-#include <krita_export.h>
 
 /**
  * The pressure crosshatching option defines a curve that is used to

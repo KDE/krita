@@ -26,7 +26,6 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QBuffer>
-#include <QCryptographicHash>
 
 #include <klocale.h>
 #include <DebugPigment.h>
@@ -71,10 +70,6 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
         strExt = filename().mid(result).toLower();
     }
     QByteArray ba = dev->readAll();
-
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(ba);
-    setMD5(md5.result());
 
     QBuffer buf(&ba);
     if (strExt == ".kgr") {
@@ -656,22 +651,7 @@ bool KoStopGradient::saveToDevice(QIODevice *dev) const
     stream << "</linearGradient>" << endl;
     stream << "</svg>" << endl;
 
+    KoResource::saveToDevice(dev);
+
     return true;
-}
-
-QByteArray KoStopGradient::generateMD5() const
-{
-    QByteArray ba;
-    QBuffer buf(&ba);
-    buf.open(QBuffer::WriteOnly);
-    saveToDevice(&buf);
-    buf.close();
-
-    if (!ba.isEmpty()) {
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-        return md5.result();
-    }
-
-    return ba;
 }

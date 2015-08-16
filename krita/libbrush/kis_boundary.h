@@ -22,7 +22,7 @@
 #include <QPair>
 #include <QPainter>
 
-#include <krita_export.h>
+#include <kritabrush_export.h>
 
 #include "kis_types.h"
 

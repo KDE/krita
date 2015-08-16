@@ -18,7 +18,7 @@
 #ifndef KIS_TILE_DATA_STORE_H_
 #define KIS_TILE_DATA_STORE_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QReadWriteLock>
 #include "kis_tile_data_interface.h"

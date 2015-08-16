@@ -19,7 +19,7 @@
 #ifndef _KIS_DYNAMIC_SENSOR_H_
 #define _KIS_DYNAMIC_SENSOR_H_
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 #include <QObject>
 

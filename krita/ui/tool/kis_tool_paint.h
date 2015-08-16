@@ -35,7 +35,7 @@
 #include <KoToolBase.h>
 #include <KoAbstractGradient.h>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <kis_types.h>
 #include <kis_image.h>

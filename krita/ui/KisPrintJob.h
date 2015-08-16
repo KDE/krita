@@ -25,7 +25,7 @@
 #include <QAbstractPrintDialog>
 #include <QPrinter>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include <kis_types.h>
 

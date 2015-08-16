@@ -22,12 +22,13 @@
 #include <QSharedPointer>
 
 #include "kis_layer_style_filter.h"
+#include <kritaimage_export.h>
 
 struct psd_layer_effects_overlay_base;
 struct psd_layer_effects_context;
 
 
-class KDE_EXPORT KisLsOverlayFilter : public KisLayerStyleFilter
+class KRITAIMAGE_EXPORT KisLsOverlayFilter : public KisLayerStyleFilter
 {
 public:
     enum Mode {

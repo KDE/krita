@@ -19,7 +19,7 @@
 #define KIS_COMPOSITEOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 #include <QString>
 
 // const QString AIRBRUSH_ENABLED = "AirbrushOption/isAirbrushing";

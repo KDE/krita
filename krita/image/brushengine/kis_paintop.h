@@ -28,7 +28,7 @@
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QPointF;
 class KoColorSpace;

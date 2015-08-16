@@ -77,6 +77,9 @@ public:
             if (widget.isNull() || widget->objectName().isEmpty()) {
                 continue; // skip this docker in release build when assert don't crash
             }
+
+            widget->setMinimumWidth(300);
+
             if (!widget->windowTitle().isEmpty()) {
                 housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 0);
                 currentAuxWidgets.insert(l);

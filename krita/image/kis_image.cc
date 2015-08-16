@@ -30,6 +30,7 @@
 #include <QDateTime>
 #include <QRect>
 #include <QRegion>
+#include <QtConcurrent>
 
 #include <klocale.h>
 
@@ -79,6 +80,7 @@
 #include "processing/kis_transform_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
+#include "commands_new/kis_activate_selection_mask_command.h"
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
@@ -87,6 +89,9 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
+#include <QtCore>
+#include <boost/bind.hpp>
+
 
 
 // #define SANITY_CHECKS
@@ -104,6 +109,10 @@
 class KisImage::KisImagePrivate
 {
 public:
+    KisImagePrivate(KisImage *_q) : q(_q) {}
+
+    KisImage *q;
+
     quint32 lockCount;
     KisPerspectiveGrid* perspectiveGrid;
 
@@ -142,12 +151,14 @@ public:
     bool startProjection;
 
     bool tryCancelCurrentStrokeAsync();
+
+    void notifyProjectionUpdatedInPatches(const QRect &rc);
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
         : QObject(0)
         , KisShared()
-        , m_d(new KisImagePrivate())
+        , m_d(new KisImagePrivate(this))
 {
     setObjectName(name);
     dbgImage << "creating" << name;
@@ -1043,8 +1054,76 @@ void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNo
     KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
 }
 
+void fetchSelectionMasks(QList<KisNodeSP> mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
+{
+    foreach (KisNodeSP node, mergedNodes) {
+        KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+
+        KisSelectionMaskSP mask;
+
+        if (layer && (mask = layer->selectionMask())) {
+            selectionMasks.append(mask);
+        }
+    }
+}
+
+void reparentSelectionMasks(KisLayerSP newLayer, const QVector<KisSelectionMaskSP> &selectionMasks)
+{
+    KisImageSP image = newLayer->image();
+    foreach (KisSelectionMaskSP mask, selectionMasks) {
+        image->undoAdapter()->addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
+        image->undoAdapter()->addCommand(new KisActivateSelectionMaskCommand(mask, false));
+    }
+}
+
+KisNodeSP tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes)
+{
+    if (mergedNodes.isEmpty()) return 0;
+
+    QList<KisSelectionMaskSP> selectionMasks;
+
+    foreach (KisNodeSP node, mergedNodes) {
+        KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(node.data());
+        if (!mask) return 0;
+
+        selectionMasks.append(mask);
+    }
+
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(selectionMasks.first()->parent().data());
+    KIS_ASSERT_RECOVER(parentLayer) { return 0; }
+
+    KisSelectionSP selection = new KisSelection();
+
+    foreach (KisMaskSP mask, selectionMasks) {
+        selection->pixelSelection()->applySelection(
+            mask->selection()->pixelSelection(), SELECTION_ADD);
+    }
+
+    image->undoAdapter()->beginMacro(kundo2_i18n("Merge Selection Masks"));
+
+    KisSelectionMaskSP mergedMask = new KisSelectionMask(image);
+    mergedMask->initSelection(parentLayer);
+
+    image->undoAdapter()->addCommand(new KisImageLayerAddCommand(image, mergedMask, parentLayer, parentLayer->lastChild()));
+    mergedMask->setSelection(selection);
+    image->undoAdapter()->addCommand(new KisActivateSelectionMaskCommand(mergedMask, true));
+
+    image->safeRemoveMultipleNodes(mergedNodes);
+
+    image->undoAdapter()->endMacro();
+
+    return mergedMask;
+}
+
 KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
 {
+    {
+        KisNodeSP mask;
+        if ((mask = tryMergeSelectionMasks(this, mergedNodes))) {
+            return mask;
+        }
+    }
+
     filterMergableNodes(mergedNodes);
 
     {
@@ -1054,6 +1133,10 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
     }
 
     if (mergedNodes.size() <= 1) return KisNodeSP();
+
+    // fetch selection masks to move them into the destination layer
+    QVector<KisSelectionMaskSP> selectionMasks;
+    fetchSelectionMasks(mergedNodes, selectionMasks);
 
     foreach (KisNodeSP layer, mergedNodes) {
         refreshHiddenArea(layer, bounds());
@@ -1079,7 +1162,7 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
             .arg(mergedLayerName).arg(mergedLayerSuffix);
     }
 
-    KisNodeSP newLayer = new KisPaintLayer(this, mergedLayerName, OPACITY_OPAQUE_U8, mergedDevice);
+    KisLayerSP newLayer = new KisPaintLayer(this, mergedLayerName, OPACITY_OPAQUE_U8, mergedDevice);
 
 
     undoAdapter()->beginMacro(kundo2_i18n("Merge Selected Nodes"));
@@ -1101,6 +1184,9 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
         undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, parent->lastChild()));
     }
 
+    // reparent selection masks into the newly created node
+    reparentSelectionMasks(newLayer, selectionMasks);
+
     safeRemoveMultipleNodes(mergedNodes);
 
     undoAdapter()->endMacro();
@@ -1118,6 +1204,14 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
+
+    QVector<KisSelectionMaskSP> selectionMasks;
+    {
+        QList<KisNodeSP> mergedNodes;
+        mergedNodes << layer;
+        mergedNodes << prevLayer;
+        fetchSelectionMasks(mergedNodes, selectionMasks);
+    }
 
     QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
@@ -1145,6 +1239,10 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     undoAdapter()->beginMacro(kundo2_i18n("Merge with Layer Below"));
 
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
+
+    // reparent selection masks into the newly created node
+    reparentSelectionMasks(mergedLayer, selectionMasks);
+
     safeRemoveTwoNodes(layer, prevLayer);
 
     undoAdapter()->endMacro();
@@ -1508,15 +1606,36 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     return id;
 }
 
-void KisImage::startIsolatedMode(KisNodeSP node)
+void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
 {
-    barrierLock();
+    KisImageConfig imageConfig;
+    int patchWidth = imageConfig.updatePatchWidth();
+    int patchHeight = imageConfig.updatePatchHeight();
+
+    for (int y = 0; y < rc.height(); y += patchHeight) {
+        for (int x = 0; x < rc.width(); x += patchWidth) {
+            QRect patchRect(x, y, patchWidth, patchHeight);
+            patchRect &= rc;
+
+            QtConcurrent::run(boost::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
+        }
+    }
+}
+
+bool KisImage::startIsolatedMode(KisNodeSP node)
+{
+    if (!tryBarrierLock()) return false;
+
     unlock();
 
     m_d->isolatedRootNode = node;
     emit sigIsolatedModeChanged();
 
-    notifyProjectionUpdated(bounds());
+    // the GUI uses our thread to do the color space conversion so we
+    // need to emit this signal in multiple threads
+    m_d->notifyProjectionUpdatedInPatches(bounds());
+
+    return true;
 }
 
 void KisImage::stopIsolatedMode()
@@ -1528,11 +1647,13 @@ void KisImage::stopIsolatedMode()
 
     emit sigIsolatedModeChanged();
 
-    notifyProjectionUpdated(bounds());
+    // the GUI uses our thread to do the color space conversion so we
+    // need to emit this signal in multiple threads
+    m_d->notifyProjectionUpdatedInPatches(bounds());
 
     // TODO: Substitute notifyProjectionUpdated() with this code
     // when update optimization is implemented
-    // 
+    //
     // QRect updateRect = bounds() | oldRootNode->extent();
     // oldRootNode->setDirty(updateRect);
 }

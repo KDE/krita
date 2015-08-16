@@ -31,7 +31,7 @@
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QWidget;
 class QPaintEvent;

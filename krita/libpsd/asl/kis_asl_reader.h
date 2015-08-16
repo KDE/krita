@@ -19,7 +19,8 @@
 #ifndef __KIS_ASL_READER_H
 #define __KIS_ASL_READER_H
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
+#include <QtGlobal>
 
 class QDomDocument;
 class QIODevice;

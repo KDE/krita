@@ -20,7 +20,7 @@
 #define _KIS_NODE_QUERY_PATH_H_
 
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 /**
  * This class represent a path to access a node starting from an other node.

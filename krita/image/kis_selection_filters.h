@@ -22,7 +22,7 @@
 #define KIS_SELECTION_FILTERS_H
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QRect>
 #include <QString>

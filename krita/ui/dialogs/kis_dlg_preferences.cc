@@ -50,7 +50,7 @@
 #include <KoFileDialog.h>
 #include <KisPart.h>
 #include <KoColorSpaceEngine.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoConfig.h>
 #include "KoID.h"
 #include <KoConfigAuthorPage.h>
@@ -265,7 +265,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
-    m_page->bnAddColorProfile->setIcon(themedIcon("document-open"));
+    m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
@@ -276,7 +276,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
-        QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen: %1", i + 1));
+        QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen %1:", i + 1));
         monitorProfileGrid->addWidget(lbl, i, 0);
         m_monitorProfileLabels << lbl;
         SqueezedComboBox *cmb = new SqueezedComboBox();
@@ -435,7 +435,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     }
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
-        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen: %1", i + 1));
+        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen %1:", i + 1));
         m_monitorProfileWidgets[i]->setCurrent(csf->defaultProfile());
     }
 }
@@ -664,7 +664,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     c.fromQColor(cfg.selectionOverlayMaskColor());
     m_selectionOverlayColorAction = new KoColorPopupAction(this);
     m_selectionOverlayColorAction->setCurrentColor(c);
-    m_selectionOverlayColorAction->setIcon(koIcon("format-stroke-color"));
+    m_selectionOverlayColorAction->setIcon(KisIconUtils::loadIcon("format-stroke-color"));
     m_selectionOverlayColorAction->setToolTip(i18n("Change the background color of the image"));
     btnSelectionOverlayColor->setDefaultAction(m_selectionOverlayColorAction);
 
@@ -877,7 +877,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setObjectName("general");
     page->setHeader(i18n("General"));
-    page->setIcon(themedIcon("configure"));
+    page->setIcon(KisIconUtils::loadIcon("configure"));
     addPage(page);
     m_general = new GeneralTab(vbox);
 
@@ -886,7 +886,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setObjectName("display");
     page->setHeader(i18n("Display"));
-    page->setIcon(themedIcon("preferences-desktop-display"));
+    page->setIcon(KisIconUtils::loadIcon("preferences-desktop-display"));
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
 
@@ -895,7 +895,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
-    page->setIcon(themedIcon("preferences-desktop-color"));
+    page->setIcon(KisIconUtils::loadIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
@@ -904,7 +904,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
-    page->setIcon(themedIcon("applications-system"));
+    page->setIcon(KisIconUtils::loadIcon("applications-system"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 
@@ -913,7 +913,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setObjectName("grid");
     page->setHeader(i18n("Grid"));
-    page->setIcon(themedIcon("view-grid"));
+    page->setIcon(KisIconUtils::loadIcon("view-grid"));
     addPage(page);
     m_gridSettings = new GridSettingsTab(vbox);
 
@@ -922,7 +922,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
-    page->setIcon(koIcon("input-tablet"));
+    page->setIcon(KisIconUtils::loadIcon("document-edit"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
@@ -931,7 +931,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
-    page->setIcon(themedIcon("folder-pictures"));
+    page->setIcon(KisIconUtils::loadIcon("folder-pictures"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
@@ -940,7 +940,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
     page->setObjectName("author");
     page->setHeader(i18n("Author"));
-    page->setIcon(themedIcon("im-user"));
+    page->setIcon(KisIconUtils::loadIcon("im-user"));
 
 
     // input settings
@@ -948,7 +948,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
     page->setObjectName("canvasinput");
-    page->setIcon(themedIcon("applications-system"));
+    page->setIcon(KisIconUtils::loadIcon("applications-system"));
 
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
 

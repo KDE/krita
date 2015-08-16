@@ -32,7 +32,7 @@ class QVariant;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KRITAUI_EXPORT KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {

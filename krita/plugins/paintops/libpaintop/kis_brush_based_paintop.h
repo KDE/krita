@@ -18,7 +18,7 @@
 #ifndef KIS_BRUSH_BASED_PAINTOP_H
 #define KIS_BRUSH_BASED_PAINTOP_H
 
-#include "krita_export.h"
+#include "kritapaintop_export.h"
 #include "kis_paintop.h"
 #include "kis_dab_cache.h"
 #include "kis_brush.h"

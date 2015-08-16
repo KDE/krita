@@ -20,7 +20,7 @@
 #define _KIS_PLAY_INFO_H_
 
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KisUndoAdapter;
 

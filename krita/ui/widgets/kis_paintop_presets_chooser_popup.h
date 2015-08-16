@@ -23,7 +23,7 @@
 
 #include <QWidget>
 #include <KoID.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_paintop_preset.h"
 
 class KoResource;

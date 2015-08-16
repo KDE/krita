@@ -84,6 +84,7 @@ set(kowidgets_LIB_SRCS
     KoDocumentInfoPropsPage.cpp
 
     KoGlobal.cpp
+    KoTableView.cpp
 )
 
 ki18n_wrap_ui( kowidgets_LIB_SRCS

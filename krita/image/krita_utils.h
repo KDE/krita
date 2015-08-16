@@ -27,7 +27,7 @@ class QPointF;
 class QPainterPath;
 class QBitArray;
 #include <QVector>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 namespace KritaUtils
 {

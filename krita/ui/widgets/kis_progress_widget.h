@@ -26,7 +26,7 @@
 
 #include <kis_progress_updater.h>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KoProgressUpdater;
 class QToolButton;

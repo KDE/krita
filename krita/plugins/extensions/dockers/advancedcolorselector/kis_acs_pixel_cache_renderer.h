@@ -43,7 +43,10 @@ namespace Acs {
             {
                 const KoColorSpace *cacheColorSpace = converter->paintingColorSpace();
                 const int pixelSize = cacheColorSpace->pixelSize();
-                realPixelCache = new KisPaintDevice(cacheColorSpace);
+
+                if (!realPixelCache || realPixelCache->colorSpace() != cacheColorSpace) {
+                    realPixelCache = new KisPaintDevice(cacheColorSpace);
+                }
 
                 KoColor color;
 
@@ -58,7 +61,7 @@ namespace Acs {
                 // NOTE: toQImage() function of the converter copies exactBounds() only!
                 pixelCache = converter->toQImage(realPixelCache);
                 pixelCacheOffset = realPixelCache->exactBounds().topLeft() - pickRect.topLeft();
-            }
+        }
     };
 }
 

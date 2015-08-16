@@ -247,9 +247,9 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("hsxSettingType", ui->colorSelectorTypeComboBox->currentIndex());
     
     //luma//
-    cfg.writeEntry("lumaR", ui->l_lumaR->text());
-    cfg.writeEntry("lumaG", ui->l_lumaG->text());
-    cfg.writeEntry("lumaB", ui->l_lumaB->text());
+    cfg.writeEntry("lumaR", ui->l_lumaR->value());
+    cfg.writeEntry("lumaG", ui->l_lumaG->value());
+    cfg.writeEntry("lumaB", ui->l_lumaB->value());
     
     //slider//
     hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
@@ -481,9 +481,9 @@ void KisColorSelectorSettings::loadPreferences()
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
     
     //luma values//
-    ui->l_lumaR->setText(cfg.readEntry("lumaR", "0.2126"));
-    ui->l_lumaG->setText(cfg.readEntry("lumaG", "0.7152"));
-    ui->l_lumaB->setText(cfg.readEntry("lumaB", "0.0722"));
+    ui->l_lumaR->setValue(cfg.readEntry("lumaR", 0.2126));
+    ui->l_lumaG->setValue(cfg.readEntry("lumaG", 0.7152));
+    ui->l_lumaB->setValue(cfg.readEntry("lumaB", 0.0722));
     
     //color sliders//
     ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
@@ -564,9 +564,9 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
     
     //luma//
-    ui->l_lumaR->setText("0.2126");
-    ui->l_lumaG->setText("0.7152");
-    ui->l_lumaB->setText("0.0722");
+    ui->l_lumaR->setValue(0.2126);
+    ui->l_lumaG->setValue(0.7152);
+    ui->l_lumaB->setValue(0.0722);
     
     //color sliders//
     ui->csl_hsvH->setChecked(false);

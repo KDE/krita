@@ -20,7 +20,7 @@
 #define _KIS_ACTION_RECORDER_H_
 
 #include <QObject>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KisRecordedAction;
 

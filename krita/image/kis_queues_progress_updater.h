@@ -20,7 +20,7 @@
 #define __KIS_QUEUES_PROGRESS_UPDATER_H
 
 #include <QObject>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KoProgressProxy;
 

@@ -88,7 +88,7 @@ class KisJPEGConverter : public QObject
 {
     Q_OBJECT
 public:
-    KisJPEGConverter(KisDocument *doc);
+    KisJPEGConverter(KisDocument *doc, bool batchMode = false);
     virtual ~KisJPEGConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -105,6 +105,7 @@ private:
     KisDocument *m_doc;
     bool m_stop;
     KIO::TransferJob *m_job;
+    bool m_batchMode;
 };
 
 #endif

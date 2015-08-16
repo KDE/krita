@@ -49,7 +49,7 @@
 #include <kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
 #include "kis_jpeg_converter.h"
-
+#include <KisImportExportManager.h>
 
 #include "ui_kis_wdg_options_jpeg.h"
 
@@ -195,7 +195,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     image->refreshGraph();
     image->lock();
 
-    KisJPEGConverter kpc(input);
+    KisJPEGConverter kpc(input, m_chain->manager()->getBatchMode());
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     image->unlock();

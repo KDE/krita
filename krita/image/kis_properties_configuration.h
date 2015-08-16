@@ -29,7 +29,7 @@ class QDomElement;
 class QDomDocument;
 
 #include "kis_serializable_configuration.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 /**

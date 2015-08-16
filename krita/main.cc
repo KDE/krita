@@ -35,8 +35,6 @@
 #include <KisApplication.h>
 #include <KoConfig.h>
 
-#include <krita_export.h>
-
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
 #include "ui/kis_aboutdata.h"

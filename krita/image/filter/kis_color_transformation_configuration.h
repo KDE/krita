@@ -19,7 +19,7 @@
 #define _KIS_COLOR_TRANSFORMATION_CONFIGURATION_H_
 
 #include "filter/kis_filter_configuration.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KoColorSpace;
 class KisColorTransformationFilter;

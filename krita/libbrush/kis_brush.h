@@ -26,7 +26,7 @@
 
 #include <kis_types.h>
 #include <kis_shared.h>
-#include <krita_export.h>
+#include <kritabrush_export.h>
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
@@ -345,7 +345,6 @@ public:
     bool isPiercedApprox() const;
 
 protected:
-    virtual QByteArray generateMD5() const;
 
     void resetBoundary();
 

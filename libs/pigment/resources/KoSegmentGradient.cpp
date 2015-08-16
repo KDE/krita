@@ -28,7 +28,6 @@
 #include <QImage>
 #include <QTextStream>
 #include <QFile>
-#include <QCryptographicHash>
 #include <QByteArray>
 #include <QBuffer>
 
@@ -91,10 +90,6 @@ bool KoSegmentGradient::load()
 bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
 {
     QByteArray data = dev->readAll();
-
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(data);
-    setMD5(md5.result());
 
     QTextStream fileContent(data, QIODevice::ReadOnly);
     fileContent.setAutoDetectUnicode(true);
@@ -227,6 +222,9 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
 
         fileContent << (int)segment->interpolation() << " " << (int)segment->colorInterpolation() << "\n";
     }
+
+    KoResource::saveToDevice(dev);
+
     return true;
 }
 
@@ -271,22 +269,6 @@ QGradient* KoSegmentGradient::toQGradient() const
 QString KoSegmentGradient::defaultFileExtension() const
 {
     return QString(".ggr");
-}
-
-QByteArray KoSegmentGradient::generateMD5() const
-{
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    saveToDevice(&buffer);
-    QByteArray ba = buffer.buffer();
-
-    if (!ba.isEmpty()) {
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-        return md5.result();
-    }
-
-    return QByteArray();
 }
 
 KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor)

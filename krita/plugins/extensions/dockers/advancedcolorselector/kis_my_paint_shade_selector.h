@@ -27,6 +27,7 @@
 #include <QImage>
 #include <KoColor.h>
 
+class KoColorSpace;
 
 class QTimer;
 
@@ -56,6 +57,8 @@ private:
     QTimer* m_updateTimer;
     KoColor m_lastRealColor;
     KisPaintDeviceSP m_realPixelCache;
+    KisPaintDeviceSP m_realCircleBorder;
+    const KoColorSpace *m_cachedColorSpace;
 };
 
 #endif // KIS_MY_PAINT_SHADE_SELECTOR_H

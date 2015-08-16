@@ -22,7 +22,7 @@
 #define KIS_BASIC_MATH_TOOLBOX_H
 
 #include "kis_math_toolbox.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 /**
  * This class implement KisMathToolbox for most colorspaces, only colorspaces with "angular"
  * channels need to reimplement the functions

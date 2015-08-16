@@ -23,7 +23,7 @@
 
 #include <QStringList>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <kcomponentdata.h>
 #include <kaboutdata.h>

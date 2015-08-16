@@ -22,7 +22,6 @@
 #include <QTextStream>
 #include <QBuffer>
 #include <QByteArray>
-#include <QCryptographicHash>
 
 #include <kis_debug.h>
 
@@ -103,24 +102,6 @@ QStringList TasksetResource::actionList()
     return m_actions;
 }
 
-QByteArray TasksetResource::generateMD5() const
-{
-    QByteArray ba;
-    QBuffer buf(&ba);
-    buf.open(QBuffer::WriteOnly);
-    saveToDevice(&buf);
-    buf.close();
-
-    if (!ba.isEmpty()) {
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-        return md5.result();
-    }
-
-    return ba;
-
-}
-
 bool TasksetResource::saveToDevice(QIODevice *io) const
 {
 
@@ -137,6 +118,9 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
 
     QTextStream textStream(io);
     doc.save(textStream, 4);
+
+    KoResource::saveToDevice(io);
+
     return true;
 }
 

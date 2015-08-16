@@ -26,7 +26,8 @@
 #include <QMap>
 #include <QRect>
 #include <QAbstractButton>
-
+#include <QDesktopWidget>
+#include <QApplication>
 
 class SectionLayout : public QLayout
 {
@@ -62,6 +63,7 @@ public:
     }
 
     void addItem(QLayoutItem*) { Q_ASSERT(0); }
+
     QLayoutItem* itemAt(int i) const
     {
         if (m_items.count() <= i)
@@ -70,6 +72,7 @@ public:
     }
 
     QLayoutItem* takeAt(int i) { return m_items.takeAt(i); }
+
     int count() const { return m_items.count(); }
 
     void setGeometry (const QRect &rect)
@@ -102,10 +105,13 @@ public:
         }
     }
 
+    void setButtonSize(const QSize size)
+    {
+        m_buttonSize = size;
+    }
+
     const QSize &buttonSize() const
     {
-        if (!m_items.isEmpty() && ! m_buttonSize.isValid())
-            const_cast<SectionLayout*> (this)->m_buttonSize = m_items[0]->widget()->sizeHint();
         return m_buttonSize;
     }
 
@@ -148,6 +154,11 @@ public:
     QString name() const
     {
         return m_name;
+    }
+
+    void setButtonSize(QSize size)
+    {
+        m_layout->setButtonSize(size);
     }
 
     QSize iconSize() const

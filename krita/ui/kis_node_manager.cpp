@@ -444,8 +444,10 @@ void KisNodeManager::toggleIsolateMode(bool checked)
         // Transform masks don't have pixel data...
         if (activeNode->inherits("KisTransformMask")) return;
         KIS_ASSERT_RECOVER_RETURN(activeNode);
-
-        image->startIsolatedMode(activeNode);
+        if (!image->startIsolatedMode(activeNode)) {
+            KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
+            action->setChecked(false);
+        }
     } else {
         image->stopIsolatedMode();
     }

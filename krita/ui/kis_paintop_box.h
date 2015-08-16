@@ -37,7 +37,7 @@
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
 #include "kis_config.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 
 class QToolButton;
@@ -197,8 +197,8 @@ private:
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;
 
-    int normalBrushSize; // when toggling between eraser mode
-    int eraserBrushSize;
+    qreal normalBrushSize; // when toggling between eraser mode
+    qreal eraserBrushSize;
 
     KisAction* m_hMirrorAction;
     KisAction* m_vMirrorAction;

@@ -33,7 +33,7 @@ class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KRITAUI_EXPORT KisStatusBar : public QObject
 {

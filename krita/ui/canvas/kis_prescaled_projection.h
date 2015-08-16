@@ -20,7 +20,7 @@
 
 #include <QObject>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_shared.h>
 
 #include "kis_update_info.h"

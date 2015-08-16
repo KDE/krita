@@ -27,6 +27,7 @@
 #include <kis_image.h>
 
 #include <KisViewManager.h>
+#include <KisImportExportManager.h>
 
 #include "kis_jpeg_converter.h"
 
@@ -63,7 +64,7 @@ KisImportExportFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        KisJPEGConverter ib(doc);
+        KisJPEGConverter ib(doc, m_chain->manager()->getBatchMode());
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

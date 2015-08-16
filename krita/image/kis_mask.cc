@@ -93,6 +93,15 @@ KisMask::~KisMask()
     delete m_d;
 }
 
+void KisMask::setImage(KisImageWSP image)
+{
+    KisDefaultBoundsBaseSP db = m_d->selection->pixelSelection()->defaultBounds();
+    KisDefaultBounds *defaultBounds = dynamic_cast<KisDefaultBounds*>(db.data());
+    if (defaultBounds) {
+        defaultBounds->setImage(image);
+    }
+}
+
 bool KisMask::allowAsChild(KisNodeSP node) const
 {
     Q_UNUSED(node);

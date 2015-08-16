@@ -74,6 +74,8 @@ set(pigmentcms_SRCS
     resources/KoColorSet.cpp
     resources/KoPattern.cpp
     resources/KoResource.cpp
+    resources/KoMD5Generator.cpp
+    resources/KoHashGeneratorProvider.cpp
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
 )

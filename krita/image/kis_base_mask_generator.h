@@ -24,7 +24,7 @@
 #include <KoID.h>
 #include <klocale.h>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class QDomElement;
 class QDomDocument;

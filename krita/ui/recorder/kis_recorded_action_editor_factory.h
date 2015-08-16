@@ -19,7 +19,7 @@
 #ifndef _KIS_RECORDED_ACTION_EDITOR_FACTORY_H_
 #define _KIS_RECORDED_ACTION_EDITOR_FACTORY_H_
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QWidget;
 class KisRecordedAction;

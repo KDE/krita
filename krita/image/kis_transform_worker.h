@@ -22,7 +22,7 @@
 #define KIS_TRANSFORM_WORKER_H_
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QRect>
 #include <KoUpdater.h>

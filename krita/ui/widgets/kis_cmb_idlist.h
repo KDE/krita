@@ -24,7 +24,7 @@
 
 #include <QComboBox>
 #include <KoID.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 /**
  * A combobox that is associated with a list of KoID's. The

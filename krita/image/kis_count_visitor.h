@@ -18,7 +18,7 @@
 #ifndef KIS_COUNT_VISITOR
 #define KIS_COUNT_VISITOR
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <KoProperties.h>
 

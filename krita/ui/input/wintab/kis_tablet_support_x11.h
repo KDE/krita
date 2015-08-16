@@ -19,8 +19,8 @@
 #ifndef __KIS_TABLET_SUPPORT_X11_H
 #define __KIS_TABLET_SUPPORT_X11_H
 
-#include <krita_export.h>
 #include <QAbstractNativeEventFilter>
+#include <kritaui_export.h>
 
 class KRITAUI_EXPORT KisTabletSupportX11 : public QAbstractNativeEventFilter
 {

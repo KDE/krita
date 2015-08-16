@@ -32,7 +32,7 @@
 #include <KoInteractionTool.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "KisApplication.h"
 #include "KisMainWindow.h"
@@ -146,7 +146,7 @@ void KisPart::Private::loadActions()
                     qDebug() << text << "has no name! From:" << actionDefinition;
                 }
 
-                KisAction *action = new KisAction(KIcon(icon), text);
+                KisAction *action = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
                 action->setObjectName(name);
                 action->setWhatsThis(whatsthis);
                 action->setToolTip(toolTip);

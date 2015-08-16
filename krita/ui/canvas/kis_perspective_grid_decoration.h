@@ -24,7 +24,7 @@
 #define KIS_PERSPECTIVE_GRID_DECORATION_H
 
 #include "kis_canvas_decoration.h"
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisView;
 

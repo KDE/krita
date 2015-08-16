@@ -26,7 +26,7 @@
 
 #include "psd_utils.h"
 #include "kis_debug.h"
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 
 namespace KisAslWriterUtils {

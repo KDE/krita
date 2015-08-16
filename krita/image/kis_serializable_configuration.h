@@ -20,8 +20,9 @@
 
 class QDomElement;
 class QDomDocument;
+class QString;
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * This is an interface for objects that are serializable and unserializable.

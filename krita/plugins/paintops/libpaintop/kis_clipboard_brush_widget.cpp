@@ -111,7 +111,7 @@ void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
-        preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+        preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
     }
 }
 

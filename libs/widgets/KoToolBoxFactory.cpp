@@ -43,7 +43,7 @@ QDockWidget* KoToolBoxFactory::createDockWidget()
 {
     KoToolBox *box = new KoToolBox();
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);
-    docker->setObjectName(QLatin1String("ToolBox"));
+    docker->setObjectName(id());
 
     return docker;
 }

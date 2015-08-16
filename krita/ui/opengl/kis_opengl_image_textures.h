@@ -26,7 +26,7 @@
 #include <QVector>
 #include <QMap>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include "kis_shared.h"
 

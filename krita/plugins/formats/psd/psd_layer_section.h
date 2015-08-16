@@ -60,6 +60,7 @@ public:
     PsdAdditionalLayerInfoBlock globalInfoSection;
 
 private:
+    bool readLayerInfoImpl(QIODevice* io);
     bool readImpl(QIODevice* io);
     void writeImpl(QIODevice* io, KisNodeSP rootLayer);
 private:

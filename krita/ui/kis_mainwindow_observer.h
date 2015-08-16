@@ -2,7 +2,7 @@
 #define KIS_MAINWINDOW_OBSERVER_H
 
 #include <KoCanvasObserverBase.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisViewManager;
 

@@ -21,7 +21,7 @@
 #define __KIS_PRECISION_OPTION_H
 
 #include <QString>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 class KisPropertiesConfiguration;
 
 const QString PRECISION_LEVEL = "KisPrecisionOption/precisionLevel";

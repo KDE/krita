@@ -24,7 +24,7 @@
 
 #include "kis_types.h"
 #include "kis_shared.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 /**
@@ -102,10 +102,6 @@ public:
         KisPaintOpPreset *m_preset;
         bool m_isDirty;
     };
-
-protected:
-
-    virtual QByteArray generateMD5() const;
 
 private:
 

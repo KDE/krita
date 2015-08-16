@@ -210,7 +210,9 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
-    resources->setOpacity(1.0);
+    if (!fillSource.contains("opacity")) {
+        resources->setOpacity(1.0);
+    }
 
     KisProcessingVisitorSP visitor =
             new FillProcessingVisitor(QPoint(0, 0), // start position

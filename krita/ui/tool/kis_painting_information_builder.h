@@ -63,7 +63,7 @@ private:
                                                   int timeElapsed);
 
     /**
-     * Defines how many descret samples are stored in a precomputed array
+     * Defines how many discrete samples are stored in a precomputed array
      * of different pressures.
      */
     static const int LEVEL_OF_PRESSURE_RESOLUTION;

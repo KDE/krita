@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef FLAKE_EXPORT
-# if defined(MAKE_FLAKE_LIB)
+# if defined(flake_EXPORTS)
 /* We are building this library */
 #  define FLAKE_EXPORT KDE_EXPORT
 #  define FLAKE_TEST_EXPORT KDE_EXPORT

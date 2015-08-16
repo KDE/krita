@@ -24,6 +24,7 @@
 
 class KoFilterEffect;
 class KoFilterEffectConfigWidgetBase;
+class QString;
 
 /// API docs go here
 class FLAKE_EXPORT KoFilterEffectFactoryBase

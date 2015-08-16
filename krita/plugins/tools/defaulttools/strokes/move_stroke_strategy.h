@@ -21,7 +21,7 @@
 
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
-#include "kritadefaulttools_export.h"
+#include "../kritadefaulttools_export.h"
 
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;

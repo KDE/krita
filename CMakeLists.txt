@@ -879,7 +879,9 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
                     ${PIGMENT_INCLUDES}
                     ${KOMAIN_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands
+                    ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 #############################################
 ####           filter libraries          ####

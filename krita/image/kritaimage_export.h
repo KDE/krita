@@ -28,7 +28,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 
 #ifndef KRITAIMAGE_EXPORT
-# ifdef MAKE_KRITAIMAGE_LIB
+# ifdef kritaimage_EXPORTS
 #  define KRITAIMAGE_EXPORT KDE_EXPORT
 # else
 #  define KRITAIMAGE_EXPORT KDE_IMPORT
@@ -44,7 +44,7 @@
 /* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
 #  if defined _WIN32 || defined _WIN64
-#    if defined(MAKE_KRITAIMAGE_LIB)
+#    if defined(kritaimage_EXPORTS)
 #      define KRITAIMAGE_TEST_EXPORT KDE_EXPORT
 #    else
 #       define KRITAIMAGE_TEST_EXPORT KDE_IMPORT

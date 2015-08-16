@@ -32,6 +32,7 @@ set(textlayout_LIB_SRCS
 
 
 add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
+generate_export_header(kotextlayout BASE_NAME kotextlayout)
 
 target_link_libraries(kotextlayout kotext)
 target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext)

@@ -3,6 +3,7 @@ add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif ()
@@ -99,6 +100,7 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 
 
 add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
+generate_export_header(kowidgets BASE_NAME kowidgets)
 
 target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 
@@ -127,7 +129,7 @@ install( FILES
     KoPageLayoutWidget.h
     KoPagePreviewWidget.h
     KoPositionSelector.h
-    kowidgets_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kowidgets_export.h
     KoZoomAction.h
     KoZoomController.h
     KoZoomInput.h

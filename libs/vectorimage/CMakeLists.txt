@@ -26,6 +26,7 @@ set(vectorimage_LIB_SRCS
 )
 
 add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
+generate_export_header(kovectorimage BASE_NAME kovectorimage)
 
 target_link_libraries(kovectorimage  KF5::KDELibs4Support Qt5::Gui Qt5::PrintSupport)
 target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES )

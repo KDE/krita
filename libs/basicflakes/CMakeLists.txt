@@ -16,6 +16,7 @@ ki18n_wrap_ui( basicflakes_LIB_SRCS
 
 
 add_library(basicflakes SHARED ${basicflakes_LIB_SRCS})
+generate_export_header(basicflakes)
 
 target_link_libraries(basicflakes kowidgets flake pigmentcms)
 
@@ -28,7 +29,7 @@ install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
     tools/KoCreatePathTool.h
     tools/KoPencilTool.h
-    basicflakes_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/basicflakes_export.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

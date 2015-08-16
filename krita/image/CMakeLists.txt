@@ -41,6 +41,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${CMAKE_BINARY_DIR}/libs/widgets
     3rdparty
 )
 
@@ -302,6 +303,7 @@ set(einspline_SRCS
 )
 
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+# generate_export_header(kritaimage BASE_NAME kritaimage)
 
 target_link_libraries(kritaimage kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)

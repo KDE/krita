@@ -5,6 +5,7 @@ macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 include_directories(${ZLIB_INCLUDE_DIR})
+include_directories(${CMAKE_BINARY_DIR}/krita/libpsd)  #For kispsd_include.h
 
 set(LIB_PSD_SRCS 
     psd_header.cpp

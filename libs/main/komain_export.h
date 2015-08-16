@@ -28,7 +28,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KOMAIN_EXPORT
-# if defined(MAKE_KOMAIN_LIB)
+# if defined(komain_EXPORTS)
 /* We are building this library */
 #  define KOMAIN_EXPORT KDE_EXPORT
 # else

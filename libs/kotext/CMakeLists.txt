@@ -132,6 +132,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 add_library(kotext SHARED ${kotext_LIB_SRCS})
+# generate_export_header(kotext BASE_NAME kotext)
 
 target_link_libraries(kotext flake)
 if( SHOULD_BUILD_FEATURE_RDF )

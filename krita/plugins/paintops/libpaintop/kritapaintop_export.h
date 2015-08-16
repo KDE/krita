@@ -27,7 +27,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 
 #ifndef PAINTOP_EXPORT
-# ifdef MAKE_KRITALIBPAINTOP_LIB
+# ifdef kritalibpaintop_EXPORTS
 #  define PAINTOP_EXPORT KDE_EXPORT
 # else
 #  define PAINTOP_EXPORT KDE_IMPORT
@@ -43,7 +43,7 @@
 /* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
 #  if defined _WIN32 || defined _WIN64
-#    if defined(MAKE_KRITALIBPAINTOP_LIB)
+#    if defined(kritalibpaintop_EXPORTS)
 #      define PAINTOP_TEST_EXPORT KDE_EXPORT
 #    else
 #       define PAINTOP_TEST_EXPORT KDE_IMPORT

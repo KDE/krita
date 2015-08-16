@@ -21,6 +21,7 @@ set(kritalibbrush_LIB_SRCS
 )
 
 add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
+generate_export_header(kritalibbrush BASE_NAME kritabrush EXPORT_MACRO_NAME BRUSH_EXPORT)
 
 if (WIN32)
     target_link_libraries(kritalibbrush kritaimage kowidgets Qt5::Svg ${WIN32_PLATFORM_NET_LIBS})

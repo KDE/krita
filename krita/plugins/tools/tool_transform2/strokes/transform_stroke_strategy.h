@@ -25,6 +25,7 @@
 #include <kis_types.h>
 #include "tool_transform_args.h"
 #include <kis_processing_visitor.h>
+#include <kritatooltransform_export.h>
 
 
 

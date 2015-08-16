@@ -70,7 +70,7 @@ set_target_properties(kopageapp PROPERTIES
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
-    kopageapp_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kopageapp_export.h
     KoPACanvas.h
     KoPACanvasItem.h
     KoPACanvasBase.h

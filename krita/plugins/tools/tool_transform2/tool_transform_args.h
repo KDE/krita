@@ -26,7 +26,7 @@
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
 #include "kis_liquify_properties.h"
-#include <kritatooltransform_export.h>
+#include "kritatooltransform_export.h"
 
 
 #include <QScopedPointer>

@@ -451,6 +451,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
+generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::GlobalAccel KF5::KDELibs4Support)
 if (NOT WIN32)

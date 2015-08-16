@@ -127,19 +127,26 @@ public:
     int uniqueId() const {
         return m_uniqueId;
     }
-    /// wrapper around KoToolFactoryBase::shortcut()
+    /// KAction->shortcut() if it exists, otherwise KoToolFactoryBase::shortcut()
     KShortcut shortcut() const;
+    /// Writes a tooltip for a button, appending the keyboard shortcut if we have one
+    QString buttonToolTip() const;
+    /// Associate an action with this tool
+    void setAction(KAction *a);
 
 Q_SIGNALS:
-    /// emitted when one of the generated buttons was pressed.
+    /// Emitted when the generated toolbox button is pressed.
     void toolActivated(ToolHelper *tool);
 
 private Q_SLOTS:
     void buttonPressed();
+    void actionUpdated();
 
 private:
     KoToolFactoryBase *m_toolFactory;
     int m_uniqueId;
+    QToolButton *button;
+    KAction *action;
 };
 
 /// \internal

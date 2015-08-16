@@ -788,19 +788,24 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         return;
     }
 
+    // Actions available during the use of individual tools
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoToolBase *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
-        QHash<QString, KAction*>::const_iterator it(actions.constBegin());
-        for (; it != actions.constEnd(); ++it) {
-            if (!ac->action(it.key()))
-                ac->addAction(it.key(), it.value());
+        QHash<QString, KAction*>::const_iterator action(actions.constBegin());
+        for (; action != actions.constEnd(); ++action) {
+            if (!ac->action(action.key()))
+                ac->addAction(action.key(), action.value());
         }
     }
+
+    // Actions used to switch tools; connect slot to keep button tooltips updated
     foreach(ToolHelper * th, d->tools) {
         ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
         action->setShortcut(th->shortcut());
         ac->addAction(th->id(), action);
+        th->setAction(action);
+        connect(action, SIGNAL(changed()), th, SLOT(actionUpdated()));
     }
 }
 

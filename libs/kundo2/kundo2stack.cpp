@@ -377,7 +377,7 @@ void KUndo2Command::undoMergedCommands()
         QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
         it.toFront();
         while (it.hasNext()) {
-            KUndo2Command* cmd =  dynamic_cast<KUndo2Command*>(it.next());
+            KUndo2Command* cmd = it.next();
             cmd->undoMergedCommands();
         }
     }
@@ -390,7 +390,7 @@ void KUndo2Command::redoMergedCommands()
         QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
         it.toBack();
         while (it.hasPrevious()) {
-            KUndo2Command* cmd = dynamic_cast<KUndo2Command*>(it.previous());
+            KUndo2Command* cmd = it.previous();
             cmd->redoMergedCommands();
         }
     }
@@ -973,12 +973,23 @@ void KUndo2QStack::setIndex(int idx)
     int i = m_index;
     while (i < idx) {
         m_command_list.at(i++)->redoMergedCommands();
+        notifySetIndexChangedOneCommand();
     }
     while (i > idx) {
         m_command_list.at(--i)->undoMergedCommands();
+        notifySetIndexChangedOneCommand();
     }
 
     setIndex(idx, false);
+}
+
+
+/**
+ * Called by setIndex after every command execution.  It is needed by
+ * Krita to insert barriers between different kind of commands
+ */
+void KUndo2QStack::notifySetIndexChangedOneCommand()
+{
 }
 
 /*!

@@ -200,6 +200,12 @@ public:
         }
     }
 
+    void notifySetIndexChangedOneCommand() {
+        KisImageWSP image = this->image();
+        image->unlock();
+        image->barrierLock();
+    }
+
     void undo() {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();

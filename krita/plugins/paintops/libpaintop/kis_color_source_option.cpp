@@ -89,19 +89,23 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
     case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
     case PATTERN: {
-        KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
-        dev->convertFromQImage(_painter->pattern()->pattern(), 0);
-        return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
+        if (_painter && _painter->pattern()) {
+            KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
+            dev->convertFromQImage(_painter->pattern()->pattern(), 0);
+            return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
+        }
     }
     case PATTERN_LOCKED: {
-        KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
-        dev->convertFromQImage(_painter->pattern()->pattern(), 0);
-        return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), true);
+        if (_painter && _painter->pattern()) {
+            KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
+            dev->convertFromQImage(_painter->pattern()->pattern(), 0);
+            return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), true);
+        }
 
     }
     }
-    qFatal("Unknown color source");
-    return 0;
+    // Fallback in case the patterns are messed up
+    return new KisPlainColorSource(_painter->backgroundColor(), _painter->paintColor());
 }
 
 QString KisColorSourceOption::colorSourceTypeId() const

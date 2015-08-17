@@ -24,7 +24,6 @@
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 
-#include <KoProgressUpdater.h>
 #include "testutil.h"
 #include "qimage_based_test.h"
 #include "kis_filter_strategy.h"

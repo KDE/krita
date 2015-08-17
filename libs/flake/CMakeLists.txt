@@ -219,8 +219,8 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} pigmentcms kowidgetutils koodf)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 

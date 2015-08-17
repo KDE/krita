@@ -24,7 +24,7 @@
 #include <QCheckBox>
 #include <QVector>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include <kis_config_widget.h>
 
 class KisPropertiesConfiguration;

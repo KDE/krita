@@ -25,7 +25,7 @@
 #include <boost/bind.hpp>
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 class QDomElement;

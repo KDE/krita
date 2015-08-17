@@ -150,18 +150,18 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
-    m_selectAll = new KisAction(koIcon("edit-select-all"), i18n("Select &All"), this);
+    m_selectAll = new KisAction(themedIcon("select-all"), i18n("Select &All"), this);
     actionManager->addAction("select_all", m_selectAll);
     m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    m_deselect = new KisAction(koIcon("edit-select-all"), i18n("Deselect"), this);
+    m_deselect = new KisAction(themedIcon("select-clear"), i18n("Deselect"), this);
     m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     actionManager->addAction("deselect", m_deselect);
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
-    m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
+    m_clear = new KisAction(themedIcon("select-clear"), i18n("Clear"), this);
     m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
@@ -200,7 +200,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));  
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KisAction(i18n("Fill with Background Color"), this);
@@ -215,6 +215,26 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillPattern->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_pattern", m_fillPattern);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
+
+    m_fillForegroundColorOpacity  = new KisAction(i18n("Fill with Foreground Color (Opacity)"), this);
+    m_fillForegroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillForegroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_foreground_color_opacity", m_fillForegroundColorOpacity);
+    m_fillForegroundColorOpacity->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Backspace));
+    connect(m_fillForegroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillForegroundColorOpacity()));
+
+    m_fillBackgroundColorOpacity  = new KisAction(i18n("Fill with Background Color (Opacity)"), this);
+    m_fillBackgroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillBackgroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_background_color_opacity", m_fillBackgroundColorOpacity);
+    m_fillBackgroundColorOpacity->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backspace));
+    connect(m_fillBackgroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillBackgroundColorOpacity()));
+
+    m_fillPatternOpacity  = new KisAction(i18n("Fill with Pattern (Opacity)"), this);
+    m_fillPatternOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillPatternOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_pattern_opacioty", m_fillPatternOpacity);
+    connect(m_fillPatternOpacity, SIGNAL(triggered()), this, SLOT(fillPatternOpacity()));
 
     m_strokeShapes  = new KisAction(i18nc("@action:inmenu", "Stro&ke selected shapes"), this);
     m_strokeShapes->setActivationFlags(KisAction::SHAPES_SELECTED);
@@ -245,6 +265,11 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     action->setActivationFlags(KisAction::SHAPES_SELECTED);
     actionManager->addAction("convert_shapes_to_vector_selection", action);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
+
+    action = new KisAction(i18nc("@action:inmenu", "&Convert to Shape"), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    actionManager->addAction("convert_selection_to_shape", action);
+    connect(action, SIGNAL(triggered()), SLOT(convertToShape())); 
 
     m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
     actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode);
@@ -476,6 +501,12 @@ void KisSelectionManager::convertShapesToVectorSelection()
     factory.run(m_view);
 }
 
+void KisSelectionManager::convertToShape()
+{
+    KisSelectionToShapeActionFactory factory;
+    factory.run(m_view);
+}
+
 void KisSelectionManager::clear()
 {
     KisClearActionFactory factory;
@@ -498,6 +529,24 @@ void KisSelectionManager::fillPattern()
 {
     KisFillActionFactory factory;
     factory.run("pattern", m_view);
+}
+
+void KisSelectionManager::fillForegroundColorOpacity()
+{
+    KisFillActionFactory  factory;
+    factory.run("fg_opacity", m_view);
+}
+
+void KisSelectionManager::fillBackgroundColorOpacity()
+{
+    KisFillActionFactory factory;
+    factory.run("bg_opacity", m_view);
+}
+
+void KisSelectionManager::fillPatternOpacity()
+{
+    KisFillActionFactory factory;
+    factory.run("pattern_opacity", m_view);
 }
 
 void KisSelectionManager::copySelectionToNewLayer()

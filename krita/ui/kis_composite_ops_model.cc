@@ -105,7 +105,7 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
         Q_ASSERT(item);
 
         if (!item->isCategory() && !item->isEnabled()) {
-            return koIcon("dialog-warning");
+            return themedIcon("dialog-warning");
         }
     }
 

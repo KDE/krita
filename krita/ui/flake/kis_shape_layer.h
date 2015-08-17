@@ -24,7 +24,7 @@
 
 #include <kis_types.h>
 #include <kis_external_layer_iface.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QRect;
 class QIcon;

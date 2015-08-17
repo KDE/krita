@@ -198,7 +198,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
 
 bool KisDabCache::needSeparateOriginal()
 {
-    return (m_d->textureOption && m_d->textureOption->enabled) ||
+    return (m_d->textureOption && m_d->textureOption->m_enabled) ||
            (m_d->sharpnessOption && m_d->sharpnessOption->isChecked());
 }
 

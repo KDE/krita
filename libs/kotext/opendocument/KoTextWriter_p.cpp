@@ -386,15 +386,16 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
 void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
 {
     QBuffer rdfXmlData;
-    KoXmlWriter *rdfXmlWriter = new KoXmlWriter(&rdfXmlData);
-    rdfXmlWriter->startDocument("rdf");
-    rdfXmlWriter->startElement("rdf");
-    rdf->saveOdf(context, rdfXmlWriter);
-    rdfXmlWriter->endElement();
-    rdfXmlWriter->endDocument();
-    KoXmlDocument *xmlReader = new KoXmlDocument;
-    xmlReader->setContent(rdfXmlData.data(), true);
-    KoXmlElement mainElement = xmlReader->documentElement();
+    KoXmlWriter rdfXmlWriter(&rdfXmlData);
+    rdfXmlWriter.startDocument("rdf");
+    rdfXmlWriter.startElement("rdf");
+    rdf->saveOdf(context, &rdfXmlWriter);
+    rdfXmlWriter.endElement();
+    rdfXmlWriter.endDocument();
+
+    KoXmlDocument xmlReader;
+    xmlReader.setContent(rdfXmlData.data(), true);
+    KoXmlElement mainElement = xmlReader.documentElement();
     foreach (const Attribute &attributeNameNS, mainElement.attributeFullNames()) {
         QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
                                                 .arg(attributeNameNS.second);
@@ -402,7 +403,6 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
             attributeName.prepend("xml");
         tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
     }
-    delete(rdfXmlWriter);
 }
 
 /*
@@ -709,7 +709,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 }
             }
         }
-    }
+     }
 
     if (to !=-1 && to < block.position() + block.length()) {
         foreach (KoInlineObject* inlineObject, *currentPairedInlineObjectsStack) {
@@ -770,7 +770,6 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     }
 
 
-    openTagRegion(KoTextWriter::Private::Table, tableTagInformation);
 
     int firstColumn = 0;
     int lastColumn = table->columns() -1;
@@ -781,7 +780,17 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         firstRow = table->cellAt(from).row();
         lastColumn = table->cellAt(to).column();
         lastRow = table->cellAt(to).row();
+
+        if (firstColumn == lastColumn && firstRow == lastRow && from >= table->firstPosition()) {
+            // we only selected something inside a single cell so don't save a table
+            writeBlocks(table->document(), from, to, listStyles, table);
+            return;
+        }
     }
+
+
+    openTagRegion(KoTextWriter::Private::Table, tableTagInformation);
+
     for (int c = firstColumn ; c <= lastColumn; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;

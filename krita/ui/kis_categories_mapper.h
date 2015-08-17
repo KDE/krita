@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <QScopedPointer>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 
 /**

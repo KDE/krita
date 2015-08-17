@@ -467,3 +467,9 @@ KisDisplayColorConverter* KisColorSelectorBase::converter() const
         m_canvas->displayColorConverter() :
         KisDisplayColorConverter::dumbConverterInstance();
 }
+
+
+void KisColorSelectorBase::mouseMoveEvent(QMouseEvent *event)
+{
+    event->accept();
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2014-2015 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,10 @@
 #ifndef KIS_GMIC_SMALL_APPLICATOR_H
 #define KIS_GMIC_SMALL_APPLICATOR_H
 
+#include <QMutex>
 #include <QThread>
+#include <QWaitCondition>
+
 #include <kis_types.h>
 
 #include "kis_gmic_data.h"
@@ -37,7 +40,7 @@ public:
     KisGmicSmallApplicator(QObject *parent = 0);
     ~KisGmicSmallApplicator();
 
-    void setProperties(const QRect& canvasRect,
+    void render(const QRect& canvasRect,
                        const QSize& previewSize,
                        KisNodeListSP layers,
                        KisGmicFilterSetting * settings,
@@ -49,8 +52,7 @@ public:
 
 Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
-    void previewReady();
-
+    void previewFinished(bool successfully);
 
 protected:
     void run();
@@ -65,8 +67,14 @@ private:
     KisGmicFilterSetting * m_setting;
     QByteArray m_gmicCustomCommands;
     KisPaintDeviceSP m_preview;
-    bool m_gmicFinishedSuccessfully;
     KisGmicDataSP m_gmicData;
+
+    bool m_abort;
+    bool m_restart;
+
+    QMutex m_mutex;
+    QWaitCondition m_condition;
+
 };
 
 #endif

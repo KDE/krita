@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSACTION_BASED_COMMAND_H
 #define KIS_TRANSACTION_BASED_COMMAND_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kundo2command.h>
 
 class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command

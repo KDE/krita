@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisViewManager;
 class KisActionManager;

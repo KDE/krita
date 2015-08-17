@@ -54,7 +54,6 @@ class KoStore;
 #include "KoXmlReaderForward.h"
 class KoXmlWriter;
 class KoGenStyles;
-class KoOdfStylesReader;
 class KoOdfLoadingContext;
 
 

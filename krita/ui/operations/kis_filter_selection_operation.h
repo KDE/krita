@@ -20,7 +20,7 @@
 #ifndef KIS_FILTER_SELECTION_OPERATION_H
 #define KIS_FILTER_SELECTION_OPERATION_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include "kis_operation.h"
 
 class KisSelectionFilter;

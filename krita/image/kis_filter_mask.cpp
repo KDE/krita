@@ -34,9 +34,6 @@
 #include "kis_transaction.h"
 #include "kis_painter.h"
 
-#include <KoUpdater.h>
-#include <KoProgressUpdater.h>
-
 KisFilterMask::KisFilterMask()
     : KisEffectMask(),
       KisNodeFilterInterface(0, false)
@@ -56,7 +53,7 @@ KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
 
 QIcon KisFilterMask::icon() const
 {
-    return koIcon("view-filter");
+    return themedIcon("view-filter");
 }
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)

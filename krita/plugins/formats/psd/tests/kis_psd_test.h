@@ -38,6 +38,8 @@ private Q_SLOTS:
     void testSaveLayerStylesWithPatternMulti();
 
     void testOpeningFromOpenCanvas();
+    void testOpeningAllFormats();
+    void testSavingAllFormats();
 };
 
 #endif

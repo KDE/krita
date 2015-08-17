@@ -20,7 +20,7 @@
 #ifndef KIS_LAYER_PROPS_COMMAND_H
 #define KIS_LAYER_PROPS_COMMAND_H
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <kundo2command.h>
 #include <QSize>

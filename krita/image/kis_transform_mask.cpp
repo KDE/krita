@@ -114,7 +114,7 @@ KisPaintDeviceSP KisTransformMask::paintDevice() const
 
 QIcon KisTransformMask::icon() const
 {
-    return koIcon("edit-cut");
+    return themedIcon("edit-cut");
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)
@@ -236,7 +236,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
     if (m_d->recalculatingStaticImage) {
         m_d->staticCacheDevice->clear();
         m_d->params->transformDevice(const_cast<KisTransformMask*>(this), src, m_d->staticCacheDevice);
-        dst->makeCloneFrom(m_d->staticCacheDevice, m_d->staticCacheDevice->extent());
+        QRect updatedRect = m_d->staticCacheDevice->extent();
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
 #ifdef DEBUG_RENDERING
         qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
@@ -253,7 +254,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else {
+    } else if (m_d->staticCacheDevice) {
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING

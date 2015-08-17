@@ -24,6 +24,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QShowEvent>
+#include <QPushButton>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -48,13 +49,12 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
 
     m_brush = 0;
-    m_brushCreated = false;
 
     m_clipboard = KisClipboard::instance();
 
-    connect(m_clipboard, SIGNAL(clipChanged()), this, SLOT(slotUseBrushClicked()));
+    connect(m_clipboard, SIGNAL(clipChanged()), this, SLOT(slotCreateBrush()));
     connect(colorAsmask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
-    connect(saveBrush, SIGNAL(clicked()), this, SLOT(slotSaveBrush()));
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotAddPredefined()));
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -64,23 +64,10 @@ KisClipboardBrushWidget::~KisClipboardBrushWidget()
 {
 }
 
-KisBrushSP KisClipboardBrushWidget::brush()
-{
-    return m_brush;
-}
-
-void KisClipboardBrushWidget::slotUseBrushClicked()
+void KisClipboardBrushWidget::slotCreateBrush()
 {
     // do nothing if it's hidden otherwise it can break the active brush is something is copied
     if (m_clipboard->hasClip() && !isHidden()) {
-
-        if (m_brush) {
-            bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(m_brush.data());
-
-            if (!removedCorrectly) {
-                kWarning() << "Brush was not removed correctly from the resource server";
-            }
-        }
 
         pd = m_clipboard->clip(QRect(0, 0, 0, 0), false);     //Weird! Don't know how this works!
         if (pd) {
@@ -94,15 +81,16 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
             m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
             m_brush->setValid(true);
 
-            KisBrushServer::instance()->brushServer()->addResource(m_brush.data(), false);
-
             preview->setPixmap(QPixmap::fromImage(m_brush->image()));
-
-            emit sigBrushChanged();
         }
-    }
-    else {
+    } else {
         preview->setText(i18n("Nothing copied\n to Clipboard"));
+    }
+
+    if(m_brush == 0) {
+        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    } else {
+        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
 }
 
@@ -112,29 +100,26 @@ void KisClipboardBrushWidget::slotSpacingChanged()
         m_brush->setSpacing(spacingWidget->spacing());
         m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     }
-    emit sigBrushChanged();
 }
 
 void KisClipboardBrushWidget::showEvent(QShowEvent *)
 {
-    if (!m_brushCreated) {
-        this->slotUseBrushClicked();
-        m_brushCreated = true;
-    }
+    slotCreateBrush();
 }
 
 void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
-        preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+        preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
     }
-
-    emit sigBrushChanged();
 }
 
-void KisClipboardBrushWidget::slotSaveBrush()
+void KisClipboardBrushWidget::slotAddPredefined()
 {
+    if(!m_brush)
+        return;
+
     QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
     QString extension = ".gbr";
     QString name = nameEdit->text();
@@ -165,5 +150,8 @@ void KisClipboardBrushWidget::slotSaveBrush()
             resource->makeMaskImage();
         }
         m_rServerAdapter->addResource(resource);
+        emit sigNewPredefinedBrush(resource);
     }
+
+    close();
 }

@@ -19,7 +19,8 @@ set ( VectorShape_SRCS
 
 kde4_add_plugin(calligra_shape_vector ${VectorShape_SRCS})
 
-target_link_libraries(calligra_shape_vector flake kovectorimage ${KDE4_KFILE_LIBRARY})
+target_link_libraries(calligra_shape_vector flake kovectorimage
+${KDE4_KFILE_LIBRARY} ${KDE4_KIO_LIBS})
 
 install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR})
 

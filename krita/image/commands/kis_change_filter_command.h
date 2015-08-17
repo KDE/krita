@@ -18,7 +18,6 @@
 #ifndef KIS_CHANGE_FILTER_COMMAND_H
 #define KIS_CHANGE_FILTER_COMMAND_H
 
-#include <krita_export.h>
 #include <kundo2command.h>
 #include <QRect>
 #include "kis_types.h"

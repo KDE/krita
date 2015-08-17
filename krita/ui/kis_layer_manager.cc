@@ -102,7 +102,7 @@
 #include "kis_abstract_projection_plane.h"
 #include "commands_new/kis_set_layer_style_command.h"
 #include "kis_post_execution_undo_adapter.h"
-
+#include "kis_selection_mask.h"
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor
@@ -320,7 +320,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_groupLayersSave = new KisAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new KisAction(themedIcon("document-save"), i18n("Save Group Layers..."), this);
     m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
@@ -329,6 +329,11 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
+
+    KisAction *trimToImage = new KisAction(themedIcon("trim-to-image"), i18n("Trim to Image Size"), this);
+    trimToImage->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager->addAction("trim_to_image", trimToImage);
+    connect(trimToImage, SIGNAL(triggered()), this, SLOT(trimToImage()));
 
     m_layerStyle  = new KisAction(i18n("Layer Style..."), this);
     m_layerStyle->setActivationFlags(KisAction::ACTIVE_LAYER);
@@ -374,6 +379,14 @@ void KisLayerManager::imageResizeToActiveLayer()
                       "Layer is empty "),
                 QIcon(), 2000, KisFloatingMessage::Low);
         }
+    }
+}
+
+void KisLayerManager::trimToImage()
+{
+    KisImageWSP image = m_view->image();
+    if (image) {
+        image->cropImage(image->bounds());
     }
 }
 
@@ -530,7 +543,9 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     parent = activeNode;
     above = parent->lastChild();
 
-    while (parent && !parent->allowAsChild(node)) {
+    while (parent &&
+           (!parent->allowAsChild(node) || parent->userLocked())) {
+
         above = parent;
         parent = parent->parent();
     }
@@ -760,6 +775,30 @@ void KisLayerManager::flattenImage()
     }
 }
 
+inline bool isSelectionMask(KisNodeSP node) {
+    return dynamic_cast<KisSelectionMask*>(node.data());
+}
+
+bool tryMergeSelectionMasks(KisNodeSP currentNode, KisImageSP image)
+{
+    bool result = false;
+
+    KisNodeSP prevNode = currentNode->prevSibling();
+    if (isSelectionMask(currentNode) &&
+        prevNode && isSelectionMask(prevNode)) {
+
+        QList<KisNodeSP> mergedNodes;
+        mergedNodes.append(currentNode);
+        mergedNodes.append(prevNode);
+
+        image->mergeMultipleLayers(mergedNodes, currentNode);
+
+        result = true;
+    }
+
+    return result;
+}
+
 void KisLayerManager::mergeLayer()
 {
     KisImageWSP image = m_view->image();
@@ -768,19 +807,26 @@ void KisLayerManager::mergeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (!layer->prevSibling()) return;
-    KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
-    if (!prevLayer) return;
+    QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+    if (selectedNodes.size() > 1) {
+        image->mergeMultipleLayers(selectedNodes, layer);
 
-    if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
-        image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-    }
-    else {
-        const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
-        if (!strategy) return;
-        image->mergeDown(layer, strategy);
+    } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
 
+        if (!layer->prevSibling()) return;
+        KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+        if (!prevLayer) return;
+
+        if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
+            image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+        }
+        else {
+            const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
+            if (!strategy) return;
+            image->mergeDown(layer, strategy);
+        }
     }
+
     m_view->updateGUI();
 }
 

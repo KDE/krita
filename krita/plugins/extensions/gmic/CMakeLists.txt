@@ -163,13 +163,13 @@ set(kritagmic_PART_SRCS
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
-target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${ZLIB_LIBRARIES})
+target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${ZLIB_LIBRARIES})
 
 # gmicparser for debugging purposes
 
 set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
 kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
-target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
+target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
 
 ########### install files ###############
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)

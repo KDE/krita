@@ -25,7 +25,7 @@
 #include <QDomElement>
 #include <QLocale>
 #include "klocale.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_debug.h"
 
 

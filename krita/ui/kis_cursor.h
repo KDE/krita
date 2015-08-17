@@ -22,7 +22,7 @@
 #ifndef __kis_cursor_h__
 #define __kis_cursor_h__
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <QCursor>
 

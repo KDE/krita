@@ -84,6 +84,7 @@ set(kowidgets_LIB_SRCS
     KoDocumentInfoPropsPage.cpp
 
     KoGlobal.cpp
+    KoTableView.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -99,10 +100,10 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 
 kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
+target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KIO_LIBS})
+
 if(GHNS)
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KNEWSTUFF3_LIBS})
-else()
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
+    target_link_libraries(kowidgets {KDE4_KNEWSTUFF3_LIBS})
 endif ()
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})

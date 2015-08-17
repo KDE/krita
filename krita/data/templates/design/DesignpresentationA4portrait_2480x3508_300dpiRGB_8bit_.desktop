@@ -2,7 +2,7 @@
 Icon=template_DIN_A4_portrait
 Name=Design presentation A4 portrait [ 2480x3508 , 300dpi RGB , 8bit ]
 Name[bs]=Design prezentacija A4 uspravno [ 2480x3508 , 300dpi RGB , 8bit ]
-Name[ca]=Disseny de presentació A4 vertical [ 2480x3508 / 300dpi RGB / 8bit ]
+Name[ca]=Disseny de presentació A4 vertical [ 2480x3508 / 300ppp RGB / 8bit ]
 Name[ca@valencia]=Disseny de presentació A4 vertical [ 2480x3508 / 300dpi RGB / 8bit ]
 Name[cs]=Návrh prezentace A4 svisle [ x3508 , 300dpi RGB , 8bit ]
 Name[da]=Design-præsentation A4 stående [ x3508 , 300dpi RGB , 8bit ]
@@ -25,6 +25,7 @@ Name[pt]=Desenho de apresentação A4 em Paisagem [ 2480x3508 , 300ppp RGB , 8-b
 Name[pt_BR]=Design de apresentação A4 retrato [ 2480x3508, 300dpi RGB, 8bits ]
 Name[sk]=Dizajn prezentácia A4 portrét [ 2480x3508 , 300dpi RGB , 8bit ]
 Name[sv]=Design presentation A4 porträtt [ 2480x3508, 300 punkter/tum RGB, 8 bitar ]
+Name[tr]=A4 dikey sunum tasarla [ 2480x3508 , 300dpi RGB , 8bit ]
 Name[uk]=Компонування презентації, A4, книжкова [2480x3508, 300 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign presentation A4 portrait [ 2480x3508 , 300dpi RGB , 8bit ]xx
 Type=Link

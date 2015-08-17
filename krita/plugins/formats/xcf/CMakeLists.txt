@@ -2,7 +2,7 @@ add_subdirectory(tests)
 
 set(XCFTOOLS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/xcftools")
 
-include_directories( ${XCFTOOLS_SOURCE_DIR} )
+include_directories( ${XCFTOOLS_SOURCE_DIR})
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
@@ -16,11 +16,14 @@ set(kritaxcfimport_PART_SRCS
     ${XCFTOOLS_SOURCE_DIR}/pixels.c
     ${XCFTOOLS_SOURCE_DIR}/scaletab.c
     ${XCFTOOLS_SOURCE_DIR}/table.c
+    ${XCFTOOLS_SOURCE_DIR}/enums.c
+    ${XCFTOOLS_SOURCE_DIR}/flatspec.c
+    ${XCFTOOLS_SOURCE_DIR}/flatten.c  
     )
 
 kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})
 
-target_link_libraries(kritaxcfimport kritaui )
+target_link_libraries(kritaxcfimport kritaui ${KDE4_KIO_LIBS})
 
 if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})

@@ -115,7 +115,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
         store->close();
     }
 
-    KisPNGConverter::saveDeviceToStore("mergedimage.png", image, image->projection(), store);
+    KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), image->projection(), store);
 
     delete store;
     return KisImageBuilder_RESULT_OK;

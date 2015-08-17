@@ -22,7 +22,6 @@
 #include <QObject>
 
 #include <KoVariable.h>
-#include <KoTextShapeData.h>
 #include <KoTextPage.h>
 
 class KoShapeSavingContext;

@@ -21,7 +21,7 @@
 #ifndef _KIS_CATEGORIZED_ITEM_DELEGATE_H_
 #define _KIS_CATEGORIZED_ITEM_DELEGATE_H_
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <QIcon>
 #include <QStyledItemDelegate>
 

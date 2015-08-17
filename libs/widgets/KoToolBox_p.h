@@ -105,10 +105,14 @@ private Q_SLOTS:
 
     /// unlocks the with after adjustToFit
     void resizeUnlock();
+
+    /// set the icon size for all the buttons
+    void slotContextIconSize();
+
 protected:
     void paintEvent(QPaintEvent *event);
-protected:
     void resizeEvent(QResizeEvent* event);
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private:
     class Private;

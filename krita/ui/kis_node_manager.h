@@ -22,7 +22,7 @@
 #include <QList>
 
 #include "kis_types.h"
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KActionCollection;
 
@@ -195,7 +195,7 @@ public Q_SLOTS:
     void saveNodeAsImage();
 
     // merges the active layer with the layer below it.
-    void mergeLayerDown();
+    void mergeLayer();
 
     void slotSplitAlphaIntoMask();
     void slotSplitAlphaWrite();

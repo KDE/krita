@@ -43,7 +43,7 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     ui->shortcutsView->header()->setResizeMode(QHeaderView::Stretch);
     setExpanded(false);
 
-    QAction *deleteAction = new QAction(koIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
+    QAction *deleteAction = new QAction(themedIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
     connect(deleteAction, SIGNAL(triggered(bool)), SLOT(deleteShortcut()));
     ui->shortcutsView->addAction(deleteAction);
     ui->shortcutsView->setContextMenuPolicy(Qt::ActionsContextMenu);

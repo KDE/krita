@@ -63,27 +63,27 @@ void KisImageManager::setup(KisActionManager *actionManager)
     actionManager->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KisAction(koIcon("document-properties"), i18n("Properties..."), this);
+    action  = new KisAction(themedIcon("configure"), i18n("Properties..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
-    action  = new KisAction(koIcon("document-new"), i18n("as Paint Layer..."), this);
+    action  = new KisAction(themedIcon("document-new"), i18n("as Paint Layer..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_paint_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KisAction(koIcon("edit-copy"), i18n("as Transparency Mask..."), this);
+    action  = new KisAction(themedIcon("edit-copy"), i18n("as Transparency Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_transparency_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
 
-    action  = new KisAction(koIcon("bookmarks"), i18n("as Filter Mask..."), this);
+    action  = new KisAction(themedIcon("view-filter"), i18n("as Filter Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_filter_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
 
-    action  = new KisAction(koIcon("edit-paste"), i18n("as Selection Mask..."), this);
+    action  = new KisAction(themedIcon("edit-paste"), i18n("as Selection Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_selection_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));

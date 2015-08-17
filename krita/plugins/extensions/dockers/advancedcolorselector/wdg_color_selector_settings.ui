@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
+    <width>618</width>
     <height>838</height>
    </rect>
   </property>
@@ -74,7 +74,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_typeshape">
       <attribute name="title">
@@ -101,14 +101,14 @@
        <layout class="QHBoxLayout" name="horizontalLayout_15">
         <item>
          <layout class="QGridLayout" name="gridLayout_5">
-          <property name="verticalSpacing">
-           <number>6</number>
-          </property>
           <property name="leftMargin">
            <number>0</number>
           </property>
           <property name="rightMargin">
            <number>0</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>6</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="redlabel">
@@ -124,7 +124,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QLineEdit" name="l_lumaG">
+           <widget class="KDoubleNumInput" name="l_lumaG">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -137,14 +137,8 @@
               <height>0</height>
              </size>
             </property>
-            <property name="inputMask">
-             <string notr="true">9.90000; </string>
-            </property>
-            <property name="text">
-             <string notr="true">0.7152</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="decimals">
+             <number>4</number>
             </property>
            </widget>
           </item>
@@ -175,7 +169,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="l_lumaR">
+           <widget class="KDoubleNumInput" name="l_lumaR">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -188,19 +182,13 @@
               <height>0</height>
              </size>
             </property>
-            <property name="inputMask">
-             <string notr="true">9.9000; </string>
-            </property>
-            <property name="text">
-             <string notr="true">0.2126</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="decimals">
+             <number>4</number>
             </property>
            </widget>
           </item>
           <item row="0" column="5">
-           <widget class="QLineEdit" name="l_lumaB">
+           <widget class="KDoubleNumInput" name="l_lumaB">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -213,14 +201,8 @@
               <height>0</height>
              </size>
             </property>
-            <property name="inputMask">
-             <string>9.90000; </string>
-            </property>
-            <property name="text">
-             <string notr="true">0.0722</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="decimals">
+             <number>4</number>
             </property>
            </widget>
           </item>
@@ -881,7 +863,7 @@
           <rect>
            <x>10</x>
            <y>30</y>
-           <width>231</width>
+           <width>232</width>
            <height>80</height>
           </rect>
          </property>
@@ -999,7 +981,7 @@
           <rect>
            <x>10</x>
            <y>30</y>
-           <width>227</width>
+           <width>232</width>
            <height>75</height>
           </rect>
          </property>
@@ -1372,6 +1354,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KDoubleNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
   <customwidget>
    <class>KTabWidget</class>
    <extends>QTabWidget</extends>

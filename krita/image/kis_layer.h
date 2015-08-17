@@ -26,7 +26,7 @@
 #include <QMetaType>
 #include <QObject>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include "KisDocumentSectionModel.h"
 
@@ -365,6 +365,8 @@ protected:
                      KisPaintDeviceSP destination,
                      const QRect &requestedRect,
                      KisNodeSP filthyNode, KisNodeSP lastNode) const;
+
+    bool canMergeAndKeepBlendOptions(KisLayerSP otherLayer);
 private:
     friend class KisLayerProjectionPlane;
     friend class KisTransformMask;

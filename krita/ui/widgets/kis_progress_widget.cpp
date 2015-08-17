@@ -36,7 +36,7 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
     m_cancelButton = new QToolButton(this);
-    m_cancelButton->setIcon(koIcon("process-stop"));
+    m_cancelButton->setIcon(themedIcon("process-stop"));
 
     QSizePolicy sizePolicy = m_cancelButton->sizePolicy();
     sizePolicy.setVerticalPolicy(QSizePolicy::Ignored);

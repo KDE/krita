@@ -19,7 +19,6 @@
 #define KIS_DUPLICATEOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString DUPLICATE_HEALING = "Duplicateop/Healing";
 const QString DUPLICATE_CORRECT_PERSPECTIVE = "Duplicateop/CorrectPerspective";

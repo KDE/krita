@@ -23,7 +23,7 @@
 #include <QVector>
 #include <QPointF>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisGreenCoordinatesMath
 {

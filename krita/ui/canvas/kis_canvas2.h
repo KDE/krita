@@ -27,7 +27,7 @@
 
 #include <KoColorConversionTransformation.h>
 #include <KoCanvasBase.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_types.h>
 #include <KoPointerEvent.h>
 
@@ -198,6 +198,9 @@ public Q_SLOTS:
 
     /// canvas rotation in degrees
     qreal rotationAngle() const;
+    /// Bools indicating canvasmirroring.
+    bool xAxisMirrored() const;
+    bool yAxisMirrored() const;
 
     void channelSelectionChanged();
 

@@ -19,7 +19,7 @@ kde4_add_plugin(kritaexrimport ${kritaexrimport_PART_SRCS})
 
 
 
-target_link_libraries(kritaexrimport kritaui ${OPENEXR_LIBRARIES} )
+target_link_libraries(kritaexrimport kritaui ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -35,7 +35,7 @@ kde4_add_ui_files(kritaexrexport_PART_SRCS exr_export_widget.ui )
 kde4_add_plugin(kritaexrexport ${kritaexrexport_PART_SRCS})
 
 
-target_link_libraries(kritaexrexport kritaui ${OPENEXR_LIBRARIES} )
+target_link_libraries(kritaexrexport kritaui ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

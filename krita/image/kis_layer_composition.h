@@ -19,7 +19,7 @@
 #ifndef _KIS_LAYERCOMPOSITION_H
 #define _KIS_LAYERCOMPOSITION_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QMap>
 #include <QUuid>

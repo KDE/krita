@@ -31,6 +31,8 @@
 #include "KoTextLayoutRootArea.h"
 #include "FrameIterator.h"
 
+#include <stdint.h>
+
 #include <klocale.h>
 
 #include <QCache>
@@ -91,7 +93,7 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, const QSize &_size
 
     const QSize &size = (!_size.isValid() || _size.isNull()) ? d->defaultSize : _size;
 
-    QString imageKey = "p_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
+    QString imageKey = "p_" + QString::number(reinterpret_cast<uintptr_t>(style)) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
@@ -148,8 +150,8 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
 
     const QSize &size = (!_size.isValid() || _size.isNull()) ? d->defaultSize : _size;
 
-    QString imageKey = "c_" + QString::number(reinterpret_cast<unsigned long>(characterStyle)) + "_"
-                     + "p_" + QString::number(reinterpret_cast<unsigned long>(paragraphStyle)) + "_"
+    QString imageKey = "c_" + QString::number(reinterpret_cast<uintptr_t>(characterStyle)) + "_"
+                     + "p_" + QString::number(reinterpret_cast<uintptr_t>(paragraphStyle)) + "_"
                      + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
@@ -277,13 +279,13 @@ void KoStyleThumbnailer::layoutThumbnail(const QSize &size, QImage *im, KoStyleT
 
 void KoStyleThumbnailer::removeFromCache(KoParagraphStyle *style)
 {
-    QString imageKey = "p_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_";
+    QString imageKey = "p_" + QString::number(reinterpret_cast<uintptr_t>(style)) + "_";
     removeFromCache(imageKey);
 }
 
 void KoStyleThumbnailer::removeFromCache(KoCharacterStyle *style)
 {
-    QString imageKey = "c_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_";
+    QString imageKey = "c_" + QString::number(reinterpret_cast<uintptr_t>(style)) + "_";
     removeFromCache(imageKey);
 }
 

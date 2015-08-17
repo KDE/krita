@@ -214,6 +214,11 @@ public Q_SLOTS:
      */
     void switchToolRequested(const QString &id);
 
+    /**
+     * Request change input device
+     * @param id the id of the input device
+     */
+    void switchInputDeviceRequested(const KoInputDevice &id);
 
     /**
      * a new tool has become known to mankind
@@ -292,7 +297,7 @@ private:
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
-    Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
+    Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape*> &shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
     QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);

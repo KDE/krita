@@ -22,15 +22,47 @@
 #include "KoToolBox_p.h"
 #include "KoToolBoxLayout_p.h"
 
-#include <KoCanvasController.h>
-#include <KoShapeLayer.h>
 #include <QButtonGroup>
 #include <QToolButton>
 #include <QStyleOptionFrameV3>
 #include <QPainter>
 #include <QHash>
 #include <QApplication>
+#include <QStyle>
 #include <QTimer>
+#include <QMenu>
+#include <QAction>
+
+#include <klocale.h>
+#include <kdebug.h>
+#include <kicon.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+
+#include <KoCanvasController.h>
+#include <KoShapeLayer.h>
+
+#define BUTTON_MARGIN 10
+
+static int buttonSize(int screen)
+{
+    QRect rc = qApp->desktop()->screenGeometry(screen);
+    if (rc.width() <= 1024) {
+        return 12;
+    }
+    else if (rc.width() <= 1377) {
+        return 14;
+    }
+    else  if (rc.width() <= 1920 ) {
+        return 16;
+    }
+    else if (rc.width() <= 2048) {
+        return 32;
+    }
+    else {
+        return 48;
+    }
+}
 
 class KoToolBox::Private
 {
@@ -39,16 +71,20 @@ public:
         : layout(0)
         , buttonGroup(0)
         , floating(false)
+        , contextSize(0)
     {
     }
 
     void addSection(Section *section, const QString &name);
 
+    QList<QToolButton*> buttons;
     QMap<QString, Section*> sections;
     KoToolBoxLayout *layout;
     QButtonGroup *buttonGroup;
     QHash<QToolButton*, QString> visibilityCodes;
     bool floating;
+    QMap<QAction*,int> contextIconSizes;
+    QMenu* contextSize;
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)
@@ -82,8 +118,8 @@ KoToolBox::KoToolBox()
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
-            this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+            SIGNAL(addedTool(KoToolButton,KoCanvasController*)),
+            this, SLOT(toolAdded(KoToolButton,KoCanvasController*)));
 
     QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }
@@ -95,9 +131,18 @@ KoToolBox::~KoToolBox()
 
 void KoToolBox::addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId)
 {
+    d->buttons << button;
     // ensure same L&F
     button->setCheckable(true);
     button->setAutoRaise(true);
+
+    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
+    KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+    int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
+    button->setIconSize(QSize(iconSize, iconSize));
+    foreach (Section *section, d->sections.values())  {
+        section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
+    }
 
     QString sectionToBeAddedTo;
     if (section.contains(qApp->applicationName())) {
@@ -244,7 +289,7 @@ void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
 void KoToolBox::adjustToFit()
 {
     int newWidth = width() - (width() % layout()->minimumSize().width());
-    if(newWidth != width() && newWidth >= layout()->minimumSize().width()) {
+    if (newWidth != width() && newWidth >= layout()->minimumSize().width()) {
         setMaximumWidth(newWidth);
         QTimer::singleShot(0, this, SLOT(resizeUnlock()));
     }
@@ -253,4 +298,65 @@ void KoToolBox::adjustToFit()
 void KoToolBox::resizeUnlock()
 {
     setMaximumWidth(QWIDGETSIZE_MAX);
+}
+
+void KoToolBox::slotContextIconSize()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    if (action && d->contextIconSizes.contains(action)) {
+        const int iconSize = d->contextIconSizes.value(action);
+
+        KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+        cfg.writeEntry("iconSize", iconSize);
+
+        foreach(QToolButton *button, d->buttons) {
+            button->setIconSize(QSize(iconSize, iconSize));
+        }
+
+        foreach(Section *section, d->sections.values())  {
+            section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
+        }
+
+    }
+
+    adjustToFit();
+}
+
+void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
+{
+
+    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
+
+    if (!d->contextSize) {
+
+        d->contextSize = new QMenu(i18n("Icon Size"), this);
+        d->contextIconSizes.insert(d->contextSize->addAction(i18nc("@item:inmenu Icon size", "Default"),
+                                                          this, SLOT(slotContextIconSize())),
+                                   toolbuttonSize);
+
+        QList<int> sizes;
+        sizes << 12 << 14 << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
+        foreach(int i, sizes) {
+            d->contextIconSizes.insert(d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize())), i);
+        }
+
+        QActionGroup *sizeGroup = new QActionGroup(d->contextSize);
+        foreach (QAction *action, d->contextSize->actions()) {
+            action->setActionGroup(sizeGroup);
+            action->setCheckable(true);
+        }
+    }
+    KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+    toolbuttonSize = cfg.readEntry("iconSize", toolbuttonSize);
+
+    QMapIterator< QAction*, int > it = d->contextIconSizes;
+    while (it.hasNext()) {
+        it.next();
+        if (it.value() == toolbuttonSize) {
+            it.key()->setChecked(true);
+            break;
+        }
+    }
+
+    d->contextSize->exec(event->globalPos());
 }

@@ -27,11 +27,6 @@
 #include "KisPart.h"
 #include "KisView.h"
 
-#include "KoOdfStylesReader.h"
-#include "KoOdfReadStore.h"
-#include "KoOdfWriteStore.h"
-#include "KoXmlNS.h"
-
 #include <KoCanvasBase.h>
 #include <KoColor.h>
 #include <KoColorProfile.h>
@@ -203,6 +198,12 @@ public:
             KUndo2Stack::setIndex(idx);
             image->unlock();
         }
+    }
+
+    void notifySetIndexChangedOneCommand() {
+        KisImageWSP image = this->image();
+        image->unlock();
+        image->barrierLock();
     }
 
     void undo() {
@@ -581,6 +582,11 @@ KisDocument::KisDocument()
     init();
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
+
+    gridData().setShowGrid(false);
+    KisConfig cfg;
+    gridData().setGrid(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+
 }
 
 KisDocument::~KisDocument()
@@ -1056,10 +1062,21 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
     int accuracy = 0;
 
     QFile f(url.toLocalFile());
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open file to check the mimetype" << url;
+    }
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
     KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
     f.close();
+
+    if (!mime) {
+        return mimeType;
+    }
+
+    // Checking the content failed as well, so let's fall back on the extension again
+    if (mime->name() == "application/octet-stream") {
+        return mimeType;
+    }
 
     return mime->name();
 }
@@ -1191,7 +1208,7 @@ bool KisDocument::importDocument(const KUrl & _url)
 }
 
 
-bool KisDocument::openUrl(const KUrl & _url)
+bool KisDocument::openUrl(const KUrl & _url, KisDocument::OpenUrlFlags flags)
 {
     kDebug(30003) << "url=" << _url.url();
     d->lastErrorMessage.clear();
@@ -1238,7 +1255,9 @@ bool KisDocument::openUrl(const KUrl & _url)
         setModified(true);
     }
     else {
-        KisPart::instance()->addRecentURLToAllMainWindows(_url);
+        if( !(flags & OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES) ) {
+            KisPart::instance()->addRecentURLToAllMainWindows(_url);
+        }
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
@@ -1275,7 +1294,6 @@ bool KisDocument::openFile()
 
     // for images, always check content.
     typeName = checkImageMimeTypes(typeName, u);
-
 
     //kDebug(30003) << "mimetypes 4:" << typeName;
 

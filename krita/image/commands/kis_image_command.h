@@ -20,7 +20,7 @@
 #ifndef KIS_IMAGE_COMMAND_H_
 #define KIS_IMAGE_COMMAND_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <kundo2command.h>
 

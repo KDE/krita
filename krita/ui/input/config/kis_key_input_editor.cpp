@@ -43,7 +43,7 @@ KisKeyInputEditor::KisKeyInputEditor(QWidget *parent)
     d->ui = new Ui::KisKeyInputEditor;
     d->ui->setupUi(popup);
 
-    d->ui->clearKeysButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
+    d->ui->clearKeysButton->setIcon(themedIcon("edit-clear"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

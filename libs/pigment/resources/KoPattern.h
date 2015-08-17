@@ -64,10 +64,6 @@ public:
      */
     QImage pattern() const;
 
-protected:
-
-    virtual QByteArray generateMD5() const;
-
 private:
 
     bool init(QByteArray& data);

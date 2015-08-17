@@ -97,13 +97,14 @@
     <Action name="rasterize_layer" icon="" text="Rasterize Layer" whatsThis="" toolTip="Rasterize Layer" iconText="Rasterize Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="save_groups_as_images" icon="document-save" text="Save Group Layers..." whatsThis="" toolTip="Save Group Layers" iconText="Save Group Layers" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="resizeimagetolayer" icon="" text="Size Canvas to Size of Current Layer" whatsThis="" toolTip="Size Canvas to Size of Current Layer" iconText="Size Canvas to Size of Current Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="mirrorNodeX" icon="object-flip-horizontal" text="Mirror Layer Horizontally" whatsThis="" toolTip="Mirror Layer Horizontally" iconText="Mirror Layer Horizontally" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="mirrorNodeY" icon="object-flip-vertical" text="Mirror Layer Vertically" whatsThis="" toolTip="Mirror Layer Vertically" iconText="Mirror Layer Vertically" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="trim_to_image" icon="light_trim-to-image" text="Trim to Image Size" whatsThis="" toolTip="Trim to Image Size" iconText="Trim to Image Size" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="mirrorNodeX" icon="light_symmetry-horizontal" text="Mirror Layer Horizontally" whatsThis="" toolTip="Mirror Layer Horizontally" iconText="Mirror Layer Horizontally" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="mirrorNodeY" icon="light_symmetry-vertical" text="Mirror Layer Vertically" whatsThis="" toolTip="Mirror Layer Vertically" iconText="Mirror Layer Vertically" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="activateNextLayer" icon="" text="Activate next layer" whatsThis="" toolTip="Activate next layer" iconText="Activate next layer" shortcut="PgUp" defaultShortcut="PgUp" isCheckable="false" statusTip=""/>
     <Action name="activatePreviousLayer" icon="" text="Activate previous layer" whatsThis="" toolTip="Activate previous layer" iconText="Activate previous layer" shortcut="PgDown" defaultShortcut="PgDown" isCheckable="false" statusTip=""/>
     <Action name="save_node_as_image" icon="document-save" text="Save Layer/Mask..." whatsThis="" toolTip="Save Layer/Mask" iconText="Save Layer/Mask" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="duplicatelayer" icon="edit-copy" text="&amp;Duplicate Layer or Mask" whatsThis="" toolTip="Duplicate Layer or Mask" iconText="Duplicate Layer or Mask" shortcut="Ctrl+J" defaultShortcut="Ctrl+J" isCheckable="false" statusTip=""/>
-    <Action name="add_new_paint_layer" icon="document-new" text="&amp;Paint Layer" whatsThis="" toolTip="Paint Layer" iconText="Paint Layer" shortcut="Ins" defaultShortcut="Ins" isCheckable="false" statusTip=""/>
+    <Action name="add_new_paint_layer" icon="light_document-new" text="&amp;Paint Layer" whatsThis="" toolTip="Paint Layer" iconText="Paint Layer" shortcut="Ins" defaultShortcut="Ins" isCheckable="false" statusTip=""/>
     <Action name="add_new_group_layer" icon="folder-new" text="&amp;Group Layer" whatsThis="" toolTip="Group Layer" iconText="Group Layer" shortcut="Ctrl+G" defaultShortcut="Ctrl+G" isCheckable="false" statusTip=""/>
     <Action name="add_new_clone_layer" icon="edit-copy" text="&amp;Clone Layer" whatsThis="" toolTip="Clone Layer" iconText="Clone Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="add_new_shape_layer" icon="bookmark-new" text="&amp;Vector Layer" whatsThis="" toolTip="Vector Layer" iconText="Vector Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -131,17 +132,6 @@
     <Action name="image_color" icon="format-stroke-color" text="Image Background Color and Transparency..." whatsThis="" toolTip="Change the background color of the image" iconText="Image Background Color and Transparency" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="view_grid" icon="view-grid" text="Show Grid" whatsThis="" toolTip="Show Grid" iconText="Show Grid" shortcut="Ctrl+Shift+'" defaultShortcut="Ctrl+Shift+'" isCheckable="false" statusTip=""/>
     <Action name="view_snap_to_grid" icon="" text="Snap To Grid" whatsThis="" toolTip="Snap To Grid" iconText="Snap To Grid" shortcut="Ctrl+Shift+;" defaultShortcut="Ctrl+Shift+;" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_1x1" icon="" text="1x1" whatsThis="" toolTip="1x1" iconText="1x1" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_2x2" icon="" text="2x2" whatsThis="" toolTip="2x2" iconText="2x2" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_4x4" icon="" text="4x4" whatsThis="" toolTip="4x4" iconText="4x4" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_5x5" icon="" text="5x5" whatsThis="" toolTip="5x5" iconText="5x5" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_8x8" icon="" text="8x8" whatsThis="" toolTip="8x8" iconText="8x8" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_10x10" icon="" text="10x10" whatsThis="" toolTip="10x10" iconText="10x10" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_16x16" icon="" text="16x16" whatsThis="" toolTip="16x16" iconText="16x16" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_20x20" icon="" text="20x20" whatsThis="" toolTip="20x20" iconText="20x20" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_32x32" icon="" text="32x32" whatsThis="" toolTip="32x32" iconText="32x32" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_40x40" icon="" text="40x40" whatsThis="" toolTip="40x40" iconText="40x40" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_fast_grid_64x64" icon="" text="64x64" whatsThis="" toolTip="64x64" iconText="64x64" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="view_toggle_perspective_grid" icon="" text="Show Perspective Grid" whatsThis="" toolTip="Show Perspective Grid" iconText="Show Perspective Grid" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
     <Action name="view_clear_perspective_grid" icon="" text="Clear Perspective Grid" whatsThis="" toolTip="Clear Perspective Grid" iconText="Clear Perspective Grid" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="view_toggle_painting_assistants" icon="" text="Hide Painting Assistants" whatsThis="" toolTip="Hide Painting Assistants" iconText="Hide Painting Assistants" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
@@ -196,15 +186,15 @@
     <Action name="mirror_actions" icon="" text="Mirror" whatsThis="" toolTip="Mirror" iconText="Mirror" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="workspaces" icon="" text="Workspaces" whatsThis="" toolTip="Workspaces" iconText="Workspaces" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="paintops" icon="" text="&amp;Painter's Tools" whatsThis="" toolTip="Painter's Tools" iconText="Painter's Tools" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="file_new" icon="document-new" text="&amp;New" whatsThis="" toolTip="Create new document" iconText="New" shortcut="Ctrl+N" defaultShortcut="Ctrl+N" isCheckable="false" statusTip=""/>
+    <Action name="file_new" icon="light_document-new" text="&amp;New" whatsThis="" toolTip="Create new document" iconText="New" shortcut="Ctrl+N" defaultShortcut="Ctrl+N" isCheckable="false" statusTip=""/>
     <Action name="file_open" icon="document-open" text="&amp;Open..." whatsThis="" toolTip="Open an existing document" iconText="Open" shortcut="Ctrl+O" defaultShortcut="Ctrl+O" isCheckable="false" statusTip=""/>
     <Action name="file_open_recent" icon="document-open-recent" text="Open &amp;Recent" whatsThis="" toolTip="Open a document which was recently opened" iconText="Open Recent" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="file_save" icon="document-save" text="&amp;Save" whatsThis="" toolTip="Save" iconText="Save" shortcut="Ctrl+S" defaultShortcut="Ctrl+S" isCheckable="false" statusTip=""/>
     <Action name="file_save_as" icon="document-save-as" text="Save &amp;As..." whatsThis="" toolTip="Save document under a new name" iconText="Save As" shortcut="Ctrl+Shift+S" defaultShortcut="Ctrl+Shift+S" isCheckable="false" statusTip=""/>
     <Action name="file_print" icon="document-print" text="&amp;Print..." whatsThis="" toolTip="Print document" iconText="Print" shortcut="Ctrl+P" defaultShortcut="Ctrl+P" isCheckable="false" statusTip=""/>
     <Action name="file_print_preview" icon="document-print-preview" text="Print Previe&amp;w" whatsThis="" toolTip="Show a print preview of document" iconText="Print Preview" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="edit_undo" icon="edit-undo" text="Undo" whatsThis="" toolTip="Undo last action" iconText="Undo" shortcut="Ctrl+Z" defaultShortcut="Ctrl+Z" isCheckable="false" statusTip=""/>
-    <Action name="edit_redo" icon="edit-redo" text="Redo" whatsThis="" toolTip="Redo last undone action" iconText="Redo" shortcut="Ctrl+Shift+Z" defaultShortcut="Ctrl+Shift+Z" isCheckable="false" statusTip=""/>
+    <Action name="edit_undo" icon="light_edit-undo" text="Undo" whatsThis="" toolTip="Undo last action" iconText="Undo" shortcut="Ctrl+Z" defaultShortcut="Ctrl+Z" isCheckable="false" statusTip=""/>
+    <Action name="edit_redo" icon="light_edit-redo" text="Redo" whatsThis="" toolTip="Redo last undone action" iconText="Redo" shortcut="Ctrl+Shift+Z" defaultShortcut="Ctrl+Shift+Z" isCheckable="false" statusTip=""/>
     <Action name="file_export_pdf" icon="application-pdf" text="Export as PDF..." whatsThis="" toolTip="Export as PDF" iconText="Export as PDF" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="file_quit" icon="application-exit" text="&amp;Quit" whatsThis="" toolTip="Quit application" iconText="Quit" shortcut="Ctrl+Q" defaultShortcut="Ctrl+Q" isCheckable="false" statusTip=""/>
     <Action name="file_close_all" icon="" text="Close All" whatsThis="" toolTip="Close All" iconText="Close All" shortcut="Ctrl+Shift+W" defaultShortcut="Ctrl+Shift+W" isCheckable="false" statusTip=""/>
@@ -213,7 +203,7 @@
     <Action name="file_export_file" icon="document-export" text="E&amp;xport..." whatsThis="" toolTip="Export" iconText="Export" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="file_documentinfo" icon="document-properties" text="Document Information" whatsThis="" toolTip="Document Information" iconText="Document Information" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="options_configure_keybinding" icon="configure-shortcuts" text="Configure S&amp;hortcuts..." whatsThis="" toolTip="Configure Shortcuts" iconText="Configure Shortcuts" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="options_configure_toolbars" icon="configure-toolbars" text="Configure Tool&amp;bars..." whatsThis="" toolTip="Configure Toolbars" iconText="Configure Toolbars" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="options_configure_toolbars" icon="light_configure" text="Configure Tool&amp;bars..." whatsThis="" toolTip="Configure Toolbars" iconText="Configure Toolbars" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="theme_menu" icon="" text="&amp;Themes" whatsThis="" toolTip="Themes" iconText="Themes" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="fullscreen" icon="view-fullscreen" text="F&amp;ull Screen Mode" whatsThis="" toolTip="Display the window in full screen" iconText="Full Screen Mode" shortcut="Ctrl+Shift+F" defaultShortcut="Ctrl+Shift+F" isCheckable="false" statusTip=""/>
     <Action name="view_toggledockers" icon="" text="Show Dockers" whatsThis="" toolTip="Show Dockers" iconText="Show Dockers" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
@@ -224,7 +214,7 @@
     <Action name="windows_tile" icon="" text="Tile" whatsThis="" toolTip="Tile" iconText="Tile" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="windows_next" icon="" text="Next" whatsThis="" toolTip="Next" iconText="Next" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="windows_previous" icon="" text="Previous" whatsThis="" toolTip="Previous" iconText="Previous" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="view_newwindow" icon="window-new" text="&amp;New Window" whatsThis="" toolTip="New Window" iconText="New Window" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="view_newwindow" icon="light_window-new" text="&amp;New Window" whatsThis="" toolTip="New Window" iconText="New Window" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="file_close" icon="" text="Close" whatsThis="" toolTip="Close" iconText="Close" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="options_configure" icon="configure" text="&amp;Configure Krita..." whatsThis="" toolTip="Configure Krita" iconText="Configure Krita" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="clones_array" icon="" text="Clones &amp;Array..." whatsThis="" toolTip="Clones Array" iconText="Clones Array" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -235,7 +225,7 @@
     <Action name="gmic" icon="" text="Apply G'Mic Action..." whatsThis="" toolTip="Apply G'Mic Action" iconText="Apply G'Mic Action" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="histogram" icon="" text="&amp;Histogram..." whatsThis="" toolTip="Histogram" iconText="Histogram" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagesize" icon="" text="Scale To New Size..." whatsThis="" toolTip="Scale To New Size" iconText="Scale To New Size" shortcut="Ctrl+Alt+I" defaultShortcut="Ctrl+Alt+I" isCheckable="false" statusTip=""/>
-    <Action name="canvassize" icon="" text="Size Canvas..." whatsThis="" toolTip="Size Canvas" iconText="Size Canvas" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="canvassize" icon="" text="Size Canvas..." whatsThis="" toolTip="Size Canvas" iconText="Size Canvas" shortcut="Ctrl+Alt+C" defaultShortcut="Ctrl+Alt+C" isCheckable="false" statusTip=""/>
     <Action name="layersize" icon="" text="Scale &amp;Layer..." whatsThis="" toolTip="Scale Layer" iconText="Scale Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="selectionscale" icon="" text="&amp;Scale..." whatsThis="" toolTip="Scale" iconText="Scale" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="imagesplit" icon="" text="Image Split " whatsThis="" toolTip="Image Split" iconText="Image Split" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -243,7 +233,7 @@
     <Action name="growselection" icon="" text="Grow Selection..." whatsThis="" toolTip="Grow Selection" iconText="Grow Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="shrinkselection" icon="" text="Shrink Selection..." whatsThis="" toolTip="Shrink Selection" iconText="Shrink Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="borderselection" icon="" text="Border Selection..." whatsThis="" toolTip="Border Selection" iconText="Border Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="featherselection" icon="" text="Feather Selection..." whatsThis="" toolTip="Feather Selection" iconText="Feather Selection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="featherselection" icon="" text="Feather Selection..." whatsThis="" toolTip="Feather Selection" iconText="Feather Selection" shortcut="Shift+F6" defaultShortcut="Shift+F6" isCheckable="false" statusTip=""/>
     <Action name="smoothselection" icon="" text="Smooth" whatsThis="" toolTip="Smooth" iconText="Smooth" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="offsetimage" icon="" text="&amp;Offset Image..." whatsThis="" toolTip="Offset Image" iconText="Offset Image" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="offsetlayer" icon="" text="&amp;Offset Layer..." whatsThis="" toolTip="Offset Layer" iconText="Offset Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
@@ -256,8 +246,8 @@
     <Action name="rotateImageCW90" icon="object-rotate-right" text="Rotate Image 90&#xB0; to the Right" whatsThis="" toolTip="Rotate Image 90&#xB0; to the Right" iconText="Rotate Image 90&#xB0; to the Right" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="rotateImage180" icon="" text="Rotate Image 180&#xB0;" whatsThis="" toolTip="Rotate Image 180&#xB0;" iconText="Rotate Image 180&#xB0;" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="rotateImageCCW90" icon="object-rotate-left" text="Rotate Image 90&#xB0; to the Left" whatsThis="" toolTip="Rotate Image 90&#xB0; to the Left" iconText="Rotate Image 90&#xB0; to the Left" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="mirrorImageHorizontal" icon="object-flip-horizontal" text="Mirror Image Horizontally" whatsThis="" toolTip="Mirror Image Horizontally" iconText="Mirror Image Horizontally" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="mirrorImageVertical" icon="object-flip-vertical" text="Mirror Image Vertically" whatsThis="" toolTip="Mirror Image Vertically" iconText="Mirror Image Vertically" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="mirrorImageHorizontal" icon="light_symmetry-horizontal" text="Mirror Image Horizontally" whatsThis="" toolTip="Mirror Image Horizontally" iconText="Mirror Image Horizontally" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="mirrorImageVertical" icon="light_symmetry-vertical" text="Mirror Image Vertically" whatsThis="" toolTip="Mirror Image Vertically" iconText="Mirror Image Vertically" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="rotatelayer" icon="" text="&amp;Rotate Layer..." whatsThis="" toolTip="Rotate Layer" iconText="Rotate Layer" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="rotateLayer180" icon="" text="Rotate Layer 180&#xB0;" whatsThis="" toolTip="Rotate Layer 180&#xB0;" iconText="Rotate Layer 180&#xB0;" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="rotateLayerCW90" icon="object-rotate-right" text="Rotate Layer 90&#xB0; to the Right" whatsThis="" toolTip="Rotate Layer 90&#xB0; to the Right" iconText="Rotate Layer 90&#xB0; to the Right" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

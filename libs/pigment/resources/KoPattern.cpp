@@ -28,7 +28,6 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <QCryptographicHash>
 #include <QPoint>
 #include <QSize>
 #include <QImage>
@@ -156,6 +155,8 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     if (wrote == -1)
         return false;
 
+    KoResource::saveToDevice(dev);
+
     return true;
 }
 
@@ -174,7 +175,11 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
     }
     else {
         QImage image;
-        result = image.load(dev, fileExtension.toUpper().toLatin1());
+        // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+        // fails with "libpng error: IDAT: CRC error"
+        QByteArray data = dev->readAll();
+        QBuffer buffer(&data);
+        result = image.load(&buffer, fileExtension.toUpper().toLatin1());
         setPatternImage(image);
     }
 
@@ -390,23 +395,5 @@ KoPattern* KoPattern::clone() const
 QImage KoPattern::pattern() const
 {
     return m_pattern;
-}
-
-QByteArray KoPattern::generateMD5() const
-{
-    if (!pattern().isNull()) {
-        QImage im = m_pattern.convertToFormat(QImage::Format_ARGB32);
-#if QT_VERSION >= 0x040700
-        QByteArray ba = QByteArray::fromRawData((const char*)im.constBits(), im.byteCount());
-#else
-        QByteArray ba = QByteArray::fromRawData((const char*)im.bits(), im.byteCount());
-#endif
-
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-
-        return md5.result();
-    }
-    return QByteArray();
 }
 

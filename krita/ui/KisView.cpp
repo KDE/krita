@@ -86,7 +86,7 @@
 #include "kis_painting_assistants_decoration.h"
 #include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
-
+#include "kis_filter_manager.h"
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
 
@@ -314,6 +314,11 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
 KisView::~KisView()
 {
+
+    if (d->viewManager->filterManager()->isStrokeRunning()) {
+        d->viewManager->filterManager()->cancel();
+    }
+
     KisPart::instance()->removeView(this);
     delete d;
 }
@@ -463,7 +468,7 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView::dropEvent(QDropEvent *event)
 {
-    KisImageSP kisimage = image();
+    KisImageWSP kisimage = image();
     Q_ASSERT(kisimage);
 
     QPoint cursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();

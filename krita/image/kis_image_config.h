@@ -20,7 +20,7 @@
 #define KIS_IMAGE_CONFIG_H_
 
 #include <kconfiggroup.h>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 class KRITAIMAGE_EXPORT KisImageConfig

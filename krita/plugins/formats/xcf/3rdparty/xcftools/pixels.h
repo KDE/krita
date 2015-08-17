@@ -125,4 +125,6 @@ void applyMask(struct Tile *tile, struct Tile *mask);
 
 struct Tile *getLayerTile(struct xcfLayer *,const struct rect *);
 
+struct Tile * getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles, struct rect want);
+
 #endif /* FLATTEN_H */

@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QPoint>
 #include <QFileInfo>
-#include <QCryptographicHash>
 #include <QBuffer>
 
 #include <kis_debug.h>
@@ -255,6 +254,39 @@ void KisBrush::setHasColor(bool hasColor)
     d->hasColor = hasColor;
 }
 
+bool KisBrush::isPiercedApprox() const
+{
+    QImage image = brushTipImage();
+
+    qreal w = image.width();
+    qreal h = image.height();
+
+    qreal xPortion = qMin(0.1, 5.0 / w);
+    qreal yPortion = qMin(0.1, 5.0 / h);
+
+    int x0 = std::floor((0.5 - xPortion) * w);
+    int x1 = std::ceil((0.5 + xPortion) * w);
+
+    int y0 = std::floor((0.5 - yPortion) * h);
+    int y1 = std::ceil((0.5 + yPortion) * h);
+
+    const int maxNumSamples = (x1 - x0 + 1) * (y1 - y0 + 1);
+    const int failedPixelsThreshold = 0.1 * maxNumSamples;
+    const int thresholdValue = 0.95 * 255;
+    int failedPixels = 0;
+
+    for (int y = y0; y <= y1; y++) {
+        for (int x = x0; x <= x1; x++) {
+            QRgb pixel = image.pixel(x,y);
+
+            if (qRed(pixel) > thresholdValue) {
+                failedPixels++;
+            }
+        }
+    }
+
+    return failedPixels > failedPixelsThreshold;
+}
 
 bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 {
@@ -301,18 +333,6 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("scale", QString::number(scale()));
 }
 
-QByteArray KisBrush::generateMD5() const
-{
-    if (!filename().isNull() && !filename().startsWith("bundle://") && QFileInfo(filename()).exists()) {
-        QFile f(filename());
-        f.open(QFile::ReadOnly);
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(f.readAll());
-        return md5.result();
-    }
-    return QByteArray();
-}
-
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 {
     element.setAttribute("BrushVersion", "2");
@@ -342,11 +362,7 @@ qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal su
 {
     Q_UNUSED(info);
 
-    angle += d->angle;
-
-    // Make sure the angle stay in [0;2*M_PI]
-    if (angle < 0) angle += 2 * M_PI;
-    if (angle > 2 * M_PI) angle -= 2 * M_PI;
+    angle = normalizeAngle(angle + d->angle);
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
@@ -358,11 +374,7 @@ qint32 KisBrush::maskHeight(double scale, double angle, qreal subPixelX, qreal s
 {
     Q_UNUSED(info);
 
-    angle += d->angle;
-
-    // Make sure the angle stay in [0;2*M_PI]
-    if (angle < 0) angle += 2 * M_PI;
-    if (angle > 2 * M_PI) angle -= 2 * M_PI;
+    angle = normalizeAngle(angle + d->angle);
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
@@ -372,17 +384,7 @@ qint32 KisBrush::maskHeight(double scale, double angle, qreal subPixelX, qreal s
 
 double KisBrush::maskAngle(double angle) const
 {
-    angle += d->angle;
-
-    // Make sure the angle stay in [0;2*M_PI]
-    if (angle < 0)      {
-        angle += 2 * M_PI;
-    }
-    if (angle > 2 * M_PI) {
-        angle -= 2 * M_PI;
-    }
-
-    return angle;
+    return normalizeAngle(angle + d->angle);
 }
 
 quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
@@ -468,11 +470,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 
-    angle += d->angle;
-
-    // Make sure the angle stay in [0;2*M_PI]
-    if (angle < 0) angle += 2 * M_PI;
-    if (angle > 2 * M_PI) angle -= 2 * M_PI;
+    angle   = normalizeAngle(angle + d->angle);
     scaleX *= d->scale;
     scaleY *= d->scale;
 
@@ -563,11 +561,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 {
     Q_ASSERT(valid());
     Q_UNUSED(info);
-    angle += d->angle;
-
-    // Make sure the angle stay in [0;2*M_PI]
-    if (angle < 0) angle += 2 * M_PI;
-    if (angle > 2 * M_PI) angle -= 2 * M_PI;
+    angle  = normalizeAngle(angle + d->angle);
     scale *= d->scale;
 
     prepareBrushPyramid();

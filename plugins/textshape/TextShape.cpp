@@ -33,7 +33,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 #include <KoOdfWorkaround.h>
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>

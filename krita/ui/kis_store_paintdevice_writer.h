@@ -30,12 +30,14 @@ public:
 
     virtual ~KisStorePaintDeviceWriter() {}
 
-    qint64 write(const QByteArray &data) {
-        return m_store->write(data);
+    bool write(const QByteArray &data) {
+        qint64 len = m_store->write(data);
+        return (len == data.size());
     }
 
-    qint64 write(const char* data, qint64 length) {
-        return m_store->write(data, length);
+    bool write(const char* data, qint64 length) {
+        qint64 len = m_store->write(data, length);
+        return (length == len);
     }
 
     KoStore *m_store;

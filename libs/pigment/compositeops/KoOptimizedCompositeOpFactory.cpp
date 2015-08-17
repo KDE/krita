@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoOptimizedCompositeOpFactoryPerArch.h" // vc.h must come first
 #include "KoOptimizedCompositeOpFactory.h"
 
 #if defined(__clang__)
 #pragma GCC diagnostic ignored "-Wundef"
 #endif
 
-#include "KoOptimizedCompositeOpFactoryPerArch.h"
 
 static struct ArchReporter {
     ArchReporter() {

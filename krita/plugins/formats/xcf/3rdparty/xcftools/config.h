@@ -1,9 +1,13 @@
 #define HAVE_NETINET_IN_H 1
 
 #ifdef _MSC_VER
-#define HAVE_INTTYPES_H 0
+#   if _MSC_VER < 1800
+#       define HAVE_INTTYPES_H 0
+#   else
+#       define HAVE_INTTYPES_H 1
+#   endif
 #else
-#define HAVE_INTTYPES_H 1
+#   define HAVE_INTTYPES_H 1
 #endif
 
 #define PACKAGE_STRING "krita"

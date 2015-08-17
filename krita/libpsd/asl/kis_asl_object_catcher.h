@@ -20,7 +20,7 @@
 #define __KIS_ASL_OBJECT_CATCHER_H
 
 #include <QVector>
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 class QString;
 class QColor;

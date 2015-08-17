@@ -30,6 +30,7 @@
 #include <kurl.h>
 
 #include <KoDocumentInfo.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoStore.h>
@@ -239,7 +240,14 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     }
 
     if (!autosave) {
-        KisPNGConverter::saveDeviceToStore("mergedimage.png", image, image->projection(), store);
+        KisPaintDeviceSP dev = image->projection();
+        if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
+            dev = new KisPaintDevice(*dev.data());
+            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+            delete cmd;
+        }
+
+        KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
     }
 
     saveAssistants(store, uri,external);

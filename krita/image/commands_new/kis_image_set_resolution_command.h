@@ -19,7 +19,7 @@
 #ifndef KIS_IMAGE_SET_RESOLUTION_COMMAND_H
 #define KIS_IMAGE_SET_RESOLUTION_COMMAND_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include <kundo2command.h>

@@ -391,7 +391,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(UUID, mask->uuid().toString());
 
     if (maskType == SELECTION_MASK) {
-        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("visible"));
+        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("active"));
     }
 
     m_nodeFileNames[mask] = MASK + QString::number(m_count);

@@ -74,10 +74,15 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     // It does not matter in the end, as long as the result looks good.
 
     // This selector was ported from MyPaint in 2010
-
-    m_realPixelCache = new KisPaintDevice(this->colorSpace());
-    KisPaintDeviceSP realCircleBorder = new KisPaintDevice(this->colorSpace());
-
+    if (m_cachedColorSpace != colorSpace()) {
+        m_realPixelCache = new KisPaintDevice(colorSpace());
+        m_realCircleBorder = new KisPaintDevice(colorSpace());
+        m_cachedColorSpace = colorSpace();
+    }
+    else {
+        m_realPixelCache->clear();
+        m_realCircleBorder->clear();
+    }
 	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
 
@@ -161,7 +166,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 					color = converter()->fromHsvF(fh, fs, fv);}
 //qDebug()<<color->toQcolor();
                     color.setOpacity(aaFactor);
-                    Acs::setColor(realCircleBorder, QPoint(x, y), color);
+                    Acs::setColor(m_realCircleBorder, QPoint(x, y), color);
 
                     h = 180 + 180*atan2f(dys,-dxs)/M_PI;
                     v = 255*(r-s_radius)/(diag-s_radius) - 128;
@@ -194,7 +199,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     }
 
     KisPainter gc(m_realPixelCache);
-    gc.bitBlt(QPoint(0,0), realCircleBorder, rect());
+    gc.bitBlt(QPoint(0,0), m_realCircleBorder, rect());
 
     QPainter painter(this);
     QImage renderedImage = converter()->toQImage(m_realPixelCache);

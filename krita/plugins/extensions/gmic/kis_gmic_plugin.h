@@ -62,13 +62,13 @@ private Q_SLOTS:
     // miliseconds - time gmic spent filtering images
     void slotGmicFinished(bool successfully, int miliseconds = -1, const QString& msg = QString());
     void slotUpdateProgress();
-    void slotPreviewReady();
+    void slotViewportPreviewFinished(bool successfully);
 
 
 private:
     void parseGmicCommandDefinitions(const QStringList &gmicDefinitionFilePaths);
     void setupDefinitionPaths();
-    void createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
+    void renderViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
     // has to be accepted or cancelled!
     void startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting, Activity activity);
     bool checkSettingsValidity(KisNodeListSP layers, const KisGmicFilterSetting * setting);
@@ -81,6 +81,9 @@ private:
     void waitForFilterFinish();
 
     void startProgressReporting();
+
+    // debug function
+    void dumpCompiletimeFeatures();
 
 private:
     KisGmicWidget * m_gmicWidget;

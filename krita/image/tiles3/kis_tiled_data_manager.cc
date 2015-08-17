@@ -118,13 +118,15 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
 {
     QReadLocker locker(&m_lock);
 
+    bool retval = true;
+
     if(CURRENT_VERSION == LEGACY_VERSION) {
         char str[80];
         sprintf(str, "%d\n", m_hashTable->numTiles());
-        store.write(str, strlen(str));
+        retval = store.write(str, strlen(str));
     }
     else {
-        writeTilesHeader(store, m_hashTable->numTiles());
+        retval = writeTilesHeader(store, m_hashTable->numTiles());
     }
 
 
@@ -135,11 +137,15 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
         KisTileCompressorFactory::create(CURRENT_VERSION);
 
     while ((tile = iter.tile())) {
-        compressor->writeTile(tile, store);
+        retval = compressor->writeTile(tile, store);
+        if (!retval) {
+            warnFile << "Failed to write tile";
+            break;
+        }
         ++iter;
     }
 
-    return true;
+    return retval;
 }
 bool KisTiledDataManager::read(QIODevice *stream)
 {
@@ -205,8 +211,7 @@ bool KisTiledDataManager::writeTilesHeader(KisPaintDeviceWriter &store, quint32 
         .arg(pixelSize())
         .arg(numTiles);
 
-    store.write(buffer.toLatin1());
-    return true;
+    return store.write(buffer.toLatin1());
 }
 
 #define takeOneLine(stream, maxLine, keyword, value)            \

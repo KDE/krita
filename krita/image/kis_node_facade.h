@@ -20,7 +20,7 @@
 
 #include "kis_types.h"
 #include "kis_node.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 /**
  * KisNodeFacade is the public interface to adding and removing nodes.
  */

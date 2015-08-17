@@ -23,7 +23,6 @@
 #include <QImageReader>
 #include <QByteArray>
 #include <QBuffer>
-#include <QCryptographicHash>
 
 KisPngBrush::KisPngBrush(const QString& filename)
     : KisBrush(filename)
@@ -53,6 +52,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     // fails with "libpng error: IDAT: CRC error"
     QByteArray data = dev->readAll();
     QBuffer buf(&data);
+    buf.open(QIODevice::ReadOnly);
     QImageReader reader(&buf, "PNG");
 
     if (!reader.canRead()) {
@@ -108,7 +108,12 @@ bool KisPngBrush::save()
 
 bool KisPngBrush::saveToDevice(QIODevice *dev) const
 {
-    return brushTipImage().save(dev, "PNG");
+    if(brushTipImage().save(dev, "PNG")) {
+        KoResource::saveToDevice(dev);
+        return true;
+    }
+
+    return false;
 }
 
 QString KisPngBrush::defaultFileExtension() const

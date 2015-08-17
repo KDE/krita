@@ -2,7 +2,7 @@
 Icon=template_DIN_A3_landscape
 Name=Design presentation A3 Landscape [ 4960x3508 , 300dpi RGB , 8bit ]
 Name[bs]=Design prezentacija A3 položeno [ 4960x3508 , 300dpi RGB , 8bit ]
-Name[ca]=Disseny de presentació A3 apaïsada [ 4960x3508 / 300dpi RGB / 8bit ]
+Name[ca]=Disseny de presentació A3 apaïsada [ 4960x3508 / 300ppp RGB / 8bit ]
 Name[ca@valencia]=Disseny de presentació A3 apaïsada [ 4960x3508 / 300dpi RGB / 8bit ]
 Name[cs]=Návrh prezentace A3 vodorovně [ 4960x3508 , 300dpi RGB , 8bit ]
 Name[da]=Design-præsentation A3 liggende [ 4960x3508 , 300dpi RGB , 8bit ]
@@ -25,6 +25,7 @@ Name[pt]=Desenho de apresentação A3 em Paisagem [ 4960x3508 , 300ppp RGB , 8-b
 Name[pt_BR]=Design de apresentação A3 paisagem [ 4960x3508, 300dpi RGB, 8bits ]
 Name[sk]=Dizajn prezentácia A3 krajinka [ 4960x3508 , 300dpi RGB , 8bit ]
 Name[sv]=Design presentation A3 landskap [ 4960x3508, 300 punkter/tum RGB, 8 bitar ]
+Name[tr]=A3 Yatay sunum tasarla [ 4960x3508 , 300dpi RGB , 8bit ]
 Name[uk]=Компонування презентації, A3, альбомна [4960⨯3508, 300 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign presentation A3 Landscape [ 4960x3508 , 300dpi RGB , 8bit ]xx
 Type=Link

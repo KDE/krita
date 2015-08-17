@@ -2,8 +2,9 @@
  * Copyright (C) 2009-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2015 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2015 Soma Schliszka <soma.schliszka@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -410,10 +411,12 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
                     int selectionColumnSpan;
                     if (!cell1.isValid() || !cell2.isValid()) {
                         // entire table
+                        visitor.visitTable(table, KoTextVisitor::Entirely);
                         selectionRow = selectionColumn = 0;
                         selectionRowSpan = table->rows();
                         selectionColumnSpan = table->columns();
                     } else {
+                        visitor.visitTable(table, KoTextVisitor::Partly);
                         d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
                     }
 
@@ -422,6 +425,7 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
                              selectionColumnSpan; c++) {
                             QTextTableCell cell = table->cellAt(r,c);
                             if (!cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                                visitor.visitTableCell(&cell, KoTextVisitor::Partly);
                                 recursivelyVisitSelection(cell.begin(), visitor);
                             } else {
                                 visitor.nonVisit();
@@ -432,8 +436,10 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
                         }
                     }
                 } else {
+                    visitor.visitTable(table, KoTextVisitor::Partly);
                     // And the selection is simple
                     if (!cell1.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                        visitor.visitTableCell(&cell1, KoTextVisitor::Entirely);
                         recursivelyVisitSelection(cell1.begin(), visitor);
                     } else {
                         visitor.nonVisit();
@@ -540,13 +546,19 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Variable"));
+    KUndo2Command *topCommand = cmd;
+    if (!cmd) {
+        topCommand = beginEditBlock(kundo2_i18n("Insert Variable"));
+    }
 
-    int startPosition = d->caret.position();
+    if (d->caret.hasSelection()) {
+        deleteChar(false, topCommand);
+    }
+    d->caret.beginEditBlock();
+
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
         d->newLine(0);
-        startPosition = d->caret.position();
     }
 
     QTextCharFormat format = d->caret.charFormat();
@@ -554,20 +566,14 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
+    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
 
-    int endPosition = d->caret.position();
-    d->caret.setPosition(startPosition);
-    d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, kundo2_i18n("Key Press"), format, format, false);
-    d->caret.clearSelection();
-
-    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, cmd);
-
+    d->caret.endEditBlock();
+ 
     if (!cmd) {
-        addCommand(insertInlineObjectCommand);
+        addCommand(topCommand);
+        endEditBlock();
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 
     emit cursorPositionChanged();
 }
@@ -661,7 +667,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
 //    }
 
     if (previous) {
-        if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        if (!d->caret.hasSelection() && d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
             movePosition(QTextCursor::PreviousCharacter);
             if (d->caret.block().length() <= 1) {
                 movePosition(QTextCursor::NextCharacter);
@@ -669,7 +675,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
                 return; // it becomes just a cursor movement;
         }
     } else {
-        if (d->caret.block().length() > 1) {
+        if (!d->caret.hasSelection() && d->caret.block().length() > 1) {
             QTextCursor tmpCursor = d->caret;
             tmpCursor.movePosition(QTextCursor::NextCharacter);
             if (tmpCursor.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
@@ -981,19 +987,20 @@ void KoTextEditor::insertTable(int rows, int columns)
     blockFormat.setProperty(KoParagraphStyle::HiddenByTable, true);
     cursor.setBlockFormat(blockFormat);
 
-    // Format the cells a bit.
+    // Define the initial cell format
+    QTextTableCellFormat format;
+    KoTableCellStyle cellStyle;
+    cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+    cellStyle.setPadding(5);
+    cellStyle.applyStyle(format);
+
+    // Apply formatting to all cells
     for (int row = 0; row < table->rows(); ++row) {
         for (int col = 0; col < table->columns(); ++col) {
             QTextTableCell cell = table->cellAt(row, col);
-            QTextTableCellFormat format;
-            KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setPadding(5);
-
-            cellStyle.applyStyle(format);
             cell.setFormat(format);
         }
     }

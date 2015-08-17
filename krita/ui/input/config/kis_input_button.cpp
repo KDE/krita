@@ -49,7 +49,7 @@ public:
 KisInputButton::KisInputButton(QWidget *parent)
     : KPushButton(parent), d(new Private(this))
 {
-    setIcon(koIcon("configure"));
+    setIcon(themedIcon("configure"));
     setText(i18nc("No input for this button", "None"));
     setCheckable(true);
 

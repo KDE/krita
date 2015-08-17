@@ -24,7 +24,7 @@
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QStringList;
 class KisDocument;

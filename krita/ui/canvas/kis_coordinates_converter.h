@@ -23,7 +23,7 @@
 #include <QTransform>
 #include <KoZoomHandler.h>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_types.h"
 
 #define EPSILON 1e-6

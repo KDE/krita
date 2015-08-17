@@ -213,6 +213,12 @@ KisDynamicSensorSP KisCurveOption::sensor(DynamicSensorType sensorType, bool act
     return 0;
 }
 
+
+bool KisCurveOption::isRandom() const
+{
+    return (bool) sensor(FUZZY, true);
+}
+
 bool KisCurveOption::isCurveUsed() const
 {
     return m_useCurve;

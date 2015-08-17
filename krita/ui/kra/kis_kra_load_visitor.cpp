@@ -92,6 +92,9 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
     m_store = store;
     m_name = name;
     m_store->pushDirectory();
+    if (m_name.startsWith("/")) {
+        m_name.remove(0, 1);
+    }
     if (!m_store->enterDirectory(m_name)) {
         dbgFile << "Could not enter directory" << m_name << ", probably an old-style file with 'part' added.";
         m_name = expandEncodedDirectory(m_name);
@@ -512,7 +515,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         if (!result) {
             m_errorMessages << i18n("Could not load raster selection %1.", location);
         }
-
+        pixelSelection->invalidateOutlineCache();
     }
 
     // Shape selection
@@ -528,7 +531,6 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         if (!result) {
             m_errorMessages << i18n("Could not load vector selection %1.", location);
         }
-
     }
     return result;
 }

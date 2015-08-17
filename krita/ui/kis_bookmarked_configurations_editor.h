@@ -20,7 +20,7 @@
 #define _KIS_BOOKMARKED_CONFIGURATIONS_EDITOR_H_
 
 #include <QDialog>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KisBookmarkedConfigurationsModel;
 class KisSerializableConfiguration;

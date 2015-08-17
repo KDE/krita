@@ -28,7 +28,6 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 
-#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColor.h>
@@ -77,17 +76,6 @@ void KisAbrBrush::setBrushTipImage(const QImage& image)
     setValid(true);
     setBrushType(MASK);
     setHasColor(false);
-
-#if QT_VERSION >= 0x040700
-    QByteArray ba = QByteArray::fromRawData((const char*)image.constBits(), image.byteCount());
-#else
-    QByteArray ba = QByteArray::fromRawData((const char*)image.bits(), image.byteCount());
-#endif
-
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(ba);
-    md5.addData(m_parentMD5);
-    setMD5(md5.result());
 
     KisBrush::setBrushTipImage(image);
 }

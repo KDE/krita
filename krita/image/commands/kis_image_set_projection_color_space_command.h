@@ -20,7 +20,6 @@
 #ifndef KIS_IMAGE_SET_PROJECTION_COLOR_SPACE_COMMAND_H_
 #define KIS_IMAGE_SET_PROJECTION_COLOR_SPACE_COMMAND_H_
 
-#include <krita_export.h>
 #include "kis_image_command.h"
 
 class KoColorSpace;

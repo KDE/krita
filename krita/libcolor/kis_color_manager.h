@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QByteArray>
 
-#include "kritalibcolor_export.h"
+#include "kritacolor_export.h"
 /**
  * @brief The KisColorManager class can be used as a cross-platform way to get the
  * display profile associated with a device.

@@ -19,7 +19,7 @@
 #ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 #define __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QIODevice;
 class KoPattern;

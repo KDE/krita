@@ -20,7 +20,7 @@ kde4_add_plugin(kritatiffimport ${kritatiffimport_PART_SRCS})
 
 
 
-target_link_libraries(kritatiffimport kritaui ${TIFF_LIBRARIES})
+target_link_libraries(kritatiffimport kritaui ${KDE4_KIO_LIBS} ${TIFF_LIBRARIES})
 
 install(TARGETS kritatiffimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -39,7 +39,7 @@ kde4_add_plugin(kritatiffexport ${kritatiffexport_PART_SRCS})
 
 
 
-target_link_libraries(kritatiffexport kritaui ${TIFF_LIBRARIES})
+target_link_libraries(kritatiffexport kritaui ${KDE4_KIO_LIBS} ${TIFF_LIBRARIES})
 
 install(TARGETS kritatiffexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

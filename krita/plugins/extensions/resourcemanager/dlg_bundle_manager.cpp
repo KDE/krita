@@ -57,10 +57,10 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
     connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->listInactive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
-    m_ui->bnAdd->setIcon(koIcon("arrow-right"));
+    m_ui->bnAdd->setIcon(themedIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
 
-    m_ui->bnRemove->setIcon(koIcon("arrow-left"));
+    m_ui->bnRemove->setIcon(themedIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
@@ -70,7 +70,6 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
 
     refreshListData();
 
-    m_ui->bnEditBundle->hide(); // this bunde editor is pretty broken. we can delete this line once fixed
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
 
     connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));

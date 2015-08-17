@@ -193,7 +193,7 @@ KoToolManager::Private::~Private()
 }
 
 // helper method.
-CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *controller, KoInputDevice device)
+CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *controller, const KoInputDevice &device)
 {
     QHash<QString, KoToolBase*> toolsHash;
     foreach(ToolHelper *tool, tools) {
@@ -597,7 +597,7 @@ void KoToolManager::Private::updateCursor(const QCursor &cursor)
     canvasData->canvas->canvas()->setCursor(cursor);
 }
 
-void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
+void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
 {
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
@@ -853,6 +853,12 @@ void KoToolManager::switchToolRequested(const QString & id)
     while (!d->canvasData->stack.isEmpty()) // switching means to flush the stack
         d->canvasData->stack.pop();
     d->switchTool(id, false);
+}
+
+void KoToolManager::switchInputDeviceRequested(const KoInputDevice &id)
+{
+    if (!d->canvasData) return;
+    d->switchInputDevice(id);
 }
 
 void KoToolManager::switchToolTemporaryRequested(const QString &id)

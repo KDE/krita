@@ -46,10 +46,7 @@
 
 #include <kundo2stack.h>
 
-#include <QTimer>
 #include <QUrl>
-#include <QPixmap>
-#include <QMap>
 #include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>
@@ -156,12 +153,12 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Footnote");
-    setParent(d->defaultParagraphStyle);
+    style->setParentStyle(d->defaultParagraphStyle);
     add(style);
     d->footNotesConfiguration->setDefaultNoteParagraphStyle(style);
     style = new KoParagraphStyle();
     style->setName("Endnote");
-    setParent(d->defaultParagraphStyle);
+    style->setParentStyle(d->defaultParagraphStyle);
     add(style);
     d->endNotesConfiguration->setDefaultNoteParagraphStyle(style);
     KoCharacterStyle *cStyle = new KoCharacterStyle();
@@ -396,22 +393,22 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
     //save note configuration in styles.xml
     if (d->footNotesConfiguration) {
         QBuffer xmlBufferFootNote;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
-        d->footNotesConfiguration->saveOdf(xmlWriter);
+        KoXmlWriter xmlWriter(&xmlBufferFootNote);
+        d->footNotesConfiguration->saveOdf(&xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferFootNote.data());
     }
 
     if (d->endNotesConfiguration) {
         QBuffer xmlBufferEndNote;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
-        d->endNotesConfiguration->saveOdf(xmlWriter);
+        KoXmlWriter xmlWriter(&xmlBufferEndNote);
+        d->endNotesConfiguration->saveOdf(&xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferEndNote.data());
     }
 
     if (d->bibliographyConfiguration) {
         QBuffer xmlBufferBib;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferBib);
-        d->bibliographyConfiguration->saveOdf(xmlWriter);
+        KoXmlWriter xmlWriter(&xmlBufferBib);
+        d->bibliographyConfiguration->saveOdf(&xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferBib.data());
     }
 
@@ -427,8 +424,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
     foreach(KoTextTableTemplate *textTableTemplate, d->tableTemplates) {
         QBuffer xmlBufferTableTemplate;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferTableTemplate);
-        textTableTemplate->saveOdf(xmlWriter, textSharedSavingData);
+        KoXmlWriter xmlWriter(&xmlBufferTableTemplate);
+        textTableTemplate->saveOdf(&xmlWriter, textSharedSavingData);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferTableTemplate.data());
     }
 }

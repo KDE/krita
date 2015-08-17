@@ -85,7 +85,7 @@ QMimeData* CollectionItemModel::mimeData(const QModelIndexList& indexes) const
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
     dataStream << m_shapeTemplateList[index.row()].id;
-    KoProperties *props = m_shapeTemplateList[index.row()].properties;
+    const KoProperties *props = m_shapeTemplateList[index.row()].properties;
 
     if(props)
         dataStream << props->store("shapes");
@@ -114,7 +114,7 @@ Qt::ItemFlags CollectionItemModel::flags(const QModelIndex& index) const
     return QAbstractListModel::flags(index);
 }
 
-KoProperties* CollectionItemModel::properties(const QModelIndex& index) const
+const KoProperties* CollectionItemModel::properties(const QModelIndex& index) const
 {
     if (!index.isValid() || index.row() > m_shapeTemplateList.count())
         return 0;

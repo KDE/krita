@@ -19,7 +19,7 @@
 #ifndef __KIS_PROCESSING_VISITOR_H
 #define __KIS_PROCESSING_VISITOR_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_shared.h"
 
 #include <QMutex>

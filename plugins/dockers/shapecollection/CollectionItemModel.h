@@ -42,7 +42,7 @@ struct KoCollectionItem
     QString name;
     QString toolTip;
     QIcon icon;
-    KoProperties* properties;
+    const KoProperties* properties;
 };
 
 class CollectionItemModel : public QAbstractListModel
@@ -63,7 +63,7 @@ class CollectionItemModel : public QAbstractListModel
         void setShapeTemplateList(const QList<KoCollectionItem>& newlist);
         QList<KoCollectionItem> shapeTemplateList () const { return m_shapeTemplateList; }
 
-        KoProperties* properties(const QModelIndex& index) const;
+        const KoProperties* properties(const QModelIndex& index) const;
 
     private:
         QList<KoCollectionItem> m_shapeTemplateList;

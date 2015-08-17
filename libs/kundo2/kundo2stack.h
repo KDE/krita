@@ -217,6 +217,9 @@ Q_SIGNALS:
     void undoTextChanged(const QString &undoActionText);
     void redoTextChanged(const QString &redoActionText);
 
+protected:
+    virtual void notifySetIndexChangedOneCommand();
+
 private:
     // from QUndoStackPrivate
     QList<KUndo2Command*> m_command_list;

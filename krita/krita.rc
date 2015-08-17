@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="74"
+version="75"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
@@ -92,15 +92,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="view_grid"/>
       <!--Action name="view_snap_to_grid"/-->
-      <Menu name="view_fast_grid_config">
-        <text>Grid Spacing</text>
-        <Action name="view_fast_grid_1x1"/>
-        <Action name="view_fast_grid_2x2"/>
-        <Action name="view_fast_grid_5x5"/>
-        <Action name="view_fast_grid_10x10"/>
-        <Action name="view_fast_grid_20x20"/>
-        <Action name="view_fast_grid_40x40"/>
-      </Menu>
       <Separator/>
       <Action name="view_toggle_perspective_grid"/>
       <Action name="view_clear_perspective_grid"/>
@@ -119,6 +110,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="imagecolorspaceconversion"/>
       <Action name="duplicate_image"/>
       <Separator/>
+      <Action name="trim_to_image"/>
       <Action name="resizeimagetolayer"/>
       <Action name="resizeimagetoselection"/>
       <Separator/>
@@ -218,6 +210,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="invert"/>
       <Action name="convert_to_vector_selection"/>
       <Action name="convert_shapes_to_vector_selection"/>
+      <Action name="convert_selection_to_shape"/>
       <Separator/>
       <Action name="feather"/>
       <Action name="similar"/>

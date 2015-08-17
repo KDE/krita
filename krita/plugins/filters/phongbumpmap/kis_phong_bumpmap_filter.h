@@ -47,6 +47,8 @@ public:
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+private:
+    //bool m_usenormalmap;
 };
 
 #endif  //KIS_PHONG_BUMPMAP_FILTER_H

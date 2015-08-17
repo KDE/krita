@@ -27,7 +27,7 @@
 #include "kis_global.h"
 #include "kis_indirect_painting_support.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 /**
  KisMask is the base class for all single channel
@@ -82,6 +82,8 @@ public:
     KisMask(const KisMask& rhs);
 
     virtual ~KisMask();
+
+    void setImage(KisImageWSP image);
 
     bool allowAsChild(KisNodeSP node) const;
 

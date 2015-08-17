@@ -51,14 +51,41 @@ extern "C" {
 #include "xcftools.h"
 #include "pixels.h"
 
-    extern struct Tile *
-    getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
-    struct rect want);
-
 #define GET_RED(x) (x >> RED_SHIFT)
 #define GET_GREEN(x) (x >> GREEN_SHIFT)
 #define GET_BLUE(x) (x >> BLUE_SHIFT)
 #define GET_ALPHA(x) (x >> ALPHA_SHIFT)
+}
+
+struct Layer {
+    KisLayerSP layer;
+    int depth;
+    KisMaskSP mask;
+};
+
+KisGroupLayerSP findGroup(const QVector<Layer> &layers, const Layer& layer, int i)
+{
+    for (; i < layers.size(); ++i) {
+        KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(const_cast<KisLayer*>(layers[i].layer.data()));
+        if (group && (layers[i].depth == layer.depth -1)) {
+            return group;
+        }
+    }
+    return 0;
+}
+
+void addLayers(const QVector<Layer> &layers, KisImageSP image, int depth)
+{
+    for(int i = 0; i < layers.size(); i++) {
+        const Layer &layer = layers[i];
+        if (layer.depth == depth) {
+            KisGroupLayerSP group = (depth == 0 ? image->rootLayer() : findGroup(layers, layer, i));
+            image->addNode(layer.layer, group);
+            if (layer.mask) {
+                image->addNode(layer.mask, layer.layer);
+            }
+        }
+    }
 }
 
 K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
@@ -202,11 +229,19 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
     // Create the image
     KisImageSP image = new KisImage(doc->createUndoStore(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
 
+    QVector<Layer> layers;
+    uint maxDepth = 0;
+
     // Read layers
     for (int i = 0; i < XCF.numLayers; ++i) {
+
+        Layer layer;
+
         xcfLayer& xcflayer = XCF.layers[i];
-        dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity;
+        dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity << "group:" << xcflayer.isGroup << xcflayer.pathLength;
         dbgFile << ppVar(xcflayer.dim.width) << ppVar(xcflayer.dim.height) << ppVar(xcflayer.dim.tilesx) << ppVar(xcflayer.dim.tilesy) << ppVar(xcflayer.dim.ntiles) << ppVar(xcflayer.dim.c.t) << ppVar(xcflayer.dim.c.l) << ppVar(xcflayer.dim.c.r) << ppVar(xcflayer.dim.c.b);
+
+        maxDepth = qMax(maxDepth, xcflayer.pathLength);
 
         bool isRgbA = false;
         // Select the color space
@@ -227,14 +262,21 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
         }
 
         // Create the layer
-        KisPaintLayerSP layer = new KisPaintLayer(image, QString::fromUtf8(xcflayer.name), xcflayer.opacity, colorSpace);
+        KisLayerSP kisLayer;
+        if (xcflayer.isGroup) {
+            kisLayer = new KisGroupLayer(image, QString::fromUtf8(xcflayer.name), xcflayer.opacity);
+        }
+        else {
+            kisLayer = new KisPaintLayer(image, QString::fromUtf8(xcflayer.name), xcflayer.opacity, colorSpace);
+        }
 
         // Set some properties
-        layer->setCompositeOp(layerModeG2K(xcflayer.mode));
-        layer->setVisible(xcflayer.isVisible);
-        layer->disableAlphaChannel(xcflayer.mode != GIMP_NORMAL_MODE);
+        kisLayer->setCompositeOp(layerModeG2K(xcflayer.mode));
+        kisLayer->setVisible(xcflayer.isVisible);
+        kisLayer->disableAlphaChannel(xcflayer.mode != GIMP_NORMAL_MODE);
 
-        image->addNode(layer.data(), image->rootLayer().data());
+        layer.layer = kisLayer;
+        layer.depth = xcflayer.pathLength;
 
         // Copy the data in the image
         initLayer(&xcflayer);
@@ -242,48 +284,52 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
         int left = xcflayer.dim.c.l;
         int top = xcflayer.dim.c.t;
 
-        // Copy the data;
-        for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
-            for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
-                rect want;
-                want.l = x + left;
-                want.t = y + top;
-                want.b = want.t + TILE_HEIGHT;
-                want.r = want.l + TILE_WIDTH;
-                Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
-                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
-                rgba* data = tile->pixels;
-                for (int v = 0; v < TILE_HEIGHT; ++v) {
-                    if (isRgbA) {
-                        // RGB image
-                        do {
-                            KoBgrTraits<quint8>::setRed(it->rawData(), GET_RED(*data));
-                            KoBgrTraits<quint8>::setGreen(it->rawData(), GET_GREEN(*data));
-                            KoBgrTraits<quint8>::setBlue(it->rawData(), GET_BLUE(*data));
-                            KoBgrTraits<quint8>::setOpacity(it->rawData(), quint8(GET_ALPHA(*data)), 1);
-                            ++data;
-                        } while (it->nextPixel());
-                    } else {
-                        // Grayscale image
-                        do {
-                            it->rawData()[0] = GET_RED(*data);
-                            it->rawData()[1] = GET_ALPHA(*data);
-                            ++data;
-                        } while (it->nextPixel());
+        if (!xcflayer.isGroup) {
+
+            // Copy the data;
+            for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
+                for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
+                    rect want;
+                    want.l = x + left;
+                    want.t = y + top;
+                    want.b = want.t + TILE_HEIGHT;
+                    want.r = want.l + TILE_WIDTH;
+                    Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                    KisHLineIteratorSP it = kisLayer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
+                    rgba* data = tile->pixels;
+                    for (int v = 0; v < TILE_HEIGHT; ++v) {
+                        if (isRgbA) {
+                            // RGB image
+                           do {
+                                KoBgrTraits<quint8>::setRed(it->rawData(), GET_RED(*data));
+                                KoBgrTraits<quint8>::setGreen(it->rawData(), GET_GREEN(*data));
+                                KoBgrTraits<quint8>::setBlue(it->rawData(), GET_BLUE(*data));
+                                KoBgrTraits<quint8>::setOpacity(it->rawData(), quint8(GET_ALPHA(*data)), 1);
+                                ++data;
+                            } while (it->nextPixel());
+                        } else {
+                            // Grayscale image
+                            do {
+                                it->rawData()[0] = GET_RED(*data);
+                                it->rawData()[1] = GET_ALPHA(*data);
+                                ++data;
+                            } while (it->nextPixel());
+                        }
+                        it->nextRow();
                     }
-                    it->nextRow();
                 }
             }
+
+            // Move the layer to its position
+            kisLayer->paintDevice()->setX(left);
+            kisLayer->paintDevice()->setY(top);
         }
-
-        // Move the layer to its position
-        layer->paintDevice()->setX(left);
-        layer->paintDevice()->setY(top);
-
         // Create the mask
         if (xcflayer.hasMask) {
             KisTransparencyMaskSP mask = new KisTransparencyMask();
-            mask->initSelection(layer);
+            layer.mask = mask;
+
+            mask->initSelection(kisLayer);
             for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
                 for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
                     rect want;
@@ -306,11 +352,15 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
             }
             mask->paintDevice()->setX(left);
             mask->paintDevice()->setY(top);
-            image->addNode(mask, layer);
+            image->addNode(mask, kisLayer);
         }
 
         dbgFile << xcflayer.pixels.tileptrs;
+        layers.append(layer);
+    }
 
+    for (int i = 0; i <= maxDepth; ++i) {
+        addLayers(layers, image, i);
     }
 
     doc->setCurrentImage(image);

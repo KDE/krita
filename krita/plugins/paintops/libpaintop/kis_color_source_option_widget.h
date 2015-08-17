@@ -21,6 +21,7 @@
 #define KIS_COLOR_SOURCE_OPTION_WIDGET_H
 
 #include "kis_paintop_option.h"
+#include <kritapaintop_export.h>
 
 /**
  * The brush option allows the user to select a particular brush

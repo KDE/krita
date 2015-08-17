@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportFilter.h"
 #include "KisFilterEntry.h"
 #include <KoStoreDevice.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "KisFilterChainLinkList.h"
 
 class KTemporaryFile;

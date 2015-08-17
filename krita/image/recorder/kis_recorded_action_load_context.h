@@ -19,7 +19,7 @@
 #ifndef _KIS_RECORDED_ACTION_LOAD_CONTEXT_H_
 #define _KIS_RECORDED_ACTION_LOAD_CONTEXT_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KoAbstractGradient;
 class KoPattern;

@@ -19,7 +19,7 @@
 #ifndef __KIS_SWAPPED_DATA_STORE_H
 #define __KIS_SWAPPED_DATA_STORE_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QMutex>
 #include <QByteArray>

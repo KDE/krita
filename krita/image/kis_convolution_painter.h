@@ -23,7 +23,7 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_image.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 template<class factory> class KisConvolutionWorker;
 

@@ -23,7 +23,7 @@
 #include <QScopedPointer>
 
 #include <kis_types.h>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_stroke_job.h"
 
 class KisStrokeStrategy;

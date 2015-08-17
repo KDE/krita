@@ -131,6 +131,7 @@
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_icon_utils.h"
 
 
 class StatusBarItem
@@ -369,9 +370,6 @@ KisViewManager::~KisViewManager()
     }
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
-    if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
-    }
     delete d;
 }
 
@@ -786,7 +784,7 @@ void KisViewManager::createActions()
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
-    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
+    d->actionAuthor  = new KSelectAction(themedIcon("im-user"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
@@ -1195,7 +1193,7 @@ void KisViewManager::showJustTheCanvas(bool toggled)
         }
     }
 
-    if (cfg.hideTitlebarFullscreen()) {
+    if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {
@@ -1242,17 +1240,6 @@ void KisViewManager::openResourcesDirectory()
 void KisViewManager::updateIcons()
 {
 #if QT_VERSION >= 0x040700
-    QColor background = mainWindow()->palette().background().color();
-
-    bool useDarkIcons = background.value() > 100;
-    QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
-
-    QStringList whitelist;
-    whitelist << "ToolBox" << "KisLayerBox";
-
-    QStringList blacklistedIcons;
-    blacklistedIcons << "editpath" << "artistictext-tool" << "view-choose";
-
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
@@ -1261,9 +1248,6 @@ void KisViewManager::updateIcons()
             if (titlebar) {
                 titlebar->updateIcons();
             }
-            if (!whitelist.contains(dock->objectName())) {
-                continue;
-            }
 
             QObjectList objects;
             objects.append(dock);
@@ -1271,16 +1255,7 @@ void KisViewManager::updateIcons()
                 QObject* object = objects.takeFirst();
                 objects.append(object->children());
 
-                QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
-                if (button && !button->icon().name().isEmpty()) {
-                    QString name = button->icon().name(); name = name.remove("dark_").remove("light_");
-
-                    if (!blacklistedIcons.contains(name)) {
-                        QString iconName = prefix + name;
-                        KIcon icon = koIcon(iconName.toLatin1());
-                        button->setIcon(icon);
-                    }
-                }
+                KisIconUtils::updateIconCommon(object);
             }
         }
     }

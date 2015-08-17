@@ -22,7 +22,7 @@
 #include <QScopedPointer>
 #include <QVector>
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 class QString;
 class QColor;

@@ -61,7 +61,8 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->inclinationSpinBox2, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->inclinationSpinBox3, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->inclinationSpinBox4, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    
+
+    connect(m_page->useNormalMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->diffuseReflectivityGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->specularReflectivityGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     
@@ -100,6 +101,7 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->diffuseReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_DIFFUSE_REFLECTIVITY) );
     m_page->specularReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_SPECULAR_REFLECTIVITY) );
     m_page->shinynessExponentKisSliderSpinBox->setValue( config->getInt(PHONG_SHINYNESS_EXPONENT) );
+    m_page->useNormalMap->setChecked( config->getBool(USE_NORMALMAP_IS_ENABLED) );
     m_page->diffuseReflectivityGroup->setChecked( config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED) );
     m_page->specularReflectivityGroup->setChecked( config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED) );
     // NOTE: Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
@@ -129,6 +131,8 @@ KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
 {
     KisFilterConfiguration *config = new KisFilterConfiguration("phongbumpmap", 2);
     config->setProperty(PHONG_HEIGHT_CHANNEL, m_page->heightChannelComboBox->currentText());
+    config->setProperty(USE_NORMALMAP_IS_ENABLED, m_page->useNormalMap->isChecked());
+    
     config->setProperty(PHONG_AMBIENT_REFLECTIVITY, m_page->ambientReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, m_page->diffuseReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY, m_page->specularReflectivityKisDoubleSliderSpinBox->value());

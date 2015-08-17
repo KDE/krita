@@ -19,7 +19,7 @@
 #ifndef __KIS_UPDATE_TIME_MONITOR_H
 #define __KIS_UPDATE_TIME_MONITOR_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 

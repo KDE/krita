@@ -19,7 +19,7 @@
 #ifndef KIS_IMAGE_VIEW_CONVERTER_H
 #define KIS_IMAGE_VIEW_CONVERTER_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include "kis_image.h"
 #include "kis_types.h"

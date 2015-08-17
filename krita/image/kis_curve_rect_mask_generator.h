@@ -19,7 +19,7 @@
 #ifndef _KIS_CURVE_RECT_MASK_GENERATOR_H_
 #define _KIS_CURVE_RECT_MASK_GENERATOR_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KisCubicCurve;
 class QDomElement;

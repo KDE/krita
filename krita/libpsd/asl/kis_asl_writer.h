@@ -19,7 +19,7 @@
 #ifndef __KIS_ASL_WRITER_H
 #define __KIS_ASL_WRITER_H
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 class QDomDocument;
 class QIODevice;

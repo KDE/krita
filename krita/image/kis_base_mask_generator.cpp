@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_brush_mask_applicator_factories.h"  // vc.h must come first
 #include "kis_mask_generator.h"
 
 #include <cmath>
@@ -31,7 +32,6 @@
 #include "kis_cubic_curve.h"
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_curve_rect_mask_generator.h"
-#include "kis_brush_mask_applicator_factories.h"
 
 
 KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id) : d(new Private), m_id(id)

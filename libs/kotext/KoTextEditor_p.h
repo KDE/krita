@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+* Copyright (C) 2015 Soma Schliszka <soma.schliszka@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,7 @@
 #include <QStack>
 #include <QTextBlock>
 #include <QTextDocument>
+#include <QTextTableCell>
 #include <QTimer>
 
 class KUndo2Command;
@@ -80,6 +82,12 @@ public:
 class KoTextVisitor
 {
 public:
+    /// The ObjectVisitingMode enum marks how was the visited object selected.
+    enum ObjectVisitingMode {
+        Partly,     /// The visited object (table, cell, ...) is just @b partly selected. (Eg. just one cell is selected in the visited table)
+        Entirely,   /// The visited object (table, cell, ...) is @b entirely selected.
+    };
+
     explicit KoTextVisitor(KoTextEditor *editor)
         : m_abortVisiting(false)
         , m_editor(editor)
@@ -92,6 +100,28 @@ public:
 
     virtual void visitFragmentSelection(QTextCursor &)
     {
+    }
+
+    /**
+     * This method allows to perform custom operation when the visitor reaches a QTextTable
+     * @param visitedTable pointer to the currenlty visited table object
+     * @param visitingMode flag, marks if the table is just partly visited or entirely
+     */
+    virtual void visitTable(QTextTable *visitedTable, ObjectVisitingMode visitingMode)
+    {
+        Q_UNUSED(visitedTable);
+        Q_UNUSED(visitingMode);
+    }
+
+    /**
+     * This method allows to perform custom operation when the visitor reaches a QTextTableCell
+     * @param visitedTable pointer to the currenlty visited cell object
+     * @param visitingMode flag, marks if the cell is just partly visited or entirely
+     */
+    virtual void visitTableCell(QTextTableCell *visitedCell, ObjectVisitingMode visitingMode)
+    {
+        Q_UNUSED(visitedCell);
+        Q_UNUSED(visitingMode);
     }
 
     // The default implementation calls visitFragmentSelection on each fragment.intersect.selection

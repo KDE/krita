@@ -22,7 +22,7 @@
 #include <QtGlobal>
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class KisBrushSizeOptionsWidget;
 

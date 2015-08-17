@@ -316,6 +316,7 @@ set(kritaui_LIB_SRCS
     KisView.cpp
 
     thememanager.cpp
+    kis_icon_utils.cpp
 
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
@@ -332,6 +333,8 @@ set(kritaui_LIB_SRCS
     kis_animation_frame_cache.cpp
     kis_animation_cache_populator.cpp
     kis_animation_exporter.cpp
+
+    kis_md5_generator.cpp
 )
 
 if(WIN32)
@@ -447,7 +450,8 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
-                              ${X11_Xinput_LIB})
+                              ${X11_Xinput_LIB}
+                              ${KDE4_KIO_LIBS} )
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
@@ -473,7 +477,7 @@ if(HAVE_OPENGL)
 
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms ${KDE4_KIO_LIBS} ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -487,6 +491,7 @@ if (APPLE)
 endif ()
 
 install( FILES
+    kritaui_export.h
     canvas/kis_canvas2.h
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h

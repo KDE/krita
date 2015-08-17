@@ -25,6 +25,7 @@
 
 #include "kis_types.h"
 
+#include <kritaimage_export.h>
 
 
 class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlane : public KisAbstractProjectionPlane

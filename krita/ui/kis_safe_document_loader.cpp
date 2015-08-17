@@ -145,7 +145,8 @@ void KisSafeDocumentLoader::delayedLoadStart()
         tempInfo.size() == m_d->initialFileSize) {
 
         m_d->doc.reset(KisPart::instance()->createDocument());
-        successfullyLoaded = m_d->doc->openUrl(m_d->temporaryPath);
+        successfullyLoaded = m_d->doc->openUrl(m_d->temporaryPath,
+                                               KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
     } else {
         qDebug() << "File was modified externally. Restarting.";
         qDebug() << ppVar(m_d->fileChangedFlag);

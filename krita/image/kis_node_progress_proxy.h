@@ -24,7 +24,7 @@
 
 #include <kis_types.h>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * This class implements \ref KoProgressProxy and allows node to report progress.

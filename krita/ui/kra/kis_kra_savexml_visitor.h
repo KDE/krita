@@ -25,7 +25,7 @@
 
 #include "kis_node_visitor.h"
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 {

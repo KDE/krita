@@ -21,7 +21,7 @@
 
 #include <knuminput.h>
 #include <kis_config_widget.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include <kis_debug.h>
 #include <QVector>
 

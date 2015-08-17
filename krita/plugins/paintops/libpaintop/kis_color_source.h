@@ -25,6 +25,7 @@
 #include <KoColor.h>
 
 #include <kis_types.h>
+#include <kritapaintop_export.h>
 
 class KoAbstractGradient;
 class KoColorTransformation;

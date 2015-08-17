@@ -658,15 +658,17 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
     return result;
 }
 
-bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode)
+bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode)
 {
     bool result = false;
 
     const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+    KisNodeSP oldRootNode;
 
     if (lastCommand &&
-        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args) &&
-        args->mode() == mode) {
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode) &&
+        args->mode() == mode &&
+        oldRootNode == currentNode) {
 
         args->saveContinuedState();
 
@@ -852,7 +854,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     }
 
     ToolTransformArgs fetchedArgs;
-    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode);
+    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode, currentNode);
 
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
@@ -900,7 +902,17 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     }
 
     m_strokeData = StrokeData(image()->startStroke(strategy));
-    clearDevices(m_transaction.rootNode(), m_workRecursively);
+
+    bool haveInvisibleNodes = clearDevices(m_transaction.rootNode(), m_workRecursively);
+    if (haveInvisibleNodes) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Invisible sublayers will also be transformed. Lock layers if you do not want them to be transformed "),
+                QIcon(), 4000, KisFloatingMessage::Low);
+    }
+
 
     Q_ASSERT(m_changesTracker.isEmpty());
     commitChanges();
@@ -955,15 +967,18 @@ void KisToolTransform::slotTrackerChangedConfig()
     updateOptionWidget();
 }
 
-void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
+bool KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
 {
-    if (!node->isEditable()) return;
+    bool haveInvisibleNodes = false;
+    if (!node->isEditable(false)) return haveInvisibleNodes;
+
+    haveInvisibleNodes = !node->visible(false);
 
     if (recursive) {
         // simple tail-recursive iteration
         KisNodeSP prevNode = node->lastChild();
         while(prevNode) {
-            clearDevices(prevNode, recursive);
+            haveInvisibleNodes |= clearDevices(prevNode, recursive);
             prevNode = prevNode->prevSibling();
         }
     }
@@ -977,6 +992,8 @@ void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
      * applicable nodes right in the beginning of the processing
      */
     m_strokeData.addClearedNode(node);
+
+    return haveInvisibleNodes;
 }
 
 void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)

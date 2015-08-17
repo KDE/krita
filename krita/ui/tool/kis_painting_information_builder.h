@@ -23,7 +23,7 @@
 #include <QVector>
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_paint_information.h"
 
 class KoPointerEvent;
@@ -63,7 +63,7 @@ private:
                                                   int timeElapsed);
 
     /**
-     * Defines how many descret samples are stored in a precomputed array
+     * Defines how many discrete samples are stored in a precomputed array
      * of different pressures.
      */
     static const int LEVEL_OF_PRESSURE_RESOLUTION;

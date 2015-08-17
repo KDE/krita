@@ -21,7 +21,7 @@
 #define KIS_PRESSURE_OPACITY_OPTION
 
 #include "kis_curve_option.h"
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class KisPainter;
 /**

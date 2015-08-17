@@ -25,7 +25,6 @@
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_image.h"
 #include <kis_selection.h>
-#include <KoUpdater.h>
 
 #include <gmic.h>
 #include "kis_gmic_synchronize_layers_command.h"
@@ -62,7 +61,6 @@ void KisGmicApplicator::preview()
     KisImageSignalVector emitSignals;
     emitSignals << ComplexSizeChangedSignal() << ModifiedSignal;
 
-
     m_applicator = new KisProcessingApplicator(m_image, m_node,
             KisProcessingApplicator::RECURSIVE | KisProcessingApplicator::NO_UI_UPDATES,
             emitSignals, m_actionName);
@@ -81,7 +79,7 @@ void KisGmicApplicator::preview()
     }
     else
     {
-        layerSize = QRect(0,0,m_image->width(), m_image->height());
+        layerSize = QRect(0, 0, m_image->width(), m_image->height());
     }
 
     // convert krita layers to gmic layers
@@ -147,7 +145,7 @@ void KisGmicApplicator::cancel()
 
 void KisGmicApplicator::finish()
 {
-    dbgPlugins << "aplicator " << m_applicator << " finished";
+    dbgPlugins << "Applicator " << m_applicator << " finished";
     if (m_applicator)
     {
         m_applicator->end();

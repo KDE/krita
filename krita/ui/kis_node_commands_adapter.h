@@ -24,7 +24,7 @@ class KoCompositeOp;
 class KUndo2MagicString;
 
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 #include <QObject>
 

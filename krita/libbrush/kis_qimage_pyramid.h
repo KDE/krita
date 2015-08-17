@@ -21,7 +21,7 @@
 
 #include <QImage>
 #include <QVector>
-#include <krita_export.h>
+#include <kritabrush_export.h>
 
 
 class BRUSH_EXPORT KisQImagePyramid

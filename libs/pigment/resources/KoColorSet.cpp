@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
-#include <QCryptographicHash>
 #include <QBuffer>
 #include <QByteArray>
 #include <QPainter>
@@ -118,9 +117,6 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 
     Q_ASSERT(m_data.size() != 0);
 
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(m_data);
-    setMD5(md5.result());
     return init();
 }
 
@@ -141,16 +137,6 @@ qint32 KoColorSet::nColors()
     return m_colors.count();
 }
 
-QByteArray KoColorSet::generateMD5() const
-{
-    if (!m_data.isEmpty()) {
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(m_data);
-        return md5.result();
-    }
-    return QByteArray();
-}
-
 bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
     QTextStream stream(dev);
@@ -165,6 +151,9 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
         else
             stream << entry.name << "\n";
     }
+
+    KoResource::saveToDevice(dev);
+
     return true;
 }
 

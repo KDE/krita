@@ -23,7 +23,7 @@ if (KDEPIMLIBS_FOUND)
    )
 endif ()
 
-target_link_libraries(calligra_semanticitem_contact ${KDE4_KDECORE_LIBS}  ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_contact ${KDE4_KFILE_LIBS} ${KDE4_KDECORE_LIBS} ${KORDF_LIBS})
 
 
 install(TARGETS calligra_semanticitem_contact  DESTINATION ${PLUGIN_INSTALL_DIR})

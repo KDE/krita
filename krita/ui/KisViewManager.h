@@ -28,7 +28,7 @@
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_types.h>
 
 #include "kis_floating_message.h"

@@ -23,10 +23,6 @@
 
 #include <klocale.h>
 
-#include <QColor>
-#include <QRectF>
-#include <QPixmap>
-
 KoCreateShapesToolFactory::KoCreateShapesToolFactory()
         : KoToolFactoryBase(KoCreateShapesTool_ID)
 {

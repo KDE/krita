@@ -19,7 +19,7 @@
 #ifndef _KIS_META_DATA_IO_BACKEND_H_
 #define _KIS_META_DATA_IO_BACKEND_H_
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 #include <KoGenericRegistry.h>
 
@@ -74,7 +74,7 @@ public:
      * @param ioDevice the device to where the metadata will be saved
      * @param headerType determine if an header must be prepend to the binary header, and if it does,
      *                   which type of header
-     * @return true if the save was successful
+     * @return true if the save was successful (XXX: actually, all backends always return true...)
      */
     virtual bool saveTo(Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const = 0;
 

@@ -30,8 +30,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <KoGenStyle.h>
-#include <KoStyleStack.h>
 #include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>

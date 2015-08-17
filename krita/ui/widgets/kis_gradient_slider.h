@@ -28,7 +28,7 @@
 #include <QList>
 #include <QPair>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KRITAUI_EXPORT KisGradientSlider : public QWidget
 {

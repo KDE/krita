@@ -20,6 +20,7 @@
 #define KIS_LS_STROKE_FILTER_H
 
 #include <QSharedPointer>
+#include <kritaimage_export.h>
 
 #include "kis_layer_style_filter.h"
 
@@ -27,7 +28,7 @@ struct psd_layer_effects_stroke;
 struct psd_layer_effects_context;
 
 
-class KDE_EXPORT KisLsStrokeFilter : public KisLayerStyleFilter
+class KRITAIMAGE_EXPORT KisLsStrokeFilter : public KisLayerStyleFilter
 {
 public:
     KisLsStrokeFilter();

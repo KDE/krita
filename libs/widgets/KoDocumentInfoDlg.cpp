@@ -37,10 +37,7 @@
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 
-#include <QLabel>
 #include <QLineEdit>
-#include <QTextEdit>
-#include <QPixmap>
 #include <QDateTime>
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem

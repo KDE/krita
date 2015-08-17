@@ -26,7 +26,7 @@
 #include <QObject>
 
 #include <KisDocument.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_shared.h>
 #include <kis_canvas2.h>
 

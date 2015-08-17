@@ -19,7 +19,6 @@
 #define KIS_SKETCHOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString SKETCH_PROBABILITY = "Sketch/probability";
 const QString SKETCH_DISTANCE_DENSITY = "Sketch/distanceDensity";

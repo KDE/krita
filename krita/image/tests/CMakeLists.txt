@@ -554,22 +554,12 @@ set(kis_node_query_path_test_SRCS kis_node_query_path_test.cpp )
 kde4_add_unit_test(KisNodeQueryPathTest TESTNAME krita-image-KisNodeQueryPathTest ${kis_node_query_path_test_SRCS})
 target_link_libraries(KisNodeQueryPathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
-
-########### next target ###############
-# action recorder results vary with the version of lcms
-if(LCMS2_FOUND)
-
-set(kis_action_recorder_test_SRCS kis_action_recorder_test.cpp )
-kde4_add_unit_test(KisActionRecorderTest TESTNAME krita-image-KisActionRecorderTest ${kis_action_recorder_test_SRCS})
-target_link_libraries(KisActionRecorderTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
 ########### next target ###############
 
 set(kis_processings_test_SRCS kis_processings_test.cpp )
 kde4_add_unit_test(KisProcessingsTest TESTNAME krita-image-KisProcessingsTest ${kis_processings_test_SRCS})
 target_link_libraries(KisProcessingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
-endif()
 
 ########### next target ###############
 
@@ -640,7 +630,7 @@ target_link_libraries(KisOnionSkinCompositorTest  ${KDE4_KDEUI_LIBS} kritaimage 
 ########### next target ###############
 
 set(kis_layer_styles_test_SRCS kis_layer_styles_test.cpp )
-kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-plugins-kis_layer_styles_test  ${kis_layer_styles_test_SRCS})
+kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-image-LayerStylesTest  ${kis_layer_styles_test_SRCS})
 target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############

@@ -182,6 +182,8 @@ void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInforma
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
+	//fixes Bug 338011
+	painter()->renderMirrorMask(rc, m_lineCacheDevice);
     }
     else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);

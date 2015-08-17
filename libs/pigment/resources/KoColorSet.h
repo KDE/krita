@@ -22,12 +22,9 @@
 #include <QObject>
 #include <QColor>
 #include <QVector>
-#include <QPixmap>
 
 #include "KoResource.h"
 #include "KoColor.h"
-
-class QPixmap;
 
 struct KoColorSetEntry {
     KoColor color;
@@ -87,10 +84,6 @@ public:
     void removeAt(quint32 index);
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
-
-protected:
-
-    virtual QByteArray generateMD5() const;
 
 private:
 

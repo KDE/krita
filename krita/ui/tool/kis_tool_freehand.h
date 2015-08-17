@@ -27,7 +27,7 @@
 #include "kis_distance_information.h"
 #include "kis_smoothing_options.h"
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KoPointerEvent;
 class KoCanvasBase;

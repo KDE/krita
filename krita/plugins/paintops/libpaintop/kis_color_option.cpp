@@ -49,7 +49,7 @@ KisColorOption::KisColorOption()
     setObjectName("KisColorOption");
 
     // ui
-    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), m_options->hsvWidget, SLOT(setEnabled(bool)));
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SLOT(setEnabled(bool)));
     // settings
     connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -91,12 +91,19 @@ void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting
     m_options->valueSlider->setValue(setting->getInt(COLOROP_VALUE));
     m_options->randomOpacityCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_OPACITY));
     m_options->randomHSVCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_HSV));
+    setEnabled(setting->getBool(COLOROP_USE_RANDOM_HSV));
     m_options->sampleInputCHBox->setChecked(setting->getBool(COLOROP_SAMPLE_COLOR));
     m_options->fillBackgroundCHBox->setChecked(setting->getBool(COLOROP_FILL_BG));
     m_options->colorPerParticleCHBox->setChecked(setting->getBool(COLOROP_COLOR_PER_PARTICLE));
     m_options->mixBgColorCHBox->setChecked(setting->getBool(COLOROP_MIX_BG_COLOR));
 }
 
+void KisColorOption::setEnabled(bool enabled)
+{
+    m_options->hueSlider->setEnabled(!enabled);
+    m_options->saturationSlider->setEnabled(!enabled);
+    m_options->valueSlider->setEnabled(!enabled);
+}
 
 bool KisColorOption::useRandomOpacity() const
 {

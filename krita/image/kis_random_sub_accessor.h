@@ -24,7 +24,7 @@
 
 #include "kis_random_accessor_ng.h"
 #include "kis_types.h"
-#include <krita_export.h>
+#include <kritaimage_export.h>
 #include "kis_shared.h"
 
 /**

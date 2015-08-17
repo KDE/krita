@@ -131,7 +131,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 
 QIcon KisGroupLayer::icon() const
 {
-    return koIcon("folder");
+    return themedIcon("folder");
 }
 
 void KisGroupLayer::setImage(KisImageWSP image)
@@ -144,7 +144,7 @@ KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
 {
     KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
 
-    if (prevGroup) {
+    if (prevGroup && canMergeAndKeepBlendOptions(prevLayer)) {
         KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
 
         KisNodeSP child, cloned;
@@ -353,13 +353,15 @@ struct ExactBoundsPolicy
 };
 
 template <class MetricPolicy>
-QRect collectRects(const KisNode *node, MetricPolicy policy, bool skipFirst = true)
+QRect collectRects(const KisNode *node, MetricPolicy policy)
 {
     QRect accumulator;
 
     const KisNode *child = node->firstChild();
     while (child) {
-        accumulator |= policy(child);
+        if (!qobject_cast<const KisMask*>(child)) {
+            accumulator |= policy(child);
+        }
         child = child->nextSibling();
     }
 

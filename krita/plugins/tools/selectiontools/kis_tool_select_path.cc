@@ -59,7 +59,6 @@ QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgetsList =
         DelegatedSelectPathTool::createOptionWidgets();
-    selectionOptionWidget()->disableAntiAliasSelectionOption();
     return widgetsList;
 }
 
@@ -126,6 +125,7 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setAntiAliasPolygonFill(m_selectionTool->antiAliasSelection());
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
         QTransform matrix;

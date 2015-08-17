@@ -22,7 +22,7 @@
 
 #include "kis_curve_option.h"
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 #include <KoColor.h>
 
 class KoColorTransformation;

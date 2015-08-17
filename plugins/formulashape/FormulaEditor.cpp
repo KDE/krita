@@ -42,7 +42,6 @@
 #include <klocale.h>
 #include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 
 FormulaEditor::FormulaEditor( FormulaCursor cursor, FormulaData* data )
 {

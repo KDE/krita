@@ -143,13 +143,6 @@ bool KoZipStore::doFinalize()
 bool KoZipStore::openWrite(const QString& name)
 {
     Q_D(KoStore);
-#if 0
-    // Prepare memory buffer for writing
-    m_byteArray.resize(0);
-    d->stream = new QBuffer(m_byteArray);
-    d->stream->open(QIODevice::WriteOnly);
-    return true;
-#endif
     d->stream = 0; // Don't use!
     return m_pZip->prepareWriting(name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
 }
@@ -202,12 +195,6 @@ bool KoZipStore::closeWrite()
     Q_D(KoStore);
     kDebug(30002) << "Wrote file" << d->fileName << " into ZIP archive. size" << d->size;
     return m_pZip->finishWriting(d->size);
-#if 0
-    if (!m_pZip->writeFile(d->fileName , "user", "group", d->size, m_byteArray.data()))
-        kWarning(30002) << "Failed to write " << d->fileName;
-    m_byteArray.resize(0);   // save memory
-    return true;
-#endif
 }
 
 bool KoZipStore::enterRelativeDirectory(const QString& dirName)

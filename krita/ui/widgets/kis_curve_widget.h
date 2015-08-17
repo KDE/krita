@@ -31,7 +31,7 @@
 #include <QPaintEvent>
 #include <QList>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QSpinBox;
 class KisCubicCurve;

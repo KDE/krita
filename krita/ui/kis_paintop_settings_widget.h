@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTOP_SETTINGS_WIDGET_H
 #define KIS_PAINTOP_SETTINGS_WIDGET_H
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_paintop_config_widget.h>
 
 class KisPaintOpOption;
@@ -62,6 +62,9 @@ private Q_SLOTS:
     void slotLockPropertiesDrop();
     void slotLockPropertiesSave();
     void slotEntryChecked(const QModelIndex &index);
+
+protected:
+    virtual void notifyPageChanged();
 
 private:
     

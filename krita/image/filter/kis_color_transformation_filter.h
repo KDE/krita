@@ -21,7 +21,7 @@
 #define _KIS_COLOR_TRANSFORMATION_FILTER_H_
 
 #include "kis_filter.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 /**
  * This is a base class for filters that implement a filter for
@@ -41,6 +41,8 @@ public:
      * Create the color transformation that will be applied on the device.
      */
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const = 0;
+
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

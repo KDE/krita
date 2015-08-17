@@ -23,6 +23,7 @@
 
 #include "kis_paintop_option.h"
 #include <kis_types.h>
+#include <kritapaintop_export.h>
 
 class KisPropertiesConfiguration;
 class QLabel;

@@ -62,12 +62,12 @@
 using namespace KRA;
 
 KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
-        : KisNodeVisitor()
-        , m_store(store)
-        , m_external(false)
-        , m_name(name)
-        , m_nodeFileNames(nodeFileNames)
-        , m_writer(new KisStorePaintDeviceWriter(store))
+    : KisNodeVisitor()
+    , m_store(store)
+    , m_external(false)
+    , m_name(name)
+    , m_nodeFileNames(nodeFileNames)
+    , m_writer(new KisStorePaintDeviceWriter(store))
 {
 }
 
@@ -91,9 +91,15 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
             return false;
         }
         m_store->pushDirectory();
-        m_store->enterDirectory(getLocation(layer, DOT_SHAPE_LAYER)) ;
-        result = shapeLayer->saveLayer(m_store);
-        m_store->popDirectory();
+        QString location = getLocation(layer, DOT_SHAPE_LAYER);
+        result = m_store->enterDirectory(location);
+        if (!result) {
+            m_errorMessages << i18n("Filed to open %1.", location);
+        }
+        else {
+            result = shapeLayer->saveLayer(m_store);
+            m_store->popDirectory();
+        }
     }
     else if (KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer)) {
         Q_UNUSED(fileLayer); // We don't save data for file layers, but we still want to save the masks.
@@ -216,11 +222,18 @@ bool KisKraSaveVisitor::visit(KisTransformMask *mask)
     QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
     if (m_store->open(location)) {
         QByteArray a = doc.toByteArray();
-        m_store->write(a, a.size());
-        m_store->close();
+        bool retval = true;
+        retval = (m_store->write(a) == a.size());
+        if (!retval) {
+            warnFile << "Could not write transform mask configuration";
+        }
+        if (!m_store->close()) {
+            warnFile << "Could not close store after writing transform mask configuration";
+            retval = false;
+        }
+        return retval;
     }
-
-    return true;
+    return false;
 }
 
 bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
@@ -374,33 +387,39 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     } else {
         return false;
     }
+
+    bool retval = true;
+
     if (selection->hasPixelSelection()) {
         KisPaintDeviceSP dev = selection->pixelSelection();
-
-        savePaintDevice(dev, getLocation(node, DOT_PIXEL_SELECTION));
+        if (!savePaintDevice(dev, getLocation(node, DOT_PIXEL_SELECTION))) {
+            m_errorMessages << i18n("Failed to save the pixel selection data for layer %1.", node->name());
+            retval = false;
+        }
     }
     if (selection->hasShapeSelection()) {
         m_store->pushDirectory();
-        m_store->enterDirectory(getLocation(node, DOT_SHAPE_SELECTION));
-        KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
-        if (!shapeSelection) {
-            m_store->popDirectory();
-            return false;
-        }
+        retval = m_store->enterDirectory(getLocation(node, DOT_SHAPE_SELECTION));
+        if (retval) {
+            KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+            if (!shapeSelection) {
+                retval = false;
+            }
 
-        if (!shapeSelection->saveSelection(m_store)) {
-            m_store->popDirectory();
-            return false;
+            if (retval && !shapeSelection->saveSelection(m_store)) {
+                m_errorMessages << i18n("Failed to save the vector selection data for layer %1.", node->name());
+                retval = false;
+            }
         }
         m_store->popDirectory();
     }
-    return true;
+    return retval;
 }
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
     KisNodeFilterInterface *filterInterface =
-        dynamic_cast<KisNodeFilterInterface*>(node);
+            dynamic_cast<KisNodeFilterInterface*>(node);
 
     KisSafeFilterConfigurationSP filter;
 
@@ -408,16 +427,16 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
         filter = filterInterface->filter();
     }
 
+    bool retval = false;
+
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {
             QString s = filter->toXML();
-            m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
-            m_store->close();
-            return true;
+            retval = (m_store->write(s.toUtf8(), qstrlen(s.toUtf8())) == qstrlen(s.toUtf8())); m_store->close();
         }
     }
-    return false;
+    return retval;
 }
 
 bool KisKraSaveVisitor::saveMetaData(KisNode* node)
@@ -438,16 +457,25 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
     dbgFile << "going to save " << backend->id() << ", " << backend->name() << " to " << location;
 
     QBuffer buffer;
-    backend->saveTo(metadata, &buffer);
+    // not that the metadata backends every return anything but true...
+    bool retval = backend->saveTo(metadata, &buffer);
 
-    QByteArray data = buffer.data();
-    dbgFile << "\t information size is" << data.size();
-
-    if (data.size() > 0 && m_store->open(location)) {
-        m_store->write(data,  data.size());
-        m_store->close();
+    if (!retval) {
+        m_errorMessages << i18n("The metadata backend failed to save the metadata for %1", node->name());
     }
-    return true;
+    else {
+        QByteArray data = buffer.data();
+        dbgFile << "\t information size is" << data.size();
+
+        if (data.size() > 0 && m_store->open(location)) {
+            retval = m_store->write(data,  data.size());
+            m_store->close();
+        }
+        if (!retval) {
+            m_errorMessages << i18n("Could not write for %1 metadata to the file.", node->name());
+        }
+    }
+    return retval;
 }
 
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)

@@ -19,7 +19,7 @@
 #ifndef KIS_CATEGORIZED_LIST_VIEW_H_
 #define KIS_CATEGORIZED_LIST_VIEW_H_
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <QListView>
 #include <QListWidget>
 

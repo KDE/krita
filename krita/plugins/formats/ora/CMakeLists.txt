@@ -12,7 +12,7 @@ set(kritaoraimport_PART_SRCS
 
 kde4_add_plugin(kritaoraimport ${kritaoraimport_PART_SRCS})
 
-target_link_libraries(kritaoraimport kritaui )
+target_link_libraries(kritaoraimport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritaoraimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -26,7 +26,7 @@ set(kritaoraexport_PART_SRCS
 kde4_add_plugin(kritaoraexport ${kritaoraexport_PART_SRCS})
 
 
-target_link_libraries(kritaoraexport kritaui )
+target_link_libraries(kritaoraexport kritaui ${KDE4_KIO_LIBS})
 
 install(TARGETS kritaoraexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

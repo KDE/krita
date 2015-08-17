@@ -26,7 +26,7 @@
 #include <kis_selection_component.h>
 #include <kis_types.h>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class KoStore;
 class KoShapeManager;

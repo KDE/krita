@@ -196,7 +196,7 @@ getBasicXcfInfo(void)
 {
   uint32_t ptr, data, layerfile ;
   PropType type ;
-  int i ;
+  int i, j ;
   
   xcfCheckspace(0,14+7*4,"(very short)");
   if( strcmp((char*)xcf_file,"gimp xcf file") == 0 )
@@ -207,7 +207,7 @@ getBasicXcfInfo(void)
   else
     FatalBadXCF(_("Not an XCF file at all (magic not recognized)"));
 
-  if( XCF.version < 0 || XCF.version > 2 ) {
+  if( XCF.version < 0 || XCF.version > 3 ) {
     fprintf(stderr,
             _("Warning: XCF version %d not supported (trying anyway...)\n"),
             XCF.version);
@@ -241,6 +241,7 @@ getBasicXcfInfo(void)
   for( i = 0 ; i < XCF.numLayers ; i++ ) {
     struct xcfLayer *L = XCF.layers + i ;
     ptr = xcfL(layerfile+4*(XCF.numLayers-1-i)) ;
+
     L->mode = GIMP_NORMAL_MODE ;
     L->opacity = 255 ;
     L->isVisible = 1 ;
@@ -250,6 +251,11 @@ getBasicXcfInfo(void)
     L->type = xcfL(ptr); ptr+=4 ;
     L->name = xcfString(ptr,&ptr);
     L->propptr = ptr ;
+
+    L->isGroup = 0;
+    L->pathLength = 0;
+    L->path = NULL;
+
     while( (type = xcfNextprop(&ptr,&data)) != PROP_END ) {
       switch(type) {
       case PROP_OPACITY:
@@ -270,6 +276,20 @@ getBasicXcfInfo(void)
       case PROP_MODE:
         L->mode = xcfL(data);
         break ;
+      case PROP_GROUP_ITEM:
+        L->isGroup = 1 ;
+        break;
+      case PROP_ITEM_PATH:
+        L->pathLength = (ptr - data - 2) / 4 ;
+
+        if ( L->pathLength != 0 ) {
+         
+          L->path = xcfmalloc( L->pathLength * sizeof(unsigned) ) ;
+          
+          for ( j = 0; j!=L->pathLength; j++ )
+            *(L->path + j) = (unsigned)xcfL(data + 4 * j);
+        }
+        break;
       default:
         /* Ignore unknown properties */
         break ;

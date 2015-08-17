@@ -39,7 +39,7 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
 {
 //     QFrame::setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 
-    m_acceptIcon  = koIcon("list-add");
+    m_acceptIcon  = themedIcon("list-add");
     m_buttons     = new QButtonGroup();
     m_popup       = new QFrame(0, Qt::Popup);
     m_arrowButton = new QToolButton();

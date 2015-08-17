@@ -24,7 +24,7 @@
 
 #include <QWidget>
 #include <QSlider>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 class QHBoxLayout;
 class QDoubleSpinBox;

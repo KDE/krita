@@ -99,7 +99,7 @@ void KisGmicWidget::createMainLayout()
         updateBtn->setEnabled(false);
     }
 
-    expandCollapseBtn->setIcon(koIcon("zoom-in"));
+    expandCollapseBtn->setIcon(themedIcon("zoom-in"));
     connect(expandCollapseBtn, SIGNAL(clicked()), this, SLOT(slotExpandCollapse()));
 
     connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
@@ -431,13 +431,13 @@ void KisGmicWidget::slotExpandCollapse()
     if (iconName == "zoom-in")
     {
         m_filterTree->expandAll();
-        expandCollapseBtn->setIcon(koIcon("zoom-out"));
+        expandCollapseBtn->setIcon(themedIcon("zoom-out"));
 
     }
     else if (iconName == "zoom-out")
     {
         m_filterTree->collapseAll();
-        expandCollapseBtn->setIcon(koIcon("zoom-in"));
+        expandCollapseBtn->setIcon(themedIcon("zoom-in"));
     }
 #endif
 }

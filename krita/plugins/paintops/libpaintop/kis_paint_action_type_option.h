@@ -19,7 +19,7 @@
 #define KIS_PAINT_ACTION_TYPE_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 class KisPaintActionWidget;
 

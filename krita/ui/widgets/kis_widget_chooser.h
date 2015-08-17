@@ -19,7 +19,7 @@
 #ifndef H_KIS_WIDGET_CHOOSER_H_
 #define H_KIS_WIDGET_CHOOSER_H_
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <QList>
 #include <QIcon>
 #include <QFrame>

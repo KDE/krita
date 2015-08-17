@@ -39,7 +39,7 @@
 * especially for development versions of Calligra.
 * If you use that macro directly for a file format (e.g. OASIS Open Document)
 * or for a protocol (e.g. http) be careful that it is appropriate.
-* (Fictional) example: "2.8 Pre-Alpha"
+* (Fictional) example: "2.8 Alpha"
 */
 #define CALLIGRA_VERSION_STRING "@CALLIGRA_VERSION_STRING@"
 

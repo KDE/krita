@@ -19,7 +19,6 @@
 #define KIS_SPRAYOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 const QString SPRAY_DIAMETER = "Spray/diameter";
 const QString SPRAY_ASPECT = "Spray/aspect";

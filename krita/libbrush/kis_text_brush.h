@@ -23,7 +23,7 @@
 #include <QFont>
 
 #include "kis_brush.h"
-#include "krita_export.h"
+#include "kritabrush_export.h"
 #include "kis_gbr_brush.h"
 
 class KisTextBrushesPipe;

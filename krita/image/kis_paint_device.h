@@ -32,7 +32,7 @@
 #include "kis_shared.h"
 #include "kis_default_bounds_base.h"
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class KUndo2Command;
 class QRect;
@@ -137,7 +137,7 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     /**
      * the default bounds rect of the paint device
@@ -150,7 +150,7 @@ public:
     void move(qint32 x, qint32 y);
 
     /**
-     * Convenience method for the above. Can be overridden in subclasses.
+     * Convenience method for the above.
      */
     virtual void move(const QPoint& pt);
 
@@ -184,7 +184,7 @@ public:
      * rect is united with the defaultBounds()->bounds() value
      * (the size of the image, usually).
      */
-    virtual QRect extent() const;
+    QRect extent() const;
 
     /// Convience method for the above
     void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
@@ -232,7 +232,7 @@ public:
      * For tiled data manager, it region will consist of a number
      * of rects each corresponding to a tile.
      */
-    virtual QRegion region() const;
+    QRegion region() const;
 
     /**
      * Cut the paint device down to the specified rect. If the crop
@@ -303,6 +303,12 @@ public:
      * x,y shifts, colorspace and will share pixels inside \a rect.
      * After calling this function:
      * (this->extent() >= this->exactBounds() == rect).
+     *
+     * Rule of thumb:
+     *
+     * "Use makeCloneFrom() or makeCloneFromRough() if and only if you
+     * are the only owner of the destination paint device and you are
+     * 100% sure no other thread has access to it"
      */
     void makeCloneFrom(KisPaintDeviceSP src, const QRect &rect);
 
@@ -313,6 +319,12 @@ public:
      * of pixels. Actual copy area will be a bigger - it will
      * be aligned by tiles borders. So after calling this function:
      * (this->extent() == this->exactBounds() >= rect).
+     *
+     * Rule of thumb:
+     *
+     * "Use makeCloneFrom() or makeCloneFromRough() if and only if you
+     * are the only owner of the destination paint device and you are
+     * 100% sure no other thread has access to it"
      */
     void makeCloneFromRough(KisPaintDeviceSP src, const QRect &minimalRect);
 
@@ -459,7 +471,7 @@ public:
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
      * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
+    void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -492,7 +504,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile,
+    QImage convertToQImage(const KoColorProfile *  dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
@@ -506,7 +518,7 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect()) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -517,14 +529,14 @@ public:
      * @param maxh: maximum height
      * @param rect: only this rect will be used for the thumbnail
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
+    QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh,
+    QImage createThumbnail(qint32 maxw, qint32 maxh,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
@@ -670,12 +682,12 @@ public:
     /**
      * Return the number of bytes a pixel takes.
      */
-    virtual quint32 pixelSize() const;
+    quint32 pixelSize() const;
 
     /**
      * Return the number of channels a pixel takes
      */
-    virtual quint32 channelCount() const;
+    quint32 channelCount() const;
 
     /**
      * Create a keyframe channel for the content on this device.
@@ -698,21 +710,21 @@ public:
      * Add the specified rect to the parent layer's set of dirty rects
      * (if there is a parent layer)
      */
-    virtual void setDirty(const QRect & rc);
+    void setDirty(const QRect & rc);
 
     /**
      *  Add the specified region to the parent layer's dirty region
      *  (if there is a parent layer)
      */
-    virtual void setDirty(const QRegion & region);
+    void setDirty(const QRegion & region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
      *  as parent layer.
      */
-    virtual void setDirty();
+    void setDirty();
 
-    virtual void setDirty(const QVector<QRect> rects);
+    void setDirty(const QVector<QRect> rects);
 
     /**
      * Called by KisTransactionData when it thinks current time should

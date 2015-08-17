@@ -19,11 +19,12 @@
 #ifndef __KIS_CURRENT_OUTLINE_FETCHER_H
 #define __KIS_CURRENT_OUTLINE_FETCHER_H
 
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 
 #include <QFlags>
 #include <QScopedPointer>
 #include <QPainterPath>
+#include <QPointF>
 
 class KisPaintInformation;
 class KisPaintOpSettings;
@@ -51,7 +52,8 @@ public:
                               const KisPaintOpSettings *settings,
                               const QPainterPath &originalOutline,
                               qreal additionalScale = 1.0,
-                              qreal additionalRotation = 0.0) const;
+                              qreal additionalRotation = 0.0,
+                              bool tilt = false, qreal tiltcenterx = 1.0, qreal tiltcentery = 1.0) const;
 
 private:
     struct Private;

@@ -20,7 +20,7 @@
 #define KIS_TOOL_BUTTON_H
 
 #include <QToolButton>
-#include <krita_export.h>
+#include <kritaui_export.h>
 
 /** This class exists to work around a bug in QToolButton when in
   * MenuPopupButton mode. The correct (mouse) behavior is to display

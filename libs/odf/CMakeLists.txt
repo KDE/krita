@@ -14,7 +14,6 @@ set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
     KoOdfManifestEntry.cpp
-    KoDom.cpp
     KoDocumentInfo.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
@@ -60,7 +59,7 @@ kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 add_dependencies(koodf writeodf.h-target)
 
 target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${QT_QTXML_LIBRARY})
 if( QCA2_FOUND )
     target_link_libraries(koodf ${QCA2_LIBRARIES})
 endif()
@@ -76,7 +75,6 @@ install( FILES
     KoOdf.h
     KoXmlNS.h
     KoOdfManifestEntry.h
-    KoDom.h
     KoGenStyle.h
     KoGenStyles.h
     KoFontFace.h

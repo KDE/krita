@@ -21,7 +21,7 @@
 #ifndef KIS_MAIN_WINDOW_H
 #define KIS_MAIN_WINDOW_H
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 #include <QPointer>
 
@@ -443,6 +443,7 @@ private:
 
 private slots:
     void initializeGeometry();
+    void showManual();
 
 private:
     class Private;

@@ -21,7 +21,7 @@
 #define _KIS_FILTER_MANAGER_
 
 #include <QObject>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_types.h>
 
 class KisViewManager;

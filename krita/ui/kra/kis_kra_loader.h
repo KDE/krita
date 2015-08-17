@@ -31,7 +31,7 @@ class KoColorSpace;
 class KisPaintingAssistant;
 
 #include <kis_types.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 /**
  * Load old-style 1.x .kra files. Updated for 2.0, let's try to stay
  * compatible. But 2.0 won't be able to save 1.x .kra files unless we

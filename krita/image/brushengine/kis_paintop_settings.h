@@ -20,7 +20,7 @@
 #define KIS_PAINTOP_SETTINGS_H_
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QImage>
 #include <QScopedPointer>
@@ -129,7 +129,9 @@ public:
     enum OutlineMode {
         CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
         CursorIsCircleOutline,
-        CursorNoOutline
+        CursorNoOutline,
+        CursorTiltOutline,
+        CursorColorOutline
     };
 
     /**

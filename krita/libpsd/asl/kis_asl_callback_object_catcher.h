@@ -26,7 +26,7 @@
 
 #include <KoAbstractGradient.h>
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 class KoPattern;
 

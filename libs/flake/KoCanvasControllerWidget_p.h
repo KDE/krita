@@ -45,10 +45,6 @@
 
 #include <KoConfig.h>
 
-#ifdef HAVE_OPENGL
-#include <QGLWidget>
-#endif
-
 
 class KoCanvasControllerWidget::Private
 {

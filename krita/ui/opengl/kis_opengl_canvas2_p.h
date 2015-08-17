@@ -186,6 +186,8 @@ namespace Sync {
     static kis_glGetSynciv k_glGetSynciv = 0;
     typedef void (*kis_glDeleteSync)(GLsync);
     static kis_glDeleteSync k_glDeleteSync = 0;
+    typedef GLenum (*kis_glClientWaitSync)(GLsync,GLbitfield,GLuint64);
+    static kis_glClientWaitSync k_glClientWaitSync = 0;
 
     //Initialise the function pointers for glFenceSync and glGetSynciv
     //Note: Assumes a current OpenGL context.
@@ -194,23 +196,26 @@ namespace Sync {
 #if defined Q_OS_WIN
         if (KisOpenGL::supportsFenceSync()) {
 #ifdef ENV64BIT
-            k_glFenceSync = (kis_glFenceSync)ctx->getProcAddress("glFenceSync");
-            k_glGetSynciv = (kis_glGetSynciv)ctx->getProcAddress("glGetSynciv");
+            k_glFenceSync  = (kis_glFenceSync)ctx->getProcAddress("glFenceSync");
+            k_glGetSynciv  = (kis_glGetSynciv)ctx->getProcAddress("glGetSynciv");
             k_glDeleteSync = (kis_glDeleteSync)ctx->getProcAddress("glDeleteSync");
 #else
-            k_glFenceSync = (kis_glFenceSync)ctx->getProcAddress("glFenceSyncARB");
-            k_glGetSynciv = (kis_glGetSynciv)ctx->getProcAddress("glGetSyncivARB");
+            k_glFenceSync  = (kis_glFenceSync)ctx->getProcAddress("glFenceSyncARB");
+            k_glGetSynciv  = (kis_glGetSynciv)ctx->getProcAddress("glGetSyncivARB");
             k_glDeleteSync = (kis_glDeleteSync)ctx->getProcAddress("glDeleteSyncARB");
 #endif
+            k_glClientWaitSync = (kis_glClientWaitSync)ctx->getProcAddress("glClientWaitSync");
         }
 #elif defined Q_OS_LINUX
         if (KisOpenGL::supportsFenceSync()) {
-            k_glFenceSync = (kis_glFenceSync)ctx->getProcAddress("glFenceSync");
-            k_glGetSynciv = (kis_glGetSynciv)ctx->getProcAddress("glGetSynciv");
+            k_glFenceSync  = (kis_glFenceSync)ctx->getProcAddress("glFenceSync");
+            k_glGetSynciv  = (kis_glGetSynciv)ctx->getProcAddress("glGetSynciv");
             k_glDeleteSync = (kis_glDeleteSync)ctx->getProcAddress("glDeleteSync");
+            k_glClientWaitSync = (kis_glClientWaitSync)ctx->getProcAddress("glClientWaitSync");
         }
 #endif
-        if (k_glFenceSync == 0 || k_glGetSynciv == 0 || k_glDeleteSync == 0) {
+        if (k_glFenceSync  == 0 || k_glGetSynciv      == 0 ||
+            k_glDeleteSync == 0 || k_glClientWaitSync == 0) {
             qWarning("Could not find sync functions, disabling sync notification.");
         }
     }
@@ -220,7 +225,7 @@ namespace Sync {
         if(k_glFenceSync) {
             GLsync sync = k_glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
             if (KisOpenGL::needsFenceWorkaround()) {
-                glClientWaitSync(sync, 0, 1);
+                k_glClientWaitSync(sync, 0, 1);
             }
             return sync;
         }

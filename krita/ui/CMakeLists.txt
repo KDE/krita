@@ -449,10 +449,11 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${X11_X11_LIB}
-                              ${X11_Xinput_LIB}
-                              KF5::GlobalAccel # for KisShortcutEditWidget.cpp
-                              KF5::KDELibs4Support)
+target_link_libraries(kritaui KF5::GlobalAccel KF5::KDELibs4Support)
+if (NOT WIN32)
+  target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
+endif()
+
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
@@ -464,11 +465,11 @@ else()
 endif ()
 
 if(HAVE_OPENGL)
-    target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL Qt5::X11Extras ${OPENEXR_LIBRARIES})
+    target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})
 
-    # activate workaround for the VSync disable
+    # Add VSync disable workaround
     if(NOT WIN32)
-      target_link_libraries(kritaui ${CMAKE_DL_LIBS})
+      target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
     endif()
 
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};Qt5::OpenGL")

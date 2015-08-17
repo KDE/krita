@@ -232,10 +232,11 @@ void KisOpenGLCanvas2::initializeGL()
 //            }
 //        }
 //    }
+
     KisConfig cfg;
     qDebug() << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
     int glVersion = KisOpenGL::initializeContext(context());
-    qDebug() << "OpenGL: Context gives version" << glVersion;
+    qDebug() << "OpenGL: Version found" << glVersion;
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
@@ -245,6 +246,28 @@ void KisOpenGLCanvas2::initializeGL()
     initializeDisplayShader();
 
     Sync::init();
+
+
+
+    /**
+     * Warn about Intel's broken video drivers
+     */
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+#ifndef GL_RENDERER
+#  define GL_RENDERER 0x1F01
+#endif
+    QString renderer = QString((const char*)glGetString(GL_RENDERER));
+    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Warning"),
+                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                      "If you experience problems like a black or blank screen,"
+                                      "please update your display driver to the latest version.\n\n"
+                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
+        cfg.writeEntry("WarnedAboutIntel", true);
+    }
+#endif
+
 
     d->canvasInitialized = true;
 }

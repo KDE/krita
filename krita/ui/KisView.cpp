@@ -56,6 +56,8 @@
 #include <QToolBar>
 #include <QUrl>
 #include <QStatusBar>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -268,23 +270,6 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
     d->canvas = new KisCanvas2(d->viewConverter, resourceManager, this, document->shapeController());
-
-/**
- * Warn about Intel's broken video drivers
- */
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-    QString renderer((const char*)glGetString(GL_RENDERER));
-    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Warning"),
-                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a black or blank screen,"
-                                      "please update your display driver to the latest version.\n\n"
-                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
-        cfg.writeEntry("WarnedAboutIntel", true);
-    }
-
-#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
 
     grp.writeEntry("CreatingCanvas", false);
     grp.sync();

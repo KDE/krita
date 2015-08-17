@@ -235,6 +235,11 @@ public:
         if (save) {
             QFileInfo fileInfo(resource->filename());
 
+            QDir d(fileInfo.path());
+            if (!d.exists()) {
+                d.mkdir(fileInfo.path());
+            }
+
             if (fileInfo.exists()) {
                 QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
                 kDebug() << "fileName is " << filename;

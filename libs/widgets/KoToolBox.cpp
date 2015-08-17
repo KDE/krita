@@ -44,6 +44,26 @@
 
 #define BUTTON_MARGIN 10
 
+static int buttonSize(int screen)
+{
+    QRect rc = qApp->desktop()->screenGeometry(screen);
+    if (rc.width() <= 1024) {
+        return 12;
+    }
+    else if (rc.width() <= 1377) {
+        return 14;
+    }
+    else  if (rc.width() <= 1920 ) {
+        return 16;
+    }
+    else if (rc.width() <= 2048) {
+        return 32;
+    }
+    else {
+        return 48;
+    }
+}
+
 class KoToolBox::Private
 {
 public:
@@ -116,7 +136,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     button->setCheckable(true);
     button->setAutoRaise(true);
 
-    int toolbuttonSize = 14; // QApplication::style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, 0);
+    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
     KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
     button->setIconSize(QSize(iconSize, iconSize));
@@ -305,7 +325,7 @@ void KoToolBox::slotContextIconSize()
 void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 {
 
-    int toolbuttonSize = 16; //QApplication::style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, 0);
+    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
 
     if (!d->contextSize) {
 
@@ -326,7 +346,6 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
             action->setCheckable(true);
         }
     }
-
     KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
     toolbuttonSize = cfg.readEntry("iconSize", toolbuttonSize);
 

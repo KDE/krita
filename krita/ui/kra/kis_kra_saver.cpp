@@ -186,8 +186,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
 
     if (!autosave) {
         KisPaintDeviceSP dev = image->projection();
-        QString id = dev->colorSpace()->id();
-        if (!(id.contains("RGB") || id.contains("GRAY"))) {
+        if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
             dev = new KisPaintDevice(*dev.data());
             KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
             delete cmd;

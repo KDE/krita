@@ -86,6 +86,11 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 
 }
 
+bool colorSpaceIdSupported(const QString &id)
+{
+    return id == "RGBA" || id == "RGBA16" ||
+        id == "GRAYA" || id == "GRAYAU16" || id == "GRAYA16";
+}
 
 QPair<QString, QString> getColorSpaceForColorType(int color_type, int color_nb_bits)
 {
@@ -1250,6 +1255,10 @@ void KisPNGConverter::progress(png_structp png_ptr, png_uint_32 row_number, int 
     //     setProgress(row_number);
 }
 
+bool KisPNGConverter::isColorSpaceSupported(const KoColorSpace *cs)
+{
+    return colorSpaceIdSupported(cs->id());
+}
 
 #include "kis_png_converter.moc"
 

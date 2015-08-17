@@ -32,6 +32,7 @@
 
 class KoStore;
 class KisDocument;
+class KoColorSpace;
 
 
 namespace KisMetaData
@@ -133,6 +134,8 @@ public:
     KisImageWSP image();
 
     static bool saveDeviceToStore(const QString &filename, KisImageWSP image, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
+
+    static bool isColorSpaceSupported(const KoColorSpace *cs);
 
 public Q_SLOTS:
     virtual void cancel();

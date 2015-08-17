@@ -126,14 +126,14 @@ public:
      * @param interlace set to true if you want to generate an interlaced png
      * @param alpha set to true if you want to save the alpha channel
      */
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
-    KisImageBuilder_Result buildFile(QIODevice*, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(const KUrl& uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP image();
 
-    static bool saveDeviceToStore(const QString &filename, KisImageWSP image, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
+    static bool saveDeviceToStore(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
 
     static bool isColorSpaceSupported(const KoColorSpace *cs);
 

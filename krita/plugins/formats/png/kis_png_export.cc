@@ -240,7 +240,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(url, image, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KisImportExportFilter::OK;

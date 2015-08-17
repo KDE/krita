@@ -819,7 +819,7 @@ KisImageWSP KisPNGConverter::image()
     return m_image;
 }
 
-bool KisPNGConverter::saveDeviceToStore(const QString &filename, KisImageWSP image, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData)
+bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData)
 {
     if (store->open(filename)) {
         KoStoreDevice io(store);
@@ -838,7 +838,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, KisImageWSP ima
         options.interlace = false;
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
-        bool success = pngconv.buildFile(&io, image, dev, annotIt, annotIt, options, metaDataStore);
+        bool success = pngconv.buildFile(&io, imageRect, xRes, yRes, dev, annotIt, annotIt, options, metaDataStore);
         if (success != KisImageBuilder_RESULT_OK) {
             dbgFile << "Saving PNG failed:" << filename;
             delete metaDataStore;
@@ -858,7 +858,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, KisImageWSP ima
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     dbgFile << "Start writing PNG File " << uri;
     if (uri.isEmpty())
@@ -868,17 +868,15 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP i
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open a QIODevice for writing
     QFile *fp = new QFile(uri.toLocalFile());
-    KisImageBuilder_Result result = buildFile(fp, image, device, annotationsStart, annotationsEnd, options, metaData);
+    KisImageBuilder_Result result = buildFile(fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
     return result;
     // TODO: if failure do            KIO::del(uri); // async
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
-
-
     if (!iodevice->open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";
         return (KisImageBuilder_RESULT_FAILURE);
@@ -887,19 +885,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!device)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    if (!image)
-        return KisImageBuilder_RESULT_EMPTY;
-
-    // Setup the writing callback of libpng
-    int height = image->height();
-    int width = image->width();
-
     if (!options.alpha) {
         KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
         KoColor c(options.transparencyFillColor, device->colorSpace());
-        tmp->fill(QRect(0, 0, width, height), c);
+        tmp->fill(imageRect, c);
         KisPainter gc(tmp);
-        gc.bitBlt(QPoint(0, 0), device, QRect(0, 0, width, height));
+        gc.bitBlt(imageRect.topLeft(), device, imageRect);
         gc.end();
         device = tmp;
     }
@@ -965,7 +956,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
 
-        KisSequentialIterator it(device, image->bounds());
+        KisSequentialIterator it(device, imageRect);
 
         bool toomuchcolor = false;
         do {
@@ -1011,8 +1002,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
     png_set_IHDR(png_ptr, info_ptr,
-                 width,
-                 height,
+                 imageRect.width(),
+                 imageRect.height(),
                  color_nb_bits,
                  color_type, interlacetype,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
@@ -1137,7 +1128,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
 #endif
-    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(image->xRes()) * 100.0, CM_TO_POINT(image->yRes()) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(xRes) * 100.0, CM_TO_POINT(yRes) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
 
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
@@ -1153,12 +1144,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
     // Fill the data structure
-    png_byte** row_pointers = new png_byte*[height];
-    for (int y = 0; y < height; y++) {
+    png_byte** row_pointers = new png_byte*[imageRect.height()];
+    for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {
 
-        KisHLineConstIteratorSP it = device->createHLineConstIteratorNG(0, y, width);
+        KisHLineConstIteratorSP it = device->createHLineConstIteratorNG(imageRect.x(), y, imageRect.width());
 
-        row_pointers[y] = new png_byte[width*device->pixelSize()];
+        row_pointers[y] = new png_byte[imageRect.width() * device->pixelSize()];
 
         switch (color_type) {
         case PNG_COLOR_TYPE_GRAY:
@@ -1231,7 +1222,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
     // Free memory
     png_destroy_write_struct(&png_ptr, &info_ptr);
-    for (int y = 0; y < height; y++) {
+    for (int y = 0; y < imageRect.height(); y++) {
         delete[] row_pointers[y];
     }
     delete[] row_pointers;

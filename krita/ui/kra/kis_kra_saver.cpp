@@ -192,7 +192,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             delete cmd;
         }
 
-        KisPNGConverter::saveDeviceToStore("mergedimage.png", image, dev, store);
+        KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
     }
 
     saveAssistants(store, uri,external);

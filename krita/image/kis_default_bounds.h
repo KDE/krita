@@ -37,8 +37,6 @@ public:
     KisDefaultBounds(KisImageWSP image = 0);
     virtual ~KisDefaultBounds();
 
-    void setImage(KisImageWSP image);
-
     QRect bounds() const;
     bool wrapAroundMode() const;
 

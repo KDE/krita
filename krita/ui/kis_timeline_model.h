@@ -55,6 +55,8 @@ public:
     void beginMacro(const KUndo2MagicString &macroName);
     void endMacro();
 
+    int totalLength();
+
 public: // KisNodeModel
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController);
 

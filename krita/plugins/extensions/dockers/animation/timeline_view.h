@@ -53,6 +53,7 @@ protected slots:
 
 private slots:
     void rowsChanged();
+    void scroll();
 
 private:
     TimelineWidget *m_timelineWidget;
@@ -62,6 +63,7 @@ private:
     bool m_isDragging;
     float m_dragStart;
     float m_dragOffset;
+    int m_frameWidth;
 
     int getTime(const QModelIndex &channelIndex, int index) const;
     int findKeyframe(const QModelIndex &channelIndex, int x, bool exact) const;

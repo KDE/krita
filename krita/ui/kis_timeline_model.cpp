@@ -23,7 +23,7 @@
 #include "kis_dummies_facade_base.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
-
+#include "kis_image_animation_interface.h"
 
 
 struct KisTimelineModel::Private
@@ -66,6 +66,13 @@ void KisTimelineModel::endMacro()
     }
 }
 
+int KisTimelineModel::totalLength()
+{
+    if (!m_d->image || !m_d->image->animationInterface()) return 0;
+
+   return m_d->image->animationInterface()->totalLength();
+}
+
 void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {
     if(dummiesFacade()) {
@@ -74,8 +81,8 @@ void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, 
         connectAllChannels(dummiesFacade()->rootDummy(), false);
     }
 
-    KisNodeModel::setDummiesFacade(newDummiesFacade, image, shapeController);
     m_d->image = image;
+    KisNodeModel::setDummiesFacade(newDummiesFacade, image, shapeController);
 
     if (newDummiesFacade) {
         connectAllChannels(dummiesFacade()->rootDummy(), true);

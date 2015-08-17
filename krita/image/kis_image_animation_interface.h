@@ -104,6 +104,8 @@ public:
     void setFramerate(float fps);
 
     KisImageWSP image() const;
+
+    int totalLength();
 private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;

@@ -200,3 +200,31 @@ void KisImageAnimationInterface::blockFrameInvalidation(bool value)
 {
     m_d->frameInvalidationBlocked = value;
 }
+
+int findLastKeyframeTimeRecursive(KisNodeSP node)
+{
+    int time = 0;
+
+    KisKeyframeChannel *channel;
+    foreach(channel, node->keyframeChannels()) {
+        KisKeyframeSP keyframe = channel->lastKeyframe();
+        if (keyframe) {
+            time = std::max(time, keyframe->time());
+        }
+    }
+
+    KisNodeSP child = node->firstChild();
+    while (child) {
+        time = std::max(time, findLastKeyframeTimeRecursive(child));
+        child = child->nextSibling();
+    }
+
+    return time;
+}
+
+int KisImageAnimationInterface::totalLength()
+{
+    int lastKey = findLastKeyframeTimeRecursive(m_d->image->root());
+
+    return std::max(lastKey, m_d->currentRange.end());
+}

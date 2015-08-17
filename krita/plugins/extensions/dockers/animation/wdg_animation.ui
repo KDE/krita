@@ -107,7 +107,7 @@
      <item row="3" column="1">
       <widget class="QSpinBox" name="spinToFrame">
        <property name="maximum">
-        <number>1000</number>
+        <number>10000</number>
        </property>
        <property name="value">
         <number>100</number>

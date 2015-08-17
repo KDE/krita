@@ -58,6 +58,7 @@ public:
 
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
+    KisKeyframeSP lastKeyframe() const;
 
     /**
      * Get the set of frames affected by any changes to the value

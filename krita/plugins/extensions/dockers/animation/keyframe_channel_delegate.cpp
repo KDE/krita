@@ -68,14 +68,6 @@ void KeyframeChannelDelegate::paintKeyframe(QPainter *painter, const QStyleOptio
 
 QSize KeyframeChannelDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(option);
-
-    int keyCount = index.model()->rowCount(index);
-    if (keyCount == 0) return QSize();
-
-    QModelIndex lastKey = index.child(keyCount -1, 0);
-    int time = lastKey.data(KisTimelineModel::TimeRole).toInt();
-    int width = view->timeToPosition(time);
-
-    return QSize(width + 100, 12);
+    Q_UNUSED(index);
+    return QSize(option.rect.width(), 12);
 }

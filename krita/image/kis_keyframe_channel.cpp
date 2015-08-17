@@ -256,6 +256,13 @@ KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe) const
     return i.value();
 }
 
+KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
+{
+    if (m_d->keys.isEmpty()) return KisKeyframeSP(0);
+
+    return (m_d->keys.end()-1).value();
+}
+
 KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
 {
     return identicalFrames(time);

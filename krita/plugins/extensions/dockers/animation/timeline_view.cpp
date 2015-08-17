@@ -32,6 +32,7 @@ TimelineView::TimelineView(QWidget *parent, TimelineWidget *timelineWidget)
     : QTreeView(parent)
     , m_timelineWidget(timelineWidget)
     , m_channelDelegate(new KeyframeChannelDelegate(this, this))
+    , m_frameWidth(8)
 {
     setItemDelegateForColumn(1, m_channelDelegate);
 
@@ -42,6 +43,7 @@ TimelineView::TimelineView(QWidget *parent, TimelineWidget *timelineWidget)
     header()->hide();
     setItemsExpandable(false);
 
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(scroll()));
 }
 
 QModelIndex TimelineView::indexAt(const QPoint &point) const
@@ -155,7 +157,10 @@ bool TimelineView::viewportEvent(QEvent *e)
 
 void TimelineView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    resizeColumnToContents(1);
+    Q_UNUSED(topLeft);
+    Q_UNUSED(bottomRight);
+
+    rowsChanged();
 }
 
 int TimelineView::getKeyframeAt(const QModelIndex &channelIndex, int x) const
@@ -207,18 +212,18 @@ int TimelineView::getTime(const QModelIndex &channelIndex, int index) const
 
 int TimelineView::timeToPosition(int time) const
 {
-    return time * 8 + columnViewportPosition(1);
+    return time * m_frameWidth + columnViewportPosition(1);
 }
 
 int TimelineView::positionToTime(int x) const
 {
-    return (x - columnViewportPosition(1)) / 8;
+    return (x - columnViewportPosition(1)) / m_frameWidth;
 }
 
 bool TimelineView::isWithingView(int time) const
 {
     int x = timeToPosition(time);
-    return x >= columnViewportPosition(1) && x < viewport()->width();
+    return x >= 0 && x < viewport()->width();
 }
 
 void TimelineView::setModel(QAbstractItemModel *newModel)
@@ -228,15 +233,27 @@ void TimelineView::setModel(QAbstractItemModel *newModel)
     QTreeView::setModel(newModel);
 
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged()));
-    // Note: QTreeView already handles deletions, so we don't need to connect those
+    connect(newModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsChanged()));
+    connect(newModel, SIGNAL(modelReset()), this, SLOT(rowsChanged()));
 
+    header()->setStretchLastSection(false);
+    header()->setResizeMode(QHeaderView::Fixed);
+    header()->setResizeMode(1, QHeaderView::Fixed);
     setColumnWidth(0, 1);
 }
 
 void TimelineView::rowsChanged()
 {
-    resizeColumnToContents(1);
+    KisTimelineModel *timelineModel = qobject_cast<KisTimelineModel*>(model());
+    int width = (timelineModel->totalLength() + 10) * m_frameWidth;
+    setColumnWidth(1, width);
+
     viewport()->update();
+}
+
+void TimelineView::scroll()
+{
+    m_timelineWidget->update();
 }
 
 bool TimelineView::isDragging()

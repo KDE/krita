@@ -8,7 +8,7 @@ endif ()
 
 kde4_add_library(kritacolor SHARED ${kritacolor_LIB_SRCS} )
 
-target_link_libraries(kritacolor ${QT_QTCORE_LIBRARY} ${kritacolor_EXTRA_LIBRARIES})
+target_link_libraries(kritacolor ${QT_QTCORE_LIBRARY} KF5::KDELibs4Support ${kritacolor_EXTRA_LIBRARIES})
 
 target_link_libraries(kritacolor LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY}) 
 

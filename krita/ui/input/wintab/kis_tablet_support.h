@@ -74,10 +74,6 @@ struct QTabletDeviceData
     int xinput_button_release;
     int xinput_proximity_in;
     int xinput_proximity_out;
-#elif defined(Q_OS_MAC)
-    qint64 llId;
-    int currentDevice;
-    int currentPointerType;
 #elif defined(Q_WS_MAC)
     quint64 tabletUniqueID;
     int tabletDeviceType;
@@ -86,8 +82,11 @@ struct QTabletDeviceData
 #endif
 
     // Added by Krita
-#ifdef Q_OS_MAC
-    QMap<quint8, quint8> buttonsMap;
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN32)
+  QMap<quint8, quint8> buttonsMap;
+  qint64 llId;
+  int currentPointerType;
+  int currentDevice;
 #endif
 
 #ifdef HAVE_X11

@@ -20,7 +20,7 @@
 #define __KIS_PAINT_DEVICE_FRAMES_INTERFACE_H
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 class KisPaintDeviceData;
 class KisPaintDeviceWriter;

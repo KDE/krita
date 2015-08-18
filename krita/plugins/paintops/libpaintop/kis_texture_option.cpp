@@ -261,7 +261,7 @@ void KisTextureOption::resetGUI(KoResource* res)
 }
 
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
-    : pattern(0),
+    : m_pattern(0),
       m_levelOfDetail(levelOfDetail)
 {
 }

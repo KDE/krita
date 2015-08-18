@@ -21,7 +21,7 @@
 
 #include <QAbstractItemModel>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_image.h"
 #include "kis_node_model.h"
 

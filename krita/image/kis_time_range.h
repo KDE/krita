@@ -19,7 +19,7 @@
 #ifndef __KIS_TIME_RANGE_H
 #define __KIS_TIME_RANGE_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <algorithm>
 #include <limits>

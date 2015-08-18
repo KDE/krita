@@ -19,7 +19,7 @@
 #ifndef _TIMELINE_DOCKER_H_
 #define _TIMELINE_DOCKER_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>

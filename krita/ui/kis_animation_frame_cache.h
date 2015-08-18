@@ -22,10 +22,9 @@
 #include <QImage>
 #include <QObject>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_types.h"
 #include "kis_shared.h"
-#include <krita_export.h>
 
 class KisImage;
 class KisImageAnimationInterface;

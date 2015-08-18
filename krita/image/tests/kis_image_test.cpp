@@ -325,7 +325,7 @@ struct FlattenTestImage
         layer1->paintDevice()->fill(rect1, KoColor(Qt::red, p.image->colorSpace()));
 
         layer2->paintDevice()->fill(rect2, KoColor(Qt::green, p.image->colorSpace()));
-        tmask->testingInitSelection(tmaskRect);
+        tmask->testingInitSelection(tmaskRect, layer2);
 
         layer3->paintDevice()->fill(rect3, KoColor(Qt::blue, p.image->colorSpace()));
         layer4->paintDevice()->fill(rect4, KoColor(Qt::yellow, p.image->colorSpace()));

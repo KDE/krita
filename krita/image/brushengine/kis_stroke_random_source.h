@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_random_source.h"
 
 

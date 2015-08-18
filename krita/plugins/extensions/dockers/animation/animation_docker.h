@@ -19,7 +19,7 @@
 #ifndef _ANIMATION_DOCKER_H_
 #define _ANIMATION_DOCKER_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QDockWidget>
 

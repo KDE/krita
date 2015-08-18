@@ -21,7 +21,7 @@
 
 #include <qglobal.h>
 #include <qmetatype.h>
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_keyframe.h"
 
 class KisKeyframeChannel;

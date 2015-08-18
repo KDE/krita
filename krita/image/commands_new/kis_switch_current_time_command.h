@@ -19,7 +19,7 @@
 #ifndef __KIS_SWITCH_CURRENT_TIME_COMMAND_H
 #define __KIS_SWITCH_CURRENT_TIME_COMMAND_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include <kundo2command.h>

@@ -70,8 +70,6 @@ void KisGridManager::updateGUI()
 
 void KisGridManager::setView(QPointer<KisView> imageView)
 {
-    qDebug() << "KisGridManager::setView();" << imageView;
-
     if (m_imageView) {
         m_toggleGrid->disconnect();
         m_gridDecoration = 0;

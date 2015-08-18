@@ -23,7 +23,22 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 
-
+/**
+ * KisRandomSource is a special object that wraps around random number
+ * generation routines.
+ *
+ * It has the following properties:
+ *
+ * 1) Two KisRandomSource objects will generate exactly the same sequences of
+ *    numbers if created with the same seed.
+ *
+ * 2) After copy-construction or assignment the two objects will
+ *    continue to generate exactly the same numbers. Imagine like the
+ *    history got forked.
+ *
+ * 3) Copying of a KisRandomSource object is fast. It uses Tauss88
+ *    algorithm to achieve this.
+ */
 class KRITAIMAGE_EXPORT KisRandomSource : public KisShared
 {
 public:
@@ -37,9 +52,19 @@ public:
     qint64 min() const;
     qint64 max() const;
 
+    /**
+     * Generates a random number in a range from min() to max()
+     */
     qint64 generate() const;
 
+    /**
+     * Generates a random number in a range from \p min to \p max
+     */
     int generate(int min, int max) const;
+
+    /**
+     * Generates a random number in a closed range [0; 1.0]
+     */
     qreal generateNormalized() const;
 
 private:

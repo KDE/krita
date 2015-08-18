@@ -187,6 +187,19 @@ qint64 KoZipStore::write(const char* _data, qint64 _len)
     return 0;
 }
 
+QStringList KoZipStore::directoryList() const
+{
+    QStringList retval;
+    const KArchiveDirectory *directory = m_pZip->directory();
+    foreach(const QString &name, directory->entries()) {
+        const KArchiveEntry* fileArchiveEntry = m_pZip->directory()->entry(name);
+        if (fileArchiveEntry->isDirectory()) {
+            retval << name;
+        }
+    }
+    return retval;
+}
+
 bool KoZipStore::closeWrite()
 {
     Q_D(KoStore);

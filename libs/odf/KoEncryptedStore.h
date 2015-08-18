@@ -65,6 +65,8 @@ public:
      */
     virtual bool isEncrypted();
 
+    virtual QStringList directoryList() const;
+
 protected:
 
     void init(const QByteArray &appIdentification);

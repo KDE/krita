@@ -97,6 +97,19 @@ KoTarStore::~KoTarStore()
     }
 }
 
+QStringList KoTarStore::directoryList() const
+{
+    QStringList retval;
+    const KArchiveDirectory *directory = m_pTar->directory();
+    foreach(const QString &name, directory->entries()) {
+        const KArchiveEntry* fileArchiveEntry = m_pTar->directory()->entry(name);
+        if (fileArchiveEntry->isDirectory()) {
+            retval << name;
+        }
+    }
+    return retval;
+}
+
 QByteArray KoTarStore::completeMagic(const QByteArray& appMimetype)
 {
     kDebug(30002) << "QCString KoTarStore::completeMagic( const QCString& appMimetype )********************";

@@ -481,6 +481,19 @@ bool KoEncryptedStore::isEncrypted()
     return true;
 }
 
+QStringList KoEncryptedStore::directoryList() const
+{
+    QStringList retval;
+    const KArchiveDirectory *directory = m_pZip->directory();
+    foreach(const QString &name, directory->entries()) {
+        const KArchiveEntry* fileArchiveEntry = m_pZip->directory()->entry(name);
+        if (fileArchiveEntry->isDirectory()) {
+            retval << name;
+        }
+    }
+    return retval;
+}
+
 bool KoEncryptedStore::isToBeEncrypted(const QString& name)
 {
     return !(name == META_FILE || name == MANIFEST_FILE || name == THUMBNAIL_FILE);

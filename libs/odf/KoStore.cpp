@@ -603,3 +603,8 @@ KoStore::Mode KoStore::mode() const
     Q_D(const KoStore);
     return d->mode;
 }
+
+QStringList KoStore::directoryList() const
+{
+    return QStringList();
+}

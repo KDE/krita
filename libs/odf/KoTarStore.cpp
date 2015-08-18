@@ -149,13 +149,10 @@ bool KoTarStore::openRead(const QString& name)
     Q_D(KoStore);
     const KArchiveEntry * entry = m_pTar->directory()->entry(name);
     if (entry == 0) {
-        //kWarning(30002) << "Unknown filename " << name;
-        //return KIO::ERR_DOES_NOT_EXIST;
         return false;
     }
     if (entry->isDirectory()) {
         kWarning(30002) << name << " is a directory !";
-        //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
     KArchiveFile * f = (KArchiveFile *) entry;

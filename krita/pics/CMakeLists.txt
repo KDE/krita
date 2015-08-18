@@ -39,6 +39,8 @@ unlinked.png
 width_icon.png
 width.png
 workspace-chooser.png
+onionA.png
+onionB.png
 onionOn.png
 onionOff.png
 

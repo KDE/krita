@@ -19,6 +19,7 @@
 #include "kis_animation_cache_populator.h"
 
 #include <QTimer>
+#include <QMutex>
 
 #include "KisPart.h"
 #include "KisDocument.h"
@@ -52,6 +53,8 @@ struct KisAnimationCachePopulator::Private
         BetweenFrames
     };
     State state;
+
+    QMutex mutex;
 
     Private(KisAnimationCachePopulator *q)
         : q(q),
@@ -102,7 +105,6 @@ struct KisAnimationCachePopulator::Private
         if (idleCounter >= IDLE_COUNT_THRESHOLD) {
             bool requested = tryRequestGeneration();
             if (requested) {
-                enterState(WaitingForFrame);
                 return;
             } else {
                 enterState(WaitingForIdle);
@@ -151,18 +153,35 @@ struct KisAnimationCachePopulator::Private
 
             for (int t = currentRange.start(); t <= currentRange.end(); t++) {
                 if (!cache->frameStatus(t) == KisAnimationFrameCache::Cached) {
-                    connect(animation, SIGNAL(sigFrameReady(int)), q, SLOT(slotFrameReady(int)));
-
-                    requestImage = image;
-                    requestedFrame = t;
-
-                    animation->requestFrameRegeneration(t, image->bounds());
-                    return true;
+                    return regenerate(image, t);
                 }
             }
         }
 
         return false;
+    }
+
+    bool regenerate(KisImageSP image, int frame)
+    {
+        mutex.lock();
+
+        if (state == WaitingForFrame) {
+            mutex.unlock();
+            return false;
+        }
+
+        requestImage = image;
+        requestedFrame = frame;
+
+        KisImageAnimationInterface *animation = image->animationInterface();
+        connect(animation, SIGNAL(sigFrameReady(int)), q, SLOT(slotFrameReady(int)));
+        animation->requestFrameRegeneration(frame, image->bounds());
+
+        enterState(WaitingForFrame);
+
+        mutex.unlock();
+
+        return true;
     }
 
     void disconnectImage()
@@ -195,6 +214,12 @@ struct KisAnimationCachePopulator::Private
     }
 };
 
+KisAnimationCachePopulator *KisAnimationCachePopulator::instance()
+{
+    K_GLOBAL_STATIC(KisAnimationCachePopulator, s_instance);
+    return s_instance;
+}
+
 KisAnimationCachePopulator::KisAnimationCachePopulator()
     : m_d(new Private(this))
 {
@@ -203,6 +228,11 @@ KisAnimationCachePopulator::KisAnimationCachePopulator()
 
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
 {}
+
+bool KisAnimationCachePopulator::regenerate(KisImageSP image, int frame)
+{
+    return m_d->regenerate(image, frame);
+}
 
 void KisAnimationCachePopulator::slotStart()
 {

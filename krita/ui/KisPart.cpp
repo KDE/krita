@@ -87,7 +87,6 @@ public:
         , canvasItem(0)
         , startupWidget(0)
         , actionCollection(0)
-        , animationCachePopulator(new KisAnimationCachePopulator())
     {
     }
 
@@ -108,8 +107,6 @@ public:
     KActionCollection *actionCollection;
 
     void loadActions();
-
-    QScopedPointer<KisAnimationCachePopulator> animationCachePopulator;
 };
 
 
@@ -206,8 +203,9 @@ KisPart::KisPart()
     Q_UNUSED(KisColorManager::instance());
 
     QThread *thread = new QThread(this);
-    d->animationCachePopulator->moveToThread(thread);
-    connect(thread, SIGNAL(started()), d->animationCachePopulator.data(), SLOT(slotStart()));
+    KisAnimationCachePopulator *animationCachePopulator = KisAnimationCachePopulator::instance();
+    animationCachePopulator->moveToThread(thread);
+    connect(thread, SIGNAL(started()), animationCachePopulator, SLOT(slotStart()));
     thread->start();
 }
 

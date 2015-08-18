@@ -20,14 +20,21 @@
 #define KIS_ANIMATION_CACHE_POPULATOR_H
 
 #include <QObject>
+#include "kis_types.h"
 
 class KisAnimationCachePopulator : public QObject
 {
     Q_OBJECT
 
 public:
-    KisAnimationCachePopulator();
-    ~KisAnimationCachePopulator();
+    static KisAnimationCachePopulator *instance();
+
+    /**
+     * Request generation of given frame. The request will
+     * be ignored if the populator is already requesting a frame.
+     * @return true if generation reqeusted, false if busy
+     */
+    bool regenerate(KisImageSP image, int frame);
 
 private slots:
     void slotStart();
@@ -35,6 +42,9 @@ private slots:
     void slotFrameReady(int frame);
 
 private:
+    KisAnimationCachePopulator();
+    ~KisAnimationCachePopulator();
+
     struct Private;
     QScopedPointer<Private> m_d;
 };

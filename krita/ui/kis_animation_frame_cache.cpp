@@ -25,6 +25,7 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
+#include "kis_animation_cache_populator.h"
 
 #include "opengl/kis_opengl_image_textures.h"
 
@@ -162,7 +163,7 @@ bool KisAnimationFrameCache::uploadFrame(int time)
     Private::Frame *frame = m_d->getFrame(time);
 
     if (!frame) {
-        m_d->image->animationInterface()->requestFrameRegeneration(time, m_d->image->bounds());
+        KisAnimationCachePopulator::instance()->regenerate(m_d->image, time);
     } else {
         m_d->textures->recalculateCache(frame->openGlFrame);
     }

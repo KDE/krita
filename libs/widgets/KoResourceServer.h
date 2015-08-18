@@ -205,7 +205,7 @@ public:
 
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if (resource->name() != fname) {
+                        if (resource->name().isEmpty()) {
                             resource->setName(fname);
                         }
                         if (m_resourcesByName.contains(resource->name())) {

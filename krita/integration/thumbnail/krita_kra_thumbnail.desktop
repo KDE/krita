@@ -38,7 +38,7 @@ Name[x-test]=xxKrita Documentsxx
 Name[zh_CN]=Krita 文档
 
 X-KDE-ServiceTypes=ThumbCreator
-MimeType=application/x-krita;
+MimeType=application/x-krita;image/openraster;
 
 X-KDE-Library=kritathumbnail
 CacheThumbnail=true

@@ -529,31 +529,30 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (!qAppName().toLower().contains("test")) {
-            if (!m_batchMode) {
-                KisConfig cfg;
-                quint32 behaviour = cfg.pasteBehaviour();
-                if (behaviour == PASTE_ASK) {
-                    KisDlgPngImport dlg(m_path, csName.first, csName.second);
-                    QApplication::restoreOverrideCursor();
-                    dlg.exec();
-                    if (!dlg.profile().isEmpty()) {
+        if (color_nb_bits == 16 && !qAppName().toLower().contains("test") && !m_batchMode) {
+            KisConfig cfg;
+            quint32 behaviour = cfg.pasteBehaviour();
+            if (behaviour == PASTE_ASK) {
+                KisDlgPngImport dlg(m_path, csName.first, csName.second);
+                QApplication::restoreOverrideCursor();
+                dlg.exec();
+                if (!dlg.profile().isEmpty()) {
 
-                        QString s = KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
+                    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
 
-                        const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-                        if (csf) {
-                            QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-                            foreach(const KoColorProfile *p, profileList) {
-                                if (p->name() == dlg.profile()) {
-                                    profile = p;
-                                    break;
-                                }
+                    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
+                    if (csf) {
+                        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+                        foreach(const KoColorProfile *p, profileList) {
+                            if (p->name() == dlg.profile()) {
+                                profile = p;
+                                break;
                             }
                         }
                     }
-                    QApplication::setOverrideCursor(Qt::WaitCursor);
                 }
+                QApplication::setOverrideCursor(Qt::WaitCursor);
+
             }
         }
         dbgFile << "no embedded profile, will use the default profile";

@@ -19,19 +19,20 @@
 #include "filter/kis_color_transformation_configuration.h"
 
 #include <QMutexLocker>
+#include <QMap>
+#include <QThread>
 #include "filter/kis_color_transformation_filter.h"
 
 struct KisColorTransformationConfiguration::Private {
     Private()
-    : colorTransformation(0)
     {}
 
     ~Private()
     {
-        delete colorTransformation;
+        qDeleteAll(colorTransformation);
     }
 
-    KoColorTransformation *colorTransformation;
+    QMap<QThread*, KoColorTransformation*> colorTransformation;
     QMutex mutex;
 };
 
@@ -48,11 +49,13 @@ KisColorTransformationConfiguration::~KisColorTransformationConfiguration()
 
 KoColorTransformation* KisColorTransformationConfiguration::colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter * filter) const
 {
-    if (!d->colorTransformation) {
-         QMutexLocker locker(&d->mutex);
-         if (!d->colorTransformation) {
-             d->colorTransformation = filter->createTransformation(cs, this);
-         }
+    qDebug() << QThread::currentThread();
+    QMutexLocker locker(&d->mutex);
+    KoColorTransformation *transformation = d->colorTransformation.value(QThread::currentThread(), 0);
+    if (!transformation) {
+        transformation = filter->createTransformation(cs, this);
+        d->colorTransformation.insert(QThread::currentThread(), transformation);
     }
-    return d->colorTransformation;
+    locker.unlock();
+    return transformation;
 }

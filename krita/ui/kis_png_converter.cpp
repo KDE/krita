@@ -39,7 +39,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kio/netaccess.h>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>
@@ -782,35 +781,18 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
     m_path = uri.prettyUrl();
 
-    // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    QString tmpFile;
-
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
-
-        // open the file
-        dbgFile << QFile::encodeName(uriTF.toLocalFile()) << " " << uriTF.toLocalFile() << " " << uriTF;
-        //         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
-        QFile *fp = new QFile(uriTF.toLocalFile());
-        if (fp->exists()) {
-            result = buildImage(fp);
-        } else {
-            result = (KisImageBuilder_RESULT_NOT_EXIST);
-        }
-
-        delete fp;
-        KIO::NetAccess::removeTempFile(tmpFile);
+    QFile fp(uri.toLocalFile());
+    if (fp.exists()) {
+        return buildImage(&fp);
     }
+    return (KisImageBuilder_RESULT_NOT_EXIST);
 
-    return result;
 }
 
 

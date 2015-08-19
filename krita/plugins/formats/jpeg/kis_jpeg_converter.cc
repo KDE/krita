@@ -41,9 +41,6 @@ extern "C" {
 #include <QMessageBox>
 #include <klocale.h>
 
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
-
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -434,22 +431,12 @@ KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
+
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
+    return decode(uri);
 
-    // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    QString tmpFile;
-
-    if (KIO::NetAccess::download(uri, tmpFile, QApplication::activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
-        result = decode(uriTF);
-        KIO::NetAccess::removeTempFile(tmpFile);
-    }
-
-    return result;
 }
 
 
@@ -724,7 +711,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             }
             break;
         default:
-            KIO::del(uri); // asynchronous, but I guess that's ok
             delete [] row_pointer;
             jpeg_destroy_compress(&cinfo);
             return KisImageBuilder_RESULT_UNSUPPORTED;

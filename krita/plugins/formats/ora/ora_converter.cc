@@ -19,8 +19,6 @@
 
 #include <QApplication>
 
-#include <kio/netaccess.h>
-
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
@@ -50,7 +48,7 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
@@ -60,7 +58,6 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
     
-
     OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
@@ -69,7 +66,6 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     delete store;
 
     return KisImageBuilder_RESULT_OK;
-
 }
 
 KisImageWSP OraConverter::image()
@@ -90,6 +86,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
     // Open file for writing
     KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {

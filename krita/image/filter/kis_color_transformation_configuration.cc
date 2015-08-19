@@ -49,7 +49,6 @@ KisColorTransformationConfiguration::~KisColorTransformationConfiguration()
 
 KoColorTransformation* KisColorTransformationConfiguration::colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter * filter) const
 {
-    qDebug() << QThread::currentThread();
     QMutexLocker locker(&d->mutex);
     KoColorTransformation *transformation = d->colorTransformation.value(QThread::currentThread(), 0);
     if (!transformation) {

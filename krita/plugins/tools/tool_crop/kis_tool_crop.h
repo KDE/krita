@@ -209,7 +209,7 @@ class KisToolCropFactory : public KoToolFactoryBase
 public:
     KisToolCropFactory(const QStringList&)
             : KoToolFactoryBase("KisToolCrop") {
-        setToolTip(i18n("Crop the image to an area"));
+        setToolTip(i18n("Crop Tool"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);

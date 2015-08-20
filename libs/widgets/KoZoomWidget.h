@@ -24,6 +24,7 @@
 
 #include <QWidget>
 #include "KoZoomAction.h"
+#include <QScopedPointer>
 
 class KoZoomWidget : public QWidget
 {
@@ -76,7 +77,7 @@ public Q_SLOTS:
     void setAspectMode(bool status);
 private:
     class Private;
-    Private* const d;
+    QScopedPointer<Private> const d;
 };
 
 #endif // KOZOOMWIDGET_H

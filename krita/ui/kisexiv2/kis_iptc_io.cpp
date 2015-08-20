@@ -99,6 +99,8 @@ void KisIptcIO::initMappingsTable() const
 
 bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
+    QStringList blockedEntries = QStringList() << "photoshop:DateCreated";
+
     initMappingsTable();
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::IptcData iptcData;
@@ -106,11 +108,16 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             it != store->end(); ++it) {
         const KisMetaData::Entry& entry = *it;
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
+            if (blockedEntries.contains(entry.qualifiedName())) {
+                qWarning() << "skipping" << entry.qualifiedName() << entry.value();
+                continue;
+            }
             try {
                 QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
                 Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
                 Exiv2::Value *v = kmdValueToExivValue(entry.value(),
                                                       Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record()));
+
                 if (v && v->typeId() != Exiv2::invalidTypeId) {
                     iptcData.add(iptcKey, v);
                 }

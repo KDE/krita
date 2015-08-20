@@ -395,7 +395,7 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
     KoColor color;
     QColor previewColor;
 
-    if (KisToolUtils::pick(device, imagePoint, &color)) {
+    if (KisToolUtils::pickWrapped(device, imagePoint, &color, image())) {
         canvas()->resourceManager()->setResource(resource, color);
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

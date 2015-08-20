@@ -52,6 +52,9 @@
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
 
+#include "kis_wrapped_rect.h"
+
+
 namespace
 {
 // The location of the sample all visible layers in the combobox
@@ -177,7 +180,12 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
     }
 
     if (m_config.radius == 1) {
-        dev->pixel(pos.x(), pos.y(), &m_pickedColor);
+        QPoint realPos = pos.toPoint();
+        if (currentImage()->wrapAroundModePermitted()) {
+            realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
+        }
+
+        dev->pixel(realPos.x(), realPos.y(), &m_pickedColor);
     }
     else {
 
@@ -193,7 +201,14 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
         for (int y = -m_config.radius; y <= m_config.radius; y++) {
             for (int x = -m_config.radius; x <= m_config.radius; x++) {
                 if (((x * x) + (y * y)) < m_config.radius * m_config.radius) {
-                    accessor->moveTo(pos.x() + x, pos.y() + y);
+
+                    QPoint realPos(pos.x() + x, pos.y() + y);
+
+                    if (currentImage()->wrapAroundModePermitted()) {
+                        realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
+                    }
+
+                    accessor->moveTo(realPos.x(), realPos.y());
                     pixels << accessor->oldRawData();
                 }
             }
@@ -248,7 +263,8 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
 
     QPoint pos = convertToIntPixelCoord(event);
     // the color picking has to start in the visible part of the layer
-    if (!currentImage()->bounds().contains(pos)) {
+    if (!currentImage()->bounds().contains(pos) &&
+        !currentImage()->wrapAroundModePermitted()) {
         event->ignore();
         return;
     }

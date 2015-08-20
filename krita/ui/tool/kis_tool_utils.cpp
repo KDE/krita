@@ -21,8 +21,25 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
+#include <kis_wrapped_rect.h>
+#include <kis_image.h>
+
 
 namespace KisToolUtils {
+
+    bool pickWrapped(KisPaintDeviceSP dev, QPoint pos, KoColor *color, KisImageSP image)
+    {
+        if (!image->tryBarrierLock()) return false;
+
+        if (image->wrapAroundModePermitted()) {
+            pos = KisWrappedRect::ptToWrappedPt(pos, image->bounds());
+        }
+
+        bool result = pick(dev, pos, color);
+
+        image->unlock();
+        return result;
+    }
 
     bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color)
     {

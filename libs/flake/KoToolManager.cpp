@@ -742,9 +742,10 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolButton> KoToolManager::createToolList() const
+QVector<KoToolButton> KoToolManager::createToolList() const
 {
-    QList<KoToolButton> answer;
+    QVector<KoToolButton> answer;
+    answer.reserve(d->tools.count());
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.

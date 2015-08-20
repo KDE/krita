@@ -51,6 +51,8 @@ struct KoToolButton {
     QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
 };
 
+Q_DECLARE_TYPEINFO(KoToolButton, Q_MOVABLE_TYPE);
+
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -190,7 +192,7 @@ public:
      * @returns a list of Buttons.
      * This is a factory method for buttons and meta information on the button to better display the button.
      */
-    QList<KoToolButton> createToolList() const;
+    QVector<KoToolButton> createToolList() const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);

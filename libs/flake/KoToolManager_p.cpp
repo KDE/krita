@@ -27,7 +27,11 @@
 #include <kicon.h>
 #include <klocale.h>
 
-#include <QtGlobal> // for qrand()
+static int newUniqueToolHelperId()
+{
+    static int idCounter = 0;
+    return ++idCounter;
+}
 
 /*    ************ ToolHelper **********
  * This class wrangles the tool factory, toolbox button and switch-tool action
@@ -37,7 +41,7 @@
 
 ToolHelper::ToolHelper(KoToolFactoryBase *tool)
     : m_toolFactory(tool),
-      m_uniqueId((int)qrand()),
+      m_uniqueId(newUniqueToolHelperId()),
       button(0),
       action(0)
 {

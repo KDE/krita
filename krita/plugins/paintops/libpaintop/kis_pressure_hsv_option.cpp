@@ -111,12 +111,17 @@ struct KisPressureHSVOption::Private
 
 KisPressureHSVOption::KisPressureHSVOption(const QString& parameterName)
     : KisCurveOption(parameterName, KisPaintOpOption::COLOR, false)
-    , d(new Private)
+    , d(new Private())
 {
     d->parameterName = parameterName;
     d->paramId = -1;
     d->min = -1;
     d->max = 1;
+}
+
+KisPressureHSVOption::~KisPressureHSVOption()
+{
+    delete d;
 }
 
 

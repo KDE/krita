@@ -106,7 +106,6 @@ KoToolBox::KoToolBox()
     setLayout(d->layout);
     foreach(const KoToolButton & button, KoToolManager::instance()->createToolList()) {
         addButton(button);
-        d->visibilityCodes.insert(button.button, button.visibilityCode);
     }
 
     // Update visibility of buttons
@@ -166,6 +165,8 @@ void KoToolBox::addButton(const KoToolButton &button)
         d->buttonGroup->addButton(button.button);
     else
         d->buttonGroup->addButton(button.button, button.buttonGroupId);
+
+    d->visibilityCodes.insert(button.button, button.visibilityCode);
 }
 
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
@@ -281,7 +282,6 @@ void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
 {
     Q_UNUSED(canvas);
     addButton(button);
-    d->visibilityCodes.insert(button.button, button.visibilityCode);
     setButtonsVisible(QList<QString>());
 
 }

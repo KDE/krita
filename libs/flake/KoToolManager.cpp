@@ -801,14 +801,12 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     }
 
     // Actions used to switch tools; connect slot to keep button tooltips updated
-    if (qApp->applicationName().contains("krita")) {
-        foreach(ToolHelper * th, d->tools) {
-            ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
-            action->setShortcut(th->shortcut());
-            ac->addAction(th->id(), action);
-            th->setAction(action);
-            connect(action, SIGNAL(changed()), th, SLOT(actionUpdated()));
-        }
+    foreach(ToolHelper * th, d->tools) {
+        ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
+        action->setShortcut(th->shortcut());
+        ac->addAction(th->id(), action);
+        th->setAction(action);
+        connect(action, SIGNAL(changed()), th, SLOT(actionUpdated()));
     }
 }
 

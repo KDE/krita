@@ -713,6 +713,7 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
         memset(defPixel, 0, pixelSize());
         m_d->colorSpace->convertPixelsTo(defaultPixel(), defPixel, dstColorSpace, 1, renderingIntent, conversionFlags);
         setDefaultPixel(defPixel);
+        delete[] defPixel;
     }
     else {
         KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);

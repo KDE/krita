@@ -105,7 +105,7 @@ KoToolBox::KoToolBox()
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
     foreach(const KoToolButton & button, KoToolManager::instance()->createToolList()) {
-        addButton(button.button, button.section, button.priority, button.buttonGroupId);
+        addButton(button);
         d->visibilityCodes.insert(button.button, button.visibilityCode);
     }
 
@@ -129,30 +129,30 @@ KoToolBox::~KoToolBox()
     delete d;
 }
 
-void KoToolBox::addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId)
+void KoToolBox::addButton(const KoToolButton &button)
 {
-    d->buttons << button;
+    d->buttons << button.button;
     // ensure same L&F
-    button->setCheckable(true);
-    button->setAutoRaise(true);
+    button.button->setCheckable(true);
+    button.button->setAutoRaise(true);
 
     int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
     KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
-    button->setIconSize(QSize(iconSize, iconSize));
+    button.button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {
         section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
     }
 
     QString sectionToBeAddedTo;
-    if (section.contains(qApp->applicationName())) {
+    if (button.section.contains(qApp->applicationName())) {
         sectionToBeAddedTo = "main";
-    } else if (section.contains("main")) {
+    } else if (button.section.contains("main")) {
         sectionToBeAddedTo = "main";
-    }  else if (section.contains("dynamic")) {
+    }  else if (button.section.contains("dynamic")) {
         sectionToBeAddedTo = "dynamic";
     } else {
-        sectionToBeAddedTo = section;
+        sectionToBeAddedTo = button.section;
     }
 
     Section *sectionWidget = d->sections.value(sectionToBeAddedTo);
@@ -160,12 +160,12 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
         sectionWidget = new Section(this);
         d->addSection(sectionWidget, sectionToBeAddedTo);
     }
-    sectionWidget->addButton(button, priority);
+    sectionWidget->addButton(button.button, button.priority);
 
-    if (buttonGroupId < 0)
-        d->buttonGroup->addButton(button);
+    if (button.buttonGroupId < 0)
+        d->buttonGroup->addButton(button.button);
     else
-        d->buttonGroup->addButton(button, buttonGroupId);
+        d->buttonGroup->addButton(button.button, button.buttonGroupId);
 }
 
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
@@ -280,7 +280,7 @@ void KoToolBox::setFloating(bool v)
 void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)
 {
     Q_UNUSED(canvas);
-    addButton(button.button, button.section, button.priority, button.buttonGroupId);
+    addButton(button);
     d->visibilityCodes.insert(button.button, button.visibilityCode);
     setButtonsVisible(QList<QString>());
 

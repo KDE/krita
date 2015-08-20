@@ -22,6 +22,8 @@
 #define KORESOURCEITEMCHOOSERSYNC_H
 
 #include <QObject>
+#include <QScopedPointer>
+
 #include "kowidgets_export.h"
 
 /**
@@ -57,7 +59,7 @@ private:
 
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif // KORESOURCEITEMCHOOSERSYNC_H

@@ -161,10 +161,7 @@ void KoToolBox::addButton(const KoToolButton &button)
     }
     sectionWidget->addButton(button.button, button.priority);
 
-    if (button.buttonGroupId < 0)
-        d->buttonGroup->addButton(button.button);
-    else
-        d->buttonGroup->addButton(button.button, button.buttonGroupId);
+    d->buttonGroup->addButton(button.button, button.buttonGroupId);
 
     d->visibilityCodes.insert(button.button, button.visibilityCode);
 }

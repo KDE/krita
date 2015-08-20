@@ -47,7 +47,7 @@ struct KoToolButton {
     QToolButton *button;    ///< a newly created button.
     QString section;        ///< The section the button wants to be in.
     int priority;           ///< Lower number (higher priority) means coming first in the section.
-    int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
+    int buttonGroupId;      ///< A unique ID for this tool as passed by changedTool(), >= 0
     QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
 };
 

@@ -23,6 +23,7 @@
 
 #include "koplugin_export.h"
 
+#include <QScopedPointer>
 
 class KOPLUGIN_EXPORT KoServiceLocator
 {
@@ -42,8 +43,7 @@ private:
     void init();
 
     struct Private;
-    Private *const d;
-
+    const QScopedPointer<Private> d;
 };
 
 #endif // KOSERVICELOCATOR_H

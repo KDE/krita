@@ -161,7 +161,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, false);
         showControl(m_chkSmoothPressure, false);
-        showControl(m_chkUseScalableDistance, false);
+        showControl(m_chkUseScalableDistance, true);
         showControl(m_sliderDelayDistance, true);
         showControl(m_chkFinishStabilizedCurve, true);
         showControl(m_chkStabilizeSensors, true);
@@ -400,6 +400,11 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
     m_chkUseScalableDistance->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
                                                     m_chkUseScalableDistance->sizeHint().height()));
+    m_chkUseScalableDistance->setToolTip(i18nc("@info:tooltip",
+                                               "Scalable distance takes zoom level "
+                                               "into account and makes the distance "
+                                               "be visually constant whatever zoom "
+                                               "level is chosen"));
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
     addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance"))));
 

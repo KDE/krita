@@ -78,13 +78,15 @@ struct KisToolFreehandHelper::Private
     QQueue<KisPaintInformation> stabilizerDeque;
     KisPaintInformation stabilizerLastPaintInfo;
     QTimer stabilizerPollTimer;
-    
+
     int canvasRotation;
     bool canvasMirroredH;
 
     KisPaintInformation
     getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
                            const KisPaintInformation &lastPaintInfo);
+
+    qreal effectiveSmoothnessDistance() const;
 };
 
 
@@ -332,6 +334,16 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
                      pi2);
 }
 
+qreal KisToolFreehandHelper::Private::effectiveSmoothnessDistance() const
+{
+    const qreal effectiveSmoothnessDistance =
+        !smoothingOptions->useScalableDistance() ?
+        smoothingOptions->smoothnessDistance() :
+        smoothingOptions->smoothnessDistance() / resources->effectiveZoom();
+
+    return effectiveSmoothnessDistance;
+}
+
 void KisToolFreehandHelper::paint(KoPointerEvent *event)
 {
     KisPaintInformation info =
@@ -384,13 +396,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
-            const qreal effectiveSmoothnessDistance =
-                !m_d->smoothingOptions->useScalableDistance() ?
-                m_d->smoothingOptions->smoothnessDistance() :
-                m_d->smoothingOptions->smoothnessDistance() /
-                m_d->resources->effectiveZoom();
-
-            const qreal sigma = effectiveSmoothnessDistance / 3.0; // '3.0' for (3 * sigma) range
+            const qreal sigma = m_d->effectiveSmoothnessDistance() / 3.0; // '3.0' for (3 * sigma) range
 
             qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
             qreal gaussianWeight2 = sigma * sigma;
@@ -562,8 +568,8 @@ int KisToolFreehandHelper::elapsedStrokeTime() const
 void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
 {
     // FIXME: Ugly hack, this is no a "distance" in any way
-    int sampleSize = m_d->smoothingOptions->smoothnessDistance();
-    assert(sampleSize > 0);
+    int sampleSize = qRound(m_d->effectiveSmoothnessDistance());
+    sampleSize = qMax(3, sampleSize);
 
     // Fill the deque with the current value repeated until filling the sample
     m_d->stabilizerDeque.clear();

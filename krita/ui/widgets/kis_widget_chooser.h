@@ -76,6 +76,7 @@ public:
 public Q_SLOTS:
 
     void showPopupWidget();
+    void updateThemedIcons();
     
 private:
     void     removeWidget(const QString& id);

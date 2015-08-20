@@ -124,6 +124,7 @@ public:
     /// wrapper around KoToolFactoryBase::priority();
     int priority() const;
     KoToolBase *createTool(KoCanvasBase *canvas) const;
+    /// unique id, >= 0
     int uniqueId() const {
         return m_uniqueId;
     }
@@ -144,7 +145,7 @@ private Q_SLOTS:
 
 private:
     KoToolFactoryBase *m_toolFactory;
-    int m_uniqueId;
+    const int m_uniqueId;
     QToolButton *button;
     KAction *action;
 };

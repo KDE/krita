@@ -1158,4 +1158,13 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 {
     m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
+
+    KisConfig cfg;
+    if (!cfg.toolOptionsInDocker()) {
+        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
+    }
+
+    m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
+    m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
+
 }

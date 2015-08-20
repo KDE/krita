@@ -249,7 +249,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_workspaceWidget = new KisPopupButton(this);
-    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(iconsize, iconsize);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
@@ -1172,5 +1172,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
+
 
 }

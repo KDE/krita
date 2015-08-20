@@ -36,6 +36,12 @@ struct KisWrappedRect : public QVector<QRect> {
         return y;
     }
 
+    static inline QPoint ptToWrappedPt(QPoint pt, const QRect &wrapRect) {
+        pt.rx() = xToWrappedX(pt.x(), wrapRect);
+        pt.ry() = yToWrappedY(pt.y(), wrapRect);
+        return pt;
+    }
+
     enum {
         TOPLEFT = 0,
         TOPRIGHT,

@@ -17,8 +17,8 @@
    inkscape:version="0.91 r13725"
    sodipodi:docname="light_deletelayer.svg"
    inkscape:export-filename="/home/timo/kde4/src/calligra/krita/pics/layerbox/light_deletelayer.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   inkscape:export-xdpi="61.875"
+   inkscape:export-ydpi="61.875">
   <defs
      id="defs4">
     <filter
@@ -126,7 +126,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="12.518174"
+     inkscape:cx="0.330674"
      inkscape:cy="13.267453"
      inkscape:document-units="px"
      inkscape:current-layer="layer4"
@@ -170,7 +170,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
             <dc:title>Andrei Rudenko</dc:title>

@@ -27,6 +27,9 @@
 
 #include "krita_utils.h"
 
+#include "kis_refresh_subtree_walker.h"
+#include "kis_async_merger.h"
+
 
 struct KisProjectionLeaf::Private
 {
@@ -45,6 +48,13 @@ struct KisProjectionLeaf::Private
 
     bool checkThisPassThrough() {
         return checkPassThrough(node);
+    }
+
+    void temporarySetPassThrough(bool value) {
+        KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node);
+        if (!group) return;
+
+        group->setPassThroughMode(value);
     }
 };
 
@@ -246,4 +256,26 @@ bool KisProjectionLeaf::isDroppedMask() const
 {
     return qobject_cast<KisMask*>(m_d->node) &&
         m_d->checkParentPassThrough();
+}
+
+
+/**
+ * This method is rather slow and dangerous. It should be executes in
+ * exclusive environment only.
+ */
+void KisProjectionLeaf::explicitlyRegeneratePassThroughProjection()
+{
+    if (!m_d->checkThisPassThrough()) return;
+
+    m_d->temporarySetPassThrough(false);
+
+    const QRect updateRect = projection()->defaultBounds()->bounds();
+
+    KisRefreshSubtreeWalker walker(updateRect);
+    walker.collectRects(m_d->node, updateRect);
+
+    KisAsyncMerger merger;
+    merger.startMerge(walker);
+
+    m_d->temporarySetPassThrough(true);
 }

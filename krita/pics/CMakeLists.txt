@@ -53,8 +53,6 @@ dark_selection-mode_mask.png
 dark_trim-to-image.png
 dark_layer-locked.png
 dark_layer-unlocked.png
-dark_novisible.png
-dark_visible.png
 dark_transparency-enabled.png
 dark_transparency-disabled.png
 
@@ -62,8 +60,6 @@ light_transparency-enabled.png
 light_transparency-disabled.png
 light_layer-locked.png
 light_layer-unlocked.png
-light_novisible.png
-light_visible.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png

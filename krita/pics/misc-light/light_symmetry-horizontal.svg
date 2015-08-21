@@ -165,18 +165,18 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="5.320918"
-     inkscape:cy="14.645856"
+     inkscape:cx="-6.866582"
+     inkscape:cy="14.677106"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="px"
      inkscape:showpageshadow="false"
      showborder="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1028"
-     inkscape:window-x="1358"
-     inkscape:window-y="-8"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      objecttolerance="20">
     <inkscape:grid
@@ -217,7 +217,7 @@
      inkscape:label="Layer 1">
     <path
        style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="M 16,-5.9999996e-7 16,31.999999 l -14,0 z"
+       d="M 14,-5.9999996e-7 14,31.999999 l -14,0 z"
        id="rect4183"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />

@@ -13,8 +13,8 @@
    height="22"
    id="svg3760"
    version="1.1"
-   inkscape:version="0.91+devel r"
-   sodipodi:docname="draw-eraser.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="light_draw-eraser.svg">
   <defs
      id="defs3762" />
   <sodipodi:namedview
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="12.462573"
-     inkscape:cx="9.8955918"
-     inkscape:cy="13.079015"
+     inkscape:zoom="24.925146"
+     inkscape:cx="5.9368585"
+     inkscape:cy="12.562494"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -34,12 +34,13 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1366"
-     inkscape:window-height="670"
-     inkscape:window-x="-4"
-     inkscape:window-y="29"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
-     inkscape:showpageshadow="false">
+     inkscape:showpageshadow="false"
+     showguides="false">
     <sodipodi:guide
        position="-0.99999557,22.999999"
        orientation="24,0"
@@ -92,7 +93,8 @@
        type="xygrid"
        id="grid4139"
        originx="-0.99998114"
-       originy="-1.0000137" />
+       originy="-1.0000137"
+       empspacing="4" />
   </sodipodi:namedview>
   <metadata
      id="metadata3765">
@@ -112,10 +114,14 @@
      id="layer1"
      transform="translate(-551.28571,-607.64789)">
     <path
-       style="fill:#f2f2f2;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 16,4 -8,8 4,4 8,-8 -4,-4 z M 6,14 4,16 8,20 10,18 6,14 Z"
-       transform="translate(550.28572,606.6479)"
-       id="path4118"
+       style="fill:#cacaca;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="M 13.021484 1.9082031 L 5.9492188 8.9785156 L 13.021484 16.050781 L 20.091797 8.9785156 L 13.021484 1.9082031 z M 4.5351562 10.392578 L 1 13.929688 L 6.0703125 19 L 10.072266 19 L 11.607422 17.464844 L 4.5351562 10.392578 z "
+       transform="translate(551.28571,607.64789)"
+       id="path4118" />
+    <path
+       style="fill:#cacaca;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 557.28571,626.6479 13,0 0,-1 -13,0 z"
+       id="path4156"
        inkscape:connector-curvature="0" />
   </g>
 </svg>

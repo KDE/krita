@@ -62,7 +62,7 @@ KoColor::KoColor(const KoColorSpace * colorSpace)
     Q_ASSERT(colorSpace);
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
     d->data = new quint8[d->colorSpace->pixelSize()];
-    d->colorSpace->fromQColor(Qt::black, d->data);
+    memset(d->data, 0, d->colorSpace->pixelSize());
 }
 
 KoColor::~KoColor()

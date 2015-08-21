@@ -148,8 +148,48 @@ bool IccColorProfile::isSuitableForDisplay() const
         return d->shared->lcmsProfile->isSuitableForDisplay();
     return false;
 }
-
-
+bool IccColorProfile::hasColorants() const
+{
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->hasColorants();
+    return false;
+}
+QVector <double> IccColorProfile::getColorantsXYZ() const
+{
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->getColorantsXYZ();
+    return QVector<double>(9);
+}
+QVector <double> IccColorProfile::getColorantsxyY() const
+{
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->getColorantsxyY();
+    return QVector<double>(9);
+}
+QVector <double> IccColorProfile::getWhitePointXYZ() const
+{
+    QVector <double> d50Dummy(3);
+    d50Dummy<<0.9642<<1.0000<<0.8249;
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->getWhitePointXYZ();
+    return d50Dummy;
+}
+QVector <double> IccColorProfile::getWhitePointxyY() const
+{
+    QVector <double> d50Dummy(3);
+    d50Dummy<<0.34773<<0.35952<<1.0;
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->getWhitePointxyY();
+    return d50Dummy;
+}
+QVector <double> IccColorProfile::getEstimatedTRC() const
+{
+    QVector <double> dummy(3);
+    dummy.fill(2.2);//estimated sRGB trc.
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->getEstimatedTRC();
+    return dummy;
+}
 bool IccColorProfile::load()
 {
     QFile file(fileName());

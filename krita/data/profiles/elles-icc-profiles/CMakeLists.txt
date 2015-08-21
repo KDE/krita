@@ -1,8 +1,24 @@
 ########### install files ###############
 install(FILES
+    ACES-elle-V2-g10.icc
+    ACES-elle-V4-g10.icc
+    ACES-elle-V2-g22.icc
+    ACES-elle-V4-g22.icc
+    ACES-elle-V2-labl.icc
+    ACES-elle-V4-labl.icc
+    ACES-elle-V2-srgbtrc.icc
+    ACES-elle-V4-srgbtrc.icc
+    ACEScg-elle-V2-g10.icc
+    ACEScg-elle-V4-g10.icc
+    ACEScg-elle-V2-labl.icc
+    ACEScg-elle-V4-labl.icc
+    ACEScg-elle-V2-srgbtrc.icc
+    ACEScg-elle-V4-srgbtrc.icc
     AllColorsRGB-elle-V2-g10.icc
-    AllColorsRGB-elle-V2-srgbtrc.icc
     AllColorsRGB-elle-V4-g10.icc
+    AllColorsRGB-elle-V2-labl.icc
+    AllColorsRGB-elle-V4-labl.icc
+    AllColorsRGB-elle-V2-srgbtrc.icc
     AllColorsRGB-elle-V4-srgbtrc.icc
     CIERGB-elle-V2-g10.icc
     CIERGB-elle-V2-g22.icc
@@ -10,12 +26,16 @@ install(FILES
     CIERGB-elle-V4-g10.icc
     CIERGB-elle-V4-g22.icc
     CIERGB-elle-V4-srgbtrc.icc
+    CIERGB-elle-V2-labl.icc
+    CIERGB-elle-V4-labl.icc
     ClayRGB-elle-V2-g10.icc
     ClayRGB-elle-V2-g22.icc
     ClayRGB-elle-V2-srgbtrc.icc
     ClayRGB-elle-V4-g10.icc
     ClayRGB-elle-V4-g22.icc
     ClayRGB-elle-V4-srgbtrc.icc
+    ClayRGB-elle-V2-labl.icc;
+    ClayRGB-elle-V4-labl.icc
     CMakeLists.txt
     Gray-D50-elle-V2-g10.icc
     Gray-D50-elle-V2-g18.icc
@@ -25,10 +45,16 @@ install(FILES
     Gray-D50-elle-V4-g18.icc
     Gray-D50-elle-V4-g22.icc
     Gray-D50-elle-V4-srgbtrc.icc
+    Gray-D50-elle-V2-labl.icc
+    Gray-D50-elle-V4-labl.icc
+    Gray-D50-elle-V2-rec709.icc
+    Gray-D50-elle-V4-rec709.icc
     IdentityRGB-elle-V2-g10.icc
     IdentityRGB-elle-V2-srgbtrc.icc
     IdentityRGB-elle-V4-g10.icc
     IdentityRGB-elle-V4-srgbtrc.icc
+    IdentityRGB-elle-V2-labl.icc
+    IdentityRGB-elle-V4-labl.icc
     Lab-D50-Identity-elle-V2.icc
     Lab-D50-Identity-elle-V4.icc
     LargeRGB-elle-V2-g10.icc
@@ -37,14 +63,35 @@ install(FILES
     LargeRGB-elle-V4-g10.icc
     LargeRGB-elle-V4-g18.icc
     LargeRGB-elle-V4-srgbtrc.icc
+    LargeRGB-elle-V2-labl.icc
+    LargeRGB-elle-V4-labl.icc
+    Rec2020-elle-V2-rec709.icc
+    Rec2020-elle-V4-rec709.icc
+    Rec2020-elle-V2-g10.icc
+    Rec2020-elle-V4-g10.icc
+    Rec2020-elle-V2-labl.icc
+    Rec2020-elle-V4-labl.icc
+    Rec2020-elle-V2-srgbtrc.icc
+    Rec2020-elle-V4-srgbtrc.icc
     sRGB-elle-V2-g10.icc
     sRGB-elle-V2-srgbtrc.icc
     sRGB-elle-V4-g10.icc
     sRGB-elle-V4-srgbtrc.icc
+    sRGB-elle-V2-labl.icc
+    sRGB-elle-V4-labl.icc
+    #sRGB-elle-V2-rec709.icc
+    #sRGB-elle-V4-rec709.icc
     WideRGB-elle-V2-g10.icc
     WideRGB-elle-V2-g22.icc
     WideRGB-elle-V2-srgbtrc.icc
     WideRGB-elle-V4-g10.icc
     WideRGB-elle-V4-g22.icc
     WideRGB-elle-V4-srgbtrc.icc
+    WideRGB-elle-V2-srgbtrc.icc
+    WideRGB-elle-V4-srgbtrc.icc
+    WideRGB-elle-V2-labl.icc
+    WideRGB-elle-V4-labl.icc
+    Lab-D50-Identity-elle-V2.icc
+    Lab-D50-Identity-elle-V4.icc
+    XYZ-D50-Identity-elle-V4.icc
 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)

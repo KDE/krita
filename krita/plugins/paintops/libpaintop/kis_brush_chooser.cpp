@@ -35,6 +35,7 @@
 
 #include <KoResourceItemChooser.h>
 
+#include <kis_icon_utils.h>
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
 #include "widgets/kis_slider_spin_box.h"
@@ -150,8 +151,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
 
-    QPushButton *stampButton = new QPushButton(i18n("Stamp"), this);
-    QPushButton *clipboardButton = new QPushButton(i18n("Clipboard"), this);
+    QPushButton *stampButton = new QPushButton(KisIconUtils::loadIcon("list-add"), i18n("Stamp"), this);
+    QPushButton *clipboardButton = new QPushButton(KisIconUtils::loadIcon("edit-paste"), i18n("Clipboard"), this);
 
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
                                  "\n If no selection is present the whole image will be used."));

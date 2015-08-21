@@ -1530,7 +1530,6 @@ bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXml
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
-    qDebug() << store->device()->readAll();
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {

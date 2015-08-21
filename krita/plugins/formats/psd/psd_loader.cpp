@@ -19,6 +19,8 @@
 
 #include <QApplication>
 
+#include <kurl.h>
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -50,11 +52,10 @@
 #include "psd_image_data.h"
 
 PSDLoader::PSDLoader(KisDocument *doc)
+    : m_image(0)
+    , m_doc(doc)
+    , m_stop(false)
 {
-    m_image = 0;
-    m_doc = doc;
-    m_job = 0;
-    m_stop = false;
 }
 
 PSDLoader::~PSDLoader()

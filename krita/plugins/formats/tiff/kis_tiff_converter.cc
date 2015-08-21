@@ -24,11 +24,10 @@
 #include <QFile>
 #include <QApplication>
 
+#include <kurl.h>
+
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
-
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -169,7 +168,6 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
 KisTIFFConverter::KisTIFFConverter(KisDocument *doc)
 {
     m_doc = doc;
-    m_job = 0;
     m_stop = false;
 
     TIFFSetWarningHandler(0);
@@ -668,13 +666,11 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
 
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(kisimage->rootLayer().data());
     if (root == 0) {
-        KIO::del(uri);
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
     KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
     if (!visitor->visit(root)) {
-        KIO::del(uri);
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }

@@ -48,11 +48,9 @@
 #include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
 #include <kiconloader.h>
 #include <kaboutdata.h>
 #include <kconfiggroup.h>
-#include <kio/job.h>
 #include <kcomponentdata.h>
 #include <kis_factory2.h>
 
@@ -301,39 +299,38 @@ void KisTemplateCreateDia::slotOk() {
 
     KUrl dest;
     dest.setPath(templateDir+file+ext);
-    if ( QFile::exists( dest.pathOrUrl() ) )
-    {
-        do
-        {
+    if (QFile::exists( dest.pathOrUrl())) {
+        do {
             file.prepend( '_' );
             dest.setPath( templateDir + file + ext );
-            tmpIcon=".icon/"+file+".png";
-            icon=iconDir+file+".png";
+            tmpIcon=".icon/" + file + ".png";
+            icon=iconDir + file + ".png";
         }
-        while ( KIO::NetAccess::exists( dest, KIO::NetAccess::DestinationSide, this ) );
+        while (QFile(dest.toLocalFile()).exists());
     }
     bool ignore = false;
     kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
     KisTemplate *t=new KisTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
-    if(!group->add(t)) {
+    if (!group->add(t)) {
         KisTemplate *existingTemplate=group->find(d->m_name->text());
-        if(existingTemplate && !existingTemplate->isHidden()) {
+        if (existingTemplate && !existingTemplate->isHidden()) {
             if (QMessageBox::warning(this,
                                      i18nc("@title:window", "Krita"),
                                      i18n("Do you really want to overwrite the existing '%1' template?", existingTemplate->name()),
-                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
                 group->add(t, true);
-            else
-            {
+            }
+            else {
                 delete t;
                 return;
             }
         }
-        else
+        else {
             ignore = true;
+        }
     }
 
-    if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
+    if (!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
         slotButtonClicked( KDialog::Cancel );
         return;
@@ -363,13 +360,13 @@ void KisTemplateCreateDia::slotOk() {
         if((*it).contains(dir)==0) {
             orig.setPath( (*it)+".directory" );
             // Check if we can read the file
-            if( KIO::NetAccess::exists(orig, KIO::NetAccess::SourceSide, this) ) {
-                dest.setPath( dir+"/.directory" );
+            if (QFile(orig.toLocalFile()).exists()) {
+                dest.setPath(dir + "/.directory");
                 // We copy the file with overwrite
-                KIO::FileCopyJob *job = KIO::file_copy( orig, dest, -1, KIO::Overwrite | KIO::HideProgressInfo);
-                job->exec();
-
-                ready=true;
+                if (!QFile(orig.toLocalFile()).copy(dest.toLocalFile())) {
+                    qWarning() << "Failed to copy from" << orig.toLocalFile() << "to" << dest.toLocalFile();
+                }
+                ready = true;
             }
         }
     }

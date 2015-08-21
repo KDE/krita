@@ -53,18 +53,15 @@
 #include <kmimetype.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
+#include <kio/job.h>
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kio/job.h>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 #include "kundo2stack.h"
@@ -1533,6 +1530,7 @@ bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXml
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
+    qDebug() << store->device()->readAll();
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {

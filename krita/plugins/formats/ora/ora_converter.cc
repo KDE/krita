@@ -19,6 +19,8 @@
 
 #include <QApplication>
 
+#include <kurl.h>
+
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
@@ -33,10 +35,9 @@
 #include "ora_save_context.h"
 
 OraConverter::OraConverter(KisDocument *doc)
+    : m_doc(doc)
+    , m_stop(false)
 {
-    m_doc = doc;
-    m_job = 0;
-    m_stop = false;
 }
 
 OraConverter::~OraConverter()

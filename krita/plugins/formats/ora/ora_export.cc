@@ -19,9 +19,10 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <QMessageBox>
+#include <kurl.h>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>

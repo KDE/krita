@@ -40,6 +40,7 @@ extern "C" {
 
 #include <QMessageBox>
 #include <klocale.h>
+#include <kurl.h>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -111,11 +112,10 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 }
 
 KisJPEGConverter::KisJPEGConverter(KisDocument *doc, bool batchMode)
+    : m_doc(doc)
+    , m_stop(false)
+    , m_batchMode(batchMode)
 {
-    m_doc = doc;
-    m_job = 0;
-    m_stop = false;
-    m_batchMode = batchMode;
 }
 
 KisJPEGConverter::~KisJPEGConverter()

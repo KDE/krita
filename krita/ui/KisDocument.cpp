@@ -53,18 +53,15 @@
 #include <kmimetype.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
+#include <kio/job.h>
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kio/job.h>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 #include "kundo2stack.h"
@@ -198,6 +195,12 @@ public:
             KUndo2Stack::setIndex(idx);
             image->unlock();
         }
+    }
+
+    void notifySetIndexChangedOneCommand() {
+        KisImageWSP image = this->image();
+        image->unlock();
+        image->barrierLock();
     }
 
     void undo() {

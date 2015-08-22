@@ -42,6 +42,9 @@ public:
     KoTarStore(QWidget* window, const KUrl& url, const QString & _filename, Mode _mode,
                const QByteArray & appIdentification, bool writeMimetype = true);
     ~KoTarStore();
+
+    virtual QStringList directoryList() const;
+
 protected:
     void init(const QByteArray &appIdentification);
     virtual bool doFinalize();

@@ -33,6 +33,8 @@
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
 
+#include "kis_projection_leaf.h"
+
 
 class ModifyTransformMaskCommand : public KUndo2Command {
 public:
@@ -102,8 +104,8 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
              * taken into account.
              */
             m_selection = 0;
-
         } else {
+            rootNode->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
             device = rootNode->projection();
         }
 

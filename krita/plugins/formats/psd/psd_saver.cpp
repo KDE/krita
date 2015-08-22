@@ -23,6 +23,8 @@
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
 
+#include <kurl.h>
+
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
@@ -83,11 +85,10 @@ QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colo
 
 
 PSDSaver::PSDSaver(KisDocument *doc)
+    : m_doc(doc)
+    , m_image(doc->image())
+    , m_stop(false)
 {
-    m_doc = doc;
-    m_image  = doc->image();
-    m_job = 0;
-    m_stop = false;
 }
 
 PSDSaver::~PSDSaver()

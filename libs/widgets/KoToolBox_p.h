@@ -54,21 +54,6 @@ public:
     explicit KoToolBox();
     ~KoToolBox();
 
-    /**
-     * Add a button to the toolbox.
-     * The buttons should all be added before the first showing since adding will not really add
-     * them to the UI until setup() is called.
-     *
-     * @param button the new button.  Please make sure you connect to the button yourself.
-     * @param section the section in which this button will be shown.  Each section will be its own
-     *        widget.
-     * @param priority the priority in the section. Lowest value means it will be shown first.
-     * @param buttonGroupId if passed this will allow you to use setActiveTool() to trigger
-     *      this button
-     * @see setup()
-     */
-    void addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId=-1);
-
 public Q_SLOTS:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active button.
@@ -93,6 +78,17 @@ public Q_SLOTS:
     void setOrientation(Qt::Orientation orientation);
 
     void setFloating(bool v);
+
+private:
+    /**
+     * Add a button to the toolbox.
+     * The buttons should all be added before the first showing since adding will not really add
+     * them to the UI until setup() is called.
+     *
+     * @param button the new button.  Please make sure you connect to the button yourself.
+     * @see setup()
+     */
+    void addButton(const KoToolButton &button);
 
 private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);

@@ -68,7 +68,7 @@ class KisToolGridFactory : public KoToolFactoryBase
 public:
     KisToolGridFactory(const QStringList&)
             : KoToolFactoryBase("KisToolGrid") {
-        setToolTip(i18n("Edit the grid"));
+        setToolTip(i18n("Grid Tool"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_grid"));
         setPriority(17);

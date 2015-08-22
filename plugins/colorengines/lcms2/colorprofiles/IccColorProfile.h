@@ -66,6 +66,12 @@ public:
         virtual bool isSuitableForOutput() const = 0;
         virtual bool isSuitableForPrinting() const = 0;
         virtual bool isSuitableForDisplay() const = 0;
+        virtual bool hasColorants() const = 0;
+        virtual QVector <double> getColorantsXYZ() const = 0;
+        virtual QVector <double> getColorantsxyY() const = 0;
+        virtual QVector <double> getWhitePointXYZ() const = 0;
+        virtual QVector <double> getWhitePointxyY() const = 0;
+        virtual QVector <double> getEstimatedTRC() const = 0;
     };
 public:
 
@@ -87,6 +93,12 @@ public:
     virtual bool isSuitableForOutput() const;
     virtual bool isSuitableForPrinting() const;
     virtual bool isSuitableForDisplay() const;
+    virtual bool hasColorants() const;
+    virtual QVector <double> getColorantsXYZ() const;
+    virtual QVector <double> getColorantsxyY() const;
+    virtual QVector <double> getWhitePointXYZ() const;
+    virtual QVector <double> getWhitePointxyY() const;
+    virtual QVector <double> getEstimatedTRC() const;
     virtual bool operator==(const KoColorProfile&) const;
     virtual QString type() const { return "icc"; }
 

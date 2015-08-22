@@ -44,12 +44,14 @@ class QCursor;
 
 /// Struct for the createToolList return type.
 struct KoToolButton {
-    QToolButton *button;///< a newly created button.
+    QToolButton *button;    ///< a newly created button.
     QString section;        ///< The section the button wants to be in.
     int priority;           ///< Lower number (higher priority) means coming first in the section.
-    int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
+    int buttonGroupId;      ///< A unique ID for this tool as passed by changedTool(), >= 0
     QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
 };
+
+Q_DECLARE_TYPEINFO(KoToolButton, Q_MOVABLE_TYPE);
 
 
 /**
@@ -190,7 +192,7 @@ public:
      * @returns a list of Buttons.
      * This is a factory method for buttons and meta information on the button to better display the button.
      */
-    QList<KoToolButton> createToolList() const;
+    QVector<KoToolButton> createToolList() const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);

@@ -95,11 +95,9 @@ KisMask::~KisMask()
 
 void KisMask::setImage(KisImageWSP image)
 {
-    KisDefaultBoundsBaseSP db = m_d->selection->pixelSelection()->defaultBounds();
-    KisDefaultBounds *defaultBounds = dynamic_cast<KisDefaultBounds*>(db.data());
-    if (defaultBounds) {
-        defaultBounds->setImage(image);
-    }
+    KisPaintDeviceSP parentPaintDevice = parent() ? parent()->original() : 0;
+    KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice, image);
+    m_d->selection->setDefaultBounds(defaultBounds);
 }
 
 bool KisMask::allowAsChild(KisNodeSP node) const

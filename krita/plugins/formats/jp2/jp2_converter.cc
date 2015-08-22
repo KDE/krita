@@ -25,7 +25,6 @@
 
 #include <QMessageBox>
 
-#include <kio/netaccess.h>
 #include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
@@ -274,22 +273,10 @@ KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
-
-    // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    QString tmpFile;
-
-    if (KIO::NetAccess::download(uri, tmpFile, QApplication::activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
-        result = decode(uriTF);
-        KIO::NetAccess::removeTempFile(tmpFile);
-    }
-
-    return result;
+    return decode(uri);
 }
 
 

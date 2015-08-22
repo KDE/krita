@@ -94,8 +94,16 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
         m_name.remove(0, 1);
     }
     if (!m_store->enterDirectory(m_name)) {
-        dbgFile << "Could not enter directory" << m_name << ", probably an old-style file with 'part' added.";
-        m_name = expandEncodedDirectory(m_name);
+        QStringList directories = m_store->directoryList();
+        qDebug() << directories;
+        if (directories.size() > 0) {
+            dbgFile << "Could not locate the directory, maybe some encoding issue? Grab the first directory, that'll be the image one." << m_name << directories;
+            m_name = directories.first();
+        }
+        else {
+            dbgFile << "Could not enter directory" << m_name << ", probably an old-style file with 'part' added.";
+            m_name = expandEncodedDirectory(m_name);
+        }
     }
     else {
         m_store->popDirectory();

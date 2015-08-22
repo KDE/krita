@@ -36,7 +36,6 @@
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>

@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 #include <QFileInfo>
 #include <QDesktopServices>
-#include <QScopedPointer>
 
 #include <kactioncollection.h>
 #include <klocale.h>

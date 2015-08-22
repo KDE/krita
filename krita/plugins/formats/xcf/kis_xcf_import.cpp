@@ -28,8 +28,6 @@
 #include <kpluginfactory.h>
 #include <kurl.h>
 
-#include <kio/netaccess.h>
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
@@ -120,36 +118,20 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& 
 
     KUrl url(filename);
 
-
-    dbgFile << "Import: " << url;
     if (url.isEmpty())
         return KisImportExportFilter::FileNotFound;
 
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
-        dbgFile << "Inexistant file";
+    if (!url.isLocalFile()) {
         return KisImportExportFilter::FileNotFound;
     }
 
-    // We're not set up to handle asynchronous loading at the moment.
-    QString tmpFile;
-    KisImportExportFilter::ConversionStatus result;
-    if (KIO::NetAccess::download(url, tmpFile, QApplication::activeWindow())) {
-        KUrl uriTF(tmpFile);
-
-        // open the file
-        QFile *fp = new QFile(uriTF.toLocalFile());
-        if (fp->exists()) {
-            doc->prepareForImport();
-            result = loadFromDevice(fp, doc);
-        } else {
-            result = KisImportExportFilter::CreationError;
-        }
-
-        KIO::NetAccess::removeTempFile(tmpFile);
-        return result;
+    QFile fp(url.toLocalFile());
+    if (fp.exists()) {
+        doc->prepareForImport();
+        return loadFromDevice(&fp, doc);
     }
-    dbgFile << "Download failed";
-    return KisImportExportFilter::DownloadFailed;
+
+    return KisImportExportFilter::CreationError;
 }
 
 QString layerModeG2K(GimpLayerModeEffects mode)

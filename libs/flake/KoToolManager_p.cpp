@@ -25,24 +25,37 @@
 #include <KoToolFactoryBase.h>
 #include <QToolButton>
 #include <kicon.h>
+#include <klocale.h>
 
-#include <QtGlobal> // for qrand()
-
-//   ************ ToolHelper **********
-ToolHelper::ToolHelper(KoToolFactoryBase *tool)
+static int newUniqueToolHelperId()
 {
-    m_toolFactory = tool;
-    m_uniqueId = (int) qrand();
+    static int idCounter = 0;
+    return ++idCounter;
+}
+
+/*    ************ ToolHelper **********
+ * This class wrangles the tool factory, toolbox button and switch-tool action
+ * for a single tool. It assumes the  will continue to live once it is created.
+ * (Hiding the toolbox is OK.)
+ */
+
+ToolHelper::ToolHelper(KoToolFactoryBase *tool)
+    : m_toolFactory(tool),
+      m_uniqueId(newUniqueToolHelperId()),
+      button(0),
+      action(0)
+{
 }
 
 QToolButton* ToolHelper::createButton()
 {
-    QToolButton *but = new QToolButton();
-    but->setObjectName(m_toolFactory->id());
-    but->setIcon(KIcon(m_toolFactory->iconName()));
-    but->setToolTip(m_toolFactory->toolTip());
-    connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));
-    return but;
+    button = new QToolButton();
+    button->setObjectName(m_toolFactory->id());
+    button->setIcon(KIcon(m_toolFactory->iconName()));
+    button->setToolTip(buttonToolTip());
+
+    connect(button, SIGNAL(clicked()), this, SLOT(buttonPressed()));
+    return button;
 }
 
 void ToolHelper::buttonPressed()
@@ -63,6 +76,20 @@ QString ToolHelper::activationShapeId() const
 QString ToolHelper::toolTip() const
 {
     return m_toolFactory->toolTip();
+}
+
+QString ToolHelper::buttonToolTip() const
+{
+  return shortcut().isEmpty() ?
+    i18nc("@info:tooltip", "%1", toolTip()) :
+    i18nc("@info:tooltip %2 is shortcut", "%1 (%2)", toolTip(),
+          shortcut().toString());
+}
+
+void ToolHelper::actionUpdated()
+{
+    if (button)
+        button->setToolTip(buttonToolTip());
 }
 
 KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
@@ -86,7 +113,16 @@ int ToolHelper::priority() const
 
 KShortcut ToolHelper::shortcut() const
 {
+    if (action) {
+        return action->shortcut();
+    }
+
     return m_toolFactory->shortcut();
+}
+
+void ToolHelper::setAction(KAction *a)
+{
+    action = a;
 }
 
 //   ************ Connector **********
@@ -104,7 +140,7 @@ void Connector::selectionChanged()
 
 //   ************ ToolAction **********
 ToolAction::ToolAction(KoToolManager* toolManager, const QString &id, const QString &name, QObject *parent)
-    : QAction(name, parent),
+    : KAction(name, parent),
     m_toolManager(toolManager),
     m_toolID(id)
 {
@@ -120,6 +156,3 @@ void ToolAction::actionTriggered()
     m_toolManager->switchToolRequested(m_toolID);
 }
 
-
-
-#include <KoToolManager_p.moc>

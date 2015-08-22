@@ -116,7 +116,7 @@ void KoToolFactoryBase::setPriority(int newPriority)
     d->priority = newPriority;
 }
 
-void KoToolFactoryBase::setShortcut(const KShortcut & shortcut)
+void KoToolFactoryBase::setShortcut(const KShortcut &shortcut)
 {
     d->shortcut = shortcut;
 }

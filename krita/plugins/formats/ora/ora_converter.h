@@ -22,9 +22,6 @@
 
 #include <QObject>
 
-#include <kio/job.h>
-#include <kurl.h>
-
 #include "kis_png_converter.h"
 #include "kis_types.h"
 
@@ -51,7 +48,6 @@ private:
     KisDocument *m_doc;
     vKisNodeSP m_activeNodes;
     bool m_stop;
-    KIO::TransferJob *m_job;
 };
 
 #endif

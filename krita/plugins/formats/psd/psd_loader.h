@@ -22,7 +22,6 @@
 
 #include <QObject>
 
-#include <kio/job.h>
 #include <kurl.h>
 
 #include "kis_types.h"
@@ -74,7 +73,6 @@ private:
     KisImageWSP m_image;
     KisDocument *m_doc;
     bool m_stop;
-    KIO::TransferJob *m_job;
 };
 
 #endif

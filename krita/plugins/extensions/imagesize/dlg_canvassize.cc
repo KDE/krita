@@ -22,7 +22,7 @@
 #include "kcanvaspreview.h"
 
 #include <KoUnit.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoSizeGroup.h>
 #include <klocalizedstring.h>
 
@@ -522,15 +522,15 @@ void DlgCanvasSize::updateYOffsetUIValue(double value)
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-     m_anchorIcons[NORTH_WEST] =  koIcon("arrow_north_west");
-     m_anchorIcons[NORTH] = koIcon("arrow_north");
-     m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
-     m_anchorIcons[EAST] = koIcon("arrow_east");
-     m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
-     m_anchorIcons[WEST] = koIcon("arrow_west");
-     m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
-     m_anchorIcons[SOUTH] = koIcon("arrow_south");
-     m_anchorIcons[SOUTH_EAST] = koIcon("arrow_south_east");
+    m_anchorIcons[NORTH_WEST] =  KisIconUtils::loadIcon("arrow_north_west");
+    m_anchorIcons[NORTH] = KisIconUtils::loadIcon("arrow_north");
+    m_anchorIcons[NORTH_EAST] = KisIconUtils::loadIcon("arrow_north_east");
+    m_anchorIcons[EAST] = KisIconUtils::loadIcon("arrow_east");
+    m_anchorIcons[CENTER] = KisIconUtils::loadIcon("arrow_center");
+    m_anchorIcons[WEST] = KisIconUtils::loadIcon("arrow_west");
+    m_anchorIcons[SOUTH_WEST] = KisIconUtils::loadIcon("arrow_south_west");
+    m_anchorIcons[SOUTH] = KisIconUtils::loadIcon("arrow_south");
+    m_anchorIcons[SOUTH_EAST] = KisIconUtils::loadIcon("arrow_south_east");
 }
 
 void DlgCanvasSize::updateAnchorIcons(int id)

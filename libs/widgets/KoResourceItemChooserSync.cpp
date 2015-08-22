@@ -28,14 +28,14 @@ struct KoResourceItemChooserSync::Private
 };
 
 
-KoResourceItemChooserSync::KoResourceItemChooserSync() : d(new Private)
+KoResourceItemChooserSync::KoResourceItemChooserSync()
+    : d(new Private)
 {
     d->baseLength = 50;
 }
 
 KoResourceItemChooserSync::~KoResourceItemChooserSync()
 {
-
 }
 
 KoResourceItemChooserSync* KoResourceItemChooserSync::instance()

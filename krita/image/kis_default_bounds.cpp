@@ -47,11 +47,6 @@ KisDefaultBounds::~KisDefaultBounds()
     delete m_d;
 }
 
-void KisDefaultBounds::setImage(KisImageWSP image)
-{
-    m_d->image = image;
-}
-
 QRect KisDefaultBounds::bounds() const
 {
     /**

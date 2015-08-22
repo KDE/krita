@@ -22,7 +22,6 @@
 
 #include <QObject>
 
-// #include <kio/job.h>
 #include <kurl.h>
 
 #include "kis_types.h"

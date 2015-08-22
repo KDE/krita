@@ -23,8 +23,6 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kio/netaccess.h>
-
 #include <kpluginfactory.h>
 #include <kurl.h>
 
@@ -70,13 +68,9 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
     if (!filename.isEmpty()) {
         KUrl url(filename);
 
-        if (url.isEmpty())
-            return KisImportExportFilter::FileNotFound;
-
-        if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+        if (url.isEmpty() || !url.isLocalFile()) {
             return KisImportExportFilter::FileNotFound;
         }
-
 
         QString localFile = url.toLocalFile();
         QImage img(localFile);

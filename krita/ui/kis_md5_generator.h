@@ -25,4 +25,5 @@ public:
     ~KisMD5Generator();
 
     QByteArray generateHash(QString filename);
+    using KoMD5Generator::generateHash;
 };

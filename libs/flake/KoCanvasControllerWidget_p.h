@@ -45,7 +45,6 @@
 
 #include <KoConfig.h>
 
-
 class KoCanvasControllerWidget::Private
 {
 public:

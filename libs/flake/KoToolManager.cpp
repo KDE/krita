@@ -742,9 +742,10 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolButton> KoToolManager::createToolList() const
+QVector<KoToolButton> KoToolManager::createToolList() const
 {
-    QList<KoToolButton> answer;
+    QVector<KoToolButton> answer;
+    answer.reserve(d->tools.count());
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
@@ -788,19 +789,26 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         return;
     }
 
+    // Actions available during the use of individual tools
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoToolBase *tool, cd->allTools) {
-        QHash<QString, QAction *> actions = tool->actions();
-        QHash<QString, QAction *>::const_iterator it(actions.constBegin());
-        for (; it != actions.constEnd(); ++it) {
-            if (!ac->action(it.key()))
-                ac->addAction(it.key(), it.value());
+        QHash<QString, QAction*> actions = tool->actions();
+        QHash<QString, QAction*>::const_iterator action(actions.constBegin());
+        for (; action != actions.constEnd(); ++action) {
+            if (!ac->action(action.key()))
+                ac->addAction(action.key(), action.value());
         }
     }
-    foreach(ToolHelper * th, d->tools) {
-        ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
-        action->setShortcut(th->shortcut().primary());
-        ac->addAction(th->id(), action);
+
+    // Actions used to switch tools; connect slot to keep button tooltips updated
+    if (qApp->applicationName().contains("krita")) {
+        foreach(ToolHelper * th, d->tools) {
+            ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
+            action->setShortcut(th->shortcut());
+            ac->addAction(th->id(), action);
+            th->setAction(action);
+            connect(action, SIGNAL(changed()), th, SLOT(actionUpdated()));
+        }
     }
 }
 

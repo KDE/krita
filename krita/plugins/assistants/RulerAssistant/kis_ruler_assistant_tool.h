@@ -98,7 +98,7 @@ class KisRulerAssistantToolFactory : public KoToolFactoryBase
 public:
     KisRulerAssistantToolFactory()
             : KoToolFactoryBase("KisRulerAssistantTool") {
-        setToolTip(i18n("Ruler assistant editor tool"));
+        setToolTip(i18n("Assistant Tool"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
         setPriority(0);

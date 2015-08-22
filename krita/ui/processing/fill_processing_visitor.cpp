@@ -21,6 +21,7 @@
 #include <kis_node.h>
 #include <kis_image.h>
 #include <kis_fill_painter.h>
+#include <kis_wrapped_rect.h>
 
 
 FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
@@ -62,6 +63,12 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
     ProgressHelper helper(node);
     QRect fillRect = m_resources->image()->bounds();
 
+    if (!device->defaultBounds()->wrapAroundMode() &&
+        !fillRect.contains(m_startPoint)) {
+
+        return;
+    }
+
     if (m_selectionOnly) {
         KisPaintDeviceSP filledDevice = device->createCompositionSourceDevice();
         KisFillPainter fillPainter(filledDevice);
@@ -94,6 +101,11 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
 
     } else {
 
+        QPoint startPoint = m_startPoint;
+        if (device->defaultBounds()->wrapAroundMode()) {
+            startPoint = KisWrappedRect::ptToWrappedPt(startPoint, device->defaultBounds()->bounds());
+        }
+
         KisFillPainter fillPainter(device, m_selection);
         fillPainter.beginTransaction();
 
@@ -111,9 +123,9 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
 
         if (m_usePattern) {
-            fillPainter.fillPattern(m_startPoint.x(), m_startPoint.y(), sourceDevice);
+            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice);
         } else {
-            fillPainter.fillColor(m_startPoint.x(), m_startPoint.y(), sourceDevice);
+            fillPainter.fillColor(startPoint.x(), startPoint.y(), sourceDevice);
         }
 
         fillPainter.endTransaction(undoAdapter);

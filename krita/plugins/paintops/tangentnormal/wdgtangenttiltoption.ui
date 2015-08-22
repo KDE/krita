@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>264</height>
+    <height>298</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,6 +23,13 @@
    </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string extracomment="This is a type of normal map used in 3d rendering. Normal in this case reffers to the Normal in the law of Reflection by William Snellius">A Brush Engine for Drawing 3d Tangent Normal Maps</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QGroupBox" name="TangentEncoding">
      <property name="autoFillBackground">
@@ -243,7 +250,7 @@
           </property>
          </widget>
         </item>
-	<item row="0" column="3">
+        <item row="0" column="3">
          <widget class="QRadioButton" name="optionMix">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mix Tilt and Drawing angle to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -253,37 +260,37 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-	 <widget class="KisDoubleSliderSpinBox" name="sliderElevationSensitivity" native="true">
-	  <property name="sizePolicy">
-	   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-	    <horstretch>0</horstretch>
-	    <verstretch>0</verstretch>
-	   </sizepolicy>
-	  </property>
-	 </widget>
-	</item>
-	<item row="2" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="L_mix">
           <property name="text">
            <string>Direction/Tilt Mix Value</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="KisDoubleSliderSpinBox" name="sliderMixValue" native="true">
-	  <property name="sizePolicy">
-	   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-	    <horstretch>0</horstretch>
-	    <verstretch>0</verstretch>
-	   </sizepolicy>
-	  </property>
-	 </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="L_elevation">
           <property name="text">
            <string>Elevation Sensitivity</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="3">
+         <widget class="KisDoubleSliderSpinBox" name="sliderMixValue" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="3">
+         <widget class="KisDoubleSliderSpinBox" name="sliderElevationSensitivity" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
          </widget>
         </item>
@@ -322,18 +329,38 @@
   </customwidget>
  </customwidgets>
  <resources/>
-  <connections>
-   <connection>
-    <sender>optionMix</sender>
-    <signal>toggled(bool)</signal>
-    <receiver>sliderMixValue</receiver>
-    <slot>setVisible(bool)</slot>
-   </connection>
-   <connection>
-    <sender>optionMix</sender>
-    <signal>toggled(bool)</signal>
-    <receiver>L_mix</receiver>
-    <slot>setVisible(bool)</slot>
-   </connection>
-  </connections>
+ <connections>
+  <connection>
+   <sender>optionMix</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>sliderMixValue</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>optionMix</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>L_mix</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

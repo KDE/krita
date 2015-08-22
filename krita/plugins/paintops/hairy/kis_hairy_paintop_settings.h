@@ -35,7 +35,7 @@ public:
 
     KisHairyPaintOpSettings();
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
-    virtual void fromXML(const QDomElement&);
+
 };
 
 #endif

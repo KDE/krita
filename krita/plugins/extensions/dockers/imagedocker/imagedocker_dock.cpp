@@ -271,8 +271,6 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
         image = qvariant_cast<QImage>(event->mimeData()->imageData());
     }
 
-    // TODO: use KIO to fetch images from http:// urls
-
     if (!image.isNull()) {
         QTemporaryFile *file = new QTemporaryFile(QDir::tempPath () + QDir::separator() + "krita_reference_dnd_XXXXXX.png");
         m_temporaryFiles.append(file);

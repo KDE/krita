@@ -219,13 +219,11 @@ bool KoStore::open(const QString & _name)
 
     if (d->isOpen) {
         kWarning(30002) << "Store is already opened, missing close";
-        //return KIO::ERR_INTERNAL;
         return false;
     }
 
     if (d->fileName.length() > 512) {
         kError(30002) << "KoStore: Filename " << d->fileName << " is too long" << endl;
-        //return KIO::ERR_MALFORMED_URL;
         return false;
     }
 
@@ -233,7 +231,6 @@ bool KoStore::open(const QString & _name)
         kDebug(30002) << "opening for writing" << d->fileName;
         if (d->filesList.contains(d->fileName)) {
             kWarning(30002) << "KoStore: Duplicate filename" << d->fileName;
-            //return KIO::ERR_FILE_ALREADY_EXIST;
             return false;
         }
 
@@ -247,7 +244,6 @@ bool KoStore::open(const QString & _name)
         if (!openRead(d->fileName))
             return false;
     } else
-        //return KIO::ERR_UNSUPPORTED_ACTION;
         return false;
 
     d->isOpen = true;
@@ -267,7 +263,6 @@ bool KoStore::close()
 
     if (!d->isOpen) {
         kWarning(30002) << "You must open before closing";
-        //return KIO::ERR_INTERNAL;
         return false;
     }
 
@@ -607,4 +602,9 @@ KoStore::Mode KoStore::mode() const
 {
     Q_D(const KoStore);
     return d->mode;
+}
+
+QStringList KoStore::directoryList() const
+{
+    return QStringList();
 }

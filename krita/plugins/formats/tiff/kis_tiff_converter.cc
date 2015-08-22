@@ -24,12 +24,10 @@
 #include <QFile>
 #include <QApplication>
 
+#include <kurl.h>
+
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
-
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
-#include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -170,7 +168,6 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
 KisTIFFConverter::KisTIFFConverter(KisDocument *doc)
 {
     m_doc = doc;
-    m_job = 0;
     m_stop = false;
 
     TIFFSetWarningHandler(0);
@@ -188,7 +185,6 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KUrl& uri)
     TIFF *image = 0;
     if ((image = TIFFOpen(QFile::encodeName(uri.toLocalFile()), "r")) == NULL) {
         dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << uri.toLocalFile();
-
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
     do {
@@ -615,21 +611,11 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    QString tmpFile;
-
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
-        KUrl uriTF(tmpFile);
-        result = decode(uriTF);
-        KIO::NetAccess::removeTempFile(tmpFile);
-    }
-
-    return result;
+    return decode(uri);
 }
 
 
@@ -680,13 +666,11 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
 
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(kisimage->rootLayer().data());
     if (root == 0) {
-        KIO::del(uri);
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
     KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
     if (!visitor->visit(root)) {
-        KIO::del(uri);
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }

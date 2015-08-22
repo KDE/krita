@@ -21,6 +21,7 @@
 #define _KO_COLOR_PROFILE_H_
 
 #include <QString>
+#include <QVector>
 #include <QVariant>
 
 #include "pigment_export.h"
@@ -107,6 +108,32 @@ public:
      */
     virtual bool isSuitableForDisplay() const = 0;
 
+    /**
+     * @return if the profile has colorants.
+     */
+    virtual bool hasColorants() const = 0;
+    /**
+     * @return a qvector <double>(9) with the RGB colorants in XYZ
+     */
+    virtual QVector <double> getColorantsXYZ() const = 0;
+    /**
+     * @return a qvector <double>(9) with the RGB colorants in xyY
+     */
+    virtual QVector <double> getColorantsxyY() const = 0;
+    /**
+     * @return a qvector <double>(3) with the whitepoint in XYZ
+     */
+    virtual QVector <double> getWhitePointXYZ() const = 0;
+    /**
+     * @return a qvector <double>(3) with the whitepoint in xyY
+     */
+    virtual QVector <double> getWhitePointxyY() const = 0;
+    
+    /**
+     * @return estimated gamma for RGB and Grayscale profiles
+     */
+    virtual QVector <double> getEstimatedTRC() const = 0;
+    
     virtual bool operator==(const KoColorProfile&) const = 0;
 
     /**

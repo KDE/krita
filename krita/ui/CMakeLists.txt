@@ -198,6 +198,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc
     widgets/kis_color_space_selector.cc
+    widgets/kis_advanced_color_space_selector.cc
+    widgets/kis_cie_tongue_widget.cpp
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
@@ -392,6 +394,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgcolorsettings.ui
     forms/wdgtabletsettings.ui
     forms/wdgcolorspaceselector.ui
+    forms/wdgcolorspaceselectoradvanced.ui
     forms/wdgdisplaysettings.ui
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui

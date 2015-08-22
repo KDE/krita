@@ -108,7 +108,8 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 
     if (!currentNode() ||
-        !currentImage()->bounds().contains(m_startPos)) {
+        (!image()->wrapAroundModePermitted() &&
+         !image()->bounds().contains(m_startPos))) {
 
         return;
     }
@@ -133,7 +134,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     bool useFastMode = m_useFastMode->isChecked();
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
-                                       KisProcessingApplicator::NONE,
+                                       KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
                                        KisImageSignalVector() << ModifiedSignal,
                                        kundo2_i18n("Flood Fill"));
 

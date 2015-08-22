@@ -85,11 +85,11 @@ void SpecificColorSelectorDock::setMainWindow(KisViewManager* kisview)
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
     if (!node) return;
-    if (!node->paintDevice()) return;
+    if (!node->projection()) return;
     if (!m_colorSelector) return;
     if (!m_colorSelector->customColorSpaceUsed()) {
-        const KoColorSpace *cs = node->paintDevice() ?
-            node->paintDevice()->compositionSourceColorSpace() :
+        const KoColorSpace *cs = node->projection() ?
+            node->projection()->compositionSourceColorSpace() :
             node->colorSpace();
 
         m_colorSelector->setColorSpace(cs);

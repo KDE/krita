@@ -247,7 +247,7 @@ bool ToolTransformArgs::isIdentity() const
 
         return true;
     } else if (m_mode == LIQUIFY) {
-        qWarning("Not implemented!");
+        // Not implemented!
         return false;
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");

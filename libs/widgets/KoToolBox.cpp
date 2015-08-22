@@ -44,6 +44,26 @@
 
 #define BUTTON_MARGIN 10
 
+static int buttonSize(int screen)
+{
+    QRect rc = qApp->desktop()->screenGeometry(screen);
+    if (rc.width() <= 1024) {
+        return 12;
+    }
+    else if (rc.width() <= 1377) {
+        return 14;
+    }
+    else  if (rc.width() <= 1920 ) {
+        return 16;
+    }
+    else if (rc.width() <= 2048) {
+        return 32;
+    }
+    else {
+        return 48;
+    }
+}
+
 class KoToolBox::Private
 {
 public:
@@ -85,8 +105,7 @@ KoToolBox::KoToolBox()
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
     foreach(const KoToolButton & button, KoToolManager::instance()->createToolList()) {
-        addButton(button.button, button.section, button.priority, button.buttonGroupId);
-        d->visibilityCodes.insert(button.button, button.visibilityCode);
+        addButton(button);
     }
 
     // Update visibility of buttons
@@ -109,30 +128,30 @@ KoToolBox::~KoToolBox()
     delete d;
 }
 
-void KoToolBox::addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId)
+void KoToolBox::addButton(const KoToolButton &button)
 {
-    d->buttons << button;
+    d->buttons << button.button;
     // ensure same L&F
-    button->setCheckable(true);
-    button->setAutoRaise(true);
+    button.button->setCheckable(true);
+    button.button->setAutoRaise(true);
 
-    int toolbuttonSize = 14; // QApplication::style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, 0);
+    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
     KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
-    button->setIconSize(QSize(iconSize, iconSize));
+    button.button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {
         section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
     }
 
     QString sectionToBeAddedTo;
-    if (section.contains(qApp->applicationName())) {
+    if (button.section.contains(qApp->applicationName())) {
         sectionToBeAddedTo = "main";
-    } else if (section.contains("main")) {
+    } else if (button.section.contains("main")) {
         sectionToBeAddedTo = "main";
-    }  else if (section.contains("dynamic")) {
+    }  else if (button.section.contains("dynamic")) {
         sectionToBeAddedTo = "dynamic";
     } else {
-        sectionToBeAddedTo = section;
+        sectionToBeAddedTo = button.section;
     }
 
     Section *sectionWidget = d->sections.value(sectionToBeAddedTo);
@@ -140,12 +159,11 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
         sectionWidget = new Section(this);
         d->addSection(sectionWidget, sectionToBeAddedTo);
     }
-    sectionWidget->addButton(button, priority);
+    sectionWidget->addButton(button.button, button.priority);
 
-    if (buttonGroupId < 0)
-        d->buttonGroup->addButton(button);
-    else
-        d->buttonGroup->addButton(button, buttonGroupId);
+    d->buttonGroup->addButton(button.button, button.buttonGroupId);
+
+    d->visibilityCodes.insert(button.button, button.visibilityCode);
 }
 
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
@@ -260,8 +278,7 @@ void KoToolBox::setFloating(bool v)
 void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)
 {
     Q_UNUSED(canvas);
-    addButton(button.button, button.section, button.priority, button.buttonGroupId);
-    d->visibilityCodes.insert(button.button, button.visibilityCode);
+    addButton(button);
     setButtonsVisible(QList<QString>());
 
 }
@@ -305,7 +322,7 @@ void KoToolBox::slotContextIconSize()
 void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 {
 
-    int toolbuttonSize = 16; //QApplication::style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, 0);
+    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
 
     if (!d->contextSize) {
 
@@ -326,7 +343,6 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
             action->setCheckable(true);
         }
     }
-
     KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
     toolbuttonSize = cfg.readEntry("iconSize", toolbuttonSize);
 

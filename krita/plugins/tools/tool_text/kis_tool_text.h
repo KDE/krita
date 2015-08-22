@@ -66,7 +66,7 @@ class KisToolTextFactory : public KoToolFactoryBase
 public:
     KisToolTextFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolText") {
-        setToolTip(i18n("Text tool"));
+        setToolTip(i18n("Text Tool"));
 
         setToolType(mainToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

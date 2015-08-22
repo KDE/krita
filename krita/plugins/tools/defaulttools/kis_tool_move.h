@@ -121,7 +121,7 @@ class KisToolMoveFactory : public KoToolFactoryBase
 public:
     KisToolMoveFactory(const QStringList&)
             : KoToolFactoryBase("KritaTransform/KisToolMove") {
-        setToolTip(i18n("Move a layer"));
+        setToolTip(i18n("Move Tool"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);

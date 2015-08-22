@@ -62,6 +62,15 @@ public:
 
     bool isDroppedMask() const;
 
+    /**
+     * Regenerate projection of the current group layer iff it is
+     * pass-through mode.
+     *
+     * WARNING: must be called either under the image lock held
+     *          or in the context of an exclusive stroke job.
+     */
+    void explicitlyRegeneratePassThroughProjection();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

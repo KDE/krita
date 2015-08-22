@@ -152,13 +152,10 @@ bool KoZipStore::openRead(const QString& name)
     Q_D(KoStore);
     const KArchiveEntry * entry = m_pZip->directory()->entry(name);
     if (entry == 0) {
-        //kWarning(30002) << "Unknown filename " << name;
-        //return KIO::ERR_DOES_NOT_EXIST;
         return false;
     }
     if (entry->isDirectory()) {
         kWarning(30002) << name << " is a directory !";
-        //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
     // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual!
@@ -188,6 +185,19 @@ qint64 KoZipStore::write(const char* _data, qint64 _len)
     if (m_pZip->writeData(_data, _len))     // writeData returns a bool!
         return _len;
     return 0;
+}
+
+QStringList KoZipStore::directoryList() const
+{
+    QStringList retval;
+    const KArchiveDirectory *directory = m_pZip->directory();
+    foreach(const QString &name, directory->entries()) {
+        const KArchiveEntry* fileArchiveEntry = m_pZip->directory()->entry(name);
+        if (fileArchiveEntry->isDirectory()) {
+            retval << name;
+        }
+    }
+    return retval;
 }
 
 bool KoZipStore::closeWrite()

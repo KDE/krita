@@ -41,6 +41,7 @@ public:
     using KoCreatePathTool::endPathWithoutLastPoint;
     using KoCreatePathTool::endPath;
     using KoCreatePathTool::cancelPath;
+    using KoCreatePathTool::removeLastPoint;
 
 private:
     KisToolSelectPath* const m_selectionTool;
@@ -72,6 +73,7 @@ class KisToolSelectPath : public SelectionActionHandler<KisDelegatedSelectPathWr
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent* event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 protected:
     void requestStrokeCancellation();

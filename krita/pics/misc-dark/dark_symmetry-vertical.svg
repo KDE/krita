@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="light_symmetry-vertical.svg"
+   sodipodi:docname="dark_symmetry-vertical.svg"
    inkscape:export-filename="C:\dribbble\krita icons\Collaborate\1_flat\other\symmetry-vertical.png"
    inkscape:export-xdpi="45"
    inkscape:export-ydpi="45">
@@ -165,7 +165,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="16.78754"
+     inkscape:cx="4.60004"
      inkscape:cy="19.330307"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -173,10 +173,10 @@
      units="px"
      inkscape:showpageshadow="false"
      showborder="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1028"
-     inkscape:window-x="1358"
-     inkscape:window-y="-8"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      objecttolerance="20">
     <inkscape:grid
@@ -223,7 +223,7 @@
        sodipodi:nodetypes="cccc" />
     <path
        style="opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="m 32,15.999999 -32,0 0,14 z"
+       d="M 32,18 0,18 0,32 Z"
        id="rect4183-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />

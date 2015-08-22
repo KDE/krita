@@ -43,6 +43,9 @@ public:
 
     virtual void setCompressionEnabled(bool e);
     virtual qint64 write(const char* _data, qint64 _len);
+
+    virtual QStringList directoryList() const;
+
 protected:
     void init(const QByteArray& appIdentification);
     virtual bool doFinalize();

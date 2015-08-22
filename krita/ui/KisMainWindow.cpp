@@ -61,7 +61,6 @@
 #include <kfileitem.h>
 #include <kglobalsettings.h>
 #include <khelpmenu.h>
-#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmenu.h>
@@ -692,7 +691,7 @@ KisView *KisMainWindow::activeView() const
 
 bool KisMainWindow::openDocument(const KUrl & url)
 {
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
+    if (!QFile(url.toLocalFile()).exists()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();

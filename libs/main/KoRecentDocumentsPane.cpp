@@ -69,7 +69,6 @@ public:
     }
 
     QList<KJob*> m_previewJobs;
-    QStandardItemModel* m_model;
 };
 
 

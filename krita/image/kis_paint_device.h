@@ -288,6 +288,12 @@ public:
      * x,y shifts, colorspace and will share pixels inside \a rect.
      * After calling this function:
      * (this->extent() >= this->exactBounds() == rect).
+     *
+     * Rule of thumb:
+     *
+     * "Use makeCloneFrom() or makeCloneFromRough() if and only if you
+     * are the only owner of the destination paint device and you are
+     * 100% sure no other thread has access to it"
      */
     void makeCloneFrom(KisPaintDeviceSP src, const QRect &rect);
 
@@ -298,6 +304,12 @@ public:
      * of pixels. Actual copy area will be a bigger - it will
      * be aligned by tiles borders. So after calling this function:
      * (this->extent() == this->exactBounds() >= rect).
+     *
+     * Rule of thumb:
+     *
+     * "Use makeCloneFrom() or makeCloneFromRough() if and only if you
+     * are the only owner of the destination paint device and you are
+     * 100% sure no other thread has access to it"
      */
     void makeCloneFromRough(KisPaintDeviceSP src, const QRect &minimalRect);
 

@@ -22,6 +22,7 @@
 
 #include "KoMD5Generator.h"
 
+#include <kglobal.h>
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = 0;
 
 KoHashGeneratorProvider::KoHashGeneratorProvider()
@@ -52,8 +53,6 @@ void KoHashGeneratorProvider::setGenerator(QString algorithm, KoHashGenerator *g
 
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance()
 {
-    if(!instance_var)
-        instance_var = new KoHashGeneratorProvider();
-
-    return instance_var;
+    K_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
+    return s_instance;
 }

@@ -59,7 +59,7 @@ bool KritaCreator::create(const QString &path, int width, int height, QImage &im
     // first check if normal thumbnail is good enough
     if (// ORA thumbnail?
         store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
-         // KRA thumbnail?
+        // KRA thumbnail?
         store->open(QLatin1String("preview.png"))) {
 
         const QByteArray thumbnailData = store->read(store->size());

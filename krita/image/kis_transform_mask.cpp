@@ -236,7 +236,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
     if (m_d->recalculatingStaticImage) {
         m_d->staticCacheDevice->clear();
         m_d->params->transformDevice(const_cast<KisTransformMask*>(this), src, m_d->staticCacheDevice);
-        dst->makeCloneFrom(m_d->staticCacheDevice, m_d->staticCacheDevice->extent());
+        QRect updatedRect = m_d->staticCacheDevice->extent();
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
 #ifdef DEBUG_RENDERING
         qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);

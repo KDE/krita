@@ -102,14 +102,10 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
     image->unlock();
 
-    QStringList supportedColorModelIds;
-    supportedColorModelIds << RGBAColorModelID.id() << GrayAColorModelID.id() << GrayColorModelID.id();
-    QStringList supportedColorDepthIds;
-    supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
-    if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
-            !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
+
+    if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
         if (!m_chain->manager()->getBatchMode()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("Cannot export images in this colorspace or channel depth to PNG"));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
         }
         return KisImportExportFilter::UsageError;
     }
@@ -240,7 +236,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(url, image, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KisImportExportFilter::OK;

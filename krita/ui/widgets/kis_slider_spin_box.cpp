@@ -70,7 +70,8 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     , d_ptr(_d)
 {
     Q_D(KisAbstractSliderSpinBox);
-    changeEvent(new QEvent(QEvent::StyleChange));
+    QEvent e(QEvent::StyleChange);
+    changeEvent(&e);
 
     d->upButtonDown = false;
     d->downButtonDown = false;

@@ -157,7 +157,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
 
-    m_colorSetChooser = new ColorSetChooser();
+    m_colorSetChooser = new ColorSetChooser(this);
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
     m_wdgPaletteDock->bnColorSets->setIcon(koIcon("hi16-palette_library"));

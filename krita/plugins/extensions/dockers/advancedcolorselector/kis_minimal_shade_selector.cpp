@@ -85,7 +85,8 @@ void KisMinimalShadeSelector::updateSettings()
 
     int lineCount = strili.size();
     while(lineCount-m_shadingLines.size() > 0) {
-        m_shadingLines.append(new KisShadeSelectorLine(m_proxy.data(), this));
+        KisShadeSelectorLine *line = new KisShadeSelectorLine(m_proxy.data(), this);
+        m_shadingLines.append(line);
         m_shadingLines.last()->setLineNumber(m_shadingLines.size()-1);
         layout()->addWidget(m_shadingLines.last());
     }

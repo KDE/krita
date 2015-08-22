@@ -1,0 +1,477 @@
+Elle Stone's Well-Behaved ICC Profiles and Code
+
+This profile pack provides well-behaved ICC RGB working space profiles, plus Gray, XYZ, and LAB profiles, plus code for making your own V2 and V4 profiles using LittleCMS version 2 ("LCMS").
+
+Written September 2013. Updated June 2015.
+
+Page Contents
+
+    Introduction and why I distribute ICC profiles and profile-making code
+    The profile TRC variants and ICC spec versions
+    Profile descriptions
+        ACES
+        ACEScg
+        AdobeRGB1998
+        AllColorsRGB
+        CIERGB
+        IdentityRGB
+        ProphotoRGB
+        Rec.2020
+        sRGB
+        WideGamutRGB
+        Gray ICC profiles
+        LCMS built-in LAB and XYZ Identity ICC profiles
+    How to compile the profile-making code
+
+Introduction
+
+My ICC profile-making code makes a variety of RGB working space profiles, plus Gray profiles, plus XYZ and LAB identity profiles. The code includes the most commonly used RGB working space profiles (including ACES, ACEScg, AdobeRGB1998, ProPhotoRGB, Rec.2020, and sRGB), plus an assortment of less commonly used profiles.
+
+Each RGB working space profile "family" is provided with the profile's standard Tone Reproduction Curve ("TRC"), the linear gamma TRC, and the sRGB and LAB "L" TRCs, in both V2 and V4 versions.
+
+The downloadable tar.gz or zip profile pack includes the profiles, source code, licences, README, and etc. If there is a profile you need, that isn't already included in the code or profile pack, let me know and I'll try to add the code to make the new profile.
+Legalese
+
+To the best of my knowledge, all the profiles included in my ICC profile pack and profile-making code are free from known copyright restrictions. I am not a lawyer, so use at your own risk. The downloadable premade profiles are released under the Creative Commons Attribution-Share-Alike Unported license, version 3.0 (https://creativecommons.org/licenses/by-sa/3.0/legalcode). The profile-making code is released as GNU General Public License, version 2 (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html). Both of these licenses are on the Fedora and Debian lists of free software licenses.
+
+
+Why I distribute ICC profiles and profile-making code
+
+I distribute ICC profiles and profile-making code for three reasons:
+
+    I think everyone should have access to well-behaved, properly made ICC profiles that aren't encumbered by onerous copyrights.
+    Many profile vendors don't supply linear gamma versions of the various ICC RGB working space profiles, even though more and more artists and photographers are choosing to edit in linear gamma color spaces to take advantage of proper color mixing.
+    I did a survey of profiles provided by various profile vendors, and didn't like the results:
+        Some profile vendors supply RGB working space profiles that are made using the wrong source white point, the wrong primaries, and/or wrong or oddly coded TRCs.
+        And some profile vendors provide RGB working space profiles that aren't well-behaved, even though being well-behaved is pretty much the defining characteristic of a proper RGB working space profile.
+
+For more information about assorted problems with various vendor-supplied RGB working space profiles, see:
+
+    What Makes a Color Space Well-Behaved?
+    Are Your Working Space Profiles Well Behaved?
+    In Quest of Well Behaved Working Spaces
+    Survey of Free and Open Source ICC RGB Working Space Profiles
+
+Software used to make the profiles
+
+My profile-making code uses the LittleCMS open source color management engine ("LCMS"). However, by itself LCMS often can't create well-behaved profiles because unlike the ArgyllCMS profile-making code, the LCMS profile-making code doesn't compensate for hexadecimal quantization. Unfortunately, without somehow compensating for hexadecimal quantization, using LCMS to make sRGB, AdobeRGB1998, and quite a few other color space profiles will result in profiles that aren't well behaved. The AdobeRGB1998 specifications not only give the D65 xy and XYZ values for the AdobeRGB1998 color space, but also the D50-adapted XYZ values. Because LCMS doesn't account for hexadecimal quantization, AdobeRGB1998 profiles made with LCMS don't exactly match the AdobeRGB1998 specifications.
+
+As already noted, ArgyllCMS's profile-making code does compensate for hexadecimal quantization. So for profiles that are affected by hexadecimal quantization, I used the ArgyllCMS profile-making source code (located in "src/mkDispProf.c") to calculate the properly quantized D50-adapted XYZ values. Then I used a spreadsheet to "back-Bradford-adapt" from the ArgyllCMS D50-adapted XYZ values to the source color space white point to calculate "prequantized" xy values to feed to LCMS. These "prequantized" xy values allow me to use LCMS to make profiles that are well-behaved, with colorants that match the corresponding ArgyllCMS profiles (when there is one; my profile pack and code does include profiles that ArgyllCMS doesn't distribute). And I used ArgyllCMS's xicclu utility to confirm that all the profiles included in my profile pack are indeed well-behaved.
+The profile TRC variants and ICC spec versions
+
+Each profile "family", for example, sRGB or ProPhotoRGB or Rec.2020, is supplied with several variants. Each profile is supplied with its standard TRC, the linear gamma (gamma=1.0) TRC, the gamma=2.2 TRC (as the true gamma TRC that is closest to being perceptually uniform), the sRGB TRC, and the LAB "L" (perceptually uniform) TRC. And each profile variant is supplied in V2 and V4 versions.
+TRC variants
+
+Several variants of each RGB working space profile are provided. Each profile is provided with its standard Tone Reproduction Curve ("TRC"). For example:
+
+    The standard TRC for ProPhotoRGB is gamma=1.8.
+    The standard TRC for AdobeRGB1998 (and many other RGB working space profiles) is gamma=2.2.
+    The standard TRC for sRGB has a short linear portion in the deep shadows and a gamma=2.4 portion elsewhere, for a net TRC that is approximately equal to the gamma=2.2 TRC.
+
+In addition to the profile's standard TRC, for each of the RGB working spaces, profile variants are made with the linear gamma TRC (gamma=1.0), the sRGB TRC, and the Lab "L" (aka "lstar") TRC.
+
+So there are two or three additional profile variants for each of the standard RGB working spaces, depending on what the standard TRC for any given RGB working space happens to be. Also the Gray profiles are provided with the linear gamma, gamma=1.8, and gamma=2.2 TRCs, plus the sRGB, LAB "L", and Rec.709 TRCs.
+A note about V2 vs V4 profiles with gamma=1.8 and gamma=2.2 TRCs:
+
+See the next section below for an explanation of the difference between V2 and V4 profiles.
+
+All nominally "Gamma=2.2" profiles that I supply have a gamma=2.19921875 TRC, in keeping with the gamma value used in nominally "gamma=2.2" V2 profiles. This gamma value reflects hexadecimal rounding that was unavoidable in V2 profiles and is explicitly given on page 10 of the AdobeRGB1998 color space specifications.
+
+All nominally "Gamma=1.8" profiles that I supply have a gamma=1.80078125 TRC, in keeping with the gamma value used in nominally "gamma=1.8" V2 profiles. This gamma value reflects hexadecimal rounding that was unavoidable in V2 profiles.
+
+V4 profiles can encode gamma curves that are exactly gamma=1.8 and gamma=2.2. But using gamma=1.8 and gamma=2.2 for V4 profiles would mean that V2 and V4 versions of standard RGB working space profiles would use slightly different TRCS, and this seems to me to be not a good idea.
+V2 and V4 versions
+
+Well, that's already a lot of profiles. But there's more. For reasons explained below, each profile variant is provides as a V4 profile and also as a V2 profile.
+When to use V4 profiles and when to use V2 profiles:
+
+For anyone who wants the simplest possible "rule of thumb" regarding when to use V2 profiles and when to use V4 profiles:
+
+    Use V4 profiles for editing images using high bit depth image editors that use LCMS as the Color Management Module. This includes Krita, digiKam/showFoto, and GIMP 2.9.
+    Use V2 profiles for exporting finished images to be uploaded to the web or for use with imaging software that can't read V4 profiles.
+
+What does "V2" and "V4" even mean?
+In short:
+
+The International Color Consortium ("the ICC", founded in 1993) is responsible for setting specifications for ICC profiles:
+
+V2 ICC profiles are made according to the V2 specs, released around 1995.
+
+V4 ICC profiles are made according to the V4 specs, released around 2001 and last revised around 2010.
+In more detail:
+
+A lot changed between V2 and V4, causing a huge uproar and a lot of disagreement and unhappiness. This disagreement and unhappiness is a major reason why some very important software (such as ArgyllCMS and other profiling software) still makes and uses V2 profiles.
+
+The "V2" profiles I supply are actually "V2 profiles made according to V4 specs". These profiles are readable by V2 software such as ArgyllCMS and LCMS version 1. But they don't provide all the functionality you would get from a real V2 profile when using color management software that was programmed to use the V2 ICC specs.
+
+In particular, V4 specs don't allow for absolute colorimetric conversions to many commonly used matrix profiles, including sRGB. So "V2 according to V4" profiles don't behave exactly like real V2 profiles used in a real V2 workflow. LCMS provides ICC profile color management following V4 specs, not V2 specs. So Krita, GIMP, RawTherapee, showFoto, and all other imaging software that uses LCMS can read real V2 profiles, but V2 profiles are treated as if they were V4 profiles.
+Why do I supply "V2 according to V4" profiles and also V4 profiles?
+In short:
+
+On the one hand, a lot of software packages can't read V4 profiles, including Firefox when set to its default color management settings.
+
+On the other hand, LCMS quantizes RGB data when doing an ICC profile conversion to (and from?) a profile that is made with a point TRC. For example, V2 and "V2 according to V4" profiles that use the sRGB TRC have "point curve" TRCs.
+
+So I supply "V2 according to V4" profiles for use with software that can't read V4 profiles. And I supply V4 profiles (with parametric curves instead of point curves) for use with Krita and other image editing software that uses LCMS to do ICC profile conversions.
+
+When editing 8-bit images, it doesn't matter whether the image's ICC profile has a point curve or a parametric curve, because the RGB data is already quantized below the level of precision provided by the point curves. But for high bit depth editing, it's better to use V4 profiles with parametric curves.
+In more detail:
+
+The "V2 according to V4" sRGB profile uses a TRC that has 4096 points that specify a "point curve" that controls how fast the RGB colors get lighter as the RGB values range from (0,0,0) to (1,1,1) on a floating point scale.
+
+My V4 sRGB profile (along with my other V4 profiles with the sRGB or LAB "L" TRC) uses a parametric curve that closely follows the original sRGB TRC specified by Hewlett-Packard and Microsoft when they released the sRGB color space specs (different from ICC profile specs!) back in 1996.
+
+LCMS can "look up" an infinite number of RGB values along a parametric curve TRC, limited only by the precision of the floating point computations. So there's no quantization for V4 TRCs with the parametric sRGB curve.
+
+Parametric curves were introduced as part of the V4 specs. They weren't available for V2 profiles. So software that uses V2 color management can't read parametric curves (unless updates are made to allow reading V4 profiles, as I believe was done for Cinepaint.
+
+The original sRGB TRC as specified by Hewlett-Packard and Microsoft only had 1024 points. My impression is that most color management software interpolates between the points (for example, ArgyllCMS interpolates between the points). LCMS merely quantizes. So LCMS makes "V2 according to V4" profiles with 4096 points to lessen the effect of quantization. LCMS isn't required to quantize. This isn't in the ICC V4 specs. Possibly this peculiar LCMS behavior changed in the 2.7 release, but I haven't checked.
+
+Note 1: This issue of "quantization with V2 point curves" vs "no quantization with V4 parametric curves" only affects the profiles in the profile pack that have file names that end with "-srgbtrc.icc", "-rec709.icc" or "-labl.icc". For profiles with true gamma curves (that is, all the profiles with file names that end in "-g10.icc", "-g18.icc", or "-g22.icc"), you can use V2 or V4 versions without worrying about point curve quantization.
+Why don't I supply true V2 profiles?
+
+I make the profiles using LCMS. LCMS doesn't make true V2 profiles, and ArgyllCMS isn't really set up for making ICC profile. I have to modify and recompile the ArgyllCMS source code for each profile that turns out to need "prequantization". You can download some true V2 profiles from the ArgyllCMS website as part of the ArgyllCMS software. And I'm considering using ArgyllCMS to make real V2 profiles to include in the profile pack (instead of "V2 according to V4" profiles). But doing so would require modifying the ArgyllCMS source code for each and every profile TRC variant, and that's a lot of work.
+Profile descriptions
+
+Currently my profile pack and code includes the following RGB working space profiles:
+
+    ACES
+    ACEScg
+    AdobeRGB1998
+    AllColorsRGB
+    CIERGB
+    IdentityRGB
+    ProphotoRGB
+    Rec.2020
+    WideGamutRGB
+    sRGB
+
+The profile pack and code also includes the following non-RGB profiles:
+
+    Gray ICC profiles
+    LCMS built-in LAB and XYZ Identity ICC profiles
+
+As already noted, the linear gamma profiles should only be used for high bit depth image editing. This is because there are too few tonal steps in the shadows of linear gamma color spaces, so for 8-bit images, shadows are posterized. (As an aside, those extra tonal steps that aren't in the shadows of linear gamma images didn't just vanish — compared to perceptually uniform RGB color spaces, there are many more tonal steps in the highlights of linear gamma color spaces.)
+Use notes that apply to all the RGB working space profiles:
+
+    Which color space should you use?
+
+    Everyone wants to know "what's the best RGB working space" and the answer depends in part on what you want to do, including how large a color gamut you need to encompass the colors you want to edit. However, contrary to what you might think, the size of the color gamut is not the only consideration.
+
+    About RGB Colourspace Models Performance takes a look at various color spaces from the point of view of how well selected multiplication operations emulate what would happen if you did the same calculations using spectral data. The study ranks the most commonly encountered RGB color spaces on how closely results in each color space emulate results obtained using spectral data.
+
+    The About RGB Colourspace Models Performance study can be critiqued on various grounds (I wish the study had included actual ICC profile working spaces, and I wish more operations had been checked). Nonetheless the findings are interesting. Some color spaces you might not have ever used ranked near the top of the study's ranking, including Rec.2020 and the ACEScg color space (both of which are included in my profile-making code and profile pack). And some of the more well-known and commonly used RGB working spaces, including sRGB, AdobeRGB1998 and ProPhotoRGB, ranked rather poorly, with sRGB ranking second from the bottom.
+
+    Anyway, I encourage you to think about breaking with the "sRGB/AdobeRGB1998/ProPhotoRGB" trio of commonly-used color spaces, and experiment with the Rec.2020 and ACEScg color spaces. I also encourage you to try using linear gamma color spaces, but of course only if you can use a high bit depth image editor (GIMP 2.9 requires special considerations when choosing an RGB working space). And when you need a color space with a perceptually uniform TRC, try the "labl" version of your preferred linear gamma color space.
+    The profiles that end in "-g10.icc" are linear gamma (gamma=1.0, "linear light", etc) profiles and should only be used when editing at high bit depths (16-bit floating point, 16-bit integer, 32-bit floating point, 32-bit integer). Many editing operations produce better results in linear gamma color spaces.
+    The profiles that end in "-labl.icc" have perceptually uniform TRCs. A few editing operations really should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth images.
+    The profiles that end in "-srgbtrc.icc", "-g22.icc", and "-bt709.icc" have approximately but not exactly perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform.
+    When editing 8-bit images, you should use a profile with a small color gamut and an approximately or exactly uniform TRC. Of the profiles supplied in my profile pack, only the sRGB and AdobeRGB1998 (ClayRGB) color spaces are small enough for 8-bit editing. Even with the AdobeRGB1998 color space you need to be careful to not cause posterization. And of course you can't use the linear gamma versions of these profiles for 8-bit editing.
+    The profiles that end in "-srgbtrc.icc" can be used with high bit depth GIMP 2.9 to mitigate some of the problems caused by GIMP's hard coded sRGB parameters.
+
+ACES, D60, gamma=1.0
+White point, standard TRC, and color space specification:
+
+    White point: D60 as given in the ACES specifications.
+    Standard TRC: gamma=1.0.
+    Color space specification: TB-2014-004 : Informative Notes on SMPTE ST 2065-1 – Academy Color Encoding Specification (ACES). See Aces Documentation for links to more documentation on ACES and ACES workflows.
+
+Description:
+
+Quoting Wikipedia, "'Academy Color Encoding System (ACES) is a color image encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for a fully encompassing color accurate workflow, with "seamless interchange of high quality motion picture images regardless of source'."
+Supplied profile variants:
+
+    ACES-elle-V2-g10.icc; ACES-elle-V4-g10.icc
+    ACES-elle-V2-g22.icc; ACES-elle-V4-g22.icc
+    ACES-elle-V2-labl.icc; ACES-elle-V4-labl.icc
+    ACES-elle-V2-srgbtrc.icc; ACES-elle-V4-srgbtrc.icc
+
+ACEScg, D60, gamma=1.0
+White point, standard TRC, and color space specification:
+
+    White point: D60 as given in the ACES specifications.
+    Standard TRC: gamma=1.0.
+    Color space specification: S-2014-004 : ACEScg — A Working Space for CGI Render and Compositing. Again, see Aces Documentation for links to more documentation on ACES and ACES workflows.
+
+Description:
+
+The ACEScg color space is smaller than the ACES color space, but large enough to contain the "Rec-2020 gamut and the DCI-P3 gamut", and has chromaticities that fall just barely outside the horseshoe-shaped locus of real colors on the xy chromaticity diagram.
+Supplied profile variants:
+
+    ACEScg-elle-V2-g10.icc; ACEScg-elle-V4-g10.icc
+    ACEScg-elle-V2-labl.icc; ACEScg-elle-V4-labl.icc
+    ACEScg-elle-V2-srgbtrc.icc; ACEScg-elle-V4-srgbtrc.icc
+
+AdobeRGB1998
+White point, standard TRC, and color space specification:
+
+    White point: D65 as given in the AdobeRGB1998 and sRGB specs.
+    Standard TRC: Gamma=2.19921875.
+    Color space specification: Adobe® RGB (1998) Color Image Encoding
+
+Description:
+
+To avoid possible copyright infringement issues, I used "ClayRGB" (following ArgyllCMS) as the base name for these profiles. As used below, "Compatible with Adobe RGB 1998" is terminology suggested in the preamble to the AdobeRGB 1998 color space specifications.
+
+The Adobe RGB 1998 color gamut covers a higher percentage of real-world cyans, greens, and yellow-greens than sRGB, but still doesn't include all printable cyans, greens, yellow-greens, especially when printing using today's high-end, wider gamut, ink jet printers. BetaRGB (not included in the profile pack) and Rec.2020 are better matches for the color gamuts of today's wide gamut printers.
+
+The Adobe RGB 1998 color gamut is a reasonable approximation to some of today's high-end wide gamut monitors.
+Supplied profile variants:
+
+    ClayRGB-elle-V2-g22.icc (compatible with Adobe RGB 1998); ClayRGB-elle-V4-g22 (compatible with Adobe RGB 1998): These profiles can be applied to DCF R98 camera-generated jpegs. They can also be used for 8-bit image editing if used with appropriate caution to avoid posterization, and also for high bit depth image editing (profiles with true gamma TRCs aren't subject to the LCMS quantization that affects point curve profiles such as the V2 sRGB point curve).
+    ClayRGB-elle-V2-g10.icc; ClayRGB-elle-V4-g10.icc
+    ClayRGB-elle-V2-labl.icc; ClayRGB-elle-V4-labl.icc
+    ClayRGB-elle-V2-srgbtrc.icc; ClayRGB-elle-V4-srgbtrc.icc
+
+AllColorsRGB
+White point, standard TRC, and color space specification:
+
+    White point: D50 (ICC specs for D50).
+    Standard TRC: Gamma=1.0.
+    Color space specification: See the Description below:
+
+Description:
+
+This profile's color gamut is roughly the same size and shape as the ACES color space gamut, and like the ACES color space, AllColorsRGB holds all possible real colors. But AllColorsRGB actually has a slightly larger color gamut (to capture some fringe colors that barely qualify as real when viewed by the standard observer) and uses the D50 white point.
+
+Just like the ACES color space, AllColorsRGB holds a high percentage of imaginary colors. See the Completely Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs for more information about imaginary colors.
+
+I can't think of any particular reason why anyone would want to use this profile for editing, unless you have a burning need to make sure your color space really does hold all possible real colors.
+
+AllColorsRGB chromaticities for red and blue were calculated from ledtuning.nl, and the green chromaticity was calculated using simple linear algebra:
+
+blue 375nm red 780nm, plus Y intercepts:
+Color Wavelength (): 375 nm.
+Spectral Locus coordinates: X:0.17451 Y:0.005182
+Color Wavelength (): 780 nm.
+Spectral Locus coordinates: X:0.734690265 Y:0.265309735
+X1:0.17451 Y1:0.005182
+X2:0.734690265 Y2:0.265309735
+X3:0.00Y3:? Solve for Y3:
+(0.265309735-0.005182)/(0.734690265-0.17451)=0.46436433279205221554=m
+y=mx+b let x=0; y=b
+Y1=0.005182=(0.46436433279205221554*0.17451)+b
+b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
+
+Supplied profile variants:
+
+    AllColorsRGB-elle-V2-g10.icc; AllColorsRGB-elle-V4-g10.icc
+    AllColorsRGB-elle-V2-labl.icc; AllColorsRGB-elle-V4-labl.icc
+    AllColorsRGB-elle-V2-srgbtrc.icc; AllColorsRGB-elle-V4-srgbtrc.icc
+
+CIERGB
+White point, standard TRC, and color space specification:
+
+    White point: E (ASTM).
+    Standard TRC: linear gamma.
+    Color space specification: see the Description below.
+
+Description:
+
+This profile is included mostly for its historical significance. It's the color space that was used in the original color matching experiments that led to the creation of the XYZ reference color space.
+
+The ASTM E white point is probably the right E white point to use when making the CIERGB color space profile. It's not clear to me what the correct CIERGB primaries really are. Lindbloom gives one set. The LCMS version 1 tutorial gives a different set. I asked a friend to ask a bonified expert in the field, who said the real primaries should be calculated from the spectral wavelengths, so I did.
+
+These web pages give the spectral wavelengths:
+
+    Hakipedia.org page on the CIE color space
+    How the CIE 1931 Color-Matching Functions Were Derived from Wright-Guild Data.pdf
+
+This page has resources for calculating xy values given a spectral color wavelength:
+
+    Color Matching Functions
+
+This page does the calculations for you:
+
+    ledtuning.nl
+
+Plugging the wavelengths into the ledtuning website gives the following CIE RGB xy primaries, which I used to make the profiles:
+
+    700.0 nm has Spectral Locus coordinates: x:0.734690023 y:0.265309977
+    546.1 nm has Spectral Locus coordinates: x:0.2736747378 y:0.7174284409
+    435.8 nm has Spectral Locus coordinates: x:0.1665361196 y:0.0088826412
+
+Supplied profile variants:
+
+    CIERGB-elle-V2-g10.icc; CIERGB-elle-V4-g10.icc (as used in the color matching experiments, the appropriate TRC is the linear gamma TRC).
+    CIERGB-elle-V2-labl.icc; CIERGB-elle-V4-labl.icc
+    CIERGB-elle-V2-srgbtrc.icc; CIERGB-elle-V4-srgbtrc.icc
+
+IdentityRGB, D50, Gamma=1.0
+White point, standard TRC, and color space specification:
+
+    White point: D50.
+    Standard TRC: linear gamma.
+    Color space specification: See the Description below.
+
+Description:
+
+The IdentityRGB working space is included in the profile pack because it's a mathematically obvious way to include all possible visible colors, though it has a higher percentage of imaginary colors than the ACES and AllColorsRGB color spaces. I can't think of any reason why you'd ever want to actually edit images in the IdentityRGB working space.
+Supplied profile variants:
+
+    IdentityRGB-elle-V2-g10.icc; IdentityRGB-elle-V4-g10.icc
+    IdentityRGB-elle-V2-labl.icc; IdentityRGB-elle-V4-labl.icc
+    IdentityRGB-elle-V2-srgbtrc.icc; IdentityRGB-elle-V4-srgbtrc.icc
+
+ProphotoRGB
+White point, standard TRC, and color space specification:
+
+    White point: D50 as given in the RIMM/ROMM specs.
+    Standard TRC: Gamma=1.80078125. The original specs called for a point curve that approximated the gamma=1.8 TRC, but had a linear portion in the shadows. A ProPhotoRGB profile with the original point curve TRC is available from ArgyllCMS. PhotoShop and probably all other image editing programs use ProPhotoRGB made with a simple gamma curve.
+    Color space specification: See Reference Input/Output Medium Metric RGB Color Encodings (RIMM/ROMM RGB), by Kevin E. Spaulding, Geoffrey J. Woolfe and Edward J. Giorgianni, Eastman Kodak Company, Rochester, New York, U.S.A. ("RIMM" refers to ProPhotoRGB with the linear gamma TRC. "ROMM" refers to ProPhotoRGB with the approximately gamma=1.8 TRC.)
+
+Description:
+
+To avoid possible copyright infringement issues, I used "LargeRGB" (following RawTherapee) as the base name for these profiles.
+
+Kodak designed the RIMM/ROMM (ProPhotoRGB) color gamut to include all printable and most real world colors. It includes some imaginary colors and excludes some of the real world blues and violet blues that can be captured by digital cameras. It also excludes some very saturated "camera-captured" yellows as interpreted by some (and probably many) camera matrix input profiles.
+
+The ProPhotoRGB primaries are hard-coded into Adobe products such as Lightroom and the Dng-DCP camera "profiles". However, other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit as an RGB working space. Personally and for most editing purposes, I recommend BetaRGB, Rec2020, or the ACEScg profiles ProPhotoRGB.
+Supplied profile variants:
+
+    LargeRGB-elle-V2-g18.icc; LargeRGB-elle-V4-g18.icc: These profiles are compatible with standard ProPhotoRGB images as produced by Lightroom and other raw processing software that uses DCP and outputs normal ProPhotoRGB images.
+    LargeRGB-elle-V2-g10.icc; LargeRGB-elle-V4-g10.icc
+    LargeRGB-elle-V2-labl.icc; LargeRGB-elle-V4-labl.icc
+    LargeRGB-elle-V2-srgbtrc.icc; LargeRGB-elle-V4-srgbtrc.icc
+
+Rec.2020, D65, Rec709??
+White point, standard TRC, and color space specification:
+
+    White point: D65 as given in the sRGB and AdobeRGB1998 specs.
+    Standard TRC: well, there are two transfer curves, one for 10-bit encoding and one for 12-bit encoding, and both are very close to the Rec.709 transfer curve. So I just made the one Rec.2020 profile using the Rec.709 transfer curve.
+    Color space specification: BT.2020 : Parameter values for ultra-high definition television systems for production and international programme exchange
+
+Description:
+
+Rec.2020 is the up-and-coming replacement for the thoroughly outdated sRGB color space. As of June 2015, very few (if any) display devices (and certainly no affordable display devices) can display all of Rec.2020. However, display technology is closing in on Rec.2020, movies are already being made for Rec.2020, and various cameras offer support for Rec.2020. And in the digital darkroom Rec.2020 is much more suitable as a general RGB working space than the exceedingly small sRGB color space.
+Supplied profile variants:
+
+    Rec2020-elle-V2-rec709.icc; Rec2020-elle-V4-rec709.icc
+    Rec2020-elle-V2-g10.icc; Rec2020-elle-V4-g10.icc
+    Rec2020-elle-V2-labl.icc; Rec2020-elle-V4-labl.icc
+    Rec2020-elle-V2-srgbtrc.icc; Rec2020-elle-V4-srgbtrc.icc
+
+sRGB
+White point, standard TRC, and color space specification:
+
+    White point: D65 as given in the AdobeRGB1998 and sRGB specs.
+    Standard TRC: The sRGB TRC, which has a linear portion in the shadows and gamma=2.4 elsewhere.
+    Color space specification: A Standard Default Color Space for the Internet - sRGB
+
+Description:
+
+Hewlett-Packard and Microsoft designed sRGB to match the color gamut of consumer-grade CRTs from the 1990s. sRGB is the standard color space for the world wide web and is still the best choice for exporting images to the internet.
+
+The sRGB color gamut was a good match to calibrated decent quality CRTs. But sRGB is not a good match to many consumer-grade LCD monitors, which often can't display the more saturated sRGB blues and magentas (the good news: as technology progresses, wider gamuts are trickling down to consumer grade monitors).
+
+Printer color gamuts can easily exceed the sRGB color gamut in cyans, greens, and yellow-greens. Colors from interpolated camera raw files also often exceed the sRGB color gamut.
+
+As a very relevant aside, using perceptual intent when converting to sRGB does not magically makes otherwise out of gamut colors fit inside the sRGB color gamut! The standard sRGB color space (along with all the other the RGB profiles provided in my profile pack) is a matrix profile, and matrix profiles don't have perceptual intent tables.
+Supplied profile variants:
+
+    sRGB-elle-V2-srgbtrc.icc; sRGB-elle-V4-srgbtrc.icc
+    sRGB-elle-V2-g10.icc; sRGB-elle-V4-g10.icc
+    sRGB-elle-V2-labl.icc; sRGB-elle-V4-labl.icc
+    sRGB-elle-V2-rec709.icc; sRGB-elle-V4-rec709.icc
+
+Special use notes:
+
+    sRGB-elle-V2-srgbtrc.icc: This sRGB profile can be assigned to DCF R03 camera-generated jpegs, and also can be used for editing 8-bit images. For maximum compatibility with color-managed browsers, use this variant for images posted to the internet.
+    sRGB-elle-V4-srgbtrc.icc: This sRGB profile can be assigned to DCF R03 camera-generated jpegs. It can be used for editing 8-bit and also high bit depth images.
+
+    For finished images, it's better to assign the "sRGB-elle-V2-srgbtrc.icc" profile before uploading the image to the internet. This extra step probably only benefits Firefox users who have calibrated and profiled their monitors, but haven't changed the default Firefox color management settings, which is to say, probably not very many people.
+    sRGB-elle-V2-rec709.icc and sRGB-elle-V4-rec709.icc are actually Rec.709 profiles, as the Rec.709 color space is exactly the same as the sRGB color space, except the Rec.709 colorspace uses the Rec.709 TRC. So if you need a Rec.709 ICC profile, use one of these two profiles.
+
+WideGamutRGB
+White point, standard TRC, and color space specification:
+
+    White point: D50 as given in the RIMM/ROMM specs.
+    Standard TRC: Gamma=2.19921875.
+    Color space specification: See Danny Pascale: A review of RGB color spaces. Although Adobe designed the WideGamutRGB color space, Adobe doesn't seem to supply any color space specifications for this color space.
+
+Description:
+
+To avoid possible copyright infringement issues, I used "WideRGB" as the base name for these profiles.
+
+WideGamutRGB was designed by Adobe to be a wide gamut color space that uses spectral colors as its primaries. Pascale's primary values produce a profile that matches old V2 Widegamut profiles from Adobe and Canon. It's an interesting color space, but shortly after its introduction, Adobe switched their emphasis to the ProPhotoRGB color space.
+Supplied profile variants:
+
+    WideRGB-elle-V2-g22.icc; WideRGB-elle-V4-g22.icc: These profiles are compatible with other WideGamutRGB profiles, though some WideGamutRGB profiles do use a very slightly different set of primaries (following Bruce Lindbloom instead of Pascale).
+    WideRGB-elle-V2-g10.icc; WideRGB-elle-V4-g10.icc
+    WideRGB-elle-V2-srgbtrc.icc; WideRGB-elle-V4-srgbtrc.icc
+    WideRGB-elle-V2-labl.icc; WideRGB-elle-V4-labl.icc
+
+Gray ICC profiles, D50 white point
+White point, standard TRC, and color space specification:
+
+    White point: D50.
+    Standard TRC: There isn't one. Pick the one that matches the TRC of the profile of the image that you just converted from RGB to gray.
+    Color space specification: There is none. See the Description below.
+
+Description:
+
+These profiles are for use with RGB images that have been converted to monotone gray (black and white). The main reason to convert from RGB to Gray is to save the file space needed to encode the image. Google places a premium on fast-loading web pages, and images are one of the slower-loading elements of a web page. So converting black and white images to Grayscale images does save some kilobytes. For grayscale images uploaded to the internet, convert the image to the V2 Gray profile with the sRGB TRC.
+Supplied profile variants:
+
+    Gray-D50-elle-V2-g10.icc; Gray-D50-elle-V4-g10.icc
+    Gray-D50-elle-V2-g18.icc; Gray-D50-elle-V4-g18.icc
+    Gray-D50-elle-V2-g22.icc; Gray-D50-elle-V4-g22.icc
+    Gray-D50-elle-V2-labl.icc; Gray-D50-elle-V4-labl.icc
+    Gray-D50-elle-V2-rec709.icc; Gray-D50-elle-V4-rec709.icc
+    Gray-D50-elle-V2-srgbtrc.icc; Gray-D50-elle-V4-srgbtrc.icc
+
+LCMS built-in LAB and XYZ Profile variants:
+White point, standard TRC, and color space specification:
+
+    White point: D50 (as given in the ICC specs).
+    Standard TRC: Not applicable.
+    Color space specification: Not applicable.
+
+Description:
+
+These are identity LUT ("look up table") profiles.
+Supplied profile variants:
+
+    Lab-D50-Identity-elle-V2.icc; Lab-D50-Identity-elle-V4.icc
+    XYZ-D50-Identity-elle-V4.icc
+
+Note: I don't think LCMS version 2 (the version of LittleCMS that was used to write the profile-making code) can make a V2 XYZ profile.
+How to compile the profile-making code
+
+Many readily available RGB working space profiles are made using the wrong source white point and/or the wrong unadapted primaries. Many readily available RGB working space profiles are not well behaved. I supply not just well-behaved profiles, but also source code that you can modify and compile to make your own RGB working space profiles.
+
+For the three video profiles (PAL, SMPTE-C, and NTSC) and the two old monitor-based working spaces (Apple and ColorMatch), I included the profile's primaries, white point, and tone response curve information but not the actual profile making code. It should be obvious how to add the appropriate code if you want to make these profiles.
+Pre-quantized unadapted primaries
+
+Making an RGB working space profile requires a source white point and a set of unadapted primaries. As discussed in In Quest of Well Behaved Working Spaces and Survey of Free and Open Source ICC RGB Working Space Profiles, the resulting profile's illuminant, white point/chad tag, and adapted primaries are subject to hexadecimal rounding or quantization during the profile making process. If this quantization isn't somehow compensated for, the resulting profile's adapted primaries sometimes deviate from the theoretically correct adapted primaries. A side effect for profiles so affected is they end up being not well behaved.
+
+In addition to the standard unadapted primaries, for the profiles that are affected by hexadecimal rounding, my profile-making code includes "pre-quantized" unadapted primaries that compensate for hexadecimal quantization. These pre-quantized unadapted primaries were back-calculated from profiles made using Argyllcms version 1.6.3, which does compensate for hexadecimal quantization. Profiles made using the "pre-quantized" primaries are well behaved.
+How to compile the code to make your own ICC profiles
+
+To make your own ICC profiles:
+
+    If you run Linux, you probably already have gcc installed. Otherwise you'll need to set up a development environment.
+    Install a recent version of LittleCMS version 2. As of Jun, 2015, I'm using LCMS 2.7.
+
+    As an aside, if you want LCMS transicc terminal readout that matches the Argyllcms xicclu readout, you'll need to download and modify the LCMS source code as explained in In Quest of Well Behaved Working Spaces, and compile and install the modified code. Whether or not you've modifed LCMS, the code given below will produce well behaved profiles because the primaries have been pre-quantized.
+
+    Compiling LCMS from source requires that you install the development versions of various LCMS dependencies (according to Gentoo Portage: jpeg, tiff, zlib, and coreutils).
+
+    If you run into a libtool mismatch error, see libtool version mismatch error for ways to deal with the problem.
+    Download and unpack the code, notes, licences, and profiles.
+    Make whatever modifications you want to make to the code and the profile names, descriptions, copyright information, and so on.
+
+    If you do modify the code, please respect the GNU General Public License, version 2 (or later) license (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+
+    If you modify the code in such a way as to make modified profiles, please remove my name from the file name and the profile description and copyright, and put in your own information.
+
+    If you directly modify the profiles themselves, please respect the Creative Commons V3 unported BY-SA copyright (https://creativecommons.org/licenses/by-sa/3.0/legalcode).
+
+    It should be obvious from the examples provided how to code up additional ICC profiles if there's another working space that you want, that doesn't have primaries and/or white points and/or tone response curves as provided in the current code. But if there's a profile that you want added, send me an email and I'll see if I can add the profile.
+
+    I couldn't find the LCMS function for creating a V2 XYZ profile. If you know how to do this, please send me an email.
+    Compile the profile-making code in the usual way (a sample compile command is in the code comments).
+    To actually make the ICC profiles, type "./make-elles-profiles" (suitably modified if you created an executable with a different name) at the command line.
+    Copy the resulting ICC profiles to wherever you want to keep your ICC profiles. If you run Linux, you'll probably need to be root to copy them to "/usr/share/color/icc".
+
+Questions or comments? Send an email to ellestone@ninedegreesbelow.com

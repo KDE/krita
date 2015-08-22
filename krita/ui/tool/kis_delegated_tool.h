@@ -24,6 +24,8 @@
 
 #include <QPointer>
 
+#include "input/kis_input_manager.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_delegated_tool_policies.h"
 
 
@@ -48,12 +50,22 @@ public:
         BaseClass::activate(toolActivation, shapes);
         m_localTool->activate(toolActivation, shapes);
         ActivationPolicy::onActivate(BaseClass::canvas());
+
+        KisInputManager *inputManager = (static_cast<KisCanvas2*>(BaseClass::canvas()))->globalInputManager();
+        if (inputManager) {
+            inputManager->attachPriorityEventFilter(this);
+        }
     }
 
     void deactivate()
     {
         m_localTool->deactivate();
         BaseClass::deactivate();
+
+        KisInputManager *inputManager = (static_cast<KisCanvas2*>(BaseClass::canvas()))->globalInputManager();
+        if (inputManager) {
+            inputManager->detachPriorityEventFilter(this);
+        }
     }
 
     void mousePressEvent(KoPointerEvent *event)

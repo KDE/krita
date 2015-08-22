@@ -24,9 +24,8 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kio/netaccess.h>
-
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>
@@ -264,7 +263,7 @@ KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+        if (!url.isLocalFile()) {
             return KisImportExportFilter::FileNotFound;
         }
 

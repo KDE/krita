@@ -125,11 +125,17 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
+    //Right click removes last point
+    if (event->button() == Qt::RightButton) {
+      removeLastPoint();
+      return;
+    }
+
     const bool isOverFirstPoint = d->shape &&
         handleGrabRect(d->firstPoint->point()).contains(event->point);
     bool haveCloseModifier = (listeningToModifiers() && (event->modifiers() & Qt::ShiftModifier));
 
-    if ((event->button() == Qt::RightButton) || ((event->button() == Qt::LeftButton) && haveCloseModifier && !isOverFirstPoint)) {
+    if ((event->button() == Qt::LeftButton) && haveCloseModifier && !isOverFirstPoint) {
         endPathWithoutLastPoint();
         return;
     }
@@ -354,6 +360,25 @@ void KoCreatePathTool::cancelPath()
         d->activePoint = 0;
     }
     d->cleanUp();
+}
+
+void KoCreatePathTool::removeLastPoint()
+{
+    Q_D(KoCreatePathTool);
+
+    if ((d->shape)) {
+        KoPathPointIndex lastPointIndex = d->shape->pathPointIndex(d->activePoint);
+
+        if (lastPointIndex.second > 1) {
+            lastPointIndex.second--;
+            delete d->shape->removePoint(lastPointIndex);
+
+            d->hoveredPoint = 0;
+
+            d->repaintActivePoint();
+            canvas()->updateCanvas(d->shape->boundingRect());
+        }
+    }
 }
 
 void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)

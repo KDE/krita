@@ -42,6 +42,7 @@ public:
     using KoCreatePathTool::endPathWithoutLastPoint;
     using KoCreatePathTool::endPath;
     using KoCreatePathTool::cancelPath;
+    using KoCreatePathTool::removeLastPoint;
 
 private:
     KisToolPath* const m_parentTool;
@@ -61,6 +62,7 @@ public:
 
     virtual QList< QPointer<QWidget> > createOptionWidgets();
 
+    bool eventFilter(QObject *obj, QEvent *event);
     void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);
@@ -82,7 +84,7 @@ class KisToolPathFactory : public KoToolFactoryBase
 public:
     KisToolPathFactory(const QStringList&)
             : KoToolFactoryBase("KisToolPath") {
-        setToolTip(i18n("Bezier Curve Tool. Shift-mouseclick ends the curve."));
+        setToolTip(i18n("Bezier Curve Tool: Shift-mouseclick ends the curve."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_draw_path"));

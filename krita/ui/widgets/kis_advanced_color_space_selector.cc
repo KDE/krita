@@ -258,7 +258,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     if (currentModelStr == "RGBA") {
         d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("If the selected model is RGB","RGB, standing for Red, Green, Blue, is the colour model used by screens and other light-based media. It is an additive colour model, meaning that adding colours together makes them brighter. This colour model is the most extensive of all colour models, and is recommended as a model for working files, that you can later convert to other spaces. RGB is also the recommended space for HDR editing."));
     } else if (currentModelStr == "CMYKA") {
-            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("If the selected model is CMYK","CMYK, standing for Cyan, Magenta, Yellow, Key, is the model used by printers and other ink-based media. It is a subtractive model, meaning that adding colors together will turn them darker. Because of CMYK profiles being very specific per printer, it is recommended to work in RGB space, and then later convert to a CMYK profile, preferably one delivered by you printer. Unfortunately, Krita can't retrieve colorants or the TRC for this space."));
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("If the selected model is CMYK","CMYK, standing for Cyan, Magenta, Yellow, Key, is the model used by printers and other ink-based media. It is a subtractive model, meaning that adding colors together will turn them darker. Because of CMYK profiles being very specific per printer, it is recommended to work in RGB space, and then later convert to a CMYK profile, preferably one delivered by your printer. Unfortunately, Krita can't retrieve colorants or the TRC for this space."));
     } else if (currentModelStr == "XYZA") {
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("If the selected model is XYZ","XYZ is the space determined by the CIE as the space that encompasses all other colors, and used to convert colors between profiles. It is an additive colour model, meaning that adding colours together makes them brighter. It isn't recommended for editing, but can be useful to encode in. TRC is assumed to be linear."));
     } else if (currentModelStr == "GRAYA") {
@@ -289,7 +289,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         
         if(profileName.contains("ACES-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
-            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Quoting Wikipedia, 'Academy Color Encoding System (ACES) is a color image encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for a fully encompassing color accurate workflow, with 'seamless interchange of high quality motion picture images regardless of source''."));
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Quoting Wikipedia, 'Academy Color Encoding System (ACES) is a color image encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for a fully encompassing color accurate workflow, with 'seamless interchange of high quality motion picture images regardless of source'."));
         }
         if(profileName.contains("ACEScg-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");

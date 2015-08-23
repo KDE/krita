@@ -408,8 +408,11 @@ macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framewor
 ## Test for KReport
 ##
 macro_optional_find_package(KReport 2.96.0)
-macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
-                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+if (KReport_FOUND AND KREPORT_SCRIPTING)
+    set(KReport_WITH_SCRIPTING_FOUND TRUE)
+endif()
+macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats (scripting support required)"
+                                               "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
 
 ##
 ## Test for KProperty
@@ -936,7 +939,7 @@ calligra_drop_product_on_bad_condition( APP_KRITA
 
 calligra_drop_product_on_bad_condition( APP_KEXI
     KDb_FOUND "KDb not found"
-    KReport_FOUND "KReport not found"
+    KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
     KProperty_FOUND "KProperty not found"
 )
 

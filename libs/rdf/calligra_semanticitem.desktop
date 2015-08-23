@@ -22,7 +22,6 @@ Name[pt]=Definição do item semântico
 Name[pt_BR]=Definição do item semântico
 Name[sk]=Definícia sémantickej položky
 Name[sv]=Definition av semantiskt objekt
-Name[tr]=Anlamsal öge tanımlaması
 Name[uk]=Визначення семантичного запису
 Name[x-test]=xxSemantic item definitionxx
 Comment=Definition of a semantic item object
@@ -48,7 +47,6 @@ Comment[pt]=Definição de um objecto de item semântico
 Comment[pt_BR]=Definição de um objeto de item semântico
 Comment[sk]=Definícia objektu sémantickej položky
 Comment[sv]=Definition av ett semantiskt objekt
-Comment[tr]=Bir anlamsal öge nesnesinin tanımı
 Comment[uk]=Визначення об’єкта семантичного запису
 Comment[x-test]=xxDefinition of a semantic item objectxx
 

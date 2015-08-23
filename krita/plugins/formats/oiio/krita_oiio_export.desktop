@@ -26,7 +26,6 @@ Name[pt]=Filtro de Exportação OIIO do OpenColorIO para o Krita
 Name[pt_BR]=Filtro de exportação baseado no OpenColorIO do Oiio para Krita
 Name[sk]=Exportný filter Krita založený na Oiio OpenColorIO
 Name[sv]=Krita Oiio OpenColorIO-baserat exportfilter
-Name[tr]=Krita Oiio OpenColorIO-tabanlı dışa aktarım filtresi
 Name[uk]=Фільтр експортування Oiio на основі OpenColorIO для Krita
 Name[x-test]=xxKrita Oiio OpenColorIO-based export Filterxx
 X-KDE-Export=image/cineon,image/dpx,image/fits,image/field3d,image/vnd.radiance,image/exr

@@ -21,7 +21,6 @@ Name[pt]='Plugin' de Eventos do Calendário RDF
 Name[pt_BR]=Plugin de eventos do calendário RDF
 Name[sk]=Plugin udalosti kalendára RDF
 Name[sv]=Insticksprogram för RDF-kalenderhändelser
-Name[tr]=RDF Takvim Olayı Eklentisi
 Name[uk]=Додаток подій календаря RDF
 Name[x-test]=xxRDF Calendar Event Pluginxx
 Comment=A plugin to map calendar event items between document and RDF database
@@ -45,7 +44,6 @@ Comment[pt]=Um 'plugin' para associar os itens do evento entre o documento e a b
 Comment[pt_BR]=Um plugin para associar os eventos de calendário entre o documento e o banco de dados RDF
 Comment[sk]=Plugin na mapovanie položiek kalendára medzi dokumentom a RDF databázou
 Comment[sv]=Ett insticksprogram för att avbilda kalenderhändelseobjekt mellan dokument och en RDF-databas
-Comment[tr]=Belgeler ile RDF veritabanı arasında takvim olaylarını eşleyen eklenti
 Comment[uk]=Додаток для створення зв’язку між записами подій календаря у документі та у базі даних RDF
 Comment[x-test]=xxA plugin to map calendar event items between document and RDF databasexx
 

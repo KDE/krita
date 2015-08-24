@@ -541,13 +541,10 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
 
-
         // XXX: should this be changed for the views in other windows as well?
         foreach(QPointer<KisView> koview, KisPart::instance()->views()) {
             KisViewManager *view = qobject_cast<KisViewManager*>(koview);
             if (view) {
-                view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-
                 // Update the settings for all nodes -- they don't query
                 // KisConfig directly because they need the settings during
                 // compositing, and they don't connect to the config notifier

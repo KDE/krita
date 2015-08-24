@@ -258,6 +258,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisConfig cfg;
 
+    // If we can get a profile from cfg.getScreenProfile(), it's fairly certain that
+    // we do have a properly setup colord system, otherwise, there's no reason to
+    // enable the checkbox
+    m_page->chkUseSystemMonitorProfile->setEnabled(cfg.getScreenProfile(0));
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 

@@ -45,7 +45,6 @@
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
     : m_view(view)
-    , m_displayProfile(0)
 {
     m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
@@ -148,20 +147,6 @@ KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
     else {
         return 0;
     }
-}
-
-
-void KisCanvasResourceProvider::resetDisplayProfile(int screen)
-{
-    KisConfig cfg;
-    m_displayProfile = cfg.displayProfile(screen);
-    //qDebug() << "display profile for screen" << screen << m_displayProfile;
-    emit sigDisplayProfileChanged(m_displayProfile);
-}
-
-const KoColorProfile * KisCanvasResourceProvider::currentDisplayProfile() const
-{
-    return m_displayProfile;
 }
 
 KisImageWSP KisCanvasResourceProvider::currentImage() const
@@ -288,12 +273,6 @@ void KisCanvasResourceProvider::slotImageSizeChanged()
         QSizeF postscriptSize(fw, fh);
         m_resourceManager->setResource(KoCanvasResourceManager::PageSize, postscriptSize);
     }
-}
-
-void KisCanvasResourceProvider::slotSetDisplayProfile(const KoColorProfile * profile)
-{
-    m_displayProfile = const_cast<KoColorProfile*>(profile);
-    emit sigDisplayProfileChanged(profile);
 }
 
 void KisCanvasResourceProvider::slotOnScreenResolutionChanged()

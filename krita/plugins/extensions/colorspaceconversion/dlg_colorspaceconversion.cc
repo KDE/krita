@@ -72,11 +72,19 @@ DlgColorSpaceConversion::~DlgColorSpaceConversion()
 
 void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs)
 {
+    if (cs->profile()->getEstimatedTRC()[0]==1.0) {
+    //this tries to automatically determine whether optimisations ought to be checked or not.
+    //if the space you're converting from is linear TRC, uncheck.
+        m_page->chkAllowLCMSOptimization->setCheckState(Qt::Unchecked);
+    } else {
+        m_page->chkAllowLCMSOptimization->setCheckState(Qt::Checked);
+    } 
     m_page->colorSpaceSelector->setCurrentColorSpace(cs);
 }
 
 void DlgColorSpaceConversion::selectionChanged(bool valid)
 {
+    //TODO: Figure out how to uncheck when moving TO a linear TRC.
     Q_UNUSED(valid);
     enableButtonOk(m_page->colorSpaceSelector->currentColorSpace());
 }

@@ -212,6 +212,7 @@ tool_transform/dark_transform_icons_main.png
 tool_transform/dark_transform_icons_perspective.png
 tool_transform/dark_transform_icons_warp.png
 tool_transform/dark_transform_icons_penPressure.png
+tool_transform/dark_krita_tool_transform_recursive.png
 
 tool_transform/light_transform_icons_cage.png
 tool_transform/light_transform_icons_liquify_erase.png
@@ -225,6 +226,7 @@ tool_transform/light_transform_icons_main.png
 tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
 tool_transform/light_transform_icons_penPressure.png
+tool_transform/light_krita_tool_transform_recursive.png
 
 Breeze-dark/dark_application-exit.svg
 Breeze-dark/dark_application-pdf.svg

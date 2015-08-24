@@ -18,7 +18,7 @@
 
 #include "kis_tool_transform_config_widget.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "rotation_icons.h"
 #include "kis_canvas2.h"
 #include <QSignalMapper>
@@ -43,8 +43,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
       m_configChanged(false)
 {
     setupUi(this);
-    showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
-    chkWorkRecursively->setIcon(koIcon("krita_tool_transform_recursive.png"));
+    showDecorationsBox->setIcon(KisIconUtils::loadIcon("krita_tool_transform"));
+    chkWorkRecursively->setIcon(KisIconUtils::loadIcon("krita_tool_transform_recursive"));
 
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
@@ -288,21 +288,21 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 void KisToolTransformConfigWidget::slotUpdateIcons()
 {
-    freeTransformButton->setIcon(themedIcon("transform_icons_main"));
-    warpButton->setIcon(themedIcon("transform_icons_warp"));
-    cageButton->setIcon(themedIcon("transform_icons_cage"));
-    perspectiveTransformButton->setIcon(themedIcon("transform_icons_perspective"));
-    liquifyButton->setIcon(themedIcon("transform_icons_liquify_main"));
+    freeTransformButton->setIcon(KisIconUtils::loadIcon("transform_icons_main"));
+    warpButton->setIcon(KisIconUtils::loadIcon("transform_icons_warp"));
+    cageButton->setIcon(KisIconUtils::loadIcon("transform_icons_cage"));
+    perspectiveTransformButton->setIcon(KisIconUtils::loadIcon("transform_icons_perspective"));
+    liquifyButton->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_main"));
 
-    liquifyMove->setIcon(themedIcon("transform_icons_liquify_move"));
-    liquifyScale->setIcon(themedIcon("transform_icons_liquify_resize"));
-    liquifyRotate->setIcon(themedIcon("transform_icons_liquify_rotate"));
-    liquifyOffset->setIcon(themedIcon("transform_icons_liquify_offset"));
-    liquifyUndo->setIcon(themedIcon("transform_icons_liquify_erase"));
+    liquifyMove->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_move"));
+    liquifyScale->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_resize"));
+    liquifyRotate->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotate"));
+    liquifyOffset->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_offset"));
+    liquifyUndo->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_erase"));
 
     // pressure icons
-    liquifySizePressureBox->setIcon(themedIcon("transform_icons_penPressure"));
-    liquifyAmountPressureBox->setIcon(themedIcon("transform_icons_penPressure"));
+    liquifySizePressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
+    liquifyAmountPressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
 }
 
 double KisToolTransformConfigWidget::radianToDegree(double rad)

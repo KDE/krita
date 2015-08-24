@@ -54,6 +54,7 @@
 #include <QPrintDialog>
 #include <QToolBar>
 #include <QUrl>
+#include <QMoveEvent>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -1030,9 +1031,7 @@ void KisView::slotImageResolutionChanged()
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
                 setResource(KoCanvasResourceManager::Unit, d->canvas->unit());
-
     }
-
 }
 
 void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
@@ -1040,7 +1039,6 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateGUI();
 }
-
 
 #include <KisView_p.moc>
 #include <KisView.moc>

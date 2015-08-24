@@ -46,6 +46,7 @@
 #include <QProgressBar>
 #include <QSignalMapper>
 #include <QTabBar>
+#include <QMoveEvent>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -2264,6 +2265,14 @@ void KisMainWindow::showDockerTitleBars(bool show)
     KisConfig cfg;
     cfg.setShowDockerTitleBars(show);
 }
+
+void KisMainWindow::moveEvent(QMoveEvent *e)
+{
+    if (qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(e->oldPos())) {
+        KisConfigNotifier::instance()->notifyConfigChanged();
+    }
+}
+
 
 
 #include <KisMainWindow.moc>

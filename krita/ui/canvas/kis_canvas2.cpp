@@ -809,7 +809,7 @@ void KisCanvas2::slotConfigChanged()
 
 }
 
-void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
+void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->displayColorConverter->monitorProfile() == monitorProfile) return;
 

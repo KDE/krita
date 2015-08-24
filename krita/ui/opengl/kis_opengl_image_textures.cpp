@@ -22,6 +22,8 @@
 #include <QGLWidget>
 
 #include <QMessageBox>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -29,6 +31,7 @@
 
 #include "kis_image.h"
 #include "kis_config.h"
+#include "KisPart.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -109,7 +112,15 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
 bool KisOpenGLImageTextures::imageCanShareTextures()
 {
     KisConfig cfg;
-    return !cfg.useOcio();
+    if (cfg.useOcio()) return false;
+    if (KisPart::instance()->mainwindowCount() == 1) return true;
+    if (qApp->desktop()->screenCount() == 1) return true;
+    for (int i = 1; i < qApp->desktop()->screenCount(); i++) {
+        if (cfg.displayProfile(i) != cfg.displayProfile(i - 1)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,

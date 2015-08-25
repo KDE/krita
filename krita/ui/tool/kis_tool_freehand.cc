@@ -62,6 +62,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 {
     m_assistant = false;
     m_magnetism = 1.0;
+    m_only_one_assistant = true;
 
     setSupportOutline(true);
 
@@ -359,9 +360,15 @@ void KisToolFreehand::setAssistant(bool assistant)
     m_assistant = assistant;
 }
 
+void KisToolFreehand::setOnlyOneAssistantSnap(bool assistant)
+{
+    m_only_one_assistant = assistant;
+}
+
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
+        static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(m_only_one_assistant);
         QPointF ap = static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }

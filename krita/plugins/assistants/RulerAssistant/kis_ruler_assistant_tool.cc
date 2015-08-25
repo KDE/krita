@@ -234,10 +234,12 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_dragStart = *assistant->handles()[1];
             } else if (m_handleDrag == assistant->handles()[1]) {
                 m_dragStart = *assistant->handles()[0];
-            } else if (m_handleDrag == assistant->handles()[2]) {
-                m_dragStart = *assistant->handles()[0];
-            } else if (m_handleDrag == assistant->handles()[3]) {
-                m_dragStart = *assistant->handles()[1];
+            } else if(assistant->handles().size()==4){
+                if (m_handleDrag == assistant->handles()[2]) {
+                    m_dragStart = *assistant->handles()[0];
+                } else if (m_handleDrag == assistant->handles()[3]) {
+                    m_dragStart = *assistant->handles()[1];
+                }
             }
             m_snapIsRadial = false;
         } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||

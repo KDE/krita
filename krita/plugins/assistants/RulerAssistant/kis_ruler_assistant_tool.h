@@ -59,6 +59,7 @@ private:
     void outlineOn(KisPaintingAssistant* assistant);
     void outlineOff(KisPaintingAssistant* assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
+    QPointF straightLine(QPointF point, QPointF compare);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 
 public Q_SLOTS:
@@ -84,6 +85,9 @@ protected:
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;
+    QPointF m_dragStart;
+    QLineF m_radius;
+    bool m_snapIsRadial;
     QPointF m_dragEnd;
 
 private:

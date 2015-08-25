@@ -130,6 +130,16 @@ void KisCanvasController::keyPressEvent(QKeyEvent *event)
     Q_UNUSED(event);
 }
 
+void KisCanvasController::wheelEvent(QWheelEvent *event)
+{
+    /**
+     * Dirty Hack Alert:
+     * Do not call the KoCanvasControllerWidget::wheelEvent()
+     * to disable the default behavior of KoCanvasControllerWidget and QAbstractScrollArea
+     */
+    Q_UNUSED(event);
+}
+
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     KoCanvasBase *canvas = this->canvas();

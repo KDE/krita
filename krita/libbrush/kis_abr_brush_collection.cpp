@@ -374,7 +374,8 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
             abrBrush = m_abrBrushes[name];
         }
         else {
-            abrBrush = new KisAbrBrush(name, md5(), this);
+            abrBrush = new KisAbrBrush(name, this);
+            abrBrush->setMD5(md5());
         }
 
         abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
@@ -472,7 +473,8 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 abrBrush = m_abrBrushes[name];
             }
             else {
-                abrBrush = new KisAbrBrush(name, md5(), this);
+                abrBrush = new KisAbrBrush(name, this);
+                abrBrush->setMD5(md5());
             }
 
             abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));

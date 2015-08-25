@@ -236,12 +236,9 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     action->setShortcut(standardAction->shortcut(KAction::ActiveShortcut), KAction::ActiveShortcut);
 #ifdef Q_OS_WIN
     if (actionType == KStandardAction::SaveAs && standardAction->shortcut(KAction::DefaultShortcut).primary().isEmpty()) {
-        qDebug() << "hack!";
         action->setShortcut(QKeySequence("CTRL+SHIFT+S"), KAction::DefaultShortcut);
     }
 #endif
-    qDebug() << "default" << standardAction->text() << standardAction->shortcut(KAction::DefaultShortcut).primary() << standardAction->shortcut(KAction::DefaultShortcut).alternate();
-    qDebug() << "Active" << standardAction->text() << standardAction->shortcut(KAction::ActiveShortcut).primary() << standardAction->shortcut(KAction::ActiveShortcut).alternate();
     action->setCheckable(standardAction->isCheckable());
     if (action->isCheckable()) {
         action->setChecked(standardAction->isChecked());

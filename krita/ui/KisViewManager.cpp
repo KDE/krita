@@ -1193,8 +1193,16 @@ void KisViewManager::showJustTheCanvas(bool toggled)
     if (cfg.hideToolbarFullscreen()) {
         QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
         foreach(QToolBar* toolbar, toolBars) {
-            if (toolbar->isVisible() == toggled) {
-                toolbar->setVisible(!toggled);
+            if (!toggled) {
+                if (toolbar->dynamicPropertyNames().contains("wasvisible")) {
+                    if (toolbar->property("wasvisible").toBool()) {
+                        toolbar->setVisible(true);
+                    }
+                }
+            }
+            else {
+                toolbar->setProperty("wasvisible", toolbar->isVisible());
+                toolbar->setVisible(false);
             }
         }
     }

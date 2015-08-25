@@ -575,8 +575,9 @@ void KisMainWindow::slotThemeChanged()
     emit themeChanged();
 }
 
-void KisMainWindow::updateReloadFileAction(KisDocument */*doc*/)
+void KisMainWindow::updateReloadFileAction(KisDocument *doc)
 {
+    Q_UNUSED(doc);
 //    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 

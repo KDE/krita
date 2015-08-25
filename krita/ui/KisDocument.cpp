@@ -1929,8 +1929,9 @@ QDomDocument KisDocument::createDomDocument(const QString& appName, const QStrin
     return doc;
 }
 
-bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
+bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
 {
+    Q_UNUSED(store);
     if (d->image) {
         d->shapeController->setImage(0);
         d->image = 0;

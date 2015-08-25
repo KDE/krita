@@ -103,7 +103,7 @@ public:
      * @brief reload Reloads the document from the original url
      * @return the result of loading the document
      */
-    virtual bool reload();
+    bool reload();
 
     /**
      * @brief openUrl Open an URL
@@ -111,7 +111,7 @@ public:
      * @param flags Control specific behavior
      * @return success status
      */
-    virtual bool openUrl(const KUrl & url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
+    bool openUrl(const KUrl & url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -144,7 +144,7 @@ public:
      * KisView::updateReadWrite is called for every attached
      * view.
      */
-    virtual void setReadWrite(bool readwrite = true);
+    void setReadWrite(bool readwrite = true);
 
     /**
      * To be preferred when a document exists. It is fast when calling
@@ -152,7 +152,7 @@ public:
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    virtual QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
@@ -168,7 +168,7 @@ public:
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KisDocument without a filter, in *addition* to the main one
-    virtual QStringList extraNativeMimeTypes() const { return QStringList() << KIS_MIME_TYPE; }
+    QStringList extraNativeMimeTypes() const { return QStringList() << KIS_MIME_TYPE; }
 
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
@@ -266,7 +266,7 @@ public:
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
-    virtual QPixmap generatePreview(const QSize& size);
+    QPixmap generatePreview(const QSize& size);
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -288,7 +288,7 @@ public:
      *
      *  @see isEmpty()
      */
-    virtual void setEmpty();
+    void setEmpty();
 
     /**
      *  @brief Loads a document from a store.
@@ -298,7 +298,7 @@ public:
      *  @param store The store to load from
      *  @param url An internal url, like tar:/1/2
      */
-    virtual bool loadFromStore(KoStore *store, const QString& url);
+    bool loadFromStore(KoStore *store, const QString& url);
 
     /// Unused
     virtual bool loadOdf(KoOdfReadStore & odfStore);
@@ -322,7 +322,7 @@ public:
      *  Reimplement this to save the contents of the %Calligra document into
      *  a QDomDocument. The framework takes care of saving it to the store.
      */
-    virtual QDomDocument saveXML();
+    QDomDocument saveXML();
 
     /**
      *  Return a correctly created QDomDocument for this KisDocument,
@@ -356,14 +356,14 @@ public:
      *
      *  @param file the file to load - usually KReadOnlyPart::m_file or the result of a filter
      */
-    virtual bool loadNativeFormat(const QString & file);
+    bool loadNativeFormat(const QString & file);
 
     /**
      *  Saves the document in native format, to a given file
      *  You should never have to reimplement.
      *  Made public for writing templates.
      */
-    virtual bool saveNativeFormat(const QString & file);
+    bool saveNativeFormat(const QString & file);
 
     /**
      * Saves the document in the native format to the given store.
@@ -439,8 +439,8 @@ public:
      *
      * @see KoPageLayout
      */
-    virtual KoPageLayout pageLayout(int pageNumber = 0) const;
-    virtual void setPageLayout(const KoPageLayout &pageLayout);
+    KoPageLayout pageLayout(int pageNumber = 0) const;
+    void setPageLayout(const KoPageLayout &pageLayout);
 
     /**
      * Performs a cleanup of unneeded backup files
@@ -543,12 +543,12 @@ public:
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
      */
-    virtual void setModified(bool _mod);
+    void setModified(bool _mod);
 
     /**
      * Initialize an empty document using default values
      */
-    virtual void initEmpty();
+    void initEmpty();
 
     /**
      * Returns the global undo stack
@@ -572,18 +572,18 @@ public Q_SLOTS:
      * Adds a command to the undo stack and executes it by calling the redo() function.
      * @param command command to add to the undo stack
      */
-    virtual void addCommand(KUndo2Command *command);
+    void addCommand(KUndo2Command *command);
 
     /**
      * Begins recording of a macro command. At the end endMacro needs to be called.
      * @param text command description
      */
-    virtual void beginMacro(const KUndo2MagicString &text);
+    void beginMacro(const KUndo2MagicString &text);
 
     /**
      * Ends the recording of a macro command.
      */
-    virtual void endMacro();
+    void endMacro();
 
 Q_SIGNALS:
 
@@ -646,14 +646,14 @@ private:
      *
      * This method is called from the KReadOnlyPart::openUrl method.
      */
-    virtual bool openFile();
+    bool openFile();
 
     /**
      * This method is called by @a openFile() to allow applications to setup there
      * own KoProgressUpdater-subTasks which are then taken into account for the
      * displayed progressbar during loading.
      */
-    virtual void setupOpenFileSubProgress();
+    void setupOpenFileSubProgress();
 
     /**
      *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
@@ -661,14 +661,14 @@ private:
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      */
-    virtual bool saveFile();
+    bool saveFile();
 
     /**
      *  Overload this function if you have to load additional files
      *  from a store. This function is called after loadXML()
      *  and after loadChildren() have been called.
      */
-    virtual bool completeLoading(KoStore *store);
+    bool completeLoading(KoStore *store);
 
     /**
      *  If you want to write additional files to a store,
@@ -680,11 +680,11 @@ private:
      *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
      *  If it is, then the pictures should be saved to tar:/pictures.
      */
-    virtual bool completeSaving(KoStore *store);
+    bool completeSaving(KoStore *store);
 
 
     /** @internal */
-    virtual void setModified();
+    void setModified();
 
     /**
      *  Returns whether or not the current openUrl() or openFile() call is
@@ -714,13 +714,13 @@ public:
     KUrl url() const;
     void setUrl(const KUrl &url);
 
-    virtual bool closeUrl(bool promptToSave = true);
+    bool closeUrl(bool promptToSave = true);
 
-    virtual bool saveAs( const KUrl &url );
+    bool saveAs( const KUrl &url );
 
 public Q_SLOTS:
 
-    virtual bool save();
+    bool save();
     bool waitSaveComplete();
 
 Q_SIGNALS:

@@ -237,7 +237,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
-    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_selectOpaque->setActivationConditions(KisAction::SELECTION_EDITABLE);
     m_selectOpaque->setObjectName("select_opaque");
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));

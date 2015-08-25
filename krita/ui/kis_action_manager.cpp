@@ -143,17 +143,17 @@ void KisActionManager::updateGUI()
 
     }
 
-
     // is there a selection/mask?
     // you have to have at least one view(document) open for this to be true
-    if (node)
-    {
+    if (node) {
 
         // if a node exists, we know there is an active layer as well
         flags |= KisAction::ACTIVE_NODE;
 
         layer = dynamic_cast<KisLayer*>(node.data());
-        flags |= KisAction::ACTIVE_LAYER;
+        if (layer) {
+            flags |= KisAction::ACTIVE_LAYER;
+        }
 
         if (node->inherits("KisTransparencyMask")) {
             flags |= KisAction::ACTIVE_TRANSPARENCY_MASK;

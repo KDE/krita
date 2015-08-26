@@ -231,7 +231,7 @@ private:
     KisDocument *m_doc;
 };
 
-class KisDocument::Private
+class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
     Private(KisDocument *document) :

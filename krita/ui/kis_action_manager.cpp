@@ -35,7 +35,7 @@
 
 
 
-class KisActionManager::Private {
+class Q_DECL_HIDDEN KisActionManager::Private {
 
 public:
     Private()

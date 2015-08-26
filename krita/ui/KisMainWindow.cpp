@@ -153,7 +153,7 @@ public:
     }
 };
 
-class KisMainWindow::Private
+class Q_DECL_HIDDEN KisMainWindow::Private
 {
 public:
     Private(KisMainWindow *parent)

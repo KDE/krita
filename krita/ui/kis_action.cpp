@@ -21,7 +21,7 @@
 #include "kis_action_manager.h"
 #include <QEvent>
 
-class KisAction::Private {
+class Q_DECL_HIDDEN KisAction::Private {
 
 public:
     Private() : flags(NONE), conditions(NO_CONDITION), actionManager(0) {}

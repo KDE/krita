@@ -77,7 +77,7 @@
 
 #include "kis_action.h"
 
-class KisPart::Private
+class Q_DECL_HIDDEN KisPart::Private
 {
 public:
     Private(KisPart *_part)

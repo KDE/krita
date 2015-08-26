@@ -64,7 +64,7 @@ uint qHash(QPointer<T> value) {
     return reinterpret_cast<quintptr>(value.data());
 }
 
-class KisInputManager::Private
+class Q_DECL_HIDDEN KisInputManager::Private
 {
 public:
     Private(KisInputManager *qq)

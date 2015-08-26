@@ -100,7 +100,7 @@ QString KisView::newObjectName()
 
 bool KisView::s_firstView = true;
 
-class KisView::Private
+class Q_DECL_HIDDEN KisView::Private
 {
 public:
     Private()

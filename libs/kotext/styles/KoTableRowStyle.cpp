@@ -34,7 +34,7 @@
 #include <KoXmlNS.h>
 
 
-class KoTableRowStyle::Private : public QSharedData
+class Q_DECL_HIDDEN KoTableRowStyle::Private : public QSharedData
 {
 public:
     Private() : QSharedData(), parentStyle(0), next(0) {}

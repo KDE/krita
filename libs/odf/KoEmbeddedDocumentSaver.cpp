@@ -44,7 +44,7 @@ struct FileEntry {
 };
 
 
-class KoEmbeddedDocumentSaver::Private
+class Q_DECL_HIDDEN KoEmbeddedDocumentSaver::Private
 {
 public:
     Private() {}

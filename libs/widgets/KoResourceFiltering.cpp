@@ -25,7 +25,7 @@
 #include <QString>
 
 
-class KoResourceFiltering::Private
+class Q_DECL_HIDDEN KoResourceFiltering::Private
 {
 public:
     Private()

@@ -21,7 +21,7 @@
 
 #include <QString>
 
-class KoTextEditingFactory::Private
+class Q_DECL_HIDDEN KoTextEditingFactory::Private
 {
 public:
     Private(const QString &identifier)

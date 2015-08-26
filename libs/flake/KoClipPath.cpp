@@ -41,7 +41,7 @@ QTransform scaleFromPercent(const QSizeF &size)
     return QTransform().scale(w/100, h/100);
 }
 
-class KoClipData::Private
+class Q_DECL_HIDDEN KoClipData::Private
 {
 public:
     Private() : deleteClipShapes(true)
@@ -87,7 +87,7 @@ void KoClipData::removeClipShapesOwnership()
     d->deleteClipShapes = false;
 }
 
-class KoClipPath::Private
+class Q_DECL_HIDDEN KoClipPath::Private
 {
 public:
     Private(KoClipData *data)

@@ -23,7 +23,7 @@
 #include <KoShape.h>
 #include <klocale.h>
 
-class KoShapeSizeCommand::Private
+class Q_DECL_HIDDEN KoShapeSizeCommand::Private
 {
 public:
     QList<KoShape*> shapes;

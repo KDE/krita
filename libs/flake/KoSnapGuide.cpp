@@ -31,7 +31,7 @@
 #include <math.h>
 
 
-class KoSnapGuide::Private
+class Q_DECL_HIDDEN KoSnapGuide::Private
 {
 public:
     Private(KoCanvasBase *parentCanvas)

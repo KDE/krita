@@ -38,7 +38,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
-class KoTableColumnStyle::Private : public QSharedData
+class Q_DECL_HIDDEN KoTableColumnStyle::Private : public QSharedData
 {
 public:
     Private() : QSharedData(), parentStyle(0) {}

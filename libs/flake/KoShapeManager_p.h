@@ -47,7 +47,7 @@
 #include <QTimer>
 #include <kdebug.h>
 
-class KoShapeManager::Private
+class Q_DECL_HIDDEN KoShapeManager::Private
 {
 public:
     Private(KoShapeManager *shapeManager, KoCanvasBase *c)

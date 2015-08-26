@@ -34,7 +34,7 @@ static bool beforeThan(KoInlineNote *note1, KoInlineNote *note2)
     return (note1->getPosInDocument() < note2->getPosInDocument());
 }
 
-class KoTextLayoutEndNotesArea::Private
+class Q_DECL_HIDDEN KoTextLayoutEndNotesArea::Private
 {
 public:
     Private()

@@ -22,7 +22,7 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 
-class KoFrameShape::Private
+class Q_DECL_HIDDEN KoFrameShape::Private
 {
 public:
     Private(const QString &ns, const QString &tag)

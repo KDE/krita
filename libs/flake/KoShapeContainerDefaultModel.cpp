@@ -23,7 +23,7 @@
 
 #include "KoShapeContainer.h"
 
-class KoShapeContainerDefaultModel::Private
+class Q_DECL_HIDDEN KoShapeContainerDefaultModel::Private
 {
 public:
     class Relation

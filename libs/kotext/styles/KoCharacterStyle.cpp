@@ -62,7 +62,7 @@
     QMap<QString,qreal> textScaleMap;
 #endif //SHOULD_BUILD_FONT_CONVERSION
 
-class KoCharacterStyle::Private
+class Q_DECL_HIDDEN KoCharacterStyle::Private
 {
 public:
     Private();

@@ -263,7 +263,7 @@ private:
     QList<QPointF> points;
 };
 
-class KoPathSegment::Private
+class Q_DECL_HIDDEN KoPathSegment::Private
 {
 public:
     Private(KoPathSegment *qq, KoPathPoint *p1, KoPathPoint *p2)

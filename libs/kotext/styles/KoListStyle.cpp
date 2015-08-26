@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <QBuffer>
 
-class KoListStyle::Private
+class Q_DECL_HIDDEN KoListStyle::Private
 {
 public:
     Private() : styleId(0) { }

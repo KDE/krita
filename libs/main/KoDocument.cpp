@@ -139,7 +139,7 @@ QString KoDocument::newObjectName()
     return name;
 }
 
-class KoDocument::Private
+class Q_DECL_HIDDEN KoDocument::Private
 {
 public:
     Private(KoDocument *document, KoPart *part) :

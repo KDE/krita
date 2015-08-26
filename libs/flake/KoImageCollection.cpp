@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
-class KoImageCollection::Private
+class Q_DECL_HIDDEN KoImageCollection::Private
 {
 public:
     ~Private()

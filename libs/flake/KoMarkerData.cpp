@@ -47,7 +47,7 @@ static const struct {
     { "marker-end"  , "marker-end-width",   "marker-end-center", "draw:marker-end"  , "draw:marker-end-width",   "draw:marker-end-center" }
 };
 
-class KoMarkerData::Private
+class Q_DECL_HIDDEN KoMarkerData::Private
 {
 public:
     Private(KoMarker *marker, qreal baseWidth, KoMarkerData::MarkerPosition position, bool center)

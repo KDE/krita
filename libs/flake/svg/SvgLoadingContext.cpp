@@ -30,7 +30,7 @@
 #include <QStack>
 #include <QFileInfo>
 
-class SvgLoadingContext::Private
+class Q_DECL_HIDDEN SvgLoadingContext::Private
 {
 public:
     Private()

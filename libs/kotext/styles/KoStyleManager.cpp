@@ -51,7 +51,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-class KoStyleManager::Private
+class Q_DECL_HIDDEN KoStyleManager::Private
 {
 public:
     Private()

@@ -25,7 +25,7 @@
 #include <QString>
 #include <QRectF>
 
-class KoFilterEffect::Private
+class Q_DECL_HIDDEN KoFilterEffect::Private
 {
 public:
     Private()

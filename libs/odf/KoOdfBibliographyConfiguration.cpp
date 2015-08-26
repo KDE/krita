@@ -44,7 +44,7 @@ const QList<QString> KoOdfBibliographyConfiguration::bibDataFields = QList<QStri
                                                                           << "series" << "title" << "url" << "volume"
                                                                           << "year";
 
-class KoOdfBibliographyConfiguration::Private
+class Q_DECL_HIDDEN KoOdfBibliographyConfiguration::Private
 {
 public:
     QString prefix;

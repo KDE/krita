@@ -29,7 +29,7 @@
 // KDE
 #include <klocale.h>
 
-class KoGroupButton::Private
+class Q_DECL_HIDDEN KoGroupButton::Private
 {
 public:
     Private(KoGroupButton *qq, const GroupPosition position) : groupPosition(position)

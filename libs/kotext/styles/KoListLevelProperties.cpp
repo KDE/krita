@@ -49,7 +49,7 @@
 
 #include <QTextList>
 
-class KoListLevelProperties::Private
+class Q_DECL_HIDDEN KoListLevelProperties::Private
 {
 public:
     StylePrivate stylesPrivate;

@@ -33,7 +33,7 @@
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
 
-class KoTextMeta::Private
+class Q_DECL_HIDDEN KoTextMeta::Private
 {
 public:
     Private(const QTextDocument *doc)

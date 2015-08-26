@@ -30,7 +30,7 @@
 #include <QTimerEvent>
 #include <QToolTip>
 
-class KoItemToolTip::Private
+class Q_DECL_HIDDEN KoItemToolTip::Private
 {
     public:
         QTextDocument *document;

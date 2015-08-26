@@ -33,7 +33,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QCheckBox>
 #include <QGroupBox>
 
-class KoConfigDocumentPage::Private
+class Q_DECL_HIDDEN KoConfigDocumentPage::Private
 {
 public:
     Private(KoDocument* doc)

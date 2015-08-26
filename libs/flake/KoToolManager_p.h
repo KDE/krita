@@ -44,7 +44,7 @@ class CanvasData;
 class QToolButton;
 class KoToolProxy;
 
-class KoToolManager::Private
+class Q_DECL_HIDDEN KoToolManager::Private
 {
 public:
     Private(KoToolManager *qq);

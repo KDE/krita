@@ -25,7 +25,7 @@
 #include <QTextFormat>
 #include <QTextDocumentFragment>
 
-class KoChangeTrackerElement::Private
+class Q_DECL_HIDDEN KoChangeTrackerElement::Private
 {
 public:
     Private() {}

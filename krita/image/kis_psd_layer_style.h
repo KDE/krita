@@ -19,7 +19,7 @@
 #define KIS_PSD_LAYER_STYLE_H
 
 class QIODevice;
-struct QUuid;
+class QUuid;
 
 #include <QVector>
 

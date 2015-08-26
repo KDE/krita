@@ -20,9 +20,9 @@
 #ifndef _KIS_BUFFER_STREAM_H_
 #define _KIS_BUFFER_STREAM_H_
 
-#ifdef _MSC_VER // this removes KDEWIN extensions to stdio.h: required by tiffio.h
-#define KDEWIN_STDIO_H
-#include <../include/stdio.h>
+#ifdef _MSC_VER
+#define KDEWIN_STDIO_H  // Remove KDEWIN extensions to stdio.h
+#include <stdio.h>
 #endif
 
 #include <tiffio.h>

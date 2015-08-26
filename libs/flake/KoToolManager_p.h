@@ -41,7 +41,6 @@ class KoCanvasController;
 class KoShapeLayer;
 class ToolHelper;
 class CanvasData;
-class QToolButton;
 class KoToolProxy;
 
 class Q_DECL_HIDDEN KoToolManager::Private
@@ -106,16 +105,24 @@ public:
     bool layerExplicitlyDisabled;
 };
 
+class ShortcutToolAction;
+
 /// \internal
 class ToolHelper : public QObject
 {
     Q_OBJECT
 public:
     explicit ToolHelper(KoToolFactoryBase *tool);
-    QToolButton *createButton();
+    KoToolAction *toolAction();
     /// wrapper around KoToolFactoryBase::id();
     QString id() const;
-    /// wrapper around KoToolFactoryBase::toolTip();
+    /// wrapper around KoToolFactoryBase::iconName();
+    QString iconName() const;
+    /// descriptive text, as ;
+    QString text() const;
+    /// descriptive icon text, e.g. use on a button next to an icon or without one;
+    QString iconText() const;
+    /// tooltip of the tool, e.g. for tooltip of a button;
     QString toolTip() const;
     /// wrapper around KoToolFactoryBase::toolType();
     QString toolType() const;
@@ -124,30 +131,30 @@ public:
     /// wrapper around KoToolFactoryBase::priority();
     int priority() const;
     KoToolBase *createTool(KoCanvasBase *canvas) const;
+    ShortcutToolAction *createShortcutToolAction(QObject *parent);
     /// unique id, >= 0
     int uniqueId() const {
         return m_uniqueId;
     }
     /// KAction->shortcut() if it exists, otherwise KoToolFactoryBase::shortcut()
     KShortcut shortcut() const;
-    /// Writes a tooltip for a button, appending the keyboard shortcut if we have one
-    QString buttonToolTip() const;
-    /// Associate an action with this tool
-    void setAction(KAction *a);
+
+public Q_SLOTS:
+    void activate();
 
 Q_SIGNALS:
-    /// Emitted when the generated toolbox button is pressed.
+    /// Emitted when the tool should be activated, e.g. by pressing the tool's assigned button in the toolbox
     void toolActivated(ToolHelper *tool);
 
 private Q_SLOTS:
-    void buttonPressed();
-    void actionUpdated();
+    void shortcutToolActionUpdated();
 
 private:
-    KoToolFactoryBase *m_toolFactory;
+    KoToolFactoryBase * const m_toolFactory;
     const int m_uniqueId;
-    QToolButton *button;
-    KAction *action;
+    KShortcut m_customShortcut;
+    bool m_hasCustomShortcut;
+    KoToolAction *m_toolAction;
 };
 
 /// \internal
@@ -170,18 +177,17 @@ private:
 
 /// \internal
 /// Helper class to provide a action for tool shortcuts
-class ToolAction : public KAction
+class ShortcutToolAction : public KAction
 {
     Q_OBJECT
 public:
-    ToolAction(KoToolManager* toolManager, const QString &id, const QString &name, QObject *parent);
-    virtual ~ToolAction();
+    ShortcutToolAction(const QString &id, const QString &name, QObject *parent);
+    virtual ~ShortcutToolAction();
 
 private Q_SLOTS:
     void actionTriggered();
 
 private:
-    KoToolManager* m_toolManager;
     QString m_toolID;
 };
 

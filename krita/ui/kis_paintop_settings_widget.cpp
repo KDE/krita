@@ -149,6 +149,7 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
     KisPaintopLodLimitations l;
 
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
+        if (option->isCheckable() && !option->isChecked()) continue;
         option->lodLimitations(&l);
     }
 

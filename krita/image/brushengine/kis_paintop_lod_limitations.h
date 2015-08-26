@@ -23,6 +23,9 @@
 #include <QVector>
 #include <QMetaType>
 
+inline uint qHash(const KoID &id) {
+    return qHash(id.id());
+}
 
 class KisPaintopLodLimitations
 {
@@ -31,16 +34,8 @@ public:
     {
     }
 
-    KisPaintopLodLimitations(QVector<KoID> _limitations,
-                             QVector<KoID> _blockers)
-        : limitations(_limitations),
-          blockers(_blockers)
-    {
-
-    }
-
-    QVector<KoID> limitations;
-    QVector<KoID> blockers;
+    QSet<KoID> limitations;
+    QSet<KoID> blockers;
 };
 
 Q_DECLARE_METATYPE(KisPaintopLodLimitations);

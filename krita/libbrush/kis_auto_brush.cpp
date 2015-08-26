@@ -41,6 +41,8 @@
 #include "kis_paint_information.h"
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
+#include "kis_paintop_lod_limitations.h"
+
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
@@ -338,4 +340,17 @@ QPainterPath KisAutoBrush::outline() const
     }
 
     return KisBrush::boundary()->path();
+}
+
+void KisAutoBrush::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    KisBrush::lodLimitations(l);
+
+    if (!qFuzzyCompare(density(), 1.0)) {
+        l->limitations << KoID("auto-brush-density", i18nc("PaintOp LoD limitation", "Brush Density recommended value 100.0"));
+    }
+
+    if (!qFuzzyCompare(randomness(), 0.0)) {
+        l->limitations << KoID("auto-brush-randomness", i18nc("PaintOp LoD limitation", "Brush Randomness recommended value 0.0"));
+    }
 }

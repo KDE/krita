@@ -21,6 +21,9 @@
 #include <klocale.h>
 #include <kis_painter.h>
 #include <KoColor.h>
+#include "kis_dynamic_sensor.h"
+#include "kis_paintop_lod_limitations.h"
+
 
 KisPressureSizeOption::KisPressureSizeOption()
     : KisCurveOption("Size", KisPaintOpOption::GENERAL, true)
@@ -33,4 +36,15 @@ double KisPressureSizeOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return 1.0;
     return computeValue(info);
+}
+
+void KisPressureSizeOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    if (sensor(FUZZY, true)) {
+        l->limitations << KoID("size-fade", i18nc("PaintOp LoD limitation", "Size -> Fuzzy (sensor)"));
+    }
+
+    if (sensor(FADE, true)) {
+        l->blockers << KoID("size-fuzzy", i18nc("PaintOp LoD limitation", "Size -> Fade (sensor)"));
+    }
 }

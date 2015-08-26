@@ -50,7 +50,7 @@
 #include "kis_embedded_pattern_manager.h"
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"
-
+#include "kis_paintop_lod_limitations.h"
 
 #include <time.h>
 
@@ -250,6 +250,12 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
 }
+
+void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->limitations << KoID("texture-pattern", i18nc("PaintOp LoD limitation", "Texture -> Pattern (low quality preview)"));
+}
+
 
 void KisTextureOption::resetGUI(KoResource* res)
 {

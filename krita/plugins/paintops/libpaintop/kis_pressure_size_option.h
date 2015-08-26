@@ -24,6 +24,9 @@
 #include <kis_paint_information.h>
 #include <kritapaintop_export.h>
 
+class KisPaintopLodLimitations;
+
+
 /**
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on the size of the dab
@@ -34,6 +37,7 @@ public:
     KisPressureSizeOption();
     double apply(const KisPaintInformation & info) const;
 
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 };
 

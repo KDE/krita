@@ -38,6 +38,8 @@ class KoColorSpace;
 
 class KisPaintInformation;
 class KisBoundary;
+class KisPaintopLodLimitations;
+
 
 enum enumBrushType {
     INVALID,
@@ -317,6 +319,8 @@ public:
 
     void prepareBrushPyramid() const;
     void clearBrushPyramid();
+
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 //protected:
 

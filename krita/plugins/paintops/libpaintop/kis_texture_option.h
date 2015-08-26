@@ -33,6 +33,7 @@ class KisTextureOptionWidget;
 class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
+class KisPaintopLodLimitations;
 
 class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 {
@@ -46,6 +47,7 @@ public Q_SLOTS:
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private Q_SLOTS:
 

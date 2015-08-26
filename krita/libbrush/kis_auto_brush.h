@@ -77,6 +77,8 @@ public:
     qreal randomness() const;
     qreal density() const;
 
+    void lodLimitations(KisPaintopLodLimitations *l) const;
+
 private:
 
     QImage createBrushPreview();

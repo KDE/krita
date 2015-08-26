@@ -115,6 +115,11 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
     readNamedOptionSetting(m_name, setting);
 }
 
+void KisCurveOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    Q_UNUSED(l);
+}
+
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
 {
     if (!setting) return;

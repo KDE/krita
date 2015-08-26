@@ -23,6 +23,8 @@
 #include "kis_paintop_option.h"
 #include <kritapaintop_export.h>
 
+class KisPaintopLodLimitations;
+
 /**
  * The brush option allows the user to select a particular brush
  * footprint for suitable paintops
@@ -36,6 +38,9 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    void lodLimitations(KisPaintopLodLimitations *l) const;
+
 private Q_SLOTS:
     void sourceChanged();
 private:

@@ -46,6 +46,7 @@
 #include <kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_qimage_pyramid.h>
+#include "kis_paintop_lod_limitations.h"
 
 
 KisBrush::ColoringInformation::~ColoringInformation()
@@ -627,4 +628,13 @@ qreal KisBrush::angle() const
 QPainterPath KisBrush::outline() const
 {
     return boundary()->path();
+}
+
+void KisBrush::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    if (autoSpacingActive()) {
+        l->limitations << KoID("auto-spacing", i18nc("PaintOp LoD limitation", "Auto Spacing"));
+    } else if (spacing() > 0.5) {
+        l->limitations << KoID("huge-spacing", i18nc("PaintOp LoD limitation", "Spacing > 0.5, consider disabling LoD"));
+    }
 }

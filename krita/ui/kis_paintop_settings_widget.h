@@ -25,6 +25,7 @@
 class KisPaintOpOption;
 class KisPropertiesConfiguration;
 class KisPaintOpConfigWidget;
+class KisPaintopLodLimitations;
 
 /**
  * A common widget for enabling/disabling and determining
@@ -48,6 +49,8 @@ public:
 
     /// Reimplemented
     virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
+
+    virtual KisPaintopLodLimitations lodLimitations() const;
 
     ///Reimplemented, sets image on option widgets
     virtual void setImage(KisImageWSP image);

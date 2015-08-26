@@ -73,6 +73,11 @@ void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setti
     m_d->isWritingSettings = false;
 }
 
+void KisPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    Q_UNUSED(l);
+}
+
 KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
 {
     return m_d->category;

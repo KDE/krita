@@ -78,6 +78,7 @@ public:
     QBitArray channelLockFlags() const;
 
     qreal effectiveZoom() const;
+    bool presetAllowsLod() const;
 
 private:
     struct Private;

@@ -47,6 +47,9 @@
 #include "kis_config.h"
 
 #include "kis_resource_server_provider.h"
+#include "kis_lod_availability_widget.h"
+
+#include "kis_signal_auto_connection.h"
 
 
 struct KisPaintOpPresetsPopup::Private
@@ -63,6 +66,8 @@ public:
     bool ignoreHideEvents;
     QSize minimumSettingsWidgetSize;
     QRect detachedGeometry;
+
+    KisSignalAutoConnectionsStore widgetConnections;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -153,6 +158,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->detachedGeometry = QRect(100, 100, 0, 0);
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
+
+    m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
 }
 
 
@@ -176,17 +183,30 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     m_d->layout->update();
     updateGeometry();
 
-    m_d->settingsWidget = static_cast<KisPaintOpConfigWidget*>(widget);
-    if (m_d->settingsWidget){
-        if (m_d->settingsWidget->supportScratchBox()) {
-            showScratchPad();
-        }
-        else {
-            hideScratchPad();
-        }
-    }
+    m_d->widgetConnections.clear();
+    m_d->settingsWidget = 0;
 
     if (widget) {
+
+        m_d->settingsWidget = dynamic_cast<KisPaintOpConfigWidget*>(widget);
+        KIS_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
+
+        if (m_d->settingsWidget->supportScratchBox()) {
+            showScratchPad();
+        } else {
+            hideScratchPad();
+        }
+
+        m_d->widgetConnections.addConnection(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability, SIGNAL(sigUserChangedLodAvailability(bool)),
+                                             m_d->settingsWidget, SLOT(slotUserChangedLodAvailability(bool)));
+        m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigUserChangedLodAvailability(bool)),
+                                             m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability, SLOT(slotUserChangedLodAvailability(bool)));
+        m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigConfigurationItemChanged()),
+                                             this, SLOT(slotUpdateLodAvailability()));
+
+        m_d->settingsWidget->coldInitExternalLodAvailabilityWidget();
+
+
         widget->setFont(m_d->smallFont);
 
         QSize hint = widget->sizeHint();
@@ -197,7 +217,16 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
         m_d->layout->update();
         widget->show();
+
     }
+}
+
+void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
+{
+    if (!m_d->settingsWidget) return;
+
+    KisPaintopLodLimitations l = m_d->settingsWidget->lodLimitations();
+    m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
 
 void KisPaintOpPresetsPopup::slotWatchPresetNameLineEdit()

@@ -84,6 +84,8 @@ public Q_SLOTS:
     void showScratchPad();
     void resourceSelected(KoResource* resource);
 
+    void slotUpdateLodAvailability();
+
 Q_SIGNALS:
     void savePresetClicked();
     void defaultPresetClicked();

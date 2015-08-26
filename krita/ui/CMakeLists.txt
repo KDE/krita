@@ -230,6 +230,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
+    widgets/kis_lod_availability_widget.cpp
     input/kis_input_manager.cpp
     input/kis_extended_modifiers_mapper.cpp
     input/kis_abstract_input_action.cpp

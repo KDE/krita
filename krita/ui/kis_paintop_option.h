@@ -27,6 +27,7 @@
 
 class QWidget;
 class QString;
+class KisPaintopLodLimitations;
 
 /**
  * Base interface for paintop options. A paintop option
@@ -71,6 +72,8 @@ public:
     void startWriteOptionSetting(KisPropertiesConfiguration* setting) const;
 
     QWidget* configurationPage() const;
+
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 protected:
 

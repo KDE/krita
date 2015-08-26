@@ -30,7 +30,10 @@
 
 struct FreehandStrokeStrategy::Private
 {
+    Private(KisResourcesSnapshotSP _resources) : resources(_resources) {}
+
     KisStrokeRandomSource randomSource;
+    KisResourcesSnapshotSP resources;
 };
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -40,7 +43,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfo),
-      m_d(new Private())
+      m_d(new Private(resources))
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -52,7 +55,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfos),
-      m_d(new Private())
+      m_d(new Private(resources))
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -130,6 +133,8 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 {
+    if (!m_d->resources->presetAllowsLod()) return 0;
+
     FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
     clone->setUndoEnabled(false);
     return clone;

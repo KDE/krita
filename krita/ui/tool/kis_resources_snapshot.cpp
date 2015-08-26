@@ -71,6 +71,7 @@ struct KisResourcesSnapshot::Private {
 
     bool globalAlphaLock;
     qreal effectiveZoom;
+    bool presetAllowsLod;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
@@ -122,6 +123,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentN
 
     m_d->globalAlphaLock = resourceManager->resource(KisCanvasResourceProvider::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toDouble();
+    m_d->presetAllowsLod = resourceManager->resource(KisCanvasResourceProvider::PresetAllowsLod).toBool();
 }
 
 KisResourcesSnapshot::~KisResourcesSnapshot()
@@ -310,4 +312,9 @@ QBitArray KisResourcesSnapshot::channelLockFlags() const
 qreal KisResourcesSnapshot::effectiveZoom() const
 {
     return m_d->effectiveZoom;
+}
+
+bool KisResourcesSnapshot::presetAllowsLod() const
+{
+    return m_d->presetAllowsLod;
 }

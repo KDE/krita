@@ -301,3 +301,12 @@ void KisPaintOpSettings::onPropertyChanged()
 
 }
 
+bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *config)
+{
+    return config->getBool("lodUserAllowed", true);
+}
+
+void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfiguration *config, bool value)
+{
+    config->setProperty("lodUserAllowed", value);
+}

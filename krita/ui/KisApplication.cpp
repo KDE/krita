@@ -170,6 +170,7 @@ KisApplication::KisApplication(const QString &key)
         setStyle("Plastique");
         setStyle("Breeze");
         setStyle("Oxygen");
+        setStyle("Fusion");
     }
 
 }

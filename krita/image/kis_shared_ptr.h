@@ -87,7 +87,7 @@ public:
     inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
 
     // Free the pointer and set it to new value
-    void attach(T* p) const;
+    void attach(T* p);
 
     // Free the pointer
     void clear();
@@ -110,10 +110,6 @@ public:
     }
 
     inline KisSharedPtr<T>& operator= (const KisSharedPtr& o) {
-        attach(o.d);
-        return *this;
-    }
-    inline const KisSharedPtr<T>& operator= (const KisSharedPtr& o) const {
         attach(o.d);
         return *this;
     }
@@ -286,10 +282,7 @@ public:
         attach(o);
         return *this;
     }
-    inline const KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) const {
-        attach(o);
-        return *this;
-    }
+
     inline bool operator== (const T* p) const {
         return (d == p);
     }
@@ -496,7 +489,7 @@ Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
 
 
 template <class T>
-Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
+Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p)
 {
     if (d != p) {
         ref(this, p);

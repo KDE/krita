@@ -90,7 +90,7 @@
       <item row="0" column="0" colspan="2">
        <widget class="QLabel" name="lbltrc">
         <property name="text">
-         <string>TRC</string>
+         <string notr="true">TRC</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

@@ -19,6 +19,7 @@
 #define KIS_EXPERIMENTOP_OPTION_H
 
 #include <kis_paintop_option.h>
+class KisPaintopLodLimitations;
 
 const QString EXPERIMENT_DISPLACEMENT_ENABLED = "Experiment/displacementEnabled";
 const QString EXPERIMENT_DISPLACEMENT_VALUE = "Experiment/displacement";
@@ -42,6 +43,8 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private Q_SLOTS:
     void enableSpeed(qreal value);
@@ -76,6 +79,9 @@ public:
         windingFill = setting->getBool(EXPERIMENT_WINDING_FILL);
         hardEdge = setting->getBool(EXPERIMENT_HARD_EDGE);
     }
+
+
+
 };
 
 #endif

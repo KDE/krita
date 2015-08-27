@@ -215,6 +215,9 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
     abr >> sample_section_size;
     sample_section_end = sample_section_size + abr.device()->pos();
 
+    if(sample_section_end < 0 || sample_section_end > abr.device()->size())
+        return 0;
+
     data_start = abr.device()->pos();
 
     while ((!abr.atEnd()) && (abr.device()->pos() < sample_section_end)) {
@@ -223,7 +226,14 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
         brush_end = brush_size;
         // complement to 4
         while (brush_end % 4 != 0) brush_end++;
-        abr.device()->seek(abr.device()->pos() + brush_end);
+
+        qint64 newPos = abr.device()->pos() + brush_end;
+        if(newPos > 0 && newPos < abr.device()->size()) {
+            abr.device()->seek(newPos);
+        }
+        else
+            return 0;
+
         samples++;
     }
 

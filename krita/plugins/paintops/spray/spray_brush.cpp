@@ -49,17 +49,9 @@
 #include "random_gauss.h"
 
 #include <QtGlobal>
-#ifdef Q_OS_WIN
-// quoting DRAND48(3) man-page:
-// These functions are declared obsolete by  SVID  3,
-// which  states  that rand(3) should be used instead.
-#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
-#endif
-
 
 SprayBrush::SprayBrush()
 {
-    srand48(time(0));
     m_painter = 0;
     m_transfo = 0;
     m_rand = new RandomGauss(time(0));
@@ -73,7 +65,7 @@ SprayBrush::~SprayBrush()
 }
 
 
-qreal SprayBrush::rotationAngle()
+qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
 {
     qreal rotation = 0.0;
 
@@ -87,7 +79,7 @@ qreal SprayBrush::rotationAngle()
             rotation = linearInterpolation(rotation , M_PI * 2.0 * qBound<qreal>(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeDynamicsProperties->randomRotationWeight);
         }
         else {
-            rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_shapeDynamicsProperties->randomRotationWeight);
+            rotation = linearInterpolation(rotation, M_PI * 2.0 * randomSource->generateNormalized(), m_shapeDynamicsProperties->randomRotationWeight);
         }
     }
 
@@ -97,9 +89,13 @@ qreal SprayBrush::rotationAngle()
 
 
 void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
-                       const KisPaintInformation& info, qreal rotation, qreal scale,
+                       const KisPaintInformation& info,
+                       qreal rotation, qreal scale,
+                       qreal additionalScale,
                        const KoColor &color, const KoColor &bgColor)
 {
+    KisRandomSourceSP randomSource = info.randomSource();
+
     // initializing painter
     if (!m_painter) {
         m_painter = new KisPainter(dab);
@@ -127,19 +123,19 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     KisCrossDeviceColorPicker colorPicker(source, m_inkColor);
 
     // apply size sensor
-    m_radius = m_properties->radius * scale;
+    m_radius = m_properties->radius * scale * additionalScale;
 
     // jitter movement
     if (m_properties->jitterMovement) {
-        x = x + ((2 * m_radius * drand48()) - m_radius) * m_properties->amount;
-        y = y + ((2 * m_radius * drand48()) - m_radius) * m_properties->amount;
+        x = x + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->amount;
+        y = y + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->amount;
     }
 
     // this is wrong for every shape except pixel and anti-aliased pixel
 
 
     if (m_properties->useDensity) {
-        m_particlesCount = (m_properties->coverage * (M_PI * m_radius * m_radius));
+        m_particlesCount = (m_properties->coverage * (M_PI * pow2(m_radius)) / pow2(additionalScale));
     }
     else {
         m_particlesCount = m_properties->particleCount;
@@ -167,19 +163,19 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     for (quint32 i = 0; i < m_particlesCount; i++) {
         // generate random angle
-        angle = drand48() * M_PI * 2;
+        angle = randomSource->generateNormalized() * M_PI * 2;
 
         // generate random length
         if (m_properties->gaussian) {
             length = qBound<qreal>(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
         }
         else {
-            length = drand48();
+            length = randomSource->generateNormalized();
         }
 
         if (m_shapeDynamicsProperties->enabled) {
             // rotation
-            rotationZ = rotationAngle();
+            rotationZ = rotationAngle(randomSource);
 
             if (m_shapeDynamicsProperties->followCursor) {
 
@@ -194,7 +190,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             // random size - scale
             if (m_shapeDynamicsProperties->randomSize) {
-                particleScale = drand48();
+                particleScale = randomSource->generateNormalized();
             }
         }
         // generate polar coordinate
@@ -232,9 +228,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             }
 
             if (m_colorProperties->useRandomHSV && m_transfo) {
-                params["h"] = (m_colorProperties->hue / 180.0) * drand48();
-                params["s"] = (m_colorProperties->saturation / 100.0) * drand48();
-                params["v"] = (m_colorProperties->value / 100.0) * drand48();
+                params["h"] = (m_colorProperties->hue / 180.0) * randomSource->generateNormalized();
+                params["s"] = (m_colorProperties->saturation / 100.0) * randomSource->generateNormalized();
+                params["v"] = (m_colorProperties->value / 100.0) * randomSource->generateNormalized();
                 m_transfo->setParameters(params);
                 m_transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
                 m_transfo->setParameter(4, false);//sets the colorize to false.
@@ -242,7 +238,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             }
 
             if (m_colorProperties->useRandomOpacity) {
-                quint8 alpha = qRound(drand48() * OPACITY_OPAQUE_U8);
+                quint8 alpha = qRound(randomSource->generateNormalized() * OPACITY_OPAQUE_U8);
                 m_inkColor.setOpacity(alpha);
                 m_painter->setOpacity(alpha);
             }
@@ -254,8 +250,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->setPaintColor(m_inkColor);
         }
 
-        qreal jitteredWidth = qMax(qreal(1.0), m_shapeProperties->width * particleScale);
-        qreal jitteredHeight = qMax(qreal(1.0), m_shapeProperties->height * particleScale);
+        qreal jitteredWidth = qMax(qreal(1.0), m_shapeProperties->width * particleScale * additionalScale);
+        qreal jitteredHeight = qMax(qreal(1.0), m_shapeProperties->height * particleScale * additionalScale);
 
         if (m_shapeProperties->enabled){
         switch (m_shapeProperties->shape){

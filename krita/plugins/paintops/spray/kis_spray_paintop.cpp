@@ -36,6 +36,8 @@
 #include <kis_sprayop_option.h>
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
+#include <kis_lod_transform.h>
+
 
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
@@ -107,16 +109,17 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     // Spray Brush is capable of working with zero scale,
     // so no additional checks for 'zero'ness are needed
-    qreal scale = m_sizeOption.apply(info);
+    const qreal scale = m_sizeOption.apply(info);
+    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
 
     setCurrentRotation(rotation);
-    setCurrentScale(scale);
+    setCurrentScale(scale * additionalScale);
 
     m_sprayBrush.paint(m_dab,
                        m_node->paintDevice(),
                        info,
                        rotation,
-                       scale,
+                       scale, additionalScale,
                        painter()->paintColor(),
                        painter()->backgroundColor());
 
@@ -125,5 +128,5 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    return KisSpacingInformation(m_spacing);
+    return KisSpacingInformation(m_spacing * additionalScale);
 }

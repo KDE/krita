@@ -45,7 +45,7 @@ public:
     SprayBrush();
     ~SprayBrush();
 
-    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, const KoColor &color, const KoColor &bgColor);
+    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, qreal additionalScale, const KoColor &color, const KoColor &bgColor);
     void setProperties(KisSprayProperties * properties,
                        KisColorProperties * colorProperties,
                        KisShapeProperties * shapeProperties,
@@ -84,7 +84,7 @@ private:
 
 private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
-    qreal rotationAngle();
+    qreal rotationAngle(KisRandomSourceSP randomSource);
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor &color, qreal rx, qreal ry);
     void paintCircle(KisPainter * painter, qreal x, qreal y, int radius);

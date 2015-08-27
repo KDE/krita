@@ -41,7 +41,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
-    ${CMAKE_BINARY_DIR}/libs/widgets
     3rdparty
 )
 

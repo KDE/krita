@@ -810,7 +810,6 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
 # flake depends on koodf and pigment
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
-                   ${KOPLUGIN_INCLUDES}
                    ${PIGMENT_INCLUDES}
                    ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
@@ -840,22 +839,18 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout)
 
-# Widgets depends on flake
-set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
+# Widgets depends on kotext and flake
+set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_BINARY_DIR}/libs/widgetutils
                    ${CMAKE_SOURCE_DIR}/libs/widgets
                    ${CMAKE_BINARY_DIR}/libs/widgets)
 
 # BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
+set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
-set(KOWIDGETS_INCLUDES 
-                    ${BASICFLAKES_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils)
 
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES 

@@ -15,16 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <widget class="QCheckBox" name="chkRememberSetting">
-     <property name="text">
-      <string>Do not ask (hold Shift to see it again)</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="lblTitleMessage">
      <property name="text">
-      <string>Krita couldn't determine size of the screen the tablet device is connected to. Please choose correct data source or enter screen resolution manually</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The driver for your  drawing tablet and Windows do not agree on the size of the screen your tablet is connected to. Please select the right option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -34,20 +27,20 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Screen Resolution</string>
+      <string/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QRadioButton" name="radioWintab">
         <property name="text">
-         <string notr="true">Use Wintab data NO_I18N</string>
+         <string notr="true">This is what the tablet thinks: NO_I18N</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="radioQt">
         <property name="text">
-         <string notr="true">Use Qt data NO_I18N</string>
+         <string notr="true">This is what the computer thinks: NO_I18N</string>
         </property>
        </widget>
       </item>
@@ -56,7 +49,7 @@
         <item>
          <widget class="QRadioButton" name="radioManual">
           <property name="text">
-           <string>Manual</string>
+           <string>If both are wrong, enter the size manually:</string>
           </property>
          </widget>
         </item>
@@ -155,6 +148,13 @@
          </layout>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkRememberSetting">
+        <property name="text">
+         <string>Do not ask again (hold Shift to ask again)</string>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer">

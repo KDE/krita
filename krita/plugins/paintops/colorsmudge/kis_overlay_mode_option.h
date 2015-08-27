@@ -18,10 +18,13 @@
 #ifndef _KIS_OVERLAYMODE_OPTION_H_
 #define _KIS_OVERLAYMODE_OPTION_H_
 
-#include <kis_paintop_option.h>
-#include <klocale.h>
-
 #include <QLabel>
+
+#include <klocale.h>
+#include <kis_paintop_option.h>
+
+#include "kis_paintop_lod_limitations.h"
+
 
 class KisOverlayModeOption : public KisPaintOpOption
 {
@@ -44,6 +47,11 @@ public:
         bool enabled = setting->getBool("MergedPaint");
         setChecked(enabled);
     }
+
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const {
+        l->blockers << KoID("colorsmudge-overlay", i18nc("PaintOp LoD limitation", "Overlay Option"));
+    }
+
 };
 
 class KisOverlayModeOptionWidget: public KisOverlayModeOption

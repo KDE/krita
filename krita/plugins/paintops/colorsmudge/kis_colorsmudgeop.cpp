@@ -209,7 +209,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
         if (m_smudgeRadiusOption.isChecked()) {
-            m_smudgeRadiusOption.apply(*m_smudgePainter, info, m_dstDabRect.width(), pt.x(), pt.y(), painter()->device());
+            qreal effectiveSize = 0.5 * (m_dstDabRect.width() + m_dstDabRect.height());
+            m_smudgeRadiusOption.apply(*m_smudgePainter, info, effectiveSize, pt.x(), pt.y(), painter()->device());
+
             KoColor color2 = m_smudgePainter->paintColor();
             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color2);
 

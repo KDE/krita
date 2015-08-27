@@ -332,20 +332,28 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","These profiles are for use with RGB images that have been converted to monotone gray (black and white). The main reason to convert from RGB to Gray is to save the file space needed to encode the image. Google places a premium on fast-loading web pages, and images are one of the slower-loading elements of a web page. So converting black and white images to Grayscale images does save some kilobytes. For grayscale images uploaded to the internet, convert the image to the V2 Gray profile with the sRGB TRC."));
         }
         if(profileName.contains("-g10")) {
-        d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
-        d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The profiles that end in '-g10.icc' are linear gamma (gamma=1.0, 'linear light', etc) profiles and should only be used when editing at high bit depths (16-bit floating point, 16-bit integer, 32-bit floating point, 32-bit integer). Many editing operations produce better results in linear gamma color spaces."));
+            d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The profiles that end in '-g10.icc' are linear gamma (gamma=1.0, 'linear light', etc) profiles and should only be used when editing at high bit depths (16-bit floating point, 16-bit integer, 32-bit floating point, 32-bit integer). Many editing operations produce better results in linear gamma color spaces."));
         }
         if(profileName.contains("-labl")) {
-        d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
-        d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The profiles that end in '-labl.icc' have perceptually uniform TRCs. A few editing operations really should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth images."));
+            d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The profiles that end in '-labl.icc' have perceptually uniform TRCs. A few editing operations really should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth images."));
         }
         if(profileName.contains("-srgbtrc") || profileName.contains("-g22") || profileName.contains("-g18") || profileName.contains("-bt709")) {
-        d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
-        d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-bt709.icc' have approximately but not exactly perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform."));
+            d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-bt709.icc' have approximately but not exactly perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform."));
         }
         if(d->colorSpaceSelector->cmbColorDepth->currentItem().id()=="U8") {
-        d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
-        d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","When editing 8-bit images, you should use a profile with a small color gamut and an approximately or exactly uniform TRC. Of the profiles supplied in my profile pack, only the sRGB and AdobeRGB1998 (ClayRGB) color spaces are small enough for 8-bit editing. Even with the AdobeRGB1998 color space you need to be careful to not cause posterization. And of course you can't use the linear gamma versions of these profiles for 8-bit editing."));
+            d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","When editing 8-bit images, you should use a profile with a small color gamut and an approximately or exactly perceptually uniform TRC. Of the profiles supplied in my profile pack, only the sRGB and AdobeRGB1998 (ClayRGB) color spaces are small enough for 8-bit editing. Even with the AdobeRGB1998 color space you need to be careful to not cause posterization. And of course you can't use the linear gamma versions of these profiles for 8-bit editing."));
+        }
+        if(profileName.contains("-V4-"){
+            d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Use V4 profiles for editing images using high bit depth image editors that use LCMS as the Color Management Module. This includes Krita, digiKam/showFoto, and GIMP 2.9."));
+        }
+        if(profileName.contains("-V2-"){
+            d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Use V2 profiles for exporting finished images to be uploaded to the web or for use with imaging software that can't read V4 profiles."));
         }
     }
             

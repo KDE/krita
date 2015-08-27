@@ -515,7 +515,7 @@ void KisAdvancedColorSpaceSelector::downloadProfile()
             iccEngine->removeProfile( fi.absolutePath()+'/'+fi.fileName());
         }
     }
-    fillCmbProfiles();
+    fillLstProfiles();
 #endif
 }
 
@@ -523,7 +523,7 @@ void KisAdvancedColorSpaceSelector::uploadProfile()
 {
 #ifdef GHNS
     KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
-    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
+    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->lstProfile->currentText());
     if(!profile)  return;
     dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
     dialog.setUploadName(profile->name());

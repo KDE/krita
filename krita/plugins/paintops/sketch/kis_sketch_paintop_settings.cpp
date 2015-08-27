@@ -62,18 +62,18 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         path = ellipseOutline(diameter, diameter, 1.0, 0.0/*brush->scale(), brush->angle()*/);
         QPainterPath tiltLine;
         QLineF tiltAngle(path.boundingRect().center(), path.boundingRect().topLeft());
-        tiltAngle.setLength(qMax(diameter, qreal(50.0)) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
+        tiltAngle.setLength(qMax(diameter*0.5, qreal(50.0)) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
         tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
         tiltLine.moveTo(tiltAngle.p1());
         tiltLine.lineTo(tiltAngle.p2());
         tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
-        tiltLine.lineTo(tiltAngle.p1());
         tiltLine.lineTo(tiltAngle.p2());
-        
+        tiltLine.lineTo(tiltAngle.p1());
+
         path = outlineFetcher()->fetchOutline(info, this, path);
         if (mode == CursorTiltOutline) {
             QPainterPath realOutline = brush->outline();
-        
+
             tiltLine.translate(info.pos());
             path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, path.boundingRect().center().x(), path.boundingRect().center().y()));
         }

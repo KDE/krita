@@ -51,11 +51,11 @@ QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &in
 
         QPainterPath tiltLine;
         QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,size));
-        tiltAngle.setLength(qMax(size, qreal(50.0)) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-2.0);
+        tiltAngle.setLength(qMax(size*0.5, qreal(50.0)) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
         tiltLine.moveTo(tiltAngle.p1());
         tiltLine.lineTo(tiltAngle.p2());
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+2.0);
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
         tiltLine.lineTo(tiltAngle.p2());
         tiltLine.lineTo(tiltAngle.p1());
 

@@ -45,6 +45,7 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* settings) const;
     void readOptionSetting(const KisPropertiesConfiguration* settings);
 
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
 

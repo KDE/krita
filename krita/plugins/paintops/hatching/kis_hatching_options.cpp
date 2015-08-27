@@ -18,6 +18,7 @@
  */
 
 #include "kis_hatching_options.h"
+#include "kis_paintop_lod_limitations.h"
 
 #include "ui_wdghatchingoptions.h"
 
@@ -115,3 +116,9 @@ void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* set
 
     m_options->separationIntervalSpinBox->setValue(setting->getInt("Hatching/separationintervals"));
 }
+
+void KisHatchingOptions::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->limitations << KoID("hatching-brush", i18nc("PaintOp LoD limitation", "Hatching Brush (heavy aliasing in LOD mode)"));
+}
+

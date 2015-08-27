@@ -62,7 +62,7 @@ void HatchingBrush::init()
 {
 }
 
-void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color)
+void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color, qreal additionalScale)
 {
     m_painter.begin(dev);
     m_painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -71,12 +71,12 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
 
     angle = givenangle;
     double tempthickness = m_settings->thickness * m_settings->thicknesssensorvalue;
-    if (tempthickness >= 1)
-        thickness = qRound(tempthickness);
-    else
-        thickness = 1;
-    if (m_settings->enabledcurveseparation)
-        separation = separationAsFunctionOfParameter(m_settings->separationsensorvalue, m_settings->separation, m_settings->separationintervals);
+    thickness = qMax(1, qRound(additionalScale * tempthickness));
+    separation = additionalScale *
+        (m_settings->enabledcurveseparation ?
+         separationAsFunctionOfParameter(m_settings->separationsensorvalue, m_settings->separation, m_settings->separationintervals) :
+         m_settings->separation);
+
     height_ = height;
     width_ = width;
 

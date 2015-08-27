@@ -53,14 +53,14 @@ struct KisAdvancedColorSpaceSelector::Private {
 
 KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, const QString &caption) : QDialog(parent), d(new Private)
 {
-    
+
     setObjectName("KisAdvancedColorSpaceSelector");
     setWindowTitle(caption);
     d->colorSpaceSelector = new Ui_WdgColorSpaceSelectorAdvanced;
     d->colorSpaceSelector->setupUi(this);
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
-    
+
     d->colorSpaceSelector->bnDownloadProfile->setIcon(themedIcon("download"));
     d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
     d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
@@ -96,10 +96,10 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
     connect(d->colorSpaceSelector->bnDownloadProfile, SIGNAL(clicked()), this, SLOT(downloadProfile()));
     connect(d->colorSpaceSelector->bnUploadProfile, SIGNAL(clicked()), this, SLOT(uploadProfile()));
-    
+
     connect(d->colorSpaceSelector->bnOK, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->colorSpaceSelector->bnOK, SIGNAL(rejected()), this, SLOT(reject()));
-    
+
     d->knsrcFile = "kritaiccprofiles.knsrc";
     fillLstProfiles();
 }
@@ -194,7 +194,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         d->colorSpaceSelector->lblXYZ_B->setText(notApplicable);
         d->colorSpaceSelector->lblXYZ_B->setToolTip(notApplicableTooltip);
     }
-    
+
     //set TRC
     QVector <double> estimatedTRC(3);
     QString estimatedGamma = i18nc("Estimated Gamma indicates how the TRC(Tone Response Curve or Tone Reproduction Curve) is bent. A Gamma of 1.0 means linear","Estimated Gamma: ");
@@ -268,7 +268,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     } else if (currentModelStr == "YCbCrA") {
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("If the selected model is YCbCr","YCbCr, standing for Luma, Blue Chroma, Red Chroma, is a model designed for video encoding. It is based on human perception, meaning that it tries to encode the difference in lightness, red-green balance and yellow-blue balance. Chroma in this case is then a word indicating a special type of saturation, in these cases the saturation of Red and Blue, of which the desaturated equivalents are Green and Yellow respectively. It is there to open up certain images correctly, but Krita does not currently ship a profile for this due to lack of open source ICC profiles for YCrCb."));
     }
-    
+
     QString currentDepthStr = d->colorSpaceSelector->cmbColorDepth->currentItem().id();
     d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
     if (currentDepthStr == "U8") {
@@ -282,11 +282,11 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     } else if (currentDepthStr == "F64") {
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("When the selected Bitdepth is 64bit float, but this isn't actually available in Krita at the moment.","64bit float: 64bit float is as precise as it gets in current technology, and this depth is used most of the time for images that are generated or used as an input for software. It being floating point is an absolute requirement for Scene Referred (HDR) images. This does take eight times as much space on the RAM and hard-drive than any given 8bit image of the same properties, and for some devices it takes much more processing power. We recommend watching the RAM usage of the file carefully, or otherwise use 8bit if your computer slows down."));
     }
-    
-    if (profileName.contains("-elle-") ) {
+
+    if (profileName.contains("-elle-")) {
         d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
         d->colorSpaceSelector->textProfileDescription->appendHtml("<b>"+i18nc("These are Elle Stone's notes on her profiles that we ship. The full text can be found here: http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html","Elle's Notes:")+"</b>");
-        
+
         if(profileName.contains("ACES-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Quoting Wikipedia, 'Academy Color Encoding System (ACES) is a color image encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for a fully encompassing color accurate workflow, with 'seamless interchange of high quality motion picture images regardless of source'."));
@@ -347,16 +347,15 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","When editing 8-bit images, you should use a profile with a small color gamut and an approximately or exactly perceptually uniform TRC. Of the profiles supplied in my profile pack, only the sRGB and AdobeRGB1998 (ClayRGB) color spaces are small enough for 8-bit editing. Even with the AdobeRGB1998 color space you need to be careful to not cause posterization. And of course you can't use the linear gamma versions of these profiles for 8-bit editing."));
         }
-        if(profileName.contains("-V4-"){
+        if(profileName.contains("-V4-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Use V4 profiles for editing images using high bit depth image editors that use LCMS as the Color Management Module. This includes Krita, digiKam/showFoto, and GIMP 2.9."));
         }
-        if(profileName.contains("-V2-"){
+        if(profileName.contains("-V2-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Use V2 profiles for exporting finished images to be uploaded to the web or for use with imaging software that can't read V4 profiles."));
         }
     }
-            
 }
 
 QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoint) {
@@ -419,7 +418,7 @@ QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoin
     //F10 (0.35090, 0.35444) (5000K) (Philips TL85, Ultralume 50)
     //F11 (0.38541, 0.37123) (4000K) (Philips TL84, Ultralume 40)
     //F12 (0.44256, 0.39717) (3000K) (Philips TL83, Ultralume 30)
-    
+
     return name;
 }
 

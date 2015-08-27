@@ -35,6 +35,8 @@
 #include <kis_brush_option.h>
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_lod_transform.h>
+
 
 #include "kis_brush.h"
 
@@ -122,6 +124,7 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     // Hairy Brush is capable of working with zero scale,
     // so no additional checks for 'zero'ness are needed
     qreal scale = m_sizeOption.apply(pi2);
+    scale *= KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 

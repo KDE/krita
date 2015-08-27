@@ -16,15 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <stdlib.h>
-#define srand48 srand
-inline double drand48()
-{
-    return double(rand()) / RAND_MAX;
-}
-#endif
-
 #include "hairy_brush.h"
 #include "trajectory.h"
 
@@ -95,12 +86,13 @@ void HairyBrush::fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density)
     const KoColorSpace * cs = dab->colorSpace();
     KoColor bristleColor(cs);
 
-    srand48(12345678);
+    KisRandomSource randomSource(0);
+
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             alpha =  cs->opacityF(dabPointer);
             if (alpha != 0.0) {
-                if (density == 1.0 || drand48() <= density) {
+                if (density == 1.0 || randomSource.generateNormalized() <= density) {
                     memcpy(bristleColor.data(), dabPointer, pixelSize);
 
                     bristle = new Bristle(x - centerX, y - centerY, alpha); // using value from image as length of bristle
@@ -164,6 +156,8 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         }
     }
 
+    KisRandomSourceSP randomSource = pi2.randomSource();
+
     qreal fx1, fy1, fx2, fy2;
     qreal randomX, randomY;
     qreal shear;
@@ -178,8 +172,8 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         if (!m_bristles.at(i)->enabled()) continue;
         bristle = m_bristles[i];
 
-        randomX = (drand48() * 2 - 1.0) * m_properties->randomFactor;
-        randomY = (drand48() * 2 - 1.0) * m_properties->randomFactor;
+        randomX = (randomSource->generateNormalized() * 2 - 1.0) * m_properties->randomFactor;
+        randomY = (randomSource->generateNormalized() * 2 - 1.0) * m_properties->randomFactor;
 
         shear = pressure * m_properties->shearFactor;
 
@@ -244,7 +238,6 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         }
 
     }
-    //repositionBristles(angle,slope);
     m_dab = 0;
     m_dabAccessor = 0;
 }
@@ -305,23 +298,6 @@ void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal
             bristle->inkAmount();
     }
     bristleColor.setOpacity(opacity);
-}
-
-void HairyBrush::repositionBristles(double angle, double slope)
-{
-    // setX
-    srand48((int)slope);
-    for (int i = 0; i < m_bristles.size(); i++) {
-        float x = m_bristles[i]->x();
-        m_bristles[i]->setX(x + drand48());
-    }
-
-    // setY
-    srand48((int)angle);
-    for (int i = 0; i < m_bristles.size(); i++) {
-        float y = m_bristles[i]->y();
-        m_bristles[i]->setY(y + drand48());
-    }
 }
 
 inline void HairyBrush::addBristleInk(Bristle *bristle,const QPointF &pos, const KoColor &color)

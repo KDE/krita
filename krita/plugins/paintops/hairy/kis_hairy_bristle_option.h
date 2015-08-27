@@ -20,6 +20,7 @@
 #define KIS_HAIRY_BRISTLE_OPTION_H
 
 #include <kis_paintop_option.h>
+class KisPaintopLodLimitations;
 
 const QString HAIRY_BRISTLE_USE_MOUSEPRESSURE = "HairyBristle/useMousePressure";
 const QString HAIRY_BRISTLE_SCALE = "HairyBristle/scale";
@@ -49,6 +50,8 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* config) const;
     void readOptionSetting(const KisPropertiesConfiguration* config);
+    void lodLimitations(KisPaintopLodLimitations *l) const;
+
 private:
     KisBristleOptionsWidget * m_options;
 };

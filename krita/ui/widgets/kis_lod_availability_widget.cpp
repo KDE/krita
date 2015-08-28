@@ -18,17 +18,20 @@
 
 #include "kis_lod_availability_widget.h"
 
+#include <QPushButton>
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include <QToolTip>
+
 
 #include <kis_canvas_resource_provider.h>
-
 
 struct KisLodAvailabilityWidget::Private
 {
     Private() : chkLod(0), resourceManager(0) {}
 
     QCheckBox *chkLod;
+    QPushButton *btnLod;
     KoCanvasResourceManager *resourceManager;
 
     void updateLodStatus();
@@ -38,10 +41,19 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
     : QWidget(parent),
       m_d(new Private)
 {
-    m_d->chkLod = new QCheckBox("PLCHLD", this);
+    m_d->chkLod = new QCheckBox(this);
+
+    m_d->btnLod = new QPushButton(this);
+    m_d->btnLod->setFlat(true);
+
+    connect(m_d->btnLod, SIGNAL(clicked()), SLOT(showLodToolTip()));
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(m_d->chkLod);
+    layout->addWidget(m_d->btnLod);
+
+    layout->setSpacing(0);
+
     setLayout(layout);
 
     // set no limitations
@@ -53,6 +65,11 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
 
 KisLodAvailabilityWidget::~KisLodAvailabilityWidget()
 {
+}
+
+void KisLodAvailabilityWidget::showLodToolTip()
+{
+    QToolTip::showText(QCursor::pos(), m_d->btnLod->toolTip(), m_d->btnLod);
 }
 
 void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
@@ -96,10 +113,12 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
     {
         QFont font;
         font.setStrikeOut(isBlocked);
-        m_d->chkLod->setFont(font);
         m_d->chkLod->setEnabled(!isBlocked);
-        m_d->chkLod->setText(text);
-        m_d->chkLod->setToolTip(toolTip);
+
+        m_d->btnLod->setEnabled(!isBlocked);
+        m_d->btnLod->setFont(font);
+        m_d->btnLod->setText(text);
+        m_d->btnLod->setToolTip(toolTip);
     }
 
     m_d->updateLodStatus();

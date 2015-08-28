@@ -45,6 +45,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sigUserChangedLodAvailability(bool value);
 
+private Q_SLOTS:
+    void showLodToolTip();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

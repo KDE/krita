@@ -34,6 +34,7 @@ const QString DYNA_LINE_COUNT = "Dyna/lineCount";
 const QString DYNA_LINE_SPACING = "Dyna/lineSpacing";
 
 class KisDynaOpOptionsWidget;
+class KisPaintopLodLimitations;
 
 class KisDynaOpOption : public KisPaintOpOption
 {
@@ -58,6 +59,7 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
     KisDynaOpOptionsWidget * m_options;

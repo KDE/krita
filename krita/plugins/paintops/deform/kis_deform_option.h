@@ -21,6 +21,7 @@
 #include <kis_paintop_option.h>
 
 class KisDeformOptionsWidget;
+class KisPaintopLodLimitations;
 
 const QString DEFORM_AMOUNT = "Deform/deformAmount";
 const QString DEFORM_ACTION = "Deform/deformAction";
@@ -44,6 +45,8 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
     KisDeformOptionsWidget * m_options;

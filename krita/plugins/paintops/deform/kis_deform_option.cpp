@@ -18,6 +18,9 @@
 #include "kis_deform_option.h"
 #include "ui_wdgdeformoptions.h"
 
+#include "kis_paintop_lod_limitations.h"
+
+
 class KisDeformOptionsWidget: public QWidget, public Ui::WdgDeformOptions
 {
 public:
@@ -102,6 +105,11 @@ void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) con
     config->setProperty(DEFORM_USE_BILINEAR, m_options->interpolationChBox->isChecked());
     config->setProperty(DEFORM_USE_COUNTER, m_options->useCounter->isChecked());
     config->setProperty(DEFORM_USE_OLD_DATA, m_options->useOldData->isChecked());
+}
+
+void KisDeformOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->blockers << KoID("deform-brush", i18nc("PaintOp LoD limitation", "Deform Brush (unsupported)"));
 }
 
 int  KisDeformOption::deformAction() const

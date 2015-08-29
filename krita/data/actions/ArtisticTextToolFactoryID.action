@@ -1,5 +1,4 @@
 <Actions version="1" name="ArtisticTextToolFactoryID">
- <Action iconText="Select All" shortcut="Ctrl+A" toolTip="Select All" icon="edit-select-all" whatsThis="" statusTip="" name="edit_select_all" isCheckable="false" text="Select &amp;All" defaultShortcut="Ctrl+A"/>
  <Action iconText="Subscript" shortcut="" toolTip="Subscript" icon="format-text-subscript" whatsThis="" statusTip="" name="artistictext_subscript" isCheckable="false" text="Subscript" defaultShortcut=""/>
  <Action iconText="Detach Path" shortcut="" toolTip="Detach Path" icon="artistictext-detach-path" whatsThis="" statusTip="" name="artistictext_detach_from_path" isCheckable="false" text="Detach Path" defaultShortcut=""/>
  <Action iconText="Italic text" shortcut="" toolTip="Italic text" icon="format-text-italic" whatsThis="" statusTip="" name="artistictext_font_italic" isCheckable="false" text="Italic text" defaultShortcut=""/>

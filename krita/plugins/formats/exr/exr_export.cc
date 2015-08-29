@@ -25,6 +25,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -44,8 +45,7 @@
 
 class KisExternalLayer;
 
-K_PLUGIN_FACTORY(ExportFactory, registerPlugin<exrExport>();)
-K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_exr_export.json", registerPlugin<exrExport>();)
 
 exrExport::exrExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

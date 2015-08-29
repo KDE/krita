@@ -789,4 +789,3 @@ void MainWindow::forceFullScreen(bool newValue)
     d->forceFullScreen = newValue;
 }
 
-#include "MainWindow.moc"

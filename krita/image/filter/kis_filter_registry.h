@@ -22,6 +22,7 @@
 
 #include <QObject>
 
+#include "kis_filter.h"
 #include "kis_types.h"
 #include "KoGenericRegistry.h"
 

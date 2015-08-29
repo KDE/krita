@@ -4,13 +4,13 @@ set(kritaconvolutionfilters_PART_SRCS
    kis_convolution_filter.cpp )
 
 
-kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
-
+add_library(kritaconvolutionfilters MODULE ${kritaconvolutionfilters_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaconvolutionfilters kritaconvolutionfilters.desktop)
 
 
 target_link_libraries(kritaconvolutionfilters kritaui)
 
-install(TARGETS kritaconvolutionfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaconvolutionfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

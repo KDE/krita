@@ -48,10 +48,10 @@
 #include "TableSource.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
-K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
-K_EXPORT_PLUGIN(ChartShapePluginFactory("calligra_shape_chart"))
+K_PLUGIN_FACTORY_WITH_JSON(ChartShapePluginFactory, "calligra_shape_chart.json",
+                           registerPlugin<ChartShapePlugin>();)
 
 ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
     : QObject(parent)

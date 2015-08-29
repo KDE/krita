@@ -56,7 +56,7 @@ class KoCanvasControllerProxyObject;
  * <p>The using application can instantiate this class and add its
  * canvas using the setCanvas() call. Which is designed so it can be
  * called multiple times if you need to exchange one canvas
- * widget for another, for instance, switching between a plain QWidget or a QGLWidget.
+ * widget for another, for instance, switching between a plain QWidget or a QOpenGLWidget.
  *
  * <p>There is _one_ KoCanvasController per canvas in your
  * application.

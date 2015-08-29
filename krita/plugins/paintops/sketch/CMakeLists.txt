@@ -9,13 +9,14 @@ set(kritasketchpaintop_PART_SRCS
     kis_sketch_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritasketchpaintop_PART_SRCS wdgsketchoptions.ui )
+ki18n_wrap_ui(kritasketchpaintop_PART_SRCS wdgsketchoptions.ui )
 
-kde4_add_plugin(kritasketchpaintop ${kritasketchpaintop_PART_SRCS})
+add_library(kritasketchpaintop MODULE ${kritasketchpaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritasketchpaintop kritasketchpaintop.desktop)
 
 target_link_libraries(kritasketchpaintop kritalibpaintop)
 
-install(TARGETS kritasketchpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritasketchpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

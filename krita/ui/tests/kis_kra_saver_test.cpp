@@ -246,4 +246,3 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 }
 
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
-#include "kis_kra_saver_test.moc"

@@ -83,4 +83,3 @@ void OverviewDockerDock::unsetCanvas()
 }
 
 
-#include "overviewdocker_dock.moc"

@@ -86,4 +86,3 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     m_smudgeOptionWidget->updateBrushPierced(pierced);
 }
 
-#include "kis_colorsmudgeop_settings_widget.moc"

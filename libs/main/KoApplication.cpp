@@ -37,6 +37,7 @@
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
 #include "KoPart.h"
+#include <KoJsonTrader.h>
 #include <KoConfig.h>
 
 #include <kdeversion.h>
@@ -63,6 +64,7 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QPluginLoader>
 
 #include <stdlib.h>
 
@@ -259,8 +261,14 @@ bool KoApplication::start()
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
 
-    // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
+    // Find the part component file corresponding to the application instance name
+    KoDocumentEntry entry;
+    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", d->nativeMimeType)) {
+        if (loader->fileName().contains(applicationName()+QString("part"))) {
+            entry = KoDocumentEntry(loader);
+            break;
+        }
+    }
     if (entry.isEmpty()) {
         QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
@@ -331,8 +339,7 @@ bool KoApplication::start()
         if (!mime) {
             qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
         }
-        QString extension = mime->property("X-KDE-NativeExtension").toString();
-        if (extension.isEmpty()) extension = mime->mainExtension();
+        const QString extension = mime->mainExtension();
 
         QStringList filters;
         filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
@@ -612,10 +619,10 @@ QList<KoPart*> KoApplication::partList() const
 QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
-    KService::Ptr service = entry.service();
-    return KoFilterManager::mimeFilter(d->nativeMimeType,
-                                       direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
+    QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+
+    return KoFilterManager::mimeFilter(d->nativeMimeType, direction, mimeTypes);
 }
 
 

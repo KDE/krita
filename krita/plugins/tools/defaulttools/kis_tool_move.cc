@@ -23,6 +23,7 @@
 
 #include <QPoint>
 
+#include <kglobal.h>
 
 #include "kis_cursor.h"
 #include "kis_selection.h"

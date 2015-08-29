@@ -383,7 +383,7 @@ void KisCustomImageWidget::saveAsPredefined()
     if (fileName.isEmpty()) {
         return;
     }
-    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("data");
+    QString saveLocation = KGlobal::dirs()->saveLocation("data");
 
     QDir d;
     d.mkpath(saveLocation + "krita/predefined_image_sizes/");
@@ -471,4 +471,3 @@ void KisCustomImageWidget::switchPortraitLandscape()
         bnPortrait->setChecked(true);
 }
 
-#include "kis_custom_image_widget.moc"

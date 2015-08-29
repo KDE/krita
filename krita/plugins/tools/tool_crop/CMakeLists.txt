@@ -8,15 +8,16 @@ set(kritatoolcrop_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
+ki18n_wrap_ui(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
 
-kde4_add_plugin(kritatoolcrop ${kritatoolcrop_PART_SRCS})
+add_library(kritatoolcrop MODULE ${kritatoolcrop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatoolcrop kritatoolcrop.desktop)
 
 
 
 target_link_libraries(kritatoolcrop kritaui)
 
-install(TARGETS kritatoolcrop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolcrop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

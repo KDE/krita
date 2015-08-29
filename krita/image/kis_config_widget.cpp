@@ -50,4 +50,3 @@ void KisConfigWidget::setView(KisViewManager *view)
     }
 }
 
-#include "kis_config_widget.moc"

@@ -49,7 +49,6 @@ struct KoPageLayout;
 class KoCanvasResourceManager;
 
 // KDE classes
-class KStatusBar;
 class KAction;
 class KActionCollection;
 
@@ -58,7 +57,7 @@ class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;
 class QCloseEvent;
-
+class QStatusBar;
 
 /**
  * This class is used to display a @ref KisDocument.
@@ -127,7 +126,7 @@ public:
     /**
      * @return the statusbar of the KisMainWindow in which this view is currently.
      */
-    KStatusBar * statusBar() const;
+    QStatusBar * statusBar() const;
 
     /**
      * This adds a widget to the statusbar for this view.

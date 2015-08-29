@@ -20,6 +20,8 @@
 #ifndef __KIS_GMIC_COMMAND_H
 #define __KIS_GMIC_COMMAND_H
 
+#include <gmic.h>
+
 #include <QSharedPointer>
 
 #include <kundo2command.h>

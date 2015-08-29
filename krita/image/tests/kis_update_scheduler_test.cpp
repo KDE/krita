@@ -412,5 +412,4 @@ void KisUpdateSchedulerTest::testTimeMonitor()
 }
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
-#include "kis_update_scheduler_test.moc"
 

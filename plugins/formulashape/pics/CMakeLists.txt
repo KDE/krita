@@ -1,3 +1,7 @@
 add_subdirectory( hicolor )
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+ecm_install_icons( ICONS
+    22-actions-formulashape.png
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME hicolor
+)

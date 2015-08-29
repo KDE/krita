@@ -1053,4 +1053,3 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
     QTimer::singleShot(100, this, SIGNAL(activeFilterConfigChanged()));
 }
 
-#include "LayerModel.moc"

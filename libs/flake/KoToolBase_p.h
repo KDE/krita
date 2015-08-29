@@ -34,7 +34,7 @@
 #include <string.h> // for the qt version check
 
 class QWidget;
-class KAction;
+class QAction;
 class KoToolBase;
 class KoCanvasBase;
 
@@ -80,10 +80,10 @@ public:
 
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
-    QHash<QString, KAction*> actionCollection;
+    QHash<QString, QAction *> actionCollection;
     QString toolId;
     QList<QAction*> popupActionList;
-    QSet<KAction*> readOnlyActions;
+    QSet<QAction *> readOnlyActions;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;

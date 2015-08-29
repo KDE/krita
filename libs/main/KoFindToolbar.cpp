@@ -154,11 +154,11 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
     connect(replaceAction, SIGNAL(triggered()), this, SLOT(activateReplace()));
 
-    KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
+    QAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));
     connect(findNextAction, SIGNAL(triggered(bool)), this, SLOT(activateSearch()));
     findNextAction->setEnabled(false);
-    KAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->previousButton, SIGNAL(clicked(bool)));
+    QAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->previousButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findPrevAction, SLOT(setEnabled(bool)));
     connect(findPrevAction, SIGNAL(triggered(bool)), this, SLOT(activateSearch()));
     findPrevAction->setEnabled(false);
@@ -289,4 +289,5 @@ void KoFindToolbar::Private::returnPressed()
     }
 }
 
-#include "KoFindToolbar.moc"
+// have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoFindToolbar.cpp"

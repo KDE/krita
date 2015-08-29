@@ -93,4 +93,3 @@ void KisNodeQueryPathEditor::slotPopupQuickHelp()
           "<i>./0</i> represents the first child of the current layer" ) );
 }
 
-#include "kis_node_query_path_editor.moc"

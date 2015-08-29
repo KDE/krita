@@ -5,13 +5,13 @@ set(kritatoolperspectivegrid_PART_SRCS
     kis_tool_perspectivegrid.cc
     )
 
-kde4_add_plugin(kritatoolperspectivegrid ${kritatoolperspectivegrid_PART_SRCS})
-
+add_library(kritatoolperspectivegrid MODULE ${kritatoolperspectivegrid_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatoolperspectivegrid kritatoolperspectivegrid.desktop)
 
 
 target_link_libraries(kritatoolperspectivegrid kritaui)
 
-install(TARGETS kritatoolperspectivegrid  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolperspectivegrid  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

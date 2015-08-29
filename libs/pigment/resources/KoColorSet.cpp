@@ -31,7 +31,7 @@
 #include <QByteArray>
 #include <QPainter>
 
-#include <kdebug.h>
+#include <DebugPigment.h>
 #include <klocale.h>
 
 #include "KoColor.h"
@@ -162,13 +162,13 @@ bool KoColorSet::init()
     m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
     if (filename().isNull()) {
-        qWarning() << "Cannot load palette" << name() << "there is no filename set";
+        warnPigment << "Cannot load palette" << name() << "there is no filename set";
         return false;
     }
     if (m_data.isNull()) {
         QFile file(filename());
         if (file.size() == 0) {
-            qWarning() << "Cannot load palette" << name() << "there is no data available";
+            warnPigment << "Cannot load palette" << name() << "there is no data available";
             return false;
         }
         file.open(QIODevice::ReadOnly);

@@ -23,14 +23,14 @@
 // Qt
 #include <kundo2command.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 
 
 class KoShape;
 
 #if 0
-namespace KDChart
+namespace KChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;
@@ -39,7 +39,7 @@ class Chart;
 #endif
 
 
-namespace KChart
+namespace KoChart
 {
 
 class ChartShape;
@@ -76,6 +76,6 @@ private:
     bool m_newIsVisible;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_CHART_TEXTSHAPE_COMMAND

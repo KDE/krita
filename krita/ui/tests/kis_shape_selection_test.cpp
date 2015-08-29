@@ -74,6 +74,5 @@ void KisShapeSelectionTest::testAddChild()
 }
 
 QTEST_KDEMAIN(KisShapeSelectionTest, NoGUI)
-#include "kis_shape_selection_test.moc"
 
 

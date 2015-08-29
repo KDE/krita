@@ -282,5 +282,4 @@ void PSDSaver::cancel()
     m_stop = true;
 }
 
-#include "psd_saver.moc"
 

@@ -21,7 +21,7 @@
 #define FULLSCREENPLAYER_H
 
 #include <QWidget>
-#include <Phonon/Global>
+#include <phonon/Global>
 
 namespace Phonon
 {

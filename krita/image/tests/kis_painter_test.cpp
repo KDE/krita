@@ -518,6 +518,5 @@ void KisPainterTest::benchmarkBitBltOldData()
 }
 
 QTEST_KDEMAIN(KisPainterTest, NoGUI)
-#include "kis_painter_test.moc"
 
 

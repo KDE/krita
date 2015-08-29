@@ -6,17 +6,17 @@ set(kritanoisefilter_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritanoisefilter_PART_SRCS
+ki18n_wrap_ui(kritanoisefilter_PART_SRCS
     wdgnoiseoptions.ui
     )
 
-kde4_add_plugin(kritanoisefilter ${kritanoisefilter_PART_SRCS})
-
+add_library(kritanoisefilter MODULE ${kritanoisefilter_PART_SRCS})
+kcoreaddons_desktop_to_json(kritanoisefilter kritanoisefilter.desktop)
 
 
 target_link_libraries(kritanoisefilter kritaui)
 
-install(TARGETS kritanoisefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritanoisefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

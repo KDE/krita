@@ -1,6 +1,8 @@
 project(calligra)
 
-cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+message(STATUS "Using CMake version: ${CMAKE_VERSION}")
+
+cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy CMP0017 was introduced in version 2.8.4
@@ -17,7 +19,16 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
     cmake_policy(SET CMP0046 OLD)
 endif()
 
-
+# QT5TODO: remove KDE4_BUILD_TESTS post-3.0
+# transitional forward compatibility:
+# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5
+# have BUILD_TESTING overrule KDE4_BUILD_TESTS if set
+# slightly broken approach, if a cache exists then unsetting tests will need both
+# BUILD_TESTING and KDE4_BUILD_TESTS to be set to FALSE
+# better fixes welcome
+if (BUILD_TESTING)
+    set(KDE4_BUILD_TESTS TRUE)
+endif()
 
  ######################
 #######################
@@ -27,11 +38,11 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9.6")
-set(CALLIGRA_VERSION_MAJOR 2)
-set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 6)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-#set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
+set(CALLIGRA_VERSION_STRING "3.0 Alpha")
+set(CALLIGRA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
+set(CALLIGRA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
+set(CALLIGRA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
@@ -42,18 +53,24 @@ endif()
 
 message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
 
-# define the generic version of the Calligra libraries here
-# this makes it easy to advance it when the next Calligra release comes
-if(CALLIGRA_VERSION_MAJOR EQUAL 2)
-    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 5")
+# Define the generic version of the Calligra libraries here
+# This makes it easy to advance it when the next Calligra release comes.
+# 14 was the last GENERIC_CALLIGRA_LIB_VERSION_MAJOR of the previous Calligra series
+# (2.x) so we're starting with 15 in 3.x series.
+if(CALLIGRA_STABLE_VERSION_MAJOR EQUAL 3)
+    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
 else()
-    # let's make sure we won't forget to update the "5"
-    message(FATAL_ERROR "Reminder: please update offset == 5 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
+    # let's make sure we won't forget to update the "15"
+    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
 endif()
 set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+                      "${CMAKE_SOURCE_DIR}/cmake/modules")
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/transitional")
+
+message("Module path:" ${CMAKE_MODULE_PATH})
 
 # fetch git revision for the current build
 
@@ -150,37 +167,73 @@ calligra_set_productset(${PRODUCTSET})
 ## Look for KDE and Qt ##
 #########################
 ########################
-set(KDE_MIN_VERSION "4.3.0")
-find_package(KDE4 4.3.0 REQUIRED)
 
-find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
+find_package(ECM 1.7.0 REQUIRED NOMODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+include(ECMOptionalAddSubdirectory)
+include(ECMInstallIcons)
+include(ECMAddAppIcon)
+include(ECMSetupVersion)
+include(ECMMarkNonGuiExecutable)
+include(ECMGenerateHeaders)
+include(GenerateExportHeader)
+include(ECMMarkAsTest)
+
+include(CMakePackageConfigHelpers)
+include(WriteBasicConfigVersionFile)
+include(CheckFunctionExists)
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(FeatureSummary)
+
+find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
+                                     GuiAddons I18n ItemModels ItemViews
+                                     WidgetsAddons ThreadWeaver
+                                     Completion IconThemes Sonnet
+                                     Parts KIO
+                                     XmlGui Kross Wallet GlobalAccel
+                                     Emoticons ConfigWidgets KDELibs4Support
+    OPTIONAL_COMPONENTS
+        NotifyConfig
+        Activities
+        Declarative
+        KHtml
+)
+if(KF5_Activities_FOUND)
+    set(HAVE_KACTIVITIES TRUE)
+endif()
+
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Script Svg Test Concurrent)
+find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
+
+set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
+set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
+set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+
+set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
-    find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
+    find_package(Qt5 5.3.0 REQUIRED OpenGL)
+    set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
 
 
-include (KDE4Defaults)
+
+
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-
-if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
-    if (NOT IHAVEPATCHEDQT)
-        set(SHOULD_BUILD_PART_WORDS FALSE)
-        set(SHOULD_BUILD_PART_STAGE FALSE)
-        set(SHOULD_BUILD_PLUGIN_TEXTSHAPE FALSE)
-        set(SHOULD_BUILD_PLUGIN_TEXTEDITING FALSE)
-        message(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
-    endif ()
-endif ()
+include (ECMInstallIcons)
 
 if (GHNS)
     if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
         set(GHNS FALSE)
     endif()
 
-    macro_optional_find_package(LibAttica)
+    find_package(Attica)
+    find_package(NewStuff)
     macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
 
     if (NOT LIBATTICA_FOUND)
@@ -192,8 +245,19 @@ endif ()
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
+find_package(X11)
+if(X11_FOUND)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+                 X11Extras
+    )
+    set(HAVE_X11 TRUE)
+    add_definitions(-DHAVE_X11)
+else()
+    set(HAVE_X11 FALSE)
+endif()
+
+# only with this definition will the FOO_TEST_EXPORT macro do something
 if(KDE4_BUILD_TESTS)
-    # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif()
 
@@ -214,6 +278,14 @@ if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
     )
 endif()
 
+# set custom calligra plugin installdir
+set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
+
+# TEMPORARY: for initial Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+# remove once code porting phase starts, perhaps first locally in product subdirs
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
+endif ()
 
  ###########################
 ############################
@@ -245,26 +317,6 @@ endif ()
 ############################
 ###########################
 
-##
-## Test for sqlite
-##
-set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.7)
-set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
-macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
-macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
-                  "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-                  "Required by Calligra's default database handler for Kexi and bibliography in Words.")
-
-##
-## Test for ICU
-##
-macro_optional_find_package(ICU)
-macro_bool_to_01(ICU_FOUND HAVE_ICU)
-macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
-                  "http://icu-project.org" FALSE ""
-                  "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
 ## Check for OpenEXR
@@ -304,10 +356,67 @@ macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
 ##
-## Test for kdepimlibs
+## Test for Phonon4Qt5
 ##
-macro_optional_find_package(KdepimLibs 4.6.0)
-macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
+find_package(Phonon4Qt5)
+macro_log_feature(Phonon4Qt5_FOUND "Phonon4Qt5" "Abstraction lib for multimedia applications" "http://www.kde.org/" FALSE "" "Required by Stage event actions and Videoshape plugin")
+
+##
+## Test for KF5CalendarCore
+##
+find_package(KF5CalendarCore CONFIG)
+macro_log_feature(KF5CalendarCore_FOUND "KF5CalendarCore" "KDE Calendar Library" "http://www.kde.org/" FALSE "" "Required by Plan Ical export and optionally used by semantic item Event")
+
+##
+## Test for KF5Contacts
+##
+find_package(KF5Contacts CONFIG)
+macro_log_feature(KF5Contacts_FOUND "KF5Contacts" "KDE Address book Library" "http://www.kde.org/" FALSE "" "Optionally used by semantic item Contact")
+
+##
+## Test for KF5AkonadiContact
+##
+find_package(KF5AkonadiContact CONFIG)
+macro_log_feature(KF5AkonadiContact_FOUND "KF5AkonadiContact" "Library for Accessing Contacts stored in Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by Plan")
+
+##
+## Test for KF5AkonadiCore
+##
+find_package(KF5Akonadi CONFIG)
+macro_log_feature(KF5Akonadi_FOUND "KF5Akonadi" "Library for general Access to Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by semantic items Event and Contact")
+
+##
+## Test for KGantt
+##
+macro_optional_find_package(KGantt 2.6.0)
+macro_log_feature(KGantt_FOUND "KGantt" "Library for creating Gantt diagrams (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Plan")
+
+##
+## Test for KChart
+##
+macro_optional_find_package(KChart 2.6.0)
+macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
+
+##
+## Test for KDb
+##
+macro_optional_find_package(KDb 1.0.0)
+macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
+                            "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
+
+##
+## Test for KReport
+##
+macro_optional_find_package(KReport 2.96.0)
+macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
+                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+
+##
+## Test for KProperty
+##
+macro_optional_find_package(KProperty 2.96.0)
+macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with editor widget"
+                                  "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
 
 ##
 ## Test for eigen3
@@ -318,8 +427,8 @@ macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra"
 ##
 ## Test for QCA2
 ##
-macro_optional_find_package(QCA2)
-macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
+macro_optional_find_package(Qca-qt5 2.1.0)
+macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/download.kde.org/stable/qca-qt5" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
 
 ##
 ## Test for exiv2
@@ -331,8 +440,10 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 ##
 ## Test for soprano
 ##
-macro_optional_find_package(Soprano)
-macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
+# QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
+# macro_optional_find_package(Soprano)
+set(Soprano_FOUND FALSE)
+macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 endif()
@@ -393,9 +504,12 @@ configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
 if(HAVE_VC)
     message(STATUS "Vc found!")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+                        "${CMAKE_SOURCE_DIR}/cmake/vc")
 
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
     include (VcMacros)
+
+    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
 
     #Handle Vc master
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
@@ -410,7 +524,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -418,7 +532,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -426,7 +540,7 @@ if(HAVE_VC)
     else()
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
         else()
             set(${_objs} ${_src})
         endif()
@@ -434,7 +548,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
         else()
             set(${_objs} ${_src})
         endif()
@@ -455,15 +569,6 @@ if(NOT WIN32 AND NOT APPLE)
   set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
 else()
   set(REQUIRED_Xinput_FOUND TRUE)
-endif()
-
-##
-## Test for KActivities
-##
-macro_optional_find_package(KActivities 6.1.0)
-macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
-if(KActivities_FOUND)
-    set(HAVE_KACTIVITIES TRUE)
 endif()
 
 #Set the build of TextShape changetraker
@@ -515,17 +620,25 @@ else()
 endif()
 
 ##
+## Test for Qt WebKitWidgets
+##
+macro_log_feature(Qt5Sql_FOUND "Qt Sql"
+                  "Qt SQL module."
+                  "http://qt.io" FALSE ""
+                  "Optional for Sheets database connection")
+
+##
 ## Test for Qt Webkit
 ##
-macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape, web Kexi widget and web report element")
+macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape, web Kexi widget and web report element")
 if(QT_QTWEBKIT_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
 endif()
 
 ##
-## Test for KDeclarative
+## Test for Qt WebKitWidgets
 ##
-macro_optional_find_package(KDeclarative)
+macro_log_feature(Qt5WebKitWidgets_FOUND "Qt WebkitWidgets" "QWidgets module for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for Stage")
 
 ##
 ## Test endianess
@@ -542,8 +655,8 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 ##
 ## Test for Okular
 ##
-macro_optional_find_package(Okular)
-macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
+macro_optional_find_package(Okular5 1.0.0)
+macro_log_feature(Okular5_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
 
 ##
 ## Test for librevenge
@@ -619,7 +732,7 @@ macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
 ## Test for qt-poppler
 ##
 macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
+macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
 
 ## The Karbon pdf-importer needs the not-officially-supported XPDF Headers
 ## Installing these is off by default in poppler sources, so lets make
@@ -630,7 +743,7 @@ if(POPPLER_FOUND)
     if(POPPLER_XPDF_HEADERS)
         set(POPPLER_XPDF_HEADERS_FOUND TRUE)
     endif()
-    macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt4-xpdf-headers" "XPDF headers in the Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
+    macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt5-xpdf-headers" "XPDF headers in the Poppler Qt5 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
 endif()
 
 
@@ -663,7 +776,7 @@ include(MacroCalligraBuildTest)
 #          any other include directory
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 
 set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
@@ -681,22 +794,22 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KOVERSION_INCLUDES} 
-                   ${KDE4_INCLUDES})
+                   )
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${KOVERSION_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/pigment
+                   ${CMAKE_BINARY_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${Boost_INCLUDE_DIRS}
-                   ${QT_INCLUDES}
-                   ${KDE4_INCLUDES})
+                   
+                   )
 
 # flake depends on koodf and pigment
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
-                   ${KOPLUGIN_INCLUDES}
                    ${PIGMENT_INCLUDES}
                    ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
@@ -726,23 +839,21 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout)
 
-# Widgets depends on flake
-set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
+# Widgets depends on kotext and flake
+set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/widgets)
+                   ${CMAKE_BINARY_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgets
+                   ${CMAKE_BINARY_DIR}/libs/widgets)
 
 # BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
+set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
-set(KOWIDGETS_INCLUDES ${KDE4_INCLUDES}
-                    ${BASICFLAKES_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils)
 
 # komain depends on kotext & flake
-set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
+set(KOMAIN_INCLUDES 
                     ${KOWIDGETS_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/main
@@ -763,41 +874,9 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
                     ${PIGMENT_INCLUDES}
                     ${KOMAIN_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
-
-# koproperty
-set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/libs
-                        ${CMAKE_SOURCE_DIR}/libs/widgets)
-set(KOPROPERTY_LIBS koproperty)
-
-# koreport
-set(KOREPORT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/libs/
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed)
-set(KOREPORT_LIBS koreport)
-
-# calligradb
-set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
-                        ${CMAKE_BINARY_DIR}/libs/db)
-
-#############################################
-####          3rd party libraries        ####
-#############################################
-
-set(KDGANTT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
-)
-
-set(KDCHART_INCLUDES
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
-)
-set(KDCHART_LIBS calligrakdchart)
-
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands
+                    ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 #############################################
 ####           filter libraries          ####
@@ -826,9 +905,6 @@ endif()
 if (NOT QT_MAC_USE_COCOA)
     set(NOT_COCOA TRUE)
 endif()
-if (${QTVERSION} VERSION_GREATER 4.7.0)
-    set(QT_GREATER_470 TRUE)
-endif()
 
 calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
     SHARED_MIME_INFO_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
@@ -836,6 +912,10 @@ calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_STAGE
+    Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
@@ -851,24 +931,31 @@ calligra_drop_product_on_bad_condition( APP_KRITA
     REQUIRED_Xinput_FOUND "Xinput devel not found "
 )
 
-calligra_drop_product_on_bad_condition( APP_ACTIVE
-    QT_GREATER_470 "Qt version <= 4.7.0"
-    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
-    KDECLARATIVE_FOUND "KDeclarative not found"
+calligra_drop_product_on_bad_condition( APP_KEXI
+    KDb_FOUND "KDb not found"
+    KReport_FOUND "KReport not found"
+    KProperty_FOUND "KProperty not found"
 )
 
-# TODO: remove when Predicate lib arrives
-calligra_drop_product_on_bad_condition( LIB_CALLIGRADB
-    HAVE_ICU "ICU devel not found"
-    HAVE_SQLITE "sqlite devel not found"
+calligra_drop_product_on_bad_condition( APP_ACTIVE
+    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
+    KF5DECLARATIVE_FOUND "KF5Declarative not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
-    OKULAR_FOUND "Okular devel not found"
+    Okular5_FOUND "Okular devel not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
-    OKULAR_FOUND "Okular devel not found"
+    Okular5_FOUND "Okular devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
+    KChart_FOUND "KChart devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE
+    Phonon4Qt5_FOUND "Phonon4Qt5 devel not found"
 )
 
 calligra_drop_product_on_bad_condition( FILTER_KEY_TO_ODP
@@ -915,6 +1002,7 @@ calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
+    KF5_KHtml_FOUND "KF5KHtml devel not found"
 )
 
 calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
@@ -935,6 +1023,11 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
 )
 
+calligra_drop_product_on_bad_condition( APP_PLAN
+    KGantt_FOUND "KGantt devel not found"
+    KChart_FOUND "KChart devel not found"
+)
+
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
     LIBQGIT2_FOUND "libqgit2 devel not found"
@@ -943,6 +1036,7 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
 calligra_drop_product_on_bad_condition( PART_QTQUICK
     USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
+    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_GEMINI
@@ -989,7 +1083,6 @@ calligra_drop_unbuildable_products()
 if(SHOULD_BUILD_FEATURE_RDF)
    add_definitions( -DSHOULD_BUILD_RDF )
 endif()
-
 
  ###################
 ####################

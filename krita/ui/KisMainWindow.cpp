@@ -80,6 +80,8 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
+#include <kguiitem.h>
+#include <k4aboutdata.h>
 
 #include <KoConfig.h>
 #include "KoDockFactoryBase.h"
@@ -277,7 +279,8 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-    setComponentData(KisFactory::componentData());
+//    setComponentData(KisFactory::componentData());
+
     KGlobal::setActiveComponent(KisFactory::componentData());
 
     KisConfig cfg;
@@ -367,14 +370,42 @@ KisMainWindow::KisMainWindow()
 
     setAutoSaveSettings(KisFactory::componentName(), false);
 
-    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), viewManager());
 
     subWindowActivated();
     updateWindowMenu();
 
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        d->helpMenu = new KHelpMenu( this, KisFactory::aboutData(), false, actionCollection() );
+        d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
+
+        KActionCollection *actions = actionCollection();
+        QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->helpMenu->action(KHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->helpMenu->action(KHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->helpMenu->action(KHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->helpMenu->action(KHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->helpMenu->action(KHelpMenu::menuAboutKDE);
+
+        if (helpContentsAction) {
+            actions->addAction(helpContentsAction->objectName(), helpContentsAction);
+        }
+        if (whatsThisAction) {
+            actions->addAction(whatsThisAction->objectName(), whatsThisAction);
+        }
+        if (reportBugAction) {
+            actions->addAction(reportBugAction->objectName(), reportBugAction);
+        }
+        if (switchLanguageAction) {
+            actions->addAction(switchLanguageAction->objectName(), switchLanguageAction);
+        }
+        if (aboutAppAction) {
+            actions->addAction(aboutAppAction->objectName(), aboutAppAction);
+        }
+        if (aboutKdeAction) {
+            actions->addAction(aboutKdeAction->objectName(), aboutKdeAction);
+        }
+
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
@@ -829,7 +860,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            QString ext = mime->property("X-KDE-NativeExtension").toString();
+            const QString ext = mime->mainExtension();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;
@@ -1095,7 +1126,8 @@ void KisMainWindow::saveWindowSettings()
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KisMainWindow::saveWindowSettings";
-        saveWindowSize(config->group("MainWindow"));
+        KConfigGroup group = config->group("MainWindow");
+        saveWindowSize(group);
         config->sync();
         d->windowSizeDirty = false;
     }
@@ -1187,7 +1219,7 @@ void KisMainWindow::slotFileOpen()
     }
 }
 
-void KisMainWindow::slotFileOpenRecent(const KUrl & url)
+void KisMainWindow::slotFileOpenRecent(const QUrl & url)
 {
     // Create a copy, because the original KUrl in the map of recent files in
     // KRecentFilesAction may get deleted.
@@ -1450,7 +1482,8 @@ void KisMainWindow::slotConfigureKeys()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
+    KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+    saveMainWindowSettings(group);
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1486,7 +1519,8 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
+            KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+            saveMainWindowSettings(group);
         }
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
@@ -1849,13 +1883,13 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::updateWindowMenu()
 {
-    KMenu *menu = d->windowMenu->menu();
+    QMenu *menu = d->windowMenu->menu();
     menu->clear();
 
     menu->addAction(d->newWindow);
     menu->addAction(d->documentMenu);
 
-    KMenu *docMenu = d->documentMenu->menu();
+    QMenu *docMenu = d->documentMenu->menu();
     docMenu->clear();
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
@@ -1888,12 +1922,10 @@ void KisMainWindow::updateWindowMenu()
         if (child) {
             QString text;
             if (i < 9) {
-                text = i18n("&%1 %2").arg(i + 1)
-                        .arg(child->document()->url().prettyUrl());
+                text = i18n("&%1 %2", i + 1, child->document()->url().prettyUrl());
             }
             else {
-                text = i18n("%1 %2").arg(i + 1)
-                        .arg(child->document()->url().prettyUrl());
+                text = i18n("%1 %2", i + 1, child->document()->url().prettyUrl());
             }
 
             QAction *action  = menu->addAction(text);
@@ -2051,7 +2083,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
         // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
         KMimeType::Ptr mime = KMimeType::mimeType(d->activeView->document()->outputMimeType());
         if (mime) {
-            QString extension = mime->property("X-KDE-NativeExtension").toString();
+            QString extension = mime->mainExtension();
 
             if (title.endsWith(extension))
                 title.chop(extension.length());
@@ -2060,7 +2092,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 
     if (title.isEmpty()) {
         // #139905
-        title = i18n("%1 unsaved document (%2)", KisFactory::aboutData()->programName(),
+        title = i18n("%1 unsaved document (%2)", KisFactory::componentData().aboutData()->programName(),
                      KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
     }
     printer.setDocName(title);
@@ -2073,7 +2105,7 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
 
-    d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     KSharedConfigPtr configPtr = KisFactory::componentData().config();
     d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
@@ -2269,4 +2301,4 @@ void KisMainWindow::showDockerTitleBars(bool show)
 }
 
 
-#include <KisMainWindow.moc>
+#include <moc_KisMainWindow.cpp>

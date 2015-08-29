@@ -34,6 +34,7 @@ class KoView;
 class KoPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
+class KComponentData;
 class QDockWidget;
 
 struct KoPageLayout;
@@ -89,6 +90,9 @@ public:
      * (title in the about page) changes.
      */
     void updateCaption();
+
+    KComponentData componentData () const;
+    void setComponentData (const KComponentData &componentData);
 
     /**
      *  Retrieves the document that is displayed in the mainwindow.
@@ -223,7 +227,7 @@ public Q_SLOTS:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new mainwindow will be opened for showing the opened file.
      */
-    void slotFileOpenRecent(const KUrl &);
+    void slotFileOpenRecent(const QUrl &);
 
     /**
      *  Saves the current document with the current name.
@@ -242,7 +246,7 @@ public Q_SLOTS:
     void slotFilePrintPreview();
 
     KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
-    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
+    KoPrintJob* exportToPdf(const KoPageLayout &pageLayout, const QString &pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.

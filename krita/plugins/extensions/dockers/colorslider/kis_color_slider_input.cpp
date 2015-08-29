@@ -705,4 +705,5 @@ void KisHSXColorSliderInput::toneUpdate(int l, int type)
         
     }
 }
-#include "kis_color_slider_input.moc"
+
+#include "moc_kis_color_slider_input.cpp"

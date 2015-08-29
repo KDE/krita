@@ -38,8 +38,7 @@
 #include "kis_simple_noise_reducer.h"
 #include "kis_wavelet_noise_reduction.h"
 
-K_PLUGIN_FACTORY(KritaImageEnhancementFactory, registerPlugin<KritaImageEnhancement>();)
-K_EXPORT_PLUGIN(KritaImageEnhancementFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaImageEnhancementFactory, "kritaimageenhancement.json", registerPlugin<KritaImageEnhancement>();)
 
 KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -52,3 +51,4 @@ KritaImageEnhancement::~KritaImageEnhancement()
 {
 }
 
+#include "imageenhancement.moc"

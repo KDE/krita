@@ -60,5 +60,4 @@ int KisPaintOpFactory::priority() const
 }
 
 
-#include "kis_paintop_factory.moc"
 

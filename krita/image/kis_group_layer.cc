@@ -381,5 +381,3 @@ QRect KisGroupLayer::exactBounds() const
         collectRects(this, ExactBoundsPolicy()) :
         KisLayer::exactBounds();
 }
-
-#include "kis_group_layer.moc"

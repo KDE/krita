@@ -21,7 +21,7 @@
 
 #include "NewAxisDialog.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 NewAxisDialog::NewAxisDialog(QWidget *parent)
     : QDialog(parent)

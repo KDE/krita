@@ -29,11 +29,11 @@
 // Qt
 #include <QPen>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "CellRegion.h"
 
-namespace KDChart {
+namespace KChart {
     class DataValueAttributes;
     class PieAttributes;
     class MarkerAttributes;
@@ -41,9 +41,9 @@ namespace KDChart {
 
 class KoShapeLoadingContext;
 
-namespace KChart {
+namespace KoChart {
 
-class KDChartModel;
+class KChartModel;
 
 /**
  * @brief The DataSet class stores properties of a single data series.
@@ -110,7 +110,7 @@ public:
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setMarkerAttributes(const KDChart::MarkerAttributes& attribs, int section = -1);
+    void setMarkerAttributes(const KChart::MarkerAttributes& attribs, int section = -1);
     
     /**
      * \return the MarkerAttributes.
@@ -119,18 +119,18 @@ public:
      * \param section The data point to return the MarkerAttributes for. -1 will return
      * the series-wide value
      */
-    KDChart::MarkerAttributes getMarkerAttributes(int section = -1) const;
+    KChart::MarkerAttributes getMarkerAttributes(int section = -1) const;
 
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
     QBrush brush() const;
     OdfMarkerStyle markerStyle() const;
     QIcon markerIcon(OdfMarkerStyle markerStyle);
-    KDChart::PieAttributes pieAttributes() const;
+    KChart::PieAttributes pieAttributes() const;
     QPen   pen(int section) const;
     QBrush brush(int section) const;
-    KDChart::PieAttributes pieAttributes(int section) const;
-    KDChart::DataValueAttributes dataValueAttributes(int section = -1) const;
+    KChart::PieAttributes pieAttributes(int section) const;
+    KChart::DataValueAttributes dataValueAttributes(int section = -1) const;
     int    number() const;
 
     bool showMeanValue() const;
@@ -232,8 +232,8 @@ public:
     void labelDataChanged(const QRect &region) const;
     void categoryDataChanged(const QRect &region) const;
 
-    void setKdChartModel(KDChartModel *model);
-    KDChartModel *kdChartModel() const;
+    void setKdChartModel(KChartModel *model);
+    KChartModel *kdChartModel() const;
 
     bool loadOdf(const KoXmlElement &n, KoShapeLoadingContext &context);
     bool loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext &context);
@@ -247,7 +247,7 @@ private:
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif // KCHART_DATASET_H
 

@@ -343,4 +343,3 @@ void KisBrushTest::testQPainterTransformationBorder()
 }
 
 QTEST_KDEMAIN(KisBrushTest, GUI)
-#include "kis_brush_test.moc"

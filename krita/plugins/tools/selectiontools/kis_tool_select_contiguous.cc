@@ -33,6 +33,7 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include "KoPointerEvent.h"
 #include "KoViewConverter.h"
@@ -231,7 +232,3 @@ void KisToolSelectContiguous::setSelectionAction(int newSelectionAction)
         emit selectionActionChanged();
     }
 }
-
-
-
-#include "kis_tool_select_contiguous.moc"

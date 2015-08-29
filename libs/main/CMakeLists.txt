@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
@@ -10,7 +10,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
-if( QCA2_FOUND )
+if( Qca-qt5_FOUND )
    add_definitions( -DQCA2 )
 endif()
 
@@ -81,23 +81,23 @@ if (APPLE)
     )
 endif ()
 
-kde4_add_ui_files( komain_LIB_SRCS
+ki18n_wrap_ui( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-kde4_add_library(komain SHARED ${komain_LIB_SRCS})
+
+QT5_WRAP_CPP(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
+
+add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
 
 target_link_libraries(komain
-    ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KIO_LIBS}
     kowidgets
     kotextlayout
 )
 
-if( KActivities_FOUND )
-    include_directories(${KACTIVITIES_INCLUDES})
-    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
+if( KF5_Activities_FOUND )
+    target_link_libraries(komain KF5::Activities)
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  KF5::Activities)
 endif()
 
 if (APPLE)

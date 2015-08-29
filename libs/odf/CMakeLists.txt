@@ -5,8 +5,7 @@ include_directories( ${KOODF_INCLUDES} )
 
 ########### libkoodf ###############
 
-if( QCA2_FOUND )
-    include_directories( ${QCA2_INCLUDE_DIR} )
+if( Qca-qt5_FOUND )
     add_definitions( -DQCA2 )
 endif()
 
@@ -55,13 +54,14 @@ set(koodf_LIB_SRCS
     writeodf/helpers.cpp
 )
 
-kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
+add_library(koodf SHARED ${koodf_LIB_SRCS})
 add_dependencies(koodf writeodf.h-target)
+generate_export_header(koodf BASE_NAME koodf)
 
-target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${QT_QTXML_LIBRARY})
-if( QCA2_FOUND )
-    target_link_libraries(koodf ${QCA2_LIBRARIES})
+target_link_libraries(koodf KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::KDELibs4Support Qt5::Xml)
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES KF5::KDELibs4Support Qt5::Xml)
+if( Qca-qt5_FOUND )
+    target_link_libraries(koodf qca-qt5)
 endif()
 
 set_target_properties(koodf PROPERTIES
@@ -71,7 +71,7 @@ install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 install( FILES
-    koodf_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/koodf_export.h
     KoOdf.h
     KoXmlNS.h
     KoOdfManifestEntry.h

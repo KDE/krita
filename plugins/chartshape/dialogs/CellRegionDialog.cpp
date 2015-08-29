@@ -21,7 +21,7 @@
 
 #include "CellRegionDialog.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 
 CellRegionDialog::CellRegionDialog(QWidget *parent)

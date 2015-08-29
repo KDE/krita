@@ -806,4 +806,3 @@ KisMetaData::Store* KisLayer::metaData()
     return m_d->metaDataStore;
 }
 
-#include "kis_layer.moc"

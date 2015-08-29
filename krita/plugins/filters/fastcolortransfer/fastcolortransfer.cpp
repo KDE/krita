@@ -40,8 +40,7 @@
 #include "ui_wdgfastcolortransfer.h"
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(KritaFastColorTransferFactory, registerPlugin<FastColorTransferPlugin>();)
-K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaFastColorTransferFactory, "kritafastcolortransfer.json", registerPlugin<FastColorTransferPlugin>();)
 
 
 FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QVariantList &)
@@ -172,3 +171,5 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
 
     }
 }
+
+#include "fastcolortransfer.moc"

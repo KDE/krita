@@ -27,10 +27,10 @@
 #include <QObject>
 #include <QStandardItemModel>
 
-// KChart
+// KoChart
 #include "TableSource.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 class TestTableSource : public QObject
 {

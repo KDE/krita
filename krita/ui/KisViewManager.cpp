@@ -160,7 +160,7 @@ public:
         return m_widget;
     }
 
-    void ensureItemShown(KStatusBar * sb) {
+    void ensureItemShown(QStatusBar * sb) {
         Q_ASSERT(m_widget);
         if (!m_connected) {
             if (m_permanent)
@@ -174,7 +174,7 @@ public:
             m_connected = true;
         }
     }
-    void ensureItemHidden(KStatusBar * sb) {
+    void ensureItemHidden(QStatusBar * sb) {
         if (m_connected) {
             m_hidden = m_widget->isHidden();
             sb->removeWidget(m_widget);
@@ -539,7 +539,7 @@ void KisViewManager::addStatusBarItem(QWidget * widget, int stretch, bool perman
     if (!mainWindow()) return;
 
     StatusBarItem item(widget, stretch, permanent);
-    KStatusBar * sb = mainWindow()->statusBar();
+    QStatusBar * sb = mainWindow()->statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
@@ -548,7 +548,7 @@ void KisViewManager::addStatusBarItem(QWidget * widget, int stretch, bool perman
 
 void KisViewManager::removeStatusBarItem(QWidget * widget)
 {
-    KStatusBar *sb = mainWindow()->statusBar();
+    QStatusBar *sb = mainWindow()->statusBar();
 
     int itemCount = d->statusBarItems.count();
     for (int i = itemCount-1; i >= 0; --i) {
@@ -1151,10 +1151,6 @@ void KisViewManager::showStatusBar(bool toggled)
     }
 }
 
-#if defined HAVE_OPENGL && defined Q_OS_WIN32
-#include <QGLContext>
-#endif
-
 void KisViewManager::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;
@@ -1348,4 +1344,3 @@ void KisViewManager::slotUpdateAuthorProfileActions()
 }
 
 
-#include "KisViewManager.moc"

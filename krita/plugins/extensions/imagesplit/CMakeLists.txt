@@ -4,15 +4,16 @@ set(kritaimagesplit_PART_SRCS
     wdg_imagesplit.cpp
     )
 
-kde4_add_ui_files(kritaimagesplit_PART_SRCS
+ki18n_wrap_ui(kritaimagesplit_PART_SRCS
     wdg_imagesplit.ui
     )
 
-kde4_add_plugin(kritaimagesplit ${kritaimagesplit_PART_SRCS})
+add_library(kritaimagesplit MODULE ${kritaimagesplit_PART_SRCS})
 
 target_link_libraries(kritaimagesplit kritaui)
+kcoreaddons_desktop_to_json(kritaimagesplit kritaimagesplit.desktop)
 
-install(TARGETS kritaimagesplit  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimagesplit  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  imagesplit.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritaimagesplit.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

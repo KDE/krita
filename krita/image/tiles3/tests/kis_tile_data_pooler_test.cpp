@@ -108,4 +108,3 @@ void KisTileDataPoolerTest::testCycles()
 }
 
 QTEST_KDEMAIN(KisTileDataPoolerTest, NoGUI)
-#include "kis_tile_data_pooler_test.moc"

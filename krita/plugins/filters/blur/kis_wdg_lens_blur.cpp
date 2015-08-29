@@ -80,4 +80,3 @@ void KisWdgLensBlur::setConfiguration(const KisPropertiesConfiguration* config)
     }
 }
 
-#include "kis_wdg_lens_blur.moc"

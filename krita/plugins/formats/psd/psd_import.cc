@@ -27,8 +27,7 @@
 
 #include "psd_loader.h"
 
-K_PLUGIN_FACTORY(ImportFactory, registerPlugin<psdImport>();)
-K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_psd_import.json", registerPlugin<psdImport>();)
 
         psdImport::psdImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

@@ -20,6 +20,8 @@
 #include "kis_texture_tile.h"
 
 #ifdef HAVE_OPENGL
+#include <QDebug>
+#include <QOpenGLFunctions>
 
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F
@@ -40,7 +42,7 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                                const QByteArray &fillData, FilterMode filter,
-                               bool useBuffer, int numMipmapLevels)
+                               bool useBuffer, int numMipmapLevels, QOpenGLFunctions *fcn)
 
     : m_textureId(0)
 #ifdef USE_PIXEL_BUFFERS
@@ -52,6 +54,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     , m_needsMipmapRegeneration(false)
     , m_useBuffer(useBuffer)
     , m_numMipmapLevels(numMipmapLevels)
+    , f(fcn)
 {
     const GLvoid *fd = fillData.constData();
 
@@ -62,8 +65,8 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                                              m_tileRectInImagePixels,
                                              m_texturesInfo);
 
-    glGenTextures(1, &m_textureId);
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    f->glGenTextures(1, &m_textureId);
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
 
@@ -73,7 +76,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     fd = 0;
 #endif
 
-    glTexImage2D(GL_TEXTURE_2D, 0,
+    f->glTexImage2D(GL_TEXTURE_2D, 0,
                  m_texturesInfo->internalFormat,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
@@ -96,15 +99,15 @@ KisTextureTile::~KisTextureTile()
         delete m_glBuffer;
     }
 #endif
-    glDeleteTextures(1, &m_textureId);
+    f->glDeleteTextures(1, &m_textureId);
 }
 
 void KisTextureTile::bindToActiveTexture()
 {
-    glBindTexture(GL_TEXTURE_2D, textureId());
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     if (m_needsMipmapRegeneration) {
-        glGenerateMipmap(GL_TEXTURE_2D);
+        f->glGenerateMipmap(GL_TEXTURE_2D);
         m_needsMipmapRegeneration = false;
     }
 }
@@ -120,7 +123,8 @@ void KisTextureTile::setNeedsMipmapRegeneration()
 
 void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 {
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    f->initializeOpenGLFunctions();
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
 
@@ -139,7 +143,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
             m_glBuffer->bind();
             m_glBuffer->allocate(updateInfo.patchPixelsLength());
 
-            void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+            void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
             memcpy(vid, fd, updateInfo.patchPixelsLength());
             m_glBuffer->unmap();
 
@@ -148,7 +152,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-        glTexImage2D(GL_TEXTURE_2D, 0,
+        f->glTexImage2D(GL_TEXTURE_2D, 0,
                      m_texturesInfo->internalFormat,
                      m_texturesInfo->width,
                      m_texturesInfo->height, 0,
@@ -173,7 +177,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
             quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
             m_glBuffer->allocate(size);
 
-            void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+            void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
             memcpy(vid, fd, size);
             m_glBuffer->unmap();
 
@@ -182,7 +186,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
+        f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
                         m_texturesInfo->format,
@@ -222,7 +226,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = 0;
         int end = patchOffset.y() - 1;
         for (int i = start; i <= end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
@@ -238,7 +242,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = patchOffset.y() + patchSize.height();
         int end = tileSize.height() - 1;
         for (int i = start; i < end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
@@ -263,7 +267,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = 0;
         int end = patchOffset.x() - 1;
         for (int i = start; i <= end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
@@ -288,7 +292,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = patchOffset.x() + patchSize.width();
         int end = tileSize.width() - 1;
         for (int i = start; i <= end; i++) {
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
@@ -305,14 +309,13 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
 {
     if (m_useBuffer) {
         if (!m_glBuffer) {
-            m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
-            m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
+            m_glBuffer = new QOpenGLBuffer(QOpenGLBuffer::PixelUnpackBuffer);
+            m_glBuffer->setUsagePattern(QOpenGLBuffer::DynamicDraw);
             m_glBuffer->create();
             m_glBuffer->bind();
             m_glBuffer->allocate(size);
         }
-
-        void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+        void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
         memcpy(vid, data, size);
         m_glBuffer->unmap();
 

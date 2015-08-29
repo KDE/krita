@@ -75,4 +75,3 @@ KisBrushSP KisBrushRegistry::getOrCreateBrush(const QDomElement& element)
     return brush;
 }
 
-#include "kis_brush_registry.moc"

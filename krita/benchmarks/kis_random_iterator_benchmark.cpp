@@ -236,4 +236,3 @@ void KisRandomIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
 
 
 QTEST_KDEMAIN(KisRandomIteratorBenchmark, GUI)
-#include "kis_random_iterator_benchmark.moc"

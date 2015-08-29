@@ -61,7 +61,7 @@ void InsertSemanticObjectReferenceAction::activated()
     lay->addWidget(tree);
 
     KPageDialog dialog(m_canvas->canvasWidget());
-    dialog.setCaption(i18n("%1 Options", text())); // TODO add comment (i18nc)
+    dialog.setWindowTitle(i18n("%1 Options", text())); // TODO add comment (i18nc)
     dialog.addPage(widget, QString());
 
     if (dialog.exec() == KPageDialog::Accepted && tree->currentItem()) {

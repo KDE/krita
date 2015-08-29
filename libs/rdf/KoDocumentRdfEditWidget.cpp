@@ -260,7 +260,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
         styleSheetsGridLayout->addWidget(setStylesheetButton, row, 2);
         connect(setStylesheetButton, SIGNAL(clicked()), SLOT(onDefaultSheetButtonClicked()));
 
-        hKoRdfSemanticItem templateItem = docRdf->createSemanticItem(semanticItemName, this);
+	hKoRdfSemanticItem templateItem(static_cast<KoRdfSemanticItem *>(
+	    docRdf->createSemanticItem(semanticItemName, this).data()));
         d->buildComboBox(defaultStylesheetComboBox, templateItem);
 
         ++row;
@@ -342,7 +343,8 @@ void KoDocumentRdfEditWidget::apply()
     for( ; it != end; ++it) {
         const QString &semanticClass = it.key();
         QComboBox *comboBox = it.value();
-        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass);
+	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+	    rdf->createSemanticItem(semanticClass).data()));
         si->defaultStylesheet(stylesheetFromComboBox(comboBox));
     }
 }
@@ -502,7 +504,9 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
     kDebug(30015) << "changing default stylesheet to:" << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(comboBox);
     const QString semanticItemClass = comboBox->property(SemanticItemClassId).toString();
-    if (hKoRdfSemanticItem si = rdf->createSemanticItem(semanticItemClass)) {
+    hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+	rdf->createSemanticItem(semanticItemClass).data()));
+    if (si) {
         si->defaultStylesheet(ss);
     }
 

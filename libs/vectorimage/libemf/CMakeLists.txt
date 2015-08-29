@@ -18,9 +18,9 @@ set(libemf_LIB_SRCS
      EmfOutputPainterStrategy.cpp
 )
 
-#kde4_add_library(libemf SHARED ${libemf_LIB_SRCS})
+#add_library(libemf SHARED ${libemf_LIB_SRCS})
 
-#target_link_libraries(libemf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} )
+#target_link_libraries(libemf   Qt5::Gui )
 
 #set_target_properties(libemf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

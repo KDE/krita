@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <kactionmenu.h>
+#include <kaction.h>
 #include <kmenu.h>
 #include <klocale.h>
 
@@ -66,9 +67,9 @@ SpellCheckMenu::~SpellCheckMenu()
 
 }
 
-QPair<QString, KAction*> SpellCheckMenu::menuAction()
+QPair<QString, QAction*> SpellCheckMenu::menuAction()
 {
-    return QPair<QString, KAction*>("spelling_suggestions", m_suggestionsMenuAction);
+    return QPair<QString, QAction*>("spelling_suggestions", m_suggestionsMenuAction);
 }
 
 void SpellCheckMenu::createSuggestionsMenu()

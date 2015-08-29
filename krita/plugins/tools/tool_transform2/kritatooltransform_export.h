@@ -25,7 +25,7 @@
 
 #ifdef COMPILING_TESTS
 #  if defined _WIN32 || defined _WIN64
-#    if defined(MAKE_KRITATOOLTRANSFORM_LIB)
+#    if defined(kritatooltransform_EXPORTS)
 #      define KRITATOOLTRANSFORM_TEST_EXPORT KDE_EXPORT
 #    else
 #       define KRITATOOLTRANSFORM_TEST_EXPORT KDE_IMPORT

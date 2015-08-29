@@ -45,7 +45,7 @@
 #if defined Q_OS_WIN
 #include "stdlib.h"
 #include <ui/input/wintab/kis_tablet_support_win.h>
-#elif defined Q_WS_X11
+#elif defined HAVE_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
@@ -134,12 +134,12 @@ int main( int argc, char** argv )
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
     app.setEventFilter(&KisTabletSupportWin::eventFilter);
-#elif defined Q_WS_X11
+#elif defined HAVE_X11
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
 
-#if defined Q_WS_X11 && QT_VERSION >= 0x040800
+#if defined HAVE_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 

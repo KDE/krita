@@ -23,13 +23,13 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "ChartLayout.h"
 
 #include "KoShape.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *chart, bool isVisible)
     : m_textShape(textShape)

@@ -6,10 +6,11 @@ set(kritaartisticcolorselector_PART_SRCS
     kis_color_selector.cpp
 )
 
-kde4_add_ui_files(kritaartisticcolorselector_PART_SRCS forms/wdgArtisticColorSelector.ui forms/wdgColorPreferencesPopup.ui)
-kde4_add_plugin(kritaartisticcolorselector ${kritaartisticcolorselector_PART_SRCS})
+ki18n_wrap_ui(kritaartisticcolorselector_PART_SRCS forms/wdgArtisticColorSelector.ui forms/wdgColorPreferencesPopup.ui)
+add_library(kritaartisticcolorselector MODULE ${kritaartisticcolorselector_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaartisticcolorselector krita_artisticcolorselector.desktop)
 
 target_link_libraries(kritaartisticcolorselector kritaui)
 
-install(TARGETS kritaartisticcolorselector DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaartisticcolorselector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES krita_artisticcolorselector.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

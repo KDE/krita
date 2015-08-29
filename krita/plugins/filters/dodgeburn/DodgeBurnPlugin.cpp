@@ -22,8 +22,7 @@
 
 #include "DodgeBurn.h"
 
-K_PLUGIN_FACTORY(DodgeBurnPluginFactory, registerPlugin<DodgeBurnPlugin>();)
-K_EXPORT_PLUGIN(DodgeBurnPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(DodgeBurnPluginFactory, "kritadodgeburn.json", registerPlugin<DodgeBurnPlugin>();)
 
 DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QVariantList &)
 {
@@ -35,3 +34,5 @@ DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QVariantList &)
 DodgeBurnPlugin::~DodgeBurnPlugin()
 {
 }
+
+#include "DodgeBurnPlugin.moc"

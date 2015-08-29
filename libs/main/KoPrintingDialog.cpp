@@ -207,4 +207,5 @@ QRectF KoPrintingDialog::preparePage(int)
     return QRectF();
 }
 
-#include <KoPrintingDialog.moc>
+// have to include this because of Q_PRIVATE_SLOT
+#include <moc_KoPrintingDialog.cpp>

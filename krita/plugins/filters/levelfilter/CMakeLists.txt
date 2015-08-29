@@ -3,17 +3,17 @@ set(kritalevelfilter_PART_SRCS
     kis_level_filter.cpp
     )
 
-kde4_add_ui_files(kritalevelfilter_PART_SRCS
+ki18n_wrap_ui(kritalevelfilter_PART_SRCS
     wdg_level.ui
     )
 
-kde4_add_plugin(kritalevelfilter ${kritalevelfilter_PART_SRCS})
-
+add_library(kritalevelfilter MODULE ${kritalevelfilter_PART_SRCS})
+kcoreaddons_desktop_to_json(kritalevelfilter kritalevelfilter.desktop)
 
 
 target_link_libraries(kritalevelfilter kritaui)
 
-install(TARGETS kritalevelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritalevelfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

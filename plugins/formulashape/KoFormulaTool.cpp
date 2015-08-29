@@ -33,6 +33,7 @@
 #include <kaction.h>
 #include <QPainter>
 #include <kdebug.h>
+#include <kurl.h>
 
 #include <QFile>
 #include <QSignalMapper>

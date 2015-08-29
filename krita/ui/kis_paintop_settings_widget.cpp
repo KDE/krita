@@ -214,7 +214,3 @@ void KisPaintOpSettingsWidget::slotEntryChecked(const QModelIndex &index)
     Q_UNUSED(index);
     emit sigConfigurationItemChanged();
 }
-
-
-
-#include "kis_paintop_settings_widget.moc"

@@ -21,7 +21,7 @@
 
 #include "AxisScalingDialog.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 AxisScalingDialog::AxisScalingDialog(QWidget *parent)
     : QDialog(parent)

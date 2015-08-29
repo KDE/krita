@@ -22,7 +22,7 @@
 
 #include "VideoData.h"
 
-#include <Phonon/Experimental/VideoFrame2>
+#include <phonon/experimental/videoframe2.h>
 #include <QTime>
 #include <QVBoxLayout>
 #include <QVarLengthArray>

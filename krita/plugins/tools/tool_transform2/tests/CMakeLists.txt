@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..  ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
+include_directories(  ${KOMAIN_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..  ${CMAKE_CURRENT_BINARY_DIR}/.. ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 macro_add_unittest_definitions()
 
@@ -7,4 +7,4 @@ macro_add_unittest_definitions()
 
 set(test_save_load_transform_args_SRCS test_save_load_transform_args.cpp )
 kde4_add_unit_test(TestSaveLoadTransformArgs TESTNAME krita-ui-TestSaveLoadTransformArgs  ${test_save_load_transform_args_SRCS})
-target_link_libraries(TestSaveLoadTransformArgs  ${KDE4_KDEUI_LIBS}  kritatooltransform kritaui kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestSaveLoadTransformArgs  ${KDE4_KDEUI_LIBS}  kritatooltransform kritaui kritaimage Qt5::Test)

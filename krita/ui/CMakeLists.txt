@@ -5,7 +5,7 @@
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
 else ()
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
+    kde_enable_exceptions()
 endif ()
 
 include_directories(
@@ -21,7 +21,7 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR})
 
-add_subdirectory( tests )
+#add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
@@ -65,6 +65,10 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
+    dialogs/KisShortcutsEditorItem.cpp
+    dialogs/KisShortcutEditWidget.cpp
+    dialogs/KisShortcutsEditorDelegate.cpp
+    dialogs/KisShortcutsDialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -364,17 +368,17 @@ if (APPLE)
         )
 endif ()
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 if(WIN32)
-    #kde4_add_ui_files(
+    #ki18n_wrap_ui(
     #    input/wintab/kis_screen_size_choice_dialog.ui
     #)
 endif()
 
 
 
-kde4_add_ui_files(kritaui_LIB_SRCS
+ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
@@ -416,6 +420,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgrectangleconstraints.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
+    forms/KisShortcutsDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
@@ -442,38 +447,43 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdg_url_requester.ui
 )
 
-kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
-                              ${X11_X11_LIB}
-                              ${X11_Xinput_LIB}
-                              ${KDE4_KIO_LIBS} )
+QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
+
+add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
+generate_export_header(kritaui BASE_NAME kritaui)
+
+target_link_libraries(kritaui KF5::GlobalAccel KF5::KDELibs4Support)
+if (NOT WIN32)
+  target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
+endif()
+
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
 else()
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif ()
 
 if(HAVE_OPENGL)
-    target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
+    target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})
 
-    # activate workaround for the VSync disable
+    # Add VSync disable workaround
     if(NOT WIN32)
-      target_link_libraries(kritaui ${CMAKE_DL_LIBS})
+      target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
     endif()
 
-    set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
-    if(HAVE_GLEW)
-        target_link_libraries(kritaui ${GLEW_LIBRARIES})
-    endif()
-
+    set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};Qt5::OpenGL")
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms ${KDE4_KIO_LIBS} ${GL_INTERFACE_LIBRARIES} )
+if(X11_FOUND)
+    target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
+endif()
+
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms KF5::KDELibs4Support ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

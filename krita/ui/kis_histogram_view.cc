@@ -379,4 +379,3 @@ void KisHistogramView::mousePressEvent(QMouseEvent * e)
 }
 
 
-#include "kis_histogram_view.moc"

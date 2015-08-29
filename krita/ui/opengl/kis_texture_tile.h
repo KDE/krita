@@ -26,10 +26,11 @@
 
 #include <QRect>
 #include <QRectF>
+#include <QOpenGLFunctions>
 
 #if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
 #define USE_PIXEL_BUFFERS
-#include <QGLBuffer>
+#include <QOpenGLBuffer>
 #endif
 
 
@@ -68,7 +69,7 @@ public:
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                    const QByteArray &fillData, FilterMode mode,
-                   bool useBuffer, int numMipmapLevels);
+                   bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f);
     ~KisTextureTile();
 
     void setUseBuffer(bool useBuffer) {
@@ -85,10 +86,6 @@ public:
         return m_tileRectInImagePixels;
     }
 
-    inline GLuint textureId() {
-        return m_textureId;
-    }
-
     inline QRect textureRectInImagePixels() {
         return m_textureRectInImagePixels;
     }
@@ -99,15 +96,16 @@ public:
 
     inline void setTextureParameters()
     {
+        if(f) {
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, m_numMipmapLevels);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, m_numMipmapLevels);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
-
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            f->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        }
     }
 
 
@@ -120,7 +118,7 @@ private:
 
 #ifdef USE_PIXEL_BUFFERS
     void createTextureBuffer(const char*data, int size);
-    QGLBuffer *m_glBuffer;
+    QOpenGLBuffer *m_glBuffer;
 #endif
 
     QRect m_tileRectInImagePixels;
@@ -131,6 +129,7 @@ private:
     bool m_needsMipmapRegeneration;
     bool m_useBuffer;
     int m_numMipmapLevels;
+    QOpenGLFunctions *f;
     Q_DISABLE_COPY(KisTextureTile)
 };
 

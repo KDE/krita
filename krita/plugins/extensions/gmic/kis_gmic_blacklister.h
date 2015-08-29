@@ -20,6 +20,7 @@
 #include <QHash>
 #include <QSet>
 #include <QQueue>
+#include <QString>
 #include <QVector>
 
 class QDomDocument;

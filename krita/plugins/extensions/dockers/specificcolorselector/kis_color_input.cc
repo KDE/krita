@@ -296,4 +296,3 @@ QWidget* KisHexColorInput::createInput()
     return m_hexInput;
 }
 
-#include "kis_color_input.moc"

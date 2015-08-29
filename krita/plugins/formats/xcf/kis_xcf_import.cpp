@@ -87,8 +87,7 @@ void addLayers(const QVector<Layer> &layers, KisImageSP image, int depth)
     }
 }
 
-K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
-K_EXPORT_PLUGIN(XCFImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(XCFImportFactory, "krita_xcf_import.json", registerPlugin<KisXCFImport>();)
 
 KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
@@ -349,3 +348,5 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
     doc->setCurrentImage(image);
     return KisImportExportFilter::OK;
 }
+
+#include "kis_xcf_import.moc"

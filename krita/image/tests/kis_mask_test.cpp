@@ -164,4 +164,3 @@ void KisMaskTest::testDeferredOffsetInitialization()
 }
 
 QTEST_KDEMAIN(KisMaskTest, GUI)
-#include "kis_mask_test.moc"

@@ -25,6 +25,7 @@
 #include "KoXmlReaderForward.h"
 
 class QMimeData;
+class QByteArray;
 class KoOdfReadStore;
 
 /**

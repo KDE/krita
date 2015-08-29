@@ -30,6 +30,8 @@
 #include <KoTextLayoutRootAreaProvider.h>
 
 #include <klocale.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
@@ -66,7 +68,7 @@ SpellCheck::SpellCheck()
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
     m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
-    QPair<QString, KAction*> pair = m_spellCheckMenu->menuAction();
+    QPair<QString, QAction*> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
     connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
@@ -294,7 +296,7 @@ void SpellCheck::runQueue()
 
 void SpellCheck::configureSpellCheck()
 {
-    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(KGlobal::config().data(), 0);
+    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
     connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
     dialog->exec();
     delete dialog;

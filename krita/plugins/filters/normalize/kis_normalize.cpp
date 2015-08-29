@@ -24,10 +24,10 @@
 #include <QTime>
 #include <QVector3D>
 
+#include <kpluginfactory.h>
 #include <klocale.h>
 
 #include <kis_debug.h>
-#include <kpluginfactory.h>
 
 #include <kis_processing_information.h>
 #include <kis_types.h>
@@ -39,23 +39,22 @@
 #include <KoColorSpaceMaths.h>
 #include <filter/kis_color_transformation_configuration.h>
 
-K_PLUGIN_FACTORY(KritaNormalizeFactory, registerPlugin<Normalize>();)
-K_EXPORT_PLUGIN(KritaNormalizeFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaNormalizeFilterFactory, "kritanormalize.json", registerPlugin<KritaNormalizeFilter>();)
 
-Normalize::Normalize(QObject *parent, const QVariantList &)
-        : QObject(parent)
+KritaNormalizeFilter::KritaNormalizeFilter(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(KisFilterSP(new KisFilterNormalize()));
 }
 
-Normalize::~Normalize()
+KritaNormalizeFilter::~KritaNormalizeFilter()
 {
 }
 
 
 KisFilterNormalize::KisFilterNormalize()
-                      : KisColorTransformationFilter(KoID("normalize"     , i18n("Normalize")),
-                                  KisFilter::categoryMap(), i18n("&Normalize..."))
+    : KisColorTransformationFilter(KoID("normalize"     , i18n("Normalize"))
+                                   , KisFilter::categoryMap(), i18n("&Normalize..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -82,48 +81,50 @@ void KisNormalizeTransformation::transform(const quint8* src, quint8* dst, qint3
     /* I don't know why, but the results of this are unexpected with a floating point space.
      * And manipulating the pixels gives strange results.
      */
-	while (nPixels--) {
-	    m_colorSpace->normalisedChannelsValue(src, channelValues);
-	    normal_vector.setX(channelValues[2]*2-1.0);
-	    normal_vector.setY(channelValues[1]*2-1.0);
-	    normal_vector.setZ(channelValues[0]*2-1.0);
-	    normal_vector.normalize();
+    while (nPixels--) {
+        m_colorSpace->normalisedChannelsValue(src, channelValues);
+        normal_vector.setX(channelValues[2]*2-1.0);
+        normal_vector.setY(channelValues[1]*2-1.0);
+        normal_vector.setZ(channelValues[0]*2-1.0);
+        normal_vector.normalize();
 
-	    channelValues[0]=normal_vector.z()*0.5+0.5;
-	    channelValues[1]=normal_vector.y()*0.5+0.5;
-	    channelValues[2]=normal_vector.x()*0.5+0.5;
-	    //channelValues[3]=1.0;
+        channelValues[0]=normal_vector.z()*0.5+0.5;
+        channelValues[1]=normal_vector.y()*0.5+0.5;
+        channelValues[2]=normal_vector.x()*0.5+0.5;
+        //channelValues[3]=1.0;
 
-	    m_colorSpace->fromNormalisedChannelsValue(dst, channelValues);
+        m_colorSpace->fromNormalisedChannelsValue(dst, channelValues);
 
-	    dst[3]=src[3];
-	    src += m_psize;
-	    dst += m_psize;
-	}
-/*    } else {
-	while (nPixels--) {
-	    m_colorSpace->normalisedChannelsValue(src, channelValues);
-	    qreal max = qMax(channelValues[2], qMax(channelValues[1], channelValues[0]));
-	    qreal min = qMin(channelValues[2], qMin(channelValues[1], channelValues[0]));
-	    qreal range = max-min;
-	    normal_vector.setX( ((channelValues[2]-min)/range) *2.0-1.0);
-	    normal_vector.setY( ((channelValues[1]-min)/range) *2.0-1.0);
-	    normal_vector.setZ( ((channelValues[0]-min)/range) *2.0-1.0);
-	    normal_vector.normalize();
+        dst[3]=src[3];
+        src += m_psize;
+        dst += m_psize;
+    }
+    /*    } else {
+    while (nPixels--) {
+        m_colorSpace->normalisedChannelsValue(src, channelValues);
+        qreal max = qMax(channelValues[2], qMax(channelValues[1], channelValues[0]));
+        qreal min = qMin(channelValues[2], qMin(channelValues[1], channelValues[0]));
+        qreal range = max-min;
+        normal_vector.setX( ((channelValues[2]-min)/range) *2.0-1.0);
+        normal_vector.setY( ((channelValues[1]-min)/range) *2.0-1.0);
+        normal_vector.setZ( ((channelValues[0]-min)/range) *2.0-1.0);
+        normal_vector.normalize();
 
-	    channelValues[2]=normal_vector.x()*0.5+0.5;
-	    channelValues[1]=normal_vector.y()*0.5+0.5;
-	    channelValues[0]=normal_vector.z()*0.5+0.5;
-	    //channelValues[3]=1.0;
+        channelValues[2]=normal_vector.x()*0.5+0.5;
+        channelValues[1]=normal_vector.y()*0.5+0.5;
+        channelValues[0]=normal_vector.z()*0.5+0.5;
+        //channelValues[3]=1.0;
 
-	    m_colorSpace->fromNormalisedChannelsValue(dst, channelValues);
-	    dst[3]=src[3];
-	    //hack to trunucate values.
-	    m_colorSpace->toRgbA16(dst, reinterpret_cast<quint8 *>(m_rgba), 1);
-	    m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
+        m_colorSpace->fromNormalisedChannelsValue(dst, channelValues);
+        dst[3]=src[3];
+        //hack to trunucate values.
+        m_colorSpace->toRgbA16(dst, reinterpret_cast<quint8 *>(m_rgba), 1);
+        m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
 
-	    src += m_psize;
-	    dst += m_psize;
-	}
+        src += m_psize;
+        dst += m_psize;
+    }
     }*/
 }
+
+#include "kis_normalize.moc"

@@ -30,4 +30,3 @@ void KisFilterRegistryTest::testCreation()
 
 
 QTEST_KDEMAIN(KisFilterRegistryTest, GUI)
-#include "kis_filter_registry_test.moc"

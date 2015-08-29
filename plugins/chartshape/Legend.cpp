@@ -44,22 +44,22 @@
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartBarDiagram>
-#include <KDChartAbstractDiagram>
-#include <KDChartFrameAttributes>
-#include <KDChartBackgroundAttributes>
-#include <KDChartLegend>
-#include "KDChartConvertions.h"
+// KChart
+#include <KChartChart>
+#include <KChartBarDiagram>
+#include <KChartAbstractDiagram>
+#include <KChartFrameAttributes>
+#include <KChartBackgroundAttributes>
+#include <KChartLegend>
+#include "KChartConvertions.h"
 
-// Kchart
+// KoChart
 #include "PlotArea.h"
 #include "ScreenConversions.h"
 #include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 class Legend::Private {
 public:
@@ -81,8 +81,8 @@ public:
     Qt::Alignment alignment;
     KoShapeStroke *lineBorder;
 
-    // The connection to KDChart
-    KDChart::Legend *kdLegend;
+    // The connection to KChart
+    KChart::Legend *kdLegend;
 
     QImage image;
 
@@ -120,7 +120,7 @@ Legend::Legend(ChartShape *parent)
 
     d->shape = parent;
 
-    d->kdLegend = new KDChart::Legend();
+    d->kdLegend = new KChart::Legend();
     d->kdLegend->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     setTitleFontSize(10);
@@ -180,8 +180,8 @@ void Legend::setFramePen(const QPen &pen)
 {
     d->framePen = pen;
 
-    // KDChart
-    KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
+    // KChart
+    KChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setPen(pen);
     d->kdLegend->setFrameAttributes(attributes);
 
@@ -197,8 +197,8 @@ void Legend::setFrameColor(const QColor &color)
 {
     d->framePen.setColor(color);
 
-    // KDChart
-    KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
+    // KChart
+    KChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setVisible(true);
     QPen pen = attributes.pen();
     pen.setColor(color);
@@ -217,8 +217,8 @@ void Legend::setBackgroundBrush(const QBrush &brush)
 {
     d->backgroundBrush = brush;
 
-    // KDChart
-    KDChart::BackgroundAttributes attributes = d->kdLegend->backgroundAttributes();
+    // KChart
+    KChart::BackgroundAttributes attributes = d->kdLegend->backgroundAttributes();
     attributes.setVisible(true);
     attributes.setBrush(brush);
     d->kdLegend->setBackgroundAttributes(attributes);
@@ -235,8 +235,8 @@ void Legend::setBackgroundColor(const QColor &color)
 {
     d->backgroundBrush.setColor(color);
 
-    // KDChart
-    KDChart::BackgroundAttributes attributes = d->kdLegend->backgroundAttributes();
+    // KChart
+    KChart::BackgroundAttributes attributes = d->kdLegend->backgroundAttributes();
     attributes.setVisible(true);
     QBrush brush = attributes.brush();
     brush.setColor(color);
@@ -255,8 +255,8 @@ void Legend::setFont(const QFont &font)
 {
     d->font = font;
 
-    // KDChart
-    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    // KChart
+    KChart::TextAttributes attributes = d->kdLegend->textAttributes();
     attributes.setFont(font);
     d->kdLegend->setTextAttributes(attributes);
 
@@ -273,9 +273,9 @@ void Legend::setFontSize(qreal size)
 {
     d->font.setPointSizeF(size);
 
-    // KDChart
-    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
-    KDChart::Measure m = attributes.fontSize();
+    // KChart
+    KChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    KChart::Measure m = attributes.fontSize();
     m.setValue(size);
     attributes.setFontSize(m);
     d->kdLegend->setTextAttributes(attributes);
@@ -286,7 +286,7 @@ void Legend::setFontSize(qreal size)
 
 void Legend::setFontColor(const QColor &color)
 {
-    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    KChart::TextAttributes attributes = d->kdLegend->textAttributes();
     QPen pen = attributes.pen();
     pen.setColor(color);
     attributes.setPen(pen);
@@ -297,7 +297,7 @@ void Legend::setFontColor(const QColor &color)
 
 QColor Legend::fontColor() const
 {
-    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    KChart::TextAttributes attributes = d->kdLegend->textAttributes();
     QPen pen = attributes.pen();
     return pen.color();
 }
@@ -311,8 +311,8 @@ void Legend::setTitleFont(const QFont &font)
 {
     d->titleFont = font;
 
-    // KDChart
-    KDChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
+    // KChart
+    KChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
     attributes.setFont(font);
     d->kdLegend->setTitleTextAttributes(attributes);
 
@@ -328,9 +328,9 @@ void Legend::setTitleFontSize(qreal size)
 {
     d->titleFont.setPointSizeF(size);
 
-    // KDChart
-    KDChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
-    attributes.setFontSize(KDChart::Measure(size, KDChartEnums::MeasureCalculationModeAbsolute));
+    // KChart
+    KChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
+    attributes.setFontSize(KChart::Measure(size, KChartEnums::MeasureCalculationModeAbsolute));
     d->kdLegend->setTitleTextAttributes(attributes);
 
     d->pixmapRepaintRequested = true;
@@ -438,7 +438,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
         background()->paint(painter, converter, paintContext, p);
     }
 
-    // KDChart thinks in pixels, Calligra in pt
+    // KChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx(painter);
 
     d->kdLegend->paint(&painter);
@@ -605,9 +605,9 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
     bodyWriter.endElement(); // chart:legend
 }
 
-KDChart::Legend *Legend::kdLegend() const
+KChart::Legend *Legend::kdLegend() const
 {
-    // There has to be a valid KDChart instance of this legend
+    // There has to be a valid KChart instance of this legend
     Q_ASSERT(d->kdLegend);
     return d->kdLegend;
 }
@@ -627,7 +627,7 @@ void Legend::update() const
 void Legend::slotKdLegendChanged()
 {
     // FIXME: Update legend properly by implementing all *DataChanged() slots
-    // in KDChartModel. Right now, only yDataChanged() is implemented.
+    // in KChartModel. Right now, only yDataChanged() is implemented.
     //d->kdLegend->forceRebuild();
     QSize size = d->kdLegend->sizeHint();
     setSize(ScreenConversions::scaleFromPxToPt(size));
@@ -641,10 +641,10 @@ void Legend::slotChartTypeChanged(ChartType chartType)
     switch (chartType) {
     case LineChartType:
     case ScatterChartType:
-        d->kdLegend->setLegendStyle(KDChart::Legend::MarkersAndLines);
+        d->kdLegend->setLegendStyle(KChart::Legend::MarkersAndLines);
         break;
     default:
-        d->kdLegend->setLegendStyle(KDChart::Legend::MarkersOnly);
+        d->kdLegend->setLegendStyle(KChart::Legend::MarkersOnly);
         break;
     }
 }

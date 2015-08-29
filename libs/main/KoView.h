@@ -33,10 +33,8 @@ class KoViewPrivate;
 class KoZoomController;
 struct KoPageLayout;
 
-// KDE classes
-class KStatusBar;
-
 // Qt classes
+class QStatusBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;
@@ -138,7 +136,7 @@ public:
    /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
      */
-    KStatusBar * statusBar() const;
+    QStatusBar * statusBar() const;
 
     /**
      * This adds a widget to the statusbar for this view.

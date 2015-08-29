@@ -102,4 +102,3 @@ void KisTransparencyMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *
     return visitor.visit(this, undoAdapter);
 }
 
-#include "kis_transparency_mask.moc"

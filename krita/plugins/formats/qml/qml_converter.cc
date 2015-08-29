@@ -103,5 +103,4 @@ void QMLConverter::writeInt(QTextStream&  out, int spacing, const QString& setti
     writeString(out, spacing, setting, QString::number(value));
 }
 
-#include "qml_converter.moc"
 

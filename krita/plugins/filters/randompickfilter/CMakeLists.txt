@@ -6,17 +6,17 @@ set(kritarandompickfilter_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritarandompickfilter_PART_SRCS
+ki18n_wrap_ui(kritarandompickfilter_PART_SRCS
     wdgrandompickoptions.ui
     )
 
-kde4_add_plugin(kritarandompickfilter ${kritarandompickfilter_PART_SRCS})
-
+add_library(kritarandompickfilter MODULE ${kritarandompickfilter_PART_SRCS})
+kcoreaddons_desktop_to_json(kritarandompickfilter kritarandompickfilter.desktop)
 
 
 target_link_libraries(kritarandompickfilter kritaui)
 
-install(TARGETS kritarandompickfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritarandompickfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

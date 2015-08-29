@@ -24,6 +24,7 @@
 #include <QDoubleSpinBox>
 
 #include <klocale.h>
+#include <kglobal.h>
 
 #include "KoPointerEvent.h"
 
@@ -349,4 +350,3 @@ void KisToolDyna::slotSetAngle(qreal angle)
 }
 
 
-#include "kis_tool_dyna.moc"

@@ -21,13 +21,13 @@
 #ifndef KIS_DOCUMENT_ENTRY_H
 #define KIS_DOCUMENT_ENTRY_H
 
-#include <kservice.h>
-#include <ksharedptr.h>
 #include <QList>
+#include <QString>
 #include "kritaui_export.h"
 
 class QStringList;
 class KisDocument;
+class QPluginLoader;
 
 /**
  *  Represents an available Calligra component
@@ -44,14 +44,14 @@ public:
     /**
      * Represents a valid entry
      */
-    explicit KisDocumentEntry(const KService::Ptr& service);
+    explicit KisDocumentEntry(QPluginLoader *loader);
     ~KisDocumentEntry();
 
     static QString nativeMimeType();
 
     static QStringList extraNativeMimeTypes();
 
-    KService::Ptr service() const;
+    QPluginLoader *loader() const;
 
     /**
      * @return TRUE if the service pointer is null
@@ -92,7 +92,7 @@ public:
     static KisDocumentEntry queryByMimeType(const QString & mimetype);
 
 private:
-    KService::Ptr m_service;
+    QPluginLoader *m_loader;
 };
 
 #endif

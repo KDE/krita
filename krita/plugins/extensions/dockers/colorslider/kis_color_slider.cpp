@@ -37,8 +37,7 @@
 
 #include "kis_color_slider_dock.h"
 
-K_PLUGIN_FACTORY(ColorSliderPluginFactory, registerPlugin<ColorSliderPlugin>();)
-K_EXPORT_PLUGIN(ColorSliderPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ColorSliderPluginFactory, "krita_colorslider.json", registerPlugin<ColorSliderPlugin>();)
 
 class ColorSliderDockFactory : public KoDockFactoryBase
 {

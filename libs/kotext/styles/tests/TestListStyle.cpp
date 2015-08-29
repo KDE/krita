@@ -30,6 +30,8 @@
 #include <QTextBlock>
 #include <QTextList>
 
+#include <QTest>
+
 void TestListStyle::testListStyle()
 {
     KoListStyle ls;

@@ -485,11 +485,7 @@ public:
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
-#if KDE_IS_VERSION(4,4,0)
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
-#else
             const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
-#endif
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
                 openLocalFile();
@@ -698,7 +694,7 @@ bool KisDocument::saveFile()
 
     if (backupFile()) {
         if (url().isLocalFile())
-            KSaveFile::backupFile(url().toLocalFile(), d->backupPath);
+            KBackup::backupFile(url().toLocalFile(), d->backupPath);
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),
@@ -1154,8 +1150,7 @@ QString KisDocument::autoSaveFile(const QString & path) const
     if (! mime) {
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
-    QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) extension = mime->mainExtension();
+    const QString extension = mime->mainExtension();
 
     if (path.isEmpty()) {
         // Never saved?
@@ -1814,9 +1809,9 @@ void KisDocument::setModified(bool mod)
 QString KisDocument::prettyPathOrUrl() const
 {
     QString _url( url().pathOrUrl() );
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (url().isLocalFile()) {
-        _url = QDir::convertSeparators(_url);
+        _url = QDir::toNativeSeparators(_url);
     }
 #endif
     return _url;
@@ -2642,5 +2637,5 @@ KisUndoStore* KisDocument::createUndoStore()
     return new KisDocumentUndoStore(this);
 }
 
-#include <KisDocument.moc>
+#include <moc_KisDocument.cpp>
 

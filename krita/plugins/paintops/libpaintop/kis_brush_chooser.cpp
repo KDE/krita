@@ -360,4 +360,6 @@ void KisBrushChooser::setImage(KisImageWSP image)
     m_image = image;
 }
 
-#include "kis_brush_chooser.moc"
+#include "moc_kis_brush_chooser.cpp"
+
+

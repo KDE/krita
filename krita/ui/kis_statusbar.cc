@@ -177,7 +177,7 @@ void KisStatusBar::imageSizeChanged()
 
 void KisStatusBar::updateSelectionIcon()
 {
-    KIcon icon;
+    QIcon icon;
     if (!m_view->selectionManager()->displaySelection()) {
         icon = themedIcon("selection-mode_invisible.png");
     } else if (m_view->selectionManager()->showSelectionAsMask()) {
@@ -338,4 +338,3 @@ KisProgressWidget* KisStatusBar::progress()
 }
 
 
-#include "kis_statusbar.moc"

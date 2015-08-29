@@ -140,4 +140,3 @@ QString Settings::lastPreset() const
     return cfg.readEntry("LastPreset", QString("Basic_tip_default"));
 }
 
-#include "Settings.moc"

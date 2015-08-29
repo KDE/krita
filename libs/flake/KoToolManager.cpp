@@ -55,7 +55,7 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 #include <QStack>
 #include <QLabel>
@@ -89,16 +89,16 @@ public:
         // 3. replace conflicting actions in the action collection
         KActionCollection *canvasActionCollection = canvas->actionCollection();
 
-        QHash<QString, KAction*> toolActions = activeTool->actions();
-        QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+        QHash<QString, QAction *> toolActions = activeTool->actions();
+        QHash<QString, QAction *>::const_iterator it(toolActions.constBegin());
 
         for (; it != toolActions.constEnd(); ++it) {
             if (canvasActionCollection) {
 
                 QString toolActionID = it.key();
-                KAction *toolAction = it.value();
+                QAction *toolAction = it.value();
 
-                KAction* action = qobject_cast<KAction*>(canvasActionCollection->action(it.key()));
+                QAction * action = qobject_cast<QAction*>(canvasActionCollection->action(it.key()));
                 if (action) {
                     canvasActionCollection->takeAction(action);
                     if (action != it.value()) {
@@ -111,7 +111,7 @@ public:
                     }
                 }
                 foreach(QAction *a, canvasActionCollection->actions()) {
-                    KAction *canvasAction = dynamic_cast<KAction*>(a);
+                    QAction *canvasAction = dynamic_cast<QAction*>(a);
                     if (canvasAction && canvasAction->shortcut().toString() != "" && canvasAction->shortcut() == toolAction->shortcut()) {
                         kWarning() << activeToolId << ": action" << toolActionID << "conflicts with canvas action" << canvasAction->objectName() << "shortcut:" << canvasAction->shortcut().toString();
                         disabledCanvasShortcuts[canvasAction] = canvasAction->shortcut().toString();
@@ -131,14 +131,14 @@ public:
         if (!activeTool)
             return;
         // disable actions of active tool
-        foreach(KAction *action, activeTool->actions()) {
+        foreach(QAction *action, activeTool->actions()) {
             action->setEnabled(false);
         }
 
         // enable actions which where disabled on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
-        foreach(QPointer<KAction> action, disabledDisabledActions) {
+        foreach(QPointer<QAction> action, disabledDisabledActions) {
             if (action) {
                 if (ac) {
                     ac->addAction(action->objectName(), action);
@@ -147,7 +147,7 @@ public:
         }
         disabledDisabledActions.clear();
 
-        foreach(QPointer<KAction> action, disabledActions) {
+        foreach(QPointer<QAction> action, disabledActions) {
             if (action) {
                 action->setEnabled(true);
                 if(ac) {
@@ -157,9 +157,9 @@ public:
         }
         disabledActions.clear();
 
-        QMap<QPointer<KAction>, QString>::const_iterator it(disabledCanvasShortcuts.constBegin());
+        QMap<QPointer<QAction>, QString>::const_iterator it(disabledCanvasShortcuts.constBegin());
         for (; it != disabledCanvasShortcuts.constEnd(); ++it) {
-            KAction *action = it.key();
+            QAction *action = it.key();
             QString shortcut = it.value();
             action->setShortcut(shortcut);
         }
@@ -175,9 +175,9 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
-    QList<QPointer<KAction> > disabledActions; ///< disabled conflicting actions
-    QList<QPointer<KAction> > disabledDisabledActions; ///< disabled conflicting actions that were already disabled
-    QMap<QPointer<KAction>, QString> disabledCanvasShortcuts; ///< Shortcuts that were temporarily removed from canvas actions because the tool overrides
+    QList<QPointer<QAction> > disabledActions; ///< disabled conflicting actions
+    QList<QPointer<QAction> > disabledDisabledActions; ///< disabled conflicting actions that were already disabled
+    QMap<QPointer<QAction>, QString> disabledCanvasShortcuts; ///< Shortcuts that were temporarily removed from canvas actions because the tool overrides
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
@@ -674,7 +674,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     // disable all actions for all tools in the all canvasdata objects for this canvas.
     foreach(CanvasData *cd, items) {
         foreach(KoToolBase* tool, cd->allTools) {
-            foreach(KAction* action, tool->actions()) {
+            foreach(QAction * action, tool->actions()) {
                 action->setEnabled(false);
             }
         }
@@ -792,8 +792,8 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     // Actions available during the use of individual tools
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoToolBase *tool, cd->allTools) {
-        QHash<QString, KAction*> actions = tool->actions();
-        QHash<QString, KAction*>::const_iterator action(actions.constBegin());
+        QHash<QString, QAction*> actions = tool->actions();
+        QHash<QString, QAction*>::const_iterator action(actions.constBegin());
         for (; action != actions.constEnd(); ++action) {
             if (!ac->action(action.key()))
                 ac->addAction(action.key(), action.value());
@@ -1024,7 +1024,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
         tl->setObjectName(tool->id());
 
-        foreach(KAction *action, tl->actions()) {
+        foreach(QAction *action, tl->actions()) {
             action->setEnabled(false);
         }
 
@@ -1061,4 +1061,5 @@ KoToolManager::Private *KoToolManager::priv()
     return d;
 }
 
-#include <KoToolManager.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoToolManager.cpp"

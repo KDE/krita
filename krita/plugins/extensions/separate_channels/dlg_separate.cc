@@ -114,4 +114,3 @@ void DlgSeparate::enableDownscale(bool enable)
     m_page->chkDownscale->setEnabled(enable);
 }
 
-#include "dlg_separate.moc"

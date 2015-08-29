@@ -120,4 +120,3 @@ void KisRandomGeneratorTest::testEvolution()
 }
 
 QTEST_KDEMAIN(KisRandomGeneratorTest, GUI)
-#include "kis_random_generator_test.moc"

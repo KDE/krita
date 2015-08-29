@@ -267,5 +267,4 @@ void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 }
 
 
-#include "kis_preset_chooser.moc"
 

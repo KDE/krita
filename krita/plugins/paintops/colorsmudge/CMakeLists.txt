@@ -8,12 +8,12 @@ set(kritacolorsmudgepaintop_PART_SRCS
     kis_smudge_radius_option.cpp
 )
 
-kde4_add_plugin(kritacolorsmudgepaintop ${kritacolorsmudgepaintop_PART_SRCS})
-
+add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacolorsmudgepaintop kritacolorsmudgepaintop.desktop)
 
 target_link_libraries(kritacolorsmudgepaintop kritalibpaintop)
 
-install(TARGETS kritacolorsmudgepaintop DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorsmudgepaintop DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

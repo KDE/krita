@@ -23,11 +23,11 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "Axis.h"
 
+using namespace KoChart;
 using namespace KChart;
-using namespace KDChart;
 
 
 AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)

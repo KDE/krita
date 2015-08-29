@@ -49,7 +49,7 @@ private:
     KisMirrorAxis* decoration();
     
     QPointer<KisView> m_imageView;
-    KAction *m_mirrorCanvas;
+    QAction *m_mirrorCanvas;
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

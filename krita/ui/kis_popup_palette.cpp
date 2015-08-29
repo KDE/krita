@@ -32,6 +32,7 @@
 #include <QDebug>
 #include <QQueue>
 #include <QMenu>
+#include <QWhatsThis>
 #include <math.h>
 #include "kis_signal_compressor.h"
 
@@ -558,4 +559,3 @@ int KisPopupPalette::numSlots()
     return qMax(config.favoritePresets(), 10);
 }
 
-#include "kis_popup_palette.moc"

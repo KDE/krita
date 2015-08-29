@@ -24,12 +24,14 @@
 #include <Qt>
 #include <kritaui_export.h>
 
+#include <QAbstractNativeEventFilter>
+
 #ifndef _WINDEF_
 typedef unsigned long DWORD;
 #endif
 
 
-class KRITAUI_EXPORT KisTabletSupportWin
+class KRITAUI_EXPORT KisTabletSupportWin : public QAbstractNativeEventFilter
 {
 public:
     struct KRITAUI_EXPORT ButtonsConverter {
@@ -42,7 +44,7 @@ public:
 public:
     static void init();
     static void setButtonsConverter(ButtonsConverter *buttonsConverter);
-    static bool eventFilter(void *message, long *result);
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 };
 
 #endif // KIS_TABLET_SUPPORT_WIN_H

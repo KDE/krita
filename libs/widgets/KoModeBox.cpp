@@ -33,6 +33,7 @@
 #include <kconfiggroup.h>
 #include <klocale.h>
 #include <kselectaction.h>
+#include <kglobal.h>
 
 #include <QMap>
 #include <QList>

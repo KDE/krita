@@ -86,4 +86,3 @@ void KisNodeVisitorTest::testFullImage()
 
 
 QTEST_KDEMAIN(KisNodeVisitorTest, GUI)
-#include "kis_node_visitor_test.moc"

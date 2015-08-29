@@ -296,8 +296,8 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
     QList<KisDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
@@ -336,7 +336,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
 
         if (impList.empty() || expList.empty()) {
             // This filter cannot be used under these conditions
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " ruled out";
+            kDebug(30500) << "Filter:" << (*it)->loader()->fileName() << " ruled out";
             continue;
         }
 
@@ -376,7 +376,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
                 }
             }
         } else {
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " does not apply.";
+            kDebug(30500) << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
         }
     }
 }
@@ -467,8 +467,8 @@ QStringList KisImportExportManager::mimeFilter()
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
@@ -492,6 +492,10 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
     if (entry->available != "check")
         return true;
 
+// QT5TODO
+#if 1
+        return true;
+#else
     //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
     QString key = entry->service()->name() + " - " + entry->service()->library();
@@ -522,6 +526,7 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
         }
     }
     return m_filterAvailable[key];
+#endif
 }
 
 void KisImportExportManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)

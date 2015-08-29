@@ -476,4 +476,3 @@ QString CompositeOpModel::currentCompositeOpID() const
     return d->currentCompositeOpID;
 }
 
-#include "CompositeOpModel.moc"

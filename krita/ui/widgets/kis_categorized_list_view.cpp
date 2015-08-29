@@ -64,7 +64,7 @@ void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
     }
 }
 
-void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &/*roles*/)
 {
     QListView::dataChanged(topLeft, bottomRight);
     updateRows(topLeft.row(), bottomRight.row()+1);

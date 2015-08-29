@@ -121,4 +121,3 @@ void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char*
     engine->rootContext()->setContextProperty("aggregatedFeedsModel", rssModel);
 }
 
-#include "kritasketchplugin.moc"

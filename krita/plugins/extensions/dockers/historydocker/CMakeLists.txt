@@ -11,10 +11,11 @@ set(kritahistorydocker_PART_SRCS
     KisUndoModel.cpp
 )
 
-kde4_add_plugin(kritahistorydocker ${kritahistorydocker_PART_SRCS})
+add_library(kritahistorydocker MODULE ${kritahistorydocker_PART_SRCS})
+kcoreaddons_desktop_to_json(kritahistorydocker kritahistorydocker.desktop)
 
 target_link_libraries(kritahistorydocker kritaimage kritaui)
 
-install(TARGETS kritahistorydocker  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritahistorydocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES kritahistorydocker.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

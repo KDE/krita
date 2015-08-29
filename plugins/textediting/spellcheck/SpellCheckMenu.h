@@ -28,7 +28,8 @@
 
 class KActionMenu;
 class KAction;
-class KMenu;
+class QAction;
+class QMenu;
 class QSignalMapper;
 class SpellCheck;
 
@@ -39,7 +40,7 @@ public:
     explicit SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck);
     ~SpellCheckMenu();
 
-    QPair<QString, KAction*> menuAction();
+    QPair<QString, QAction*> menuAction();
     void setMisspelled(const QString &word, int position,int length);
     void setEnabled(bool b);
     void setVisible(bool b);
@@ -60,7 +61,7 @@ private:
     KActionMenu *m_suggestionsMenuAction;
     KAction *m_ignoreWordAction;
     KAction *m_addToDictionaryAction;
-    KMenu *m_suggestionsMenu;
+    QMenu *m_suggestionsMenu;
     int m_lengthMisspelled;
     QSignalMapper *m_suggestionsSignalMapper;
     int m_currentMisspelledPosition;

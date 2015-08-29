@@ -33,7 +33,7 @@ class QPainter;
 class QWidget;
 class KoShapeLoadingContext;
 
-namespace KChart {
+namespace KoChart {
 
 #define CHART_MIME_TYPE "application/vnd.oasis.opendocument.chart"
 
@@ -65,7 +65,7 @@ private:
     Private * const d;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_CHARTDOCUMENT_H
 

@@ -36,7 +36,7 @@
 #include <QBuffer>
 #include <QTextStream>
 
-#include <kdebug.h>
+#include <DebugPigment.h>
 #include <klocale.h>
 
 namespace
@@ -90,7 +90,7 @@ bool KoPattern::load()
 
     bool result;
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        qWarning() << "Can't open file " << filename();
         return false;
     }
     result = loadFromDevice(&file);
@@ -278,7 +278,7 @@ bool KoPattern::init(QByteArray& bytes)
             QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k > dataSize) {
-                    kWarning(30009) << "failed in gray";
+                    qWarning() << "failed to load grayscale pattern" << filename();
                     return false;
                 }
 
@@ -298,7 +298,7 @@ bool KoPattern::init(QByteArray& bytes)
             QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k + 2 > dataSize) {
-                    kWarning(30009) << "failed in grayA";
+                    qWarning() << "failed to load grayscale +_ alpha pattern" << filename();
                     return false;
                 }
 
@@ -314,7 +314,7 @@ bool KoPattern::init(QByteArray& bytes)
             QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 3 > dataSize) {
-                    kWarning(30009) << "failed in RGB";
+                    qWarning() << "failed to load RGB pattern" << filename();
                     return false;
                 }
                 pixels[x] = qRgb(data[k],
@@ -329,7 +329,7 @@ bool KoPattern::init(QByteArray& bytes)
             QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 4 > dataSize) {
-                    kWarning(30009) << "failed in RGBA";
+                    qWarning() << "failed to load RGB + Alpha pattern" << filename();
                     return false;
                 }
 

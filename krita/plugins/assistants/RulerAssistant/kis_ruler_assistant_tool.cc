@@ -741,4 +741,3 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     return m_optionsWidget;
 }
 
-#include "kis_ruler_assistant_tool.moc"

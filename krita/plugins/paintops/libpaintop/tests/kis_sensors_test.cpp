@@ -49,4 +49,3 @@ void KisSensorsTest::testBound(KisDynamicSensorSP sensor)
 }
 
 QTEST_KDEMAIN(KisSensorsTest, GUI)
-#include "kis_sensors_test.moc"

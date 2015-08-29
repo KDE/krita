@@ -204,7 +204,7 @@ void KoColor::fromQColor(const QColor& c) const
 #ifndef NDEBUG
 void KoColor::dump() const
 {
-    //dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
+    dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id() <<"";
     QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
@@ -215,13 +215,13 @@ void KoColor::dump() const
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
-            //dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
+            dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
         } else if (ch->size() == sizeof(quint16)) {
             // Short (may also by an nvidia half)
-            //dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
+            dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
         } else if (ch->size() == sizeof(quint32)) {
             // Integer (may also be float... Find out how to distinguish these!)
-            //dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
+            dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
         }
     }
 }

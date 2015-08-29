@@ -29,7 +29,7 @@
 // ChartShape
 #include "ChartShape.h"
 
-namespace KDChart {
+namespace KChart {
     class CartesianCoordinatePlane;
     class PolarCoordinatePlane;
     class RadarCoordinatePlane;
@@ -39,7 +39,7 @@ namespace KDChart {
 class Ko3dScene;
 
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * @brief The PlotArea class is the central chart element. It plots the data and draws the axes.
@@ -151,8 +151,8 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     
-    bool registerKdDiagram(KDChart::AbstractDiagram *diagram);
-    bool deregisterKdDiagram(KDChart::AbstractDiagram *diagram);
+    bool registerKdDiagram(KChart::AbstractDiagram *diagram);
+    bool deregisterKdDiagram(KChart::AbstractDiagram *diagram);
     
     void relayout() const;
     
@@ -170,16 +170,16 @@ private:
     void paintPixmap(QPainter &painter, const KoViewConverter &converter);
 
     // For class Axis
-    KDChart::CartesianCoordinatePlane *kdCartesianPlane(Axis *axis = 0) const;
-    KDChart::PolarCoordinatePlane *kdPolarPlane() const;
-    KDChart::RadarCoordinatePlane *kdRadarPlane() const;
-    KDChart::Chart *kdChart() const;
+    KChart::CartesianCoordinatePlane *kdCartesianPlane(Axis *axis = 0) const;
+    KChart::PolarCoordinatePlane *kdPolarPlane() const;
+    KChart::RadarCoordinatePlane *kdRadarPlane() const;
+    KChart::Chart *kdChart() const;
     
     class Private;
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif // KCHART_PLOTAREA_H
 

@@ -1,4 +1,4 @@
-include_directories( ${VECTORIMAGE_INCLUDES} ${KDE4_INCLUDES} )
+include_directories( ${VECTORIMAGE_INCLUDES}  )
 
 set(vectorimage_LIB_SRCS    
     libemf/EmfRecords.cpp
@@ -25,10 +25,11 @@ set(vectorimage_LIB_SRCS
 
 )
 
-kde4_add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
+add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
+generate_export_header(kovectorimage BASE_NAME kovectorimage)
 
-target_link_libraries(kovectorimage ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
-target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS})
+target_link_libraries(kovectorimage  KF5::KDELibs4Support Qt5::Gui Qt5::PrintSupport)
+target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES )
 
 set_target_properties(kovectorimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

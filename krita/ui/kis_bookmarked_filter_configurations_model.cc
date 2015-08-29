@@ -57,4 +57,3 @@ KisFilterConfiguration* KisBookmarkedFilterConfigurationsModel::configuration(co
     return d->filter->defaultConfiguration(d->thumb);
 }
 
-#include "kis_bookmarked_filter_configurations_model.moc"

@@ -22,6 +22,7 @@
 #include <KoStore.h>
 #include <QStringList>
 #include <QBuffer>
+#include <QMimeData>
 #include <QClipboard>
 #include <QTextBrowser>
 #include <QDragEnterEvent>
@@ -40,8 +41,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent * e);
     virtual void paste();
 private:
-    bool processMimeSource(QMimeSource* ev);
-    void showZipContents(QByteArray data, const char* mimeType, bool oasis);
+    bool processMimeData(const QMimeData* mimeData);
+    void showZipContents(QByteArray data, const QString &mimeType, bool oasis);
     QString loadTextFile(KoStore* store, const QString& fileName);
 };
 
@@ -108,31 +109,28 @@ void StoreDropTest::paste()
 
 void StoreDropTest::contentsDropEvent(QDropEvent *ev)
 {
-    if (processMimeSource(ev))
+    if (processMimeData(ev->mimeData()))
         ev->acceptProposedAction();
     else
         ev->ignore();
 }
 
-bool StoreDropTest::processMimeSource(QMimeSource* ev)
+bool StoreDropTest::processMimeData(const QMimeData* mimeData)
 {
     const QString acceptMimeType("application/vnd.oasis.opendocument.");
-    const char* fmt;
-    QStringList formats;
-    for (int i = 0; (fmt = ev->format(i)); i++) {
-        formats += fmt;
-        bool oasis = QString(fmt).startsWith(acceptMimeType);
-        if (oasis || QString(fmt) == "application/x-kpresenter") {
-            QByteArray data = ev->encodedData(fmt);
-            showZipContents(data, fmt, oasis);
+    foreach (const QString &format, mimeData->formats()) {
+        bool oasis = format.startsWith(acceptMimeType);
+        if (oasis || format == "application/x-kpresenter") {
+            const QByteArray data = mimeData->data(format);
+            showZipContents(data, format, oasis);
             return true;
         }
     }
-    setText("No acceptable format found. All I got was:\n" + formats.join("\n"));
+    setText("No acceptable format found. All I got was:\n" + mimeData->formats().join("\n"));
     return false;
 }
 
-void StoreDropTest::showZipContents(QByteArray data, const char* mimeType, bool oasis)
+void StoreDropTest::showZipContents(QByteArray data, const QString &mimeType, bool oasis)
 {
     if (data.isEmpty()) {
         setText("No data!");

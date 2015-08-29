@@ -280,4 +280,3 @@ void KisBaseNode::setUuid(const QUuid& id)
     baseNodeChangedCallback();
 }
 
-#include "kis_base_node.moc"

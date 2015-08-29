@@ -53,4 +53,3 @@ void KisJpegTest::testFiles()
 }
 QTEST_KDEMAIN(KisJpegTest, GUI)
 
-#include "kis_jpeg_test.moc"

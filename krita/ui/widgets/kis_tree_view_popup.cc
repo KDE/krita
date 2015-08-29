@@ -67,4 +67,3 @@ void KisTreeViewPopup::setCurrentIndex(const QModelIndex& idx)
     emit(currentItemChanged(idx));
 }
 
-#include "kis_tree_view_popup.moc"

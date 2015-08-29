@@ -22,7 +22,7 @@
 #include <KoUnit.h>
 #include <KoDpi.h>
 
-// KChart
+// KoChart
 #include "ScreenConversions.h"
 
 // Qt
@@ -32,7 +32,7 @@
 #include <QRectF>
 #include <QRect>
 
-using namespace KChart;
+using namespace KoChart;
 
 qreal ScreenConversions::pxToPtX(qreal px)
 {

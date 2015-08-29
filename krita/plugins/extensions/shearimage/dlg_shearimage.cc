@@ -70,12 +70,12 @@ void DlgShearImage::setAngleY(quint32 angle)
 
 qint32 DlgShearImage::angleX()
 {
-    return (qint32)qRound(m_page->shearAngleX->value());
+    return m_page->shearAngleX->value();
 }
 
 qint32 DlgShearImage::angleY()
 {
-    return (qint32)qRound(m_page->shearAngleY->value());
+    return m_page->shearAngleY->value();
 }
 
 // SLOTS
@@ -85,4 +85,3 @@ void DlgShearImage::okClicked()
     accept();
 }
 
-#include "dlg_shearimage.moc"

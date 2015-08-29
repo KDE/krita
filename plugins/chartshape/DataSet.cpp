@@ -36,17 +36,17 @@
 // KDE
 #include <klocale.h>
 
-// KDChart
-#include <KDChartDataValueAttributes>
-#include <KDChartPieAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartRelativePosition>
-#include <KDChartPosition>
-#include <KDChartAbstractDiagram>
-#include <KDChartMeasure>
-#include "KDChartModel.h"
-
 // KChart
+#include <KChartDataValueAttributes>
+#include <KChartPieAttributes>
+#include <KChartTextAttributes>
+#include <KChartRelativePosition>
+#include <KChartPosition>
+#include <KChartAbstractDiagram>
+#include <KChartMeasure>
+#include "KChartModel.h"
+
+// KoChart
 #include "Axis.h"
 #include "PlotArea.h"
 #include "Surface.h"
@@ -65,7 +65,7 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-using namespace KChart;
+using namespace KoChart;
 
 const int numDefaultMarkerTypes = 15;
 
@@ -89,32 +89,55 @@ const QByteArray symbolNames[] = {
     "vertical-bar"
 };
 
-const KDChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= { 
-    KDChart::MarkerAttributes::MarkerSquare,     // 0
-    KDChart::MarkerAttributes::MarkerDiamond,    // 1
-    KDChart::MarkerAttributes::MarkerArrowDown,  // 2
-    KDChart::MarkerAttributes::MarkerArrowUp,    // 3
-    KDChart::MarkerAttributes::MarkerArrowRight, // 4
-    KDChart::MarkerAttributes::MarkerArrowLeft,  // 5
-    KDChart::MarkerAttributes::MarkerBowTie,     // 6
-    KDChart::MarkerAttributes::MarkerHourGlass,  // 7
-    KDChart::MarkerAttributes::MarkerCircle,     // 8
-    KDChart::MarkerAttributes::MarkerStar,       // 9
-    KDChart::MarkerAttributes::MarkerX,          // 10
-    KDChart::MarkerAttributes::MarkerCross,      // 11
-    KDChart::MarkerAttributes::MarkerAsterisk,   // 12
-    KDChart::MarkerAttributes::MarkerHorizontalBar,// 13
-    KDChart::MarkerAttributes::MarkerVerticalBar, // 14
+const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= { 
+    KChart::MarkerAttributes::MarkerSquare,     // 0
+    KChart::MarkerAttributes::MarkerDiamond,    // 1
+    KChart::MarkerAttributes::MarkerArrowDown,  // 2
+    KChart::MarkerAttributes::MarkerArrowUp,    // 3
+    KChart::MarkerAttributes::MarkerArrowRight, // 4
+    KChart::MarkerAttributes::MarkerArrowLeft,  // 5
+    KChart::MarkerAttributes::MarkerBowTie,     // 6
+    KChart::MarkerAttributes::MarkerHourGlass,  // 7
+    KChart::MarkerAttributes::MarkerCircle,     // 8
+    KChart::MarkerAttributes::MarkerStar,       // 9
+    KChart::MarkerAttributes::MarkerX,          // 10
+    KChart::MarkerAttributes::MarkerCross,      // 11
+    KChart::MarkerAttributes::MarkerAsterisk,   // 12
+    KChart::MarkerAttributes::MarkerHorizontalBar,// 13
+    KChart::MarkerAttributes::MarkerVerticalBar, // 14
 
     // Not used:
-    KDChart::MarkerAttributes::MarkerRing,
-    KDChart::MarkerAttributes::MarkerFastCross,
-    KDChart::MarkerAttributes::Marker1Pixel,
-    KDChart::MarkerAttributes::Marker4Pixels,
-    KDChart::MarkerAttributes::NoMarker
+    KChart::MarkerAttributes::MarkerRing,
+    KChart::MarkerAttributes::MarkerFastCross,
+    KChart::MarkerAttributes::Marker1Pixel,
+    KChart::MarkerAttributes::Marker4Pixels,
+    KChart::MarkerAttributes::NoMarker
 };
 
-static KDChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
+static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
+
+// just to get access to paintMarker method, until there is a proper way to
+// have markers painted by some util class
+class MarkerPainterDummyDiagram : public KChart::AbstractDiagram
+{
+public:
+    MarkerPainterDummyDiagram() {}
+    void doPaintMarker( QPainter* painter,
+                        const KChart::MarkerAttributes& markerAttributes,
+                        const QBrush& brush, const QPen& pen,
+                        const QPointF& point, const QSizeF& size );
+public: // abstract KChart::AbstractDiagram API
+    virtual void paint ( KChart::PaintContext* /*paintContext*/ ) {}
+    virtual void resize ( const QSizeF& /*area*/ ) {}
+protected: // abstract KChart::AbstractDiagram API
+    virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const { return QPair<QPointF, QPointF>(); }
+};
+
+void MarkerPainterDummyDiagram::doPaintMarker(QPainter* painter, const KChart::MarkerAttributes& markerAttributes, const QBrush& brush, const QPen& pen, const QPointF& point, const QSizeF& size)
+{
+    paintMarker(painter, markerAttributes, brush, pen, point, size);
+}
+
 
 class DataSet::Private
 {
@@ -132,11 +155,11 @@ public:
     QBrush defaultBrush() const;
     QBrush defaultBrush(int section) const;
 
-    KDChart::MarkerAttributes defaultMarkerAttributes() const;
+    KChart::MarkerAttributes defaultMarkerAttributes() const;
 
     // Returns an instance of DataValueAttributes with sane default values in
-    // relation to KChart
-    KDChart::DataValueAttributes defaultDataValueAttributes() const;
+    // relation to KoChart
+    KChart::DataValueAttributes defaultDataValueAttributes() const;
     /// Copies Private::dataValueAttributes to this section if it doesn't
     /// have its own DataValueAttributes copy yet.
     void insertDataValueAttributeSectionIfNecessary(int section);
@@ -144,8 +167,8 @@ public:
     /**
      * FIXME: Refactor (post-2.3)
      *        1) Maximum bubble width should be determined in ChartProxyModel
-     *        2) Actual marker size and other KDChart::MarkerAttributes should
-     *           be set by some kind of adapter for KD Chart, e.g. KDChartModel.
+     *        2) Actual marker size and other KChart::MarkerAttributes should
+     *           be set by some kind of adapter for KD Chart, e.g. KChartModel.
      *
      * This determines the maximum bubble size of *all* data points in
      * the diagram this data set belongs to so that the actual value used to
@@ -158,7 +181,7 @@ public:
 
     QPen defaultPen() const;
 
-    void dataChanged(KDChartModel::DataRole role, const QRect &rect) const;
+    void dataChanged(KChartModel::DataRole role, const QRect &rect) const;
     void setAttributesAccordingToType();
 
     DataSet      *parent;
@@ -187,8 +210,8 @@ public:
     QBrush brush;
     QMap<int, DataSet::ValueLabelType> valueLabelType;
 
-    KDChart::PieAttributes pieAttributes;
-    KDChart::DataValueAttributes dataValueAttributes;
+    KChart::PieAttributes pieAttributes;
+    KChart::DataValueAttributes dataValueAttributes;
 
     void readValueLabelType(KoStyleStack &styleStack, int section = -1);
 
@@ -196,8 +219,8 @@ public:
     //       They will override the respective global attributes.
     QMap<int, QPen> pens;
     QMap<int, QBrush> brushes;
-    QMap<int, KDChart::PieAttributes> sectionsPieAttributes;
-    QMap<int, KDChart::DataValueAttributes> sectionsDataValueAttributes;
+    QMap<int, KChart::PieAttributes> sectionsPieAttributes;
+    QMap<int, KChart::DataValueAttributes> sectionsDataValueAttributes;
 
     /// The number of this series is passed in the constructor and after
     /// that never changes.
@@ -213,7 +236,7 @@ public:
     // it belongs to.
     CellRegion categoryDataRegion; // x labels -- same for all datasets
 
-    KDChartModel *kdChartModel;
+    KChartModel *kdChartModel;
 
     int size;
 
@@ -260,62 +283,62 @@ DataSet::Private::~Private()
     delete numericStyleFormat;
 }
 
-KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
+KChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
 {
-    KDChart::MarkerAttributes ma;
+    KChart::MarkerAttributes ma;
     // Don't show markers unless we turn them on
     ma.setVisible(false);
     // The marker size is specified in pixels, but scaled by the painter's zoom level
-    ma.setMarkerSizeMode(KDChart::MarkerAttributes::AbsoluteSizeScaled);
+    ma.setMarkerSizeMode(KChart::MarkerAttributes::AbsoluteSizeScaled);
     return ma;
 }
 
-KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
+KChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
 {
-    KDChart::DataValueAttributes attr;
-    KDChart::TextAttributes textAttr = attr.textAttributes();
+    KChart::DataValueAttributes attr;
+    KChart::TextAttributes textAttr = attr.textAttributes();
     // Don't show value labels by default
     textAttr.setVisible(false);
-    KDChart::Measure fontSize = textAttr.fontSize();
+    KChart::Measure fontSize = textAttr.fontSize();
     attr.setMarkerAttributes(defaultMarkerAttributes());
     fontSize.setValue(10);
     // Don't change font size with chart size
-    fontSize.setCalculationMode(KDChartEnums::MeasureCalculationModeAbsolute);
+    fontSize.setCalculationMode(KChartEnums::MeasureCalculationModeAbsolute);
     textAttr.setFontSize(fontSize);
     // Draw text horizontally
     textAttr.setRotation(0);
     attr.setTextAttributes(textAttr);
     // Set positive value position
-    KDChart::RelativePosition positivePosition = attr.positivePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    KChart::RelativePosition positivePosition = attr.positivePosition();
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignCenter);
-        positivePosition.setReferencePosition(KDChartEnums::PositionCenter);
+        positivePosition.setReferencePosition(KChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        positivePosition.setReferencePosition(KDChartEnums::PositionNorth);
+        positivePosition.setReferencePosition(KChartEnums::PositionNorth);
     }
     else {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        positivePosition.setReferencePosition(KDChartEnums::PositionNorthWest);
+        positivePosition.setReferencePosition(KChartEnums::PositionNorthWest);
     }
     positivePosition.setHorizontalPadding(0.0);
     positivePosition.setVerticalPadding(-100.0);
     attr.setPositivePosition(positivePosition);
 
     // Set negative value position
-    KDChart::RelativePosition negativePosition = attr.negativePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    KChart::RelativePosition negativePosition = attr.negativePosition();
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignCenter);
-        negativePosition.setReferencePosition(KDChartEnums::PositionCenter);
+        negativePosition.setReferencePosition(KChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-        negativePosition.setReferencePosition(KDChartEnums::PositionSouth);
+        negativePosition.setReferencePosition(KChartEnums::PositionSouth);
     }
     else {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-        negativePosition.setReferencePosition(KDChartEnums::PositionSouthWest);
+        negativePosition.setReferencePosition(KChartEnums::PositionSouthWest);
     }
     negativePosition.setHorizontalPadding(0.0);
     negativePosition.setVerticalPadding(100.0);
@@ -457,7 +480,7 @@ QBrush DataSet::Private::defaultBrush() const
     Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
     // A data set-wide default brush only makes sense if the legend shows
     // data set labels, not the category data. See notes on data directions
-    // in KDChartModel.h for details.
+    // in KChartModel.h for details.
     if (modelDataDirection == Qt::Vertical)
         return defaultDataSetColor(num);
     // FIXME: What to return in the other case?
@@ -575,37 +598,37 @@ qreal DataSet::upperErrorLimit() const
 #include <QDebug>
 void DataSet::Private::setAttributesAccordingToType()
 {
-    KDChart::DataValueAttributes attr = dataValueAttributes;
-    KDChart::RelativePosition positivePosition = attr.positivePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    KChart::DataValueAttributes attr = dataValueAttributes;
+    KChart::RelativePosition positivePosition = attr.positivePosition();
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignCenter);
-        positivePosition.setReferencePosition(KDChartEnums::PositionCenter);
+        positivePosition.setReferencePosition(KChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        positivePosition.setReferencePosition(KDChartEnums::PositionNorth);
+        positivePosition.setReferencePosition(KChartEnums::PositionNorth);
     }
     else {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        positivePosition.setReferencePosition(KDChartEnums::PositionNorthWest);
+        positivePosition.setReferencePosition(KChartEnums::PositionNorthWest);
     }
     positivePosition.setHorizontalPadding(0.0);
     positivePosition.setVerticalPadding(-100.0);
     attr.setPositivePosition(positivePosition);
 
     // Set negative value position
-    KDChart::RelativePosition negativePosition = attr.negativePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    KChart::RelativePosition negativePosition = attr.negativePosition();
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignCenter);
-        negativePosition.setReferencePosition(KDChartEnums::PositionCenter);
+        negativePosition.setReferencePosition(KChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-        negativePosition.setReferencePosition(KDChartEnums::PositionSouth);
+        negativePosition.setReferencePosition(KChartEnums::PositionSouth);
     }
     else {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-        negativePosition.setReferencePosition(KDChartEnums::PositionSouthWest);
+        negativePosition.setReferencePosition(KChartEnums::PositionSouthWest);
     }
     negativePosition.setHorizontalPadding(0.0);
     negativePosition.setVerticalPadding(100.0);
@@ -613,37 +636,37 @@ void DataSet::Private::setAttributesAccordingToType()
     dataValueAttributes = attr;
 
     for (int i = 0; i < sectionsDataValueAttributes.count(); ++i) {
-        KDChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
-        KDChart::RelativePosition positivePosition = attr.positivePosition();
-        if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+        KChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
+        KChart::RelativePosition positivePosition = attr.positivePosition();
+        if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
             positivePosition.setAlignment(Qt::AlignCenter);
-            positivePosition.setReferencePosition(KDChartEnums::PositionCenter);
+            positivePosition.setReferencePosition(KChartEnums::PositionCenter);
         }
-        else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+        else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
             positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-            positivePosition.setReferencePosition(KDChartEnums::PositionNorth);
+            positivePosition.setReferencePosition(KChartEnums::PositionNorth);
         }
         else {
             positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-            positivePosition.setReferencePosition(KDChartEnums::PositionNorthWest);
+            positivePosition.setReferencePosition(KChartEnums::PositionNorthWest);
         }
         positivePosition.setHorizontalPadding(0.0);
         positivePosition.setVerticalPadding(-100.0);
         attr.setPositivePosition(positivePosition);
 
         // Set negative value position
-        KDChart::RelativePosition negativePosition = attr.negativePosition();
-        if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+        KChart::RelativePosition negativePosition = attr.negativePosition();
+        if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
             negativePosition.setAlignment(Qt::AlignCenter);
-            negativePosition.setReferencePosition(KDChartEnums::PositionCenter);
+            negativePosition.setReferencePosition(KChartEnums::PositionCenter);
         }
-        else if (chartType == KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+        else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
             negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-            negativePosition.setReferencePosition(KDChartEnums::PositionSouth);
+            negativePosition.setReferencePosition(KChartEnums::PositionSouth);
         }
         else {
             negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-            negativePosition.setReferencePosition(KDChartEnums::PositionSouthWest);
+            negativePosition.setReferencePosition(KChartEnums::PositionSouthWest);
         }
         negativePosition.setHorizontalPadding(0.0);
         negativePosition.setVerticalPadding(100.0);
@@ -711,9 +734,9 @@ QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
         QPixmap markerPixmap(16,16);
         markerPixmap.fill(QColor(255,255,255,0));
         QPainter painter(&markerPixmap);
-        KDChart::MarkerAttributes matt;
+        KChart::MarkerAttributes matt;
         matt.setMarkerStyle(odf2kdMarker(markerStyle));
-        KDChart::AbstractDiagram::paintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+        MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
         QIcon markerIcon = QIcon(markerPixmap);
         return markerIcon;
     }
@@ -727,7 +750,7 @@ QPen DataSet::pen(int section) const
     return pen();
 }
 
-KDChart::PieAttributes DataSet::pieAttributes() const
+KChart::PieAttributes DataSet::pieAttributes() const
 {
     return d->pieAttributes;
 }
@@ -748,7 +771,7 @@ QBrush DataSet::brush(int section) const
     return brush();
 }
 
-KDChart::PieAttributes DataSet::pieAttributes(int section) const
+KChart::PieAttributes DataSet::pieAttributes(int section) const
 {
     if(d->sectionsPieAttributes.contains(section))
         return d->sectionsPieAttributes[section];
@@ -770,9 +793,9 @@ qreal DataSet::Private::maxBubbleSize() const
     return max;
 }
 
-KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */) const
+KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */) const
 {
-    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    KChart::DataValueAttributes attr(d->dataValueAttributes);
     Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
     if (d->sectionsDataValueAttributes.contains(section))
         attr = d->sectionsDataValueAttributes[section];
@@ -781,7 +804,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
      * Update attributes that are related to properties out of the data
      * sets's reach and thus might have changed in the meanwhile.
      */
-    KDChart::MarkerAttributes ma(attr.markerAttributes());
+    KChart::MarkerAttributes ma(attr.markerAttributes());
 
     // The chart type is a property of the plot area, check that.
     switch (d->effectiveChartType()) {
@@ -797,7 +820,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     case StockChartType:
     {
         Q_ASSERT(attr.isVisible());
-        ma.setMarkerStyle(KDChart::MarkerAttributes::MarkerSquare);
+        ma.setMarkerStyle(KChart::MarkerAttributes::MarkerSquare);
         ma.setMarkerSize(QSize(10, 10));
         ma.setVisible(true);
         d->symbolsActivated = false;
@@ -807,7 +830,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     {
         Q_ASSERT(attachedAxis());
         Q_ASSERT(attachedAxis()->plotArea());
-        ma.setMarkerStyle(KDChart::MarkerAttributes::MarkerCircle);        
+        ma.setMarkerStyle(KChart::MarkerAttributes::MarkerCircle);        
         ma.setThreeD(attachedAxis()->plotArea()->isThreeD());
         qreal maxSize = d->maxBubbleSize();
         if (section >= 0) {
@@ -818,7 +841,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
             // Whereas the maximum size is relative to 1/4 * min(dw, dh),
             // with dw, dh being the width and height of the diagram
             bubbleWidth *= 0.25;
-            ma.setMarkerSizeMode(KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
+            ma.setMarkerSizeMode(KChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
             ma.setMarkerSize(QSizeF(bubbleWidth, bubbleWidth));
         }
         ma.setVisible(true);
@@ -880,14 +903,14 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     return attr;
 }
 
-KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section) const
+KChart::MarkerAttributes DataSet::getMarkerAttributes(int section) const
 {
-    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    KChart::DataValueAttributes attr(d->dataValueAttributes);
     Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
     if (d->sectionsDataValueAttributes.contains(section))
         attr = d->sectionsDataValueAttributes[section];
 
-    KDChart::MarkerAttributes ma(attr.markerAttributes());
+    KChart::MarkerAttributes ma(attr.markerAttributes());
     ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
     ma.setMarkerSize(QSize(10, 10));
     ma.setVisible(true);
@@ -900,9 +923,9 @@ bool DataSet::markerAutoSet() const
     return d->markerIsAutoSet;
 }
 
-void DataSet::setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int section)
+void DataSet::setMarkerAttributes(const KChart::MarkerAttributes &attribs, int section)
 {
-    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    KChart::DataValueAttributes attr(d->dataValueAttributes);
     Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
     if (d->sectionsDataValueAttributes.contains(section))
         attr = d->sectionsDataValueAttributes[section];
@@ -922,12 +945,12 @@ void DataSet::setPen(const QPen &pen)
     d->penIsSet = true;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this);
-//     KDChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
+//     KChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
 //     ma.setPen(pen);
 //     d->dataValueAttributes.setMarkerAttributes(ma);
-//     for (QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+//     for (QMap< int, KChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
 //           it != d->sectionsDataValueAttributes.end(); ++it){
-//         KDChart::MarkerAttributes mattr(it->markerAttributes());
+//         KChart::MarkerAttributes mattr(it->markerAttributes());
 //         mattr.setMarkerColor(pen.color());
 //         it->setMarkerAttributes(mattr);
 //     }
@@ -940,12 +963,12 @@ void DataSet::setBrush(const QBrush &brush)
     d->brushIsSet = true;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this);
-//     KDChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
+//     KChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
 //     ma.setMarkerColor(brush.color());
 //     d->dataValueAttributes.setMarkerAttributes(ma);
-//     for (QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+//     for (QMap< int, KChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
 //           it != d->sectionsDataValueAttributes.end(); ++it){
-//         KDChart::MarkerAttributes mattr(it->markerAttributes());
+//         KChart::MarkerAttributes mattr(it->markerAttributes());
 //         mattr.setMarkerColor(brush.color());
 //         it->setMarkerAttributes(mattr);
 //     }
@@ -962,9 +985,9 @@ void DataSet::setPen(int section, const QPen &pen)
 {
     d->pens[section] = pen;
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::PenDataRole, section);
+        d->kdChartModel->dataSetChanged(this, KChartModel::PenDataRole, section);
     d->insertDataValueAttributeSectionIfNecessary(section);
-//     KDChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
+//     KChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
 //     mas.setPen(pen);
 //     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
 }
@@ -973,16 +996,16 @@ void DataSet::setBrush(int section, const QBrush &brush)
 {
     d->brushes[section] = brush;
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::BrushDataRole, section);
+        d->kdChartModel->dataSetChanged(this, KChartModel::BrushDataRole, section);
     d->insertDataValueAttributeSectionIfNecessary(section);
-//     KDChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
+//     KChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
 //     mas.setMarkerColor(brush.color());
 //     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
 }
 
 void DataSet::setMarkerStyle(OdfMarkerStyle style)
 {
-    KDChart::MarkerAttributes matt = getMarkerAttributes();
+    KChart::MarkerAttributes matt = getMarkerAttributes();
     matt.setMarkerStyle(odf2kdMarker(style));
     setMarkerAttributes(matt);
 
@@ -992,10 +1015,10 @@ void DataSet::setMarkerStyle(OdfMarkerStyle style)
 
 void DataSet::setPieExplodeFactor(int section, int factor)
 {
-    KDChart::PieAttributes &pieAttributes = d->sectionsPieAttributes[section];
+    KChart::PieAttributes &pieAttributes = d->sectionsPieAttributes[section];
     pieAttributes.setExplodeFactor((qreal)factor / (qreal)100);
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::PieAttributesRole, section);
+        d->kdChartModel->dataSetChanged(this, KChartModel::PieAttributesRole, section);
 }
 
 int DataSet::number() const
@@ -1187,7 +1210,7 @@ void DataSet::setXDataRegion(const CellRegion &region)
     d->updateSize();
 
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::XDataRole);
+        d->kdChartModel->dataSetChanged(this, KChartModel::XDataRole);
 }
 
 void DataSet::setYDataRegion(const CellRegion &region)
@@ -1196,7 +1219,7 @@ void DataSet::setYDataRegion(const CellRegion &region)
     d->updateSize();
 
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::YDataRole);
+        d->kdChartModel->dataSetChanged(this, KChartModel::YDataRole);
 }
 
 void DataSet::setCustomDataRegion(const CellRegion &region)
@@ -1205,7 +1228,7 @@ void DataSet::setCustomDataRegion(const CellRegion &region)
     d->updateSize();
     
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::CustomDataRole);
+        d->kdChartModel->dataSetChanged(this, KChartModel::CustomDataRole);
 }
 
 void DataSet::setCategoryDataRegion(const CellRegion &region)
@@ -1214,7 +1237,7 @@ void DataSet::setCategoryDataRegion(const CellRegion &region)
     d->updateSize();
 
     if (d->kdChartModel)
-        d->kdChartModel->dataSetChanged(this, KDChartModel::CategoryDataRole);
+        d->kdChartModel->dataSetChanged(this, KChartModel::CategoryDataRole);
 }
 
 void DataSet::setLabelDataRegion(const CellRegion &region)
@@ -1232,7 +1255,7 @@ int DataSet::size() const
     return qMax(1, d->size);
 }
 
-void DataSet::Private::dataChanged(KDChartModel::DataRole role, const QRect &rect) const
+void DataSet::Private::dataChanged(KChartModel::DataRole role, const QRect &rect) const
 {
     if (!kdChartModel)
         return;
@@ -1246,27 +1269,27 @@ void DataSet::Private::dataChanged(KDChartModel::DataRole role, const QRect &rec
 
 void DataSet::yDataChanged(const QRect &region) const
 {
-    d->dataChanged(KDChartModel::YDataRole, region);
+    d->dataChanged(KChartModel::YDataRole, region);
 }
 
 void DataSet::xDataChanged(const QRect &region) const
 {
-    d->dataChanged(KDChartModel::XDataRole, region);
+    d->dataChanged(KChartModel::XDataRole, region);
 }
 
 void DataSet::customDataChanged(const QRect &region) const
 {
-    d->dataChanged(KDChartModel::CustomDataRole, region);
+    d->dataChanged(KChartModel::CustomDataRole, region);
 }
 
 void DataSet::labelDataChanged(const QRect &region) const
 {
-    d->dataChanged(KDChartModel::LabelDataRole, region);
+    d->dataChanged(KChartModel::LabelDataRole, region);
 }
 
 void DataSet::categoryDataChanged(const QRect &region) const
 {
-    d->dataChanged(KDChartModel::CategoryDataRole, region);
+    d->dataChanged(KChartModel::CategoryDataRole, region);
 }
 
 int DataSet::dimension() const
@@ -1274,12 +1297,12 @@ int DataSet::dimension() const
     return numDimensions(d->effectiveChartType());
 }
 
-void DataSet::setKdChartModel(KDChartModel *model)
+void DataSet::setKdChartModel(KChartModel *model)
 {
     d->kdChartModel = model;
 }
 
-KDChartModel *DataSet::kdChartModel() const
+KChartModel *DataSet::kdChartModel() const
 {
     return d->kdChartModel;
 }
@@ -1292,15 +1315,15 @@ void DataSet::setValueLabelType(const ValueLabelType &type, int section /* = -1 
     d->valueLabelType[section] = type;
 
     // This is a reference, not a copy!
-    KDChart::DataValueAttributes &attr = section >= 0 ?
+    KChart::DataValueAttributes &attr = section >= 0 ?
                                          d->sectionsDataValueAttributes[section] :
                                          d->dataValueAttributes;
 
-    KDChart::TextAttributes ta (attr.textAttributes());
+    KChart::TextAttributes ta (attr.textAttributes());
 
     ta.setVisible(!type.noLabel());
 
-    KDChart::Measure m = ta.fontSize();
+    KChart::Measure m = ta.fontSize();
     m.setValue(8); // same small font the legend is using
     ta.setFontSize(m);
 
@@ -1308,7 +1331,7 @@ void DataSet::setValueLabelType(const ValueLabelType &type, int section /* = -1 
 
     if (d->kdChartModel) {
         if (section >= 0)
-            d->kdChartModel->dataSetChanged(this, KDChartModel::DataValueAttributesRole, section);
+            d->kdChartModel->dataSetChanged(this, KChartModel::DataValueAttributesRole, section);
         else
             d->kdChartModel->dataSetChanged(this);
     }
@@ -1526,7 +1549,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
 
     if (n.hasAttributeNS(KoXmlNS::chart, "class") && !ignoreCellRanges) {
         const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
-        KChart::ChartType chartType = KChart::BarChartType;
+        KoChart::ChartType chartType = KoChart::BarChartType;
         for (int type = 0; type < (int)LastChartType; ++type) {
             if (chartClass == odfCharttype(type)) {
                 chartType = (ChartType)type;
@@ -1790,7 +1813,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (!chartClass.isEmpty())
         bodyWriter.addAttribute("chart:class", chartClass);
 
-    if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
+    if (chartType() == KoChart::CircleChartType || chartType() == KoChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {
             bodyWriter.startElement("chart:data-point");
 
@@ -1808,49 +1831,49 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     bodyWriter.endElement(); // chart:series
 }
 
-static KDChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) {
+static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) {
     switch (style) {
     case MarkerSquare:
-        return KDChart::MarkerAttributes::MarkerSquare;
+        return KChart::MarkerAttributes::MarkerSquare;
     case MarkerDiamond:
-        return KDChart::MarkerAttributes::MarkerDiamond;
+        return KChart::MarkerAttributes::MarkerDiamond;
     case MarkerArrowDown:
-        return KDChart::MarkerAttributes::MarkerArrowDown;
+        return KChart::MarkerAttributes::MarkerArrowDown;
     case MarkerArrowUp:
-        return KDChart::MarkerAttributes::MarkerArrowUp;
+        return KChart::MarkerAttributes::MarkerArrowUp;
     case MarkerArrowRight:
-        return KDChart::MarkerAttributes::MarkerArrowRight;
+        return KChart::MarkerAttributes::MarkerArrowRight;
     case MarkerArrowLeft:
-        return KDChart::MarkerAttributes::MarkerArrowLeft;
+        return KChart::MarkerAttributes::MarkerArrowLeft;
     case MarkerBowTie:
-        return KDChart::MarkerAttributes::MarkerBowTie;
+        return KChart::MarkerAttributes::MarkerBowTie;
     case MarkerHourGlass:
-        return KDChart::MarkerAttributes::MarkerHourGlass;
+        return KChart::MarkerAttributes::MarkerHourGlass;
     case MarkerCircle:
-        return KDChart::MarkerAttributes::MarkerCircle;
+        return KChart::MarkerAttributes::MarkerCircle;
     case MarkerStar:
-        return KDChart::MarkerAttributes::MarkerStar;
+        return KChart::MarkerAttributes::MarkerStar;
     case MarkerX:
-        return KDChart::MarkerAttributes::MarkerX;
+        return KChart::MarkerAttributes::MarkerX;
     case MarkerCross:
-        return KDChart::MarkerAttributes::MarkerCross;
+        return KChart::MarkerAttributes::MarkerCross;
     case MarkerAsterisk:
-        return KDChart::MarkerAttributes::MarkerAsterisk;
+        return KChart::MarkerAttributes::MarkerAsterisk;
     case MarkerHorizontalBar:
-        return KDChart::MarkerAttributes::MarkerHorizontalBar;
+        return KChart::MarkerAttributes::MarkerHorizontalBar;
     case MarkerVerticalBar:
-        return KDChart::MarkerAttributes::MarkerVerticalBar;
+        return KChart::MarkerAttributes::MarkerVerticalBar;
     case MarkerRing:
-        return KDChart::MarkerAttributes::MarkerRing;
+        return KChart::MarkerAttributes::MarkerRing;
     case MarkerFastCross:
-        return KDChart::MarkerAttributes::MarkerFastCross;
+        return KChart::MarkerAttributes::MarkerFastCross;
     case Marker1Pixel:
-        return KDChart::MarkerAttributes::Marker1Pixel;
+        return KChart::MarkerAttributes::Marker1Pixel;
     case Marker4Pixels:
-        return KDChart::MarkerAttributes::Marker4Pixels;
+        return KChart::MarkerAttributes::Marker4Pixels;
     case NoMarker:
-        return KDChart::MarkerAttributes::NoMarker;
+        return KChart::MarkerAttributes::NoMarker;
     }
 
-    return KDChart::MarkerAttributes::MarkerSquare;
+    return KChart::MarkerAttributes::MarkerSquare;
 }

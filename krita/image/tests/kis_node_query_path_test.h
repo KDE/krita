@@ -22,6 +22,7 @@
 #include <QtTest>
 
 #include "kis_types.h"
+#include "kis_image.h"
 
 class KisNodeQueryPathTest : public QObject
 {

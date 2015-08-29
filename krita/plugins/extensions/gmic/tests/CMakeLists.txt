@@ -27,9 +27,9 @@ set(kritagmic_parser_PART_SRCS
 
 set(kis_gmic_tests_SRCS kis_gmic_tests.cpp ${kritagmic_parser_PART_SRCS})
 kde4_add_unit_test(KisGmicTests TESTNAME krita-plugins-extensions-gmic-GmicTests ${kis_gmic_tests_SRCS})
-target_link_libraries(KisGmicTests gmic kritaimage ${QT_QTTEST_LIBRARY} ${QT_QTXML_LIBRARY})
+target_link_libraries(KisGmicTests gmic kritaimage Qt5::Test ${QT_QTXML_LIBRARY})
 
 
 set(kis_gmic_benchmarks_SRCS kis_gmic_benchmarks.cpp ${kritagmic_parser_PART_SRCS})
 calligra_add_benchmark(KisGmicBenchmark TESTNAME krita-plugins-extensions-gmic-GmicBenchmarks ${kis_gmic_benchmarks_SRCS})
-target_link_libraries(KisGmicBenchmark gmic kritaimage ${QT_QTTEST_LIBRARY} ${QT_QTXML_LIBRARY})
+target_link_libraries(KisGmicBenchmark gmic kritaimage Qt5::Test ${QT_QTXML_LIBRARY})

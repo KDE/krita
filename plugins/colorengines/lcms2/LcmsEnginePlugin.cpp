@@ -79,8 +79,8 @@ void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number Erro
     kError(31000) << "Lcms2 error: " << ErrorCode << Text;
 }
 
-K_PLUGIN_FACTORY(LcmsEnginePluginFactory, registerPlugin<LcmsEnginePlugin>();)
-K_EXPORT_PLUGIN(LcmsEnginePluginFactory("calligra"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
+                           registerPlugin<LcmsEnginePlugin>();)
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -97,13 +97,13 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
 
     // prepare a list of the ICC profiles
-    KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
+    KGlobal::dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
     QStringList profileFilenames;
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
 
     // Load the profiles
     if (!profileFilenames.empty()) {

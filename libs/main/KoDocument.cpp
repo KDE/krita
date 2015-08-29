@@ -61,6 +61,7 @@
 #include <kio/job.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
+#include <kdeversion.h>
 
 #include <QtGlobal>
 #include <QBuffer>
@@ -69,7 +70,7 @@
 #include <QPainter>
 #include <QTimer>
 #ifndef QT_NO_DBUS
-#include <kio/jobuidelegate.h>
+#include <KJobWidgets>
 #include <QDBusConnection>
 #endif
 #include <QApplication>
@@ -321,9 +322,9 @@ public:
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
 #ifndef QT_NO_DBUS
-        m_job->ui()->setWindow(0);
+        KJobWidgets::setWindow(m_job, 0);
         if (m_job->ui()) {
-            m_job->ui()->setWindow(parentPart->currentMainwindow());
+            KJobWidgets::setWindow(m_job, parentPart->currentMainwindow());
         }
 #endif
         QObject::connect(m_job, SIGNAL(result(KJob*)), document, SLOT(_k_slotJobFinished(KJob*)));
@@ -555,7 +556,7 @@ bool KoDocument::saveFile()
 
     if (backupFile()) {
         if (url().isLocalFile())
-            KSaveFile::backupFile(url().toLocalFile(), d->backupPath);
+            KBackup::backupFile(url().toLocalFile(), d->backupPath);
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),
@@ -1165,17 +1166,16 @@ QString KoDocument::autoSaveFile(const QString & path) const
     if (! mime) {
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
-    QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) extension = mime->mainExtension();
+    const QString extension = mime->mainExtension();
 
     if (path.isEmpty()) {
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(d->parentPart->componentData().componentName()).arg(QApplication::applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(QApplication::applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
         KUrl url = KUrl::fromPath(path);
@@ -2655,7 +2655,7 @@ bool KoDocument::saveToUrl()
         }
         d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
 #ifndef QT_NO_DBUS
-        d->m_uploadJob->ui()->setWindow( 0 );
+        KJobWidgets::setWindow(d->m_uploadJob, 0);
 #endif
         connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
         return true;
@@ -2696,7 +2696,5 @@ bool KoDocument::openUrlInternal(const KUrl &url)
     }
 }
 
-
-
-#include <KoDocument.moc>
-
+// have to include this because of Q_PRIVATE_SLOT
+#include <moc_KoDocument.cpp>

@@ -99,4 +99,3 @@ void KisTextBrushChooser::setBrush(KisBrushSP brush)
     inputSpacing->setValue(textBrush->spacing());
 }
 
-#include "kis_text_brush_chooser.moc"

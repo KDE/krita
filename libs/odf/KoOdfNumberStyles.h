@@ -25,6 +25,8 @@
 #include "KoXmlReaderForward.h"
 
 #include <QPair>
+#include <QString>
+#include <QList>
 
 class KoGenStyles;
 class KoGenStyle;

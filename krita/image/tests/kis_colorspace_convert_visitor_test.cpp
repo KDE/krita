@@ -44,4 +44,3 @@ void KisColorSpaceConvertVisitorTest::testCreation()
 
 
 QTEST_KDEMAIN(KisColorSpaceConvertVisitorTest, GUI)
-#include "kis_colorspace_convert_visitor_test.moc"

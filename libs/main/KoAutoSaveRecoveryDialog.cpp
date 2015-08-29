@@ -61,16 +61,13 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets() const
+    QList<QWidget*> createItemWidgets(const QModelIndex &index) const
     {
-        // a lump of coal and a piece of elastic will get you through the world
-        QModelIndex idx = property("goya:creatingWidgetForIndex").value<QModelIndex>();
-
         QWidget *page = new QWidget;
         QHBoxLayout *layout = new QHBoxLayout(page);
 
         QCheckBox *checkBox = new QCheckBox;
-        checkBox->setProperty("fileitem", idx.data());
+        checkBox->setProperty("fileitem", index.data());
 
         connect(checkBox, SIGNAL(toggled(bool)), m_parent, SLOT(toggleFileItem(bool)));
         QLabel *thumbnail = new QLabel;

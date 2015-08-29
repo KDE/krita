@@ -622,4 +622,3 @@ void KisImageTest::testMergeCrossColorSpace()
 }
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)
-#include "kis_image_test.moc"

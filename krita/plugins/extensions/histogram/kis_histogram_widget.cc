@@ -146,5 +146,4 @@ void KisHistogramWidget::updateEnabled()
     }
 }
 
-#include "kis_histogram_widget.moc"
 

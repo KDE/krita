@@ -704,4 +704,3 @@ void KisSketchView::activate()
     controller->activate();
 }
 
-#include "KisSketchView.moc"

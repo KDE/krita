@@ -28,6 +28,10 @@
 **
 ****************************************************************************/
 
+#ifndef QTSINGLEAPPLICATION
+#define QTSINGLEAPPLICATION
+
+
 #include <QApplication>
 #include <kapplication.h>
 
@@ -72,3 +76,5 @@ private:
     QString appId;
     bool block;
 };
+
+#endif

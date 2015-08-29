@@ -47,4 +47,3 @@ void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesF
 }
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)
-#include "kis_shape_controller_test.moc"

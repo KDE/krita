@@ -338,4 +338,3 @@ void KisPSDTest::testSavingAllFormats()
 
 QTEST_KDEMAIN(KisPSDTest, GUI)
 
-#include "kis_psd_test.moc"

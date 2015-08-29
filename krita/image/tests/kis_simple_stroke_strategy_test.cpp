@@ -93,4 +93,3 @@ void KisSimpleStrokeStrategyTest::testCancel()
 }
 
 QTEST_KDEMAIN(KisSimpleStrokeStrategyTest, NoGUI)
-#include "kis_simple_stroke_strategy_test.moc"

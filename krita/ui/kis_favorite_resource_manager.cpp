@@ -366,5 +366,4 @@ void KisFavoriteResourceManager::init()
     }
 }
 
-#include "kis_favorite_resource_manager.moc"
 

@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-#include "thememanager.moc"
-
+#include "thememanager.h"
 // Qt includes
 
 #include <QStringList>
@@ -54,6 +53,7 @@
 #include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
+#include <kaction.h>
 
 // Calligra
 #include <KoIcon.h>
@@ -252,7 +252,7 @@ void ThemeManager::populateThemeMenu()
 
     updateCurrentKDEdefaultThemePreview();
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     d->themeMenuAction->addSeparator();
     KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
     config->setIcon(koIcon("preferences-desktop-theme"));

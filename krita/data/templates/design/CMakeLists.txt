@@ -1,4 +1,4 @@
-kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons )
+ecm_install_icons(${DATA_INSTALL_DIR}/calligra/icons )
 install( FILES  
     Designcinema16_10_2484x1200_96dpiRGB_8bit_.kra
     Designcinema2.39_1_2484x1040_96dpiRGB_8bit_.kra

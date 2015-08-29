@@ -24,10 +24,10 @@
 // KDE
 #include <qtest_kde.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 TestLoading::TestLoading()
     : TestLoadingBase()

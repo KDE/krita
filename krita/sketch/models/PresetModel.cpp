@@ -213,4 +213,3 @@ void PresetModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
     }
 }
 
-#include "PresetModel.moc"

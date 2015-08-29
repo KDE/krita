@@ -64,11 +64,13 @@
 #include "KisView.h"
 #include "kis_canvas_controller.h"
 
+#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
-#ifdef HAVE_OPENGL
-#include <QGLFormat>
 #endif
+
+#include "opengl/kis_opengl.h"
+
 
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
@@ -386,8 +388,6 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGL::makeSharedContextCurrent();
-
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
                                                                         m_d->displayColorConverter->monitorProfile(),
                                                                         m_d->displayColorConverter->renderingIntent(),
@@ -412,7 +412,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
+        if (KisOpenGL::hasOpenGL()) {
             createOpenGLCanvas();
             if (cfg.canvasState() == "OPENGL_FAILED") {
                 // Creating the opengl canvas failed, fall back
@@ -941,4 +941,3 @@ KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration()
 }
 
 
-#include "kis_canvas2.moc"

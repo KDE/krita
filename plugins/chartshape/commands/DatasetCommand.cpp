@@ -23,11 +23,11 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "DataSet.h"
 
+using namespace KoChart;
 using namespace KChart;
-using namespace KDChart;
 
 
 DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart)

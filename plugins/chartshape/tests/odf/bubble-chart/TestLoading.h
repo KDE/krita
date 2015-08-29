@@ -23,7 +23,7 @@
 
 #include "../TestLoadingBase.h"
 
-namespace KChart {
+namespace KoChart {
 
 class TestLoading : public TestLoadingBase
 {
@@ -42,6 +42,6 @@ private Q_SLOTS:
     void testAxes();
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_TESTLOADING_H_BUBBLE_CHART

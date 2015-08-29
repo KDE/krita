@@ -49,8 +49,7 @@
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
 
-K_PLUGIN_FACTORY(LayerSplitFactory, registerPlugin<LayerSplit>();)
-K_EXPORT_PLUGIN(LayerSplitFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(LayerSplitFactory, "kritalayersplit.json", registerPlugin<LayerSplit>();)
 
 LayerSplit::LayerSplit(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)

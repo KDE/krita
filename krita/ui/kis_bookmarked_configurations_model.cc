@@ -109,7 +109,7 @@ QModelIndex KisBookmarkedConfigurationsModel::indexFor(const QString& name) cons
 {
     int idx = d->configsKey.indexOf(name);
     if (idx == -1) return QModelIndex();
-    return createIndex(idx + 2, 0, 0);
+    return createIndex(idx + 2, 0);
 }
 
 bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index) const

@@ -23,12 +23,12 @@
 #include <QVariant>
 #include "filter/kis_color_transformation_filter.h"
 
-class Normalize : public QObject
+class KritaNormalizeFilter : public QObject
 {
     Q_OBJECT
 public:
-    Normalize(QObject *parent, const QVariantList &);
-    virtual ~Normalize();
+    KritaNormalizeFilter(QObject *parent, const QVariantList &);
+    virtual ~KritaNormalizeFilter();
 };
 
 class KisFilterNormalize : public KisColorTransformationFilter

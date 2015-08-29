@@ -9,7 +9,7 @@ set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
-                     ${QT_INCLUDES}
+                     
                      ${KOMAIN_INCLUDES}
 )
 
@@ -57,7 +57,7 @@ set( kformula_LIB_SRCS
    elements/UnknownElement.cpp
 )
 
-kde4_add_library(kformula SHARED ${kformula_LIB_SRCS})
+add_library(kformula SHARED ${kformula_LIB_SRCS})
 
 target_link_libraries(kformula komain)
 target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain)
@@ -102,18 +102,18 @@ set (formulashape_PART_SRCS
 )
 endif ()
 
-kde4_add_ui_files( formulashape_PART_SRCS
+ki18n_wrap_ui( formulashape_PART_SRCS
     FormulaToolWidget.ui
 )
 
-kde4_add_plugin(calligra_shape_formular ${formulashape_PART_SRCS})
+add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
 
 target_link_libraries(calligra_shape_formular kformula ${KDE4_KFILE_LIBS} ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES calligra_shape_formular.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_shape_formular  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 

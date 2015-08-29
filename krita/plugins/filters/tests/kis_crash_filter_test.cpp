@@ -95,4 +95,3 @@ void KisCrashFilterTest::testCrashFilters()
 }
 
 QTEST_KDEMAIN(KisCrashFilterTest, GUI)
-#include "kis_crash_filter_test.moc"

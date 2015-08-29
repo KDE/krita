@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <KoHashGeneratorProvider.h>
 
@@ -43,7 +44,7 @@
 #include "kis_md5_generator.h"
 
 
-KAboutData* KisFactory::s_aboutData = 0;
+K4AboutData* KisFactory::s_aboutData = 0;
 KComponentData* KisFactory::s_componentData = 0;
 
 KisFactory::KisFactory()
@@ -61,7 +62,7 @@ KisFactory::~KisFactory()
 }
 
 
-KAboutData* KisFactory::aboutData()
+K4AboutData* KisFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newKritaAboutData();
@@ -76,12 +77,12 @@ const KComponentData &KisFactory::componentData()
         Q_CHECK_PTR(s_componentData);
 
         // for cursors
-        s_componentData->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+        KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
 
         // for images in the paintop box
-        s_componentData->dirs()->addResourceType("kis_images", "data", "krita/images/");
+        KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
 
-        s_componentData->dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
+        KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

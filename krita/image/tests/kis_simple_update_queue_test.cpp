@@ -250,5 +250,4 @@ void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
 }
 
 QTEST_KDEMAIN(KisSimpleUpdateQueueTest, NoGUI)
-#include "kis_simple_update_queue_test.moc"
 

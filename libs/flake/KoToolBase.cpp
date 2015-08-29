@@ -20,7 +20,7 @@
 
 #include <QDebug>
 
-#include <kaction.h>
+#include <QAction>
 
 #include "KoToolBase.h"
 #include "KoToolBase_p.h"
@@ -69,7 +69,7 @@ KoToolBase::~KoToolBase()
 //        doc.appendChild(e);
 
 //        foreach(QAction *ac, d->actionCollection.values()) {
-//            KAction *action = qobject_cast<KAction*>(ac);
+//            QAction *action = qobject_cast<QAction*>(ac);
 //            if (action) {
 //                QDomElement a = doc.createElement("Action");
 //                a.setAttribute("name", action->objectName());
@@ -78,8 +78,8 @@ KoToolBase::~KoToolBase()
 //                a.setAttribute("whatsThis" , action->whatsThis());
 //                a.setAttribute("toolTip" , action->toolTip());
 //                a.setAttribute("iconText" , action->iconText());
-//                a.setAttribute("shortcut" , action->shortcut(KAction::ActiveShortcut).toString());
-//                a.setAttribute("defaultShortcut" , action->shortcut(KAction::DefaultShortcut).toString());
+//                a.setAttribute("shortcut" , action->shortcut(QAction::ActiveShortcut).toString());
+//                a.setAttribute("defaultShortcut" , action->shortcut(QAction::DefaultShortcut).toString());
 //                a.setAttribute("isCheckable" , QString((action->isChecked() ? "true" : "false")));
 //                a.setAttribute("statusTip", action->statusTip());
 //                e.appendChild(a);
@@ -225,7 +225,7 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
     return d->optionWidgets;
 }
 
-void KoToolBase::addAction(const QString &name, KAction *action)
+void KoToolBase::addAction(const QString &name, QAction *action)
 {
     Q_D(KoToolBase);
     if (action->objectName().isEmpty()) {
@@ -234,13 +234,13 @@ void KoToolBase::addAction(const QString &name, KAction *action)
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, KAction*> KoToolBase::actions() const
+QHash<QString, QAction *> KoToolBase::actions() const
 {
     Q_D(const KoToolBase);
     return d->actionCollection;
 }
 
-KAction *KoToolBase::action(const QString &name) const
+QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
     return d->actionCollection.value(name);

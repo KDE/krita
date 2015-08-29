@@ -582,4 +582,3 @@ void KisMetaDataTest::testValidator()
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)
-#include "kis_meta_data_test.moc"

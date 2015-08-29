@@ -24,6 +24,8 @@
 #include <KoColor.h>
 #include <kis_painter.h>
 #include <kis_paint_information.h>
+#include <kis_image.h>
+#include <kis_layer.h>
 
 class KoColorSpace;
 

@@ -34,6 +34,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kglobal.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -300,5 +301,4 @@ void KisToolGradient::slotSetAntiAliasThreshold(qreal value)
     m_configGroup.writeEntry("antialiasThreshold", value);
 }
 
-#include "kis_tool_gradient.moc"
 

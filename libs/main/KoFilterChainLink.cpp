@@ -18,6 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 #include "KoFilterChainLink.h"
 #include <QMetaMethod>
+#include <QPluginLoader>
 #include <kdebug.h>
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
@@ -96,7 +97,7 @@ namespace CalligraFilter {
 
     void ChainLink::dump() const
     {
-        kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
+        kDebug(30500) << "   Link:" << m_filterEntry->loader()->fileName();
     }
 
     void ChainLink::setupCommunication(const KoFilter *const parentFilter) const
@@ -122,24 +123,24 @@ namespace CalligraFilter {
 
         int senderMethodCount = parent->methodCount();
         for (int i = 0; i < senderMethodCount; ++i) {
-            QMetaMethod signal = parent->method(i);
-            if (signal.methodType() != QMetaMethod::Signal)
+            QMetaMethod metaMethodSignal = parent->method(i);
+            if (metaMethodSignal.methodType() != QMetaMethod::Signal)
                 continue;
             // ### untested (QMetaMethod::signature())
-            if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
+            if (strncmp(metaMethodSignal.methodSignature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
                 int receiverMethodCount = child->methodCount();
                 for (int j = 0; j < receiverMethodCount; ++j) {
-                    QMetaMethod slot = child->method(j);
-                    if (slot.methodType() != QMetaMethod::Slot)
+                    QMetaMethod metaMethodSlot = child->method(j);
+                    if (metaMethodSlot.methodType() != QMetaMethod::Slot)
                         continue;
-                    if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
-                        if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
+                    if (strncmp(metaMethodSlot.methodSignature().constData(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
+                        if (strcmp(metaMethodSignal.methodSignature().constData() + SIGNAL_PREFIX_LEN, metaMethodSlot.methodSignature().constData() + SLOT_PREFIX_LEN) == 0) {
                             QByteArray signalString;
                             signalString.setNum(QSIGNAL_CODE);
-                            signalString += signal.signature();
+                            signalString += metaMethodSignal.methodSignature();
                             QByteArray slotString;
                             slotString.setNum(QSLOT_CODE);
-                            slotString += slot.signature();
+                            slotString += metaMethodSlot.methodSignature();
                             QObject::connect(sender, signalString, receiver, slotString);
                         }
                     }

@@ -25,7 +25,7 @@
 
 #ifdef COMPILING_TESTS
 #  if defined _WIN32 || defined _WIN64
-#    if defined(MAKE_KRITADEFAULTTOOLS_LIB)
+#    if defined(kritadefaulttools_EXPORTS)
 #      define KRITADEFAULTTOOLS_TEST_EXPORT KDE_EXPORT
 #    else
 #       define KRITADEFAULTTOOLS_TEST_EXPORT KDE_IMPORT

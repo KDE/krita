@@ -21,7 +21,7 @@
 #define KOPROGRESSUPDATER_TEST_H
 
 #include <QtTest>
-#include <threadweaver/Job.h>
+#include <ThreadWeaver/Job>
 
 class KoProgressUpdaterTest : public QObject
 {
@@ -29,8 +29,8 @@ class KoProgressUpdaterTest : public QObject
 
 public Q_SLOTS:
 
-    void jobDone(ThreadWeaver::Job* );
-    
+    void jobDone(ThreadWeaver::JobPointer);
+
 private Q_SLOTS:
 
     void testCreation();

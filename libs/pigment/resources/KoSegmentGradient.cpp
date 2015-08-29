@@ -36,7 +36,7 @@
 #include "KoColorSpace.h"
 #include "KoMixColorsOp.h"
 
-#include <kdebug.h>
+#include <DebugPigment.h>
 #include <klocale.h>
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
@@ -114,7 +114,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
         numSegmentsText = nameDefinition;
     }
 
-    kDebug(30009) << "Loading gradient: " << name();
+    dbgPigment << "Loading gradient: " << name();
 
     int numSegments;
     bool ok;
@@ -125,7 +125,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-    kDebug(30009) << "Number of segments = " << numSegments;
+    dbgPigment << "Number of segments = " << numSegments;
 
     const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 

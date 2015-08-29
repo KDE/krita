@@ -25,8 +25,8 @@
 #include <kpluginfactory.h>
 
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra_shape_plugin"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_plugin.json",
+                           registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)

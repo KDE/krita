@@ -261,5 +261,4 @@ void KisCompressionTests::benchmarkDecompressionLzfTwoPass()
 }
 
 QTEST_KDEMAIN(KisCompressionTests, NoGUI)
-#include "kis_compression_tests.moc"
 

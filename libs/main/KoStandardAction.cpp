@@ -22,9 +22,9 @@
 #include <ktoggleaction.h>
 #include <klocale.h>
 
-KAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
+QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {
-    KAction *newAction = 0;
+    QAction *newAction = 0;
 
     switch (id) {
     case ShowGuides: {

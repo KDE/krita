@@ -28,5 +28,4 @@ void SqueezedComboBoxTest::testContains()
 }
 
 QTEST_KDEMAIN(SqueezedComboBoxTest, GUI)
-#include "squeezedcombobox_test.moc"
 

@@ -45,4 +45,3 @@ void KisPaintopTest::testCreation()
 
 
 QTEST_KDEMAIN(KisPaintopTest, GUI)
-#include "kis_paintop_test.moc"

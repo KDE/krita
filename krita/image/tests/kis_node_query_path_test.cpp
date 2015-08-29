@@ -98,4 +98,3 @@ void KisNodeQueryPathTest::testPathCompression()
 }
 
 QTEST_KDEMAIN(KisNodeQueryPathTest, GUI)
-#include "kis_node_query_path_test.moc"

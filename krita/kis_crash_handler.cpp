@@ -66,12 +66,12 @@
 #include <errno.h>
 #include <stdio.h>
 #include <client/mac/handler/exception_handler.h>
-#elif defined Q_WS_WIN
+#elif defined Q_OS_MAC
 #include <string.h>
 #include <windows.h>
 #include <iostream>
 #include <client/windows/handler/exception_handler.h>
-#elif defined Q_WS_X11
+#elif defined HAVE_X11
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -85,7 +85,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_MAC
 #ifndef UNICODE
 #define UNICODE
 #endif
@@ -105,7 +105,7 @@ static google_breakpad::ExceptionHandler *exceptionHandler = 0;
 
 // Note: we've crashed so we cannot use the heap here. So we cannot use any Q* class.
 static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpID, void *context,
-                               #ifdef Q_WS_WIN
+                               #ifdef Q_OS_MAC
                                EXCEPTION_POINTERS *exceptionInfo,
                                MDRawAssertionInfo *assertion,
                                #endif
@@ -115,7 +115,7 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
         return false;
     }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_MAC
 
     wchar_t command[(HD_MAX_PATH * 2) + 6];
     wcscpy(command, CRASH_REPORTER_BINARY L" \"");
@@ -148,7 +148,7 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
     } else if (pid == 0) {
         execl(CRASH_REPORTER_BINARY, CRASH_REPORTER_BINARY, dumpPath, minidumpID, (char*)0);
     }
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     abort();
 #endif
     return true;
@@ -185,7 +185,7 @@ KisCrashHandler::KisCrashHandler()
 
     QString tempPath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_MAC
     qDebug() << "Installing CrashHandler" << tempPath;
     typedef std::basic_string<wchar_t> wstring;
     wstring str;

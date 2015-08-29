@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QWheelEvent>
 #include <QMouseEvent>
+#include <QDrag>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

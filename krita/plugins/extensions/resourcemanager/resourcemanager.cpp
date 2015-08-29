@@ -51,8 +51,8 @@
 ResourceBundleServerProvider::ResourceBundleServerProvider()
 {
     // user-local
-    KGlobal::mainComponent().dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
+    KGlobal::dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
+    KGlobal::dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
     m_resourceBundleServer = new KoResourceServerSimpleConstruction<ResourceBundle>("kis_resourcebundles", "*.bundle");
     if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
         QDir().mkpath(m_resourceBundleServer->saveLocation());
@@ -103,8 +103,7 @@ public:
 
 };
 
-K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
-K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)

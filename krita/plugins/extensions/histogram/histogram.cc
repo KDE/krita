@@ -33,8 +33,7 @@
 #include "kis_node_manager.h"
 #include <kis_action.h>
 
-K_PLUGIN_FACTORY(HistogramFactory, registerPlugin<Histogram>();)
-K_EXPORT_PLUGIN(HistogramFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(HistogramFactory, "kritahistogram.json", registerPlugin<Histogram>();)
 
 Histogram::Histogram(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)

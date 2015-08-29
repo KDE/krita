@@ -11,14 +11,14 @@ set(kritahatchingpaintop_PART_SRCS
     hatching_brush.cpp
     )
 
-kde4_add_ui_files(kritahatchingpaintop_PART_SRCS wdghatchingpreferences.ui wdghatchingoptions.ui)
+ki18n_wrap_ui(kritahatchingpaintop_PART_SRCS wdghatchingpreferences.ui wdghatchingoptions.ui)
 
-kde4_add_plugin(kritahatchingpaintop ${kritahatchingpaintop_PART_SRCS})
-
+add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritahatchingpaintop kritahatchingpaintop.desktop)
 
 target_link_libraries(kritahatchingpaintop kritalibpaintop)
 
-install(TARGETS kritahatchingpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritahatchingpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

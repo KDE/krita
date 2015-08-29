@@ -22,28 +22,15 @@
 
 #include <KoConfig.h>
 
-#ifdef HAVE_OPENGL
-
-#include <config-glew.h>
-
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #endif
 
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
-
 #include <QtGlobal>
-#ifdef Q_WS_MAC
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
+class QOpenGLContext;
 
 #include "kritaui_export.h"
 
-class QGLWidget;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -52,45 +39,27 @@ class QGLWidget;
 class KRITAUI_EXPORT KisOpenGL
 {
 public:
-    /**
-     * Returns the QGLWidget that uses the shared OpenGL context.
-     * You should pass this as the shareWidget parameter to the
-     * QGLWidget constructor.
-     */
-    static QGLWidget *sharedContextWidget();
-    /**
-     * Make the shared OpenGL context the current context. You should
-     * make the context current before creating textures, display lists,
-     * shader objects, etc, that are to be shared by multiple QGLWidgets.
-     */
-    static void makeSharedContextCurrent();
 
-    /**
-     * Make the context of the widget current. You should
-     * make the context current before creating textures, display lists,
-     * shader objects, etc, that are to be shared by multiple QGLWidgets.
-     */
-    static void makeContextCurrent(QGLWidget *widget);
+    /// Request OpenGL version 3.2
+    static void initialize();
 
+    /// Initialize shared OpenGL context
+    static int initializeContext(QOpenGLContext* s);
 
-    /**
-     * Print any error messages waiting to be read from glGetError(). Use
-     * the helper macro KIS_OPENGL_PRINT_ERROR() to generate the source
-     * file and line number to identify the location the error is reported
-     * from.
-     */
-    static void printError(const char *file = 0, int line = -1);
-
-    /**
-     * Clear any error codes waiting to be read from glGetError().
-     */
-    static void clearError();
+    /// Check for OpenGL
+    static bool hasOpenGL();
 
     /**
      * @brief supportsGLSL13
      * @return true if we have a modern opengl capable of high-quality filtering
      */
     static bool supportsGLSL13();
+
+    /**
+     * @brief supportsFilter
+     * @return True if OpenGL provides fence sync methods.
+     */
+    static bool supportsFenceSync();
 
     /**
      * Returns true if we have a driver that has bugged support to sync objects (a fence)
@@ -101,23 +70,8 @@ public:
 private:
     KisOpenGL();
 
-    static void createContext();
+
 };
-
-/**
- * Helper macro to print out any OpenGL error messages waiting to be
- * read. This will also print the source file and line number where
- * the print is performed.
- */
-#define KIS_OPENGL_PRINT_ERROR() KisOpenGL::printError(__FILE__, __LINE__)
-
-/**
- * Helper macro to clear out any OpenGL error messages waiting to be
- * read.
- */
-#define KIS_OPENGL_CLEAR_ERROR() KisOpenGL::clearError()
-
-#endif // HAVE_OPENGL
 
 #endif // KIS_OPENGL_H_
 

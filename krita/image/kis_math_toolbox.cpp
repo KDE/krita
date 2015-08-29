@@ -243,4 +243,3 @@ double KisMathToolbox::maxChannelValue(KoChannelInfo *c)
     }
 }
 
-#include "kis_math_toolbox.moc"

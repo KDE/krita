@@ -104,27 +104,28 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else ()
-    kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
+    file(GLOB ICONS_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
+    ecm_add_app_icon(kritasketch_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
 # Krita Sketch library with shared things needed in both plugin and application
 # =============================================================================
 
-kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
+add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
+generate_export_headers(kritasketchlib BASE_NAME kritasketch)
 set_target_properties(kritasketchlib
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} DEFINE_SYMBOL MAKE_KRITA_SKETCH_LIB
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 
 target_link_libraries(kritasketchlib
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Declarative
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}
-    ${GLEW_LIBRARIES}
 )
 
 include(GNUInstallDirs)
@@ -136,14 +137,13 @@ include(GNUInstallDirs)
 # Krita Sketch application
 # =============================================================================
 
-kde4_add_executable(kritasketch ${kritasketch_SRCS})
+add_executable(kritasketch ${kritasketch_SRCS})
 
 target_link_libraries(kritasketch
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Declarative
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
-    ${GLEW_LIBRARIES}
     kritaui
     kritasketchlib
 )
@@ -160,14 +160,13 @@ target_link_libraries(kritasketch
 automoc4_add_library(kritasketchplugin MODULE ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 target_link_libraries(kritasketchplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Declarative
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}
-    ${GLEW_LIBRARIES}
     kritasketchlib
 )
 

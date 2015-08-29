@@ -1376,4 +1376,3 @@ void KisPaintDeviceTest::testCacheState()
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
-#include "kis_paint_device_test.moc"

@@ -20,6 +20,9 @@
 
 #include "kis_color_space_selector.h"
 
+#include <kglobal.h>
+#include <kurl.h>
+
 #include <KoFileDialog.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -201,7 +204,7 @@ void KisColorSpaceSelector::installProfile()
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
 
-    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
+    QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
@@ -262,6 +265,7 @@ void KisColorSpaceSelector::buttonUpdate()
    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
 }
 
+
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {
     if(!m_advancedSelector) {
@@ -287,4 +291,3 @@ void KisColorSpaceSelector::slotProfileValid(bool valid)
     d->profileValid = valid;
 }
 
-#include "kis_color_space_selector.moc"

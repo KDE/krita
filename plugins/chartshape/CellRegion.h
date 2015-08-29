@@ -27,14 +27,14 @@
 #include <QVector>
 #include <QRect>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 
 class QRect;
 class QPoint;
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * @brief A CellRegion represents a selection of cells in a table.

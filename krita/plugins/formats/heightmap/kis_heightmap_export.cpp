@@ -46,8 +46,7 @@
 
 #include "ui_kis_wdg_options_heightmap.h"
 
-K_PLUGIN_FACTORY(KisHeightMapExportFactory, registerPlugin<KisHeightMapExport>();)
-K_EXPORT_PLUGIN(KisHeightMapExportFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisHeightMapExportFactory, "krita_heightmap_export.json", registerPlugin<KisHeightMapExport>();)
 
 KisHeightMapExport::KisHeightMapExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
@@ -169,3 +168,5 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     f.close();
     return KisImportExportFilter::OK;
 }
+
+#include "kis_heightmap_export.moc"

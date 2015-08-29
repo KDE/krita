@@ -4,7 +4,7 @@ include_directories(
     ${TEXTLAYOUT_INCLUDES} # needed because ConnectionTool.cpp includes TextShape.h to get the id
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${FLAKE_INCLUDES}
-    ${QT_INCLUDES}
+    
 )
 
 add_subdirectory(pics)
@@ -40,7 +40,7 @@ set ( defaulttools_SRCS
     connectionTool/ConnectionPointWidget.cpp
 )
 
-kde4_add_ui_files(defaulttools_SRCS
+ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolWidget.ui
     defaulttool/DefaultToolArrangeWidget.ui
     defaulttool/DefaultToolTransformWidget.ui
@@ -49,12 +49,7 @@ kde4_add_ui_files(defaulttools_SRCS
     connectionTool/ConnectionPointWidget.ui
 )
 
-kde4_add_plugin(calligra_tool_defaults ${defaulttools_SRCS})
+add_library(calligra_tool_defaults MODULE ${defaulttools_SRCS})
+kcoreaddons_desktop_to_json(calligra_tool_defaults calligra_tool_defaults.desktop)
 target_link_libraries(calligra_tool_defaults flake kowidgets)
-install(TARGETS calligra_tool_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_tool_defaults.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-#kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+install(TARGETS calligra_tool_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

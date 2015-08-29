@@ -258,4 +258,3 @@ void DlgLayerSize::updateHeightUIValue(double value)
     }
 }
 
-#include "dlg_layersize.moc"

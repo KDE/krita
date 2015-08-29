@@ -6,13 +6,13 @@ set(kritatoolpolygon_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatoolpolygon ${kritatoolpolygon_PART_SRCS})
-
+add_library(kritatoolpolygon MODULE ${kritatoolpolygon_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatoolpolygon kritatoolpolygon.desktop)
 
 
 target_link_libraries(kritatoolpolygon kritaui)
 
-install(TARGETS kritatoolpolygon  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolpolygon  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

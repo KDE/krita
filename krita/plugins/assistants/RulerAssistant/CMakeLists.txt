@@ -15,13 +15,14 @@ set(kritarulerassistanttool_PART_SRCS
     FisheyePointAssistant.cc
     )
 
-kde4_add_ui_files(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
+ki18n_wrap_ui(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
 
-kde4_add_plugin(kritarulerassistanttool ${kritarulerassistanttool_PART_SRCS})
+add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_PART_SRCS})
+kcoreaddons_desktop_to_json(kritarulerassistanttool kritarulerassistanttool.desktop)
 
-target_link_libraries(kritarulerassistanttool kritaui flake  ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kritarulerassistanttool kritaui flake   )
 
-install(TARGETS kritarulerassistanttool  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritarulerassistanttool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

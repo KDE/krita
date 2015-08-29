@@ -29,6 +29,7 @@
 #include <QTextEdit>
 
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"
@@ -131,4 +132,3 @@ void KisDlgImageProperties::setAnnotation(const QString &type)
     }
 }
 
-#include "kis_dlg_image_properties.moc"

@@ -47,7 +47,7 @@ class KORDF_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWid
     Q_OBJECT
 protected:
     virtual QString uIObjectName() const = 0;
-    void addApplyStylesheetActions(QWidget *parent, QList<KAction *> &actions, KoCanvasBase *host);
+    void addApplyStylesheetActions(QWidget *parent, QList<QAction *> &actions, KoCanvasBase *host);
     KAction* createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
 
 public:

@@ -77,4 +77,3 @@ void KisSelectionMaskTest::testActivation()
 
 
 QTEST_KDEMAIN(KisSelectionMaskTest, GUI)
-#include "kis_selection_mask_test.moc"

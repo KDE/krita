@@ -33,7 +33,7 @@
 #include "kis_aboutdata.h"
 #include "kis_factory2.h"
 
-KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *parent)
+KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *parent)
     : QDialog(parent)
 {
     setWindowTitle(i18n("About Krita"));
@@ -43,7 +43,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
     QTabWidget *wdg = new QTabWidget;
     vlayout->addWidget(wdg);
 
-    KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), splash_screen_xpm, true);
+    KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm), true);
     splash->setWindowFlags(Qt::Widget);
     splash->setFixedSize(splash->sizeHint());
     wdg->addTab(splash, i18n("About"));
@@ -58,7 +58,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
                           "<h1 align=\"center\">Created By</h1></p>"
                           "<p>");
 
-    foreach(const KAboutPerson &author, aboutData->authors()) {
+    foreach(const K4AboutPerson &author, aboutData->authors()) {
         authors.append(author.name());
         if (!author.task().isEmpty()) {
             authors.append(" (<i>" + author.task() + "</i>)");
@@ -79,7 +79,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
                           "<h1 align=\"center\">Backed By</h1>"
                           "<p>");
 
-    foreach(const KAboutPerson &backer, aboutData->credits()) {
+    foreach(const K4AboutPerson &backer, aboutData->credits()) {
         if (backer.task() ==  ki18n("Krita 2.9 Kickstarter Backer").toString()) {
             backers.append(backer.name() + ", ");
         }
@@ -97,7 +97,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
                           "<body>"
                           "<h1 align=\"center\">Thanks To</h1>"
                           "<p>");
-    foreach(const KAboutPerson &credit, aboutData->credits()) {
+    foreach(const K4AboutPerson &credit, aboutData->credits()) {
         if (credit.task() !=  ki18n("Krita 2.9 Kickstarter Backer").toString()) {
             credits.append(credit.name());
             if (!credit.task().isEmpty()) {
@@ -135,7 +135,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
                            "to trial or educational versions of commercial software that will forbid your work in commercial situations.</p>"
                            "<br/><hr/><pre>");
 
-    license.append(aboutData->license());
+    license.append(aboutData->licenses().first().text());
     license.append("</pre></body></html>");
     lblLicense->setText(license);
 

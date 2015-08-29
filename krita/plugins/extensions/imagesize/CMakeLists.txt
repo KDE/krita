@@ -8,19 +8,19 @@ set(kritaimagesize_PART_SRCS
     kcanvaspreview.cc
     )
 
-kde4_add_ui_files(kritaimagesize_PART_SRCS
+ki18n_wrap_ui(kritaimagesize_PART_SRCS
     wdg_imagesize.ui
     wdg_canvassize.ui
     wdg_layersize.ui
     )
 
-kde4_add_plugin(kritaimagesize ${kritaimagesize_PART_SRCS})
-
+add_library(kritaimagesize MODULE ${kritaimagesize_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaimagesize kritaimagesize.desktop)
 
 
 target_link_libraries(kritaimagesize kritaui)
 
-install(TARGETS kritaimagesize  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimagesize  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

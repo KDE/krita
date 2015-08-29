@@ -169,10 +169,12 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
     QPointF point;
     QList<KoTouchPoint> touchPoints;
 
+    bool isPrimary = true;
     foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
         QPointF docPoint = widgetToDocument(p.screenPos());
-        if (p.isPrimary()) {
+        if (isPrimary) {
             point = docPoint;
+            isPrimary = false;
         }
         KoTouchPoint touchPoint;
         touchPoint.touchPoint = p;
@@ -504,9 +506,9 @@ void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
     controller = c;
 }
 
-QHash<QString, KAction*> KoToolProxy::actions() const
+QHash<QString, QAction *> KoToolProxy::actions() const
 {
-    return d->activeTool ? d->activeTool->actions() : QHash<QString, KAction*>();
+    return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction *>();
 }
 
 bool KoToolProxy::hasSelection() const
@@ -666,4 +668,5 @@ KoToolProxyPrivate *KoToolProxy::priv()
     return d;
 }
 
-#include <KoToolProxy.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoToolProxy.cpp"

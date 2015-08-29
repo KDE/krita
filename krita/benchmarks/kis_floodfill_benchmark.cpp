@@ -112,4 +112,3 @@ void KisFloodFillBenchmark::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(KisFloodFillBenchmark, NoGUI)
-#include "kis_floodfill_benchmark.moc"

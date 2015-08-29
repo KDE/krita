@@ -26,8 +26,7 @@
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 
-K_PLUGIN_FACTORY(KisOilPaintFilterPluginFactory, registerPlugin<KisOilPaintFilterPlugin>();)
-K_EXPORT_PLUGIN(KisOilPaintFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisOilPaintFilterPluginFactory, "kritaoilpaintfilter.json", registerPlugin<KisOilPaintFilterPlugin>();)
 
 KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
@@ -39,3 +38,4 @@ KisOilPaintFilterPlugin::~KisOilPaintFilterPlugin()
 {
 }
 
+#include "kis_oilpaint_filter_plugin.moc"

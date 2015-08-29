@@ -16,13 +16,13 @@ set(kritatiffimport_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatiffimport ${kritatiffimport_PART_SRCS})
-
+add_library(kritatiffimport MODULE ${kritatiffimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatiffimport krita_tiff_import.desktop)
 
 
 target_link_libraries(kritatiffimport kritaui ${KDE4_KIO_LIBS} ${TIFF_LIBRARIES})
 
-install(TARGETS kritatiffimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatiffimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -33,15 +33,16 @@ set(kritatiffexport_PART_SRCS
     kis_dlg_options_tiff.cpp
     )
 
-kde4_add_ui_files(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
+ki18n_wrap_ui(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
 
-kde4_add_plugin(kritatiffexport ${kritatiffexport_PART_SRCS})
+add_library(kritatiffexport MODULE ${kritatiffexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatiffexport krita_tiff_export.desktop)
 
 
 
 target_link_libraries(kritatiffexport kritaui ${KDE4_KIO_LIBS} ${TIFF_LIBRARIES})
 
-install(TARGETS kritatiffexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatiffexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############

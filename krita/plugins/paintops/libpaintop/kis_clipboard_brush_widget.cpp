@@ -155,3 +155,5 @@ void KisClipboardBrushWidget::slotAddPredefined()
 
     close();
 }
+
+#include "moc_kis_clipboard_brush_widget.cpp"

@@ -103,7 +103,7 @@ if(APPLE)
     add_definitions(-D_APPLE)
 endif()
 
-kde4_add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
+add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 
 if(FFTW3_FOUND)
   target_link_libraries(gmic ${FFTW3_LIBRARIES})
@@ -147,7 +147,7 @@ set(kritagmic_shared_PART_SRCS
     kis_filter_preview_widget.cpp
 )
 
-kde4_add_ui_files(kritagmic_shared_PART_SRCS wdg_gmic.ui wdg_gmic_input_output.ui)
+ki18n_wrap_ui(kritagmic_shared_PART_SRCS wdg_gmic.ui wdg_gmic_input_output.ui)
 
 set(kritagmic_PART_SRCS
     kis_gmic_simple_convertor.cpp
@@ -162,19 +162,20 @@ set(kritagmic_PART_SRCS
     kis_gmic_small_applicator.cpp
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
-kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
-target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${ZLIB_LIBRARIES})
+add_library(kritagmic MODULE ${kritagmic_PART_SRCS})
+target_link_libraries(kritagmic kritaui gmic Qt5::Xml Qt5::Network ${ZLIB_LIBRARIES})
+kcoreaddons_desktop_to_json(kritagmic kritagmic.desktop)
 
 # gmicparser for debugging purposes
 
 set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
-kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
-target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
+add_executable(gmicparser ${gmicparser_PART_SRCS})
+target_link_libraries(gmicparser Qt5::Core Qt5::Gui Qt5::Network kritaui gmic ${ZLIB_LIBRARIES})
 
 ########### install files ###############
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
 
-install(TARGETS kritagmic  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritagmic  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

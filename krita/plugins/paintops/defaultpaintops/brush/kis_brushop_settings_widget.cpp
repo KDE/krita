@@ -93,4 +93,3 @@ KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
     return config;
 }
 
-#include "kis_brushop_settings_widget.moc"

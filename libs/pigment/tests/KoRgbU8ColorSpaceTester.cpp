@@ -22,7 +22,7 @@
 #include "KoColorModelStandardIds.h"
 
 #include <qtest_kde.h>
-#include <kdebug.h>
+#include <DebugPigment.h>
 #include <string.h>
 
 #include "KoColor.h"
@@ -155,7 +155,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         if (depthId.id().contains("Float")) continue;
 
-        kDebug() << depthId.id();
+        dbgPigment << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");
         
@@ -170,7 +170,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
         src.fromQColor(red);
         dst.fromQColor(blue);
         
-        qDebug() << src.toQColor() << dst.toQColor();
+        dbgPigment << src.toQColor() << dst.toQColor();
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
@@ -251,14 +251,14 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
          * before increasing alpha of the pixel
          */
         if (badDst[3] != 0 && badDst[2] != 0) {
-            qDebug() << op->id()
+            dbgPigment << op->id()
                      << "easy case:" << goodDst[2]
                      << "difficult case:" << badDst[2];
 
-            qDebug() << "The composite op has failed to erase the color "
+            dbgPigment << "The composite op has failed to erase the color "
                 "channel which was hidden by zero alpha.";
-            qDebug() << "Expected Blue channel:" << 0;
-            qDebug() << "Actual Blue channel:  " << badDst[2];
+            dbgPigment << "Expected Blue channel:" << 0;
+            dbgPigment << "Actual Blue channel:  " << badDst[2];
 
             QFAIL("Failed to erase color channel");
         }

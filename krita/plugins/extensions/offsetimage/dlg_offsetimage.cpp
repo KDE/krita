@@ -77,4 +77,3 @@ void DlgOffsetImage::okClicked()
 }
 
 
-#include "dlg_offsetimage.moc"

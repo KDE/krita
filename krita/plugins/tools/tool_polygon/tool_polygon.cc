@@ -36,8 +36,7 @@
 
 #include "kis_tool_polygon.h"
 
-K_PLUGIN_FACTORY(ToolPolygonFactory, registerPlugin<ToolPolygon>();)
-K_EXPORT_PLUGIN(ToolPolygonFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ToolPolygonFactory, "kritatoolpolygon.json", registerPlugin<ToolPolygon>();)
 
 
 ToolPolygon::ToolPolygon(QObject *parent, const QVariantList &)

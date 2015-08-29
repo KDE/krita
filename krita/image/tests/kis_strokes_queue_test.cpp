@@ -368,4 +368,3 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
 }
 
 QTEST_KDEMAIN(KisStrokesQueueTest, NoGUI)
-#include "kis_strokes_queue_test.moc"

@@ -175,4 +175,3 @@ void KisCustomPattern::createPattern()
 }
 
 
-#include "kis_custom_pattern.moc"

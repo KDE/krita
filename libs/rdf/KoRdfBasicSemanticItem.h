@@ -29,7 +29,6 @@
 #include <Soprano/Soprano>
 // Qt
 #include <QSharedData>
-#include <QExplicitlySharedDataPointer>
 
 //TODO: rework this documentation
 /**

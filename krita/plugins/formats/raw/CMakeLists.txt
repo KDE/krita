@@ -10,17 +10,14 @@ endif()
 set(krita_raw_import_PART_SRCS kis_raw_import.cpp )
 
 
-kde4_add_ui_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
+ki18n_wrap_ui(krita_raw_import_PART_SRCS wdgrawimport.ui )
 
-kde4_add_plugin(krita_raw_import ${krita_raw_import_PART_SRCS})
+add_library(krita_raw_import MODULE ${krita_raw_import_PART_SRCS})
+kcoreaddons_desktop_to_json(krita_raw_import krita_raw_import.desktop)
 
-add_definitions( ${KDCRAW_DEFINITIONS} )
-include_directories( ${KDCRAW_INCLUDE_DIR} )
+target_link_libraries(krita_raw_import kritaui  KF5::KDcraw)
 
-
-target_link_libraries(krita_raw_import kritaui  ${KDCRAW_LIBRARIES})
-
-install(TARGETS krita_raw_import  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krita_raw_import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

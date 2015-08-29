@@ -165,4 +165,3 @@ QList<KoID> KisPaintOpRegistry::listKeys() const
     return answer;
 }
 
-#include "kis_paintop_registry.moc"

@@ -23,7 +23,7 @@
 #include "ArtisticTextToolSelection.h"
 #include "ArtisticTextShape.h"
 
-#include <kaction.h>
+#include <QAction>
 
 ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool)
     : m_textTool(textTool)

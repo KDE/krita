@@ -85,7 +85,7 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
 
     // fallback
     if (icon.isNull()) {
-        icon = KIcon(name);
+        return KIcon(name);
     }
 
     return icon;

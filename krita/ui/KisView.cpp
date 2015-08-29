@@ -54,6 +54,9 @@
 #include <QPrintDialog>
 #include <QToolBar>
 #include <QUrl>
+#include <QStatusBar>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -187,7 +190,7 @@ public:
             return m_widget;
         }
 
-        void ensureItemShown(KStatusBar * sb) {
+        void ensureItemShown(QStatusBar * sb) {
             Q_ASSERT(m_widget);
             if (!m_connected) {
                 if (m_permanent)
@@ -201,7 +204,7 @@ public:
                 m_connected = true;
             }
         }
-        void ensureItemHidden(KStatusBar * sb) {
+        void ensureItemHidden(QStatusBar * sb) {
             if (m_connected) {
                 m_hidden = m_widget->isHidden();
                 sb->removeWidget(m_widget);
@@ -220,11 +223,6 @@ public:
 
 };
 
-
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-#include <QGLContext>
-#endif
-
 KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private)
@@ -241,7 +239,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->undo = new KisUndoStackAction(d->document->undoStack(), KisUndoStackAction::UNDO);
     d->redo = new KisUndoStackAction(d->document->undoStack(), KisUndoStackAction::RED0);
 
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
         connect(d->document, SIGNAL(statusBarMessage(const QString&)),
                 this, SLOT(slotActionStatusText(const QString&)));
@@ -271,23 +269,6 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
     d->canvas = new KisCanvas2(d->viewConverter, resourceManager, this, document->shapeController());
-
-/**
- * Warn about Intel's broken video drivers
- */
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-    QString renderer((const char*)glGetString(GL_RENDERER));
-    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Warning"),
-                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a black or blank screen,"
-                                      "please update your display driver to the latest version.\n\n"
-                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
-        cfg.writeEntry("WarnedAboutIntel", true);
-    }
-
-#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
 
     grp.writeEntry("CreatingCanvas", false);
     grp.sync();
@@ -568,7 +549,7 @@ void KisView::setDocument(KisDocument *document)
 {
     d->document->disconnect(this);
     d->document = document;
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
         connect(d->document, SIGNAL(statusBarMessage(const QString&)),
                 this, SLOT(slotActionStatusText(const QString&)));
@@ -585,7 +566,7 @@ void KisView::setDocumentDeleted()
 void KisView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     Private::StatusBarItem item(widget, stretch, permanent);
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
@@ -594,7 +575,7 @@ void KisView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 
 void KisView::removeStatusBarItem(QWidget *widget)
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
 
     int itemCount = d->statusBarItems.count();
     for (int i = itemCount-1; i >= 0; --i) {
@@ -630,7 +611,7 @@ KisMainWindow * KisView::mainWindow() const
     return dynamic_cast<KisMainWindow *>(window());
 }
 
-KStatusBar * KisView::statusBar() const
+QStatusBar * KisView::statusBar() const
 {
     KisMainWindow *mw = mainWindow();
     return mw ? mw->statusBar() : 0;
@@ -638,14 +619,14 @@ KStatusBar * KisView::statusBar() const
 
 void KisView::slotActionStatusText(const QString &text)
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb)
         sb->showMessage(text);
 }
 
 void KisView::slotClearStatusText()
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb)
         sb->clearMessage();
 }
@@ -1042,5 +1023,4 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
 }
 
 
-#include <KisView_p.moc>
 #include <KisView.moc>

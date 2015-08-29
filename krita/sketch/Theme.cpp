@@ -416,4 +416,3 @@ void Theme::Private::rebuildFontCache()
     }
 }
 
-#include "Theme.moc"

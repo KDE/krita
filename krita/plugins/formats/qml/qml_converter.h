@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+#include <kurl.h>
+
 #include "kis_types.h"
 
 /**

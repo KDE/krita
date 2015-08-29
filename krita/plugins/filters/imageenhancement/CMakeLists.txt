@@ -1,5 +1,5 @@
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+kde_enable_exceptions()
 
 set(kritaimageenhancement_PART_SRCS
     imageenhancement.cpp
@@ -7,13 +7,13 @@ set(kritaimageenhancement_PART_SRCS
     kis_wavelet_noise_reduction.cpp
     )
 
-kde4_add_plugin(kritaimageenhancement ${kritaimageenhancement_PART_SRCS})
-
+add_library(kritaimageenhancement MODULE ${kritaimageenhancement_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaimageenhancement kritaimageenhancement.desktop)
 
 
 target_link_libraries(kritaimageenhancement kritaui)
 
-install(TARGETS kritaimageenhancement  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimageenhancement  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

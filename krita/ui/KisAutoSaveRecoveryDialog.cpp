@@ -61,7 +61,7 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets() const
+    QList<QWidget*> createItemWidgets(const QModelIndex& index) const
     {
         // a lump of coal and a piece of elastic will get you through the world
         QModelIndex idx = property("goya:creatingWidgetForIndex").value<QModelIndex>();

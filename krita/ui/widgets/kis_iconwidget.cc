@@ -69,5 +69,4 @@ void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)
     }
 }
 
-#include "kis_iconwidget.moc"
 

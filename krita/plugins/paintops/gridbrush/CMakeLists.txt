@@ -8,14 +8,14 @@ set(kritagridpaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
+ki18n_wrap_ui(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
-kde4_add_plugin(kritagridpaintop ${kritagridpaintop_PART_SRCS})
-
+add_library(kritagridpaintop MODULE ${kritagridpaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritagridpaintop kritagridpaintop.desktop)
 
 target_link_libraries(kritagridpaintop kritalibpaintop)
 
-install(TARGETS kritagridpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritagridpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

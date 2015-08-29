@@ -24,7 +24,7 @@
 #include <calligragitversion.h>
 #include <KoIcon.h>
 
-KAboutData *newKritaAboutData()
+K4AboutData *newKritaAboutData()
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
@@ -37,11 +37,11 @@ KAboutData *newKritaAboutData()
     version = calligraVersion;
 #endif
 
-    KAboutData * aboutData = new KAboutData("krita", 0,
+    K4AboutData * aboutData = new K4AboutData("krita", 0,
                                             ki18n("Krita"),
                                             version.toLatin1(),
                                             ki18n("Digital Painting for Artists"),
-                                            KAboutData::License_GPL,
+                                            K4AboutData::License_LGPL,
                                             ki18n("© 1999-%1, The Krita Team").subs(CALLIGRA_YEAR),
                                             KLocalizedString(),
                                             "http://www.krita.org",

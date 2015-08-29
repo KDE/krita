@@ -177,5 +177,4 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
 }
 
 QTEST_KDEMAIN(KisUpdaterContextTest, NoGUI)
-#include "kis_updater_context_test.moc"
 

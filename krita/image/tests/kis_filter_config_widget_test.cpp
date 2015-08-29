@@ -46,4 +46,3 @@ void KisConfigWidgetTest::testCreation()
 
 
 QTEST_KDEMAIN(KisConfigWidgetTest, GUI)
-#include "kis_filter_config_widget_test.moc"

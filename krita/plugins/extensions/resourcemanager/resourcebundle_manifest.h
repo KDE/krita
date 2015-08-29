@@ -18,10 +18,12 @@
 #ifndef KOXMLRESOURCEBUNDLEMANIFEST_H
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
+#include <QString>
 #include <QPair>
 #include <QMap>
 #include <QMultiMap>
 
+class QIODevice;
 
 class  ResourceBundleManifest
 {

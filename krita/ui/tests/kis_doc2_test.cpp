@@ -50,5 +50,4 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
 
 
 QTEST_KDEMAIN(KisDocumentTest, GUI)
-#include "kis_doc2_test.moc"
 

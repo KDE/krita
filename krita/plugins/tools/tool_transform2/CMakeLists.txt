@@ -23,9 +23,12 @@ set(kritatooltransform_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
+ki18n_wrap_ui(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
-kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
+add_library(kritatooltransform SHARED ${kritatooltransform_PART_SRCS})
+generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
+
+kcoreaddons_desktop_to_json(kritatooltransform kritatooltransform.desktop)
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")
@@ -34,7 +37,7 @@ else ()
   target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 endif ()
 
-install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatooltransform  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

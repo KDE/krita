@@ -1,10 +1,10 @@
 project(krita)
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 # To avoid the confusion of an endless stream of Eigen warnings.
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-unused-local-typedefs)
+    add_definitions(-Wno-unused-local-typedefs -Wno-deprecated -Wno-deprecated-declarations)
 endif ()
 
 
@@ -38,17 +38,6 @@ macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/image/config_convolution.h)
 
 include(CheckFunctionExists)
-
-macro_optional_find_package(GLEW)
-macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
-configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
-macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
-
-if(HAVE_GLEW)
-    message(STATUS "GLEW found!")
-else()
-    message(STATUS "GLEW NOT found - krita will not be able to use OpenGL.")
-endif()
 
 if(HAVE_OPENGL)
     message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
@@ -123,9 +112,6 @@ include_directories(${KRITA_INCLUDES})
 
 if(HAVE_OPENGL)
     include_directories(${OPENGL_INCLUDE_DIR})
-    if(HAVE_GLEW)
-        include_directories(${GLEW_INCLUDE_DIRS})
-    endif()
 endif()
 
 add_subdirectory( libglobal )
@@ -138,7 +124,7 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
-add_subdirectory( integration )
+#add_subdirectory( integration )
 
 if (WIN32 AND USE_BREAKPAD)
         add_subdirectory( crashreporter )
@@ -155,9 +141,10 @@ if(WIN32 AND USE_BREAKPAD)
     set(BREAKPAD_LIBS breakpad)
 endif()
 
-kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+kde4_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 
-kde4_add_executable(krita ${krita_SRCS})
+add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
 
 if (APPLE)
@@ -172,7 +159,7 @@ install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
-if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
-    add_subdirectory(sketch)
-    add_subdirectory(gemini)
-endif ()
+#if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
+#    add_subdirectory(sketch)
+#    add_subdirectory(gemini)
+#endif ()

@@ -2,11 +2,12 @@
 
 set(kritaoffsetimage_PART_SRCS offsetimage.cpp dlg_offsetimage.cpp kis_offset_processing_visitor.cpp)
 
-kde4_add_ui_files(kritaoffsetimage_PART_SRCS wdg_offsetimage.ui )
-kde4_add_plugin(kritaoffsetimage ${kritaoffsetimage_PART_SRCS})
+ki18n_wrap_ui(kritaoffsetimage_PART_SRCS wdg_offsetimage.ui )
+add_library(kritaoffsetimage MODULE ${kritaoffsetimage_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaoffsetimage kritaoffsetimage.desktop)
 
 target_link_libraries(kritaoffsetimage kritaui)
-install(TARGETS kritaoffsetimage  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaoffsetimage  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

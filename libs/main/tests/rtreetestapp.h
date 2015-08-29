@@ -22,7 +22,7 @@
 #define CALLIGRA_RTREE_DEBUG
 
 #include <QMainWindow>
-#include <QtGui>
+#include <QtWidgets>
 #include <QLinkedList>
 
 #include "KoRTree.h"

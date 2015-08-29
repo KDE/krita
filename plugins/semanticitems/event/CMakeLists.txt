@@ -8,23 +8,21 @@ set(calligra_semanticitem_event_LIB_SRCS
     KoRdfCalendarEventTreeWidgetItem.cpp
 )
 
-kde4_add_ui_files( calligra_semanticitem_event_LIB_SRCS
+ki18n_wrap_ui( calligra_semanticitem_event_LIB_SRCS
    KoRdfCalendarEventEditWidget.ui
 )
 
-kde4_add_plugin(calligra_semanticitem_event ${calligra_semanticitem_event_LIB_SRCS})
+add_library(calligra_semanticitem_event MODULE ${calligra_semanticitem_event_LIB_SRCS})
 
-if (KDEPIMLIBS_FOUND)
-   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
+if (KF5CalendarCore_FOUND AND KF5Akonadi_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_event
-      ${KDEPIMLIBS_KCALCORE_LIBS}
-      ${KDEPIMLIBS_AKONADI_LIBS}
+      KF5::CalendarCore
+      KF5::AkonadiCore
    )
 endif ()
 
-target_link_libraries(calligra_semanticitem_event ${KDE4_KFILE_LIBS} ${KDE4_KDECORE_LIBS} ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_event   ${KORDF_LIBS} KF5::KDELibs4Support)
+kcoreaddons_desktop_to_json(calligra_semanticitem_event calligra_semanticitem_event.desktop)
 
-
-install(TARGETS calligra_semanticitem_event  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES   calligra_semanticitem_event.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_semanticitem_event  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

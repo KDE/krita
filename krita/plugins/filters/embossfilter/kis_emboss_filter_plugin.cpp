@@ -25,8 +25,7 @@
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 
-K_PLUGIN_FACTORY(KisEmbossFilterPluginFactory, registerPlugin<KisEmbossFilterPlugin>();)
-K_EXPORT_PLUGIN(KisEmbossFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisEmbossFilterPluginFactory, "kritaembossfilter.json", registerPlugin<KisEmbossFilterPlugin>();)
 
 KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
@@ -37,3 +36,5 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QVariantList
 KisEmbossFilterPlugin::~KisEmbossFilterPlugin()
 {
 }
+
+#include "kis_emboss_filter_plugin.moc"

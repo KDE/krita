@@ -41,5 +41,4 @@ void KisConfigNotifier::notifyConfigChanged(void)
     emit configChanged();
 }
 
-#include "kis_config_notifier.moc"
 

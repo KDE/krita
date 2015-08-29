@@ -39,6 +39,7 @@ extern "C" {
 #include <QApplication>
 
 #include <QMessageBox>
+
 #include <klocale.h>
 #include <kurl.h>
 
@@ -736,5 +737,4 @@ void KisJPEGConverter::cancel()
     m_stop = true;
 }
 
-#include "kis_jpeg_converter.moc"
 

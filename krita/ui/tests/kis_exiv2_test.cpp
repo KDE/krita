@@ -107,4 +107,3 @@ void KisExiv2Test::testExifLoader()
 
 QTEST_KDEMAIN(KisExiv2Test, GUI)
 
-#include "kis_exiv2_test.moc"

@@ -29,6 +29,8 @@ class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
 
 class KUrl;
+class QByteArray;
+class QString;
 
 #include "koodf_export.h"
 

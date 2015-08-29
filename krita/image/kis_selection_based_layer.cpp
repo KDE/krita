@@ -267,4 +267,3 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
            QImage();
 }
 
-#include "kis_selection_based_layer.moc"

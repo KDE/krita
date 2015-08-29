@@ -28,4 +28,3 @@ void KisBasicMathToolboxTest::testCreation()
 
 
 QTEST_KDEMAIN(KisBasicMathToolboxTest, GUI)
-#include "kis_basic_math_toolbox_test.moc"

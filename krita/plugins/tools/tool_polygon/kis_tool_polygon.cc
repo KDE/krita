@@ -92,4 +92,3 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
     }
 }
 
-#include "kis_tool_polygon.moc"

@@ -65,5 +65,4 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 }
 
 
-#include "channeldocker_dock.moc"
 

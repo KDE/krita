@@ -32,10 +32,10 @@
 KisHistogram::KisHistogram(const KisPaintLayerSP layer,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
+    : m_paintDevice(layer->projection())
 {
     Q_ASSERT(producer);
 
-    m_paintDevice = layer->projection();
     m_bounds = layer->image()->bounds();
     m_type = type;
     m_producer = producer;
@@ -49,10 +49,10 @@ KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
                            const QRect &bounds,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
+    : m_paintDevice(paintdev)
 {
     Q_ASSERT(producer);
 
-    m_paintDevice = paintdev;
     m_bounds = bounds;
     m_producer = producer;
     m_type = type;

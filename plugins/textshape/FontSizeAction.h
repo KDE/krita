@@ -30,6 +30,8 @@
 
 #include <kselectaction.h>
 
+class KIcon;
+
 /**
  * An action to allow changing of the font size.
  * This action will be shown as a combobox on a toolbar with a proper set of font sizes.

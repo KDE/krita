@@ -161,21 +161,21 @@ struct KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    KGlobal::mainComponent().dirs()->addResourceType("ko_patterns", "data", "krita/patterns/", true);
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+    KGlobal::dirs()->addResourceType("ko_patterns", "data", "krita/patterns/", true);
+    KGlobal::dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
+    KGlobal::dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
-    KGlobal::mainComponent().dirs()->addResourceType("ko_gradients", "data", "krita/gradients/", true);
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+    KGlobal::dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
+    KGlobal::dirs()->addResourceType("ko_gradients", "data", "krita/gradients/", true);
+    KGlobal::dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
+    KGlobal::dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "krita/palettes/", true);
+    KGlobal::dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
+    KGlobal::dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
+    KGlobal::dirs()->addResourceType("ko_palettes", "data", "krita/palettes/", true);
 
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+    KGlobal::dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
+    KGlobal::dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
     d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     if (!QFileInfo(d->patternServer->saveLocation()).exists()) {

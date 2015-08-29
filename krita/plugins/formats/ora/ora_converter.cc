@@ -125,5 +125,4 @@ void OraConverter::cancel()
     m_stop = true;
 }
 
-#include "ora_converter.moc"
 

@@ -16,15 +16,16 @@ set(kritadefaultpaintops_PART_SRCS
 	duplicate/kis_duplicateop_option.cpp
     )
 
-kde4_add_ui_files(kritadefaultpaintops_PART_SRCS duplicate/wdgduplicateop.ui )
+ki18n_wrap_ui(kritadefaultpaintops_PART_SRCS duplicate/wdgduplicateop.ui )
 
-kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
+add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_PART_SRCS})
 
 
 
 target_link_libraries(kritadefaultpaintops kritalibpaintop)
+kcoreaddons_desktop_to_json(kritadefaultpaintops kritadefaultpaintops.desktop)
 
-install(TARGETS kritadefaultpaintops  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaultpaintops  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -91,4 +91,3 @@ KoUnit KisShapeSelectionCanvas::unit() const
     return KoUnit(KoUnit::Point);
 }
 
-#include "kis_shape_selection_canvas.moc"

@@ -28,4 +28,3 @@ void KisNameServerTest::testCreation()
 
 
 QTEST_KDEMAIN(KisNameServerTest, GUI)
-#include "kis_name_server_test.moc"

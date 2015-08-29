@@ -30,6 +30,7 @@
 #include <QDateTime>
 #include <QRect>
 #include <QRegion>
+#include <QtConcurrent>
 
 #include <klocale.h>
 
@@ -1932,5 +1933,4 @@ void KisImage::notifyNodeCollpasedChanged()
 }
 
 
-#include "kis_image.moc"
 

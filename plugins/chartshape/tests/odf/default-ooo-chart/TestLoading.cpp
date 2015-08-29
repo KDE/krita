@@ -26,13 +26,13 @@
 // KDE
 #include <qtest_kde.h>
 
-// KChart
+// KoChart
 #include "TableSource.h"
 #include "CellRegion.h"
 #include "PlotArea.h"
 #include "Legend.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 TestLoading::TestLoading()
     : TestLoadingBase()

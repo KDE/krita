@@ -10,13 +10,13 @@ set(kritajp2import_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritajp2import ${kritajp2import_PART_SRCS})
-
+add_library(kritajp2import MODULE ${kritajp2import_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajp2import krita_jp2_import.desktop)
 
 
 target_link_libraries(kritajp2import kritaui ${KDE4_KIO_LIBS} ${OPENJPEG_LIBRARIES} )
 
-install(TARGETS kritajp2import  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajp2import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -25,14 +25,15 @@ set(kritajp2export_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui_files(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
+ki18n_wrap_ui(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
 
-kde4_add_plugin(kritajp2export ${kritajp2export_PART_SRCS})
+add_library(kritajp2export MODULE ${kritajp2export_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajp2export krita_jp2_export.desktop)
 
 
 target_link_libraries(kritajp2export kritaui ${KDE4_KIO_LIBS} ${OPENJPEG_LIBRARIES} )
 
-install(TARGETS kritajp2export  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajp2export  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

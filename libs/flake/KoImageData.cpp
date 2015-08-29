@@ -393,4 +393,5 @@ bool KoImageData::saveData(QIODevice &device)
     return d->saveData(device);
 }
 
-#include <KoImageData.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoImageData.cpp"

@@ -20,10 +20,11 @@
 #pragma GCC diagnostic ignored "-Wundef"
 
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
-
-#include "DebugPigment.h"
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpOver32.h"
+
+#include <QString>
+#include "DebugPigment.h"
 
 #include <KoCompositeOpRegistry.h>
 

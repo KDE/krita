@@ -30,7 +30,7 @@ Management:
 - Kexi       -  Visual database applications creator
 
 Advanced plugins:
-- KChart     -  Graphic data visualization
+- Chart     -  Graphic data visualization
 - KFormula   -  Mathematical formulas
 
 The applications not yet part of the official release, but will

@@ -27,6 +27,8 @@
 
 #include <QPushButton>
 
+#include <kglobal.h>
+
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
@@ -338,5 +340,4 @@ QString KisToolLine::quickHelp() const
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");
 }
 
-#include "kis_tool_line.moc"
 

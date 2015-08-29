@@ -48,8 +48,7 @@
 #include <kis_iterator_ng.h>
 
 
-K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
-K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaNoiseFilterFactory, "kritanoisefilter.json", registerPlugin<KritaNoiseFilter>();)
 
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -150,4 +149,6 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
 
     delete [] interm;
 }
+
+#include "noisefilter.moc"
 

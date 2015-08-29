@@ -2,15 +2,15 @@
 set(kritacolorspaceconversion_PART_SRCS colorspaceconversion.cc dlg_colorspaceconversion.cc )
 
 
-kde4_add_ui_files(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
+ki18n_wrap_ui(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
 
-kde4_add_plugin(kritacolorspaceconversion ${kritacolorspaceconversion_PART_SRCS})
-
+add_library(kritacolorspaceconversion MODULE ${kritacolorspaceconversion_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacolorspaceconversion kritacolorspaceconversion.desktop)
 
 
 target_link_libraries(kritacolorspaceconversion kritaui)
 
-install(TARGETS kritacolorspaceconversion  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorspaceconversion  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

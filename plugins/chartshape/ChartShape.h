@@ -31,8 +31,8 @@
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 #include "KoChartInterface.h"
 
 
@@ -57,8 +57,8 @@ class KoGenStyles;
 class KoOdfLoadingContext;
 
 
-// FIXME: Remove all mentions of KDChart from the public API.
-namespace KDChart {
+// FIXME: Remove all mentions of KChart from the public API.
+namespace KChart {
     class Chart;
     class Legend;
     class CartesianAxis;
@@ -73,7 +73,7 @@ class KoTextShapeData;
 #define OdfLoadingHelperId "OdfLoadingHelperId"
 typedef KoTextShapeData TextLabelData;
 
-namespace KChart {
+namespace KoChart {
 
 class DataSet;
 class ChartProxyModel;
@@ -244,6 +244,6 @@ private:
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif

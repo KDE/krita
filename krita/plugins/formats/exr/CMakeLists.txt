@@ -15,13 +15,13 @@ set(kritaexrimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritaexrimport ${kritaexrimport_PART_SRCS})
-
+add_library(kritaexrimport MODULE ${kritaexrimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaexrimport krita_exr_import.desktop)
 
 
 target_link_libraries(kritaexrimport kritaui ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES} )
 
-install(TARGETS kritaexrimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexrimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -30,14 +30,14 @@ set(kritaexrexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui_files(kritaexrexport_PART_SRCS exr_export_widget.ui )
+ki18n_wrap_ui(kritaexrexport_PART_SRCS exr_export_widget.ui )
 
-kde4_add_plugin(kritaexrexport ${kritaexrexport_PART_SRCS})
-
+add_library(kritaexrexport MODULE ${kritaexrexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaexrexport krita_exr_export.desktop)
 
 target_link_libraries(kritaexrexport kritaui ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES} )
 
-install(TARGETS kritaexrexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexrexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

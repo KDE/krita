@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <kguiitem.h>
 
 #include "canvas/kis_canvas2.h"
 #include "kis_config.h"
@@ -125,4 +126,3 @@ KisPerspectiveGridDecoration* KisPerspectiveGridManager::decoration()
 }
 
 
-#include "kis_perspective_grid_manager.moc"

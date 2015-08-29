@@ -36,8 +36,7 @@
 #include "kis_brush_based_paintop_settings.h"
 #include "kis_brush_server.h"
 
-K_PLUGIN_FACTORY(DefaultPaintOpsPluginFactory, registerPlugin<DefaultPaintOpsPlugin>();)
-K_EXPORT_PLUGIN(DefaultPaintOpsPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(DefaultPaintOpsPluginFactory, "kritadefaultpaintops.json", registerPlugin<DefaultPaintOpsPlugin>();)
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList &)

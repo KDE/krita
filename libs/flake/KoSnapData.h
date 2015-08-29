@@ -21,6 +21,7 @@
 #define KOSNAPDATA_H
 
 #include <KoPathSegment.h>
+#include <flake_export.h>
 
 /**
  * This class is used to provide additional data to the snap guide.

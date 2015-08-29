@@ -8,13 +8,13 @@
 set(kritasobelfilter_PART_SRCS kis_sobel_filter_plugin.cpp kis_sobel_filter.cpp )
 
 
-kde4_add_plugin(kritasobelfilter ${kritasobelfilter_PART_SRCS})
-
+add_library(kritasobelfilter MODULE ${kritasobelfilter_PART_SRCS})
+kcoreaddons_desktop_to_json(kritasobelfilter kritasobelfilter.desktop)
 
 
 target_link_libraries(kritasobelfilter kritaui)
 
-install(TARGETS kritasobelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritasobelfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

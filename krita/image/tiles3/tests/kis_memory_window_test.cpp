@@ -101,5 +101,4 @@ void KisMemoryWindowTest::testTopReports()
 }
 
 QTEST_KDEMAIN(KisMemoryWindowTest, NoGUI)
-#include "kis_memory_window_test.moc"
 

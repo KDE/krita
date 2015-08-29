@@ -276,4 +276,3 @@ void KisPainterBenchmark::benchmarkDrawScanLine()
 }
 
 QTEST_KDEMAIN(KisPainterBenchmark, NoGUI)
-#include "kis_painter_benchmark.moc"

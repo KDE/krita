@@ -24,7 +24,6 @@
 #include <KoStyleManager.h>
 
 #include <klocale.h>
-#include <kstringhandler.h>
 
 #include <kdebug.h>
 

@@ -368,4 +368,3 @@ void KisFixedPaintDeviceTest::testMirroring()
 }
 
 QTEST_KDEMAIN(KisFixedPaintDeviceTest, GUI)
-#include "kis_fixed_paint_device_test.moc"

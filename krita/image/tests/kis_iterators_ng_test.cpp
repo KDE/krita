@@ -419,4 +419,3 @@ void KisIteratorTest::randomAccessor()
 }
 
 QTEST_KDEMAIN(KisIteratorTest, NoGUI)
-#include "kis_iterators_ng_test.moc"

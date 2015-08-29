@@ -38,8 +38,7 @@
 
 using namespace Eigen;
 
-K_PLUGIN_FACTORY(KritaConvolutionFiltersFactory, registerPlugin<KritaConvolutionFilters>();)
-K_EXPORT_PLUGIN(KritaConvolutionFiltersFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaConvolutionFiltersFactory, "kritaconvolutionfilters.json", registerPlugin<KritaConvolutionFilters>();)
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -239,3 +238,5 @@ KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
+
+#include "convolutionfilters.moc"

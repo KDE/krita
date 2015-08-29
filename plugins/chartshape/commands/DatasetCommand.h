@@ -23,12 +23,12 @@
 // Qt
 #include <kundo2command.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 
 
 #if 0
-namespace KDChart
+namespace KChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;
@@ -37,7 +37,7 @@ class Chart;
 #endif
 
 
-namespace KChart
+namespace KoChart
 {
 
 class DataSet;
@@ -108,6 +108,6 @@ private:
     Axis *m_newAxis;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_DATASET_COMMAND

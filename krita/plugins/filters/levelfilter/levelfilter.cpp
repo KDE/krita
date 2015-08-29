@@ -25,8 +25,7 @@
 #include "kis_level_filter.h"
 #include "filter/kis_filter_registry.h"
 
-K_PLUGIN_FACTORY(LevelFilterFactory, registerPlugin<LevelFilter>();)
-K_EXPORT_PLUGIN(LevelFilterFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(LevelFilterFactory, "kritalevelfilter.json", registerPlugin<LevelFilter>();)
 
 LevelFilter::LevelFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -38,3 +37,5 @@ LevelFilter::LevelFilter(QObject *parent, const QVariantList &)
 LevelFilter::~LevelFilter()
 {
 }
+
+#include "levelfilter.moc"

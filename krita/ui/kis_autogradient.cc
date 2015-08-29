@@ -173,4 +173,3 @@ void KisAutogradient::paramChanged()
     m_autogradientResource->updatePreview();
 }
 
-#include "kis_autogradient.moc"

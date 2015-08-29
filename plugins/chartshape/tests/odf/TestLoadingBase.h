@@ -30,12 +30,12 @@
 // KDE
 #include <qtest_kde.h>
 
-// KChart
+// KoChart
 #include "CellRegion.h"
 
 class KoShape;
 
-namespace KChart {
+namespace KoChart {
 
 class ChartShape;
 class Table;
@@ -99,11 +99,11 @@ protected:
     ChartShape *m_chart;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 namespace QTest {
     template<>
-    char *toString(const KChart::CellRegion &region);
+    char *toString(const KoChart::CellRegion &region);
 }
 
 #endif // KCHART_TESTLOADING_BASE

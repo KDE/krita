@@ -16,13 +16,13 @@ macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.rem
 macro_optional_find_package(JPEG)
 macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
 
-macro_optional_find_package(Kdcraw)
-macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digikam.org/" FALSE "" "Required by the Krita RAW filter")
+macro_optional_find_package(KF5KDcraw)
+macro_log_feature( KF5KDcraw_FOUND "KF5KDcraw" "The KDCraw library" "http://www.digikam.org/" FALSE "" "Required by the Krita RAW filter")
 
 macro_optional_find_package(OpenJPEG)
 macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
-if(KDCRAW_FOUND)
+if(KF5KDcraw_FOUND)
     add_subdirectory( raw )
 endif()
 

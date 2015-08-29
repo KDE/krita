@@ -477,4 +477,3 @@ void KisCurveWidget::leaveEvent(QEvent *)
 {
 }
 
-#include "kis_curve_widget.moc"

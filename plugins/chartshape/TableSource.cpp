@@ -27,7 +27,7 @@
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-using namespace KChart;
+using namespace KoChart;
 
 Table::Table(const QString &name, QAbstractItemModel *model)
     : m_name(name)

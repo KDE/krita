@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kglobal.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -455,5 +456,4 @@ QWidget * KisToolBrush::createOptionWidget()
     return optionsWidget;
 }
 
-#include "kis_tool_brush.moc"
 

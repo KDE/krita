@@ -109,3 +109,5 @@ bool KisBrushOptionWidget::presetIsValid()
 {
     return m_brushSelectionWidget->presetIsValid();
 }
+
+#include "moc_kis_brush_option_widget.cpp"

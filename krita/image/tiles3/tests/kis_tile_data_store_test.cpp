@@ -182,5 +182,4 @@ void KisTileDataStoreTest::testSwapping()
 }
 
 QTEST_KDEMAIN(KisTileDataStoreTest, NoGUI)
-#include "kis_tile_data_store_test.moc"
 

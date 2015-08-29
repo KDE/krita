@@ -46,8 +46,7 @@
 
 #include "dlg_imagesplit.h"
 
-K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
-K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ImagesplitFactory, "kritaimagesplit.json", registerPlugin<Imagesplit>();)
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)

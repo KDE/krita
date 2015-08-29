@@ -8,7 +8,7 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
+include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -33,6 +33,7 @@ add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
 set(pigmentcms_SRCS
+    DebugPigment.cpp
     KoBasicHistogramProducers.cpp
     KoColor.cpp
     KoColorDisplayRendererInterface.cpp
@@ -80,8 +81,8 @@ set(pigmentcms_SRCS
 )
 
 
-set(PIGMENT_INSTALL_FILES 
-        pigment_export.h
+set(PIGMENT_INSTALL_FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/pigment_export.h
         DebugPigment.h
         KoBasicHistogramProducers.h
         KoChannelInfo.h
@@ -125,19 +126,29 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
+add_library(pigmentcms SHARED ${pigmentcms_SRCS})
+generate_export_header(pigmentcms
+    BASE_NAME pigment
+    EXPORT_MACRO_NAME PIGMENTCMS_EXPORT
+)
+
+if (HAVE_VC)
+    target_link_libraries(pigmentcms KF5::KDELibs4Support)
+    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::KDELibs4Support)
+endif()
 
 target_link_libraries(
     pigmentcms
     koplugin
     ${EXTRA_LIBRARIES}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    KF5::KDELibs4Support
+    Qt5::Gui
+    Qt5::Xml
     ${WIN32_PLATFORM_NET_LIBS}
     )
 
 target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES koplugin ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${EXTRA_LIBRARIES}
+    pigmentcms LINK_INTERFACE_LIBRARIES koplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
 )
 
 set_target_properties(pigmentcms PROPERTIES

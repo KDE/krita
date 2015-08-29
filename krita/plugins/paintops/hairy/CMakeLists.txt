@@ -11,13 +11,14 @@ set(kritahairypaintop_PART_SRCS
     trajectory.cpp
     )
 
-kde4_add_ui_files(kritahairypaintop_PART_SRCS wdgInkOptions.ui  wdghairyshapeoptions.ui wdgbristleoptions.ui)
+ki18n_wrap_ui(kritahairypaintop_PART_SRCS wdgInkOptions.ui  wdghairyshapeoptions.ui wdgbristleoptions.ui)
 
-kde4_add_plugin(kritahairypaintop ${kritahairypaintop_PART_SRCS})
+add_library(kritahairypaintop MODULE ${kritahairypaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritahairypaintop kritahairypaintop.desktop)
 
 target_link_libraries(kritahairypaintop kritalibpaintop)
 
-install(TARGETS kritahairypaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritahairypaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

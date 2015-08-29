@@ -25,8 +25,7 @@
 
 #include "smallcolorselector_dock.h"
 
-K_PLUGIN_FACTORY(SmallColorSelectorPluginFactory, registerPlugin<SmallColorSelectorPlugin>();)
-K_EXPORT_PLUGIN(SmallColorSelectorPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(SmallColorSelectorPluginFactory, "krita_smallcolorselector.json", registerPlugin<SmallColorSelectorPlugin>();)
 
 class SmallColorSelectorDockFactory : public KoDockFactoryBase
 {

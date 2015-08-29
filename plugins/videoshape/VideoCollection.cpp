@@ -27,6 +27,7 @@
 #include <KoXmlWriter.h>
 
 #include <QMap>
+#include <QUrl>
 #include <kdebug.h>
 #include <kmimetype.h>
 

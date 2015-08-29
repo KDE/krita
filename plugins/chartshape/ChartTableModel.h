@@ -31,7 +31,7 @@
 // Interface
 #include <interfaces/KoChartModel.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 
@@ -39,7 +39,7 @@ class QString;
 
 // FIXME: Should it inherit QAbstractTableModel instead?
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * @brief The ChartTableModel class is used to store a data table inside a chart document.  It's main difference to a normal table model is that it can load and store to ODF.

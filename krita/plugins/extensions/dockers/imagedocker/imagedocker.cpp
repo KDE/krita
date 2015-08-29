@@ -23,8 +23,7 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(ImageDockerPluginFactory, registerPlugin<ImageDockerPlugin>();)
-K_EXPORT_PLUGIN(ImageDockerPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ImageDockerPluginFactory, "kritaimagedocker.json", registerPlugin<ImageDockerPlugin>();)
 
 class ImageDockerDockFactory: public KoDockFactoryBase {
 public:
@@ -58,3 +57,5 @@ ImageDockerPlugin::ImageDockerPlugin(QObject* parent, const QVariantList&):
 {
     KoDockRegistry::instance()->add(new ImageDockerDockFactory());
 }
+
+#include "imagedocker.moc"

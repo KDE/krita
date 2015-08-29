@@ -1,7 +1,7 @@
 project(spellcheck)
 add_subdirectory( tests )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories(   ${TEXTLAYOUT_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(spellcheck_SRCS
     SpellCheckPlugin.cpp
@@ -11,10 +11,9 @@ set(spellcheck_SRCS
     SpellCheckMenu.cpp
 )
 
-kde4_add_plugin(calligra_textediting_spellcheck ${spellcheck_SRCS})
+add_library(calligra_textediting_spellcheck MODULE ${spellcheck_SRCS})
+kcoreaddons_desktop_to_json(calligra_textediting_spellcheck calligra_textediting_spellcheck.desktop)
 
-target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout)
+target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout KF5::SonnetCore KF5::SonnetUi)
 
-install(TARGETS calligra_textediting_spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_textediting_spellcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install(TARGETS calligra_textediting_spellcheck DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

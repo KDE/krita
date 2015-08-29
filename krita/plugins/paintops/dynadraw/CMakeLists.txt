@@ -8,14 +8,14 @@ set(kritadynapaintop_PART_SRCS
     filter.cpp
     )
 
-kde4_add_ui_files(kritadynapaintop_PART_SRCS wdgdynaoptions.ui )
+ki18n_wrap_ui(kritadynapaintop_PART_SRCS wdgdynaoptions.ui )
 
-kde4_add_plugin(kritadynapaintop ${kritadynapaintop_PART_SRCS})
-
+add_library(kritadynapaintop MODULE ${kritadynapaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritadynapaintop kritadynapaintop.desktop)
 
 target_link_libraries(kritadynapaintop kritalibpaintop)
 
-install(TARGETS kritadynapaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadynapaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

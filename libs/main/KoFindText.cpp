@@ -332,4 +332,5 @@ void KoFindText::setFormat(FormatType formatType, const QTextCharFormat &format)
     }
 }
 
-#include "KoFindText.moc"
+// have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoFindText.cpp"

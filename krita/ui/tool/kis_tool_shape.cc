@@ -23,6 +23,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QGridLayout>
+#include <kglobal.h>
 
 #include <KoShape.h>
 #include <KoGradientBackground.h>
@@ -244,4 +245,3 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     notifyModified();
 }
 
-#include "kis_tool_shape.moc"

@@ -37,8 +37,7 @@
 #include "kis_tool_select_path.h"
 #include "kis_tool_select_similar.h"
 
-K_PLUGIN_FACTORY(SelectionToolsFactory, registerPlugin<SelectionTools>();)
-K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(SelectionToolsFactory, "kritaselectiontools.json", registerPlugin<SelectionTools>();)
 
 
 SelectionTools::SelectionTools(QObject *parent, const QVariantList &)

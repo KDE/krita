@@ -51,11 +51,12 @@ void InsertSemanticObjectCreateAction::activated()
     widget->setLayout(lay);
     lay->setMargin(0);
     kDebug(30015) << "semanticClass:" << m_semanticClass;
-    hKoRdfSemanticItem semItem = m_rdf->createSemanticItem(m_semanticClass, m_rdf);
+    hKoRdfSemanticItem semItem(static_cast<KoRdfSemanticItem *>(
+	m_rdf->createSemanticItem(m_semanticClass, m_rdf).data()));
     QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);
     KPageDialog dialog(m_canvas->canvasWidget());
-    dialog.setCaption(i18n("%1 Options", text().remove('&'))); // TODO add comment using i18nc
+    dialog.setWindowTitle(i18n("%1 Options", text().remove('&'))); // TODO add comment using i18nc
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
         kDebug(30015) << "activated...";

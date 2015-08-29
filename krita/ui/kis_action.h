@@ -22,7 +22,7 @@
 #include <kaction.h>
 #include <kritaui_export.h>
 #include <kdebug.h>
-
+#include <kicon.h>
 class KisActionManager;
 
 class KRITAUI_EXPORT KisAction : public KAction

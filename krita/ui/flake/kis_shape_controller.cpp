@@ -221,4 +221,3 @@ KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
     return m_d->shapesGraph.nodeToShape(node);
 }
 
-#include "kis_shape_controller.moc"

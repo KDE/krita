@@ -11,11 +11,12 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_similar.cc
 )
 
-kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})
+add_library(kritaselectiontools MODULE ${kritaselectiontools_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaselectiontools kritaselectiontools.desktop)
 
 target_link_libraries(kritaselectiontools kritaui basicflakes)
 
-install(TARGETS kritaselectiontools  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaselectiontools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -32,3 +32,4 @@ void KisPSDLayerStyleTest::testRoundTrip()
 }
 
 QTEST_KDEMAIN(KisPSDLayerStyleTest, GUI)
+

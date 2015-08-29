@@ -94,7 +94,7 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KisMainWindow* parent
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopWindow->actionCollection()->action("file_open_recent"));
     recent->disconnect(d->desktopWindow);
-    connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
+    connect(recent, SIGNAL(urlSelected(QUrl)), this, SLOT(slotFileOpenRecent(QUrl)));
     recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
 
@@ -175,7 +175,7 @@ void DesktopViewProxy::loadExistingAsNew()
     d->isImporting = false;
 }
 
-void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
+void DesktopViewProxy::slotFileOpenRecent(const QUrl& url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
 }
@@ -237,4 +237,3 @@ void DesktopViewProxy::updateKeyBindings()
     }
 }
 
-#include "desktopviewproxy.moc"

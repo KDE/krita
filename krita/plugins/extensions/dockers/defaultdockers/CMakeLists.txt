@@ -8,16 +8,17 @@ set(kritadefaultdockers_PART_HEADERS
     defaultdockers.h
 )
 
-kde4_add_ui_files(kritadefaultdockers_PART_SRCS
+ki18n_wrap_ui(kritadefaultdockers_PART_SRCS
     wdglayerbox.ui
 )
 
 
-kde4_add_plugin(kritadefaultdockers ${kritadefaultdockers_PART_SRCS} ${kritadefaultdockers_PART_HEADERS})
+add_library(kritadefaultdockers MODULE ${kritadefaultdockers_PART_SRCS} ${kritadefaultdockers_PART_HEADERS})
+kcoreaddons_desktop_to_json(kritadefaultdockers kritadefaultdockers.desktop)
 
 target_link_libraries(kritadefaultdockers kritaui)
 
-install(TARGETS kritadefaultdockers  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaultdockers  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  kritadefaultdockers.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

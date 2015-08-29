@@ -213,4 +213,3 @@ void PSDUtilsTest::test_psdread_pascalstring()
 
 QTEST_KDEMAIN(PSDUtilsTest, GUI)
 
-#include "psd_utils_test.moc"

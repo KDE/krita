@@ -2,7 +2,7 @@ add_subdirectory( tests )
 
 ########### next target ###############
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 # Chose a tiles backend
 # 1 - image/tiles
@@ -49,7 +49,7 @@ if(FFTW3_FOUND)
 endif()
 
 if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR})
+  include_directories(${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
@@ -301,10 +301,11 @@ set(einspline_SRCS
    3rdparty/einspline/nugrid.cpp
 )
 
-kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+# generate_export_header(kritaimage BASE_NAME kritaimage)
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

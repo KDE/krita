@@ -34,6 +34,7 @@
 #include <kurl.h>
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
+#include <kmimetype.h>
 
 #include <KoIcon.h>
 #include <KisImportExportManager.h>
@@ -890,7 +891,7 @@ void KisLayerManager::saveGroupLayers()
     KFileWidget *fd = new KFileWidget(m_view->document()->url().path(), page);
     fd->setUrl(m_view->document()->url());
     fd->setMimeFilter(listMimeFilter);
-    fd->setOperationMode(KAbstractFileWidget::Saving);
+    fd->setOperationMode(KFileWidget::Saving);
     layout->addWidget(fd);
 
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
@@ -1001,6 +1002,4 @@ void KisLayerManager::layerStyle()
         image->postExecutionUndoAdapter()->addCommand(command);
     }
 }
-
-#include "kis_layer_manager.moc"
 

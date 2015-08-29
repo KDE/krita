@@ -12,21 +12,16 @@ include_directories(
 set(keximigrate_spreadsheet_PART_SRCS spreadsheetmigrate.cpp )
 
 
-kde4_add_plugin(keximigrate_spreadsheet ${keximigrate_spreadsheet_PART_SRCS})
+add_library(keximigrate_spreadsheet MODULE ${keximigrate_spreadsheet_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(keximigrate_spreadsheet keximigrate_spreadsheet.desktop)
 
 target_link_libraries(keximigrate_spreadsheet
     keximigrate
-    kexidb
     kexiutils
-    ${CALLIGRADB_LIBS}
     calligrasheetscommon
+
+    Predicate
 )
 
-install(TARGETS keximigrate_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  keximigrate_spreadsheet.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS keximigrate_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

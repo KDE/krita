@@ -140,4 +140,3 @@ void KisAdjustmentLayer::setChannelFlags(const QBitArray & channelFlags)
     KisLayer::setChannelFlags(channelFlags);
 }
 
-#include "kis_adjustment_layer.moc"

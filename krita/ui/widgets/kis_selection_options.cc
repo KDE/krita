@@ -119,4 +119,3 @@ void KisSelectionOptions::disableSelectionModeOption()
     m_page->shape->hide();
 }
 
-#include "kis_selection_options.moc"

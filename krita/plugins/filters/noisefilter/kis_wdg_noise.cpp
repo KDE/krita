@@ -69,5 +69,4 @@ KisPropertiesConfiguration* KisWdgNoise::configuration() const
     return config;
 }
 
-#include "kis_wdg_noise.moc"
 

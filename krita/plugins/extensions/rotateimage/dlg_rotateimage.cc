@@ -133,4 +133,3 @@ void DlgRotateImage::resetPreview()
     // Code to update preview here.
 }
 
-#include "dlg_rotateimage.moc"

@@ -28,9 +28,11 @@
 #include <QIcon>
 #include <QImage>
 #include <QPixmap>
-#include <KStandardDirs>
 #include <QPushButton>
 #include <QDialogButtonBox>
+
+#include <KStandardDirs>
+#include <kglobal.h>
 
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"

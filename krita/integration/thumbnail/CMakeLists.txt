@@ -2,7 +2,7 @@ set(kritathumbnail_SRCS
     kritacreator.cpp
 )
 
-kde4_add_plugin(kritathumbnail ${kritathumbnail_SRCS})
+add_library(kritathumbnail MODULE ${kritathumbnail_SRCS})
 
 target_link_libraries(kritathumbnail
     koodf

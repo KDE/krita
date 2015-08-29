@@ -88,4 +88,3 @@ void DlgColorSpaceConversion::okClicked()
     accept();
 }
 
-#include "dlg_colorspaceconversion.moc"

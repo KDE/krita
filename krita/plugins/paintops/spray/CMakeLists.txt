@@ -10,14 +10,14 @@ set(kritaspraypaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
+ki18n_wrap_ui(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
 
-kde4_add_plugin(kritaspraypaintop ${kritaspraypaintop_PART_SRCS})
-
+add_library(kritaspraypaintop MODULE ${kritaspraypaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaspraypaintop kritaspraypaintop.desktop)
 
 target_link_libraries(kritaspraypaintop kritalibpaintop)
 
-install(TARGETS kritaspraypaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaspraypaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

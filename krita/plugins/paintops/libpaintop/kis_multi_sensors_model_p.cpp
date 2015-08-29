@@ -123,4 +123,3 @@ void KisMultiSensorsModel::resetCurveOption()
     endResetModel();
 }
 
-#include "kis_multi_sensors_model_p.moc"

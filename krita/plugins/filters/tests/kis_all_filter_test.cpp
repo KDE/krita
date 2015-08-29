@@ -306,4 +306,3 @@ void KisAllFilterTest::testAllFiltersWithSelections()
 
 
 QTEST_KDEMAIN(KisAllFilterTest, GUI)
-#include "kis_all_filter_test.moc"

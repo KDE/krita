@@ -22,8 +22,6 @@
 
 #include "draganddropplugin.h"
 
-#include <QtDeclarative/qdeclarative.h>
-
 #include "DeclarativeDragArea.h"
 #include "DeclarativeDragDropEvent.h"
 #include "DeclarativeDropArea.h"

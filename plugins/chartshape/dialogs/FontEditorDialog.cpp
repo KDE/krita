@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kfontchooser.h>
 
-using namespace KChart;
+using namespace KoChart;
 
 
 FontEditorDialog::FontEditorDialog(QWidget *parent)

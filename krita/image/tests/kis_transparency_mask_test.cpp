@@ -212,4 +212,3 @@ void KisTransparencyMaskTest::testMoveMaskItself()
 }
 
 QTEST_KDEMAIN(KisTransparencyMaskTest, GUI)
-#include "kis_transparency_mask_test.moc"

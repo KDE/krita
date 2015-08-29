@@ -25,6 +25,8 @@
 #include <QTextCharFormat>
 #include <QSet>
 
+class KAction;
+
 /* struct AutocorrectEntry
 {
     QString replace;

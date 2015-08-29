@@ -135,4 +135,3 @@ void KisCropProcessingVisitorTest::testWrappedInCommand()
 }
 
 QTEST_KDEMAIN(KisCropProcessingVisitorTest, GUI)
-#include "kis_crop_processing_visitor_test.moc"

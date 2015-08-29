@@ -31,8 +31,7 @@
 #include "kis_simple_paintop_factory.h"
 #include "kis_deform_paintop_settings_widget.h"
 
-K_PLUGIN_FACTORY(DeformPaintOpPluginFactory, registerPlugin<DeformPaintOpPlugin>();)
-K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(DeformPaintOpPluginFactory, "kritadeformpaintop.json", registerPlugin<DeformPaintOpPlugin>();)
 
 
 DeformPaintOpPlugin::DeformPaintOpPlugin(QObject *parent, const QVariantList &)

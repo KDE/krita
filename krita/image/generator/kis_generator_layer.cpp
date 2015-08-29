@@ -162,4 +162,3 @@ void KisGeneratorLayer::setDirty(const QRect & rect)
     m_d->updateSignalCompressor.start();
 }
 
-#include "kis_generator_layer.moc"

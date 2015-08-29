@@ -20,7 +20,7 @@
 #include "ArtisticTextShapeOnPathWidget.h"
 #include "ui_ArtisticTextShapeOnPathWidget.h"
 #include "ArtisticTextTool.h"
-#include <kaction.h>
+#include <QAction>
 
 ArtisticTextShapeOnPathWidget::ArtisticTextShapeOnPathWidget(ArtisticTextTool *tool, QWidget *parent)
     : QWidget(parent)

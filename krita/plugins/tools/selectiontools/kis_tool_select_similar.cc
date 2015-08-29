@@ -25,6 +25,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include <kglobal.h>
+
 #include <KoColorSpace.h>
 
 #include <kis_cursor.h>

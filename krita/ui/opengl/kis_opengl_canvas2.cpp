@@ -35,13 +35,15 @@
 #include <QThread>
 #include <QMessageBox>
 #include <QFile>
-
-#include <QGLShaderProgram>
-#include <QGLFramebufferObject>
-#include <QGLContext>
+#include <QOpenGLShaderProgram>
 #include <QTransform>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLFramebufferObject>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include "KoToolProxy.h"
 
@@ -109,7 +111,7 @@ public:
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
-    QGLShaderProgram *displayShader;
+    QOpenGLShaderProgram *displayShader;
     int displayUniformLocationModelViewProjection;
     int displayUniformLocationTextureMatrix;
     int displayUniformLocationViewPortScale;
@@ -117,7 +119,7 @@ public:
     int displayUniformLocationTexture0;
     int displayUniformLocationTexture1;
 
-    QGLShaderProgram *checkerShader;
+    QOpenGLShaderProgram *checkerShader;
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
@@ -156,10 +158,15 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
-    : QGLWidget(KisOpenGL::sharedContextWidget()->format(), parent, KisOpenGL::sharedContextWidget())
+    : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
+
+    QSurfaceFormat format;
+    format.setDepthBufferSize(24);
+    setFormat(format);
+
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
@@ -172,35 +179,27 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAutoFillBackground(false);
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
-
-    if (isSharing()) {
-        dbgUI << "Created QGLWidget with sharing";
-    } else {
-        dbgUI << "Created QGLWidget with no sharing";
-    }
+    setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
-
-
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
-
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
-    KisOpenGL::makeContextCurrent(this);
     delete d;
 }
 
 void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     d->displayFilter = displayFilter;
-    d->canvasInitialized = false;
-    initializeDisplayShader();
-    initializeCheckerShader();
-    d->canvasInitialized = true;
+    if (d->canvasInitialized) {
+        d->canvasInitialized = false;
+        initializeDisplayShader();
+        initializeCheckerShader();
+        d->canvasInitialized = true;
+    }
 }
 
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
@@ -211,41 +210,72 @@ void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 
 void KisOpenGLCanvas2::initializeGL()
 {
+//    KisConfig cfg;
+//    if (cfg.disableVSync()) {
+//        if (!VSyncWorkaround::tryDisableVSync(this)) {
+//            qWarning();
+//            qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+//            qWarning() << "WARNING: It means either your hardware or driver doesn't support it,";
+//            qWarning() << "WARNING: or we just don't know about this hardware. Please report us a bug";
+//            qWarning() << "WARNING: with the output of \'glxinfo\' for your card.";
+//            qWarning();
+//            qWarning() << "WARNING: Trying to workaround it by disabling Double Buffering.";
+//            qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+//            qWarning() << "WARNING: affect the quality of the final image, though.";
+//            qWarning();
+
+//            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
+//                qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+//                qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+//                qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
+//                qCritical();
+//            }
+//        }
+//    }
+
     KisConfig cfg;
-    if (cfg.disableVSync()) {
-        if (!VSyncWorkaround::tryDisableVSync(this)) {
-            qWarning();
-            qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
-            qWarning() << "WARNING: It means either your hardware or driver doesn't support it,";
-            qWarning() << "WARNING: or we just don't know about this hardware. Please report us a bug";
-            qWarning() << "WARNING: with the output of \'glxinfo\' for your card.";
-            qWarning();
-            qWarning() << "WARNING: Trying to workaround it by disabling Double Buffering.";
-            qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
-            qWarning() << "WARNING: affect the quality of the final image, though.";
-            qWarning();
+    qDebug() << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    int glVersion = KisOpenGL::initializeContext(context());
+    qDebug() << "OpenGL: Version found" << glVersion;
+    initializeOpenGLFunctions();
+    VSyncWorkaround::tryDisableVSync(context());
 
-            if (cfg.disableDoubleBuffering() && doubleBuffer()) {
-                qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
-                qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
-                qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
-                qCritical();
-            }
-        }
-    }
-
+    d->openGLImageTextures->initGL((QOpenGLFunctions *)this);
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
     initializeDisplayShader();
 
     Sync::init();
+
+
+
+    /**
+     * Warn about Intel's broken video drivers
+     */
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+#ifndef GL_RENDERER
+#  define GL_RENDERER 0x1F01
+#endif
+    QString renderer = QString((const char*)glGetString(GL_RENDERER));
+    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Warning"),
+                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                      "If you experience problems like a black or blank screen,"
+                                      "please update your display driver to the latest version.\n\n"
+                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
+        cfg.writeEntry("WarnedAboutIntel", true);
+    }
+#endif
+
 
     d->canvasInitialized = true;
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
-    glViewport(0, 0, (GLint)width, (GLint)height);
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+    paintGL();
 }
 
 void KisOpenGLCanvas2::paintGL()
@@ -255,17 +285,19 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
-    renderCanvasGL();
-
     QPainter gc(this);
-    renderDecorations(&gc);
-    gc.end();
+    gc.beginNativePainting();
+    renderCanvasGL();
 
     if (d->glSyncObject) {
         Sync::deleteSync(d->glSyncObject);
     }
-
     d->glSyncObject = Sync::getSync();
+    gc.endNativePainting();
+
+    renderDecorations(&gc);
+    gc.end();
+
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg;
@@ -299,10 +331,11 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
     texCoords[5] = QVector2D(rc.right(), rc.bottom());
 }
 
-void KisOpenGLCanvas2::drawCheckers() const
+void KisOpenGLCanvas2::drawCheckers()
 {
-    if(!d->checkerShader)
+    if (!d->checkerShader) {
         return;
+    }
 
     KisCoordinatesConverter *converter = coordinatesConverter();
     QTransform textureTransform;
@@ -358,10 +391,11 @@ void KisOpenGLCanvas2::drawCheckers() const
     d->checkerShader->release();
 }
 
-void KisOpenGLCanvas2::drawImage() const
+void KisOpenGLCanvas2::drawImage()
 {
-    if(!d->displayShader)
+    if (!d->displayShader) {
         return;
+    }
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -438,7 +472,10 @@ void KisOpenGLCanvas2::drawImage() const
             KisTextureTile *tile =
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
-            KIS_ASSERT_RECOVER_BREAK(tile);
+            if (!tile) {
+                qWarning() << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                continue;
+            }
 
             /*
              * We create a float rect here to workaround Qt's
@@ -523,7 +560,7 @@ void KisOpenGLCanvas2::initializeCheckerShader()
     if (d->canvasInitialized) return;
 
     delete d->checkerShader;
-    d->checkerShader = new QGLShaderProgram();
+    d->checkerShader = new QOpenGLShaderProgram();
 
     QString vertexShaderName;
     QString fragmentShaderName;
@@ -538,10 +575,10 @@ void KisOpenGLCanvas2::initializeCheckerShader()
 
     bool result;
 
-    result = d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, vertexShaderName);
+    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexShaderName);
     reportShaderLinkFailedAndExit(result, "Checker vertex shader", d->checkerShader->log());
 
-    result = d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, fragmentShaderName);
+    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentShaderName);
     reportShaderLinkFailedAndExit(result, "Checker fragment shader", d->checkerShader->log());
 
     d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
@@ -557,7 +594,7 @@ void KisOpenGLCanvas2::initializeCheckerShader()
 
 }
 
-QByteArray KisOpenGLCanvas2::buildFragmentShader() const
+QByteArray KisOpenGLCanvas2::buildFragmentShader()
 {
     QByteArray shaderText;
 
@@ -604,15 +641,15 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     if (d->canvasInitialized) return;
 
     delete d->displayShader;
-    d->displayShader = new QGLShaderProgram();
+    d->displayShader = new QOpenGLShaderProgram();
 
-    bool result = d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, buildFragmentShader());
+    bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildFragmentShader());
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
     if (KisOpenGL::supportsGLSL13()) {
-        result = d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
     } else {
-        result = d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
     }
     reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
 
@@ -653,7 +690,7 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::renderCanvasGL() const
+void KisOpenGLCanvas2::renderCanvasGL()
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
@@ -675,17 +712,4 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
-void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
-{
-    // Workaround for bug 322808, paint events with only a partial rect cause flickering
-    // Drop those event and trigger a new full update
-    if (event->rect().width() == width() && event->rect().height() == height()) {
-        QGLWidget::paintEvent(event);
-    } else {
-        update();
-    }
-}
-
-
-#include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

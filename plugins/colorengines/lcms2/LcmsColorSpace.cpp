@@ -24,7 +24,7 @@
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorModelStandardIds.h"
 
-#include "DebugPigment.h"
+#include "QDebug"
 
 cmsHPROFILE KoLcmsDefaultTransformations::s_RGBProfile = 0;
 QMap< QString, QMap< LcmsColorProfileContainer*, KoLcmsDefaultTransformations* > > KoLcmsDefaultTransformations::s_transformations;

@@ -26,10 +26,10 @@
 #include <QHash>
 
 #include <kshortcut.h>
+#include <kaction.h>
 
 #include "KoInputDevice.h"
 #include "KoToolManager.h"
-#include <kaction.h>
 
 class KoToolFactoryBase;
 class KoShapeManager;

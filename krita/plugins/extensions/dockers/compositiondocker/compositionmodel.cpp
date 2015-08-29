@@ -107,4 +107,3 @@ void CompositionModel::setCompositions(QList< KisLayerComposition* > composition
     reset();
 }
 
-#include "compositionmodel.moc"

@@ -339,5 +339,4 @@ void PSDLoader::cancel()
     m_stop = true;
 }
 
-#include "psd_loader.moc"
 

@@ -24,7 +24,7 @@
 
 #include "ui_NewAxisDialog.h"
 
-namespace KChart {
+namespace KoChart {
 
 class NewAxisDialog : public QDialog, public Ui::NewAxisDialog
 {
@@ -33,6 +33,6 @@ public:
     ~NewAxisDialog();
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif // KCHART_NEW_AXIS_DIALOG

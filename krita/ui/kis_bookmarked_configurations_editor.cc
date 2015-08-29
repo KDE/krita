@@ -77,4 +77,3 @@ void KisBookmarkedConfigurationsEditor::deleteConfiguration()
     }
 }
 
-#include "kis_bookmarked_configurations_editor.moc"

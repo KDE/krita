@@ -456,4 +456,3 @@ void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResource* work
     emit sigSavingWorkspace(workspace);
 }
 
-#include "kis_canvas_resource_provider.moc"

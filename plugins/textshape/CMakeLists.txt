@@ -128,7 +128,7 @@ if(BUILD_TEXTDOCUMENT_INSPECTOR)
 endif()
 
 
-kde4_add_ui_files(textshape_SRCS
+ki18n_wrap_ui(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
@@ -170,7 +170,9 @@ kde4_add_ui_files(textshape_SRCS
 
 )
 
-kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
+add_library(calligra_shape_text MODULE ${textshape_SRCS})
+
+kcoreaddons_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
 
 target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets
 ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS})
@@ -179,12 +181,11 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 
-install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES calligra_shape_text.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-#kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
 if(BUILD_TEXTDOCUMENT_INSPECTOR)
     # workaround: to avoid translations the real desktop file is only generated

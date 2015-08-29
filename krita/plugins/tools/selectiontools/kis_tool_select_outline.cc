@@ -189,7 +189,6 @@ void KisToolSelectOutline::deactivate()
     KisTool::deactivate();
 }
 
-
 void KisToolSelectOutline::setSelectionAction(int newSelectionAction)
 {
     if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
@@ -202,9 +201,3 @@ void KisToolSelectOutline::setSelectionAction(int newSelectionAction)
         emit selectionActionChanged();
     }
 }
-
-
-
-
-#include "kis_tool_select_outline.moc"
-

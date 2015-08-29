@@ -95,7 +95,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
         AlternateActiveRole,
 
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
-        ReservedRole = 99,
+        ReservedRole = Qt::UserRole + 99,
 
         /**
          * For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension

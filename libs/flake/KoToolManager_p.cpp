@@ -156,6 +156,3 @@ void ToolAction::actionTriggered()
     m_toolManager->switchToolRequested(m_toolID);
 }
 
-
-
-#include <KoToolManager_p.moc>

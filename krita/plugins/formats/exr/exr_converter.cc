@@ -1261,5 +1261,4 @@ void exrConverter::cancel()
     qWarning() << "WARNING: Cancelling of an EXR loading is not supported!";
 }
 
-#include "exr_converter.moc"
 

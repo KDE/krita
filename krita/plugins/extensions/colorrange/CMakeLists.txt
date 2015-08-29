@@ -2,15 +2,15 @@
 set(kritacolorrange_PART_SRCS colorrange.cc dlg_colorrange.cc )
 
 
-kde4_add_ui_files(kritacolorrange_PART_SRCS wdg_colorrange.ui )
+ki18n_wrap_ui(kritacolorrange_PART_SRCS wdg_colorrange.ui )
 
-kde4_add_plugin(kritacolorrange ${kritacolorrange_PART_SRCS})
-
+add_library(kritacolorrange MODULE ${kritacolorrange_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacolorrange kritacolorrange.desktop)
 
 
 target_link_libraries(kritacolorrange kritaui)
 
-install(TARGETS kritacolorrange  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorrange  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

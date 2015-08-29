@@ -38,6 +38,7 @@
 #include <QButtonGroup>
 #include <QComboBox>
 
+#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 

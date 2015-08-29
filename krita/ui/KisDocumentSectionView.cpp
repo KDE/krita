@@ -40,7 +40,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 #define DRAG_WHILE_DRAG_WORKAROUND
 #endif
 
@@ -226,7 +226,7 @@ void KisDocumentSectionView::currentChanged(const QModelIndex &current, const QM
     }
 }
 
-void KisDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void KisDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &/*roles*/)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
@@ -451,5 +451,4 @@ void KisDocumentSectionView::setDraggingFlag(bool flag)
     m_draggingFlag = flag;
 }
 
-#include <KisDocumentSectionPropertyAction_p.moc>
 #include <KisDocumentSectionView.moc>

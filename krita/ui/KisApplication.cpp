@@ -26,6 +26,7 @@
 
 #include <KoDpi.h>
 #include "KoGlobal.h"
+#include "KoConfig.h"
 
 #include <kcrash.h>
 #include <kdeversion.h>
@@ -79,6 +80,9 @@
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
 
+#ifdef HAVE_OPENGL
+#include "opengl/kis_opengl.h"
+#endif
 
 KisApplication* KisApplication::KoApp = 0;
 
@@ -146,6 +150,10 @@ KisApplication::KisApplication(const QString &key)
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
+#ifdef HAVE_OPENGL
+    KisOpenGL::initialize();
+#endif
+
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
     {
@@ -162,6 +170,7 @@ KisApplication::KisApplication(const QString &key)
         setStyle("Plastique");
         setStyle("Breeze");
         setStyle("Oxygen");
+        setStyle("Fusion");
     }
 
 }
@@ -656,4 +665,3 @@ QList<KUrl> KisApplication::checkAutosaveFiles()
     return autosaveUrls;
 }
 
-#include <KisApplication.moc>

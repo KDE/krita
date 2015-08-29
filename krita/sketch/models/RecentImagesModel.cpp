@@ -147,4 +147,3 @@ void RecentImagesModel::addRecent(const QString &_url)
         d->recentFileManager->addRecent(_url);
 }
 
-#include "RecentImagesModel.moc"

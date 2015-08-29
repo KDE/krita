@@ -150,7 +150,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
     // parent is root frame?
     if (! grandParentFrame) {
         Q_ASSERT(parentFrame == m_textDocument->rootFrame());
-        return createIndex(0, 0, 0);
+        return createIndex(0, 0, static_cast<quintptr>(0));
     }
 
     // find position of parentFrame
@@ -175,7 +175,7 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
     }
 
     if (! parentIndex.isValid()) {
-        return createIndex(row, column, 0);
+        return createIndex(row, column, static_cast<quintptr>(0));
     }
 
     Q_ASSERT(parentIndex.internalId() < m_nodeDataTable.count());

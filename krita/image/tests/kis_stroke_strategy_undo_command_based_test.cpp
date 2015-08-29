@@ -177,4 +177,3 @@ void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
 }
 
 QTEST_KDEMAIN(KisStrokeStrategyUndoCommandBasedTest, NoGUI)
-#include "kis_stroke_strategy_undo_command_based_test.moc"

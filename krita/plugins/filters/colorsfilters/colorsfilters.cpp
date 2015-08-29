@@ -62,8 +62,7 @@
 #include "kis_color_balance_filter.h"
 #include "kis_desaturate_filter.h"
 
-K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
-K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ColorsFiltersFactory, "kritacolorsfilter.json", registerPlugin<ColorsFilters>();)
 
 ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -178,3 +177,5 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     delete[] transfer;
     delete adj;
 }
+
+#include "colorsfilters.moc"

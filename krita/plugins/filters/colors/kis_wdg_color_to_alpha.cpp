@@ -117,4 +117,3 @@ void KisWdgColorToAlpha::showEvent(QShowEvent *)
 }
 
 
-#include "kis_wdg_color_to_alpha.moc"

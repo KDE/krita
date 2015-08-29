@@ -20,6 +20,7 @@
 #define KOHASHGENERATOR_H
 
 #include <QByteArray>
+#include <QString>
 
 class KoHashGenerator
 {

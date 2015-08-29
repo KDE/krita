@@ -97,4 +97,3 @@ void KisBContrastBenchmark::benchmarkFilter()
 
 
 QTEST_KDEMAIN(KisBContrastBenchmark, GUI)
-#include "kis_bcontrast_benchmark.moc"

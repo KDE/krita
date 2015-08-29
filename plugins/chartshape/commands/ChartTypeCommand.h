@@ -23,13 +23,13 @@
 // Qt
 #include <kundo2command.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 //#include "ChartShape.h"
 
 
 #if 0
-namespace KDChart
+namespace KChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;
@@ -38,7 +38,7 @@ class Chart;
 #endif
 
 
-namespace KChart
+namespace KoChart
 {
 
 class ChartShape;
@@ -77,15 +77,15 @@ public:
 
 private:
     ChartShape                        *m_chart;
-    //KDChart::Chart                    *m_chart;
+    //KChart::Chart                    *m_chart;
     ChartType                       m_oldType;
     ChartType                       m_newType;
     ChartSubtype                    m_oldSubtype;
     ChartSubtype                    m_newSubtype;
-    //KDChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
-    //KDChart::AbstractDiagram          *m_oldDiagram;
+    //KChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
+    //KChart::AbstractDiagram          *m_oldDiagram;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_CHART_TYPE_COMMAND

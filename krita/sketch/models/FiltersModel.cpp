@@ -200,4 +200,3 @@ void FiltersModel::setConfiguration(int index, QObject* configuration)
     }
 }
 
-#include "FiltersModel.moc"

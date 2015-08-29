@@ -5,13 +5,14 @@ set(kritaphongbumpmap_PART_SRCS
     phong_pixel_processor.cpp
     )
 
-kde4_add_ui_files(kritaphongbumpmap_PART_SRCS wdgphongbumpmap.ui)
+ki18n_wrap_ui(kritaphongbumpmap_PART_SRCS wdgphongbumpmap.ui)
 
-kde4_add_plugin(kritaphongbumpmap ${kritaphongbumpmap_PART_SRCS})
+add_library(kritaphongbumpmap MODULE ${kritaphongbumpmap_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaphongbumpmap kritaphongbumpmapfilter.desktop)
 
 target_link_libraries(kritaphongbumpmap kritaui)
 
-install(TARGETS kritaphongbumpmap  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaphongbumpmap  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -201,3 +201,5 @@ void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *col
     setColorSpace(colorSpace);
     setColor(m_color);
 }
+
+#include "moc_kis_specific_color_selector_widget.cpp"

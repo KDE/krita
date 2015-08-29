@@ -37,4 +37,3 @@ void KisPngTest::testFiles()
 }
 QTEST_KDEMAIN(KisPngTest, GUI)
 
-#include "kis_png_test.moc"

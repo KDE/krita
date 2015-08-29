@@ -55,7 +55,7 @@ KoInlineObject *InsertVariableAction::createInlineObject()
             widget->layout()->setMargin(0);
         }
         KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
-        dialog->setCaption(i18n("%1 Options", m_templateName));
+        dialog->setWindowTitle(i18n("%1 Options", m_templateName));
         dialog->addPage(widget, QString());
         if (dialog->exec() != KPageDialog::Accepted) {
             delete variable;

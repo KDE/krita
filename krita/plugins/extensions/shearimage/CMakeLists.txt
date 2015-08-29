@@ -2,15 +2,15 @@
 set(kritashearimage_PART_SRCS shearimage.cc dlg_shearimage.cc )
 
 
-kde4_add_ui_files(kritashearimage_PART_SRCS wdg_shearimage.ui )
+ki18n_wrap_ui(kritashearimage_PART_SRCS wdg_shearimage.ui )
 
-kde4_add_plugin(kritashearimage ${kritashearimage_PART_SRCS})
-
+add_library(kritashearimage MODULE ${kritashearimage_PART_SRCS})
+kcoreaddons_desktop_to_json(kritashearimage kritashearimage.desktop)
 
 
 target_link_libraries(kritashearimage kritaui)
 
-install(TARGETS kritashearimage  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritashearimage  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

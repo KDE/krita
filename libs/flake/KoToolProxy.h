@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QHash>
 
-class KAction;
+class QAction;
 class QAction;
 class QMouseEvent;
 class QKeyEvent;
@@ -129,7 +129,7 @@ public:
      * Retrieves the entire collection of actions for the active tool
      * or an empty hash if there is no active tool yet.
      */
-    QHash<QString, KAction*> actions() const;
+    QHash<QString, QAction *> actions() const;
 
     /// returns true if the current tool holds a selection
     bool hasSelection() const;

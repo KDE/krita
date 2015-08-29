@@ -36,4 +36,3 @@ WdgLayerSplit::WdgLayerSplit(QWidget* parent)
 }
 
 
-#include "wdg_layersplit.moc"

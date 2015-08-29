@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR})
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 set(KRITA_LUTDOCKER_PART_SRCS
   lutdocker.cpp
@@ -9,25 +9,20 @@ set(KRITA_LUTDOCKER_PART_SRCS
   black_white_point_chooser.cpp
   )
 
-kde4_add_ui_files(KRITA_LUTDOCKER_PART_SRCS
+ki18n_wrap_ui(KRITA_LUTDOCKER_PART_SRCS
     wdglut.ui
 )
 
-kde4_add_plugin(kritalutdocker ${KRITA_LUTDOCKER_PART_SRCS})
+add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_PART_SRCS})
+kcoreaddons_desktop_to_json(kritalutdocker krita_lutdocker.desktop)
+
 target_link_libraries(kritalutdocker kritaui ${OCIO_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritalutdocker ${_LIBRARIES})
 endif()
 
-if(HAVE_OPENGL)
-    if(HAVE_GLEW)
-        target_link_libraries(kritalutdocker ${GLEW_LIBRARIES})
-    endif()
-endif()
-
-
-install(TARGETS kritalutdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritalutdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

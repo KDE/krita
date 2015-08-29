@@ -23,6 +23,7 @@
 
 #include <kactioncollection.h>
 #include <kmimetype.h>
+#include <kshortcut.h>
 
 #include <KoIcon.h>
 #include <KoSelection.h>
@@ -1146,5 +1147,4 @@ void KisNodeManager::slotSplitAlphaSaveMerged()
 }
 
 
-#include "kis_node_manager.moc"
 

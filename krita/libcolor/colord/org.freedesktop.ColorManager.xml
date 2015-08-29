@@ -23,6 +23,28 @@
     </property>
 
     <!--***********************************************************-->
+    <property name='SystemVendor' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The system vendor.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='SystemModel' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The system model.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
     <method name='GetDevices'>
       <doc:doc>
         <doc:description>
@@ -35,7 +57,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              An array of device IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
+              An array of device paths, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
             </doc:para>
           </doc:summary>
         </doc:doc>
@@ -65,7 +87,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              An array of device IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
+              An array of device paths, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
             </doc:para>
           </doc:summary>
         </doc:doc>
@@ -244,7 +266,8 @@
       <doc:doc>
         <doc:description>
           <doc:para>
-            Gets a profile path for the profile filename.
+            Gets a profile path for the profile filename, either a fully-qualified
+            filename with path or just the basename of the profile.
           </doc:para>
         </doc:description>
       </doc:doc>
@@ -276,8 +299,6 @@
             Gets a profile path for a defined profile space.
             The defined space is set from the profile metadata,
             specifically in the <doc:tt>STANDARD_space</doc:tt> entry.
-            The <doc:tt>colord.conf</doc:tt> file allows an
-            administrator to manually override profiles if required.
           </doc:para>
           <doc:para>
             NOTE: only system wide profiles are able to define
@@ -319,7 +340,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              An array of profile IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/profile/adobe_rgb']</doc:tt>.
+              An array of profile paths, e.g. <doc:tt>['/org/freedesktop/ColorManager/profile/adobe_rgb']</doc:tt>.
             </doc:para>
           </doc:summary>
         </doc:doc>
@@ -339,7 +360,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              An array of sensor IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/sensor/colormunki']</doc:tt>.
+              An array of sensor paths, e.g. <doc:tt>['/org/freedesktop/ColorManager/sensor/colormunki']</doc:tt>.
             </doc:para>
           </doc:summary>
         </doc:doc>
@@ -369,7 +390,7 @@
         <doc:doc>
           <doc:summary>
             <doc:para>
-              An array of device IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
+              An array of device paths, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
             </doc:para>
           </doc:summary>
         </doc:doc>
@@ -446,7 +467,6 @@
         </doc:doc>
       </arg>
       <arg type='h' name='handle' direction='in'>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="int"/>
         <doc:doc>
           <doc:summary>
             <doc:para>
@@ -456,9 +476,8 @@
           </doc:summary>
         </doc:doc>
       </arg>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="CdStringMap"/>
       <arg type='a{ss}' name='properties' direction='in'>
-        <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="CdStringMap"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In3" value="CdStringMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>
@@ -519,9 +538,8 @@
           </doc:summary>
         </doc:doc>
       </arg>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
       <arg type='a{ss}' name='properties' direction='in'>
-        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="CdStringMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>
@@ -601,9 +619,8 @@
           </doc:list>
         </doc:doc>
       </arg>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
       <arg type='a{ss}' name='properties' direction='in'>
-        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="CdStringMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>

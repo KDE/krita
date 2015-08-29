@@ -6,13 +6,13 @@ set(kritatoolpolyline_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatoolpolyline ${kritatoolpolyline_PART_SRCS})
-
+add_library(kritatoolpolyline MODULE ${kritatoolpolyline_PART_SRCS})
+kcoreaddons_desktop_to_json(kritatoolpolyline kritatoolpolyline.desktop)
 
 
 target_link_libraries(kritatoolpolyline kritaui)
 
-install(TARGETS kritatoolpolyline  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolpolyline  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

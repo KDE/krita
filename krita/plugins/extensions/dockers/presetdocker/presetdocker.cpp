@@ -37,8 +37,7 @@
 #include "presetdocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(PresetDockerPluginFactory, registerPlugin<PresetDockerPlugin>();)
-K_EXPORT_PLUGIN(PresetDockerPluginFactory( "krita" ) )
+K_PLUGIN_FACTORY_WITH_JSON(PresetDockerPluginFactory, "krita_presetdocker.json", registerPlugin<PresetDockerPlugin>();)
 
 class PresetDockerDockFactory : public KoDockFactoryBase {
 public:

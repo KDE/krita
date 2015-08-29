@@ -39,6 +39,7 @@
 #include <QApplication>
 
 #include <klocale.h>
+#include <kurl.h>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>
@@ -1232,5 +1233,4 @@ bool KisPNGConverter::isColorSpaceSupported(const KoColorSpace *cs)
     return colorSpaceIdSupported(cs->id());
 }
 
-#include "kis_png_converter.moc"
 

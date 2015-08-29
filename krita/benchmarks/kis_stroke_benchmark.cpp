@@ -511,4 +511,3 @@ void KisStrokeBenchmark::benchmarkRand()
 
 
 QTEST_KDEMAIN(KisStrokeBenchmark, GUI)
-#include "kis_stroke_benchmark.moc"

@@ -98,6 +98,5 @@ void KisCsConversionTest::testColorSpaceConversion()
 }
 
 QTEST_KDEMAIN(KisCsConversionTest, GUI)
-#include "kis_cs_conversion_test.moc"
 
 

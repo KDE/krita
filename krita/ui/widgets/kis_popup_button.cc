@@ -164,4 +164,3 @@ void KisPopupButton::adjustPosition()
     m_d->frame->setGeometry(popupRect);
 }
 
-#include "kis_popup_button.moc"

@@ -73,4 +73,3 @@ void SmallColorSelectorDock::canvasResourceChanged(int key, const QVariant& v)
     }
 }
 
-#include "smallcolorselector_dock.moc"

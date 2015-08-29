@@ -28,11 +28,11 @@
 // Calligra
 #include <KoShape.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 class Legend : public QObject, public KoShape
 {
@@ -79,7 +79,7 @@ public:
     bool loadOdf(const KoXmlElement &legendElement, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context) const;
 
-    KDChart::Legend *kdLegend() const;
+    KChart::Legend *kdLegend() const;
 
     void rebuild();
     using KoShape::update;

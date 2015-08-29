@@ -21,13 +21,13 @@ Boston, MA 02110-1301, USA.
 #ifndef KIS_FILTER_ENTRY_H
 #define KIS_FILTER_ENTRY_H
 
-#include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
+#include <QStringList>
 #include "kritaui_export.h"
 
 class QObject;
-class QStringList;
+class QPluginLoader;
 class KisImportExportFilter;
 class KisFilterChain;
 /**
@@ -40,7 +40,7 @@ public:
     typedef KSharedPtr<KisFilterEntry> Ptr;
 
     //KisFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
-    explicit KisFilterEntry(const KService::Ptr& service);
+    explicit KisFilterEntry(QPluginLoader *loader);
     ~KisFilterEntry() { }
 
     KisImportExportFilter* createFilter(KisFilterChain* chain, QObject* parent = 0);
@@ -84,12 +84,12 @@ public:
      */
     static QList<KisFilterEntry::Ptr> query();
 
-    KService::Ptr service() const {
-        return m_service;
+    QPluginLoader *loader() const {
+        return m_loader;
     }
 
 private:
-    KService::Ptr m_service;
+    QPluginLoader *m_loader;
 };
 
 #endif

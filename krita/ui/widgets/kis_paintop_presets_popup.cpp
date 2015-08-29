@@ -379,5 +379,3 @@ void KisPaintOpPresetsPopup::slotUpdateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
 }
-
-#include "kis_paintop_presets_popup.moc"

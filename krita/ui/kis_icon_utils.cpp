@@ -59,7 +59,7 @@ KIcon loadIcon(const QString &name) {
 
     // fallback
     if (icon.isNull()) {
-        icon = KIcon(name);
+        return KIcon(name);
     }
 
     return icon;

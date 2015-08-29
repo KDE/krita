@@ -398,4 +398,3 @@ void KisPrescaledProjection::drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP in
     }
 }
 
-#include "kis_prescaled_projection.moc"

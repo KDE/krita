@@ -34,7 +34,7 @@
 #include <KoOdfReadStore.h>
 #include <KoTextShapeDataBase.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "ChartProxyModel.h"
 #include "ChartDocument.h"
@@ -45,10 +45,10 @@
 #include "Axis.h"
 
 // KD Chart
-#include <KDChartAbstractDiagram>
-#include <KDChartLegend>
+#include <KChartAbstractDiagram>
+#include <KChartLegend>
 
-using namespace KChart;
+using namespace KoChart;
 
 TestLoadingBase::TestLoadingBase()
     : QObject()
@@ -99,8 +99,8 @@ void TestLoadingBase::testLegendElements(QStringList labels)
     QCOMPARE(m_chart->legend()->kdLegend()->datasetCount(),
               (unsigned int)labels.count());
 
-    QList<KDChart::AbstractDiagram*> diagrams = m_chart->legend()->kdLegend()->diagrams();
-    foreach(KDChart::AbstractDiagram *diagram, diagrams) {
+    QList<KChart::AbstractDiagram*> diagrams = m_chart->legend()->kdLegend()->diagrams();
+    foreach(KChart::AbstractDiagram *diagram, diagrams) {
         QVERIFY(diagram);
         QStringList diagramLabels = diagram->datasetLabels();
         foreach(const QString &diagramLabel, diagramLabels) {
@@ -206,7 +206,7 @@ TableSource *TestLoadingBase::tableSource()
 
 namespace QTest {
     template<>
-    char *toString(const KChart::CellRegion &region) {
+    char *toString(const KoChart::CellRegion &region) {
         return qstrdup(region.toString().toLatin1());
     }
 }

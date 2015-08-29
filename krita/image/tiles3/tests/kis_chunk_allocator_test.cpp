@@ -122,5 +122,4 @@ void KisChunkAllocatorTest::testFragmentation()
 
 
 QTEST_KDEMAIN(KisChunkAllocatorTest, NoGUI)
-#include "kis_chunk_allocator_test.moc"
 

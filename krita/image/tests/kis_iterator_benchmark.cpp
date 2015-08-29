@@ -233,4 +233,3 @@ void KisIteratorBenchmark::runBenchmark()
 }
 
 QTEST_KDEMAIN(KisIteratorBenchmark, NoGUI)
-#include "kis_iterator_benchmark.moc"

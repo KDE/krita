@@ -22,8 +22,7 @@
 #include "KoUpdater.h"
 #include <QThread>
 
-#include <threadweaver/ThreadWeaver.h>
-#include <threadweaver/Job.h>
+#include <ThreadWeaver/ThreadWeaver>
 
 #include <qtest_kde.h>
 
@@ -31,14 +30,14 @@ class TestWeaverJob : public ThreadWeaver::Job
 {
 public:
 
-    TestWeaverJob( QObject * parent, QPointer<KoUpdater> updater, int steps = 10 )
-        : ThreadWeaver::Job( parent )
+    TestWeaverJob( QPointer<KoUpdater> updater, int steps = 10 )
+        : ThreadWeaver::Job()
         , m_updater(updater)
         , m_steps(steps)
         {
         }
 
-    void run()
+    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread *)
         {
             for (int i = 1; i < m_steps + 1; ++i) {
                 for (int j = 1; j < 10000; ++j){}
@@ -260,28 +259,25 @@ void KoProgressUpdaterTest::testFromWeaver()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start(10);
-    ThreadWeaver::Weaver * weaver = new ThreadWeaver::Weaver();
-    weaver->setMaximumNumberOfThreads( 4 );
-    connect( weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( jobDone( ThreadWeaver::Job* ) ) );
+    ThreadWeaver::Queue::instance()->setMaximumNumberOfThreads(4);
     for (int i = 0; i < 10; ++i) {
         QPointer<KoUpdater> up = pu.startSubtask();
-        ThreadWeaver::Job * job = new TestWeaverJob(this, up, 10);
-        weaver->enqueue(job);
+        ThreadWeaver::QObjectDecorator * job = new ThreadWeaver::QObjectDecorator(new TestWeaverJob(up, 10));
+        connect( job, SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobDone(ThreadWeaver::JobPointer)) );
+        ThreadWeaver::Queue::instance()->enqueue(ThreadWeaver::make_job_raw(job));
     }
-    while (!weaver->isIdle()) {
+    while (!ThreadWeaver::Queue::instance()->isIdle()) {
          QTest::qSleep(250);
          QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
-    weaver->finish();
-    delete weaver;
+    ThreadWeaver::Queue::instance()->finish();
     QCOMPARE(jobsdone, 10);
 }
 
-void KoProgressUpdaterTest::jobDone(ThreadWeaver::Job* job)
+void KoProgressUpdaterTest::jobDone(ThreadWeaver::JobPointer job)
 {
     Q_UNUSED(job);
     ++jobsdone;
 }
 
 QTEST_KDEMAIN(KoProgressUpdaterTest, GUI)
-#include <KoProgressUpdater_test.moc>

@@ -153,5 +153,4 @@ void KisGradientChooser::editGradient()
 
 
 
-#include "kis_gradient_chooser.moc"
 

@@ -165,4 +165,3 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     return options;
 }
 
-#include "kis_dlg_options_tiff.moc"

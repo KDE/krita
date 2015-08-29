@@ -21,8 +21,6 @@
 #include "kis_level_filter_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include "kis_paint_device.h"
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
@@ -104,4 +102,3 @@ void KisLevelFilterBenchmark::benchmarkFilter()
 
 
 QTEST_KDEMAIN(KisLevelFilterBenchmark, GUI)
-#include "kis_level_filter_benchmark.moc"

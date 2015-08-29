@@ -29,7 +29,7 @@
 
 #ifdef HAVE_OPENGL
 #include <opengl/kis_opengl.h>
-#include <QGLContext>
+#include <QOpenGLContext>
 #endif
 
 
@@ -244,15 +244,6 @@ void OcioDisplayFilter::updateProcessor()
     // work for everyone these days
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
-
-    if (!QGLContext::currentContext()) {
-        /**
-         * Force initialization of GL context when the filter is
-         * created before the openGL canvas. This might happen when
-         * switching from QPainter to openGL canvas for the first time.
-         */
-        KisOpenGL::makeSharedContextCurrent();
-    }
 
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 

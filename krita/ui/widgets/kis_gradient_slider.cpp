@@ -359,4 +359,3 @@ void KisGradientSlider::slotModifyGamma(double v)
     update();
 }
 
-#include "kis_gradient_slider.moc"

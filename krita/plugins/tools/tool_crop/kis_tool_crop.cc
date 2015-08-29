@@ -36,6 +36,7 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>
@@ -860,4 +861,3 @@ void KisToolCrop::drawDecorationLine(QPainter *p, DecorationLine *decorLine, con
 
     p->drawLine(start, end);
 }
-#include "kis_tool_crop.moc"

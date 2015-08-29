@@ -48,8 +48,7 @@
 
 #include "dlg_colorspaceconversion.h"
 
-K_PLUGIN_FACTORY(ColorSpaceConversionFactory, registerPlugin<ColorSpaceConversion>();)
-K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ColorSpaceConversionFactory, "kritacolorspaceconversion.json", registerPlugin<ColorSpaceConversion>();)
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)

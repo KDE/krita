@@ -90,5 +90,4 @@ KisPropertiesConfiguration* KisWdgWave::configuration() const
     return config;
 }
 
-#include "kis_wdg_wave.moc"
 

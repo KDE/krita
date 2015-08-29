@@ -94,4 +94,3 @@ void FilterStrokeTest::testBlurFilter()
 }
 
 QTEST_KDEMAIN(FilterStrokeTest, GUI)
-#include "filter_stroke_test.moc"

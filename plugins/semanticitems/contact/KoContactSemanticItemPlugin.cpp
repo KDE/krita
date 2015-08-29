@@ -28,8 +28,8 @@
 // KDE
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<KoContactSemanticItemPlugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra_semanticitem_contact"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_contact.json",
+                           registerPlugin<KoContactSemanticItemPlugin>();)
 
 KoContactSemanticItemPlugin::KoContactSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
   : QObject(parent)

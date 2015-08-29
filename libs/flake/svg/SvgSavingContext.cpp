@@ -30,7 +30,10 @@
 #include <ktemporaryfile.h>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
+#include <kurl.h>
 
+#include <QImage>
+#include <QTransform>
 #include <QBuffer>
 #include <QHash>
 #include <QFile>

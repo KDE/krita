@@ -305,4 +305,3 @@ KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() co
 }
 
 
-#include "kis_clone_layer.moc"

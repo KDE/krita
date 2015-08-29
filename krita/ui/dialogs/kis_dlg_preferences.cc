@@ -44,11 +44,6 @@
 
 #include <boost/bind.hpp>
 
-
-#ifdef HAVE_OPENGL
-#include <qgl.h>
-#endif
-
 #include <KisDocument.h>
 #include <KoColorProfile.h>
 #include <KisApplication.h>
@@ -64,7 +59,6 @@
 #include <kvbox.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>
-
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -262,7 +256,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
 // XXX: no color management integration on Windows or OSX yet
-#ifndef Q_WS_X11
+#ifndef HAVE_X11
     m_page->chkUseSystemMonitorProfile->setVisible(false);
 #endif
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
@@ -336,7 +330,7 @@ void ColorSettingsTab::installProfile()
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
 
-    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
+    QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
@@ -632,7 +626,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {       
+    if (!KisOpenGL::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -692,7 +686,7 @@ void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg;
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {
+    if (!KisOpenGL::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -871,10 +865,11 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     : KPageDialog(parent)
 {
     Q_UNUSED(name);
-    setCaption(i18n("Preferences"));
-    setButtons(Ok | Cancel | Help | Default);
-    setDefaultButton(Ok);
-    showButtonSeparator(true);
+    setWindowTitle(i18n("Preferences"));
+    // QT5TODO: help button needs custom wiring up to whatever help should be shown
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults);
+    button(QDialogButtonBox::Ok)->setDefault(true);
+
     setFaceType(KPageDialog::List);
 
     // General
@@ -955,10 +950,11 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("canvasinput");
     page->setIcon(KisIconUtils::loadIcon("applications-system"));
 
-    connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
-    connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));
-    connect(this, SIGNAL(cancelClicked()), m_inputConfiguration, SLOT(revertChanges()));
-    connect(this, SIGNAL(defaultClicked()), m_inputConfiguration, SLOT(setDefaults()));
+    QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
+
+    connect(this, SIGNAL(accepted()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(rejected()), m_inputConfiguration, SLOT(revertChanges()));
+    connect(restoreDefaultsButton, SIGNAL(clicked(bool)), m_inputConfiguration, SLOT(setDefaults()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
@@ -971,12 +967,12 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         preferenceSet->setParent(vbox);
         preferenceSet->loadPreferences();
 
-        connect(this, SIGNAL(defaultClicked()), preferenceSet, SLOT(loadDefaultPreferences()), Qt::UniqueConnection);
-        connect(this, SIGNAL(okClicked()),      preferenceSet, SLOT(savePreferences()),        Qt::UniqueConnection);
+        connect(restoreDefaultsButton, SIGNAL(clicked(bool)), preferenceSet, SLOT(loadDefaultPreferences()), Qt::UniqueConnection);
+        connect(this, SIGNAL(accepted()), preferenceSet, SLOT(savePreferences()), Qt::UniqueConnection);
     }
 
 
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
+    connect(restoreDefaultsButton, SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
 
 }
 
@@ -1125,4 +1121,3 @@ bool KisDlgPreferences::editPreferences()
     return baccept;
 }
 
-#include "kis_dlg_preferences.moc"

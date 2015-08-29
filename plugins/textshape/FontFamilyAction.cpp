@@ -183,4 +183,5 @@ void KoFontFamilyAction::setFont( const QString &family )
     kDebug(129) << "Font not found " << family.toLower();
 }
 
-#include "FontFamilyAction.moc"
+// have to include this because of Q_PRIVATE_SLOT
+#include "moc_FontFamilyAction.cpp"

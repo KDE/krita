@@ -30,17 +30,15 @@ set ( ArtisticTextShape_SRCS
     ReplaceTextRangeCommand.cpp
 )
 
-kde4_add_ui_files( ArtisticTextShape_SRCS
+ki18n_wrap_ui( ArtisticTextShape_SRCS
     ArtisticTextShapeConfigWidget.ui
     ArtisticTextShapeOnPathWidget.ui
 )
 
-kde4_add_plugin( calligra_shape_artistictext ${ArtisticTextShape_SRCS} )
+add_library(calligra_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
+
+kcoreaddons_desktop_to_json(calligra_shape_artistictext calligra_shape_artistictext.desktop)
 
 target_link_libraries(calligra_shape_artistictext flake)
 
-install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-########### install files ###############
-
-install( FILES calligra_shape_artistictext.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install( TARGETS calligra_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

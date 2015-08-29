@@ -17,11 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#define UNSTABLE_POPPLER_QT4
 #include "kis_pdf_import.h"
 
 // poppler's headers
-#include <poppler/qt4/poppler-qt4.h>
+#include <poppler/qt5/poppler-qt5.h>
 
 // Qt's headers
 #include <QFile>
@@ -35,6 +34,7 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
+#include <kurl.h>
 
 // calligra's headers
 #include <KisFilterChain.h>
@@ -53,8 +53,8 @@
 // plugins's headers
 #include "kis_pdf_import_widget.h"
 
-K_PLUGIN_FACTORY(PDFImportFactory, registerPlugin<KisPDFImport>();)
-K_EXPORT_PLUGIN(PDFImportFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(PDFImportFactory, "krita_pdf_import.json",
+                           registerPlugin<KisPDFImport>();)
 
 KisPDFImport::KisPDFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {

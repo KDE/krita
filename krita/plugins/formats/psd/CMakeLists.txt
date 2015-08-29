@@ -5,6 +5,7 @@ macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 include_directories(${ZLIB_INCLUDE_DIR})
+include_directories(${CMAKE_BINARY_DIR}/krita/libpsd)  #For kispsd_include.h
 
 set(LIB_PSD_SRCS 
     psd_header.cpp
@@ -24,14 +25,16 @@ set(kritapsdimport_PART_SRCS
     ${LIB_PSD_SRCS}
 )
 
-kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
+add_library(kritapsdimport MODULE ${kritapsdimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritapsdimport krita_psd_import.desktop)
+
 if (WIN32)
 	target_link_libraries(kritapsdimport kritaui kritapsd ${KDE4_KIO_LIBS} ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()
 	target_link_libraries(kritapsdimport kritaui kritapsd ${KDE4_KIO_LIBS} ${ZLIB_LIBRARIES})
 endif ()
 
-install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -41,14 +44,15 @@ set(kritapsdexport_PART_SRCS
     ${LIB_PSD_SRCS}
 )
 
-kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
+add_library(kritapsdexport MODULE ${kritapsdexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritapsdexport krita_psd_export.desktop)
 
 if (WIN32)
     target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()	
     target_link_libraries(kritapsdexport kritaui ${ZLIB_LIBRARIES})
 endif ()	
-install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES krita_psd_import.desktop 
                krita_psd_export.desktop  

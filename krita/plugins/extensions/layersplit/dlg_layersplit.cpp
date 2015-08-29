@@ -115,4 +115,3 @@ int DlgLayerSplit::fuzziness() const
 
 
 
-#include "dlg_layersplit.moc"

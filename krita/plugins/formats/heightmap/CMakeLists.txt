@@ -4,13 +4,14 @@ set(kritaheightmapimport_PART_SRCS
     kis_heightmap_import.cpp
     )
 
-kde4_add_ui_files(kritaheightmapimport_PART_SRCS kis_wdg_options_heightmap.ui )
+ki18n_wrap_ui(kritaheightmapimport_PART_SRCS kis_wdg_options_heightmap.ui )
 
-kde4_add_plugin(kritaheightmapimport ${kritaheightmapimport_PART_SRCS})
+add_library(kritaheightmapimport MODULE ${kritaheightmapimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaheightmapimport krita_heightmap_import.desktop)
 
 target_link_libraries(kritaheightmapimport kritaui )
 
-install(TARGETS kritaheightmapimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaheightmapimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -18,13 +19,14 @@ set(kritaheightmapexport_PART_SRCS
     kis_heightmap_export.cpp
     )
 
-kde4_add_ui_files(kritaheightmapexport_PART_SRCS kis_wdg_options_heightmap.ui )
+ki18n_wrap_ui(kritaheightmapexport_PART_SRCS kis_wdg_options_heightmap.ui )
 
-kde4_add_plugin(kritaheightmapexport ${kritaheightmapexport_PART_SRCS})
+add_library(kritaheightmapexport MODULE ${kritaheightmapexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaheightmapexport krita_heightmap_export.desktop)
 
 target_link_libraries(kritaheightmapexport kritaui  )
 
-install(TARGETS kritaheightmapexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaheightmapexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

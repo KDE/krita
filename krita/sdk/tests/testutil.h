@@ -22,7 +22,6 @@
 #include <QList>
 #include <QTime>
 #include <QDir>
-#include <kundo2qstack.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

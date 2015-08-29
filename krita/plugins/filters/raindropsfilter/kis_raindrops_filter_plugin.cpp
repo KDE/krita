@@ -27,8 +27,7 @@
 
 #include "kis_raindrops_filter.h"
 
-K_PLUGIN_FACTORY(KisRainDropsFilterPluginFactory, registerPlugin<KisRainDropsFilterPlugin>();)
-K_EXPORT_PLUGIN(KisRainDropsFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisRainDropsFilterPluginFactory, "kritaraindropsfilter.json", registerPlugin<KisRainDropsFilterPlugin>();)
 
 KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
@@ -39,3 +38,5 @@ KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QVaria
 KisRainDropsFilterPlugin::~KisRainDropsFilterPlugin()
 {
 }
+
+#include "kis_raindrops_filter_plugin.moc"

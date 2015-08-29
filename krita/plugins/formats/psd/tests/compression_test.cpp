@@ -98,4 +98,3 @@ void CompressionTest::testCompressionUncompressed()
 
 QTEST_KDEMAIN(CompressionTest, GUI)
 
-#include "compression_test.moc"

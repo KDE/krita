@@ -26,7 +26,8 @@ class QAbstractButton;
 class QComboBox;
 class QAction;
 class QObject;
-class KIcon;
+
+#include <kicon.h>
 
 namespace KisIconUtils
 {

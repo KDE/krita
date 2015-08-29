@@ -69,4 +69,3 @@ KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
     return config;
 }
 
-#include "kis_filterop_settings_widget.moc"

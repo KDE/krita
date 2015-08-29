@@ -6,14 +6,14 @@ set(kritaexperimentpaintop_PART_SRCS
     kis_experiment_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
+ki18n_wrap_ui(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
 
-kde4_add_plugin(kritaexperimentpaintop ${kritaexperimentpaintop_PART_SRCS})
-
+add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaexperimentpaintop kritaexperimentpaintop.desktop)
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 
-install(TARGETS kritaexperimentpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexperimentpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

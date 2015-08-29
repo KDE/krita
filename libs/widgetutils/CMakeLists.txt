@@ -1,5 +1,3 @@
-include_directories(${QT_INCLUDES} ${KDE4_INCLUDES})
-
 add_subdirectory(tests)
 
 set(kowidgetutils_LIB_SRCS
@@ -14,11 +12,12 @@ set(kowidgetutils_LIB_SRCS
 )
 
 
-kde4_add_library(kowidgetutils SHARED ${kowidgetutils_LIB_SRCS})
+add_library(kowidgetutils SHARED ${kowidgetutils_LIB_SRCS})
+generate_export_header(kowidgetutils BASE_NAME kowidgetutils)
 
 # KDE is only used for i18n
-target_link_libraries(kowidgetutils ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY} ${KDE4_KDECORE_LIBS})
-target_link_libraries(kowidgetutils LINK_INTERFACE_LIBRARIES ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY})
+target_link_libraries(kowidgetutils Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets KF5::KDELibs4Support)
+target_link_libraries(kowidgetutils LINK_INTERFACE_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml)
 
 set_target_properties(kowidgetutils
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -34,7 +33,7 @@ install(FILES
     KoUpdater.h
     KoProperties.h
     KoSizeGroup.h
-    kowidgetutils_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kowidgetutils_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
     COMPONENT Devel
 )

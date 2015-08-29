@@ -71,4 +71,3 @@ void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
     m_resourceItemView->scrollTo(m_resourceItemView->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
 }
 
-#include "kis_preset_selector_strip.moc"

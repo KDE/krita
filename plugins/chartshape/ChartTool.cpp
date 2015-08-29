@@ -43,15 +43,15 @@
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartCartesianAxis>
-#include <KDChartGridAttributes>
-#include <KDChartAbstractCartesianDiagram>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPosition>
-
 // KChart
+#include <KChartChart>
+#include <KChartCartesianAxis>
+#include <KChartGridAttributes>
+#include <KChartAbstractCartesianDiagram>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartPosition>
+
+// KoChart
 #include "Surface.h"
 #include "PlotArea.h"
 #include "Axis.h"
@@ -59,7 +59,7 @@
 #include "Legend.h"
 #include "ChartProxyModel.h"
 #include "ChartConfigWidget.h"
-#include "KDChartConvertions.h"
+#include "KChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
 #include "commands/AxisCommand.h"
@@ -67,7 +67,7 @@
 #include "commands/ChartTextShapeCommand.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 
 class ChartTool::Private

@@ -28,7 +28,7 @@
 #include <QBuffer>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoMixColorsOp.h"

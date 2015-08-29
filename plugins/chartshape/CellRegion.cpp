@@ -36,12 +36,12 @@
 // KDE
 #include <kdebug.h>
 
-// KChart
+// KoChart
 #include "TableSource.h"
 
 
 using std::pow;
-using namespace KChart;
+using namespace KoChart;
 
 /************************RegionParser*******************************/
 

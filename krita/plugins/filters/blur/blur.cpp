@@ -27,8 +27,7 @@
 #include "kis_lens_blur_filter.h"
 #include "filter/kis_filter_registry.h"
 
-K_PLUGIN_FACTORY(BlurFilterPluginFactory, registerPlugin<BlurFilterPlugin>();)
-K_EXPORT_PLUGIN(BlurFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(BlurFilterPluginFactory, "kritablurfilter.json", registerPlugin<BlurFilterPlugin>();)
 
 BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -43,3 +42,6 @@ BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QVariantList &)
 BlurFilterPlugin::~BlurFilterPlugin()
 {
 }
+
+#include "blur.moc"
+

@@ -132,5 +132,4 @@ void KisSwappedDataStoreTest::testRandomAccess()
 }
 
 QTEST_KDEMAIN(KisSwappedDataStoreTest, NoGUI)
-#include "kis_swapped_data_store_test.moc"
 

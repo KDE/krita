@@ -152,4 +152,3 @@ qint32 KisMultiIntegerFilterWidget::valueAt(qint32 i) {
 }
 
 
-#include "kis_multi_integer_filter_widget.moc"

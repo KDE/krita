@@ -81,10 +81,10 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
-#include <klocale.h>
 #include <kstandardaction.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 #include <QTextTable>
 #include <QTextList>
 #include <QTabWidget>
@@ -131,7 +131,7 @@ public:
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
+    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut)) {
         if (input == ks)
             return true;
     }
@@ -172,8 +172,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         connect(plugin, SIGNAL(startMacro(const QString &)),
                 this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-        QHash<QString, KAction*> actions = plugin->actions();
-        QHash<QString, KAction*>::iterator i = actions.begin();
+        QHash<QString, QAction*> actions = plugin->actions();
+        QHash<QString, QAction*>::iterator i = actions.begin();
         while (i != actions.end()) {
             addAction(i.key(), i.value());
             ++i;
@@ -313,7 +313,7 @@ void TextTool::createActions()
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-    KAction *action = new KAction(koIcon("format-list-unordered"),  i18n("Bullet list"), this);
+    QAction *action = new KAction(koIcon("format-list-unordered"),  i18n("Bullet list"), this);
     addAction("format_bulletlist", action);
 
     action = new KAction(koIcon("format-list-ordered"),  i18n("Numbered list"), this);
@@ -367,7 +367,7 @@ void TextTool::createActions()
 
         action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
         addAction("insert_framebreak", action);
-        action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
+        action->setShortcut(Qt::CTRL + Qt::Key_Return);
         connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
         action->setToolTip(i18n("Insert a page break"));
         action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
@@ -536,7 +536,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     , m_tablePenMode(false)
 {
     // we could init some vars here, but we probably don't have to
-    KGlobal::setLocale(new KLocale("en"));
+    QLocale::setDefault(QLocale("en"));
     QTextDocument *document = new QTextDocument(); // this document is leaked
 
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
@@ -1111,8 +1111,8 @@ TextEditingPluginContainer *TextTool::textEditingPluginContainer()
             connect(plugin, SIGNAL(startMacro(const QString &)),
                     this, SLOT(startMacro(const QString &)));
             connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-            QHash<QString, KAction*> actions = plugin->actions();
-            QHash<QString, KAction*>::iterator i = actions.begin();
+            QHash<QString, QAction*> actions = plugin->actions();
+            QHash<QString, QAction*>::iterator i = actions.begin();
             while (i != actions.end()) {
                 addAction(i.key(), i.value());
                 ++i;

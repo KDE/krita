@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KOTEXTLAYOUT_EXPORT
-# if defined(MAKE_KOTEXTLAYOUT_LIB)
+# if defined(kotextlayout_EXPORTS)
 /* We are building this library */
 #  define KOTEXTLAYOUT_EXPORT KDE_EXPORT
 # else
@@ -46,7 +46,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KOTEXTLAYOUT_LIB)
+# if defined(kotextlayout_EXPORTS)
 #       define KOTEXTLAYOUT_TEST_EXPORT KDE_EXPORT
 #   else
 #       define KOTEXTLAYOUT_TEST_EXPORT KDE_IMPORT

@@ -69,8 +69,10 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 #include <kmenubar.h>
 #include <kmimetype.h>
+#include <k4aboutdata.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -160,7 +162,7 @@ public:
             // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
             KMimeType::Ptr mime = KMimeType::mimeType(rootDocument->outputMimeType());
             if (mime) {
-                QString extension = mime->property("X-KDE-NativeExtension").toString();
+                const QString extension = mime->mainExtension();
 
                 if (title.endsWith(extension))
                     title.chop(extension.length());
@@ -205,14 +207,14 @@ public:
     bool readOnly;
 
     KAction *showDocumentInfo;
-    KAction *saveAction;
-    KAction *saveActionAs;
-    KAction *printAction;
-    KAction *printActionPreview;
-    KAction *sendFileAction;
+    QAction *saveAction;
+    QAction *saveActionAs;
+    QAction *printAction;
+    QAction *printActionPreview;
+    QAction *sendFileAction;
     KAction *exportPdf;
-    KAction *closeFile;
-    KAction *reloadFile;
+    QAction *closeFile;
+    QAction *reloadFile;
     KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
@@ -244,6 +246,7 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
+    KComponentData componentData;
 
     KHelpMenu *m_helpMenu;
 
@@ -287,7 +290,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
-    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
@@ -954,7 +957,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            QString ext = mime->property("X-KDE-NativeExtension").toString();
+            const QString ext = mime->mainExtension();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;
@@ -1181,7 +1184,8 @@ void KoMainWindow::saveWindowSettings()
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KoMainWindow::saveWindowSettings";
-        saveWindowSize(config->group("MainWindow"));
+        KConfigGroup mainWindowConfigGroup = config->group("MainWindow");
+        saveWindowSize(mainWindowConfigGroup);
         config->sync();
         d->windowSizeDirty = false;
     }
@@ -1330,7 +1334,7 @@ void KoMainWindow::slotFileOpen()
     (void) openDocument(url);
 }
 
-void KoMainWindow::slotFileOpenRecent(const KUrl & url)
+void KoMainWindow::slotFileOpenRecent(const QUrl & url)
 {
     // Create a copy, because the original KUrl in the map of recent files in
     // KRecentFilesAction may get deleted.
@@ -1449,10 +1453,14 @@ KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
     return exportToPdf(pageLayout, pdfFileName);
 }
 
-KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QString &_pdfFileName)
 {
     if (!rootView())
         return 0;
+
+    KoPageLayout pageLayout = _pageLayout;
+    QString pdfFileName = _pdfFileName;
+
     if (pdfFileName.isEmpty()) {
         KConfigGroup group = KGlobal::config()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
@@ -1550,8 +1558,11 @@ void KoMainWindow::slotConfigureKeys()
 
 void KoMainWindow::slotConfigureToolbars()
 {
-    if (rootDocument())
-        saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+    if (rootDocument()) {
+        KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        saveMainWindowSettings(componentConfigGroup);
+    }
+
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1560,7 +1571,8 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
     if (rootDocument()) {
-        applyMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+        KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        applyMainWindowSettings(componentConfigGroup);
     }
 
     KXMLGUIFactory *factory = guiFactory();
@@ -1584,8 +1596,10 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
         else
             bar->hide();
 
-        if (rootDocument())
-            saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+        if (rootDocument()) {
+            KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+            saveMainWindowSettings(componentConfigGroup);
+        }
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
@@ -1799,6 +1813,16 @@ void KoMainWindow::setPartToOpen(KoPart *part)
     d->partToOpen = part;
 }
 
+KComponentData KoMainWindow::componentData() const
+{
+    return d->componentData;
+}
+
+void KoMainWindow::setComponentData(const KComponentData &componentData)
+{
+    d->componentData = componentData;
+}
+
 QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
@@ -1980,11 +2004,39 @@ void KoMainWindow::newView()
 
 void KoMainWindow::createMainwindowGUI()
 {
-    if ( isHelpMenuEnabled() && !d->m_helpMenu )
-        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
+    if ( isHelpMenuEnabled() && !d->m_helpMenu ) {
+        d->m_helpMenu = new KHelpMenu( this, *componentData().aboutData(), true );
+
+        KActionCollection *actions = actionCollection();
+        QAction *helpContentsAction = d->m_helpMenu->action(KHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->m_helpMenu->action(KHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->m_helpMenu->action(KHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->m_helpMenu->action(KHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->m_helpMenu->action(KHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->m_helpMenu->action(KHelpMenu::menuAboutKDE);
+
+        if (helpContentsAction) {
+            actions->addAction(helpContentsAction->objectName(), helpContentsAction);
+        }
+        if (whatsThisAction) {
+            actions->addAction(whatsThisAction->objectName(), whatsThisAction);
+        }
+        if (reportBugAction) {
+            actions->addAction(reportBugAction->objectName(), reportBugAction);
+        }
+        if (switchLanguageAction) {
+            actions->addAction(switchLanguageAction->objectName(), switchLanguageAction);
+        }
+        if (aboutAppAction) {
+            actions->addAction(aboutAppAction->objectName(), aboutAppAction);
+        }
+        if (aboutKdeAction) {
+            actions->addAction(aboutKdeAction->objectName(), aboutKdeAction);
+        }
+    }
 
     QString f = xmlFile();
-    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );
+    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc"/*, componentData()*/ ) );
     if ( !f.isEmpty() )
         setXMLFile( f, true );
     else

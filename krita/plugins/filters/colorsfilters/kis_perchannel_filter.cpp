@@ -580,4 +580,3 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
 }
 
-#include "kis_perchannel_filter.moc"

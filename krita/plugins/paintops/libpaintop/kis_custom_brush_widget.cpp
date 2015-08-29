@@ -250,4 +250,3 @@ void KisCustomBrushWidget::createBrush()
 }
 
 
-#include "kis_custom_brush_widget.moc"

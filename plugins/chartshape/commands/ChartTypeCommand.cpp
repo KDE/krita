@@ -23,21 +23,21 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// KDChart
-#include "KDChartAbstractCoordinatePlane"
-#include "KDChartBarDiagram"
-#include "KDChartChart"
-#include "KDChartLineDiagram"
-#include "KDChartPieDiagram"
-#include "KDChartPolarDiagram"
-#include "KDChartRingDiagram"
-
 // KChart
+#include "KChartAbstractCoordinatePlane"
+#include "KChartBarDiagram"
+#include "KChartChart"
+#include "KChartLineDiagram"
+#include "KChartPieDiagram"
+#include "KChartPolarDiagram"
+#include "KChartRingDiagram"
+
+// KoChart
 #include "ChartShape.h"
 #include "Legend.h"
 
+using namespace KoChart;
 using namespace KChart;
-using namespace KDChart;
 
 
 ChartTypeCommand::ChartTypeCommand(ChartShape* chart)

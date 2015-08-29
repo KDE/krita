@@ -5,11 +5,12 @@ set(kritaclonesarray_PART_SRCS
   dlg_clonesarray.cpp
   )
 
-kde4_add_ui_files(kritaclonesarray_PART_SRCS wdg_clonesarray.ui )
-kde4_add_plugin(kritaclonesarray ${kritaclonesarray_PART_SRCS})
+ki18n_wrap_ui(kritaclonesarray_PART_SRCS wdg_clonesarray.ui )
+add_library(kritaclonesarray MODULE ${kritaclonesarray_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaclonesarray kritaclonesarray.desktop)
 
 target_link_libraries(kritaclonesarray kritaui)
-install(TARGETS kritaclonesarray  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaclonesarray  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

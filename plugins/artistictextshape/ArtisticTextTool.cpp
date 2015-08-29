@@ -46,7 +46,7 @@
 
 #include <klocale.h>
 #include <kstandardaction.h>
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QAction>
@@ -66,47 +66,47 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
-    m_detachPath  = new KAction(koIcon("artistictext-detach-path"), i18n("Detach Path"), this);
+    m_detachPath  = new QAction(koIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
     addAction("artistictext_detach_from_path", m_detachPath);
 
-    m_convertText  = new KAction(koIcon("pathshape"), i18n("Convert to Path"), this);
+    m_convertText  = new QAction(koIcon("pathshape"), i18n("Convert to Path"), this);
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
     addAction("artistictext_convert_to_path", m_convertText);
 
-    m_fontBold = new KAction(koIcon("format-text-bold"), i18n("Bold text"), this);
+    m_fontBold = new QAction(koIcon("format-text-bold"), i18n("Bold text"), this);
     m_fontBold->setCheckable(true);
     connect(m_fontBold, SIGNAL(toggled(bool)), this, SLOT(toggleFontBold(bool)));
     addAction("artistictext_font_bold", m_fontBold);
 
-    m_fontItalic = new KAction(koIcon("format-text-italic"), i18n("Italic text"), this);
+    m_fontItalic = new QAction(koIcon("format-text-italic"), i18n("Italic text"), this);
     m_fontItalic->setCheckable(true);
     connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
     addAction("artistictext_font_italic", m_fontItalic);
 
-    m_superScript = new KAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_superScript = new QAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
     m_superScript->setCheckable(true);
     connect(m_superScript, SIGNAL(triggered()), this, SLOT(setSuperScript()));
     addAction("artistictext_superscript", m_superScript);
 
-    m_subScript = new KAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_subScript = new QAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
     m_subScript->setCheckable(true);
     connect(m_subScript, SIGNAL(triggered()), this, SLOT(setSubScript()));
     addAction("artistictext_subscript", m_subScript);
 
-    KAction *anchorStart = new KAction(koIcon("format-justify-left"), i18n("Anchor at Start"), this);
+    QAction *anchorStart = new QAction(koIcon("format-justify-left"), i18n("Anchor at Start"), this);
     anchorStart->setCheckable( true );
     anchorStart->setData(ArtisticTextShape::AnchorStart);
     addAction("artistictext_anchor_start", anchorStart);
 
-    KAction *anchorMiddle = new KAction(koIcon("format-justify-center"), i18n("Anchor at Middle"), this);
+    QAction *anchorMiddle = new QAction(koIcon("format-justify-center"), i18n("Anchor at Middle"), this);
     anchorMiddle->setCheckable( true );
     anchorMiddle->setData(ArtisticTextShape::AnchorMiddle);
     addAction("artistictext_anchor_middle", anchorMiddle);
 
-    KAction *anchorEnd = new KAction(koIcon("format-justify-right"), i18n("Anchor at End"), this);
+    QAction *anchorEnd = new QAction(koIcon("format-justify-right"), i18n("Anchor at End"), this);
     anchorEnd->setCheckable( true );
     anchorEnd->setData(ArtisticTextShape::AnchorEnd);
     addAction("artistictext_anchor_end", anchorEnd);

@@ -21,14 +21,15 @@ set(kritaxcfimport_PART_SRCS
     ${XCFTOOLS_SOURCE_DIR}/flatten.c  
     )
 
-kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})
+add_library(kritaxcfimport MODULE ${kritaxcfimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritaxcfimport krita_xcf_import.desktop)
 
 target_link_libraries(kritaxcfimport kritaui ${KDE4_KIO_LIBS})
 
 if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
 else ()
-    install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+    install(TARGETS kritaxcfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 endif ()
 
 ########### install files ###############

@@ -335,4 +335,3 @@ void KisGradientPainterTest::testCachedStrategy()
 }
 
 QTEST_KDEMAIN(KisGradientPainterTest, GUI)
-#include "kis_gradient_painter_test.moc"

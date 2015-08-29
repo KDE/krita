@@ -27,4 +27,3 @@ LayerCompositeDetails::~LayerCompositeDetails()
 {
 }
 
-#include "LayerCompositeDetails.moc"

@@ -20,13 +20,18 @@
 
 #include "KoPluginLoader.h"
 
-#include <kdebug.h>
-#include <kservice.h>
-#include <KoServiceLocator.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KoJsonTrader.h>
 
+#include <QString>
+#include <QStringList>
+#include <QJsonObject>
+#include <QPluginLoader>
+#include <QDebug>
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KPluginFactory>
 
 class KoPluginLoader::Private
 {
@@ -50,27 +55,25 @@ KoPluginLoader* KoPluginLoader::instance()
     return s_instance;
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject *owner)
+void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner)
 {
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
-    kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType;
     d->loadedServiceTypes << serviceType;
     QString query = QString::fromLatin1("(Type == 'Service')");
     if (!versionString.isEmpty()) {
         query += QString::fromLatin1(" and (%1)").arg(versionString);
     }
 
-    const KService::List offers = KoServiceLocator::instance()->entries(serviceType);
-
-    KService::List plugins;
+    QList<QPluginLoader *> offers = KoJsonTrader::self()->query(serviceType, QString());
+    QList<QPluginLoader *> plugins;
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
-        kDebug(30003) << "Loading" << serviceType << "with checking the config";
-        KConfigGroup configGroup = KGlobal::config()->group(config.group);
+        qDebug() << "Loading" << serviceType << "with checking the config";
+        KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
 
@@ -80,16 +83,18 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         if (firstStart) {
             configChanged = true;
         }
-        foreach(KSharedPtr<KService> service, offers) {
-            const QString pluginName = service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
+        foreach(QPluginLoader *loader, offers) {
+            QJsonObject json = loader->metaData().value("MetaData").toObject();
+            json = json.value("KPlugin").toObject();
+            const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
-                kWarning(30003) << "Loading plugin" << service->name() << "failed, has no X-KDE-PluginInfo-Name.";
+                qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
             }
             if (whiteList.contains(pluginName)) {
-                plugins.append(service);
+                plugins.append(loader);
             } else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
-                plugins.append(service);
+                plugins.append(loader);
                 configChanged = true;
             } else {
                 blacklist << pluginName;
@@ -99,42 +104,44 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         plugins = offers;
     }
 
-    QMap<QString, KSharedPtr<KService> > serviceNames;
-    foreach(KSharedPtr<KService> service, plugins) {
-        if (serviceNames.contains(service->name())) { // duplicate
-            QVariant pluginVersion2 = service->property("X-Flake-PluginVersion", QVariant::Int);
+    QMap<QString, QPluginLoader *> serviceNames;
+    foreach(QPluginLoader *loader, plugins) {
+        if (serviceNames.contains(loader->fileName())) { // duplicate
+            QJsonObject json2 = loader->metaData().value("MetaData").toObject();
+            QVariant pluginVersion2 = json2.value("X-Flake-PluginVersion").toVariant();
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
-            KSharedPtr<KService> otherService = serviceNames.value(service->name());
-            QVariant pluginVersion = otherService->property("X-Flake-PluginVersion", QVariant::Int);
+            QPluginLoader *currentLoader = serviceNames.value(loader->fileName());
+            QJsonObject json = currentLoader->metaData().value("MetaData").toObject();
+            QVariant pluginVersion = json.value("X-Flake-PluginVersion").toVariant();
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
             }
         }
-        serviceNames.insert(service->name(), service);
+        serviceNames.insert(loader->fileName(), loader);
     }
 
     QList<QString> whiteList;
-    foreach(KSharedPtr<KService> service, serviceNames) {
-        QString error;
-        QObject * plugin = service->createInstance<QObject>(owner ? owner : this, QVariantList(), &error);
+    foreach(QPluginLoader *loader, serviceNames) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
+        QObject *plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
         if (plugin) {
-            whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
-            kDebug(30003) << "Loaded plugin" << service->name() << owner;
+            QJsonObject json = loader->metaData().value("MetaData").toObject();
+            const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
+            whiteList << pluginName;
+//             qDebug() << "Loaded plugin" << loader->fileName() << owner;
             if (!owner) {
                 delete plugin;
             }
         } else {
-            kWarning(30003) << "Loading plugin" << service->name() << "failed, " << error;
+            qWarning() << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
         }
     }
 
     if (configChanged && config.whiteList && config.blacklist && config.group) {
-        KConfigGroup configGroup = KGlobal::config()->group(config.group);
+        KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
 }
-
-#include <KoPluginLoader.moc>

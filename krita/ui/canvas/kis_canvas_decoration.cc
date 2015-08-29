@@ -92,4 +92,3 @@ QPointer<KisView>KisCanvasDecoration::view() const
 {
     return d->view;
 }
-#include "kis_canvas_decoration.moc"

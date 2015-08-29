@@ -393,4 +393,3 @@ void KisTransformMask::setY(qint32 y)
     KisEffectMask::setY(y);
 }
 
-#include "kis_transform_mask.moc"

@@ -404,7 +404,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
         return belongsToIsolatedGroup(node) &&
-            !node->projectionLeaf()->isDroppedMask() ? QVariant() : Qt::gray;
+            !node->projectionLeaf()->isDroppedMask() ? QVariant() : QVariant(QColor(Qt::gray));
     case Qt::FontRole: {
         QFont baseFont;
         if (node->projectionLeaf()->isDroppedMask()) {
@@ -683,4 +683,3 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     return result;
 }
 
-#include "kis_node_model.moc"

@@ -27,6 +27,7 @@
 
 //QT
 #include <QUuid>
+#include <QDateTime>
 
 using namespace Soprano;
 

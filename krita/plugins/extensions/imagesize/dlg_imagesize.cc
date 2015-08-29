@@ -26,6 +26,7 @@
 #include <KoSizeGroup.h>
 #include <klocalizedstring.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <kis_filter_strategy.h>
 
@@ -489,4 +490,3 @@ void DlgImageSize::updatePrintResolutionUIValue(double value)
     m_page->printResolution->blockSignals(false);
 }
 
-#include "dlg_imagesize.moc"

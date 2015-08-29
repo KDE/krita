@@ -90,4 +90,3 @@ void KisGradientBenchmark::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(KisGradientBenchmark, NoGUI)
-#include "kis_gradient_benchmark.moc"

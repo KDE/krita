@@ -38,6 +38,7 @@
 #include <QButtonGroup>
 #include <QDesktopServices>
 #include <QTemporaryFile>
+#include <QMimeData>
 
 #include "ui_wdgimagedocker.h"
 #include "ui_wdgImageViewPopup.h"

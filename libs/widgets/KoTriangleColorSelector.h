@@ -22,6 +22,7 @@
 #include <QWidget>
 
 #include "kowidgets_export.h"
+#include <kdemacros.h>
 
 class KoColor;
 class KoColorDisplayRendererInterface;

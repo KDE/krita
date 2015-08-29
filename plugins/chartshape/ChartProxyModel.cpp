@@ -42,13 +42,13 @@
 #include <KoOdfGraphicStyles.h>
 #include <interfaces/KoChartModel.h>
 
-// KChart
+// KoChart
 #include "Axis.h"
 #include "DataSet.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 
 // ================================================================

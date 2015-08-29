@@ -163,5 +163,4 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
 
 }
 
-#include "kis_wdg_generator.moc"
 

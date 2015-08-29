@@ -120,4 +120,3 @@ KisPropertiesConfiguration* KisMultiDoubleFilterWidget::configuration() const
     return config;
 }
 
-#include "kis_multi_double_filter_widget.moc"

@@ -30,7 +30,7 @@
  *
  * TODO: support other devices than monitors
  */
-class KRITALIBCOLOR_EXPORT KisColorManager : public QObject
+class KRITACOLOR_EXPORT KisColorManager : public QObject
 {
     Q_OBJECT
 

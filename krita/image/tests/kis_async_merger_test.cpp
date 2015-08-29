@@ -288,5 +288,4 @@ void KisAsyncMergerTest::testSubgraphingWithoutUpdatingParent()
 }
 
 QTEST_KDEMAIN(KisAsyncMergerTest, NoGUI)
-#include "kis_async_merger_test.moc"
 

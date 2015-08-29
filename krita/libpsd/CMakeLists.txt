@@ -1,3 +1,6 @@
+include_directories(${KOTEXT_INCLUDES})
+include_directories(${CMAKE_BINARY_DIR}/krita/libpsd)  #For kispsd_include.h
+
 add_subdirectory( tests )
 
 set(kritapsd_LIB_SRCS
@@ -17,12 +20,13 @@ set(kritapsd_LIB_SRCS
     asl/kis_asl_writer.cpp
 )
 
-kde4_add_library(kritapsd SHARED ${kritapsd_LIB_SRCS} )
+add_library(kritapsd SHARED ${kritapsd_LIB_SRCS} )
+generate_export_header(kritapsd BASE_NAME kritapsd)
 
 if (WIN32)
-    target_link_libraries(kritapsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS})
+    target_link_libraries(kritapsd pigmentcms kritaglobal KF5::KDELibs4Support ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS})
 else (WIN32)
-    target_link_libraries(kritapsd pigmentcms kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+    target_link_libraries(kritapsd pigmentcms kritaglobal KF5::KDELibs4Support ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 endif (WIN32)
 
 target_link_libraries(kritapsd LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})

@@ -87,4 +87,3 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 }
 
 QTEST_KDEMAIN(KisKraSaveXmlVisitorTest, GUI)
-#include "kis_kra_savexml_visitor_test.moc"

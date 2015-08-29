@@ -65,4 +65,3 @@ void PatternDockerDock::patternChanged(KoPattern *pattern)
     m_patternChooser->setCurrentPattern(pattern);
 }
 
-#include "patterndocker_dock.moc"

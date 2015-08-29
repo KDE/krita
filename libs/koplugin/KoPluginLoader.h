@@ -50,8 +50,7 @@ public:
 #include "MyPlugin.h"
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(MyPluginFactory, registerPlugin<MyPlugin>();)
-K_EXPORT_PLUGIN(MyPluginFactory("DaPlugin"))
+K_PLUGIN_FACTORY_WITH_JSON(MyPluginFactory, "myplugin.json", registerPlugin<MyPlugin>();)
 
 MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
     // do stuff like creating a factory and adding it to the
@@ -109,10 +108,9 @@ public:
      * @param serviceType The string used to identify the plugins.
      * @param versionString A string match that allows you to check for a specific version
      * @param config when passing a valid config only the wanted plugins are actually loaded
-     * @param owner an optional parent object for the plugins
      * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject *owner = 0);
+    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
 private:
     KoPluginLoader();

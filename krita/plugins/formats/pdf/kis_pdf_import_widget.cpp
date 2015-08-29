@@ -21,7 +21,7 @@
 
 #define UNSTABLE_POPPLER_QT4
 // poppler's headers
-#include <poppler/qt4/poppler-qt4.h>
+#include <poppler/qt5/poppler-qt5.h>
 
 // Qt's headers
 #include <QRadioButton>
@@ -188,4 +188,3 @@ void KisPDFImportWidget::slotAspectChanged(bool keep)
     }
 }
 
-#include "kis_pdf_import_widget.moc"

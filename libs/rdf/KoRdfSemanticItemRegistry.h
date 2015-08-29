@@ -29,6 +29,9 @@
 #include "KoRdfSemanticItemFactoryBase.h"
 #include <KoGenericRegistry.h>
 
+// Qt
+#include <QSharedPointer>
+
 class KoCanvasBase;
 
 /**

@@ -219,4 +219,3 @@ void KisPaintLayer::setAlphaLocked(bool lock)
 }
 
 
-#include "kis_paint_layer.moc"

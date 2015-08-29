@@ -269,6 +269,5 @@ void KisSharedPtrTest::testWeakSPToWeakSPCopy()
 
 
 QTEST_KDEMAIN(KisSharedPtrTest, NoGUI)
-#include "kis_shared_ptr_test.moc"
 
 

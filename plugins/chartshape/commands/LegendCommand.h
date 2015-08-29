@@ -23,12 +23,12 @@
 // Qt
 #include <kundo2command.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 
 
 #if 0
-namespace KDChart
+namespace KChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;
@@ -37,7 +37,7 @@ class Chart;
 #endif
 
 
-namespace KChart
+namespace KoChart
 {
 
 class Legend;
@@ -89,6 +89,6 @@ private:
     bool m_newShowFrame;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_LEGEND_COMMAND

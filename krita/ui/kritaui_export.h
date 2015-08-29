@@ -27,7 +27,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 
 #ifndef KRITAUI_EXPORT
-# ifdef MAKE_KRITAUI_LIB
+# ifdef kritaui_EXPORTS
 #  define KRITAUI_EXPORT KDE_EXPORT
 # else
 #  define KRITAUI_EXPORT KDE_IMPORT
@@ -43,7 +43,7 @@
 /* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
 #  if defined _WIN32 || defined _WIN64
-#    if defined(MAKE_KRITAUI_LIB)
+#    if defined(kritaui_EXPORTS)
 #      define KRITAUI_TEST_EXPORT KDE_EXPORT
 #    else
 #       define KRITAUI_TEST_EXPORT KDE_IMPORT

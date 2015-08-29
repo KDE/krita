@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 #include "ui_KoCsvImportDialog.h"
 

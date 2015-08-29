@@ -23,8 +23,8 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("spacenavigator"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_device_spacenavigator.json",
+                           registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)

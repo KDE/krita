@@ -46,16 +46,16 @@
 
 #include <kdebug.h>
 
-// KDChart
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartBackgroundAttributes>
-#include <KDChartFrameAttributes>
-
 // KChart
+#include <KChartCartesianCoordinatePlane>
+#include <KChartBackgroundAttributes>
+#include <KChartFrameAttributes>
+
+// KoChart
 #include "PlotArea.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 class Surface::Private
 {
@@ -71,7 +71,7 @@ public:
     QBrush   brush;
     QPen     framePen;
 
-    KDChart::CartesianCoordinatePlane *kdPlane;
+    KChart::CartesianCoordinatePlane *kdPlane;
 };
 
 Surface::Private::Private(PlotArea *parent)
@@ -154,8 +154,8 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
     bool brushLoaded = false;
     
     if (surfaceElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
-        KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
-        KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
+        KChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
+        KChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
         // Add the chart style to the style stack.
         styleStack.clear();
@@ -208,7 +208,7 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
 
 #ifndef NWORKAROUND_ODF_BUGS
     if (!brushLoaded) {
-        KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
+        KChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
         QColor fillColor = KoOdfWorkaround::fixMissingFillColor(surfaceElement, context);
         if (fillColor.isValid()) {
             backgroundAttributes.setVisible(true);

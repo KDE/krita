@@ -6,11 +6,12 @@ set(kritappmimport_PART_SRCS
     kis_ppm_import.cpp
     )
 
-kde4_add_plugin(kritappmimport ${kritappmimport_PART_SRCS})
+add_library(kritappmimport MODULE ${kritappmimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritappmimport krita_ppm_import.desktop)
 
 target_link_libraries(kritappmimport kritaui ${KDE4_KIO_LIBS})
 
-install(TARGETS kritappmimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritappmimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -18,13 +19,14 @@ set(kritappmexport_PART_SRCS
     kis_ppm_export.cpp
     )
 
-kde4_add_ui_files(kritappmexport_PART_SRCS kis_wdg_options_ppm.ui )
+ki18n_wrap_ui(kritappmexport_PART_SRCS kis_wdg_options_ppm.ui )
 
-kde4_add_plugin(kritappmexport ${kritappmexport_PART_SRCS})
+add_library(kritappmexport MODULE ${kritappmexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritappmexport krita_ppm_export.desktop)
 
 target_link_libraries(kritappmexport kritaui  )
 
-install(TARGETS kritappmexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritappmexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

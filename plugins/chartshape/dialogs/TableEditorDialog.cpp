@@ -32,12 +32,12 @@
 // Calligra
 #include <KoIcon.h>
 
-// KChart
+// KoChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 TableEditorDialog::TableEditorDialog()
     : QDialog( 0 )

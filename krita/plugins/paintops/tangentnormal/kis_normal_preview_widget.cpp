@@ -23,6 +23,8 @@
 #include <QColor>
 #include <QPoint>
 
+#include "kglobal.h"
+
 #include "kis_global.h"
 #include <kstandarddirs.h>
 #include "kis_factory2.h"
@@ -34,7 +36,7 @@ KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent)
     m_greenChannel = 2;
     m_blueChannel = 4;
     //TODO: this can be changed in frameworks to  KGlobal::dirs()->findResource("kis_images", "krita-tangetnormal.png");
-    m_fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
+    m_fileName = KGlobal::dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
     QImage preview = QImage(m_fileName);
     setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 }

@@ -207,9 +207,8 @@ void KisImageManager::slotImageColor()
     if (!image) return;
 
     KColorDialog dlg;
-#if KDE_IS_VERSION(4,5,0)
     dlg.setAlphaChannelEnabled(true);
-#endif
+
     KoColor bg = image->defaultProjectionColor();
     dlg.setColor(bg.toQColor());
     dlg.setButtons(KColorDialog::Ok | KColorDialog::Cancel);
@@ -228,4 +227,3 @@ void KisImageManager::slotImageColor()
 }
 
 
-#include "kis_image_manager.moc"

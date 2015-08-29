@@ -12,20 +12,20 @@ set(kritablurfilter_PART_SRCS
     kis_wdg_lens_blur.cpp
     )
 
-kde4_add_ui_files(kritablurfilter_PART_SRCS
+ki18n_wrap_ui(kritablurfilter_PART_SRCS
     wdgblur.ui
     wdg_gaussian_blur.ui
     wdg_motion_blur.ui
     wdg_lens_blur.ui
     )
 
-kde4_add_plugin(kritablurfilter ${kritablurfilter_PART_SRCS})
-
+add_library(kritablurfilter MODULE ${kritablurfilter_PART_SRCS})
+kcoreaddons_desktop_to_json(kritablurfilter kritablurfilter.desktop)
 
 
 target_link_libraries(kritablurfilter kritaui)
 
-install(TARGETS kritablurfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritablurfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

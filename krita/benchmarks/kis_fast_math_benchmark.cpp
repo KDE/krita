@@ -56,4 +56,3 @@ void KisFastMathBenchmark::benchmarkLibCAtan2()
 
 QTEST_KDEMAIN(KisFastMathBenchmark, GUI)
 
-#include "kis_fast_math_benchmark.moc"

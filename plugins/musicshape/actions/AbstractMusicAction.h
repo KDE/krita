@@ -27,6 +27,8 @@ namespace MusicCore {
     class Staff;
 }
 
+class KIcon;
+
 class AbstractMusicAction : public KAction
 {
     Q_OBJECT

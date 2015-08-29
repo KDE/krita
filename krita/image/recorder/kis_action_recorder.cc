@@ -36,4 +36,3 @@ void KisActionRecorder::addAction(const KisRecordedAction& action, const KisReco
     emit(addedAction(action));
 }
 
-#include "kis_action_recorder.moc"

@@ -200,4 +200,3 @@ void KisDatamanagerBenchmark::benchmarkMemCpy()
 
 
 QTEST_KDEMAIN(KisDatamanagerBenchmark, GUI)
-#include "kis_datamanager_benchmark.moc"

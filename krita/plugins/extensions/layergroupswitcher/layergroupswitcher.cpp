@@ -35,8 +35,7 @@
 
 #include "kis_action.h"
 
-K_PLUGIN_FACTORY(LayerGroupSwitcherFactory, registerPlugin<LayerGroupSwitcher>();)
-K_EXPORT_PLUGIN(LayerGroupSwitcherFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(LayerGroupSwitcherFactory, "kritalayergroupswitcher.json", registerPlugin<LayerGroupSwitcher>();)
 
 LayerGroupSwitcher::LayerGroupSwitcher(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
@@ -129,3 +128,5 @@ void LayerGroupSwitcher::moveIntoPreviousGroup()
     }
     image->refreshGraph();
 }
+
+#include "layergroupswitcher.moc"

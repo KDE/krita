@@ -45,4 +45,3 @@ WdgImagesplit::WdgImagesplit(QWidget* parent)
 }
 
 
-#include "wdg_imagesplit.moc"

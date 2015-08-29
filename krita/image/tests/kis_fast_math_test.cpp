@@ -41,4 +41,3 @@ void KisFastMathTest::testAtan2()
 
 
 QTEST_KDEMAIN(KisFastMathTest, GUI)
-#include "kis_fast_math_test.moc"

@@ -79,7 +79,7 @@ private:
     const KisShapeProperties * m_shapeProperties;
     const KisShapeDynamicsProperties * m_shapeDynamicsProperties;
 
-    const KisBrushSP m_brush;
+    KisBrushSP m_brush;
     KisFixedPaintDeviceSP m_fixedDab;
 
 private:

@@ -234,7 +234,9 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
 
         foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
             if (!KoRdfSemanticItemRegistry::instance()->isBasic(semanticClass)) {
-                hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, this);
+                hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+		    KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, this).data()
+		));
                 si->loadUserStylesheets(d->model);
             }
         }
@@ -328,7 +330,13 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
 
         foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
             if (!KoRdfSemanticItemRegistry::instance()->isBasic(semanticClass)) {
-                hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, const_cast<KoDocumentRdf*>(this));
+                hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+		    KoRdfSemanticItemRegistry::instance()->createSemanticItem(
+			semanticClass,
+			this,
+			const_cast<KoDocumentRdf*>(this)
+		    ).data()
+		));
                 si->saveUserStylesheets(d->model, context);
             }
         }
@@ -492,7 +500,7 @@ Soprano::Statement KoDocumentRdf::toStatement(KoTextInlineRdf *inlineRdf) const
     RDEBUG << "subj:"  << subj;
     RDEBUG << " pred:" << pred;
     RDEBUG << " obj:"  << obj;
-    return Soprano::Statement(subj, pred, obj, inlineRdfContext());;
+    return Soprano::Statement(subj, pred, obj, inlineRdfContext());
 }
 
 void KoDocumentRdf::addStatements(QSharedPointer<Soprano::Model> model, const QString &xmlid)
@@ -923,8 +931,9 @@ void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfBasicSemanticItem item)
         // reflow the formatting for each view of the semanticItem, in reverse document order
         //
         QMap<int, reflowItem> col;
-        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << hKoRdfSemanticItem(item)->name();
-        insertReflow(col, item);
+	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(item.data()));
+        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << si->name();
+        insertReflow(col, si);
         applyReflow(col);
     }
     emit semanticObjectUpdated(item);
@@ -936,11 +945,10 @@ void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem ba
         return;
     }
 
-    hKoRdfSemanticItem item = baseItem;
+    hKoRdfSemanticItem item(static_cast<KoRdfSemanticItem *>(baseItem.data()));
     if (item) {
-        hKoRdfSemanticItem newitem = item;
-        RDEBUG << "xmlid:" << xmlid << " reflow item:" << newitem->name();
-        emit semanticObjectViewSiteUpdated(newitem, xmlid);
+	RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
+	emit semanticObjectViewSiteUpdated(item, xmlid);
     }
 }
 

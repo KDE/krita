@@ -32,8 +32,7 @@
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-K_PLUGIN_FACTORY(GridFactory, registerPlugin<GridPlugin>();)
-K_EXPORT_PLUGIN(GridFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(GridFactory, "kritatoolgrid.json", registerPlugin<GridPlugin>();)
 
 
 GridPlugin::GridPlugin(QObject *parent, const QVariantList &)

@@ -30,4 +30,3 @@ void KisAnnotationTest::testCreation()
 
 
 QTEST_KDEMAIN(KisAnnotationTest, GUI)
-#include "kis_annotation_test.moc"

@@ -370,5 +370,5 @@ void KoDockWidgetTitleBar::Private::updateIcons()
 
 }
 
-
-#include <KoDockWidgetTitleBar.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoDockWidgetTitleBar.cpp"

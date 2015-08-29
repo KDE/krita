@@ -22,15 +22,16 @@ set(kritajpegimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritajpegimport ${kritajpegimport_PART_SRCS})
+add_library(kritajpegimport MODULE ${kritajpegimport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajpegimport krita_jpeg_import.desktop)
 
 if(LCMS2_FOUND)
-    target_link_libraries(kritajpegimport kritaui ${KDE4_KIO_LIBS} jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegimport kritaui ${KDE4_KIO_LIBS} ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 else()
-    target_link_libraries(kritajpegimport kritaui ${KDE4_KIO_LIBS} jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegimport kritaui ${KDE4_KIO_LIBS} ${JPEG_LIBRARIES} ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 endif()
 
-install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajpegimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -39,17 +40,18 @@ set(kritajpegexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
+ki18n_wrap_ui(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
-kde4_add_plugin(kritajpegexport ${kritajpegexport_PART_SRCS})
+add_library(kritajpegexport MODULE ${kritajpegexport_PART_SRCS})
+kcoreaddons_desktop_to_json(kritajpegexport krita_jpeg_export.desktop)
 
 if(LCMS2_FOUND)
-    target_link_libraries(kritajpegexport kritaui  ${KDE4_KIO_LIBS} jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegexport kritaui  ${KDE4_KIO_LIBS} ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 else()
-    target_link_libraries(kritajpegexport kritaui  ${KDE4_KIO_LIBS} jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
+    target_link_libraries(kritajpegexport kritaui  ${KDE4_KIO_LIBS} ${JPEG_LIBRARIES} ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 endif()
 
-install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritajpegexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

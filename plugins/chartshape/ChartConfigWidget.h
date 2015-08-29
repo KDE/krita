@@ -27,9 +27,9 @@
 // Calligra
 #include <KoShapeConfigWidgetBase.h>
 
-// KDChart
-
 // KChart
+
+// KoChart
 #include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
 
@@ -37,13 +37,13 @@
 class KoShape;
 class KAction;
 
-namespace KDChart
+namespace KChart
 {
     class Position;
     class CartesianAxis;
 }
 
-namespace KChart
+namespace KoChart
 {
 class ChartShape;
 
@@ -195,7 +195,7 @@ private:
     Private * const d;
 };
 
-}  // namespace KChart
+}  // namespace KoChart
 
 
 #endif // KCHART_CHART_TYPE_CONFIG_WIDGET

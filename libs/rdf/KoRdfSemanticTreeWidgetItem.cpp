@@ -95,7 +95,7 @@ KAction *KoRdfSemanticTreeWidgetItem::createAction(QWidget *parent, KoCanvasBase
 }
 
 void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
-        QList<KAction *> &actions, KoCanvasBase *host)
+        QList<QAction *> &actions, KoCanvasBase *host)
 {
     if (!host) {
         return;
@@ -169,7 +169,7 @@ void KoRdfSemanticTreeWidgetItem::edit()
     QWidget *w = semanticItem()->createEditor(widget);
     lay->addWidget(w);
     KPageDialog dialog;
-    dialog.setCaption(caption);
+    dialog.setWindowTitle(caption);
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
         kDebug(30015) << "KoRdfSemanticTreeWidgetItem::edit() accepted...";

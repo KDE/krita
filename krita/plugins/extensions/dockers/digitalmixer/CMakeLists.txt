@@ -1,13 +1,14 @@
 
 set(KRITA_DIGITALMIXER_PART_SRCS digitalmixer.cc digitalmixer_dock.cc )
 
-# kde4_add_ui_files(kritadigitalmixer_PART_SRCS myuifile.ui )
+# ki18n_wrap_ui(kritadigitalmixer_PART_SRCS myuifile.ui )
 
-kde4_add_plugin(kritadigitalmixer ${KRITA_DIGITALMIXER_PART_SRCS})
+add_library(kritadigitalmixer MODULE ${KRITA_DIGITALMIXER_PART_SRCS})
+kcoreaddons_desktop_to_json(kritadigitalmixer krita_digitalmixer.desktop)
 
 target_link_libraries(kritadigitalmixer kritaui)
 
-install(TARGETS kritadigitalmixer  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritadigitalmixer  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

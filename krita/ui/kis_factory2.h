@@ -35,13 +35,13 @@ public:
     KisFactory();
     ~KisFactory();
 
-    static KAboutData *aboutData();
+    static K4AboutData *aboutData();
     static const KComponentData &componentData();
     static const QString componentName();
 
 private:
     static KComponentData *s_componentData;
-    static KAboutData *s_aboutData;
+    static K4AboutData *s_aboutData;
 };
 
 #endif

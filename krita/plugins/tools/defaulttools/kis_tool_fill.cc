@@ -24,6 +24,7 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
@@ -298,4 +299,3 @@ void KisToolFill::slotSetFeather(int feather)
     m_feather = feather;
     m_configGroup.writeEntry("featherAmount", feather);
 }
-#include "kis_tool_fill.moc"

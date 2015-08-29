@@ -73,5 +73,4 @@ KisPropertiesConfiguration* KisWdgRandomPick::configuration() const
     return config;
 }
 
-#include "kis_wdg_random_pick.moc"
 

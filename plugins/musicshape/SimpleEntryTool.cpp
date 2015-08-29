@@ -21,12 +21,13 @@
 #include <QBuffer>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
+#include <QInputDialog>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kfiledialog.h>
-#include <kinputdialog.h>
 #include <kaction.h>
+#include <kurl.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -687,7 +688,12 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = KInputDialog::getInteger(i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
+    int barCount = QInputDialog::getInt(0, i18n("Add measures"),
+                                        i18n("Add how many measures?"),
+                                        1,
+                                        1,
+                                        1000,
+                                        1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
 }

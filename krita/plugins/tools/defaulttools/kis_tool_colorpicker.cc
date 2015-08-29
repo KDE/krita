@@ -33,7 +33,9 @@
 #include <QWidget>
 #include <QVector>
 
+#include <kconfiggroup.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <QMessageBox>
 
 #include "kis_layer.h"
@@ -42,7 +44,6 @@
 #include "kis_paint_device.h"
 #include "kis_properties_configuration.h"
 
-#include "kis_tool_colorpicker.moc"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "kis_random_accessor_ng.h"

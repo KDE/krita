@@ -34,11 +34,13 @@
 #include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QMimeData>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
+#include <kurl.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>

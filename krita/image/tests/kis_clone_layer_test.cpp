@@ -392,4 +392,3 @@ void KisCloneLayerTest::testCyclingGroupLayer()
 }
 
 QTEST_KDEMAIN(KisCloneLayerTest, GUI)
-#include "kis_clone_layer_test.moc"

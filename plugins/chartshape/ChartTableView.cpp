@@ -23,7 +23,7 @@
 #include "ChartTableView.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 ChartTableView::ChartTableView(QWidget *parent /* = 0 */)
    : QTableView(parent)

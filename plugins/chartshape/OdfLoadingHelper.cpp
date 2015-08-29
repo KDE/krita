@@ -26,7 +26,7 @@
 // Calligra
 #include "KoOdfStylesReader.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 OdfLoadingHelper::OdfLoadingHelper()
     : tableSource(0)

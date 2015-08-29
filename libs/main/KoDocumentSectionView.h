@@ -137,7 +137,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
-    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>());
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private Q_SLOTS:

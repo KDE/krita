@@ -6,11 +6,12 @@ set(kritafilterop_PART_SRCS
     )
 
 
-kde4_add_plugin(kritafilterop ${kritafilterop_PART_SRCS})
+add_library(kritafilterop MODULE ${kritafilterop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritafilterop kritafilterop.desktop)
 
 target_link_libraries(kritafilterop kritalibpaintop)
 
-install(TARGETS kritafilterop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritafilterop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -36,4 +36,3 @@ void KisPPMTest::testFiles()
 }
 QTEST_KDEMAIN(KisPPMTest, GUI)
 
-#include "kis_ppm_test.moc"

@@ -9,13 +9,14 @@ set(kritacurvepaintop_PART_SRCS
       kis_curve_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritacurvepaintop_PART_SRCS wdgcurveoptions.ui )
+ki18n_wrap_ui(kritacurvepaintop_PART_SRCS wdgcurveoptions.ui )
 
-kde4_add_plugin(kritacurvepaintop ${kritacurvepaintop_PART_SRCS})
+add_library(kritacurvepaintop MODULE ${kritacurvepaintop_PART_SRCS})
+kcoreaddons_desktop_to_json(kritacurvepaintop kritacurvepaintop.desktop)
 
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 
-install(TARGETS kritacurvepaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacurvepaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

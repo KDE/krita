@@ -30,8 +30,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(ExperimentPaintOpPluginFactory, registerPlugin<ExperimentPaintOpPlugin>();)
-K_EXPORT_PLUGIN(ExperimentPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(ExperimentPaintOpPluginFactory, "kritaexperimentpaintop.json", registerPlugin<ExperimentPaintOpPlugin>();)
 
 
 ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QVariantList &)

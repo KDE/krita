@@ -359,4 +359,3 @@ void KisMaskManager::maskToBottom()
     m_commandsAdapter->toBottom(activeMask());
 }
 
-#include "kis_mask_manager.moc"

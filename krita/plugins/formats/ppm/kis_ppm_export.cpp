@@ -44,8 +44,7 @@
 #include <QApplication>
 
 
-K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
-K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KisPPMExportFactory, "krita_ppm_export.json", registerPlugin<KisPPMExport>();)
 
 KisPPMExport::KisPPMExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
@@ -289,3 +288,5 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     fp.close();
     return KisImportExportFilter::OK;
 }
+
+#include "kis_ppm_export.moc"

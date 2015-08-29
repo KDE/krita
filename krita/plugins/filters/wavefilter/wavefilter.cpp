@@ -45,8 +45,7 @@
 #include "ui_wdgwaveoptions.h"
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(KritaWaveFilterFactory, registerPlugin<KritaWaveFilter>();)
-K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaWaveFilterFactory, "kritawavefilter.json", registerPlugin<KritaWaveFilter>();)
 
 class KisWaveCurve
 {
@@ -174,3 +173,5 @@ QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration*
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     return rect.adjusted(-horizontalamplitude, -verticalamplitude, horizontalamplitude, verticalamplitude);
 }
+
+#include "wavefilter.moc"

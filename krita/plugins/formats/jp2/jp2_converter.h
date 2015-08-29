@@ -28,6 +28,8 @@
 #include "kis_types.h"
 class KisDocument;
 
+class KUrl;
+
 struct JP2ConvertOptions {
   int rate;
   int numberresolution;

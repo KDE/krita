@@ -400,5 +400,4 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
         return QPainterPath();
 }
 
-#include "kis_tool_freehand.moc"
 

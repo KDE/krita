@@ -31,7 +31,7 @@
 
 #include <math.h>
 
-#ifdef _WIN32
+#if defined(_MSC_VER) && (_MSC_VER < 1800)
 #define isfinite(x) (double)(x)
 #endif
 
@@ -75,7 +75,7 @@ OrthogonalSnapStrategy::OrthogonalSnapStrategy()
 
 bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
     QPointF horzSnap, vertSnap;
     qreal minVertDist = HUGE_VAL;
     qreal minHorzDist = HUGE_VAL;
@@ -140,7 +140,7 @@ NodeSnapStrategy::NodeSnapStrategy()
 
 bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
     const qreal maxDistance = maxSnapDistance * maxSnapDistance;
     qreal minDistance = HUGE_VAL;
 
@@ -178,7 +178,7 @@ ExtensionSnapStrategy::ExtensionSnapStrategy()
 
 bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
 
     const qreal maxDistance = maxSnapDistance * maxSnapDistance;
     qreal minDistances[2] = { HUGE_VAL, HUGE_VAL };
@@ -380,7 +380,7 @@ IntersectionSnapStrategy::IntersectionSnapStrategy()
 
 bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
     const qreal maxDistance = maxSnapDistance * maxSnapDistance;
     qreal minDistance = HUGE_VAL;
 
@@ -427,7 +427,7 @@ GridSnapStrategy::GridSnapStrategy()
 
 bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
     if (! proxy->canvas()->snapToGrid())
         return false;
 
@@ -492,7 +492,7 @@ BoundingBoxSnapStrategy::BoundingBoxSnapStrategy()
 
 bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
     const qreal maxDistance = maxSnapDistance * maxSnapDistance;
     qreal minDistance = HUGE_VAL;
 
@@ -579,7 +579,7 @@ LineGuideSnapStrategy::LineGuideSnapStrategy()
 
 bool LineGuideSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
 {
-    Q_ASSERT(isfinite(maxSnapDistance));
+    Q_ASSERT(std::isfinite(maxSnapDistance));
 
     KoGuidesData * guidesData = proxy->canvas()->guidesData();
 

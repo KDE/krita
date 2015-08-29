@@ -3,6 +3,7 @@ add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif ()
@@ -87,7 +88,7 @@ set(kowidgets_LIB_SRCS
     KoTableView.cpp
 )
 
-kde4_add_ui_files( kowidgets_LIB_SRCS
+ki18n_wrap_ui( kowidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     KoCsvImportDialog.ui
     koDocumentInfoAboutWidget.ui
@@ -98,15 +99,21 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 )
 
 
-kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
+add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
+generate_export_header(kowidgets BASE_NAME kowidgets)
 
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KIO_LIBS})
+target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 
 if(GHNS)
-    target_link_libraries(kowidgets {KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kowidgets KF5::NewStuff)
 endif ()
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
+if(X11_FOUND)
+    target_link_libraries(kowidgets Qt5::X11Extras ${X11_LIBRARIES})
+endif()
+
+
+target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils )
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -122,7 +129,7 @@ install( FILES
     KoPageLayoutWidget.h
     KoPagePreviewWidget.h
     KoPositionSelector.h
-    kowidgets_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kowidgets_export.h
     KoZoomAction.h
     KoZoomController.h
     KoZoomInput.h
@@ -164,9 +171,9 @@ set(filedialogtester_SRCS
     KoFileDialogTester.cpp
     main.cpp
 )
-kde4_add_ui_files(filedialogtester_SRCS
+ki18n_wrap_ui(filedialogtester_SRCS
     KoFileDialogTester.ui
 )
 
-kde4_add_executable(filedialogtester ${filedialogtester_SRCS})
+add_executable(filedialogtester ${filedialogtester_SRCS})
 target_link_libraries(filedialogtester kowidgets)

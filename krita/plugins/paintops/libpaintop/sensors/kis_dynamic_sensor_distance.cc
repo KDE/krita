@@ -86,4 +86,3 @@ void KisDynamicSensorDistance::fromXML(const QDomElement& e)
     m_length = e.attribute("length", "30").toInt();
 }
 
-#include "kis_dynamic_sensor_distance.moc"

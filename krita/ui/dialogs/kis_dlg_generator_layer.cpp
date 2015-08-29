@@ -74,4 +74,3 @@ QString KisDlgGeneratorLayer::layerName() const
     return dlgWidget.txtLayerName->text();
 }
 
-#include "kis_dlg_generator_layer.moc"

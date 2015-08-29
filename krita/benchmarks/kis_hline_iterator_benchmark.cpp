@@ -192,4 +192,3 @@ void KisHLineIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy(){
 
 
 QTEST_KDEMAIN(KisHLineIteratorBenchmark, GUI)
-#include "kis_hline_iterator_benchmark.moc"

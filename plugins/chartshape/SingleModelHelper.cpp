@@ -24,12 +24,12 @@
 // Qt
 #include <QAbstractItemModel>
 
-// KChart
+// KoChart
 #include "TableSource.h"
 #include "ChartProxyModel.h"
 #include "CellRegion.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 SingleModelHelper::SingleModelHelper(Table *table, ChartProxyModel *proxyModel)
     : m_table(table)

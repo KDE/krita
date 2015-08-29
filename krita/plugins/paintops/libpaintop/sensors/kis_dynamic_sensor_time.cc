@@ -101,4 +101,3 @@ void KisDynamicSensorTime::fromXML(const QDomElement& e)
     m_length = e.attribute("duration", "30").toInt();
 }
 
-#include "kis_dynamic_sensor_time.moc"

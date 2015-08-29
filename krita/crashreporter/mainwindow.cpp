@@ -32,11 +32,11 @@
 
 #include <KoConfig.h>
 
-#ifdef Q_OS_WIN
+#ifdef Q_OS_MAC
 #include <windows.h>
 #endif
 
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_MAC
 //#include <cstring>
 //#include <windows.h>
 //#include <shellapi.h>
@@ -74,7 +74,7 @@
 //    }
 //}
 
-//#else // Q_WS_WIN
+//#else // Q_OS_MAC
 
 void doRestart(MainWindow* mainWindow, bool resetConfig)
 {
@@ -119,11 +119,11 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
     restartCommand = QString("open \"") + QString(bundleDir.absolutePath() + "/krita.app\"");
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_MAC
     restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/krita.exe \"";
 #endif
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/krita \"";
 #endif
 
@@ -134,7 +134,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
                              i18n("Could not restart Krita. Please try to restart manually."));
     }
 }
-//#endif  // Q_WS_WIN
+//#endif  // Q_OS_MAC
 
 #ifdef Q_WS_MAC
 QString platformToStringMac(QSysInfo::MacVersion version)
@@ -167,7 +167,7 @@ QString platformToStringMac(QSysInfo::MacVersion version)
 }
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_MAC
 QString platformToStringWin(QSysInfo::WinVersion version)
 {
     switch(version) {
@@ -303,7 +303,7 @@ void MainWindow::startUpload()
            << Field("Email", txtEmail->text().toLatin1())
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_MAC
 
     QString platform = platformToStringWin(QSysInfo::WindowsVersion);
 
@@ -315,7 +315,7 @@ void MainWindow::startUpload()
 
     fields << Field("Platform", platform.toLatin1());
 #endif
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     fields << Field("Platform", "Linux/X11");
 #endif
 #ifdef Q_WS_MAC

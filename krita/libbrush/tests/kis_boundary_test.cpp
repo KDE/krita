@@ -34,4 +34,3 @@ void KisBoundaryTest::testCreation()
 
 
 QTEST_KDEMAIN(KisBoundaryTest, GUI)
-#include "kis_boundary_test.moc"

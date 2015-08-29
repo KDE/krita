@@ -44,7 +44,7 @@ public:
             INVALID_TYPE,
             INVALID_VALUE
         };
-    private:
+    public:
         Reason(Type type = UNKNOWN_REASON);
         Reason(const Reason&);
         Reason& operator=(const Reason&);

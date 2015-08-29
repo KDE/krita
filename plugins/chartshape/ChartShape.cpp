@@ -39,27 +39,27 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartAbstractDiagram>
-#include <KDChartCartesianAxis>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPolarCoordinatePlane>
-#include "KDChartConvertions.h"
+// KChart
+#include <KChartChart>
+#include <KChartAbstractDiagram>
+#include <KChartCartesianAxis>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartPolarCoordinatePlane>
+#include "KChartConvertions.h"
 // Attribute Classes
-#include <KDChartDataValueAttributes>
-#include <KDChartGridAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartMarkerAttributes>
-#include <KDChartThreeDPieAttributes>
-#include <KDChartThreeDBarAttributes>
-#include <KDChartThreeDLineAttributes>
+#include <KChartDataValueAttributes>
+#include <KChartGridAttributes>
+#include <KChartTextAttributes>
+#include <KChartMarkerAttributes>
+#include <KChartThreeDPieAttributes>
+#include <KChartThreeDBarAttributes>
+#include <KChartThreeDLineAttributes>
 // Diagram Classes
-#include <KDChartBarDiagram>
-#include <KDChartPieDiagram>
-#include <KDChartLineDiagram>
-#include <KDChartRingDiagram>
-#include <KDChartPolarDiagram>
+#include <KChartBarDiagram>
+#include <KChartPieDiagram>
+#include <KChartLineDiagram>
+#include <KChartRingDiagram>
+#include <KChartPolarDiagram>
 
 // Calligra
 #include <KoShapeLoadingContext.h>
@@ -90,7 +90,7 @@
 #include <KoTextDocument.h>
 #include <KoUnit.h>
 
-// KChart
+// KoChart
 #include "Axis.h"
 #include "DataSet.h"
 #include "Legend.h"
@@ -112,7 +112,7 @@
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
 
-namespace KChart {
+namespace KoChart {
 
 /// @see ChartShape::setEnableUserInteraction()
 static bool ENABLE_USER_INTERACTION = true;
@@ -154,7 +154,7 @@ void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
     style.addPropertyPt("fo:font-size", font.pointSize(), KoGenStyle::TextType);
     style.addProperty("fo:color", color.isValid() ? color.name() : "#000000", KoGenStyle::TextType);
     int w = font.weight();
-    style.addProperty("fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number(qRound(w / 10) * 100), KoGenStyle::TextType);
+    style.addProperty("fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number(qRound(w / 10.0) * 100), KoGenStyle::TextType);
     style.addProperty("fo:font-style", font.italic() ? "italic" : "normal", KoGenStyle::TextType);
 }
 
@@ -263,7 +263,7 @@ public:
     PlotArea  *plotArea;
 
     // Data
-    ChartProxyModel     *proxyModel;	 /// What's presented to KDChart
+    ChartProxyModel     *proxyModel;	 /// What's presented to KChart
     QAbstractItemModel  *internalModel;
     TableSource          tableSource;
     SingleModelHelper   *internalModelHelper;
@@ -1027,7 +1027,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // 1. Load the chart type.
     const QString chartClass = chartElement.attributeNS(KoXmlNS::chart, "class", QString());
-    KChart::ChartType chartType = KChart::BarChartType;
+    KoChart::ChartType chartType = KoChart::BarChartType;
     // Find out what charttype the chart class corresponds to.
     bool  knownType = false;
     for (int type = 0; type < (int)LastChartType; ++type) {
@@ -1354,4 +1354,4 @@ void ChartShape::setEnableUserInteraction(bool enable)
     ENABLE_USER_INTERACTION = enable;
 }
 
-} // Namespace KChart
+} // Namespace KoChart

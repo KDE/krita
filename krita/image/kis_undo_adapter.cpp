@@ -33,6 +33,5 @@ void KisUndoAdapter::emitSelectionChanged()
     emit selectionChanged();
 }
 
-#include "kis_undo_adapter.moc"
 
 

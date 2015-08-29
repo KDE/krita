@@ -119,9 +119,9 @@ private:
 
 KisBrushServer::KisBrushServer()
 {
-    KGlobal::mainComponent().dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
+    KGlobal::dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
+    KGlobal::dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
+    KGlobal::dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
 
     m_brushServer = new BrushResourceServer();
     if (!QFileInfo(m_brushServer->saveLocation()).exists()) {
@@ -161,4 +161,3 @@ void KisBrushServer::slotRemoveBlacklistedResources()
     m_brushServer->removeBlackListedFiles();
 }
 
-#include "kis_brush_server.moc"

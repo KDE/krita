@@ -47,4 +47,3 @@ void KisRecordedActionEditorTest::testFilterEditorCreation()
 
 QTEST_KDEMAIN(KisRecordedActionEditorTest, GUI)
 
-#include "kis_recorded_action_editor_test.moc"

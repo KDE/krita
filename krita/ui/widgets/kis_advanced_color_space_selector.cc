@@ -293,7 +293,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         }
         if(profileName.contains("ACEScg-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");
-            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The ACEScg color space is smaller than the ACES color space, but large enough to contain the 'Rec-2020 gamut and the DCI-P3 gamut', and has chromaticities that fall just barely outside the horseshoe-shaped locus of real colors on the xy chromaticity diagram."));
+            d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","The ACEScg color space is smaller than the ACES color space, but large enough to contain the 'Rec-2020 gamut and the DCI-P3 gamut', unlike the ACES color space it has no negative values and contains only few colors that fall just barely outside the area of real colors humans can see"));
         }
         if(profileName.contains("ClayRGB-")) {
             d->colorSpaceSelector->textProfileDescription->appendHtml("<br/>");

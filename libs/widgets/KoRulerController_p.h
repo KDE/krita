@@ -44,7 +44,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
     return tab1.position < tab2.position;
 }
 
-class KoRulerController::Private
+class Q_DECL_HIDDEN KoRulerController::Private
 {
 public:
     Private(KoRuler *r, KoCanvasResourceManager *crp)

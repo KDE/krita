@@ -33,7 +33,7 @@
 #include <QUrl>
 #include <QPainterPath>
 
-class KoMarker::Private
+class Q_DECL_HIDDEN KoMarker::Private
 {
 public:
     Private()

@@ -52,7 +52,7 @@
 #endif
 
 
-class KoDocumentSectionView::Private
+class Q_DECL_HIDDEN KoDocumentSectionView::Private
 {
 public:
     Private()

@@ -33,7 +33,7 @@ public:
     KisDuplicateOpOption();
 
     ~KisDuplicateOpOption();
-
+private:
     bool healing() const;
     void setHealing(bool healing);
 
@@ -45,7 +45,7 @@ public:
 
     bool cloneFromProjection() const;
     void setCloneFromProjection(bool cloneFromProjection);
-
+public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);

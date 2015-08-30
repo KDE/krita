@@ -41,7 +41,7 @@
 
 class KUndo2Command;
 
-class KoTextEditor::Private
+class Q_DECL_HIDDEN KoTextEditor::Private
 {
 public:
     enum State {

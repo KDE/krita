@@ -35,7 +35,7 @@
 #include <QStylePainter>
 #include <QStyleOptionFrame>
 
-class KoDockWidgetTitleBar::Private
+class Q_DECL_HIDDEN KoDockWidgetTitleBar::Private
 {
 public:
     Private(KoDockWidgetTitleBar* thePublic)

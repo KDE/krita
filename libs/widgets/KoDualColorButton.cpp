@@ -34,7 +34,7 @@
 #include <QPainter>
 #include <qdrawutil.h>
 
-class KoDualColorButton::Private
+class Q_DECL_HIDDEN KoDualColorButton::Private
 {
   public:
     Private(const KoColor &fgColor, const KoColor &bgColor,

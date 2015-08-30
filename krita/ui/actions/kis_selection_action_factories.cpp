@@ -196,10 +196,9 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     bool usePattern = false;
     bool useBgColor = false;
     
-    if (fillSource == "pattern") {
+    if (fillSource.contains("pattern")) {
         usePattern = true;
-    }
-    else if (fillSource == "bg") {
+    } else if (fillSource.contains("bg")) {
         useBgColor = true;
     }
 

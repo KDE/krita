@@ -161,7 +161,7 @@ private Q_SLOTS:
     void activatePickColorDelayed();
 
 protected Q_SLOTS:
-    virtual void updateTabletPressureSamples();
+    void updateTabletPressureSamples();
 
 protected:
     quint8 m_opacity;

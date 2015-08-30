@@ -42,7 +42,7 @@ int compare(const QPair < QPointF, KoShape * > &a, const QPair < QPointF, KoShap
     return a.first.y() < b.first.y();
 }
 
-class KoAnnotationLayoutManager::Private
+class Q_DECL_HIDDEN KoAnnotationLayoutManager::Private
 {
 public:
     Private()

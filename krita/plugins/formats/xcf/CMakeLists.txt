@@ -28,9 +28,9 @@ target_link_libraries(kritaxcfimport kritaui ${KDE4_KIO_LIBS})
 
 if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
-else ()
-    install(TARGETS kritaxcfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 endif ()
+
+install(TARGETS kritaxcfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

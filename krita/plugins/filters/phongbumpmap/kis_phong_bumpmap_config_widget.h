@@ -59,6 +59,8 @@ public:
 
 private:
     KisPaintDeviceSP m_device;
+private Q_SLOTS:
+    void slotDisableHeightChannelCombobox(bool normalmapchecked);
 };
 
 #endif  //KIS_PHONG_BUMPMAP_CONFIG_WIDGET_H

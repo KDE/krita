@@ -33,7 +33,7 @@
 #include <KGlobal>
 #include <KPluginFactory>
 
-class KoPluginLoader::Private
+class Q_DECL_HIDDEN KoPluginLoader::Private
 {
 public:
     QStringList loadedServiceTypes;

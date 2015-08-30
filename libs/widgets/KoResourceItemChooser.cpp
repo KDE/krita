@@ -60,7 +60,7 @@
 #include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
 
-class KoResourceItemChooser::Private
+class Q_DECL_HIDDEN KoResourceItemChooser::Private
 {
 public:
     Private()

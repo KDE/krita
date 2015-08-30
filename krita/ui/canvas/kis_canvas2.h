@@ -198,6 +198,11 @@ public Q_SLOTS:
 
     void channelSelectionChanged();
 
+    /**
+     * Called whenever the display monitor profile resource changes
+     */
+    void slotSetDisplayProfile(const KoColorProfile *profile);
+
 private Q_SLOTS:
 
     /// The image projection has changed, now start an update
@@ -219,12 +224,6 @@ private Q_SLOTS:
      * Called whenever the configuration settings change.
      */
     void slotConfigChanged();
-
-    /**
-     * Called whenever the display monitor profile resource changes
-     */
-    void slotSetDisplayProfile(const KoColorProfile * profile);
-
 
     void slotSelectionChanged();
 

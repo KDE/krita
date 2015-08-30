@@ -141,6 +141,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 if (dist < minDist) {
                     minDist = dist;
                 }
+                m_dragStart = QPointF(assistant->topRight().data()->x(),assistant->topRight().data()->y());
                 m_internalMode = MODE_DRAGGING_NODE;
             } else if (m_handleDrag == assistant->topRight()) {
                 double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
@@ -148,20 +149,25 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                     minDist = dist;
                 }
                 m_internalMode = MODE_DRAGGING_NODE;
+                m_dragStart = QPointF(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
             } else if (m_handleDrag == assistant->bottomLeft()) {
                 double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                 if (dist < minDist) {
                     minDist = dist;
                 }
                 m_internalMode = MODE_DRAGGING_NODE;
+                m_dragStart = QPointF(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
             } else if (m_handleDrag == assistant->bottomRight()) {
                 double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                 if (dist < minDist) {
                     minDist = dist;
                 }
                 m_internalMode = MODE_DRAGGING_NODE;
+                m_dragStart = QPointF(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
             } else if (m_handleDrag == assistant->leftMiddle()) {
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
+                m_dragStart = QPointF((assistant->bottomLeft().data()->x()+assistant->topLeft().data()->x())*0.5,
+                                      (assistant->bottomLeft().data()->y()+assistant->topLeft().data()->y())*0.5);
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
                 m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant();
@@ -174,6 +180,8 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 return;
             } else if (m_handleDrag == assistant->rightMiddle()) {
+                m_dragStart = QPointF((assistant->topRight().data()->x()+assistant->bottomRight().data()->x())*0.5,
+                                      (assistant->topRight().data()->y()+assistant->bottomRight().data()->y())*0.5);
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
@@ -187,6 +195,8 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 return;
             } else if (m_handleDrag == assistant->topMiddle()) {
+                m_dragStart = QPointF((assistant->topLeft().data()->x()+assistant->topRight().data()->x())*0.5,
+                                      (assistant->topLeft().data()->y()+assistant->topRight().data()->y())*0.5);
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
@@ -200,6 +210,8 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 return;
             } else if (m_handleDrag == assistant->bottomMiddle()) {
+                m_dragStart = QPointF((assistant->bottomLeft().data()->x()+assistant->bottomRight().data()->x())*0.5,
+                                      (assistant->bottomLeft().data()->y()+assistant->bottomRight().data()->y())*0.5);
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
                 m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
@@ -213,8 +225,41 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 return;
             }
+            m_snapIsRadial = false;
+        } else if (m_handleDrag && assistant->handles().size()>1 && (assistant->id() == "ruler" ||
+                                    assistant->id() == "parallel ruler" ||
+                                    assistant->id() == "infinite ruler" ||
+                                    assistant->id() == "spline")){
+            if (m_handleDrag == assistant->handles()[0]) {
+                m_dragStart = *assistant->handles()[1];
+            } else if (m_handleDrag == assistant->handles()[1]) {
+                m_dragStart = *assistant->handles()[0];
+            } else if(assistant->handles().size()==4){
+                if (m_handleDrag == assistant->handles()[2]) {
+                    m_dragStart = *assistant->handles()[0];
+                } else if (m_handleDrag == assistant->handles()[3]) {
+                    m_dragStart = *assistant->handles()[1];
+                }
+            }
+            m_snapIsRadial = false;
+        } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||
+                                    assistant->id() == "concentric ellipse" ||
+                                    assistant->id() == "fisheye-point")){
+            m_snapIsRadial = false;
+            if (m_handleDrag == assistant->handles()[0]) {
+                m_dragStart = *assistant->handles()[1];
+            } else if (m_handleDrag == assistant->handles()[1]) {
+                m_dragStart = *assistant->handles()[0];
+            } else if (m_handleDrag == assistant->handles()[2]) {
+                m_dragStart = assistant->buttonPosition();
+                m_radius = QLineF(m_dragStart, *assistant->handles()[0]);
+                m_snapIsRadial = true;
+            }
+            
+        } else {
+            m_dragStart = assistant->buttonPosition();
+            m_snapIsRadial = false;
         }
-        
     }
 
     if (m_handleDrag) {
@@ -289,6 +334,16 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_handleDrag) {
         *m_handleDrag = event->point;
+        //ported from the gradient tool... we need to think about this more in the future.
+        if (event->modifiers() == Qt::ShiftModifier && m_snapIsRadial) {
+            QLineF dragRadius = QLineF(m_dragStart, event->point);
+            dragRadius.setLength(m_radius.length()); 
+            *m_handleDrag = dragRadius.p2();
+        } else if (event->modifiers() == Qt::ShiftModifier ) {
+            *m_handleDrag = straightLine(event->point, m_dragStart);
+        } else {
+            *m_handleDrag = event->point;
+        }
         m_handleDrag->uncache();
 
         m_handleCombine = 0;
@@ -464,12 +519,28 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         *m_newAssistant->handles().back() = event->point;
         m_canvas->updateCanvas();
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
-        QPointF translate = event->point - m_dragEnd;
+        QPointF translate = event->point - m_dragEnd;;
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
         m_canvas->updateCanvas();
     }
+}
+
+QPointF KisRulerAssistantTool::straightLine(QPointF point, QPointF compare)
+{
+    QPointF comparison = point - compare;
+    QPointF result;
+
+    if (fabs(comparison.x()) > fabs(comparison.y())) {
+        result.setX(point.x());
+        result.setY(compare.y());
+    } else {
+        result.setX(compare.x());
+        result.setY(point.y());
+    }
+
+    return result;
 }
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)

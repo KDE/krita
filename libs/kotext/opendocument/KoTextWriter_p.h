@@ -95,7 +95,7 @@ class TagInformation
 /**
  * XXX: Apidox!
  */
-class KoTextWriter::Private
+class Q_DECL_HIDDEN KoTextWriter::Private
 {
 public:
 

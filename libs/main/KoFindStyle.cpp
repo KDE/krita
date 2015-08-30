@@ -34,7 +34,7 @@
 Q_DECLARE_METATYPE(QTextDocument *)
 Q_DECLARE_METATYPE(QTextCursor)
 
-class KoFindStyle::Private
+class Q_DECL_HIDDEN KoFindStyle::Private
 {
 public:
     QList<QTextDocument*> documents;

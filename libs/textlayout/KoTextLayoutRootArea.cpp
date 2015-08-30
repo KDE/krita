@@ -25,7 +25,7 @@
 #include <KoTextShapeData.h>
 #include <KoTextPage.h>
 
-class KoTextLayoutRootArea::Private
+class Q_DECL_HIDDEN KoTextLayoutRootArea::Private
 {
 public:
     Private()

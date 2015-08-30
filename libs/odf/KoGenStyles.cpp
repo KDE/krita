@@ -108,7 +108,7 @@ static void insertRawOdfStyles(const QByteArray& xml, QByteArray& styles)
     styles.append(xml);
 }
 
-class KoGenStyles::Private
+class Q_DECL_HIDDEN KoGenStyles::Private
 {
 public:
     Private(KoGenStyles *q) : q(q)

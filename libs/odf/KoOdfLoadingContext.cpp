@@ -38,7 +38,7 @@
 #include <QStandardPaths>
 
 
-class KoOdfLoadingContext::Private
+class Q_DECL_HIDDEN KoOdfLoadingContext::Private
 {
 public:
     Private(KoOdfStylesReader &sr, KoStore *s)

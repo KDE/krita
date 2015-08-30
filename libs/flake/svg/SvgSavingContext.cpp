@@ -39,7 +39,7 @@
 #include <QFile>
 #include <QFileInfo>
 
-class SvgSavingContext::Private
+class Q_DECL_HIDDEN SvgSavingContext::Private
 {
 public:
     Private(QIODevice &outputDevice)

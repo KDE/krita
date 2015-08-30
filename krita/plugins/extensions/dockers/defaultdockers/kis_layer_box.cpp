@@ -112,8 +112,9 @@ inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractBu
 
 inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
 {
-    Q_ASSERT(m_canvas);
-    menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
+    if (m_canvas) {
+        menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
+    }
 }
 
 KisLayerBox::KisLayerBox()
@@ -236,7 +237,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
-    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_selectOpaque->setActivationConditions(KisAction::SELECTION_EDITABLE);
     m_selectOpaque->setObjectName("select_opaque");
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
@@ -270,6 +271,8 @@ KisLayerBox::KisLayerBox()
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_wdgLayerBox->listLayers->setModel(m_nodeModel);
+
+    setEnabled(false);
 }
 
 KisLayerBox::~KisLayerBox()
@@ -513,48 +516,50 @@ void KisLayerBox::slotSetOpacity(double opacity)
 
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
-    QMenu menu;
+    if (m_canvas) {
+        QMenu menu;
 
-    if (index.isValid()) {
-        menu.addAction(m_propertiesAction);
-        addActionToMenu(&menu, "layer_style");
+        if (index.isValid()) {
+            menu.addAction(m_propertiesAction);
+            addActionToMenu(&menu, "layer_style");
 
-        menu.addSeparator();
-        menu.addAction(m_removeAction);
+            menu.addSeparator();
+            menu.addAction(m_removeAction);
 
-        addActionToMenu(&menu, "duplicatelayer");
-        addActionToMenu(&menu, "flatten_image");
-        addActionToMenu(&menu, "flatten_layer");
+            addActionToMenu(&menu, "duplicatelayer");
+            addActionToMenu(&menu, "flatten_image");
+            addActionToMenu(&menu, "flatten_layer");
 
-        // TODO: missing icon "edit-merge"
-        QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
-        if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
-        menu.addSeparator();
+            // TODO: missing icon "edit-merge"
+            QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
+            if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
+            menu.addSeparator();
 
-        QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
-        addActionToMenu(convertToMenu, "convert_to_paint_layer");
-        addActionToMenu(convertToMenu, "convert_to_transparency_mask");
-        addActionToMenu(convertToMenu, "convert_to_filter_mask");
-        addActionToMenu(convertToMenu, "convert_to_selection_mask");
+            QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
+            addActionToMenu(convertToMenu, "convert_to_paint_layer");
+            addActionToMenu(convertToMenu, "convert_to_transparency_mask");
+            addActionToMenu(convertToMenu, "convert_to_filter_mask");
+            addActionToMenu(convertToMenu, "convert_to_selection_mask");
 
-        QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
-        addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
-        addActionToMenu(splitAlphaMenu, "split_alpha_write");
-        addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
+            QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
+            addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
+            addActionToMenu(splitAlphaMenu, "split_alpha_write");
+            addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-        KisNodeSP node = m_nodeModel->nodeFromIndex(index);
-        if (node && !node->inherits("KisTransformMask")) {
-            addActionToMenu(&menu, "isolate_layer");
+            KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+            if (node && !node->inherits("KisTransformMask")) {
+                addActionToMenu(&menu, "isolate_layer");
+            }
         }
+        menu.addSeparator();
+        addActionToMenu(&menu, "add_new_transparency_mask");
+        addActionToMenu(&menu, "add_new_filter_mask");
+        addActionToMenu(&menu, "add_new_transform_mask");
+        addActionToMenu(&menu, "add_new_selection_mask");
+        menu.addSeparator();
+        menu.addAction(m_selectOpaque);
+        menu.exec(pos);
     }
-    menu.addSeparator();
-    addActionToMenu(&menu, "add_new_transparency_mask");
-    addActionToMenu(&menu, "add_new_filter_mask");
-    addActionToMenu(&menu, "add_new_transform_mask");
-    addActionToMenu(&menu, "add_new_selection_mask");
-    menu.addSeparator();
-    menu.addAction(m_selectOpaque);
-    menu.exec(pos);
 }
 
 void KisLayerBox::slotMergeLayer()

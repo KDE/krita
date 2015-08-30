@@ -32,7 +32,7 @@
 // 4 updates per second should be enough
 #define PROGRESSUPDATER_GUITIMERINTERVAL 250
 
-class KoProgressUpdater::Private
+class Q_DECL_HIDDEN KoProgressUpdater::Private
 {
 public:
 

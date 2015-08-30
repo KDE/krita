@@ -23,7 +23,7 @@
 
 #include "KoDocumentBase.h"
 
-class KoDocumentBase::Private {
+class Q_DECL_HIDDEN KoDocumentBase::Private {
 public:
 };
 

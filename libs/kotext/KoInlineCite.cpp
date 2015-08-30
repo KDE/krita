@@ -35,7 +35,7 @@
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
 
-class KoInlineCite::Private
+class Q_DECL_HIDDEN KoInlineCite::Private
 {
 public:
     Private(KoInlineCite::Type t)

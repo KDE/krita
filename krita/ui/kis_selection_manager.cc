@@ -233,7 +233,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillPatternOpacity  = new KisAction(i18n("Fill with Pattern (Opacity)"), this);
     m_fillPatternOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillPatternOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("fill_selection_pattern_opacioty", m_fillPatternOpacity);
+    actionManager->addAction("fill_selection_pattern_opacity", m_fillPatternOpacity);
     connect(m_fillPatternOpacity, SIGNAL(triggered()), this, SLOT(fillPatternOpacity()));
 
     m_strokeShapes  = new KisAction(i18nc("@action:inmenu", "Stro&ke selected shapes"), this);

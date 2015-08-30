@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-class KoShapeStrokeCommand::Private
+class Q_DECL_HIDDEN KoShapeStrokeCommand::Private
 {
 public:
     Private() {}

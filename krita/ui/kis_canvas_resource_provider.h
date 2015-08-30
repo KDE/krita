@@ -96,9 +96,6 @@ public:
 
     KoAbstractGradient *currentGradient() const;
 
-    void resetDisplayProfile(int screen = -1);
-    const KoColorProfile * currentDisplayProfile() const;
-
     KisImageWSP currentImage() const;
 
     KisNodeSP currentNode() const;
@@ -154,8 +151,6 @@ public Q_SLOTS:
      */
     // FIXME: this slot doesn't catch the case when image resolution is changed
     void slotImageSizeChanged();
-    void slotSetDisplayProfile(const KoColorProfile * profile);
-
     void slotOnScreenResolutionChanged();
 
     // This is a flag to handle a bug:
@@ -189,7 +184,6 @@ private:
 
     KisViewManager * m_view;
     KoCanvasResourceManager *m_resourceManager;
-    const KoColorProfile *m_displayProfile;
     bool m_fGChanged;
     QList<QPointer<KisAbstractPerspectiveGrid> > m_perspectiveGrids;
 

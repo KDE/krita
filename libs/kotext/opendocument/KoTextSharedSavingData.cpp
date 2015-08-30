@@ -28,7 +28,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <QMap>
 
-class KoTextSharedSavingData::Private
+class Q_DECL_HIDDEN KoTextSharedSavingData::Private
 {
 public:
     Private(void) : changes(0) { }

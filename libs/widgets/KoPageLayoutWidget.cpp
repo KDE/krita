@@ -23,7 +23,7 @@
 
 #include <KoUnit.h>
 
-class KoPageLayoutWidget::Private
+class Q_DECL_HIDDEN KoPageLayoutWidget::Private
 {
 public:
     Ui::KoPageLayoutWidget widget;

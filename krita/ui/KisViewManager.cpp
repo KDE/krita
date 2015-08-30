@@ -404,9 +404,6 @@ void KisViewManager::setCurrentView(KisView *view)
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
-        d->viewConnections.addUniqueConnection(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
-        resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
-
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
@@ -1192,8 +1189,16 @@ void KisViewManager::showJustTheCanvas(bool toggled)
     if (cfg.hideToolbarFullscreen()) {
         QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
         foreach(QToolBar* toolbar, toolBars) {
-            if (toolbar->isVisible() == toggled) {
-                toolbar->setVisible(!toggled);
+            if (!toggled) {
+                if (toolbar->dynamicPropertyNames().contains("wasvisible")) {
+                    if (toolbar->property("wasvisible").toBool()) {
+                        toolbar->setVisible(true);
+                    }
+                }
+            }
+            else {
+                toolbar->setProperty("wasvisible", toolbar->isVisible());
+                toolbar->setVisible(false);
             }
         }
     }

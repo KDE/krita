@@ -21,7 +21,7 @@
 
 #include "KoRdfSemanticItemFactoryBase.h"
 
-class KoRdfSemanticItemFactoryBase::Private
+class Q_DECL_HIDDEN KoRdfSemanticItemFactoryBase::Private
 {
 public:
     Private(const QString &identifier)

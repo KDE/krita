@@ -34,6 +34,9 @@ struct KisPaintingAssistantsDecoration::Private {
     QList<KisPaintingAssistant*> assistants;
     bool assistantVisible;
     bool outlineVisible;
+    bool snapOnlyOneAssistant;
+    KisPaintingAssistant* firstAssistant;
+    bool aFirstStroke;
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
@@ -42,6 +45,7 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
+    d->snapOnlyOneAssistant=true;//turn on by default.
 }
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
@@ -87,22 +91,46 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     QPointF best = point;
     double distance = DBL_MAX;
     //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
-        if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
-            QPointF pt = assistant->adjustPosition(point, strokeBegin);
-            if (pt.x() != pt.x()) continue;
-            double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
-            if (d < distance) {
-                best = pt;
-                distance = d;
+    if(!d->snapOnlyOneAssistant){
+        foreach(KisPaintingAssistant* assistant, d->assistants) {
+            if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+                QPointF pt = assistant->adjustPosition(point, strokeBegin);
+                if (pt.x() != pt.x()) continue;
+                double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
+                if (dist < distance) {
+                    best = pt;
+                    distance = dist;
+                }
             }
         }
+    } else if (d->aFirstStroke==false) {
+        foreach(KisPaintingAssistant* assistant, d->assistants) {
+            if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+                QPointF pt = assistant->adjustPosition(point, strokeBegin);
+                if (pt.x() != pt.x()) continue;
+                double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
+                if (dist < distance) {
+                    best = pt;
+                    distance = dist;
+                    d->firstAssistant = assistant;
+                }
+            }
+        }
+    } else {
+        best = d->firstAssistant->adjustPosition(point, strokeBegin);
     }
+    //this is here to be compatible with the movement in the perspective tool.
+    qreal dx = point.x() - strokeBegin.x(), dy = point.y() - strokeBegin.y();
+        if (dx * dx + dy * dy >= 4.0) {
+            // allow some movement before snapping
+            d->aFirstStroke=true;
+        }
     return best;
 }
 
 void KisPaintingAssistantsDecoration::endStroke()
 {
+    d->aFirstStroke=false;
     foreach(KisPaintingAssistant* assistant, d->assistants) {
         assistant->endStroke();
     }
@@ -153,6 +181,12 @@ void KisPaintingAssistantsDecoration::setOutlineVisible(bool set)
 {
     d->outlineVisible=set;
 }
+
+void KisPaintingAssistantsDecoration::setOnlyOneAssistantSnap(bool assistant)
+{
+    d->snapOnlyOneAssistant = assistant;
+}
+
 bool KisPaintingAssistantsDecoration::assistantVisibility()
 {
     return d->assistantVisible;
@@ -161,7 +195,6 @@ bool KisPaintingAssistantsDecoration::outlineVisibility()
 {
     return d->outlineVisible;
 }
-
 void KisPaintingAssistantsDecoration::uncache()
 {
      foreach(KisPaintingAssistant* assistant, d->assistants) {

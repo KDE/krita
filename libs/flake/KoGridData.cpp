@@ -35,7 +35,7 @@
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 
-class KoGridData::Private
+class Q_DECL_HIDDEN KoGridData::Private
 {
 public:
     Private()

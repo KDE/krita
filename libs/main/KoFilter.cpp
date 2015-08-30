@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterManager.h"
 #include "KoUpdater.h"
 
-class KoFilter::Private
+class Q_DECL_HIDDEN KoFilter::Private
 {
 public:
     QPointer<KoUpdater> updater;

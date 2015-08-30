@@ -46,7 +46,7 @@ struct LineKeeper
 };
 
 
-class KoTextLayoutArea::Private
+class Q_DECL_HIDDEN KoTextLayoutArea::Private
 {
 public:
     Private()

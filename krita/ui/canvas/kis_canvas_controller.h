@@ -37,6 +37,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void changeCanvasWidget(QWidget *widget);
     virtual void keyPressEvent(QKeyEvent *event);
+    virtual void wheelEvent(QWheelEvent *event);
     virtual bool eventFilter(QObject *watched, QEvent *event);
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
     virtual void activate();

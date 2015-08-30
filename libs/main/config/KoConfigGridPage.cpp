@@ -37,7 +37,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QHBoxLayout>
 #include <QLabel>
 
-class KoConfigGridPage::Private
+class Q_DECL_HIDDEN KoConfigGridPage::Private
 {
 public:
     Private(KoDocument* doc)

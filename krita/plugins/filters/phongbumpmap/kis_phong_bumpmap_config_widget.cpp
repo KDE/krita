@@ -88,6 +88,8 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     QList<KoChannelInfo *> channels = m_device->colorSpace()->channels();
     for (quint8 ch = 0; ch < m_device->colorSpace()->colorChannelCount(); ch++)
         m_page->heightChannelComboBox->addItem(channels.at(ch)->name());
+    
+    connect(m_page->useNormalMap, SIGNAL(toggled(bool)), this, SLOT(slotDisableHeightChannelCombobox(bool) ) );
 
 
 }
@@ -97,6 +99,11 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     if (!config) return;
     
     QVariant tempcolor;
+    if (config->getBool(USE_NORMALMAP_IS_ENABLED))  {
+        m_page->heightChannelComboBox->setEnabled(false);
+    } else {
+        m_page->heightChannelComboBox->setEnabled(true);
+    }
     m_page->ambientReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_AMBIENT_REFLECTIVITY) );
     m_page->diffuseReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_DIFFUSE_REFLECTIVITY) );
     m_page->specularReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_SPECULAR_REFLECTIVITY) );
@@ -167,5 +174,13 @@ KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
         qDebug() << i.key() << ":" << i.value();
     */
     return config;
+}
+
+void KisPhongBumpmapConfigWidget::slotDisableHeightChannelCombobox(bool normalmapchecked) {
+    if (normalmapchecked)  {
+        m_page->heightChannelComboBox->setEnabled(false);
+    } else {
+        m_page->heightChannelComboBox->setEnabled(true);
+    }
 }
 

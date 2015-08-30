@@ -21,7 +21,7 @@
 
 #include <QString>
 
-class KoEventAction::Private
+class Q_DECL_HIDDEN KoEventAction::Private
 {
 public:
     QString id;

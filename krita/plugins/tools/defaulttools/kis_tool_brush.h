@@ -120,6 +120,7 @@ private:
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
+    QCheckBox *m_chkOnlyOneAssistant;
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
     QCheckBox *m_chkSmoothPressure;

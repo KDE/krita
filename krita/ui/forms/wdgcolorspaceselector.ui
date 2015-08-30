@@ -147,7 +147,7 @@
      <item>
       <widget class="QPushButton" name="bnAdvanced">
        <property name="text">
-        <string>Choose Color Space</string>
+        <string>Color Space Browser</string>
        </property>
       </widget>
      </item>

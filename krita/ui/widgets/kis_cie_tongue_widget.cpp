@@ -139,7 +139,7 @@ static const double spectral_chromaticity[81][3] =
     { 0.7347, 0.2653 }  // 780 nm
 };
 
-class KisCIETongueWidget::Private
+class Q_DECL_HIDDEN KisCIETongueWidget::Private
 {
 public:
  

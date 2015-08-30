@@ -37,7 +37,6 @@
 
 #include <QMap>
 #include <QList>
-#include <QToolButton>
 #include <QHash>
 #include <QSet>
 #include <QRect>
@@ -69,8 +68,8 @@ public:
 
     KoCanvasBase *canvas;
     QGridLayout *layout;
-    QList<KoToolButton> buttons; // buttons maintained by toolmanager
-    QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
+    QList<KoToolAction*> toolActions; // toolActions maintained by toolmanager
+    QList<KoToolAction*> addedToolActions; //tools in the order added to QToolBox
     QMap<int, QWidget *> addedWidgets;
     QSet<QWidget *> currentAuxWidgets;
     int activeId;
@@ -86,28 +85,28 @@ public:
 
 QString KoModeBox::applicationName;
 
-static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
+static bool compareToolActions(const KoToolAction *b1, const KoToolAction *b2)
 {
     int b1Level;
     int b2Level;
-    if (b1.section.contains(KoModeBox::applicationName)) {
+    if (b1->section().contains(KoModeBox::applicationName)) {
         b1Level = 0;
-    } else if (b1.section.contains("main")) {
+    } else if (b1->section().contains("main")) {
         b1Level = 1;
     } else {
         b1Level = 2;
     }
 
-    if (b2.section.contains(KoModeBox::applicationName)) {
+    if (b2->section().contains(KoModeBox::applicationName)) {
         b2Level = 0;
-    } else if (b2.section.contains("main")) {
+    } else if (b2->section().contains("main")) {
         b2Level = 1;
     } else {
         b2Level = 2;
     }
 
     if (b1Level == b2Level) {
-        return b1.priority < b2.priority;
+        return b1->priority() < b2->priority();
     } else {
         return b1Level < b2Level;
     }
@@ -150,13 +149,13 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->layout->setContentsMargins(0,0,0,0);
     setLayout(d->layout);
 
-    foreach(const KoToolButton &button, KoToolManager::instance()->createToolList()) {
-        addButton(button);
+    foreach(KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
+        addToolAction(toolAction);
     }
 
-    qSort(d->buttons.begin(), d->buttons.end(), compareButton);
+    qSort(d->toolActions.begin(), d->toolActions.end(), compareToolActions);
 
-    // Update visibility of buttons
+    // Update visibility of toolActions
     updateShownTools(QList<QString>());
 
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -169,8 +168,8 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
             this, SLOT(setCurrentLayer(const KoCanvasController *,const KoShapeLayer *)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(updateShownTools(QList<QString>)));
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(KoToolButton,KoCanvasController*)),
-            this, SLOT(toolAdded(KoToolButton,KoCanvasController*)));
+            SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
+            this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
 
     connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
          this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
@@ -181,10 +180,9 @@ KoModeBox::~KoModeBox()
     delete d;
 }
 
-void KoModeBox::addButton(const KoToolButton &button)
+void KoModeBox::addToolAction(KoToolAction *toolAction)
 {
-    d->buttons.append(button);
-    button.button->setVisible(false);
+    d->toolActions.append(toolAction);
 }
 
 void KoModeBox::locationChanged(Qt::DockWidgetArea area)
@@ -244,8 +242,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
         d->activeId = id;
         d->tabBar->blockSignals(true);
         int i = 0;
-        foreach (const KoToolButton &button, d->addedButtons) {
-            if (button.buttonGroupId == d->activeId) {
+        foreach (KoToolAction *toolAction, d->addedToolActions) {
+            if (toolAction->buttonGroupId() == d->activeId) {
                 d->tabBar->setCurrentIndex(i);
                 d->stack->setCurrentIndex(i);
                 break;
@@ -257,7 +255,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
     }
 }
 
-QIcon KoModeBox::createTextIcon(const KoToolButton &button) const
+QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
 {
     QSize iconSize = d->tabBar->iconSize();
     QFont smallFont  = KGlobalSettings::generalFont();
@@ -278,9 +276,9 @@ QIcon KoModeBox::createTextIcon(const KoToolButton &button) const
         }
     }
 
-    button.button->icon().paint(&p, 0, 0, iconSize.height(), 22);
+    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
 
-    QTextLayout textLayout(button.button->toolTip(), smallFont, p.device());
+    QTextLayout textLayout(toolAction->iconText(), smallFont, p.device());
     QTextOption option;
     if (d->horizontalMode) {
         option = QTextOption(Qt::AlignVCenter | Qt::AlignHCenter);
@@ -320,7 +318,7 @@ QIcon KoModeBox::createTextIcon(const KoToolButton &button) const
     return QIcon(QPixmap::fromImage(pm));
 }
 
-QIcon KoModeBox::createSimpleIcon(const KoToolButton &button) const
+QIcon KoModeBox::createSimpleIcon(KoToolAction *toolAction) const
 {
     QSize iconSize = d->tabBar->iconSize();
 
@@ -339,14 +337,14 @@ QIcon KoModeBox::createSimpleIcon(const KoToolButton &button) const
         }
     }
 
-    button.button->icon().paint(&p, 0, 0, iconSize.height(), iconSize.width());
+    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
 
     return QIcon(QPixmap::fromImage(pm));
 }
 
-void KoModeBox::addItem(const KoToolButton &button)
+void KoModeBox::addItem(KoToolAction *toolAction)
 {
-    QWidget *oldwidget = d->addedWidgets[button.buttonGroupId];
+    QWidget *oldwidget = d->addedWidgets[toolAction->buttonGroupId()];
     QWidget *widget;
 
     // We need to create a new widget in all cases as QToolBox seeems to crash if we reuse
@@ -361,14 +359,14 @@ void KoModeBox::addItem(const KoToolButton &button)
     widget->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
     layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    d->addedWidgets[button.buttonGroupId] = widget;
+    d->addedWidgets[toolAction->buttonGroupId()] = widget;
 
     // Create a rotated icon with text
     if (d->iconMode == IconAndText) {
-        d->tabBar->addTab(createTextIcon(button), QString());
+        d->tabBar->addTab(createTextIcon(toolAction), QString());
     } else {
-        int index = d->tabBar->addTab(createSimpleIcon(button), QString());
-        d->tabBar->setTabToolTip(index, button.button->toolTip());
+        int index = d->tabBar->addTab(createSimpleIcon(toolAction), QString());
+        d->tabBar->setTabToolTip(index, toolAction->toolTip());
     }
     d->tabBar->blockSignals(false);
     ScrollArea *sa = new ScrollArea();
@@ -385,7 +383,7 @@ void KoModeBox::addItem(const KoToolButton &button)
     sa->setFrameShape(QFrame::NoFrame);
     sa->setFocusPolicy(Qt::NoFocus);
     d->stack->addWidget(sa);
-    d->addedButtons.append(button);
+    d->addedToolActions.append(toolAction);
 }
 
 void KoModeBox::updateShownTools(const QList<QString> &codes)
@@ -402,36 +400,36 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
         d->stack->removeWidget(d->stack->widget(0));
     }
 
-    d->addedButtons.clear();
+    d->addedToolActions.clear();
 
     int newIndex = -1;
-    foreach (const KoToolButton &button, d->buttons) {
-        QString toolCodes = button.visibilityCode;
-        if (button.buttonGroupId == d->activeId) {
-            newIndex = d->addedButtons.length();
+    foreach (KoToolAction *toolAction, d->toolActions) {
+        const QString toolCodes = toolAction->visibilityCode();
+        if (toolAction->buttonGroupId() == d->activeId) {
+            newIndex = d->addedToolActions.length();
         }
-        if (button.section.contains(applicationName)) {
-            addItem(button);
+        if (toolAction->section().contains(applicationName)) {
+            addItem(toolAction);
             continue;
-        } else if (!button.section.contains("dynamic")
-            && !button.section.contains("main")) {
+        } else if (!toolAction->section().contains("dynamic")
+            && !toolAction->section().contains("main")) {
             continue;
         }
         if (toolCodes.startsWith(QLatin1String("flake/"))) {
-            addItem(button);
+            addItem(toolAction);
             continue;
         }
 
         if (toolCodes.endsWith( QLatin1String( "/always"))) {
-            addItem(button);
+            addItem(toolAction);
             continue;
         } else if (toolCodes.isEmpty() && codes.count() != 0) {
-            addItem(button);
+            addItem(toolAction);
             continue;
         } else {
            foreach (const QString &shapeCode, codes) {
                 if (toolCodes.contains(shapeCode)) {
-                    addItem(button);
+                    addItem(toolAction);
                     break;
                 }
            }
@@ -576,12 +574,12 @@ void KoModeBox::unsetCanvas()
     d->canvas = 0;
 }
 
-void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)
+void KoModeBox::toolAdded(KoToolAction *toolAction, KoCanvasController *canvas)
 {
     if (canvas->canvas() == d->canvas) {
-        addButton(button);
+        addToolAction(toolAction);
 
-        qStableSort(d->buttons.begin(), d->buttons.end(), compareButton);
+        qStableSort(d->toolActions.begin(), d->toolActions.end(), compareToolActions);
 
         updateShownTools(QList<QString>());
     }
@@ -590,7 +588,7 @@ void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
 void KoModeBox::toolSelected(int index)
 {
     if (index != -1) {
-        d->addedButtons[index].button->click();
+        d->addedToolActions.at(index)->trigger();
     }
 }
 

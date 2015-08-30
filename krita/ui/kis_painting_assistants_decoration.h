@@ -48,6 +48,8 @@ public:
     void setAssistantVisible(bool set);
     /*sets whether the preview is visible*/
     void setOutlineVisible(bool set);
+    /*sets whether we snap to only one assistant*/
+    void setOnlyOneAssistantSnap(bool assistant);
     /*returns assistant visibility*/
     bool assistantVisibility();
     /*returns preview visibility*/

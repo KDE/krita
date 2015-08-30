@@ -231,7 +231,7 @@ private:
     KisDocument *m_doc;
 };
 
-class KisDocument::Private
+class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
     Private(KisDocument *document) :
@@ -743,7 +743,7 @@ bool KisDocument::saveFile()
     if (!ret) {
         if (!suppressErrorDialog) {
             if (errorMessage().isEmpty()) {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()) + "\n\n" + i18n("Most likely a layer is still processing effects."));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
             } else if (errorMessage() != "USER_CANCELED") {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }
@@ -1924,8 +1924,9 @@ QDomDocument KisDocument::createDomDocument(const QString& appName, const QStrin
     return doc;
 }
 
-bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
+bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
 {
+    Q_UNUSED(store);
     if (d->image) {
         d->shapeController->setImage(0);
         d->image = 0;

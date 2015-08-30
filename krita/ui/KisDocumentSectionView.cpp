@@ -53,7 +53,7 @@
 #endif
 
 
-class KisDocumentSectionView::Private
+class Q_DECL_HIDDEN KisDocumentSectionView::Private
 {
 public:
     Private()

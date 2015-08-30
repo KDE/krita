@@ -19,7 +19,7 @@
 
 #include "kis_operation_ui_widget.h"
 
-class KisOperationUIWidget::Private {
+class Q_DECL_HIDDEN KisOperationUIWidget::Private {
 
 public:
     Private() {}

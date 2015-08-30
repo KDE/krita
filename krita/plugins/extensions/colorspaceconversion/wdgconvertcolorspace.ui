@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>183</height>
+    <width>487</width>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -124,6 +124,9 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
    </item>
    <item>
     <widget class="QCheckBox" name="chkAllowLCMSOptimization">
+     <property name="toolTip">
+      <string>Krita tries to automatically check or uncheck this based on the information it can get from the profile you are converting from and the profile you are converting to.</string>
+     </property>
      <property name="text">
       <string>Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)</string>
      </property>

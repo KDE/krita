@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-class KoOdfStylesReader::Private
+class Q_DECL_HIDDEN KoOdfStylesReader::Private
 {
 public:
 

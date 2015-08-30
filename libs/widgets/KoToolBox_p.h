@@ -29,7 +29,6 @@
 
 #include <KoToolManager.h>
 
-class QToolButton;
 class KoCanvasController;
 class KoShapeLayer;
 
@@ -85,16 +84,16 @@ private:
      * The buttons should all be added before the first showing since adding will not really add
      * them to the UI until setup() is called.
      *
-     * @param button the new button.  Please make sure you connect to the button yourself.
+     * @param toolAction the action of the tool
      * @see setup()
      */
-    void addButton(const KoToolButton &button);
+    void addButton(KoToolAction *toolAction);
 
 private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
-    void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
+    void toolAdded(KoToolAction *toolAction, KoCanvasController *canvas);
 
     /// resize the toolbox to show the icons without any gap at the edge
     void adjustToFit();

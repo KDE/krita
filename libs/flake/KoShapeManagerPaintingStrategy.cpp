@@ -24,7 +24,7 @@
 #include "KoShapeManager.h"
 #include <QPainter>
 
-class KoShapeManagerPaintingStrategy::Private
+class Q_DECL_HIDDEN KoShapeManagerPaintingStrategy::Private
 {
 public:
     Private(KoShapeManager * manager)

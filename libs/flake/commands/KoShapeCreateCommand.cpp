@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 
-class KoShapeCreateCommand::Private
+class Q_DECL_HIDDEN KoShapeCreateCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c, KoShape *s)

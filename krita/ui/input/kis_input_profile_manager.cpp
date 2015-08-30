@@ -45,7 +45,7 @@
 #define PROFILE_VERSION 3
 
 
-class KisInputProfileManager::Private
+class Q_DECL_HIDDEN KisInputProfileManager::Private
 {
 public:
     Private() : currentProfile(0) { }

@@ -405,7 +405,7 @@
           <string extracomment="Whether or not this filter should only use a given channel or use all channels and treat them as a normal map">Use Normalmap</string>
          </property>
          <property name="tristate">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>

@@ -64,7 +64,7 @@ KoInlineObjectExtent::KoInlineObjectExtent(qreal ascent, qreal descent)
 {
 }
 
-class KoTextDocumentLayout::Private
+class Q_DECL_HIDDEN KoTextDocumentLayout::Private
 {
 public:
     Private(KoTextDocumentLayout *)

@@ -34,6 +34,7 @@
 #include "KisView.h"
 
 class QCloseEvent;
+class QMoveEvent;
 
 struct KoPageLayout;
 class KoCanvasResourceManager;
@@ -439,6 +440,10 @@ private:
     void createActions();
 
     void applyToolBarLayout();
+
+protected:
+
+    void moveEvent(QMoveEvent *e);
 
 private slots:
     void initializeGeometry();

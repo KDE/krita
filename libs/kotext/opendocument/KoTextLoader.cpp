@@ -106,7 +106,7 @@
 // #define KOOPENDOCUMENTLOADER_DEBUG
 
 /// \internal d-pointer class.
-class KoTextLoader::Private
+class Q_DECL_HIDDEN KoTextLoader::Private
 {
 public:
     KoShapeLoadingContext &context;

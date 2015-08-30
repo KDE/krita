@@ -57,7 +57,7 @@ enum Type {
 };
 #endif
 
-class KoTextInlineRdf::Private
+class Q_DECL_HIDDEN KoTextInlineRdf::Private
 {
 public:
     Private(const QTextDocument *doc, const QTextBlock &b)

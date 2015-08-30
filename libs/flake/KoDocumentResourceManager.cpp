@@ -29,7 +29,7 @@
 #include "KoShapeController.h"
 #include "KoResourceManager_p.h"
 
-class KoDocumentResourceManager::Private
+class Q_DECL_HIDDEN KoDocumentResourceManager::Private
 {
 public:
     KoResourceManager manager;

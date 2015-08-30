@@ -26,7 +26,7 @@
 #include <KDebug>
 #include <KGlobal>
 
-class KoRdfSemanticItemRegistry::Private
+class Q_DECL_HIDDEN KoRdfSemanticItemRegistry::Private
 {
 public:
     ~Private();

@@ -24,7 +24,7 @@
 #include "KoTextBlockBorderData.h"
 #include "KoTextBlockPaintStrategyBase.h"
 
-class KoTextBlockData::Private : public QTextBlockUserData
+class Q_DECL_HIDDEN KoTextBlockData::Private : public QTextBlockUserData
 {
 public:
     Private()

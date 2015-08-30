@@ -803,11 +803,13 @@ void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
+
     resetCanvas(cfg.useOpenGL());
+    slotSetDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this->canvasWidget())));
 
 }
 
-void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
+void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->displayColorConverter->monitorProfile() == monitorProfile) return;
 

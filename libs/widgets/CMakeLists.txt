@@ -72,6 +72,7 @@ set(kowidgets_LIB_SRCS
     KoResourceFiltering.cpp
     KoResourceModelBase.cpp
 
+    KoToolBoxButton.cpp
     KoToolBox.cpp
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp

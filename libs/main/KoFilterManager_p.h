@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 
 class QListWidget;
 
-class KoFilterManager::Private
+class Q_DECL_HIDDEN KoFilterManager::Private
 {
 public:
     bool batch;

@@ -20,7 +20,7 @@
 
 #include "KoFindOption.h"
 
-class KoFindOption::Private
+class Q_DECL_HIDDEN KoFindOption::Private
 {
 public:
     Private() { }

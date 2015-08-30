@@ -24,7 +24,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-class KoFilterEffectLoadingContext::Private
+class Q_DECL_HIDDEN KoFilterEffectLoadingContext::Private
 {
 public:
     Private()

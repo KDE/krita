@@ -37,7 +37,7 @@
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
 
-class KoAnnotation::Private
+class Q_DECL_HIDDEN KoAnnotation::Private
 {
 public:
     Private(const QTextDocument *doc):

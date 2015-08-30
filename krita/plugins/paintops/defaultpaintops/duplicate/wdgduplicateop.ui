@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>474</width>
+    <width>521</width>
     <height>193</height>
    </rect>
   </property>
@@ -79,7 +79,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Clone Brush:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select the source point with ctrl-click. The clone brush will continue cloning from the layer that was active when you selected the brush. You can select a different layer to clone onto.&lt;/p&gt;&lt;p&gt;If you want to clone from a different layer, select a different layer and press ctrl-alt-click.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Clone Brush:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select the source point with ctrl-click.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

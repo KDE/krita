@@ -23,7 +23,7 @@
 #include "KoShapeContainer.h"
 #include <klocale.h>
 
-class KoPathCombineCommand::Private
+class Q_DECL_HIDDEN KoPathCombineCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c, const QList<KoPathShape*> &p)

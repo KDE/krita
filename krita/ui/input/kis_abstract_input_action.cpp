@@ -22,7 +22,7 @@
 #include <QMouseEvent>
 #include <klocalizedstring.h>
 
-class KisAbstractInputAction::Private
+class Q_DECL_HIDDEN KisAbstractInputAction::Private
 {
 public:
     QString id;

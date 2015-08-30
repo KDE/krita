@@ -34,7 +34,7 @@
 #include "KoChannelInfo.h"
 
 
-class KoColor::Private
+class Q_DECL_HIDDEN KoColor::Private
 {
 public:
     Private() : data(0), colorSpace(0) {}

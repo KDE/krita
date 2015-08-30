@@ -33,7 +33,7 @@ static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
 
-class KoPathPoint::Private
+class Q_DECL_HIDDEN KoPathPoint::Private
 {
 public:
     Private()

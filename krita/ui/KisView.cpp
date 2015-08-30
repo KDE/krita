@@ -1020,5 +1020,3 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateGUI();
 }
-
-#include <KisView_p.moc>

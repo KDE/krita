@@ -23,6 +23,8 @@
 
 #include "KoDocumentBase.h"
 
+#include <QtGlobal>
+
 class Q_DECL_HIDDEN KoDocumentBase::Private {
 public:
 };

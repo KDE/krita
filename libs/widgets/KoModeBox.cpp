@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kselectaction.h>
 #include <kglobal.h>
+#include <kicon.h>
 
 #include <QMap>
 #include <QList>

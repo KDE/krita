@@ -32,6 +32,7 @@
 // KDE
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <kurl.h>
 // Qt
 #include <QTemporaryFile>
 
@@ -219,7 +220,7 @@ void KoRdfLocation::updateFromEditorData()
 KoRdfSemanticTreeWidgetItem *KoRdfLocation::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     KoRdfLocationTreeWidgetItem *item =
-        new KoRdfLocationTreeWidgetItem(parent, hKoRdfSemanticItem(this));
+        new KoRdfLocationTreeWidgetItem(parent, hKoRdfLocation(this));
     return item;
 }
 

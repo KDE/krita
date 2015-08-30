@@ -100,7 +100,7 @@ void KoRdfFoaF::updateFromEditorData()
 KoRdfSemanticTreeWidgetItem *KoRdfFoaF::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     kDebug(30015) << "format(), default stylesheet:" << defaultStylesheet()->name();
-    KoRdfFoaFTreeWidgetItem *item = new KoRdfFoaFTreeWidgetItem(parent, hKoRdfSemanticItem(this));
+    KoRdfFoaFTreeWidgetItem *item = new KoRdfFoaFTreeWidgetItem(parent, hKoRdfFoaF(this));
     return item;
 }
 

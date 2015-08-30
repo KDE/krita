@@ -94,7 +94,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="KTimeZoneWidget" name="tz">
+        <widget class="K4TimeZoneWidget" name="tz">
          <property name="uniformRowHeights">
           <bool>true</bool>
          </property>

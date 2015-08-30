@@ -36,3 +36,5 @@ KoLocationSemanticItemPlugin::KoLocationSemanticItemPlugin(QObject *parent, cons
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoLocationSemanticItemFactory());
 }
+
+#include "KoLocationSemanticItemPlugin.moc" // prevents vtable error

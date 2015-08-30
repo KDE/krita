@@ -36,3 +36,5 @@ KoContactSemanticItemPlugin::KoContactSemanticItemPlugin(QObject *parent, const 
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoContactSemanticItemFactory());
 }
+
+#include "KoContactSemanticItemPlugin.moc" // prevents vtable error

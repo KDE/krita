@@ -27,6 +27,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include "ksystemtimezone.h"
+#include <kglobal.h>
 
 #ifdef KDEPIMLIBS_FOUND
 #include <akonadi/collectiondialog.h>
@@ -78,7 +79,7 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
     tz = KSystemTimeZones::local();
     kDebug(30015) << "date string:" << s << "\n"
         << " is valid:" << ret.isValid() << "\n"
-        << " parsed:" << ret << "\n"
+        << " parsed:" << ret.toString() << "\n"
         << " time.tz.offset:" << ret.timeZone().currentOffset()
         << " tz.offset:" << tz.timeZone().currentOffset();
     return ret;
@@ -131,8 +132,8 @@ KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf
                    m_startTimespec);
     m_dtend = VEventDateTimeToKDateTime(it.binding("dtend").toString(),
                                            m_endTimespec);
-    kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart
-        << " end:" << m_dtend;
+    kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart.toString()
+        << " end:" << m_dtend.toString();
     kDebug(30015) << "KoRdfCalendarEvent() long:" << KoTextRdfCore::optionalBindingAsString(it, "long")
         << " lat:" << KoTextRdfCore::optionalBindingAsString(it, "lat");
     kDebug(30015) << "KoRdfCalendarEvent() context-direct:" << it.binding("graph").toString();
@@ -216,8 +217,8 @@ void KoRdfCalendarEvent::updateFromEditorData()
     KDateTime dtend(editWidget.endDate->date(),   editWidget.endTime->time(),   m_endTimespec);
     kDebug(30015) << "m_startTimespec.offset:" << m_startTimespec.timeZone().currentOffset();
     kDebug(30015) << "date:" << editWidget.startDate->date();
-    kDebug(30015) << "time:" << editWidget.startTime->time();
-    kDebug(30015) << "dtstart:" << dtstart;
+    kDebug(30015) << "time:" << editWidget.startTime->time().toString();
+    kDebug(30015) << "dtstart:" << dtstart.toString();
     kDebug(30015) << "qdtstart:" << dtstart.dateTime();
     LiteralValue lv(dtstart.dateTime());
     Node n = Node::createLiteralNode(lv);
@@ -232,7 +233,7 @@ void KoRdfCalendarEvent::updateFromEditorData()
 KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
 {
     KoRdfCalendarEventTreeWidgetItem *item  =
-        new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfSemanticItem(this));
+        new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfCalendarEvent(this));
     return item;
 }
 

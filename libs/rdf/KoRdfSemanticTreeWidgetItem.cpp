@@ -146,11 +146,11 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     topMenu->addAction(action);
 }
 
-QList<KAction *> KoRdfSemanticTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
+QList<QAction *> KoRdfSemanticTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
     Q_UNUSED(parent);
     Q_UNUSED(host);
-    return QList<KAction *>();
+    return QList<QAction *>();
 }
 
 void KoRdfSemanticTreeWidgetItem::insert(KoCanvasBase *host)

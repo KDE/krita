@@ -53,9 +53,9 @@ void KoRdfFoaFTreeWidgetItem::insert(KoCanvasBase *host)
     foaf()->insert(host);
 }
 
-QList<KAction *> KoRdfFoaFTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
+QList<QAction *> KoRdfFoaFTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
-    QList<KAction *> m_actions;
+    QList<QAction *> m_actions;
     KAction *action = 0;
 
     action = createAction(parent, host, i18n("Edit..."));

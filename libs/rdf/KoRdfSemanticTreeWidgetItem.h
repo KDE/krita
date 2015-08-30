@@ -64,7 +64,7 @@ public:
      */
     virtual hKoRdfSemanticItem semanticItem() const = 0;
 
-    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
+    virtual QList<QAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);
 
 public Q_SLOTS:

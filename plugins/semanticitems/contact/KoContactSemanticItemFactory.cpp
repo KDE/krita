@@ -86,7 +86,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
         hKoRdfBasicSemanticItem newSemanticItem(new KoRdfFoaF(0, rdf, it));
 
         const QString newItemLs = newSemanticItem->linkingSubject().toString();
-        foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+        foreach (hKoRdfBasicSemanticItem semItem, oldSemanticItems) {
             if (newItemLs == semItem->linkingSubject().toString()) {
                 oldSemanticItems.removeAll(semItem);
                 newSemanticItem = 0;

@@ -36,3 +36,5 @@ KoEventSemanticItemPlugin::KoEventSemanticItemPlugin(QObject *parent, const QVar
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoEventSemanticItemFactory());
 }
+
+#include "KoEventSemanticItemPlugin.moc" // prevents vtable error

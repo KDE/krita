@@ -55,10 +55,10 @@ QString KoRdfLocationTreeWidgetItem::uIObjectName() const
     return i18n("Location Information");
 }
 
-QList<KAction *> KoRdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
+QList<QAction *> KoRdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
-    QList<KAction *> m_actions;
-    KAction *action = 0;
+    QList<QAction *> m_actions;
+    QAction *action = 0;
 
 #ifdef CAN_USE_MARBLE
     // These were coded to need marble

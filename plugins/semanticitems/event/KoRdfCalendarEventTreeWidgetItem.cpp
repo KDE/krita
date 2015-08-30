@@ -43,10 +43,10 @@ QString KoRdfCalendarEventTreeWidgetItem::uIObjectName() const
     return i18n("Calendar Event");
 }
 
-QList<KAction *> KoRdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanvasBase* host)
+QList<QAction *> KoRdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanvasBase* host)
 {
-    QList<KAction *> m_actions;
-    KAction* action = 0;
+    QList<QAction *> m_actions;
+    QAction* action = 0;
     action = createAction(parent, host, i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     m_actions.append(action);

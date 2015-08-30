@@ -58,6 +58,7 @@ set( kformula_LIB_SRCS
 )
 
 add_library(kformula SHARED ${kformula_LIB_SRCS})
+generate_export_header(kformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
 target_link_libraries(kformula komain)
 target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain)

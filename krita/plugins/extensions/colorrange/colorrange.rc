@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritacolorrange" version="1">
+<kpartgui library="kritacolorrange" version="1" translationDomain="krita">
 <MenuBar>
     <Menu name="Select"><text>Select</text>
 	<Separator/>

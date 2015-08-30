@@ -1,5 +1,7 @@
 project( textPlugin)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_text\")
+
 # only build the textdocument inspector in non-release builds
 if(NOT RELEASE_BUILD)
     set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)

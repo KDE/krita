@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_semanticitem_event\")
+
 include_directories(
     ${KORDF_INCLUDES}
 )

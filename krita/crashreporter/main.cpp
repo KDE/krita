@@ -37,6 +37,8 @@ int main( int argc, char **argv )
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
 
+    KLocalizedString::setApplicationDomain( "crashhandler" );
+
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
     version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
@@ -65,8 +67,6 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-    KGlobal::locale()->insertCatalog("crashhandler");
 
     KApplication app;
 

@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra\")
+
 if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( version )
     add_subdirectory( koplugin )

@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_comment\")
+
 include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}

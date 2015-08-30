@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_template\")
+
 include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############

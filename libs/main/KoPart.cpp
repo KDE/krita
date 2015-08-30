@@ -392,8 +392,6 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &compon
 void KoPart::setComponentData(const KComponentData &componentData)
 {
     d->m_componentData = componentData;
-
-    KGlobal::locale()->insertCatalog(componentData.catalogName());
 }
 
 

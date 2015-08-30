@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_plugin\")
+
 include_directories( ${KOMAIN_INCLUDES} )
 
 ########### Flake Plugin library ###############

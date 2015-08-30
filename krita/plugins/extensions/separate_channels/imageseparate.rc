@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaseparatechannels" version="6">
+<kpartgui library="kritaseparatechannels" version="6" translationDomain="krita">
 <MenuBar>
     <Menu name="Image"><text>Image</text>
 	<Separator/>

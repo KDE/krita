@@ -1,5 +1,7 @@
 project(textvariables)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textinlineobject_variables\")
+
 include_directories(
     
     

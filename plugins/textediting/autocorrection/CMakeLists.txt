@@ -1,5 +1,7 @@
 project(autocorrection)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textediting_autocorrect\")
+
 add_subdirectory( data )
 
 include_directories(   ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )

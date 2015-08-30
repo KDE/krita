@@ -1,5 +1,7 @@
 project(krita)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+
 kde_enable_exceptions()
 
 # To avoid the confusion of an endless stream of Eigen warnings.

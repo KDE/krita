@@ -86,8 +86,6 @@ const KComponentData &KisFactory::componentData()
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
-
-        KGlobal::locale()->insertCatalog(s_componentData->catalogName());
     }
 
     return *s_componentData;

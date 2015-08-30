@@ -1,5 +1,7 @@
 project(changecase)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textediting_changecase\")
+
 include_directories(   ${KOTEXT_INCLUDES} )
 
 set(changecase_SRCS

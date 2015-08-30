@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"keximigrate_spreadsheet\")
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/kexi

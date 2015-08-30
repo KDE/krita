@@ -1,5 +1,4 @@
-
-
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textediting_thesaurus\")
 
 include_directories(  ${KOTEXT_INCLUDES} )
 

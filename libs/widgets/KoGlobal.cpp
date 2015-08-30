@@ -44,11 +44,6 @@ KoGlobal* KoGlobal::self()
 KoGlobal::KoGlobal()
         : m_pointSize(-1), m_calligraConfig(0)
 {
-    if (KGlobal::locale()) {
-        // Install the libcalligra* translations
-        KGlobal::locale()->insertCatalog("calligra");
-    }
-
     // When running unittests, there is not necessarily a main component
     if (KGlobal::hasMainComponent()) {
         // Tell KStandardDirs about the calligra prefix

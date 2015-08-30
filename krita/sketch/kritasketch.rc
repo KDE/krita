@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="50">
+<kpartgui name="Krita" version="50" translationDomain="krita">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>

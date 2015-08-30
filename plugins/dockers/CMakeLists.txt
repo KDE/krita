@@ -1,5 +1,7 @@
 project(calligradockers)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra-dockers\")
+
 include_directories(
      ${FLAKE_INCLUDES}
      ${KOWIDGETS_INCLUDES}     

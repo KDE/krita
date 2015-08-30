@@ -1,5 +1,7 @@
 project( vectorshape)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_vector\")
+
 include_directories(${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
 
 set ( VectorShape_SRCS

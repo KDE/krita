@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritabigbrother" version="3">
+<kpartgui library="kritabigbrother" version="3" translationDomain="krita">
 <MenuBar>
     <Menu name="tools"><text>&amp;Tools</text>
         <Menu name="Recording"><text>Recording</text>

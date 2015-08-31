@@ -102,7 +102,6 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
 
     connect(d->colorSpaceSelector->bnAdvanced, SIGNAL(clicked()), this,  SLOT(slotOpenAdvancedSelector()));
 
-
     //d->colorSpaceSelector->lblColorSpaces->hide();
     //d->colorSpaceSelector->lblColorModels->hide();
     //d->colorSpaceSelector->lblProfiles->hide();
@@ -288,7 +287,7 @@ void KisColorSpaceSelector::buttonUpdate()
 
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {
-    if(!m_advancedSelector) {
+    if (!m_advancedSelector) {
         m_advancedSelector = new KisAdvancedColorSpaceSelector(this, "Select a Colorspace");
         m_advancedSelector->setModal(true);
         m_advancedSelector->setCurrentColorSpace(currentColorSpace());
@@ -297,7 +296,7 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_advancedSelector->exec();
 
-    if(result) {
+    if (result) {
         if (d->profileValid==true) {
             setCurrentColorSpace(m_advancedSelector->currentColorSpace());
             d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());

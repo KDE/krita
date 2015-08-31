@@ -59,7 +59,7 @@ private Q_SLOTS:
     void slotProfileValid(bool valid);
 private:
     struct Private;
-    KisAdvancedColorSpaceSelector* m_advancedSelector;
+    KisAdvancedColorSpaceSelector *m_advancedSelector;
     Private * const d;
 };
 

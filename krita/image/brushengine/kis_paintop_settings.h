@@ -233,6 +233,8 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value);
 
+    static bool isLodUserAllowed(const KisPropertiesConfiguration *config);
+    static void setLodUserAllowed(KisPropertiesConfiguration *config, bool value);
 
 protected:
     /**

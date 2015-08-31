@@ -62,6 +62,8 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
+   brushengine/kis_random_source.cpp
+   brushengine/kis_stroke_random_source.cpp
    brushengine/kis_paintop.cc
    brushengine/kis_paintop_factory.cpp
    brushengine/kis_paintop_preset.cpp
@@ -70,6 +72,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_locked_properties.cc
    brushengine/kis_locked_properties_proxy.cpp
    brushengine/kis_locked_properties_server.cpp
+   brushengine/kis_paintop_config_widget.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
@@ -99,6 +102,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_set_layer_style_command.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
+   commands_new/kis_switch_current_time_command.cpp
    commands_new/kis_activate_selection_mask_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
@@ -164,15 +168,21 @@ set(kritaimage_LIB_SRCS
    kis_update_scheduler.cpp
    kis_queues_progress_updater.cpp
    kis_composite_progress_proxy.cpp
+   kis_sync_lod_cache_stroke_strategy.cpp
    kis_update_time_monitor.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp
+   kis_image_animation_interface.cpp
+   kis_time_range.cpp
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
+   kis_projection_updates_filter.cpp
+   kis_suspend_projection_updates_stroke_strategy.cpp
+   kis_regenerate_frame_stroke_strategy.cpp
    kis_crop_saved_extra_data.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
@@ -276,6 +286,12 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_path_paint_action.cpp
    recorder/kis_recorded_shape_paint_action.cpp
+
+   kis_keyframe.cpp
+   kis_keyframe_channel.cpp
+   kis_scalar_keyframe_channel.cpp
+   kis_raster_keyframe_channel.cpp
+   kis_onion_skin_compositor.cpp
 
    kis_psd_layer_style.cpp
 

@@ -71,11 +71,16 @@ public:
 private:
 
     bool savePaintDevice(KisPaintDeviceSP device, QString location);
+
+    template<class DevicePolicy>
+    bool savePaintDeviceFrame(KisPaintDeviceSP device, QString location, DevicePolicy policy);
+
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
     bool saveMetaData(KisNode* node);
     QString getLocation(KisNode* node, const QString& suffix = QString());
+    QString getLocation(const QString &filename, const QString &suffix = QString());
 
 private:
 

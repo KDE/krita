@@ -21,6 +21,8 @@
 #include <QWidget>
 #include <QRadioButton>
 
+#include "kis_paintop_lod_limitations.h"
+
 #include "ui_wdgparticleoptions.h"
 
 class KisParticleOpOptionsWidget: public QWidget, public Ui::WdgParticleOptions
@@ -123,4 +125,9 @@ void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->weightSPBox->setValue((qreal)setting->getDouble(PARTICLE_WEIGHT));
     m_options->dxSPBox->setValue((qreal)setting->getDouble(PARTICLE_SCALE_X));
     m_options->dySPBox->setValue((qreal)setting->getDouble(PARTICLE_SCALE_Y));
+}
+
+void KisParticleOpOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->blockers << KoID("particle-brush", i18nc("PaintOp LoD limitation", "Particle Brush (not supported)"));
 }

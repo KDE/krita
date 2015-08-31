@@ -29,7 +29,7 @@
 
 KisNodeQueryPathTest::KisNodeQueryPathTest()
 {
-    image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "", false);
+    image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "");
     current = new KisGroupLayer(image, "", OPACITY_OPAQUE_U8);
     child1 = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
     child2 = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);

@@ -63,12 +63,17 @@ public:
 private:
 
     bool loadPaintDevice(KisPaintDeviceSP device, const QString& location);
+
+    template<class DevicePolicy>
+    bool loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy);
+
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
     bool loadMetaData(KisNode* node);
     void initSelectionForMask(KisMask *mask);
     bool loadSelection(const QString& location, KisSelectionSP dstSelection);
     QString getLocation(KisNode* node, const QString& suffix = QString());
+    QString getLocation(const QString &filename, const QString &suffix = QString());
 
 private:
     KisImageWSP m_image;

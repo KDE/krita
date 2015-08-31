@@ -119,7 +119,9 @@ public:
     int displayUniformLocationTexture0;
     int displayUniformLocationTexture1;
 
+    int displayUniformLocationFixedLodLevel;
     QOpenGLShaderProgram *checkerShader;
+
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
@@ -500,10 +502,18 @@ void KisOpenGLCanvas2::drawImage()
                 d->displayShader->setUniformValue(d->displayUniformLocationTexture1, 1);
             }
 
+            int currentLodPlane = tile->currentLodPlane();
+            if (d->displayUniformLocationFixedLodLevel >= 0) {
+                d->displayShader->setUniformValue(d->displayUniformLocationFixedLodLevel,
+                                                  (GLfloat) currentLodPlane);
+            }
+
             glActiveTexture(GL_TEXTURE0);
             tile->bindToActiveTexture();
 
-            if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
+            if (currentLodPlane) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+            } else if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             } else {
@@ -601,36 +611,37 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
     bool haveDisplayFilter = d->displayFilter && !d->displayFilter->program().isEmpty();
     bool useHiQualityFiltering = d->filterMode == KisTextureTile::HighQualityFiltering;
     bool haveGLSL13 = KisOpenGL::supportsGLSL13();
+    bool useDirectLodFetch = haveGLSL13;
 
-    QString filename = haveGLSL13 && useHiQualityFiltering ?
-        "highq_downscale" : "simple_texture";
+    QString filename;
 
-    QString legacyPostfix = !haveGLSL13 ? "_legacy" : "";
-    QString filterPostfix = haveDisplayFilter ? "_ocio" : "";
-
-    QString prefaceKey = QString("krita/shaders/%1%2_preface.frag.inc")
-        .arg(filename)
-        .arg(legacyPostfix);
-
-    QString mainKey = QString("krita/shaders/%1%2_main%3.frag.inc")
-        .arg(filename)
-        .arg(legacyPostfix)
-        .arg(filterPostfix);
-
-    {
-        QFile prefaceFile(KGlobal::dirs()->findResource("data", prefaceKey));
-        prefaceFile.open(QIODevice::ReadOnly);
-        shaderText.append(prefaceFile.readAll());
+    if (haveGLSL13) {
+        filename = "highq_downscale.frag";
+        shaderText.append("#version 130\n");
+    } else {
+        filename = "simple_texture_legacy.frag";
     }
 
+    QString fileKey = QString("krita/shaders/%1")
+        .arg(filename);
+
     if (haveDisplayFilter) {
+        shaderText.append("#define USE_OCIO\n");
         shaderText.append(d->displayFilter->program().toLatin1());
     }
 
+    if (haveGLSL13 && useHiQualityFiltering) {
+        shaderText.append("#define HIGHQ_SCALING\n");
+    }
+
+    if (haveGLSL13 && useDirectLodFetch) {
+        shaderText.append("#define DIRECT_LOD_FETCH\n");
+    }
+
     {
-        QFile mainFile(KGlobal::dirs()->findResource("data", mainKey));
-        mainFile.open(QIODevice::ReadOnly);
-        shaderText.append(mainFile.readAll());
+        QFile prefaceFile(KGlobal::dirs()->findResource("data", fileKey));
+        prefaceFile.open(QIODevice::ReadOnly);
+        shaderText.append(prefaceFile.readAll());
     }
 
     return shaderText;
@@ -663,11 +674,21 @@ void KisOpenGLCanvas2::initializeDisplayShader()
 
     d->displayUniformLocationModelViewProjection = d->displayShader->uniformLocation("modelViewProjection");
     d->displayUniformLocationTextureMatrix = d->displayShader->uniformLocation("textureMatrix");
-    d->displayUniformLocationViewPortScale = d->displayShader->uniformLocation("viewportScale");
-    d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
     d->displayUniformLocationTexture0 = d->displayShader->uniformLocation("texture0");
+
+    // ocio
     d->displayUniformLocationTexture1 = d->displayShader->uniformLocation("texture1");
 
+    // highq || lod
+    d->displayUniformLocationViewPortScale = d->displayShader->uniformLocation("viewportScale");
+
+    // highq
+    d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
+
+    // lod
+    d->displayUniformLocationFixedLodLevel =
+        KisOpenGL::supportsGLSL13() ?
+        d->displayShader->uniformLocation("fixedLodLevel") : -1;
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

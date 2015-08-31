@@ -25,6 +25,16 @@
 
 #include "kis_update_time_monitor.h"
 
+#include "kis_stroke_random_source.h"
+
+
+struct FreehandStrokeStrategy::Private
+{
+    Private(KisResourcesSnapshotSP _resources) : resources(_resources) {}
+
+    KisStrokeRandomSource randomSource;
+    KisResourcesSnapshotSP resources;
+};
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
@@ -32,7 +42,8 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                PainterInfo *painterInfo,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfo,true)
+                                    resources, painterInfo),
+      m_d(new Private(resources))
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -43,9 +54,22 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                QVector<PainterInfo*> painterInfos,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfos,true)
+                                    resources, painterInfos),
+      m_d(new Private(resources))
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
+}
+
+FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail)
+    : KisPainterBasedStrokeStrategy(rhs, levelOfDetail),
+      m_d(new Private(*rhs.m_d))
+{
+    m_d->randomSource.setLevelOfDetail(levelOfDetail);
+}
+
+FreehandStrokeStrategy::~FreehandStrokeStrategy()
+{
+    KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
 void FreehandStrokeStrategy::init(bool needsIndirectPainting,
@@ -59,26 +83,27 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
     KisUpdateTimeMonitor::instance()->startStrokeMeasure();
 }
 
-FreehandStrokeStrategy::~FreehandStrokeStrategy()
-{
-    KisUpdateTimeMonitor::instance()->endStrokeMeasure();
-}
-
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    PainterInfo *info = d->painterInfo;
+    PainterInfo *info = painterInfos()[d->painterInfoId];
 
     KisUpdateTimeMonitor::instance()->reportPaintOpPreset(info->painter->preset());
+    KisRandomSourceSP rnd = m_d->randomSource.source();
 
     switch(d->type) {
     case Data::POINT:
+        d->pi1.setRandomSource(rnd);
         info->painter->paintAt(d->pi1, info->dragDistance);
         break;
     case Data::LINE:
+        d->pi1.setRandomSource(rnd);
+        d->pi2.setRandomSource(rnd);
         info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
         break;
     case Data::CURVE:
+        d->pi1.setRandomSource(rnd);
+        d->pi2.setRandomSource(rnd);
         info->painter->paintBezierCurve(d->pi1,
                                         d->control1,
                                         d->control2,
@@ -104,4 +129,13 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
     KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
     d->node->setDirty(dirtyRects);
+}
+
+KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    if (!m_d->resources->presetAllowsLod()) return 0;
+
+    FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
+    clone->setUndoEnabled(false);
+    return clone;
 }

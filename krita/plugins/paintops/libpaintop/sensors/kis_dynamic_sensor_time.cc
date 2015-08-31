@@ -35,6 +35,8 @@ KisDynamicSensorTime::KisDynamicSensorTime()
 
 qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
 {
+    if (pi.isHoveringMode()) return 1.0;
+
     qreal curtime = pi.currentTime();
 
     if (curtime >= m_lastTime) {

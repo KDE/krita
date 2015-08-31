@@ -65,6 +65,7 @@
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
+#include "kis_image_animation_interface.h"
 #include "kis_stroke_strategy.h"
 #include "kis_image_barrier_locker.h"
 
@@ -86,13 +87,24 @@
 #include "kis_wrapped_rect.h"
 #include "kis_crop_saved_extra_data.h"
 
+#include "kis_lod_transform.h"
+
+#include "kis_suspend_projection_updates_stroke_strategy.h"
+#include "kis_sync_lod_cache_stroke_strategy.h"
+#include <boost/functional/factory.hpp>
+#include <boost/bind.hpp>
+
+#include "kis_projection_updates_filter.h"
+
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
+#include "kis_image_barrier_locker.h"
+
 #include <QtCore>
 #include <boost/bind.hpp>
 
-
+#include "kis_time_range.h"
 
 // #define SANITY_CHECKS
 
@@ -142,27 +154,29 @@ public:
     vKisAnnotationSP annotations;
 
     QAtomicInt disableUIUpdateSignals;
-    QAtomicInt disableDirtyRequests;
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter;
     KisImageSignalRouter *signalRouter;
+    KisImageAnimationInterface *animationInterface;
     KisUpdateScheduler *scheduler;
 
     KisCompositeProgressProxy *compositeProgressProxy;
 
-    bool startProjection;
+    int blockLevelOfDetail;
 
     bool tryCancelCurrentStrokeAsync();
 
     void notifyProjectionUpdatedInPatches(const QRect &rc);
 };
 
-KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
+KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
         : QObject(0)
         , KisShared()
         , m_d(new KisImagePrivate(this))
 {
     setObjectName(name);
     dbgImage << "creating" << name;
-    m_d->startProjection = startProjection;
+
+    m_d->blockLevelOfDetail = 0;
 
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -173,7 +187,19 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
 
+    {
+        m_d->scheduler = new KisUpdateScheduler(this);
+        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+        m_d->scheduler->setLod0ToNStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSyncLodCacheStrokeStrategy*>(), KisImageWSP(this)));
+        m_d->scheduler->setSuspendUpdatesStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), true));
+        m_d->scheduler->setResumeUpdatesStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), false));
+    }
+
     m_d->signalRouter = new KisImageSignalRouter(this);
+    m_d->animationInterface = new KisImageAnimationInterface(this);
 
     if (!undoStore) {
         undoStore = new KisDumbUndoStore();
@@ -198,11 +224,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 
     m_d->compositeProgressProxy = new KisCompositeProgressProxy();
 
-    if (m_d->startProjection) {
-        m_d->scheduler = new KisUpdateScheduler(this);
-        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
-    }
-
     connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }
 
@@ -221,19 +242,20 @@ KisImage::~KisImage()
      */
     m_d->rootLayer = 0;
 
-
-    KisUpdateScheduler *scheduler = m_d->scheduler;
-    m_d->scheduler = 0;
-    delete scheduler;
-
     delete m_d->postExecutionUndoAdapter;
     delete m_d->legacyUndoAdapter;
     delete m_d->undoStore;
     delete m_d->compositeProgressProxy;
 
+    delete m_d->animationInterface;
     delete m_d->signalRouter;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
+
+    KisUpdateScheduler *scheduler = m_d->scheduler;
+    m_d->scheduler = 0;
+    delete scheduler;
+
     delete m_d;
 
     disconnect(); // in case Qt gets confused
@@ -276,6 +298,8 @@ void KisImage::nodeChanged(KisNode* node)
     KisNodeGraphListener::nodeChanged(node);
     requestStrokeEnd();
     m_d->signalRouter->emitNodeChanged(node);
+
+    invalidateFrames(KisTimeRange::infinite(0), QRect());
 }
 
 KisSelectionSP KisImage::globalSelection() const
@@ -367,10 +391,7 @@ void KisImage::barrierLock()
 {
     if (!locked()) {
         requestStrokeEnd();
-
-        if (m_d->scheduler) {
-            m_d->scheduler->barrierLock();
-        }
+        m_d->scheduler->barrierLock();
     }
     m_d->lockCount++;
 }
@@ -380,9 +401,7 @@ bool KisImage::tryBarrierLock()
     bool result = true;
 
     if (!locked()) {
-        if (m_d->scheduler) {
-            result = m_d->scheduler->tryBarrierLock();
-        }
+        result = m_d->scheduler->tryBarrierLock();
     }
 
     if (result) {
@@ -396,10 +415,7 @@ void KisImage::lock()
 {
     if (!locked()) {
         requestStrokeEnd();
-
-        if (m_d->scheduler) {
-            m_d->scheduler->lock();
-        }
+        m_d->scheduler->lock();
     }
     m_d->lockCount++;
 }
@@ -412,9 +428,7 @@ void KisImage::unlock()
         m_d->lockCount--;
 
         if (m_d->lockCount == 0) {
-            if (m_d->scheduler) {
-                m_d->scheduler->unlock();
-            }
+            m_d->scheduler->unlock();
         }
     }
 }
@@ -1570,10 +1584,7 @@ KisImageSignalRouter* KisImage::signalRouter()
 void KisImage::waitForDone()
 {
     requestStrokeEnd();
-
-    if (m_d->scheduler) {
-        m_d->scheduler->waitForDone();
-    }
+    m_d->scheduler->waitForDone();
 }
 
 KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
@@ -1585,7 +1596,9 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
      * However this is purely their choice whether to end a stroke
      * or not.
      */
-    requestStrokeEnd();
+    if (strokeStrategy->requestsOtherStrokesToEnd()) {
+        requestStrokeEnd();
+    }
 
     /**
      * Some of the strokes can cancel their work with undoing all the
@@ -1597,13 +1610,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
         m_d->undoStore->purgeRedoState();
     }
 
-    KisStrokeId id;
-
-    if (m_d->scheduler) {
-        id = m_d->scheduler->startStroke(strokeStrategy);
-    }
-
-    return id;
+    return m_d->scheduler->startStroke(strokeStrategy);
 }
 
 void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
@@ -1666,35 +1673,22 @@ KisNodeSP KisImage::isolatedModeRoot() const
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     KisUpdateTimeMonitor::instance()->reportJobStarted(data);
-
-    if (m_d->scheduler) {
-        m_d->scheduler->addJob(id, data);
-    }
+    m_d->scheduler->addJob(id, data);
 }
 
 void KisImage::endStroke(KisStrokeId id)
 {
-    if (m_d->scheduler) {
-        m_d->scheduler->endStroke(id);
-    }
+    m_d->scheduler->endStroke(id);
 }
 
 bool KisImage::cancelStroke(KisStrokeId id)
 {
-    bool result = false;
-    if (m_d->scheduler) {
-        result = m_d->scheduler->cancelStroke(id);
-    }
-    return result;
+    return m_d->scheduler->cancelStroke(id);
 }
 
 bool KisImage::KisImagePrivate::tryCancelCurrentStrokeAsync()
 {
-    bool result = false;
-    if (scheduler) {
-        result = scheduler->tryCancelCurrentStrokeAsync();
-    }
-    return result;
+    return scheduler->tryCancelCurrentStrokeAsync();
 }
 
 void KisImage::requestUndoDuringStroke()
@@ -1723,9 +1717,11 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
 {
     if (!root) root = m_d->rootLayer;
 
-    if (m_d->scheduler) {
-        m_d->scheduler->fullRefresh(root, rc, cropRect);
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
     }
+
+    m_d->scheduler->fullRefresh(root, rc, cropRect);
 }
 
 void KisImage::initialRefreshGraph()
@@ -1753,35 +1749,50 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 {
     if (!root) root = m_d->rootLayer;
 
-    if (m_d->scheduler) {
-        m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
     }
+
+    m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
 }
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
 {
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
 
-    if (m_d->scheduler) {
-        m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
     }
+
+    m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
 }
 
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
-    if (m_d->scheduler) {
-        m_d->scheduler->addSpontaneousJob(spontaneousJob);
-    }
+    m_d->scheduler->addSpontaneousJob(spontaneousJob);
+}
+
+void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
+{
+    // udpate filters are *not* recursive!
+    KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
+
+    m_d->projectionUpdatesFilter = filter;
+}
+
+KisProjectionUpdatesFilterSP KisImage::projectionUpdatesFilter() const
+{
+    return m_d->projectionUpdatesFilter;
 }
 
 void KisImage::disableDirtyRequests()
 {
-    m_d->disableDirtyRequests.ref();
+    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP(new KisDropAllProjectionUpdatesFilter()));
 }
 
 void KisImage::enableDirtyRequests()
 {
-    m_d->disableDirtyRequests.deref();
+    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
 }
 
 void KisImage::disableUIUpdates()
@@ -1799,7 +1810,12 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
     KisUpdateTimeMonitor::instance()->reportUpdateFinished(rc);
 
     if (!m_d->disableUIUpdateSignals) {
-        emit sigImageUpdated(rc);
+        int lod = currentLevelOfDetail();
+        QRect dirtyRect = !lod ? rc : KisLodTransform::upscaledRect(rc, lod);
+
+        if (dirtyRect.isEmpty()) return;
+
+        emit sigImageUpdated(dirtyRect);
     }
 }
 
@@ -1829,15 +1845,20 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
                                            const QRect &cropRect)
 {
     KisNodeGraphListener::requestProjectionUpdate(node, rect);
-
-    if (m_d->scheduler) {
-        m_d->scheduler->updateProjection(node, rect, cropRect);
-    }
+    m_d->scheduler->updateProjection(node, rect, cropRect);
 }
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
-    if (m_d->disableDirtyRequests) return;
+    if (m_d->projectionUpdatesFilter
+        && m_d->projectionUpdatesFilter->filter(this, node, rect)) {
+
+        return;
+    }
+
+    if (m_d->animationInterface) {
+        m_d->animationInterface->notifyNodeChanged(node, rect, false);
+    }
 
     /**
      * Here we use 'permitted' instead of 'active' intentively,
@@ -1855,6 +1876,16 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
     } else {
         requestProjectionUpdateImpl(node, rect, bounds());
     }
+}
+
+void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+    m_d->animationInterface->invalidateFrames(range, rect);
+}
+
+void KisImage::requestTimeSwitch(int time)
+{
+    m_d->animationInterface->requestTimeSwitchNonGUI(time);
 }
 
 QList<KisLayerComposition*> KisImage::compositions()
@@ -1923,8 +1954,44 @@ bool KisImage::wrapAroundModePermitted() const
 
 bool KisImage::wrapAroundModeActive() const
 {
-    return m_d->wrapAroundModePermitted && m_d->scheduler &&
+    return m_d->wrapAroundModePermitted &&
         m_d->scheduler->wrapAroundModeSupported();
+}
+
+void KisImage::setDesiredLevelOfDetail(int lod)
+{
+    if (m_d->blockLevelOfDetail) {
+        qWarning() << "WARNING: KisImage::setDesiredLevelOfDetail()"
+                   << "was called while LoD functionality was being blocked!";
+        return;
+    }
+
+    m_d->scheduler->setDesiredLevelOfDetail(lod);
+}
+
+int KisImage::currentLevelOfDetail() const
+{
+    if (m_d->blockLevelOfDetail) {
+        return 0;
+    }
+
+    return m_d->scheduler->currentLevelOfDetail();
+}
+
+void KisImage::setLevelOfDetailBlocked(bool value)
+{
+    KisImageBarrierLockerRaw l(this);
+
+    if (value && !m_d->blockLevelOfDetail) {
+        m_d->scheduler->setDesiredLevelOfDetail(0);
+    }
+
+    m_d->blockLevelOfDetail = value;
+}
+
+bool KisImage::levelOfDetailBlocked() const
+{
+    return m_d->blockLevelOfDetail;
 }
 
 void KisImage::notifyNodeCollpasedChanged()
@@ -1932,5 +1999,9 @@ void KisImage::notifyNodeCollpasedChanged()
     emit sigNodeCollapsedChanged();
 }
 
+KisImageAnimationInterface* KisImage::animationInterface() const
+{
+    return m_d->animationInterface;
+}
 
 

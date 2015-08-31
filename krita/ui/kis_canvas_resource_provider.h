@@ -68,7 +68,8 @@ public:
         HdrGamma,
         GlobalAlphaLock,
         PreviousPaintOpPreset,
-        EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
+        EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
+        PresetAllowsLod
     };
 
 

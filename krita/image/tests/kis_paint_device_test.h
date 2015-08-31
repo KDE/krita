@@ -45,7 +45,6 @@ private Q_SLOTS:
     void testBltPerformance();
     void testColorSpaceConversion();
     void testDeviceDuplication();
-    void testSharedDataManager();
     void testTranslate();
     void testOpacity();
     void testExactBoundsWeirdNullAlphaCase();
@@ -62,6 +61,16 @@ private Q_SLOTS:
     void testMoveWrapAround();
 
     void testCacheState();
+
+    void testLodDevice();
+    void benchmarkLod1Generation();
+    void benchmarkLod2Generation();
+    void benchmarkLod3Generation();
+    void benchmarkLod4Generation();
+
+    void testFramesLeaking();
+    void testFramesUndoRedo();
+    void testFramesUndoRedoWithChannel();
 };
 
 #endif

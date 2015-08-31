@@ -46,6 +46,8 @@
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_transaction.h>
+#include <kis_lod_transform.h>
+
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
@@ -93,6 +95,8 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
         return KisSpacingInformation(1.0);
 
     qreal scale = m_sizeOption.apply(info);
+    scale *= KisLodTransform::lodToScale(painter()->device());
+
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);

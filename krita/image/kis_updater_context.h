@@ -27,6 +27,7 @@
 #include "kis_stroke_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
+#include "kis_lock_free_lod_counter.h"
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -47,6 +48,12 @@ public:
      * \see lock()
      */
     void getJobsSnapshot(qint32 &numMergeJobs, qint32 &numStrokeJobs);
+
+    /**
+     * Returns the current level of detail of all the running jobs in the
+     * context. If there are no jobs, returns -1.
+     */
+    int currentLevelOfDetail() const;
 
     /**
      * Check whether there is a spare thread for running
@@ -134,6 +141,7 @@ protected:
     QMutex m_lock;
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;
+    KisLockFreeLodCounter m_lodCounter;
 };
 
 class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext

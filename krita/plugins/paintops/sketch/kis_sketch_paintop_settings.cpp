@@ -66,6 +66,7 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
         tiltLine.moveTo(tiltAngle.p1());
         tiltLine.lineTo(tiltAngle.p2());
+
         tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
         tiltLine.lineTo(tiltAngle.p2());
         tiltLine.lineTo(tiltAngle.p1());

@@ -42,6 +42,8 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_abstract_projection_plane.h"
 #include "kis_projection_leaf.h"
 
+#include "kis_keyframe_channel.h"
+#include "kis_time_range.h"
 
 /**
  *The link between KisProjection ans KisImageUpdater
@@ -93,7 +95,7 @@ public:
     KisNodeProgressProxy *nodeProgressProxy;
     KisBusyProgressIndicator *busyProgressIndicator;
     QReadWriteLock nodeSubgraphLock;
-
+    QMap<QString, KisKeyframeChannel*> keyframeChannels;
 
     KisProjectionLeafSP projectionLeaf;
 
@@ -237,6 +239,23 @@ KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
         toQShared(new KisDumbProjectionPlane());
 
     return plane;
+}
+
+QList<KisKeyframeChannel*> KisNode::keyframeChannels() const
+{
+    return m_d->keyframeChannels.values();
+}
+
+KisKeyframeChannel * KisNode::getKeyframeChannel(const QString &id) const
+{
+    QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
+    if (i == m_d->keyframeChannels.end()) return 0;
+    return i.value();
+}
+
+void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
+{
+    m_d->keyframeChannels.insert(channel->id(), channel);
 }
 
 KisProjectionLeafSP KisNode::projectionLeaf() const
@@ -544,3 +563,16 @@ void KisNode::setDirty(const QRect & rect)
     }
 }
 
+void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->invalidateFrames(range, rect);
+    }
+}
+
+void KisNode::requestTimeSwitch(int time)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestTimeSwitch(time);
+    }
+}

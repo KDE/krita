@@ -39,17 +39,13 @@
 #include <kis_gridop_option.h>
 #include <kis_grid_shape_option.h>
 #include <kis_color_option.h>
+#include <kis_lod_transform.h>
+
 
 #ifdef BENCHMARK
 #include <QTime>
 #endif
 
-#ifdef Q_OS_WIN
-// quoting DRAND48(3) man-page:
-// These functions are declared obsolete by  SVID  3,
-// which  states  that rand(3) should be used instead.
-#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
-#endif
 
 KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
@@ -86,11 +82,14 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     time.start();
 #endif
 
-    if (!painter()) return KisSpacingInformation(m_spacing);
+    KisRandomSourceSP randomSource = info.randomSource();
+    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
+
+    if (!painter()) return KisSpacingInformation(m_spacing * additionalScale);
     m_dab->clear();
 
-    int gridWidth = m_properties.gridWidth * m_properties.scale;
-    int gridHeight = m_properties.gridHeight * m_properties.scale;
+    qreal gridWidth = m_properties.gridWidth * m_properties.scale * additionalScale;
+    qreal gridHeight = m_properties.gridHeight * m_properties.scale * additionalScale;
 
     int divide;
     if (m_properties.pressureDivision) {
@@ -101,46 +100,48 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     }
     divide = qRound(m_properties.scale * divide);
 
-    int posX = qRound(info.pos().x());
-    int posY = qRound(info.pos().y());
+    qreal posX = info.pos().x();
+    qreal posY = info.pos().y();
+    posX = posX - std::fmod(posX, gridWidth);
+    posY = posY - std::fmod(posY, gridHeight);
 
-    QPoint dabPosition(posX - posX % gridWidth, posY - posY % gridHeight);
-    QPoint dabRightBottom(dabPosition.x() + gridWidth, dabPosition.y() + gridHeight);
+    const QRectF dabRect(posX, posY, gridWidth, gridHeight);
+    const QRect dabRectAligned = dabRect.toAlignedRect();
 
     divide = qMax(1, divide);
-    qreal yStep = gridHeight / (qreal)divide;
-    qreal xStep = gridWidth / (qreal)divide;
+    const qreal yStep = gridHeight / (qreal)divide;
+    const qreal xStep = gridWidth / (qreal)divide;
 
     QRectF tile;
     KoColor color(painter()->paintColor());
 
-    KisCrossDeviceColorPicker *colorPicker = 0;
+    QScopedPointer<KisCrossDeviceColorPicker> colorPicker;
     if (m_node) {
-        colorPicker = new KisCrossDeviceColorPicker(m_node->paintDevice(), color);
+        colorPicker.reset(new KisCrossDeviceColorPicker(m_node->paintDevice(), color));
     }
 
-    qreal vertBorder = m_properties.vertBorder;
-    qreal horzBorder = m_properties.horizBorder;
+    qreal vertBorder = m_properties.vertBorder * additionalScale;
+    qreal horzBorder = m_properties.horizBorder * additionalScale;
     if (m_properties.randomBorder) {
         if (vertBorder == horzBorder) {
-            vertBorder = horzBorder = vertBorder * drand48();
+            vertBorder = horzBorder = vertBorder * randomSource->generateNormalized();
         }
         else {
-            vertBorder *= drand48();
-            horzBorder *= drand48();
+            vertBorder *= randomSource->generateNormalized();
+            horzBorder *= randomSource->generateNormalized();
         }
     }
 
     bool shouldColor = true;
     // fill the tile
     if (m_colorProperties.fillBackground) {
-        m_dab->fill(dabPosition.x(), dabPosition.y(), gridWidth, gridHeight, painter()->backgroundColor().data());
+        m_dab->fill(dabRectAligned, painter()->backgroundColor());
     }
 
     for (int y = 0; y < divide; y++) {
         for (int x = 0; x < divide; x++) {
             // determine the tile size
-            tile = QRectF(dabPosition.x() + x * xStep, dabPosition.y() + y * yStep, xStep, yStep);
+            tile = QRectF(dabRect.x() + x * xStep, dabRect.y() + y * yStep, xStep, yStep);
             tile.adjust(vertBorder, horzBorder, -vertBorder, -horzBorder);
             tile = tile.normalized();
 
@@ -169,9 +170,9 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
                 if (m_colorProperties.useRandomHSV) {
                     QHash<QString, QVariant> params;
-                    params["h"] = (m_colorProperties.hue / 180.0) * drand48();
-                    params["s"] = (m_colorProperties.saturation / 100.0) * drand48();
-                    params["v"] = (m_colorProperties.value / 100.0) * drand48();
+                    params["h"] = (m_colorProperties.hue / 180.0) * randomSource->generateNormalized();
+                    params["s"] = (m_colorProperties.saturation / 100.0) * randomSource->generateNormalized();
+                    params["v"] = (m_colorProperties.value / 100.0) * randomSource->generateNormalized();
                     KoColorTransformation* transfo;
                     transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
                     transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
@@ -180,7 +181,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 }
 
                 if (m_colorProperties.useRandomOpacity) {
-                    qreal alpha = drand48();
+                    const qreal alpha = randomSource->generateNormalized();
                     color.setOpacity(alpha);
                     m_painter->setOpacity(qRound(alpha * OPACITY_OPAQUE_U8));
                 }
@@ -230,15 +231,13 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
 
-    delete colorPicker;
-
 #ifdef BENCHMARK
     int msec = time.elapsed();
     kDebug() << msec << " ms/dab " << "[average: " << m_total / (qreal)m_count << "]";
     m_total += msec;
     m_count++;
 #endif
-    return KisSpacingInformation(m_spacing);
+    return KisSpacingInformation(m_spacing * additionalScale);
 }
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)

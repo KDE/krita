@@ -19,6 +19,8 @@
 #include <klocale.h>
 
 #include "ui_wdgbristleoptions.h"
+#include "kis_paintop_lod_limitations.h"
+
 
 class KisBristleOptionsWidget: public QWidget, public Ui::WdgBristleOptions
 {
@@ -96,3 +98,7 @@ void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* confi
     config->setProperty(HAIRY_BRISTLE_USE_COMPOSITING, m_options->compositingCBox->isChecked());
 }
 
+void KisHairyBristleOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->limitations << KoID("hairy-brush", i18nc("PaintOp LoD limitation", "Bristle Brush (the lines will be thinner than on preview)"));
+}

@@ -28,6 +28,7 @@
 #include "kis_color_source_option.h"
 #include "kis_color_source.h"
 #include <kis_paint_device.h>
+#include "kis_paintop_lod_limitations.h"
 
 
 struct KisColorSourceOptionWidget::Private {
@@ -82,6 +83,18 @@ void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfigurat
         rb->setChecked(true);
     }
 }
+
+void KisColorSourceOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    if (d->option.type() == KisColorSourceOption::TOTAL_RANDOM) {
+        l->limitations << KoID("source-total-random", i18nc("PaintOp LoD limitation", "Source -> Total Random"));
+    } else if (d->option.type() == KisColorSourceOption::PATTERN) {
+        l->blockers << KoID("source-pattern", i18nc("PaintOp LoD limitation", "Source -> Pattern"));
+    } else if (d->option.type() == KisColorSourceOption::PATTERN_LOCKED) {
+        l->blockers << KoID("source-pattern-locked", i18nc("PaintOp LoD limitation", "Source -> Pattern Locked"));
+    }
+}
+
 
 void KisColorSourceOptionWidget::sourceChanged()
 {

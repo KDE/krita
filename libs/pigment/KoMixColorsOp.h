@@ -55,6 +55,7 @@ public:
      * @endcode
      */
     virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
 };
 
 #endif

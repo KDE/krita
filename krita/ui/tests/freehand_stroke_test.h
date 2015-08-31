@@ -33,6 +33,9 @@ private Q_SLOTS:
     void testAutoTextured17();
     void testAutoTextured38();
     void testMixDullCompositioning();
+
+    void testAutobrushStrokeLod();
+    void testPredefinedBrushStrokeLod();
 };
 
 #endif /* __FREEHAND_STROKE_TEST_H */

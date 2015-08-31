@@ -52,6 +52,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_pyramid.cpp
     canvas/kis_qpainter_canvas_widget_factory.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_animation_player.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -235,6 +236,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
+    widgets/kis_lod_availability_widget.cpp
     input/kis_input_manager.cpp
     input/kis_extended_modifiers_mapper.cpp
     input/kis_abstract_input_action.cpp
@@ -333,6 +335,12 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtsingleapplication.cpp
 
     widgets/kis_url_requester.cpp
+
+    kis_timeline_model.cpp
+    kis_animation_frame_cache.cpp
+    kis_animation_cache_populator.cpp
+    kis_animation_exporter.cpp
+
     kis_md5_generator.cpp
 )
 

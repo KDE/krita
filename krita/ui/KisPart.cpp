@@ -73,6 +73,7 @@
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
+#include "kis_animation_cache_populator.h"
 
 #include "kis_color_manager.h"
 
@@ -106,7 +107,6 @@ public:
     KActionCollection *actionCollection;
 
     void loadActions();
-
 };
 
 
@@ -202,6 +202,11 @@ KisPart::KisPart()
     Q_UNUSED(KisResourceServerProvider::instance());
     Q_UNUSED(KisColorManager::instance());
 
+    QThread *thread = new QThread(this);
+    KisAnimationCachePopulator *animationCachePopulator = KisAnimationCachePopulator::instance();
+    animationCachePopulator->moveToThread(thread);
+    connect(thread, SIGNAL(started()), animationCachePopulator, SLOT(slotStart()));
+    thread->start();
 }
 
 KisPart::~KisPart()

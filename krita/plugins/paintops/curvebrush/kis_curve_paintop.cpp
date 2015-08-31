@@ -28,6 +28,8 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_types.h"
+#include <kis_lod_transform.h>
+
 
 KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter), m_painter(0)
@@ -91,7 +93,8 @@ void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation 
         m_points.removeFirst();
     }
 
-    qreal lineWidth = m_lineWidthOption.apply(pi2, m_curveProperties.lineWidth);
+    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
+    const qreal lineWidth = additionalScale * m_lineWidthOption.apply(pi2, m_curveProperties.lineWidth);
 
     QPen pen(QBrush(Qt::white), lineWidth);
     QPainterPath path;

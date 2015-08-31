@@ -117,13 +117,28 @@ public:
         return m_brushesMap.value(m_text.at(0));
     }
 
+    void notifyStrokeStarted() {
+        m_charIndex = 0;
+        updateBrushIndexesImpl();
+    }
+
 protected:
-    int chooseNextBrush(const KisPaintInformation& info) const {
+
+    int chooseNextBrush(const KisPaintInformation& info) {
         Q_UNUSED(info);
         return m_currentBrushIndex;
     }
-    void updateBrushIndexes() {
+    void updateBrushIndexes(const KisPaintInformation& info) {
+        Q_UNUSED(info);
+
         m_charIndex++;
+        updateBrushIndexesImpl();
+    }
+
+private:
+    void updateBrushIndexesImpl() {
+        if (m_text.isEmpty()) return;
+
         if (m_charIndex >= m_text.size()) {
             m_charIndex = 0;
         }
@@ -189,9 +204,14 @@ QFont KisTextBrush::font()
     return m_font;
 }
 
-void KisTextBrush::notifyCachedDabPainted()
+void KisTextBrush::notifyStrokeStarted()
 {
-    m_brushesPipe->notifyCachedDabPainted();
+    m_brushesPipe->notifyStrokeStarted();
+}
+
+void KisTextBrush::notifyCachedDabPainted(const KisPaintInformation& info)
+{
+    m_brushesPipe->notifyCachedDabPainted(info);
 }
 
 void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const

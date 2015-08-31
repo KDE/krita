@@ -29,6 +29,8 @@ private Q_SLOTS:
 
     void testCreation();
     void testSerialisation();
+
+    void benchmarkTausRandomGeneration();
 };
 
 #endif

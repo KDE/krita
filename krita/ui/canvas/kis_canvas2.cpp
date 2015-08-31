@@ -42,6 +42,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
+#include "kis_image_barrier_locker.h"
 #include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
@@ -63,6 +64,8 @@
 #include "kis_exposure_gamma_correction_interface.h"
 #include "KisView.h"
 #include "kis_canvas_controller.h"
+#include "kis_animation_player.h"
+#include "kis_animation_frame_cache.h"
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
@@ -127,6 +130,11 @@ public:
     KisDisplayColorConverter *displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
+
+    KisAnimationPlayer *animationPlayer;
+    KisAnimationFrameCacheSP frameCache;
+
+    bool lodAllowedInCanvas;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
@@ -136,8 +144,13 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
+    m_d->lodAllowedInCanvas = cfg.levelOfDetailEnabled();
 
     createCanvas(cfg.useOpenGL());
+
+    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
+
+    m_d->animationPlayer = new KisAnimationPlayer(this);
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -393,6 +406,8 @@ void KisCanvas2::createOpenGLCanvas()
                                                                         m_d->displayColorConverter->renderingIntent(),
                                                                         m_d->displayColorConverter->conversionFlags());
 
+    m_d->frameCache = KisAnimationFrameCache::getFrameCache(m_d->openGLImageTextures);
+
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     canvasWidget->setDisplayFilter(m_d->displayColorConverter->displayFilter());
 
@@ -465,6 +480,7 @@ void KisCanvas2::connectCurrentCanvas()
     startResizingImage();
 
     emit imageChanged(image);
+    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
 }
 
 void KisCanvas2::disconnectCurrentCanvas()
@@ -743,7 +759,23 @@ void KisCanvas2::notifyZoomChanged()
         m_d->prescaledProjection->notifyZoomChanged();
     }
 
+    notifyLevelOfDetailChange();
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
+}
+
+void KisCanvas2::notifyLevelOfDetailChange()
+{
+    if (!m_d->lodAllowedInCanvas) return;
+
+    KisImageSP image = this->image();
+
+    const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
+
+    KisConfig cfg;
+    const int maxLod = cfg.numMipmapLevels();
+
+    int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
+    image->setDesiredLevelOfDetail(lod);
 }
 
 void KisCanvas2::preScale()
@@ -809,15 +841,18 @@ void KisCanvas2::slotConfigChanged()
 
 }
 
+void KisCanvas2::refetchDataFromImage()
+{
+    KisImageSP image = this->image();
+    KisImageBarrierLocker l(image);
+    startUpdateInPatches(image->bounds());
+}
+
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->displayColorConverter->monitorProfile() == monitorProfile) return;
 
     m_d->displayColorConverter->setMonitorProfile(monitorProfile);
-
-    KisImageWSP image = this->image();
-
-    image->barrierLock();
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
@@ -835,9 +870,7 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
                                                     m_d->displayColorConverter->conversionFlags());
     }
 
-    startUpdateInPatches(image->bounds());
-
-    image->unlock();
+    refetchDataFromImage();
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
@@ -876,6 +909,16 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 void KisCanvas2::setCursor(const QCursor &cursor)
 {
     canvasWidget()->setCursor(cursor);
+}
+
+KisAnimationFrameCacheSP KisCanvas2::frameCache()
+{
+    return m_d->frameCache;
+}
+
+KisAnimationPlayer *KisCanvas2::animationPlayer()
+{
+    return m_d->animationPlayer;
 }
 
 void KisCanvas2::slotSelectionChanged()
@@ -920,6 +963,34 @@ bool KisCanvas2::wrapAroundViewingMode() const
         return !(infinityDecoration->visible());
     }
     return false;
+}
+
+void KisCanvas2::setLodAllowedInCanvas(bool value)
+{
+#ifdef HAVE_OPENGL
+    m_d->lodAllowedInCanvas =
+        value &&
+        m_d->currentCanvasIsOpenGL &&
+        KisOpenGL::supportsGLSL13();
+#else
+    Q_UNUSED(value);
+    m_d->lodAllowedInCanvas = false;
+#endif
+
+    KisImageSP image = this->image();
+
+    if (m_d->lodAllowedInCanvas != !image->levelOfDetailBlocked()) {
+        image->setLevelOfDetailBlocked(!m_d->lodAllowedInCanvas);
+        notifyLevelOfDetailChange();
+    }
+
+    KisConfig cfg;
+    cfg.setLevelOfDetailEnabled(m_d->lodAllowedInCanvas);
+}
+
+bool KisCanvas2::lodAllowedInCanvas() const
+{
+    return m_d->lodAllowedInCanvas;
 }
 
 KoGuidesData *KisCanvas2::guidesData()

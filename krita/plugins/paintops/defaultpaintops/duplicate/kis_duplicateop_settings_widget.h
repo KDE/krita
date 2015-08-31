@@ -27,6 +27,7 @@
 #include <kis_image.h>
 
 class KisDuplicateOpOption;
+class KisPaintopLodLimitations;
 
 class KisDuplicateOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
@@ -40,6 +41,7 @@ public:
     ~KisDuplicateOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
+    KisPaintopLodLimitations lodLimitations() const;
 
     virtual bool supportScratchBox() {
         return false;

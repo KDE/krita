@@ -367,4 +367,85 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
     VERIFY_EMPTY(jobs[2]);
 }
 
+#include <boost/functional/factory.hpp>
+#include <boost/bind.hpp>
+
+void KisStrokesQueueTest::testStrokesLevelOfDetail()
+{
+    KisStrokesQueue queue;
+
+    queue.setSuspendUpdatesStrokeStrategyFactory(
+        boost::bind(
+        boost::factory<KisTestingStrokeStrategy*>(), "susp_u_", false, true, true));
+
+    queue.setResumeUpdatesStrokeStrategyFactory(
+        boost::bind(
+        boost::factory<KisTestingStrokeStrategy*>(), "resu_u_", false, true, true));
+
+    // create a stroke with LOD0 + LOD2
+    queue.setDesiredLevelOfDetail(2);
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("lod_", false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    // create a update with LOD == 0 (default one)
+    // well, this walker is not initialized... but who cares?
+    KisBaseRectsWalkerSP walker = new KisMergeWalker(QRect());
+
+    KisTestableUpdaterContext context(2);
+    QVector<KisUpdateJobItem*> jobs;
+
+    context.addMergeJob(walker);
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_WALKER(jobs[0], walker);
+    VERIFY_EMPTY(jobs[1]);
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    context.clear();
+
+    jobs = context.getJobs();
+    VERIFY_EMPTY(jobs[0]);
+    VERIFY_EMPTY(jobs[1]);
+
+    context.clear();
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "clone2_lod_dab");
+    VERIFY_EMPTY(jobs[1]);
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    // walker of a different LOD must not be allowed
+    QCOMPARE(context.isJobAllowed(walker), false);
+
+    context.clear();
+    context.addMergeJob(walker);
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_WALKER(jobs[0], walker);
+    COMPARE_NAME(jobs[1], "susp_u_init");
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    context.clear();
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "lod_dab");
+    VERIFY_EMPTY(jobs[1]);
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    context.clear();
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "resu_u_init");
+    VERIFY_EMPTY(jobs[1]);
+    QCOMPARE(queue.needsExclusiveAccess(), false);
+
+    context.clear();
+}
+
 QTEST_KDEMAIN(KisStrokesQueueTest, NoGUI)

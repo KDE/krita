@@ -51,6 +51,7 @@ const QString CLONE_TYPE = "clonetype";
 const QString COLORSPACE_NAME = "colorspacename";
 const QString COMPOSITE_OP = "compositeop";
 const QString DESCRIPTION = "description";
+const QString ONION_SKIN_ENABLED = "onionskin";
 
 const QString DOT_FILTERCONFIG = ".filterconfig";
 const QString DOT_TRANSFORMCONFIG = ".transformconfig";
@@ -105,6 +106,7 @@ const QString Y_TRANSLATION = "y_translation";
 const QString ACTIVE = "active";
 const QString LAYER_STYLE_UUID = "layerstyle";
 const QString PASS_THROUGH_MODE = "passthrough";
+const QString KEYFRAME_FILE = "keyframes";
 }
 
 

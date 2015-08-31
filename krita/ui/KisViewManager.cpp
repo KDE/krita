@@ -221,6 +221,7 @@ public:
         , rotateCanvasRight(0)
         , rotateCanvasLeft(0)
         , wrapAroundAction(0)
+        , levelOfDetailAction(0)
         , showRulersAction(0)
         , zoomTo100pct(0)
         , zoomIn(0)
@@ -273,6 +274,7 @@ public:
     KisAction *rotateCanvasRight;
     KisAction *rotateCanvasLeft;
     KisAction *wrapAroundAction;
+    KisAction *levelOfDetailAction;
     KisAction *showRulersAction;
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
@@ -414,8 +416,13 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
         d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), canvasController, SLOT(rotateCanvasRight15()));
         d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),canvasController, SLOT(rotateCanvasLeft15()));
+
         d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
         d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
+
+        d->viewConnections.addUniqueConnection(d->levelOfDetailAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleLevelOfDetailMode(bool)));
+        d->levelOfDetailAction->setChecked(canvasController->levelOfDetailMode());
+
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
@@ -710,6 +717,12 @@ void KisViewManager::createActions()
     d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
+
+    d->levelOfDetailAction = new KisAction(i18n("Fast Preview Mode (LOD)"), this);
+    d->levelOfDetailAction->setCheckable(true);
+    d->levelOfDetailAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("level_of_detail_mode", d->levelOfDetailAction);
+    d->levelOfDetailAction->setShortcut(QKeySequence("Shift+L"));
 
     KisAction *tAction = new KisAction(i18n("Show Status Bar"), this);
     tAction->setCheckable(true);

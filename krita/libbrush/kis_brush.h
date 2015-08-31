@@ -38,6 +38,8 @@ class KoColorSpace;
 
 class KisPaintInformation;
 class KisBoundary;
+class KisPaintopLodLimitations;
+
 
 enum enumBrushType {
     INVALID,
@@ -217,6 +219,15 @@ public:
      **/
     virtual bool canPaintFor(const KisPaintInformation& /*info*/);
 
+
+    /**
+     * Is called by the paint op when a paintop starts a stroke.  The
+     * point is that we store brushes a server while the paint ops are
+     * are recreated all the time. Is means that upon a stroke start
+     * the brushes may need to clear its state.
+     */
+    virtual void notifyStrokeStarted();
+
     /**
      * Is called by the cache, when cache hit has happened.
      * Having got this notification the brush can update the counters
@@ -225,7 +236,7 @@ public:
      * Currently, this is used by pipe'd brushes to implement
      * incremental and random parasites
      */
-    void notifyCachedDabPainted();
+    virtual void notifyCachedDabPainted(const KisPaintInformation& info);
 
     /**
      * Return a fixed paint device that contains a correctly scaled image dab.
@@ -308,6 +319,8 @@ public:
 
     void prepareBrushPyramid() const;
     void clearBrushPyramid();
+
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 //protected:
 

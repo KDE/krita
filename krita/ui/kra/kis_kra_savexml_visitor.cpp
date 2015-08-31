@@ -45,7 +45,7 @@
 #include <kis_transparency_mask.h>
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
-
+#include "kis_keyframe_channel.h"
 
 using namespace KRA;
 
@@ -113,6 +113,11 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     saveLayer(element, PAINT_LAYER, layer);
     element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
+
+    if (layer->getKeyframeChannel(KisKeyframeChannel::Content.id())->keyframeCount() > 1) {
+        element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
+    }
+
     return element;
 }
 
@@ -162,6 +167,12 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     while (i.hasNext()) {
         i.next();
         m_nodeFileNames[i.key()] = i.value();
+    }
+
+    i = QMapIterator<const KisNode*, QString>(visitor.keyframeFileNames());
+    while (i.hasNext()) {
+        i.next();
+        m_keyframeFileNames[i.key()] = i.value();
     }
 
     return success;
@@ -317,6 +328,8 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
+    QString filename = LAYER + QString::number(m_count);
+
     el.setAttribute(CHANNEL_FLAGS, flagsToString(layer->channelFlags()));
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
@@ -324,7 +337,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(VISIBLE, layer->visible());
     el.setAttribute(LOCKED, layer->userLocked());
     el.setAttribute(NODE_TYPE, layerType);
-    el.setAttribute(FILE_NAME, LAYER + QString::number(m_count));
+    el.setAttribute(FILE_NAME, filename);
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
@@ -341,7 +354,24 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
         }
     }
 
-    m_nodeFileNames[layer] = LAYER + QString::number(m_count);
+    bool saveKeyframes = false;
+    QList<KisKeyframeChannel*> keyframeChannels = layer->keyframeChannels();
+    foreach (KisKeyframeChannel *channel, keyframeChannels) {
+        if (channel->keyframeCount() > 0) {
+            if (channel->inherits("KisRasterKeyframeChannel") && channel->keyframeCount() <= 1) continue;
+
+            saveKeyframes = true;
+            break;
+        }
+    }
+
+    if (saveKeyframes) {
+        QString keyframeFile = filename + ".keyframes.xml";
+        m_keyframeFileNames[layer] = keyframeFile;
+        el.setAttribute(KEYFRAME_FILE, keyframeFile);
+    }
+
+    m_nodeFileNames[layer] = filename;
 
     dbgFile << "Saved layer "
             << layer->name()
@@ -390,6 +420,12 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         while (i.hasNext()) {
             i.next();
             m_nodeFileNames[i.key()] = i.value();
+        }
+
+        i = QMapIterator<const KisNode*, QString>(visitor.keyframeFileNames());
+        while (i.hasNext()) {
+            i.next();
+            m_keyframeFileNames[i.key()] = i.value();
         }
 
         return success;

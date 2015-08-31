@@ -23,6 +23,8 @@
 #include "kis_layer.h"
 #include "kis_indirect_painting_support.h"
 
+#include <QBitArray>
+
 class KoColorSpace;
 
 /**
@@ -134,6 +136,16 @@ public:
      */
     void setAlphaLocked(bool lock);
 
+    /**
+     * @return true if onion skins should be rendered on this layer
+     */
+    bool onionSkinEnabled() const;
+
+    /**
+     * @param state whether onion skins should be rendered
+     */
+    void setOnionSkinEnabled(bool state);
+
 public Q_SLOTS:
 
     // KisIndirectPaintingSupport
@@ -146,7 +158,9 @@ protected:
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
                                   const QRect& rect) const;
+
 private:
+    void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());
 
     struct Private;
     Private * const m_d;

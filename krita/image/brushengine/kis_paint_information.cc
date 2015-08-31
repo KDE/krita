@@ -24,7 +24,7 @@
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
 #include "kis_algebra_2d.h"
-
+#include "kis_lod_transform.h"
 
 
 struct KisPaintInformation::Private {
@@ -50,7 +50,9 @@ struct KisPaintInformation::Private {
         time(time_),
         speed(speed_),
         isHoveringMode(isHoveringMode_),
-        currentDistanceInfo(0)
+        randomSource(0),
+        currentDistanceInfo(0),
+        levelOfDetail(0)
     {
     }
 
@@ -78,12 +80,15 @@ struct KisPaintInformation::Private {
         time = rhs.time;
         speed = rhs.speed;
         isHoveringMode = rhs.isHoveringMode;
+        randomSource = rhs.randomSource;
         currentDistanceInfo = rhs.currentDistanceInfo;
         canvasRotation = rhs.canvasRotation;
         canvasMirroredH = rhs.canvasMirroredH;
         if (rhs.drawingAngleOverride) {
             drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
         }
+
+        levelOfDetail = rhs.levelOfDetail;
     }
 
 
@@ -97,11 +102,14 @@ struct KisPaintInformation::Private {
     qreal time;
     qreal speed;
     bool isHoveringMode;
+    KisRandomSourceSP randomSource;
     int canvasRotation;
     bool canvasMirroredH;
 
     QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
+
+    int levelOfDetail;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
         currentDistanceInfo = di;
@@ -368,7 +376,13 @@ qreal KisPaintInformation::drawingDistance() const
     }
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
-    return diff.length();
+    qreal length = diff.length();
+
+    if (d->levelOfDetail) {
+        length *= KisLodTransform::lodToInvScale(d->levelOfDetail);
+    }
+
+    return length;
 }
 
 qreal KisPaintInformation::drawingSpeed() const
@@ -394,6 +408,26 @@ qreal KisPaintInformation::perspective() const
 qreal KisPaintInformation::currentTime() const
 {
     return d->time;
+}
+
+KisRandomSourceSP KisPaintInformation::randomSource() const
+{
+    if (!d->randomSource) {
+        qWarning() << "WARNING: accessing a paint info object without a random source!";
+        d->randomSource = new KisRandomSource();
+    }
+
+    return d->randomSource;
+}
+
+void KisPaintInformation::setRandomSource(KisRandomSourceSP value)
+{
+    d->randomSource = value;
+}
+
+void KisPaintInformation::setLevelOfDetail(int levelOfDetail) const
+{
+    d->levelOfDetail = levelOfDetail;
 }
 
 QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
@@ -429,6 +463,7 @@ KisPaintInformation KisPaintInformation::mixOnlyPosition(qreal t, const KisPaint
                                basePi.currentTime(),
                                basePi.drawingSpeed());
 
+    result.setRandomSource(basePi.randomSource());
     return result;
 }
 
@@ -462,6 +497,8 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time, speed);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
+    result.d->levelOfDetail = pi1.d->levelOfDetail;
+    result.setRandomSource(pi1.randomSource());
     result.d->canvasRotation = pi2.canvasRotation();
     result.d->canvasMirroredH = pi2.canvasMirroredH();
 

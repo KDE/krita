@@ -29,6 +29,8 @@ class KoID;
 class KisConfigWidget;
 class KisFilterConfiguration;
 class KisFilterOptionWidget;
+class KisPaintopLodLimitations;
+
 
 const QString FILTER_ID = "Filter/id";
 const QString FILTER_SMUDGE_MODE = "Filter/smudgeMode";
@@ -72,6 +74,8 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private Q_SLOTS:
 

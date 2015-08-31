@@ -22,6 +22,7 @@
 #include <QDebug>
 
 #include "kis_debug.h"
+#include "kis_time_range.h"
 
 namespace KisDomUtils {
 
@@ -49,6 +50,18 @@ void saveValue(QDomElement *parent, const QString &tag, const QRect &rc)
     e.setAttribute("y", Private::numberToString(rc.y()));
     e.setAttribute("w", Private::numberToString(rc.width()));
     e.setAttribute("h", Private::numberToString(rc.height()));
+}
+
+void saveValue(QDomElement *parent, const QString &tag, const QPoint &pt)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "point");
+
+    e.setAttribute("x", Private::numberToString(pt.x()));
+    e.setAttribute("y", Private::numberToString(pt.y()));
 }
 
 void saveValue(QDomElement *parent, const QString &tag, const QPointF &pt)
@@ -95,6 +108,23 @@ void saveValue(QDomElement *parent, const QString &tag, const QTransform &t)
     e.setAttribute("m31", Private::numberToString(t.m31()));
     e.setAttribute("m32", Private::numberToString(t.m32()));
     e.setAttribute("m33", Private::numberToString(t.m33()));
+}
+
+void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "timerange");
+
+    if (range.isValid()) {
+        e.setAttribute("from", Private::numberToString(range.start()));
+
+        if (!range.isInfinite()) {
+            e.setAttribute("to", Private::numberToString(range.end()));
+        }
+    }
 }
 
 bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement *el, QStringList *errorMessages)
@@ -164,6 +194,16 @@ bool loadValue(const QDomElement &e, QRect *rc)
     return true;
 }
 
+bool loadValue(const QDomElement &e, QPoint *pt)
+{
+    if (!Private::checkType(e, "point")) return false;
+
+    pt->setX(Private::stringToInt(e.attribute("x", "0")));
+    pt->setY(Private::stringToInt(e.attribute("y", "0")));
+
+    return true;
+}
+
 bool loadValue(const QDomElement &e, QPointF *pt)
 {
     if (!Private::checkType(e, "pointf")) return false;
@@ -209,6 +249,25 @@ bool loadValue(const QDomElement &e, QTransform *t)
     return true;
 }
 
+bool loadValue(const QDomElement &e, KisTimeRange *range)
+{
+    if (!Private::checkType(e, "timerange")) return false;
+
+    int start = Private::stringToInt(e.attribute("from", "-1"));
+    int end = Private::stringToInt(e.attribute("to", "-1"));
+
+    if (start == -1) {
+        range = new KisTimeRange();
+    } else if (end == -1) {
+        *range = KisTimeRange::infinite(start);
+    } else {
+        *range = KisTimeRange::fromTime(start, end);
+    }
+
+
+    return true;
+}
+
 QDomElement findElementByAttibute(QDomNode parent,
                                   const QString &tag,
                                   const QString &attribute,
@@ -229,6 +288,8 @@ QDomElement findElementByAttibute(QDomNode parent,
 
     return QDomElement();
 }
+
+
 
 
 }

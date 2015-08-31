@@ -28,6 +28,9 @@
 #include <QImage>
 #include <QVector>
 
+class KoColor;
+
+
 /**
  * A fixed paint device is a simple paint device that consists of an array
  * of bytes and a rectangle. It cannot grow, it cannot shrink, all you can
@@ -165,6 +168,8 @@ public:
      * but if the paintdevice has not been initialized, it will be.
      */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
+
+    void fill(const QRect &rc, const KoColor &color);
 
 
     /**

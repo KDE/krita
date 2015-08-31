@@ -21,6 +21,8 @@
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
 
+#include "kis_painter.h"
+
 #include <kglobal.h>
 
 #include <QImage>
@@ -70,7 +72,8 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(const KisPaintOpSettingsSP 
 
 
 KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
-    : KisPaintOp(painter)
+    : KisPaintOp(painter),
+      m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail())
 {
     Q_ASSERT(settings);
 
@@ -84,6 +87,8 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
         brushOption.readOptionSetting(settings);
         m_brush = brushOption.brush();
     }
+
+    m_brush->notifyStrokeStarted();
 
     m_precisionOption.readOptionSetting(settings);
     m_dabCache = new KisDabCache(m_brush);

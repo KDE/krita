@@ -30,6 +30,8 @@ private Q_SLOTS:
     void testLoading();
     void testObligeSingleChild();
     void testObligeSingleChildNonTranspPixel();
+
+    void testLoadAnimated();
 };
 
 #endif

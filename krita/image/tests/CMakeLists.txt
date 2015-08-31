@@ -612,6 +612,12 @@ target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Te
 
 ########### next target ###############
 
+set(kis_keyframing_test_SRCS kis_keyframing_test.cpp )
+kde4_add_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
+target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_psd_layer_style_test_SRCS kis_psd_layer_style_test.cpp )
 kde4_add_unit_test(KisPSDLayerStyleTest TESTNAME krita-image-PSDLayerStyle-Test ${kis_psd_layer_style_test_SRCS})
 target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
@@ -621,6 +627,17 @@ target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::T
 set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
 kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
 target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+
+########### next target ###############
+
+set(kis_image_animation_interface_test_SRCS kis_image_animation_interface_test.cpp )
+kde4_add_unit_test(KisImageAnimationInterfaceTest TESTNAME krita-image-ImageAnimationInterface-Test ${kis_image_animation_interface_test_SRCS})
+target_link_libraries(KisImageAnimationInterfaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+########### next target ###############
+
+set(kis_onion_skin_compositor_test_SRCS kis_onion_skin_compositor_test.cpp )
+kde4_add_unit_test(KisOnionSkinCompositorTest TESTNAME krita-image-OnionSkinCompositor-Test ${kis_onion_skin_compositor_test_SRCS})
+target_link_libraries(KisOnionSkinCompositorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

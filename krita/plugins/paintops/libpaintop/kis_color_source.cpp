@@ -101,8 +101,10 @@ KisPlainColorSource::~KisPlainColorSource()
     delete m_cachedBackGroundColor;
 }
 
-void KisPlainColorSource::selectColor(double mix)
+void KisPlainColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
+    Q_UNUSED(pi);
+
     if (!m_color || !(*m_color->colorSpace() == *m_foreGroundColor.colorSpace())) {
         delete m_color;
         m_color = new KoColor(m_foreGroundColor.colorSpace());
@@ -120,7 +122,6 @@ void KisPlainColorSource::selectColor(double mix)
     const qint16 weights[2] = { (qint16)(255 - weight), (qint16)weight };
 
     m_color->colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color->data());
-
 }
 
 //-------------------------------------------------//
@@ -138,8 +139,9 @@ KisGradientColorSource::~KisGradientColorSource()
 {
 }
 
-void KisGradientColorSource::selectColor(double mix)
+void KisGradientColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
+    Q_UNUSED(pi);
     m_gradient->colorAt(*m_color, mix);
 }
 
@@ -156,10 +158,15 @@ KisUniformRandomColorSource::~KisUniformRandomColorSource()
 {
 }
 
-void KisUniformRandomColorSource::selectColor(double mix)
+void KisUniformRandomColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
+    Q_UNUSED(pi);
     Q_UNUSED(mix);
-    m_color->fromQColor(QColor((int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX)));
+
+    KisRandomSourceSP source = pi.randomSource();
+    m_color->fromQColor(QColor((int)source->generate(0, 255),
+                               (int)source->generate(0, 255),
+                               (int)source->generate(0, 255)));
 }
 
 
@@ -175,8 +182,10 @@ KisTotalRandomColorSource::~KisTotalRandomColorSource()
 {
 }
 
-void KisTotalRandomColorSource::selectColor(double)
+void KisTotalRandomColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
+    Q_UNUSED(mix);
+    Q_UNUSED(pi);
 }
 
 void KisTotalRandomColorSource::applyColorTransformation(const KoColorTransformation*) {}
@@ -226,9 +235,10 @@ KoPatternColorSource::~KoPatternColorSource()
 {
 }
 
-void KoPatternColorSource::selectColor(double mix)
+void KoPatternColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
     Q_UNUSED(mix);
+    Q_UNUSED(pi);
 }
 
 void KoPatternColorSource::applyColorTransformation(const KoColorTransformation* transfo)

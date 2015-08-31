@@ -58,6 +58,10 @@ public:
         return m_nodeFileNames;
     }
 
+    QMap<const KisNode*, QString> keyframeFileNames() {
+        return m_keyframeFileNames;
+    }
+
 public:
     QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc);
 
@@ -77,6 +81,7 @@ private:
 
     vKisNodeSP m_selectedNodes;
     QMap<const KisNode*,  QString> m_nodeFileNames;
+    QMap<const KisNode*,  QString> m_keyframeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;

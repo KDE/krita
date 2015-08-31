@@ -36,6 +36,9 @@
 #include <kis_debug.h>
 #include <kis_layer_composition.h>
 
+#include "kis_undo_stores.h"
+
+
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
 
@@ -49,6 +52,105 @@ void KisImageTest::layerTests()
     image->addNode(layer);
 
     QVERIFY(image->rootLayer()->firstChild()->objectName() == layer->objectName());
+}
+
+void KisImageTest::benchmarkCreation()
+{
+    const QRect imageRect(0,0,3000,2000);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QList<KisImageSP> images;
+    QList<KisSurrogateUndoStore*> stores;
+
+
+    QBENCHMARK {
+        for (int i = 0; i < 10; i++) {
+            stores << new KisSurrogateUndoStore();
+        }
+
+        for (int i = 0; i < 10; i++) {
+            KisImageSP image = new KisImage(stores.takeLast(), imageRect.width(), imageRect.height(), cs, "test image");
+            images << image;
+        }
+    }
+}
+
+#include "testutil.h"
+#include "kis_stroke_strategy.h"
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
+
+
+class ForbiddenLodStrokeStrategy : public KisStrokeStrategy
+{
+public:
+    ForbiddenLodStrokeStrategy(boost::function<void()> lodCallback)
+        : m_lodCallback(lodCallback)
+    {
+    }
+
+    KisStrokeStrategy* createLodClone(int levelOfDetail) {
+        Q_UNUSED(levelOfDetail);
+        m_lodCallback();
+        return 0;
+    }
+
+private:
+    boost::function<void()> m_lodCallback;
+};
+
+void notifyVar(bool *value) {
+    *value = true;
+}
+
+void KisImageTest::testBlockLevelOfDetail()
+{
+    TestUtil::MaskParent p;
+
+    QCOMPARE(p.image->currentLevelOfDetail(), 0);
+
+    p.image->setDesiredLevelOfDetail(1);
+    p.image->waitForDone();
+
+    QCOMPARE(p.image->currentLevelOfDetail(), 0);
+
+    {
+        bool lodCreated = false;
+        KisStrokeId id = p.image->startStroke(
+            new ForbiddenLodStrokeStrategy(
+                boost::bind(&notifyVar, &lodCreated)));
+        p.image->endStroke(id);
+        p.image->waitForDone();
+
+        QVERIFY(lodCreated);
+    }
+
+    p.image->setLevelOfDetailBlocked(true);
+
+    {
+        bool lodCreated = false;
+        KisStrokeId id = p.image->startStroke(
+            new ForbiddenLodStrokeStrategy(
+                boost::bind(&notifyVar, &lodCreated)));
+        p.image->endStroke(id);
+        p.image->waitForDone();
+
+        QVERIFY(!lodCreated);
+    }
+
+    p.image->setLevelOfDetailBlocked(false);
+    p.image->setDesiredLevelOfDetail(1);
+
+    {
+        bool lodCreated = false;
+        KisStrokeId id = p.image->startStroke(
+            new ForbiddenLodStrokeStrategy(
+                boost::bind(&notifyVar, &lodCreated)));
+        p.image->endStroke(id);
+        p.image->waitForDone();
+
+        QVERIFY(lodCreated);
+    }
 }
 
 void KisImageTest::testConvertImageColorSpace()
@@ -223,7 +325,7 @@ struct FlattenTestImage
         layer1->paintDevice()->fill(rect1, KoColor(Qt::red, p.image->colorSpace()));
 
         layer2->paintDevice()->fill(rect2, KoColor(Qt::green, p.image->colorSpace()));
-        tmask->testingInitSelection(tmaskRect);
+        tmask->testingInitSelection(tmaskRect, layer2);
 
         layer3->paintDevice()->fill(rect3, KoColor(Qt::blue, p.image->colorSpace()));
         layer4->paintDevice()->fill(rect4, KoColor(Qt::yellow, p.image->colorSpace()));

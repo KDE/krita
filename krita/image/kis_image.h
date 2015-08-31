@@ -53,6 +53,7 @@ class KoColorProfile;
 class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
+class KisImageAnimationInterface;
 
 namespace KisMetaData
 {
@@ -78,7 +79,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -89,6 +90,8 @@ public: // KisNodeGraphListener implementation
     void nodeChanged(KisNode * node);
     void notifySelectionChanged();
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
+    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void requestTimeSwitch(int time);
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc);
@@ -519,9 +522,36 @@ public:
     bool wrapAroundModeActive() const;
 
     /**
+     * \return curent level of detail which is used when processing the image.
+     * Current working zoom = 2 ^ (- currentLevelOfDetail()). Default value is
+     * null, which means we work on the original image.
+     */
+    int currentLevelOfDetail() const;
+
+    /**
+     * Notify KisImage which level of detail should be used in the
+     * lod-mode. Setting the mode does not guarantee the LOD to be
+     * used. It will be activated only when the stokes supports it.
+     */
+    void setDesiredLevelOfDetail(int lod);
+
+    /**
+     * Blocks usage of level of detail functionality. After this method
+     * has been called, no new strokes will use LoD.
+     */
+    void setLevelOfDetailBlocked(bool value);
+
+    /**
+     * \see setLevelOfDetailBlocked()
+     */
+    bool levelOfDetailBlocked() const;
+
+    /**
      * Notifies that the node collapsed state has changed
      */
     void notifyNodeCollpasedChanged();
+
+    KisImageAnimationInterface *animationInterface() const;
 
 public:
     bool startIsolatedMode(KisNodeSP node);
@@ -701,6 +731,10 @@ public Q_SLOTS:
      * whole subtree of nodes. But while we change any particular
      * node, it can ask for an update itself. This method is a way of
      * blocking such intermediate (and excessive) requests.
+     *
+     * NOTE: this is a convenience function for setProjectionUpdatesFilter()
+     *       that installs a predefined filter that eats everything. Please
+     *       note that these calls are *not* recursive
      */
     void disableDirtyRequests();
 
@@ -708,6 +742,19 @@ public Q_SLOTS:
      * \see disableDirtyRequests()
      */
     void enableDirtyRequests();
+
+    /**
+     * Installs a filter object that will filter all the incoming projection update
+     * requests. If the filter return true, the incoming update is dropped.
+     *
+     * NOTE: you cannot set filters recursively!
+     */
+    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter);
+
+    /**
+     * \see setProjectionUpdatesFilter()
+     */
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const;
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);

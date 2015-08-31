@@ -9,17 +9,7 @@ install( FILES
     simple_texture.frag
     simple_texture_legacy.frag
 
-    highq_downscale_preface.frag.inc
-    highq_downscale_main.frag.inc
-    highq_downscale_main_ocio.frag.inc
-
-    simple_texture_preface.frag.inc
-    simple_texture_main.frag.inc
-    simple_texture_main_ocio.frag.inc
-
-    simple_texture_legacy_preface.frag.inc
-    simple_texture_legacy_main.frag.inc
-    simple_texture_legacy_main_ocio.frag.inc
+    highq_downscale.frag
 
     cursor.vert
     cursor.frag

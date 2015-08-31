@@ -1851,6 +1851,7 @@ bool KisDocument::completeLoading(KoStore* store)
         return false;
     }
 
+    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
     d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
 
     bool retval = true;
@@ -1889,6 +1890,7 @@ bool KisDocument::completeSaving(KoStore* store)
 {
     QString uri = url().url();
 
+    d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
     d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), isAutosaving());
     bool retval = true;
     if (!d->kraSaver->errorMessages().isEmpty()) {

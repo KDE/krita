@@ -48,6 +48,10 @@ class KoColorProfile;
 
 class KisDataManager;
 class KisPaintDeviceWriter;
+class KisKeyframe;
+class KisRasterKeyframeChannel;
+
+class KisPaintDeviceFramesInterface;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -74,7 +78,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(const KoColorSpace * colorSpace, const QString& name = QString());
+    explicit KisPaintDevice(const KoColorSpace * colorSpace, const QString& name = QString());
 
     /**
      * Create a new paint device with the specified colorspace. The
@@ -87,7 +91,15 @@ public:
      */
     KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
 
-    KisPaintDevice(const KisPaintDevice& rhs);
+    /**
+     * Creates a copy of this device.
+     *
+     * If \p copyFrames is false, the newly created device clones the
+     * current frame of \p rhs only (default and efficient
+     * behavior). If \p copyFrames is true, the new device is a deep
+     * copy of the source with all the frames included.
+     */
+    KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false);
     virtual ~KisPaintDevice();
 
 protected:
@@ -253,11 +265,14 @@ public:
     /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
+     * If frame ID is given, set default pixel for that frame. Otherwise use active frame.
      */
     void setDefaultPixel(const quint8 *defPixel);
 
     /**
      * Get a pointer to the default pixel.
+     * If the frame parameter is given, get the default pixel of
+     * specified frame. Otherwise use currently active frame.
      */
     const quint8 *defaultPixel() const;
 
@@ -450,7 +465,7 @@ public:
      * Changes the profile of the colorspace of this paint device to the given
      * profile. If the given profile is 0, nothing happens.
      */
-    void setProfile(const KoColorProfile * profile);
+    bool setProfile(const KoColorProfile * profile);
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
@@ -674,6 +689,21 @@ public:
      */
     quint32 channelCount() const;
 
+    /**
+     * Create a keyframe channel for the content on this device.
+     * @param id identifier for the channel
+     * @param node the parent node for the channel
+     * @return keyframe channel
+     */
+    KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id, const KisNodeWSP node);
+
+    KisRasterKeyframeChannel* keyframeChannel() const;
+
+    /**
+     * An interface to modify/load/save frames stored inside this device
+     */
+    KisPaintDeviceFramesInterface* framesInterface();
+
 public:
 
     /**
@@ -695,6 +725,13 @@ public:
     void setDirty();
 
     void setDirty(const QVector<QRect> rects);
+
+    /**
+     * Called by KisTransactionData when it thinks current time should
+     * be changed. And the requests is forwarded to the image if
+     * needed.
+     */
+    void requestTimeSwitch(int time);
 
 public:
 
@@ -758,10 +795,12 @@ public:
 
     static MemoryReleaseObject* createMemoryReleaseObject();
 
+public:
+    QRegion syncLodCache(int levelOfDetail);
+
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);
-    void init(KisDataManagerSP explicitDataManager,
-              const KoColorSpace *colorSpace,
+    void init(const KoColorSpace *colorSpace,
               KisDefaultBoundsBaseSP defaultBounds,
               KisNodeWSP parent, const QString& name);
 
@@ -773,6 +812,12 @@ private:
      * in the colorspace of this paint device.
      */
     QVector<qint32> channelSizes() const;
+
+    void emitColorSpaceChanged();
+    void emitProfileChanged();
+
+private:
+    friend class KisPaintDeviceFramesInterface;
 
 protected:
     friend class KisSelectionTest;

@@ -19,6 +19,9 @@
 
 #include "kis_node_graph_listener.h"
 
+#include "kis_time_range.h"
+
+
 struct KisNodeGraphListener::Private
 {
     Private() : sequenceNumber(0) {}
@@ -80,4 +83,15 @@ void KisNodeGraphListener::notifySelectionChanged()
 
 void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QRect& /*rect*/)
 {
+}
+
+void KisNodeGraphListener::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+{
+    Q_UNUSED(range);
+    Q_UNUSED(rect);
+}
+
+void KisNodeGraphListener::requestTimeSwitch(int time)
+{
+    Q_UNUSED(time);
 }

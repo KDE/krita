@@ -103,7 +103,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
         m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     }
 
-
     QPainter gc(&m_buffer);
 
     // we double buffer, so we paint on an image first, then from the image onto the canvas,
@@ -112,7 +111,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.setClipRegion(ev->region());
 
     KisCoordinatesConverter *converter = coordinatesConverter();
-    QTransform imageTransform = converter->viewportToWidgetTransform();
 
     gc.save();
 
@@ -130,17 +128,9 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.setTransform(checkersTransform);
     gc.drawPolygon(polygon);
 
-    gc.setTransform(imageTransform);
-    gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    QRectF viewportRect = converter->widgetToViewport(ev->rect());
-
-    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    gc.drawImage(viewportRect, m_d->prescaledProjection->prescaledQImage(),
-                 viewportRect);
+    drawImage(gc, ev->rect());
 
     gc.restore();
-
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
@@ -152,6 +142,21 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     QPainter painter(this);
     painter.drawImage(ev->rect(), m_buffer, ev->rect());
+}
+
+void KisQPainterCanvas::drawImage(QPainter & gc, const QRect &updateWidgetRect) const
+{
+    KisCoordinatesConverter *converter = coordinatesConverter();
+
+    QTransform imageTransform = converter->viewportToWidgetTransform();
+    gc.setTransform(imageTransform);
+    gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+    QRectF viewportRect = converter->widgetToViewport(updateWidgetRect);
+
+    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    gc.drawImage(viewportRect, m_d->prescaledProjection->prescaledQImage(),
+                 viewportRect);
 }
 
 QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const

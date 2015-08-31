@@ -38,6 +38,7 @@
 
 #include <kis_annotation.h>
 #include <kis_image.h>
+#include <kis_image_animation_interface.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
@@ -45,9 +46,11 @@
 #include <kis_painting_assistants_decoration.h>
 #include <kis_psd_layer_style_resource.h>
 #include "kis_png_converter.h"
+#include "kis_keyframe_channel.h"
 
 #include "KisDocument.h"
 #include <string>
+#include "kis_dom_utils.h"
 
 
 using namespace KRA;
@@ -57,6 +60,7 @@ struct KisKraSaver::Private
 public:
     KisDocument* doc;
     QMap<const KisNode*, QString> nodeFileNames;
+    QMap<const KisNode*, QString> keyframeFilenames;
     QString imageName;
     QStringList errorMessages;
 };
@@ -103,11 +107,62 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     m_d->errorMessages.append(visitor.errorMessages());
 
     m_d->nodeFileNames = visitor.nodeFileNames();
+    m_d->keyframeFilenames = visitor.keyframeFileNames();
 
     saveBackgroundColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
+
+    QDomElement animationElement = doc.createElement("animation");
+    KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
+    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->currentRange());
+    KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
+    imageElement.appendChild(animationElement);
+
     return imageElement;
+}
+
+bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)
+{
+    QMap<const KisNode*, QString>::iterator it;
+
+    for (it = m_d->keyframeFilenames.begin(); it != m_d->keyframeFilenames.end(); it++) {
+        const KisNode *node = it.key();
+        QString filename = it.value();
+
+        QString location =
+                (external ? QString() : uri)
+                + m_d->imageName + LAYER_PATH + filename;
+
+        if (!saveNodeKeyframes(store, location, node)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisNode *node)
+{
+    QDomDocument doc = KisDocument::createDomDocument("krita-keyframes", "keyframes", "1.0");
+    QDomElement root = doc.documentElement();
+
+    KisKeyframeChannel *channel;
+    foreach (channel, node->keyframeChannels()) {
+        QDomElement element = channel->toXML(doc, m_d->nodeFileNames[node]);
+        root.appendChild(element);
+    }
+
+    if (store->open(location)) {
+        QByteArray xml = doc.toByteArray();
+        store->write(xml);
+        store->close();
+    } else {
+        m_d->errorMessages << i18n("could not save keyframes");
+        return false;
+    }
+
+    return true;
 }
 
 bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool autosave)
@@ -298,3 +353,4 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
     }
     return true;
 }
+

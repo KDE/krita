@@ -87,6 +87,11 @@ void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
 
+void KisBrushOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    KisBrushSP brush = this->brush();
+    brush->lodLimitations(l);
+}
 
 void KisBrushOptionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {

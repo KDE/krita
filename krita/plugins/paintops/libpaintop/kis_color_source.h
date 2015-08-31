@@ -45,7 +45,7 @@ public:
      * This is function is called to initialize the color that will be used for the dab.
      * @param mix is a parameter between 0.0 and 1.0
      */
-    virtual void selectColor(double mix) = 0;
+    virtual void selectColor(double mix, const KisPaintInformation &pi) = 0;
     /**
      * Apply a color transformation on the selected color
      */
@@ -88,7 +88,7 @@ class PAINTOP_EXPORT KisPlainColorSource : public KisUniformColorSource
 public:
     KisPlainColorSource(const KoColor& backGroundColor, const KoColor& foreGroundColor);
     virtual ~KisPlainColorSource();
-    virtual void selectColor(double mix);
+    virtual void selectColor(double mix, const KisPaintInformation &pi);
 private:
     KoColor m_backGroundColor, m_foreGroundColor;
     KoColor* m_cachedBackGroundColor;
@@ -99,7 +99,7 @@ class PAINTOP_EXPORT KisGradientColorSource : public KisUniformColorSource
 public:
     KisGradientColorSource(const KoAbstractGradient* gradient, const KoColorSpace* workingCS);
     virtual ~KisGradientColorSource();
-    virtual void selectColor(double mix);
+    virtual void selectColor(double mix, const KisPaintInformation &pi);
 private:
     const KoAbstractGradient* m_gradient;
 };
@@ -109,7 +109,7 @@ class PAINTOP_EXPORT KisUniformRandomColorSource : public KisUniformColorSource
 public:
     KisUniformRandomColorSource();
     virtual ~KisUniformRandomColorSource();
-    virtual void selectColor(double mix);
+    virtual void selectColor(double mix, const KisPaintInformation &pi);
 };
 
 class PAINTOP_EXPORT KisTotalRandomColorSource : public KisColorSource
@@ -118,7 +118,7 @@ public:
     KisTotalRandomColorSource();
     virtual ~KisTotalRandomColorSource();
 public:
-    virtual void selectColor(double mix);
+    virtual void selectColor(double mix, const KisPaintInformation &pi);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const;
@@ -135,7 +135,7 @@ public:
     KoPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked);
     virtual ~KoPatternColorSource();
 public:
-    virtual void selectColor(double mix);
+    virtual void selectColor(double mix, const KisPaintInformation &pi);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const;

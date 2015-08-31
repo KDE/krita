@@ -114,6 +114,11 @@ public:
     typedef QStack<JobItem> LeafStack;
 
 public:
+    KisBaseRectsWalker()
+        : m_levelOfDetail(0)
+    {
+    }
+
     virtual ~KisBaseRectsWalker() {
     }
 
@@ -128,6 +133,7 @@ public:
         m_resultUncroppedChangeRect = requestedRect;
         m_requestedRect = requestedRect;
         m_startNode = node;
+        m_levelOfDetail = getNodeLevelOfDetail(startLeaf);
         startTrip(startLeaf);
     }
 
@@ -135,6 +141,18 @@ public:
         Q_ASSERT(m_startNode);
 
         KisProjectionLeafSP startLeaf = m_startNode->projectionLeaf();
+
+        int calculatedLevelOfDetail = getNodeLevelOfDetail(startLeaf);
+
+        if (m_levelOfDetail != calculatedLevelOfDetail) {
+            qWarning() << "WARNING: KisBaseRectsWalker::recalculate()"
+                       << "The levelOfDetail has changes with time,"
+                       << "which couldn't have happened!"
+                       << ppVar(m_levelOfDetail)
+                       << ppVar(calculatedLevelOfDetail);
+
+            m_levelOfDetail = calculatedLevelOfDetail;
+        }
 
         if(startLeaf->isStillInGraph()) {
             collectRects(m_startNode, requestedRect);
@@ -199,6 +217,10 @@ public:
 
     inline QRect requestedRect() const {
         return m_requestedRect;
+    }
+
+    inline int levelOfDetail() const {
+        return m_levelOfDetail;
     }
 
     virtual UpdateType type() const = 0;
@@ -409,6 +431,19 @@ protected:
     }
 
 private:
+    inline int getNodeLevelOfDetail(KisProjectionLeafSP leaf) {
+        while (!leaf->projection()) {
+            leaf = leaf->parent();
+        }
+
+        KIS_ASSERT_RECOVER(leaf->projection()) {
+            return 0;
+        }
+
+        return leaf->projection()->defaultBounds()->currentLevelOfDetail();
+    }
+
+private:
     /**
      * The result variables.
      * By the end of a recursion they will store a complete
@@ -450,6 +485,8 @@ private:
 
     QRect m_childNeedRect;
     QRect m_lastNeedRect;
+
+    int m_levelOfDetail;
 };
 
 #endif /* __KIS_BASE_RECTS_WALKER_H */

@@ -43,6 +43,7 @@ namespace utils {
         StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFileName = "autobrush_300px.kpp");
         virtual ~StrokeTester();
 
+        void testSimpleStroke();
         void test();
         void benchmark();
 
@@ -65,20 +66,19 @@ namespace utils {
 
         // overload
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
+        virtual void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode);
 
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
                                                 KisResourcesSnapshotSP resources,
-                                                KisPainter *painter,
                                                 KisImageWSP image) = 0;
 
         virtual void addPaintingJobs(KisImageWSP image,
                                      KisResourcesSnapshotSP resources,
-                                     KisPainter *painter, int iteration);
+                                     int iteration);
 
         // overload
         virtual void addPaintingJobs(KisImageWSP image,
-                                     KisResourcesSnapshotSP resources,
-                                     KisPainter *painter);
+                                     KisResourcesSnapshotSP resources);
 
     private:
         void testOneStroke(bool cancelled, bool indirectPainting,

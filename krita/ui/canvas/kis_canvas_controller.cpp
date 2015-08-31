@@ -245,3 +245,26 @@ bool KisCanvasController::wrapAroundMode() const
 
     return kritaCanvas->wrapAroundViewingMode();
 }
+
+void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    kritaCanvas->setLodAllowedInCanvas(value);
+
+    int result = levelOfDetailMode();
+
+    m_d->view->viewManager()->showFloatingMessage(
+        i18n("Fast Preview Mode (LOD): %1", result ?
+             i18n("ON") : i18n("OFF")),
+             QIcon(), 500, KisFloatingMessage::Low);
+}
+
+bool KisCanvasController::levelOfDetailMode() const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->lodAllowedInCanvas();
+}

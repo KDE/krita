@@ -46,6 +46,7 @@ struct KisExposureGammaCorrectionInterface;
 class KisPaintingAssistantsDecoration;
 class KisView;
 class KisInputManager;
+class KisAnimationPlayer;
 
 enum KisCanvasType {
     QPAINTER,
@@ -171,6 +172,11 @@ public: // KisCanvas2 methods
 
     void setCursor(const QCursor &cursor);
 
+    KisAnimationFrameCacheSP frameCache();
+    KisAnimationPlayer *animationPlayer();
+
+    void refetchDataFromImage();
+
 Q_SIGNALS:
     void imageChanged(KisImageWSP image);
 
@@ -237,6 +243,10 @@ public:
     // interface for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
+
+    void setLodAllowedInCanvas(bool value);
+    bool lodAllowedInCanvas() const;
+
     void initializeImage();
     // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);
@@ -253,6 +263,8 @@ private:
     void createQPainterCanvas();
     void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
+
+    void notifyLevelOfDetailChange();
 
 private:
 

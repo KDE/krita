@@ -18,6 +18,8 @@
 #include "kis_sketchop_option.h"
 
 #include "ui_wdgsketchoptions.h"
+#include "kis_paintop_lod_limitations.h"
+
 
 class KisSketchOpOptionsWidget: public QWidget, public Ui::WdgSketchOptions
 {
@@ -100,4 +102,7 @@ void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* sett
     m_options->distanceOpacityCHbox->setChecked(settings->getBool(SKETCH_DISTANCE_OPACITY));
 }
 
-
+void KisSketchOpOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->limitations << KoID("sketch-brush", i18nc("PaintOp LoD limitation", "Sketch brush (differences in connecting lines are possible)"));
+}

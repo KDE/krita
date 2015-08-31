@@ -25,6 +25,7 @@
 #include "kis_stroke_job.h"
 #include "kis_spontaneous_job.h"
 #include "kis_stroke.h"
+#include "kis_image.h"
 
 
 #define SCOMPARE(s1, s2) QCOMPARE(QString(s1), QString(s2))
@@ -45,13 +46,16 @@ void executeStrokeJobs(KisStroke *stroke) {
     }
 }
 
-bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
-    if(walker->requestedRect() == rect) {
+bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect, int lod = 0) {
+    if(walker->requestedRect() == rect && walker->levelOfDetail() == lod) {
         return true;
     }
     else {
-        qDebug() << "walker rect:" << walker->requestedRect();
-        qDebug() << "expected rect:" << rect;
+        qCritical() << "walker rect:" << walker->requestedRect();
+        qCritical() << "expected rect:" << rect;
+        qCritical() << "walker lod:" << walker->levelOfDetail();
+        qCritical() << "expected lod:" << lod;
+
         return false;
     }
 }
@@ -59,8 +63,9 @@ bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
 class KisNoopSpontaneousJob : public KisSpontaneousJob
 {
 public:
-    KisNoopSpontaneousJob(bool overridesEverything = false)
-        : m_overridesEverything(overridesEverything)
+    KisNoopSpontaneousJob(bool overridesEverything = false, int lod = 0)
+        : m_overridesEverything(overridesEverything),
+          m_lod(lod)
     {
     }
 
@@ -72,14 +77,19 @@ public:
         return m_overridesEverything;
     }
 
+    int levelOfDetail() const {
+        return m_lod;
+    }
+
 private:
     bool m_overridesEverything;
+    int m_lod;
 };
 
 class KisNoopDabStrategy : public KisStrokeJobStrategy
 {
 public:
-KisNoopDabStrategy(QString name)
+    KisNoopDabStrategy(QString name)
     : m_name(name),
       m_isMarked(false)
     {}
@@ -105,21 +115,53 @@ private:
     bool m_isMarked;
 };
 
+class KisTestingStrokeJobData : public KisStrokeJobData
+{
+public:
+    KisTestingStrokeJobData(Sequentiality sequentiality = SEQUENTIAL,
+                             Exclusivity exclusivity = NORMAL)
+        : KisStrokeJobData(sequentiality, exclusivity)
+    {
+    }
+
+    KisTestingStrokeJobData(const KisTestingStrokeJobData &rhs)
+        : KisStrokeJobData(rhs)
+    {
+    }
+
+    KisStrokeJobData* createLodClone(int levelOfDetail) {
+        Q_UNUSED(levelOfDetail);
+        return new KisTestingStrokeJobData(*this);
+    }
+};
+
 class KisTestingStrokeStrategy : public KisStrokeStrategy
 {
 public:
     KisTestingStrokeStrategy(const QString &prefix = QString(),
                              bool exclusive = false,
-                             bool inhibitServiceJobs = false)
+                             bool inhibitServiceJobs = false,
+                             bool forceAllowInitJob = false)
         : m_prefix(prefix),
           m_inhibitServiceJobs(inhibitServiceJobs),
+          m_forceAllowInitJob(forceAllowInitJob),
           m_cancelSeqNo(0)
     {
         setExclusive(exclusive);
     }
 
+    KisTestingStrokeStrategy(const KisTestingStrokeStrategy &rhs, int levelOfDetail)
+        : KisStrokeStrategy(rhs),
+          m_prefix(rhs.m_prefix),
+          m_inhibitServiceJobs(rhs.m_inhibitServiceJobs),
+          m_forceAllowInitJob(rhs.m_forceAllowInitJob),
+          m_cancelSeqNo(rhs.m_cancelSeqNo)
+    {
+        m_prefix = QString("clone%1_%2").arg(levelOfDetail).arg(m_prefix);
+    }
+
     KisStrokeJobStrategy* createInitStrategy() {
-        return !m_inhibitServiceJobs ?
+        return m_forceAllowInitJob || !m_inhibitServiceJobs ?
             new KisNoopDabStrategy(m_prefix + "init") : 0;
     }
 
@@ -135,6 +177,10 @@ public:
 
     KisStrokeJobStrategy* createDabStrategy() {
         return new KisNoopDabStrategy(m_prefix + "dab");
+    }
+
+    KisStrokeStrategy* createLodClone(int levelOfDetail) {
+        return new KisTestingStrokeStrategy(*this, levelOfDetail);
     }
 
     class CancelData : public KisStrokeJobData
@@ -154,6 +200,7 @@ public:
 private:
     QString m_prefix;
     bool m_inhibitServiceJobs;
+    int m_forceAllowInitJob;
     int m_cancelSeqNo;
 };
 

@@ -39,6 +39,9 @@ public:
 
     QRect bounds() const;
     bool wrapAroundMode() const;
+    int currentLevelOfDetail() const;
+    int currentTime() const;
+    bool externalFrameActive() const;
 
 protected:
     friend class KisPaintDeviceTest;

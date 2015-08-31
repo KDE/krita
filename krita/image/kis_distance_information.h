@@ -85,6 +85,7 @@ public:
     KisDistanceInformation();
     KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
     KisDistanceInformation(const KisDistanceInformation &rhs);
+    KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
 
     ~KisDistanceInformation();
@@ -104,6 +105,11 @@ public:
     qreal getNextPointPosition(const QPointF &start,
                                const QPointF &end);
 
+    /**
+     * \return true if at least one dab has been painted with this
+     *         distance information
+     */
+    bool isStarted() const;
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,

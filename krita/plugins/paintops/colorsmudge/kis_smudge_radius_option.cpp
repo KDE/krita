@@ -48,10 +48,15 @@ KisSmudgeRadiusOption::KisSmudgeRadiusOption():
     setValueRange(0.0,300.0);
 }
 
-void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy,KisPaintDeviceSP dev) const
+void KisSmudgeRadiusOption::apply(KisPainter& painter,
+                                  const KisPaintInformation& info,
+                                  qreal diameter,
+                                  qreal posx,
+                                  qreal posy,
+                                  KisPaintDeviceSP dev) const
 {
     double sliderValue = computeValue(info);
-    int smudgeRadius = ((sliderValue * scale)*0.5)/100.0;//scale is diameter?
+    int smudgeRadius = ((sliderValue * diameter) * 0.5) / 100.0;
 
 
     KoColor color = painter.paintColor();

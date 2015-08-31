@@ -81,7 +81,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
     KUndo2CommandSP finishCommand(new TestingUndoCommand(kundo2_noi18n("finish"), result));
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 300, 300, cs, "test", true);
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test");
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased(kundo2_noi18n("test"), false,
@@ -143,7 +143,7 @@ void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
 {
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 300, 300, cs, "test", true);
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test");
 
     QAtomicInt counter;
     QAtomicInt hadConcurrency;

@@ -31,6 +31,7 @@ public:
 
     bool overrides(const KisSpontaneousJob *otherJob);
     void run();
+    int levelOfDetail() const;
 
 private:
     KisSelectionSP m_selection;

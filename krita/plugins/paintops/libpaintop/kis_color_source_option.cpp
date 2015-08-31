@@ -127,3 +127,8 @@ QList<KoID> KisColorSourceOption::sourceIds()
 {
     return Private::type2id.values();
 }
+
+KisColorSourceOption::Type KisColorSourceOption::type() const
+{
+    return d->type;
+}

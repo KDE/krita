@@ -59,3 +59,8 @@ void KisRecalculateTransformMaskJob::run()
 
     image->requestProjectionUpdateNoFilthy(layer, layer->extent(), image->bounds());
 }
+
+int KisRecalculateTransformMaskJob::levelOfDetail() const
+{
+    return 0;
+}

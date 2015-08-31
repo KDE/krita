@@ -26,10 +26,13 @@
 #include "kis_vec.h"
 #include "kritaimage_export.h"
 #include "kis_distance_information.h"
+#include "kis_random_source.h"
+
 
 class QDomDocument;
 class QDomElement;
 class KisDistanceInformation;
+
 
 /**
  * KisPaintInformation contains information about the input event that
@@ -180,6 +183,16 @@ public:
 
     /// Number of ms since the beginning of the stroke
     qreal currentTime() const;
+
+    // random source for generating in-stroke effects
+    KisRandomSourceSP randomSource() const;
+
+    // the stroke should initialize random source of all the used
+    // paint info objects, otherwise it shows a warning
+    void setRandomSource(KisRandomSourceSP value);
+
+    // set level of detail which info object has been generated for
+    void setLevelOfDetail(int levelOfDetail) const;
 
     /**
      * The paint information may be generated not only during real

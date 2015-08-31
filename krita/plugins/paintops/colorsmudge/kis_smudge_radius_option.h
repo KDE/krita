@@ -33,7 +33,13 @@ public:
      * Set the opacity of the painter based on the rate
      * and the curve (if checked)
      */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scale,qreal posx,qreal posy,KisPaintDeviceSP dev) const;
+    void apply(KisPainter& painter,
+               const KisPaintInformation& info,
+               qreal diameter,
+               qreal posx,
+               qreal posy,
+               KisPaintDeviceSP dev) const;
+
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 

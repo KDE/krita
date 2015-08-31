@@ -106,31 +106,15 @@ protected:
                                 const QPointF &lastPosition,
                                 int lastTime);
 
-    // to be overridden in derived classes to add painting with
-    // multiple painters
-
-    virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
-                         const KisPaintInformation &pi);
-
-    virtual void paintLine(const QVector<PainterInfo*> &painterInfos,
-                           const KisPaintInformation &pi1,
-                           const KisPaintInformation &pi2);
-
-    virtual void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
-                                  const KisPaintInformation &pi1,
-                                  const QPointF &control1,
-                                  const QPointF &control2,
-                                  const KisPaintInformation &pi2);
-
     // lo-level methods for painting primitives
 
-    void paintAt(PainterInfo *painterInfo, const KisPaintInformation &pi);
+    void paintAt(int painterInfoId, const KisPaintInformation &pi);
 
-    void paintLine(PainterInfo *painterInfo,
+    void paintLine(int painterInfoId,
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(PainterInfo *painterInfo,
+    void paintBezierCurve(int painterInfoId,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
@@ -138,15 +122,15 @@ protected:
 
     // hi-level methods for painting primitives
 
-    void paintAt(const KisPaintInformation &pi);
+    virtual void paintAt(const KisPaintInformation &pi);
 
-    void paintLine(const KisPaintInformation &pi1,
-                   const KisPaintInformation &pi2);
+    virtual void paintLine(const KisPaintInformation &pi1,
+                           const KisPaintInformation &pi2);
 
-    void paintBezierCurve(const KisPaintInformation &pi1,
-                          const QPointF &control1,
-                          const QPointF &control2,
-                          const KisPaintInformation &pi2);
+    virtual void paintBezierCurve(const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2);
 
 private:
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,

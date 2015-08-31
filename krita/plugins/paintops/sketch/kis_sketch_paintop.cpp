@@ -39,15 +39,10 @@
 
 #include <kis_pressure_opacity_option.h>
 #include <kis_dab_cache.h>
+#include "kis_lod_transform.h"
+
 
 #include <QtGlobal>
-#ifdef Q_OS_WIN
-// quoting DRAND48(3) man-page:
-// These functions are declared obsolete by  SVID  3,
-// which  states  that rand(3) should be used instead.
-#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
-#endif
-
 
 /*
 * Based on Harmony project http://github.com/mrdoob/harmony/
@@ -143,13 +138,16 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     QPointF mousePosition = pi2.pos();
     m_points.append(mousePosition);
 
-    const double scale = m_sizeOption.apply(pi2);
+
+    const qreal lodAdditionalScale = KisLodTransform::lodToScale(painter()->device());
+    const qreal scale = lodAdditionalScale * m_sizeOption.apply(pi2);
+    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return;
+
+    const qreal currentLineWidth = qMax(0.9, lodAdditionalScale * m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth));
+
+    const qreal currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
     const double rotation = m_rotationOption.apply(pi2);
     const double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
-    const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
-    const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
-
-    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return;
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection) {
@@ -235,16 +233,27 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
             probability =  distance / density;
         }
 
+        KisRandomSourceSP randomSource = pi2.randomSource();
+
         // density check
-        if (drand48() >= probability) {
+        if (randomSource->generateNormalized() >= probability) {
             QPointF offsetPt = diff * currentOffsetScale;
 
             if (m_sketchProperties.randomRGB) {
+                /**
+                 * Since the order of calculation of function
+                 * parameters is not defined by C++ standard, we
+                 * should generate values in an external code snippet
+                 * which has a definite order of execution.
+                 */
+                qreal r1 = randomSource->generateNormalized();
+                qreal r2 = randomSource->generateNormalized();
+                qreal r3 = randomSource->generateNormalized();
+
                 // some color transformation per line goes here
-                randomColor.setRgbF(drand48() * painterColor.redF(),
-                                    drand48() * painterColor.greenF(),
-                                    drand48() * painterColor.blueF()
-                                   );
+                randomColor.setRgbF(r1 * painterColor.redF(),
+                                    r2 * painterColor.greenF(),
+                                    r3 * painterColor.blueF());
                 color.fromQColor(randomColor);
                 m_painter->setPaintColor(color);
             }
@@ -256,7 +265,7 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
             }
 
             if (m_sketchProperties.randomOpacity) {
-                opacity *= drand48();
+                opacity *= randomSource->generateNormalized();
             }
 
             m_painter->setOpacity(opacity);

@@ -55,6 +55,8 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+    void lodLimitations(KisPaintopLodLimitations *l) const;
+
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
 

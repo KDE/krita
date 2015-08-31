@@ -25,6 +25,12 @@ KisStrokeJobData::KisStrokeJobData(Sequentiality sequentiality,
 {
 }
 
+KisStrokeJobData::KisStrokeJobData(const KisStrokeJobData &rhs)
+    : m_sequentiality(rhs.m_sequentiality),
+      m_exclusivity(rhs.m_exclusivity)
+{
+}
+
 KisStrokeJobData::~KisStrokeJobData()
 {
 }
@@ -44,6 +50,11 @@ bool KisStrokeJobData::isExclusive() const
     return m_exclusivity == EXCLUSIVE;
 }
 
+KisStrokeJobData* KisStrokeJobData::createLodClone(int levelOfDetail)
+{
+    Q_UNUSED(levelOfDetail);
+    return 0;
+}
 
 KisStrokeJobStrategy::KisStrokeJobStrategy()
 {

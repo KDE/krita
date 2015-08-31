@@ -346,9 +346,14 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
                                            KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
-void KisMask::testingInitSelection(const QRect &rect)
+void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
 {
-    m_d->selection = new KisSelection();
+    if (parentLayer) {
+        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentLayer->paintDevice(), parentLayer->image()));
+    } else {
+        m_d->selection = new KisSelection();
+    }
+
     m_d->selection->pixelSelection()->select(rect, OPACITY_OPAQUE_U8);
     m_d->selection->updateProjection(rect);
     m_d->selection->setParentNode(this);

@@ -35,6 +35,7 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_lod_transform.h>
 
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
@@ -139,6 +140,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
+    scale *= KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(info);
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -207,7 +209,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
         if (m_smudgeRadiusOption.isChecked()) {
-            m_smudgeRadiusOption.apply(*m_smudgePainter, info, m_dstDabRect.width(), pt.x(), pt.y(), painter()->device());
+            qreal effectiveSize = 0.5 * (m_dstDabRect.width() + m_dstDabRect.height());
+            m_smudgeRadiusOption.apply(*m_smudgePainter, info, effectiveSize, pt.x(), pt.y(), painter()->device());
+
             KoColor color2 = m_smudgePainter->paintColor();
             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color2);
 

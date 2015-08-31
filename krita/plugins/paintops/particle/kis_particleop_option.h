@@ -28,6 +28,7 @@ const QString PARTICLE_SCALE_X = "Particle/scaleX";
 const QString PARTICLE_SCALE_Y = "Particle/scaleY";
 
 class KisParticleOpOptionsWidget;
+class KisPaintopLodLimitations;
 
 class KisParticleOpOption : public KisPaintOpOption
 {
@@ -43,7 +44,7 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
     KisParticleOpOptionsWidget * m_options;

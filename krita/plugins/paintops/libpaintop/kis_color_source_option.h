@@ -51,6 +51,8 @@ public:
     void setColorSourceType(const QString& _type);
     static QList<KoID> sourceIds();
 
+    Type type() const;
+
 private:
     struct Private;
     Private* const d;

@@ -78,7 +78,7 @@ KisDocument *createDocument(QList<KisNodeSP> nodes)
         rc |= node->exactBounds();
     }
 
-    KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name(), false);
+    KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
 
     foreach(KisNodeSP node, nodes) {
         image->addNode(node->clone());

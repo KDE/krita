@@ -48,6 +48,11 @@ public:
     Sequentiality sequentiality() { return m_sequentiality; };
     Exclusivity exclusivity() { return m_exclusivity; };
 
+    virtual KisStrokeJobData* createLodClone(int levelOfDetail);
+
+protected:
+    KisStrokeJobData(const KisStrokeJobData &rhs);
+
 private:
     Sequentiality m_sequentiality;
     Exclusivity m_exclusivity;

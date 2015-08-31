@@ -21,7 +21,7 @@
 
 #include <kis_paintop_option.h>
 
-
+class KisPaintopLodLimitations;
 class KisHatchingOptionsWidget;
 
 class KisHatchingOptions : public KisPaintOpOption
@@ -33,6 +33,7 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
     KisHatchingOptionsWidget * m_options;

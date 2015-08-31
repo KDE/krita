@@ -35,6 +35,7 @@
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include "kis_paintop_lod_limitations.h"
 
 
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
@@ -66,3 +67,9 @@ KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
     return config;
 }
 
+KisPaintopLodLimitations KisDuplicateOpSettingsWidget::lodLimitations() const
+{
+    KisPaintopLodLimitations l = KisBrushBasedPaintopOptionWidget::lodLimitations();
+    l.blockers << KoID("clone-brush", i18nc("PaintOp LoD limitation", "Clone Brush (temporarily disabled)"));
+    return l;
+}

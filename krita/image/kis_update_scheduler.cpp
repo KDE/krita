@@ -137,19 +137,19 @@ void KisUpdateScheduler::progressUpdate()
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addUpdateJob(node, rc, cropRect);
+    m_d->updatesQueue->addUpdateJob(node, rc, cropRect, currentLevelOfDetail());
     processQueues();
 }
 
 void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addUpdateNoFilthyJob(node, rc, cropRect);
+    m_d->updatesQueue->addUpdateNoFilthyJob(node, rc, cropRect, currentLevelOfDetail());
     processQueues();
 }
 
 void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addFullRefreshJob(root, rc, cropRect);
+    m_d->updatesQueue->addFullRefreshJob(root, rc, cropRect, currentLevelOfDetail());
     processQueues();
 }
 
@@ -220,6 +220,52 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
     return m_d->strokesQueue->wrapAroundModeSupported();
 }
 
+void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
+{
+    m_d->strokesQueue->setDesiredLevelOfDetail(lod);
+
+    /**
+     * The queue might have started an internal stroke for
+     * cache synchronization. Process the queues to execute
+     * it if needed.
+     */
+    processQueues();
+}
+
+int KisUpdateScheduler::currentLevelOfDetail() const
+{
+    int levelOfDetail = -1;
+
+    if (levelOfDetail < 0) {
+        levelOfDetail = m_d->updaterContext->currentLevelOfDetail();
+    }
+
+    if (levelOfDetail < 0) {
+        levelOfDetail = m_d->updatesQueue->overrideLevelOfDetail();
+    }
+
+    if (levelOfDetail < 0) {
+        levelOfDetail = 0;
+    }
+
+    return levelOfDetail;
+}
+
+void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setLod0ToNStrokeStrategyFactory(factory);
+}
+
+void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setSuspendUpdatesStrokeStrategyFactory(factory);
+}
+
+void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setResumeUpdatesStrokeStrategyFactory(factory);
+}
+
 void KisUpdateScheduler::updateSettings()
 {
     if(m_d->updatesQueue) {
@@ -238,6 +284,12 @@ void KisUpdateScheduler::lock()
 
 void KisUpdateScheduler::unlock()
 {
+    /**
+     * Legacy strokes may have changed the image while we didn't
+     * control it. Notify the queue to take it into account.
+     */
+    m_d->strokesQueue->notifyUFOChangedImage();
+
     m_d->processingBlocked = false;
     processQueues();
 }

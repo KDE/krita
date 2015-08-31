@@ -33,19 +33,21 @@ class KisTextureOptionWidget;
 class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
+class KisPaintopLodLimitations;
 
 class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 {
     Q_OBJECT
 public:
 
-    explicit KisTextureOption(QObject *parent = 0);
+    explicit KisTextureOption();
     virtual ~KisTextureOption();
 
 public Q_SLOTS:
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private Q_SLOTS:
 
@@ -60,9 +62,7 @@ private:
 class PAINTOP_EXPORT KisTextureProperties
 {
 public:
-    KisTextureProperties()
-        : m_pattern(0)
-    {}
+    KisTextureProperties(int levelOfDetail);
 
     enum TexturingMode {
         MULTIPLY,
@@ -90,6 +90,8 @@ private:
     int m_cutoffLeft;
     int m_cutoffRight;
     int m_cutoffPolicy;
+
+    int m_levelOfDetail;
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;

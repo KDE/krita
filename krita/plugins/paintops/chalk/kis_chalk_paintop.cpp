@@ -36,6 +36,8 @@
 #include <kis_paint_information.h>
 
 #include <kis_pressure_opacity_option.h>
+#include <kis_lod_transform.h>
+
 
 KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
@@ -75,8 +77,10 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
+    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
+
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_chalkBrush->paint(m_dab, x1, y1, painter()->paintColor());
+    m_chalkBrush->paint(m_dab, x1, y1, painter()->paintColor(), additionalScale);
 
     QRect rc = m_dab->extent();
 

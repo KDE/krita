@@ -37,7 +37,8 @@ public:
     KisTextBrush(const KisTextBrush &rhs);
     virtual ~KisTextBrush();
 
-    void notifyCachedDabPainted();
+    void notifyStrokeStarted();
+    void notifyCachedDabPainted(const KisPaintInformation& info);
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             double scaleX, double scaleY, double angle,

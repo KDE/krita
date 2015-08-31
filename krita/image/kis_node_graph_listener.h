@@ -19,6 +19,7 @@
 #define KIS_NODE_GRAPH_LISTENER_H_
 
 #include "kritaimage_export.h"
+class KisTimeRange;
 class KisNode;
 class QRect;
 
@@ -90,6 +91,10 @@ public:
      * Inform the model that a node has been changed (setDirty)
      */
     virtual void requestProjectionUpdate(KisNode * node, const QRect& rect);
+
+    virtual void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+
+    virtual void requestTimeSwitch(int time);
 
     /**
      * Returns the sequence of the graph.

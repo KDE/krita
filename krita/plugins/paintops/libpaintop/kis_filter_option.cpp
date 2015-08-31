@@ -37,6 +37,8 @@
 
 #include "ui_wdgfilteroption.h"
 
+#include "kis_paintop_lod_limitations.h"
+
 class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions
 {
 public:
@@ -189,6 +191,18 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
     }
 }
 
+void KisFilterOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    KisFilterConfiguration *config = filterConfig();
+
+    if (m_currentFilter && config) {
+        QRect testRect(0,0,100,100);
+        if (m_currentFilter->neededRect(testRect, config) != testRect ||
+            m_currentFilter->changedRect(testRect, config) != testRect) {
+
+            l->blockers << KoID("filter-nonlinear", i18nc("PaintOp LoD limitation", "\"%1\" does not support LOD (non-linear filter)", config->name()));
+        }
+    }
+}
+
 #include "moc_kis_filter_option.cpp"
-
-

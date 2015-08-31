@@ -41,6 +41,7 @@ public:
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
     bool isCheckable() const;
     bool isChecked() const;

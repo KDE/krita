@@ -34,6 +34,8 @@ KisDynamicSensorDistance::KisDynamicSensorDistance()
 
 qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
 {
+    if (pi.isHoveringMode()) return 1.0;
+
     m_measuredDistance += pi.drawingDistance();
 
     m_measuredDistance = m_periodic ?

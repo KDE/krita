@@ -38,6 +38,8 @@ public:
 
     QDomElement saveXML(QDomDocument& doc,  KisImageWSP image);
 
+    bool saveKeyframes(KoStore *store, const QString &uri, bool external);
+
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool includeMerge);
 
     /// @return a list with everthing that went wrong while saving
@@ -48,6 +50,7 @@ private:
     void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     bool saveAssistants(KoStore *store,QString uri, bool external);
     bool saveAssistantsList(QDomDocument& doc, QDomElement& element);
+    bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
     struct Private;
     Private * const m_d;
 };

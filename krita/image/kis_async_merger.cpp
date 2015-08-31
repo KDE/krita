@@ -269,6 +269,10 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
             writeProjection(currentLeaf, useTempProjections, applyRect);
             resetProjection();
         }
+
+        // FIXME: remove it from the inner loop and/or change to a warning!
+        Q_ASSERT(currentLeaf->projection()->defaultBounds()->currentLevelOfDetail() ==
+                 walker.levelOfDetail());
     }
 
     if(notifyClones) {

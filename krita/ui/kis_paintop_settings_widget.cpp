@@ -38,6 +38,8 @@
 #include <kis_locked_properties_server.h>
 #include <kis_locked_properties_proxy.h>
 #include <kis_locked_properties.h>
+#include <kis_paintop_lod_limitations.h>
+
 
 
 struct KisPaintOpSettingsWidget::Private
@@ -126,6 +128,8 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
         m_d->model->signalDataChanged(m_d->model->indexOf(info));
         indexcount++;
     }
+
+    KisPaintOpConfigWidget::setConfiguration(propertiesProxy);
     delete propertiesProxy;
 }
 
@@ -135,7 +139,21 @@ void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration *co
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startWriteOptionSetting(propertiesProxy);
     }
+
+    KisPaintOpConfigWidget::writeConfiguration(propertiesProxy);
     delete propertiesProxy;
+}
+
+KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
+{
+    KisPaintopLodLimitations l;
+
+    foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
+        if (option->isCheckable() && !option->isChecked()) continue;
+        option->lodLimitations(&l);
+    }
+
+    return l;
 }
 
 void KisPaintOpSettingsWidget::setImage(KisImageWSP image)

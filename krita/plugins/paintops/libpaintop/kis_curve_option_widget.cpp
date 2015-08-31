@@ -105,6 +105,11 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 }
 
+void KisCurveOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    m_curveOption->lodLimitations(l);
+}
+
 bool KisCurveOptionWidget::isCheckable() const
 {
     return m_curveOption->isCheckable();

@@ -202,3 +202,15 @@ target_link_libraries(KisFileLayerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage Q
 set(kis_asl_layer_style_serializer_test_SRCS kis_asl_layer_style_serializer_test.cpp )
 kde4_add_unit_test(KisAslLayerStyleSerializerTest TESTNAME krita-ui-KisAslLayerStyleSerializerTest ${kis_asl_layer_style_serializer_test_SRCS})
 target_link_libraries(KisAslLayerStyleSerializerTest  ${KDE4_KDEUI_LIBS} kritaui kritaimage kowidgets ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_animation_exporter_test_SRCS kis_animation_exporter_test.cpp )
+kde4_add_unit_test(KisAnimationExporterTest TESTNAME kritaui-animation_exporter_test ${kis_animation_exporter_test_SRCS})
+target_link_libraries(KisAnimationExporterTest  ${KDE4_KDEUI_LIBS} kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_animation_frame_cache_test_SRCS kis_animation_frame_cache_test.cpp )
+kde4_add_unit_test(KisAnimationFrameCacheTest TESTNAME kritaui-animation_frame_cache_test ${kis_animation_frame_cache_test_SRCS})
+target_link_libraries(KisAnimationFrameCacheTest  ${KDE4_KDEUI_LIBS} kritaui kritaimage ${QT_QTTEST_LIBRARY})

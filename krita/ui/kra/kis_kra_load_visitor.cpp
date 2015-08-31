@@ -54,6 +54,8 @@
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
 #include "kis_dom_utils.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_paint_device_frames_interface.h"
 
 using namespace KRA;
 
@@ -343,11 +345,68 @@ QStringList KisKraLoadVisitor::errorMessages() const
     return m_errorMessages;
 }
 
+struct SimpleDevicePolicy
+{
+    bool read(KisPaintDeviceSP dev, QIODevice *stream) {
+        return dev->read(stream);
+    }
+
+    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+        return dev->setDefaultPixel(defaultPixel);
+    }
+};
+
+struct FramedDevicePolicy
+{
+    FramedDevicePolicy(int frameId)
+        :  m_frameId(frameId) {}
+
+    bool read(KisPaintDeviceSP dev, QIODevice *stream) {
+        return dev->framesInterface()->readFrame(stream, m_frameId);
+    }
+
+    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+        return dev->framesInterface()->setFrameDefaultPixel(defaultPixel, m_frameId);
+    }
+
+    int m_frameId;
+};
+
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
     // Layer data
+
+    KisPaintDeviceFramesInterface *frameInterface = device->framesInterface();
+    QList<int> frames;
+
+    if (frameInterface) {
+        frames = device->framesInterface()->frames();
+    }
+
+    if (!frameInterface || frames.count() <= 1) {
+        return loadPaintDeviceFrame(device, location, SimpleDevicePolicy());
+    } else {
+        KisRasterKeyframeChannel *keyframeChannel = device->keyframeChannel();
+
+        for (int i = 0; i < frames.count(); i++) {
+            int id = frames[i];
+            QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
+            Q_ASSERT(!frameFilename.isEmpty());
+
+            if (!loadPaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+template<class DevicePolicy>
+bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy)
+{
     if (m_store->open(location)) {
-        if (!device->read(m_store->device())) {
+        if (!policy.read(device, m_store->device())) {
             m_errorMessages << i18n("Could not read pixel data: %1.", location);
             device->disconnect();
             m_store->close();
@@ -363,7 +422,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         if (m_store->size() == pixelSize) {
             quint8 *defPixel = new quint8[pixelSize];
             m_store->read((char*)defPixel, pixelSize);
-            device->setDefaultPixel(defPixel);
+            policy.setDefaultPixel(device, defPixel);
             delete[] defPixel;
         }
         m_store->close();
@@ -385,11 +444,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         m_store->close();
         // Create a colorspace with the embedded profile
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
-        const KoColorSpace *cs =
-            KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), profile);
-        // replace the old colorspace
-        if (cs) {
-            device->setDataManager(device->dataManager(), cs);
+        if (device->setProfile(profile)) {
             return true;
         }
     }
@@ -490,7 +545,12 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)
 {
+    return getLocation(m_layerFilenames[node], suffix);
+}
+
+QString KisKraLoadVisitor::getLocation(const QString &filename, const QString& suffix)
+{
     QString location = m_external ? QString() : m_uri;
-    location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
+    location += m_name + LAYER_PATH + filename + suffix;
     return location;
 }

@@ -51,11 +51,9 @@ protected:
 
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisPainter *painter,
                                     KisImageWSP image) {
         Q_UNUSED(image);
         Q_UNUSED(indirectPainting);
-        Q_UNUSED(painter);
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(m_filterName);
         Q_ASSERT(filter);
@@ -65,10 +63,9 @@ protected:
         return new KisFilterStrokeStrategy(filter, KisSafeFilterConfigurationSP(filterConfig), resources);
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources) {
 
         Q_UNUSED(resources);
-        Q_UNUSED(painter);
 
         image->addJob(strokeId(),
                       new KisFilterStrokeStrategy::

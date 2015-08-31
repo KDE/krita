@@ -85,6 +85,8 @@ public Q_SLOTS:
     void resourceSelected(KoResource* resource);
     void slotUpdateThemedIcons();
 
+    void slotUpdateLodAvailability();
+
 Q_SIGNALS:
     void savePresetClicked();
     void defaultPresetClicked();

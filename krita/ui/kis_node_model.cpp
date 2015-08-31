@@ -204,6 +204,16 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
     }
 }
 
+KisModelIndexConverterBase * KisNodeModel::indexConverter() const
+{
+    return m_d->indexConverter;
+}
+
+KisDummiesFacadeBase *KisNodeModel::dummiesFacade() const
+{
+    return m_d->dummiesFacade;
+}
+
 void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
 {
     KisNodeSP node = dummy->node();

@@ -27,6 +27,7 @@
 #include "kis_debug.h"
 #include <QThread>
 #include <QApplication>
+#include <QColor>
 
 
 KisImageConfig::KisImageConfig()
@@ -205,6 +206,56 @@ QString KisImageConfig::swapDir(bool requestDefault)
 void KisImageConfig::setSwapDir(const QString &swapDir)
 {
     m_config.writeEntry("swaplocation", swapDir);
+}
+
+int KisImageConfig::numberOfOnionSkins() const
+{
+    return m_config.readEntry("numberOfOnionSkins", 1);
+}
+
+void KisImageConfig::setNumberOfOnionSkins(int value)
+{
+    m_config.writeEntry("numberOfOnionSkins", value);
+}
+
+int KisImageConfig::onionSkinTintFactor() const
+{
+    return m_config.readEntry("onionSkinTintFactor", 0);
+}
+
+void KisImageConfig::setOnionSkinTintFactor(int value)
+{
+    m_config.writeEntry("onionSkinTintFactor", value);
+}
+
+int KisImageConfig::onionSkinOpacity(int offset) const
+{
+    return m_config.readEntry("onionSkinOpacity_" + QString::number(offset), 128);
+}
+
+void KisImageConfig::setOnionSkinOpacity(int offset, int value)
+{
+    m_config.writeEntry("onionSkinOpacity_" + QString::number(offset), value);
+}
+
+QColor KisImageConfig::onionSkinTintColorBackward() const
+{
+    return m_config.readEntry("onionSkinTintColorBackward", QColor(Qt::red));
+}
+
+void KisImageConfig::setOnionSkinTintColorBackward(const QColor &value)
+{
+    m_config.writeEntry("onionSkinTintColorBackward", value);
+}
+
+QColor KisImageConfig::onionSkinTintColorForward() const
+{
+    return m_config.readEntry("oninSkinTintColorForward", QColor(Qt::green));
+}
+
+void KisImageConfig::setOnionSkinTintColorForward(const QColor &value)
+{
+    m_config.writeEntry("oninSkinTintColorForward", value);
 }
 
 

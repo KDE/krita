@@ -38,6 +38,9 @@
 #include <kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_pressure_opacity_option.h>
+#include <kis_lod_transform.h>
+
+
 
 #include <KoColorSpaceRegistry.h>
 
@@ -95,7 +98,8 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     m_settings->separationsensorvalue = m_separationOption.apply(info);
     m_settings->thicknesssensorvalue = m_thicknessOption.apply(info);
 
-    double scale = m_sizeOption.apply(info);
+    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
+    const double scale = additionalScale * m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return KisSpacingInformation(1.0);
 
     setCurrentScale(scale);
@@ -134,43 +138,43 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     if (m_settings->enabledcurvecrosshatching) {
         if (m_settings->perpendicular) {
             if (m_settings->crosshatchingsensorvalue > 0.5)
-                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->minusthenplus) {
             if (m_settings->crosshatchingsensorvalue > 0.33)
-                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
             if (m_settings->crosshatchingsensorvalue > 0.67)
-                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->plusthenminus) {
             if (m_settings->crosshatchingsensorvalue > 0.33)
-                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
             if (m_settings->crosshatchingsensorvalue > 0.67)
-                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->moirepattern) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 180), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 180), painter()->paintColor(), additionalScale);
             donotbasehatch = true;
         }
     } else {
         if (m_settings->perpendicular) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->minusthenplus) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->plusthenminus) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->moirepattern) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-10), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-10), painter()->paintColor(), additionalScale);
         }
     }
 
     if (!donotbasehatch)
-        m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
+        m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor(), additionalScale);
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);

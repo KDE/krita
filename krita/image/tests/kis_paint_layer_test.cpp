@@ -24,6 +24,8 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kundo2command.h"
+
 #include "kis_group_layer.h"
 #include "kis_types.h"
 #include "kis_paint_layer.h"
@@ -36,9 +38,9 @@
 #include "kis_pixel_selection.h"
 #include <kis_iterator_ng.h>
 #include "kis_layer_projection_plane.h"
-
 #include "kis_psd_layer_style.h"
-
+#include "filter/kis_filter_registry.h"
+#include "kis_keyframe_channel.h"
 
 void KisPaintLayerTest::testProjection()
 {
@@ -104,7 +106,27 @@ void KisPaintLayerTest::testProjection()
 
 }
 
-#include "filter/kis_filter_registry.h"
+void KisPaintLayerTest::testKeyframing()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, cs, "");
+    KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
+    KisPaintDeviceSP dev = layer->paintDevice();
+
+    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel("content");
+
+    QVERIFY(contentChannel != 0);
+    QCOMPARE(contentChannel->keyframeCount(), 1);
+
+    KUndo2Command parentCommand;
+
+    KisKeyframeChannel *rasterChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    rasterChannel->addKeyframe(7, &parentCommand);
+    QCOMPARE(contentChannel->keyframeCount(), 2);
+    QVERIFY(contentChannel->keyframeAt(0) != contentChannel->keyframeAt(7));
+
+
+}
 
 void KisPaintLayerTest::testLayerStyles()
 {

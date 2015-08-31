@@ -18,6 +18,8 @@
 #include "kis_experimentop_option.h"
 #include <klocale.h>
 
+#include "kis_paintop_lod_limitations.h"
+
 #include "ui_wdgexperimentoptions.h"
 
 class KisExperimentOpOptionsWidget: public QWidget, public Ui::WdgExperimentOptions
@@ -119,4 +121,11 @@ void KisExperimentOpOption::enableSmooth(qreal value)
 void KisExperimentOpOption::enableDisplacement(qreal value)
 {
     enableCheckBox(m_options->displaceCHBox, value);
+}
+
+void KisExperimentOpOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    if (m_options->displaceCHBox->isChecked()) {
+        l->blockers << KoID("experiment-displacement", i18nc("PaintOp LoD limitation", "Displacement Option"));
+    }
 }

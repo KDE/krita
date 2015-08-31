@@ -327,6 +327,8 @@ public:
     int favoritePresets(bool defaultValue = false) const;
     void setFavoritePresets(const int value);
 
+    bool levelOfDetailEnabled(bool defaultValue = false) const;
+    void setLevelOfDetailEnabled(bool value);
 
     enum OcioColorManagementMode {
         INTERNAL = 0,

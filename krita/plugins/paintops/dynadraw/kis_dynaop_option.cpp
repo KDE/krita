@@ -18,6 +18,8 @@
 #include "kis_dynaop_option.h"
 #include <klocale.h>
 
+#include "kis_paintop_lod_limitations.h"
+
 #include "ui_wdgdynaoptions.h"
 
 class KisDynaOpOptionsWidget: public QWidget, public Ui::WdgDynaOptions
@@ -173,4 +175,9 @@ void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->LineCBox->setChecked(setting->getBool(DYNA_ENABLE_LINE));
     m_options->twoCBox->setChecked(setting->getBool(DYNA_USE_TWO_CIRCLES));
     m_options->fixedAngleChBox->setChecked(setting->getBool(DYNA_USE_FIXED_ANGLE));
+}
+
+void KisDynaOpOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->blockers << KoID("dyna-brush", i18nc("PaintOp LoD limitation", "Dyna Brush (not supported)"));
 }

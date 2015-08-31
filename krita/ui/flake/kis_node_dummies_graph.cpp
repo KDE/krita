@@ -25,8 +25,7 @@
 /********************************************************************/
 
 KisNodeDummy::KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node)
-    : m_parent(0),
-      m_nodeShape(nodeShape),
+    : m_nodeShape(nodeShape),
       m_node(node)
 {
 }
@@ -48,30 +47,30 @@ KisNodeDummy* KisNodeDummy::lastChild() const
 
 KisNodeDummy* KisNodeDummy::nextSibling() const
 {
-    if(!m_parent) return 0;
+    if(!parent()) return 0;
 
-    int index = m_parent->m_children.indexOf(const_cast<KisNodeDummy*>(this));
+    int index = parent()->m_children.indexOf(const_cast<KisNodeDummy*>(this));
     Q_ASSERT(index >= 0);
 
     index++;
-    return index < m_parent->m_children.size() ?
-        m_parent->m_children[index] : 0;
+    return index < parent()->m_children.size() ?
+        parent()->m_children[index] : 0;
 }
 
 KisNodeDummy* KisNodeDummy::prevSibling() const
 {
-    if(!m_parent) return 0;
+    if(!parent()) return 0;
 
-    int index = m_parent->m_children.indexOf(const_cast<KisNodeDummy*>(this));
+    int index = parent()->m_children.indexOf(const_cast<KisNodeDummy*>(this));
     Q_ASSERT(index >= 0);
 
     index--;
-    return index >= 0 ? m_parent->m_children[index] : 0;
+    return index >= 0 ? parent()->m_children[index] : 0;
 }
 
 KisNodeDummy* KisNodeDummy::parent() const
 {
-    return m_parent;
+    return qobject_cast<KisNodeDummy*>(QObject::parent());
 }
 
 KisNodeShape* KisNodeDummy::nodeShape() const
@@ -117,7 +116,7 @@ void KisNodeDummiesGraph::addNode(KisNodeDummy *node, KisNodeDummy *parent, KisN
 {
     Q_ASSERT(!containsNode(node->node()));
 
-    node->m_parent = parent;
+    node->setParent(parent);
 
     Q_ASSERT_X(parent || !m_rootDummy, "KisNodeDummiesGraph::addNode", "Trying to add second root dummy");
     Q_ASSERT_X(!parent || m_rootDummy, "KisNodeDummiesGraph::addNode", "Trying to add non-orphan child with no root dummy set");
@@ -144,7 +143,7 @@ void KisNodeDummiesGraph::removeNode(KisNodeDummy *node)
     Q_ASSERT(containsNode(node->node()));
     unmapDummyRecursively(node);
 
-    KisNodeDummy *parent = node->m_parent;
+    KisNodeDummy *parent = node->parent();
     Q_ASSERT_X(m_rootDummy, "KisNodeDummiesGraph::removeNode", "Trying to remove a dummy with no root dummy");
 
     if(!parent) {

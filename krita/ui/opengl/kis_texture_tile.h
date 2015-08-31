@@ -94,25 +94,14 @@ public:
         return m_tileRectInTexturePixels;
     }
 
-    inline void setTextureParameters()
-    {
-        if(f) {
-            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
-            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, m_numMipmapLevels);
-            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-            f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
-
-            f->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        }
-    }
-
-
     void bindToActiveTexture();
+    int currentLodPlane() const;
 
 private:
+    inline void setTextureParameters();
+
     void setNeedsMipmapRegeneration();
+    void setCurrentLodPlane(int lod);
 
     GLuint m_textureId;
 
@@ -127,6 +116,7 @@ private:
     FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
     bool m_needsMipmapRegeneration;
+    int m_currentLodPlane;
     bool m_useBuffer;
     int m_numMipmapLevels;
     QOpenGLFunctions *f;

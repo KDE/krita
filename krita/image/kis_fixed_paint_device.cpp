@@ -201,6 +201,13 @@ void KisFixedPaintDevice::clear(const QRect & rc)
     delete[] black;
 }
 
+void KisFixedPaintDevice::fill(const QRect &rc, const KoColor &color)
+{
+    KoColor realColor(color);
+    realColor.convertTo(colorSpace());
+    fill(rc.x(), rc.y(), rc.width(), rc.height(), realColor.data());
+}
+
 void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
 {
     if (m_data.isEmpty() || m_bounds.isEmpty()) {

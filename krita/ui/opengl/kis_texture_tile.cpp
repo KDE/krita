@@ -27,6 +27,19 @@
 #define GL_BGRA 0x814F
 #endif
 
+void KisTextureTile::setTextureParameters()
+{
+
+    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
+    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, m_numMipmapLevels);
+    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
+
+    f->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+}
+
 inline QRectF relativeRect(const QRect &br /* baseRect */,
                            const QRect &cr /* childRect */,
                            const KisGLTexturesInfo *texturesInfo)
@@ -52,6 +65,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     , m_filter(filter)
     , m_texturesInfo(texturesInfo)
     , m_needsMipmapRegeneration(false)
+    , m_currentLodPlane(0)
     , m_useBuffer(useBuffer)
     , m_numMipmapLevels(numMipmapLevels)
     , f(fcn)
@@ -114,11 +128,27 @@ void KisTextureTile::bindToActiveTexture()
 
 void KisTextureTile::setNeedsMipmapRegeneration()
 {
+    // TODO: when a switch for LoD is implemented, put it there to
+    //       allow mipmapping in that case
+
     if (m_filter == TrilinearFilterMode ||
         m_filter == HighQualityFiltering) {
 
         m_needsMipmapRegeneration = true;
     }
+
+    m_currentLodPlane = 0;
+}
+
+int KisTextureTile::currentLodPlane() const
+{
+    return m_currentLodPlane;
+}
+
+void KisTextureTile::setCurrentLodPlane(int lod)
+{
+    m_currentLodPlane = lod;
+    m_needsMipmapRegeneration = false;
 }
 
 void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
@@ -127,6 +157,10 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
+
+    const int patchLevelOfDetail = updateInfo.patchLevelOfDetail();
+    const QSize patchSize = updateInfo.realPatchSize();
+    const QPoint patchOffset = updateInfo.realPatchOffset();
 
     const GLvoid *fd = updateInfo.data();
 #ifdef USE_PIXEL_BUFFERS
@@ -152,10 +186,10 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-        f->glTexImage2D(GL_TEXTURE_2D, 0,
+        f->glTexImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                      m_texturesInfo->internalFormat,
-                     m_texturesInfo->width,
-                     m_texturesInfo->height, 0,
+                     patchSize.width(),
+                     patchSize.height(), 0,
                      m_texturesInfo->format,
                      m_texturesInfo->type,
                      fd);
@@ -168,9 +202,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 
     }
     else {
-        QPoint patchOffset = updateInfo.patchOffset();
-        QSize patchSize = updateInfo.patchSize();
-
 #ifdef USE_PIXEL_BUFFERS
         if (m_useBuffer) {
             m_glBuffer->bind();
@@ -186,7 +217,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-        f->glTexSubImage2D(GL_TEXTURE_2D, 0,
+        f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
                         m_texturesInfo->format,
@@ -213,20 +244,13 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
      */
 
     const int pixelSize = updateInfo.pixelSize();
-    const QRect imageRect = updateInfo.imageRect();
-    const QPoint patchOffset = updateInfo.patchOffset();
-    const QSize patchSize = updateInfo.patchSize();
-    const QRect patchRect = QRect(m_textureRectInImagePixels.topLeft() +
-                                  patchOffset,
-                                  patchSize);
-    const QSize tileSize = updateInfo.tileRect().size();
+    const QSize tileSize = updateInfo.realTileSize();
 
-
-    if(imageRect.top() == patchRect.top()) {
+    if(updateInfo.isTopmost()) {
         int start = 0;
         int end = patchOffset.y() - 1;
         for (int i = start; i <= end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
@@ -235,14 +259,14 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
     }
 
-    if (imageRect.bottom() == patchRect.bottom()) {
+    if (updateInfo.isBottommost()) {
         int shift = patchSize.width() * (patchSize.height() - 1) *
                 pixelSize;
 
         int start = patchOffset.y() + patchSize.height();
         int end = tileSize.height() - 1;
         for (int i = start; i < end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
@@ -251,7 +275,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
     }
 
-    if (imageRect.left() == patchRect.left()) {
+    if (updateInfo.isLeftmost()) {
 
         QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
 
@@ -267,7 +291,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = 0;
         int end = patchOffset.x() - 1;
         for (int i = start; i <= end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
@@ -276,7 +300,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
     }
 
-    if (imageRect.right() == patchRect.right()) {
+    if (updateInfo.isRightmost()) {
 
         QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
 
@@ -292,7 +316,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = patchOffset.x() + patchSize.width();
         int end = tileSize.width() - 1;
         for (int i = start; i <= end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, 0,
+            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
@@ -301,7 +325,11 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
     }
 
-    setNeedsMipmapRegeneration();
+    if (!patchLevelOfDetail) {
+        setNeedsMipmapRegeneration();
+    } else {
+        setCurrentLodPlane(patchLevelOfDetail);
+    }
 }
 
 #ifdef USE_PIXEL_BUFFERS

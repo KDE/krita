@@ -38,6 +38,8 @@ class KisNodeProgressProxy;
 class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
+class KisKeyframeChannel;
+class KisTimeRange;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -128,6 +130,19 @@ public:
     virtual void setDirty(const QRegion &region);
 
     /**
+     * Informs that the frames in the given range are no longer valid
+     * and need to be recached.
+     * @param range frames to invalidate
+     */
+    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+
+    /**
+     * Informs that the current world time should be changed.
+     * Might be caused by e.g. undo operation
+     */
+    void requestTimeSwitch(int time);
+
+    /**
      * \return a pointer to a KisAbstractProjectionPlane interface of
      *         the node. This interface is used by the image merging
      *         framework to get information and to blending for the
@@ -142,6 +157,19 @@ public:
     virtual KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
+     * Return the keyframe channels associated with this node
+     * @return list of keyframe channels
+     */
+    QList<KisKeyframeChannel *> keyframeChannels() const;
+
+    /**
+     * Get the keyframe channel with given id.
+     * @param id internal name for channel
+     * @return keyframe channel with the id, or null if not found
+     */
+    KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
+
+    /**
      * The rendering of the image may not always happen in the order
      * of the main graph. Pass-through nodes ake some subgraphs
      * linear, so it the order of rendering change. projectionLeaf()
@@ -150,6 +178,18 @@ public:
      * graph may have a different order the main one.
      */
     virtual KisProjectionLeafSP projectionLeaf() const;
+
+protected:
+
+    /**
+     * Add a keyframe channel for this node. The channel will be added
+     * to the common hash table which will be available to the UI.
+     *
+     * WARNING: the \p channel object *NOT* become owned by the node!
+     *          The caller must ensure manually that the lifetime of
+     *          the object coincide with the lifetime of the node.
+     */
+    void addKeyframeChannel(KisKeyframeChannel* channel);
 
 protected:
 

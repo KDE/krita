@@ -47,3 +47,8 @@ void KisRecalculateGeneratorLayerJob::run()
 
     m_layer->update();
 }
+
+int KisRecalculateGeneratorLayerJob::levelOfDetail() const
+{
+    return 0;
+}

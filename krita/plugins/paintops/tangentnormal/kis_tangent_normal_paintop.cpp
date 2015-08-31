@@ -22,17 +22,15 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
-#include <KoCompositeOpRegistry.h>
 
 #include <kis_brush.h>
-#include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_image.h>
-#include <kis_selection.h>
+#include <kis_node.h>
 #include <kis_brush_based_paintop_settings.h>
-#include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_lod_transform.h>
+
 
 KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
@@ -110,6 +108,8 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     }
 
     qreal scale    = m_sizeOption.apply(info);
+    scale *= KisLodTransform::lodToScale(painter()->device());
+
     qreal rotation = m_rotationOption.apply(info);
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();

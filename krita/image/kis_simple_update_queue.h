@@ -39,9 +39,9 @@ public:
 
     void processQueue(KisUpdaterContext &updaterContext);
 
-    void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    void addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail);
+    void addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail);
+    void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
 
@@ -52,16 +52,18 @@ public:
 
     void updateSettings();
 
+    int overrideLevelOfDetail() const;
+
 protected:
-    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail, KisBaseRectsWalker::UpdateType type);
 
     bool processOneJob(KisUpdaterContext &updaterContext);
 
-    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
-    bool tryMergeJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail, KisBaseRectsWalker::UpdateType type);
+    bool tryMergeJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail, KisBaseRectsWalker::UpdateType type);
 
     void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
-                     const KisNodeSP &baseNode, const qreal maxAlpha);
+                     const qreal maxAlpha);
     bool joinRects(QRect& baseRect, const QRect& newRect, qreal maxAlpha);
 
 protected:
@@ -98,6 +100,8 @@ protected:
      * The coefficient of work used while collecting phase of tryToMerge()
      */
     qreal m_maxMergeCollectAlpha;
+
+    int m_overrideLevelOfDetail;
 };
 
 class KRITAIMAGE_EXPORT KisTestableSimpleUpdateQueue : public KisSimpleUpdateQueue

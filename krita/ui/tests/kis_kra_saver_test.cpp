@@ -46,6 +46,8 @@
 #include "kis_shape_selection.h"
 #include "util.h"
 #include "testutil.h"
+#include "kis_keyframe_channel.h"
+#include "kis_image_animation_interface.h"
 
 #include "kis_transform_mask_params_interface.h"
 
@@ -243,6 +245,78 @@ void KisKraSaverTest::testRoundTripLayerStyles()
     chk.checkImage(doc2->image(), "00_initial_layers");
 
     QVERIFY(chk.testPassed());
+}
+
+void KisKraSaverTest::testRoundTripAnimation()
+{
+    QRect imageRect(0,0,512,512);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+    KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    image->addNode(layer1);
+
+    layer1->paintDevice()->fill(QRect(100, 100, 50, 50), KoColor(Qt::black, cs));
+    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::red, cs).data());
+
+    KUndo2Command parentCommand;
+
+    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    rasterChannel->addKeyframe(10, &parentCommand);
+    image->animationInterface()->switchCurrentTimeAsync(10);
+    image->waitForDone();
+    layer1->paintDevice()->fill(QRect(200, 50, 10, 10), KoColor(Qt::black, cs));
+    layer1->paintDevice()->move(25, 15);
+    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::green, cs).data());
+
+    rasterChannel->addKeyframe(20, &parentCommand);
+    image->animationInterface()->switchCurrentTimeAsync(20);
+    image->waitForDone();
+    layer1->paintDevice()->fill(QRect(150, 200, 30, 30), KoColor(Qt::black, cs));
+    layer1->paintDevice()->move(100, 50);
+    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs).data());
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setCurrentImage(image);
+    doc->saveNativeFormat("roundtrip_animation.kra");
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_animation.kra");
+    KisImageSP image2 = doc2->image();
+    KisNodeSP node = image2->root()->firstChild();
+
+    QVERIFY(node->inherits("KisPaintLayer"));
+    KisPaintLayerSP layer2 = qobject_cast<KisPaintLayer*>(node.data());
+    cs = layer2->paintDevice()->colorSpace();
+
+    QCOMPARE(image2->animationInterface()->currentTime(), 20);
+    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QCOMPARE(channel->keyframeCount(), 3);
+
+    image2->animationInterface()->switchCurrentTimeAsync(0);
+    image2->waitForDone();
+
+    QCOMPARE(layer2->paintDevice()->nonDefaultPixelArea(), QRect(64, 64, 128, 128));
+    QCOMPARE(layer2->paintDevice()->x(), 0);
+    QCOMPARE(layer2->paintDevice()->y(), 0);
+    QVERIFY(!memcmp(layer2->paintDevice()->defaultPixel(), KoColor(Qt::red, cs).data(), cs->pixelSize()));
+
+    image2->animationInterface()->switchCurrentTimeAsync(10);
+    image2->waitForDone();
+
+    QCOMPARE(layer2->paintDevice()->nonDefaultPixelArea(), QRect(217, 15, 64, 64));
+    QCOMPARE(layer2->paintDevice()->x(), 25);
+    QCOMPARE(layer2->paintDevice()->y(), 15);
+    QVERIFY(!memcmp(layer2->paintDevice()->defaultPixel(), KoColor(Qt::green, cs).data(), cs->pixelSize()));
+
+    image2->animationInterface()->switchCurrentTimeAsync(20);
+    image2->waitForDone();
+
+    QCOMPARE(layer2->paintDevice()->nonDefaultPixelArea(), QRect(228, 242, 64, 64));
+    QCOMPARE(layer2->paintDevice()->x(), 100);
+    QCOMPARE(layer2->paintDevice()->y(), 50);
+    QVERIFY(!memcmp(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs).data(), cs->pixelSize()));
+
 }
 
 QTEST_KDEMAIN(KisKraSaverTest, GUI)

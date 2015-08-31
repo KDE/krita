@@ -49,6 +49,8 @@
 #include <kis_gradient_slider.h>
 #include "kis_embedded_pattern_manager.h"
 #include "kis_algebra_2d.h"
+#include "kis_lod_transform.h"
+#include "kis_paintop_lod_limitations.h"
 
 #include <time.h>
 
@@ -134,7 +136,7 @@ public:
     QCheckBox *chkInvert;
 };
 
-KisTextureOption::KisTextureOption(QObject *)
+KisTextureOption::KisTextureOption()
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
 {
     setObjectName("KisTextureOption");
@@ -249,6 +251,12 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
 }
 
+void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
+{
+    l->limitations << KoID("texture-pattern", i18nc("PaintOp LoD limitation", "Texture -> Pattern (low quality preview)"));
+}
+
+
 void KisTextureOption::resetGUI(KoResource* res)
 {
     KoPattern *pattern = static_cast<KoPattern *>(res);
@@ -256,6 +264,12 @@ void KisTextureOption::resetGUI(KoResource* res)
 
     m_optionWidget->offsetSliderX->setRange(0, pattern->pattern().width() / 2);
     m_optionWidget->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
+}
+
+KisTextureProperties::KisTextureProperties(int levelOfDetail)
+    : m_pattern(0),
+      m_levelOfDetail(levelOfDetail)
+{
 }
 
 void KisTextureProperties::recalculateMask()
@@ -266,15 +280,17 @@ void KisTextureProperties::recalculateMask()
 
     QImage mask = m_pattern->pattern();
 
-    if (mask.format() != QImage::Format_RGB32 ||
-            mask.format() != QImage::Format_ARGB32) {
+    if ((mask.format() != QImage::Format_RGB32) |
+        (mask.format() != QImage::Format_ARGB32)) {
 
         mask = mask.convertToFormat(QImage::Format_ARGB32);
     }
 
-    if (!qFuzzyCompare(m_scale, 0.0)) {
+    qreal scale = m_scale * KisLodTransform::lodToScale(m_levelOfDetail);
+
+    if (!qFuzzyCompare(scale, 0.0)) {
         QTransform tf;
-        tf.scale(m_scale, m_scale);
+        tf.scale(scale, scale);
         QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }

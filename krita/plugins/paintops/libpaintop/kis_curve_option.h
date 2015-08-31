@@ -54,6 +54,7 @@ public:
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
     const QString& name() const;
     KisPaintOpOption::PaintopCategory category() const;

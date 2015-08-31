@@ -25,6 +25,8 @@
 
 #include "kis_chalkop_option.h"
 #include "kis_paint_device.h"
+#include "kis_random_source.h"
+
 
 class ChalkBrush
 {
@@ -32,7 +34,7 @@ class ChalkBrush
 public:
     ChalkBrush(const ChalkProperties * properties, KoColorTransformation* transformation);
     ~ChalkBrush();
-    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
+    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, qreal additionalScale);
 
 private:
     KoColor m_inkColor;
@@ -40,7 +42,7 @@ private:
     const ChalkProperties * m_properties;
     KoColorTransformation* m_transfo;
     int m_saturationId;
-
+    KisRandomSource m_randomSource;
 };
 
 #endif

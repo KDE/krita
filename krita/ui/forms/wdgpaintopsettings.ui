@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>847</width>
-    <height>98</height>
+    <width>961</width>
+    <height>107</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,0,0,0,0,0">
@@ -23,7 +23,16 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -223,7 +232,7 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1,1,0">
      <item>
       <widget class="QPushButton" name="bnDefaultPreset">
        <property name="sizePolicy">
@@ -272,6 +281,16 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="KisLodAvailabilityWidget" name="wdgLodAvailability" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -293,6 +312,12 @@
    <class>KisPaintOpListWidget</class>
    <extends>QWidget</extends>
    <header>kis_paintop_list_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisLodAvailabilityWidget</class>
+   <extends>QWidget</extends>
+   <header>kis_lod_availability_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

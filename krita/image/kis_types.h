@@ -158,6 +158,9 @@ typedef QVector<KisAnnotationSP> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
+class KisAnimationFrameCache;
+typedef KisSharedPtr<KisAnimationFrameCache> KisAnimationFrameCacheSP;
+
 // Repeat iterators
 class KisHLineIterator2;
 template<class T> class KisRepeatHLineIteratorPixelBase;
@@ -229,6 +232,9 @@ typedef KisStrokeWSP KisStrokeId;
 class KisFilterConfiguration;
 typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 
+class KisProjectionUpdatesFilter;
+typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
+
 class KisAbstractProjectionPlane;
 typedef QSharedPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneSP;
 typedef QWeakPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneWSP;
@@ -242,6 +248,10 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
 
 class KoAbstractGradient;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
+
+class KisKeyframe;
+typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
+typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 
 #include <QSharedPointer>
 #include <QWeakPointer>

@@ -48,6 +48,9 @@
 #include "kis_config.h"
 #include "krita_utils.h"
 #include "kis_canvas_resource_provider.h"
+#include "opengl/kis_opengl.h"
+#include "kis_lod_transform.h"
+
 
 
 class KisZoomController : public KoZoomController
@@ -245,15 +248,10 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
                           KritaUtils::prettyFormatReal(humanZoom)),
                     QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
     }
-    qreal scaleX, scaleY;
-    m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
-    if (scaleX != scaleY) {
-        qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
-    }
+    const qreal effectiveZoom =
+        m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
 
-    // zoom by average of x and y
-    const qreal effectiveZoom = 0.5 * (scaleX + scaleY);
     m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
 }
 

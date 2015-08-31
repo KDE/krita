@@ -55,6 +55,9 @@ public:
     virtual int timedId();
     void setTimedID(int timedID);
 
+    int id() const;
+    bool mergeWith(const KUndo2Command* command);
+
     virtual bool timedMergeWith(KUndo2Command *other);
     virtual QVector<KUndo2Command*> mergeCommandsVector();
     virtual void setTime();

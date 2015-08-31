@@ -116,6 +116,11 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     m_glFuncs->glDeleteTextures(1, &m_checkerTexture);
 }
 
+KisImageSP KisOpenGLImageTextures::image() const
+{
+    return m_image;
+}
+
 bool KisOpenGLImageTextures::imageCanShareTextures()
 {
     KisConfig cfg;
@@ -264,18 +269,33 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     info->tileList.reserve(numItems);
 
     const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
+    const QRect bounds = m_image->bounds();
+    const int levelOfDetail = m_image->currentLevelOfDetail();
+
+    QRect alignedUpdateRect = updateRect;
+    QRect alignedBounds = bounds;
+
+    if (levelOfDetail) {
+        alignedUpdateRect = KisLodTransform::alignedRect(alignedUpdateRect, levelOfDetail);
+        alignedBounds = KisLodTransform::alignedRect(alignedBounds, levelOfDetail);
+    }
 
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
-            QRect tileRect = calculateTileRect(col, row);
-            QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
+            const QRect tileRect = calculateTileRect(col, row);
+            const QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
+
+            QRect alignedTileTextureRect = levelOfDetail ?
+                KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
+                tileTextureRect;
 
             KisTextureTileUpdateInfoSP tileInfo(
                 new KisTextureTileUpdateInfo(col, row,
-                                             tileTextureRect,
-                                             updateRect,
-                                             m_image->bounds()));
+                                             alignedTileTextureRect,
+                                             alignedUpdateRect,
+                                             alignedBounds,
+                                             levelOfDetail));
             // Don't update empty tiles
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);

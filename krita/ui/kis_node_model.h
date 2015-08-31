@@ -25,6 +25,7 @@
 class KisDummiesFacadeBase;
 class KisNodeDummy;
 class KisShapeController;
+class KisModelIndexConverterBase;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view on the node
@@ -91,6 +92,10 @@ private Q_SLOTS:
     void updateSettings();
     void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
+
+protected:
+    KisModelIndexConverterBase *indexConverter() const;
+    KisDummiesFacadeBase *dummiesFacade() const;
 
 private:
     friend class KisModelIndexConverter;

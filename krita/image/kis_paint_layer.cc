@@ -28,6 +28,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoProperties.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -36,11 +37,15 @@
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
+#include "kis_onion_skin_compositor.h"
+#include "kis_raster_keyframe_channel.h"
+
 struct KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
+    KisRasterKeyframeChannel *contentChannel;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -48,8 +53,8 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         , m_d(new Private())
 {
     Q_ASSERT(dev);
-    m_d->paintDevice = dev;
-    m_d->paintDevice->setParentNode(this);
+
+    init(dev);
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
@@ -59,7 +64,8 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         , m_d(new Private())
 {
     Q_ASSERT(image);
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+
+    init(new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image)));
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -71,7 +77,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         colorSpace = image->colorSpace();
     }
     Q_ASSERT(colorSpace);
-    m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
+    init(new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image)));
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -79,9 +85,19 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         , KisIndirectPaintingSupport()
         , m_d(new Private)
 {
-    m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
-    m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
+}
+
+void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags)
+{
+    m_d->paintDevice = paintDevice;
     m_d->paintDevice->setParentNode(this);
+
+    m_d->paintChannelFlags = paintChannelFlags;
+
+    m_d->contentChannel = paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
+
+    addKeyframeChannel(m_d->contentChannel);
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -106,7 +122,7 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
 
 bool KisPaintLayer::needProjection() const
 {
-    return hasTemporaryTarget();
+    return hasTemporaryTarget() || (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled());
 }
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
@@ -121,6 +137,11 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPainter gc(projection);
         setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
+    }
+
+    if (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
+        KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
+        compositor->composite(m_d->paintDevice, projection, rect);
     }
 
     unlockTemporaryTarget();
@@ -149,6 +170,10 @@ KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() co
     // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
 
+    if (m_d->contentChannel->keyframeCount() > 1) {
+        l << KisDocumentSectionModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
+    }
+
     return l;
 }
 
@@ -157,6 +182,9 @@ void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::Pro
     foreach (const KisDocumentSectionModel::Property &property, properties) {
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
+        }
+        else if (property.name == i18n("Onion skin")) {
+            setOnionSkinEnabled(property.state.toBool());
         }
     }
 
@@ -192,12 +220,14 @@ const QBitArray& KisPaintLayer::channelLockFlags() const
 QRect KisPaintLayer::extent() const
 {
     QRect rect = temporaryTarget() ? temporaryTarget()->extent() : QRect();
+    if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::extent();
 }
 
 QRect KisPaintLayer::exactBounds() const
 {
     QRect rect = temporaryTarget() ? temporaryTarget()->exactBounds() : QRect();
+    if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::exactBounds();
 }
 
@@ -218,4 +248,18 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
 }
 
+bool KisPaintLayer::onionSkinEnabled() const
+{
+    return nodeProperties().boolProperty("onionskin", false);
+}
+
+void KisPaintLayer::setOnionSkinEnabled(bool state)
+{
+    if (state == false && onionSkinEnabled()) {
+        // Turning off onionskins shrinks our extent. Let's clean up the onion skins first
+        setDirty(KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice));
+    }
+
+    nodeProperties().setProperty("onionskin", state);
+}
 

@@ -19,6 +19,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
       <Action name="file_export_pdf"/>
+      <Action name="file_export_animation"/>
       <Separator/>
       <Action name="save_incremental_version"/>
       <Action name="save_incremental_backup"/>
@@ -61,8 +62,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>&amp;View</text>
       <Action name="view_show_just_the_canvas"/>
       <Action name="fullscreen"/>
-      
       <Action name="wrap_around_mode"/>
+      <Action name="level_of_detail_mode"/>
       <Separator/>
       <Menu name="Canvas">
           <text>&amp;Canvas</text>

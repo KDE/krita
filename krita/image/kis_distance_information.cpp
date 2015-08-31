@@ -25,6 +25,7 @@
 #include <QTransform>
 #include "kis_algebra_2d.h"
 
+#include "kis_lod_transform.h"
 
 
 struct KisDistanceInformation::Private {
@@ -61,6 +62,18 @@ KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs
     : m_d(new Private(*rhs.m_d))
 {
 
+}
+
+KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs, int levelOfDetail)
+    : m_d(new Private(*rhs.m_d))
+{
+    KIS_ASSERT_RECOVER_NOOP(!m_d->lastPaintInfoValid &&
+                            "The distance information "
+                            "should be cloned before the "
+                            "actual painting is started");
+
+    KisLodTransform t(levelOfDetail);
+    m_d->lastPosition = t.map(m_d->lastPosition);
 }
 
 KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInformation &rhs)
@@ -107,6 +120,11 @@ bool KisDistanceInformation::hasLastPaintInformation() const
 const KisPaintInformation& KisDistanceInformation::lastPaintInformation() const
 {
     return m_d->lastPaintInformation;
+}
+
+bool KisDistanceInformation::isStarted() const
+{
+    return m_d->lastPaintInfoValid;
 }
 
 void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,

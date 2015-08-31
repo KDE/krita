@@ -37,10 +37,16 @@ public:
     virtual KisStrokeJobStrategy* createFinishStrategy();
     virtual KisStrokeJobStrategy* createCancelStrategy();
     virtual KisStrokeJobStrategy* createDabStrategy();
+    virtual KisStrokeJobStrategy* createSuspendStrategy();
+    virtual KisStrokeJobStrategy* createResumeStrategy();
 
     virtual KisStrokeJobData* createInitData();
     virtual KisStrokeJobData* createFinishData();
     virtual KisStrokeJobData* createCancelData();
+    virtual KisStrokeJobData* createSuspendData();
+    virtual KisStrokeJobData* createResumeData();
+
+    virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
@@ -55,6 +61,16 @@ public:
      * except if we are running an undo or redo stroke.
      */
     bool clearsRedoOnStart() const;
+
+    /**
+     * Returns true if the other currently running strokes should be
+     * politely asked to exit. The default value is 'true'.
+     *
+     * The only known exception right now is
+     * KisRegenerateFrameStrokeStrategy which does not requests ending
+     * of any actions, since it performs purely background action.
+     */
+    bool requestsOtherStrokesToEnd() const;
 
     QString id() const;
     KUndo2MagicString name() const;
@@ -83,6 +99,13 @@ protected:
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
     void setClearsRedoOnStart(bool value);
+    void setRequestsOtherStrokesToEnd(bool value);
+
+protected:
+    /**
+     * Protected c-tor, used for cloning of hi-level strategies
+     */
+    KisStrokeStrategy(const KisStrokeStrategy &rhs);
 
 private:
     bool m_exclusive;
@@ -90,6 +113,7 @@ private:
     bool m_needsIndirectPainting;
     QString m_indirectPaintingCompositeOp;
     bool m_clearsRedoOnStart;
+    bool m_requestsOtherStrokesToEnd;
 
     QString m_id;
     KUndo2MagicString m_name;

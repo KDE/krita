@@ -21,23 +21,28 @@
 #include "kis_stroke_strategy.h"
 
 
-KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
+KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, Type type, int levelOfDetail)
     : m_strokeStrategy(strokeStrategy),
       m_strokeInitialized(false),
       m_strokeEnded(false),
+      m_strokeSuspended(false),
       m_isCancelled(false),
-      m_prevJobSequential(false)
+      m_prevJobSequential(false),
+      m_worksOnLevelOfDetail(levelOfDetail),
+      m_type(type)
 {
-    m_initStrategy = m_strokeStrategy->createInitStrategy();
-    m_dabStrategy = m_strokeStrategy->createDabStrategy();
-    m_cancelStrategy = m_strokeStrategy->createCancelStrategy();
-    m_finishStrategy = m_strokeStrategy->createFinishStrategy();
+    m_initStrategy.reset(m_strokeStrategy->createInitStrategy());
+    m_dabStrategy.reset(m_strokeStrategy->createDabStrategy());
+    m_cancelStrategy.reset(m_strokeStrategy->createCancelStrategy());
+    m_finishStrategy.reset(m_strokeStrategy->createFinishStrategy());
+    m_suspendStrategy.reset(m_strokeStrategy->createSuspendStrategy());
+    m_resumeStrategy.reset(m_strokeStrategy->createResumeStrategy());
 
     if(!m_initStrategy) {
         m_strokeInitialized = true;
     }
     else {
-        enqueue(m_initStrategy, m_strokeStrategy->createInitData());
+        enqueue(m_initStrategy.data(), m_strokeStrategy->createInitData());
     }
 }
 
@@ -45,18 +50,34 @@ KisStroke::~KisStroke()
 {
     Q_ASSERT(m_strokeEnded);
     Q_ASSERT(m_jobsQueue.isEmpty());
+}
 
-    delete m_initStrategy;
-    delete m_dabStrategy;
-    delete m_cancelStrategy;
-    delete m_finishStrategy;
-    delete m_strokeStrategy;
+bool KisStroke::supportsSuspension()
+{
+    return !m_strokeInitialized || (m_suspendStrategy && m_resumeStrategy);
+}
+
+void KisStroke::suspendStroke(KisStrokeSP recipient)
+{
+    if (!m_strokeInitialized || m_strokeSuspended) return;
+
+    KIS_ASSERT_RECOVER_NOOP(m_suspendStrategy && m_resumeStrategy);
+
+    prepend(m_resumeStrategy.data(),
+            m_strokeStrategy->createResumeData(),
+            worksOnLevelOfDetail(), false);
+
+    recipient->prepend(m_suspendStrategy.data(),
+                       m_strokeStrategy->createSuspendData(),
+                       worksOnLevelOfDetail(), false);
+
+    m_strokeSuspended = true;
 }
 
 void KisStroke::addJob(KisStrokeJobData *data)
 {
     Q_ASSERT(!m_strokeEnded || m_isCancelled);
-    enqueue(m_dabStrategy, data);
+    enqueue(m_dabStrategy.data(), data);
 }
 
 KisStrokeJob* KisStroke::popOneJob()
@@ -66,9 +87,8 @@ KisStrokeJob* KisStroke::popOneJob()
     if(job) {
         m_prevJobSequential = job->isSequential();
 
-        if(!m_strokeInitialized) {
-            m_strokeInitialized = true;
-        }
+        m_strokeInitialized = true;
+        m_strokeSuspended = false;
     }
 
     return job;
@@ -94,7 +114,7 @@ void KisStroke::endStroke()
     Q_ASSERT(!m_strokeEnded);
     m_strokeEnded = true;
 
-    enqueue(m_finishStrategy, m_strokeStrategy->createFinishData());
+    enqueue(m_finishStrategy.data(), m_strokeStrategy->createFinishData());
 }
 
 /**
@@ -119,17 +139,20 @@ void KisStroke::cancelStroke()
     if (m_isCancelled) return;
 
     if(!m_strokeInitialized) {
-        clearQueue();
+        /**
+         * FIXME: this assert is probably a bit too optimistic,
+         *        because the LODN stroke that suspends the other one
+         *        can be easily non-initialized
+         */
+        KIS_ASSERT_RECOVER_NOOP(sanityCheckAllJobsAreCancellable());
+        clearQueueOnCancel();
     }
     else if(m_strokeInitialized &&
             (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
 
-        clearQueue();
-        if(m_cancelStrategy) {
-            m_jobsQueue.enqueue(
-                new KisStrokeJob(m_cancelStrategy,
-                                 m_strokeStrategy->createCancelData()));
-        }
+        clearQueueOnCancel();
+        enqueue(m_cancelStrategy.data(),
+                m_strokeStrategy->createCancelData());
     }
     // else {
     //     too late ...
@@ -139,12 +162,29 @@ void KisStroke::cancelStroke()
     m_strokeEnded = true;
 }
 
-void KisStroke::clearQueue()
+bool KisStroke::sanityCheckAllJobsAreCancellable() const
 {
     foreach(KisStrokeJob *item, m_jobsQueue) {
-        delete item;
+        if (!item->isCancellable()) {
+            return false;
+        }
     }
-    m_jobsQueue.clear();
+    return true;
+}
+
+void KisStroke::clearQueueOnCancel()
+{
+    QQueue<KisStrokeJob*>::iterator it = m_jobsQueue.begin();
+    QQueue<KisStrokeJob*>::iterator end = m_jobsQueue.end();
+
+    while (it != end) {
+        if ((*it)->isCancellable()) {
+            delete (*it);
+            it = m_jobsQueue.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 bool KisStroke::isInitialized() const
@@ -165,6 +205,11 @@ bool KisStroke::isExclusive() const
 bool KisStroke::supportsWrapAroundMode() const
 {
     return m_strokeStrategy->supportsWrapAroundMode();
+}
+
+int KisStroke::worksOnLevelOfDetail() const
+{
+    return m_worksOnLevelOfDetail;
 }
 
 bool KisStroke::prevJobSequential() const
@@ -193,10 +238,50 @@ void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
         return;
     }
 
-    m_jobsQueue.enqueue(new KisStrokeJob(strategy, data));
+    m_jobsQueue.enqueue(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), true));
+}
+
+void KisStroke::prepend(KisStrokeJobStrategy *strategy,
+                        KisStrokeJobData *data,
+                        int levelOfDetail,
+                        bool isCancellable)
+{
+    // factory methods can return null, if no action is needed
+    if(!strategy) {
+        delete data;
+        return;
+    }
+
+    // LOG_MERGE_FIXME:
+    Q_UNUSED(levelOfDetail);
+
+    m_jobsQueue.prepend(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), isCancellable));
 }
 
 KisStrokeJob* KisStroke::dequeue()
 {
     return !m_jobsQueue.isEmpty() ? m_jobsQueue.dequeue() : 0;
+}
+
+void KisStroke::setLodBuddy(KisStrokeSP buddy)
+{
+    m_lodBuddy = buddy;
+}
+
+KisStrokeSP KisStroke::lodBuddy() const
+{
+    return m_lodBuddy;
+}
+
+KisStroke::Type KisStroke::type() const
+{
+    if (m_type == LOD0) {
+        KIS_ASSERT_RECOVER_NOOP(m_lodBuddy && "LOD0 strokes must always have a buddy");
+    } else if (m_type == LODN) {
+        KIS_ASSERT_RECOVER_NOOP(m_worksOnLevelOfDetail > 0 && "LODN strokes must work on LOD > 0!");
+    } else if (m_type == LEGACY) {
+        KIS_ASSERT_RECOVER_NOOP(m_worksOnLevelOfDetail == 0 && "LEGACY strokes must work on LOD == 0!");
+    }
+
+    return m_type;
 }

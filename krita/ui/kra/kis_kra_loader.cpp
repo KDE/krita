@@ -62,12 +62,16 @@
 #include <kis_psd_layer_style.h>
 #include <kis_psd_layer_style_resource.h>
 #include "kis_resource_server_provider.h"
+#include "kis_keyframe_channel.h"
 
 #include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
+#include "kis_dom_utils.h"
+#include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
 
 /*
 
@@ -118,6 +122,7 @@ public:
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     QList<KisPaintingAssistant*> assistants;
+    QMap<KisNode*, QString> keyframeFilenames;
     QStringList errorMessages;
 };
 
@@ -272,6 +277,10 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                     image->setDefaultProjectionColor(color);
                 }
             }
+
+            if (e.tagName().toLower() == "animation") {
+                loadAnimationMetadata(e, image);
+            }
         }
 
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
@@ -386,6 +395,61 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     loadAssistants(store, uri, external);
 }
 
+void KisKraLoader::loadKeyframes(KoStore *store, const QString uri, bool external)
+{
+    QMap<KisNode*, QString>::iterator it;
+
+    for (it = m_d->keyframeFilenames.begin(); it != m_d->keyframeFilenames.end(); it++) {
+        KisNodeSP node = it.key();
+        QString filename = it.value();
+
+        QString location =
+                (external ? QString() : uri)
+                + m_d->imageName + LAYER_PATH + filename;
+
+        loadNodeKeyframes(store, location, node);
+    }
+}
+
+void KisKraLoader::loadNodeKeyframes(KoStore *store, const QString &location, KisNodeSP node)
+{
+    if (!store->open(location)) {
+        m_d->errorMessages << i18n("Could not load keyframes from %1.", location);
+        return;
+    }
+
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    KoXmlDocument doc = KoXmlDocument(true);
+
+    bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
+    store->close();
+
+    if (!ok) {
+        m_d->errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, errorLine, errorColumn, i18n(errorMsg.toUtf8()));
+        return;
+    }
+
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, doc.documentElement());
+    QDomElement root = dom.firstChildElement();
+
+    for (QDomElement child = root.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+        if (child.nodeName().toUpper() == "CHANNEL") {
+            QString id = child.attribute("name");
+            KisKeyframeChannel *channel = node->getKeyframeChannel(id);
+
+            if (!channel) {
+                m_d->errorMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);
+                continue;
+            }
+
+            channel->loadXML(child);
+        }
+    }
+}
+
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
@@ -422,6 +486,31 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             }
         }
         loadedAssistant++;
+    }
+}
+
+void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageWSP image)
+{
+    QDomDocument qDom;
+    KoXml::asQDomElement(qDom, element);
+    QDomElement qElement = qDom.firstChildElement();
+
+    float framerate;
+    KisTimeRange range;
+    int currentTime;
+
+    KisImageAnimationInterface *animation = image->animationInterface();
+
+    if (KisDomUtils::loadValue(qElement, "framerate", &framerate)) {
+        animation->setFramerate(framerate);
+    }
+
+    if (KisDomUtils::loadValue(qElement, "range", &range)) {
+        animation->setRange(range);
+    }
+
+    if (KisDomUtils::loadValue(qElement, "currentTime", &currentTime)) {
+        animation->switchCurrentTimeAsync(currentTime);
     }
 }
 
@@ -598,6 +687,9 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node.data());
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
         layer->setChannelLockFlags(channelLockFlags);
+
+        bool onionEnabled = element.attribute(ONION_SKIN_ENABLED, "0") == "0" ? false : true;
+        layer->setOnionSkinEnabled(onionEnabled);
     }
 
     if (element.attribute(FILE_NAME).isNull()) {
@@ -609,6 +701,10 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
     if (element.hasAttribute("selected") && element.attribute("selected") == "true")  {
         m_d->selectedNodes.append(node);
+    }
+
+    if (element.hasAttribute(KEYFRAME_FILE)) {
+        m_d->keyframeFilenames.insert(node.data(), element.attribute(KEYFRAME_FILE));
     }
 
     return node;

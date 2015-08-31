@@ -39,3 +39,8 @@ void KisUpdateOutlineJob::run()
     }
     m_selection->notifySelectionChanged();
 }
+
+int KisUpdateOutlineJob::levelOfDetail() const
+{
+    return 0;
+}

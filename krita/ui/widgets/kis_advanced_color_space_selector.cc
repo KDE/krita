@@ -112,6 +112,7 @@ KisAdvancedColorSpaceSelector::~KisAdvancedColorSpaceSelector()
 
 void KisAdvancedColorSpaceSelector::fillLstProfiles()
 {
+    d->colorSpaceSelector->lstProfile->blockSignals(true);
     QString s = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
     d->colorSpaceSelector->lstProfile->clear();
 
@@ -134,6 +135,7 @@ void KisAdvancedColorSpaceSelector::fillLstProfiles()
         }
     }
     d->colorSpaceSelector->lstProfile->setCurrentItem(defaultProfile);
+    d->colorSpaceSelector->lstProfile->blockSignals(true);
     colorSpaceChanged();
 }
 

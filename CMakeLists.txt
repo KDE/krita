@@ -1026,6 +1026,8 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
+    KReport_FOUND "KReport not found"
+    KProperty_FOUND "KProperty not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT

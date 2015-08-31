@@ -50,8 +50,8 @@ public:
     using KisPropertiesConfiguration::setProperty;
     void setProperty(const QString & name, const QVariant & value);
 private:
-    KisLockedProperties* m_lockedProperties;
-    const KisPropertiesConfiguration* m_parent;
+    KisLockedProperties *m_lockedProperties;
+    const KisPropertiesConfiguration *m_parent;
 };
 
 #endif // KIS_LOCKED_PROPERTIES_PROXY_H

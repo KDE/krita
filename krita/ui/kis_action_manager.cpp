@@ -35,7 +35,7 @@
 
 
 
-class KisActionManager::Private {
+class Q_DECL_HIDDEN KisActionManager::Private {
 
 public:
     Private()
@@ -143,17 +143,17 @@ void KisActionManager::updateGUI()
 
     }
 
-
     // is there a selection/mask?
     // you have to have at least one view(document) open for this to be true
-    if (node)
-    {
+    if (node) {
 
         // if a node exists, we know there is an active layer as well
         flags |= KisAction::ACTIVE_NODE;
 
         layer = dynamic_cast<KisLayer*>(node.data());
-        flags |= KisAction::ACTIVE_LAYER;
+        if (layer) {
+            flags |= KisAction::ACTIVE_LAYER;
+        }
 
         if (node->inherits("KisTransparencyMask")) {
             flags |= KisAction::ACTIVE_TRANSPARENCY_MASK;
@@ -234,6 +234,11 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
     action->setShortcut(standardAction->shortcut(KAction::DefaultShortcut), KAction::DefaultShortcut);
     action->setShortcut(standardAction->shortcut(KAction::ActiveShortcut), KAction::ActiveShortcut);
+#ifdef Q_OS_WIN
+    if (actionType == KStandardAction::SaveAs && standardAction->shortcut(KAction::DefaultShortcut).primary().isEmpty()) {
+        action->setShortcut(QKeySequence("CTRL+SHIFT+S"), KAction::DefaultShortcut);
+    }
+#endif
     action->setCheckable(standardAction->isCheckable());
     if (action->isCheckable()) {
         action->setChecked(standardAction->isChecked());

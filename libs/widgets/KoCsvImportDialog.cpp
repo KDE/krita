@@ -43,7 +43,7 @@ public:
 };
 
 
-class KoCsvImportDialog::Private
+class Q_DECL_HIDDEN KoCsvImportDialog::Private
 {
 public:
     KoCsvImportDialog* q;

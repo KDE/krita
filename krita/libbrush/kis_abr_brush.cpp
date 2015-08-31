@@ -39,9 +39,8 @@
 
 #define DEFAULT_SPACING 0.25
 
-KisAbrBrush::KisAbrBrush(const QString& filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent)
+KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
     : KisBrush(filename)
-    , m_parentMD5(parentMD5)
     , m_parent(parent)
 {
     setBrushType(INVALID);

@@ -50,7 +50,7 @@
 #include "KoOdfBibliographyConfiguration.h"
 #include "KoTextTableTemplate.h"
 
-class KoTextSharedLoadingData::Private
+class Q_DECL_HIDDEN KoTextSharedLoadingData::Private
 {
 public:
     Private()

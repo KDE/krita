@@ -36,7 +36,6 @@
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
@@ -55,6 +54,7 @@
 #include <QPrintDialog>
 #include <QToolBar>
 #include <QUrl>
+#include <QMoveEvent>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -100,7 +100,7 @@ QString KisView::newObjectName()
 
 bool KisView::s_firstView = true;
 
-class KisView::Private
+class Q_DECL_HIDDEN KisView::Private
 {
 public:
     Private()
@@ -1031,9 +1031,7 @@ void KisView::slotImageResolutionChanged()
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
                 setResource(KoCanvasResourceManager::Unit, d->canvas->unit());
-
     }
-
 }
 
 void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
@@ -1041,7 +1039,6 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateGUI();
 }
-
 
 #include <KisView_p.moc>
 #include <KisView.moc>

@@ -30,7 +30,7 @@
 #include <QStylePainter>
 #include <QStyleOptionFrame>
 
-class KoDockWidgetTitleBarButton::Private
+class Q_DECL_HIDDEN KoDockWidgetTitleBarButton::Private
 {
 public:
     Private() : styleSize(0, 0), iconSize(0) {}

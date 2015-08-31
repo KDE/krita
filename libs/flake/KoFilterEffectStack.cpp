@@ -26,7 +26,7 @@
 #include <QSet>
 #include <QDebug>
 
-class KoFilterEffectStack::Private
+class Q_DECL_HIDDEN KoFilterEffectStack::Private
 {
 public:
     Private()

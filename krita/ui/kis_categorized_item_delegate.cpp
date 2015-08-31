@@ -86,6 +86,16 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
         for(int i=0; i<index.model()->rowCount(); i++) {
             QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
             m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
+
+            /**
+             * Make all the items, including the ones having
+             * checkboxes look the same.
+             */
+            QStyle *style = QApplication::style();
+            QStyleOptionButton so;
+            QSize size = style->sizeFromContents(QStyle::CT_CheckBox, &so, QSize(), 0);
+
+            m_minimumItemHeight = qMax(size.height(), m_minimumItemHeight);
         }
     }
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);

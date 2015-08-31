@@ -29,7 +29,6 @@
 
 #include <KoToolManager.h>
 
-class QToolButton;
 class KoCanvasController;
 class KoShapeLayer;
 
@@ -53,21 +52,6 @@ public:
     /// constructor
     explicit KoToolBox();
     ~KoToolBox();
-
-    /**
-     * Add a button to the toolbox.
-     * The buttons should all be added before the first showing since adding will not really add
-     * them to the UI until setup() is called.
-     *
-     * @param button the new button.  Please make sure you connect to the button yourself.
-     * @param section the section in which this button will be shown.  Each section will be its own
-     *        widget.
-     * @param priority the priority in the section. Lowest value means it will be shown first.
-     * @param buttonGroupId if passed this will allow you to use setActiveTool() to trigger
-     *      this button
-     * @see setup()
-     */
-    void addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId=-1);
 
 public Q_SLOTS:
     /**
@@ -94,11 +78,22 @@ public Q_SLOTS:
 
     void setFloating(bool v);
 
+private:
+    /**
+     * Add a button to the toolbox.
+     * The buttons should all be added before the first showing since adding will not really add
+     * them to the UI until setup() is called.
+     *
+     * @param toolAction the action of the tool
+     * @see setup()
+     */
+    void addButton(KoToolAction *toolAction);
+
 private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
-    void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
+    void toolAdded(KoToolAction *toolAction, KoCanvasController *canvas);
 
     /// resize the toolbox to show the icons without any gap at the edge
     void adjustToFit();

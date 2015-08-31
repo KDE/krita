@@ -18,6 +18,7 @@
 #include "psd_import.h"
 
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KisFilterChain.h>
 

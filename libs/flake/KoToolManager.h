@@ -35,20 +35,52 @@ class KoToolBase;
 class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
-class QToolButton;
 class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
 class ToolHelper;
+class KShortcut;
 
 class QCursor;
 
-/// Struct for the createToolList return type.
-struct KoToolButton {
-    QToolButton *button;///< a newly created button.
-    QString section;        ///< The section the button wants to be in.
-    int priority;           ///< Lower number (higher priority) means coming first in the section.
-    int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
-    QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
+/**
+ * This class serves as a QAction-like control object for activation of a tool.
+ *
+ * It allows to implement a custom UI to control the activation of tools.
+ * See KoToolBox & KoModeBox in the kowidgets library.
+ *
+ * KoToolAction objects are indirectly owned by the KoToolManager singleton
+ * and live until the end of its lifetime.
+ */
+class FLAKE_EXPORT KoToolAction : public QObject
+{
+    Q_OBJECT
+public:
+    // toolHelper takes over ownership, and those live till the end of KoToolManager.
+    explicit KoToolAction(ToolHelper *toolHelper);
+    ~KoToolAction();
+
+public:
+    QString id() const;             ///< The id of the tool
+    QString iconText() const;       ///< The icontext of the tool
+    QString toolTip() const;        ///< The tooltip of the tool
+    QString iconName() const;       ///< The icon name of the tool
+    KShortcut shortcut() const;     ///< The shortcut to activate the tool
+
+    QString section() const;        ///< The section the tool wants to be in.
+    int priority() const;           ///< Lower number (higher priority) means coming first in the section.
+    int buttonGroupId() const;      ///< A unique ID for this tool as passed by changedTool(), >= 0
+    QString visibilityCode() const; ///< This tool should become visible when we emit this string in toolCodesSelected()
+
+public Q_SLOTS:
+    void trigger();                 ///< Request the activation of the tool
+
+Q_SIGNALS:
+    void changed();                 ///< Emitted when a property changes (shortcut ATM)
+
+private:
+    friend class ToolHelper;
+    class Private;
+    Private *const d;
 };
 
 
@@ -186,11 +218,10 @@ public:
     QString preferredToolForSelection(const QList<KoShape*> &shapes);
 
     /**
-     * Create a list of buttons to represent all the tools.
-     * @returns a list of Buttons.
-     * This is a factory method for buttons and meta information on the button to better display the button.
+     * Returns the list of toolActions for the current tools.
+     * @returns lists of toolActions for the current tools.
      */
-    QList<KoToolButton> createToolList() const;
+    QList<KoToolAction*> toolActionList() const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
@@ -285,7 +316,7 @@ Q_SIGNALS:
     /**
      * emitted whenever a new tool is dynamically added for the given canvas
      */
-    void addedTool(const KoToolButton &button, KoCanvasController *canvas);
+    void addedTool(KoToolAction *toolAction, KoCanvasController *canvas);
 
 private:
     KoToolManager();

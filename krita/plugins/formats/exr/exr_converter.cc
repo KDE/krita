@@ -31,10 +31,9 @@
 #include "exr_extra_tags.h"
 
 #include <QApplication>
-
 #include <QMessageBox>
 
-#include <kio/netaccess.h>
+#include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
@@ -841,22 +840,11 @@ KisImageBuilder_Result exrConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::DestinationSide, QApplication::activeWindow())) {
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
+    return decode(uri);
 
-    // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    QString tmpFile;
-
-    if (KIO::NetAccess::download(uri, tmpFile, qApp->activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
-        result = decode(uriTF);
-        KIO::NetAccess::removeTempFile(tmpFile);
-    }
-
-    return result;
 }
 
 

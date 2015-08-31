@@ -31,7 +31,7 @@
 
 #include <kdebug.h>
 
-class KoResourceSelector::Private
+class Q_DECL_HIDDEN KoResourceSelector::Private
 {
 public:
     Private() : displayMode(ImageMode) {}

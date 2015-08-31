@@ -27,7 +27,8 @@
 #include <kdebug.h>
 #include <QAction>
 
-class KoPasteController::Private {
+class Q_DECL_HIDDEN KoPasteController::Private
+{
 public:
     Private(KoPasteController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a) {
     }

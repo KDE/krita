@@ -38,6 +38,7 @@ KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProx
                                            QWidget *parent)
     : KisShadeSelectorLineBase(parent),
       m_displayHelpText(false),
+      m_cachedColorSpace(0),
       m_parentProxy(parentProxy)
 {
     setParam(0, 0, 0, 0, 0, 0);
@@ -49,6 +50,7 @@ KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal
                                            KisColorSelectorBaseProxy *parentProxy, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
     KisShadeSelectorLineBase(parent),
     m_displayHelpText(false),
+    m_cachedColorSpace(0),
     m_parentProxy(parentProxy)
 {
     setParam(hueDelta, satDelta, valDelta, hueShift, satShift, valShift);

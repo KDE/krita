@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 
 class QListWidget;
 
-class KisImportExportManager::Private
+class Q_DECL_HIDDEN KisImportExportManager::Private
 {
 public:
     bool batch;

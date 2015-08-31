@@ -59,6 +59,7 @@ private:
     void outlineOn(KisPaintingAssistant* assistant);
     void outlineOff(KisPaintingAssistant* assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
+    QPointF straightLine(QPointF point, QPointF compare);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 
 public Q_SLOTS:
@@ -84,6 +85,9 @@ protected:
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;
+    QPointF m_dragStart;
+    QLineF m_radius;
+    bool m_snapIsRadial;
     QPointF m_dragEnd;
 
 private:
@@ -98,7 +102,7 @@ class KisRulerAssistantToolFactory : public KoToolFactoryBase
 public:
     KisRulerAssistantToolFactory()
             : KoToolFactoryBase("KisRulerAssistantTool") {
-        setToolTip(i18n("Ruler assistant editor tool"));
+        setToolTip(i18n("Assistant Tool"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
         setPriority(0);

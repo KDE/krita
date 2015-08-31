@@ -26,7 +26,7 @@
 #include <klocale.h>
 // #include <kdebug.h>
 
-class KoShapeAlignCommand::Private
+class Q_DECL_HIDDEN KoShapeAlignCommand::Private
 {
 public:
     Private() : command(0) {}

@@ -52,6 +52,45 @@ bool KoDummyColorProfile::isSuitableForDisplay() const
 {
     return true;
 }
+bool KoDummyColorProfile::hasColorants() const
+{
+    return true;
+}
+
+QVector<double> KoDummyColorProfile::getColorantsXYZ() const
+{
+    QVector<double> d50Dummy(3);
+    d50Dummy<<0.34773<<0.35952<<1.0;
+    return d50Dummy;
+}
+
+QVector<double> KoDummyColorProfile::getColorantsxyY() const
+{
+    QVector<double> d50Dummy(3);
+    d50Dummy<<0.34773<<0.35952<<1.0;
+    return d50Dummy;
+}
+
+QVector<double> KoDummyColorProfile::getWhitePointXYZ() const
+{
+    QVector<double> d50Dummy(3);
+    d50Dummy<<0.9642<<1.0000<<0.8249;
+    return d50Dummy;
+}
+
+QVector<double> KoDummyColorProfile::getWhitePointxyY() const
+{
+    QVector<double> d50Dummy(3);
+    d50Dummy<<0.34773<<0.35952<<1.0;
+    return d50Dummy;
+}
+
+QVector <double> KoDummyColorProfile::getEstimatedTRC() const
+{
+    QVector<double> Dummy(3);
+    Dummy.fill(2.2);
+    return Dummy;
+}
 
 bool KoDummyColorProfile::operator==(const KoColorProfile& rhs) const
 {

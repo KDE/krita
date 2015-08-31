@@ -35,7 +35,7 @@
 #endif
 
 
-class KisShortcutMatcher::Private
+class Q_DECL_HIDDEN KisShortcutMatcher::Private
 {
 public:
     Private()

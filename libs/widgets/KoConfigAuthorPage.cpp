@@ -40,7 +40,7 @@
 #include <QToolButton>
 #include <QInputDialog>
 
-class KoConfigAuthorPage::Private
+class Q_DECL_HIDDEN KoConfigAuthorPage::Private
 {
 public:
     QList<Ui::KoConfigAuthorPage *> profileUiList;

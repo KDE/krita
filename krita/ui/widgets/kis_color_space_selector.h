@@ -21,10 +21,12 @@
 #define _KIS_COLOR_SPACE_SELECTOR_H_
 
 #include <QWidget>
+#include "kis_advanced_color_space_selector.h"
 #include <kritaui_export.h>
 
 class KoID;
 class KoColorSpace;
+class KisAdvancedColorSpaceSelector;
 
 class KRITAUI_EXPORT KisColorSpaceSelector : public QWidget
 {
@@ -53,8 +55,11 @@ private Q_SLOTS:
     void uploadProfile();
     void downloadProfile();
     void buttonUpdate();
+    void slotOpenAdvancedSelector();
+    void slotProfileValid(bool valid);
 private:
     struct Private;
+    KisAdvancedColorSpaceSelector* m_advancedSelector;
     Private * const d;
 };
 

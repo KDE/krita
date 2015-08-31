@@ -24,6 +24,11 @@ KisLockedPropertiesServer::KisLockedPropertiesServer()
     m_propertiesFromLocked = false;
 }
 
+KisLockedPropertiesServer::~KisLockedPropertiesServer()
+{
+    delete m_lockedProperties;
+}
+
 KisLockedPropertiesProxy* KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfiguration* config)
 {
     KisLockedPropertiesProxy* m = new KisLockedPropertiesProxy(config, lockedProperties());

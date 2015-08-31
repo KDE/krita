@@ -64,6 +64,9 @@ light_onion_skin_options.png
 
 mirrorAxis-HorizontalMove.png
 mirrorAxis-VerticalMove.png
+visible.svg
+novisible.svg
+dirty-preset.svg
 
 dark_selection-mode_ants.png
 dark_selection-mode_invisible.png
@@ -71,21 +74,21 @@ dark_selection-mode_mask.png
 dark_trim-to-image.png
 dark_layer-locked.png
 dark_layer-unlocked.png
-dark_novisible.png
-dark_visible.png
 dark_transparency-enabled.png
 dark_transparency-disabled.png
+dark_novisible.svg
+dark_visible.svg
 
 light_transparency-enabled.png
 light_transparency-disabled.png
 light_layer-locked.png
 light_layer-unlocked.png
-light_novisible.png
-light_visible.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png
 light_trim-to-image.png
+light_novisible.svg
+light_visible.svg
 
 layerbox/dark_addlayer.png
 layerbox/dark_addtofolder.png
@@ -104,6 +107,7 @@ layerbox/light_duplicatelayer.png
 layerbox/light_properties.png
 layerbox/light_removefromfolder.png
 
+misc-light/light_draw-eraser.svg
 misc-light/light_ox16-action-object-align-horizontal-center-calligra.svg
 misc-light/light_ox16-action-object-align-horizontal-left-calligra.svg
 misc-light/light_ox16-action-object-align-horizontal-right-calligra.svg
@@ -127,6 +131,7 @@ misc-light/light_stroke-join-round.svg
 misc-light/light_symmetry-horizontal.svg
 misc-light/light_symmetry-vertical.svg
 
+misc-dark/dark_draw-eraser.svg
 misc-dark/dark_ox16-action-object-align-horizontal-center-calligra.svg
 misc-dark/dark_ox16-action-object-align-horizontal-left-calligra.svg
 misc-dark/dark_ox16-action-object-align-horizontal-right-calligra.svg
@@ -228,6 +233,7 @@ tool_transform/dark_transform_icons_main.png
 tool_transform/dark_transform_icons_perspective.png
 tool_transform/dark_transform_icons_warp.png
 tool_transform/dark_transform_icons_penPressure.png
+tool_transform/dark_krita_tool_transform_recursive.png
 
 tool_transform/light_transform_icons_cage.png
 tool_transform/light_transform_icons_liquify_erase.png
@@ -241,6 +247,7 @@ tool_transform/light_transform_icons_main.png
 tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
 tool_transform/light_transform_icons_penPressure.png
+tool_transform/light_krita_tool_transform_recursive.png
 
 Breeze-dark/dark_application-exit.svg
 Breeze-dark/dark_application-pdf.svg
@@ -268,7 +275,6 @@ Breeze-dark/dark_document-print.svg
 Breeze-dark/dark_document-save-as.svg
 Breeze-dark/dark_document-save.svg
 Breeze-dark/dark_download.svg
-Breeze-dark/dark_draw-eraser.svg
 Breeze-dark/dark_drive-harddisk.svg
 Breeze-dark/dark_edit-clear.svg
 Breeze-dark/dark_edit-copy.svg
@@ -346,7 +352,6 @@ Breeze-light/light_document-print.svg
 Breeze-light/light_document-save-as.svg
 Breeze-light/light_document-save.svg
 Breeze-light/light_download.svg
-Breeze-light/light_draw-eraser.svg
 Breeze-light/light_drive-harddisk.svg
 Breeze-light/light_edit-clear.svg
 Breeze-light/light_edit-copy.svg

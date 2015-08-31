@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-class KoShapeClipCommand::Private
+class Q_DECL_HIDDEN KoShapeClipCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c)

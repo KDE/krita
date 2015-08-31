@@ -40,7 +40,7 @@
 
 #include "FrameIterator.h"
 
-class KoTextLayoutTableArea::Private
+class Q_DECL_HIDDEN KoTextLayoutTableArea::Private
 {
 public:
     Private()

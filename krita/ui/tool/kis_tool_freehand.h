@@ -91,6 +91,7 @@ protected Q_SLOTS:
     void explicitUpdateOutline();
     virtual void resetCursorStyle();
     void setAssistant(bool assistant);
+    void setOnlyOneAssistantSnap(bool assistant);
 
 private:
     friend class KisToolFreehandPaintingInformationBuilder;
@@ -114,6 +115,7 @@ protected:
     KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;
     double m_magnetism;
+    bool m_only_one_assistant;
 
 private:
     KisPaintingInformationBuilder *m_infoBuilder;

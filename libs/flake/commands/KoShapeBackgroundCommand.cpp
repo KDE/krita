@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-class KoShapeBackgroundCommand::Private
+class Q_DECL_HIDDEN KoShapeBackgroundCommand::Private
 {
 public:
     Private() {

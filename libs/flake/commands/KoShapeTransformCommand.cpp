@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 
-class KoShapeTransformCommand::Private
+class Q_DECL_HIDDEN KoShapeTransformCommand::Private
 {
 public:
     Private(const QList<KoShape*> &list) : shapes(list) { }

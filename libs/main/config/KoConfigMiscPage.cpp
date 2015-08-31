@@ -39,7 +39,7 @@
 #include <QLabel>
 #include <QCheckBox>
 
-class KoConfigMiscPage::Private
+class Q_DECL_HIDDEN KoConfigMiscPage::Private
 {
 public:
     Private(KoDocument* doc, KoDocumentResourceManager *documentResources)

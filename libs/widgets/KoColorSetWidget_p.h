@@ -44,7 +44,7 @@
 
 class KoColorPatch;
 
-class KoColorSetWidget::KoColorSetWidgetPrivate {
+class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
     QPointer<KoColorSet> colorSet;

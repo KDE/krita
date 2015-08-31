@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportManager.h"
 #include "KoUpdater.h"
 
-class KisImportExportFilter::Private
+class Q_DECL_HIDDEN KisImportExportFilter::Private
 {
 public:
     QPointer<KoUpdater> updater;

@@ -53,9 +53,6 @@ protected:
  * The ModeBox is a container for tool buttons which are themselves
  * divided into sections.
  *
- * Adding buttons using addButton() will allow you to show those buttons.  You should connect
- * the button to your handling method yourself.
- *
  * @see KoToolManager
  */
 class KoModeBox : public QWidget {
@@ -64,21 +61,6 @@ public:
     /// constructor
     explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
     ~KoModeBox();
-
-    /**
-     * Add a button to the modebox.
-     * The buttons should all be added before the first showing since adding will not really add
-     * them to the UI until setup() is called.
-     *
-     * @param button the new button.  Please make sure you connect to the button yourself.
-     * @param section the section in which this button will be shown.  Each section will be its own
-     *        widget.
-     * @param priority the priority in the section. Lowest value means it will be shown first.
-     * @param buttonGroupId if passed this will allow you to use setActiveTool() to trigger
-     *      this button
-     * @see setup()
-     */
-    void addButton(const KoToolButton &button);
 
     /**
      * Should been called when the docker position has changed.
@@ -115,7 +97,7 @@ private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
-    void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
+    void toolAdded(KoToolAction *toolAction, KoCanvasController *canvas);
 
     /// slot for when a new item have been selected in the QToolBox
     void toolSelected(int index);
@@ -128,6 +110,16 @@ private Q_SLOTS:
 
     /// switch tabs side
     void switchTabsSide(int);
+
+    /**
+     * Add a tool to the modebox.
+     * The tools should all be added before the first showing since adding will not really add
+     * them to the UI until setup() is called.
+     *
+     * @param toolAction the action of the tool
+     * @see setup()
+     */
+    void addToolAction(KoToolAction *toolAction);
 
 public:
     static QString applicationName;
@@ -148,9 +140,9 @@ private:
         RightSide
     };
 
-    QIcon createTextIcon(const KoToolButton &button) const;
-    QIcon createSimpleIcon(const KoToolButton &button) const;
-    void addItem(const KoToolButton &button);
+    QIcon createTextIcon(KoToolAction *toolAction) const;
+    QIcon createSimpleIcon(KoToolAction *toolAction) const;
+    void addItem(KoToolAction *toolAction);
 
 private:
     class Private;

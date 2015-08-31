@@ -59,7 +59,7 @@
 
 #include <QPainter>
 
-class KoPADocument::Private
+class Q_DECL_HIDDEN KoPADocument::Private
 {
 public:
     QList<KoPAPageBase*> pages;

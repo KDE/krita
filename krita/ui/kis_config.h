@@ -483,13 +483,13 @@ public:
     }
 
 
+    /// get the profile the color managment system has stored for the given screen
+    static const KoColorProfile* getScreenProfile(int screen);
 
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&) const;
 
-    /// get the profile the color managment system has stored for the given screen
-    static const KoColorProfile* getScreenProfile(int screen);
 
 private:
     mutable KConfigGroup m_cfg;

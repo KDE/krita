@@ -28,7 +28,7 @@ enum enumState {
 /**
  * Private members for KisCurveWidget class
  */
-class KisCurveWidget::Private
+class Q_DECL_HIDDEN KisCurveWidget::Private
 {
 
     KisCurveWidget *m_curveWidget;

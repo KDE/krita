@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WdgColorSpaceSelector</class>
  <widget class="QWidget" name="WdgColorSpaceSelector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>318</width>
+    <height>128</height>
+   </rect>
+  </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="labelAlignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -116,6 +124,30 @@
        </property>
        <property name="text">
         <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="lblColorantInfo">
+       <property name="text">
+        <string notr="true">TextLabel</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnAdvanced">
+       <property name="text">
+        <string>Color Space Browser</string>
        </property>
       </widget>
      </item>

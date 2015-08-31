@@ -37,7 +37,7 @@
 
 #include <KoGenChanges.h>
 
-class KoShapeAnchor::Private
+class Q_DECL_HIDDEN KoShapeAnchor::Private
 {
 public:
     Private(KoShape *s)

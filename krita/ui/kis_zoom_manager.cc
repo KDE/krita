@@ -244,7 +244,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     if (m_view->viewManager()) {
         m_view->viewManager()->
                 showFloatingMessage(
-                    i18nc("floating message about zoom", "Zoom: %1 \%",
+                    i18nc("floating message about zoom", "Zoom: %1 %",
                           KritaUtils::prettyFormatReal(humanZoom)),
                     QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
     }

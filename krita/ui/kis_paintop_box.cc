@@ -197,6 +197,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     for (int i = 0; i < 3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
+
         KisDoubleSliderSpinBox* slOpacity;
         KisDoubleSliderSpinBox* slFlow;
         KisDoubleSliderSpinBox* slSize;
@@ -289,16 +290,19 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     view->actionCollection()->addAction("brushslider1", action);
     action->setDefaultWidget(m_sliderChooser[0]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[0], SLOT(showPopupWidget()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[0], SLOT(updateThemedIcons()));
 
     action = new KAction(i18n("Brush option slider 2"), this);
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[1], SLOT(updateThemedIcons()));
 
     action = new KAction(i18n("Brush option slider 3"), this);
     view->actionCollection()->addAction("brushslider3", action);
     action->setDefaultWidget(m_sliderChooser[2]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[2], SLOT(showPopupWidget()));
+        connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[2], SLOT(updateThemedIcons()));
 
     action = new KAction(i18n("Next Favourite Preset"), this);
     view->actionCollection()->addAction("next_favorite_preset", action);
@@ -353,8 +357,10 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
-    m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
+    m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);       
     m_presetsPopup->switchDetached(false);
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(slotUpdateThemedIcons()));
+
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setFixedSize(500, 600);
@@ -1158,4 +1164,15 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 {
     m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
+
+    KisConfig cfg;
+    if (!cfg.toolOptionsInDocker()) {
+        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
+    }
+
+    m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
+    m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
+
+
 }

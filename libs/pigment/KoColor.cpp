@@ -34,7 +34,7 @@
 #include "KoChannelInfo.h"
 
 
-class KoColor::Private
+class Q_DECL_HIDDEN KoColor::Private
 {
 public:
     Private() : data(0), colorSpace(0) {}
@@ -50,9 +50,9 @@ public:
 KoColor::KoColor()
         : d(new Private())
 {
-    d->colorSpace = KoColorSpaceRegistry::instance()->lab16(0);
+    d->colorSpace = KoColorSpaceRegistry::instance()->rgb16(0);
     d->data = new quint8[d->colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
+    d->colorSpace->fromQColor(Qt::black, d->data);
     d->colorSpace->setOpacity(d->data, OPACITY_OPAQUE_U8, 1);
 }
 
@@ -64,7 +64,6 @@ KoColor::KoColor(const KoColorSpace * colorSpace)
     d->data = new quint8[d->colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 }
-
 
 KoColor::~KoColor()
 {

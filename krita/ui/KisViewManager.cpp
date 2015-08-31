@@ -46,7 +46,6 @@
 
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmenu.h>
@@ -407,9 +406,6 @@ void KisViewManager::setCurrentView(KisView *view)
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
-        d->viewConnections.addUniqueConnection(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
-        resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
-
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
@@ -1005,7 +1001,7 @@ void KisViewManager::slotSaveIncremental()
             newVersion.append(".");
         }
         fileName.replace(regex, newVersion);
-        fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, mainWindow());
+        fileAlreadyExists = QFile(fileName).exists();
         if (fileAlreadyExists) {
             if (!letter.isNull()) {
                 char letterCh = letter.at(0).toLatin1();
@@ -1076,7 +1072,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, mainWindow());
+            fileAlreadyExists = QFile(backupFileName).exists();
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
@@ -1116,7 +1112,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, mainWindow());
+            fileAlreadyExists = QFile(backupFileName).exists();
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
                 int intVersion = baseNewVersion.toInt(0);
@@ -1210,8 +1206,16 @@ void KisViewManager::showJustTheCanvas(bool toggled)
     if (cfg.hideToolbarFullscreen()) {
         QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
         foreach(QToolBar* toolbar, toolBars) {
-            if (toolbar->isVisible() == toggled) {
-                toolbar->setVisible(!toggled);
+            if (!toggled) {
+                if (toolbar->dynamicPropertyNames().contains("wasvisible")) {
+                    if (toolbar->property("wasvisible").toBool()) {
+                        toolbar->setVisible(true);
+                    }
+                }
+            }
+            else {
+                toolbar->setProperty("wasvisible", toolbar->isVisible());
+                toolbar->setVisible(false);
             }
         }
     }

@@ -38,7 +38,7 @@
 
 #include "KoTagToolButton.h"
 
-class KoTagChooserWidget::Private
+class Q_DECL_HIDDEN KoTagChooserWidget::Private
 {
 public:
     KComboBox* comboBox;

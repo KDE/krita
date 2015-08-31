@@ -26,6 +26,13 @@
 
 
 namespace KisToolUtils {
+
+/**
+ * return the color at the given position on the given paint device.
+ * NOTE: the function takes wraparound mode and image locking into account
+ */
+bool pickWrapped(KisPaintDeviceSP dev, QPoint pos, KoColor *color, KisImageSP image);
+
 /**
  * return the color at the given position on the given paint device.
  */

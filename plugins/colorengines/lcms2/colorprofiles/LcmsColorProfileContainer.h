@@ -81,6 +81,12 @@ public:
     virtual bool isSuitableForPrinting() const;
 
     virtual bool isSuitableForDisplay() const;
+    virtual bool hasColorants() const;
+    virtual QVector <double> getColorantsXYZ() const;
+    virtual QVector <double> getColorantsxyY() const;
+    virtual QVector <double> getWhitePointXYZ() const;
+    virtual QVector <double> getWhitePointxyY() const;
+    virtual QVector <double> getEstimatedTRC() const;
     virtual QString name() const;
     virtual QString info() const;
 

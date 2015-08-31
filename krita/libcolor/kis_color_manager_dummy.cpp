@@ -20,7 +20,7 @@
 
 #include <kglobal.h>
 
-class KisColorManager::Private {
+class Q_DECL_HIDDEN KisColorManager::Private {
 public:
     // we are too dumb for that :)
 };

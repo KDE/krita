@@ -19,7 +19,7 @@
 
 #include "KoShapeConnectionChangeCommand.h"
 
-class KoShapeConnectionChangeCommand::Private
+class Q_DECL_HIDDEN KoShapeConnectionChangeCommand::Private
 {
 public:
     Private()

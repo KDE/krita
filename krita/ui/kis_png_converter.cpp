@@ -39,7 +39,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kio/netaccess.h>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>
@@ -530,31 +529,30 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (!qAppName().toLower().contains("test")) {
-            if (!m_batchMode) {
-                KisConfig cfg;
-                quint32 behaviour = cfg.pasteBehaviour();
-                if (behaviour == PASTE_ASK) {
-                    KisDlgPngImport dlg(m_path, csName.first, csName.second);
-                    QApplication::restoreOverrideCursor();
-                    dlg.exec();
-                    if (!dlg.profile().isEmpty()) {
+        if (color_nb_bits == 16 && !qAppName().toLower().contains("test") && !m_batchMode) {
+            KisConfig cfg;
+            quint32 behaviour = cfg.pasteBehaviour();
+            if (behaviour == PASTE_ASK) {
+                KisDlgPngImport dlg(m_path, csName.first, csName.second);
+                QApplication::restoreOverrideCursor();
+                dlg.exec();
+                if (!dlg.profile().isEmpty()) {
 
-                        QString s = KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
+                    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
 
-                        const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
-                        if (csf) {
-                            QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-                            foreach(const KoColorProfile *p, profileList) {
-                                if (p->name() == dlg.profile()) {
-                                    profile = p;
-                                    break;
-                                }
+                    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
+                    if (csf) {
+                        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+                        foreach(const KoColorProfile *p, profileList) {
+                            if (p->name() == dlg.profile()) {
+                                profile = p;
+                                break;
                             }
                         }
                     }
-                    QApplication::setOverrideCursor(Qt::WaitCursor);
                 }
+                QApplication::setOverrideCursor(Qt::WaitCursor);
+
             }
         }
         dbgFile << "no embedded profile, will use the default profile";
@@ -782,35 +780,18 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
     m_path = uri.prettyUrl();
 
-    // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    QString tmpFile;
-
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
-
-        // open the file
-        dbgFile << QFile::encodeName(uriTF.toLocalFile()) << " " << uriTF.toLocalFile() << " " << uriTF;
-        //         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
-        QFile *fp = new QFile(uriTF.toLocalFile());
-        if (fp->exists()) {
-            result = buildImage(fp);
-        } else {
-            result = (KisImageBuilder_RESULT_NOT_EXIST);
-        }
-
-        delete fp;
-        KIO::NetAccess::removeTempFile(tmpFile);
+    QFile fp(uri.toLocalFile());
+    if (fp.exists()) {
+        return buildImage(&fp);
     }
+    return (KisImageBuilder_RESULT_NOT_EXIST);
 
-    return result;
 }
 
 

@@ -161,7 +161,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, false);
         showControl(m_chkSmoothPressure, false);
-        showControl(m_chkUseScalableDistance, false);
+        showControl(m_chkUseScalableDistance, true);
         showControl(m_sliderDelayDistance, true);
         showControl(m_chkFinishStabilizedCurve, true);
         showControl(m_chkStabilizeSensors, true);
@@ -400,6 +400,11 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
     m_chkUseScalableDistance->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
                                                     m_chkUseScalableDistance->sizeHint().height()));
+    m_chkUseScalableDistance->setToolTip(i18nc("@info:tooltip",
+                                               "Scalable distance takes zoom level "
+                                               "into account and makes the distance "
+                                               "be visually constant whatever zoom "
+                                               "level is chosen"));
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
     addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance"))));
 
@@ -416,6 +421,7 @@ QWidget * KisToolBrush::createOptionWidget()
     assistantWidget->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     assistantLayout->addWidget(m_chkAssistant);
+
     m_sliderMagnetism = new KisSliderSpinBox(optionsWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
     m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
@@ -423,13 +429,20 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
-
+    
     KAction *toggleaction = new KAction(i18n("Toggle Assistant"), this);
     addAction("toggle_assistant", toggleaction);
     toggleaction->setShortcut(KShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
     addOptionWidgetOption(m_sliderMagnetism, assistantWidget);
+    
+    m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
+    m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant, prevents snapping mess while using the infinite assistants."));
+    m_chkOnlyOneAssistant->setCheckState(Qt::Checked);//turn on by default.
+    connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
+    addOptionWidgetOption(m_chkOnlyOneAssistant, new QLabel(i18n("Snap single:")));
+
 
     //load settings from configuration kritarc file
     slotSetSmoothingType((int)m_configGroup.readEntry("smoothingType", 0));

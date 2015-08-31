@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kurl.h>
 
-class KoFileDialog::Private
+class Q_DECL_HIDDEN KoFileDialog::Private
 {
 public:
     Private(QWidget *parent_,
@@ -119,14 +119,9 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir, bool override)
 {
-    if (override || d->defaultDirectory.isEmpty() || !QDir(d->defaultDirectory).exists()) {
+    if (override || d->defaultDirectory.isEmpty() || !QFile(d->defaultDirectory).exists()) {
         QFileInfo f(defaultDir);
-        if (!f.isDir()) {
-            d->defaultDirectory = f.absoluteDir().canonicalPath();
-        }
-        else {
-            d->defaultDirectory = defaultDir;
-        }
+        d->defaultDirectory = f.absoluteFilePath();
     }
 }
 
@@ -230,7 +225,7 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    d->fileDialog.reset( new QFileDialog(d->parent, d->caption, d->defaultDirectory) );
+    d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory));
 
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);

@@ -108,7 +108,7 @@ public:
     KisToolMeasureFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolMeasure") {
         setToolType(TOOL_TYPE_TRANSFORM);
-        setToolTip(i18n("Measure the distance between two points"));
+        setToolTip(i18n("Measure Tool"));
         setIconName(koIconNameCStr("krita_tool_measure"));
         setPriority(16);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

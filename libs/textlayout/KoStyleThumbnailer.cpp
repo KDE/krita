@@ -49,7 +49,7 @@
 extern int qt_defaultDpiX();
 extern int qt_defaultDpiY();
 
-class KoStyleThumbnailer::Private
+class Q_DECL_HIDDEN KoStyleThumbnailer::Private
 {
 public:
     Private() :

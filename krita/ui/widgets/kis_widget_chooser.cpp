@@ -31,6 +31,8 @@
 #include <QStylePainter>
 #include <QStyleOption>
 
+#include <kis_icon_utils.h>
+
 #include "kis_config.h"
 
 KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
@@ -39,7 +41,7 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
 {
 //     QFrame::setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 
-    m_acceptIcon  = themedIcon("list-add");
+    m_acceptIcon  = KisIconUtils::loadIcon("list-add");
     m_buttons     = new QButtonGroup();
     m_popup       = new QFrame(0, Qt::Popup);
     m_arrowButton = new QToolButton();
@@ -138,6 +140,8 @@ QLayout* KisWidgetChooser::createPopupLayout()
         if(!i->choosen) {
             if(row == buttons.size()) {
                 QToolButton* bn = new QToolButton();
+
+                m_acceptIcon  = KisIconUtils::loadIcon("list-add");
                 bn->setIcon(m_acceptIcon);
                 bn->setAutoRaise(true);
                 buttons.push_back(bn);
@@ -243,6 +247,16 @@ void KisWidgetChooser::showPopupWidget()
 
     m_popup->setGeometry(popupRect);
     m_popup->show();
+}
+
+
+void KisWidgetChooser::updateThemedIcons()
+{
+    for (int i = 0; i < m_buttons->buttons().length(); i++) {
+         if ( m_buttons->button(i)) {
+              m_buttons->button(i)->setIcon(KisIconUtils::loadIcon("list-add"));
+         }
+    }
 }
 
 void KisWidgetChooser::slotButtonPressed()

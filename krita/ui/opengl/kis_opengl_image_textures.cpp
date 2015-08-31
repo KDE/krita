@@ -22,6 +22,8 @@
 #include <QGLWidget>
 
 #include <QMessageBox>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -29,6 +31,7 @@
 
 #include "kis_image.h"
 #include "kis_config.h"
+#include "KisPart.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -114,7 +117,15 @@ KisImageSP KisOpenGLImageTextures::image() const
 bool KisOpenGLImageTextures::imageCanShareTextures()
 {
     KisConfig cfg;
-    return !cfg.useOcio();
+    if (cfg.useOcio()) return false;
+    if (KisPart::instance()->mainwindowCount() == 1) return true;
+    if (qApp->desktop()->screenCount() == 1) return true;
+    for (int i = 1; i < qApp->desktop()->screenCount(); i++) {
+        if (cfg.displayProfile(i) != cfg.displayProfile(i - 1)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
@@ -501,24 +512,26 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!m_internalColorManagementActive &&
         colorModelId != destinationColorModelId) {
 
-        QMessageBox::critical(0,
-                              i18nc("@title:window", "Internal color management was activated"),
-                              i18n("It was requested to disable final color "
-                                   "conversion for a image that has non-RGB "
-                                   "color space. This is a bug in Krita. "
-                                      "Please report us how you managed to get "
-                                      "this message.\n\n"
-                                      "Right now the internal color conversion "
-                                      "into the monitor profile will be activated. "
-                                      "Please take it into account if you use OCIO "
-                                      "or activated it for some other reason."));
+        KisConfig cfg;
+        KisConfig::OcioColorManagementMode cm = cfg.ocioColorManagementMode();
+
+        if (cm != KisConfig::INTERNAL) {
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Krita"),
+                                  i18n("You enabled OpenColorIO based color management, but your image is not an RGB image.\n"
+                                       "OpenColorIO-based color management only works with RGB images.\n"
+                                       "Please check the settings in the LUT docker."
+                                       "OpenColorIO will now be deactivated."));
+        }
 
         qWarning() << "WARNING: Internal color management was forcely enabled";
+        qWarning() << "Color Management Mode: " << cm;
         qWarning() << ppVar(m_image->colorSpace());
         qWarning() << ppVar(destinationColorModelId);
         qWarning() << ppVar(destinationColorDepthId);
 
-        m_internalColorManagementActive = false;
+        cfg.setOcioColorManagementMode(KisConfig::INTERNAL);
+        m_internalColorManagementActive = true;
     }
 
     const KoColorProfile *profile =

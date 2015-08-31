@@ -20,7 +20,7 @@
 #ifndef COLORSELECTORITEM_H
 #define COLORSELECTORITEM_H
 
-#include <QtDeclarative/qdeclarativeitem.h>
+#include <QDeclarativeItem>
 
 class KoColor;
 class ColorSelectorItem : public QDeclarativeItem

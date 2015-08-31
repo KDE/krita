@@ -203,14 +203,23 @@ bool SQLitePreparedStatement::execute()
 
     //real execution
     res = sqlite3_step(prepared_st_handle);
-    sqlite3_reset(prepared_st_handle);
-    if (m_type == InsertStatement && res == SQLITE_DONE) {
-        return true;
+    if (m_type == InsertStatement) {
+        const bool ok = res == SQLITE_DONE;
+        if (!ok) {
+            kDebug() << res << QString::fromLatin1(sqlite3_errmsg(data))
+                     << QString::fromLatin1(sqlite3_sql(prepared_st_handle));
+        }
+        sqlite3_reset(prepared_st_handle);
+        return ok;
     }
-    if (m_type == SelectStatement) {
-        //fetch result
-
-        //todo
+    else if (m_type == SelectStatement) {
+        //! @todo fetch result
+        const bool ok = res == SQLITE_ROW;
+        if (!ok) {
+            kDebug() << res << sqlite3_errmsg(data);
+        }
+        sqlite3_reset(prepared_st_handle);
+        return ok;
     }
     return false;
 }

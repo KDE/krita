@@ -46,6 +46,7 @@
 #include <QProgressBar>
 #include <QSignalMapper>
 #include <QTabBar>
+#include <QMoveEvent>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -61,7 +62,6 @@
 #include <kfileitem.h>
 #include <kglobalsettings.h>
 #include <khelpmenu.h>
-#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmenu.h>
@@ -153,7 +153,7 @@ public:
     }
 };
 
-class KisMainWindow::Private
+class Q_DECL_HIDDEN KisMainWindow::Private
 {
 public:
     Private(KisMainWindow *parent)
@@ -543,13 +543,10 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
 
-
         // XXX: should this be changed for the views in other windows as well?
         foreach(QPointer<KisView> koview, KisPart::instance()->views()) {
             KisViewManager *view = qobject_cast<KisViewManager*>(koview);
             if (view) {
-                view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-
                 // Update the settings for all nodes -- they don't query
                 // KisConfig directly because they need the settings during
                 // compositing, and they don't connect to the config notifier
@@ -579,8 +576,9 @@ void KisMainWindow::slotThemeChanged()
     emit themeChanged();
 }
 
-void KisMainWindow::updateReloadFileAction(KisDocument */*doc*/)
+void KisMainWindow::updateReloadFileAction(KisDocument *doc)
 {
+    Q_UNUSED(doc);
 //    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 
@@ -693,7 +691,7 @@ KisView *KisMainWindow::activeView() const
 
 bool KisMainWindow::openDocument(const KUrl & url)
 {
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
+    if (!QFile(url.toLocalFile()).exists()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
@@ -2292,6 +2290,14 @@ void KisMainWindow::showDockerTitleBars(bool show)
     KisConfig cfg;
     cfg.setShowDockerTitleBars(show);
 }
+
+void KisMainWindow::moveEvent(QMoveEvent *e)
+{
+    if (qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(e->oldPos())) {
+        KisConfigNotifier::instance()->notifyConfigChanged();
+    }
+}
+
 
 
 #include <KisMainWindow.moc>

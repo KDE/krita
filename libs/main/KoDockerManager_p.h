@@ -34,7 +34,7 @@
 #include "KoView.h"
 #include "KoMainWindow.h"
 
-class KoDockerManager::Private
+class Q_DECL_HIDDEN KoDockerManager::Private
 {
 public:
     Private(KoMainWindow *mw) :

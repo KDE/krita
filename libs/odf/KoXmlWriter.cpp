@@ -28,7 +28,7 @@
 static const int s_indentBufferLength = 100;
 static const int s_escapeBufferLen = 10000;
 
-class KoXmlWriter::Private
+class Q_DECL_HIDDEN KoXmlWriter::Private
 {
 public:
     Private(QIODevice* dev_, int indentLevel = 0) : dev(dev_), baseIndentLevel(indentLevel) {}

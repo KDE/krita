@@ -22,7 +22,8 @@
 #include "KoXmlNS.h"
 #include "KoXmlWriter.h"
 
-class KoOdfNumberDefinition::Private {
+class Q_DECL_HIDDEN KoOdfNumberDefinition::Private
+{
 public:
     QString prefix;
     QString suffix;

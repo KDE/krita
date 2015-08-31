@@ -183,6 +183,14 @@ public:
     Mode mode() const;
 
     /**
+     * If an store is opened for reading, then the directories
+     * of the store can be accessed via this function.
+     *
+     * @return a stringlist with all directories found
+     */
+    virtual QStringList directoryList() const;
+
+    /**
      * Enters one or multiple directories. In Read mode this actually
      * checks whether the specified directories exist and returns false
      * if they don't. In Write mode we don't create the directory, we

@@ -754,8 +754,8 @@ public:
     ~KoXmlNodeData();
 
     // generic properties
-    KoXmlNode::NodeType nodeType: 3;
-    bool loaded: 1;
+    KoXmlNode::NodeType nodeType;
+    bool loaded;
 
 #ifdef KOXML_COMPACT
     unsigned nodeDepth;

@@ -48,9 +48,11 @@
 struct KisColorSpaceSelector::Private {
     Ui_WdgColorSpaceSelector* colorSpaceSelector;
     QString knsrcFile;
+    bool profileValid;
+    QString defaultsuffix;
 };
 
-KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), d(new Private)
+KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), m_advancedSelector(0), d(new Private)
 {
     setObjectName("KisColorSpaceSelector");
     d->colorSpaceSelector = new Ui_WdgColorSpaceSelector;
@@ -93,8 +95,22 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     connect(d->colorSpaceSelector->bnUploadProfile, SIGNAL(clicked()), this, SLOT(uploadProfile()));
 
     d->knsrcFile = "kritaiccprofiles.knsrc";
+    d->defaultsuffix = " "+i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)");
+
+    connect(d->colorSpaceSelector->bnAdvanced, SIGNAL(clicked()), this,  SLOT(slotOpenAdvancedSelector()));
+
+
+    //d->colorSpaceSelector->lblColorSpaces->hide();
+    //d->colorSpaceSelector->lblColorModels->hide();
+    //d->colorSpaceSelector->lblProfiles->hide();
+    //d->colorSpaceSelector->cmbColorModels->hide();
+    //d->colorSpaceSelector->cmbColorDepth->hide();
+    //d->colorSpaceSelector->cmbProfile->hide();
+    //d->colorSpaceSelector->bnInstallProfile->hide();
 
     fillCmbProfiles();
+    d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());
+    d->colorSpaceSelector->lblColorantInfo->hide();
 }
 
 KisColorSpaceSelector::~KisColorSpaceSelector()
@@ -113,11 +129,19 @@ void KisColorSpaceSelector::fillCmbProfiles()
     if (csf == 0) return;
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-
+    QStringList profileNames;
     foreach(const KoColorProfile *profile, profileList) {
-        d->colorSpaceSelector->cmbProfile->addSqueezedItem(profile->name());
+        profileNames.append(profile->name());
     }
-    d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile());
+    qSort(profileNames);
+    foreach(QString stringName, profileNames) {
+        if (stringName==csf->defaultProfile()) {
+            d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName+d->defaultsuffix);
+        } else {
+            d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName);
+        }
+    }
+    d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile()+d->defaultsuffix);
     colorSpaceChanged();
 }
 
@@ -134,9 +158,19 @@ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(
-               d->colorSpaceSelector->cmbColorModels->currentItem().id(), d->colorSpaceSelector->cmbColorDepth->currentItem().id()
-               , d->colorSpaceSelector->cmbProfile->itemHighlighted());
+    QString profilenamestring = d->colorSpaceSelector->cmbProfile->itemHighlighted();
+    if (profilenamestring.contains(d->defaultsuffix)) {
+        profilenamestring.remove(d->defaultsuffix);
+        return KoColorSpaceRegistry::instance()->colorSpace(
+               d->colorSpaceSelector->cmbColorModels->currentItem().id(),
+               d->colorSpaceSelector->cmbColorDepth->currentItem().id(),
+               profilenamestring);
+    } else {
+        return KoColorSpaceRegistry::instance()->colorSpace(
+               d->colorSpaceSelector->cmbColorModels->currentItem().id(),
+               d->colorSpaceSelector->cmbColorDepth->currentItem().id(),
+               profilenamestring);
+    }
 }
 
 void KisColorSpaceSelector::setCurrentColorModel(const KoID& id)
@@ -166,9 +200,11 @@ void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
 void KisColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;
+    d->profileValid = valid;
     emit(selectionChanged(valid));
     if(valid) {
         emit colorSpaceChanged(currentColorSpace());
+        QString text = currentColorSpace()->profile()->name();
     }
 }
 
@@ -244,6 +280,30 @@ void KisColorSpaceSelector::buttonUpdate()
        return;
    }
    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
+}
+
+void KisColorSpaceSelector::slotOpenAdvancedSelector()
+{
+    if(!m_advancedSelector) {
+        m_advancedSelector = new KisAdvancedColorSpaceSelector(this, "Select a Colorspace");
+        m_advancedSelector->setModal(true);
+        m_advancedSelector->setCurrentColorSpace(currentColorSpace());
+        connect(m_advancedSelector, SIGNAL(selectionChanged(bool)), this, SLOT(slotProfileValid(bool)) );
+    }
+
+    QDialog::DialogCode result = (QDialog::DialogCode)m_advancedSelector->exec();
+
+    if(result) {
+        if (d->profileValid==true) {
+            setCurrentColorSpace(m_advancedSelector->currentColorSpace());
+            d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());
+        }
+    }
+}
+
+void KisColorSpaceSelector::slotProfileValid(bool valid)
+{
+    d->profileValid = valid;
 }
 
 #include "kis_color_space_selector.moc"

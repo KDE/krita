@@ -36,8 +36,6 @@
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
 
-#include <kio/netaccess.h>
-
 // calligra's headers
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>
@@ -77,14 +75,8 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     KUrl url(filename);
 
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
+    if (!url.isLocalFile()) {
         return KisImportExportFilter::FileNotFound;
-    }
-
-    // We're not set up to handle asynchronous loading at the moment.
-    QString tmpFile;
-    if (KIO::NetAccess::download(url, tmpFile, QApplication::activeWindow())) {
-        url.setPath(tmpFile);
     }
 
     Poppler::Document* pdoc = Poppler::Document::load(url.toLocalFile());
@@ -100,7 +92,6 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         dbgFile << "Error when reading the PDF";
         return KisImportExportFilter::StorageCreationError;
     }
-
 
     while (pdoc->isLocked()) {
         KPasswordDialog dlg(0);
@@ -157,24 +148,12 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         QImage img = page->renderToImage(wdg->intResolution->value(), wdg->intResolution->value(), 0, 0, width, height);
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
 
-// XXX: this rendering in tiles is a good idea, but: a) it is slower b) it is buggy -- see bug https://bugs.kde.org/show_bug.cgi?id=300554
-
-//        for (int x = 0; x < width; x += 1000) {
-//            int currentWidth = (x + 1000 > width) ? (width - x) : 1000;
-//            for (int y = 0; y < height; y += 1000) {
-//                int currentHeight = (y + 1000 > height) ? (height - x) : 1000;
-//                qDebug() << wdg->intHorizontal->value() << wdg->intVertical->value() << x << y << currentWidth << currentHeight;
-//                QImage img = page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight);
-//                layer->paintDevice()->convertFromQImage(img, 0, x, y);
-//            }
-//        }
         delete page;
         image->addNode(layer, image->rootLayer(), 0);
         loadUpdater->setProgress(*it + 1);
     }
 
     doc->setCurrentImage(image);
-    KIO::NetAccess::removeTempFile(tmpFile);
 
     delete pdoc;
     delete kdb;

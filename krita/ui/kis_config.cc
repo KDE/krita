@@ -54,7 +54,7 @@ KisConfig::KisConfig()
 KisConfig::~KisConfig()
 {
     if (qApp->thread() != QThread::currentThread()) {
-        qDebug() << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        //qDebug() << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
         return;
     }
 
@@ -404,20 +404,27 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
     KisConfig cfg;
-    QString monitorId = cfg.monitorForScreen(screen, "");
+    QString monitorId;
+    if (KisColorManager::instance()->devices().size() > screen) {
+        monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
+    }
+    //qDebug() << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;
+
     if (monitorId.isEmpty()) {
         return 0;
     }
 
     QByteArray bytes = KisColorManager::instance()->displayProfile(monitorId);
 
+    //qDebug() << "\tgetScreenProfile()" << bytes.size();
+
     if (bytes.length() > 0) {
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
-        //qDebug() << "KisConfig::getScreenProfile for screen" << screen << profile->name();
+        //qDebug() << "\tKisConfig::getScreenProfile for screen" << screen << profile->name();
         return profile;
     }
     else {
-        //qDebug() << "Could not get a system monitor profile";
+        //qDebug() << "\tCould not get a system monitor profile";
         return 0;
     }
 }
@@ -426,7 +433,7 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
 {
     // if the user plays with the settings, they can override the display profile, in which case
     // we don't want the system setting.
-    bool override = m_cfg.readEntry("monitorProfile/OverrideX11", false);
+    bool override = useSystemMonitorProfile();
     //qDebug() << "KisConfig::displayProfile(). Override X11:" << override;
     const KoColorProfile *profile = 0;
     if (override) {
@@ -436,14 +443,14 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {
-        //ebug() << "\tGoing to get the monitor profile";
+        //qDebug() << "\tGoing to get the monitor profile";
         QString monitorProfileName = monitorProfile(screen);
         //qDebug() << "\t\tmonitorProfileName:" << monitorProfileName;
         if (!monitorProfileName.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         }
         if (profile) {
-            //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
+            //qDebug() << "\t\tsuitable for display" << profile->isSuitableForDisplay();
         }
         else {
             //qDebug() << "\t\tstill no profile";
@@ -460,7 +467,7 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
         //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
     }
     else {
-        //qDebug() << "\tCOuldn't get a display profile at all";
+        //qDebug() << "\tCouldn't get a display profile at all";
     }
 
     return profile;

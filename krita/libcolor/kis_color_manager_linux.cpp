@@ -23,7 +23,7 @@
 
 #include <QDebug>
 
-class KisColorManager::Private {
+class Q_DECL_HIDDEN KisColorManager::Private {
 public:
     Private(QObject *parent)
         : colord(new KisColord(parent))
@@ -69,6 +69,7 @@ QStringList KisColorManager::devices(DeviceType type) const
 
 QByteArray KisColorManager::displayProfile(const QString &device, int profile) const
 {
+    //qDebug() << "KisColorManager::displayProfile" << device << profile << d->colord->deviceProfile(device, profile).size();
     return d->colord->deviceProfile(device, profile);
 }
 

@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <QPointF>
 
-class KoPathPointMergeCommand::Private
+class Q_DECL_HIDDEN KoPathPointMergeCommand::Private
 {
 public:
     Private(const KoPathPointData &pointData1, const KoPathPointData &pointData2)

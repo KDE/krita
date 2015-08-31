@@ -38,7 +38,7 @@ static QVector3D odfToVector3D(const QString &string);
 //                         Ko3dScene::Private
 
 
-class Ko3dScene::Private
+class Q_DECL_HIDDEN Ko3dScene::Private
 {
 public:
     Private() {};

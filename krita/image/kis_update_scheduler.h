@@ -104,9 +104,10 @@ public:
 
     /**
      * Blocks all the updates from execution. It doesn't affect
-     * strokes execution in any way. This tipe of lock is supposed
+     * strokes execution in any way. This type of lock is supposed
      * to be held by the strokes themselves when they need a short
      * access to some parts of the projection of the image.
+     *
      * From all the other places you should use usual lock()/unlock()
      * methods
      *

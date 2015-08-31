@@ -15,10 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="light_deletelayer.svg"
-   inkscape:export-filename="C:\dribbble\krita icons\Collaborate\1_flat\layers\light_deletelayer.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   sodipodi:docname="dark_deletelayer.svg"
+   inkscape:export-filename="/home/timo/kde4/src/calligra/krita/pics/layerbox/dark_deletelayer.png"
+   inkscape:export-xdpi="61.875"
+   inkscape:export-ydpi="61.875">
   <defs
      id="defs4">
     <filter
@@ -126,7 +126,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="13.893174"
+     inkscape:cx="-10.481826"
      inkscape:cy="13.111203"
      inkscape:document-units="px"
      inkscape:current-layer="layer4"
@@ -134,10 +134,10 @@
      units="in"
      inkscape:showpageshadow="false"
      showborder="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1041"
-     inkscape:window-x="1366"
-     inkscape:window-y="0"
+     inkscape:window-width="1880"
+     inkscape:window-height="1060"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      objecttolerance="10000"
      guidetolerance="10000"
@@ -192,7 +192,7 @@
        sodipodi:nodetypes="ccccccccccccccc" />
     <path
        style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="m 4,10 0,20 2,0 0,2 20,0 0,-2 2,0 0,-20 z"
+       d="m 4,11 0,19 2,0 0,2 20,0 0,-2 2,0 0,-19 z"
        id="rect4178"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc" />

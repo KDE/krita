@@ -43,6 +43,9 @@ public:
 
     virtual void setCompressionEnabled(bool e);
     virtual qint64 write(const char* _data, qint64 _len);
+
+    virtual QStringList directoryList() const;
+
 protected:
     void init(const QByteArray& appIdentification);
     virtual bool doFinalize();
@@ -56,13 +59,15 @@ protected:
     virtual bool enterAbsoluteDirectory(const QString& path);
     virtual bool fileExists(const QString& absPath) const;
 
+private:
+
     /// The archive
     KZip * m_pZip;
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
     const KArchiveDirectory* m_currentDir;
-private:
+
     Q_DECLARE_PRIVATE(KoStore)
 };
 

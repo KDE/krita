@@ -235,12 +235,12 @@ int KisPaintInformation::canvasRotation() const
     return d->canvasRotation;
 }
 
-void KisPaintInformation::setCanvasRotation(int rot)
+void KisPaintInformation::setCanvasRotation(int rotation)
 {
-    if (rot<0) {
-        d->canvasRotation= 360- abs(rot % 360);
+    if (rotation < 0) {
+        d->canvasRotation= 360- abs(rotation % 360);
     } else {
-        d->canvasRotation= rot % 360;
+        d->canvasRotation= rotation % 360;
     }
     
 } 

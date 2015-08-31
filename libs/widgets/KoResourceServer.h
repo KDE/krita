@@ -180,12 +180,20 @@ public:
             QString front = filenames.first();
             filenames.pop_front();
 
-            QString fname = QFileInfo(front).fileName();
+            // In the save location, people can use sub-folders... And then they probably want
+            // to load both versions! See https://bugs.kde.org/show_bug.cgi?id=321361.
+            QString fname;
+            if (front.contains(saveLocation())) {
+                fname = front.split(saveLocation())[1];
+            }
+            else {
+                fname = QFileInfo(front).fileName();
+            }
 
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
-            if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
+            if (!uniqueFiles.contains(fname)) {
                 m_loadLock.lock();
                 uniqueFiles.append(fname);
                 QList<PointerType> resources = createResources(front);
@@ -197,8 +205,8 @@ public:
 
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if ( resource->name().isEmpty() ) {
-                            resource->setName( fname );
+                        if (resource->name().isEmpty()) {
+                            resource->setName(fname);
                         }
                         if (m_resourcesByName.contains(resource->name())) {
                             resource->setName(resource->name() + "(" + resource->shortFilename() + ")");

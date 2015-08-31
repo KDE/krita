@@ -57,8 +57,80 @@
 #include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
+#include <kshortcut.h>
 #include <QStack>
 #include <QLabel>
+
+class Q_DECL_HIDDEN KoToolAction::Private
+{
+public:
+    ToolHelper* toolHelper;
+};
+
+KoToolAction::KoToolAction(ToolHelper* toolHelper)
+    : QObject(toolHelper)
+    , d(new Private)
+{
+    d->toolHelper = toolHelper;
+}
+
+KoToolAction::~KoToolAction()
+{
+    delete d;
+}
+
+void KoToolAction::trigger()
+{
+    d->toolHelper->activate();
+}
+
+
+QString KoToolAction::iconText() const
+{
+    return d->toolHelper->iconText();
+}
+
+QString KoToolAction::toolTip() const
+{
+    return d->toolHelper->toolTip();
+}
+
+QString KoToolAction::id() const
+{
+    return d->toolHelper->id();
+}
+
+QString KoToolAction::iconName() const
+{
+    return d->toolHelper->iconName();
+}
+
+KShortcut KoToolAction::shortcut() const
+{
+    return d->toolHelper->shortcut();
+}
+
+
+QString KoToolAction::section() const
+{
+    return d->toolHelper->toolType();
+}
+
+int KoToolAction::priority() const
+{
+    return d->toolHelper->priority();
+}
+
+int KoToolAction::buttonGroupId() const
+{
+    return d->toolHelper->uniqueId();
+}
+
+QString KoToolAction::visibilityCode() const
+{
+    return d->toolHelper->activationShapeId();
+}
+
 
 class CanvasData
 {
@@ -742,19 +814,14 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolButton> KoToolManager::createToolList() const
+QList<KoToolAction*> KoToolManager::toolActionList() const
 {
-    QList<KoToolButton> answer;
+    QList<KoToolAction*> answer;
+    answer.reserve(d->tools.count());
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
-        KoToolButton button;
-        button.button = tool->createButton();
-        button.section = tool->toolType();
-        button.priority = tool->priority();
-        button.buttonGroupId = tool->uniqueId();
-        button.visibilityCode = tool->activationShapeId();
-        answer.append(button);
+        answer.append(tool->toolAction());
     }
     return answer;
 }
@@ -788,18 +855,23 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         return;
     }
 
+    // Actions available during the use of individual tools
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoToolBase *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
-        QHash<QString, KAction*>::const_iterator it(actions.constBegin());
-        for (; it != actions.constEnd(); ++it) {
-            if (!ac->action(it.key()))
-                ac->addAction(it.key(), it.value());
+        QHash<QString, KAction*>::const_iterator action(actions.constBegin());
+        for (; action != actions.constEnd(); ++action) {
+            if (!ac->action(action.key()))
+                ac->addAction(action.key(), action.value());
         }
     }
+
+    // Actions used to switch tools via shortcuts
     foreach(ToolHelper * th, d->tools) {
-        ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
-        action->setShortcut(th->shortcut());
+        if (ac->action(th->id())) {
+            continue;
+        }
+        ShortcutToolAction* action = th->createShortcutToolAction(ac);
         ac->addAction(th->id(), action);
     }
 }
@@ -982,16 +1054,8 @@ void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
             continue;
         }
 
-        KoToolButton button;
-        button.button = tool->createButton();
-        button.section = tool->toolType();
-        button.priority = tool->priority();
-        button.buttonGroupId = tool->uniqueId();
-        button.visibilityCode = tool->activationShapeId();
-
-        emit addedTool(button, controller);
+        emit addedTool(tool->toolAction(), controller);
     }
-
 }
 
 QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *controller, ToolHelper *tool)

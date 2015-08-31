@@ -30,7 +30,7 @@
 #include "KoPAPageBase.h"
 #include "KoPAPageProvider.h"
 
-class KoPACanvasBase::Private
+class Q_DECL_HIDDEN KoPACanvasBase::Private
 {
 public:
     Private(KoPADocument * doc)

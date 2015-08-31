@@ -20,8 +20,8 @@
 #include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 
-class KoPAViewBase::Private {
-
+class Q_DECL_HIDDEN KoPAViewBase::Private
+{
 public:
 
     KoZoomHandler zoomHandler;

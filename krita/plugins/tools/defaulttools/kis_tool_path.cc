@@ -50,6 +50,21 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
     DelegatedPathTool::mousePressEvent(event);
 }
 
+// Install an event filter to catch right-click events.
+// This is the simplest way to accommodate the popup palette binding.
+bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonDblClick) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::RightButton) {
+            localTool()->removeLastPoint();
+            return true;
+        }
+    }
+    return false;
+}
+
 void KisToolPath::beginAlternateAction(KoPointerEvent *event, AlternateAction action) {
  Q_UNUSED(action)
  mousePressEvent(event);

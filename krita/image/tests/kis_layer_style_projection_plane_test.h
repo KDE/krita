@@ -27,7 +27,7 @@
 class KisLayerStyleProjectionPlaneTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testShadow();
     void testGlow();
     void testGlowGradient();

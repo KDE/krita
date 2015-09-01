@@ -125,7 +125,7 @@ protected:
         QTreeView::hideEvent(event);
     }
 
-private slots:
+private Q_SLOTS:
     void update_scroll_area(const QModelIndex& i)
     {
         resizeColumnToContents(i.column());

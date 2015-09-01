@@ -244,10 +244,10 @@ public:
     void addNewStyle(KisPSDLayerStyleSP style);
     void loadCollection(const QString &fileName);
 
-private slots:
+private Q_SLOTS:
     void loadStyles(const QString &name);
     void selectStyle(QListWidgetItem *previous, QListWidgetItem* current);
-signals:
+Q_SIGNALS:
     void styleSelected(KisPSDLayerStyleSP style);
 
 private:
@@ -266,10 +266,10 @@ public:
 
     KisPSDLayerStyleSP style() const;
 
-signals:
+Q_SIGNALS:
     void configChanged();
 
-public slots:
+public Q_SLOTS:
     void slotMasterFxSwitchChanged(bool value);
     void syncGlobalAngle(int angle);
 

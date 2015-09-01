@@ -27,7 +27,6 @@ endif()
 # BUILD_TESTING and KDE4_BUILD_TESTS to be set to FALSE
 # better fixes welcome
 if (BUILD_TESTING)
-    add_definitions(-DBUILD_TESTING)
     set(KDE4_BUILD_TESTS TRUE)
 endif()
 

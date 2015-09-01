@@ -50,7 +50,6 @@
 #include <kmenubar.h>
 #include <kmenu.h>
 #include <QMessageBox>
-#include <KoServiceLocator.h>
 #include <kservice.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>

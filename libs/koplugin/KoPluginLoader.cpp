@@ -22,8 +22,6 @@
 
 #include <KoJsonTrader.h>
 
-#include <QString>
-#include <QStringList>
 #include <QJsonObject>
 #include <QPluginLoader>
 #include <QDebug>

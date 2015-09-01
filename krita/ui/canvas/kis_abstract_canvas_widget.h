@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>, (C)
+ * Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,8 +29,11 @@ class KoToolProxy;
 class KisCanvas2;
 class KisCanvasDecoration;
 class KisDisplayFilter;
+class KisDisplayColorConverter;
+class QBitArray;
 
 #include "kis_types.h"
+#include "kis_ui_types.h"
 
 
 class KisAbstractCanvasWidget
@@ -45,21 +49,39 @@ public:
 
     virtual KoToolProxy * toolProxy() const = 0;
 
-    /**
-     * Draw the specified decorations on the view.
-     */
+    /// Draw the specified decorations on the view.
     virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const = 0;
 
     virtual void addDecoration(KisCanvasDecoration* deco) = 0;
+
     virtual KisCanvasDecoration* decoration(const QString& id) const = 0;
 
     virtual void setDecorations(const QList<KisCanvasDecoration*> &) = 0;
+
     virtual QList<KisCanvasDecoration*> decorations() const = 0;
 
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
+
+    // Called from KisCanvas2::channelSelectionChanged
+    virtual void channelSelectionChanged(QBitArray channelFlags) = 0;
+
+    // Called from KisCanvas2::slotSetDisplayProfile
+    virtual void setDisplayProfile(KisDisplayColorConverter *colorConverter) = 0;
+
+    // Called from KisCanvas2::disconnectCurrentCanvas
+    virtual void disconnectCurrentCanvas() = 0;
+
+    // Called from KisCanvas2::finishResizingImage
+    virtual void finishResizingImage(qint32 w, qint32 h) = 0;
+
+    // Called from KisCanvas2::startUpdateProjection
+    virtual KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags) = 0;
+
+    // Called from KisCanvas2::updateCanvasProjection
+    virtual QRect updateCanvasProjection(KisUpdateInfoSP info) = 0;
 
     /**
      * Returns true if the asynchromous engine of the canvas

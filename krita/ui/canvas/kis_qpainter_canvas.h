@@ -23,11 +23,13 @@
 
 #include "kis_canvas_widget_base.h"
 #include "kis_prescaled_projection.h"
+#include "kis_ui_types.h"
 
 class QImage;
 class QPaintEvent;
 class QPainter;
 class KisCanvas2;
+class KisDisplayColorConverter;
 
 /**
  *
@@ -51,21 +53,25 @@ public:
 
     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
-public: // QWidget
+public: // QWidget overrides
 
-    /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
 
-    /// reimplemented method from superclass
     void resizeEvent(QResizeEvent *e);
 
-    /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
-    /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-public: // KisAbstractCanvasWidget
+public: // Implement kis_abstract_canvas_widget interface
+    void setDisplayFilter(KisDisplayFilter* displayFilter);
+    void setWrapAroundViewingMode(bool value);
+    void channelSelectionChanged(QBitArray channelFlags);
+    void setDisplayProfile(KisDisplayColorConverter *colorConverter);
+    void disconnectCurrentCanvas();
+    void finishResizingImage(qint32 w, qint32 h);
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags);
+    QRect updateCanvasProjection(KisUpdateInfoSP info);
 
     QWidget * widget() {
         return this;

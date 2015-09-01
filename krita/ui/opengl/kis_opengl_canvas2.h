@@ -1,5 +1,6 @@
-    /*
+/*
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+ * Copyright (C) Michael Abrahams <miabraha@gmail.com>, (C) 2015
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,10 +33,12 @@
 #include "opengl/kis_opengl_image_textures.h"
 
 #include "kritaui_export.h"
+#include "kis_ui_types.h"
 
 class QWidget;
 class QPaintEvent;
 class KisCanvas2;
+class KisDisplayColorConverter;
 
 
 /**
@@ -52,60 +55,58 @@ class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget, public QOpenGLFunc
 
 public:
 
-    KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
+    KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter);
 
     virtual ~KisOpenGLCanvas2();
 
-    void setDisplayFilter(KisDisplayFilter* displayFilter);
-    void setWrapAroundViewingMode(bool value);
+public: // QOpenGLWidget
 
-public: // QWidget
+    void resizeGL(int width, int height);
+    void initializeGL();
+    void paintGL();
 
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
 public:
-
-    bool isBusy() const;
     void initializeCheckerShader();
     void initializeDisplayShader();
     void renderCanvasGL();
     void renderDecorations(QPainter *painter);
 
 
-
-private Q_SLOTS:
-    void slotConfigChanged();
-
-
-public:
-
-    void resizeGL(int width, int height);
-    void initializeGL();
-    void paintGL();
-
-public:
+public: // Implement kis_abstract_canvas_widget interface
+    void setDisplayFilter(KisDisplayFilter* displayFilter);
+    void setWrapAroundViewingMode(bool value);
+    void channelSelectionChanged(QBitArray channelFlags);
+    void setDisplayProfile(KisDisplayColorConverter *colorConverter);
+    void disconnectCurrentCanvas();
+    void finishResizingImage(qint32 w, qint32 h);
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags);
+    QRect updateCanvasProjection(KisUpdateInfoSP info);
 
     QWidget *widget() {
         return this;
     }
+
+    bool isBusy() const;
+
+private Q_SLOTS:
+    void slotConfigChanged();
 
 protected: // KisCanvasWidgetBase
     virtual bool callFocusNextPrevChild(bool next);
 
 private:
     void reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log);
-
-private:
-
-
-
-    struct Private;
-    Private * const d;
-
     void drawImage();
     void drawCheckers();
     QByteArray buildFragmentShader();
+
+private:
+
+    struct Private;
+    Private * const d;
 
 };
 

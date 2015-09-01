@@ -53,8 +53,10 @@
 #include "kis_selection_manager.h"
 #include "kis_selection.h"
 #include "kis_perspective_grid_manager.h"
+#include "kis_canvas_updates_compressor.h"
 #include "kis_config_notifier.h"
 #include "kis_group_layer.h"
+#include "canvas/kis_display_color_converter.h"
 
 //#define DEBUG_REPAINT
 #include <KoCanvasController.h>
@@ -164,6 +166,68 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+void KisQPainterCanvas::channelSelectionChanged(QBitArray channelFlags)
+{
+    Q_ASSERT(m_d->prescaledProjection);
+    m_d->prescaledProjection->setChannelFlags(channelFlags);
+}
+
+void KisQPainterCanvas::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+{
+    Q_ASSERT(m_d->prescaledProjection);
+    m_d->prescaledProjection->setMonitorProfile(colorConverter->monitorProfile(),
+                                                colorConverter->renderingIntent(),
+                                                colorConverter->conversionFlags());
+}
+
+void KisQPainterCanvas::setDisplayFilter(KisDisplayFilter* displayFilter)
+{
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->setDisplayFilter(displayFilter);
+
+        startUpdateInPatches(image->bounds());
+}
+
+
+void KisQPainterCanvas::setWrapAroundViewingMode(bool value)
+{
+    kDebug() << "Wrap around viewing mode not implemented in QPainter Canvas.";
+    return;
+}
+
+void KisQPainterCanvas::disconnectCurrentCanvas()
+{ }
+
+void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)
+{
+    m_d->prescaledProjection->slotImageSizeChanged(w, h);
+}
+
+KisUpdateInfoSP KisQPainterCanvas::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)
+{
+    Q_UNUSED(channelFlags);
+
+    return m_d->prescaledProjection->updateCache(rc);
+}
+
+
+QRect KisQPainterCanvas::updateCanvasProjection(KisUpdateInfoSP info)
+{
+    /**
+    * It might happen that the canvas type is switched while the
+    * update info is being stuck in the Qt's signals queue. Than a wrong
+    * type of the info may come. So just check it here.
+    */
+    bool isPPUpdateInfo = dynamic_cast<KisPPUpdateInfo*>(info.data());
+    if (isPPUpdateInfo) {
+        m_d->prescaledProjection->recalculateCache(info);
+        return info->dirtyViewportRect();
+    } else {
+        return QRect();
+    }
+}
+
+
 void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 {
     QSize size(e->size());
@@ -188,4 +252,3 @@ bool KisQPainterCanvas::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
 }
-

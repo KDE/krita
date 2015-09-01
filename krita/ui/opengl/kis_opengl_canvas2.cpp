@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006-2013
+ * Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,6 +62,7 @@
 #include "opengl/kis_opengl_canvas2_p.h"
 #include "kis_coordinates_converter.h"
 #include "canvas/kis_display_filter.h"
+#include "canvas/kis_display_color_converter.h"
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -157,7 +159,7 @@ public:
 
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
@@ -170,8 +172,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
-    d->openGLImageTextures = imageTextures;
-
+    d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(image,
+                                                                      colorConverter->monitorProfile(),
+                                                                      colorConverter->renderingIntent(),
+                                                                      colorConverter->conversionFlags());
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -180,6 +184,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+
+    setDisplayFilter(colorConverter->displayFilter());
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
@@ -193,6 +199,14 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
+
+    bool needsInternalColorManagement =
+        !displayFilter || displayFilter->useInternalColorManagement();
+
+    bool needsFullRefresh =
+        d->openGLImageTextures->
+        setInternalColorManagementActive(needsInternalColorManagement);
+
     d->displayFilter = displayFilter;
     if (d->canvasInitialized) {
         d->canvasInitialized = false;
@@ -200,7 +214,21 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
         initializeCheckerShader();
         d->canvasInitialized = true;
     }
+
+    if (needsFullRefresh) {
+        startUpdateInPatches(image->bounds());
+    } else {
+        updateCanvas();
+    }
 }
+
+void KisOpenGLCanvas2::disconnectCurrentCanvas()
+{
+    Q_ASSERT(d->openGLImageTextures);
+    d->openGLImageTextures->disconnect(canvas());
+    d->openGLImageTextures->disconnect(canvas()->image());
+}
+
 
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
@@ -705,6 +733,42 @@ void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
 {
     QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
     drawDecorations(*painter, boundingRect);
+}
+
+
+void KisOpenGLCanvas2::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+{
+    d->openGLImageTextures->setMonitorProfile(colorConverter->monitorProfile(),
+                                              colorConverter->renderingIntent(),
+                                              colorConverter->conversionFlags());
+}
+
+void KisOpenGLCanvas2::channelSelectionChanged(QBitArray channelFlags)
+{
+    d->openGLImageTextures->setChannelFlags(channelFlags);
+}
+
+
+void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
+{
+    d->openGLImageTextures->slotImageSizeChanged(w, h);
+}
+
+KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)
+{
+    d->openGLImageTextures->setChannelFlags(channelFlags);
+    return d->openGLImageTextures->updateCache(rc);
+}
+
+
+QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
+{
+    // See KisQPainterCanvas::updateCanvasProjection for more info
+    bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+    if (isOpenGLUpdateInfo) {
+        d->openGLImageTextures->recalculateCache(info);
+    }
+    return QRect(); // FIXME: Implement dirty rect for OpenGL
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

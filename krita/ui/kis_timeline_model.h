@@ -70,10 +70,16 @@ public: // QAbstractItemModel
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+protected:
+    KisModelIndexConverterBase *createIndexConverter();
+
 private slots:
     // Base class has these slots. Renamed with "2" to avoid hiding them
     void slotEndInsertDummy2(KisNodeDummy *dummy);
     void slotBeginRemoveDummy2(KisNodeDummy *dummy);
+
+    void slotNodeAnimatedAboutToChange(bool animated);
+    void slotNodeAnimatedChanged(bool animated);
 
     void slotKeyframeAboutToBeAdded(KisKeyframe *keyframe);
     void slotKeyframeAdded(KisKeyframe *keyframe);
@@ -87,7 +93,7 @@ private:
     QScopedPointer<Private> m_d;
 
     QModelIndex getChannelIndex(KisKeyframeChannel *channel, int column) const;
-    void connectAllChannels(KisNodeDummy *nodeDummy, bool needConnect);
+    void connectAllNodes(KisNodeDummy *nodeDummy, bool needConnect);
     void connectChannels(KisNodeSP node, bool needConnect);
     int getInsertionPointByTime(KisKeyframeChannel *channel, int time);
 };

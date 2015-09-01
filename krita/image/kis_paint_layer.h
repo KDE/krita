@@ -146,6 +146,8 @@ public:
      */
     void setOnionSkinEnabled(bool state);
 
+    void enableAnimation();
+
 public Q_SLOTS:
 
     // KisIndirectPaintingSupport

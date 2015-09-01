@@ -114,7 +114,7 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
 
-    if (layer->getKeyframeChannel(KisKeyframeChannel::Content.id())->keyframeCount() > 1) {
+    if (layer->isAnimated()) {
         element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
     }
 
@@ -354,18 +354,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
         }
     }
 
-    bool saveKeyframes = false;
-    QList<KisKeyframeChannel*> keyframeChannels = layer->keyframeChannels();
-    foreach (KisKeyframeChannel *channel, keyframeChannels) {
-        if (channel->keyframeCount() > 0) {
-            if (channel->inherits("KisRasterKeyframeChannel") && channel->keyframeCount() <= 1) continue;
-
-            saveKeyframes = true;
-            break;
-        }
-    }
-
-    if (saveKeyframes) {
+    if (layer->isAnimated()) {
         QString keyframeFile = filename + ".keyframes.xml";
         m_keyframeFileNames[layer] = keyframeFile;
         el.setAttribute(KEYFRAME_FILE, keyframeFile);

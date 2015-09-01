@@ -143,6 +143,10 @@ void AnimationDocker::slotAddBlankFrame()
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
 
+    if (!node->isAnimated()) {
+        node->enableAnimation();
+    }
+
     KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
     if (rasterChannel) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
@@ -158,6 +162,10 @@ void AnimationDocker::slotAddDuplicateFrame()
 
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
+
+    if (!node->isAnimated()) {
+        node->enableAnimation();
+    }
 
     KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
     if (rasterChannel) {

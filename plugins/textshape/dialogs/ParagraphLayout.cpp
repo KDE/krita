@@ -137,5 +137,3 @@ void ParagraphLayout::save(KoParagraphStyle *style)
             style->setOrphanThreshold(widget.threshold->value());
         }
 }
-
-#include <ParagraphLayout.moc>

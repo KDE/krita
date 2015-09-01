@@ -26,4 +26,3 @@ void TestAttributeManager::testColorConversion()
 }
 
 QTEST_MAIN(TestAttributeManager)
-#include "TestAttributeManager.moc"

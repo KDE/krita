@@ -134,5 +134,3 @@ void TemplateTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
     openPressed();
 }
-
-#include <TemplateTool.moc>

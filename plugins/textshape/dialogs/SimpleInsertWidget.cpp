@@ -53,5 +53,3 @@ void SimpleInsertWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
 }
-
-#include <SimpleInsertWidget.moc>

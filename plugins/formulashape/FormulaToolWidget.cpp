@@ -159,6 +159,3 @@ QList< QString > FormulaToolWidget::symbolsInRange ( int first, int last )
     }
     return list;
 }
-
-
-#include "FormulaToolWidget.moc"

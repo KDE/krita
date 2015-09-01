@@ -77,5 +77,3 @@ KUndo2Command * RectangleShapeConfigWidget::createCommand()
 
     return new RectangleShapeConfigCommand(m_rectangle, cornerRadiusX, cornerRadiusY);
 }
-
-#include <RectangleShapeConfigWidget.moc>

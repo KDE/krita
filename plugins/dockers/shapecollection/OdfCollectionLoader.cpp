@@ -199,5 +199,3 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
 
     m_loadingTimer->start();
 }
-
-#include <OdfCollectionLoader.moc>

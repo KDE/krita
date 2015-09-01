@@ -72,5 +72,3 @@ QString ListsSpinBox::textFromValue(int value) const
         return "X";
     }
 }
-
-#include <ListsSpinBox.moc>

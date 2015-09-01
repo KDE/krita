@@ -345,5 +345,3 @@ void Changecase::toggleCase()
         pos = block.position();
     }
 }
-
-#include <Changecase.moc>

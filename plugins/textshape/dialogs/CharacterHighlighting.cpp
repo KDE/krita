@@ -476,5 +476,3 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
     else if (widget.enableText->isChecked() && m_textColorChanged)
         style->setForeground(QBrush(widget.textColor->color()));
 }
-
-#include <CharacterHighlighting.moc>

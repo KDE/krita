@@ -103,5 +103,3 @@ void StyleManagerDialog::setParagraphStyle(KoParagraphStyle *style)
 {
     m_styleManagerWidget->setParagraphStyle(style);
 }
-
-#include <StyleManagerDialog.moc>

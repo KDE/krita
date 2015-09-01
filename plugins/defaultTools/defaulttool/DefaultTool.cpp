@@ -1323,5 +1323,3 @@ uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes )
 
     return count;
 }
-
-#include <DefaultTool.moc>

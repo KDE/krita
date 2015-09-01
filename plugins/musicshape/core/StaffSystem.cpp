@@ -118,5 +118,3 @@ void StaffSystem::setClefs(QList<Clef*> clefs)
 }
 
 } // namespace MusicCore
-
-#include <StaffSystem.moc>

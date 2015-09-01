@@ -951,5 +951,3 @@ void TestDocumentLayout::testShapePosition2()
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
-
-#include <TestDocumentLayout.moc>

@@ -117,4 +117,3 @@ void TestCursor::moveCursor()
 
 
 QTEST_KDEMAIN(TestCursor,GUI)
-#include "TestCursor.moc"

@@ -203,5 +203,3 @@ void GuidesToolOptionWidget::setUnit(const KoUnit &unit)
     widget.positionList->blockSignals(false);
     widget.position->blockSignals(false);
 }
-
-#include <GuidesToolOptionWidget.moc>

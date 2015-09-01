@@ -3090,5 +3090,3 @@ void TextTool::insertAnnotation()
     // Set Annotation creation date.
     shape->setDate(QDate::currentDate().toString(Qt::ISODate));
 }
-
-#include <TextTool.moc>

@@ -48,5 +48,3 @@ void PartDetailsDialog::showDialog(MusicTool *tool, Part* part, QWidget* parent)
                                                         dlg.widget.staffCount->value()));
     }
 }
-
-#include <PartDetailsDialog.moc>

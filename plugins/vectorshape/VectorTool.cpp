@@ -116,5 +116,3 @@ void VectorTool::setImageData(KJob *job)
 
     canvas()->addCommand(cmd);
 }
-
-#include <VectorTool.moc>

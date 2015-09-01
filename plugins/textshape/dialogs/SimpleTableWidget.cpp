@@ -210,5 +210,3 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     action->setMenu(listLevelMenu);
     */
 }
-
-#include <SimpleTableWidget.moc>

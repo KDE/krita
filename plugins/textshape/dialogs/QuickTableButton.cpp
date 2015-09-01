@@ -177,5 +177,3 @@ void QuickTableButton::emitCreate(int rows, int columns)
     m_menu->hide();
     emit create(rows, columns);
 }
-
-#include <QuickTableButton.moc>

@@ -173,5 +173,3 @@ void FixedDateFormat::customTextChanged(const QString& text)
             widget.formatList->setItemSelected(item, false);
     }
 }
-
-#include <FixedDateFormat.moc>

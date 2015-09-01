@@ -44,6 +44,3 @@ int TableDialog::rows()
 {
     return widget.intRows->value();
 }
-
-
-#include <TableDialog.moc>

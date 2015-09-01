@@ -952,5 +952,3 @@ QVariant ArtisticTextTool::inputMethodQuery(Qt::InputMethodQuery query, const Ko
     }
     return QVariant();
 }
-
-#include <ArtisticTextTool.moc>

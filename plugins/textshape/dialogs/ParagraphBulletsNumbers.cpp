@@ -378,5 +378,3 @@ void ParagraphBulletsNumbers::setFontSize(const KoCharacterStyle *style)
 {
     m_fontSize = style->fontPointSize();
 }
-
-#include <ParagraphBulletsNumbers.moc>

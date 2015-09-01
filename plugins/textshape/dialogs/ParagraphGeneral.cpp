@@ -223,5 +223,3 @@ KoParagraphStyle *ParagraphGeneral::style() const
 {
     return m_style;
 }
-
-#include <ParagraphGeneral.moc>

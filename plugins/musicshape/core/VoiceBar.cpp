@@ -143,5 +143,3 @@ void VoiceBar::updateAccidentals()
 }
 
 } // namespace MusicCore
-
-#include <VoiceBar.moc>

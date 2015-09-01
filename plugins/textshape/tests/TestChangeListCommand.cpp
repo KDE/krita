@@ -277,5 +277,3 @@ void TestChangeListCommand::splitList()
 }
 
 QTEST_MAIN(TestChangeListCommand)
-
-#include <TestChangeListCommand.moc>

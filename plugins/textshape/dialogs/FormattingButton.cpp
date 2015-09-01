@@ -212,5 +212,3 @@ bool FormattingButton::isFirstTimeMenuShown()
 {
     return m_menuShownFirstTime;
 }
-
-#include <FormattingButton.moc>

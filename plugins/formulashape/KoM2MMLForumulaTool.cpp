@@ -229,5 +229,3 @@ KoToolBase* KoM2MMLFormulaToolFactory::createTool( KoCanvasBase* canvas )
 {
     return new KoM2MMLFormulaTool( canvas );
 }
-
-#include "KoM2MMLForumulaTool.moc"

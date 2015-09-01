@@ -60,5 +60,3 @@ void InsertCharacter::insertCharacter()
 {
     emit insertCharacter(QString(m_charSelector->currentChar()));
 }
-
-#include <InsertCharacter.moc>

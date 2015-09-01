@@ -127,5 +127,3 @@ void TestChangesDatabase::testMerge()
 }
 
 QTEST_MAIN(TestChangesDatabase)
-
-#include <TestChangesDatabase.moc>

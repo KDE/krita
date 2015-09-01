@@ -286,5 +286,3 @@ void ParagraphIndentSpacing::rightMarginChanged(qreal margin)
     Q_UNUSED(margin);
     emit parStyleChanged();
 }
-
-#include <ParagraphIndentSpacing.moc>

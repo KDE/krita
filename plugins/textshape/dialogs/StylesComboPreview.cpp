@@ -194,5 +194,3 @@ void StylesComboPreview::addNewStyle()
     setReadOnly(false);
     this->setFocus();
 }
-
-#include "StylesComboPreview.moc"

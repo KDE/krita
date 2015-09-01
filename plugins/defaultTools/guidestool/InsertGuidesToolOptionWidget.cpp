@@ -51,5 +51,3 @@ void InsertGuidesToolOptionWidget::onCreateButtonClicked(bool checked)
 
     emit createGuides(transaction);
 }
-
-#include <InsertGuidesToolOptionWidget.moc>

@@ -1942,6 +1942,3 @@ void ChartConfigWidget::ui_datasetShowSymbolChanged(bool b)
 
     emit datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b);
 }
-
-#include "ChartConfigWidget.moc"
-

@@ -128,5 +128,3 @@ inline KoSection* SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
 {
     return m_widget.sectionTree->model()->itemData(idx)[Qt::UserRole + 1].value<KoSection *>();
 }
-
-#include <SectionFormatDialog.moc>

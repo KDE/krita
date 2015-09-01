@@ -116,5 +116,3 @@ void CommentTool::mousePressEvent(KoPointerEvent* /*event*/)
 void CommentTool::paint(QPainter& /*painter*/, const KoViewConverter& /*converter*/)
 {
 }
-
-#include <CommentTool.moc>

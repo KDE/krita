@@ -91,6 +91,3 @@ bool TemplateShape::loadOdf(const KoXmlElement &templateElement, KoShapeLoadingC
 void TemplateShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
 }
-
-
-#include <TemplateShape.moc>

@@ -26,8 +26,8 @@
 #include <QStylePainter>
 #include <QToolButton>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoGroupButton::Private
 {

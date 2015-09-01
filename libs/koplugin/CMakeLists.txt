@@ -5,7 +5,7 @@ set(koplugin_LIB_SRCS
 )
 
 # help plugin trader find installed plugins when run from uninstalled tests
-if (KDE4_BUILD_TESTS)
+if (BUILD_TESTING)
     add_definitions(-DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 endif()
 

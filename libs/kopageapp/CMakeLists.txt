@@ -2,12 +2,6 @@ include_directories(
     ${KOPAGEAPP_INCLUDES}
 )
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the KOPAGEAPP_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
-
 add_subdirectory(tests)
 add_subdirectory(tools)
 

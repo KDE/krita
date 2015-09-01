@@ -2,11 +2,6 @@ project(flake)
 
 include_directories(${FLAKE_INCLUDES} )
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the FLAKE_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
 add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)

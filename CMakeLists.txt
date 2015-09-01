@@ -19,17 +19,6 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
     cmake_policy(SET CMP0046 OLD)
 endif()
 
-# QT5TODO: remove KDE4_BUILD_TESTS post-3.0
-# transitional forward compatibility:
-# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5
-# have BUILD_TESTING overrule KDE4_BUILD_TESTS if set
-# slightly broken approach, if a cache exists then unsetting tests will need both
-# BUILD_TESTING and KDE4_BUILD_TESTS to be set to FALSE
-# better fixes welcome
-if (BUILD_TESTING)
-    set(KDE4_BUILD_TESTS TRUE)
-endif()
-
  ######################
 #######################
 ## Constants defines ##
@@ -258,8 +247,11 @@ else()
     set(HAVE_X11 FALSE)
 endif()
 
-# only with this definition will the FOO_TEST_EXPORT macro do something
-if(KDE4_BUILD_TESTS)
+# only with this definition will all the FOO_TEST_EXPORT macro do something
+# TODO: check if this can be moved to only those places which make use of it,
+# to reduce global compiler definitions that would trigger a recompile of
+# everything on a change (like adding/removing tests to/from the build)
+if(BUILD_TESTING)
     add_definitions(-DCOMPILING_TESTS)
 endif()
 

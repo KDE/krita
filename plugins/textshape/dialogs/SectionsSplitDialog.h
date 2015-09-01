@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SECTIONFORMATDIALOG_H
-#define SECTIONFORMATDIALOG_H
+#ifndef SECTIONSSPLITDIALOG_H
+#define SECTIONSSPLITDIALOG_H
 
 #include <KDialog>
 
@@ -26,29 +26,23 @@ class KoTextEditor;
 class KoSection;
 class KoSectionModel;
 
-#include <ui_SectionFormatDialog.h>
-class SectionFormatDialog : public KDialog
+#include <ui_SectionsSplitDialog.h>
+class SectionsSplitDialog : public KDialog
 {
     Q_OBJECT
-
+    
 public:
-    explicit SectionFormatDialog(QWidget *parent, KoTextEditor *editor);
-
+    explicit SectionsSplitDialog(QWidget *parent, KoTextEditor *editor);
+    
 private Q_SLOTS:
-    void sectionSelected(const QModelIndex &idx);
-    void sectionNameChanged();
-    void updateTreeState();
-
+    void beforeListSelection();
+    void afterListSelection();
+    
+    void okClicked();
+    
 private:
-    class ProxyModel;
-    class SectionNameValidator;
-
-    Ui::SectionFormatDialog m_widget;
+    Ui::SectionsSplitDialog m_widget;
     KoTextEditor* m_editor;
-    QModelIndex m_curIdx;
-    KoSectionModel *m_sectionModel;
-
-    KoSection *sectionFromModel(const QModelIndex &idx);
 };
 
-#endif //SECTIONFORMATDIALOG_H
+#endif //SECTIONSSPLITDIALOG_H

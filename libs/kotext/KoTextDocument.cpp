@@ -3,7 +3,7 @@
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,7 +42,7 @@
 #include "KoOdfLineNumberingConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
 #include <KoShapeController.h>
-#include <KoSectionManager.h>
+#include <KoSectionModel.h>
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
 Q_DECLARE_METATYPE(QTextFrame*)
@@ -66,7 +66,7 @@ const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGenera
 const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
 const QUrl KoTextDocument::FrameBlockFormatUrl = QUrl("kotext://frameBlockFormat");
 const QUrl KoTextDocument::ShapeControllerUrl = QUrl("kotext://shapeController");
-const QUrl KoTextDocument::SectionManagerUrl = QUrl("ktext://sectionManager");
+const QUrl KoTextDocument::SectionModelUrl = QUrl("ktext://sectionModel");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -399,20 +399,18 @@ void KoTextDocument::setFrameBlockFormat(const QTextBlockFormat &format)
     m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }
 
-KoSectionManager* KoTextDocument::sectionManager()
+KoSectionModel* KoTextDocument::sectionModel()
 {
-    QVariant resource = m_document->resource(KoTextDocument::SectionManager, SectionManagerUrl);
+    QVariant resource = m_document->resource(KoTextDocument::SectionModel, SectionModelUrl);
     if (!resource.isValid()) {
-        setSectionManager(new KoSectionManager(document())); //using create on demand strategy
+        setSectionModel(new KoSectionModel(document())); // Using create on demand strategy
     }
-
-    return m_document->resource(KoTextDocument::SectionManager, SectionManagerUrl).value<KoSectionManager *>();
+    return m_document->resource(KoTextDocument::SectionModel, SectionModelUrl).value<KoSectionModel *>();
 }
 
-void KoTextDocument::setSectionManager(KoSectionManager *manager)
+void KoTextDocument::setSectionModel(KoSectionModel *model)
 {
     QVariant v;
-    v.setValue(manager);
-    m_document->addResource(KoTextDocument::SectionManager, SectionManagerUrl, v);
+    v.setValue(model);
+    m_document->addResource(KoTextDocument::SectionModel, SectionModelUrl, v);
 }
-

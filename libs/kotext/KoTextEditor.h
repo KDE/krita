@@ -141,6 +141,7 @@ private:
     friend class ParagraphFormattingCommand;
     friend class RenameSectionCommand;
     friend class NewSectionCommand;
+    friend class SplitSectionsCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -460,7 +461,49 @@ public Q_SLOTS:
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
+    /**
+     * Inserts a new paragraph and warps it to new section
+     * Source:
+     *  some|textP
+     * Result:
+     *  someP
+     *  [|textP]
+     * 
+     * [] -- section bounds
+     * |  -- cursor зщышешщт
+     * P  -- paragraph sign
+     */ 
     void newSection();
+    
+    /** 
+     * Splits sections startings and inserts paragraph between them.
+     * Source: {sectionIdToInsertBefore == 1}
+     *   [[[sometext...
+     *    ^
+     *   012
+     * Result:
+     *   [P
+     *   [[sometext...
+     * 
+     * [] -- section bounds
+     * P  -- paragraph sign
+     */
+    void splitSectionsStartings(int sectionIdToInsertBefore);
+    
+    /**
+     * Splits section endings and insert paragraph between them.
+     * Source: {sectionIdToInsertAfter == 1}
+     *   sometext]]]
+     *            ^
+     *           012
+     * Result:
+     *   sometext]]P
+     *   P]
+     * 
+     * [] -- section bounds
+     * P  -- paragraph sign
+     */
+    void splitSectionsEndings(int sectionIdToInsertAfter);
 
     void renameSection(KoSection *section, const QString &newName);
 

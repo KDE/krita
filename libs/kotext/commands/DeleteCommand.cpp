@@ -3,7 +3,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,10 +35,25 @@
 #include <KoAnnotation.h>
 #include <KoSection.h>
 #include <KoSectionUtils.h>
-#include <KoSectionManager.h>
+#include <KoSectionModel.h>
 #include <KoSectionEnd.h>
 #include <KoShapeController.h>
 #include <KoDocument.h>
+
+bool DeleteCommand::SectionDeleteInfo::operator<(const DeleteCommand::SectionDeleteInfo &other) const
+{
+    // At first we remove sections that lays deeper in tree
+    // On one level we delete sections by descending order of their childIdx
+    // That is needed on undo, cuz we want it to be simply done by inserting
+    // sections back in reverse order of their deletion.
+    // Without childIdx compare it is possible that we will want to insert
+    // section on position 2 while the number of children is less than 2.
+    
+    if (section->level() != other.section->level()) {
+        return section->level() > other.section->level();
+    }
+    return childIdx > other.childIdx;
+}
 
 DeleteCommand::DeleteCommand(DeleteMode mode,
                              QTextDocument *document,
@@ -48,8 +63,8 @@ DeleteCommand::DeleteCommand(DeleteMode mode,
     , m_document(document)
     , m_shapeController(shapeController)
     , m_first(true)
-    , m_undone(false)
     , m_mode(mode)
+    , m_mergePossible(true)
 {
     setText(kundo2_i18n("Delete"));
 }
@@ -57,29 +72,42 @@ DeleteCommand::DeleteCommand(DeleteMode mode,
 void DeleteCommand::undo()
 {
     KoTextCommandBase::undo();
-    UndoRedoFinalizer finalizer(this);
+    UndoRedoFinalizer finalizer(this); // Look at KoTextCommandBase documentation
+
+    // KoList
     updateListChanges();
-    m_undone = true;
-    KoTextDocument(m_document).sectionManager()->invalidate();
+
+    // KoTextRange
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
     foreach (KoTextRange *range, m_rangesToRemove) {
         rangeManager->insert(range);
     }
+
+    // KoInlineObject
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
         object->manager()->addInlineObject(object);
     }
+
+    // KoSectionModel
+    insertSectionsToModel();
 }
 
 void DeleteCommand::redo()
 {
-    m_undone = false;
     if (!m_first) {
         KoTextCommandBase::redo();
-        UndoRedoFinalizer finalizer(this);
+        UndoRedoFinalizer finalizer(this); // Look at KoTextCommandBase documentation
+
+        // KoTextRange
         KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
         foreach (KoTextRange *range, m_rangesToRemove) {
             rangeManager->remove(range);
         }
+
+        // KoSectionModel
+        deleteSectionsFromModel();
+
+        // TODO: there is nothing for InlineObjects and Lists. Is it OK?
     } else {
         m_first = false;
         if (m_document) {
@@ -93,13 +121,26 @@ void DeleteCommand::redo()
     }
 }
 
+// Section handling algorithm:
+//   At first, we go though the all section starts and ends
+// that are in selection, and delete all pairs, because
+// they will be deleted.
+//   Then we have multiple cases: selection start split some block
+// or don't split any block.
+//   In the first case all formatting info will be stored in the
+// split block(it has startBlockNum number).
+//   In the second case it will be stored in the block pointed by the
+// selection end(it has endBlockNum number).
+//   Also there is a trivial case, when whole selection is inside
+// one block, in this case hasEntirelyInsideBlock will be false
+// and we will do nothing.
+
 class DeleteVisitor : public KoTextVisitor
 {
 public:
     DeleteVisitor(KoTextEditor *editor, DeleteCommand *command)
         : KoTextVisitor(editor)
         , m_first(true)
-        , m_mergePossible(true)
         , m_command(command)
         , m_startBlockNum(-1)
         , m_endBlockNum(-1)
@@ -107,26 +148,15 @@ public:
     {
     }
 
-    // Section handling algorithm:
-    //   At first, we go though the all section starts and ends
-    // that are in selection, and delete all pairs, because
-    // they will be deleted.
-    //   Then we have multiple cases: selection start split some block
-    // or don't split any block.
-    //   In the first case all formatting info will be stored in the
-    // split block(it has startBlockNum number).
-    //   In the second case it will be stored in the block pointed by the
-    // selection end(it has endBlockNum number).
-    //   Also there is a trivial case, when whole selection is inside
-    // one block, in this case hasEntirelyInsideBlock will be false
-    // and we will do nothing.
-
     virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
             QTextCursor fragmentSelection(caret);
             fragmentSelection.setPosition(qMax(caret.selectionStart(), it.fragment().position()));
-            fragmentSelection.setPosition(qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
+            fragmentSelection.setPosition(
+                qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()),
+                QTextCursor::KeepAnchor
+            );
 
             if (fragmentSelection.anchor() >= fragmentSelection.position()) {
                 continue;
@@ -135,6 +165,7 @@ public:
             visitFragmentSelection(fragmentSelection);
         }
 
+        // Section handling below
         bool doesBeginInside = false;
         bool doesEndInside = false;
         if (block.position() >= caret.selectionStart()) { // Begin of the block is inside selection.
@@ -150,7 +181,17 @@ public:
             QList<KoSectionEnd *> closeList = KoSectionUtils::sectionEndings(block.blockFormat());
             foreach (KoSectionEnd *se, closeList) {
                 if (!m_curSectionDelimiters.empty() && m_curSectionDelimiters.last().name == se->name()) {
-                    m_curSectionDelimiters.pop_back();
+                    KoSection *section = se->correspondingSection();
+                    int childIdx = KoTextDocument(m_command->m_document).sectionModel()
+                        ->findRowOfChild(section);
+
+                    m_command->m_sectionsToRemove.push_back(
+                        DeleteCommand::SectionDeleteInfo(
+                            section,
+                            childIdx
+                        )
+                    );
+                    m_curSectionDelimiters.pop_back(); // This section will die
                 } else {
                     m_curSectionDelimiters.push_back(SectionHandle(se->name(), se));
                 }
@@ -173,10 +214,11 @@ public:
             m_first = false;
         }
 
-        if (m_mergePossible && fragmentSelection.charFormat() != m_firstFormat) {
-            m_mergePossible = false;
+        if (m_command->m_mergePossible && fragmentSelection.charFormat() != m_firstFormat) {
+            m_command->m_mergePossible = false;
         }
 
+        // Handling InlineObjects below
         KoTextDocument textDocument(fragmentSelection.document());
         KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
 
@@ -194,95 +236,19 @@ public:
         }
     }
 
-    void finalize(QTextCursor *cur)
-    {
-        KoTextDocument(cur->document()).sectionManager()->invalidate();
-        // It means that selection isn't within one block.
-        if (m_hasEntirelyInsideBlock || m_startBlockNum != -1 || m_endBlockNum != -1) {
-            QList<KoSection *> openList;
-            QList<KoSectionEnd *> closeList;
-            foreach (const SectionHandle &handle, m_curSectionDelimiters) {
-                if (handle.type == SectionOpen) { // Start of the section.
-                    openList << handle.dataSec;
-                } else { // End of the section.
-                    closeList << handle.dataSecEnd;
-                }
-            }
-
-            // We're expanding ends in affected blocks to the end of the start block,
-            // delete all sections, that are entirely in affected blocks,
-            // and move ends, we have, to the begin of the next after the end block.
-            if (m_startBlockNum != -1) {
-                QTextBlockFormat fmt = cur->document()->findBlockByNumber(m_startBlockNum).blockFormat();
-                QTextBlockFormat fmt2 = cur->document()->findBlockByNumber(m_endBlockNum + 1).blockFormat();
-                fmt.clearProperty(KoParagraphStyle::SectionEndings);
-
-                //m_endBlockNum != -1 in this case.
-                QList<KoSectionEnd *> closeListEndBlock = KoSectionUtils::sectionEndings(
-                    cur->document()->findBlockByNumber(m_endBlockNum).blockFormat());
-
-                while (!openList.empty() && !closeListEndBlock.empty()
-                    && openList.last()->name() == closeListEndBlock.first()->name()) {
-                    openList.pop_back();
-                    closeListEndBlock.pop_front();
-                }
-                openList << KoSectionUtils::sectionStartings(fmt2);
-                closeList << closeListEndBlock;
-
-                // We leave open section of start block untouched.
-                KoSectionUtils::setSectionStartings(fmt2, openList);
-                KoSectionUtils::setSectionEndings(fmt, closeList);
-
-                QTextCursor changer = *cur;
-                changer.setPosition(cur->document()->findBlockByNumber(m_startBlockNum).position());
-                changer.setBlockFormat(fmt);
-                if (m_endBlockNum + 1 < cur->document()->blockCount()) {
-                    changer.setPosition(cur->document()->findBlockByNumber(m_endBlockNum + 1).position());
-                    changer.setBlockFormat(fmt2);
-                }
-            } else { // m_endBlockNum != -1 in this case. We're pushing all new section info to the end block.
-                QTextBlockFormat fmt = cur->document()->findBlockByNumber(m_endBlockNum).blockFormat();
-                QList<KoSection *> allStartings = KoSectionUtils::sectionStartings(fmt);
-                fmt.clearProperty(KoParagraphStyle::SectionStartings);
-
-                QList<KoSectionEnd *> pairedEndings;
-                QList<KoSectionEnd *> unpairedEndings;
-
-                foreach (KoSectionEnd *se, KoSectionUtils::sectionEndings(fmt)) {
-                    KoSection *sec = se->correspondingSection();
-
-                    if (allStartings.contains(sec)) {
-                        pairedEndings << se;
-                    } else {
-                        unpairedEndings << se;
-                    }
-                }
-
-                closeList = pairedEndings + closeList + unpairedEndings;
-
-                KoSectionUtils::setSectionStartings(fmt, openList);
-                KoSectionUtils::setSectionEndings(fmt, closeList);
-
-                QTextCursor changer = *cur;
-                changer.setPosition(cur->document()->findBlockByNumber(m_endBlockNum).position());
-                changer.setBlockFormat(fmt);
-            }
-        }
-    }
-
     enum SectionHandleAction
     {
-        SectionClose, // Denotes close of the section.
-        SectionOpen // Denotes start or beginning of the section.
+        SectionClose, ///< Denotes close of the section.
+        SectionOpen ///< Denotes start or beginning of the section.
     };
 
-    //Helper struct for handling sections.
+    /// Helper struct for handling sections.
     struct SectionHandle {
-        QString name; // Name of the section.
-        SectionHandleAction type; // Action of a SectionHandle.
+        QString name; ///< Name of the section.
+        SectionHandleAction type; ///< Action of a SectionHandle.
 
-        KoSection *dataSec; // Pointer to KoSection.
-        KoSectionEnd *dataSecEnd; // Pointer to KoSectionEnd.
+        KoSection *dataSec; ///< Pointer to KoSection.
+        KoSectionEnd *dataSecEnd; ///< Pointer to KoSectionEnd.
 
         SectionHandle(QString _name, KoSection *_data)
             : name(_name)
@@ -302,7 +268,6 @@ public:
     };
 
     bool m_first;
-    bool m_mergePossible;
     DeleteCommand *m_command;
     QTextCharFormat m_firstFormat;
     int m_startBlockNum;
@@ -310,6 +275,127 @@ public:
     bool m_hasEntirelyInsideBlock;
     QList<SectionHandle> m_curSectionDelimiters;
 };
+
+void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
+{
+    // Lets handle pointers from block formats first
+    // It means that selection isn't within one block.
+    if (v.m_hasEntirelyInsideBlock || v.m_startBlockNum != -1 || v.m_endBlockNum != -1) {
+        QList<KoSection *> openList;
+        QList<KoSectionEnd *> closeList;
+        foreach (const DeleteVisitor::SectionHandle &handle, v.m_curSectionDelimiters) {
+            if (handle.type == v.SectionOpen) { // Start of the section.
+                openList << handle.dataSec;
+            } else { // End of the section.
+                closeList << handle.dataSecEnd;
+            }
+        }
+
+        // We're expanding ends in affected blocks to the end of the start block,
+        // delete all sections, that are entirely in affected blocks,
+        // and move ends, we have, to the begin of the next after the end block.
+        if (v.m_startBlockNum != -1) {
+            QTextBlockFormat fmt = cur->document()->findBlockByNumber(v.m_startBlockNum).blockFormat();
+            QTextBlockFormat fmt2 = cur->document()->findBlockByNumber(v.m_endBlockNum + 1).blockFormat();
+            fmt.clearProperty(KoParagraphStyle::SectionEndings);
+
+            // m_endBlockNum != -1 in this case.
+            QList<KoSectionEnd *> closeListEndBlock = KoSectionUtils::sectionEndings(
+                cur->document()->findBlockByNumber(v.m_endBlockNum).blockFormat());
+
+            while (!openList.empty() && !closeListEndBlock.empty()
+                && openList.last()->name() == closeListEndBlock.first()->name()) {
+
+                int childIdx = KoTextDocument(m_document)
+                    .sectionModel()->findRowOfChild(openList.back());
+                m_sectionsToRemove.push_back(
+                    DeleteCommand::SectionDeleteInfo(
+                        openList.back(),
+                        childIdx
+                    )
+                );
+
+                openList.pop_back();
+                closeListEndBlock.pop_front();
+            }
+            openList << KoSectionUtils::sectionStartings(fmt2);
+            closeList << closeListEndBlock;
+
+            // We leave open section of start block untouched.
+            KoSectionUtils::setSectionStartings(fmt2, openList);
+            KoSectionUtils::setSectionEndings(fmt, closeList);
+
+            QTextCursor changer = *cur;
+            changer.setPosition(cur->document()->findBlockByNumber(v.m_startBlockNum).position());
+            changer.setBlockFormat(fmt);
+            if (v.m_endBlockNum + 1 < cur->document()->blockCount()) {
+                changer.setPosition(cur->document()->findBlockByNumber(v.m_endBlockNum + 1).position());
+                changer.setBlockFormat(fmt2);
+            }
+        } else { // v.m_startBlockNum == -1
+            // v.m_endBlockNum != -1 in this case.
+            // We're pushing all new section info to the end block.
+            QTextBlockFormat fmt = cur->document()->findBlockByNumber(v.m_endBlockNum).blockFormat();
+            QList<KoSection *> allStartings = KoSectionUtils::sectionStartings(fmt);
+            fmt.clearProperty(KoParagraphStyle::SectionStartings);
+
+            QList<KoSectionEnd *> pairedEndings;
+            QList<KoSectionEnd *> unpairedEndings;
+
+            foreach (KoSectionEnd *se, KoSectionUtils::sectionEndings(fmt)) {
+                KoSection *sec = se->correspondingSection();
+
+                if (allStartings.contains(sec)) {
+                    pairedEndings << se;
+                } else {
+                    unpairedEndings << se;
+                }
+            }
+
+            if (cur->selectionStart()) {
+                QTextCursor changer = *cur;
+                changer.setPosition(cur->selectionStart() - 1);
+
+                QTextBlockFormat prevFmt = changer.blockFormat();
+                QList<KoSectionEnd *> prevEndings = KoSectionUtils::sectionEndings(prevFmt);
+
+                prevEndings = prevEndings + closeList;
+
+                KoSectionUtils::setSectionEndings(prevFmt, prevEndings);
+                changer.setBlockFormat(prevFmt);
+            }
+
+            KoSectionUtils::setSectionStartings(fmt, openList);
+            KoSectionUtils::setSectionEndings(fmt, pairedEndings + unpairedEndings);
+
+            QTextCursor changer = *cur;
+            changer.setPosition(cur->document()->findBlockByNumber(v.m_endBlockNum).position());
+            changer.setBlockFormat(fmt);
+        }
+    }
+
+    // Now lets deal with KoSectionModel
+    qSort(m_sectionsToRemove.begin(), m_sectionsToRemove.end());
+    deleteSectionsFromModel();
+}
+
+void DeleteCommand::deleteSectionsFromModel()
+{
+    KoSectionModel *model = KoTextDocument(m_document).sectionModel();
+    foreach (const SectionDeleteInfo &info, m_sectionsToRemove) {
+        model->deleteFromModel(info.section);
+    }
+}
+
+void DeleteCommand::insertSectionsToModel()
+{
+    KoSectionModel *model = KoTextDocument(m_document).sectionModel();
+    QList<SectionDeleteInfo>::iterator it = m_sectionsToRemove.end();
+    while (it != m_sectionsToRemove.begin()) {
+        it--;
+        model->insertToModel(it->section, it->childIdx);
+    }
+}
 
 void DeleteCommand::doDelete()
 {
@@ -329,16 +415,25 @@ void DeleteCommand::doDelete()
 
     DeleteVisitor visitor(textEditor, this);
     textEditor->recursivelyVisitSelection(m_document.data()->rootFrame()->begin(), visitor);
-    visitor.finalize(caret); // Finalize section handling routine.
-    m_mergePossible = visitor.m_mergePossible;
 
+    // Sections Model
+    finalizeSectionHandling(caret, visitor); // Finalize section handling routine.
+
+    // InlineObjects
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
         deleteInlineObject(object);
     }
 
+    // Ranges
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
 
-    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->document(), textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+    m_rangesToRemove = rangeManager->textRangesChangingWithin(
+        textEditor->document(),
+        textEditor->selectionStart(),
+        textEditor->selectionEnd(),
+        textEditor->selectionStart(),
+        textEditor->selectionEnd()
+    );
 
     foreach (KoTextRange *range, m_rangesToRemove) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
@@ -347,7 +442,7 @@ void DeleteCommand::doDelete()
             // we should only delete the anchor if the selection is covering it... not if the selection is
             // just adjecent to the anchor. This is more in line with what other wordprocessors do
             if (anchorRange->position() != textEditor->selectionStart()
-            && anchorRange->position() != textEditor->selectionEnd()) {
+                    && anchorRange->position() != textEditor->selectionEnd()) {
                 KoShape *shape = anchorRange->anchor()->shape();
                 if (m_shapeController) {
                     KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
@@ -369,7 +464,13 @@ void DeleteCommand::doDelete()
         }
     }
 
+    // Check: is merge possible?
     if (textEditor->hasComplexSelection()) {
+        m_mergePossible = false;
+    }
+
+    //FIXME: lets forbid merging of "section affecting" deletions by now
+    if (!m_sectionsToRemove.empty()) {
         m_mergePossible = false;
     }
 
@@ -380,6 +481,7 @@ void DeleteCommand::doDelete()
         m_length = textEditor->selectionEnd() - textEditor->selectionStart();
     }
 
+    // Actual deletion of text
     caret->deleteChar();
 
     if (m_mode != PreviousChar || !caretAtBeginOfBlock) {

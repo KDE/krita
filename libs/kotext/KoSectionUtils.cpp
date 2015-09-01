@@ -37,7 +37,7 @@ bool KoSectionUtils::getNextBlock(QTextCursor &cur)
     return true;
 }
 
-void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, QList<KoSection *> &list)
+void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, const QList<KoSection *> &list)
 {
     if (list.empty()) {
         fmt.clearProperty(KoParagraphStyle::SectionStartings);
@@ -47,7 +47,7 @@ void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, QList<KoSection 
     }
 }
 
-void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, QList<KoSectionEnd *> &list)
+void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, const QList<KoSectionEnd *> &list)
 {
     if (list.empty()) {
         fmt.clearProperty(KoParagraphStyle::SectionEndings);

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ *  Copyright (c) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,8 +36,7 @@ class KoSectionEndPrivate;
  */
 class KOTEXT_EXPORT KoSectionEnd {
 public:
-    explicit KoSectionEnd(KoSection* section);
-    ~KoSectionEnd(); // this is needed to QScopedPointer to work
+    ~KoSectionEnd(); // this is needed for QScopedPointer
 
     void saveOdf(KoShapeSavingContext &context) const;
 
@@ -50,6 +49,11 @@ protected:
 private:
     Q_DISABLE_COPY(KoSectionEnd)
     Q_DECLARE_PRIVATE(KoSectionEnd)
+
+    explicit KoSectionEnd(KoSection *section);
+
+    friend class KoSectionModel;
+    friend class TestKoTextEditor;
 };
 
 Q_DECLARE_METATYPE(KoSectionEnd *)

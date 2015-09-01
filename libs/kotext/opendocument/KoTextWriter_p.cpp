@@ -90,7 +90,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     // are positioned entirely inside selection.
     // They will stay untouched, and others will be omitted.
 
-    // So we are using stack to detect them, by going though
+    // So we are using stack to detect them, by going through
     // the selection and finding open/close pairs.
     QSet<QString> entireWithinSectionNames;
     QStack<QString> sectionNamesStack;

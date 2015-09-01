@@ -36,6 +36,7 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/SectionFormatDialog.h"
+#include "dialogs/SectionsSplitDialog.h"
 #include "dialogs/SimpleTableWidget.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
@@ -220,6 +221,10 @@ void TextTool::createActions()
     addAction("insert_section", m_actionInsertSection);
     connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
 
+    m_actionSplitSections = new KAction(koIcon("split"), i18n("Insert paragraph between sections"), this); //FIXME: Find another icon for this.
+    addAction("split_sections", m_actionSplitSections);
+    connect(m_actionSplitSections, SIGNAL(triggered(bool)), this, SLOT(splitSections()));
+    
     m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
@@ -2270,6 +2275,19 @@ void TextTool::configureSection()
     dia->exec();
     delete dia;
 
+    returnFocusToCanvas();
+    updateActions();
+}
+
+void TextTool::splitSections()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+    
+    SectionsSplitDialog *dia = new SectionsSplitDialog(0, m_textEditor.data());
+    dia->exec();
+    delete dia;
+    
     returnFocusToCanvas();
     updateActions();
 }

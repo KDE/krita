@@ -153,16 +153,16 @@ void KisAdvancedColorSpaceSelector::fillCmbDepths(const KoID& id)
     if (depths.contains(Integer8BitsColorDepthID)) {
         sortedDepths << Integer8BitsColorDepthID;
     }
-    else if (depths.contains(Integer16BitsColorDepthID)) {
+    if (depths.contains(Integer16BitsColorDepthID)) {
         sortedDepths << Integer16BitsColorDepthID;
     }
-    else if (depths.contains(Float16BitsColorDepthID)) {
+    if (depths.contains(Float16BitsColorDepthID)) {
         sortedDepths << Float16BitsColorDepthID;
     }
-    else if (depths.contains(Float32BitsColorDepthID)) {
+    if (depths.contains(Float32BitsColorDepthID)) {
         sortedDepths << Float32BitsColorDepthID;
     }
-    else if (depths.contains(Float64BitsColorDepthID)) {
+    if (depths.contains(Float64BitsColorDepthID)) {
         sortedDepths << Float64BitsColorDepthID;
     }
 

@@ -781,4 +781,3 @@ void TestPathShape::closeMerge()
 }
 
 QTEST_MAIN(TestPathShape)
-#include <TestPathShape.moc>

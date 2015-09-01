@@ -70,4 +70,3 @@ void TestColorConversionSystem::testGoodConnections()
 }
 
 QTEST_KDEMAIN(TestColorConversionSystem, NoGUI)
-#include <TestColorConversionSystem.moc>

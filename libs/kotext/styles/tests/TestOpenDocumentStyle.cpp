@@ -720,4 +720,3 @@ void TestOpenDocumentStyle::testCharacterStyle()
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)
-#include <TestOpenDocumentStyle.moc>

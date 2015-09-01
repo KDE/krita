@@ -175,6 +175,3 @@ void KoConfigMiscPage::slotUnitChanged(int u)
 
     emit unitChanged(unit);
 }
-
-#include <KoConfigMiscPage.moc>
-

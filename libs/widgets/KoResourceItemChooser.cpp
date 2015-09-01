@@ -624,6 +624,3 @@ void KoResourceItemChooser::updateView()
         baseLengthChanged(chooserSync->baseLength());
     }
 }
-
-
-#include <KoResourceItemChooser.moc>

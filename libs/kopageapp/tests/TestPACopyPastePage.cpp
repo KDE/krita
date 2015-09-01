@@ -312,4 +312,3 @@ void TestPACopyPastePage::copyPasteMixedPages()
 }
 
 QTEST_KDEMAIN( TestPACopyPastePage, GUI )
-#include "TestPACopyPastePage.moc"

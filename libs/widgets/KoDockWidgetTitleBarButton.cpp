@@ -112,5 +112,3 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     opt.iconSize = QSize(size, size);
     style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &p, this);
 }
-
-#include <KoDockWidgetTitleBarButton.moc>

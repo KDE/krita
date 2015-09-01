@@ -162,4 +162,3 @@ void TestNumberStyle::testCurrency()
 }
 
 QTEST_MAIN(TestNumberStyle)
-#include <TestNumberStyle.moc>

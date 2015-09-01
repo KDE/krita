@@ -1645,5 +1645,3 @@ void KoTextLoader::processBody()
 void KoTextLoader::endBody()
 {
 }
-
-#include <KoTextLoader.moc>

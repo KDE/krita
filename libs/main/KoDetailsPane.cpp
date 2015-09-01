@@ -132,5 +132,3 @@ QStandardItemModel* KoDetailsPane::model() const
 {
     return d->m_model;
 }
-
-#include <KoDetailsPane.moc>

@@ -132,5 +132,3 @@ void KoZoomWidget::setAspectMode(bool status)
         d->aspectButton->blockSignals(false);
     }
 }
-
-#include "KoZoomWidget.moc"

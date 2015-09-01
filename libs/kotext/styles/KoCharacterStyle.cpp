@@ -2268,5 +2268,3 @@ void KoCharacterStyle::removeHardCodedDefaults()
 {
     d->hardCodedDefaultStyle.clearAll();
 }
-
-#include <KoCharacterStyle.moc>

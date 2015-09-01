@@ -1285,6 +1285,3 @@ void KoPAView::updateUnit(const KoUnit &unit)
     d->verticalRuler->setUnit(unit);
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
-
-#include <KoPAView.moc>
-

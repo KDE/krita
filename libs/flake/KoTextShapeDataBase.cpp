@@ -85,5 +85,3 @@ KoTextShapeDataBase::ResizeMethod KoTextShapeDataBase::resizeMethod() const
     Q_D(const KoTextShapeDataBase);
     return d->resizeMethod;
 }
-
-#include <KoTextShapeDataBase.moc>

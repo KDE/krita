@@ -63,4 +63,3 @@ void TestKoColorSpaceSanity::testChannelsInfo()
 }
 
 QTEST_KDEMAIN(TestKoColorSpaceSanity, NoGUI)
-#include "TestKoColorSpaceSanity.moc"

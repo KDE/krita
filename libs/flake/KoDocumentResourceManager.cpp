@@ -221,5 +221,3 @@ void KoDocumentResourceManager::setShapeController(KoShapeController *shapeContr
     variant.setValue<KoShapeController *>(shapeController);
     setResource(ShapeController, variant);
 }
-
-#include <KoDocumentResourceManager.moc>

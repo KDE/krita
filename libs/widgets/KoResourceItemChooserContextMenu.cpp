@@ -211,4 +211,3 @@ KoResourceItemChooserContextMenu::~KoResourceItemChooserContextMenu()
 {
 
 }
-#include "KoResourceItemChooserContextMenu.moc"

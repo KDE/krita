@@ -41,4 +41,3 @@ void TestKoElementReference::testElementReference()
 }
 
 QTEST_MAIN(TestKoElementReference)
-#include <TestKoElementReference.moc>

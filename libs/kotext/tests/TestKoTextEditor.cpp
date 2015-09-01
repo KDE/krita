@@ -772,5 +772,3 @@ public:
 };
 
 QTEST_MAIN(TestKoTextEditor)
-
-#include "TestKoTextEditor.moc"

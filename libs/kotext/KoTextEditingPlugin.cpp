@@ -115,6 +115,3 @@ void KoTextEditingPlugin::setCurrentCursorPosition(QTextDocument *document, int 
     Q_UNUSED(cursorPosition);
     Q_UNUSED(document);
 }
-
-#include <KoTextEditingPlugin.moc>
-

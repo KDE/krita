@@ -132,4 +132,3 @@ void TestShapeAt::testShadow()
 }
 
 QTEST_MAIN(TestShapeAt)
-#include "TestShapeAt.moc"

@@ -142,4 +142,3 @@ void KoPropertiesTest::testPassAround()
 }
 
 QTEST_KDEMAIN(KoPropertiesTest, NoGUI)
-#include <KoPropertiesTest.moc>

@@ -508,5 +508,3 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
-
-#include <KoFillConfigWidget.moc>

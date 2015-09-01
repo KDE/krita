@@ -368,4 +368,3 @@ void TestPathSegment::paramAtLength()
 }
 
 QTEST_KDEMAIN(TestPathSegment, GUI)
-#include <TestPathSegment.moc>

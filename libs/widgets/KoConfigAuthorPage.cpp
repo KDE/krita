@@ -210,6 +210,3 @@ void KoConfigAuthorPage::apply()
     authorGroup.writeEntry("profile-names", profiles);
     authorGroup.sync();
 }
-
-
-#include <KoConfigAuthorPage.moc>

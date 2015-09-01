@@ -94,6 +94,3 @@ void KoPAMasterPageDialog::selectionChanged()
     // TODO: user shouldn't be able to deselect any item
     enableButtonOk(m_listView->selectionModel()->hasSelection());
 }
-
-#include <KoPAMasterPageDialog.moc>
-

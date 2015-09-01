@@ -49,4 +49,3 @@ void TestResourceManager::testUnitChanged()
 }
 
 QTEST_MAIN(TestResourceManager)
-#include <TestResourceManager.moc>

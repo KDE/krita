@@ -166,5 +166,3 @@ void KoConfigGridPage::spinBoxVSpacingChanged(qreal v)
     if (d->bnLinkSpacing->keepAspectRatio())
         d->spaceHorizUSpin->changeValue(v);
 }
-
-#include <KoConfigGridPage.moc>

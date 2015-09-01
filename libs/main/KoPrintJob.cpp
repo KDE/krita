@@ -59,5 +59,3 @@ bool KoPrintJob::canPrint()
 
     return false;
 }
-
-#include <KoPrintJob.moc>

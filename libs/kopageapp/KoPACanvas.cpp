@@ -207,5 +207,3 @@ void KoPACanvas::setCursor(const QCursor &cursor)
 {
     QWidget::setCursor(cursor);
 }
-
-#include <KoPACanvas.moc>

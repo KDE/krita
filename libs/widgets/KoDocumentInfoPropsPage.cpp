@@ -100,5 +100,3 @@ void KoDocumentInfoPropsPage::applyChanges()
 {
     // Unused in Calligra
 }
-
-#include <KoDocumentInfoPropsPage.moc>

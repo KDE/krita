@@ -275,5 +275,3 @@ void TestShapeGroupCommand::testGroupStrokeShapes()
 }
 
 QTEST_MAIN(TestShapeGroupCommand)
-
-#include "TestShapeGroupCommand.moc"

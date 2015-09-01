@@ -111,5 +111,3 @@ void KoConfigDocumentPage::slotDefault()
     d->autoSave->setValue(d->doc->defaultAutoSave() / 60);
     d->createBackupFile->setChecked(true);
 }
-
-#include <KoConfigDocumentPage.moc>

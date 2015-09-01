@@ -48,5 +48,3 @@ void InsertInlineObjectActionBase::activated()
         }
     }
 }
-
-#include <InsertInlineObjectActionBase_p.moc>

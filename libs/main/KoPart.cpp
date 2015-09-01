@@ -393,8 +393,3 @@ void KoPart::setComponentData(const KComponentData &componentData)
 {
     d->m_componentData = componentData;
 }
-
-
-
-
-#include <KoPart.moc>

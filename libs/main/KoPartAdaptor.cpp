@@ -264,6 +264,3 @@ void KoPartAdaptor::setDocumentInfoAbstract(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAboutInfo("comments", text);
 }
-
-
-#include <KoPartAdaptor.moc>

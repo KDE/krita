@@ -188,5 +188,3 @@ void KoContextBarButton::hideEvent(QHideEvent *event)
     stopFading();
     QToolButton::hideEvent(event);
 }
-// Self
-#include "KoContextBarButton.moc"

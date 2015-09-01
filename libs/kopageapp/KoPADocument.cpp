@@ -870,5 +870,3 @@ void KoPADocument::updateDocumentURL()
         om->setProperty(KoInlineObject::DocumentURL, url().pathOrUrl());
     }
 }
-
-#include <KoPADocument.moc>

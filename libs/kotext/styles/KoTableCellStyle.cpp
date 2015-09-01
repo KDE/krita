@@ -1053,5 +1053,3 @@ KoBorder::BorderStyle KoTableCellStyle::getBorderStyle(KoBorder::BorderSide side
     KoBorder::BorderData edge = getEdge(side);
     return edge.style;
 }
-
-#include <KoTableCellStyle.moc>

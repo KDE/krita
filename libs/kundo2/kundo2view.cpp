@@ -282,6 +282,4 @@ QIcon KUndo2View::cleanIcon() const
     return d->model->cleanIcon();
 }
 
-#include "kundo2view.moc"
-
 #endif // QT_NO_UNDOVIEW

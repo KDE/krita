@@ -466,5 +466,3 @@ void KoDocumentInfo::setOriginalGenerator(const QString &generator)
 {
     m_generator = generator;
 }
-
-#include <KoDocumentInfo.moc>

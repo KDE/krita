@@ -185,5 +185,3 @@ void KoColorSlider::drawArrow(QPainter *painter, const QPoint &pos)
     style()->drawPrimitive(arrowPE, &o, painter, this);
 
 }
-
-#include <KoColorSlider.moc>

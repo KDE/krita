@@ -254,6 +254,3 @@ QString KoVersionModifyDialog::comment() const
 {
     return m_textEdit->toPlainText();
 }
-
-
-#include <KoVersionDialog.moc>

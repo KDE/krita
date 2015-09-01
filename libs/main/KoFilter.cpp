@@ -62,5 +62,3 @@ void KoFilter::slotProgress(int value)
         d->updater->setValue(value);
     }
 }
-
-#include <KoFilter.moc>

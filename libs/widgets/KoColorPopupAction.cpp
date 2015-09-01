@@ -244,5 +244,3 @@ void KoColorPopupAction::slotTriggered(bool)
         d->firstTime = false;
     }
 }
-
-#include <KoColorPopupAction.moc>

@@ -161,5 +161,3 @@ void TestKoInlineTextObjectManager::testListenToProperties()
 
 
 QTEST_MAIN(TestKoInlineTextObjectManager)
-
-#include "TestKoInlineTextObjectManager.moc"

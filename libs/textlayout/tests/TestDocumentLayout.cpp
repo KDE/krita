@@ -193,5 +193,3 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
-
-#include <TestDocumentLayout.moc>

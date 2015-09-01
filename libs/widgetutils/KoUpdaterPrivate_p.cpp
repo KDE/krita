@@ -44,5 +44,3 @@ void KoUpdaterPrivate::setProgress(int percent)
     m_progress = percent;
     emit sigUpdated();
 }
-
-#include <KoUpdaterPrivate_p.moc>

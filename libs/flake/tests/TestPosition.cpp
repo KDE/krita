@@ -164,4 +164,3 @@ void TestPosition::testSetAndGetRotation()
 }
 
 QTEST_MAIN(TestPosition)
-#include "TestPosition.moc"

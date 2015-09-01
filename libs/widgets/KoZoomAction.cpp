@@ -366,6 +366,3 @@ void KoZoomAction::setMaximumZoom(qreal zoom)
     regenerateItems(d->effectiveZoom, true);
     syncSliderWithZoom();
 }
-
-
-#include <KoZoomAction.moc>

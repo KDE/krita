@@ -759,5 +759,3 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
     }
     return false;
 }
-
-#include <KoPADocumentModel.moc>

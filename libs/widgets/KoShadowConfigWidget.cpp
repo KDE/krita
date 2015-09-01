@@ -229,5 +229,3 @@ void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
         setUnit(res.value<KoUnit>());
     }
 }
-
-#include <KoShadowConfigWidget.moc>

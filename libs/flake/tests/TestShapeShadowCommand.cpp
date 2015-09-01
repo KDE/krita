@@ -64,4 +64,3 @@ void TestShapeShadowCommand::refCounting()
 }
 
 QTEST_MAIN(TestShapeShadowCommand)
-#include "TestShapeShadowCommand.moc"

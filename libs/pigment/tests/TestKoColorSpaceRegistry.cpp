@@ -53,4 +53,3 @@ void TestColorSpaceRegistry::testRgb16()
 }
 
 QTEST_KDEMAIN(TestColorSpaceRegistry, NoGUI)
-#include <TestKoColorSpaceRegistry.moc>

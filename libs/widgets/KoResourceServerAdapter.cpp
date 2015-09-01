@@ -57,4 +57,3 @@ void KoAbstractResourceServerAdapter::emitTagCategoryWasRemoved(const QString& t
 {
     emit tagCategoryWasRemoved(tag);
 }
-#include <KoResourceServerAdapter.moc>

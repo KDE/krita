@@ -538,5 +538,3 @@ qreal KoPencilTool::getFittingError(){
 void KoPencilTool::setFittingError(qreal fittingError){
     this->m_fittingError = fittingError;
 }
-
-#include "KoPencilTool.moc"

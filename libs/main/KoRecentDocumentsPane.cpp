@@ -265,5 +265,3 @@ void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap&
         }
     }
 }
-
-#include <KoRecentDocumentsPane.moc>

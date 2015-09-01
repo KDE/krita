@@ -299,4 +299,3 @@ void TestPointRemoveCommand::redoUndo()
 }
 
 QTEST_MAIN(TestPointRemoveCommand)
-#include "TestPointRemoveCommand.moc"

@@ -88,5 +88,3 @@ QString KoFilterChooser::filterSelected()
     QListWidgetItem *item = m_filterList->currentItem();
     return item->data(32).toString();
 }
-
-#include <KoFilterManager_p.moc>

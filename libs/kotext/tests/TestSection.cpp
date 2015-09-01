@@ -35,4 +35,3 @@ void TestSection::testSaveOdf()
 }
 
 QTEST_MAIN(TestSection)
-#include <TestSection.moc>

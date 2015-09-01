@@ -127,5 +127,3 @@ KoInteractionTool::KoInteractionTool(KoInteractionToolPrivate &dd)
     : KoToolBase(dd)
 {
 }
-
-#include <KoInteractionTool.moc>

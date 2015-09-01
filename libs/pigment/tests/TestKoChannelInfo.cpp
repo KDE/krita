@@ -59,5 +59,3 @@ void TestKoChannelInfo::testdisplayOrderSorted()
 }
     
 QTEST_KDEMAIN(TestKoChannelInfo, NoGUI)
-#include <TestKoChannelInfo.moc>
-

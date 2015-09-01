@@ -220,4 +220,3 @@ void TestShapeContainer::testScaling2()
 }
 
 QTEST_MAIN(TestShapeContainer)
-#include "TestShapeContainer.moc"

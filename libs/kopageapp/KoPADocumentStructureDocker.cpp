@@ -704,6 +704,5 @@ void KoPADocumentStructureDocker::selectPages(int start, int count)
         }
     }
 }
-#include <KoPADocumentStructureDocker.moc>
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

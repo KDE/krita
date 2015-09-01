@@ -549,5 +549,3 @@ KoProgressUpdater* KoFilterManager::progressUpdater() const
     }
     return d->progressUpdater.data();
 }
-
-#include <KoFilterManager.moc>

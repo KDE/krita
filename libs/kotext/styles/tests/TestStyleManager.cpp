@@ -367,4 +367,3 @@ void TestStyleManager::cleanup()
 }
 
 QTEST_MAIN(TestStyleManager)
-#include <TestStyleManager.moc>

@@ -117,6 +117,3 @@ void OdfTextTrackStyles::documentDied(QObject *document)
 {
     unregisterDocument(static_cast<QTextDocument *>(document));
 }
-
-#include <OdfTextTrackStyles.moc>
-

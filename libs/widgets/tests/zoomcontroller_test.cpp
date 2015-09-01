@@ -38,6 +38,3 @@ void zoomcontroller_test::testApi()
 }
 
 QTEST_KDEMAIN(zoomcontroller_test, GUI)
-
-#include <zoomcontroller_test.moc>
-

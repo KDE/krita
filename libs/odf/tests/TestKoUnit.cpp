@@ -159,4 +159,3 @@ void TestKoUnit::testListForUi()
 }
 
 QTEST_MAIN(TestKoUnit)
-#include <TestKoUnit.moc>

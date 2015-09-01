@@ -74,5 +74,3 @@ void TestKoColor::testSerialization()
 }
 
 QTEST_KDEMAIN(TestKoColor, NoGUI)
-#include <TestKoColor.moc>
-

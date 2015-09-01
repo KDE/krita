@@ -685,7 +685,7 @@ void KoPADocumentStructureDocker::editPaste()
     }
     else {
         // Paste Pages
-        KoPACanvas * canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
+        KoPACanvas * canvas = static_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
         canvas->koPAView()->pagePaste();
     }
 }

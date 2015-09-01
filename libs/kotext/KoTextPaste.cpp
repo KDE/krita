@@ -107,7 +107,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     }
 #endif
 
-    KoTextSharedLoadingData *sharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID));
+    KoTextSharedLoadingData *sharedData = static_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID));
 
     // add shapes to the document
     foreach (KoShape *shape, sharedData->insertedShapes()) {

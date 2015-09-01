@@ -68,6 +68,3 @@ void KoSizeGroup::removeWidget(QWidget *widget)
     d->removeWidget(widget);
     d->scheduleSizeUpdate();
 }
-
-
-#include <KoSizeGroup.moc>

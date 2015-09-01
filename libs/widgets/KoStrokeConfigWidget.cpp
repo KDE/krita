@@ -546,5 +546,3 @@ void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
         break;
     }
 }
-
-#include <KoStrokeConfigWidget.moc>

@@ -377,5 +377,3 @@ void Viewport::resetLayout()
         kDebug(30006) <<"Canvas widget geom:" << m_canvas->geometry();
 #endif
 }
-
-#include <KoCanvasControllerWidgetViewport_p.moc>

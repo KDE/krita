@@ -191,4 +191,3 @@ void TestPAPageDeleteCommand::redoUndoMultiple()
 }
 
 QTEST_KDEMAIN( TestPAPageDeleteCommand, GUI )
-#include "TestPAPageDeleteCommand.moc"

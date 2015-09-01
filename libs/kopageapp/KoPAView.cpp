@@ -912,7 +912,7 @@ void KoPAView::insertPage()
         page = masterPage;
     }
     else {
-        KoPAPage * activePage = dynamic_cast<KoPAPage*>( d->activePage );
+        KoPAPage * activePage = static_cast<KoPAPage*>( d->activePage );
         KoPAMasterPage * masterPage = activePage->masterPage();
         page = d->doc->newPage( masterPage );
     }
@@ -1285,6 +1285,3 @@ void KoPAView::updateUnit(const KoUnit &unit)
     d->verticalRuler->setUnit(unit);
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
-
-#include <KoPAView.moc>
-

@@ -158,5 +158,3 @@ void TestCellRegion::testFromStringWithSpecialCharactersMultipleTables()
 }
 
 QTEST_MAIN(TestCellRegion)
-
-#include "TestCellRegion.moc"

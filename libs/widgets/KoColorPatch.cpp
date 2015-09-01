@@ -64,5 +64,3 @@ void KoColorPatch::paintEvent(QPaintEvent *pe)
     painter.setBrush(QBrush(qc));
     painter.drawRect(contentsRect());
 }
-
-#include <KoColorPatch.moc>

@@ -138,4 +138,3 @@ void TestKoShapeRegistry::testCreateFramedShapes()
 }
 
 QTEST_KDEMAIN(TestKoShapeRegistry, GUI)
-#include <TestKoShapeRegistry.moc>

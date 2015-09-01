@@ -127,5 +127,3 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     p->restore();
     delete p;
 }
-
-#include <FormattingPreview.moc>

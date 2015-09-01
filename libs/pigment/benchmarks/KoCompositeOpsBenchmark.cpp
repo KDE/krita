@@ -89,5 +89,3 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
 
 
 QTEST_KDEMAIN(KoCompositeOpsBenchmark, NoGUI)
-#include "KoCompositeOpsBenchmark.moc"
-

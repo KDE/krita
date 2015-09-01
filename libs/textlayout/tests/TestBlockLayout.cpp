@@ -1074,5 +1074,3 @@ void TestBlockLayout::testDropCaps()
 
 
 QTEST_KDEMAIN(TestBlockLayout, GUI)
-
-#include <TestBlockLayout.moc>

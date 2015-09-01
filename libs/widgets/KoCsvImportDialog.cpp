@@ -784,5 +784,3 @@ void KoCsvImportDialog::encodingChanged(const QString &)
         d->fillTable();
     }
 }
-
-#include <KoCsvImportDialog.moc>

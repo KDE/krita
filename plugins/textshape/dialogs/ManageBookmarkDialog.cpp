@@ -172,6 +172,3 @@ void ManageBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item)
     Q_UNUSED(item);
     accept();
 }
-
-#include <ManageBookmarkDialog.moc>
-

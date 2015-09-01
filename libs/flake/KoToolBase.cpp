@@ -413,5 +413,3 @@ bool KoToolBase::isInTextMode() const
     Q_D(const KoToolBase);
     return d->isInTextMode;
 }
-
-#include <KoToolBase.moc>

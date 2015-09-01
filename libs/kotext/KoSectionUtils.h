@@ -41,7 +41,7 @@ namespace KoSectionUtils {
      * @param fmt QTextBlockFormat reference to set startings.
      * @param list QList<KoSection *> is a list to set.
      */
-    KOTEXT_EXPORT void setSectionStartings(QTextBlockFormat &fmt, QList<KoSection *> &list);
+    KOTEXT_EXPORT void setSectionStartings(QTextBlockFormat &fmt, const QList<KoSection *> &list);
 
     /**
      * Convinient function to set a list of endings to QTextBlockFormat.
@@ -50,7 +50,7 @@ namespace KoSectionUtils {
      * @param fmt QTextBlockFormat reference to set endings.
      * @param list QList<KoSectionEnd *> is a list to set.
      */
-    KOTEXT_EXPORT void setSectionEndings(QTextBlockFormat& fmt, QList<KoSectionEnd *> &list);
+    KOTEXT_EXPORT void setSectionEndings(QTextBlockFormat& fmt, const QList<KoSectionEnd *> &list);
 
     /**
      * Convinient function to get section startings from QTextBlockFormat.

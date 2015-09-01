@@ -30,12 +30,12 @@
 #include <KoTextEditor.h>
 #include <opendocument/KoTextLoader.h>
 #include <KoTextSharedLoadingData.h>
-#include <KoSectionManager.h>
+#include <KoSectionModel.h>
 
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
-#include "KoSectionManager.h"
+#include "KoSectionModel.h"
 #include <Soprano/Soprano>
 #endif
 
@@ -77,7 +77,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     bool ok = true;
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->resourceManager);
-    context.setSectionManager(KoTextDocument(d->editor->document()).sectionManager());
+    context.setSectionModel(KoTextDocument(d->editor->document()).sectionModel());
 
     KoTextLoader loader(context);
 
@@ -85,7 +85,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     // load the paste directly into the editor's cursor -- which breaks encapsulation
     loader.loadBody(body, *d->editor->cursor(), KoTextLoader::PasteMode);   // now let's load the body from the ODF KoXmlElement.
 
-    context.sectionManager()->invalidate();
+//     context.sectionModel()->invalidate(); FIXME!!
 
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "text paste, rdf handling" << d->rdfModel;
@@ -107,7 +107,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     }
 #endif
 
-    KoTextSharedLoadingData *sharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID));
+    KoTextSharedLoadingData *sharedData = static_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID));
 
     // add shapes to the document
     foreach (KoShape *shape, sharedData->insertedShapes()) {

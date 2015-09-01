@@ -593,7 +593,7 @@ bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
 {
     if (d->synced && event->type() == QEvent::Wheel) {
         KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
-        QWheelEvent *qwheel = dynamic_cast<QWheelEvent *>(event);
+        QWheelEvent *qwheel = static_cast<QWheelEvent *>(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
 
             int degrees = qwheel->delta() / 8;
@@ -624,6 +624,3 @@ void KoResourceItemChooser::updateView()
         baseLengthChanged(chooserSync->baseLength());
     }
 }
-
-
-#include <KoResourceItemChooser.moc>

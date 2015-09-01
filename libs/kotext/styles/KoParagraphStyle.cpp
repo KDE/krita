@@ -2363,5 +2363,3 @@ KoList *KoParagraphStyle::list() const
 {
     return d->list;
 }
-
-#include <KoParagraphStyle.moc>

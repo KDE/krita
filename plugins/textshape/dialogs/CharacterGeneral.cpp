@@ -198,5 +198,3 @@ KoCharacterStyle *CharacterGeneral::style() const
 {
     return m_style;
 }
-
-#include <CharacterGeneral.moc>

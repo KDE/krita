@@ -183,5 +183,3 @@ void KoPACanvasItem::setCursor(const QCursor &cursor)
 {
     QGraphicsWidget::setCursor(cursor);
 }
-
-#include <KoPACanvasItem.moc>

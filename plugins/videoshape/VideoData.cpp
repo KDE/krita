@@ -368,5 +368,3 @@ qint64 VideoData::key()
 {
     return d->key;
 }
-
-#include <VideoData.moc>

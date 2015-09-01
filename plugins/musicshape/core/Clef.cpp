@@ -108,5 +108,3 @@ int Clef::pitchToLine(int pitch) const
 }
     
 } // namespace MusicCore
-
-#include <Clef.moc>

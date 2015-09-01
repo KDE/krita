@@ -100,5 +100,3 @@ void FontDia::slotReset()
     initTabs();
     slotApply(); // ### Should reset() apply?
 }
-
-#include <FontDia.moc>

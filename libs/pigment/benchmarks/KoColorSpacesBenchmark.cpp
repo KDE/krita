@@ -147,5 +147,3 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
 }
 
 QTEST_KDEMAIN(KoColorSpacesBenchmark, GUI)
-
-#include "KoColorSpacesBenchmark.moc"

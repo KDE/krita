@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2007-2009, 2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+   Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +46,7 @@ public:
             , zIndex(0)
             , documentResources(resourceManager)
             , documentRdf(0)
-            , sectionManager(0)
+            , sectionModel(0)
     {
     }
 
@@ -66,7 +66,7 @@ public:
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
     QObject *documentRdf;
-    KoSectionManager *sectionManager;
+    KoSectionModel *sectionModel;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
@@ -210,12 +210,12 @@ void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
     d->documentRdf = documentRdf;
 }
 
-KoSectionManager* KoShapeLoadingContext::sectionManager()
+KoSectionModel *KoShapeLoadingContext::sectionModel()
 {
-    return d->sectionManager;
+    return d->sectionModel;
 }
 
-void KoShapeLoadingContext::setSectionManager(KoSectionManager *sectionManager)
+void KoShapeLoadingContext::setSectionModel(KoSectionModel *sectionModel)
 {
-    d->sectionManager = sectionManager;
+    d->sectionModel = sectionModel;
 }

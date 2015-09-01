@@ -1054,4 +1054,3 @@ void TestLoad::actionElement()
 }
 
 QTEST_MAIN(TestLoad)
-#include "TestLoad.moc"

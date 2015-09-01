@@ -280,5 +280,3 @@ bool GroupItem::eventFilter(QObject*, QEvent *event)
 
     return false;
 }
-
-#include "KoSizeGroupPrivate.moc"

@@ -255,4 +255,3 @@ void TestShapePainting::testPaintOrder()
 }
 
 QTEST_MAIN(TestShapePainting)
-#include "TestShapePainting.moc"

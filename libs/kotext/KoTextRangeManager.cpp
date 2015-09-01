@@ -139,5 +139,3 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
     }
     return ranges;
 }
-
-#include <KoTextRangeManager.moc>

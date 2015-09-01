@@ -56,6 +56,3 @@ void KoResourceItemView::contextMenuEvent(QContextMenuEvent *event)
     QTableView::contextMenuEvent(event);
     emit contextMenuRequested(event->globalPos());
 }
-
-
-#include "KoResourceItemView.moc"

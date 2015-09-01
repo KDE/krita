@@ -320,14 +320,13 @@ KisMainWindow::KisMainWindow()
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
-
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
     }
 
-
     QMap<QString, QAction*> dockwidgetActions;
+    dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         QDockWidget *dw = createDockWidget(factory);

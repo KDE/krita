@@ -122,5 +122,3 @@ void RejectChangeCommand::undo()
     UndoRedoFinalizer finalizer(this);
     emit acceptRejectChange();
 }
-
-#include <RejectChangeCommand.moc>

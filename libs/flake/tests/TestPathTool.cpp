@@ -88,4 +88,3 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
 
 
 QTEST_KDEMAIN(TestPathTool, GUI)
-#include "TestPathTool.moc"

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+   Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@ class KoLoadingShapeUpdater;
 class KoImageCollection;
 class KoSharedLoadingData;
 class KoDocumentResourceManager;
-class KoSectionManager;
+class KoSectionModel;
 
 /**
  * Context passed to shapes during loading.
@@ -191,16 +191,16 @@ public:
     void setDocumentRdf(QObject *documentRdf);
 
     /**
-     * @brief returns the current section manager
-     * @return the pointer to KoSectionManager
+     * @brief returns the current section model
+     * @return the pointer to KoSectionModel
      */
-    KoSectionManager *sectionManager();
+    KoSectionModel *sectionModel();
 
     /**
-     * @brief sets the section manager for the loading context
-     * @param sectionManager the section manager to set
+     * @brief sets the section model for the loading context
+     * @param sectionModel the section model to set
      */
-    void setSectionManager(KoSectionManager *sectionManager);
+    void setSectionModel(KoSectionModel *sectionModel);
 
 private:
     // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase

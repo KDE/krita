@@ -733,5 +733,3 @@ int KoChangeTracker::fragmentLength(const QTextDocumentFragment &fragment)
 
     return length;
 }
-
-#include <KoChangeTracker.moc>

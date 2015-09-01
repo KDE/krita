@@ -1153,5 +1153,3 @@ KoTextTableTemplate *KoStyleManager::tableTemplate(int id) const
 {
     return d->tableTemplates.value(id, 0);
 }
-
-#include <KoStyleManager.moc>

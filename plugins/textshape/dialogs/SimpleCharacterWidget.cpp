@@ -261,5 +261,3 @@ void SimpleCharacterWidget::slotCharacterStyleApplied(const KoCharacterStyle *st
 {
     m_sortedStylesModel->styleApplied(style);
 }
-
-#include <SimpleCharacterWidget.moc>

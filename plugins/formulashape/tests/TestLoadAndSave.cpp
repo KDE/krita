@@ -1527,4 +1527,3 @@ void TestLoadAndSave::actionElement()
 }
 
 QTEST_MAIN(TestLoadAndSave)
-#include "TestLoadAndSave.moc"

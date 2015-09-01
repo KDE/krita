@@ -41,4 +41,3 @@ void TestSectionStyle::testSectionStyle()
 }
 
 QTEST_MAIN(TestSectionStyle)
-#include <TestSectionStyle.moc>

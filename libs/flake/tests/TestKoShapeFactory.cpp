@@ -125,4 +125,3 @@ void TestKoShapeFactory::testOdfElement()
 }
 
 QTEST_KDEMAIN(TestKoShapeFactory, NoGUI)
-#include <TestKoShapeFactory.moc>

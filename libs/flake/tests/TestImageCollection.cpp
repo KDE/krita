@@ -308,4 +308,3 @@ void TestImageCollection::testIsValid()
 }
 
 QTEST_KDEMAIN(TestImageCollection, GUI)
-#include <TestImageCollection.moc>

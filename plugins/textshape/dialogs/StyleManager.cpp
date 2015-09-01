@@ -446,5 +446,3 @@ bool StyleManager::checkUniqueStyleName(int widgetIndex)
     }
     return unique;
 }
-
-#include <StyleManager.moc>

@@ -550,5 +550,3 @@ void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type)
 }
 
 } // namespace MusicCore
-
-#include <Chord.moc>

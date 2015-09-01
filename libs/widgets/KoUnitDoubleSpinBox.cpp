@@ -222,7 +222,3 @@ double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
 #endif
     return dbl;
 }
-
-
-
-#include <KoUnitDoubleSpinBox.moc>

@@ -392,5 +392,3 @@ void KoOpenPane::itemClicked(QTreeWidgetItem* item)
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
     }
 }
-
-#include <KoOpenPane.moc>

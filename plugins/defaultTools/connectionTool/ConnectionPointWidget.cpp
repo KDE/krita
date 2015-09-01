@@ -55,5 +55,3 @@ void ConnectionPointWidget::toggleEditModeCheckbox(bool checked)
         widget.toggleEditMode->setCheckState(Qt::Unchecked);
     widget.toggleEditMode->blockSignals(false);
 }
-
-#include <ConnectionPointWidget.moc>

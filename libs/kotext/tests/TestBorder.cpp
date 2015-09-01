@@ -54,4 +54,3 @@ void TestBorder::testBorder()
 }
 
 QTEST_MAIN(TestBorder)
-#include <TestBorder.moc>

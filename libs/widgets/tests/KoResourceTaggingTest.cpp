@@ -143,5 +143,3 @@ void KoResourceTaggingTest::testReadWriteXML()
 }
 
 QTEST_KDEMAIN(KoResourceTaggingTest, GUI)
-
-#include <KoResourceTaggingTest.moc>

@@ -28,7 +28,6 @@
 #include "MusicShape.h"
 
 #include "MusicTool.h"
-#include <MusicTool.moc>
 
 #include "dialogs/PartsWidget.h"
 

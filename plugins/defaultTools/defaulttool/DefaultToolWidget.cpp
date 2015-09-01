@@ -271,5 +271,3 @@ void DefaultToolWidget::aspectButtonToggled(bool keepAspect)
         shape->setKeepAspectRatio(keepAspect);
     }
 }
-
-#include <DefaultToolWidget.moc>

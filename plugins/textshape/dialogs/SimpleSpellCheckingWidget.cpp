@@ -36,5 +36,3 @@ SimpleSpellCheckingWidget::~SimpleSpellCheckingWidget()
 
     delete ui;
 }
-
-#include <SimpleSpellCheckingWidget.moc>

@@ -125,6 +125,3 @@ QString KoPAViewMode::name() const
 {
     return m_name;
 }
-
-#include <KoPAViewMode.moc>
-

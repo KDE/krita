@@ -127,4 +127,3 @@ void TestSelection::testSize()
 }
 
 QTEST_MAIN(TestSelection)
-#include "TestSelection.moc"

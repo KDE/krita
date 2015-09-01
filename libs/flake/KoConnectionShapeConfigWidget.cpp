@@ -71,5 +71,3 @@ KUndo2Command * KoConnectionShapeConfigWidget::createCommand()
         return new KoConnectionShapeTypeCommand(m_connection, type);
     }
 }
-
-#include <KoConnectionShapeConfigWidget.moc>

@@ -429,5 +429,3 @@ void TestChangeTrackedDelete::insertSampleTable(QTextDocument *document)
 }
 
 QTEST_MAIN(TestChangeTrackedDelete)
-
-#include <TestChangeTrackedDelete.moc>

@@ -20,11 +20,14 @@
 #ifndef NEWSECTIONCOMMAND_H
 #define NEWSECTIONCOMMAND_H
 
-#include <KoSection.h>
-#include <QTextDocument>
-
 #include <kundo2command.h>
 
+class KoSection;
+class QTextDocument;
+
+//FIXME: why it is not going from KoTextCommandBase?
+// If it will be changed to KoTextCommandBase,
+// don't forget to add UndoRedoFinalizer.
 class NewSectionCommand : public KUndo2Command
 {
 public:
@@ -36,8 +39,10 @@ public:
     virtual void redo();
 
 private:
-    bool m_first; // checks first call of redo
-    QTextDocument *m_document; // section manager of the document
+    bool m_first; ///< Checks first call of redo
+    QTextDocument *m_document; ///< Pointer to document
+    KoSection *m_section; ///< Inserted section
+    int m_childIdx; ///< Position of inserted section in parent, after inserting
 };
 
 #endif // NEWSECTIONCOMMAND_H

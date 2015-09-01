@@ -88,5 +88,3 @@ void TestFindMatch::testCopyAssign()
 }
 
 QTEST_MAIN(TestFindMatch)
-
-#include "testfindmatch.moc"

@@ -77,5 +77,3 @@ KUndo2Command * SpiralShapeConfigWidget::createCommand()
     SpiralShape::SpiralType type = static_cast<SpiralShape::SpiralType>(widget.spiralType->currentIndex());
     return new SpiralShapeConfigCommand(m_spiral, type, (widget.clockWise->currentIndex() == 0), widget.fade->value());
 }
-
-#include <SpiralShapeConfigWidget.moc>

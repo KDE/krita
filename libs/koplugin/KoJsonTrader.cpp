@@ -22,8 +22,7 @@
 
 #include <QDebug>
 
-#include <QApplication>
-#include <QList>
+#include <QCoreApplication>
 #include <QPluginLoader>
 #include <QJsonObject>
 #include <QJsonArray>

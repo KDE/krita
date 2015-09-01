@@ -101,4 +101,3 @@ void KisGridManager::toggleSnapToGrid()
     }
 }
 
-#include "kis_grid_manager.moc"

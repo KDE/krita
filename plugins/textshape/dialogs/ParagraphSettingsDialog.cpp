@@ -111,5 +111,3 @@ void ParagraphSettingsDialog::setImageCollection(KoImageCollection *imageCollect
 {
     m_paragraphGeneral->setImageCollection(imageCollection);
 }
-
-#include <ParagraphSettingsDialog.moc>

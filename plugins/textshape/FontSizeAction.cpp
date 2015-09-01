@@ -152,5 +152,3 @@ void FontSizeAction::actionTriggered( QAction* action )
     emit fontSizeChanged( action->text().toDouble() );
     KSelectAction::actionTriggered( action );
 }
-
-#include "FontSizeAction.moc"

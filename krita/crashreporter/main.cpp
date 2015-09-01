@@ -23,7 +23,6 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <KoServiceLocator.h>
 #include <kapplication.h>
 #include <kdebug.h>
 

@@ -255,4 +255,3 @@ void TestControlPointMoveCommand::redoUndoControlPoint2Symmetric()
 }
 
 QTEST_MAIN(TestControlPointMoveCommand)
-#include <TestControlPointMoveCommand.moc>

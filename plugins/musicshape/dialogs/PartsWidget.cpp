@@ -93,5 +93,3 @@ void PartsWidget::editPart()
     int row = widget.partsList->currentIndex().row();
     PartDetailsDialog::showDialog(m_tool, m_sheet->part(row), this);
 }
-
-#include <PartsWidget.moc>

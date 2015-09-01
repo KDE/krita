@@ -159,5 +159,3 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     return QTest::qExec(new DocumentStructureTest, argc, argv);
 }
-
-#include <documentstructuretest.moc>

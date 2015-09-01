@@ -112,4 +112,3 @@ void TestLayout::fencedElement()
 }
 
 QTEST_KDEMAIN(TestLayout, GUI)
-#include "TestLayout.moc"

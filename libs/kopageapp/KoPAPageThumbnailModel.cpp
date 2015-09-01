@@ -82,6 +82,3 @@ void KoPAPageThumbnailModel::setIconSize(const QSize &size)
 {
     m_iconSize = size;
 }
-
-#include <KoPAPageThumbnailModel.moc>
-

@@ -645,5 +645,3 @@ KoApplication *KoApplication::koApplication()
 {
     return KoApp;
 }
-
-#include <KoApplication.moc>

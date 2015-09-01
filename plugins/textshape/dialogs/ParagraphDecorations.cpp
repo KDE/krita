@@ -65,5 +65,3 @@ void ParagraphDecorations::clearBackgroundColor()
     m_backgroundColorReset = true;
     emit parStyleChanged();
 }
-
-#include <ParagraphDecorations.moc>

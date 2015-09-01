@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,14 +20,13 @@
 #ifndef SECTIONFORMATDIALOG_H
 #define SECTIONFORMATDIALOG_H
 
-#include <KoTextEditor.h>
-#include <KoSectionManager.h>
-
 #include <KDialog>
-#include <QModelIndex>
+
+class KoTextEditor;
+class KoSection;
+class KoSectionModel;
 
 #include <ui_SectionFormatDialog.h>
-
 class SectionFormatDialog : public KDialog
 {
     Q_OBJECT
@@ -41,12 +40,13 @@ private Q_SLOTS:
     void updateTreeState();
 
 private:
+    class ProxyModel;
+    class SectionNameValidator;
+
     Ui::SectionFormatDialog m_widget;
     KoTextEditor* m_editor;
     QModelIndex m_curIdx;
-    KoSectionManager *m_sectionManager;
-
-    class SectionNameValidator;
+    KoSectionModel *m_sectionModel;
 
     KoSection *sectionFromModel(const QModelIndex &idx);
 };

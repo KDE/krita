@@ -561,4 +561,3 @@ void TestShapeReorderCommand::testNoCommand()
 }
 
 QTEST_MAIN(TestShapeReorderCommand)
-#include "TestShapeReorderCommand.moc"

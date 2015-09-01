@@ -445,7 +445,7 @@ protected:
 
     void moveEvent(QMoveEvent *e);
 
-private slots:
+private Q_SLOTS:
     void initializeGeometry();
     void showManual();
 

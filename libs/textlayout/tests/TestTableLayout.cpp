@@ -370,5 +370,3 @@ void TestTableLayout::testRowHeightMinimum()
 }
 
 QTEST_KDEMAIN(TestTableLayout, GUI)
-
-#include <TestTableLayout.moc>

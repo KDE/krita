@@ -105,5 +105,3 @@ void SpecialButton::mousePressEvent(QMouseEvent *)
         hidePopup();
     }
 }
-
-#include <SpecialButton.moc>

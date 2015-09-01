@@ -266,5 +266,3 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 }
 
 QTEST_KDEMAIN(KoRgbU8ColorSpaceTester, NoGUI)
-#include <KoRgbU8ColorSpaceTester.moc>
-

@@ -38,5 +38,3 @@ void SimpleCaptionsWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
 }
-
-#include <SimpleCaptionsWidget.moc>

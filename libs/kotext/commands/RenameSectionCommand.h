@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplaykov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplaykov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,17 +20,20 @@
 #ifndef RENAMESECTIONCOMMAND_H
 #define RENAMESECTIONCOMMAND_H
 
-#include <KoSection.h>
-
 #include <QString>
 
 #include <kundo2qstack.h>
+
+class QTextDocument;
+
+class KoSection;
+class KoSectionModel;
 
 class RenameSectionCommand : public KUndo2Command
 {
 public:
 
-    RenameSectionCommand(KoSection *section, const QString &newName);
+    RenameSectionCommand(KoSection *section, const QString &newName, QTextDocument *document);
     virtual ~RenameSectionCommand();
 
     virtual void undo();
@@ -40,10 +43,11 @@ public:
     virtual int id() const;
 
 private:
-    KoSection *m_section; // section to rename
-    QString m_newName; // new section name
-    QString m_oldName; // old section name (needed to undo)
-    bool m_first; // checks first call of redo
+    KoSectionModel *m_sectionModel; ///< Pointer to document's KoSectionModel
+    KoSection *m_section; ///< Section to rename
+    QString m_newName; ///< New section name
+    QString m_oldName; ///< Old section name (needed to undo)
+    bool m_first; ///< Checks first call of redo
 };
 
 #endif // RENAMESECTIONCOMMAND_H

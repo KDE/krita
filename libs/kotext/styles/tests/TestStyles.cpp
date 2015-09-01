@@ -396,4 +396,3 @@ void TestStyles::testUnapplyStyle()
 }
 
 QTEST_KDEMAIN(TestStyles, GUI)
-#include <TestStyles.moc>

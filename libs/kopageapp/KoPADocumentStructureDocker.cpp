@@ -685,7 +685,7 @@ void KoPADocumentStructureDocker::editPaste()
     }
     else {
         // Paste Pages
-        KoPACanvas * canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
+        KoPACanvas * canvas = static_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
         canvas->koPAView()->pagePaste();
     }
 }
@@ -704,6 +704,5 @@ void KoPADocumentStructureDocker::selectPages(int start, int count)
         }
     }
 }
-#include <KoPADocumentStructureDocker.moc>
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

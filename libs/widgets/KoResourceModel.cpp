@@ -317,5 +317,3 @@ QList< KoResource* > KoResourceModel::serverResources() const
 {
     return m_resourceAdapter->serverResources();
 }
-
-#include <KoResourceModel.moc>

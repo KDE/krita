@@ -317,4 +317,3 @@ void KisFilterSelectorWidget::setVisible(bool visible)
     }
 }
 
-#include "kis_filter_selector_widget.moc"

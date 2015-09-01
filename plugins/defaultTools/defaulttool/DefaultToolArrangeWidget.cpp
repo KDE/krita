@@ -45,5 +45,3 @@ DefaultToolArrangeWidget::DefaultToolArrangeWidget( KoInteractionTool* tool,
     group->setDefaultAction( m_tool->action( "object_group" ) );
     ungroup->setDefaultAction( m_tool->action( "object_ungroup" ) );
 }
-
-#include <DefaultToolArrangeWidget.moc>

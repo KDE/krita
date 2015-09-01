@@ -223,5 +223,3 @@ KoColorSet *KoEditColorSetDialog::activeColorSet()
 {
     return ui->activeColorSet();
 }
-
-#include <KoEditColorSetDialog.moc>

@@ -27,5 +27,3 @@ KoToolSelection::KoToolSelection(QObject *parent)
 KoToolSelection::~KoToolSelection()
 {
 }
-
-#include <KoToolSelection.moc>

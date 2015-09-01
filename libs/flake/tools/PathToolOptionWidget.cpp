@@ -54,5 +54,3 @@ void PathToolOptionWidget::setSelectionType(int type)
     else
         widget.stackedWidget->setCurrentIndex(1);
 }
-
-#include <PathToolOptionWidget.moc>

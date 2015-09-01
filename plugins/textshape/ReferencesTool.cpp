@@ -398,5 +398,3 @@ void ReferencesTool::insertBookmark(QString bookMarkName)
         m_bmark->clearLineEdit();
     }
 }
-
-#include <ReferencesTool.moc>

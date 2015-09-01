@@ -111,6 +111,7 @@ set ( textshape_SRCS
     dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
     dialogs/SectionFormatDialog.cpp
+    dialogs/SectionsSplitDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -169,6 +170,7 @@ ki18n_wrap_ui(textshape_SRCS
     dialogs/LinkInsertionDialog.ui
     dialogs/ManageBookmark.ui
     dialogs/SectionFormatDialog.ui
+    dialogs/SectionsSplitDialog.ui
 
 )
 

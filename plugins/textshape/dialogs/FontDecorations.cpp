@@ -65,5 +65,3 @@ void FontDecorations::save(KoCharacterStyle *style) const
     }
 
 }
-
-#include <FontDecorations.moc>

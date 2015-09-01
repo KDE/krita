@@ -85,5 +85,3 @@ void SnapGuideDocker::locationChanged(Qt::DockWidgetArea area)
 {
     Q_UNUSED(area);
 }
-
-#include <SnapGuideDocker.moc>

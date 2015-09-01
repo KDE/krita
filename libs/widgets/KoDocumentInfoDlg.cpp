@@ -462,5 +462,3 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
     addPage(page);
     d->pages.append(page);
 }
-
-#include <KoDocumentInfoDlg.moc>

@@ -84,4 +84,3 @@ KisPropertiesConfiguration* KisTangentNormalPaintOpSettingsWidget::configuration
 }
 
 
-#include "kis_tangent_normal_paintop_settings_widget.moc"

@@ -68,4 +68,3 @@ void TestShapeBackgroundCommand::refCounting()
 }
 
 QTEST_MAIN(TestShapeBackgroundCommand)
-#include "TestShapeBackgroundCommand.moc"

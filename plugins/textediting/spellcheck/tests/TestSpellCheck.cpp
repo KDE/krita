@@ -93,5 +93,3 @@ void TestSpellCheck::testFetchMoreText2()
 }
 
 QTEST_KDEMAIN(TestSpellCheck, GUI)
-
-#include <TestSpellCheck.moc>

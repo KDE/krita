@@ -356,5 +356,3 @@ void SimpleParagraphWidget::changeListLevel(int level)
 
     m_tool->setListLevel(level);
 }
-
-#include <SimpleParagraphWidget.moc>

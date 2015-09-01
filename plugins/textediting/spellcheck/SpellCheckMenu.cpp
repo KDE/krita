@@ -163,5 +163,3 @@ void SpellCheckMenu::setCurrentLanguage(const QString &language)
 {
     m_speller.setLanguage(language);
 }
-
-#include <SpellCheckMenu.moc>

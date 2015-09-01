@@ -58,5 +58,3 @@ void TrackedChangeManager::selectItem(const QModelIndex &newIndex)
     widget.treeView->setCurrentIndex(newIndex);
     currentChanged(newIndex, currentIndex);
 }
-
-#include <TrackedChangeManager.moc>

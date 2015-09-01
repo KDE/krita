@@ -104,5 +104,3 @@ void TestKoBookmarkManager::testRename()
 }
 
 QTEST_MAIN(TestKoBookmarkManager)
-
-#include "TestKoBookmarkManager.moc"

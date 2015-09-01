@@ -116,5 +116,3 @@ void KoPABackgroundTool::addOptionWidget(QWidget *widget)
 {
     m_addOnWidgets.append(widget);
 }
-
-#include <KoPABackgroundTool.moc>

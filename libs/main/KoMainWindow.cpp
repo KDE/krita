@@ -2196,7 +2196,3 @@ void KoMainWindow::showDockerTitleBars(bool show)
     KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
     configGroupInterface.writeEntry("ShowDockerTitleBars", show);
 }
-
-
-
-#include <KoMainWindow.moc>

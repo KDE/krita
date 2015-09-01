@@ -257,5 +257,3 @@ void KoViewItemContextBar::disableContextBar()
 {
     m_enabled = false;
 }
-
-#include "KoViewItemContextBar.moc"

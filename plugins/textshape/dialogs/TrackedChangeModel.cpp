@@ -326,5 +326,3 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
         block = block.next();
     }
 }
-
-#include <TrackedChangeModel.moc>

@@ -141,4 +141,3 @@ void KisDlgAdjustmentLayer::slotFilterWidgetSizeChanged()
     QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
 }
 
-#include "kis_dlg_adjustment_layer.moc"

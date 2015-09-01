@@ -50,5 +50,3 @@ void TestTextTool::testCaretRect()
 }
 
 QTEST_KDEMAIN(TestTextTool, GUI)
-
-#include <TestTextTool.moc>

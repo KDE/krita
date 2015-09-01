@@ -132,4 +132,3 @@ void TestPAPageInsertCommand::redoUndoMaster()
 }
 
 QTEST_KDEMAIN( TestPAPageInsertCommand, GUI )
-#include "TestPAPageInsertCommand.moc"

@@ -1160,6 +1160,3 @@ void PlotArea::relayout() const
     d->kdRadarPlane->relayout();
     update();
 }
-
-#include "PlotArea.moc"
-

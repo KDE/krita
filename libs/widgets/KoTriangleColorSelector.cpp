@@ -448,6 +448,3 @@ void KoTriangleColorSelector::configurationChanged()
     d->invalidTriangle = true;
     update();
 }
-
-
-#include <KoTriangleColorSelector.moc>

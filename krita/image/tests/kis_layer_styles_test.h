@@ -24,7 +24,7 @@
 class KisLayerStylesTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testLayerStylesFull();
     void testLayerStylesPartial();
     void testLayerStylesPartialVary();

@@ -332,5 +332,3 @@ QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
     m_success = false;
     return "###";
 }
-
-#include <ToCGenerator.moc>

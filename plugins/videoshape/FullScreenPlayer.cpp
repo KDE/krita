@@ -211,5 +211,3 @@ void FullScreenPlayer::muteStateChanged(bool muted)
         m_volumeIconUnmuted->setVisible(true);
     }
 }
-
-#include <FullScreenPlayer.moc>

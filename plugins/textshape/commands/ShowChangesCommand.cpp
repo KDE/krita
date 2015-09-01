@@ -187,5 +187,3 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
 ShowChangesCommand::~ShowChangesCommand()
 {
 }
-
-#include <ShowChangesCommand.moc>

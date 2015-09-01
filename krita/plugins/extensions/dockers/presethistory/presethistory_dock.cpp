@@ -142,4 +142,3 @@ void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
 
 }
 
-#include "presethistory_dock.moc"

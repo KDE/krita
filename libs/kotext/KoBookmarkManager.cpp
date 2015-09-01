@@ -83,6 +83,3 @@ QList<QString> KoBookmarkManager::bookmarkNameList() const
 {
     return d->bookmarkNameList;
 }
-
-#include <KoBookmarkManager.moc>
-

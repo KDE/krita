@@ -162,5 +162,3 @@ void KoPABackgroundToolWidget::displayMasterShapes(bool doDisplay)
         m_tool->canvas()->addCommand( cmd );
     }
 }
-
-#include <KoPABackgroundToolWidget.moc>

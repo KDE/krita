@@ -126,5 +126,3 @@ void SimpleCitationBibliographyWidget::applyTemplate(int templateId)
     m_templateGenerator->moveTemplateToUsed(m_templateList.at(templateId - 1));
     m_referenceTool->editor()->insertBibliography(m_templateList.at(templateId - 1));
 }
-
-#include <SimpleCitationBibliographyWidget.moc>

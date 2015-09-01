@@ -99,5 +99,3 @@ void KoUpdater::interrupt()
 {
     m_interrupted = true;
 }
-
-#include <KoUpdater.moc>

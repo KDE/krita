@@ -964,5 +964,3 @@ void TestTableLayout::testFeatureCombination()
 }
 
 QTEST_KDEMAIN(TestTableLayout, GUI)
-
-#include <TestTableLayout.moc>

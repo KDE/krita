@@ -270,5 +270,3 @@ void DefaultToolTransformWidget::resetTransformations()
     cmd->setText( kundo2_i18n("Reset Transformations") );
     m_tool->canvas()->addCommand( cmd );
 }
-
-#include <DefaultToolTransformWidget.moc>

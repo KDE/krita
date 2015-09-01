@@ -55,4 +55,3 @@ void TestFallBackColorTransformation::parametersForward()
 }
 
 QTEST_KDEMAIN(TestFallBackColorTransformation, NoGUI)
-#include <TestFallBackColorTransformation.moc>

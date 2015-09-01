@@ -357,5 +357,3 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition,
     cursor.removeSelectedText();
     cursor.insertText(word);
 }
-
-#include <SpellCheck.moc>

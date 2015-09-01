@@ -119,4 +119,3 @@ void TestInputDevice::testEraser()
 
 
 QTEST_KDEMAIN(TestInputDevice, GUI)
-#include <TestInputDevice.moc>

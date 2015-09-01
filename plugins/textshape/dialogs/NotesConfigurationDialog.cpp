@@ -235,5 +235,3 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         this->close();
     }
 }
-
-#include <NotesConfigurationDialog.moc>

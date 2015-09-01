@@ -127,4 +127,3 @@ void TestTableCellStyle::testMargin()
 }
 
 QTEST_MAIN(TestTableCellStyle)
-#include <TestTableCellStyle.moc>

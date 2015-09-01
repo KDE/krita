@@ -528,6 +528,3 @@ void KoDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOptionV
         p->restore();
     }
 }
-
-
-#include <KoDocumentSectionDelegate.moc>

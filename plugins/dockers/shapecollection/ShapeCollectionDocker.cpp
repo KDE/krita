@@ -571,5 +571,3 @@ void ShapeCollectionDocker::removeCurrentCollection()
 {
 //TODO    removeCollection(m_collectionsCombo->itemData(m_collectionsCombo->currentIndex()).toString());
 }
-
-#include <ShapeCollectionDocker.moc>

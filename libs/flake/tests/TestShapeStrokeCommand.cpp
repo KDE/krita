@@ -64,4 +64,3 @@ void TestShapeStrokeCommand::refCounting()
 }
 
 QTEST_MAIN(TestShapeStrokeCommand)
-#include "TestShapeStrokeCommand.moc"

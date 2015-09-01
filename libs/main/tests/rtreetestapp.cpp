@@ -329,5 +329,3 @@ void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
 }
-
-#include <rtreetestapp.moc>

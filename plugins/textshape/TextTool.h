@@ -181,6 +181,8 @@ private Q_SLOTS:
     void insertNewSection();
     /// configures params of the current section
     void configureSection();
+    /// inserts paragraph between sections bounds
+    void splitSections();
     /// paste text from the clipboard without formatting
     void pasteAsText();
     /// make the selected text bold or not
@@ -371,6 +373,7 @@ private:
     KAction *m_actionChangeDirection;
     KAction *m_actionInsertSection;
     KAction *m_actionConfigureSection;
+    KAction *m_actionSplitSections;
     KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;

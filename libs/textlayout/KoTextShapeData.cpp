@@ -389,5 +389,3 @@ void KoTextShapeData::saveStyle(KoGenStyle &style, KoShapeSavingContext &context
         d->paragraphStyle->saveOdf(style, context);
     }
 }
-
-#include <KoTextShapeData.moc>

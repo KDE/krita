@@ -284,7 +284,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
 
     if (currentModelStr == "RGBA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is RGB",
-                                                                    "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, Green, Blue)</a></b>, is the color model used by screens and other light-based media.</br>"
+                                                                    "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, Green, Blue)</a></b>, is the color model used by screens and other light-based media.<br/>"
                                                                     "RGB is an additive color model: adding colors together makes them brighter. This color "
                                                                     "model is the most extensive of all color models, and is recommended as a model for painting,"
                                                                     "that you can later convert to other spaces. RGB is also the recommended colorspace for HDR editing."));
@@ -294,7 +294,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "is the model used by printers and other ink-based media.<p>"
                                                                     "CMYK is a subtractive model, meaning that adding colors together will turn them darker. Because of CMYK "
                                                                     "profiles being very specific per printer, it is recommended to work in RGB space, and then later convert "
-                                                                    "to a CMYK profile, preferably one delivered by your printer. <br>"
+                                                                    "to a CMYK profile, preferably one delivered by your printer. <br/>"
                                                                     "CMYK is <b>not</b> recommended for painting."
                                                                     "Unfortunately, Krita cannot retrieve colorants or the TRC for this space."));
     } else if (currentModelStr == "XYZA") {
@@ -307,18 +307,18 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     } else if (currentModelStr == "GRAYA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is Grayscale",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Grayscale</a></b> only allows for "
-                                                                    "gray values and transparent values. Grayscale images use half"
-                                                                    "the memory and disk space compared to an RGB image of the same bit-depth.<br>"
+                                                                    "gray values and transparent values. Grayscale images use half "
+                                                                    "the memory and disk space compared to an RGB image of the same bit-depth.<br/>"
                                                                     "Grayscale is useful for inking and greyscale images. In "
                                                                     "Krita, you can mix Grayscale and RGB layers in the same image."));
     } else if (currentModelStr == "LABA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is LAB",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. <b>L<b> stands for Lightness, "
-                                                                    "the <b>a</b> and <b>b</b> components represent color channels.</br>"
+                                                                    "the <b>a</b> and <b>b</b> components represent color channels.<br/>"
                                                                     "L*a*b is a special model for color correction. It is based on human perception, meaning that it "
                                                                     "tries to encode the difference in lightness, red-green balance and yellow-blue balance. "
                                                                     "This makes it useful for color correction, but the vast majority of color maths in the blending "
-                                                                    "modes do <b>not</b> work as expected here.<br>"
+                                                                    "modes do <b>not</b> work as expected here.<br/>"
                                                                     "Similarly, Krita does not support HDR in LAB, meaning that HDR images converted to LAB lose color "
                                                                     "information. This colorspace is <b>not</b> recommended for painting, nor for export, "
                                                                     "but best as a space to do post-processing in. The Tone Response Curve is assumed to be the L* TRC."));
@@ -343,7 +343,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
     else if (currentDepthStr == "U16") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 16",
-                                                                    "<b>16 bit integer>/b>: Also known as 'deep color'. 16 bit is ideal for editing images with a linear TRC, large "
+                                                                    "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for editing images with a linear TRC, large "
                                                                     "color space, or just when you need more precise color blending. This does take twice as much space on "
                                                                     "the RAM and hard-drive than any given 8 bit image of the same properties, and for some devices it "
                                                                     "takes much more processing power. We recommend watching the RAM usage of the file carefully, or "
@@ -352,7 +352,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
     else if (currentDepthStr == "F16") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 16 bit float",
-                                                                    "<b>16 bit floaing point</b>: Also known as 'Half Floating Point', and the standard in VFX industry images. "
+                                                                    "<b>16 bit floating point</b>: Also known as 'Half Floating Point', and the standard in VFX industry images. "
                                                                     "16 bit float is ideal for editing images with a linear Tone Response Curve, large color space, or just when you need "
                                                                     "more precise color blending. It being floating point is an absolute requirement for Scene Referred "
                                                                     "(HDR) images. This does take twice as much space on the RAM and hard-drive than any given 8 bit image "
@@ -390,7 +390,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>Quoting Wikipedia, 'Academy Color Encoding System (ACES) is a color image "
-                                                                        "encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for"
+                                                                        "encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for "
                                                                         "a fully encompassing color accurate workflow, with 'seamless interchange of high quality motion "
                                                                         "picture images regardless of source'."));
         }
@@ -440,7 +440,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "is probably the right E white point to use when making the CIERGB color space profile. "
                                                                         "It's not clear to me what the correct CIERGB primaries really are. "
                                                                         "Lindbloom gives one set. The LCMS version 1 tutorial gives a different set. "
-                                                                        "Experts in the field contend thatthe real primaries "
+                                                                        "Experts in the field contend that the real primaries "
                                                                         "should be calculated from the spectral wavelengths, so I did."));
         }
         if (profileName.contains("IdentityRGB-")) {

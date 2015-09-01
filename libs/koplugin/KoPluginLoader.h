@@ -112,8 +112,11 @@ public:
      */
     void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
-private:
+public:
+    /// DO NOT USE! Use instance() instead
+    // TODO: turn KoPluginLoader into namespace and do not expose object at all
     KoPluginLoader();
+private:
     KoPluginLoader(const KoPluginLoader&);
     KoPluginLoader operator=(const KoPluginLoader&);
 

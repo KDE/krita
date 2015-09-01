@@ -27,8 +27,8 @@
 #include <QDebug>
 
 #include <KConfig>
+#include <KSharedConfig>
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KPluginFactory>
 
 class Q_DECL_HIDDEN KoPluginLoader::Private
@@ -47,10 +47,11 @@ KoPluginLoader::~KoPluginLoader()
     delete d;
 }
 
+Q_GLOBAL_STATIC(KoPluginLoader, pluginLoaderInstance)
+
 KoPluginLoader* KoPluginLoader::instance()
 {
-    K_GLOBAL_STATIC(KoPluginLoader, s_instance)
-    return s_instance;
+    return pluginLoaderInstance();
 }
 
 void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner)

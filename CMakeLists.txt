@@ -27,6 +27,7 @@ endif()
 # BUILD_TESTING and KDE4_BUILD_TESTS to be set to FALSE
 # better fixes welcome
 if (BUILD_TESTING)
+    add_definitions(-DBUILD_TESTING)
     set(KDE4_BUILD_TESTS TRUE)
 endif()
 
@@ -195,6 +196,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Parts KIO
                                      XmlGui Kross Wallet GlobalAccel
                                      Emoticons ConfigWidgets KDELibs4Support
+                                     TextWidgets TextEditor KIO
     OPTIONAL_COMPONENTS
         NotifyConfig
         Activities
@@ -205,7 +207,8 @@ if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Script Svg Test Concurrent)
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui UiTools Widgets Xml Network PrintSupport
+                                           Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
@@ -408,8 +411,11 @@ macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framewor
 ## Test for KReport
 ##
 macro_optional_find_package(KReport 2.96.0)
-macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
-                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+if (KReport_FOUND AND KREPORT_SCRIPTING)
+    set(KReport_WITH_SCRIPTING_FOUND TRUE)
+endif()
+macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats (scripting support required)"
+                                               "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
 
 ##
 ## Test for KProperty
@@ -764,7 +770,7 @@ macro_optional_find_package(Libqgit2)
 ###############################
 
 include(MacroCalligraAddBenchmark)
-include(MacroCalligraBuildTest)
+include(MacroCalligraAddTest)
 
  ####################
 #####################
@@ -933,7 +939,7 @@ calligra_drop_product_on_bad_condition( APP_KRITA
 
 calligra_drop_product_on_bad_condition( APP_KEXI
     KDb_FOUND "KDb not found"
-    KReport_FOUND "KReport not found"
+    KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
     KProperty_FOUND "KProperty not found"
 )
 

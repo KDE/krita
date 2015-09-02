@@ -22,7 +22,7 @@
 
 #include <kglobal.h>
 
-struct KoResourceItemChooserSync::Private
+struct Q_DECL_HIDDEN KoResourceItemChooserSync::Private
 {
     int baseLength;
 };

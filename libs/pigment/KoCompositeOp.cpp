@@ -92,7 +92,7 @@ void KoCompositeOp::ParameterInfo::updateOpacityAndAverage(float value) {
     }
 }
 
-struct KoCompositeOp::Private {
+struct Q_DECL_HIDDEN KoCompositeOp::Private {
     const KoColorSpace * colorSpace;
     QString id;
     QString description;

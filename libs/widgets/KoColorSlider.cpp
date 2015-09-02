@@ -29,7 +29,7 @@
 
 #define ARROWSIZE 8
 
-struct KoColorSlider::Private
+struct Q_DECL_HIDDEN KoColorSlider::Private
 {
     Private() : upToDate(false), displayRenderer(0) {}
     KoColor minColor;

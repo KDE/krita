@@ -27,7 +27,7 @@
 #include "KoHashGenerator.h"
 #include "KoHashGeneratorProvider.h"
 
-struct KoResource::Private {
+struct Q_DECL_HIDDEN KoResource::Private {
     QString name;
     QString filename;
     bool valid;

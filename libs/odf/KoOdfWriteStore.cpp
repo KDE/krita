@@ -32,7 +32,7 @@
 
 #include "KoXmlNS.h"
 
-struct KoOdfWriteStore::Private {
+struct Q_DECL_HIDDEN KoOdfWriteStore::Private {
     Private(KoStore * store)
             : store(store)
             , storeDevice(0)

@@ -21,7 +21,7 @@
 #include <kglobal.h>
 #include <QString>
 
-struct KoColorSpaceEngine::Private {
+struct Q_DECL_HIDDEN KoColorSpaceEngine::Private {
     QString id;
     QString name;
 };

@@ -19,7 +19,7 @@
 
 #include "KoColorTransformationFactory.h"
 
-struct KoColorTransformationFactory::Private {
+struct Q_DECL_HIDDEN KoColorTransformationFactory::Private {
     QString id;
 };
 

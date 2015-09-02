@@ -28,7 +28,7 @@ KoColorConversionTransformation::Intent KoColorConversionTransformation::Adjustm
 KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::AdjustmentConversionFlags = BlackpointCompensation | NoWhiteOnWhiteFixup;
 
 
-struct KoColorConversionTransformation::Private {
+struct Q_DECL_HIDDEN KoColorConversionTransformation::Private {
     const KoColorSpace* srcColorSpace;
     const KoColorSpace* dstColorSpace;
     Intent renderingIntent;

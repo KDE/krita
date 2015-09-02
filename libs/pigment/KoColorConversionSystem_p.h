@@ -240,7 +240,7 @@ uint qHash(const KoColorConversionSystem::NodeKey &key)
     return qHash(key.modelId) + qHash(key.depthId);
 }
 
-struct KoColorConversionSystem::Private {
+struct Q_DECL_HIDDEN KoColorConversionSystem::Private {
 
     QHash<NodeKey, Node*> graph;
     QList<Vertex*> vertexes;

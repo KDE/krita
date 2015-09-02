@@ -30,7 +30,7 @@
 #define PREVIEW_HEIGHT 64
 
 
-struct KoAbstractGradient::Private {
+struct Q_DECL_HIDDEN KoAbstractGradient::Private {
     const KoColorSpace* colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;

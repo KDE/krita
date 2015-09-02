@@ -21,7 +21,7 @@
 #include <QVector>
 
 
-struct KoCompositeColorTransformation::Private
+struct Q_DECL_HIDDEN KoCompositeColorTransformation::Private
 {
     ~Private() {
         qDeleteAll(transformations);

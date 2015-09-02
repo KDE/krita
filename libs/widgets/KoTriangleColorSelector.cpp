@@ -33,7 +33,7 @@ enum CurrentHandle {
     HueHandle,
     ValueSaturationHandle };
 
-struct KoTriangleColorSelector::Private {
+struct Q_DECL_HIDDEN KoTriangleColorSelector::Private {
     Private(KoTriangleColorSelector *_q, const KoColorDisplayRendererInterface *_displayRenderer)
         : q(_q),
           displayRenderer(_displayRenderer),

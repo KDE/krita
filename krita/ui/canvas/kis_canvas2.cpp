@@ -466,7 +466,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     updateCanvasWidgetImpl();
 }
 
-void KisCanvas2::startUpdateInPatches(QRect imageRect)
+void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 {
     if (m_d->currentCanvasIsOpenGL) {
         startUpdateCanvasProjection(imageRect);

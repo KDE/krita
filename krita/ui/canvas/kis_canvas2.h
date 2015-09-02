@@ -202,7 +202,7 @@ public Q_SLOTS:
      * Called whenever the display monitor profile resource changes
      */
     void slotSetDisplayProfile(const KoColorProfile *profile);
-    void startUpdateInPatches(QRect imageRect);
+    void startUpdateInPatches(const QRect &imageRect);
 
 private Q_SLOTS:
 

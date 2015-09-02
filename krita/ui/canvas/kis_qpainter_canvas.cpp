@@ -185,7 +185,7 @@ void KisQPainterCanvas::setDisplayFilter(KisDisplayFilter* displayFilter)
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setDisplayFilter(displayFilter);
 
-        startUpdateInPatches(image->bounds());
+        canvas()->startUpdateInPatches(canvas()->image()->bounds());
 }
 
 

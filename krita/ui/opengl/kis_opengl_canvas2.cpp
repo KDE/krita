@@ -216,9 +216,9 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
     }
 
     if (needsFullRefresh) {
-        startUpdateInPatches(image->bounds());
+        canvas()->startUpdateInPatches(canvas()->image()->bounds());
     } else {
-        updateCanvas();
+        canvas()->updateCanvas();
     }
 }
 

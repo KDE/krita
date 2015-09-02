@@ -415,7 +415,7 @@ macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framewor
 ##
 ## Test for KReport
 ##
-macro_optional_find_package(KReport 2.96.0)
+macro_optional_find_package(KReport 2.96.1)
 if (KReport_FOUND AND KREPORT_SCRIPTING)
     set(KReport_WITH_SCRIPTING_FOUND TRUE)
 endif()

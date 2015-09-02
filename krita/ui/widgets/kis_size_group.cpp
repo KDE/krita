@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoSizeGroup.h"
-#include "KoSizeGroupPrivate.h"
+#include "kis_size_group.h"
+#include "kis_size_group_p.h"
 
 
-KoSizeGroup::KoSizeGroup(QObject *parent, KoSizeGroup::mode mode, bool ignoreHidden)
+KisSizeGroup::KisSizeGroup(QObject *parent, KisSizeGroup::mode mode, bool ignoreHidden)
     : QObject(parent)
-    , d(new KoSizeGroupPrivate(this, mode, ignoreHidden))
+    , d(new KisSizeGroupPrivate(this, mode, ignoreHidden))
 {}
 
-KoSizeGroup::~KoSizeGroup()
+KisSizeGroup::~KisSizeGroup()
 {
     delete d;
 }
 
-void KoSizeGroup::setMode(KoSizeGroup::mode mode)
+void KisSizeGroup::setMode(KisSizeGroup::mode mode)
 {
     if (d->m_mode != mode) {
         d->m_mode = mode;
@@ -39,12 +39,12 @@ void KoSizeGroup::setMode(KoSizeGroup::mode mode)
     }
 }
 
-KoSizeGroup::mode KoSizeGroup::getMode() const
+KisSizeGroup::mode KisSizeGroup::getMode() const
 {
     return d->m_mode;
 }
 
-void KoSizeGroup::setIgnoreHidden(bool ignoreHidden)
+void KisSizeGroup::setIgnoreHidden(bool ignoreHidden)
 {
     if (d->m_ignoreHidden != ignoreHidden) {
         d->m_ignoreHidden = ignoreHidden;
@@ -52,18 +52,18 @@ void KoSizeGroup::setIgnoreHidden(bool ignoreHidden)
     }
 }
 
-bool KoSizeGroup::isIgnoreHidden() const
+bool KisSizeGroup::isIgnoreHidden() const
 {
     return d->m_ignoreHidden;
 }
 
-void KoSizeGroup::addWidget(QWidget *widget)
+void KisSizeGroup::addWidget(QWidget *widget)
 {
     d->addWidget(widget);
     d->scheduleSizeUpdate();
 }
 
-void KoSizeGroup::removeWidget(QWidget *widget)
+void KisSizeGroup::removeWidget(QWidget *widget)
 {
     d->removeWidget(widget);
     d->scheduleSizeUpdate();

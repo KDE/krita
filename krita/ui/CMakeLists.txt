@@ -228,6 +228,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_preset_selector_strip.cpp
     widgets/kis_tree_view_popup.cc
     widgets/kis_slider_spin_box.cpp
+    widgets/kis_size_group.cpp
+    widgets/kis_size_group_p.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp

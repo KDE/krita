@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoSizeGroupPrivate.h"
+#include "kis_size_group_p.h"
 
 #include <QEvent>
 #include <QTimer>
@@ -26,7 +26,7 @@
 #include <QGridLayout>
 #include <QFormLayout>
 
-KoSizeGroupPrivate::KoSizeGroupPrivate(KoSizeGroup *q_ptr, KoSizeGroup::mode mode, bool ignoreHidden)
+KisSizeGroupPrivate::KisSizeGroupPrivate(KisSizeGroup *q_ptr, KisSizeGroup::mode mode, bool ignoreHidden)
     : QObject()
     , q(q_ptr)
     , m_mode(mode)
@@ -41,7 +41,7 @@ KoSizeGroupPrivate::KoSizeGroupPrivate(KoSizeGroup *q_ptr, KoSizeGroup::mode mod
     QObject::connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateSize()));
 }
 
-void KoSizeGroupPrivate::addWidget(QWidget *widget)
+void KisSizeGroupPrivate::addWidget(QWidget *widget)
 {
     Q_ASSERT(widget);
 
@@ -109,7 +109,7 @@ void KoSizeGroupPrivate::addWidget(QWidget *widget)
 
 }
 
-void KoSizeGroupPrivate::removeWidget(QWidget *widget)
+void KisSizeGroupPrivate::removeWidget(QWidget *widget)
 {
     Q_ASSERT(widget);
 
@@ -167,14 +167,14 @@ void KoSizeGroupPrivate::removeWidget(QWidget *widget)
     }
 }
 
-void KoSizeGroupPrivate::scheduleSizeUpdate()
+void KisSizeGroupPrivate::scheduleSizeUpdate()
 {
     m_updateTimer->start();
 }
 
-void KoSizeGroupPrivate::updateSize()
+void KisSizeGroupPrivate::updateSize()
 {
-    if (m_mode == KoSizeGroup::KO_SIZE_GROUP_NONE) {
+    if (m_mode == KisSizeGroup::KIS_SIZE_GROUP_NONE) {
         // restore original widget size in each GroupItem
         Q_FOREACH(GroupItem *groupItem, m_groupItems) {
             groupItem->setSize(groupItem->widget()->sizeHint());
@@ -202,15 +202,15 @@ void KoSizeGroupPrivate::updateSize()
                 continue;
 
             switch(m_mode) {
-            case KoSizeGroup::KO_SIZE_GROUP_HORIZONTAL:
+            case KisSizeGroup::KIS_SIZE_GROUP_HORIZONTAL:
                 groupItem->setWidth(width);
                 break;
 
-            case KoSizeGroup::KO_SIZE_GROUP_VERTICAL:
+            case KisSizeGroup::KIS_SIZE_GROUP_VERTICAL:
                 groupItem->setHeight(height);
                 break;
 
-            case KoSizeGroup::KO_SIZE_GROUP_BOTH:
+            case KisSizeGroup::KIS_SIZE_GROUP_BOTH:
                 groupItem->setWidth(width);
                 groupItem->setHeight(height);
                 break;
@@ -244,7 +244,7 @@ QSize GroupItem::sizeHint() const
 QSize GroupItem::minimumSize() const
 {
     QSize size = QWidgetItem::minimumSize();
-    if (m_group->m_mode != KoSizeGroup::KO_SIZE_GROUP_NONE) {
+    if (m_group->m_mode != KisSizeGroup::KIS_SIZE_GROUP_NONE) {
         size = m_group->getMaxSizeHint();
     }
     return size;

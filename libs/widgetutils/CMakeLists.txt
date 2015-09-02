@@ -7,8 +7,6 @@ set(kowidgetutils_LIB_SRCS
     KoUpdater.cpp
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
-    KoSizeGroup.cpp
-    KoSizeGroupPrivate.cpp
 )
 
 
@@ -32,7 +30,6 @@ install(FILES
     KoProgressUpdater.h
     KoUpdater.h
     KoProperties.h
-    KoSizeGroup.h
     ${CMAKE_CURRENT_BINARY_DIR}/kowidgetutils_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
     COMPONENT Devel

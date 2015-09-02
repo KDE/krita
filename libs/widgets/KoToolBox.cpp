@@ -56,11 +56,8 @@ static int buttonSize(int screen)
     else  if (rc.width() <= 1920 ) {
         return 16;
     }
-    else if (rc.width() <= 2048) {
-        return 32;
-    }
     else {
-        return 48;
+        return 22;
     }
 }
 

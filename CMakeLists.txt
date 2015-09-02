@@ -195,9 +195,9 @@ if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui UiTools Widgets Xml Network PrintSupport
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
+find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
@@ -932,6 +932,7 @@ calligra_drop_product_on_bad_condition( APP_KEXI
     KDb_FOUND "KDb not found"
     KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
     KProperty_FOUND "KProperty not found"
+    Qt5UiTools_FOUND "Qt5UiTools not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_ACTIVE

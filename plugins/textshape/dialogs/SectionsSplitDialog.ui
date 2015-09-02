@@ -9,7 +9,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Insert paragpraph...</string>
+      <string>Insert paragraph...</string>
      </property>
     </widget>
    </item>

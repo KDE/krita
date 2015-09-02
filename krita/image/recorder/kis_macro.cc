@@ -30,7 +30,7 @@
 #include "kis_node_query_path.h"
 #include <kis_paint_device.h>
 
-struct KisMacro::Private {
+struct Q_DECL_HIDDEN KisMacro::Private {
     QList<KisRecordedAction*> actions;
 };
 

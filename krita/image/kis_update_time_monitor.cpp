@@ -85,7 +85,7 @@ private:
     qint64 m_updateTime;
 };
 
-struct KisUpdateTimeMonitor::Private
+struct Q_DECL_HIDDEN KisUpdateTimeMonitor::Private
 {
     Private()
         : jobsTime(0),

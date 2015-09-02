@@ -21,7 +21,7 @@
 #include <KoID.h>
 
 
-struct KisLayerStyleFilter::Private
+struct Q_DECL_HIDDEN KisLayerStyleFilter::Private
 {
     KoID id;
 };

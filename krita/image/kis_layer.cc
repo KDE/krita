@@ -110,7 +110,7 @@ private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
 
-struct KisLayer::Private
+struct Q_DECL_HIDDEN KisLayer::Private
 {
     KisImageWSP image;
     QBitArray channelFlags;

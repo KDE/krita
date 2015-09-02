@@ -24,7 +24,7 @@ class QDomElement;
 
 namespace KisMetaData
 {
-struct Schema::Private {
+struct Q_DECL_HIDDEN Schema::Private {
     QString uri;
     QString prefix;
     struct EntryInfo {

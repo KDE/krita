@@ -35,7 +35,7 @@
 const char KisBookmarkedConfigurationManager::ConfigDefault[] = "Default";
 const char KisBookmarkedConfigurationManager::ConfigLastUsed[] = "Last Used";
 
-struct KisBookmarkedConfigurationManager::Private {
+struct Q_DECL_HIDDEN KisBookmarkedConfigurationManager::Private {
 
     QString configEntryGroup;
     KisSerializableConfigurationFactory* configFactory;

@@ -33,7 +33,7 @@
 
 
 
-struct KisCurveCircleMaskGenerator::Private
+struct Q_DECL_HIDDEN KisCurveCircleMaskGenerator::Private
 {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)

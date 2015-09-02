@@ -35,7 +35,7 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 
 
 
-struct KisDumbTransformMaskParams::Private
+struct Q_DECL_HIDDEN KisDumbTransformMaskParams::Private
 {
     Private() : isHidden(false) {}
 

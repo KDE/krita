@@ -28,7 +28,7 @@
 #include "kis_paint_device.h"
 #include <KoProgressUpdater.h>
 
-struct KisRecordedNodeAction::Private
+struct Q_DECL_HIDDEN KisRecordedNodeAction::Private
 {
     Private(const KisNodeQueryPath& _path) : path(_path) {}
     KisNodeQueryPath path;

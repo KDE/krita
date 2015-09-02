@@ -33,7 +33,7 @@
 #include "kundo2magicstring.h"
 
 
-struct KisMacroPlayer::Private
+struct Q_DECL_HIDDEN KisMacroPlayer::Private
 {
     Private(const KisPlayInfo& _info) : info(_info), updater(0) {}
     bool paused;

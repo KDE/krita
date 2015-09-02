@@ -35,7 +35,7 @@
 
 #define UPDATE_DELAY 100 /*ms */
 
-struct KisGeneratorLayer::Private
+struct Q_DECL_HIDDEN KisGeneratorLayer::Private
 {
     Private()
         : updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::FIRST_INACTIVE)

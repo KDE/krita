@@ -25,7 +25,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 
-struct KisBaseNode::Private
+struct Q_DECL_HIDDEN KisBaseNode::Private
 {
     QString compositeOp;
     KoProperties properties;

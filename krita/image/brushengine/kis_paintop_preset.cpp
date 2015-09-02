@@ -39,7 +39,7 @@
 
 #include <KoStore.h>
 
-struct KisPaintOpPreset::Private {
+struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
     Private()
         : settings(0),
           dirtyPreset(false)

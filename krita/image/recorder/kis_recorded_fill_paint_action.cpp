@@ -29,7 +29,7 @@
 #include "kis_paintop_preset.h"
 #include "kis_play_info.h"
 
-struct KisRecordedFillPaintAction::Private {
+struct Q_DECL_HIDDEN KisRecordedFillPaintAction::Private {
     Private(const KisNodeQueryPath& _projectionPath) : projectionPath(_projectionPath) {}
     QPoint pt;
     KisNodeQueryPath projectionPath;

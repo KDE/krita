@@ -19,7 +19,7 @@
 
 #include "kis_node_graph_listener.h"
 
-struct KisNodeGraphListener::Private
+struct Q_DECL_HIDDEN KisNodeGraphListener::Private
 {
     Private() : sequenceNumber(0) {}
     int sequenceNumber;

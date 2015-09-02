@@ -35,7 +35,7 @@
 #include "kis_thread_safe_signal_compressor.h"
 
 
-struct KisSelectionMask::Private
+struct Q_DECL_HIDDEN KisSelectionMask::Private
 {
 public:
     Private(KisSelectionMask *_q) : q(_q) {}

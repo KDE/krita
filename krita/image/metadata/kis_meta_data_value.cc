@@ -30,7 +30,7 @@
 
 using namespace KisMetaData;
 
-struct Value::Private {
+struct Q_DECL_HIDDEN Value::Private {
     Private() : type(Invalid) {}
     union {
         QVariant* variant;

@@ -27,7 +27,7 @@
 
 
 
-struct KisDistanceInformation::Private {
+struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     Private() : lastDabInfoValid(false),
                 lastPaintInfoValid(false) {}
 

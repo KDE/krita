@@ -24,7 +24,7 @@
 #include "kis_stroke.h"
 #include "kis_updater_context.h"
 
-struct KisStrokesQueue::Private {
+struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     Private()
         : openedStrokesCounter(0),
           needsExclusiveAccess(false),

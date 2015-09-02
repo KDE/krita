@@ -33,7 +33,7 @@
 
 #include "kis_config_widget.h"
 
-struct KisFilterConfiguration::Private {
+struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
     QString name;
     qint32 version;
     QBitArray channelFlags;

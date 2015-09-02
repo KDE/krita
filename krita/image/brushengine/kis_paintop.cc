@@ -55,7 +55,7 @@
 #endif
 #endif
 
-struct KisPaintOp::Private {
+struct Q_DECL_HIDDEN KisPaintOp::Private {
     Private(KisPaintOp *_q)
         : q(_q), dab(0),
           currentScale(1.0),

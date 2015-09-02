@@ -166,7 +166,7 @@ private:
 };
 
 
-struct KisPaintDevice::Private
+struct Q_DECL_HIDDEN KisPaintDevice::Private
 {
     class KisPaintDeviceStrategy;
     class KisPaintDeviceWrappedStrategy;

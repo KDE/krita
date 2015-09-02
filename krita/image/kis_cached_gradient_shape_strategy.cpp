@@ -32,7 +32,7 @@
 
 using namespace KisBSplines;
 
-struct KisCachedGradientShapeStrategy::Private
+struct Q_DECL_HIDDEN KisCachedGradientShapeStrategy::Private
 {
     QRect rc;
     qreal xStep;

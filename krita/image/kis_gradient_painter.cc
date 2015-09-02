@@ -500,7 +500,7 @@ double GradientRepeatAlternateStrategy::valueAt(double t) const
 }
 }
 
-struct KisGradientPainter::Private
+struct Q_DECL_HIDDEN KisGradientPainter::Private
 {
     enumGradientShape shape;
 

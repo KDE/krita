@@ -44,7 +44,7 @@ private:
     KisBaseProcessor* m_generator;
 };
 
-struct KisBaseProcessor::Private {
+struct Q_DECL_HIDDEN KisBaseProcessor::Private {
     Private()
             : bookmarkManager(0)
             , supportsPainting(false)

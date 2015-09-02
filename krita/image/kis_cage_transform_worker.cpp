@@ -34,7 +34,7 @@
 #endif
 #endif
 
-struct KisCageTransformWorker::Private
+struct Q_DECL_HIDDEN KisCageTransformWorker::Private
 {
     Private(KisPaintDeviceSP _dev,
             const QVector<QPointF> &_origCage,

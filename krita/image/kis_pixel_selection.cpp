@@ -42,7 +42,7 @@
 #include <kis_iterator_ng.h>
 
 
-struct KisPixelSelection::Private {
+struct Q_DECL_HIDDEN KisPixelSelection::Private {
     KisSelectionWSP parentSelection;
 
     QPainterPath outlineCache;

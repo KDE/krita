@@ -52,7 +52,7 @@
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 
-struct KisRecordedPaintAction::Private {
+struct Q_DECL_HIDDEN KisRecordedPaintAction::Private {
     KisPaintOpPresetSP paintOpPreset;
     KoColor foregroundColor;
     KoColor backgroundColor;

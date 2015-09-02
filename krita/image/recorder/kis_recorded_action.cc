@@ -27,7 +27,7 @@
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 
-struct KisRecordedAction::Private {
+struct Q_DECL_HIDDEN KisRecordedAction::Private {
     QString name;
     QString id;
 };
@@ -69,7 +69,7 @@ void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt, KisRecordedActio
     elt.setAttribute("id", id());
 }
 
-struct KisRecordedActionFactory::Private {
+struct Q_DECL_HIDDEN KisRecordedActionFactory::Private {
     QString id;
 };
 

@@ -74,7 +74,7 @@
 
 #endif
 
-struct KisPainter::Private {
+struct Q_DECL_HIDDEN KisPainter::Private {
     Private(KisPainter *_q) : q(_q) {}
 
     KisPainter *q;

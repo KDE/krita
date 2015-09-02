@@ -104,7 +104,7 @@ TypeInfo::TypeInfo(TypeInfo::PropertyType _propertyType) : d(new Private)
     }
 }
 
-struct TypeInfo::Choice::Private {
+struct Q_DECL_HIDDEN TypeInfo::Choice::Private {
     Value value;
     QString hint;
 };

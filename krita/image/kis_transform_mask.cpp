@@ -49,7 +49,7 @@
 
 #define UPDATE_DELAY 3000 /*ms */
 
-struct KisTransformMask::Private
+struct Q_DECL_HIDDEN KisTransformMask::Private
 {
     Private()
         : worker(0, QTransform(), 0),

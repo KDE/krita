@@ -28,7 +28,7 @@
 #include "kis_ls_bevel_emboss_filter.h"
 
 
-struct KisLayerStyleProjectionPlane::Private
+struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
 {
     KisAbstractProjectionPlaneWSP sourceProjectionPlane;
 

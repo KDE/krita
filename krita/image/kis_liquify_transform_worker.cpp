@@ -22,7 +22,7 @@
 #include "kis_dom_utils.h"
 
 
-struct KisLiquifyTransformWorker::Private
+struct Q_DECL_HIDDEN KisLiquifyTransformWorker::Private
 {
     Private(const QRect &_srcBounds,
             KoUpdater *_progress,

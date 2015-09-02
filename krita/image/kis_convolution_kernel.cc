@@ -23,7 +23,7 @@
 #include <QImage>
 #include <kis_mask_generator.h>
 
-struct KisConvolutionKernel::Private {
+struct Q_DECL_HIDDEN KisConvolutionKernel::Private {
     qreal offset;
     qreal factor;
     Matrix<qreal, Dynamic, Dynamic> data;

@@ -76,7 +76,7 @@ static KisNodeSPStaticRegistrar __registrar;
  *    read by the reader threads yourself!
  */
 
-struct KisNode::Private
+struct Q_DECL_HIDDEN KisNode::Private
 {
 public:
     Private(KisNode *node)

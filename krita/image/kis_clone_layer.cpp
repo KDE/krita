@@ -38,7 +38,7 @@
 #include <kis_effect_mask.h>
 
 
-struct KisCloneLayer::Private
+struct Q_DECL_HIDDEN KisCloneLayer::Private
 {
 public:
     KisLayerSP copyFrom;

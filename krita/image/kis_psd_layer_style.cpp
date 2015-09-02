@@ -28,7 +28,7 @@
 #include "kis_global.h"
 
 
-struct KisPSDLayerStyle::Private
+struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 {
     Private()
         : version(-1)

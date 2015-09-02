@@ -23,7 +23,7 @@
 //---------- KisPerspectiveGridNode ----------//
 //--------------------------------------------//
 
-struct KisPerspectiveGridNode::Private {
+struct Q_DECL_HIDDEN KisPerspectiveGridNode::Private {
     QList<KisSubPerspectiveGrid*> subGrids;
 };
 
@@ -253,7 +253,7 @@ int KisSubPerspectiveGrid::subdivisions() const
 //----------- KisPerspectiveGrid -----------//
 //------------------------------------------//
 
-struct KisPerspectiveGrid::Private {
+struct Q_DECL_HIDDEN KisPerspectiveGrid::Private {
     QList<KisSubPerspectiveGrid*> subGrids;
 };
 

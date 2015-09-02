@@ -39,7 +39,7 @@
 #include "kis_layer.h"
 #include "kis_node_query_path.h"
 
-struct KisRecordedPathPaintAction::Private {
+struct Q_DECL_HIDDEN KisRecordedPathPaintAction::Private {
     struct BezierCurveSlice {
         enum Type {
             Point,

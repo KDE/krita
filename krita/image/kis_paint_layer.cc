@@ -36,7 +36,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
-struct KisPaintLayer::Private
+struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;

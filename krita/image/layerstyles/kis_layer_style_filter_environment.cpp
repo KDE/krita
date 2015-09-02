@@ -30,7 +30,7 @@
 #include "krita_utils.h"
 
 
-struct KisLayerStyleFilterEnvironment::Private
+struct Q_DECL_HIDDEN KisLayerStyleFilterEnvironment::Private
 {
     KisLayer *sourceLayer;
 };

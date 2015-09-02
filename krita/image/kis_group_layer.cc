@@ -38,7 +38,7 @@
 #include "kis_psd_layer_style.h"
 
 
-struct KisGroupLayer::Private
+struct Q_DECL_HIDDEN KisGroupLayer::Private
 {
 public:
     Private()

@@ -36,7 +36,7 @@
 #include "filter/kis_filter.h"
 
 
-struct KisSelectionBasedLayer::Private
+struct Q_DECL_HIDDEN KisSelectionBasedLayer::Private
 {
 public:
     Private() : useSelectionInProjection(true) {}

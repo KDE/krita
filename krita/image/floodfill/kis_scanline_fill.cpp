@@ -188,7 +188,7 @@ private:
     int m_threshold;
 };
 
-struct KisScanlineFill::Private
+struct Q_DECL_HIDDEN KisScanlineFill::Private
 {
     KisPaintDeviceSP device;
     KisRandomAccessorSP it;

@@ -235,7 +235,7 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
     return a.x() < b.x();
 }
 
-struct KisCubicCurve::Data : public QSharedData {
+struct Q_DECL_HIDDEN KisCubicCurve::Data : public QSharedData {
     Data() {
         init();
     }
@@ -318,7 +318,7 @@ void KisCubicCurve::Data::updateTransfer(QVector<_T_>* transfer, bool& valid, _T
     }
 }
 
-struct KisCubicCurve::Private {
+struct Q_DECL_HIDDEN KisCubicCurve::Private {
     QSharedDataPointer<Data> data;
 };
 

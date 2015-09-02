@@ -28,7 +28,7 @@
 
 
 
-struct KisSafeTransform::Private
+struct Q_DECL_HIDDEN KisSafeTransform::Private
 {
     QRect bounds;
     QTransform forwardTransform;

@@ -42,7 +42,7 @@
 #include "kis_mask_projection_plane.h"
 
 
-struct KisMask::Private {
+struct Q_DECL_HIDDEN KisMask::Private {
     Private(KisMask *_q)
         : q(_q),
           projectionPlane(new KisMaskProjectionPlane(q))

@@ -19,7 +19,7 @@
 #ifndef _KIS_CIRCLE_MASK_GENERATOR_P_H_
 #define _KIS_CIRCLE_MASK_GENERATOR_P_H_
 
-struct KisCircleMaskGenerator::Private {
+struct Q_DECL_HIDDEN KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
     double xfadecoef, yfadecoef;
     double transformedFadeX, transformedFadeY;

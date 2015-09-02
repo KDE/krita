@@ -31,7 +31,7 @@ using namespace KisMetaData;
 
 // ---- Schema Registry ---- //
 
-struct SchemaRegistry::Private {
+struct Q_DECL_HIDDEN SchemaRegistry::Private {
     static SchemaRegistry *singleton;
     QHash<QString, Schema*> uri2Schema;
     QHash<QString, Schema*> prefix2Schema;

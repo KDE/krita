@@ -40,7 +40,7 @@
 #define erf(x) boost::math::erf(x)
 #endif
 
-struct KisGaussRectangleMaskGenerator::Private
+struct Q_DECL_HIDDEN KisGaussRectangleMaskGenerator::Private
 {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)

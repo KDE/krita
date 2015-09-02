@@ -31,7 +31,7 @@
 #include "kis_painter.h"
 
 
-struct KisIndirectPaintingSupport::Private {
+struct Q_DECL_HIDDEN KisIndirectPaintingSupport::Private {
     // To simulate the indirect painting
     KisPaintDeviceSP temporaryTarget;
     const KoCompositeOp* compositeOp;

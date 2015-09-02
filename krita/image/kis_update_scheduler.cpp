@@ -45,7 +45,7 @@
 #endif
 
 
-struct KisUpdateScheduler::Private {
+struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     Private() : updatesQueue(0), strokesQueue(0),
                 updaterContext(0), processingBlocked(false),
                 balancingRatio(1.0),

@@ -176,9 +176,6 @@ calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter" REQUIRES L
 calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter" REQUIRES LIB_KOVECTORIMAGE LIB_KOMAIN)
 calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter" REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_KOMAIN)
 
-# Plan filters
-calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter" UNPORTED  REQUIRES APP_PLAN)
-
 # Karbon filters
 calligra_define_product(FILTER_EPS_TO_SVG_AI "EPS to SVG/AI filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_XFIG_TO_ODG "XFig to ODG filter"  REQUIRES LIB_KOMAIN)
@@ -192,7 +189,6 @@ calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter"  REQUIRES LIB_KOVE
 calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter"  REQUIRES APP_KARBON)
 
 # meta apps
-calligra_define_product(APP_ACTIVE "Calligra Active app" UNPORTED  REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
 calligra_define_product(APP_CALLIGRA "General Calligra app starter"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 
 # more extras
@@ -289,10 +285,6 @@ calligra_define_productset(FILTERS_WORDS "All Words filters"
         FILTERS_WORDS_IMPORT
         FILTERS_WORDS_EXPORT
 )
-calligra_define_productset(FILTERS_PLAN "All Plan filters"
-    OPTIONAL
-        FILTER_MPXJ_IMPORT
-)
 calligra_define_productset(FILTERS_KARBON_IMPORT "All Karbon import filters"
     OPTIONAL
         FILTER_EPS_TO_SVG_AI
@@ -325,31 +317,6 @@ calligra_define_productset(FILEMANAGER "Extensions for the filemanager"
 )
 
 # apps
-calligra_define_productset(ACTIVE "Full Calligra Active"
-    REQUIRES
-        APP_ACTIVE
-    OPTIONAL
-        # extras
-        FILEMANAGER_PROPERTIES
-        FILEMANAGER_THUMBNAIL
-        # plugins
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_CHARTSHAPE
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_FORMULASHAPE
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_TEXTEDITING
-        PLUGIN_TEXTSHAPE
-        PLUGIN_VARIABLES
-        PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
-        # filters
-        FILTERS_SHEETS_IMPORT
-        FILTERS_STAGE_IMPORT
-        FILTERS_WORDS_IMPORT
-)
 calligra_define_productset(AUTHOR "Full Author (for Desktop)"
     REQUIRES
         APP_AUTHOR
@@ -469,7 +436,6 @@ calligra_define_productset(PLAN "Full Plan (for Desktop)"
         APP_PLAN
     OPTIONAL
         FEATURE_SCRIPTING
-        FILTERS_PLAN
 )
 calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
     REQUIRES

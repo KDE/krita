@@ -271,7 +271,7 @@ endmacro (KDE4_ADD_KDEINIT_EXECUTABLE)
 
 # Add a unit test, which is executed when running make test .
 # The targets are always created, but only built for the "all"
-# target if the option BUILD_TESTING is enabled. Otherwise the rules for the target
+# target if the option KDE4_BUILD_TESTS is enabled. Otherwise the rules for the target
 # are created but not built by default. You can build them by manually building the target.
 # The name of the target can be specified using TESTNAME <testname>, if it is not given
 # the macro will default to the <name>
@@ -334,14 +334,14 @@ macro (KDE4_ADD_UNIT_TEST _test_NAME)
 
     if (NOT MSVC_IDE)   #not needed for the ide
         # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
-        if (NOT BUILD_TESTING)
+        if (NOT KDE4_BUILD_TESTS)
            get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
            if(NOT _buildtestsAdded)
               add_custom_target(buildtests)
               set_directory_properties(PROPERTIES BUILDTESTS_ADDED TRUE)
            endif(NOT _buildtestsAdded)
            add_dependencies(buildtests ${_test_NAME})
-        endif (NOT BUILD_TESTING)
+        endif (NOT KDE4_BUILD_TESTS)
     endif (NOT MSVC_IDE)
 
 endmacro (KDE4_ADD_UNIT_TEST)
@@ -425,9 +425,9 @@ macro (KDE4_ADD_EXECUTABLE _target_NAME)
       set(_add_executable_param)
    endif (_nogui)
 
-   if (_test AND NOT BUILD_TESTING)
+   if (_test AND NOT KDE4_BUILD_TESTS)
       set(_add_executable_param ${_add_executable_param} EXCLUDE_FROM_ALL)
-   endif (_test AND NOT BUILD_TESTING)
+   endif (_test AND NOT KDE4_BUILD_TESTS)
 
    add_executable(${_target_NAME} ${_add_executable_param} ${_SRCS})
 

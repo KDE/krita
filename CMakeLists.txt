@@ -19,6 +19,20 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
     cmake_policy(SET CMP0046 OLD)
 endif()
 
+# QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
+# transitional forward compatibility:
+# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
+# macros in cmake/transitional. Just, Macros from cmake/transitional,
+# incl. kde4_add_unit_test, are only picked up if no macros from kdelibs4 are installed,
+# because that transitional path is appended. Prepending instead might possibly unwantedly
+# mask ECM/KF5 macros. Not tested.
+# So have BUILD_TESTING define KDE4_BUILD_TESTS.
+if (BUILD_TESTING)
+    set(KDE4_BUILD_TESTS TRUE)
+else()
+    set(KDE4_BUILD_TESTS FALSE)
+endif()
+
  ######################
 #######################
 ## Constants defines ##

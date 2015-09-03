@@ -29,7 +29,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <kcolorbutton.h>
 #include <kconfiggroup.h>
-#include <kdeversion.h>
 
 #include <QCheckBox>
 #include <QGroupBox>
@@ -72,9 +71,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     d->snapChBox = new QCheckBox(generalGrp);
     d->snapChBox->setChecked(gd.snapToGrid());
     d->gridColorBtn = new KColorButton(gd.gridColor(), generalGrp);
-#if KDE_IS_VERSION(4,5,0)
     d->gridColorBtn->setAlphaChannelEnabled(true);
-#endif
     layoutGeneral->addRow(i18n("Show grid:"), d->gridChBox);
     layoutGeneral->addRow(i18n("Snap to grid:"), d->snapChBox);
     layoutGeneral->addRow(i18n("Grid color:"), d->gridColorBtn);

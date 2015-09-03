@@ -29,7 +29,6 @@
 #include "KoConfig.h"
 
 #include <kcrash.h>
-#include <kdeversion.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -41,10 +40,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 
 #include <QFile>
 #include <QWidget>

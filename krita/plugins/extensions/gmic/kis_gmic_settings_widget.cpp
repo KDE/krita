@@ -36,7 +36,6 @@
 
 //
 #include "widgets/kis_url_requester.h"
-#include <kdeversion.h>
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
@@ -281,9 +280,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     colorButton = new KColorButton;
-#if KDE_IS_VERSION(4,5,0)
                     colorButton->setAlphaChannelEnabled(colorParam->m_hasAlpha);
-#endif
                     m_widgetToParameterIndexMapper[colorButton] = i;
                     mapParameterWidget(colorParam, colorButton);
 

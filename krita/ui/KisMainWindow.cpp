@@ -45,10 +45,7 @@
 #include <QTabBar>
 #include <QMoveEvent>
 
-#include <kdeversion.h>
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -624,9 +621,7 @@ void KisMainWindow::addRecentURL(const KUrl& url)
                     ok = false; // it's in the tmp resource
             if (ok) {
                 KRecentDocument::add(path);
-#if KDE_IS_VERSION(4,6,0)
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
-#endif
             }
         } else {
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);

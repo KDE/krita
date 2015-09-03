@@ -61,7 +61,6 @@
 #include <kio/job.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
-#include <kdeversion.h>
 
 #include <QtGlobal>
 #include <QBuffer>
@@ -384,11 +383,7 @@ public:
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
-#if KDE_IS_VERSION(4,4,0)
             const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
-#else
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
-#endif
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
                 openLocalFile();

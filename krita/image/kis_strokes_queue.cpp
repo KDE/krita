@@ -355,7 +355,7 @@ qint32 KisStrokesQueue::sizeMetric() const
     if(m_d->strokesQueue.isEmpty()) return 0;
 
     // just a rough approximation
-    return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
+    return qMax(1, m_d->strokesQueue.head()->numJobs()) * m_d->strokesQueue.size();
 }
 
 void KisStrokesQueue::Private::switchDesiredLevelOfDetail(bool forced)

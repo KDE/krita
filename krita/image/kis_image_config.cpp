@@ -44,6 +44,17 @@ KisImageConfig::~KisImageConfig()
     m_config.sync();
 }
 
+bool KisImageConfig::enableProgressReporting(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("enableProgressReporting", true) : true;
+}
+
+void KisImageConfig::setEnableProgressReporting(bool value)
+{
+    m_config.writeEntry("enableProgressReporting", value);
+}
+
 bool KisImageConfig::enablePerfLog(bool requestDefault) const
 {
     return !requestDefault ?

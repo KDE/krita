@@ -176,8 +176,12 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->compositeProgressProxy = new KisCompositeProgressProxy();
 
     {
+        KisImageConfig cfg;
+
         m_d->scheduler = new KisUpdateScheduler(this);
-        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+        if (cfg.enableProgressReporting()) {
+            m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+        }
     }
 
     m_d->signalRouter = new KisImageSignalRouter(this);

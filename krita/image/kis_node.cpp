@@ -86,6 +86,7 @@ public:
             , nodeProgressProxy(0)
             , busyProgressIndicator(0)
             , projectionLeaf(new KisProjectionLeaf(node))
+            , animated(false)
     {
     }
 
@@ -96,6 +97,7 @@ public:
     KisBusyProgressIndicator *busyProgressIndicator;
     QReadWriteLock nodeSubgraphLock;
     QMap<QString, KisKeyframeChannel*> keyframeChannels;
+    bool animated;
 
     KisProjectionLeafSP projectionLeaf;
 
@@ -251,6 +253,18 @@ KisKeyframeChannel * KisNode::getKeyframeChannel(const QString &id) const
     QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
     if (i == m_d->keyframeChannels.end()) return 0;
     return i.value();
+}
+
+bool KisNode::isAnimated() const
+{
+    return m_d->animated;
+}
+
+void KisNode::enableAnimation()
+{
+    emit animatedAboutToChange(true);
+    m_d->animated = true;
+    emit animatedChanged(true);
 }
 
 void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)

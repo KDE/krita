@@ -94,10 +94,6 @@ void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintCha
     m_d->paintDevice->setParentNode(this);
 
     m_d->paintChannelFlags = paintChannelFlags;
-
-    m_d->contentChannel = paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
-
-    addKeyframeChannel(m_d->contentChannel);
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -122,7 +118,7 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
 
 bool KisPaintLayer::needProjection() const
 {
-    return hasTemporaryTarget() || (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled());
+    return hasTemporaryTarget() || (isAnimated() && onionSkinEnabled());
 }
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
@@ -139,7 +135,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 
-    if (m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
+    if (m_d->contentChannel && m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
         KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
         compositor->composite(m_d->paintDevice, projection, rect);
     }
@@ -170,7 +166,7 @@ KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() co
     // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
 
-    if (m_d->contentChannel->keyframeCount() > 1) {
+    if (isAnimated()) {
         l << KisDocumentSectionModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
     }
 
@@ -261,6 +257,14 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     }
 
     nodeProperties().setProperty("onionskin", state);
+}
+
+void KisPaintLayer::enableAnimation()
+{
+    m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
+    addKeyframeChannel(m_d->contentChannel);
+
+    KisLayer::enableAnimation();
 }
 
 #include "kis_paint_layer.moc"

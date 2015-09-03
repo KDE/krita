@@ -80,7 +80,7 @@ Q_SIGNALS:
     void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
-private Q_SLOTS:
+protected Q_SLOTS:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
@@ -94,12 +94,14 @@ private Q_SLOTS:
     void progressPercentageChanged(int, const KisNodeSP);
 
 protected:
+    virtual KisModelIndexConverterBase *createIndexConverter();
     KisModelIndexConverterBase *indexConverter() const;
     KisDummiesFacadeBase *dummiesFacade() const;
 
 private:
     friend class KisModelIndexConverter;
     friend class KisModelIndexConverterShowAll;
+    friend class KisModelIndexConverterAnimatedLayers;
 
     void connectDummy(KisNodeDummy *dummy, bool needConnect);
     void connectDummies(KisNodeDummy *dummy, bool needConnect);

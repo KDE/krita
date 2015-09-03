@@ -153,8 +153,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
             // Write identification
             if (d->writeMimetype) {
                 m_pZip->setCompression(KZip::NoCompression);
-                (void)m_pZip->writeFile(QLatin1String("mimetype"), QString(), QString(),
-                                        appIdentification.data(), appIdentification.length());
+                (void)m_pZip->writeFile(QLatin1String("mimetype"), appIdentification);
             }
             // FIXME: Hmm, seems to be a bug here since this is
             //        inconsistent with the code in openWrite():
@@ -438,8 +437,7 @@ bool KoEncryptedStore::doFinalize()
             }
             m_manifestBuffer = document.toByteArray();
             m_pZip->setCompression(KZip::DeflateCompression);
-            if (!m_pZip->writeFile(QLatin1String(MANIFEST_FILE), QString(), QString(),
-                                   m_manifestBuffer.constData(), m_manifestBuffer.size())) {
+            if (!m_pZip->writeFile(QLatin1String(MANIFEST_FILE), m_manifestBuffer)) {
                 KMessage::message(KMessage::Error, i18n("The manifest file cannot be written. The document will remain unreadable. Please try and save the document again to prevent losing your work."));
                 m_pZip->close();
                 return false;

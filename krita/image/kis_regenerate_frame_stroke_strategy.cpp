@@ -58,7 +58,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)
-    : KisSimpleStrokeStrategy("regenerate_current_frame_stroke"),
+    : KisSimpleStrokeStrategy("regenerate_current_frame_stroke", kundo2_i18n("Render Animation")),
       m_d(new Private)
 {
     m_d->type = CURRENT_FRAME;

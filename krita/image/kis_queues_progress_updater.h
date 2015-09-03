@@ -37,7 +37,13 @@ public:
     void hide();
 
 private Q_SLOTS:
-    void updateProxy();
+    void startTicking();
+    void stopTicking();
+    void timerTicked();
+
+Q_SIGNALS:
+    void sigStartTicking();
+    void sigStopTicking();
 
 private:
     struct Private;

@@ -186,6 +186,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
 
+    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
+
     {
         m_d->scheduler = new KisUpdateScheduler(this);
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
@@ -220,8 +222,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->height = height;
 
     m_d->recorder = new KisActionRecorder(this);
-
-    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
 
     connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }

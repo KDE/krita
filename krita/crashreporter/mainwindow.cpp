@@ -193,10 +193,8 @@ QString platformToStringWin(QSysInfo::WinVersion version)
         return "Windows 7";
     case QSysInfo::WV_WINDOWS8:
         return "Windows 8";
-#if QT_VERSION >= 0x040806
     case QSysInfo::WV_WINDOWS8_1:
         return "Windows 8.1";
-#endif
     default:
         return "Unknown Windows version";
     };

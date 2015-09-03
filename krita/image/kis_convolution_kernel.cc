@@ -87,11 +87,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(image.width(), image.height(), 0, 0);
 
     Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
-#if QT_VERSION >= 0x040700
     const quint8* itImage = image.constBits();
-#else
-    const quint8* itImage = image.bits();
-#endif
     qreal factor = 0;
 
     for (int r = 0; r < image.height(); r++) {

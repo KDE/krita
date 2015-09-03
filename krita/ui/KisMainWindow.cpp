@@ -22,9 +22,6 @@
 
 #include "KisMainWindow.h"
 
-#if defined (Q_OS_MAC) && QT_VERSION < 0x050000
-#include "MacSupport.h"
-#endif
 // qt includes
 #include <QApplication>
 #include <QByteArray>
@@ -297,12 +294,7 @@ KisMainWindow::KisMainWindow()
     qApp->setStartDragDistance(25);     // 25 px is a distance that works well for Tablet and Mouse events
 
 #ifdef Q_OS_MAC
-#if QT_VERSION < 0x050000
-    MacSupport::addFullscreen(this);
-#endif
-#if QT_VERSION >= 0x050201
     setUnifiedTitleAndToolBarOnMac(true);
-#endif
 #endif
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
@@ -355,9 +347,7 @@ KisMainWindow::KisMainWindow()
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
 
-#if QT_VERSION >= 0x040800
     d->mdiArea->setTabsClosable(true);
-#endif /* QT_VERSION >= 0x040800 */
 
     setCentralWidget(d->mdiArea);
     d->mdiArea->show();

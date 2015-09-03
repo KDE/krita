@@ -50,11 +50,7 @@ QImage GreyscaleFilterEffect::processImage(const QImage& image, const KoFilterEf
     const int left = context.filterRegion().left();
     const int right = context.filterRegion().right();
     const int width = result.width();
-#if QT_VERSION >= 0x040700
     const QRgb *src = (const QRgb*)image.constBits();
-#else
-    const QRgb *src = (const QRgb*)image.bits();
-#endif
     QRgb *dst = (QRgb*)result.bits();
 
     for (int row = context.filterRegion().top(); row < bottom; ++row) {

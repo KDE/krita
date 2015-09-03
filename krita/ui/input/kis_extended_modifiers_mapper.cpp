@@ -162,9 +162,5 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 
 Qt::KeyboardModifiers KisExtendedModifiersMapper::queryStandardModifiers()
 {
-#if QT_VERSION >= 0x040800
     return QApplication::queryKeyboardModifiers();
-#else
-    return QApplication::keyboardModifiers();
-#endif
 }

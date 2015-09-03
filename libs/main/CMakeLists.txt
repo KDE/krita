@@ -77,12 +77,6 @@ if( QT_QTDBUS_FOUND )
     )
 endif()
 
-if (APPLE)
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
-        MacSupport.mm
-    )
-endif ()
-
 ki18n_wrap_ui( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui

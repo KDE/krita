@@ -158,9 +158,7 @@ KoCharacterStyle::Private::Private()
     hardCodedDefaultStyle.add(QTextFormat::FontPointSize, 12.0);
     hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
     hardCodedDefaultStyle.add(KoCharacterStyle::FontYStretch, 1);
-#if QT_VERSION >= 0x040800
     hardCodedDefaultStyle.add(QTextFormat::FontHintingPreference, QFont::PreferNoHinting);
-#endif
 }
 
 

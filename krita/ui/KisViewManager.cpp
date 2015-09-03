@@ -1225,7 +1225,6 @@ void KisViewManager::openResourcesDirectory()
 
 void KisViewManager::updateIcons()
 {
-#if QT_VERSION >= 0x040700
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
@@ -1245,7 +1244,6 @@ void KisViewManager::updateIcons()
             }
         }
     }
-#endif
 }
 void KisViewManager::makeStatusBarVisible()
 {
@@ -1270,9 +1268,7 @@ void KisViewManager::showFloatingMessage(const QString message, const QIcon& ico
     if (!d->currentImageView) return;
     d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
 
-#if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
-#endif
 }
 
 KisMainWindow *KisViewManager::mainWindow() const

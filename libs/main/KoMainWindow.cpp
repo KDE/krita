@@ -22,10 +22,6 @@
 
 #include "KoMainWindow.h"
 
-#if defined (Q_OS_MAC) && QT_VERSION < 0x050000
-#include "MacSupport.h"
-#endif
-
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"
@@ -259,12 +255,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
 #ifdef Q_OS_MAC
-    #if QT_VERSION < 0x050000
-    MacSupport::addFullscreen(this);
-    #endif
-    #if QT_VERSION >= 0x050201
     setUnifiedTitleAndToolBarOnMac(true);
-    #endif
 #endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());

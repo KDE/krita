@@ -21,6 +21,7 @@
 
 #include <QIODevice>
 
+#include <KoColor.h>
 #include <KoColorSpace.h>
 
 #include <kis_debug.h>
@@ -28,6 +29,8 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_effect_mask.h>
+#include <kis_image.h>
+
 
 #include "kis_dom_utils.h"
 
@@ -300,6 +303,30 @@ struct FlattenedNode {
     Type type;
 };
 
+void addBackgroundIfNeeded(KisNodeSP root, QList<FlattenedNode> &nodes)
+{
+    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(root.data());
+    if (!group) return;
+
+    KoColor projectionColor = group->defaultProjectionColor();
+    if (projectionColor.opacityU8() == OPACITY_TRANSPARENT_U8) return;
+
+    KisPaintLayerSP layer =
+        new KisPaintLayer(group->image(),
+                          i18nc("Automatically created layer name when saving into PSD", "Background"),
+                          OPACITY_OPAQUE_U8);
+
+    projectionColor.convertTo(layer->paintDevice()->colorSpace());
+    layer->paintDevice()->setDefaultPixel(projectionColor.data());
+
+    {
+        FlattenedNode item;
+        item.node = layer;
+        item.type = FlattenedNode::RASTER_LAYER;
+        nodes << item;
+    }
+}
+
 void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
 {
     KisNodeSP child = node->firstChild();
@@ -414,6 +441,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
 
     // Build the whole layer structure
     QList<FlattenedNode> nodes;
+    addBackgroundIfNeeded(rootLayer, nodes);
     flattenNodes(rootLayer, nodes);
 
     if (nodes.isEmpty()) {

@@ -88,7 +88,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
 {
     d->info = docInfo;
 
-// TODO: KF5 port to QDialog
+// QT5TODO: KF5 port to QDialog
     setWindowTitle(i18n("Document Information"));
 //    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
@@ -155,7 +155,7 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
 
 void KoDocumentInfoDlg::slotButtonClicked(int button)
 {
-// TODO: KF5 port to QDialog
+// QT5TODO: KF5 port to QDialog
 //    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
 //    switch (button) {
 //    case Ok:

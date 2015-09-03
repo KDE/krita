@@ -367,11 +367,15 @@ void KisCanvas2::createQPainterCanvas()
 
 void KisCanvas2::createOpenGLCanvas()
 {
+#ifdef HAVE_OPENGL
     KisConfig cfg;
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->view->image(), m_d->displayColorConverter);
     setCanvasWidget(canvasWidget);
+#else
+    qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
+#endif
 }
 
 void KisCanvas2::createCanvas(bool useOpenGL)

@@ -36,8 +36,9 @@ QByteArray KisMD5Generator::generateHash(QString filename)
     QByteArray ba;
     if(filename.startsWith("bundle://")) {
         QString bn = filename.mid(9);
-        QString fn = bn.mid(bn.indexOf(":") + 1);
-        bn = bn.left(bn.indexOf(":"));
+        int pos = bn.lastIndexOf(":");
+        QString fn = bn.right(bn.size() - pos - 1);
+        bn = bn.left(pos);
 
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {

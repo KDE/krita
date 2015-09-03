@@ -23,7 +23,7 @@
 #include "dlg_imagesize.h"
 
 #include <KoUnit.h>
-#include <KoSizeGroup.h>
+#include <kis_size_group.h>
 #include <klocalizedstring.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -105,7 +105,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printAspectRatioBtn->setKeepAspectRatio(true);
     m_page->constrainProportionsCkb->setChecked(true);
 
-    KoSizeGroup *labelsGroup = new KoSizeGroup(this);
+    KisSizeGroup *labelsGroup = new KisSizeGroup(this);
     labelsGroup->addWidget(m_page->lblPixelWidth);
     labelsGroup->addWidget(m_page->lblPixelHeight);
     labelsGroup->addWidget(m_page->lblPixelFilter);
@@ -113,7 +113,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     labelsGroup->addWidget(m_page->lblPrintHeight);
     labelsGroup->addWidget(m_page->lblResolution);
 
-    KoSizeGroup *spinboxesGroup = new KoSizeGroup(this);
+    KisSizeGroup *spinboxesGroup = new KisSizeGroup(this);
     spinboxesGroup->addWidget(m_page->pixelWidth);
     spinboxesGroup->addWidget(m_page->pixelWidthDouble);
     spinboxesGroup->addWidget(m_page->pixelHeight);
@@ -122,7 +122,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     spinboxesGroup->addWidget(m_page->printHeight);
     spinboxesGroup->addWidget(m_page->printResolution);
 
-    KoSizeGroup *comboboxesGroup = new KoSizeGroup(this);
+    KisSizeGroup *comboboxesGroup = new KisSizeGroup(this);
     comboboxesGroup->addWidget(m_page->pixelWidthUnit);
     comboboxesGroup->addWidget(m_page->pixelHeightUnit);
     comboboxesGroup->addWidget(m_page->printWidthUnit);

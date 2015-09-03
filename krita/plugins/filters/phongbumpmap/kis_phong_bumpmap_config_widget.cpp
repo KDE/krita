@@ -18,7 +18,7 @@
 
 #include "kis_phong_bumpmap_config_widget.h"
 #include <filter/kis_filter_configuration.h>
-#include <KoSizeGroup.h>
+#include <kis_size_group.h>
 #include "phong_bumpmap_constants.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
@@ -30,7 +30,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     Q_ASSERT(m_device);
     m_page = new KisPhongBumpmapWidget(this);
 
-    KoSizeGroup *matPropLabelsGroup = new KoSizeGroup(this);
+    KisSizeGroup *matPropLabelsGroup = new KisSizeGroup(this);
     matPropLabelsGroup->addWidget(m_page->lblAmbientReflectivity);
     matPropLabelsGroup->addWidget(m_page->lblDiffuseReflectivity);
     matPropLabelsGroup->addWidget(m_page->lblSpecularReflectivity);

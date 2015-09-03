@@ -22,7 +22,7 @@
 #include "dlg_feather_selection.h"
 
 #include <KoUnit.h>
-#include <KoSizeGroup.h>
+#include <kis_size_group.h>
 #include <KisViewManager.h>
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
@@ -47,7 +47,7 @@ WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisViewManager* view)
     cmbUnit->setCurrentIndex(KoUnit(KoUnit::Pixel).indexInListForUi());
 
     // ensure that both spinboxes request the same horizontal size
-    KoSizeGroup *spbGroup = new KoSizeGroup(this);
+    KisSizeGroup *spbGroup = new KisSizeGroup(this);
     spbGroup->addWidget(spbRadius);
     spbGroup->addWidget(spbRadiusDouble);
 

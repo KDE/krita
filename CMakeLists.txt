@@ -202,7 +202,6 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
     OPTIONAL_COMPONENTS
         NotifyConfig
         Activities
-        Declarative
         KHtml
 )
 if(KF5_Activities_FOUND)
@@ -949,11 +948,6 @@ calligra_drop_product_on_bad_condition( APP_KEXI
     Qt5UiTools_FOUND "Qt5UiTools not found"
 )
 
-calligra_drop_product_on_bad_condition( APP_ACTIVE
-    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
-    KF5DECLARATIVE_FOUND "KF5Declarative not found"
-)
-
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
     Okular5_FOUND "Okular devel not found"
 )
@@ -1025,10 +1019,6 @@ calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
 calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_MPXJ_IMPORT
-    SHARED_MIME_INFO_FOUND  "SharedMimeInfo not found (needed to install mimetypes)"
 )
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
@@ -1132,10 +1122,6 @@ endif()
 
 if(SHOULD_BUILD_APP_BRAINDUMP)
   add_subdirectory(braindump)
-endif()
-
-if(SHOULD_BUILD_APP_ACTIVE)
-  add_subdirectory(active)
 endif()
 
 if(SHOULD_BUILD_DOC)

@@ -23,7 +23,7 @@
 
 #include <KoUnit.h>
 #include <kis_icon_utils.h>
-#include <KoSizeGroup.h>
+#include <kis_size_group.h>
 #include <klocalizedstring.h>
 
 #include <kis_config.h>
@@ -107,14 +107,14 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     m_group->button(CENTER)->setChecked(true);
     updateAnchorIcons(CENTER);
 
-    KoSizeGroup *labelsGroup = new KoSizeGroup(this);
+    KisSizeGroup *labelsGroup = new KisSizeGroup(this);
     labelsGroup->addWidget(m_page->lblNewWidth);
     labelsGroup->addWidget(m_page->lblNewHeight);
     labelsGroup->addWidget(m_page->lblXOff);
     labelsGroup->addWidget(m_page->lblYOff);
     labelsGroup->addWidget(m_page->lblAnchor);
 
-    KoSizeGroup *spinboxesGroup = new KoSizeGroup(this);
+    KisSizeGroup *spinboxesGroup = new KisSizeGroup(this);
     spinboxesGroup->addWidget(m_page->newWidth);
     spinboxesGroup->addWidget(m_page->newWidthDouble);
     spinboxesGroup->addWidget(m_page->newHeight);
@@ -124,7 +124,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     spinboxesGroup->addWidget(m_page->yOffset);
     spinboxesGroup->addWidget(m_page->yOffsetDouble);
 
-    KoSizeGroup *comboboxesGroup = new KoSizeGroup(this);
+    KisSizeGroup *comboboxesGroup = new KisSizeGroup(this);
     comboboxesGroup->addWidget(m_page->widthUnit);
     comboboxesGroup->addWidget(m_page->heightUnit);
     comboboxesGroup->addWidget(m_page->xOffUnit);

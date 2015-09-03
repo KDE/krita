@@ -54,6 +54,7 @@ public:
     bool wrapAroundModeSupported() const;
 
     void setDesiredLevelOfDetail(int lod);
+    void explicitRegenerateLevelOfDetail();
     void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
     void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
     void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);

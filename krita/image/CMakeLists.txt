@@ -292,6 +292,7 @@ set(kritaimage_LIB_SRCS
    kis_scalar_keyframe_channel.cpp
    kis_raster_keyframe_channel.cpp
    kis_onion_skin_compositor.cpp
+   kis_idle_watcher.cpp
 
    kis_psd_layer_style.cpp
 

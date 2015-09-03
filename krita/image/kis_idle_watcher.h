@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,42 +16,44 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_CACHE_POPULATOR_H
-#define KIS_ANIMATION_CACHE_POPULATOR_H
+#ifndef __KIS_IDLE_WATCHER_H
+#define __KIS_IDLE_WATCHER_H
 
+#include "kritaimage_export.h"
+
+#include <QScopedPointer>
 #include <QObject>
+#include <QString>
+
 #include "kis_types.h"
 
-class KisPart;
 
-class KisAnimationCachePopulator : public QObject
+class KRITAIMAGE_EXPORT KisIdleWatcher : public QObject
 {
     Q_OBJECT
-
 public:
-    KisAnimationCachePopulator(KisPart *part);
-    ~KisAnimationCachePopulator();
+    KisIdleWatcher(int delay);
+    ~KisIdleWatcher();
 
-    /**
-     * Request generation of given frame. The request will
-     * be ignored if the populator is already requesting a frame.
-     * @return true if generation reqeusted, false if busy
-     */
-    bool regenerate(KisAnimationFrameCacheSP cache, int frame);
+    bool isIdle() const;
 
-public slots:
-    void slotStart();
+    void setTrackedImages(const QVector<KisImageSP> &images);
+    void setTrackedImage(KisImageSP image);
 
-    void slotRequestRegeneration();
 
-private slots:
-    void slotTimer();
-    void slotFrameReady(int frame);
-    void slotInfoConverted();
+Q_SIGNALS:
+    void startedIdleMode();
+
+private Q_SLOTS:
+    void slotImageModified();
+    void slotIdleCheckTick();
+
+    void startIdleCheck();
+    void stopIdleCheck();
 
 private:
     struct Private;
-    QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif
+#endif /* __KIS_IDLE_WATCHER_H */

@@ -73,6 +73,9 @@
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
 #include "kis_animation_cache_populator.h"
+#include "kis_idle_watcher.h"
+#include "kis_image.h"
+
 
 #include "kis_color_manager.h"
 
@@ -86,6 +89,7 @@ public:
         , canvasItem(0)
         , startupWidget(0)
         , actionCollection(0)
+        , idleWatcher(2500)
     {
     }
 
@@ -104,6 +108,9 @@ public:
     KisOpenPane *startupWidget;
 
     KActionCollection *actionCollection;
+
+    KisIdleWatcher idleWatcher;
+    QScopedPointer<KisAnimationCachePopulator> animationCachePopulator;
 
     void loadActions();
 };
@@ -201,11 +208,18 @@ KisPart::KisPart()
     Q_UNUSED(KisResourceServerProvider::instance());
     Q_UNUSED(KisColorManager::instance());
 
-    QThread *thread = new QThread(this);
-    KisAnimationCachePopulator *animationCachePopulator = KisAnimationCachePopulator::instance();
-    animationCachePopulator->moveToThread(thread);
-    connect(thread, SIGNAL(started()), animationCachePopulator, SLOT(slotStart()));
-    thread->start();
+    connect(this, SIGNAL(documentOpened(QString)),
+            this, SLOT(updateIdleWatcherConnections()));
+
+    connect(this, SIGNAL(documentClosed(QString)),
+            this, SLOT(updateIdleWatcherConnections()));
+
+    d->animationCachePopulator.reset(new KisAnimationCachePopulator(this));
+
+    connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
+            d->animationCachePopulator.data(), SLOT(slotRequestRegeneration()));
+
+    d->animationCachePopulator->slotRequestRegeneration();
 }
 
 KisPart::~KisPart()
@@ -223,6 +237,17 @@ KisPart::~KisPart()
     }
 
     delete d;
+}
+
+void KisPart::updateIdleWatcherConnections()
+{
+    QVector<KisImageSP> images;
+
+    foreach (QPointer<KisDocument> document, documents()) {
+        images << document->image();
+    }
+
+    d->idleWatcher.setTrackedImages(images);
 }
 
 void KisPart::addDocument(KisDocument *document)
@@ -399,6 +424,16 @@ KisMainWindow *KisPart::currentMainwindow() const
     }
     return mainWindow;
 
+}
+
+KisIdleWatcher* KisPart::idleWatcher() const
+{
+    return &d->idleWatcher;
+}
+
+KisAnimationCachePopulator* KisPart::cachePopulator() const
+{
+    return d->animationCachePopulator.data();
 }
 
 void KisPart::openExistingFile(const KUrl& url)

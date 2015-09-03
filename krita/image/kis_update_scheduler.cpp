@@ -46,11 +46,15 @@
 
 
 struct KisUpdateScheduler::Private {
-    Private() : updatesQueue(0), strokesQueue(0),
+    Private(KisUpdateScheduler *_q)
+              : q(_q),
+                updatesQueue(0), strokesQueue(0),
                 updaterContext(0), processingBlocked(false),
                 balancingRatio(1.0),
                 projectionUpdateListener(0),
                 progressUpdater(0) {}
+
+    KisUpdateScheduler *q;
 
     KisSimpleUpdateQueue *updatesQueue;
     KisStrokesQueue *strokesQueue;
@@ -63,10 +67,12 @@ struct KisUpdateScheduler::Private {
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
     KisLazyWaitCondition updatesFinishedCondition;
+
+    void unlockImpl(bool resetLodLevels);
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
     updateSettings();
     m_d->projectionUpdateListener = projectionUpdateListener;
@@ -80,7 +86,7 @@ KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUp
 }
 
 KisUpdateScheduler::KisUpdateScheduler()
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
 }
 
@@ -232,6 +238,14 @@ void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
     processQueues();
 }
 
+void KisUpdateScheduler::explicitRegenerateLevelOfDetail()
+{
+    m_d->strokesQueue->explicitRegenerateLevelOfDetail();
+
+    // \see a comment in setDesiredLevelOfDetail()
+    processQueues();
+}
+
 int KisUpdateScheduler::currentLevelOfDetail() const
 {
     int levelOfDetail = -1;
@@ -282,16 +296,35 @@ void KisUpdateScheduler::lock()
     m_d->updaterContext->waitForDone();
 }
 
+void KisUpdateScheduler::Private::unlockImpl(bool resetLodLevels)
+{
+    if (resetLodLevels) {
+        /**
+         * Legacy strokes may have changed the image while we didn't
+         * control it. Notify the queue to take it into account.
+         */
+        this->strokesQueue->notifyUFOChangedImage();
+    }
+
+    this->processingBlocked = false;
+    q->processQueues();
+}
+
 void KisUpdateScheduler::unlock()
 {
-    /**
-     * Legacy strokes may have changed the image while we didn't
-     * control it. Notify the queue to take it into account.
-     */
-    m_d->strokesQueue->notifyUFOChangedImage();
+    m_d->unlockImpl(true);
+}
 
-    m_d->processingBlocked = false;
-    processQueues();
+bool KisUpdateScheduler::isIdle()
+{
+    bool result = false;
+
+    if (tryBarrierLock()) {
+        result = true;
+        m_d->unlockImpl(false);
+    }
+
+    return result;
 }
 
 void KisUpdateScheduler::waitForDone()

@@ -160,7 +160,7 @@ public:
 
     KisCompositeProgressProxy *compositeProgressProxy;
 
-    int blockLevelOfDetail;
+    bool blockLevelOfDetail;
 
     bool tryCancelCurrentStrokeAsync();
 
@@ -175,7 +175,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     setObjectName(name);
     dbgImage << "creating" << name;
 
-    m_d->blockLevelOfDetail = 0;
+    m_d->blockLevelOfDetail = false;
 
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -408,6 +408,12 @@ bool KisImage::tryBarrierLock()
     }
 
     return result;
+}
+
+bool KisImage::isIdle()
+{
+    KIS_ASSERT_RECOVER_NOOP(!locked());
+    return m_d->scheduler->isIdle();
 }
 
 void KisImage::lock()
@@ -1986,6 +1992,13 @@ void KisImage::setLevelOfDetailBlocked(bool value)
     }
 
     m_d->blockLevelOfDetail = value;
+}
+
+void KisImage::explicitRegenerateLevelOfDetail()
+{
+    if (!m_d->blockLevelOfDetail) {
+        m_d->scheduler->explicitRegenerateLevelOfDetail();
+    }
 }
 
 bool KisImage::levelOfDetailBlocked() const

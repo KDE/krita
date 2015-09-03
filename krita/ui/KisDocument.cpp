@@ -98,6 +98,9 @@
 #include <kis_fill_painter.h>
 #include <kis_document_undo_store.h>
 #include <kis_painting_assistants_decoration.h>
+#include <kis_idle_watcher.h>
+#include <kis_signal_auto_connection.h>
+
 
 // Local
 #include "kis_factory2.h"
@@ -261,6 +264,7 @@ public:
         disregardAutosaveFailure(false),
         nserver(0),
         macroNestDepth(0),
+        imageIdleWatcher(2000 /*ms*/),
         kraLoader(0)
     {
         m_job = 0;
@@ -357,6 +361,9 @@ public:
     KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
     KoShapeController* koShapeController;
+    KisIdleWatcher imageIdleWatcher;
+    QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
+
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
@@ -2625,6 +2632,11 @@ void KisDocument::setCurrentImage(KisImageWSP image)
     d->image->initialRefreshGraph();
     setAutoSave(KisConfig().autoSaveInterval());
 
+    d->imageIdleWatcher.setTrackedImage(image);
+    d->imageIdleConnection.reset(
+        new KisSignalAutoConnection(
+            &d->imageIdleWatcher, SIGNAL(startedIdleMode()),
+            image.data(), SLOT(explicitRegenerateLevelOfDetail())));
 }
 
 void KisDocument::initEmpty()

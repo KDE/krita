@@ -33,6 +33,9 @@ class KisTimeRange;
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
+class KisOpenGLUpdateInfo;
+typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
+
 class KRITAUI_EXPORT KisAnimationFrameCache : public QObject, public KisShared
 {
     Q_OBJECT
@@ -50,13 +53,15 @@ public:
 
     enum CacheStatus {
         Cached,
-        Dirty,
-        Uncached
+        Uncached,
     };
 
     CacheStatus frameStatus(int time) const;
 
     KisImageWSP image();
+
+    KisOpenGLUpdateInfoSP fetchFrameData(int time) const;
+    void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
 signals:
     void changed();
@@ -68,8 +73,6 @@ private:
 
 private slots:
     void framesChanged(const KisTimeRange &range, const QRect &rect);
-    void frameReady(int time);
-
 };
 
 #endif

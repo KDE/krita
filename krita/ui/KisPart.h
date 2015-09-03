@@ -41,6 +41,9 @@ class KisDocument;
 class KisView;
 class QGraphicsItem;
 class KisDocument;
+class KisIdleWatcher;
+class KisAnimationCachePopulator;
+
 
 /**
  * Override this class in your application. It's the main entry point that
@@ -134,6 +137,9 @@ public:
 
     KisMainWindow *currentMainwindow() const;
 
+    KisIdleWatcher *idleWatcher() const;
+    KisAnimationCachePopulator *cachePopulator() const;
+
 public Q_SLOTS:
 
     /**
@@ -164,6 +170,8 @@ private Q_SLOTS:
     void viewDestroyed();
 
     void startCustomDocument(KisDocument *doc);
+
+    void updateIdleWatcherConnections();
 
 Q_SIGNALS:
     /**

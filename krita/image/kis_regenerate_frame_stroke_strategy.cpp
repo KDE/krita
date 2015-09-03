@@ -34,11 +34,11 @@ struct KisRegenerateFrameStrokeStrategy::Private
     KisImageAnimationInterface *interface;
 };
 
-
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
                                                                    const QRegion &dirtyRegion,
                                                                    KisImageAnimationInterface *interface)
-    : m_d(new Private)
+    : KisSimpleStrokeStrategy("regenerate_external_frame_stroke"),
+      m_d(new Private)
 {
     m_d->type = EXTERNAL_FRAME;
 
@@ -50,12 +50,16 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
     enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
 
+    enableJob(JOB_SUSPEND, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
+
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)
-    : m_d(new Private)
+    : KisSimpleStrokeStrategy("regenerate_current_frame_stroke"),
+      m_d(new Private)
 {
     m_d->type = CURRENT_FRAME;
 
@@ -66,6 +70,9 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnima
     enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
     enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
     enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+
+    enableJob(JOB_SUSPEND, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
 
     // switching frames is a distinct user action, so it should
     // cancel the playback or any action easily
@@ -112,5 +119,31 @@ void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
         m_d->interface->image()->enableUIUpdates();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
+    }
+}
+
+KisStrokeStrategy* KisRegenerateFrameStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    Q_UNUSED(levelOfDetail);
+    return new KisSimpleStrokeStrategy("dumb-lodn-KisRegenerateFrameStrokeStrategy");
+}
+
+void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()
+{
+    if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
+        m_d->interface->image()->enableUIUpdates();
+    } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->blockFrameInvalidation(false);
+    }
+}
+
+void KisRegenerateFrameStrokeStrategy::resumeStrokeCallback()
+{
+    if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->image()->disableUIUpdates();
+        m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
+    } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->blockFrameInvalidation(true);
     }
 }

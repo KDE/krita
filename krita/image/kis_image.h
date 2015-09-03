@@ -535,6 +535,17 @@ public:
      */
     void setDesiredLevelOfDetail(int lod);
 
+public Q_SLOTS:
+
+    /**
+     * Explicitly start regeneration of LoD planes of all the devices
+     * in the image. This call should be performed when the user is idle,
+     * just to make the quality of image updates better.
+     */
+    void explicitRegenerateLevelOfDetail();
+
+public:
+
     /**
      * Blocks usage of level of detail functionality. After this method
      * has been called, no new strokes will use LoD.
@@ -694,6 +705,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
+
+    bool isIdle();
 
     void barrierLock();
     bool tryBarrierLock();

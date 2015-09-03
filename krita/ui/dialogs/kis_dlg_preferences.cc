@@ -593,6 +593,7 @@ void PerformanceTab::load(bool requestDefault)
     sliderUndoLimit->setValue(cfg.memorySoftLimitPercent(requestDefault));
 
     chkPerformanceLogging->setChecked(cfg.enablePerfLog(requestDefault));
+    chkProgressReporting->setChecked(cfg.enableProgressReporting(requestDefault));
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
     lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
@@ -607,6 +608,7 @@ void PerformanceTab::save()
     cfg.setMemoryPoolLimitPercent(sliderPoolLimit->value());
 
     cfg.setEnablePerfLog(chkPerformanceLogging->isChecked());
+    cfg.setEnableProgressReporting(chkProgressReporting->isChecked());
 
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
 

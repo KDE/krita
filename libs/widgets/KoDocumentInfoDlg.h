@@ -72,9 +72,8 @@ public:
 
     void addPageItem(KoPageWidgetItem *item);
 
-public Q_SLOTS:
-    /** Connected to the okClicked() signal */
-    void slotApply();
+public Q_SLOTS:  // QDialog API
+    void accept();
 
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
@@ -94,8 +93,6 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-
-    void slotButtonClicked(int button);
 
     class KoDocumentInfoDlgPrivate;
     KoDocumentInfoDlgPrivate * const d;

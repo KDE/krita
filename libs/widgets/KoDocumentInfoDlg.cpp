@@ -88,12 +88,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
 {
     d->info = docInfo;
 
-// QT5TODO: KF5 port to QDialog
     setWindowTitle(i18n("Document Information"));
 //    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
-//    setButtons(KDialog::Ok | KDialog::Cancel);
-//    setDefaultButton(KDialog::Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
@@ -153,25 +152,28 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
     delete d;
 }
 
-void KoDocumentInfoDlg::slotButtonClicked(int button)
+void KoDocumentInfoDlg::accept()
 {
-// QT5TODO: KF5 port to QDialog
-//    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
-//    switch (button) {
-//    case Ok:
-//        foreach(KPageWidgetItem* item, d->pages) {
-//            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-//            if (page) {
-//                if (page->shouldDialogCloseBeVetoed()) {
-//                    return;
-//                }
-//            }
-//        }
-//        slotApply();
-//        accept();
-//        return;
-//    }
-//    KPageDialog::slotButtonClicked(button);
+    // check if any pages veto the close
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            if (page->shouldDialogCloseBeVetoed()) {
+                return;
+            }
+        }
+    }
+
+    // all fine, go and apply
+    saveAboutData();
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            page->apply();
+        }
+    }
+
+    KPageDialog::accept();
 }
 
 bool KoDocumentInfoDlg::isDocumentSaved()
@@ -265,17 +267,6 @@ void KoDocumentInfoDlg::initAuthorTab()
     d->authorUi->city->setText(d->info->authorInfo("city"));
     d->authorUi->street->setText(d->info->authorInfo("street"));
     d->authorUi->position->setText(d->info->authorInfo("position"));
-}
-
-void KoDocumentInfoDlg::slotApply()
-{
-    saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-        if (page) {
-            page->apply();
-        }
-    }
 }
 
 void KoDocumentInfoDlg::saveAboutData()

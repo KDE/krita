@@ -139,10 +139,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->pages.append(page);
 
     initAuthorTab();
-
-    // Saving encryption implies saving the document, this is done after closing the dialog
-    connect(this, SIGNAL(hidden()), this, SLOT(slotSaveEncryption()));
-
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
@@ -279,6 +275,15 @@ void KoDocumentInfoDlg::saveAboutData()
     d->applyToggleEncryption = d->toggleEncryption;
 }
 
+void KoDocumentInfoDlg::hideEvent( QHideEvent *event )
+{
+    Q_UNUSED(event);
+
+    // Saving encryption implies saving the document, this is done after closing the dialog
+    // TODO: shouldn't this be skipped if cancel is pressed?
+    saveEncryption();
+}
+
 void KoDocumentInfoDlg::slotResetMetaData()
 {
     d->info->resetMetaData();
@@ -331,7 +336,7 @@ void KoDocumentInfoDlg::slotToggleEncryption()
     }
 }
 
-void KoDocumentInfoDlg::slotSaveEncryption()
+void KoDocumentInfoDlg::saveEncryption()
 {
     if (!d->applyToggleEncryption)
         return;

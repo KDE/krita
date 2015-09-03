@@ -24,7 +24,6 @@
 
 #include "KoDocument.h"
 #include "KoPart.h"
-#include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoView.h"
 #include <kdebug.h>

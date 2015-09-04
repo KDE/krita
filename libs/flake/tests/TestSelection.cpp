@@ -23,6 +23,8 @@
 #include <KoSelection.h>
 #include <kdebug.h>
 
+#include <QTest>
+
 void TestSelection::testSelectedShapes()
 {
     KoSelection selection;

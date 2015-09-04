@@ -20,7 +20,7 @@
 #ifndef TestShapeContainer_H
 #define TestShapeContainer_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestShapeContainer : public QObject
 {

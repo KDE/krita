@@ -3,6 +3,8 @@
 #include "KoIntegerMaths.h"
 #include "KoColorSpaceMaths.h"
 
+#include <QTest>
+
 void TestKoColorSpaceMaths::testColorSpaceMathsTraits()
 {
     QCOMPARE(KoColorSpaceMathsTraits<quint8>::channelValueType, KoChannelInfo::UINT8);

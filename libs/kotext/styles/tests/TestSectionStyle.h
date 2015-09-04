@@ -20,7 +20,6 @@
 #define TESTSECTIONSTYLE_H
 
 #include <QObject>
-#include <QtTest>
 
 class TestSectionStyle : public QObject
 {

@@ -22,6 +22,7 @@
 
 #include <KoUnit.h>
 
+#include <QTest>
 
 Q_DECLARE_METATYPE(KoUnit::Type)
 Q_DECLARE_METATYPE(KoUnit::ListOptions)

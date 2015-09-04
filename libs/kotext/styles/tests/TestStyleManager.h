@@ -20,7 +20,6 @@
 #define TESTSTYLEMANAGER_H
 
 #include <QObject>
-#include <QtTest>
 
 class KoStyleManager;
 class KoTextDocument;

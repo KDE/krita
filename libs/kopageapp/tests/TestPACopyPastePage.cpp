@@ -26,6 +26,7 @@
 #include "KoPAOdfPageSaveHelper.h"
 
 #include <QClipboard>
+#include <QMimeData>
 
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>

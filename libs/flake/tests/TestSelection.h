@@ -20,7 +20,7 @@
 #ifndef TestSelection_H
 #define TestSelection_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestSelection : public QObject
 {

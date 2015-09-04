@@ -5,6 +5,7 @@
 
 #include <QTextTableCellFormat>
 #include <QRectF>
+#include <QTest>
 
 void TestTableCellStyle::testPen()
 {

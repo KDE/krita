@@ -20,7 +20,7 @@
 #ifndef TESTSHAPEREORDERCOMMAND_H
 #define TESTSHAPEREORDERCOMMAND_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestShapeReorderCommand : public QObject
 {

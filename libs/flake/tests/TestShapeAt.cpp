@@ -28,6 +28,8 @@
 
 #include <kcomponentdata.h>
 
+#include <QTest>
+
 void TestShapeAt::test()
 {
     MockShape shape1;

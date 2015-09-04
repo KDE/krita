@@ -20,9 +20,12 @@
 #ifndef TESTPACOPYPASTEPAGE_H
 #define TESTPACOPYPASTEPAGE_H
 
-#include <QtTest>
+#include <QObject>
+#include <QList>
+#include <QPointF>
 
 class QMimeData;
+class QPoint;
 class MockDocument;
 class KoPAPageBase;
 

@@ -25,6 +25,7 @@
 
 #include <QImage>
 #include <QPixmap>
+#include <QBuffer>
 #include <kurl.h>
 #include <kdebug.h>
 

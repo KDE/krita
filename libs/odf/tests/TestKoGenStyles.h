@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QtTest>
+#include <QObject>
 
 class TestKoGenStyles : public QObject
 {

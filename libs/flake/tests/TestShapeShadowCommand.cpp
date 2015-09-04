@@ -23,6 +23,8 @@
 #include "KoShapeShadowCommand.h"
 #include "KoInsets.h"
 
+#include <QTest>
+
 void TestShapeShadowCommand::refCounting()
 {
     MockShape * shape1 = new MockShape();

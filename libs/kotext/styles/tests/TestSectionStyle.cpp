@@ -21,6 +21,7 @@
 #include "styles/KoSectionStyle.h"
 
 #include <QTextFrameFormat>
+#include <QTest>
 
 void TestSectionStyle::testSectionStyle()
 {

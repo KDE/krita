@@ -116,8 +116,11 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
                 }
             }
         }
-    } else {
+    } else if(d->firstAssistant) {
+        //make sure there's a first assistant to begin with.//
         best = d->firstAssistant->adjustPosition(point, strokeBegin);
+    } else {
+        d->aFirstStroke=false;
     }
     //this is here to be compatible with the movement in the perspective tool.
     qreal dx = point.x() - strokeBegin.x(), dy = point.y() - strokeBegin.y();

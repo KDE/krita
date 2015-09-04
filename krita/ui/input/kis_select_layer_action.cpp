@@ -90,7 +90,7 @@ void KisSelectLayerAction::inputEvent(QEvent *event)
     if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
         QPoint pos =
             inputManager()->canvas()->
-            coordinatesConverter()->widgetToImage(mouseEvent->posF()).toPoint();
+            coordinatesConverter()->widgetToImage(eventPosF(event)).toPoint();
 
         KisNodeSP node = KisToolUtils::findNode(inputManager()->canvas()->image()->root(), pos, false);
 

@@ -63,7 +63,7 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if (mouseEvent) {
-        QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+        QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
 
         inputManager()->toolProxy()->forwardEvent(
             KisToolProxy::BEGIN, KisTool::AlternateChangeSize, &targetEvent, event,
@@ -75,7 +75,7 @@ void KisChangePrimarySettingAction::end(QEvent *event)
 {
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if (mouseEvent) {
-        QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
 
         inputManager()->toolProxy()->forwardEvent(
             KisToolProxy::END, KisTool::AlternateChangeSize, &targetEvent, event,
@@ -90,7 +90,7 @@ void KisChangePrimarySettingAction::inputEvent(QEvent* event)
     if (event && event->type() == QEvent::MouseMove) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
 
         inputManager()->toolProxy()->forwardEvent(
             KisToolProxy::CONTINUE, KisTool::AlternateChangeSize, &targetEvent, event,

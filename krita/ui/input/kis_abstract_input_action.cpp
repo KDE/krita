@@ -64,20 +64,17 @@ void KisAbstractInputAction::begin(int shortcut, QEvent *event)
 {
     Q_UNUSED(shortcut);
 
-    QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
-        d->lastCursorPosition = mouseEvent->posF();
+    if (event) {
+        d->lastCursorPosition = eventPosF(event);
     }
 }
 
 void KisAbstractInputAction::inputEvent(QEvent* event)
 {
-    QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
-        if (mouseEvent->type() == QEvent::MouseMove) {
-            cursorMoved(d->lastCursorPosition, mouseEvent->posF());
-        }
-        d->lastCursorPosition = mouseEvent->posF();
+    if (event) {
+        QPointF newPosition = eventPosF(event);
+        cursorMoved(d->lastCursorPosition, newPosition);
+        d->lastCursorPosition = newPosition;
     }
 }
 

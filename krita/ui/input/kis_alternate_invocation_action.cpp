@@ -108,8 +108,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
     KisAbstractInputAction::begin(shortcut, event);
 
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier); // There must be a better way
 
     m_d->savedAction = shortcutToToolAction(shortcut);
 
@@ -122,21 +121,20 @@ void KisAlternateInvocationAction::end(QEvent *event)
 {
     if (!event) return;
 
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-
-    QMouseEvent targetEvent(*mouseEvent);
+    Qt::KeyboardModifiers modifiers;
 
     switch (m_d->savedAction) {
     case KisTool::AlternatePickFgNode:
-        targetEvent = QMouseEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+        modifiers = Qt::ControlModifier;
         break;
     case KisTool::AlternateThird:
-        targetEvent = QMouseEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
+        modifiers = Qt::ControlModifier | Qt::AltModifier;
         break;
     default:
         ;
     }
 
+    QMouseEvent targetEvent = QMouseEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::LeftButton, Qt::LeftButton, modifiers);
     inputManager()->toolProxy()->forwardEvent(
         KisToolProxy::END, m_d->savedAction, &targetEvent, event,
         inputManager()->lastTabletEvent());
@@ -146,24 +144,23 @@ void KisAlternateInvocationAction::end(QEvent *event)
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
-    if (event && event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-
-        QMouseEvent targetEvent(QEvent::MouseMove, mouseEvent->pos(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
-
+    if (event && (event->type() != QEvent::MouseMove)) {
+        Qt::KeyboardModifiers modifiers;
         switch (m_d->savedAction) {
         case KisTool::AlternatePickFgNode:
-            targetEvent = QMouseEvent(QEvent::MouseMove, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+            modifiers =  Qt::ControlModifier;
             break;
         case KisTool::AlternateThird:
-            targetEvent = QMouseEvent(QEvent::MouseMove, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
+            modifiers = Qt::ControlModifier | Qt::AltModifier;
             break;
         default:
-            ;
+            modifiers = Qt::ShiftModifier;
         }
 
+        QMouseEvent targetEvent(QEvent::MouseMove, eventPos(event), Qt::LeftButton, Qt::LeftButton, modifiers);
         inputManager()->toolProxy()->forwardEvent(
             KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event,
             inputManager()->lastTabletEvent());
     }
+
 }

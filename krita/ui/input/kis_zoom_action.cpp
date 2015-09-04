@@ -74,18 +74,7 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
     KoZoomAction *zoomAction = q->inputManager()->canvas()->viewManager()->zoomController()->zoomAction();
 
     if (event) {
-        QPoint pos;
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-        if (mouseEvent) {
-            pos = mouseEvent->pos();
-        } else {
-            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
-            if (wheelEvent) {
-                pos = wheelEvent->pos();
-            } else {
-                warnKrita << "Unhandled type of event";
-            }
-        }
+        QPoint pos = eventPos(event);
 
         float oldZoom = zoomAction->effectiveZoom();
         float newZoom = zoomIn ?

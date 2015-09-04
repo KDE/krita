@@ -222,7 +222,7 @@ void KisZoomAction::inputEvent( QEvent* event )
     KisAbstractInputAction::inputEvent(event);
 }
 
-void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisZoomAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     QPointF diff = -(pos - lastPos);
 

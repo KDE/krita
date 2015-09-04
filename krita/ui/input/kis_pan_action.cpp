@@ -136,7 +136,7 @@ void KisPanAction::inputEvent(QEvent *event)
     KisAbstractInputAction::inputEvent(event);
 }
 
-void KisPanAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisPanAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     QPointF relMovement = -(pos - lastPos);
     inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());

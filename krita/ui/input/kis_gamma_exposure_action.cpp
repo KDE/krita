@@ -171,7 +171,7 @@ void KisGammaExposureAction::begin(int shortcut, QEvent *event)
     }
 }
 
-void KisGammaExposureAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisGammaExposureAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     QPointF diff = -(pos - lastPos);
 

@@ -21,6 +21,7 @@
 #include <QPointF>
 #include <QMouseEvent>
 #include <klocalizedstring.h>
+#include <QDebug>
 
 class Q_DECL_HIDDEN KisAbstractInputAction::Private
 {
@@ -30,7 +31,7 @@ public:
     QString description;
     QHash<QString, int> indexes;
 
-    QPointF lastMousePosition;
+    QPointF lastCursorPosition;
 
     static KisInputManager* inputManager;
 };
@@ -65,7 +66,7 @@ void KisAbstractInputAction::begin(int shortcut, QEvent *event)
 
     QMouseEvent *mouseEvent;
     if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
-        d->lastMousePosition = mouseEvent->posF();
+        d->lastCursorPosition = mouseEvent->posF();
     }
 }
 
@@ -74,9 +75,9 @@ void KisAbstractInputAction::inputEvent(QEvent* event)
     QMouseEvent *mouseEvent;
     if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
         if (mouseEvent->type() == QEvent::MouseMove) {
-            mouseMoved(d->lastMousePosition, mouseEvent->posF());
+            cursorMoved(d->lastCursorPosition, mouseEvent->posF());
         }
-        d->lastMousePosition = mouseEvent->posF();
+        d->lastCursorPosition = mouseEvent->posF();
     }
 }
 
@@ -85,7 +86,7 @@ void KisAbstractInputAction::end(QEvent *event)
     Q_UNUSED(event);
 }
 
-void KisAbstractInputAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisAbstractInputAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     Q_UNUSED(lastPos);
     Q_UNUSED(pos);
@@ -155,4 +156,50 @@ bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
 {
     Q_UNUSED(shortcut);
     return false;
+}
+
+
+QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
+
+    switch (event->type()) {
+    case QEvent::MouseMove:
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+        return static_cast<const QMouseEvent*>(event)->pos();
+
+    case QEvent::TabletMove:
+    case QEvent::TabletPress:
+    case QEvent::TabletRelease:
+        return static_cast<const QTabletEvent*>(event)->pos();
+
+    case QEvent::Wheel:
+        return static_cast<const QWheelEvent*>(event)->pos();
+
+    default:
+        qCritical() << "KisAbstractInputAction tried to process event data from an unhandled event type" << event->type();
+        return QPoint();
+    }
+}
+
+
+QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
+
+    switch (event->type()) {
+    case QEvent::MouseMove:
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+        return static_cast<const QMouseEvent*>(event)->posF();
+
+    case QEvent::TabletMove:
+    case QEvent::TabletPress:
+    case QEvent::TabletRelease:
+        return static_cast<const QTabletEvent*>(event)->posF();
+
+    case QEvent::Wheel:
+        return static_cast<const QWheelEvent*>(event)->posF();
+
+    default:
+        qCritical() << "KisAbstractInputAction tried to process event data from an unhandled event type" << event->type();
+        return QPoint();
+    }
 }

@@ -1,4 +1,7 @@
-/* This file is part of the KDE project * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+/* This file is part of the KDE project
+ *
+ *  Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ *  Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -263,8 +266,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         d->debugEvent<QMouseEvent, true>(event);
         break_if_should_ignore_cursor_events();
 
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        if (!d->matcher.mouseMoved(mouseEvent)) {
+        if (!d->matcher.pointerMoved(event)) {
             //Update the current tool so things like the brush outline gets updated.
             d->toolProxy->forwardMouseHoverEvent(mouseEvent, lastTabletEvent());
         }

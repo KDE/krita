@@ -30,6 +30,8 @@
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 
+#include <QTest>
+
 void TestKoOdfLoadingContext::testFillStyleStack()
 {
 #if 0
@@ -141,4 +143,4 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     delete store;
 }
 
-QTEST_KDEMAIN(TestKoOdfLoadingContext, NoGUI)
+QTEST_GUILESS_MAIN(TestKoOdfLoadingContext)

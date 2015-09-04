@@ -25,6 +25,8 @@
 #include <KoShapeShadow.h>
 #include <kundo2command.h>
 
+#include <QTest>
+
 TestShapeGroupCommand::TestShapeGroupCommand()
         : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
         , cmd1(0), cmd2(0), strokeCmd(0)

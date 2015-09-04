@@ -88,12 +88,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
 {
     d->info = docInfo;
 
-// QT5TODO: KF5 port to QDialog
     setWindowTitle(i18n("Document Information"));
 //    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
-//    setButtons(KDialog::Ok | KDialog::Cancel);
-//    setDefaultButton(KDialog::Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
@@ -140,10 +139,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->pages.append(page);
 
     initAuthorTab();
-
-    // Saving encryption implies saving the document, this is done after closing the dialog
-    connect(this, SIGNAL(hidden()), this, SLOT(slotSaveEncryption()));
-
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
@@ -153,25 +148,28 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
     delete d;
 }
 
-void KoDocumentInfoDlg::slotButtonClicked(int button)
+void KoDocumentInfoDlg::accept()
 {
-// QT5TODO: KF5 port to QDialog
-//    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
-//    switch (button) {
-//    case Ok:
-//        foreach(KPageWidgetItem* item, d->pages) {
-//            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-//            if (page) {
-//                if (page->shouldDialogCloseBeVetoed()) {
-//                    return;
-//                }
-//            }
-//        }
-//        slotApply();
-//        accept();
-//        return;
-//    }
-//    KPageDialog::slotButtonClicked(button);
+    // check if any pages veto the close
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            if (page->shouldDialogCloseBeVetoed()) {
+                return;
+            }
+        }
+    }
+
+    // all fine, go and apply
+    saveAboutData();
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            page->apply();
+        }
+    }
+
+    KPageDialog::accept();
 }
 
 bool KoDocumentInfoDlg::isDocumentSaved()
@@ -267,17 +265,6 @@ void KoDocumentInfoDlg::initAuthorTab()
     d->authorUi->position->setText(d->info->authorInfo("position"));
 }
 
-void KoDocumentInfoDlg::slotApply()
-{
-    saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-        if (page) {
-            page->apply();
-        }
-    }
-}
-
 void KoDocumentInfoDlg::saveAboutData()
 {
     d->info->setAboutInfo("keyword", d->aboutUi->leKeywords->text());
@@ -286,6 +273,15 @@ void KoDocumentInfoDlg::saveAboutData()
     d->info->setAboutInfo("description", d->aboutUi->meComments->toPlainText());
     d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
     d->applyToggleEncryption = d->toggleEncryption;
+}
+
+void KoDocumentInfoDlg::hideEvent( QHideEvent *event )
+{
+    Q_UNUSED(event);
+
+    // Saving encryption implies saving the document, this is done after closing the dialog
+    // TODO: shouldn't this be skipped if cancel is pressed?
+    saveEncryption();
 }
 
 void KoDocumentInfoDlg::slotResetMetaData()
@@ -340,7 +336,7 @@ void KoDocumentInfoDlg::slotToggleEncryption()
     }
 }
 
-void KoDocumentInfoDlg::slotSaveEncryption()
+void KoDocumentInfoDlg::saveEncryption()
 {
     if (!d->applyToggleEncryption)
         return;

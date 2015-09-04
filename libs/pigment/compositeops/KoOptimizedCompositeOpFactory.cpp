@@ -41,3 +41,8 @@ KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace 
 {
     return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32> >(cs);
 }
+
+KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp128(const KoColorSpace *cs)
+{
+    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128> >(cs);
+}

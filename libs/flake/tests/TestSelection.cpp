@@ -23,6 +23,8 @@
 #include <KoSelection.h>
 #include <kdebug.h>
 
+#include <QTest>
+
 void TestSelection::testSelectedShapes()
 {
     KoSelection selection;
@@ -126,4 +128,4 @@ void TestSelection::testSize()
     QCOMPARE(selection.size(), QSizeF( 100, 100 ));
 }
 
-QTEST_MAIN(TestSelection)
+QTEST_GUILESS_MAIN(TestSelection)

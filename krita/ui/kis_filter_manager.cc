@@ -271,9 +271,12 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
                                                        KisSafeFilterConfigurationSP(filterConfig),
                                                        resources));
 
+    QRect processRect = d->view->activeNode()->exactBounds();
+    processRect = filter->changedRect(processRect, filterConfig.data());
+
     if (filter->supportsThreading()) {
         QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(d->view->activeNode()->exactBounds(), size);
+        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
 
         foreach(const QRect &rc, rects) {
             image->addJob(d->currentStrokeId,
@@ -281,7 +284,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         }
     } else {
         image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::Data(d->view->activeNode()->exactBounds(), false));
+                      new KisFilterStrokeStrategy::Data(processRect, false));
     }
 
     d->currentlyAppliedConfiguration = filterConfig;

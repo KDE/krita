@@ -24,6 +24,8 @@
 
 #include <kcomponentdata.h>
 
+#include <QTest>
+
 TestShapeReorderCommand::TestShapeReorderCommand()
 {
     KComponentData componentData("TestShapeReorderCommand");    // we need an instance for the canvas

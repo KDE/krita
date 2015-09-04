@@ -21,6 +21,7 @@
 #include <KoPathSegment.h>
 #include <KoPathPoint.h>
 #include <QPainterPath>
+#include <QTest>
 
 void TestPathSegment::segmentAssign()
 {
@@ -367,4 +368,4 @@ void TestPathSegment::paramAtLength()
     }
 }
 
-QTEST_KDEMAIN(TestPathSegment, GUI)
+QTEST_MAIN(TestPathSegment)

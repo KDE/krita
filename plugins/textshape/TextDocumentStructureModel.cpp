@@ -76,7 +76,7 @@ int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
         return 1;
     }
 
-    Q_ASSERT(index.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(index.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
@@ -101,7 +101,7 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
         return QVariant();
     }
 
-    Q_ASSERT(index.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(index.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
@@ -127,7 +127,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
         return QModelIndex();
     }
 
-    Q_ASSERT(index.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(index.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
@@ -178,7 +178,7 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
         return createIndex(row, column, static_cast<quintptr>(0));
     }
 
-    Q_ASSERT(parentIndex.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(parentIndex.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(parentIndex.internalId());
     // can be only frame for now
@@ -219,7 +219,7 @@ bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) con
         return true;
     }
 
-    Q_ASSERT(parentIndex.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(parentIndex.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(parentIndex.internalId());
 

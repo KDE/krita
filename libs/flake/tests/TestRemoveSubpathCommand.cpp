@@ -21,6 +21,7 @@
 #include <QPainterPath>
 #include "KoPathShape.h"
 #include "KoSubpathRemoveCommand.h"
+#include <QTest>
 
 void TestRemoveSubpathCommand::redoUndo()
 {

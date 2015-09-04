@@ -33,20 +33,20 @@
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : SelectionActionHandler<KisDelegatedSelectPathWrapper>(canvas,
-                              KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
-			      i18n("Select path"),
-                              (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
+                                                            KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
+                                                            i18n("Select path"),
+                                                            (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
 {
 }
 
 void KisToolSelectPath::requestStrokeEnd()
 {
-     localTool()->endPathWithoutLastPoint();
+    localTool()->endPathWithoutLastPoint();
 }
 
 void KisToolSelectPath::requestStrokeCancellation()
 {
- localTool()->cancelPath();
+    localTool()->cancelPath();
 }
 
 void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
@@ -58,21 +58,22 @@ void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
 // Install an event filter to catch right-click events.
 bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
-  if (event->type() == QEvent::MouseButtonPress ||
-      event->type() == QEvent::MouseButtonDblClick) {
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-    if (mouseEvent->button() == Qt::RightButton) {
-      localTool()->removeLastPoint();
-      return true;
+    Q_UNUSED(obj)
+    if (event->type() == QEvent::MouseButtonPress ||
+            event->type() == QEvent::MouseButtonDblClick) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::RightButton) {
+            localTool()->removeLastPoint();
+            return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgetsList =
-        DelegatedSelectPathTool::createOptionWidgets();
+            DelegatedSelectPathTool::createOptionWidgets();
     return widgetsList;
 }
 
@@ -80,29 +81,29 @@ void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
 {
     // We will turn off the ability to change the selection in the middle of drawing a path.
     if (!m_localTool->listeningToModifiers()) {
-      SelectionActionHandler<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
+        SelectionActionHandler<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
     }
 }
 
 
 bool KisDelegatedSelectPathWrapper::listeningToModifiers() {
-  return m_localTool->listeningToModifiers();
+    return m_localTool->listeningToModifiers();
 }
 
 void KisDelegatedSelectPathWrapper::beginPrimaryAction(KoPointerEvent *event) {
- mousePressEvent(event);
+    mousePressEvent(event);
 }
 
 void KisDelegatedSelectPathWrapper::continuePrimaryAction(KoPointerEvent *event){
- mouseMoveEvent(event);
+    mouseMoveEvent(event);
 }
 
 void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
- mouseReleaseEvent(event);
+    mouseReleaseEvent(event);
 }
 
- __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
-     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
+__KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
+    : KoCreatePathTool(canvas), m_selectionTool(parentTool)
 {
 }
 

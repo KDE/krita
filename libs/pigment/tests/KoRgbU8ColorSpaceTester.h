@@ -20,7 +20,7 @@
 #ifndef KORGBCOLORSPACETESTER_H
 #define KORGBCOLORSPACETESTER_H
 
-#include <QtTest>
+#include <QObject>
 
 class KoRgbU8ColorSpaceTester : public QObject
 {

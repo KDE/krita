@@ -40,6 +40,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include <QTest>
+
 Attribute::Attribute(const QDomElement& element)
     : m_references()
 {

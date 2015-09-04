@@ -23,7 +23,6 @@
 #include <QFile>
 #include <QStandardItemModel>
 
-#include <kdeversion.h>
 #include <kcomponentdata.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
@@ -124,12 +123,8 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponent
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-#if KDE_IS_VERSION(4,6,80)
     QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
     KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
-#else
-    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, IconExtent, IconExtent, 0);
-#endif
 
     d->m_previewJobs.append(previewJob);
     connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
@@ -155,13 +150,8 @@ void KisRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         if (preview.isNull()) {
             // need to fetch preview
             const KFileItemList fileList = KFileItemList() << fileItem;
-#if KDE_IS_VERSION(4,6,80)
             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
-#else
-            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, PreviewExtent, PreviewExtent, 0);
-#endif
-
             d->m_previewJobs.append(previewJob);
             connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
             connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),

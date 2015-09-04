@@ -2,7 +2,6 @@
 #define TESTTABLECELLSTYLE_H
 
 #include <QObject>
-#include <QtTest>
 
 class TestTableCellStyle : public QObject
 {

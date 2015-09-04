@@ -127,9 +127,7 @@ int KoTextShapeContainerModel::count() const
 QList<KoShape*> KoTextShapeContainerModel::shapes() const
 {
     QList<KoShape*> answer;
-#if QT_VERSION >= 0x040700
     answer.reserve(d->children.count());
-#endif
     foreach (const Relation &relation, d->children) {
         answer << relation.child;
     }

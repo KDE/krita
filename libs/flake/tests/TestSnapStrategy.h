@@ -20,7 +20,7 @@
 #ifndef TESTSNAPSTRATEGY_H
 #define TESTSNAPSTRATEGY_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestSnapStrategy : public QObject
 {

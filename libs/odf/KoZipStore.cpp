@@ -115,8 +115,7 @@ void KoZipStore::init(const QByteArray& appIdentification)
 
         // Write identification
         if (d->writeMimetype) {
-            (void)m_pZip->writeFile(QLatin1String("mimetype"), QString(), QString(),
-                                    appIdentification.data() , appIdentification.length());
+            (void)m_pZip->writeFile(QLatin1String("mimetype"), appIdentification);
         }
 
         m_pZip->setCompression(KZip::DeflateCompression);

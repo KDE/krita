@@ -19,8 +19,7 @@
 #ifndef TESTNUMBERSTYLE_H
 #define TESTNUMBERSTYLE_H
 
-#include <QtTest>
-#include <KoOdfNumberStyles.h>
+#include <QObject>
 
 class TestNumberStyle : public QObject
 {

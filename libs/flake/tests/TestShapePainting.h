@@ -20,7 +20,7 @@
 #ifndef TESTSHAPEPAINT_H
 #define TESTSHAPEPAINT_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestShapePainting : public QObject
 {

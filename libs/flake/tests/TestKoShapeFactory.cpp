@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TestKoShapeFactory.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -124,4 +124,4 @@ void TestKoShapeFactory::testOdfElement()
     delete factory;
 }
 
-QTEST_KDEMAIN(TestKoShapeFactory, NoGUI)
+QTEST_GUILESS_MAIN(TestKoShapeFactory)

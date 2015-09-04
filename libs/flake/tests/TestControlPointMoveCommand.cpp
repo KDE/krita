@@ -22,6 +22,8 @@
 #include "KoPathShape.h"
 #include "KoPathControlPointMoveCommand.h"
 
+#include <QTest>
+
 void TestControlPointMoveCommand::redoUndoControlPoint1()
 {
     KoPathShape path;

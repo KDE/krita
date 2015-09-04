@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>318</width>
-    <height>128</height>
+    <height>154</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lblColorSpaces">
      <property name="text">
-      <string>Model:</string>
+      <string>&amp;Model:</string>
      </property>
      <property name="buddy">
       <cstring>cmbColorModels</cstring>
@@ -69,7 +69,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="lblProfiles">
      <property name="text">
-      <string>Profile:</string>
+      <string>Profi&amp;le:</string>
      </property>
      <property name="buddy">
       <cstring>cmbProfile</cstring>
@@ -131,19 +131,6 @@
    </item>
    <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="lblColorantInfo">
-       <property name="text">
-        <string notr="true">TextLabel</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QPushButton" name="bnAdvanced">
        <property name="text">

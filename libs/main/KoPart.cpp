@@ -29,7 +29,6 @@
 #include "KoView.h"
 #include "KoOpenPane.h"
 #include "KoFilterManager.h"
-#include <KoDocumentInfoDlg.h>
 
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>

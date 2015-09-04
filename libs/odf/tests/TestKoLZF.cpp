@@ -243,4 +243,4 @@ void TestKoLZF::testByteArrayRoundtripDifferentSizes()
 }
 
 
-QTEST_MAIN(TestKoLZF)
+QTEST_GUILESS_MAIN(TestKoLZF)

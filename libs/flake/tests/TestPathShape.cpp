@@ -24,6 +24,8 @@
 #include "KoPathPointData.h"
 #include "KoPathSegment.h"
 
+#include <QTest>
+
 void TestPathShape::close()
 {
     KoPathShape path;

@@ -19,6 +19,10 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
     cmake_policy(SET CMP0046 OLD)
 endif()
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.3.0)
+    cmake_policy(SET CMP0063 OLD)
+endif()
+
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
 # transitional forward compatibility:
 # BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
@@ -232,10 +236,6 @@ include (MacroAddFileDependencies)
 include (ECMInstallIcons)
 
 if (GHNS)
-    if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
-        set(GHNS FALSE)
-    endif()
-
     find_package(Attica)
     find_package(NewStuff)
     macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")

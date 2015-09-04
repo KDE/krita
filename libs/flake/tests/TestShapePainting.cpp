@@ -29,6 +29,8 @@
 
 #include <kcomponentdata.h>
 
+#include <QTest>
+
 void TestShapePainting::testPaintShape()
 {
     MockShape *shape1 = new MockShape();

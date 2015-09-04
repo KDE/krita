@@ -22,6 +22,7 @@
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpOver32.h"
+#include "KoOptimizedCompositeOpOver128.h"
 
 #include <QString>
 #include "DebugPigment.h"
@@ -46,6 +47,14 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::ReturnType
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<VC_IMPL>(ParamType param)
 {
     return new KoOptimizedCompositeOpOver32<VC_IMPL>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<VC_IMPL>(ParamType param)
+{
+    return new KoOptimizedCompositeOpOver128<VC_IMPL>(param);
 }
 
 #define __stringify(_s) #_s

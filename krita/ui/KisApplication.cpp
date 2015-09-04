@@ -29,7 +29,6 @@
 #include "KoConfig.h"
 
 #include <kcrash.h>
-#include <kdeversion.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -41,10 +40,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 
 #include <QFile>
 #include <QWidget>
@@ -291,7 +287,6 @@ void KisApplication::clearConfig()
 
 void KisApplication::askClearConfig()
 {
-#if QT_VERSION >= 0x040800
     Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
     bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
 
@@ -304,7 +299,6 @@ void KisApplication::askClearConfig()
             clearConfig();
         }
     }
-#endif
 }
 
 bool KisApplication::start()

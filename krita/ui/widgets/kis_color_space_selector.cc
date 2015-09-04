@@ -102,17 +102,7 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
 
     connect(d->colorSpaceSelector->bnAdvanced, SIGNAL(clicked()), this,  SLOT(slotOpenAdvancedSelector()));
 
-    //d->colorSpaceSelector->lblColorSpaces->hide();
-    //d->colorSpaceSelector->lblColorModels->hide();
-    //d->colorSpaceSelector->lblProfiles->hide();
-    //d->colorSpaceSelector->cmbColorModels->hide();
-    //d->colorSpaceSelector->cmbColorDepth->hide();
-    //d->colorSpaceSelector->cmbProfile->hide();
-    //d->colorSpaceSelector->bnInstallProfile->hide();
-
     fillCmbProfiles();
-    d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());
-    d->colorSpaceSelector->lblColorantInfo->hide();
 }
 
 KisColorSpaceSelector::~KisColorSpaceSelector()
@@ -299,7 +289,6 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
     if (result) {
         if (d->profileValid==true) {
             setCurrentColorSpace(m_advancedSelector->currentColorSpace());
-            d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());
         }
     }
 }

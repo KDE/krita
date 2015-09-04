@@ -19,7 +19,7 @@
 #ifndef TESTSHAPEBACKGROUNDCOMMAND_H
 #define TESTSHAPEBACKGROUNDCOMMAND_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestShapeBackgroundCommand : public QObject
 {

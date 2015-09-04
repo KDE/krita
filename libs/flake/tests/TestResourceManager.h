@@ -20,7 +20,7 @@
 #ifndef TESTRESOURCEMANAGER_H
 #define TESTRESOURCEMANAGER_H
 
-#include <qtest_kde.h>
+#include <QObject>
 
 class TestResourceManager : public QObject
 {

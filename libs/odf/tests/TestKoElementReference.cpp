@@ -20,6 +20,8 @@
 
 #include <KoElementReference.h>
 
+#include <QTest>
+
 void TestKoElementReference::testElementReference()
 {
     KoElementReference ref1;

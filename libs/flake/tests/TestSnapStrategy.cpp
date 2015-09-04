@@ -18,7 +18,7 @@
 */
 
 #include "TestSnapStrategy.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include "KoSnapStrategy.h"
 #include "KoPathShape.h"
 #include "KoSnapProxy.h"
@@ -808,4 +808,4 @@ void TestSnapStrategy::testSquareDistanceToLine()
     QVERIFY(qFuzzyCompare(result4, toCompWithFour));
 
 }
-QTEST_KDEMAIN(TestSnapStrategy, GUI)
+QTEST_MAIN(TestSnapStrategy)

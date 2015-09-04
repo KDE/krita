@@ -31,7 +31,7 @@ class QWidget;
 class KUrl;
 class KZip;
 class KArchiveDirectory;
-class KTemporaryFile;
+class QTemporaryFile;
 struct KoEncryptedStore_EncryptionData;
 
 class KoEncryptedStore : public KoStore
@@ -113,7 +113,7 @@ protected:
     QString m_filename;
     QByteArray m_manifestBuffer;
     KZip *m_pZip;
-    KTemporaryFile *m_tempFile;
+    QTemporaryFile *m_tempFile;
     bool m_bPasswordUsed;
     bool m_bPasswordDeclined;
 

@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <QList>
 #include <ctime>
+#include <QTest>
 
 struct Node
 {

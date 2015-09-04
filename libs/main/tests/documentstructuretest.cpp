@@ -20,10 +20,7 @@
 #include "documentstructuretest.h"
 
 #include <QDebug>
-#include <QtTest>
-#include <QtGui>
-
-
+#include <QTest>
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>

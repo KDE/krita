@@ -35,7 +35,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KisPart.h>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <QFileInfo>
 
 namespace TestUtil
@@ -83,8 +83,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                                                     KoColorConversionTransformation::NoOptimization);
             }
 
-            KTemporaryFile tmpFile;
-            tmpFile.setSuffix(".png");
+            QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".png"));
             tmpFile.open();
             doc->setBackupFile(false);
             doc->setOutputMimeType("image/png");

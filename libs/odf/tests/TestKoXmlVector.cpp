@@ -159,4 +159,4 @@ void TestKoXmlVector::writeAndRead()
 
 
 
-QTEST_MAIN(TestKoXmlVector)
+QTEST_GUILESS_MAIN(TestKoXmlVector)

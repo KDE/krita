@@ -29,6 +29,9 @@ public:
     KisImageConfig();
     ~KisImageConfig();
 
+    bool enableProgressReporting(bool requestDefault = false) const;
+    void setEnableProgressReporting(bool value);
+
     bool enablePerfLog(bool requestDefault = false) const;
     void setEnablePerfLog(bool value);
 

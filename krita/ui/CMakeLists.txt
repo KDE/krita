@@ -363,13 +363,6 @@ if(UNIX)
     endif()
 endif()
 
-if (APPLE)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            MacSupport.mm
-        )
-endif ()
-
 kde_enable_exceptions()
 
 if(WIN32)

@@ -42,9 +42,7 @@ CurveBrush::CurveBrush() :
     m_branch(0)
 {
     srand48(time(0));
-#if QT_VERSION >= 0x040700
     m_pens.reserve(1024);
-#endif
 }
 
 CurveBrush::~CurveBrush()

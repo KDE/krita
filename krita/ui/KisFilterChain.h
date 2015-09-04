@@ -30,7 +30,7 @@ Boston, MA 02110-1301, USA.
 #include "kritaui_export.h"
 #include "KisFilterChainLinkList.h"
 
-class KTemporaryFile;
+class QTemporaryFile;
 class KisImportExportManager;
 class KisDocument;
 
@@ -158,7 +158,7 @@ private:
     void manageIO();
     void finalizeIO();
 
-    bool createTempFile(KTemporaryFile** tempFile, bool autoDelete = true);
+    bool createTempFile(QTemporaryFile** tempFile, bool autoDelete = true);
 
     void inputFileHelper(KisDocument* document, const QString& alternativeFile);
     void outputFileHelper(bool autoDelete);
@@ -198,8 +198,8 @@ private:
     KisDocument* m_inputDocument;      // ...or even documents?
     KisDocument* m_outputDocument;
 
-    KTemporaryFile* m_inputTempFile;
-    KTemporaryFile* m_outputTempFile;
+    QTemporaryFile* m_inputTempFile;
+    QTemporaryFile* m_outputTempFile;
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for

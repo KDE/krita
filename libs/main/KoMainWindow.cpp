@@ -22,10 +22,6 @@
 
 #include "KoMainWindow.h"
 
-#if defined (Q_OS_MAC) && QT_VERSION < 0x050000
-#include "MacSupport.h"
-#endif
-
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"
@@ -45,10 +41,7 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 
-#include <kdeversion.h>
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 #include <khelpmenu.h>
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
@@ -57,7 +50,7 @@
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kedittoolbar.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <krecentdocument.h>
 #include <klocale.h>
 #include <kstatusbar.h>
@@ -73,6 +66,7 @@
 #include <kmenubar.h>
 #include <kmimetype.h>
 #include <k4aboutdata.h>
+#include <kglobal.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -259,12 +253,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
 #ifdef Q_OS_MAC
-    #if QT_VERSION < 0x050000
-    MacSupport::addFullscreen(this);
-    #endif
-    #if QT_VERSION >= 0x050201
     setUnifiedTitleAndToolBarOnMac(true);
-    #endif
 #endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
@@ -629,9 +618,7 @@ void KoMainWindow::addRecentURL(const KUrl& url)
                     ok = false; // it's in the tmp resource
             if (ok) {
                 KRecentDocument::add(path);
-#if KDE_IS_VERSION(4,6,0)
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
-#endif
             }
         } else {
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
@@ -1707,7 +1694,7 @@ void KoMainWindow::slotEmailFile()
 
         // a little open, close, delete dance to make sure we have a nice filename
         // to use, but won't block windows from creating a new file with this name.
-        KTemporaryFile *tmpfile = new KTemporaryFile();
+        QTemporaryFile *tmpfile = new QTemporaryFile();
         tmpfile->open();
         QString fileName = tmpfile->fileName();
         tmpfile->close();

@@ -63,7 +63,7 @@
 #include <kfileitem.h>
 #include <kfileitem.h>
 #include <kdirnotify.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include "kundo2stack.h"
 
 #include <QApplication>
@@ -417,8 +417,7 @@ public:
         QString extension;
         if (!ext.isEmpty() && m_url.query().isNull()) // not if the URL has a query, e.g. cgi.pl?something
             extension = '.'+ext; // keep the '.'
-        KTemporaryFile tempFile;
-        tempFile.setSuffix(extension);
+        QTemporaryFile tempFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + extension);
         tempFile.setAutoRemove(false);
         tempFile.open();
         m_file = tempFile.fileName();
@@ -450,7 +449,7 @@ public:
             // We haven't saved yet, or we did but locally - provide a temp file
             if ( m_file.isEmpty() || !m_bTemp )
             {
-                KTemporaryFile tempFile;
+                QTemporaryFile tempFile;
                 tempFile.setAutoRemove(false);
                 tempFile.open();
                 m_file = tempFile.fileName();
@@ -2392,7 +2391,7 @@ bool KisDocument::saveToUrl()
             d->m_uploadJob->kill();
             d->m_uploadJob = 0;
         }
-        KTemporaryFile *tempFile = new KTemporaryFile();
+        QTemporaryFile *tempFile = new QTemporaryFile();
         tempFile->open();
         QString uploadFile = tempFile->fileName();
         delete tempFile;

@@ -21,6 +21,7 @@
 
 #include <MockShapes.h>
 #include <QPointF>
+#include <QTest>
 
 TestPosition::TestPosition()
         : shape1(0),
@@ -163,4 +164,4 @@ void TestPosition::testSetAndGetRotation()
     QCOMPARE(shape1->rotation(), 184.0);
 }
 
-QTEST_MAIN(TestPosition)
+QTEST_GUILESS_MAIN(TestPosition)

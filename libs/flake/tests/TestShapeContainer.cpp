@@ -28,6 +28,8 @@
 #include <KoShapeGroup.h>
 #include <KoSelection.h>
 
+#include <QTest>
+
 
 void TestShapeContainer::testModel()
 {

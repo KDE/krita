@@ -21,7 +21,6 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 
@@ -37,4 +36,4 @@ void zoomcontroller_test::testApi()
 
 }
 
-QTEST_KDEMAIN(zoomcontroller_test, GUI)
+QTEST_MAIN(zoomcontroller_test)

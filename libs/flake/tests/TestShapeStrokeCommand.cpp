@@ -23,6 +23,8 @@
 #include "KoShapeStroke.h"
 #include "KoShapeStrokeCommand.h"
 
+#include <QTest>
+
 void TestShapeStrokeCommand::refCounting()
 {
     MockShape * shape1 = new MockShape();

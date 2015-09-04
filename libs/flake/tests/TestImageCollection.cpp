@@ -25,10 +25,11 @@
 
 #include <QImage>
 #include <QPixmap>
+#include <QBuffer>
 #include <kurl.h>
 #include <kdebug.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestImageCollection::testGetImageImage()
 {
@@ -307,4 +308,4 @@ void TestImageCollection::testIsValid()
     QCOMPARE(data.isValid(), false);
 }
 
-QTEST_KDEMAIN(TestImageCollection, GUI)
+QTEST_MAIN(TestImageCollection)

@@ -20,7 +20,7 @@
 #ifndef TestShapeAt_H
 #define TestShapeAt_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestShapeAt : public QObject
 {

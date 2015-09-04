@@ -60,9 +60,10 @@
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kdirnotify.h>
-#include <ktemporaryfile.h>
-#include <kdeversion.h>
+#include <kglobal.h>
 
+#include <QTemporaryFile>
+#include <QApplication>
 #include <QtGlobal>
 #include <QBuffer>
 #include <QDir>
@@ -310,8 +311,7 @@ public:
         QString extension;
         if (!ext.isEmpty() && m_url.query().isNull()) // not if the URL has a query, e.g. cgi.pl?something
             extension = '.'+ext; // keep the '.'
-        KTemporaryFile tempFile;
-        tempFile.setSuffix(extension);
+        QTemporaryFile tempFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX") + extension);
         tempFile.setAutoRemove(false);
         tempFile.open();
         m_file = tempFile.fileName();
@@ -349,7 +349,7 @@ public:
             // We haven't saved yet, or we did but locally - provide a temp file
             if ( m_file.isEmpty() || !m_bTemp )
             {
-                KTemporaryFile tempFile;
+                QTemporaryFile tempFile;
                 tempFile.setAutoRemove(false);
                 tempFile.open();
                 m_file = tempFile.fileName();
@@ -384,11 +384,7 @@ public:
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
-#if KDE_IS_VERSION(4,4,0)
             const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
-#else
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
-#endif
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
                 openLocalFile();
@@ -2642,7 +2638,7 @@ bool KoDocument::saveToUrl()
             d->m_uploadJob->kill();
             d->m_uploadJob = 0;
         }
-        KTemporaryFile *tempFile = new KTemporaryFile();
+        QTemporaryFile *tempFile = new QTemporaryFile();
         tempFile->open();
         QString uploadFile = tempFile->fileName();
         delete tempFile;

@@ -182,7 +182,8 @@ bool KoTarStore::closeWrite()
     // write the whole bytearray at once into the tar file
 
     kDebug(30002) << "Writing file" << d->fileName << " into TAR archive. size" << d->size;
-    if (!m_pTar->writeFile(d->fileName , "user", "group", m_byteArray.data(), d->size))
+    m_byteArray.resize(d->size); // TODO: check if really needed
+    if (!m_pTar->writeFile(d->fileName, m_byteArray, 0100644, QLatin1String("user"), QLatin1String("group")))
         kWarning(30002) << "Failed to write " << d->fileName;
     m_byteArray.resize(0);   // save memory
     return true;

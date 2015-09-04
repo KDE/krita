@@ -93,10 +93,11 @@ KisPaintOpPresetWSP KisPaintOpSettings::preset() const
     return d->preset;
 }
 
-bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers)
+bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
 {
     Q_UNUSED(pos);
     Q_UNUSED(modifiers);
+    Q_UNUSED(currentNode);
     setRandomOffset();
     return true; // ignore the event by default
 }

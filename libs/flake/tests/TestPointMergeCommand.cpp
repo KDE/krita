@@ -22,6 +22,8 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+
+#include <QTest>
 #include <kdebug.h>
 
 void TestPointMergeCommand::closeSingleLinePath()

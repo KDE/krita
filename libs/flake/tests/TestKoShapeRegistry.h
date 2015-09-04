@@ -19,7 +19,7 @@
 #ifndef TestKoShapeRegistry_H
 #define TestKoShapeRegistry_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestKoShapeRegistry : public QObject
 {

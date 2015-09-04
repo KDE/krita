@@ -72,17 +72,17 @@ public:
 
     void addPageItem(KoPageWidgetItem *item);
 
-public Q_SLOTS:
-    /** Connected to the okClicked() signal */
-    void slotApply();
+public Q_SLOTS:  // QDialog API
+    void accept();
+
+protected:  // QWidget API
+    void hideEvent(QHideEvent * event);
 
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
     void slotResetMetaData();
     /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
     void slotToggleEncryption();
-    /** Saves the document with changed encryption */
-    void slotSaveEncryption();
 
 Q_SIGNALS:
     void saveRequested();
@@ -94,8 +94,8 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-
-    void slotButtonClicked(int button);
+    /** Saves the document with changed encryption */
+    void saveEncryption();
 
     class KoDocumentInfoDlgPrivate;
     KoDocumentInfoDlgPrivate * const d;

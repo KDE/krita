@@ -219,13 +219,20 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Advanced</string>
+      <string>Advanced (needs restarting Krita)</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QCheckBox" name="chkProgressReporting">
+        <property name="text">
+         <string>Enable progress reporting (might affect performance)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkPerformanceLogging">
         <property name="text">
-         <string>Enable performance logging (needs restarting Krita)</string>
+         <string>Enable performance logging</string>
         </property>
        </widget>
       </item>

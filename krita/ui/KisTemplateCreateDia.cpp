@@ -34,7 +34,7 @@
 #include <QTreeWidgetItem>
 #include <QGroupBox>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <klineedit.h>
 #include <klocale.h>
 #include <KoIcon.h>
@@ -213,10 +213,10 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const KComponentData &componentData,
                                          KisDocument *document, QWidget *parent)
 {
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(QLatin1String(suffix));
+    QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(QLatin1String(suffix)));
     //Check that creation of temp file was successful
     if (!tempFile->open()) {
+        delete tempFile;
         qWarning("Creation of temporary file to store template failed.");
         return;
     }

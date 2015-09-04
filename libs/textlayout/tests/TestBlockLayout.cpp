@@ -31,9 +31,9 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 
-#include <QtGui>
 #include <QSharedPointer>
 #include <QVariant>
+#include <QTest>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -1073,4 +1073,4 @@ void TestBlockLayout::testDropCaps()
 }
 
 
-QTEST_KDEMAIN(TestBlockLayout, GUI)
+QTEST_MAIN(TestBlockLayout)

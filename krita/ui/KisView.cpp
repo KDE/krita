@@ -36,7 +36,7 @@
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>

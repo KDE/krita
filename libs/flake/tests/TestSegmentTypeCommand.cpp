@@ -20,6 +20,7 @@
 #include "TestSegmentTypeCommand.h"
 #include "KoPathSegmentTypeCommand.h"
 #include <KoPathSegment.h>
+#include <QTest>
 
 void TestSegmentTypeCommand::changeToCurve()
 {

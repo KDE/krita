@@ -583,11 +583,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     KisTabletEvent::ExtraEventType t = KisTabletEvent::TabletMoveEx;
     Qt::KeyboardModifiers modifiers = 0;
 
-#if QT_VERSION >= 0x040800
     modifiers = QApplication::queryKeyboardModifiers();
-#else
-    modifiers = QApplication::keyboardModifiers();
-#endif
 
 #if !defined (Q_OS_IRIX)
     XID device_id = 0;

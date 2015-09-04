@@ -28,6 +28,7 @@
 #include <QBuffer>
 #include <QRegExp>
 
+#include <QTest>
 
 #define TEST_BEGIN(publicId,systemId) \
     { \

@@ -19,7 +19,7 @@
 
 #include "TestKoColorSpaceRegistry.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -52,4 +52,4 @@ void TestColorSpaceRegistry::testRgb16()
     QVERIFY(*cs == *KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), 0));
 }
 
-QTEST_KDEMAIN(TestColorSpaceRegistry, NoGUI)
+QTEST_GUILESS_MAIN(TestColorSpaceRegistry)

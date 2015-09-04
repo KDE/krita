@@ -19,7 +19,6 @@
 #include "kis_queues_progress_updater.h"
 
 #include <QMutex>
-#include <QAtomicInt>
 #include <QTimer>
 #include <KoProgressProxy.h>
 
@@ -28,9 +27,9 @@ struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
 {
     Private()
         : queueSizeMetric(0)
-        , trackingStarted(false)
-        , timerFiredOnce(false)
+        , initialQueueSizeMetric(0)
         , progressProxy(0)
+        , tickingRequested(false)
     {
     }
 
@@ -39,15 +38,13 @@ struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
 
     int queueSizeMetric;
     int initialQueueSizeMetric;
-
     QString jobName;
-
-    bool trackingStarted;
-    bool timerFiredOnce;
 
     KoProgressProxy *progressProxy;
 
-    static const int TIMER_INTERVAL = 250;
+    bool tickingRequested;
+
+    static const int TIMER_INTERVAL = 500;
 };
 
 
@@ -58,7 +55,10 @@ KisQueuesProgressUpdater::KisQueuesProgressUpdater(KoProgressProxy *progressProx
 
     m_d->timer.setInterval(Private::TIMER_INTERVAL);
     m_d->timer.setSingleShot(false);
-    connect(&m_d->timer, SIGNAL(timeout()), SLOT(updateProxy()));
+
+    connect(this, SIGNAL(sigStartTicking()), SLOT(startTicking()), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigStopTicking()), SLOT(stopTicking()), Qt::QueuedConnection);
+    connect(&m_d->timer, SIGNAL(timeout()), SLOT(timerTicked()));
 }
 
 KisQueuesProgressUpdater::~KisQueuesProgressUpdater()
@@ -69,56 +69,53 @@ KisQueuesProgressUpdater::~KisQueuesProgressUpdater()
 void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString &jobName)
 {
     QMutexLocker locker(&m_d->mutex);
+
     m_d->queueSizeMetric = queueSizeMetric;
 
-    if (jobName != m_d->jobName ||
-        m_d->queueSizeMetric > m_d->initialQueueSizeMetric) {
+    if (queueSizeMetric &&
+        (jobName != m_d->jobName ||
+         m_d->queueSizeMetric > m_d->initialQueueSizeMetric)) {
 
         m_d->jobName = jobName;
         m_d->initialQueueSizeMetric = m_d->queueSizeMetric;
     }
 
-    if(m_d->queueSizeMetric && !m_d->timer.isActive()) {
-        m_d->trackingStarted = true;
-        m_d->timerFiredOnce = false;
-        m_d->timer.start();
-    }
-    else if(!m_d->queueSizeMetric && !m_d->timerFiredOnce) {
-            m_d->trackingStarted = false;
-            m_d->timer.stop();
-            m_d->initialQueueSizeMetric = 0;
+    if (m_d->queueSizeMetric && !m_d->tickingRequested) {
+
+        m_d->tickingRequested = true;
+        emit sigStartTicking();
+
+    } else if (!m_d->queueSizeMetric && m_d->tickingRequested) {
+
+        m_d->initialQueueSizeMetric = 0;
+        m_d->jobName.clear();
+        m_d->tickingRequested = false;
+        emit sigStopTicking();
     }
 }
 
 void KisQueuesProgressUpdater::hide()
 {
-    {
-        /**
-         * It's not so important to ensure the state of this variable
-         * turns over while the lock is unheld. This is only a
-         * feedback so the next call will hide it.
-         */
-
-        QMutexLocker locker(&m_d->mutex);
-        if(!m_d->trackingStarted) return;
-    }
-
     updateProgress(0, "");
 }
 
-void KisQueuesProgressUpdater::updateProxy()
+void KisQueuesProgressUpdater::startTicking()
+{
+    m_d->timer.start();
+    timerTicked();
+}
+
+void KisQueuesProgressUpdater::stopTicking()
+{
+    m_d->timer.stop();
+    timerTicked();
+}
+
+void KisQueuesProgressUpdater::timerTicked()
 {
     QMutexLocker locker(&m_d->mutex);
-
-    if(!m_d->trackingStarted) return;
-    m_d->timerFiredOnce = true;
 
     m_d->progressProxy->setRange(0, m_d->initialQueueSizeMetric);
     m_d->progressProxy->setValue(m_d->initialQueueSizeMetric - m_d->queueSizeMetric);
     m_d->progressProxy->setFormat(m_d->jobName);
-
-    if(!m_d->queueSizeMetric) {
-        m_d->timer.stop();
-        m_d->initialQueueSizeMetric = 0;
-    }
 }

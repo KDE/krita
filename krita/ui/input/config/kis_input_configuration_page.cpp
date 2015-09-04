@@ -69,15 +69,8 @@ void KisInputConfigurationPage::setDefaults()
     QDir profileDir(KGlobal::dirs()->saveLocation("data", "krita/input/", false));
 
     if (profileDir.exists()) {
-#if QT_VERSION >= 0x040700
         QStringList entries = profileDir.entryList(QStringList() << "*.profile", QDir::NoDot | QDir::NoDotDot);
-#else
-        QStringList entries = profileDir.entryList(QStringList() << "*.profile");
-#endif
         Q_FOREACH(const QString & file, entries) {
-#if QT_VERSION < 0x040700
-            if (file == "." || file == "..") continue;
-#endif
             profileDir.remove(file);
         }
 

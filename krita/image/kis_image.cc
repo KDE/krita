@@ -173,6 +173,17 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
 
+    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
+
+    {
+        KisImageConfig cfg;
+
+        m_d->scheduler = new KisUpdateScheduler(this);
+        if (cfg.enableProgressReporting()) {
+            m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+        }
+    }
+
     m_d->signalRouter = new KisImageSignalRouter(this);
 
     if (!undoStore) {
@@ -195,13 +206,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->height = height;
 
     m_d->recorder = new KisActionRecorder(this);
-
-    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
-
-    if (m_d->startProjection) {
-        m_d->scheduler = new KisUpdateScheduler(this);
-        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
-    }
 
     connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }

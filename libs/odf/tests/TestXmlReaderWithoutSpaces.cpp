@@ -1,4 +1,4 @@
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBuffer>
 #include <QFile>
@@ -2691,6 +2691,6 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     xmlfile.remove();
 }
 
-QTEST_MAIN(TestXmlReaderWithoutSpaces)
+QTEST_GUILESS_MAIN(TestXmlReaderWithoutSpaces)
 #include <TestXmlReaderWithoutSpaces.moc>
 

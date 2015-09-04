@@ -24,7 +24,7 @@
 
 #include <ThreadWeaver/ThreadWeaver>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 class TestWeaverJob : public ThreadWeaver::Job
 {
@@ -280,4 +280,4 @@ void KoProgressUpdaterTest::jobDone(ThreadWeaver::JobPointer job)
     ++jobsdone;
 }
 
-QTEST_KDEMAIN(KoProgressUpdaterTest, GUI)
+QTEST_GUILESS_MAIN(KoProgressUpdaterTest)

@@ -19,7 +19,7 @@
 #ifndef TEST_FALL_BACK_COLOR_TRANSFORMATION_H_
 #define TEST_FALL_BACK_COLOR_TRANSFORMATION_H_
 
-#include <QtTest>
+#include <QObject>
 
 class TestFallBackColorTransformation : public QObject
 {

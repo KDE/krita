@@ -78,7 +78,7 @@ void KisColorSelectorTriangle::updatePixelCache()
                                     pixelCacheOffset);
 
 //    if (!pixelCacheOffset.isNull()) {
-//        qWarning() << "WARNING: offset of the triangle selector is not null!";
+//        warnKrita << "WARNING: offset of the triangle selector is not null!";
 //    }
 
     // antialiased border

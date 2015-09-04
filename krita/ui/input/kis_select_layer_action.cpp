@@ -18,7 +18,7 @@
 
 #include "kis_select_layer_action.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QMouseEvent>
 #include <QApplication>
 

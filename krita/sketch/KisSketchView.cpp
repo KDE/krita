@@ -28,7 +28,7 @@
 #include <QScrollBar>
 #include <QHoverEvent>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kactioncollection.h>
 
 

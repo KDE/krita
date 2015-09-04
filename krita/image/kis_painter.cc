@@ -2583,7 +2583,7 @@ void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisNodeSP node, Kis
         d->paintOp = paintop;
     }
     else {
-        qWarning() << "Could not create paintop for preset " << preset->name();
+        warnKrita << "Could not create paintop for preset " << preset->name();
     }
 }
 

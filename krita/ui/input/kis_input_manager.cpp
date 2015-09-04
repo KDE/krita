@@ -17,7 +17,7 @@
 
 #include "kis_input_manager.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QQueue>
 #include <QMessageBox>
 
@@ -155,7 +155,7 @@ void KisInputManager::Private::debugEvent(QEvent *event)
     if (!KisTabletDebugger::instance()->debugEnabled()) return;
     QString msg1 = useBlocking && ignoreQtCursorEvents ? "[BLOCKED] " : "[       ]";
     Event *specificEvent = static_cast<Event*>(event);
-    qDebug() << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
+    dbgKrita << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
 }
 
 #define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
@@ -547,10 +547,10 @@ void KisInputManager::toggleTabletLogger()
                                  i18n("Tablet Event Logging Enabled") :
                                  i18n("Tablet Event Logging Disabled"));
     if (enabled) {
-        qDebug() << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
+        dbgKrita << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
     }
     else {
-        qDebug() << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+        dbgKrita << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
     }
 }
 
@@ -985,6 +985,6 @@ void KisInputManager::profileChanged()
         }
     }
     else {
-        kWarning() << "No Input Profile Found: canvas interaction will be impossible";
+        dbgKrita << "No Input Profile Found: canvas interaction will be impossible";
     }
 }

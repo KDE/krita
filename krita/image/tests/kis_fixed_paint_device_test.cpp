@@ -257,7 +257,7 @@ void KisFixedPaintDeviceTest::testBltPerformance()
         gc.bltFixed(QPoint(0, 0), fdev, image.rect());
     }
 
-    qDebug() << x
+    dbgKrita << x
     << "blits"
     << " done in "
     << t.elapsed()

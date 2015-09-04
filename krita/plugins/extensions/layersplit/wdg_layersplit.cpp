@@ -22,7 +22,7 @@
 #include <QStringList>
 #include <QImage>
 #include <QListWidgetItem>
-#include <QDebug>
+#include <kis_debug.h>
 
 
 

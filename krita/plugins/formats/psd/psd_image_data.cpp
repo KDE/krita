@@ -20,7 +20,7 @@
 #include <netinet/in.h> // htonl
 
 #include <QFile>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QVector>
 #include <QByteArray>
 #include <QBuffer>

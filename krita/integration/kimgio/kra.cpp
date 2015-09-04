@@ -13,7 +13,7 @@
 #include "kra.h"
 
 #include <kzip.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <QImage>
 #include <QIODevice>

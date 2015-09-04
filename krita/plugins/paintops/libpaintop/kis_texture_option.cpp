@@ -331,7 +331,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     m_pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     if (!m_pattern) {
-        qWarning() << "WARNING: Couldn't load the pattern for a stroke";
+        warnKrita << "WARNING: Couldn't load the pattern for a stroke";
         m_enabled = false;
         return;
     }

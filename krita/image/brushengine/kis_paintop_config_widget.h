@@ -23,7 +23,7 @@
 
 #include "kis_config_widget.h"
 #include "kis_image.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 
 /**
  * Base class for widgets that are used to edit and display paintop settings.

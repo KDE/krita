@@ -24,7 +24,7 @@
 #include <QVector>
 #include <QDataStream>
 #include <QString>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <kis_brush.h>
 

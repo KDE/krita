@@ -39,7 +39,7 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const Ko
 
     foreach(const KoColorSpace* cs, colorsapces) {
 
-        qDebug() << "Testing with" << cs->id();
+        dbgKrita << "Testing with" << cs->id();
         if (cs->id() != "GRAYU16") // No point in testing extend for GRAYU16
             (this->*funcPtr)(cs);
     }

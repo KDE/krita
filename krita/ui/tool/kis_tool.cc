@@ -213,7 +213,7 @@ void KisTool::deactivate()
     result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
 
     if (!result) {
-        qWarning() << "WARNING: KisTool::deactivate() failed to disconnect"
+        warnKrita << "WARNING: KisTool::deactivate() failed to disconnect"
                    << "some signal connections. Your actions might be executed twice!";
     }
 
@@ -621,7 +621,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
             d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
             d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
             if (! d->cursorShader->link()) {
-                qDebug() << "OpenGL error" << canvasWidget->glGetError();
+                dbgKrita << "OpenGL error" << canvasWidget->glGetError();
                 qFatal("Failed linking cursor shader");
             }
             Q_ASSERT(d->cursorShader->isLinked());

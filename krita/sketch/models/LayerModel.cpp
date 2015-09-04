@@ -457,17 +457,17 @@ void LayerModel::moveUp()
     KisNodeSP grandParent = parent->parent();
 
     if (!d->nodeManager->activeNode()->nextSibling()) {
-        //qDebug() << "Active node apparently has no next sibling, however that has happened...";
+        //dbgKrita << "Active node apparently has no next sibling, however that has happened...";
         if (!grandParent)
             return;
-        //qDebug() << "Node has grandparent";
+        //dbgKrita << "Node has grandparent";
         if (!grandParent->parent() && node->inherits("KisMask"))
             return;
-        //qDebug() << "Node isn't a mask";
+        //dbgKrita << "Node isn't a mask";
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
     }
     else {
-        //qDebug() << "Move node directly";
+        //dbgKrita << "Move node directly";
         d->nodeManager->lowerNode();
     }
 }
@@ -479,17 +479,17 @@ void LayerModel::moveDown()
     KisNodeSP grandParent = parent->parent();
 
     if (!d->nodeManager->activeNode()->prevSibling()) {
-        //qDebug() << "Active node apparently has no previous sibling, however that has happened...";
+        //dbgKrita << "Active node apparently has no previous sibling, however that has happened...";
         if (!grandParent)
             return;
-        //qDebug() << "Node has grandparent";
+        //dbgKrita << "Node has grandparent";
         if (!grandParent->parent() && node->inherits("KisMask"))
             return;
-        //qDebug() << "Node isn't a mask";
+        //dbgKrita << "Node isn't a mask";
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
     } else
     {
-        //qDebug() << "Move node directly";
+        //dbgKrita << "Move node directly";
         d->nodeManager->raiseNode();
     }
 }
@@ -986,7 +986,7 @@ QObject* LayerModel::activeFilterConfig() const
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i) {
         config->setProperty(i.key().toLatin1(), i.value());
-        //qDebug() << "Getting active config..." << i.key() << i.value();
+        //dbgKrita << "Getting active config..." << i.key() << i.value();
     }
     return config;
 }
@@ -999,13 +999,13 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     if (!config)
         return;
 
-    //qDebug() << "Attempting to set new config" << config->name();
+    //dbgKrita << "Attempting to set new config" << config->name();
     KisFilterConfiguration* realConfig = d->filters.value(config->name())->factoryConfiguration(d->activeNode->original());
     QMap<QString, QVariant>::const_iterator i;
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
         realConfig->setProperty(i.key(), config->property(i.key().toLatin1()));
-        //qDebug() << "Creating config..." << i.key() << i.value();
+        //dbgKrita << "Creating config..." << i.key() << i.value();
     }
 // The following code causes sporadic crashes, and disabling causes leaks. So, leaks it must be, for now.
 // The cause is the lack of a smart pointer interface for passing filter configs around
@@ -1021,14 +1021,14 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
 {
     if (!d->newConfig)
         return;
-    //qDebug() << "Setting new config..." << d->newConfig->name();
+    //dbgKrita << "Setting new config..." << d->newConfig->name();
     KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if (filterMask)
     {
-        //qDebug() << "Filter mask";
+        //dbgKrita << "Filter mask";
         if (filterMask->filter() == d->newConfig)
             return;
-        //qDebug() << "Setting filter mask";
+        //dbgKrita << "Setting filter mask";
         filterMask->setFilter(d->newConfig);
     }
     else
@@ -1036,15 +1036,15 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
         KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
         if (adjustmentLayer)
         {
-            //qDebug() << "Adjustment layer";
+            //dbgKrita << "Adjustment layer";
             if (adjustmentLayer->filter() == d->newConfig)
                 return;
-            //qDebug() << "Setting filter on adjustment layer";
+            //dbgKrita << "Setting filter on adjustment layer";
             adjustmentLayer->setFilter(d->newConfig);
         }
         else
         {
-            //qDebug() << "UNKNOWN, BAIL OUT!";
+            //dbgKrita << "UNKNOWN, BAIL OUT!";
         }
     }
     d->newConfig = 0;

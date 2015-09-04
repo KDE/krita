@@ -65,15 +65,15 @@ void KisBSplinesTest::test1D()
         accum(relError);
 
         if (relError > 0.10) {
-            qDebug() << ppVar(x) << ppVar(op(x)) << ppVar(spline.value(x)) << ppVar(relError);
+            dbgKrita << ppVar(x) << ppVar(op(x)) << ppVar(spline.value(x)) << ppVar(relError);
         }
     }
 
-    qDebug() << ppVar(count(accum));
-    qDebug() << ppVar(mean(accum));
-    qDebug() << ppVar(variance(accum));
-    qDebug() << ppVar((min)(accum));
-    qDebug() << ppVar((max)(accum));
+    dbgKrita << ppVar(count(accum));
+    dbgKrita << ppVar(mean(accum));
+    dbgKrita << ppVar(variance(accum));
+    dbgKrita << ppVar((min)(accum));
+    dbgKrita << ppVar((max)(accum));
 
     qreal maxError = qMax(qAbs((min)(accum)), qAbs((max)(accum)));
     QVERIFY(maxError < 0.10); // Error is less than 10%
@@ -101,16 +101,16 @@ bool test2DSpline(const Spline &spline, const Op &op, qreal start, qreal end)
             accum(relError);
 
             if (relError > 0.10) {
-                qDebug() << ppVar(x) << ppVar(y) << ppVar(op(x, y)) << ppVar(spline.value(x, y)) << ppVar(relError);
+                dbgKrita << ppVar(x) << ppVar(y) << ppVar(op(x, y)) << ppVar(spline.value(x, y)) << ppVar(relError);
             }
         }
     }
 
-    qDebug() << ppVar(count(accum));
-    qDebug() << ppVar(mean(accum));
-    qDebug() << ppVar(variance(accum));
-    qDebug() << ppVar((min)(accum));
-    qDebug() << ppVar((max)(accum));
+    dbgKrita << ppVar(count(accum));
+    dbgKrita << ppVar(mean(accum));
+    dbgKrita << ppVar(variance(accum));
+    dbgKrita << ppVar((min)(accum));
+    dbgKrita << ppVar((max)(accum));
 
     qreal maxError = qMax(qAbs((min)(accum)), qAbs((max)(accum)));
     return maxError < 0.10; // Error is less than 10%
@@ -129,7 +129,7 @@ void KisBSplinesTest::test2D()
 
     QVERIFY(test2DSpline(spline, op, start, end));
 
-    qDebug() << "Resampled";
+    dbgKrita << "Resampled";
 
     QScopedPointer<KisBSpline2D> resampledSpline(
         KisBSpline2D::createResampledSpline(spline, 7, 7));
@@ -169,7 +169,7 @@ void KisBSplinesTest::testNU2D()
 
     QVERIFY(test2DSpline(spline, op, start, end));
 
-    qDebug() << "Resampled";
+    dbgKrita << "Resampled";
 
     QScopedPointer<KisBSpline2D> resampledSpline(
         KisBSpline2D::createResampledSpline(spline, 7, 7));

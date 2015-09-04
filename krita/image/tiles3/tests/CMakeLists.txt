@@ -37,12 +37,12 @@ target_link_libraries(KisMemoryPoolTest  ${KDE4_KDEUI_LIBS} Qt5::Test)
 ########### next target ###############
 set(kis_chunk_allocator_test_SRCS kis_chunk_allocator_test.cpp ../swap/kis_chunk_allocator.cpp)
 kde4_add_unit_test(KisChunkAllocatorTest TESTNAME krita-image-KisChunkAllocatorTest  ${kis_chunk_allocator_test_SRCS})
-target_link_libraries(KisChunkAllocatorTest  ${KDE4_KDEUI_LIBS} Qt5::Test)
+target_link_libraries(KisChunkAllocatorTest kritaglobal ${KDE4_KDEUI_LIBS} Qt5::Test)
 
 ########### next target ###############
 set(kis_memory_window_test_SRCS kis_memory_window_test.cpp ../swap/kis_memory_window.cpp)
 kde4_add_unit_test(KisMemoryWindowTest TESTNAME krita-image-KisMemoryWindowTest  ${kis_memory_window_test_SRCS})
-target_link_libraries(KisMemoryWindowTest  ${KDE4_KDEUI_LIBS} Qt5::Test)
+target_link_libraries(KisMemoryWindowTest kritaglobal ${KDE4_KDEUI_LIBS} Qt5::Test)
 
 ########### next target ###############
 set(kis_swapped_data_store_test_SRCS kis_swapped_data_store_test.cpp ../kis_tile_data.cc)

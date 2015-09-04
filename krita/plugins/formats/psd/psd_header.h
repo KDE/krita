@@ -18,7 +18,7 @@
 #ifndef PSD_HEADER_H
 #define PSD_HEADER_H
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QtGlobal>
 
 #include "psd.h"

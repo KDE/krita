@@ -148,7 +148,7 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
         QRect dirtyRect(0, 0, 200, imageRect.height());
 
         for(int i = 0; i < numShifts; i++) {
-            // qDebug() << dirtyRect;
+            // dbgKrita << dirtyRect;
             scheduler.updateProjection(paintLayer1, dirtyRect, image->bounds());
             dirtyRect.translate(xShift, yShift);
         }
@@ -284,13 +284,13 @@ void KisUpdateSchedulerTest::testEmptyStroke()
 void KisUpdateSchedulerTest::testLazyWaitCondition()
 {
     {
-        qDebug() << "Not initialized";
+        dbgKrita << "Not initialized";
         KisLazyWaitCondition condition;
         QVERIFY(!condition.wait(50));
     }
 
     {
-        qDebug() << "Initialized, not awake";
+        dbgKrita << "Initialized, not awake";
         KisLazyWaitCondition condition;
         condition.initWaiting();
         QVERIFY(!condition.wait(50));
@@ -298,7 +298,7 @@ void KisUpdateSchedulerTest::testLazyWaitCondition()
     }
 
     {
-        qDebug() << "Initialized, awake";
+        dbgKrita << "Initialized, awake";
         KisLazyWaitCondition condition;
         condition.initWaiting();
         condition.wakeAll();
@@ -307,7 +307,7 @@ void KisUpdateSchedulerTest::testLazyWaitCondition()
     }
 
     {
-        qDebug() << "Initialized, not awake, then awake";
+        dbgKrita << "Initialized, not awake, then awake";
         KisLazyWaitCondition condition;
         condition.initWaiting();
         QVERIFY(!condition.wait(50));
@@ -317,7 +317,7 @@ void KisUpdateSchedulerTest::testLazyWaitCondition()
     }
 
     {
-        qDebug() << "Doublewait";
+        dbgKrita << "Doublewait";
         KisLazyWaitCondition condition;
         condition.initWaiting();
         condition.initWaiting();

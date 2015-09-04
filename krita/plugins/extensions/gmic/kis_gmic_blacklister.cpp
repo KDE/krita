@@ -147,7 +147,7 @@ Command* KisGmicBlacklister::findFilter(const Component* rootNode, const QString
             }
             else
             {
-                //qDebug() << c->name() << "is different from " << filterName;
+                //dbgKrita << c->name() << "is different from " << filterName;
             }
         }
         else

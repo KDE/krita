@@ -182,7 +182,7 @@ public:
 
         if (sketchView->errors().count() > 0) {
             foreach(const QDeclarativeError &error, sketchView->errors()) {
-                qDebug() << error.toString();
+                dbgKrita << error.toString();
             }
         }
 
@@ -746,7 +746,7 @@ void MainWindow::Private::notifySlateModeChange()
         {
                 q->switchToDesktop();
         }
-        //qDebug() << "Slate mode is now" << slateMode;
+        //dbgKrita << "Slate mode is now" << slateMode;
     } 
 #endif
 }
@@ -759,7 +759,7 @@ void MainWindow::Private::notifyDockingModeChange()
     if (docked != bDocked)
     {
         docked = bDocked;
-        //qDebug() << "Docking mode is now" << docked;
+        //dbgKrita << "Docking mode is now" << docked;
     }
 #endif
 }

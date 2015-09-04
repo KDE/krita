@@ -37,7 +37,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kdialog.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -137,7 +137,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     if (view->errors().count() > 0) {
         foreach(const QDeclarativeError &error, view->errors()) {
-            kDebug() << error.toString();
+            dbgKrita << error.toString();
         }
     }
 

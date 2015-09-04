@@ -206,7 +206,7 @@ void KisGradientPainterTest::testFindShapedExtremums()
         KisPolygonalGradientShapeStrategy::testingCalculatePathCenter(
             4, path, 2.0, true);
 
-    qDebug() << ppVar(center);
+    dbgKrita << ppVar(center);
 
     QVERIFY(path.contains(center));
 }
@@ -316,16 +316,16 @@ void KisGradientPainterTest::testCachedStrategy()
             accum(relError);
 
             if (relError > maxRelError) {
-                //qDebug() << ppVar(x) << ppVar(y) << ppVar(value) << ppVar(ref) << ppVar(relError);
+                //dbgKrita << ppVar(x) << ppVar(y) << ppVar(value) << ppVar(ref) << ppVar(relError);
             }
         }
     }
 
-    qDebug() << ppVar(count(accum));
-    qDebug() << ppVar(mean(accum));
-    qDebug() << ppVar(variance(accum));
-    qDebug() << ppVar((min)(accum));
-    qDebug() << ppVar((max)(accum));
+    dbgKrita << ppVar(count(accum));
+    dbgKrita << ppVar(mean(accum));
+    dbgKrita << ppVar(variance(accum));
+    dbgKrita << ppVar((min)(accum));
+    dbgKrita << ppVar((max)(accum));
 
     qreal varError = variance(accum);
     QVERIFY(varError < maxRelError);

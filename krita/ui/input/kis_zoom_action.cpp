@@ -83,7 +83,7 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
             if (wheelEvent) {
                 pos = wheelEvent->pos();
             } else {
-                qWarning() << "Unhandled type of event";
+                warnKrita << "Unhandled type of event";
             }
         }
 

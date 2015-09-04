@@ -220,7 +220,7 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
             std::isnan(transformedPoints[i].y())) {
 #endif
 
-            qWarning() << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
+            warnKrita << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
             transformedPoints[i] = validPoints[i];
         }
 

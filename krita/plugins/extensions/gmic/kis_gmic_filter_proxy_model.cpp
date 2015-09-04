@@ -19,7 +19,7 @@
 
 #include <kis_gmic_filter_proxy_model.h>
 #include "kis_gmic_filter_model.h"
-#include <QDebug>
+#include <kis_debug.h>
 #include <QQueue>
 
 KisGmicFilterProxyModel::KisGmicFilterProxyModel(QObject* parent): QSortFilterProxyModel(parent)

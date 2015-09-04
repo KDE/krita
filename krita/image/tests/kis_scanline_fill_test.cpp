@@ -63,7 +63,7 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     for (int i = 0; i < 11; i++) {
         QColor c;
         dev->pixel(i, 0, &c);
-        qDebug() << i << ":" << c.red();
+        dbgKrita << i << ":" << c.red();
 
         QCOMPARE(c, expectedResult[i]);
     }
@@ -72,7 +72,7 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
         gc.testingGetForwardIntervals();
 
     for (int i = 0; i < forwardIntervals.size(); i++) {
-        qDebug() << "FW:" << forwardIntervals[i];
+        dbgKrita << "FW:" << forwardIntervals[i];
         QCOMPARE(forwardIntervals[i], expectedForwardIntervals[i]);
     }
     QCOMPARE(forwardIntervals.size(), expectedForwardIntervals.size());
@@ -82,7 +82,7 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
         gc.testingGetBackwardIntervals()->fetchAllIntervals();
 
     for (int i = 0; i < backwardIntervals.size(); i++) {
-        qDebug() << "BW:" << backwardIntervals[i];
+        dbgKrita << "BW:" << backwardIntervals[i];
         QCOMPARE(backwardIntervals[i], expectedBackwardIntervals[i]);
     }
     QCOMPARE(backwardIntervals.size(), expectedBackwardIntervals.size());

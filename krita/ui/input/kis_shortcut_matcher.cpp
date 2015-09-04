@@ -26,9 +26,9 @@
 #include "kis_touch_shortcut.h"
 
 #ifdef DEBUG_MATCHER
-#include <QDebug>
-#define DEBUG_ACTION(action) qDebug() << __FUNCTION__ << ":" << action;
-#define DEBUG_BUTTON_ACTION(action, button) qDebug() << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#include <kis_debug.h>
+#define DEBUG_ACTION(action) dbgKrita << __FUNCTION__ << ":" << action;
+#define DEBUG_BUTTON_ACTION(action, button) dbgKrita << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
 #else
 #define DEBUG_ACTION(action)
 #define DEBUG_BUTTON_ACTION(action, button)

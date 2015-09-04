@@ -23,14 +23,16 @@
 
 #include "../../../sdk/tests/testutil.h"
 #include "tiles3/swap/kis_lzf_compression.h"
-
+#include <kis_debug.h>
 
 #define TEST_FILE "tile.png"
 //#define TEST_FILE "hakonepa.png"
 
 
-#define PRINT_COMPRESSION(title,src,dst)                               \
-    (qDebug() << title << dst << "/" << src << "\t|" << double(dst)/src)
+void PRINT_COMPRESSION(const QString &title, quint32 src, quint32 dst) {
+
+    dbgKrita << title << dst << "/" << src << "\t|" << double(dst)/src;
+}
 
 
 void KisCompressionTests::roundTrip(KisAbstractCompression *compression)
@@ -198,7 +200,7 @@ void KisCompressionTests::testOverflow(KisAbstractCompression *compression)
                                             output, outputSize);
 
     PRINT_COMPRESSION("Uncompressable:\t", srcSize, compressedBytes);
-    qDebug() << "Max buffer size:" << outputSize;
+    dbgKrita << "Max buffer size:" << outputSize;
     QVERIFY(compressedBytes <= outputSize);
 }
 

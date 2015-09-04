@@ -169,7 +169,7 @@ void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &/*painter*/)
         m_newPen.rotation = drand48() * M_PI / 32; //atan(dy/dx) + (drand48() - 0.5) * M_PI/32;
         m_newPen.scale = drand48() * m_pens.at(index).scale;
         m_pens.append(m_newPen);
-        qDebug() << m_pens.length();
+        dbgKrita << m_pens.length();
         m_branch = 0;
     }
     else {

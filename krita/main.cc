@@ -22,13 +22,13 @@
 
 #include <QString>
 #include <QPixmap>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QDesktopServices>
 #include <QDir>
 #include <QDate>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <kcmdlineargs.h>
 

@@ -19,7 +19,7 @@
 
 #include "KisSelectionExtras.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_selection_filters.h>
 #include <operations/kis_filter_selection_operation.h>

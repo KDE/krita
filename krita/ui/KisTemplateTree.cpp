@@ -25,7 +25,7 @@
 
 #include <kdesktopfile.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kglobal.h>
 
 #include <kstandarddirs.h>
@@ -63,8 +63,8 @@ void KisTemplateTree::writeTemplateTree()
     QString localDir = KGlobal::dirs()->saveLocation("data", m_templatesResourcePath);
 
     foreach (KisTemplateGroup *group, m_groups) {
-        //kDebug( 30003 ) <<"---------------------------------";
-        //kDebug( 30003 ) <<"group:" << group->name();
+        //dbgUI <<"---------------------------------";
+        //dbgUI <<"group:" << group->name();
 
         bool touched = false;
         QList<KisTemplate*> templates = group->templates();
@@ -73,29 +73,29 @@ void KisTemplateTree::writeTemplateTree()
             touched = (*it)->touched();
 
         if (group->touched() || touched) {
-            //kDebug( 30003 ) <<"touched";
+            //dbgUI <<"touched";
             if (!group->isHidden()) {
-                //kDebug( 30003 ) <<"not hidden";
+                //dbgUI <<"not hidden";
                 KStandardDirs::makeDir(localDir + group->name()); // create the local group dir
             } else {
-                //kDebug( 30003 ) <<"hidden";
+                //dbgUI <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
-                    //kDebug( 30003 ) <<"local only";
+                    //dbgUI <<"local only";
                     KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
-                    //kDebug( 30003 ) <<"removing:" << group->dirs().first();
+                    //dbgUI <<"removing:" << group->dirs().first();
                 } else {
-                    //kDebug( 30003 ) <<"global";
+                    //dbgUI <<"global";
                     KStandardDirs::makeDir(localDir + group->name());
                 }
             }
         }
         foreach (KisTemplate *t, templates) {
             if (t->touched()) {
-                //kDebug( 30003 ) <<"++template:" << t->name();
+                //dbgUI <<"++template:" << t->name();
                 writeTemplate(t, group, localDir);
             }
             if (t->isHidden() && t->touched()) {
-                //kDebug( 30003 ) <<"+++ delete local template ##############";
+                //dbgUI <<"+++ delete local template ##############";
                 writeTemplate(t, group, localDir);
                 QFile::remove(t->file());
                 QFile::remove(t->picture());
@@ -139,7 +139,7 @@ void KisTemplateTree::readGroups()
 
     QStringList dirs = KGlobal::dirs()->findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
-        //kDebug( 30003 ) <<"dir:" << *it;
+        //dbgUI <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())
@@ -156,7 +156,7 @@ void KisTemplateTree::readGroups()
                 name = dg.readEntry("Name");
                 defaultTab = dg.readEntry("X-KDE-DefaultTab");
                 sortingWeight = dg.readEntry("X-KDE-SortingWeight", 1000);
-                //kDebug( 30003 ) <<"name:" << name;
+                //dbgUI <<"name:" << name;
             }
             KisTemplateGroup *g = new KisTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
             add(g);
@@ -183,7 +183,7 @@ void KisTemplateTree::readTemplates()
             QStringList files = d.entryList(QDir::Files | QDir::Readable, QDir::Name);
             for (int i = 0; i < files.count(); ++i) {
                 QString filePath = *it + files[i];
-                //kDebug( 30003 ) <<"filePath:" << filePath;
+                //dbgUI <<"filePath:" << filePath;
                 QString icon;
                 QString text;
                 QString description;
@@ -202,12 +202,12 @@ void KisTemplateTree::readTemplates()
                         text = config.readEntry("Name");
                         fileName = filePath;
                         description = config.readEntry("Comment");
-                        //kDebug( 30003 ) <<"name:" << text;
+                        //dbgUI <<"name:" << text;
                         icon = config.readEntry("Icon");
                         if (icon[0] != '/' && // allow absolute paths for icons
                                 QFile::exists(*it + icon)) // allow icons from icontheme
                             icon = *it + icon;
-                        //kDebug( 30003 ) <<"icon2:" << icon;
+                        //dbgUI <<"icon2:" << icon;
                         hidden = config.readEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
                         measureSystem = config.readEntry("X-KDE-MeasureSystem").toLower();
@@ -216,16 +216,16 @@ void KisTemplateTree::readTemplates()
                         if (measureSystem == dontShow)
                             continue;
 
-                        //kDebug( 30003 ) <<"hidden:" << hidden_str;
+                        //dbgUI <<"hidden:" << hidden_str;
                         templatePath = config.readPathEntry("URL", QString());
-                        //kDebug( 30003 ) <<"Link to :" << templatePath;
+                        //dbgUI <<"Link to :" << templatePath;
                         if (templatePath[0] != '/') {
                             if (templatePath.left(6) == "file:/") // I doubt this will happen
                                 templatePath = templatePath.right(templatePath.length() - 6);
                             //else
-                            //  kDebug( 30003 ) <<"dirname=" << *it;
+                            //  dbgUI <<"dirname=" << *it;
                             templatePath = *it + templatePath;
-                            //kDebug( 30003 ) <<"templatePath:" << templatePath;
+                            //dbgUI <<"templatePath:" << templatePath;
                         }
                     } else
                         continue; // Invalid

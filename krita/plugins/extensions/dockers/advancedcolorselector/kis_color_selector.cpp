@@ -30,7 +30,7 @@
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoCanvasResourceManager.h>
 #include <KoIcon.h>

@@ -50,6 +50,8 @@
 
 #include "ui_wdgcolorspaceselectoradvanced.h"
 
+#include <kis_debug.h>
+
 struct KisAdvancedColorSpaceSelector::Private {
     Ui_WdgColorSpaceSelectorAdvanced* colorSpaceSelector;
     QString knsrcFile;
@@ -682,7 +684,7 @@ void KisAdvancedColorSpaceSelector::installProfile()
     foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation  +  file.fileName())) {
-            kWarning() << "Could not install profile!";
+            dbgKrita << "Could not install profile!";
             return;
         }
         iccEngine->addProfile(saveLocation  +  file.fileName());

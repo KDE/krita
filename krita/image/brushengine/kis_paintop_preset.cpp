@@ -148,7 +148,7 @@ bool KisPaintOpPreset::load()
     QByteArray ba;
 
     if (filename().startsWith("bundle://")) {
-        qDebug() << "bundle";
+        dbgKrita << "bundle";
         QString bn = filename().mid(9);
         int pos = bn.lastIndexOf(":");
         QString fn = bn.right(bn.size() - pos - 1);
@@ -156,14 +156,14 @@ bool KisPaintOpPreset::load()
 
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {
-            qWarning() << "Could not open store on bundle" << bn;
+            warnKrita << "Could not open store on bundle" << bn;
             return false;
         }
 
         if (resourceStore->isOpen()) resourceStore->close();
 
         if (!resourceStore->open(fn)) {
-            qWarning() << "Could not open preset" << fn << "in bundle" << bn;
+            warnKrita << "Could not open preset" << fn << "in bundle" << bn;
             return false;
         }
 
@@ -298,7 +298,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
     if (!settings) {
         setValid(false);
-        qWarning() << "Could not load settings for preset" << paintopid;
+        warnKrita << "Could not load settings for preset" << paintopid;
         return;
     }
 

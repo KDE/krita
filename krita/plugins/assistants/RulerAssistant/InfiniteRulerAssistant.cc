@@ -47,7 +47,7 @@ QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& stroke
             // allow some movement before snapping
             return strokeBegin;
         }
-    //qDebug()<<strokeBegin<< ", " <<*handles()[0];
+    //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
     QLineF snapLine = QLineF(*handles()[0], *handles()[1]);
     
     

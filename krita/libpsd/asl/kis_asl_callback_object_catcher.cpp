@@ -118,7 +118,7 @@ void KisAslCallbackObjectCatcher::addEnum(const QString &path, const QString &ty
         if (it->typeId == typeId) {
             it->map(value);
         } else {
-            qWarning() << "KisAslCallbackObjectCatcher::addEnum: inconsistent typeId"  << ppVar(typeId) << ppVar(it->typeId);
+            warnKrita << "KisAslCallbackObjectCatcher::addEnum: inconsistent typeId"  << ppVar(typeId) << ppVar(it->typeId);
         }
     }
 }
@@ -130,7 +130,7 @@ void KisAslCallbackObjectCatcher::addUnitFloat(const QString &path, const QStrin
         if (it->unit == unit) {
             it->map(value);
         } else {
-            qWarning() << "KisAslCallbackObjectCatcher::addUnitFloat: inconsistent unit"  << ppVar(unit) << ppVar(it->unit);
+            warnKrita << "KisAslCallbackObjectCatcher::addUnitFloat: inconsistent unit"  << ppVar(unit) << ppVar(it->unit);
         }
     }
 }

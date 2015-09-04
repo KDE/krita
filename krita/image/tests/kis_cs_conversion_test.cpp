@@ -86,7 +86,7 @@ void KisCsConversionTest::testColorSpaceConversion()
             }
         }
     }
-    qDebug() << colorSpaces.size() * colorSpaces.size()
+    dbgKrita << colorSpaces.size() * colorSpaces.size()
     << "conversions"
     << " done in "
     << t.elapsed()

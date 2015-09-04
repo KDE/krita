@@ -43,7 +43,7 @@
 #include "KisImportExportManager.h"
 #include "dialogs/KisShortcutsDialog.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <knotification.h>
@@ -143,7 +143,7 @@ void KisPart::Private::loadActions()
                 KShortcut defaultShortcut = KShortcut(e.attribute("defaultShortcut"));
 
                 if (name.isEmpty()) {
-                    qDebug() << text << "has no name! From:" << actionDefinition;
+                    dbgKrita << text << "has no name! From:" << actionDefinition;
                 }
 
                 KisAction *action = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
@@ -160,7 +160,7 @@ void KisPart::Private::loadActions()
                     actionCollection->addAction(name, action);
                 }
 //                else {
-//                    qDebug() << "duplicate action" << name << action << "from" << collection;
+//                    dbgKrita << "duplicate action" << name << action << "from" << collection;
 //                    delete action;
 //                }
             }
@@ -176,7 +176,7 @@ void KisPart::Private::loadActions()
             continue;
         }
         if (existingShortcuts.contains(action->shortcut())) {
-            qDebug() << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
+            dbgKrita << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
         }
         else {
             existingShortcuts[action->shortcut()] = action;
@@ -223,7 +223,7 @@ KisPart::~KisPart()
 
 void KisPart::addDocument(KisDocument *document)
 {
-    //qDebug() << "Adding document to part list" << document;
+    //dbgKrita << "Adding document to part list" << document;
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
@@ -357,14 +357,14 @@ void KisPart::addMainWindow(KisMainWindow *mainWindow)
     if (!mainWindow) return;
     if (d->mainWindows.contains(mainWindow)) return;
 
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
+    dbgUI <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
     d->mainWindows.append(mainWindow);
 
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
 {
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
+    dbgUI <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
     if (mainWindow) {
         d->mainWindows.removeAll(mainWindow);
     }
@@ -517,7 +517,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 
 #ifndef NDEBUG
     if (d->templatesResourcePath.isEmpty())
-        kDebug(30003) << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
+        dbgUI << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
 #endif
 
     if (!alwaysShow) {

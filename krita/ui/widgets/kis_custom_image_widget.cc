@@ -252,10 +252,10 @@ KisDocument* KisCustomImageWidget::createNewImage()
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
             if (result == QMessageBox::Cancel) {
-                qDebug() << "Model RGB8" << "NOT SUPPORTED";
-                qDebug() << ppVar(cs->name());
-                qDebug() << ppVar(cs->profile()->name());
-                qDebug() << ppVar(cs->profile()->info());
+                dbgKrita << "Model RGB8" << "NOT SUPPORTED";
+                dbgKrita << ppVar(cs->name());
+                dbgKrita << ppVar(cs->profile()->name());
+                dbgKrita << ppVar(cs->profile()->info());
                 return 0;
             }
         }

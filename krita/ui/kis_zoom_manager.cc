@@ -249,7 +249,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
     if (scaleX != scaleY) {
-        qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
+        warnKrita << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
     }
 
     // zoom by average of x and y

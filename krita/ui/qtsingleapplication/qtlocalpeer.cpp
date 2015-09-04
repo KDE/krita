@@ -160,7 +160,7 @@ void QtLocalPeer::receiveConnection()
     uMsg.resize(remaining);
     int got = 0;
     char* uMsgBuf = uMsg.data();
-    //qDebug() << "RCV: remaining" << remaining;
+    //dbgKrita << "RCV: remaining" << remaining;
     do {
         got = ds.readRawData(uMsgBuf, remaining);
         remaining -= got;

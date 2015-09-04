@@ -79,7 +79,7 @@ public:
         if (focusWidget) {
             QThread *guiThread = focusWidget->thread();
             if (guiThread != QThread::currentThread()) {
-                qWarning() << "WARNING: Rendering text in non-GUI thread!"
+                warnKrita << "WARNING: Rendering text in non-GUI thread!"
                            << "That may lead to hangups and crashes on some"
                            << "versions of X11/Qt!";
             }

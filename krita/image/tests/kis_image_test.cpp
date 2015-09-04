@@ -263,12 +263,12 @@ struct FlattenTestImage
 
         p.image->initialRefreshGraph();
 
-        // qDebug() << ppVar(layer1->exactBounds());
-        // qDebug() << ppVar(layer5->exactBounds());
-        // qDebug() << ppVar(layer2->exactBounds());
-        // qDebug() << ppVar(group1->exactBounds());
-        // qDebug() << ppVar(layer3->exactBounds());
-        // qDebug() << ppVar(layer4->exactBounds());
+        // dbgKrita << ppVar(layer1->exactBounds());
+        // dbgKrita << ppVar(layer5->exactBounds());
+        // dbgKrita << ppVar(layer2->exactBounds());
+        // dbgKrita << ppVar(group1->exactBounds());
+        // dbgKrita << ppVar(layer3->exactBounds());
+        // dbgKrita << ppVar(layer4->exactBounds());
 
         TestUtil::ExternalImageChecker chk("flatten", "imagetest");
         QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
@@ -570,9 +570,9 @@ void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
         qSwap(cs2, cs3);
     }
 
-    qDebug() << "Testing testMergeCrossColorSpaceImpl:";
-    qDebug() << "    " << ppVar(cs2);
-    qDebug() << "    " << ppVar(cs3);
+    dbgKrita << "Testing testMergeCrossColorSpaceImpl:";
+    dbgKrita << "    " << ppVar(cs2);
+    dbgKrita << "    " << ppVar(cs3);
 
     layer1 = p.layer;
     layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8, cs2);

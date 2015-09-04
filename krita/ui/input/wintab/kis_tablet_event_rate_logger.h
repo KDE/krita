@@ -61,12 +61,12 @@ public:
     }
 
     void dumpValues() {
-        qDebug() << "########################";
-        qDebug() << ppVar(m_id);
-        qDebug() << ppVar(m_avgTime);
-        qDebug() << ppVar(m_avgPosDiff);
-        qDebug() << "spd:" << m_avgPosDiff / m_avgTime;
-        qDebug() << "########################";
+        dbgKrita << "########################";
+        dbgKrita << ppVar(m_id);
+        dbgKrita << ppVar(m_avgTime);
+        dbgKrita << ppVar(m_avgPosDiff);
+        dbgKrita << "spd:" << m_avgPosDiff / m_avgTime;
+        dbgKrita << "########################";
     }
 
 private:

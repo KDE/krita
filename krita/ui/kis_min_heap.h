@@ -19,7 +19,7 @@
 #ifndef KIS_MIN_HEAP_H
 #define KIS_MIN_HEAP_H
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QList>
 
 template <typename T> struct PriorityNode {

@@ -24,7 +24,7 @@
 #include <QFileInfo>
 #include <QCryptographicHash>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_psd_layer_style.h"
@@ -53,7 +53,7 @@ bool KisPSDLayerStyleCollectionResource::load()
 
     bool result;
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        dbgKrita << "Can't open file " << filename();
         return false;
     }
     result = loadFromDevice(&file);
@@ -159,7 +159,7 @@ void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
         }
 
         if (!found) {
-            qWarning() << "WARNING: loading layer style for" << layer->name() << "failed! It requests unexistent style:" << uuid;
+            warnKrita << "WARNING: loading layer style for" << layer->name() << "failed! It requests unexistent style:" << uuid;
         }
     }
 

@@ -345,7 +345,7 @@ Schema::Schema(const QString & _uri, const QString & _ns)
 Schema::~Schema()
 {
     dbgImage << "Deleting schema " << d->uri << " " << d->prefix;
-    dbgImage << kBacktrace();
+    dbgImage << kisBacktrace();
     delete d;
 }
 

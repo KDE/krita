@@ -91,8 +91,8 @@ void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceS
     if (t.isTranslating()) {
         dstTopLeft = t.map(dstTopLeft);
     } else if (!t.isIdentity()) {
-        qWarning() << "KisDumbTransformMaskParams::transformDevice does not support this kind of transformation";
-        qWarning() << ppVar(t);
+        warnKrita << "KisDumbTransformMaskParams::transformDevice does not support this kind of transformation";
+        warnKrita << ppVar(t);
     }
 
     KisPainter::copyAreaOptimized(dstTopLeft, src, dst, rc);
@@ -124,7 +124,7 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
         KisDomUtils::loadValue(transformEl, "transform", &transform);
 
     if (!result) {
-        qWarning() << "WARNING: couldn't load dumb transform. Ignoring...";
+        warnKrita << "WARNING: couldn't load dumb transform. Ignoring...";
     }
 
     return KisTransformMaskParamsInterfaceSP(

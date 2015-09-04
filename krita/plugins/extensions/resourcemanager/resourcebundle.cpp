@@ -33,7 +33,7 @@
 #include <QProcessEnvironment>
 #include <QDate>
 #include <QDir>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QByteArray>
@@ -88,7 +88,7 @@ bool ResourceBundle::load()
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
     if (!resourceStore || resourceStore->bad()) {
-        qWarning() << "Could not open store on bundle" << filename();
+        warnKrita << "Could not open store on bundle" << filename();
         m_installed = false;
         setValid(false);
         return false;
@@ -100,14 +100,14 @@ bool ResourceBundle::load()
         bool toRecreate = false;
         if (resourceStore->open("META-INF/manifest.xml")) {
             if (!m_manifest.load(resourceStore->device())) {
-                qWarning() << "Could not open manifest for bundle" << filename();
+                warnKrita << "Could not open manifest for bundle" << filename();
                 return false;
             }
             resourceStore->close();
 
             foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Bundle is broken. File" << ref.resourcePath << "is missing";
+                    warnKrita << "Bundle is broken. File" << ref.resourcePath << "is missing";
                     toRecreate = true;
                 }
                 else {
@@ -117,11 +117,11 @@ bool ResourceBundle::load()
 
 
             if(toRecreate) {
-                qWarning() << "Due to missing files and wrong entries in the manifest, " << filename() << " will be recreated.";
+                warnKrita << "Due to missing files and wrong entries in the manifest, " << filename() << " will be recreated.";
             }
 
         } else {
-            qWarning() << "Could not load META-INF/manifest.xml";
+            warnKrita << "Could not load META-INF/manifest.xml";
             return false;
         }
 
@@ -129,7 +129,7 @@ bool ResourceBundle::load()
         if (resourceStore->open("meta.xml")) {
             KoXmlDocument doc;
             if (!doc.setContent(resourceStore->device())) {
-                qWarning() << "Could not parse meta.xml for" << filename();
+                warnKrita << "Could not parse meta.xml for" << filename();
                 return false;
             }
             // First find the manifest:manifest node.
@@ -144,7 +144,7 @@ bool ResourceBundle::load()
             }
 
             if (n.isNull()) {
-                qWarning() << "Could not find manifest node for bundle" << filename();
+                warnKrita << "Could not find manifest node for bundle" << filename();
                 return false;
             }
 
@@ -193,7 +193,7 @@ bool ResourceBundle::load()
             resourceStore->close();
         }
         else {
-            qWarning() << "Could not load meta.xml";
+            warnKrita << "Could not load meta.xml";
             return false;
         }
         
@@ -206,7 +206,7 @@ bool ResourceBundle::load()
             resourceStore->close();
         }
         else {
-            qWarning() << "Could not open preview.png";
+            warnKrita << "Could not open preview.png";
         }
 
         /*
@@ -215,7 +215,7 @@ bool ResourceBundle::load()
          */
         if(!versionFound) {
             m_metadata.insert("bundle-version", "1");
-            qWarning() << filename() << " has an old version and possibly wrong resources md5, so it will be recreated.";
+            warnKrita << filename() << " has an old version and possibly wrong resources md5, so it will be recreated.";
             toRecreate = true;
         }
 
@@ -239,16 +239,16 @@ bool ResourceBundle::loadFromDevice(QIODevice *)
 bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &resType)
 {
     if (!resource) {
-        qWarning() << "No Resource";
+        warnKrita << "No Resource";
         return false;
     }
 
     if (!resource->valid()) {
-        qWarning() << "Resource is not valid";
+        warnKrita << "Resource is not valid";
         return false;
     }
     if (!store || store->bad()) {
-        qWarning() << "No Store or Store is Bad";
+        warnKrita << "No Store or Store is Bad";
         return false;
     }
 
@@ -260,29 +260,29 @@ bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &re
 
         QFile f(resource->filename());
         if (!f.open(QFile::ReadOnly)) {
-            qWarning() << "Could not open resource" << resource->filename();
+            warnKrita << "Could not open resource" << resource->filename();
             return false;
         }
         ba = f.readAll();
         if (ba.size() == 0) {
-            qWarning() << "Resource is empty" << resource->filename();
+            warnKrita << "Resource is empty" << resource->filename();
             return false;
         }
         f.close();
         buf.setBuffer(&ba);
     }
     else {
-        qWarning() << "Could not find the resource " << resource->filename() << " or it isn't readable";
+        warnKrita << "Could not find the resource " << resource->filename() << " or it isn't readable";
         return false;
     }
 
     if (!buf.open(QBuffer::ReadOnly)) {
-        qWarning() << "Could not open buffer";
+        warnKrita << "Could not open buffer";
         return false;
     }
     Q_ASSERT(!store->hasFile(resType + "/" + resource->shortFilename()));
     if (!store->open(resType + "/" + resource->shortFilename())) {
-        qWarning() << "Could not open file in store for resource";
+        warnKrita << "Could not open file in store for resource";
         return false;
     }
 
@@ -314,10 +314,10 @@ bool ResourceBundle::save()
                 if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "gradients")) {
                     if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
+                        warnKrita << "Could not save resource" << resType << res->name();
                     }
                     else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
             }
@@ -329,10 +329,10 @@ bool ResourceBundle::save()
                 if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "patterns")) {
                     if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
+                        warnKrita << "Could not save resource" << resType << res->name();
                     }
                     else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
             }
@@ -345,10 +345,10 @@ bool ResourceBundle::save()
                 KoResource *res = brush.data();
                 if (!saveResourceToStore(res, store.data(), "brushes")) {
                     if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
+                        warnKrita << "Could not save resource" << resType << res->name();
                     }
                     else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
             }
@@ -360,10 +360,10 @@ bool ResourceBundle::save()
                 if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "palettes")) {
                     if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
+                        warnKrita << "Could not save resource" << resType << res->name();
                     }
                     else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
             }
@@ -375,10 +375,10 @@ bool ResourceBundle::save()
                 if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "workspaces")) {
                     if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
+                        warnKrita << "Could not save resource" << resType << res->name();
                     }
                     else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
             }
@@ -390,10 +390,10 @@ bool ResourceBundle::save()
                 if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res.data(), store.data(), "paintoppresets")) {
                     if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
+                        warnKrita << "Could not save resource" << resType << res->name();
                     }
                     else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
             }
@@ -404,8 +404,8 @@ bool ResourceBundle::save()
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
         m_thumbnail.save(&buffer, "PNG");
-        if (!store->open("preview.png")) qWarning() << "Could not open preview.png";
-        if (store->write(byteArray) != buffer.size()) qWarning() << "Could not write preview.png";
+        if (!store->open("preview.png")) warnKrita << "Could not open preview.png";
+        if (store->write(byteArray) != buffer.size()) warnKrita << "Could not write preview.png";
         store->close();
     }
 
@@ -427,13 +427,13 @@ bool ResourceBundle::install()
 {
     QStringList md5Mismatch;
     if (filename().isEmpty())  {
-        qWarning() << "Cannot install bundle: no file name" << this;
+        warnKrita << "Cannot install bundle: no file name" << this;
         return false;
     }
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
     if (!resourceStore || resourceStore->bad()) {
-        qWarning() << "Cannot open the resource bundle: invalid zip file?";
+        warnKrita << "Cannot open the resource bundle: invalid zip file?";
         return false;
     }
 
@@ -448,15 +448,15 @@ bool ResourceBundle::install()
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KoAbstractGradient *res = gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
-                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
-                    qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
@@ -478,7 +478,7 @@ bool ResourceBundle::install()
                     gradientServer->addTag(res, name());
                 }
                 else {
-                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
                 
             }
@@ -492,15 +492,15 @@ bool ResourceBundle::install()
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KoPattern *res = patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
-                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
-                    qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
@@ -533,15 +533,15 @@ bool ResourceBundle::install()
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KisBrushSP res = brushServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
-                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
-                    qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
@@ -564,7 +564,7 @@ bool ResourceBundle::install()
                     brushServer->addTag(res.data(), name());
                 }
                 else {
-                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
             }
         }
@@ -578,15 +578,15 @@ bool ResourceBundle::install()
                 KoColorSet *res = paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
 
                 if (!res) {
-                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
-                    qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
@@ -609,7 +609,7 @@ bool ResourceBundle::install()
                     paletteServer->addTag(res, name());
                 }
                 else {
-                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
             }
         }
@@ -622,15 +622,15 @@ bool ResourceBundle::install()
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KisWorkspaceResource *res = workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
-                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
-                    qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
@@ -653,7 +653,7 @@ bool ResourceBundle::install()
                     workspaceServer->addTag(res, name());
                 }
                 else {
-                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
                
             }
@@ -668,11 +668,11 @@ bool ResourceBundle::install()
                 KisPaintOpPresetSP res = paintoppresetServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
 
                 if (!res) {
-                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
@@ -680,7 +680,7 @@ bool ResourceBundle::install()
                 QByteArray data = resourceStore->device()->readAll();
                 QBuffer buffer(&data);
                 if (!res->loadFromDevice(&buffer)) {
-                    qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name() << "File:" << res->filename();
@@ -702,7 +702,7 @@ bool ResourceBundle::install()
                     paintoppresetServer->addTag(res.data(), name());
                 }
                 else {
-                    //qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
                 
             }
@@ -987,8 +987,8 @@ void ResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
         m_thumbnail.save(&buffer, "PNG");
-        if (!store->open("preview.png")) qWarning() << "Could not open preview.png";
-        if (store->write(byteArray) != buffer.size()) qWarning() << "Could not write preview.png";
+        if (!store->open("preview.png")) warnKrita << "Could not open preview.png";
+        if (store->write(byteArray) != buffer.size()) warnKrita << "Could not write preview.png";
         store->close();
     }
 

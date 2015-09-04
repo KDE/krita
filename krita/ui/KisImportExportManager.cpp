@@ -38,7 +38,7 @@ Boston, MA 02110-1301, USA.
 #include <klibloader.h>
 #include <ksqueezedtextlabel.h>
 #include <kmimetype.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <queue>
 
@@ -94,7 +94,7 @@ QString KisImportExportManager::importDocument(const QString& url,
     if (!m_graph.isValid()) {
         bool userCancelled = false;
 
-        kWarning(30500) << "Can't open " << typeName << ", trying filter chooser";
+        warnFile << "Can't open " << typeName << ", trying filter chooser";
         if (m_document) {
             if (!m_document->isAutoErrorHandlingEnabled()) {
                 status = KisImportExportFilter::BadConversionGraph;
@@ -121,7 +121,7 @@ QString KisImportExportManager::importDocument(const QString& url,
         }
 
         if (!m_graph.isValid()) {
-            kError(30500) << "Couldn't create a valid graph for this source mimetype: "
+            errFile << "Couldn't create a valid graph for this source mimetype: "
                 << typeName;
             importErrorHelper(typeName, userCancelled);
             status = KisImportExportFilter::BadConversionGraph;
@@ -149,13 +149,13 @@ QString KisImportExportManager::importDocument(const QString& url,
     } else if (!d->importMimeType.isEmpty()) {
         chain = m_graph.chain(this, d->importMimeType);
     } else {
-        kError(30500) << "You aren't supposed to use import() from a filter!" << endl;
+        errFile << "You aren't supposed to use import() from a filter!" << endl;
         status = KisImportExportFilter::UsageError;
         return QString();
     }
 
     if (!chain) {
-        kError(30500) << "Couldn't create a valid filter chain!" << endl;
+        errFile << "Couldn't create a valid filter chain!" << endl;
         importErrorHelper(typeName);
         status = KisImportExportFilter::BadConversionGraph;
         return QString();
@@ -198,20 +198,20 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
                 chain = m_graph.chain(this, mimeType);
         }
     } else if (!m_importUrlMimetypeHint.isEmpty()) {
-        kDebug(30500) << "Using the mimetype hint:" << m_importUrlMimetypeHint;
+        dbgFile << "Using the mimetype hint:" << m_importUrlMimetypeHint;
         m_graph.setSourceMimeType(m_importUrlMimetypeHint);
     } else {
         KUrl u;
         u.setPath(m_importUrl);
         KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
         if (!t || t->name() == KMimeType::defaultMimeType()) {
-            kError(30500) << "No mimetype found for" << m_importUrl;
+            errFile << "No mimetype found for" << m_importUrl;
             return KisImportExportFilter::BadMimeType;
         }
         m_graph.setSourceMimeType(t->name().toLatin1());
 
         if (!m_graph.isValid()) {
-            kWarning(30500) << "Can't open" << t->name() << ", trying filter chooser";
+            warnFile << "Can't open" << t->name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KisFilterChooser chooser(0, KisImportExportManager::mimeFilter(), QString(), u);
@@ -225,7 +225,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     }
 
     if (!m_graph.isValid()) {
-        kError(30500) << "Couldn't create a valid graph for this source mimetype.";
+        errFile << "Couldn't create a valid graph for this source mimetype.";
         if (!d->batch && !userCancelled) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not export file: the export filter is missing."));
         }
@@ -236,7 +236,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         chain = m_graph.chain(this, mimeType);
 
     if (!chain) {
-        kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
+        errFile << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
         if (!d->batch) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not export file: the export filter is missing."));
         }
@@ -336,7 +336,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
 
         if (impList.empty() || expList.empty()) {
             // This filter cannot be used under these conditions
-            kDebug(30500) << "Filter:" << (*it)->loader()->fileName() << " ruled out";
+            dbgFile << "Filter:" << (*it)->loader()->fileName() << " ruled out";
             continue;
         }
 
@@ -376,7 +376,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
                 }
             }
         } else {
-            kDebug(30500) << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
+            dbgFile << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
         }
     }
 }
@@ -418,7 +418,7 @@ QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArr
 // graph this mimetype has a connection to.
 QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direction direction, const QStringList &extraNativeMimeTypes)
 {
-    //kDebug(30500) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
+    //dbgFile <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
     QHash<QByteArray, Vertex*> vertices;
     buildGraph(vertices, direction);
 
@@ -434,7 +434,7 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
     // Now look for filters which output each of those natives mimetypes
     foreach(const QString &natit, nativeMimeTypes) {
         const QStringList outMimes = connected(vertices, natit.toLatin1());
-        //kDebug(30500) <<"output formats connected to mime" << natit <<" :" << outMimes;
+        //dbgFile <<"output formats connected to mime" << natit <<" :" << outMimes;
         foreach(const QString &mit, outMimes) {
             if (!lst.contains(mit))     // append only if not there already. Qt4: QSet<QString>?
                 lst.append(mit);
@@ -496,16 +496,16 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
 #if 1
         return true;
 #else
-    //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
+    //dbgFile <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
     QString key = entry->service()->name() + " - " + entry->service()->library();
 
     if (!m_filterAvailable.contains(key)) {
-        //kDebug( 30500 ) <<"Not cached, checking...";
+        //dbgFile <<"Not cached, checking...";
 
         KLibrary library(QFile::encodeName(entry->service()->library()));
         if (library.fileName().isEmpty()) {
-            kWarning(30500) << "Huh?? Couldn't load the lib: "
+            warnFile << "Huh?? Couldn't load the lib: "
                 << entry->service()->library();
             m_filterAvailable[ key ] = false;
             return false;
@@ -515,7 +515,7 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
         QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
         KLibrary::void_function_ptr sym = library.resolveFunction(symname);
         if (!sym) {
-//            kWarning(30500) << "The library " << library.objectName()
+//            warnFile << "The library " << library.objectName()
 //                << " does not offer a check_" << library.objectName()
 //                << " function." << endl;
             m_filterAvailable[key] = false;

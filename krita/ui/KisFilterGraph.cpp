@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <QMetaMethod>
 #include <QTemporaryFile>
 #include <kmimetype.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -102,12 +102,12 @@ KisFilterChain::Ptr Graph::chain(const KisImportExportManager* manager, QByteArr
 void Graph::dump() const
 {
 #ifndef NDEBUG
-    kDebug(30500) << "+++++++++ Graph::dump +++++++++";
-    kDebug(30500) << "From:" << m_from;
+    dbgFile << "+++++++++ Graph::dump +++++++++";
+    dbgFile << "From:" << m_from;
     foreach(Vertex *vertex, m_vertices) {
         vertex->dump("   ");
     }
-    kDebug(30500) << "+++++++++ Graph::dump (done) +++++++++";
+    dbgFile << "+++++++++ Graph::dump (done) +++++++++";
 #endif
 }
 
@@ -161,7 +161,7 @@ void Graph::buildGraph()
                 }
             }
         } else
-            kDebug(30500) << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
+            dbgFile << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
     }
 }
 

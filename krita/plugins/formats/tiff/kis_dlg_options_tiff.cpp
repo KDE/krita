@@ -148,7 +148,7 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     options.faxMode = optionswdg->kComboBoxFaxMode->currentIndex() + 1;
     options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
 
-    qDebug() << options.compressionType << options.predictor << options.alpha << options.jpegQuality << options.deflateCompress << options.faxMode << options.pixarLogCompress;
+    dbgKrita << options.compressionType << options.predictor << options.alpha << options.jpegQuality << options.deflateCompress << options.faxMode << options.pixarLogCompress;
 
     KisPropertiesConfiguration cfg;
     cfg.setProperty("compressiontype", optionswdg->kComboBoxCompressionType->currentIndex());

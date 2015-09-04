@@ -167,7 +167,7 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
     KoColorTransformation * colorTransformation = 0;
     if (colorSpace->colorModelId() != RGBAColorModelID)
     {
-        kWarning() << "Unsupported color space for fast pixel tranformation to gmic pixel format" << colorSpace->id();
+        dbgKrita << "Unsupported color space for fast pixel tranformation to gmic pixel format" << colorSpace->id();
         return 0;
     }
 
@@ -221,7 +221,7 @@ static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* c
         }
     } else
     {
-        kWarning() << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
         return 0;
     }
 
@@ -234,7 +234,7 @@ static KoColorTransformation* createTransformation(const KoColorSpace* colorSpac
     KoColorTransformation * colorTransformation = 0;
     if (colorSpace->colorModelId() != RGBAColorModelID)
     {
-        kWarning() << "Unsupported color space for fast pixel tranformation to gmic pixel format" << colorSpace->id();
+        dbgKrita << "Unsupported color space for fast pixel tranformation to gmic pixel format" << colorSpace->id();
         return 0;
     }
 
@@ -251,7 +251,7 @@ static KoColorTransformation* createTransformation(const KoColorSpace* colorSpac
     } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
         colorTransformation = new KisColorToFloatConvertor< quint8, KoBgrTraits < quint8 > >();
     } else {
-        kWarning() << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " for fast pixel tranformation to gmic pixel format";
         return 0;
     }
     return colorTransformation;
@@ -864,7 +864,7 @@ void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float 
         default:
         {
             Q_ASSERT(false);
-            kFatal() << "Unexpected gmic image format";
+            dbgKrita << "Unexpected gmic image format";
             break;
         }
     }

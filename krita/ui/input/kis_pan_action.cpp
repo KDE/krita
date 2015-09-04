@@ -18,7 +18,7 @@
 
 #include "kis_pan_action.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QGesture>

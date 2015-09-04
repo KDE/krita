@@ -191,7 +191,7 @@ void KisQPainterCanvas::setDisplayFilter(KisDisplayFilter* displayFilter)
 
 void KisQPainterCanvas::setWrapAroundViewingMode(bool value)
 {
-    kDebug() << "Wrap around viewing mode not implemented in QPainter Canvas.";
+    dbgKrita << "Wrap around viewing mode not implemented in QPainter Canvas.";
     return;
 }
 

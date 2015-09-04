@@ -156,7 +156,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                 QVector <float> current_pixel_values(4);
                 device->colorSpace()->normalisedChannelsValue(data, current_pixel_values );
 
-                //qDebug()<< "Vector:" << current_pixel_values[2] << "," << current_pixel_values[1] << "," << current_pixel_values[0];
+                //dbgKrita<< "Vector:" << current_pixel_values[2] << "," << current_pixel_values[1] << "," << current_pixel_values[0];
                 memcpy(bumpmapDataPointer,
                       tileRenderer.IlluminatePixelFromNormalmap(current_pixel_values[2], current_pixel_values[1], current_pixel_values[0]).data(),
                       pixelSize);

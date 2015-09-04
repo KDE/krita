@@ -106,7 +106,7 @@ void printPixel(QString prefix, int pixelSize, quint8 *data) {
         str += QString::number(data[i]);
     }
 
-    qDebug() << str;
+    dbgKrita << str;
 }
 
 void KisConvolutionPainterTest::testIdentityConvolution()
@@ -298,7 +298,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         // CALLGRIND_STOP_INSTRUMENTATION;
 
-        qDebug() << "Diameter:" << diameter << "time:" << timer.elapsed();
+        dbgKrita << "Diameter:" << diameter << "time:" << timer.elapsed();
 
         if(diameter < 10) {
             diameter += 2;
@@ -365,7 +365,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
 
            gc.revertTransaction();
        }
-       qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
+       dbgKrita << "Elapsed time:" << timer.elapsed() << "ms";
     }
 }
 

@@ -97,7 +97,7 @@ void KisCoordinatesConverterTest::testImageCropping()
 }
 
 #define CHECK_TRANSFORM(trans,test,ref) QCOMPARE(trans.map(test).boundingRect(), ref)
-//#define CHECK_TRANSFORM(trans,test,ref) qDebug() << trans.map(test).boundingRect()
+//#define CHECK_TRANSFORM(trans,test,ref) dbgKrita << trans.map(test).boundingRect()
 
 void KisCoordinatesConverterTest::testTransformations()
 {

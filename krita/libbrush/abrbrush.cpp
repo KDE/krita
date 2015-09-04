@@ -23,7 +23,7 @@
 #include <QColor>
 #include <QtEndian>
 #include <QByteArray>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QString>
 #include <QFile>
 #include <netinet/in.h>
@@ -146,19 +146,19 @@ static bool abr_reach_8BIM_section(QDataStream & abr, const QString name)
         r = abr.readRawData(tag, 4);
 
         if (r != 4) {
-            qDebug() << "Error: Cannot read 8BIM tag ";
+            dbgKrita << "Error: Cannot read 8BIM tag ";
             return false;
         }
 
         if (strncmp(tag, "8BIM", 4)) {
-            qDebug() << "Error: Start tag not 8BIM but " << (int)tag[0] << (int)tag[1] << (int)tag[2] << (int)tag[3] << " at position " << abr.device()->pos();
+            dbgKrita << "Error: Start tag not 8BIM but " << (int)tag[0] << (int)tag[1] << (int)tag[2] << (int)tag[3] << " at position " << abr.device()->pos();
             return false;
         }
 
         r = abr.readRawData(tagname, 4);
 
         if (r != 4) {
-            qDebug() << "Error: Cannot read 8BIM tag name";
+            dbgKrita << "Error: Cannot read 8BIM tag name";
             return false;
         }
         tagname[4] = '\0';
@@ -221,7 +221,7 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
     // set stream to samples data
     abr.device()->seek(data_start);
 
-    //qDebug() <<"samples : "<< samples;
+    //dbgKrita <<"samples : "<< samples;
     return samples;
 }
 
@@ -398,7 +398,7 @@ static qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QStr
     case 1:
         // computed brush
         // FIXME: support it!
-        qDebug() << "WARNING: computed brush unsupported, skipping.";
+        dbgKrita << "WARNING: computed brush unsupported, skipping.";
         abr.device()->seek(abr.device()->pos() + next_brush);
         // TODO: test also this one abr.skipRawData(next_brush);
         break;
@@ -432,7 +432,7 @@ static qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QStr
 
         /* FIXME: support wide brushes */
         if (height > 16384) {
-            qDebug() << "WARNING: wide brushes not supported";
+            dbgKrita << "WARNING: wide brushes not supported";
             abr.device()->seek(next_brush);
             break;
         }
@@ -454,7 +454,7 @@ static qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QStr
         break;
 
     default:
-        qDebug() << "WARNING: unknown brush type, skipping.";
+        dbgKrita << "WARNING: unknown brush type, skipping.";
         abr.device()->seek(next_brush);
     }
 
@@ -489,23 +489,23 @@ static qint32 abr_load(const QString filename)
 
     // check if the file is open correctly
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Can't open file " << filename;
+        dbgKrita << "Can't open file " << filename;
         return -1;
     }
     QDataStream abr(&file);
 
     if (!abr_read_content(abr, &abr_hdr)) {
-        qDebug() << "Error: cannot parse ABR file: " << filename;
+        dbgKrita << "Error: cannot parse ABR file: " << filename;
         return -1;
     }
 
     if (!abr_supported_content(&abr_hdr)) {
-        qDebug() << "ERROR: unable to decode abr format version " << abr_hdr.version << "(subver " << abr_hdr.subversion << ")";
+        dbgKrita << "ERROR: unable to decode abr format version " << abr_hdr.version << "(subver " << abr_hdr.subversion << ")";
         return -1;
     }
 
     if (abr_hdr.count == 0) {
-        qDebug() << "ERROR: no sample brush found in " << filename;
+        dbgKrita << "ERROR: no sample brush found in " << filename;
         return -1;
     }
 
@@ -514,9 +514,9 @@ static qint32 abr_load(const QString filename)
     for (i = 0; i < abr_hdr.count; i++) {
         layer_ID = abr_brush_load(abr, &abr_hdr, filename, image_ID, i + 1);
         if (layer_ID == -1) {
-            qDebug() << "Warning: problem loading brush #" << i << " in " << filename;
+            dbgKrita << "Warning: problem loading brush #" << i << " in " << filename;
         }
-        qDebug() << i + 1 << " / " << abr_hdr.count;
+        dbgKrita << i + 1 << " / " << abr_hdr.count;
     }
     file.close();
 

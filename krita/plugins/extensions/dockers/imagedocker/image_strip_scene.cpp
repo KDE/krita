@@ -27,7 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QMutexLocker>
-#include <QDebug>
+#include <kis_debug.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- ImageLoader ---------------------------------------------------------- //
@@ -48,7 +48,7 @@ void ImageLoader::run()
         if (!img.isNull()) {
             data->image = img.scaled(m_size, m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        //qDebug() << "Loaded" << data->path;
+        //dbgKrita << "Loaded" << data->path;
         data->isLoaded = true;
         emit sigItemContentChanged(data.key());
     }
@@ -155,7 +155,7 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
             QString fileExtension = QFileInfo(path).suffix();
 
             if (!fileExtension.compare("DNG", Qt::CaseInsensitive)) {
-                qWarning() << "WARNING: Qt is known to crash when trying to open a DNG file. Skip it";
+                warnKrita << "WARNING: Qt is known to crash when trying to open a DNG file. Skip it";
                 continue;
             }
 

@@ -56,21 +56,21 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 
 #define DEBUG_LISTS(mem, beggers, beggersMem, donors, donorsMem)        \
     do {                                                                \
-    qDebug() << "--- getLists finished ---";                            \
-    qDebug() << "  memoryOccupied:" << mem << "/" << m_memoryLimit;     \
-    qDebug() << "  donors:" << donors.size()                            \
+    dbgKrita << "--- getLists finished ---";                            \
+    dbgKrita << "  memoryOccupied:" << mem << "/" << m_memoryLimit;     \
+    dbgKrita << "  donors:" << donors.size()                            \
              << "(mem:" << donorsMem << ")";                            \
-    qDebug() << "  beggers:" << beggers.size()                          \
+    dbgKrita << "  beggers:" << beggers.size()                          \
              << "(mem:" << beggersMem << ")";                           \
-    qDebug() << "--- ----------------- ---";                            \
+    dbgKrita << "--- ----------------- ---";                            \
     } while(0)
 
 #define DEBUG_ALLOC_CLONE(mem, totalMem)                                \
-        qDebug() << "Alloc mem for clones:" << mem                      \
+        dbgKrita << "Alloc mem for clones:" << mem                      \
                  << "\tMem usage:" << totalMem << "/" << m_memoryLimit
 
 #define DEBUG_FREE_CLONE(freed, demanded)                               \
-            qDebug() << "Freed mem for clones:" << freed                \
+            dbgKrita << "Freed mem for clones:" << freed                \
                      << "/" << qAbs(demanded)
 
 #else
@@ -387,7 +387,7 @@ void KisTileDataPooler::debugTileStatistics()
 
     m_store->endIteration(iter);
 
-    qDebug() << "Tiles statistics:\t total:" << m_store->numTiles() << "\t preallocated:"<< preallocatedTiles;
+    dbgKrita << "Tiles statistics:\t total:" << m_store->numTiles() << "\t preallocated:"<< preallocatedTiles;
 }
 
 void KisTileDataPooler::testingRereadConfig()

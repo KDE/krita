@@ -162,9 +162,9 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 					else if(shadeMyPaintType=="HSL"){color = converter()->fromHslF(fh, fs, fv);}	
 					else if(shadeMyPaintType=="HSI"){color = converter()->fromHsiF(fh, fs, fv);}	
 					else if(shadeMyPaintType=="HSY"){color = converter()->fromHsyF(fh, fs, fv, R, G, B);}
-					else{qDebug()<<"MyPaint Color selector don't work right.";
+					else{dbgKrita<<"MyPaint Color selector don't work right.";
 					color = converter()->fromHsvF(fh, fs, fv);}
-//qDebug()<<color->toQcolor();
+//dbgKrita<<color->toQcolor();
                     color.setOpacity(aaFactor);
                     Acs::setColor(m_realCircleBorder, QPoint(x, y), color);
 
@@ -191,7 +191,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 			else if(shadeMyPaintType=="HSL"){color = converter()->fromHslF(fh, fs, fv);}	
 			else if(shadeMyPaintType=="HSI"){color = converter()->fromHsiF(fh, fs, fv);}	
 			else if(shadeMyPaintType=="HSY"){color = converter()->fromHsyF(fh, fs, fv);}
-			else{qDebug()<<"MyPaint Color selector don't work right.";
+			else{dbgKrita<<"MyPaint Color selector don't work right.";
 			color = converter()->fromHsvF(fh, fs, fv);}
 
             Acs::setColor(m_realPixelCache, QPoint(x, y), color);

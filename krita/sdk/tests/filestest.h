@@ -24,7 +24,7 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KisImportExportManager.h>
 
@@ -68,7 +68,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KisImportExportFilter::ConversionStatus status;
             QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
                                                status);
-            qDebug() << s;
+            dbgKrita << s;
 
             if (!doc->image()) {
                 failuresDocImage << sourceFileInfo.fileName();
@@ -110,9 +110,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
     if (failuresCompare.isEmpty() && failuresDocImage.isEmpty() && failuresFileInfo.isEmpty()) {
         return;
     }
-    qDebug() << "Comparison failures: " << failuresCompare;
-    qDebug() << "No image failures: " << failuresDocImage;
-    qDebug() << "No comparison image: " <<  failuresFileInfo;
+    dbgKrita << "Comparison failures: " << failuresCompare;
+    dbgKrita << "No image failures: " << failuresDocImage;
+    dbgKrita << "No comparison image: " <<  failuresFileInfo;
 
     QFAIL("Failed testing files");
 }

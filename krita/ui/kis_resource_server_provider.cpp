@@ -24,7 +24,7 @@
 
 #include <QDir>
 #include <QApplication>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

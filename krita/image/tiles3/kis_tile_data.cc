@@ -20,7 +20,7 @@
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <boost/pool/singleton_pool.hpp>
 
@@ -162,7 +162,7 @@ void KisTileData::releaseInternalPools()
         BoostPool8BPP::purge_memory();
 
 #ifdef DEBUG_POOL_RELEASE
-        qDebug() << "After purging unused memory:";
+        dbgKrita << "After purging unused memory:";
 
         char command[256];
         sprintf(command, "cat /proc/%d/status | grep -i vm", (int)getpid());
@@ -172,8 +172,8 @@ void KisTileData::releaseInternalPools()
 
     }
 //    else {
-//        qWarning() << "WARNING: trying to purge pool memory while there are used tiles present!";
-//        qWarning() << "         The memory will *NOT* be returned to the system, though it will";
-//        qWarning() << "         be reused by Krita internally. Please report to developers!";
+//        warnKrita << "WARNING: trying to purge pool memory while there are used tiles present!";
+//        warnKrita << "         The memory will *NOT* be returned to the system, though it will";
+//        warnKrita << "         be reused by Krita internally. Please report to developers!";
 //    }
 }

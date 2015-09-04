@@ -1,5 +1,10 @@
+include(CheckFunctionExists)
+check_function_exists(backtrace HAVE_BACKTRACE)
+configure_file(config-debug.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-debug.h)
+
 set(kritaglobal_LIB_SRCS
   kis_assert.cpp
+  kis_debug.cpp
 )
 
 kde4_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

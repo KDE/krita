@@ -95,7 +95,7 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
     }
     if (!m_store->enterDirectory(m_name)) {
         QStringList directories = m_store->directoryList();
-        qDebug() << directories;
+        dbgKrita << directories;
         if (directories.size() > 0) {
             dbgFile << "Could not locate the directory, maybe some encoding issue? Grab the first directory, that'll be the image one." << m_name << directories;
             m_name = directories.first();

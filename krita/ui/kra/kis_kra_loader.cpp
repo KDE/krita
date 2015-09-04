@@ -373,7 +373,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
             collection->assignAllLayerStyles(image->root());
         } else {
-            qWarning() << "WARNING: Couldn't load layer styles library from .kra!";
+            warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
             delete collection;
         }
     }
@@ -580,7 +580,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
                 dumbLayerStyle->setUuid(uuid);
                 layer->setLayerStyle(dumbLayerStyle);
             } else {
-                qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+                warnKrita << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
             }
         }
     }

@@ -18,7 +18,7 @@
 
 #include "kis_tool_invocation_action.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <klocalizedstring.h>
 

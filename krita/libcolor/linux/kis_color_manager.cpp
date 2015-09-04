@@ -21,7 +21,7 @@
 #include "kis_color_manager.h"
 #include "colord/KisColord.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 
 class KisColorManager::Private {
 public:
@@ -36,7 +36,7 @@ KisColorManager::KisColorManager()
     : QObject()
     , d(new Private(this))
 {
-    //qDebug() << "ColorManager started";
+    //dbgKrita << "ColorManager started";
     connect(d->colord, SIGNAL(changed(QString)), this, SIGNAL(changed(QString)));
 }
 

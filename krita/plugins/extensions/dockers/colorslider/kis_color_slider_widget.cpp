@@ -57,7 +57,7 @@ KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *disp
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
     m_configCompressor = new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this);
     connect(m_configCompressor, SIGNAL(timeout()), SLOT(setConfig()));
-    //qDebug()<<"m_canvas:"<<m_canvas;
+    //dbgKrita<<"m_canvas:"<<m_canvas;
         
     m_inputs.clear();
     
@@ -171,7 +171,7 @@ void KisColorSliderWidget::updateTimeout()
 
 void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
 {
-    //qDebug()<<"check2";
+    //dbgKrita<<"check2";
     QList<KisColorSliderInput*> visibleInputs;
     
     if (SlidersConfigArray[0]==true) {
@@ -443,7 +443,7 @@ void KisColorSliderWidget::setConfig()
     //QTimer::singleShot(1, this, SLOT(update()));//need to wait a bit before accessing the config.
 
     QBitArray m_SlidersConfigArray(12);
-    //qDebug()<<"check";
+    //dbgKrita<<"check";
     KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
 
     m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);

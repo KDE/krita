@@ -193,7 +193,7 @@ void KisCageTransformWorkerTest::stressTestRandomCages()
             QVector<QPointF> origPoints;
             QVector<QPointF> transfPoints;
 
-            qDebug() << ppVar(j);
+            dbgKrita << ppVar(j);
 
             for (int i = 0; i < numPoints; i++) {
                 origPoints << generatePoint(bounds);

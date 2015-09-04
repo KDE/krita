@@ -20,7 +20,7 @@
 #include <QPainter>
 #include <QVarLengthArray>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_types.h"

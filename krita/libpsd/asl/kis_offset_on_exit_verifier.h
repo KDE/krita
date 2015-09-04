@@ -19,7 +19,7 @@
 #ifndef __KIS_OFFSET_ON_EXIT_VERIFIER_H
 #define __KIS_OFFSET_ON_EXIT_VERIFIER_H
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QString>
 #include <QIODevice>
 
@@ -59,8 +59,8 @@ public:
                 .arg(m_device->pos())
                 .arg(m_expectedPos);
 
-            qWarning() << "*** |" << m_objectName << msg;
-            qWarning() << "    |" << m_domain;
+            warnKrita << "*** |" << m_objectName << msg;
+            warnKrita << "    |" << m_domain;
 
 #endif /* DEBUG_OFFSET_ON_EXIT */
 

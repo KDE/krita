@@ -17,7 +17,7 @@
  */
 #include "psd_resource_section.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QIODevice>
 #include <QBuffer>
 

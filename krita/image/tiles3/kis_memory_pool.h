@@ -30,7 +30,7 @@
 #define INIT_STATUS_VAR() m_hit=0; m_miss=0; m_averIndex=0; m_maxIndex=0
 #define POOL_MISS() m_miss++
 #define POOL_HIT(idx) m_hit++; m_averIndex+=idx; m_maxIndex=qMax(m_maxIndex, idx)
-#define REPORT_STATUS() qDebug() << ppVar(m_hit) << ppVar(m_miss) << "Hit rate:" << double(m_hit)/(m_hit+m_miss) << "Max index:" << m_maxIndex <<"Av. index:" << double(m_averIndex)/(m_hit)
+#define REPORT_STATUS() dbgKrita << ppVar(m_hit) << ppVar(m_miss) << "Hit rate:" << double(m_hit)/(m_hit+m_miss) << "Max index:" << m_maxIndex <<"Av. index:" << double(m_averIndex)/(m_hit)
 
 #else
 

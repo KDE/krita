@@ -501,7 +501,7 @@ void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPr
     if (!m_dirtyPresetsEnabled) {
         KisSignalsBlocker blocker(m_optionWidget);
         if (!preset->load()) {
-            qWarning() << "failed to load the preset.";
+            warnKrita << "failed to load the preset.";
         }
     }
 
@@ -559,7 +559,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     if (m_presetsPopup->currentPaintOp() != paintop.id()) {
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
-        kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
+        dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
 
     /**

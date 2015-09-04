@@ -24,7 +24,7 @@
 #include <QDomDocument>
 #include <QFile>
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kmenubar.h>
 
 #include <KisMainWindow.h>

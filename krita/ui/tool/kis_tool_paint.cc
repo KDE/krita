@@ -35,7 +35,7 @@
 #include <QEvent>
 #include <QVariant>
 #include <QAction>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QPoint>
 
 #include <kis_debug.h>

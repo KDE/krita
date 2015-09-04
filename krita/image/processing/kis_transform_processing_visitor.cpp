@@ -135,7 +135,7 @@ void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter
     Q_UNUSED(mask);
     Q_UNUSED(undoAdapter);
 
-    qWarning() << "WARNING: transformation of the transform mask is not implemented";
+    warnKrita << "WARNING: transformation of the transform mask is not implemented";
 }
 
 void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)

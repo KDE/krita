@@ -84,7 +84,7 @@ void Vertex::dump(const QByteArray& indent) const
 #ifdef NDEBUG
     Q_UNUSED(indent)
 #else
-    kDebug(30500) << indent << "Vertex:" << m_mimeType << " (" << m_weight << "):";
+    dbgFile << indent << "Vertex:" << m_mimeType << " (" << m_weight << "):";
     const QByteArray i(indent + "   ");
     foreach(Edge* edge, m_edges) {
         edge->dump(i);

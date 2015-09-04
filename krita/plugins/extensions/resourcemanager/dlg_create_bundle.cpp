@@ -315,7 +315,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         foreach(KoResource *res, server->resources()) {
             if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
             //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
-            //qDebug()<<res->filename();
+            //dbgKrita<<res->filename();
                 QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
                 item->setData(Qt::UserRole, res->shortFilename());
 

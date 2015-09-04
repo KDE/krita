@@ -234,7 +234,7 @@ void OcioDisplayFilter::updateProcessor()
     try {
         m_revereseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
     } catch (...) {
-        qWarning() << "OCIO inverted matrix does not exist!";
+        warnKrita << "OCIO inverted matrix does not exist!";
         //m_revereseApproximationProcessor;
     }
 
@@ -248,7 +248,7 @@ void OcioDisplayFilter::updateProcessor()
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 
     if (m_lut3d.size() == 0) {
-        //qDebug() << "generating lut";
+        //dbgKrita << "generating lut";
         glGenTextures(1, &m_lut3dTexID);
 
         int num3Dentries = 3 * lut3DEdgeSize * lut3DEdgeSize * lut3DEdgeSize;
@@ -283,7 +283,7 @@ void OcioDisplayFilter::updateProcessor()
     QString lut3dCacheID = QString::fromLatin1(m_processor->getGpuLut3DCacheID(shaderDesc));
     if(lut3dCacheID != m_lut3dcacheid)
     {
-        //qDebug() << "Computing 3DLut " << m_lut3dcacheid;
+        //dbgKrita << "Computing 3DLut " << m_lut3dcacheid;
         m_lut3dcacheid = lut3dCacheID;
         m_processor->getGpuLut3D(&m_lut3d[0], shaderDesc);
 
@@ -298,7 +298,7 @@ void OcioDisplayFilter::updateProcessor()
     // Step 3: Generate the shader text
     QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
     if (m_program.isEmpty() || shaderCacheID != m_shadercacheid) {
-        //qDebug() << "Computing Shader " << m_shadercacheid;
+        //dbgKrita << "Computing Shader " << m_shadercacheid;
 
         m_shadercacheid = shaderCacheID;
 

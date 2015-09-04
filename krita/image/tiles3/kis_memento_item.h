@@ -193,7 +193,7 @@ public:
                 .arg(m_parent ? (quintptr)m_parent->m_tileData : 0)
                 .arg((quintptr)m_next.data())
                 .arg(m_next ? (quintptr)m_next->m_tileData : 0);
-        qDebug() << s;
+        dbgKrita << s;
     }
 
 protected:

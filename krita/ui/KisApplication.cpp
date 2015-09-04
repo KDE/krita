@@ -35,7 +35,7 @@
 #include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -206,7 +206,7 @@ bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber,
     const KUrl templateUrl = args->url(argNumber);
     if (templateUrl.isLocalFile() && QFile::exists(templateUrl.toLocalFile())) {
         templatePath = templateUrl.toLocalFile();
-        kDebug(30003) << "using full path...";
+        dbgUI << "using full path...";
     } else {
         QString desktopName(args->arg(argNumber));
         const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
@@ -241,7 +241,7 @@ bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber,
             doc->resetURL();
             doc->setEmpty();
             doc->setTitleModified();
-            kDebug(30003) << "Template loaded...";
+            dbgUI << "Template loaded...";
             return true;
         }
         else {
@@ -467,7 +467,7 @@ bool KisApplication::start()
                     KMimeType::Ptr outputMimetype;
                     outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
                     if (outputMimetype->name() == KMimeType::defaultMimeType()) {
-                        kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                        dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;
                     }
 
@@ -482,7 +482,7 @@ bool KisApplication::start()
                     status = manager.exportDocument(exportFileName, mime);
 
                     if (status != KisImportExportFilter::OK) {
-                        kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
+                        dbgKrita << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
                     }
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));

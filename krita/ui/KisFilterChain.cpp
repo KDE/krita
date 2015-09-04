@@ -34,7 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <QMetaMethod>
 #include <QTemporaryFile>
 #include <kmimetype.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -83,7 +83,7 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     }
 
     if (!m_chainLinks.current()) {
-        kWarning(30500) << "Huh?? Found a null pointer in the chain";
+        warnFile << "Huh?? Found a null pointer in the chain";
         return KisImportExportFilter::StupidError;
     }
 
@@ -114,7 +114,7 @@ QString KisFilterChain::inputFile()
     if (m_inputQueried == File)
         return m_inputFile;
     else if (m_inputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different source.";
+        warnFile << "You already asked for some different source.";
         return QString();
     }
     m_inputQueried = File;
@@ -137,12 +137,12 @@ QString KisFilterChain::outputFile()
     // sanity check: No embedded filter should ask for a plain file
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if (filterManagerParentChain())
-        kWarning(30500) << "An embedded filter has to use storageFile()!";
+        warnFile << "An embedded filter has to use storageFile()!";
 
     if (m_outputQueried == File)
         return m_outputFile;
     else if (m_outputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different destination.";
+        warnFile << "You already asked for some different destination.";
         return QString();
     }
     m_outputQueried = File;
@@ -175,7 +175,7 @@ KoStoreDevice* KisFilterChain::storageFile(const QString& name, KoStore::Mode mo
         return storageHelper(outputFile(), name, KoStore::Write,
                              &m_outputStorage, &m_outputStorageDevice);
     else {
-        kWarning(30500) << "Oooops, how did we get here? You already asked for a"
+        warnFile << "Oooops, how did we get here? You already asked for a"
         << " different source/destination?" << endl;
         return 0;
     }
@@ -186,7 +186,7 @@ KisDocument* KisFilterChain::inputDocument()
     if (m_inputQueried == Document)
         return m_inputDocument;
     else if (m_inputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different source.";
+        warnFile << "You already asked for some different source.";
         return 0;
     }
 
@@ -206,14 +206,14 @@ KisDocument* KisFilterChain::outputDocument()
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if (filterManagerParentChain()) {
-        kWarning(30500) << "An embedded filter has to use storageFile()!";
+        warnFile << "An embedded filter has to use storageFile()!";
         return 0;
     }
 
     if (m_outputQueried == Document)
         return m_outputDocument;
     else if (m_outputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different destination.";
+        warnFile << "You already asked for some different destination.";
         return 0;
     }
 
@@ -230,13 +230,13 @@ KisDocument* KisFilterChain::outputDocument()
 
 void KisFilterChain::dump()
 {
-    kDebug(30500) << "########## KisFilterChain with" << m_chainLinks.count() << " members:";
+    dbgFile << "########## KisFilterChain with" << m_chainLinks.count() << " members:";
     ChainLink* link = m_chainLinks.first();
     while (link) {
         link->dump();
         link = m_chainLinks.next();
     }
-    kDebug(30500) << "########## KisFilterChain (done) ##########";
+    dbgFile << "########## KisFilterChain (done) ##########";
 }
 
 void KisFilterChain::appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
@@ -331,7 +331,7 @@ void KisFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if (m_inputDocument &&
             static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Export) {
-        kDebug(30500) << "Saving the output document to the export file " << m_chainLinks.current()->to();
+        dbgFile << "Saving the output document to the export file " << m_chainLinks.current()->to();
         m_inputDocument->setOutputMimeType(m_chainLinks.current()->to());
         m_inputDocument->saveNativeFormat(filterManagerExportFile());
         m_inputFile = filterManagerExportFile();
@@ -341,7 +341,7 @@ void KisFilterChain::finalizeIO()
 bool KisFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
 {
     if (*tempFile) {
-        kError(30500) << "Ooops, why is there already a temp file???" << endl;
+        errFile << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
     *tempFile = new QTemporaryFile();
@@ -439,7 +439,7 @@ KoStoreDevice* KisFilterChain::storageHelper(const QString& file, const QString&
     if (file.isEmpty())
         return 0;
     if (*storage) {
-        kDebug(30500) << "Uh-oh, we forgot to clean up...";
+        dbgFile << "Uh-oh, we forgot to clean up...";
         return 0;
     }
 
@@ -481,7 +481,7 @@ KoStoreDevice* KisFilterChain::storageCreateFirstStream(const QString& streamNam
         return 0;
 
     if (*device) {
-        kDebug(30500) << "Uh-oh, we forgot to clean up the storage device!";
+        dbgFile << "Uh-oh, we forgot to clean up the storage device!";
         (*storage)->close();
         return storageCleanupHelper(storage);
     }
@@ -505,14 +505,14 @@ KisDocument* KisFilterChain::createDocument(const QString& file)
     url.setPath(file);
     KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
     if (t->name() == KMimeType::defaultMimeType()) {
-        kError(30500) << "No mimetype found for " << file << endl;
+        errFile << "No mimetype found for " << file << endl;
         return 0;
     }
 
     KisDocument *doc = createDocument(t->name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
-        kError(30500) << "Couldn't load from the file" << endl;
+        errFile << "Couldn't load from the file" << endl;
         delete doc;
         return 0;
     }

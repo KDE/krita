@@ -19,7 +19,7 @@
 
 #include "kis_action_shortcuts_model.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <KLocalizedString>
 #include <QMetaClassInfo>

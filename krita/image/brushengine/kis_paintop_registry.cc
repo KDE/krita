@@ -99,7 +99,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
             return op;
         }
     }
-    qWarning() << "Could not create paintop for factory" << id << "with settings" << settings;
+    warnKrita << "Could not create paintop for factory" << id << "with settings" << settings;
     return 0;
 }
 

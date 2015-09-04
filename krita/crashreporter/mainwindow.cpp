@@ -127,7 +127,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
     restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/krita \"";
 #endif
 
-    qDebug() << "restartCommand" << restartCommand;
+    dbgKrita << "restartCommand" << restartCommand;
     QProcess restartProcess;
     if (!restartProcess.startDetached(restartCommand)) {
         QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita"),
@@ -321,7 +321,7 @@ void MainWindow::startUpload()
 #endif
 
     QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    qDebug() << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
+    dbgKrita << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
 
     if (f.exists()) {
         f.open(QFile::ReadOnly);
@@ -338,7 +338,7 @@ void MainWindow::startUpload()
 
     // add minidump file
     QString dumpfile = m_d->dumpPath + "/" + m_d->id + ".dmp";
-    qDebug() << "dumpfile" << dumpfile;
+    dbgKrita << "dumpfile" << dumpfile;
     body += "Content-Disposition: form-data; name=\"upload_file_minidump\"; filename=\""
             + QFileInfo(dumpfile).fileName().toLatin1() + "\"\r\n";
     body += "Content-Type: application/octet-stream\r\n\r\n";
@@ -372,9 +372,9 @@ void MainWindow::startUpload()
 
 void MainWindow::uploadDone(QNetworkReply *reply)
 {
-    qDebug() << "updloadDone";
+    dbgKrita << "updloadDone";
     if (reply && reply->error() != QNetworkReply::NoError) {
-        qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
+        errKrita << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
     if (m_d->doRestart) {
         doRestart(this, chkRemoveSettings->isChecked());
@@ -385,18 +385,18 @@ void MainWindow::uploadDone(QNetworkReply *reply)
 
 void MainWindow::uploadProgress(qint64 received, qint64 total)
 {
-    qDebug() << "updloadProgress";
+    dbgKrita << "updloadProgress";
     progressBar->setMaximum(total);
     progressBar->setValue(received);
 }
 
 void MainWindow::uploadError(QNetworkReply::NetworkError error)
 {
-    qDebug() << "updloadError" << error;
+    dbgKrita << "updloadError" << error;
     // Fake success...
     progressBar->setRange(0, 100);
     progressBar->setValue(100);
-    qCritical() << "UploadError: Error uploading crash report: " << error;
+    errKrita << "UploadError: Error uploading crash report: " << error;
 
     uploadDone(0);
 }

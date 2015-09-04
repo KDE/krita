@@ -39,7 +39,7 @@
 #define START_COUNTING() quint64 __numSteps = 0
 #define REGISTER_STEP() if(++__numSteps > WINDOW_SIZE) {__numSteps=0; __failCount++;}
 #define REGISTER_FAIL() __failCount++
-#define DEBUG_FAIL_COUNTER() qDebug() << "Slab fail count:\t" << __failCount
+#define DEBUG_FAIL_COUNTER() dbgKrita << "Slab fail count:\t" << __failCount
 
 #else
 

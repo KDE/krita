@@ -72,7 +72,7 @@ public:
 
     inline void runMergeJob() {
         Q_ASSERT(m_type == MERGE);
-        // qDebug() << "Executing merge job" << m_walker->changeRect()
+        // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);
 

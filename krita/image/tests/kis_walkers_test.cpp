@@ -71,7 +71,7 @@ protected:
         }
 
 #ifdef DEBUG_VISITORS
-        qDebug()<< "FW:"<< node->node()->name() <<'\t'<< nodeTypeString(position) << postfix;
+        dbgKrita<< "FW:"<< node->node()->name() <<'\t'<< nodeTypeString(position) << postfix;
 #endif
 
         if(postfix.isEmpty()) {
@@ -87,7 +87,7 @@ protected:
         }
 
 #ifdef DEBUG_VISITORS
-        qDebug()<< "BW:"<< node->node()->name() <<'\t'<< nodeTypeString(position) << postfix;
+        dbgKrita<< "BW:"<< node->node()->name() <<'\t'<< nodeTypeString(position) << postfix;
 #endif
         if(postfix.isEmpty()) {
             m_order.append(node->node()->name() + nodeTypePostfix(position));
@@ -113,11 +113,11 @@ struct UpdateTestJob {
 
 void reportStartWith(QString nodeName, QRect rect = QRect())
 {
-    qDebug();
+    dbgKrita;
     if(!rect.isEmpty())
-        qDebug() << "Start with:" << nodeName << rect;
+        dbgKrita << "Start with:" << nodeName << rect;
     else
-        qDebug() << "Start with:" << nodeName;
+        dbgKrita << "Start with:" << nodeName;
 }
 
 QString nodeTypeString(KisMergeWalker::NodePosition position)
@@ -197,14 +197,14 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
     QStringList::const_iterator iter = reference.constBegin();
 
     if(reference.size() != list.size()) {
-        qDebug() << "*** Seems like the walker returned stack of wrong size"
+        dbgKrita << "*** Seems like the walker returned stack of wrong size"
                  << "( ref:" << reference.size() << "act:" << list.size() << ")";
-        qDebug() << "*** We are going to crash soon... just wait...";
+        dbgKrita << "*** We are going to crash soon... just wait...";
     }
 
     foreach(const KisMergeWalker::JobItem &item, list) {
 #ifdef DEBUG_VISITORS
-        qDebug() << item.m_leaf->node()->name() << '\t'
+        dbgKrita << item.m_leaf->node()->name() << '\t'
                  << item.m_applyRect << '\t'
                  << nodeTypeString(item.m_position);
 #endif
@@ -215,7 +215,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
     }
 
 #ifdef DEBUG_VISITORS
-    qDebug() << "Result AR:\t" << walker.accessRect();
+    dbgKrita << "Result AR:\t" << walker.accessRect();
 #endif
 
     QCOMPARE(walker.accessRect(), accessRect);
@@ -1115,7 +1115,7 @@ void KisWalkersTest::testMasksOverlapping()
     foreach(UpdateTestJob job, updateList) {
         KisMergeWalker walker(cropRect);
         reportStartWith(job.startNode->name(), job.updateRect);
-        qDebug() << "Area:" << job.updateAreaName;
+        dbgKrita << "Area:" << job.updateAreaName;
         walker.collectRects(job.startNode, job.updateRect);
         verifyResult(walker, job);
     }

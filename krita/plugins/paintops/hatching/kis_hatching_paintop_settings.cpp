@@ -42,7 +42,7 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
 
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
-        qDebug() << i.key() << ":" << i.value();
+        dbgKrita << i.key() << ":" << i.value();
     /----------DO NOT REMOVE----------------*/
 
     convenienttwin->enabledcurvecrosshatching = getBool("PressureCrosshatching");

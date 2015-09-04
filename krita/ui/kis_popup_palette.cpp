@@ -29,7 +29,7 @@
 #include "KoColorSpaceRegistry.h"
 #include <kis_types.h>
 #include <QtGui>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QQueue>
 #include <QMenu>
 #include <QWhatsThis>

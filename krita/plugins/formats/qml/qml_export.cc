@@ -50,12 +50,12 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    kDebug() << "input " << input;
+    dbgKrita << "input " << input;
     if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
     }
 
-    kDebug() << "filename " << input;
+    dbgKrita << "filename " << input;
 
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;

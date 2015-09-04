@@ -24,6 +24,8 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 
+#include <kis_debug.h>
+
 void KoPatternTest::testCreation()
 {
     KoPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
@@ -37,8 +39,8 @@ void KoPatternTest::testRoundTripMd5()
     KoPattern pngPattern(filename);
     QVERIFY(pngPattern.load());
 
-    qDebug() << "PNG Name:" << pngPattern.name();
-    qDebug() << "PNG Filename:" << pngPattern.filename();
+    dbgKrita << "PNG Name:" << pngPattern.name();
+    dbgKrita << "PNG Filename:" << pngPattern.filename();
 
     pngPattern.setFilename(patFilename);
     pngPattern.save();
@@ -46,11 +48,11 @@ void KoPatternTest::testRoundTripMd5()
     KoPattern patPattern(patFilename);
     QVERIFY(patPattern.load());
 
-    qDebug() << "PAT Name:" << patPattern.name();
-    qDebug() << "PAT Filename:" << patPattern.filename();
+    dbgKrita << "PAT Name:" << patPattern.name();
+    dbgKrita << "PAT Filename:" << patPattern.filename();
 
-    qDebug() << pngPattern.pattern().format();
-    qDebug() << patPattern.pattern().format();
+    dbgKrita << pngPattern.pattern().format();
+    dbgKrita << patPattern.pattern().format();
 
     QCOMPARE(pngPattern.pattern().convertToFormat(QImage::Format_ARGB32), patPattern.pattern().convertToFormat(QImage::Format_ARGB32));
     QImage im1 = pngPattern.pattern().convertToFormat(QImage::Format_ARGB32);

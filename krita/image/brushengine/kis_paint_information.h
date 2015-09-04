@@ -19,7 +19,7 @@
 #ifndef _KIS_PAINT_INFORMATION_
 #define _KIS_PAINT_INFORMATION_
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QTime>
 
 #include "kis_global.h"

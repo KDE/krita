@@ -30,7 +30,7 @@
 #include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
 #include <kglobal.h>

@@ -37,11 +37,11 @@
 #define SANITY_RELEASE_FILTER(filter)                           \
     do {                                                        \
         if (m_filter && m_filter->sanityDerefUsageCounter()) {  \
-            qWarning();                                                 \
-            qWarning() << "WARNING: filter configuration has more than one user! Krita will probably crash soon!"; \
-            qWarning() << "WARNING:" << ppVar(this);                    \
-            qWarning() << "WARNING:" << ppVar(filter.data());           \
-            qWarning();                                                 \
+            warnKrita;                                                 \
+            warnKrita << "WARNING: filter configuration has more than one user! Krita will probably crash soon!"; \
+            warnKrita << "WARNING:" << ppVar(this);                    \
+            warnKrita << "WARNING:" << ppVar(filter.data());           \
+            warnKrita;                                                 \
         }                                                               \
     } while (0)
 

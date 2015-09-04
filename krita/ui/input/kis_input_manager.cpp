@@ -72,8 +72,9 @@ uint qHash(QPointer<T> value) {
 #define push_and_stop_ignore_cursor_events() bool __saved_ignore_events = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
 #define pop_ignore_cursor_events() d->ignoreQtCursorEvents = __saved_ignore_events
 
-#define touch_start_block_press_events() d->touchHasBlockedPressEvents = d->disableTouchOnCanvas
-#define touch_stop_block_press_events() d->touchHasBlockedPressEvents = false
+// Note: this is placeholder logic!
+#define touch_stop_block_press_events() d->blockMouseEvents()
+#define touch_start_block_press_events() d->blockMouseEvents()
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
 
 KisInputManager::KisInputManager(QObject *parent)
@@ -187,13 +188,13 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     // tool is in text editing, preventing shortcut triggering
     d->toolProxy->processEvent(event);
 
-    // because we have fake enums in here...
+    // TODO: Handle touch events correctly.
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
         break_if_should_ignore_cursor_events();
-        break_if_touch_blocked_press_events();
+        // break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
@@ -211,7 +212,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
         break_if_should_ignore_cursor_events();
-        break_if_touch_blocked_press_events();
+        // break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
@@ -343,7 +344,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::TabletRelease: {
         d->debugEvent<QTabletEvent, true>(event);
         break_if_should_ignore_cursor_events();
-        break_if_touch_blocked_press_events();
+        // break_if_touch_blocked_press_events();
 
 
         /**
@@ -398,7 +399,7 @@ void KisInputManager::slotCompressedMoveEvent()
     if (d->compressedMoveEvent) {
 
         push_and_stop_ignore_cursor_events();
-        touch_stop_block_press_events();
+        // touch_stop_block_press_events();
 
         (void) d->handleCompressedTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
 

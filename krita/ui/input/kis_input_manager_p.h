@@ -41,10 +41,6 @@
 
 #define push_and_stop_ignore_cursor_events() bool __saved_ignore_events = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
 #define pop_ignore_cursor_events() d->ignoreQtCursorEvents = __saved_ignore_events
-
-#define touch_start_block_press_events() d->touchHasBlockedPressEvents = d->disableTouchOnCanvas
-#define touch_stop_block_press_events() d->touchHasBlockedPressEvents = false
-#define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
 #include "kis_abstract_input_action.h"
 
 

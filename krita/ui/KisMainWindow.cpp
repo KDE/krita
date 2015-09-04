@@ -65,7 +65,7 @@
 #include <krecentfilesaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolinvocation.h>
@@ -1593,7 +1593,7 @@ void KisMainWindow::slotEmailFile()
 
         // a little open, close, delete dance to make sure we have a nice filename
         // to use, but won't block windows from creating a new file with this name.
-        KTemporaryFile *tmpfile = new KTemporaryFile();
+        QTemporaryFile *tmpfile = new QTemporaryFile();
         tmpfile->open();
         QString fileName = tmpfile->fileName();
         tmpfile->close();

@@ -27,7 +27,7 @@
 #include <KoImageData.h>
 
 #include <kmimetype.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
 #include <kurl.h>
@@ -187,7 +187,7 @@ QString SvgSavingContext::saveImage(const QImage &image)
         }
     } else {
         // write to a temp file first
-        KTemporaryFile imgFile;
+        QTemporaryFile imgFile;
         if (image.save(&imgFile, "PNG")) {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content
@@ -225,7 +225,7 @@ QString SvgSavingContext::saveImage(KoImageData *image)
         }
     } else {
         // write to a temp file first
-        KTemporaryFile imgFile;
+        QTemporaryFile imgFile;
         if (image->saveData(imgFile)) {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content

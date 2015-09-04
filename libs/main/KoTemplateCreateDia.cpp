@@ -35,8 +35,9 @@
 #include <QTreeWidgetItem>
 #include <QGroupBox>
 #include <QStandardPaths>
+#include <QApplication>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <klineedit.h>
 #include <klocale.h>
 #include <KoIcon.h>
@@ -57,6 +58,7 @@
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kcomponentdata.h>
+#include <kglobal.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -215,10 +217,10 @@ void KoTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const KComponentData &componentData,
                                          KoDocument *document, QWidget *parent)
 {
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(QLatin1String(suffix));
+    QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/") + qAppName() + QLatin1String("_XXXXXX") + suffix);
     //Check that creation of temp file was successful
     if (!tempFile->open()) {
+        delete tempFile;
         qWarning("Creation of temporary file to store template failed.");
         return;
     }

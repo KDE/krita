@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 #include <QTextEdit>
 
@@ -191,7 +191,7 @@ void KoVersionDialog::slotOpen()
     if (!version)
         return;
 
-    KTemporaryFile tmp;
+    QTemporaryFile tmp;
     tmp.setAutoRemove(false);
     tmp.open();
     tmp.write(version->data);

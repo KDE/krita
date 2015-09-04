@@ -54,9 +54,8 @@ void KisExrTest::testRoundTrip()
     QVERIFY(doc1->image());
 
 
-    KTemporaryFile savedFile;
+    QTemporaryFile savedFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".exr"));
     savedFile.setAutoRemove(false);
-    savedFile.setSuffix(".exr");
     savedFile.open();
 
     KUrl savedFileURL("file://" + savedFile.fileName());

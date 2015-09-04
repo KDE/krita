@@ -50,7 +50,7 @@
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kedittoolbar.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <krecentdocument.h>
 #include <klocale.h>
 #include <kstatusbar.h>
@@ -66,6 +66,7 @@
 #include <kmenubar.h>
 #include <kmimetype.h>
 #include <k4aboutdata.h>
+#include <kglobal.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -1693,7 +1694,7 @@ void KoMainWindow::slotEmailFile()
 
         // a little open, close, delete dance to make sure we have a nice filename
         // to use, but won't block windows from creating a new file with this name.
-        KTemporaryFile *tmpfile = new KTemporaryFile();
+        QTemporaryFile *tmpfile = new QTemporaryFile();
         tmpfile->open();
         QString fileName = tmpfile->fileName();
         tmpfile->close();

@@ -34,7 +34,7 @@
 #include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kdebug.h>
 
 #include <KoIcon.h>
@@ -381,7 +381,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
-    KTemporaryFile masterStyles;
+    QTemporaryFile masterStyles;
     masterStyles.open();
     KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
 
@@ -403,7 +403,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     masterPage.addAttribute("style:page-layout-name", layoutName);
     mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
 
-    KTemporaryFile contentTmpFile;
+    QTemporaryFile contentTmpFile;
     contentTmpFile.open();
     KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
 

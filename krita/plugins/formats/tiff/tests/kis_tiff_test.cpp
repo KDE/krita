@@ -77,8 +77,8 @@ void KisTiffTest::testRoundTripRGBF16()
     KisDocument *doc0 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
     doc0->newImage("test", testRect.width(), testRect.height(), csf16, KoColor(Qt::blue, csf16), QString(), 1.0);
 
-    KTemporaryFile tmpFile;
-    tmpFile.setSuffix(".tiff");
+    QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".tiff"));
+
     tmpFile.open();
     doc0->setBackupFile(false);
     doc0->setOutputMimeType("image/tiff");

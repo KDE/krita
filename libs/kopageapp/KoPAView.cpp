@@ -89,7 +89,7 @@
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kurl.h>
 
 
@@ -1003,7 +1003,7 @@ bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const 
             fileUrl.setProtocol( "file" );
         }
         const bool bLocalFile = fileUrl.isLocalFile();
-        KTemporaryFile* tmpFile = bLocalFile ? 0 : new KTemporaryFile();
+        QTemporaryFile* tmpFile = bLocalFile ? 0 : new QTemporaryFile();
         if( bLocalFile || tmpFile->open() ) {
             QFile file( bLocalFile ? fileUrl.path() : tmpFile->fileName() );
             if ( file.open( QIODevice::ReadWrite ) ) {

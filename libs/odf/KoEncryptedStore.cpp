@@ -39,7 +39,7 @@
 #include <kmessagebox.h>
 #include <kzip.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kdebug.h>
 
 struct KoEncryptedStore_EncryptionData {
@@ -124,7 +124,7 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
         m_pZip = new KZip(d->localFileName);
     } else {
         d->fileMode = KoStorePrivate::RemoteWrite;
-        m_tempFile = new KTemporaryFile();
+        m_tempFile = new QTemporaryFile();
         if (!m_tempFile->open()) {
             d->good = false;
         } else {

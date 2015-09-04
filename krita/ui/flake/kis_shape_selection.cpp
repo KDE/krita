@@ -25,7 +25,7 @@
 #include <kundo2command.h>
 #include <QMimeData>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 #include <KoShapeStroke.h>
 #include <KoPathShape.h>
@@ -130,7 +130,7 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
-    KTemporaryFile masterStyles;
+    QTemporaryFile masterStyles;
     masterStyles.open();
     KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
 
@@ -152,7 +152,7 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     masterPage.addAttribute("style:page-layout-name", layoutName);
     mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
 
-    KTemporaryFile contentTmpFile;
+    QTemporaryFile contentTmpFile;
     contentTmpFile.open();
     KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
 

@@ -219,8 +219,8 @@ QVector<Tile> generateTiles(int size,
 #endif
 
     // the 256 are used to make sure that we have a good alignment no matter what build options are used.
-    const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), 256ul);
-    const size_t maskAlignment = qMax(size_t(vecSize), 256ul);
+    const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), size_t(256));
+    const size_t maskAlignment = qMax(size_t(vecSize), size_t(256));
     for (int i = 0; i < size; i++) {
         void *ptr = NULL;
         int error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);

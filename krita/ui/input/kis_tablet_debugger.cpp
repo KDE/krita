@@ -30,16 +30,6 @@ inline QString button(const QWheelEvent &ev) {
     return "-";
 }
 
-inline QString button(const QTabletEvent &ev) {
-    Q_UNUSED(ev);
-    return "-";
-}
-
-inline QString buttons(const QTabletEvent &ev) {
-    Q_UNUSED(ev);
-    return "-";
-}
-
 template <class T>
 QString button(const T &ev) {
     return QString::number(ev.button());

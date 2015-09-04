@@ -52,7 +52,6 @@
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
-#include <ktoolinvocation.h>
 #include <kaction.h>
 
 // Calligra
@@ -251,26 +250,6 @@ void ThemeManager::populateThemeMenu()
     }
 
     updateCurrentKDEdefaultThemePreview();
-
-#ifdef HAVE_X11
-    d->themeMenuAction->addSeparator();
-    KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
-    config->setIcon(koIcon("preferences-desktop-theme"));
-    d->themeMenuAction->addAction(config);
-
-    connect(config, SIGNAL(triggered()),
-            this, SLOT(slotConfigColors()));
-#endif
-}
-
-void ThemeManager::slotConfigColors()
-{
-    int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
-    if (ret > 0)
-    {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot start Colors Settings panel from KDE Control Center. "
-                                                     "Please check your system..."));
-    }
 }
 
 void ThemeManager::updateCurrentKDEdefaultThemePreview()

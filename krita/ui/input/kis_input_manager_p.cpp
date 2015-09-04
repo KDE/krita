@@ -33,6 +33,7 @@
 
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
+    , canvas(0)
     , toolProxy(0)
     , forwardAllEventsToTool(false)
     , ignoreQtCursorEvents(false)
@@ -57,9 +58,16 @@ KisInputManager::Private::Private(KisInputManager *qq)
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
+    setupActions();
+    canvasSwitcher = new CanvasSwitcher(this, q);
 }
 
 
+
+KisInputManager::Private::~Private()
+{
+    delete canvasSwitcher;
+}
 
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
     : QObject(p),

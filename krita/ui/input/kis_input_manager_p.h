@@ -48,10 +48,11 @@
 #include "kis_abstract_input_action.h"
 
 
-class Q_DECL_HIDDEN KisInputManager::Private
+class KisInputManager::Private
 {
 public:
     Private(KisInputManager *qq);
+    ~Private();
     bool tryHidePopupPalette();
     void saveTabletEvent(const QTabletEvent *event);
     void resetSavedTabletEvent(QEvent::Type type);

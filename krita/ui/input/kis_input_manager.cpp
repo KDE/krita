@@ -79,11 +79,6 @@ uint qHash(QPointer<T> value) {
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
 {
-    d->canvas = 0;
-    d->toolProxy = 0;
-
-    d->setupActions();
-
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
@@ -93,8 +88,6 @@ KisInputManager::KisInputManager(QObject *parent)
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
 #endif
-
-    d->canvasSwitcher = new Private::CanvasSwitcher(d, this);
 }
 
 KisInputManager::~KisInputManager()

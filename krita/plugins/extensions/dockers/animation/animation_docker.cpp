@@ -233,15 +233,18 @@ void AnimationDocker::slotPreviousFrame()
 {
     if (!m_canvas) return;
 
-    int time = m_canvas->image()->animationInterface()->currentTime() - 1;
-    m_canvas->image()->animationInterface()->requestTimeSwitchWithUndo(time);
+    int time = m_canvas->image()->animationInterface()->currentUITime() - 1;
+
+    if (time >= 0) {
+        m_canvas->image()->animationInterface()->requestTimeSwitchWithUndo(time);
+    }
 }
 
 void AnimationDocker::slotNextFrame()
 {
     if (!m_canvas) return;
 
-    int time = m_canvas->image()->animationInterface()->currentTime() + 1;
+    int time = m_canvas->image()->animationInterface()->currentUITime() + 1;
     m_canvas->image()->animationInterface()->requestTimeSwitchWithUndo(time);
 }
 

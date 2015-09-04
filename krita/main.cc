@@ -28,6 +28,8 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QDate>
+#include <QLoggingCategory>
+
 #include <kis_debug.h>
 
 #include <kcmdlineargs.h>
@@ -74,6 +76,10 @@ extern "C" int main(int argc, char **argv)
 #if defined Q_OS_WIN
     SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
 #endif
+
+    // Disable all debug output by default
+    QLoggingCategory::setFilterRules("log_pigment=false");
+    QLoggingCategory::setFilterRules("*=false");
 
     int state;
     K4AboutData *aboutData = KisFactory::aboutData();

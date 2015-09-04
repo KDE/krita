@@ -72,8 +72,10 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
 {
     bool ignoreEvent = true;
 
-    if (modifiers == Qt::ControlModifier) {
-        m_sourceNode = currentNode;
+    if (modifiers & Qt::ControlModifier) {
+        if (!m_sourceNode || !(modifiers & Qt::AltModifier)) {
+            m_sourceNode = currentNode;
+        }
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
         ignoreEvent = false;

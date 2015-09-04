@@ -99,8 +99,7 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
     if (shortcut == ActivateShortcut || shortcut == LineToolShortcut) {
         d->active =
             inputManager()->toolProxy()->forwardEvent(
-                KisToolProxy::BEGIN, KisTool::Primary, event, event,
-                inputManager()->lastTabletEvent());
+                KisToolProxy::BEGIN, KisTool::Primary, event, event);
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
@@ -128,8 +127,7 @@ void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
         inputManager()->toolProxy()->
-            forwardEvent(KisToolProxy::END, KisTool::Primary, event, event,
-                         inputManager()->lastTabletEvent());
+            forwardEvent(KisToolProxy::END, KisTool::Primary, event, event);
 
         d->active = false;
     }
@@ -143,8 +141,7 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 
 
     inputManager()->toolProxy()->
-        forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
-                     inputManager()->lastTabletEvent());
+        forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event);
 }
 
 void KisToolInvocationAction::processUnhandledEvent(QEvent* event)

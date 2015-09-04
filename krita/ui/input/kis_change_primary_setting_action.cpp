@@ -64,9 +64,7 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
     if (event) {
         QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
 
-        inputManager()->toolProxy()->forwardEvent(
-            KisToolProxy::BEGIN, KisTool::AlternateChangeSize, &targetEvent, event,
-            inputManager()->lastTabletEvent());
+        inputManager()->toolProxy()->forwardEvent(KisToolProxy::BEGIN, KisTool::AlternateChangeSize, &targetEvent, event);
     }
 }
 
@@ -74,10 +72,7 @@ void KisChangePrimarySettingAction::end(QEvent *event)
 {
     if (event) {
         QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-
-        inputManager()->toolProxy()->forwardEvent(
-            KisToolProxy::END, KisTool::AlternateChangeSize, &targetEvent, event,
-            inputManager()->lastTabletEvent());
+        inputManager()->toolProxy()->forwardEvent(KisToolProxy::END, KisTool::AlternateChangeSize, &targetEvent, event);
     }
 
     KisAbstractInputAction::end(event);
@@ -88,9 +83,6 @@ void KisChangePrimarySettingAction::inputEvent(QEvent* event)
     // Is there a reason to restrict to only mouse and tablet events?
     if (event && (event->type() != QEvent::MouseMove && event->type() != QEvent::TabletMove)) {
         QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
-
-        inputManager()->toolProxy()->forwardEvent(
-            KisToolProxy::CONTINUE, KisTool::AlternateChangeSize, &targetEvent, event,
-            inputManager()->lastTabletEvent());
+        inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, KisTool::AlternateChangeSize, &targetEvent, event);
     }
 }

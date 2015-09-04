@@ -48,9 +48,6 @@ class KisInputManager;
  *    will be of QMouseEvent type, representing the event happened.
  *    All the mouse move events between begin() and end() will be
  *    redirected to the inputEvent() method.
- *
- *    You can fetch the QTabletEvent data for the current mouse event
- *    with inputManager()->lastTabletEvent().
  */
 class KRITAUI_EXPORT KisAbstractInputAction
 {

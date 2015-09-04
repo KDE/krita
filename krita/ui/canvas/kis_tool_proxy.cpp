@@ -78,19 +78,31 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
     return KoPointerEvent(&fakeEvent, QPointF());
 }
 
-void KisToolProxy::forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent)
+void KisToolProxy::forwardHoverEvent(QEvent *event)
 {
-    if (lastTabletEvent) {
-        QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos());
-        this->tabletEvent(lastTabletEvent, docPoint);
-    } else {
-        KIS_ASSERT_RECOVER_RETURN(mouseEvent->type() == QEvent::MouseMove);
+    switch (event->type()) {
+    case QEvent::TabletMove: {
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        QPointF docPoint = widgetToDocument(tabletEvent->posF());
+        this->tabletEvent(tabletEvent, docPoint);
+        return;
+    }
+
+    case QEvent::MouseMove: {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         QPointF docPoint = widgetToDocument(mouseEvent->posF());
         mouseMoveEvent(mouseEvent, docPoint);
+        return;
+    }
+
+    default: {
+        qWarning() << "forwardHoverEvent encountered unknown event type.";
+        return;
+    }
     }
 }
 
-bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent)
+bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent)
 {
     bool retval = true;
 
@@ -115,27 +127,19 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
             this->touchEvent(touchEvent);
         }
     } else if (mouseEvent) {
-        if (lastTabletEvent) {
-            QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos());
-            lastTabletEvent->accept();
-            this->tabletEvent(lastTabletEvent, docPoint);
-            forwardToTool(state, action, lastTabletEvent, docPoint);
-            retval = lastTabletEvent->isAccepted();
-        } else {
-            QPointF docPoint = widgetToDocument(mouseEvent->posF());
-            mouseEvent->accept();
-            if (mouseEvent->type() == QEvent::MouseButtonPress) {
-                mousePressEvent(mouseEvent, docPoint);
-            } else if (mouseEvent->type() == QEvent::MouseButtonDblClick) {
-                mouseDoubleClickEvent(mouseEvent, docPoint);
-            } else if (mouseEvent->type() == QEvent::MouseButtonRelease) {
-                mouseReleaseEvent(mouseEvent, docPoint);
-            } else if (mouseEvent->type() == QEvent::MouseMove) {
-                mouseMoveEvent(mouseEvent, docPoint);
-            }
-            forwardToTool(state, action, originalEvent, docPoint);
-            retval = mouseEvent->isAccepted();
+        QPointF docPoint = widgetToDocument(mouseEvent->posF());
+        mouseEvent->accept();
+        if (mouseEvent->type() == QEvent::MouseButtonPress) {
+            mousePressEvent(mouseEvent, docPoint);
+        } else if (mouseEvent->type() == QEvent::MouseButtonDblClick) {
+            mouseDoubleClickEvent(mouseEvent, docPoint);
+        } else if (mouseEvent->type() == QEvent::MouseButtonRelease) {
+            mouseReleaseEvent(mouseEvent, docPoint);
+        } else if (mouseEvent->type() == QEvent::MouseMove) {
+            mouseMoveEvent(mouseEvent, docPoint);
         }
+        forwardToTool(state, action, originalEvent, docPoint);
+        retval = mouseEvent->isAccepted();
     } else if(event->type() == QEvent::KeyPress) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
         keyPressEvent(kevent);

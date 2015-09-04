@@ -65,17 +65,14 @@ uint qHash(QPointer<T> value) {
     return reinterpret_cast<quintptr>(value.data());
 }
 
-#define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
-#define stop_ignore_cursor_events() d->ignoreQtCursorEvents = false
-#define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) break;
 
-#define push_and_stop_ignore_cursor_events() bool __saved_ignore_events = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
-#define pop_ignore_cursor_events() d->ignoreQtCursorEvents = __saved_ignore_events
+#define start_ignore_cursor_events() d->blockMouseEvents()
+#define stop_ignore_cursor_events() d->allowMouseEvents()
 
-// Note: this is placeholder logic!
-#define touch_stop_block_press_events() d->blockMouseEvents()
-#define touch_start_block_press_events() d->blockMouseEvents()
-#define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
+// Note: this is placeholder!
+#define touch_stop_block_press_events()  //d->blockMouseEvents()
+#define touch_start_block_press_events()  //d->blockMouseEvents()
+#define break_if_touch_blocked_press_events() // if (d->touchHasBlockedPressEvents) break;
 
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
@@ -163,14 +160,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     bool retval = false;
     if (object != d->eventsReceiver) return retval;
 
-    if (!d->ignoreQtCursorEvents ||
-        (event->type() != QEvent::MouseButtonPress &&
-         event->type() != QEvent::MouseButtonDblClick &&
-         event->type() != QEvent::MouseButtonRelease &&
-         event->type() != QEvent::MouseMove &&
-         event->type() != QEvent::TabletPress &&
-         event->type() != QEvent::TabletMove &&
-         event->type() != QEvent::TabletRelease)) {
+    if (true) {
 
         foreach (QPointer<QObject> filter, d->priorityEventFilter) {
             if (filter.isNull()) {
@@ -193,7 +183,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
-        break_if_should_ignore_cursor_events();
         // break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -205,18 +194,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(mouseEvent->button(), mouseEvent);
         }
-        d->resetSavedTabletEvent(event->type());
         event->setAccepted(retval);
         break;
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
-        break_if_should_ignore_cursor_events();
         // break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
-        d->resetSavedTabletEvent(event->type());
         event->setAccepted(retval);
         break;
     }
@@ -255,15 +241,13 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     }
     case QEvent::MouseMove: {
         d->debugEvent<QMouseEvent, true>(event);
-        break_if_should_ignore_cursor_events();
 
         if (!d->matcher.pointerMoved(event)) {
             //Update the current tool so things like the brush outline gets updated.
-            d->toolProxy->forwardMouseHoverEvent(static_cast<QMouseEvent*>(event), lastTabletEvent());
+            d->toolProxy->forwardHoverEvent(event);
         }
         retval = true;
         event->setAccepted(retval);
-        d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::Wheel: {
@@ -339,13 +323,28 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         stop_ignore_cursor_events();
         break;
-    case QEvent::TabletPress:
-    case QEvent::TabletMove:
     case QEvent::TabletRelease: {
-        d->debugEvent<QTabletEvent, true>(event);
-        break_if_should_ignore_cursor_events();
         // break_if_touch_blocked_press_events();
+        d->debugEvent<QTabletEvent, false>(event);
 
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        retval = d->matcher.buttonReleased(tabletEvent->button(), tabletEvent);
+        retval = true;
+        event->setAccepted(true);
+        stop_ignore_cursor_events();
+        break;
+    }
+
+
+    case QEvent::TabletMove: {
+        d->debugEvent<QTabletEvent, false>(event);
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+
+        if (!d->matcher.pointerMoved(tabletEvent)) {
+            d->toolProxy->forwardHoverEvent(tabletEvent);
+        }
+        retval = true;
+        event->setAccepted(true);
 
         /**
          * The flow of tablet events means the tablet is in the
@@ -354,9 +353,22 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
          * changing focus of the window with tablet in the proximity
          * area)
          */
-        QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
-        d->saveTabletEvent(tabletEvent);
-        event->ignore();
+        start_ignore_cursor_events();
+        break;
+    }
+
+    case QEvent::TabletPress: {
+        d->debugEvent<QTabletEvent, true>(event);
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        if (d->tryHidePopupPalette()) {
+            retval = true;
+        } else {
+            //Make sure the input actions know we are active.
+            KisAbstractInputAction::setInputManager(this);
+            retval = d->matcher.buttonPressed(tabletEvent->button(), tabletEvent);
+        }
+        event->setAccepted(true);
+        retval = true;
         start_ignore_cursor_events();
         break;
     }
@@ -367,7 +379,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        d->resetSavedTabletEvent(event->type());
+        // d->resetSavedTabletEvent(event->type());
         break;
     case QEvent::TouchUpdate:
         touch_start_block_press_events();
@@ -375,14 +387,14 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         retval = d->matcher.touchUpdateEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        d->resetSavedTabletEvent(event->type());
+        // d->resetSavedTabletEvent(event->type());
         break;
     case QEvent::TouchEnd:
         touch_stop_block_press_events();
         d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        d->resetSavedTabletEvent(event->type());
+        // d->resetSavedTabletEvent(event->type());
         delete d->lastTouchEvent;
         d->lastTouchEvent = 0;
         break;
@@ -398,12 +410,9 @@ void KisInputManager::slotCompressedMoveEvent()
 {
     if (d->compressedMoveEvent) {
 
-        push_and_stop_ignore_cursor_events();
         // touch_stop_block_press_events();
 
         (void) d->handleCompressedTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
-
-        pop_ignore_cursor_events();
 
         d->compressedMoveEvent.reset();
         qDebug() << "Compressed move event received.";
@@ -418,11 +427,6 @@ KisCanvas2* KisInputManager::canvas() const
 KisToolProxy* KisInputManager::toolProxy() const
 {
     return d->toolProxy;
-}
-
-QTabletEvent* KisInputManager::lastTabletEvent() const
-{
-    return d->lastTabletEvent;
 }
 
 QTouchEvent *KisInputManager::lastTouchEvent() const

@@ -34,13 +34,6 @@
 #include "kis_signal_compressor.h"
 #include "input/kis_tablet_debugger.h"
 
-
-#define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
-#define stop_ignore_cursor_events() d->ignoreQtCursorEvents = false
-#define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) break;
-
-#define push_and_stop_ignore_cursor_events() bool __saved_ignore_events = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
-#define pop_ignore_cursor_events() d->ignoreQtCursorEvents = __saved_ignore_events
 #include "kis_abstract_input_action.h"
 
 
@@ -50,8 +43,6 @@ public:
     Private(KisInputManager *qq);
     ~Private();
     bool tryHidePopupPalette();
-    void saveTabletEvent(const QTabletEvent *event);
-    void resetSavedTabletEvent(QEvent::Type type);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
     void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
@@ -68,16 +59,12 @@ public:
     KisToolProxy *toolProxy;
 
     bool forwardAllEventsToTool;
-    bool ignoreQtCursorEvents;
+    bool ignoreQtCursorEvents();
 
     bool disableTouchOnCanvas;
     bool touchHasBlockedPressEvents;
 
     KisShortcutMatcher matcher;
-#ifdef HAVE_X11
-    QPointF hiResEventsWorkaroundCoeff;
-#endif
-    QTabletEvent *lastTabletEvent;
     QTouchEvent *lastTouchEvent;
 
     KisToolInvocationAction *defaultInputAction;
@@ -91,14 +78,16 @@ public:
 
     QSet<QPointer<QObject> > priorityEventFilter;
 
+    void blockMouseEvents();
+    void allowMouseEvents();
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event)
     {
       if (!KisTabletDebugger::instance()->debugEnabled()) return;
-      QString msg1 = useBlocking && ignoreQtCursorEvents ? "[BLOCKED] " : "[       ]";
+      QString msg1 = useBlocking && ignoreQtCursorEvents() ? "[BLOCKED] " : "[       ]";
       Event *specificEvent = static_cast<Event*>(event);
-      dbgKrita << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
+      dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
     }
 
     class ProximityNotifier : public QObject

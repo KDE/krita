@@ -112,9 +112,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
     m_d->savedAction = shortcutToToolAction(shortcut);
 
-    inputManager()->toolProxy()->forwardEvent(
-        KisToolProxy::BEGIN, m_d->savedAction, &targetEvent, event,
-        inputManager()->lastTabletEvent());
+    inputManager()->toolProxy()->forwardEvent(KisToolProxy::BEGIN, m_d->savedAction, &targetEvent, event);
 }
 
 void KisAlternateInvocationAction::end(QEvent *event)
@@ -135,9 +133,7 @@ void KisAlternateInvocationAction::end(QEvent *event)
     }
 
     QMouseEvent targetEvent = QMouseEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::LeftButton, Qt::LeftButton, modifiers);
-    inputManager()->toolProxy()->forwardEvent(
-        KisToolProxy::END, m_d->savedAction, &targetEvent, event,
-        inputManager()->lastTabletEvent());
+    inputManager()->toolProxy()->forwardEvent(KisToolProxy::END, m_d->savedAction, &targetEvent, event);
 
     KisAbstractInputAction::end(event);
 }
@@ -158,9 +154,7 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
         }
 
         QMouseEvent targetEvent(QEvent::MouseMove, eventPos(event), Qt::LeftButton, Qt::LeftButton, modifiers);
-        inputManager()->toolProxy()->forwardEvent(
-            KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event,
-            inputManager()->lastTabletEvent());
+        inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event);
     }
 
 }

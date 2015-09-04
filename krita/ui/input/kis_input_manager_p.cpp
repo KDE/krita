@@ -31,18 +31,66 @@
 #include "input/kis_tablet_debugger.h"
 
 
+
+// Note: this class is intended to model all event masking logic.
+class EventEater : public QObject
+{
+public:
+    EventEater() : QObject(qApp), hungry(false) {}
+
+    bool eventFilter(QObject* object, QEvent* event )
+    {
+        if (hungry && (event->type() == QEvent::MouseMove ||
+                       event->type() == QEvent::MouseButtonPress ||
+                       event->type() == QEvent::MouseButtonRelease)) {
+            if (KisTabletDebugger::instance()->debugEnabled()) {
+                QString pre = QString("[FILTERED]");
+                QMouseEvent *ev = static_cast<QMouseEvent*>(event);
+                dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    void activate()
+    {
+        if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
+            dbgTablet << "Ignoring mouse events.";
+        hungry = true;
+    }
+
+    void deactivate()
+    {
+        if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
+            dbgTablet << "Accepting mouse events.";
+        hungry = false;
+    }
+
+    bool isActive()
+    {
+        return hungry;
+    }
+
+private:
+    bool hungry;
+};
+
+// Should be Q_GLOBAL_STATIC?
+EventEater *globalEventEater;
+
+bool KisInputManager::Private::ignoreQtCursorEvents()
+{
+    return globalEventEater->isActive();
+}
+
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
     , canvas(0)
     , toolProxy(0)
     , forwardAllEventsToTool(false)
-    , ignoreQtCursorEvents(false)
     , disableTouchOnCanvas(false)
     , touchHasBlockedPressEvents(false)
-#ifdef HAVE_X11
-    , hiResEventsWorkaroundCoeff(1.0, 1.0)
-#endif
-    , lastTabletEvent(0)
     , lastTouchEvent(0)
     , defaultInputAction(0)
     , eventsReceiver(0)
@@ -60,6 +108,8 @@ KisInputManager::Private::Private(KisInputManager *qq)
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
     setupActions();
     canvasSwitcher = new CanvasSwitcher(this, q);
+    globalEventEater = new EventEater();
+    qApp->installEventFilter(globalEventEater);
 }
 
 
@@ -67,6 +117,7 @@ KisInputManager::Private::Private(KisInputManager *qq)
 KisInputManager::Private::~Private()
 {
     delete canvasSwitcher;
+    delete globalEventEater;
 }
 
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
@@ -162,11 +213,11 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
     switch (event->type()) {
     case QEvent::TabletEnterProximity:
         d->debugEvent<QEvent, false>(event);
-        start_ignore_cursor_events();
+        // d->blockMouseEvents();  Qt sends fake mouse events instead of hover events, so disable this for now.
         break;
     case QEvent::TabletLeaveProximity:
         d->debugEvent<QEvent, false>(event);
-        stop_ignore_cursor_events();
+        d->allowMouseEvents();
         break;
     default:
         break;
@@ -334,64 +385,21 @@ inline QPointF multiplyPoints(const QPointF &pt1, const QPointF &pt2) {
 }
 #endif
 
-void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
-{
-    delete lastTabletEvent;
-
-#ifdef HAVE_X11
-    /**
-     * There is a bug in Qt-x11 when working in 2 tablets + 2 monitors
-     * setup. The hiResGlobalPos() value gets scaled wrongly somehow.
-     * Happily, the error is linear (without the offset) so we can simply
-     * scale it a bit.
-     */
-    if (event->type() == QEvent::TabletPress) {
-        if ((event->globalPos() - event->hiResGlobalPos()).manhattanLength() > 4) {
-            hiResEventsWorkaroundCoeff = dividePoints(event->globalPos(), event->hiResGlobalPos());
-        } else {
-            hiResEventsWorkaroundCoeff = QPointF(1.0, 1.0);
-        }
-    }
-#endif
-
-    lastTabletEvent =
-        new QTabletEvent(event->type(),
-                         event->pos(),
-                         event->globalPos(),
-                         // QT5TODO: Qt5's QTabletEvent no longer has a hiResGlobalPos, and we don't know whether this bug still happens in Qt5.
-                         //                          #ifdef HAVE_X11
-                         //                              multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
-                         //                          #else
-                         //                              event->hiResGlobalPos(),
-                         //                          #endif
-                         event->device(),
-                         event->pointerType(),
-                         event->pressure(),
-                         event->xTilt(),
-                         event->yTilt(),
-                         event->tangentialPressure(),
-                         event->rotation(),
-                         event->z(),
-                         event->modifiers(),
-                         event->uniqueId());
-}
-
 void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
 {
     delete lastTouchEvent;
     lastTouchEvent = new QTouchEvent(event->type(), event->device(), event->modifiers(), event->touchPointStates(), event->touchPoints());
 }
 
-void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type /*type*/)
-{
-    /**
-     * On both Windows and Linux each mouse event corresponds to a
-     * single tablet event, so the saved event must be reset after
-     * every mouse-related event
-     */
 
-    delete lastTabletEvent;
-    lastTabletEvent = 0;
+void KisInputManager::Private::blockMouseEvents()
+{
+    globalEventEater->activate();
+}
+
+void KisInputManager::Private::allowMouseEvents()
+{
+    globalEventEater->deactivate();
 }
 
 bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent)
@@ -403,7 +411,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTab
     retval = q->eventFilter(object, tevent);
 
     if (!retval && !tevent->isAccepted()) {
-        qWarning() << "Rejected a compressed tablet event.";
+        dbgTablet << "Rejected a compressed tablet event.";
     }
 
     return retval;

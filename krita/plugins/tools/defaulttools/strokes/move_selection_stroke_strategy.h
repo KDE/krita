@@ -44,6 +44,7 @@ private:
     KisSelectionSP m_selection;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
+    QPoint m_initialDeviceOffset;
 };
 
 #endif /* __MOVE_SELECTION_STROKE_STRATEGY_H */

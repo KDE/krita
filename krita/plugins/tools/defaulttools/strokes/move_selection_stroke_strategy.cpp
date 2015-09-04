@@ -69,6 +69,8 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     indirect->setTemporaryCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER));
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
 
+    m_initialDeviceOffset = QPoint(movedDevice->x(), movedDevice->y());
+
     m_selection->setVisible(false);
 }
 
@@ -128,11 +130,15 @@ void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         KisPaintDeviceSP movedDevice = indirect->temporaryTarget();
 
         QRegion dirtyRegion = movedDevice->region();
-        dirtyRegion |= dirtyRegion.translated(d->offset);
 
-        movedDevice->setX(movedDevice->x() + d->offset.x());
-        movedDevice->setY(movedDevice->y() + d->offset.y());
-        m_finalOffset += d->offset;
+        QPoint currentDeviceOffset(movedDevice->x(), movedDevice->y());
+        QPoint newDeviceOffset(m_initialDeviceOffset + d->offset);
+
+        dirtyRegion |= dirtyRegion.translated(newDeviceOffset - currentDeviceOffset);
+
+        movedDevice->setX(newDeviceOffset.x());
+        movedDevice->setY(newDeviceOffset.y());
+        m_finalOffset = d->offset;
 
         m_paintLayer->setDirty(dirtyRegion);
     } else {

@@ -1331,10 +1331,7 @@ void KoRuler::createGuideToolConnection(KoCanvasBase *canvas)
 {
     Q_ASSERT(canvas);
     KoToolBase *tool = KoToolManager::instance()->toolById(canvas, QLatin1String("GuidesTool_ID"));
-    if (tool == 0) {
-        kWarning(30003) << "No guides tool found, skipping connection";
-        return;
-    }
+    if (!tool) return; // It's perfectly fine to have no guides tool, we don't have to warn the user about it
     connect(this, SIGNAL(guideLineCreated(Qt::Orientation,qreal)),
         tool, SLOT(createGuideLine(Qt::Orientation,qreal)));
 }

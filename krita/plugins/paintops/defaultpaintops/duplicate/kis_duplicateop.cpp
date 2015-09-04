@@ -111,7 +111,17 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         realSourceDevice = m_image->projection();
     }
     else {
-        realSourceDevice = m_node->projection();
+        KisNodeSP externalSourceNode = m_settings->sourceNode();
+
+        /**
+         * The saved layer might have been deleted by then, so check if it
+         * still belongs to a graph
+         */
+        if (!externalSourceNode || !externalSourceNode->graphListener()) {
+            externalSourceNode = m_node;
+        }
+
+        realSourceDevice = externalSourceNode->projection();
     }
 
     qreal scale = m_sizeOption.apply(info);

@@ -65,7 +65,7 @@ public:
      * If the tool is supposed to ignore the event, the paint op should return false
      * and if the tool is supposed to use the event, return true.
      */
-    virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers);
+    virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
 
     /**
      * This function is called to set random offsets to the brush whenever the mouse is clicked. It is

@@ -265,7 +265,8 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
                                             event->rotation(),
                                             event->tangentialPressure(),
                                             perspective, 0, 0),
-                        event->modifiers());
+                        event->modifiers(),
+                        currentNode());
     return !paintOpIgnoredEvent;
 }
 

@@ -45,7 +45,7 @@ public:
 
     QPointF offset() const;
     QPointF position() const;
-    virtual bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers);
+    virtual bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
     void activate();
 
     void fromXML(const QDomElement& elt);
@@ -54,11 +54,14 @@ public:
     KisPaintOpSettingsSP clone() const;
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
+    KisNodeWSP sourceNode() const;
+
 public:
 
     QPointF m_offset;
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click
+    KisNodeWSP m_sourceNode;
 };
 
 

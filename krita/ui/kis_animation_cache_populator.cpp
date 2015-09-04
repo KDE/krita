@@ -33,6 +33,9 @@
 #include "kis_update_info.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_idle_watcher.h"
+#include "KisViewManager.h"
+#include "kis_node_manager.h"
+#include "kis_keyframe_channel.h"
 
 
 struct KisAnimationCachePopulator::Private
@@ -161,13 +164,29 @@ struct KisAnimationCachePopulator::Private
     bool tryRequestGeneration()
     {
         // Prioritize the active document
-        KisMainWindow *activeWindow = part->currentMainwindow();
+        KisAnimationFrameCacheSP activeDocumentCache = KisAnimationFrameCacheSP(0);
 
+        KisMainWindow *activeWindow = part->currentMainwindow();
         if (activeWindow && activeWindow->activeView()) {
             KisCanvas2 *activeCanvas = activeWindow->activeView()->canvasBase();
 
             if (activeCanvas && activeCanvas->frameCache()) {
-                bool requested = tryRequestGeneration(activeCanvas->frameCache());
+                activeDocumentCache = activeCanvas->frameCache();
+
+                // Let's skip frames affected by changes to the active node (on the active document)
+                // This avoids constant invalidation and regeneration while drawing
+                KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
+                KisTimeRange skipRange;
+                if (activeNode) {
+                    int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
+
+                    KisKeyframeChannel *channel;
+                    foreach (channel, activeNode->keyframeChannels()) {
+                        skipRange |= channel->affectedFrames(currentTime);
+                    }
+                }
+
+                bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
                 if (requested) return true;
             }
         }
@@ -175,14 +194,19 @@ struct KisAnimationCachePopulator::Private
         QList<KisAnimationFrameCache*> caches = KisAnimationFrameCache::caches();
         KisAnimationFrameCache *cache;
         foreach (cache, caches) {
-            bool requested = tryRequestGeneration(cache);
+            if (cache == activeDocumentCache.data()) {
+                // We already handled this one...
+                continue;
+            }
+
+            bool requested = tryRequestGeneration(cache, KisTimeRange());
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
@@ -196,6 +220,15 @@ struct KisAnimationCachePopulator::Private
             // TODO: optimize check for fully-cached case
 
             for (int frame = currentRange.start(); frame <= currentRange.end(); frame++) {
+                if (skipRange.contains(frame)) {
+                    if (skipRange.isInfinite()) {
+                        break;
+                    } else {
+                        frame = skipRange.end();
+                        continue;
+                    }
+                }
+
                 if (!cache->frameStatus(frame) == KisAnimationFrameCache::Cached) {
                     return regenerate(cache, frame);
                 }

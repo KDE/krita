@@ -68,7 +68,6 @@
 #include <QTemporaryFile>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
-#include <ktoolinvocation.h>
 #include <kurlcombobox.h>
 #include <kurl.h>
 #include <kmainwindow.h>
@@ -1571,63 +1570,6 @@ void KisMainWindow::slotProgress(int value)
 void KisMainWindow::setMaxRecentItems(uint _number)
 {
     d->recentFiles->setMaxItems(_number);
-}
-
-void KisMainWindow::slotEmailFile()
-{
-    if (!d->activeView || !d->activeView->document())
-        return;
-
-    // Subject = Document file name
-    // Attachment = The current file
-    // Message Body = The current document in HTML export? <-- This may be an option.
-    QString theSubject;
-    QStringList urls;
-    QString fileURL;
-    if (d->activeView->document()->url().isEmpty() ||
-            d->activeView->document()->isModified()) {
-        //Save the file as a temporary file
-        bool const tmp_modified = d->activeView->document()->isModified();
-        KUrl const tmp_url = d->activeView->document()->url();
-        QByteArray const tmp_mimetype = d->activeView->document()->outputMimeType();
-
-        // a little open, close, delete dance to make sure we have a nice filename
-        // to use, but won't block windows from creating a new file with this name.
-        QTemporaryFile *tmpfile = new QTemporaryFile();
-        tmpfile->open();
-        QString fileName = tmpfile->fileName();
-        tmpfile->close();
-        delete tmpfile;
-
-        KUrl u;
-        u.setPath(fileName);
-        d->activeView->document()->setUrl(u);
-        d->activeView->document()->setModified(true);
-        d->activeView->document()->setOutputMimeType(d->activeView->document()->nativeFormatMimeType());
-
-        saveDocument(d->activeView->document(), false, true);
-
-        fileURL = fileName;
-        theSubject = i18n("Document");
-        urls.append(fileURL);
-
-        d->activeView->document()->setUrl(tmp_url);
-        d->activeView->document()->setModified(tmp_modified);
-        d->activeView->document()->setOutputMimeType(tmp_mimetype);
-    } else {
-        fileURL = d->activeView->document()->url().url();
-        theSubject = i18n("Document - %1", d->activeView->document()->url().fileName(KUrl::ObeyTrailingSlash));
-        urls.append(fileURL);
-    }
-
-    kDebug(30003) << "(" << fileURL << ")";
-
-    if (!fileURL.isEmpty()) {
-        KToolInvocation::invokeMailer(QString(), QString(), QString(), theSubject,
-                                      QString(), //body
-                                      QString(),
-                                      urls); // attachments
-    }
 }
 
 void KisMainWindow::slotReloadFile()

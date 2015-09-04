@@ -86,8 +86,7 @@ void KisSelectLayerAction::begin(int shortcut, QEvent *event)
 
 void KisSelectLayerAction::inputEvent(QEvent *event)
 {
-    QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+    if (event && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove)) {
         QPoint pos =
             inputManager()->canvas()->
             coordinatesConverter()->widgetToImage(eventPosF(event)).toPoint();

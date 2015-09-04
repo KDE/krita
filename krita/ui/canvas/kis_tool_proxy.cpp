@@ -18,6 +18,7 @@
 
 #include "kis_tool_proxy.h"
 #include "kis_canvas2.h"
+#include "input/kis_tablet_debugger.h"
 
 #include <KoToolProxy_p.h>
 
@@ -98,7 +99,7 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     if (tabletEvent) {
-        QPointF docPoint = tabletToDocument(tabletEvent->hiResGlobalPos());
+        QPointF docPoint = tabletToDocument(tabletEvent->globalPosF());
         tabletEvent->accept();
         this->tabletEvent(tabletEvent, docPoint);
         forwardToTool(state, action, tabletEvent, docPoint);

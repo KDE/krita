@@ -18,6 +18,7 @@
 
 #include "kis_shortcut_matcher.h"
 
+#include <QEvent>
 #include <QMouseEvent>
 #include <QTabletEvent>
 
@@ -154,7 +155,7 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
     return false;
 }
 
-bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *event)
+bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
 {
     DEBUG_BUTTON_ACTION("entered", button);
 
@@ -181,7 +182,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *even
     return retval;
 }
 
-bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *event)
+bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
 {
     DEBUG_BUTTON_ACTION("entered", button);
 
@@ -217,7 +218,7 @@ bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAc
     return tryRunWheelShortcut(wheelAction, event);
 }
 
-bool KisShortcutMatcher::mouseMoved(QMouseEvent *event)
+bool KisShortcutMatcher::pointerMoved(QEvent *event)
 {
     if (m_d->usingTouch || !m_d->runningShortcut) {
         return false;
@@ -383,7 +384,7 @@ void KisShortcutMatcher::prepareReadyShortcuts()
     }
 }
 
-bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QMouseEvent* event )
+bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* event )
 {
     KisStrokeShortcut *goodCandidate = 0;
 
@@ -439,7 +440,7 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
     }
 }
 
-bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QMouseEvent* event )
+bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* event )
 {
     Q_ASSERT(m_d->runningShortcut);
     Q_ASSERT(!m_d->readyShortcut);

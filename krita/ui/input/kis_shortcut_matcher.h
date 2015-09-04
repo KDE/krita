@@ -24,6 +24,7 @@
 #include <QList>
 #include "kis_single_action_shortcut.h"
 
+class QEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
@@ -125,26 +126,26 @@ public:
     bool keyReleased(Qt::Key key);
 
     /**
-     * Handles the mouse button press event
+     * Handles button presses from a tablet or mouse.
      *
-     * \param button the button that has been pressed
-     * \param event the event that caused this call
+     * \param event the event that caused this call.
+     * Must be of type QTabletEvent or QMouseEvent.
      *
      * \return whether the event has been handled successfully and
      * should be eaten by the events filter
      */
-    bool buttonPressed(Qt::MouseButton button, QMouseEvent *event);
+    bool buttonPressed(Qt::MouseButton button, QEvent *event);
 
     /**
      * Handles the mouse button release event
      *
-     * \param button the button that has been pressed
-     * \param event the event that caused this call
+     * \param event the event that caused this call.
+     * Must be of type QTabletEvent or QMouseEvent.
      *
      * \return whether the event has been handled successfully and
      * should be eaten by the events filter
      */
-    bool buttonReleased(Qt::MouseButton button, QMouseEvent *event);
+    bool buttonReleased(Qt::MouseButton button, QEvent *event);
 
     /**
      * Handles the mouse wheel event
@@ -155,14 +156,14 @@ public:
     bool wheelEvent(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
 
     /**
-     * Handles the mouse move event
+     * Handles tablet and mouse move events.
      *
      * \param event the event that caused this call
      *
      * \return whether the event has been handled successfully and
      * should be eaten by the events filter
      */
-    bool mouseMoved(QMouseEvent *event);
+    bool pointerMoved(QEvent *event);
 
     /**
      * Handle cursor's Enter event.
@@ -214,9 +215,9 @@ private:
 
     void prepareReadyShortcuts();
 
-    bool tryRunReadyShortcut( Qt::MouseButton button, QMouseEvent* event );
+    bool tryRunReadyShortcut( Qt::MouseButton button, QEvent* event );
     void tryActivateReadyShortcut();
-    bool tryEndRunningShortcut( Qt::MouseButton button, QMouseEvent* event );
+    bool tryEndRunningShortcut( Qt::MouseButton button, QEvent* event );
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);

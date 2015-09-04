@@ -17,6 +17,7 @@
  */
 
 
+#include <QList>
 #include <QPointer>
 #include <QSet>
 #include <QEvent>
@@ -45,6 +46,7 @@
 #define touch_start_block_press_events() d->touchHasBlockedPressEvents = d->disableTouchOnCanvas
 #define touch_stop_block_press_events() d->touchHasBlockedPressEvents = false
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
+#include "kis_abstract_input_action.h"
 
 
 class Q_DECL_HIDDEN KisInputManager::Private

@@ -22,8 +22,6 @@
 
 #include <kis_debug.h>
 #include <QQueue>
-#include <QMessageBox>
-
 #include <klocalizedstring.h>
 #include <QApplication>
 

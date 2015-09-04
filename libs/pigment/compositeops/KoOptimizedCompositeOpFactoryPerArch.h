@@ -34,6 +34,9 @@ class KoOptimizedCompositeOpAlphaDarken32;
 template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver32;
 
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpOver128;
+
 template<template<Vc::Implementation I> class CompositeOp>
 struct KoOptimizedCompositeOpFactoryPerArch
 {

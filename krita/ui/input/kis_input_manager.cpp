@@ -115,17 +115,6 @@ void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
 void KisInputManager::toggleTabletLogger()
 {
     KisTabletDebugger::instance()->toggleDebugging();
-
-    bool enabled = KisTabletDebugger::instance()->debugEnabled();
-    QMessageBox::information(0, i18nc("@title:window", "Krita"), enabled ?
-                                 i18n("Tablet Event Logging Enabled") :
-                                 i18n("Tablet Event Logging Disabled"));
-    if (enabled) {
-        dbgKrita << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
-    }
-    else {
-        dbgKrita << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
-    }
 }
 
 void KisInputManager::attachPriorityEventFilter(QObject *filter)

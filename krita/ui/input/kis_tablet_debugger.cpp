@@ -19,9 +19,11 @@
 #include "kis_tablet_debugger.h"
 
 #include <QEvent>
-#include <kis_debug.h>
+#include <QMessageBox>
 
+#include <kis_debug.h>
 #include <kglobal.h>
+#include <QMessageBox>
 
 inline QString button(const QWheelEvent &ev) {
     Q_UNUSED(ev);
@@ -51,8 +53,8 @@ QString buttons(const T &ev) {
 template <class Event>
     void dumpBaseParams(QTextStream &s, const Event &ev, const QString &prefix)
 {
-    s << qSetFieldWidth(10) << left << prefix << reset << " ";
-    s << qSetFieldWidth(17) << left << exTypeToString(ev.type()) << reset;
+    s << qSetFieldWidth(5)  << left << prefix << reset << " ";
+    s << qSetFieldWidth(17) << left << KisTabletDebugger::exTypeToString(ev.type()) << reset;
 }
 
 template <class Event>
@@ -64,7 +66,7 @@ template <class Event>
     s << "gpos: "  << qSetFieldWidth(4) << ev.globalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalY() << qSetFieldWidth(0) << " ";
 }
 
-QString exTypeToString(QEvent::Type type) {
+QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
     return
         type == QEvent::TabletEnterProximity ? "TabletEnterProximity" :
         type == QEvent::TabletLeaveProximity ? "TabletLeaveProximity" :
@@ -103,6 +105,15 @@ KisTabletDebugger* KisTabletDebugger::instance()
 void KisTabletDebugger::toggleDebugging()
 {
     m_debugEnabled = !m_debugEnabled;
+    QMessageBox::information(0, i18nc("@title:window", "Krita"), m_debugEnabled ?
+                             i18n("Tablet Event Logging Enabled") :
+                             i18n("Tablet Event Logging Disabled"));
+    if (m_debugEnabled) {
+        dbgKrita << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
+    }
+    else {
+        dbgKrita << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+    }
 }
 
 bool KisTabletDebugger::debugEnabled() const

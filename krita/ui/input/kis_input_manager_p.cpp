@@ -27,7 +27,7 @@
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 #include "kis_input_profile_manager.h"
-#include "kis_input_profile_manager.h"
+#include "input/kis_tablet_debugger.h"
 
 
 KisInputManager::Private::Private(KisInputManager *qq)

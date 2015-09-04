@@ -29,9 +29,11 @@
 #include <kis_debug.h>
 #define DEBUG_ACTION(action) dbgKrita << __FUNCTION__ << ":" << action;
 #define DEBUG_BUTTON_ACTION(action, button) dbgKrita << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#define DEBUG_EVENT_ACTION(action, event) if (event) {dbgKrita << __FUNCTION__ << ":" << action << "type:" << event->type();}
 #else
 #define DEBUG_ACTION(action)
 #define DEBUG_BUTTON_ACTION(action, button)
+#define DEBUG_EVENT_ACTION(action, event)
 #endif
 
 
@@ -207,7 +209,10 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *eve
 
 bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    if (m_d->runningShortcut || m_d->usingTouch) return false;
+    if (m_d->runningShortcut || m_d->usingTouch) {
+        DEBUG_ACTION("Wheel event canceled.");
+        return false;
+    }
 
     return tryRunWheelShortcut(wheelAction, event);
 }
@@ -336,10 +341,14 @@ bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key, QKeyEvent *event)
     return tryRunSingleActionShortcutImpl(key, event, filteredKeys);
 }
 
+// Note: sometimes event can be zero!!
 template<typename T, typename U>
 bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QList<Qt::Key> &keysState)
 {
-    if (m_d->actionsSuppressed()) return false;
+    if (m_d->actionsSuppressed()) {
+        DEBUG_EVENT_ACTION("Event suppressed", event)
+        return false;
+    }
 
     KisSingleActionShortcut *goodCandidate = 0;
 
@@ -352,8 +361,11 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
     }
 
     if (goodCandidate) {
+        DEBUG_EVENT_ACTION("Beginning action for event", event)
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
         goodCandidate->action()->end(0);
+    } else {
+        DEBUG_EVENT_ACTION("Could not match a candidate for event", event)
     }
 
     return goodCandidate;

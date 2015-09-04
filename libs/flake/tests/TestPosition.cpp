@@ -163,4 +163,4 @@ void TestPosition::testSetAndGetRotation()
     QCOMPARE(shape1->rotation(), 184.0);
 }
 
-QTEST_MAIN(TestPosition)
+QTEST_GUILESS_MAIN(TestPosition)

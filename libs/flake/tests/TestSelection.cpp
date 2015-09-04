@@ -126,4 +126,4 @@ void TestSelection::testSize()
     QCOMPARE(selection.size(), QSizeF( 100, 100 ));
 }
 
-QTEST_MAIN(TestSelection)
+QTEST_GUILESS_MAIN(TestSelection)

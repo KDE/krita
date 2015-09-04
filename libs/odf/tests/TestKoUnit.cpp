@@ -158,4 +158,4 @@ void TestKoUnit::testListForUi()
     QCOMPARE(unit.indexInListForUi(listOptions), index);
 }
 
-QTEST_MAIN(TestKoUnit)
+QTEST_GUILESS_MAIN(TestKoUnit)

@@ -191,4 +191,4 @@ void TestColorConversion::testRGBHSL()
     QCOMPARE(b, 0.75f);
 }
 
-QTEST_MAIN(TestColorConversion)
+QTEST_GUILESS_MAIN(TestColorConversion)

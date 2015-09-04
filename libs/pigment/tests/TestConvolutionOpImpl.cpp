@@ -19,7 +19,7 @@
 
 #include "TestConvolutionOpImpl.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "../KoColorSpaceAbstract.h"
 #include "../KoColorSpaceTraits.h"
@@ -218,4 +218,4 @@ void TestConvolutionOpImpl::testOneFullyTransparent()
 }
 
 
-QTEST_KDEMAIN(TestConvolutionOpImpl, NoGUI)
+QTEST_GUILESS_MAIN(TestConvolutionOpImpl)

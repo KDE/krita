@@ -25,7 +25,6 @@
 #include <QStringList>
 #include <QDomElement>
 #include <QList>
-#include <qtest_kde.h>
 
 #include <KoGenStyle.h>
 

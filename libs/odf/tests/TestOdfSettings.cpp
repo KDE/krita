@@ -1,4 +1,4 @@
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QObject>
 
@@ -94,6 +94,6 @@ void TestOdfSettings::testNamedMap()
     QVERIFY(secondView.isNull());
 }
 
-QTEST_KDEMAIN(TestOdfSettings, GUI)
+QTEST_GUILESS_MAIN(TestOdfSettings)
 
 #include <TestOdfSettings.moc>

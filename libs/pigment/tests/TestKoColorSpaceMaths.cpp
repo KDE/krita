@@ -24,4 +24,4 @@ void TestKoColorSpaceMaths::testScaleToA()
     }
 }
 
-QTEST_MAIN(TestKoColorSpaceMaths)
+QTEST_GUILESS_MAIN(TestKoColorSpaceMaths)

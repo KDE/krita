@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 class TestStorage : public QObject
 {
@@ -257,6 +257,6 @@ void TestStorage::storage2()
     QFile::remove(testFile);
 }
 
-QTEST_KDEMAIN(TestStorage, NoGUI)
+QTEST_GUILESS_MAIN(TestStorage)
 #include <TestStorage.moc>
 

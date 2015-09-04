@@ -23,7 +23,6 @@
 
 #include <QObject>
 #include <QPainter>
-#include <qtest_kde.h>
 
 class QTextDocument;
 class KoTextDocumentLayout;

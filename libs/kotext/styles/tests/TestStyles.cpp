@@ -29,6 +29,8 @@
 #include <QTextCursor>
 #include <QTextLength>
 
+#include <QTest>
+
 void TestStyles::testStyleInheritance()
 {
     KoParagraphStyle style1;
@@ -395,4 +397,4 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(QTextFormat::FontItalic), false);
 }
 
-QTEST_KDEMAIN(TestStyles, GUI)
+QTEST_MAIN(TestStyles)

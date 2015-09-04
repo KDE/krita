@@ -21,7 +21,6 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 
@@ -142,4 +141,4 @@ void KoResourceTaggingTest::testReadWriteXML()
     QVERIFY(resources.size() == 0);
 }
 
-QTEST_KDEMAIN(KoResourceTaggingTest, GUI)
+QTEST_MAIN(KoResourceTaggingTest)

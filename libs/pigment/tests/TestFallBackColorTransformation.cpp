@@ -4,7 +4,7 @@
 #include <KoFallBackColorTransformation.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 struct KoDummyColorTransformation : public KoColorTransformation
 {
@@ -54,4 +54,4 @@ void TestFallBackColorTransformation::parametersForward()
   delete fallback;
 }
 
-QTEST_KDEMAIN(TestFallBackColorTransformation, NoGUI)
+QTEST_GUILESS_MAIN(TestFallBackColorTransformation)

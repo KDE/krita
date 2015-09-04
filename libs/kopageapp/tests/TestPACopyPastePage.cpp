@@ -32,7 +32,7 @@
 #include <KoDrag.h>
 #include <KoOdf.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 void TestPACopyPastePage::copyAndPaste( MockDocument * doc, QList<KoPAPageBase *> & pages, KoPAPageBase * after )
@@ -311,4 +311,4 @@ void TestPACopyPastePage::copyPasteMixedPages()
     QVERIFY( doc.pages( true )[1] == master2 );
 }
 
-QTEST_KDEMAIN( TestPACopyPastePage, GUI )
+QTEST_MAIN( TestPACopyPastePage )

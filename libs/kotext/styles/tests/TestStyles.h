@@ -22,7 +22,6 @@
 #define TESTSTYLES_H
 
 #include <QObject>
-#include <qtest_kde.h>
 
 class TestStyles : public QObject
 {

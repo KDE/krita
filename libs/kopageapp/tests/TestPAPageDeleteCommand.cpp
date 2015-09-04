@@ -24,7 +24,7 @@
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestPAPageDeleteCommand::redoUndo()
 {
@@ -190,4 +190,4 @@ void TestPAPageDeleteCommand::redoUndoMultiple()
     QVERIFY(doc.pageByIndex(2, false) == p3);
 }
 
-QTEST_KDEMAIN( TestPAPageDeleteCommand, GUI )
+QTEST_MAIN( TestPAPageDeleteCommand )

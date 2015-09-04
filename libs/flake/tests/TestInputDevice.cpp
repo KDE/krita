@@ -20,7 +20,7 @@
 
 #include "TestInputDevice.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "KoInputDevice.h"
 
 //Tests so the KoInputDevice created is of tablet type
@@ -118,4 +118,4 @@ void TestInputDevice::testEraser()
 }
 
 
-QTEST_KDEMAIN(TestInputDevice, GUI)
+QTEST_MAIN(TestInputDevice)

@@ -18,7 +18,7 @@
 
 #include "KoPropertiesTest.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoProperties.h>
 
 void KoPropertiesTest::testDeserialization()
@@ -141,4 +141,4 @@ void KoPropertiesTest::testPassAround()
 
 }
 
-QTEST_KDEMAIN(KoPropertiesTest, NoGUI)
+QTEST_GUILESS_MAIN(KoPropertiesTest)

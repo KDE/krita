@@ -25,7 +25,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
@@ -88,4 +88,4 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
 }
 
 
-QTEST_KDEMAIN(KoCompositeOpsBenchmark, NoGUI)
+QTEST_GUILESS_MAIN(KoCompositeOpsBenchmark)

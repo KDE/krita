@@ -19,7 +19,7 @@
 
 #include "TestColorConversionSystem.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <DebugPigment.h>
 #include <KoColorProfile.h>
@@ -69,4 +69,4 @@ void TestColorConversionSystem::testGoodConnections()
     QVERIFY2(countFail == failed, QString("%1 tests have fails (it should have been %2)").arg(countFail).arg(failed).toLatin1());
 }
 
-QTEST_KDEMAIN(TestColorConversionSystem, NoGUI)
+QTEST_GUILESS_MAIN(TestColorConversionSystem)

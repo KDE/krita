@@ -327,4 +327,4 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
 }
 
 
-QTEST_MAIN(TestKoColorSpaceAbstract)
+QTEST_GUILESS_MAIN(TestKoColorSpaceAbstract)

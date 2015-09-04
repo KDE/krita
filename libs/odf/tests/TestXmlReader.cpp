@@ -1,4 +1,4 @@
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBuffer>
 #include <QFile>
@@ -2767,6 +2767,6 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
     xmlfile.remove();
 }
 
-QTEST_MAIN(TestXmlReader)
+QTEST_GUILESS_MAIN(TestXmlReader)
 #include <TestXmlReader.moc>
 

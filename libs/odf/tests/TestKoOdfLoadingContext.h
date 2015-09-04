@@ -19,7 +19,7 @@
 #ifndef TESTKOODFLOADINGCONTEXT_H
 #define TESTKOODFLOADINGCONTEXT_H
 
-#include <qtest_kde.h>
+#include <QObject>
 
 class TestKoOdfLoadingContext : public QObject
 {

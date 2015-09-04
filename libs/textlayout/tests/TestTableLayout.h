@@ -21,7 +21,6 @@
 #define TESTTABLELAYOUT_H
 
 #include <QObject>
-#include <qtest_kde.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>

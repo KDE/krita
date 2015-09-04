@@ -68,11 +68,12 @@ QPointF KisDuplicateOpSettings::position() const
     return m_position;
 }
 
-bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt::KeyboardModifiers modifiers)
+bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
 {
     bool ignoreEvent = true;
 
     if (modifiers == Qt::ControlModifier) {
+        m_sourceNode = currentNode;
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
         ignoreEvent = false;
@@ -88,6 +89,10 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
     return ignoreEvent;
 }
 
+KisNodeWSP KisDuplicateOpSettings::sourceNode() const
+{
+    return m_sourceNode;
+}
 
 void KisDuplicateOpSettings::activate()
 {

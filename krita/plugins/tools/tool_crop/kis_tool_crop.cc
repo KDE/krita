@@ -247,7 +247,7 @@ bool KisToolCrop::tryContinueLastCropAction()
     bool result = false;
 
     const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
-    const KisCropSavedExtraData *data;
+    const KisCropSavedExtraData *data = 0;
 
     if ((lastCommand = image()->undoAdapter()->presentCommand()) &&
         (data = dynamic_cast<const KisCropSavedExtraData*>(lastCommand->extraData()))) {

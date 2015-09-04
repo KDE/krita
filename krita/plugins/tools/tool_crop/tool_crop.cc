@@ -39,12 +39,10 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolCropFactory, "kritatoolcrop.json", registerPlugin
 
 
 ToolCrop::ToolCrop(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolCropFactory(QStringList()));
-
-
 }
 
 ToolCrop::~ToolCrop()

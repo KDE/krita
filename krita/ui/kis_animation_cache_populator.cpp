@@ -207,7 +207,11 @@ struct KisAnimationCachePopulator::Private
 
     bool regenerate(KisAnimationFrameCacheSP cache, int frame)
     {
-        KIS_ASSERT_RECOVER(state == WaitingForIdle) { return false; }
+        if (state == WaitingForFrame || state == WaitingForConvertedFrame) {
+            // Already busy, deny request
+            return false;
+        }
+
         KIS_ASSERT_RECOVER_NOOP(QThread::currentThread() == q->thread());
 
         KisImageSP image = cache->image();

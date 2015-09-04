@@ -74,9 +74,6 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
         type == QTabletEvent::TabletMove ? "TabletMove" :
         type == QTabletEvent::TabletPress ? "TabletPress" :
         type == QTabletEvent::TabletRelease ? "TabletRelease" :
-        type == (QEvent::Type) KisTabletEvent::TabletMoveEx ? "TabletMoveEx" :
-        type == (QEvent::Type) KisTabletEvent::TabletPressEx ? "TabletPressEx" :
-        type == (QEvent::Type) KisTabletEvent::TabletReleaseEx ? "TabletReleaseEx" :
         "unknown";
 }
 
@@ -130,6 +127,7 @@ QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &p
 
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
+    s << "Source:" << ev.source();
 
     return string;
 }
@@ -198,11 +196,6 @@ template <class Event>
 }
 
 QString KisTabletDebugger::eventToString(const QTabletEvent &ev, const QString &prefix)
-{
-    return tabletEventToString(ev, prefix);
-}
-
-QString KisTabletDebugger::eventToString(const KisTabletEvent &ev, const QString &prefix)
 {
     return tabletEventToString(ev, prefix);
 }

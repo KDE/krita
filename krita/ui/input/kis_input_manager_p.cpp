@@ -386,22 +386,16 @@ void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type /*type*/)
     lastTabletEvent = 0;
 }
 
-bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEvent *tevent)
+bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent)
 {
     if(object == 0) return false;
 
     bool retval = false;
 
-    QTabletEvent qte = tevent->toQTabletEvent();
-    qte.ignore();
-    retval = q->eventFilter(object, &qte);
-    tevent->setAccepted(qte.isAccepted());
+    retval = q->eventFilter(object, tevent);
 
-    if (!retval && !qte.isAccepted()) {
-        QMouseEvent qme = tevent->toQMouseEvent();
-        qme.ignore();
-        retval = q->eventFilter(object, &qme);
-        tevent->setAccepted(qme.isAccepted());
+    if (!retval && !tevent->isAccepted()) {
+        qWarning() << "Rejected a compressed tablet event.";
     }
 
     return retval;

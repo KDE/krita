@@ -32,7 +32,6 @@
 #include "kis_canvas2.h"
 #include "kis_tool_proxy.h"
 #include "kis_signal_compressor.h"
-#include "kis_tablet_event.h"
 #include "input/kis_tablet_debugger.h"
 
 
@@ -64,7 +63,7 @@ public:
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
     void saveTouchEvent( QTouchEvent* event );
-    bool handleKisTabletEvent(QObject *object, KisTabletEvent *tevent);
+    bool handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent);
 
     KisInputManager *q;
 
@@ -88,7 +87,7 @@ public:
 
     QObject *eventsReceiver;
     KisSignalCompressor moveEventCompressor;
-    QScopedPointer<KisTabletEvent> compressedMoveEvent;
+    QScopedPointer<QTabletEvent> compressedMoveEvent;
     bool testingAcceptCompressedTabletEvents;
     bool testingCompressBrushEvents;
 

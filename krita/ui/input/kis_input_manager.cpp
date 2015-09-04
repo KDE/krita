@@ -55,7 +55,6 @@
 #include "kis_shortcut_configuration.h"
 
 #include <input/kis_tablet_debugger.h>
-#include <input/kis_tablet_event.h>
 #include <kis_signal_compressor.h>
 
 #include "kis_extended_modifiers_mapper.h"
@@ -266,7 +265,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         if (!d->matcher.pointerMoved(event)) {
             //Update the current tool so things like the brush outline gets updated.
-            d->toolProxy->forwardMouseHoverEvent(mouseEvent, lastTabletEvent());
+            d->toolProxy->forwardMouseHoverEvent(static_cast<QMouseEvent*>(event), lastTabletEvent());
         }
         retval = true;
         event->setAccepted(retval);
@@ -353,47 +352,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break_if_should_ignore_cursor_events();
         break_if_touch_blocked_press_events();
 
-        //We want both the tablet information and the mouse button state.
-        //Since QTabletEvent only provides the tablet information, we
-        //save that and then ignore the event so it will generate a mouse
-        //event.
-        QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
-        d->saveTabletEvent(tabletEvent);
-        event->ignore();
-
-        break;
-    }
-    case KisTabletEvent::TabletPressEx:
-    case KisTabletEvent::TabletMoveEx:
-    case KisTabletEvent::TabletReleaseEx: {
-        d->debugEvent<KisTabletEvent, false>(event);
-        stop_ignore_cursor_events();
-        touch_stop_block_press_events();
-
-        KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
-
-        if (tevent->type() == (QEvent::Type)KisTabletEvent::TabletMoveEx &&
-            (!d->matcher.supportsHiResInputEvents() ||
-             d->testingCompressBrushEvents)) {
-
-            d->compressedMoveEvent.reset(new KisTabletEvent(*tevent));
-            d->moveEventCompressor.start();
-
-            /**
-             * On Linux Qt eats the rest of unneeded events if we
-             * ignore the first of the chunk of tablet events. So
-             * generally we should never activate this feature. Only
-             * for testing purposes!
-             */
-            if (d->testingAcceptCompressedTabletEvents) {
-                tevent->setAccepted(true);
-            }
-
-            retval = true;
-        } else {
-            slotCompressedMoveEvent();
-            retval = d->handleKisTabletEvent(object, tevent);
-        }
 
         /**
          * The flow of tablet events means the tablet is in the
@@ -402,16 +360,10 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
          * changing focus of the window with tablet in the proximity
          * area)
          */
+        QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
+        d->saveTabletEvent(tabletEvent);
+        event->ignore();
         start_ignore_cursor_events();
-
-        break;
-    }
-    case KisTabletEvent::TouchProximityInEx: {
-        touch_start_block_press_events();
-        break;
-    }
-    case KisTabletEvent::TouchProximityOutEx: {
-        touch_stop_block_press_events();
         break;
     }
 
@@ -455,11 +407,12 @@ void KisInputManager::slotCompressedMoveEvent()
         push_and_stop_ignore_cursor_events();
         touch_stop_block_press_events();
 
-        (void) d->handleKisTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
+        (void) d->handleCompressedTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
 
         pop_ignore_cursor_events();
 
         d->compressedMoveEvent.reset();
+        qDebug() << "Compressed move event received.";
     }
 }
 

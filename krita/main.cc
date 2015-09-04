@@ -154,16 +154,6 @@ extern "C" int main(int argc, char **argv)
         }
     }
 
-#if defined Q_OS_WIN
-    KisTabletSupportWin tabletSupportWin;
-    tabletSupportWin.init();
-    app.installNativeEventFilter(&tabletSupportWin);
-#elif defined HAVE_X11
-    KisTabletSupportX11 tabletSupportX11;
-    tabletSupportX11.init();
-    app.installNativeEventFilter(&tabletSupportX11);
-#endif
-
 
 #if defined HAVE_OPENGL
     KisOpenGL::initialize();

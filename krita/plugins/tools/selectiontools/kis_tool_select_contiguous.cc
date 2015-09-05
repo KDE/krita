@@ -49,6 +49,9 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
+#include "kis_paint_device.h"
+#include "kis_pixel_selection.h"
+#include "tiles3/kis_hline_iterator.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
         : KisToolSelectBase(canvas,
@@ -105,6 +108,23 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
     image->unlock();
 
+    // If we're not antialiasing, threshold the entire selection
+    if (!antiAliasSelection()) {
+        QRect r = selection->selectedExactRect();
+        if (r.isValid()) {
+            KisHLineIteratorSP selectionIt = selection->pixelSelection()->createHLineIteratorNG(r.x(), r.y(), r.width());
+            for (qint32 y = 0; y < r.height(); y++) {
+                do {
+                    if (selectionIt->rawData()[0] > 0) {
+                        selection->pixelSelection()->colorSpace()->setOpacity(selectionIt->rawData(), OPACITY_OPAQUE_U8, 1);
+                    }
+                } while (selectionIt->nextPixel());
+                selectionIt->nextRow();
+            }
+        }
+    }
+
+
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas || !selection->pixelSelection()) {
         QApplication::restoreOverrideCursor();
@@ -146,7 +166,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-    selectionWidget->disableAntiAliasSelectionOption();
     selectionWidget->disableSelectionModeOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());

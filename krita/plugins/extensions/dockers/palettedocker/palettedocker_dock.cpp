@@ -118,6 +118,7 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
     , m_resourceProvider(0)
+    , m_canvas(0)
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -204,6 +205,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         KisCanvas2 *cv = dynamic_cast<KisCanvas2*>(canvas);
         m_model->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
     }
+    m_canvas = static_cast<KisCanvas2*>(canvas);
 }
 
 
@@ -211,6 +213,7 @@ void PaletteDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_model->setDisplayRenderer(0);
+    m_canvas = 0;
 }
 
 void PaletteDockerDock::unsetResourceServer()
@@ -258,23 +261,24 @@ void PaletteDockerDock::addColorForeground()
 
 void PaletteDockerDock::addColor()
 {
-//    if (m_currentColorSet && m_resourceProvider) {
-//        const KoColorDisplayRendererInterface *displayRenderer =
-//            m_canvas->displayColorConverter()->displayRendererInterface();
+    if (m_currentColorSet && m_resourceProvider) {
 
-//        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
-//        QColor color;
+        const KoColorDisplayRendererInterface *displayRenderer =
+            m_canvas->displayColorConverter()->displayRendererInterface();
 
-//        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
+        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
+        QColor color;
 
-//        if (result == KColorDialog::Accepted) {
-//            KoColorSetEntry newEntry;
-//            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
-//            m_currentColorSet->add(newEntry);
-//            m_currentColorSet->save();
-//            setColorSet(m_currentColorSet); // update model
-//        }
-//    }
+        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
+
+        if (result == KColorDialog::Accepted) {
+            KoColorSetEntry newEntry;
+            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
+            m_currentColorSet->add(newEntry);
+            m_currentColorSet->save();
+            setColorSet(m_currentColorSet); // update model
+        }
+    }
 }
 
 void PaletteDockerDock::removeColor()

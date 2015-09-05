@@ -210,7 +210,8 @@ public:
 
             leftSrcBorder = getLeftSrcNeedBorder(dstStart, line, buffer);
             rightSrcBorder = getRightSrcNeedBorder(dstEnd - 1, line, buffer);
-        } else {
+        }
+        else {
             dstStart = findAntialiasedDstStart(srcLine.end(), filterSupport, line);
             dstEnd = findAntialiasedDstEnd(srcLine.start(), filterSupport, line);
 
@@ -218,10 +219,10 @@ public:
             rightSrcBorder = getRightSrcNeedBorder(dstStart, line, buffer);
         }
 
-        //Q_ASSERT(dstStart < dstEnd);
-        //Q_ASSERT(leftSrcBorder < rightSrcBorder);
-        //Q_ASSERT(leftSrcBorder <= srcLine.start());
-        //Q_ASSERT(srcLine.end() <= rightSrcBorder);
+        if (dstStart >= dstEnd)  return LinePos(dstStart, 0);
+        if (leftSrcBorder >= rightSrcBorder) return LinePos(dstStart, 0);
+        if (leftSrcBorder > srcLine.start()) return LinePos(dstStart, 0);
+        if (srcLine.end() > rightSrcBorder) return LinePos(dstStart, 9);
 
         int pixelSize = m_src->pixelSize();
         KoMixColorsOp *mixOp = m_src->colorSpace()->mixColorsOp();
@@ -278,7 +279,7 @@ public:
         delete[] colors;
         delete[] srcLineBuf;
 
-        return LinePos(dstStart, dstEnd - dstStart);
+        return LinePos(dstStart, qMax(0, dstEnd - dstStart));
     }
 
 private:

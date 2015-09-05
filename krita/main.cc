@@ -79,7 +79,10 @@ extern "C" int main(int argc, char **argv)
 
     // Disable all debug output by default
     QLoggingCategory::setFilterRules("log_pigment=false");
-    QLoggingCategory::setFilterRules("*=false");
+    QLoggingCategory::setFilterRules("*=false\n"
+                                     "krita.tablet=true");
+
+
 
     int state;
     K4AboutData *aboutData = KisFactory::aboutData();

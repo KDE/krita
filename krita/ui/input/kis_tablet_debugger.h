@@ -22,6 +22,7 @@
 #include <QTextStream>
 #include <QTabletEvent>
 #include <input/kis_tablet_event.h>
+#include <QLoggingCategory>
 
 
 class KisTabletDebugger

@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QApplication>
 #include <QScopedPointer>
+#include <QtGlobal>
 
 #include "kis_config.h"
 #include "kis_abstract_input_action.h"

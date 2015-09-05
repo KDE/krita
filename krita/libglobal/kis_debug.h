@@ -36,6 +36,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41008();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41009();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41010();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 
 #define dbgResources qCDebug(_30009)
 #define dbgKrita qCDebug(_41000)
@@ -50,6 +51,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
 #define dbgMath qCDebug(_41009)
 #define dbgRender qCDebug(_41010)
 #define dbgScript qCDebug(_41011)
+#define dbgTablet qCDebug(_41012)
 
 #define infoResources qCInfo(_30009)
 #define infoKrita qCInfo(_41000)
@@ -64,6 +66,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
 #define infoMath qCInfo(_41009)
 #define infoRender qCInfo(_41010)
 #define infoScript qCInfo(_41011)
+#define infoTablet qCInfo(_41012)
 
 #define warnResources qCWarning(_30009)
 #define warnKrita qCWarning(_41000)
@@ -78,6 +81,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
 #define warnMath qCWarning(_41009)
 #define warnRender qCWarning(_41010)
 #define warnScript qCWarning(_41011)
+#define warnTablet qCWarning(_41012)
 
 #define errResources qCCritical(_30009)
 #define errKrita qCCritical(_41000)
@@ -92,6 +96,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
 #define errMath qCCritical(_41009)
 #define errRender qCCritical(_41010)
 #define errScript qCCritical(_41011)
+#define errTablet qCCritical(_41012)
 
 #define fatalResources qCFatal(_30009)
 #define fatalKrita qCFatal(_41000)
@@ -106,6 +111,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
 #define fatalMath qCFatal(_41009)
 #define fatalRender qCFatal(_41010)
 #define fatalScript qCFatal(_41011)
+#define fatalTablet qCFatal(_41012)
 
 
 KRITAGLOBAL_EXPORT QString kisBacktrace();

@@ -4,6 +4,8 @@
 #include <AttributeManager.h>
 #include <KoXmlReader.h>
 
+#include <QTest>
+
 void TestAttributeManager::initTestCase()
 {
     m_attributeManager = new AttributeManager();

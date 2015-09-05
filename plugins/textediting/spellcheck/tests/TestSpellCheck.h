@@ -2,7 +2,6 @@
 #define TESTSPELLCHECK_H
 
 #include <QObject>
-#include <qtest_kde.h>
 
 class TestSpellCheck : public QObject
 {

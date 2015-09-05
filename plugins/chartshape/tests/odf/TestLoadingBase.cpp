@@ -25,9 +25,7 @@
 
 // Qt
 #include <QTextDocument>
-
-// KDE
-#include <qtest_kde.h>
+#include <QDir>
 
 // Calligra
 #include <KoStore.h>

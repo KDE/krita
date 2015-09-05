@@ -21,7 +21,6 @@
 #ifndef _KO_GENERIC_REGISTRY_H_
 #define _KO_GENERIC_REGISTRY_H_
 
-#include <kdebug.h>
 #include <QList>
 #include <QString>
 #include <QHash>

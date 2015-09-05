@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>

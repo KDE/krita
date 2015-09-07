@@ -22,6 +22,7 @@
 #define KIS_TEMPLATE_TREE_H
 
 #include <QList>
+#include <QString>
 #include "kritaui_export.h"
 
 class KisTemplate;

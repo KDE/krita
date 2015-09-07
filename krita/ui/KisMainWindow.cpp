@@ -354,7 +354,7 @@ KisMainWindow::KisMainWindow()
 
     createActions();
 
-    setAutoSaveSettings(KisFactory::componentName(), false);
+    setAutoSaveSettings("krita", false);
 
     KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), viewManager());
 
@@ -1117,7 +1117,7 @@ void KisMainWindow::saveWindowSettings()
     if (!d->activeView || d->activeView->document()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+        KConfigGroup group = KGlobal::config()->group("krita");
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
@@ -1464,7 +1464,7 @@ void KisMainWindow::slotConfigureKeys()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+    KConfigGroup group = KGlobal::config()->group("krita");
     saveMainWindowSettings(group);
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
@@ -1474,7 +1474,7 @@ void KisMainWindow::slotConfigureToolbars()
 
 void KisMainWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
+    applyMainWindowSettings(KGlobal::config()->group("krita"));
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
@@ -1501,7 +1501,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+            KConfigGroup group = KGlobal::config()->group("krita");
             saveMainWindowSettings(group);
         }
     } else
@@ -1676,7 +1676,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             visible = false;
         }
 
-        KConfigGroup group = KGlobal::config()->group(KisFactory::componentName()).group("DockWidget " + factory->id());
+        KConfigGroup group = KGlobal::config()->group("krita").group("DockWidget " + factory->id());
         side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
@@ -1687,7 +1687,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
-        group = KGlobal::config()->group(KisFactory::componentName()).group("DockWidget " + factory->id());
+        group = KGlobal::config()->group("krita").group("DockWidget " + factory->id());
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 

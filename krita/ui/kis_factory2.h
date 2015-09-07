@@ -37,7 +37,6 @@ public:
 
     static K4AboutData *aboutData();
     static const KComponentData &componentData();
-    static const QString componentName();
 
 private:
     static KComponentData *s_componentData;

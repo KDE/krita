@@ -112,7 +112,7 @@ public:
 
 void KisPart::Private::loadActions()
 {
-    actionCollection = new KActionCollection(part, KisFactory::componentName());
+    actionCollection = new KActionCollection(part, "krita");
 
     KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
     QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);

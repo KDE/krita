@@ -86,7 +86,3 @@ const KComponentData &KisFactory::componentData()
     return *s_componentData;
 }
 
-const QString KisFactory::componentName()
-{
-    return "krita";
-}

@@ -46,7 +46,6 @@
 #include <QMoveEvent>
 
 #include <krecentdirs.h>
-#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kactionmenu.h>
@@ -75,7 +74,6 @@
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
-#include <k4aboutdata.h>
 
 #include <KoConfig.h>
 #include "KoDockFactoryBase.h"

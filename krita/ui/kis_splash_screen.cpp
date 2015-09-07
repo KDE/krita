@@ -27,23 +27,20 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
-#include <kaboutdata.h>
-#include <k4aboutdata.h>
 #include <kicon.h>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
-
-    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
-
+    setWindowIcon(koIcon("calligrakrita"));
 
     QString color = "#FFFFFF";
     if (themed && qApp->palette().background().color().value() >100) {

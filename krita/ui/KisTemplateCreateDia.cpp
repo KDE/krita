@@ -49,10 +49,8 @@
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kiconloader.h>
-#include <kaboutdata.h>
 #include <kconfiggroup.h>
 #include <kurl.h>
-#include <k4aboutdata.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;

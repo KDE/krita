@@ -20,8 +20,6 @@
 
 #include <QDialog>
 
-class K4AboutData;
-
 class KisAboutApplication : public QDialog
 {
     Q_OBJECT

@@ -26,7 +26,6 @@
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>

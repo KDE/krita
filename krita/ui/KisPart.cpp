@@ -29,7 +29,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
-#include <KoInteractionTool.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
 #include <kis_icon_utils.h>

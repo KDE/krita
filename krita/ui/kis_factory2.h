@@ -35,7 +35,6 @@ public:
     KisFactory();
     ~KisFactory();
 
-    static K4AboutData *aboutData();
     static const KComponentData &componentData();
 
 private:

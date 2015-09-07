@@ -364,7 +364,7 @@ KisMainWindow::KisMainWindow()
 
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
+        d->helpMenu = new KHelpMenu(this, "Dummy Text That Is Not Used In Frameworks 5", false);
 
         KActionCollection *actions = actionCollection();
         QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
@@ -396,7 +396,7 @@ KisMainWindow::KisMainWindow()
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
-    // KDE libss 4' help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
+    // KDE' libs 4''s help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
     QAction *helpAction = actionCollection()->action("help_contents");
     helpAction->disconnect();
     connect(helpAction, SIGNAL(triggered()), this, SLOT(showManual()));
@@ -1963,7 +1963,7 @@ void KisMainWindow::showErrorAndDie()
 
 void KisMainWindow::showAboutApplication()
 {
-    KisAboutApplication dlg(KisFactory::aboutData(), this);
+    KisAboutApplication dlg(this);
     dlg.exec();
 }
 

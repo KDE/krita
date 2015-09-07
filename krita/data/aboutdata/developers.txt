@@ -1,0 +1,198 @@
+Boudewijn Rempt
+Aaron J. Seigo
+Adam Celarek
+Adam Pigg
+Adriaan de Groot
+Adrian Page
+Adrian Schroeter
+Albert Astals Cid
+Alberto Villa
+Alexander Neundorf
+Alexander Potashev
+Alexis Ménard
+Alfredo Beaumont Sainz
+Allen Winter
+Ana Beatriz Guerrero López
+Andras Mantia
+Andreas Hartmetz
+Andreas Lundin
+André Marcelo Alvarenga
+Andrew Coles
+Andre Woebbeking
+Andrius da Costa Ribas
+Andy Fawcett
+Anne-Marie Mahfouf
+Ariya Hidayat
+Arjen Hiemstra
+Bart Coppens
+Ben Cooksley
+Benjamin K. Stuhl
+Benjamin Meyer
+Benjamin Reed
+Benoît Jacob
+Ben Schleimer
+Bernhard Rosenkraenzer
+Bo Thorsen
+Brad Hards
+Bram Schoenmakers
+Burkhard Lück
+Carlo Segato
+C. Boemann
+Christer Stenbrenden
+Christian Ehrlicher
+Christian Mueller
+Christoph Feck
+Chusslove Illich
+Clarence Dang
+Cyrille Berger
+Daniel M. Duley
+Daniel Molkentin
+Dan Leinir Turthra Jensen
+Dan Meltzer
+Danny Allen
+David Faure
+David Gowers
+Dirk Mueller
+Dirk Schönberger
+Dmitry Kazakov
+Edward Apap
+Elvis Stansvik
+Emanuele Tamponi
+Enrique Matías Sánchez
+Fabian Kosmale
+Frank Osterfeld
+Frederik Schwarzer
+Fredrik Edemar
+Fredy Yanardi
+Friedrich W. H. Kossebau
+Gábor Lehel
+Gary Cramblitt
+Geoffry Song
+Gioele Barabucci
+Giovanni Venturi
+Gopalakrishna Bhat A
+Hanna Scott
+Harald Sitter
+Hasso Tepper
+Helge Deller
+Helio Castro
+Hideki Saito
+Hoàng Đức Hiếu
+Hugo Pereira Da Costa
+Inge Wallin
+Ingo Klöcker
+İsmail Dönmez
+Ivan Yossi
+Jaime
+Jaime Torres
+Jaison Lee
+Jakob Petsovits
+Jakub Stachowski
+Jan Hambrecht
+Jarosław Staniek
+Jens Herden
+Jessica Hall
+Johannes Simon
+John Layt
+Jonathan Riddell
+Jonathan Singer
+José Luis Vergara
+Juan Luis Boya García
+Juan Palacios
+Jure Repinc
+Kai-Uwe Behrmann
+Kevin Krammer
+Kevin Ottens
+Kurt Pfeifle
+Laurent Montel
+Lauri Watts
+Leo Savernik
+Lukáš Tinkl
+Lukáš Tvrdý
+Maciej Mrozowski
+Malcolm Hunter
+Manuel Riecke
+manu tortosa
+Marc Pegon
+Marijn Kruisselbrink
+Martin Ellis
+Martin Gräßlin
+Matthew Woehlke
+Matthias Klumpp
+Matthias Kretz
+Matus Talcik
+Maximiliano Curia
+Melchior Franz
+Michael David Howell
+Michael Drueing
+Michael Thaler
+Michel Hermier
+Mohit Goyal
+Mojtaba Shahi Senobari
+Montel Laurent
+Moritz Molch
+Nick Shaforostoff
+Nicolas Goutte
+Olivier Goffart
+Patrick Julien
+Patrick Spendrin
+Pavel Heimlich
+Peter Simonsson
+Pierre Ducroquet
+Pierre Stirnweiss
+Pino Toscano
+Rafael Fernández López
+Raphael Langerhorst
+Rex Dieter
+Rob Buis
+Roopesh Chander
+Sahil Nagpal
+Salil Kapur
+Samuel Buttigieg
+Sander Koning
+Sascha Suelzer
+Scott Petrovic
+Scott Wheeler
+Sebastian Sauer
+Shivaraman Aiyer
+Siddharth Sharma
+Silvio Heinrich
+Somsubhra Bairi
+Spencer Brown
+Srikanth Tiyyagura
+Stefan Nikolaus
+Stephan Binner
+Stephan Kulow
+Stuart Dickson
+Sune Vuorela
+Sven Langkamp
+Thiago Macieira
+Thomas Capricelli
+Thomas Friedrichsmeier
+Thomas Klausner
+Thomas Nagy
+Thomas Zander
+Thorsten Staerk
+Thorsten Zachmann
+Tim Beaulen
+Timothée Giet
+Tobias Koenig
+Tom Burdick
+Torio Mlshi
+Torsten Rahn
+Unai Garro
+Urs Wolfer
+Vadim Zhukov
+Vera Lukman
+Victor Lafon
+Victor Wåhlström
+Volker Krause
+Waldo Bastian
+Werner Trobin
+Wilco Greven
+Will Entriken
+William Steidtmann
+Wolthera van Hovell
+Yann Bodson
+Yue Liu
+Yuri Chornoivan

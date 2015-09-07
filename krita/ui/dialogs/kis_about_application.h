@@ -26,7 +26,7 @@ class KisAboutApplication : public QDialog
 {
     Q_OBJECT
 public:
-    explicit KisAboutApplication(const K4AboutData *aboutData, QWidget *parent = 0);
+    explicit KisAboutApplication(QWidget *parent = 0);
 
 Q_SIGNALS:
 

@@ -56,19 +56,14 @@ KisFactory::~KisFactory()
     s_componentData = 0;
 }
 
-
-K4AboutData* KisFactory::aboutData()
+const KComponentData &KisFactory::componentData()
 {
     if (!s_aboutData) {
         s_aboutData = newKritaAboutData();
     }
-    return s_aboutData;
-}
 
-const KComponentData &KisFactory::componentData()
-{
     if (!s_componentData) {
-        s_componentData = new KComponentData(aboutData());
+        s_componentData = new KComponentData(s_aboutData);
         Q_CHECK_PTR(s_componentData);
 
     }

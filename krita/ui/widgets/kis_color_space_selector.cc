@@ -40,7 +40,6 @@
 
 #include <QDesktopServices>
 
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 

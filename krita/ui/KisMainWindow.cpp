@@ -1098,8 +1098,6 @@ void KisMainWindow::saveWindowSettings()
     KSharedConfigPtr config = KGlobal::config();
 
     if (d->windowSizeDirty ) {
-
-        // Save window size into the config file of our componentData
         dbgUI << "KisMainWindow::saveWindowSettings";
         KConfigGroup group = config->group("MainWindow");
         saveWindowSize(group);

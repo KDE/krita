@@ -41,7 +41,6 @@
 #include <QTextBrowser>
 #include <QScrollBar>
 
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kurl.h>

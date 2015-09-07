@@ -35,7 +35,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 
 #include "KoColorSpace.h"

@@ -37,7 +37,6 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
-#include "ui/kis_aboutdata.h"
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"

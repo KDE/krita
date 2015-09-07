@@ -32,7 +32,6 @@
 
 #include "../data/splash/splash_screen.xpm"
 #include "kis_splash_screen.h"
-#include "kis_aboutdata.h"
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
     : QDialog(parent)

@@ -73,6 +73,8 @@
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
+#include "KisImportExportManager.h"
+#include "KisDocumentEntry.h"
 
 #include "kis_color_manager.h"
 
@@ -551,7 +553,9 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     if (d->startupWidget) {
         delete d->startupWidget;
     }
-    const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                      KisImportExportManager::Import,
+                                                                      KisDocumentEntry::extraNativeMimeTypes());
 
     d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templatesResourcePath);
     d->startupWidget->setWindowModality(Qt::WindowModal);

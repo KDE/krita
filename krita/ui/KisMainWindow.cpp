@@ -124,7 +124,8 @@
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
 #include "kis_icon_utils.h"
-
+#include <KisImportExportFilter.h>
+#include <KisDocumentEntry.h>
 
 #include "calligraversion.h"
 
@@ -1178,7 +1179,9 @@ void KisMainWindow::slotFileOpen()
     QStringList urls;
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                 KisImportExportManager::Import,
+                                                                 KisDocumentEntry::extraNativeMimeTypes()));
     QStringList filters = dialog.nameFilters();
     filters << i18n("All files (*.*)");
     dialog.setNameFilters(filters);

@@ -31,8 +31,6 @@ class QStringList;
 
 #include <KisImportExportManager.h>
 
-#define koApp KisApplication::koApplication()
-
 /**
  *  @brief Base class for all %Calligra apps
  *
@@ -88,30 +86,8 @@ public:
      */
     void setSplashScreen(QWidget *splash);
 
-    /**
-     * return a list of mimetypes this application supports.
-     */
-    QStringList mimeFilter(KisImportExportManager::Direction direction) const;
-
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
-
-    /**
-     * Returns the current application object.
-     *
-     * This is similar to the global QApplication pointer qApp. It
-     * allows access to the single global KisApplication object, since
-     * more than one cannot be created in the same application. It
-     * saves you the trouble of having to pass the pointer explicitly
-     * to every function that may require it.
-     * @return the current application object
-     */
-    static KisApplication* koApplication();
-
-protected:
-
-    // Current application object.
-    static KisApplication *KoApp;
 
 public Q_SLOTS:
 

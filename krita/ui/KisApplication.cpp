@@ -81,8 +81,6 @@
 #include "opengl/kis_opengl.h"
 #endif
 
-KisApplication* KisApplication::KoApp = 0;
-
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -139,8 +137,6 @@ KisApplication::KisApplication(const QString &key)
     : QtSingleApplication(key, KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv())
     , d(new KisApplicationPrivate)
 {
-    KisApplication::KoApp = this;
-
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
@@ -534,14 +530,6 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
     d->splashScreen = splashScreen;
 }
 
-QStringList KisApplication::mimeFilter(KisImportExportManager::Direction direction) const
-{
-    return KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                              direction,
-                                              KisDocumentEntry::extraNativeMimeTypes());
-}
-
-
 bool KisApplication::notify(QObject *receiver, QEvent *event)
 {
     try {
@@ -557,10 +545,6 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
 
 }
 
-KisApplication *KisApplication::koApplication()
-{
-    return KoApp;
-}
 
 void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
 {

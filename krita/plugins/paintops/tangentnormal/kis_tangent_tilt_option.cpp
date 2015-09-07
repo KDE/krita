@@ -28,7 +28,6 @@
 
 #include "kis_global.h"
 #include <kstandarddirs.h>
-#include "kis_factory2.h"
 
 class KisTangentTiltOptionWidget: public QWidget, public Ui::WdgTangentTiltOptions
 {

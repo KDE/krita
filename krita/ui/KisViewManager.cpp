@@ -91,7 +91,6 @@
 #include "kis_coordinates_converter.h"
 #include <KisDocumentEntry.h>
 #include "KisDocument.h"
-#include "kis_factory2.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
@@ -867,8 +866,7 @@ int KisViewManager::viewCount() const
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
-    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra",
-                                        KisFactory::componentData(), document(), mainWindow());
+    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra", document(), mainWindow());
 }
 
 void KisViewManager::slotCreateCopy()

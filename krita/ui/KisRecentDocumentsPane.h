@@ -43,7 +43,7 @@ public:
      * @param _componentData the instance object for the app
      * @param header string used as header text in the listview
      */
-    KisRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
+    KisRecentDocumentsPane(QWidget* parent, const QString& header);
     ~KisRecentDocumentsPane();
 
 protected Q_SLOTS:

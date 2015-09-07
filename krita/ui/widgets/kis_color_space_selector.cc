@@ -44,7 +44,6 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
-#include "kis_factory2.h"
 #include <kis_debug.h>
 
 #include "ui_wdgcolorspaceselector.h"

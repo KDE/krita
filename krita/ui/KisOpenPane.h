@@ -26,7 +26,6 @@
 
 class KConfig;
 class KisOpenPanePrivate;
-class KComponentData;
 class QPixmap;
 class KisTemplatesPane;
 class KisDetailsPane;
@@ -44,10 +43,9 @@ public:
     /**
      * Constructor
      * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KisOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
+    KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     virtual ~KisOpenPane();
 
     QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);

@@ -41,7 +41,6 @@
 #include "kis_image.h"
 #include "kis_annotation.h"
 #include "kis_config.h"
-#include "kis_factory2.h"
 #include "kis_signal_compressor.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"

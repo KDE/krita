@@ -46,8 +46,6 @@
 #include <kglobal.h>
 #include <kurl.h>
 
-#include "kis_factory2.h"
-
 #include "ui_wdgcolorspaceselectoradvanced.h"
 
 #include <kis_debug.h>

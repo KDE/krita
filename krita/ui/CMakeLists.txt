@@ -98,7 +98,6 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
-    kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
     kis_splash_screen.cpp

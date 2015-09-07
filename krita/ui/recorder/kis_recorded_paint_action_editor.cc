@@ -32,7 +32,6 @@
 
 #include "ui_wdgpaintactioneditor.h"
 #include <KoColorSpaceRegistry.h>
-#include <kis_factory2.h>
 #include <kstandarddirs.h>
 #include "kis_node_query_path_editor.h"
 #include <recorder/kis_node_query_path.h>

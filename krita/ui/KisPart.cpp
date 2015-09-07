@@ -66,7 +66,6 @@
 
 #include "KisView.h"
 #include "KisDocument.h"
-#include "kis_factory2.h"
 #include "kis_config.h"
 #include "kis_clipboard.h"
 #include "kis_custom_image_widget.h"
@@ -523,7 +522,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 #endif
 
     if (!alwaysShow) {
-        KConfigGroup cfgGrp(KisFactory::componentData().config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
             KUrl url(fullTemplateName);
@@ -557,7 +556,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
                                                                       KisImportExportManager::Import,
                                                                       KisDocumentEntry::extraNativeMimeTypes());
 
-    d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templatesResourcePath);
+    d->startupWidget = new KisOpenPane(0, mimeFilter, d->templatesResourcePath);
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
     foreach(const CustomDocumentWidgetItem & item, widgetList) {

@@ -37,8 +37,6 @@
 #include <k4aboutdata.h>
 #include <kicon.h>
 
-#include <kis_factory2.h>
-
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
@@ -59,7 +57,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     chkShowAtStartup->hide();
     connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
 
-    KConfigGroup cfg(KisFactory::componentData().config(), "SplashScreen");
+    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
@@ -85,7 +83,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblVersion->setText(i18n("Version: %1", version));
     lblVersion->setStyleSheet("color:" + color);
 
-    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
+    KConfigGroup cfg2(KGlobal::config(), "RecentFiles");
     int i = 1;
 
     QString recent = i18n("<html>"

@@ -22,7 +22,6 @@
 #include "ui_KisDetailsPaneBase.h"
 
 class QEvent;
-class KComponentData;
 class KUrl;
 class QStandardItemModel;
 
@@ -33,10 +32,8 @@ class KisDetailsPane : public QWidget, public Ui_KisDetailsPaneBase
     Q_OBJECT
 
 public:
-    KisDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
+    KisDetailsPane(QWidget* parent, const QString& header);
     virtual ~KisDetailsPane();
-
-    KComponentData componentData();
 
     virtual bool eventFilter(QObject* watched, QEvent* e);
 

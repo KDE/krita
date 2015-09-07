@@ -69,7 +69,6 @@
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_preference_set_registry.h"
-#include "kis_factory2.h"
 #include "kis_color_manager.h"
 
 #include "slider_and_spin_box_sync.h"

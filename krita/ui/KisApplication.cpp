@@ -63,7 +63,6 @@
 #include "KisDocumentEntry.h"
 #include "KisDocument.h"
 #include "KisMainWindow.h"
-#include "kis_factory2.h"
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 

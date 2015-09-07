@@ -60,7 +60,6 @@
 #include "kis_canvas2.h"
 #include "kis_node_manager.h"
 #include "KisViewManager.h"
-#include "kis_factory2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
 #include "kis_favorite_resource_manager.h"

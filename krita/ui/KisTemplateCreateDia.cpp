@@ -51,8 +51,6 @@
 #include <kiconloader.h>
 #include <kaboutdata.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
-#include <kis_factory2.h>
 #include <kurl.h>
 #include <k4aboutdata.h>
 
@@ -61,9 +59,8 @@ static const int thumbnailExtent = 128;
 
 class KisTemplateCreateDiaPrivate {
 public:
-    KisTemplateCreateDiaPrivate(const KComponentData &componentData, const QString &filePath, const QPixmap &thumbnail)
-         : m_componentData( componentData )
-         , m_filePath(filePath)
+    KisTemplateCreateDiaPrivate(const QString &filePath, const QPixmap &thumbnail)
+         : m_filePath(filePath)
          , m_thumbnail(thumbnail)
     {
         m_tree=0;
@@ -91,7 +88,6 @@ public:
     QTreeWidget *m_groups;
     QPushButton *m_add, *m_remove;
     QCheckBox *m_defaultTemplate;
-    KComponentData m_componentData;
     QString m_filePath;
     QPixmap m_thumbnail;
     bool m_changed;
@@ -104,10 +100,10 @@ public:
  *
  ****************************************************************************/
 
-KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &componentData,
-                                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
+KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
+                                           const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
   : KDialog(parent)
-  , d(new KisTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
+  , d(new KisTemplateCreateDiaPrivate(filePath, thumbnail))
 {
 
     setButtons( KDialog::Ok|KDialog::Cancel );
@@ -140,7 +136,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSortingEnabled(true);
 
-    d->m_tree = new KisTemplateTree(templatesResourcePath, componentData, true);
+    d->m_tree = new KisTemplateTree(templatesResourcePath, true);
     fillGroupTree();
     d->m_groups->sortItems(0, Qt::AscendingOrder);
 
@@ -178,7 +174,8 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts", KisFactory::componentData().aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",
+                                           qApp->applicationDisplayName()));
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);
@@ -210,7 +207,6 @@ void KisTemplateCreateDia::slotSelectionChanged()
 
 void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const char *suffix,
-                                         const KComponentData &componentData,
                                          KisDocument *document, QWidget *parent)
 {
     QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(QLatin1String(suffix)));
@@ -228,7 +224,7 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
 
     const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
 
-    KisTemplateCreateDia *dia = new KisTemplateCreateDia(templatesResourcePath, componentData, fileName, thumbnail, parent);
+    KisTemplateCreateDia *dia = new KisTemplateCreateDia(templatesResourcePath, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
 
@@ -378,7 +374,7 @@ void KisTemplateCreateDia::slotOk() {
     if ( d->m_defaultTemplate->isChecked() )
     {
 
-      KConfigGroup grp( d->m_componentData.config(), "TemplateChooserDialog" );
+      KConfigGroup grp(KGlobal::config(), "TemplateChooserDialog");
       grp.writeEntry( "LastReturnType", "Template" );
       grp.writePathEntry( "FullTemplateName", dir + '/' + t->file() );
       grp.writePathEntry( "AlwaysUseTemplate", dir + '/' + t->file() );

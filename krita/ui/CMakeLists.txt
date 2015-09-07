@@ -337,6 +337,7 @@ set(kritaui_LIB_SRCS
 
     widgets/kis_url_requester.cpp
     kis_md5_generator.cpp
+    KisApplicationArguments.cpp
 )
 
 if(WIN32)

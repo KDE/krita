@@ -49,8 +49,8 @@ static QString instancesLockFilename(const QString &appSessionId)
     return res + appSessionId + QLatin1String("-instances");
 }
 
-QtSingleApplication::QtSingleApplication(const QString &appId, int &/*argc*/, char **/*argv*/)
-    : KApplication(),
+QtSingleApplication::QtSingleApplication(const QString &appId, int &argc, char **argv)
+    : QApplication(argc, argv),
       firstPeer(-1),
       pidPeer(0)
 {

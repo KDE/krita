@@ -71,16 +71,6 @@ const KComponentData &KisFactory::componentData()
         s_componentData = new KComponentData(aboutData());
         Q_CHECK_PTR(s_componentData);
 
-        // for cursors
-        KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
-
-        // for images in the paintop box
-        KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
-
-        KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
-
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
     }
 
     return *s_componentData;

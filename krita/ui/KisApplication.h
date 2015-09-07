@@ -28,6 +28,8 @@ class KisApplicationPrivate;
 class KCmdLineArgs;
 class QWidget;
 class QStringList;
+class QCommandLineParser;
+class KisApplicationArguments;
 
 #include <KisImportExportManager.h>
 
@@ -52,7 +54,7 @@ public:
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      */
-    explicit KisApplication(const QString &key);
+    explicit KisApplication(const QString &key, int &argc, char **argv);
 
     /**
      *  Destructor.
@@ -70,7 +72,7 @@ public:
      * It is valid behaviour not to call this method at all. In this case you
      * have to process your command line parameters by yourself.
      */
-    virtual bool start();
+    virtual bool start(const KisApplicationArguments &args);
 
     /**
      * Checks if user is holding ctrl+alt+shift keys and asks if the settings file should be cleared.
@@ -91,13 +93,13 @@ public:
 
 public Q_SLOTS:
 
-    void remoteArguments(const QByteArray &message, QObject*socket);
+    void remoteArguments(QByteArray &message, QObject*socket);
     void fileOpenRequested(const QString & url);
 
 private:
     /// @return the number of autosavefiles opened
     QList<KUrl> checkAutosaveFiles();
-    bool createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow);
+    bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow);
     void clearConfig();
 
 private:

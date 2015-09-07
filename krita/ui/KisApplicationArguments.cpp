@@ -137,7 +137,7 @@ QByteArray KisApplicationArguments::serialize()
     QBuffer buf(&ba);
     buf.open(QIODevice::WriteOnly);
     QDataStream ds(&buf);
-    ds.setVersion(QDataStream::Qt_5_5);
+    ds.setVersion(QDataStream::Qt_5_0);
     ds << d->filenames.count();
     foreach(const QString &filename, d->filenames) {
         ds << filename;
@@ -163,7 +163,7 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
     QBuffer buf(&serialized);
     buf.open(QIODevice::ReadOnly);
     QDataStream ds(&buf);
-    ds.setVersion(QDataStream::Qt_5_5);
+    ds.setVersion(QDataStream::Qt_5_0);
     int count;
     ds >> count;
     for(int i = 0; i < count; ++i) {

@@ -23,10 +23,10 @@
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
-
 #include <KoDpi.h>
 #include "KoGlobal.h"
 #include "KoConfig.h"
+#include <KoHashGeneratorProvider.h>
 
 #include <kcrash.h>
 #include <klocale.h>
@@ -66,6 +66,7 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 
+#include "kis_md5_generator.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
@@ -169,6 +170,7 @@ KisApplication::KisApplication(const QString &key)
         setStyle("Fusion");
     }
 
+    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)

@@ -145,6 +145,11 @@ public:
 
         return rect;
     }
+
+    static inline int coordToLodCoord(int x, int lod) {
+        return divideSafe(x, lod);
+    }
+
 private:
     /**
      * Aligns @value to the lowest integer not smaller than @value and

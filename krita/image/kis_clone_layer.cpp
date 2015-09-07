@@ -36,26 +36,29 @@
 
 #include <QStack>
 #include <kis_effect_mask.h>
+#include "kis_lod_capable_layer_offset.h"
 
 
 struct KisCloneLayer::Private
 {
-public:
+    Private(KisDefaultBoundsBaseSP defaultBounds)
+        : offset(defaultBounds)
+    {
+    }
+
+    KisLodCapableLayerOffset offset;
+
     KisLayerSP copyFrom;
     KisCloneInfo copyFromInfo;
     CopyLayerType type;
-    qint32 x;
-    qint32 y;
 };
 
 KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity)
         : KisLayer(image, name, opacity)
-        , m_d(new Private())
+        , m_d(new Private(new KisDefaultBounds(image)))
 {
     m_d->copyFrom = from;
     m_d->type = COPY_PROJECTION;
-    m_d->x = 0;
-    m_d->y = 0;
 
     // When loading the layer we copy from might not exist yet
     if (m_d->copyFrom) {
@@ -65,12 +68,12 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
 
 KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
         : KisLayer(rhs)
-        , m_d(new Private())
+        , m_d(new Private(new KisDefaultBounds(rhs.image())))
 {
     m_d->copyFrom = rhs.copyFrom();
     m_d->type = rhs.copyType();
-    m_d->x = rhs.x();
-    m_d->y = rhs.y();
+    m_d->offset = rhs.m_d->offset;
+
     if (m_d->copyFrom) {
         m_d->copyFrom->registerClone(this);
     }
@@ -126,7 +129,7 @@ KisPaintDeviceSP KisCloneLayer::original() const
 
 bool KisCloneLayer::needProjection() const
 {
-    return m_d->x || m_d->y;
+return m_d->offset.x() || m_d->offset.y();
 }
 
 void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
@@ -134,7 +137,7 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         const QRect& rect) const
 {
     QRect copyRect = rect;
-    copyRect.translate(-m_d->x, -m_d->y);
+    copyRect.translate(-m_d->offset.x(), -m_d->offset.y());
 
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, copyRect);
 }
@@ -186,19 +189,19 @@ QRect KisCloneLayer::needRectOnSourceForMasks(const QRect &rc) const
 
 qint32 KisCloneLayer::x() const
 {
-    return m_d->x;
+    return m_d->offset.x();
 }
 qint32 KisCloneLayer::y() const
 {
-    return m_d->y;
+    return m_d->offset.y();
 }
 void KisCloneLayer::setX(qint32 x)
 {
-    m_d->x = x;
+    m_d->offset.setX(x);
 }
 void KisCloneLayer::setY(qint32 y)
 {
-    m_d->y = y;
+    m_d->offset.setY(y);
 }
 
 QRect KisCloneLayer::extent() const
@@ -222,8 +225,8 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
     QRect resultRect = rect;
 
     if(pos & (N_FILTHY_PROJECTION | N_FILTHY)) {
-        if (m_d->x || m_d->y) {
-            resultRect |= rect.translated(-m_d->x, -m_d->y);
+        if (m_d->offset.x() || m_d->offset.y()) {
+            resultRect |= rect.translated(-m_d->offset.x(), -m_d->offset.y());
         }
 
         /**
@@ -239,7 +242,7 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
 
 QRect KisCloneLayer::outgoingChangeRect(const QRect &rect) const
 {
-    return rect.translated(m_d->x, m_d->y);
+    return rect.translated(m_d->offset.x(), m_d->offset.y());
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)

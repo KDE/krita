@@ -449,10 +449,6 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
     return wrappedStrategy.data();
 }
 
-inline int coordToLodCoord(int x, int lod) {
-    return x >> lod;
-}
-
 QRegion KisPaintDevice::Private::syncLodData(int newLod)
 {
     Data *srcData = currentNonLodData();
@@ -461,8 +457,8 @@ QRegion KisPaintDevice::Private::syncLodData(int newLod)
         m_lodData.reset(new Data(srcData, false));
     }
 
-    int expectedX = coordToLodCoord(srcData->x(), newLod);
-    int expectedY = coordToLodCoord(srcData->y(), newLod);
+    int expectedX = KisLodTransform::coordToLodCoord(srcData->x(), newLod);
+    int expectedY = KisLodTransform::coordToLodCoord(srcData->y(), newLod);
 
     /**
      * We compare color spaces as pure pointers, because they must be

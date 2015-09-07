@@ -388,7 +388,15 @@ public:
      */
     bool collapsed() const;
 
+    /**
+     * Returns true if the offset of the node can be changed in a LodN
+     * stroke. Currently, all the nodes except shape layers support that.
+     */
+    bool supportsLodMoves() const;
+
 protected:
+
+    void setSupportsLodMoves(bool value);
 
     /**
      * FIXME: This method is a workaround for getting parent node

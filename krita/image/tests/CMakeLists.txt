@@ -644,3 +644,9 @@ target_link_libraries(KisLayerStyleProjectionPlaneTest  ${KDE4_KDEUI_LIBS} krita
 set(kis_projection_leaf_test_SRCS kis_projection_leaf_test.cpp )
 kde4_add_unit_test(KisProjectionLeafTest TESTNAME kritaimage-projection_leaf_test ${kis_projection_leaf_test_SRCS})
 target_link_libraries(KisProjectionLeafTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_lod_capable_layer_offset_test_SRCS kis_lod_capable_layer_offset_test.cpp )
+kde4_add_unit_test(KisLodCapableLayerOffsetTest TESTNAME kritaimage-lod_capable_layer_offset_test ${kis_lod_capable_layer_offset_test_SRCS})
+target_link_libraries(KisLodCapableLayerOffsetTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

@@ -183,8 +183,28 @@ void MoveStrokeStrategy::setUpdatesEnabled(bool value)
     m_updatesEnabled = value;
 }
 
+bool checkSupportsLodMoves(KisNodeSP node)
+{
+    if (!node->supportsLodMoves()) {
+        return false;
+    }
+
+    KisNodeSP child = node->firstChild();
+    while(child) {
+        if (!checkSupportsLodMoves(child)) {
+            return false;
+        }
+        child = child->nextSibling();
+    }
+
+    return true;
+}
+
+
 KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
 {
+    if (!checkSupportsLodMoves(m_node)) return 0;
+
     MoveStrokeStrategy *clone = new MoveStrokeStrategy(*this, levelOfDetail > 0);
     clone->setUndoEnabled(false);
     this->setUpdatesEnabled(false);

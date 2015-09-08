@@ -77,5 +77,3 @@ void SectionsSplitDialog::okClicked()
         m_editor->splitSectionsEndings(m_widget.afterList->currentRow());
     }
 }
-
-#include <SectionsSplitDialog.moc>

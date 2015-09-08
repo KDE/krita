@@ -20,6 +20,7 @@ if (NOT ${CMAKE_VERSION} VERSION_LESS 3.0.0)
 endif ()
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
+    cmake_policy(SET CMP0059 OLD)
     cmake_policy(SET CMP0063 OLD)
 endif()
 

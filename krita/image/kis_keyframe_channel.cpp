@@ -252,7 +252,6 @@ KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe) const
     if (i == m_d->keys.begin() || i == m_d->keys.end()) return KisKeyframeSP(0);
     i--;
 
-    if (i == m_d->keys.begin()) return KisKeyframeSP(0);
     return i.value();
 }
 

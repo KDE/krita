@@ -21,6 +21,7 @@
 #define _KRITACREATOR_H_
 
 // KDE
+#include <QIODevice>
 #include <kio/thumbcreator.h>
 
 class KritaCreator : public ThumbCreator

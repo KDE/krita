@@ -5,8 +5,9 @@ set(kritathumbnail_SRCS
 add_library(kritathumbnail MODULE ${kritathumbnail_SRCS})
 
 target_link_libraries(kritathumbnail
-    koodf
-    ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
+    KF5::Archive
+    Qt5::Gui
 )
 
 install(TARGETS kritathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -70,7 +70,7 @@ boolean fill_input_buffer(j_decompress_ptr cinfo)
     src->bytes_in_buffer = numBytesRead;
     src->anyDataReceived = true;
 
-    return true;
+    return (boolean)true;
 }
 
 void skip_input_data(j_decompress_ptr cinfo, long numBytes)

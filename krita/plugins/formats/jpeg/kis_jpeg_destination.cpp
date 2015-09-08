@@ -68,7 +68,7 @@ boolean empty_output_buffer(j_compress_ptr cinfo)
     dest->next_output_byte = dest->buffer;
     dest->free_in_buffer = OUTPUT_BUFFER_SIZE;
     
-    return true;
+    return (boolean)true;
 }
 
 void term_destination(j_compress_ptr cinfo)

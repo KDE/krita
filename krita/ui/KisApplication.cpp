@@ -480,7 +480,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
                 if (exportAs) {
                     KMimeType::Ptr outputMimetype;
-                    outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
+                    outputMimetype = KMimeType::findByUrl(QUrl::fromLocalFile(exportFileName), 0, false, true /* file doesn't exist */);
                     if (outputMimetype->name() == KMimeType::defaultMimeType()) {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;

@@ -95,7 +95,7 @@ KisAslCallbackObjectCatcher::~KisAslCallbackObjectCatcher()
 template <class HashType, typename T>
 inline void passToCallback(const QString &path, const HashType &hash, const T &value)
 {
-    typename HashType::const_iterator it = hash.find(path);
+    typename HashType::const_iterator it = hash.constFind(path);
     if (it != hash.constEnd()) {
         (*it)(value);
     }
@@ -113,7 +113,7 @@ void KisAslCallbackObjectCatcher::addInteger(const QString &path, int value)
 
 void KisAslCallbackObjectCatcher::addEnum(const QString &path, const QString &typeId, const QString &value)
 {
-    MapHashEnum::const_iterator it = m_d->mapEnum.find(path);
+    MapHashEnum::const_iterator it = m_d->mapEnum.constFind(path);
     if (it != m_d->mapEnum.constEnd()) {
         if (it->typeId == typeId) {
             it->map(value);
@@ -125,7 +125,7 @@ void KisAslCallbackObjectCatcher::addEnum(const QString &path, const QString &ty
 
 void KisAslCallbackObjectCatcher::addUnitFloat(const QString &path, const QString &unit, double value)
 {
-    MapHashUnitFloat::const_iterator it = m_d->mapUnitFloat.find(path);
+    MapHashUnitFloat::const_iterator it = m_d->mapUnitFloat.constFind(path);
     if (it != m_d->mapUnitFloat.constEnd()) {
         if (it->unit == unit) {
             it->map(value);
@@ -157,7 +157,7 @@ void KisAslCallbackObjectCatcher::addPoint(const QString &path, const QPointF &v
 
 void KisAslCallbackObjectCatcher::addCurve(const QString &path, const QString &name, const QVector<QPointF> &points)
 {
-    MapHashCurve::const_iterator it = m_d->mapCurve.find(path);
+    MapHashCurve::const_iterator it = m_d->mapCurve.constFind(path);
     if (it != m_d->mapCurve.constEnd()) {
         (*it)(name, points);
     }
@@ -170,7 +170,7 @@ void KisAslCallbackObjectCatcher::addPattern(const QString &path, const KoPatter
 
 void KisAslCallbackObjectCatcher::addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName)
 {
-    MapHashPatternRef::const_iterator it = m_d->mapPatternRef.find(path);
+    MapHashPatternRef::const_iterator it = m_d->mapPatternRef.constFind(path);
     if (it != m_d->mapPatternRef.constEnd()) {
         (*it)(patternUuid, patternName);
     }

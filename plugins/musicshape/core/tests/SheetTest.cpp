@@ -31,7 +31,7 @@ class SheetTest : public QObject
     Q_OBJECT
 private:
     Sheet* sheet;
-private slots:
+private Q_SLOTS:
     void init()
     {
             sheet = new Sheet();

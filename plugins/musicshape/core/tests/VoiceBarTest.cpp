@@ -33,7 +33,7 @@ class VoiceBarTest : public QObject
     Q_OBJECT
 private:
     MusicCore::VoiceBar* voiceBar;
-private slots:
+private Q_SLOTS:
     void init()
     {
             Sheet* sheet = new Sheet();

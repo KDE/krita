@@ -275,12 +275,12 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
             } else if (tag == "title" || tag == "description" || tag == "subject" ||
                        tag == "date" || tag == "language") {
                 QByteArray elementName(QString("dc:" + tag).toLatin1());
-                xmlWriter.startElement(elementName);
+                xmlWriter.startElement(elementName.constData());
                 xmlWriter.addTextNode(aboutInfo(tag));
                 xmlWriter.endElement();
             } else {
                 QByteArray elementName(QString("meta:" + tag).toLatin1());
-                xmlWriter.startElement(elementName);
+                xmlWriter.startElement(elementName.constData());
                 xmlWriter.addTextNode(aboutInfo(tag));
                 xmlWriter.endElement();
             }

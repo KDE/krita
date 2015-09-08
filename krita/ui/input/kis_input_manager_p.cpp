@@ -38,7 +38,7 @@ class EventEater : public QObject
 public:
     EventEater() : QObject(0), hungry(false) {}
 
-    bool eventFilter(QObject* object, QEvent* event )
+    bool eventFilter(QObject* /*object*/, QEvent* event )
     {
         if ((hungry  && (event->type() == QEvent::MouseMove ||
                          event->type() == QEvent::MouseButtonPress ||

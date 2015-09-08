@@ -288,7 +288,7 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     if (t->isHidden() && QFile::exists(fileName))
         return;
     QString fill;
-    while (KIO::NetAccess::exists(fileName, KIO::NetAccess::SourceSide, 0)) {
+    while (QFile(fileName).exists()) {
         fill += '_';
         fileName = path + fill + name + ".desktop";
     }

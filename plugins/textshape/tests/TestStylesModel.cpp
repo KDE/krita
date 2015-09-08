@@ -11,11 +11,11 @@
 class TestStylesModel : public QObject
 {
     Q_OBJECT
-public slots:
+public Q_SLOTS:
     void init();
     void cleanup();
 
-private slots:
+private Q_SLOTS:
     void testPrecalcCache();
     void testSetManager();
 

@@ -136,7 +136,7 @@ void KoFileDialog::setImageFilters()
     QStringList imageFilters;
     // add filters for all formats supported by QImage
     foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilters << "image/" + format;
+        imageFilters << QLatin1String("image/") + format;
     }
     setMimeTypeFilters(imageFilters);
 }
@@ -450,7 +450,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
             QString oneFilter;
             QStringList patterns = mimeType->patterns();
             QStringList::ConstIterator jt;
-            for (jt = patterns.begin(); jt != patterns.end(); ++jt) {
+            for (jt = patterns.constBegin(); jt != patterns.constEnd(); ++jt) {
                 if (d->swapExtensionOrder) {
                     oneFilter.prepend(*jt + " ");
                     if (withAllSupportedEntry) {

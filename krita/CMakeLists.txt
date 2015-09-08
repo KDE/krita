@@ -1,6 +1,14 @@
 project(krita)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+add_definitions(
+  -DTRANSLATION_DOMAIN=\"krita\"
+  -DQT_USE_QSTRINGBUILDER
+  -DQT_STRICT_ITERATORS
+  -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+  -DQT_USE_FAST_OPERATOR_PLUS
+  -DQT_USE_FAST_CONCATENATION
+)
 
 kde_enable_exceptions()
 

@@ -888,7 +888,7 @@ void KisLayerManager::saveGroupLayers()
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);
 
-    KFileWidget *fd = new KFileWidget(m_view->document()->url().path(), page);
+    KFileWidget *fd = new KFileWidget(QUrl::fromLocalFile(m_view->document()->url().path()), page);
     fd->setUrl(m_view->document()->url());
     fd->setMimeFilter(listMimeFilter);
     fd->setOperationMode(KFileWidget::Saving);

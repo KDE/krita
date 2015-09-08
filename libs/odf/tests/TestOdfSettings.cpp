@@ -11,7 +11,7 @@ class TestOdfSettings : public QObject
 public:
     TestOdfSettings() { }
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void testParseConfigItemString();
     void testSelectItemSet();

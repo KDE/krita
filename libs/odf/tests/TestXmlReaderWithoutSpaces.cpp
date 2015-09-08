@@ -15,7 +15,7 @@
 class TestXmlReaderWithoutSpaces : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testNode();
     void testElement();
     void testAttributes();

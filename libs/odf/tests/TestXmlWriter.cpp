@@ -26,7 +26,7 @@
 class TestXmlWriter : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testDocytype();
     void testEmtpyElement();
     void testAttributes();

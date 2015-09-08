@@ -33,7 +33,7 @@
 class TestStorage : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void storage_data();
     void storage();
     void storage2_data();
@@ -87,7 +87,8 @@ void TestStorage::storage()
     QDir dirTest(testFile);
     if (dirTest.exists()) {
 #ifdef Q_OS_UNIX
-        system(QByteArray("rm -rf ") + QFile::encodeName(testFile));       // QDir::rmdir isn't recursive!
+        QByteArray ba = QByteArray("rm -rf ") + QFile::encodeName(testFile);
+        system(ba.constData());       // QDir::rmdir isn't recursive!
 #else
         QFAIL("build dir not empty");
 #endif
@@ -220,7 +221,8 @@ void TestStorage::storage2()
     QDir dirTest(testFile);
     if (dirTest.exists()) {
 #ifdef Q_OS_UNIX
-        system(QByteArray("rm -rf ") + QFile::encodeName(testFile));       // QDir::rmdir isn't recursive!
+        QByteArray ba = QByteArray("rm -rf ") + QFile::encodeName(testFile);
+        system(ba.constData());       // QDir::rmdir isn't recursive!
 #else
         QFAIL("build dir not empty");
 #endif

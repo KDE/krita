@@ -261,6 +261,15 @@ else()
     set(HAVE_X11 FALSE)
 endif()
 
+# use sane compile flags
+add_definitions(
+  -DQT_USE_QSTRINGBUILDER
+  -DQT_STRICT_ITERATORS
+  -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+  -DQT_USE_FAST_OPERATOR_PLUS
+  -DQT_USE_FAST_CONCATENATION
+)
+
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,
 # to reduce global compiler definitions that would trigger a recompile of
@@ -275,15 +284,6 @@ if(WIN32)
     add_definitions(-D_USE_MATH_DEFINES)
     add_definitions(-DNOMINMAX)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
-endif()
-
-# would need more code changes before 4.8.0, e.g. with qPrintable()
-if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
-    # enable QStringBuilder enhancement
-    add_definitions(
-        -DQT_USE_FAST_CONCATENATION
-        -DQT_USE_FAST_OPERATOR_PLUS
-    )
 endif()
 
 # set custom calligra plugin installdir

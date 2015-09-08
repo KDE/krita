@@ -38,7 +38,7 @@ bool validateOutput(MusicCore::Sheet* sheet, const char* fname);
 class MusicXmlWriterTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init() 
     {
     }

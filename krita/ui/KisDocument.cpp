@@ -519,10 +519,7 @@ public:
         }
         else
         {
-            KUrl dirUrl( m_url );
-            dirUrl.setPath( dirUrl.directory() );
-            ::org::kde::KDirNotify::emitFilesAdded( dirUrl.url() );
-
+            ::org::kde::KDirNotify::emitFilesAdded(QUrl::fromLocalFile(m_url.directory()));
             m_uploadJob = 0;
             document->setModified( false );
             emit document->completed();

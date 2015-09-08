@@ -50,9 +50,9 @@ void KoCompositeColorTransformation::appendTransform(KoColorTransformation *tran
 
 void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
-    QVector<KoColorTransformation*>::const_iterator begin = m_d->transformations.begin();
+    QVector<KoColorTransformation*>::const_iterator begin = m_d->transformations.constBegin();
     QVector<KoColorTransformation*>::const_iterator it = begin;
-    QVector<KoColorTransformation*>::const_iterator end = m_d->transformations.end();
+    QVector<KoColorTransformation*>::const_iterator end = m_d->transformations.constEnd();
 
     for (; it != end; ++it) {
         if (it == begin) {

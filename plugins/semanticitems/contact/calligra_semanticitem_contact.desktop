@@ -23,6 +23,7 @@ Name[pt]='Plugin' de Contactos em RDF
 Name[pt_BR]=Plugin de contatos em RDF
 Name[sk]=Plugin kontaktu RDF
 Name[sv]=Insticksprogram för RDF-kontakt
+Name[tr]=RDF Bağlantı Eklentisi
 Name[uk]=Додаток контактів RDF
 Name[x-test]=xxRDF Contact Pluginxx
 Comment=A plugin to map contact items between document and RDF database
@@ -46,6 +47,7 @@ Comment[pt]=Um 'plugin' para associar os itens do contacto entre o documento e a
 Comment[pt_BR]=Um plugin para associar os itens do contato entre o documento e o banco de dados RDF
 Comment[sk]=Plugin na mapovanie položiek kontaktov medzi dokumentom a RDF databázou
 Comment[sv]=Ett insticksprogram för att avbilda kontaktobjekt mellan dokument och en RDF-databas
+Comment[tr]=Belgeler ile RDF veritabanı arasında nesneleri eşleyen eklenti
 Comment[uk]=Додаток для створення зв’язку між записами контактів у документі та у базі даних RDF
 Comment[x-test]=xxA plugin to map contact items between document and RDF databasexx
 

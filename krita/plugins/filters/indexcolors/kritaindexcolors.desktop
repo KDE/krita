@@ -17,6 +17,7 @@ Name[pt]=Filtro de Cores Indexadas
 Name[pt_BR]=Filtros de cores indexadas
 Name[sk]=Indexový filter farieb
 Name[sv]=Indexfärgfilter
+Name[tr]=Renk Dizini Filtresi
 Name[uk]=Фільтр індексованих кольорів
 Name[x-test]=xxIndex Colors Filterxx
 Comment=Reduce the amount of colors in the picture to a pre-defined palette.

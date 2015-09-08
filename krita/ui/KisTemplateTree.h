@@ -1,6 +1,6 @@
 /*
    This file is part of the KDE project
-   Copyright (C) 2000 Werner Trobin <trobin@kde.org>
+   ompyright (C) 2000 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #define KIS_TEMPLATE_TREE_H
 
 #include <QList>
-#include <kcomponentdata.h>
+#include <QString>
 #include "kritaui_export.h"
 
 class KisTemplate;
@@ -32,15 +32,12 @@ class KRITAUI_EXPORT KisTemplateTree
 {
 
 public:
-    KisTemplateTree(const QString &templatesResourcePath, const KComponentData &instance,
+    KisTemplateTree(const QString &templatesResourcePath,
                    bool readTree = false);
     ~KisTemplateTree();
 
     QString templatesResourcePath() const {
         return m_templatesResourcePath;
-    }
-    KComponentData componentData() const {
-        return m_componentData;
     }
     void readTemplateTree();
     void writeTemplateTree();
@@ -64,7 +61,6 @@ private:
                        const QString &localDir);
 
     QString m_templatesResourcePath;
-    KComponentData m_componentData;
     QList<KisTemplateGroup*> m_groups;
     KisTemplateGroup *m_defaultGroup;
     KisTemplate *m_defaultTemplate;

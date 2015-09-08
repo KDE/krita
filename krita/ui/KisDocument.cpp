@@ -101,7 +101,6 @@
 #include <kis_debug.h>
 
 // Local
-#include "kis_factory2.h"
 #include "KisViewManager.h"
 #include "kis_clipboard.h"
 #include "widgets/kis_custom_image_widget.h"
@@ -564,7 +563,7 @@ KisDocument::KisDocument()
     d->pageLayout.rightMargin = 0;
 
 
-    KConfigGroup cfgGrp(KisFactory::componentData().config(), "Undo");
+    KConfigGroup cfgGrp(KGlobal::config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
     connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));

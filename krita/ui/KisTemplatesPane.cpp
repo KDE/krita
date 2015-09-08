@@ -23,7 +23,7 @@
 #include "KisTemplate.h"
 
 #include <QStandardItemModel>
-#include <kcomponentdata.h>
+#include <kglobal.h>
 #include <kurl.h>
 #include <kconfiggroup.h>
 
@@ -39,16 +39,16 @@ public:
 };
 
 
-KisTemplatesPane::KisTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
+KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
                                  KisTemplateGroup *group, KisTemplate* defaultTemplate)
-        : KisDetailsPane(parent, _componentData, header)
+        : KisDetailsPane(parent,header)
         , d(new KisTemplatesPanePrivate)
 {
     setFocusProxy(m_documentList);
 
     KGuiItem openGItem(i18n("Use This Template"));
     m_openButton->setGuiItem(openGItem);
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
     m_alwaysUseCheckBox->setVisible(false);
@@ -134,7 +134,7 @@ void KisTemplatesPane::openFile(const QModelIndex& index)
 {
     if (index.isValid()) {
         QStandardItem* item = model()->itemFromIndex(index);
-        KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
         cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
@@ -157,7 +157,7 @@ void KisTemplatesPane::alwaysUseClicked()
         d->m_alwaysUseTemplate = item->data(Qt::UserRole + 1).toString();
     }
 
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
     cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
     cfgGrp.sync();
     emit alwaysUseChanged(this, d->m_alwaysUseTemplate);

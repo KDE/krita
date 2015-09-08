@@ -81,7 +81,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
-    kis_aboutdata.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
@@ -98,7 +97,6 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
-    kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
     kis_splash_screen.cpp

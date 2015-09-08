@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QStandardItemModel>
 
-#include <kcomponentdata.h>
+#include <kglobal.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
@@ -74,9 +74,9 @@ public:
 };
 
 
-KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData,
+KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
                                                const QString& header)
-    : KisDetailsPane(parent, _componentData, header)
+    : KisDetailsPane(parent, header)
     , d(new KisRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
@@ -86,7 +86,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponent
 
     model()->setSortRole(0); // Disable sorting
 
-    KConfigGroup config(componentData().config(), "RecentFiles");
+    KConfigGroup config(KGlobal::config(), "RecentFiles");
 
     int i = 1;
     QString path;
@@ -196,7 +196,7 @@ void KisRecentDocumentsPane::openFile(const QModelIndex& index)
 {
     if (!index.isValid()) return;
 
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
     cfgGrp.writeEntry("LastReturnType", "File");
 
     KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));

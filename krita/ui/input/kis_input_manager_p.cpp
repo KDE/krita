@@ -36,18 +36,20 @@
 class EventEater : public QObject
 {
 public:
-    EventEater() : QObject(qApp), hungry(false) {}
+    EventEater() : QObject(0), hungry(false) {}
 
     bool eventFilter(QObject* object, QEvent* event )
     {
-        if (hungry && (event->type() == QEvent::MouseMove ||
-                       event->type() == QEvent::MouseButtonPress ||
-                       event->type() == QEvent::MouseButtonRelease)) {
+        if ((hungry  && (event->type() == QEvent::MouseMove ||
+                         event->type() == QEvent::MouseButtonPress ||
+                         event->type() == QEvent::MouseButtonRelease)) ||
+            (peckish && (event->type() == QEvent::MouseButtonPress))) {
             if (KisTabletDebugger::instance()->debugEnabled()) {
-                QString pre = QString("[FILTERED]");
+                QString pre = QString("[BLOCKED]");
                 QMouseEvent *ev = static_cast<QMouseEvent*>(event);
                 dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
             }
+            peckish = false;
             return true;
         }
         return false;
@@ -67,17 +69,22 @@ public:
         hungry = false;
     }
 
+    void eatOneMousePress()
+    {
+        peckish = true;
+    }
+
     bool isActive()
     {
         return hungry;
     }
 
 private:
-    bool hungry;
+    bool hungry;  // Continue eating mouse strokes
+    bool peckish;  // Eat a single mouse press event
 };
 
-// Should be Q_GLOBAL_STATIC?
-EventEater *globalEventEater;
+Q_GLOBAL_STATIC(EventEater, globalEventEater);
 
 bool KisInputManager::Private::ignoreQtCursorEvents()
 {
@@ -108,7 +115,6 @@ KisInputManager::Private::Private(KisInputManager *qq)
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
     setupActions();
     canvasSwitcher = new CanvasSwitcher(this, q);
-    globalEventEater = new EventEater();
     qApp->installEventFilter(globalEventEater);
 }
 
@@ -117,7 +123,6 @@ KisInputManager::Private::Private(KisInputManager *qq)
 KisInputManager::Private::~Private()
 {
     delete canvasSwitcher;
-    delete globalEventEater;
 }
 
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
@@ -213,6 +218,7 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
     switch (event->type()) {
     case QEvent::TabletEnterProximity:
         d->debugEvent<QEvent, false>(event);
+        globalEventEater->eatOneMousePress();
         // d->blockMouseEvents();  Qt sends fake mouse events instead of hover events, so disable this for now.
         break;
     case QEvent::TabletLeaveProximity:

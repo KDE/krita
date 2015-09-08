@@ -27,7 +27,6 @@
 
 class QString;
 class QPixmap;
-class KComponentData;
 class KisDocument;
 class KisTemplateCreateDiaPrivate;
 
@@ -42,13 +41,12 @@ class KRITAUI_EXPORT KisTemplateCreateDia : public KDialog
     Q_OBJECT
 
 private:
-    KisTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &instance,
+    KisTemplateCreateDia(const QString &templatesResourcePath,
                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
     ~KisTemplateCreateDia();
 
 public:
     static void createTemplate(const QString &templatesResourcePath, const char *suffix,
-                               const KComponentData &componentData,
                                KisDocument *document, QWidget *parent = 0);
 
 private Q_SLOTS:

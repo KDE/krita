@@ -46,7 +46,6 @@
 #include <QMoveEvent>
 
 #include <krecentdirs.h>
-#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kactionmenu.h>
@@ -75,7 +74,6 @@
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
-#include <k4aboutdata.h>
 
 #include <KoConfig.h>
 #include "KoDockFactoryBase.h"
@@ -100,7 +98,6 @@
 #include "KisPrintJob.h"
 #include "KisPart.h"
 #include "KisApplication.h"
-#include "kis_factory2.h"
 
 #include "kis_action.h"
 #include "kis_canvas_controller.h"
@@ -274,10 +271,6 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-//    setComponentData(KisFactory::componentData());
-
-    KGlobal::setActiveComponent(KisFactory::componentData());
-
     KisConfig cfg;
 
     d->viewManager = new KisViewManager(this, actionCollection());
@@ -364,7 +357,7 @@ KisMainWindow::KisMainWindow()
 
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        d->helpMenu = new KHelpMenu( this, *KisFactory::aboutData(), false );
+        d->helpMenu = new KHelpMenu(this, "Dummy Text That Is Not Used In Frameworks 5", false);
 
         KActionCollection *actions = actionCollection();
         QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
@@ -396,7 +389,7 @@ KisMainWindow::KisMainWindow()
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
-    // KDE libss 4' help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
+    // KDE' libs 4''s help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
     QAction *helpAction = actionCollection()->action("help_contents");
     helpAction->disconnect();
     connect(helpAction, SIGNAL(triggered()), this, SLOT(showManual()));
@@ -637,7 +630,7 @@ void KisMainWindow::addRecentURL(const KUrl& url)
 void KisMainWindow::saveRecentFiles()
 {
     // Save list of recent files
-    KSharedConfigPtr config = KisFactory::componentData().config();
+    KSharedConfigPtr config = KGlobal::config();
     d->recentFiles->saveEntries(config->group("RecentFiles"));
     config->sync();
 
@@ -649,8 +642,7 @@ void KisMainWindow::saveRecentFiles()
 
 void KisMainWindow::reloadRecentFileList()
 {
-    KSharedConfigPtr config = KisFactory::componentData().config();
-    d->recentFiles->loadEntries(config->group("RecentFiles"));
+    d->recentFiles->loadEntries(KGlobal::config()->group("RecentFiles"));
 }
 
 void KisMainWindow::updateCaption()
@@ -1103,11 +1095,9 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
 void KisMainWindow::saveWindowSettings()
 {
-    KSharedConfigPtr config = KisFactory::componentData().config();
+    KSharedConfigPtr config = KGlobal::config();
 
     if (d->windowSizeDirty ) {
-
-        // Save window size into the config file of our componentData
         dbgUI << "KisMainWindow::saveWindowSettings";
         KConfigGroup group = config->group("MainWindow");
         saveWindowSize(group);
@@ -1963,7 +1953,7 @@ void KisMainWindow::showErrorAndDie()
 
 void KisMainWindow::showAboutApplication()
 {
-    KisAboutApplication dlg(KisFactory::aboutData(), this);
+    KisAboutApplication dlg(this);
     dlg.exec();
 }
 
@@ -2020,7 +2010,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 
     if (title.isEmpty()) {
         // #139905
-        title = i18n("%1 unsaved document (%2)", KisFactory::componentData().aboutData()->programName(),
+        title = i18n("%1 unsaved document (%2)", qApp->applicationDisplayName(),
                      KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
     }
     printer.setDocName(title);
@@ -2035,7 +2025,7 @@ void KisMainWindow::createActions()
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
-    KSharedConfigPtr configPtr = KisFactory::componentData().config();
+    KSharedConfigPtr configPtr = KGlobal::config();
     d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
 
     d->saveAction = actionManager->createStandardAction(KStandardAction::Save, this, SLOT(slotFileSave()));

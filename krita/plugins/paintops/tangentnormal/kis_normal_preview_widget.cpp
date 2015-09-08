@@ -27,7 +27,6 @@
 
 #include "kis_global.h"
 #include <kstandarddirs.h>
-#include "kis_factory2.h"
 
 KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent)
         : QLabel(parent)

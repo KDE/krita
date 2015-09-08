@@ -1,14 +1,11 @@
 
 
-#include <kaboutdata.h>
-
 #include "kis_random_generator_demo.h"
 #include "../kis_random_generator.h"
 
 #include <ctime>
 #include <cstdlib>
 #include <QApplication>
-#include <KAboutData>
 #include <KLocalizedString>
 #include <QCommandLineParser>
 
@@ -142,14 +139,7 @@ void KisRandomGeneratorDemo::updateNoise()
 
 int main(int argc, char **argv)
 {
-    KAboutData about("kis_random_generator_demo", i18n("kis_random_generator_demo"), "0.2",
-                     i18n("Krita Random Generator demo/test application"),
-                     KAboutLicense::GPL_V2, i18n("Copyright 2009 Matthew Woehlke"));
-    about.addAuthor( i18n("Matthew Woehlke"), QString(), "mw_triad@users.sourceforge.net" );
     QApplication app(argc, argv);
-    KAboutData::setApplicationData(about);
-
-
     KisRandomGeneratorDemo *demo = new KisRandomGeneratorDemo;
     demo->show();
     return app.exec();

@@ -41,12 +41,9 @@
 #include <QTextBrowser>
 #include <QScrollBar>
 
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kurl.h>
-
-#include "kis_factory2.h"
 
 #include "ui_wdgcolorspaceselectoradvanced.h"
 

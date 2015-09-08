@@ -33,7 +33,6 @@
 
 #include <kshortcut.h>
 
-#include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
 
 #include <kis_shape_selection.h>

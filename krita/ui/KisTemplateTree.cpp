@@ -38,9 +38,10 @@
 #include <KisTemplates.h>
 
 KisTemplateTree::KisTemplateTree(const QString &templatesResourcePath,
-                               const KComponentData &componentData, bool readTree) :
-        m_templatesResourcePath(templatesResourcePath), m_componentData(componentData), m_defaultGroup(0),
-        m_defaultTemplate(0)
+                                 bool readTree)
+    :  m_templatesResourcePath(templatesResourcePath)
+    , m_defaultGroup(0)
+    , m_defaultTemplate(0)
 {
     if (readTree)
         readTemplateTree();

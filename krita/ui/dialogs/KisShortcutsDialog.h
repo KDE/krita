@@ -112,8 +112,7 @@ public:
      * Add all actions of the collection to the ones displayed and configured
      * by the dialog.
      *
-     * @param title the title associated with the collection (if null, the
-     * KAboutData::progName() of the collection's componentData is used)
+     * @param title the title associated with the collection.
      */
     void addCollection(KActionCollection *, const QString &title = QString());
 

@@ -37,8 +37,6 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
-#include "ui/kis_aboutdata.h"
-#include "ui/kis_factory2.h"
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
@@ -106,12 +104,6 @@ extern "C" int main(int argc, char **argv)
     app.askClearConfig();
 
     KisApplicationArguments args(app);
-
-    // create factory only after application, the componentData it creates in the
-    // constructor will need an existing QCoreApplication at least with Qt5/KF5,
-    // to set name of application etc., as also needed to find resources
-    KisFactory factory;
-    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
 
     if (app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing

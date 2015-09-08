@@ -24,7 +24,6 @@
 #include <kis_paintop_registry.h>
 #include <kis_paintop_factory.h>
 #include <kstandarddirs.h>
-#include "kis_factory2.h"
 
 #include <kglobal.h>
 

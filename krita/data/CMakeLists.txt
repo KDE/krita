@@ -1,3 +1,4 @@
+add_subdirectory( aboutdata )
 add_subdirectory( actions )
 add_subdirectory( brushes )
 add_subdirectory( bundles )

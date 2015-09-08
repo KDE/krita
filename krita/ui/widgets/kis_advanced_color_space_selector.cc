@@ -279,7 +279,11 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
 
     d->colorSpaceSelector->textProfileDescription->clear();
-    d->colorSpaceSelector->textProfileDescription->append("<h3>About "  +  currentColorSpace()->name()  +  "/"  +  profileName  +  "</h3>");
+    if (profileList.isEmpty()==false) {
+        d->colorSpaceSelector->textProfileDescription->append("<h3>"+i18nc("About <Profilename>","About ")  +  currentColorSpace()->name()  +  "/"  +  profileName  +  "</h3>");
+    } else {
+        d->colorSpaceSelector->textProfileDescription->append("<h3>" + profileName  +  "</h3>");
+    }
 
     if (currentModelStr == "RGBA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is RGB",
@@ -620,7 +624,7 @@ const KoColorSpace* KisAdvancedColorSpaceSelector::currentColorSpace()
     QString check = "";
     if (d->colorSpaceSelector->lstProfile->currentItem()) {
         check = d->colorSpaceSelector->lstProfile->currentItem()->text();
-    } else {
+    } else if (d->colorSpaceSelector->lstProfile->item(0)) {
         check = d->colorSpaceSelector->lstProfile->item(0)->text();
     }
     return KoColorSpaceRegistry::instance()->colorSpace(d->colorSpaceSelector->cmbColorModels->currentItem().id(),

@@ -17,16 +17,6 @@
 
 #include <kzip.h>
 
-#include <kis_image.h>
-#include <KisDocument.h>
-#include <kis_group_layer.h>
-#include <kis_image.h>
-#include <kis_open_raster_stack_load_visitor.h>
-#include "ora_load_context.h"
-#include <kis_paint_layer.h>
-
-#include <kis_debug.h>
-
 OraHandler::OraHandler()
 {
 }

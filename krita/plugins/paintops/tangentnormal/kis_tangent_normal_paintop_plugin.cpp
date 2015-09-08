@@ -32,8 +32,10 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(TangentNormalPaintOpPluginFactory, registerPlugin<TangentNormalPaintOpPlugin>();)
-K_EXPORT_PLUGIN(TangentNormalPaintOpPluginFactory("krita"))
+//K_PLUGIN_FACTORY(TangentNormalPaintOpPluginFactory, registerPlugin<TangentNormalPaintOpPlugin>();)
+//K_EXPORT_PLUGIN(TangentNormalPaintOpPluginFactory("krita"))
+
+K_PLUGIN_FACTORY_WITH_JSON(TangentNormalPaintOpPluginFactory, "kritatangentnormalpaintop.json", registerPlugin<TangentNormalPaintOpPlugin>();)
 
 
 TangentNormalPaintOpPlugin::TangentNormalPaintOpPlugin(QObject* parent, const QVariantList&):
@@ -41,7 +43,7 @@ TangentNormalPaintOpPlugin::TangentNormalPaintOpPlugin(QObject* parent, const QV
 {
     KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisTangentNormalPaintOp, KisBrushBasedPaintOpSettings, KisTangentNormalPaintOpSettingsWidget>(
                                             "tangentnormal", i18n("Tangent Normal"), KisPaintOpFactory::categoryStable(), "krita-tangetnormal.png",
-                                            QString(), QStringList(), 2)
+                                            QString(), QStringList(), 16)
                                        );
 }
 

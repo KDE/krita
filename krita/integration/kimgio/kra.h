@@ -17,14 +17,23 @@ class KraHandler : public QImageIOHandler
 public:
     KraHandler();
 
-    bool canRead() const;
-    bool read(QImage *image);
-    bool write(const QImage &image);
-
-    QByteArray name() const;
+    bool canRead() const Q_DECL_OVERRIDE;
+    bool read(QImage *image)  Q_DECL_OVERRIDE;
 
     static bool canRead(QIODevice *device);
 };
+
+class KraPlugin : public QImageIOPlugin
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QImageIOHandlerFactoryInterface" FILE "kra.json")
+
+public:
+    Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
+    QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
+};
+
+
 
 #endif
 

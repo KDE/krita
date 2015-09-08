@@ -46,17 +46,6 @@ bool KraHandler::read(QImage *image)
     return true;
 }
 
-bool KraHandler::write(const QImage &)
-{
-    // TODO Stub!
-    return false;
-}
-
-QByteArray KraHandler::name() const
-{
-    return "kra";
-}
-
 bool KraHandler::canRead(QIODevice *device)
 {
     if (!device) {
@@ -76,27 +65,23 @@ bool KraHandler::canRead(QIODevice *device)
 }
 
 
-class KraPlugin : public QImageIOPlugin
-{
-public:
-    QStringList keys() const;
-    Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
-    QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
-};
-
-QStringList KraPlugin::keys() const
-{
-    return QStringList() << "kra" << "KRA";
-}
-
 QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
-    Q_UNUSED(device);
-    if (format == "kra" || format == "KRA")
+    if (format == "kra" || format == "KRA") {
         return Capabilities(CanRead);
-    else
+    }
+    if (!format.isEmpty()) {
         return 0;
+    }
+    if (!device->isOpen()) {
+        return 0;
+    }
 
+    Capabilities cap;
+    if (device->isReadable() && KraHandler::canRead(device)) {
+        cap |= CanRead;
+    }
+    return cap;
 }
 
 QImageIOHandler *KraPlugin::create(QIODevice *device, const QByteArray &format) const
@@ -106,6 +91,3 @@ QImageIOHandler *KraPlugin::create(QIODevice *device, const QByteArray &format) 
     handler->setFormat(format);
     return handler;
 }
-
-Q_EXPORT_STATIC_PLUGIN(KraPlugin)
-Q_EXPORT_PLUGIN2(Kra, KraPlugin)

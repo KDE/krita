@@ -17,14 +17,22 @@ class OraHandler : public QImageIOHandler
 public:
     OraHandler();
 
-    bool canRead() const;
-    bool read(QImage *image);
-    bool write(const QImage &image);
-
-    QByteArray name() const;
+    bool canRead() const Q_DECL_OVERRIDE;
+    bool read(QImage *image)  Q_DECL_OVERRIDE;
 
     static bool canRead(QIODevice *device);
 };
+
+
+class OraPlugin : public QImageIOPlugin
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QImageIOHandlerFactoryInterface" FILE "ora.json")
+public:
+    Capabilities capabilities(QIODevice *device, const QByteArray &format) const Q_DECL_OVERRIDE;
+    QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const Q_DECL_OVERRIDE;
+};
+
 
 #endif
 

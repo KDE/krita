@@ -25,7 +25,7 @@
 #include "ora_load_context.h"
 #include <kis_paint_layer.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 OraHandler::OraHandler()
 {

@@ -1,8 +1,7 @@
 /*
- *  main.cc - part of KImageShop
- *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ * Copyright (c) 1999 Matthias Elter <me@kde.org>
+ * Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ * Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +15,22 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include <stdlib.h>
 
 #include <QString>
 #include <QPixmap>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QDesktopServices>
 #include <QDir>
 #include <QDate>
-#include <QDebug>
+#include <QLoggingCategory>
 
-#include <kcmdlineargs.h>
+#include <kis_debug.h>
 
 #include <KisApplication.h>
 #include <KoConfig.h>
@@ -43,6 +43,7 @@
 #include "kis_splash_screen.h"
 #include "KisPart.h"
 #include "opengl/kis_opengl.h"
+#include "KisApplicationArguments.h"
 
 #if defined Q_OS_WIN
 #include <Windows.h>
@@ -75,22 +76,10 @@ extern "C" int main(int argc, char **argv)
     SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
 #endif
 
-    int state;
-    K4AboutData *aboutData = KisFactory::aboutData();
-
-    KCmdLineArgs::init(argc, argv, aboutData);
-
-    KCmdLineOptions options;
-    options.add("print", ki18n("Only print and exit"));
-    options.add("template", ki18n("Open a new document with a template"));
-    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
-    options.add("export-pdf", ki18n("Only export to PDF and exit"));
-    options.add("export", ki18n("Export to the given filename and exit"));
-    options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
-    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
-    options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
-
-    KCmdLineArgs::addCmdLineOptions(options);
+    // Disable all debug output by default
+    // You can re-enable debug output by starting Krita like "QT_LOGGING_RULES="krita*=true" krita"
+    // See: http://doc.qt.io/qt-5/qloggingcategory.html
+    QLoggingCategory::setFilterRules("*=false");
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita" +
@@ -110,12 +99,13 @@ extern "C" int main(int argc, char **argv)
 #endif
 
     // first create the application so we can create a pixmap
-    KisApplication app(key);
-
+    KisApplication app(key, argc, argv);
     // If we should clear the config, it has to be done as soon as possible after
     // KisApplication has been created. Otherwise the config file may have been read
     // and stored in a KConfig object we have no control over.
     app.askClearConfig();
+
+    KisApplicationArguments args(app);
 
     // create factory only after application, the componentData it creates in the
     // constructor will need an existing QCoreApplication at least with Qt5/KF5,
@@ -124,37 +114,17 @@ extern "C" int main(int argc, char **argv)
     Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
 
     if (app.isRunning()) {
-
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
-        const bool batchRun =
-            args->isSet("print") || args->isSet("export") || args->isSet("export-pdf");
+        const bool batchRun = (args.print() || args.exportAs() || args.exportAsPdf());
 
         if (!batchRun) {
-
-            QByteArray ba;
-            QDataStream ds(&ba, QIODevice::WriteOnly);
-            args->saveAppArgs(ds);
-            ds.device()->close();
-
+            QByteArray ba = args.serialize();
             if (app.sendMessage(ba)) {
                 return 0;
             }
         }
     }
-
-#if defined Q_OS_WIN
-    KisTabletSupportWin tabletSupportWin;
-    tabletSupportWin.init();
-    app.installNativeEventFilter(&tabletSupportWin);
-#elif defined HAVE_X11
-    KisTabletSupportX11 tabletSupportX11;
-    tabletSupportX11.init();
-    app.installNativeEventFilter(&tabletSupportX11);
-#endif
-
 
 #if defined HAVE_OPENGL
     KisOpenGL::initialize();
@@ -172,15 +142,15 @@ extern "C" int main(int argc, char **argv)
     QWidget *splash = 0;
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
-         splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
+         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
     }
     else {
-        splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
+        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
     }
 
     app.setSplashScreen(splash);
 
-    if (!app.start()) {
+    if (!app.start(args)) {
         return 1;
     }
 
@@ -192,7 +162,7 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
 
-    state = app.exec();
+    int state = app.exec();
 
     return state;
 }

@@ -32,6 +32,8 @@
 #include "KoXmlNS.h"
 #include "KoGenStyle.h"
 
+#include <kdebug.h>
+
 #include <QTextCursor>
 #include <QTextDocument>
 

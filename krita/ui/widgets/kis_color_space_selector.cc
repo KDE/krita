@@ -45,6 +45,7 @@
 #include <kglobal.h>
 
 #include "kis_factory2.h"
+#include <kis_debug.h>
 
 #include "ui_wdgcolorspaceselector.h"
 
@@ -218,7 +219,7 @@ void KisColorSpaceSelector::installProfile()
     foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
-            kWarning() << "Could not install profile!";
+            dbgKrita << "Could not install profile!";
             return;
         }
         iccEngine->addProfile(saveLocation + file.fileName());

@@ -81,7 +81,7 @@ void KisMemoryWindowTest::testTopReports()
             ptr = memory.getWriteChunkPtr(KisChunkData(chunkStart, chunkLength));
             memcpy(ptr, writeBuffer.data(), chunkLength);
 
-            qDebug() << "Writing chunk at" << chunkStart / chunkLength << "MiB" << "max" << maxChunk / chunkLength;
+            dbgKrita << "Writing chunk at" << chunkStart / chunkLength << "MiB" << "max" << maxChunk / chunkLength;
             QTest::qWait(250);
         }
 
@@ -94,7 +94,7 @@ void KisMemoryWindowTest::testTopReports()
             ptr = memory.getReadChunkPtr(KisChunkData(chunkStart, chunkLength));
             memcpy(readBuffer.data(), ptr, chunkLength);
 
-            qDebug() << "Reading chunk at" << chunkStart / chunkLength << "MiB" << "max" << maxChunk / chunkLength;
+            dbgKrita << "Reading chunk at" << chunkStart / chunkLength << "MiB" << "max" << maxChunk / chunkLength;
             QTest::qWait(250);
         }
     }

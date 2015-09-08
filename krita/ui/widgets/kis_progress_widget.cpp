@@ -19,7 +19,7 @@
  */
 
 #include "kis_progress_widget.h"
-#include <QDebug>
+#include <kis_debug.h>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QKeyEvent>

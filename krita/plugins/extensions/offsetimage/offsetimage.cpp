@@ -81,7 +81,7 @@ void OffsetImage::slotOffsetImage()
     }
     else
     {
-        kWarning() << "KisImage not available";
+        dbgKrita << "KisImage not available";
     }
 }
 
@@ -107,7 +107,7 @@ void OffsetImage::slotOffsetLayer()
     }
     else
     {
-        kWarning() << "KisImage not available";
+        dbgKrita << "KisImage not available";
     }
 }
 

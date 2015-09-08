@@ -20,7 +20,7 @@
 #include "kis_texture_tile.h"
 
 #ifdef HAVE_OPENGL
-#include <QDebug>
+#include <kis_debug.h>
 #include <QOpenGLFunctions>
 
 #ifndef GL_BGRA

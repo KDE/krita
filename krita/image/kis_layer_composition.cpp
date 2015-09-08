@@ -156,9 +156,9 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
         QDomElement valueElement = doc.createElement("value");
         valueElement.setAttribute("uuid", iter.key().toString());
         valueElement.setAttribute("visible", iter.value());
-        kDebug() << "contains" << m_collapsedMap.contains(iter.key());
+        dbgKrita << "contains" << m_collapsedMap.contains(iter.key());
         if (m_collapsedMap.contains(iter.key())) {
-            kDebug() << "colapsed :" << m_collapsedMap[iter.key()];
+            dbgKrita << "colapsed :" << m_collapsedMap[iter.key()];
             valueElement.setAttribute("collapsed", m_collapsedMap[iter.key()]);
         }
         compositionElement.appendChild(valueElement);

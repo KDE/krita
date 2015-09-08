@@ -226,7 +226,7 @@ void ResourceManager::slotImport()
         }
     }
     else {
-        qWarning() << "Trying to add a resource of an undefined type";
+        warnKrita << "Trying to add a resource of an undefined type";
     }
 
 }
@@ -322,7 +322,7 @@ void ResourceManager::bundlesLoaded()
 
     foreach(ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
         if (!bundle->install()) {
-            qWarning() << "Could not install resources for bundle" << bundle->name();
+            warnKrita << "Could not install resources for bundle" << bundle->name();
         }
     }
 

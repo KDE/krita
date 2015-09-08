@@ -171,7 +171,7 @@ KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
 
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
-        qDebug() << i.key() << ":" << i.value();
+        dbgKrita << i.key() << ":" << i.value();
     */
     return config;
 }

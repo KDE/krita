@@ -554,7 +554,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
         m_d->commandsAdapter->endMacro();
 
     } else {
-        qWarning() << "Unsupported node conversion type:" << nodeType;
+        warnKrita << "Unsupported node conversion type:" << nodeType;
     }
 }
 
@@ -1010,7 +1010,7 @@ void KisNodeManager::saveNodeAsImage()
     KisNodeSP node = activeNode();
 
     if (!node) {
-        qWarning() << "BUG: Save Node As Image was called without any node selected";
+        warnKrita << "BUG: Save Node As Image was called without any node selected";
         return;
     }
 

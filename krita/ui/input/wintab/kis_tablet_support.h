@@ -123,7 +123,7 @@ struct QTabletDeviceData
             }
 
             if (m_workaroundX11SmoothPressureSteps) {
-                qWarning() << "WARNING: Workaround for broken tablet"
+                warnKrita << "WARNING: Workaround for broken tablet"
                            << "pressure reports is activated. Number"
                            << "of smooth steps:"
                            << m_workaroundX11SmoothPressureSteps;

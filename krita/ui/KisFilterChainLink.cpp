@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #include <QPluginLoader>
 #include <QTemporaryFile>
 #include <kmimetype.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include "KisFilterEntry.h"
 #include "KisImportExportManager.h"
 #include "KoProgressUpdater.h"
@@ -68,14 +68,14 @@ namespace CalligraFilter {
     KisImportExportFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
     {
         if (!m_filterEntry) {
-            kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
+            errFile << "This filter entry is null. Strange stuff going on." << endl;
             return KisImportExportFilter::FilterEntryNull;
         }
 
         m_filter = m_filterEntry->createFilter(m_chain);
 
         if (!m_filter) {
-            kError(30500) << "Couldn't create the filter." << endl;
+            errFile << "Couldn't create the filter." << endl;
             return KisImportExportFilter::FilterCreationError;
         }
 
@@ -99,7 +99,7 @@ namespace CalligraFilter {
 
     void ChainLink::dump() const
     {
-        kDebug(30500) << "   Link:" << m_filterEntry->loader()->fileName();
+        dbgFile << "   Link:" << m_filterEntry->loader()->fileName();
     }
 
     void ChainLink::setupCommunication(const KisImportExportFilter *const parentFilter) const

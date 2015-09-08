@@ -1025,7 +1025,7 @@ void filterMergableNodes(QList<KisNodeSP> &nodes)
         if (!dynamic_cast<KisLayer*>(it->data()) ||
             checkIsChildOf(*it, nodes)) {
 
-            qDebug() << "Skipping node" << ppVar((*it)->name());
+            dbgKrita << "Skipping node" << ppVar((*it)->name());
             it = nodes.erase(it);
         } else {
             ++it;

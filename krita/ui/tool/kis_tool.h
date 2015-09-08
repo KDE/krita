@@ -51,9 +51,9 @@
 #define MOVE_CONDITION(_event, _mode) (this->mode() == (_mode))
 
 #ifdef __GNUC__
-#define WARN_WRONG_MODE(_mode) qWarning() << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
+#define WARN_WRONG_MODE(_mode) warnKrita << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
 #else
-#define WARN_WRONG_MODE(_mode) qWarning() << "Unexpected tool event has come while being mode" << _mode << "!"
+#define WARN_WRONG_MODE(_mode) warnKrita << "Unexpected tool event has come while being mode" << _mode << "!"
 #endif
 
 #define CHECK_MODE_SANITY_OR_RETURN(_mode) if (mode() != _mode) { WARN_WRONG_MODE(mode()); return; }

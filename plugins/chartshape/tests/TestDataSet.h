@@ -21,9 +21,6 @@
 #ifndef KCHART_TESTDATASET_H
 #define KCHART_TESTDATASET_H
 
-// Qt
-#include <QtTest>
-
 // KoChart
 #include "ChartProxyModel.h"
 #include "ChartTableModel.h"

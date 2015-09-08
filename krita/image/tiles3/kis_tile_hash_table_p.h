@@ -389,10 +389,10 @@ void KisTileHashTableTraits<T>::sanityChecksumCheck()
     }
 
     if (exactNumTiles != m_numTiles) {
-        qDebug() << "Sanity check failed!";
-        qDebug() << ppVar(exactNumTiles);
-        qDebug() << ppVar(m_numTiles);
-        qDebug() << "Wrong tiles checksum!";
-        Q_ASSERT(0); // not qFatal() for a backtrace support
+        dbgKrita << "Sanity check failed!";
+        dbgKrita << ppVar(exactNumTiles);
+        dbgKrita << ppVar(m_numTiles);
+        dbgKrita << "Wrong tiles checksum!";
+        Q_ASSERT(0); // not fatalKrita for a backtrace support
     }
 }

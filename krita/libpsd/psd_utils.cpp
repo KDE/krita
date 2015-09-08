@@ -21,7 +21,7 @@
 
 #include <QIODevice>
 #include <QString>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <netinet/in.h> // htonl
 #include "psd.h"

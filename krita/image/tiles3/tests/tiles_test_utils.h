@@ -21,6 +21,7 @@
 
 #include <KoStore_p.h>
 #include <kis_paint_device_writer.h>
+#include <kis_debug.h>
 
 class KisFakePaintDeviceWriter : public KisPaintDeviceWriter {
 public:
@@ -75,7 +76,7 @@ bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size)
 {
     for(; size > 0; size--)
         if(*(mem++) != c) {
-            qDebug() << "Expected" << c << "but found" << *(mem-1);
+            dbgKrita << "Expected" << c << "but found" << *(mem-1);
             return false;
         }
 

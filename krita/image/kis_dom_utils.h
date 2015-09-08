@@ -54,7 +54,7 @@ namespace KisDomUtils {
             }
 
             if (!ok) {
-                qWarning() << "WARNING: KisDomUtils::stringToInt failed:" << ppVar(str);
+                warnKrita << "WARNING: KisDomUtils::stringToInt failed:" << ppVar(str);
                 value = 0;
             }
 
@@ -83,7 +83,7 @@ namespace KisDomUtils {
             }
 
             if (!ok) {
-                qWarning() << "WARNING: KisDomUtils::stringToDouble failed:" << ppVar(str);
+                warnKrita << "WARNING: KisDomUtils::stringToDouble failed:" << ppVar(str);
                 value = 0;
             }
 

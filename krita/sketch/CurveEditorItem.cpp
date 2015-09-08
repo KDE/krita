@@ -24,7 +24,7 @@
 #include "kis_curve_widget.h"
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
-#include <QDebug>
+#include <kis_debug.h>
 
 class CurveEditorItem::Private
 {

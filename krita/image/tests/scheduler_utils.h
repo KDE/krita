@@ -50,8 +50,8 @@ bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
         return true;
     }
     else {
-        qDebug() << "walker rect:" << walker->requestedRect();
-        qDebug() << "expected rect:" << rect;
+        dbgKrita << "walker rect:" << walker->requestedRect();
+        dbgKrita << "expected rect:" << rect;
         return false;
     }
 }

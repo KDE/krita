@@ -24,7 +24,7 @@
 // Qt
 #include <QList>
 #include <QString>
-#include <QtTest>
+#include <QTest>
 
 TestTableSource::TestTableSource()
     : QObject()

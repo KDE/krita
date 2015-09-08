@@ -185,7 +185,7 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
                                       indirectPainting,
                                       externalLayer);
 
-    qDebug() << "Testcase:" << testName
+    dbgKrita << "Testcase:" << testName
              << "(comare against " << (testUpdates ? "projection" : "layer") << ")";
 
     QImage resultImage;

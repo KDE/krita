@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include <kmimetype.h>
 #include <QTemporaryFile>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"
 #include "KoUpdater.h"

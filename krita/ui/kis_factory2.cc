@@ -33,15 +33,11 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 
-#include <KoHashGeneratorProvider.h>
-
 #include <kis_debug.h>
 
 #include "kis_aboutdata.h"
 
 #include "KisPart.h"
-
-#include "kis_md5_generator.h"
 
 
 K4AboutData* KisFactory::s_aboutData = 0;
@@ -50,7 +46,6 @@ KComponentData* KisFactory::s_componentData = 0;
 KisFactory::KisFactory()
 {
     (void)componentData();
-    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
 
 KisFactory::~KisFactory()
@@ -76,22 +71,8 @@ const KComponentData &KisFactory::componentData()
         s_componentData = new KComponentData(aboutData());
         Q_CHECK_PTR(s_componentData);
 
-        // for cursors
-        KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
-
-        // for images in the paintop box
-        KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
-
-        KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
-
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
     }
 
     return *s_componentData;
 }
 
-const QString KisFactory::componentName()
-{
-    return "krita";
-}

@@ -70,6 +70,10 @@ void KisColorSelectorTriangle::updatePixelCache()
 
     QPoint pixelCacheOffset;
 
+    if (m_cachedSize != QSize(width, height) && m_realPixelCache) {
+        m_realPixelCache = 0;
+    }
+
     Acs::PixelCacheRenderer::render(this,
                                     m_parent->converter(),
                                     QRect(0, 0, width, height),
@@ -78,7 +82,7 @@ void KisColorSelectorTriangle::updatePixelCache()
                                     pixelCacheOffset);
 
 //    if (!pixelCacheOffset.isNull()) {
-//        qWarning() << "WARNING: offset of the triangle selector is not null!";
+//        warnKrita << "WARNING: offset of the triangle selector is not null!";
 //    }
 
     // antialiased border

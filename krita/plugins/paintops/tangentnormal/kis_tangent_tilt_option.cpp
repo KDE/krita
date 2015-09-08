@@ -116,7 +116,7 @@ int KisTangentTiltOption::directionType() const
         type=3;
     }
     else {
-        qWarning()<<"There's something odd with the radio buttons. We'll use Tilt";
+        warnKrita<<"There's something odd with the radio buttons. We'll use Tilt";
     }
 
     return type;

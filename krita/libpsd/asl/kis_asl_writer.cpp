@@ -120,7 +120,7 @@ void parseElement(const QDomElement &el, QIODevice *device, bool forceTypeInfo =
         writeFixedString("bool", device);
         SAFE_WRITE_EX(device, v);
     } else {
-        qWarning() << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(key);
+        warnKrita << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(key);
     }
 }
 
@@ -268,7 +268,7 @@ void KisAslWriter::writeFile(QIODevice *device, const QDomDocument &doc)
     try {
         Private::writeFileImpl(device, doc);
     } catch (Private::ASLWriteException &e) {
-        qWarning() << "WARNING: ASL:" << e.what();
+        warnKrita << "WARNING: ASL:" << e.what();
     }
 }
 

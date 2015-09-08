@@ -51,7 +51,7 @@ public:
     void begin(int shortcut, QEvent *event);
 
     virtual void inputEvent(QEvent* event);
-    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    void cursorMoved(const QPointF &lastPos, const QPointF &pos);
 
     virtual bool isShortcutRequired(int shortcut) const;
 

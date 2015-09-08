@@ -29,14 +29,14 @@
 
 void debugSpan(const KisFilterWeightsApplicator::BlendSpan &span)
 {
-    qDebug() << ppVar(span.weights->centerIndex);
+    dbgKrita << ppVar(span.weights->centerIndex);
     for (int i = 0; i < span.weights->span; i++) {
-        qDebug() << "Weights" << i << span.weights->weight[i];
+        dbgKrita << "Weights" << i << span.weights->weight[i];
     }
 
-    qDebug() << ppVar(span.firstBlendPixel);
-    qDebug() << ppVar(span.offset);
-    qDebug() << ppVar(span.offsetInc);
+    dbgKrita << ppVar(span.firstBlendPixel);
+    dbgKrita << ppVar(span.offset);
+    dbgKrita << ppVar(span.offsetInc);
 }
 
 void testSpan(qreal scale, qreal dx, int dst_l,
@@ -57,11 +57,11 @@ void testSpan(qreal scale, qreal dx, int dst_l,
         span.offset != KisFixedPoint(expectedOffset) ||
         span.offsetInc != KisFixedPoint(expectedOffsetInc)) {
 
-        qDebug() << "Failed to generate a span:";
-        qDebug() << ppVar(scale) << ppVar(dx) << ppVar(dst_l);
-        qDebug() << ppVar(span.firstBlendPixel) << ppVar(expectedFirstPixel);
-        qDebug() << ppVar(span.offset) << ppVar(KisFixedPoint(expectedOffset));
-        qDebug() << ppVar(span.offsetInc) << ppVar(KisFixedPoint(expectedOffsetInc));
+        dbgKrita << "Failed to generate a span:";
+        dbgKrita << ppVar(scale) << ppVar(dx) << ppVar(dst_l);
+        dbgKrita << ppVar(span.firstBlendPixel) << ppVar(expectedFirstPixel);
+        dbgKrita << ppVar(span.offset) << ppVar(KisFixedPoint(expectedOffset));
+        dbgKrita << ppVar(span.offsetInc) << ppVar(KisFixedPoint(expectedOffsetInc));
         QFAIL("fail");
     }
 }
@@ -172,7 +172,7 @@ void printPixels(KisPaintDeviceSP dev, int x0, int len, bool horizontal)
         int y = horizontal ? 0 : i;
 
         dev->pixel(x, y, &c);
-        qDebug() << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
+        dbgKrita << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
     }
 }
 
@@ -189,9 +189,9 @@ void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[], bool
         if (c.red() != r[i] ||
             c.alpha() != a[i]) {
 
-            qDebug() << "Failed to compare RA channels:" << ppVar(x0 + i);
-            qDebug() << "Red:" << c.red() << "Expected:" << r[i];
-            qDebug() << "Alpha:" << c.alpha() << "Expected:" << a[i];
+            dbgKrita << "Failed to compare RA channels:" << ppVar(x0 + i);
+            dbgKrita << "Red:" << c.red() << "Expected:" << r[i];
+            dbgKrita << "Alpha:" << c.alpha() << "Expected:" << a[i];
             QFAIL("failed");
         }
     }

@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kurl.h>
 
 #include <KoFileDialog.h>

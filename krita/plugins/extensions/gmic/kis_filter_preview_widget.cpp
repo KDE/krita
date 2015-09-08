@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QWheelEvent>
 
-#include <QDebug>
+#include <kis_debug.h>
 
 KisFilterPreviewWidget::KisFilterPreviewWidget(QWidget* parent): QWidget(parent)
 {

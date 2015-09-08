@@ -75,7 +75,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     QImage image = reader.read();
 
     if (image.isNull()) {
-      kWarning() << "Could not read brush" << filename() << ". Error:" << reader.errorString();
+      dbgKrita << "Could not read brush" << filename() << ". Error:" << reader.errorString();
       setValid(false);
       return false;
     }

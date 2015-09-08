@@ -54,7 +54,7 @@
 
 #include "kis_crash_handler.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QDesktopServices>
 #include <QTextStream>
 
@@ -186,7 +186,7 @@ KisCrashHandler::KisCrashHandler()
     QString tempPath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
 
 #ifdef Q_OS_MAC
-    qDebug() << "Installing CrashHandler" << tempPath;
+    dbgKrita << "Installing CrashHandler" << tempPath;
     typedef std::basic_string<wchar_t> wstring;
     wstring str;
     str.resize(tempPath.length());
@@ -196,7 +196,7 @@ KisCrashHandler::KisCrashHandler()
                                                              google_breakpad::ExceptionHandler::HANDLER_ALL);
 
 #else
-    qDebug() << "Installing CrashHandler"; // do not remove this line; it is needed to make it work on linux.
+    dbgKrita << "Installing CrashHandler"; // do not remove this line; it is needed to make it work on linux.
 
     exceptionHandler = new google_breakpad::ExceptionHandler(tempPath.toStdString(), 0,
                                                              startCrashReporter, 0,

@@ -117,7 +117,7 @@ void KisSwappedDataStoreTest::testRandomAccess()
 
     for(qint32 i = 0; i < NUM_CYCLES; i++) {
         if(!(i%5000))
-            qDebug() << i << "of" << NUM_CYCLES;
+            dbgKrita << i << "of" << NUM_CYCLES;
 
         qint32 col = qrand() % NUM_TILES;
 

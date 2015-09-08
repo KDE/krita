@@ -27,7 +27,7 @@
 #include <cstdlib>
 
 // Qt includes.
-#include <QDebug>
+#include <kis_debug.h>
 #include <QtGlobal>
 #include <QPainter>
 #include <QPoint>

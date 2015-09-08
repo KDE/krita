@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QTreeView>
 #include <QHeaderView>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QResizeEvent>
 #include <QSize>
 

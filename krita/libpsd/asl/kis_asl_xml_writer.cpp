@@ -55,7 +55,7 @@ KisAslXmlWriter::~KisAslXmlWriter()
 QDomDocument KisAslXmlWriter::document() const
 {
     if (m_d->document.documentElement() != m_d->currentElement) {
-        qWarning() << "KisAslXmlWriter::document(): unbalanced enter/leave descriptor/array";
+        warnKrita << "KisAslXmlWriter::document(): unbalanced enter/leave descriptor/array";
     }
 
     return m_d->document;
@@ -82,7 +82,7 @@ void KisAslXmlWriter::leaveDescriptor()
     if (!m_d->currentElement.parentNode().toElement().isNull()) {
         m_d->currentElement = m_d->currentElement.parentNode().toElement();
     } else {
-        qWarning() << "KisAslXmlWriter::leaveDescriptor(): unbalanced enter/leave descriptor";
+        warnKrita << "KisAslXmlWriter::leaveDescriptor(): unbalanced enter/leave descriptor";
     }
 }
 
@@ -105,7 +105,7 @@ void KisAslXmlWriter::leaveList()
     if (!m_d->currentElement.parentNode().toElement().isNull()) {
         m_d->currentElement = m_d->currentElement.parentNode().toElement();
     } else {
-        qWarning() << "KisAslXmlWriter::leaveList(): unbalanced enter/leave list";
+        warnKrita << "KisAslXmlWriter::leaveList(): unbalanced enter/leave list";
     }
 }
 

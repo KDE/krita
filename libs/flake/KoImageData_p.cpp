@@ -112,7 +112,7 @@ void KoImageDataPrivate::setSuffix(const QString &name)
 void KoImageDataPrivate::copyToTemporary(QIODevice &device)
 {
     delete temporaryFile;
-    temporaryFile = new QTemporaryFile(QLatin1String("KoImageData/") + qAppName() + QLatin1String("_XXXXXX"));
+    temporaryFile = new QTemporaryFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX"));
     if (!temporaryFile->open()) {
         kWarning(30006) << "open temporary file for writing failed";
         errorCode = KoImageData::StorageFailed;

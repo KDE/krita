@@ -50,7 +50,7 @@ void KisRecalculateTransformMaskJob::run()
     KisLayerSP layer = dynamic_cast<KisLayer*>(m_mask->parent().data());
 
     if (!layer) {
-        qWarning() << "WARNING: KisRecalculateTransformMaskJob::run() Mask has no parent layer! Skipping projection update!";
+        warnKrita << "WARNING: KisRecalculateTransformMaskJob::run() Mask has no parent layer! Skipping projection update!";
         return;
     }
 

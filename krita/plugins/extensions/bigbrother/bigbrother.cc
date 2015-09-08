@@ -116,7 +116,7 @@ BigBrotherPlugin::~BigBrotherPlugin()
 void BigBrotherPlugin::slotOpenPlay()
 {
     KisMacro* m = openMacro();
-    qDebug() << m;
+    dbgKrita << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();

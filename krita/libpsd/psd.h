@@ -33,7 +33,7 @@
 
 #include "kritapsd_export.h"
 
-#include "kis_debug.h"
+#include "kis_types.h"
 
 class KoPattern;
 

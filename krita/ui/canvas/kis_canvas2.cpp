@@ -333,7 +333,7 @@ KoUnit KisCanvas2::unit() const
     KisImageWSP image = m_d->view->image();
     if (image) {
         if (!qFuzzyCompare(image->xRes(), image->yRes())) {
-            qWarning() << "WARNING: resolution of the image is anisotropic"
+            warnKrita << "WARNING: resolution of the image is anisotropic"
                        << ppVar(image->xRes())
                        << ppVar(image->yRes());
         }

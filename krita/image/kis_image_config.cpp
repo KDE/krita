@@ -37,7 +37,7 @@ KisImageConfig::KisImageConfig()
 KisImageConfig::~KisImageConfig()
 {
     if (qApp->thread() != QThread::currentThread()) {
-        qDebug() << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
+        dbgKrita << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
         return;
     }
 
@@ -230,7 +230,7 @@ void KisImageConfig::setSwapDir(const QString &swapDir)
 #include <sys/sysctl.h>
 #endif
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 int KisImageConfig::totalRAM()
 {
@@ -280,7 +280,7 @@ int KisImageConfig::totalRAM()
 #endif
 
     if(error) {
-        kWarning() << "Cannot get the size of your RAM."
+        dbgKrita << "Cannot get the size of your RAM."
                    << "Using default value of 1GiB.";
     }
 

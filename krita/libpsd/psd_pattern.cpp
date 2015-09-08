@@ -21,7 +21,7 @@
 #include "compression.h"
 
 #include <QImage>
-#include <QDebug>
+#include <kis_debug.h>
 
 struct PsdPattern::Private
 {
@@ -169,7 +169,7 @@ bool psd_read_pattern(QIODevice *io)
                     length *= 2;
                     pixels *= 2;
                 default:
-                    qDebug() << "Wrong depth for pattern";
+                    dbgKrita << "Wrong depth for pattern";
                     return false;
                 }
 
@@ -196,7 +196,7 @@ bool psd_read_pattern(QIODevice *io)
                 case MultiChannel:
                     length *= 4;
                 default:
-                    qDebug() << "Impossible color mode" << pattern.color_mode;
+                    dbgKrita << "Impossible color mode" << pattern.color_mode;
                     return false;
                 }
 

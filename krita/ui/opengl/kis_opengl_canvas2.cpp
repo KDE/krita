@@ -32,7 +32,7 @@
 #include <QPoint>
 #include <QPainter>
 #include <QMatrix>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QThread>
 #include <QMessageBox>
 #include <QFile>
@@ -241,30 +241,30 @@ void KisOpenGLCanvas2::initializeGL()
 //    KisConfig cfg;
 //    if (cfg.disableVSync()) {
 //        if (!VSyncWorkaround::tryDisableVSync(this)) {
-//            qWarning();
-//            qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
-//            qWarning() << "WARNING: It means either your hardware or driver doesn't support it,";
-//            qWarning() << "WARNING: or we just don't know about this hardware. Please report us a bug";
-//            qWarning() << "WARNING: with the output of \'glxinfo\' for your card.";
-//            qWarning();
-//            qWarning() << "WARNING: Trying to workaround it by disabling Double Buffering.";
-//            qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
-//            qWarning() << "WARNING: affect the quality of the final image, though.";
-//            qWarning();
+//            warnKrita;
+//            warnKrita << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+//            warnKrita << "WARNING: It means either your hardware or driver doesn't support it,";
+//            warnKrita << "WARNING: or we just don't know about this hardware. Please report us a bug";
+//            warnKrita << "WARNING: with the output of \'glxinfo\' for your card.";
+//            warnKrita;
+//            warnKrita << "WARNING: Trying to workaround it by disabling Double Buffering.";
+//            warnKrita << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+//            warnKrita << "WARNING: affect the quality of the final image, though.";
+//            warnKrita;
 
 //            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
-//                qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
-//                qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
-//                qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
-//                qCritical();
+//                errKrita << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+//                errKrita << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+//                errKrita << "CRITICAL: For an optimal experience, please disable OpenGL";
+//                errKrita;
 //            }
 //        }
 //    }
 
     KisConfig cfg;
-    qDebug() << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    dbgKrita << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
     int glVersion = KisOpenGL::initializeContext(context());
-    qDebug() << "OpenGL: Version found" << glVersion;
+    dbgKrita << "OpenGL: Version found" << glVersion;
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
@@ -501,7 +501,7 @@ void KisOpenGLCanvas2::drawImage()
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
             if (!tile) {
-                qWarning() << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                warnKrita << "OpenGL: Trying to paint texture tile but it has not been created yet.";
                 continue;
             }
 
@@ -570,7 +570,7 @@ void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString 
     KisConfig cfg;
 
     if (cfg.useVerboseOpenGLDebugOutput()) {
-        qDebug() << "GL-log:" << context << log;
+        dbgKrita << "GL-log:" << context << log;
     }
 
     if (result) return;

@@ -17,7 +17,7 @@
  */
 #include "kis_about_application.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QTabWidget>
 #include <QLabel>
 #include <QTextEdit>

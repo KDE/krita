@@ -551,7 +551,7 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 
     if (!parent) {
-        qWarning() << "KisLayerManager::adjustLayerPosition:"
+        warnKrita << "KisLayerManager::adjustLayerPosition:"
                    << "No node accepted newly created node";
 
         parent = m_view->image()->root();

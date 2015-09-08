@@ -23,9 +23,6 @@
 // Own
 #include "TestLoading.h"
 
-// KDE
-#include <qtest_kde.h>
-
 // KoChart
 #include "ChartShape.h"
 #include "PlotArea.h"
@@ -54,5 +51,4 @@ void TestLoading::testLegend()
     testLegendElements(QStringList() << "Row 1" << "Row 2" << "Row 3" << "Row 4");
 }
 
-QTEST_KDEMAIN(TestLoading, GUI)
-
+QTEST_MAIN(TestLoading)

@@ -38,7 +38,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QCheckBox>
-#include <QDebug>
+#include <kis_debug.h>
 
 
 struct FileItem {

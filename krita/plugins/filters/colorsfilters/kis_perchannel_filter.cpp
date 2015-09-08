@@ -291,9 +291,9 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         }
 
     } else if (cfg->curves().size() != int(m_virtualChannels.size())) {
-        qWarning() << "WARNING: trying to load a curve with incorrect  number of channels!";
-        qWarning() << "WARNING:   expected:" << m_virtualChannels.size();
-        qWarning() << "WARNING:        got:" << cfg->curves().size();
+        warnKrita << "WARNING: trying to load a curve with incorrect  number of channels!";
+        warnKrita << "WARNING:   expected:" << m_virtualChannels.size();
+        warnKrita << "WARNING:        got:" << cfg->curves().size();
         return;
     } else {
         for (int ch = 0; ch < cfg->curves().size(); ch++)

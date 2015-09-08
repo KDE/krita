@@ -47,7 +47,7 @@
 #include <kinputdialog.h>
 #include <QMessageBox>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kiconloader.h>
 #include <kaboutdata.h>
 #include <kconfiggroup.h>
@@ -297,7 +297,7 @@ void KisTemplateCreateDia::slotOk() {
     if ( pos > -1 )
         ext = d->m_filePath.mid(pos);
     else
-        kWarning(30004) << "Template extension not found!";
+        warnUI << "Template extension not found!";
 
     KUrl dest;
     dest.setPath(templateDir+file+ext);
@@ -311,7 +311,7 @@ void KisTemplateCreateDia::slotOk() {
         while (QFile(dest.toLocalFile()).exists());
     }
     bool ignore = false;
-    kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
+    dbgUI <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
     KisTemplate *t=new KisTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
     if (!group->add(t)) {
         KisTemplate *existingTemplate=group->find(d->m_name->text());
@@ -351,7 +351,7 @@ void KisTemplateCreateDia::slotOk() {
         } else if(!d->m_customPixmap.isNull()) {
             saveAsQuadraticPng(d->m_customPixmap, icon);
         } else {
-            kWarning(30004) << "Could not save the preview picture!";
+            warnUI << "Could not save the preview picture!";
         }
     }
 
@@ -366,7 +366,7 @@ void KisTemplateCreateDia::slotOk() {
                 dest.setPath(dir + "/.directory");
                 // We copy the file with overwrite
                 if (!QFile(orig.toLocalFile()).copy(dest.toLocalFile())) {
-                    qWarning() << "Failed to copy from" << orig.toLocalFile() << "to" << dest.toLocalFile();
+                    warnKrita << "Failed to copy from" << orig.toLocalFile() << "to" << dest.toLocalFile();
                 }
                 ready = true;
             }
@@ -507,13 +507,13 @@ void KisTemplateCreateDia::updatePixmap() {
         d->m_preview->setPixmap(d->m_thumbnail);
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
-            kDebug(30004) <<"Trying to load picture" << d->m_customFile;
+            dbgUI <<"Trying to load picture" << d->m_customFile;
             // use the code in KisTemplate to load the image... hacky, I know :)
             KisTemplate t("foo", "bar", QString(), d->m_customFile);
             d->m_customPixmap=t.loadPicture();
         }
         else
-            kWarning(30004) << "Trying to load picture";
+            warnUI << "Trying to load picture";
 
         if(!d->m_customPixmap.isNull())
             d->m_preview->setPixmap(d->m_customPixmap);

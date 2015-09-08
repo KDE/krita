@@ -195,7 +195,7 @@ void KisInputProfileManager::loadProfiles()
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
     QStringList profiles = KGlobal::dirs()->findAllResources("data", "krita/input/*", KStandardDirs::Recursive);
 
-    qDebug() << "profiles" << profiles;
+    dbgKrita << "profiles" << profiles;
 
     QMap<QString, QList<ProfileEntry> > profileEntries;
 

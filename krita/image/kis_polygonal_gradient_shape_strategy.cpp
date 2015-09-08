@@ -292,8 +292,8 @@ namespace Private {
 
             if (status == GSL_SUCCESS)
             {
-                // qDebug() << "*******Converged to minimum";
-                // qDebug() << gsl_vector_get (s->x, 0)
+                // dbgKrita << "*******Converged to minimum";
+                // dbgKrita << gsl_vector_get (s->x, 0)
                 //          << gsl_vector_get (s->x, 1)
                 //          << "|" << s->fval << size;
 
@@ -403,11 +403,11 @@ QPointF KisPolygonalGradientShapeStrategy::testingCalculatePathCenter(int numSam
                                                   &result);
 
     if (!success) {
-        qDebug() << "WARNING: Couldn't calculate findBestStartingPoint for:";
-        qDebug() << ppVar(numSamples);
-        qDebug() << ppVar(exponent);
-        qDebug() << ppVar(searchForMax);
-        qDebug() << ppVar(path);
+        dbgKrita << "WARNING: Couldn't calculate findBestStartingPoint for:";
+        dbgKrita << ppVar(numSamples);
+        dbgKrita << ppVar(exponent);
+        dbgKrita << ppVar(searchForMax);
+        dbgKrita << ppVar(path);
 
     }
 

@@ -101,7 +101,7 @@ void KisTiffTest::testRoundTripRGBF16()
                                        QString(),
                                        status);
 
-    qDebug() << s;
+    dbgKrita << s;
     Q_ASSERT(doc1->image());
 
     QImage ref0 = doc0->image()->projection()->convertToQImage(0, testRect);

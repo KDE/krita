@@ -147,7 +147,7 @@ void readChildObject(QIODevice *device,
 
     QString OSType = readFixedString(device);
 
-    //qDebug() << "Child" << ppVar(key) << ppVar(OSType);
+    //dbgKrita << "Child" << ppVar(key) << ppVar(OSType);
 
     if (OSType == "obj ") {
         qFatal("no implemented");
@@ -220,7 +220,7 @@ void readDescriptor(QIODevice *device,
     el.setAttribute("classId", classId);
     el.setAttribute("name", name);
 
-    //qDebug() << "Descriptor" << ppVar(key) << ppVar(classId) << ppVar(numChildren);
+    //dbgKrita << "Descriptor" << ppVar(key) << ppVar(classId) << ppVar(numChildren);
 
     for (quint32 i = 0; i < numChildren; i++) {
         readChildObject(device, &el, doc);
@@ -258,10 +258,10 @@ QImage readVirtualArrayList(QIODevice *device,
         throw ASLParseException("VAList: Krita doesn't support ASL files with 'numberOfChannels' flag not equal to 24 (it is not documented)!");
     }
 
-    // qDebug() << ppVar(arrayVersion);
-    // qDebug() << ppVar(arrayLength);
-    // qDebug() << ppVar(arrayRect);
-    // qDebug() << ppVar(numberOfChannels);
+    // dbgKrita << ppVar(arrayVersion);
+    // dbgKrita << ppVar(arrayLength);
+    // dbgKrita << ppVar(arrayRect);
+    // dbgKrita << ppVar(numberOfChannels);
 
     if (numPlanes != 1 && numPlanes != 3) {
         throw ASLParseException("VAList: unsupported number of planes!");
@@ -304,13 +304,13 @@ QImage readVirtualArrayList(QIODevice *device,
         quint8 useCompression = 9;
         SAFE_READ_EX(device, useCompression);
 
-        // qDebug() << "plane index:" << ppVar(i);
-        // qDebug() << ppVar(arrayWritten);
-        // qDebug() << ppVar(arrayPlaneLength);
-        // qDebug() << ppVar(pixelDepth1);
-        // qDebug() << ppVar(planeRect);
-        // qDebug() << ppVar(pixelDepth2);
-        // qDebug() << ppVar(useCompression);
+        // dbgKrita << "plane index:" << ppVar(i);
+        // dbgKrita << ppVar(arrayWritten);
+        // dbgKrita << ppVar(arrayPlaneLength);
+        // dbgKrita << ppVar(pixelDepth1);
+        // dbgKrita << ppVar(planeRect);
+        // dbgKrita << ppVar(pixelDepth2);
+        // dbgKrita << ppVar(useCompression);
 
         if (pixelDepth1 != pixelDepth2) {
             throw ASLParseException("VAList: two pixel depths of the plane are not equal (it is not documented)!");
@@ -382,7 +382,7 @@ QImage readVirtualArrayList(QIODevice *device,
 #if 0
      static int i = -1; i++;
      QString filename = QString("pattern_image_%1.png").arg(i);
-     qDebug() << "### dumping pattern image" << ppVar(filename);
+     dbgKrita << "### dumping pattern image" << ppVar(filename);
      image.save(filename);
 #endif
 
@@ -424,13 +424,13 @@ qint64 readPattern(QIODevice *device,
 
     QString patternUuid = readPascalString(device);
 
-    // qDebug() << "--";
-    // qDebug() << ppVar(patternSize);
-    // qDebug() << ppVar(patternImageMode);
-    // qDebug() << ppVar(patternHeight);
-    // qDebug() << ppVar(patternWidth);
-    // qDebug() << ppVar(patternName);
-    // qDebug() << ppVar(patternUuid);
+    // dbgKrita << "--";
+    // dbgKrita << ppVar(patternSize);
+    // dbgKrita << ppVar(patternImageMode);
+    // dbgKrita << ppVar(patternHeight);
+    // dbgKrita << ppVar(patternWidth);
+    // dbgKrita << ppVar(patternName);
+    // dbgKrita << ppVar(patternUuid);
 
 
     int numPlanes = 0;
@@ -538,7 +538,7 @@ QDomDocument readFileImpl(QIODevice *device)
                     bytesRead += chunk;
                 }
             } catch (ASLParseException &e) {
-                qWarning() << "WARNING: ASL (emb. pattern):" << e.what();
+                warnKrita << "WARNING: ASL (emb. pattern):" << e.what();
             }
         }
     }
@@ -580,7 +580,7 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
     QDomDocument doc;
 
     if (device->isSequential()) {
-        qWarning() << "WARNING: *** KisAslReader::readFile: the supplied"
+        warnKrita << "WARNING: *** KisAslReader::readFile: the supplied"
                    << "IO device is sequential. Chances are that"
                    << "the layer style will *not* be loaded correctly!";
     }
@@ -588,7 +588,7 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
     try {
         doc = Private::readFileImpl(device);
     } catch (KisAslReaderUtils::ASLParseException &e) {
-        qWarning() << "WARNING: ASL:" << e.what();
+        warnKrita << "WARNING: ASL:" << e.what();
     }
 
     return doc;
@@ -599,7 +599,7 @@ QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
     QDomDocument doc;
 
     if (device->isSequential()) {
-        qWarning() << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
+        warnKrita << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
                    << "IO device is sequential. Chances are that"
                    << "the layer style will *not* be loaded correctly!";
     }
@@ -624,7 +624,7 @@ QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
         Private::readDescriptor(device, "", &root, &doc);
 
     } catch (KisAslReaderUtils::ASLParseException &e) {
-        qWarning() << "WARNING: PSD: lfx2 section:" << e.what();
+        warnKrita << "WARNING: PSD: lfx2 section:" << e.what();
     }
 
     return doc;
@@ -651,7 +651,7 @@ QDomDocument KisAslReader::readPsdSectionPattern(QIODevice *device, qint64 bytes
             bytesRead += chunk;
         }
     } catch (KisAslReaderUtils::ASLParseException &e) {
-        qWarning() << "WARNING: PSD (emb. pattern):" << e.what();
+        warnKrita << "WARNING: PSD (emb. pattern):" << e.what();
     }
 
     return doc;

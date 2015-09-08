@@ -169,7 +169,7 @@ KisPaintDeviceSP TransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP src)
     QMutexLocker l(&m_devicesCacheMutex);
     KisPaintDeviceSP cache = m_devicesCacheHash.value(src.data());
     if (!cache) {
-        qWarning() << "WARNING: Transform Stroke: the device is absent in cache!";
+        warnKrita << "WARNING: Transform Stroke: the device is absent in cache!";
     }
 
     return cache;
@@ -216,7 +216,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
 
                     if (td->config.aX() || td->config.aY()) {
-                        qWarning() << "Perspective transform of an external layer is not supported:" << extLayer->name();
+                        warnKrita << "Perspective transform of an external layer is not supported:" << extLayer->name();
                     }
 
                     QVector3D transformedCenter;

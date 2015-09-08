@@ -20,7 +20,7 @@
 #include <QString>
 #include <QFile>
 #include <QDataStream>
-#include <QDebug>
+#include <kis_debug.h>
 #include <iostream>
 
 const QString PATT = "patt";
@@ -175,14 +175,14 @@ static quint32 parseEntry(QDataStream &buf)
 
     if (nlen == 1331849827) { // "Objc"
         value = p_objc(buf); // TODO: port
-        qDebug() << "Objc " << value;
+        dbgKrita << "Objc " << value;
     }
     else {
         // read char with nlen bytes and convert to String
         char * name = new char[ nlen + 1 ];
         int status = buf.readRawData(name, nlen);
         if (status == -1) {
-            qDebug() << "Error, name can't be readed";
+            dbgKrita << "Error, name can't be readed";
         }
         name[nlen] = '\0';
 
@@ -205,14 +205,14 @@ static quint32 parseEntry(QDataStream &buf)
             case P_LONG: value = p_vlls(buf); break; // yes vlls, it is not typo
             case P_DOUB: value = p_doub(buf); break;
             case P_ENUM: value = p_enum(buf); break;
-            default: qDebug() << "Freak error occurred!"; break;
+            default: dbgKrita << "Freak error occurred!"; break;
             }
-            qDebug() << name << type << value;
+            dbgKrita << name << type << value;
 
         }
         else {
-            qDebug() << "Unknown key:\t" << name << type;
-            //qDebug() << p_unkn(buf);
+            dbgKrita << "Unknown key:\t" << name << type;
+            //dbgKrita << p_unkn(buf);
             return -1;
         }
 
@@ -225,7 +225,7 @@ static void parse(QString fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Can't open file " << fileName;
+        dbgKrita << "Can't open file " << fileName;
         return;
     }
     QDataStream buf(&file);
@@ -235,7 +235,7 @@ static void parse(QString fileName)
     short int vermaj, vermin;
     buf >> vermaj;
     buf >> vermin;
-    qDebug() << "Version: " << vermaj << "." << vermin;
+    dbgKrita << "Version: " << vermaj << "." << vermin;
 
     int index = file.readAll().indexOf("8BIMdesc");
     buf.device()->seek(index);
@@ -244,7 +244,7 @@ static void parse(QString fileName)
         status = parseEntry(buf);
         if (status == -1) {
             // something to break the parsing with fail?
-            qDebug() << "Finishing with fail...";
+            dbgKrita << "Finishing with fail...";
             break;
         }
     }

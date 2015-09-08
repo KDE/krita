@@ -21,7 +21,7 @@
 
 #include <kaction.h>
 #include <kritaui_export.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kicon.h>
 class KisActionManager;
 

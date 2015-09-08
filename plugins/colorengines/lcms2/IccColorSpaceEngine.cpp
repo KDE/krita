@@ -26,7 +26,7 @@
 
 #include "LcmsColorSpace.h"
 
-#include "QDebug"
+#include <kdebug.h>
 
 // -- KoLcmsColorConversionTransformation --
 

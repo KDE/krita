@@ -26,9 +26,6 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <klocale.h>
 #include <kglobal.h>
 
 #include "KoPluginLoader.h"

@@ -61,8 +61,6 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *eve
         pointerPos = mouseEvent->pos();
     } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
         pointerPos = tabletEvent->pos();
-    } else if (KisTabletEvent *kisTabletEvent = dynamic_cast<KisTabletEvent*>(event)) {
-        pointerPos = kisTabletEvent->pos();
     }
 
     QPointF documentPos = coordinatesConverter->widgetToDocument(pointerPos);
@@ -144,9 +142,9 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     KoCanvasBase *canvas = this->canvas();
     if (canvas && canvas->canvasWidget() && (watched == canvas->canvasWidget())) {
-        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove || event->type() == (QEvent::Type)KisTabletEvent::TabletMoveEx) {
+        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
             m_d->emitPointerPositionChangedSignals(event);
-            return false;
+            return true;
         }
     }
 

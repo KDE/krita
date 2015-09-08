@@ -335,7 +335,7 @@ void ColorSettingsTab::installProfile()
     foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
-            kWarning() << "Could not install profile!";
+            dbgKrita << "Could not install profile!";
             return;
         }
         iccEngine->addProfile(saveLocation + file.fileName());
@@ -426,7 +426,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
     foreach (const KoColorProfile *profile, profileList) {
-//        //qDebug() << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
+//        //dbgKrita << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
             for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());

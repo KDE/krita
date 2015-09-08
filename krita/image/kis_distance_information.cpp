@@ -204,7 +204,7 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             m_d->distance += KisAlgebra2D::abs(diff);
         }
     } else {
-        qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";
+        warnKrita << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";
     }
 
     return t;

@@ -56,7 +56,7 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <ksavefile.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
@@ -98,6 +98,7 @@
 #include <kis_fill_painter.h>
 #include <kis_document_undo_store.h>
 #include <kis_painting_assistants_decoration.h>
+#include <kis_debug.h>
 
 // Local
 #include "kis_factory2.h"
@@ -497,7 +498,7 @@ public:
 
     void _k_slotGotMimeType(KIO::Job *job, const QString &mime)
     {
-        kDebug(1000) << mime;
+        dbgFile << mime;
         Q_ASSERT(job == m_job); Q_UNUSED(job);
         // set the mimetype only if it was not already set (for example, by the host application)
         if (mimeType.isEmpty()) {
@@ -657,7 +658,7 @@ bool KisDocument::exportDocument(const KUrl & _url)
     // This is sooooo hacky :(
     // Hopefully we will restore enough state.
     //
-    kDebug(30003) << "Restoring KisDocument state to before export";
+    dbgUI << "Restoring KisDocument state to before export";
 
     // always restore url & m_file because KParts has changed them
     // (regardless of failure or success)
@@ -679,7 +680,7 @@ bool KisDocument::exportDocument(const KUrl & _url)
 
 bool KisDocument::saveFile()
 {
-    kDebug(30003) << "doc=" << url().url();
+    dbgUI << "doc=" << url().url();
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
@@ -719,7 +720,7 @@ bool KisDocument::saveFile()
     bool ret = false;
     bool suppressErrorDialog = false;
     if (!isNativeFormat(outputMimeType)) {
-        kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
+        dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
         KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KisImportExportFilter::OK;
@@ -929,15 +930,15 @@ bool KisDocument::saveNativeFormat(const QString & file)
     setDisregardAutosaveFailure(false);
 
     d->lastErrorMessage.clear();
-    //kDebug(30003) <<"Saving to store";
+    //dbgUI <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Auto;
     if (d->specialOutputFlag == SaveAsDirectoryStore) {
         backend = KoStore::Directory;
-        kDebug(30003) << "Saving as uncompressed XML, using directory store.";
+        dbgUI << "Saving as uncompressed XML, using directory store.";
     }
     else if (d->specialOutputFlag == SaveAsFlatXML) {
-        kDebug(30003) << "Saving as a flat XML file.";
+        dbgUI << "Saving as a flat XML file.";
         QFile f(file);
         if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             bool success = saveToStream(&f);
@@ -947,7 +948,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
             return false;
     }
 
-    kDebug(30003) << "KisDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
+    dbgUI << "KisDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
 
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
@@ -972,11 +973,11 @@ bool KisDocument::saveNativeFormat(const QString & file)
 
 bool KisDocument::saveNativeFormatCalligra(KoStore *store)
 {
-    kDebug(30003) << "Saving root";
+    dbgUI << "Saving root";
     if (store->open("root")) {
         KoStoreDevice dev(store);
         if (!saveToStream(&dev) || !store->close()) {
-            kDebug(30003) << "saveToStream failed";
+            dbgUI << "saveToStream failed";
             delete store;
             return false;
         }
@@ -1008,7 +1009,7 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         delete store;
         return false;
     }
-    kDebug(30003) << "Saving done of url:" << url().url();
+    dbgUI << "Saving done of url:" << url().url();
     if (!store->finalize()) {
         delete store;
         return false;
@@ -1026,7 +1027,7 @@ bool KisDocument::saveToStream(QIODevice *dev)
     dev->open(QIODevice::WriteOnly);
     int nwritten = dev->write(s.data(), s.size());
     if (nwritten != (int)s.size())
-        kWarning(30003) << "wrote " << nwritten << "- expected" <<  s.size();
+        warnUI << "wrote " << nwritten << "- expected" <<  s.size();
     return nwritten == (int)s.size();
 }
 
@@ -1055,7 +1056,7 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
 
     QFile f(url.toLocalFile());
     if (!f.open(QIODevice::ReadOnly)) {
-        qWarning() << "Could not open file to check the mimetype" << url;
+        warnKrita << "Could not open file to check the mimetype" << url;
     }
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
     KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
@@ -1076,7 +1077,7 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
 // Called for embedded documents
 bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
 {
-    kDebug(30003) << "Saving document to store" << _path;
+    dbgUI << "Saving document to store" << _path;
 
     _store->pushDirectory();
     // Use the path as the internal url
@@ -1102,7 +1103,7 @@ bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
     // Now that we're done leave the directory again
     _store->popDirectory();
 
-    kDebug(30003) << "Saved document to store";
+    dbgUI << "Saved document to store";
 
     return true;
 }
@@ -1155,10 +1156,10 @@ QString KisDocument::autoSaveFile(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(KisFactory::componentName()).arg(qApp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(KisFactory::componentName()).arg(qApp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
         KUrl url = KUrl::fromPath(path);
@@ -1179,7 +1180,7 @@ bool KisDocument::importDocument(const KUrl & _url)
 {
     bool ret;
 
-    kDebug(30003) << "url=" << _url.url();
+    dbgUI << "url=" << _url.url();
     d->isImporting = true;
 
     // open...
@@ -1188,7 +1189,7 @@ bool KisDocument::importDocument(const KUrl & _url)
     // reset url & m_file (kindly? set by KisParts::openUrl()) to simulate a
     // File --> Import
     if (ret) {
-        kDebug(30003) << "success, resetting url";
+        dbgUI << "success, resetting url";
         resetURL();
         setTitleModified();
     }
@@ -1201,7 +1202,7 @@ bool KisDocument::importDocument(const KUrl & _url)
 
 bool KisDocument::openUrl(const KUrl & _url, KisDocument::OpenUrlFlags flags)
 {
-    kDebug(30003) << "url=" << _url.url();
+    dbgUI << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
@@ -1217,7 +1218,7 @@ bool KisDocument::openUrl(const KUrl & _url, KisDocument::OpenUrlFlags flags)
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
-            //kDebug(30003) <<"asf=" << asf;
+            //dbgUI <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
@@ -1261,7 +1262,7 @@ bool KisDocument::openUrl(const KUrl & _url, KisDocument::OpenUrlFlags flags)
 
 bool KisDocument::openFile()
 {
-    //kDebug(30003) <<"for" << localFilePath();
+    //dbgUI <<"for" << localFilePath();
     if (!QFile::exists(localFilePath())) {
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
@@ -1286,7 +1287,7 @@ bool KisDocument::openFile()
     // for images, always check content.
     typeName = checkImageMimeTypes(typeName, u);
 
-    //kDebug(30003) << "mimetypes 4:" << typeName;
+    //dbgUI << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
@@ -1311,9 +1312,9 @@ bool KisDocument::openFile()
     if (u.fileName() == "maindoc.xml" || u.fileName() == "content.xml" || typeName == "inode/directory") {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
         d->specialOutputFlag = SaveAsDirectoryStore;
-        kDebug(30003) << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
+        dbgUI << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
     }
-    kDebug(30003) << localFilePath() << "type:" << typeName;
+    dbgUI << localFilePath() << "type:" << typeName;
 
     QString importedFile = localFilePath();
 
@@ -1414,7 +1415,7 @@ bool KisDocument::openFile()
             return false;
         }
         d->isEmpty = false;
-        kDebug(30003) << "importedFile" << importedFile << "status:" << static_cast<int>(status);
+        dbgUI << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
 
     QApplication::restoreOverrideCursor();
@@ -1514,10 +1515,10 @@ void KisDocument::setMimeTypeAfterLoading(const QString& mimeType)
 // The caller must call store->close() if loadAndParse returns true.
 bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc)
 {
-    //kDebug(30003) <<"Trying to open" << filename;
+    //dbgUI <<"Trying to open" << filename;
 
     if (!store->open(filename)) {
-        kWarning(30003) << "Entry " << filename << " not found!";
+        warnUI << "Entry " << filename << " not found!";
         d->lastErrorMessage = i18n("Could not find %1", filename);
         return false;
     }
@@ -1527,7 +1528,7 @@ bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXml
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {
-        kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
+        errUI << "Parsing error in " << filename << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
@@ -1536,7 +1537,7 @@ bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXml
                                                                QCoreApplication::UnicodeUTF8));
         return false;
     }
-    kDebug(30003) << "File" << filename << " loaded and parsed";
+    dbgUI << "File" << filename << " loaded and parsed";
     return true;
 }
 
@@ -1559,7 +1560,7 @@ bool KisDocument::loadNativeFormat(const QString & file_)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    kDebug(30003) << file;
+    dbgUI << file;
 
     QFile in;
     bool isRawXML = false;
@@ -1590,7 +1591,7 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         if (! isRawXML)
             // also check for broken MathML files, which seem to be rather common
             isRawXML = (qstrnicmp(buf, "<math", 5) == 0);   // file begins with <math ?
-        //kDebug(30003) <<"PATTERN=" << buf;
+        //dbgUI <<"PATTERN=" << buf;
     }
     // Is it plain XML?
     if (isRawXML) {
@@ -1605,7 +1606,7 @@ bool KisDocument::loadNativeFormat(const QString & file_)
             if (res)
                 res = completeLoading(0);
         } else {
-            kError(30003) << "Parsing Error! Aborting! (in KisDocument::loadNativeFormat (QFile))" << endl
+            errUI << "Parsing Error! Aborting! (in KisDocument::loadNativeFormat (QFile))" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
             << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
@@ -1688,7 +1689,7 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         }
 
     } else {
-        kError(30003) << "ERROR: No maindoc.xml" << endl;
+        errUI << "ERROR: No maindoc.xml" << endl;
         d->lastErrorMessage = i18n("Invalid document: no file 'maindoc.xml'.");
         QApplication::restoreOverrideCursor();
         return false;
@@ -1700,7 +1701,7 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             d->docInfo->load(doc);
         }
     } else {
-        //kDebug( 30003 ) <<"cannot open document info";
+        //dbgUI <<"cannot open document info";
         delete d->docInfo;
         d->docInfo = new KoDocumentInfo(this);
     }
@@ -1723,7 +1724,7 @@ bool KisDocument::loadFromStore(KoStore *_store, const QString& url)
         }
         _store->close();
     } else {
-        kWarning() << "couldn't open " << url;
+        dbgKrita << "couldn't open " << url;
     }
 
     _store->pushDirectory();
@@ -1781,8 +1782,8 @@ void KisDocument::setModified(bool mod)
         return;
     }
 
-    //kDebug(30003)<<" url:" << url.path();
-    //kDebug(30003)<<" mod="<<mod<<" MParts mod="<<KisParts::ReadWritePart::isModified()<<" isModified="<<isModified();
+    //dbgUI<<" url:" << url.path();
+    //dbgUI<<" mod="<<mod<<" MParts mod="<<KisParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 
     if (mod && !d->modifiedAfterAutosave) {
         // First change since last autosave -> start the autosave timer
@@ -1905,7 +1906,7 @@ bool KisDocument::completeSaving(KoStore* store)
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
 {
-    return createDomDocument(KisFactory::componentName(), tagName, version);
+    return createDomDocument("krita", tagName, version);
 }
 
 //static
@@ -2095,7 +2096,7 @@ bool KisDocument::storeInternal() const
 void KisDocument::setStoreInternal(bool i)
 {
     d->storeInternal = i;
-    //kDebug(30003)<<"="<<d->storeInternal<<" doc:"<<url().url();
+    //dbgUI<<"="<<d->storeInternal<<" doc:"<<url().url();
 }
 
 bool KisDocument::hasExternURL() const

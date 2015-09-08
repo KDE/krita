@@ -18,7 +18,7 @@
 
 #include "kis_select_layer_action.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QMouseEvent>
 #include <QApplication>
 
@@ -86,11 +86,10 @@ void KisSelectLayerAction::begin(int shortcut, QEvent *event)
 
 void KisSelectLayerAction::inputEvent(QEvent *event)
 {
-    QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+    if (event && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove)) {
         QPoint pos =
             inputManager()->canvas()->
-            coordinatesConverter()->widgetToImage(mouseEvent->posF()).toPoint();
+            coordinatesConverter()->widgetToImage(eventPosF(event)).toPoint();
 
         KisNodeSP node = KisToolUtils::findNode(inputManager()->canvas()->image()->root(), pos, false);
 

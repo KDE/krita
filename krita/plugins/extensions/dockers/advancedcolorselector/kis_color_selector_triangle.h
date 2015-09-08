@@ -20,7 +20,7 @@
 
 #include "kis_color_selector_component.h"
 #include "kis_paint_device.h"
-
+#include <QSize>
 #include <QImage>
 
 namespace Acs {
@@ -53,7 +53,7 @@ private:
 private:
     QImage m_renderedPixelCache;
     KisPaintDeviceSP m_realPixelCache;
-
+    QSize m_cachedSize;
     QPointF m_lastClickPos;
 };
 

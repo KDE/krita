@@ -52,7 +52,7 @@ void KisPSDTest::testOpening()
     KisImportExportFilter::ConversionStatus status;
     QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
                                        status);
-    qDebug() << s;
+    dbgKrita << s;
 
     Q_ASSERT(doc->image());
 }
@@ -263,12 +263,12 @@ void KisPSDTest::testOpeningAllFormats()
             //continue;
         }
 
-        //qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());
+        //dbgKrita << "Opening" << ppVar(sourceFileInfo.fileName());
 
         QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
 
         if (!doc->image()) {
-            qCritical() << "FAILED to open" << sourceFileInfo.fileName();
+            errKrita << "FAILED to open" << sourceFileInfo.fileName();
             continue;
         }
 
@@ -293,12 +293,12 @@ void KisPSDTest::testSavingAllFormats()
             //continue;
         }
 
-        qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());
+        dbgKrita << "Opening" << ppVar(sourceFileInfo.fileName());
 
         QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
 
         if (!doc->image()) {
-            qCritical() << "FAILED to open" << sourceFileInfo.fileName();
+            errKrita << "FAILED to open" << sourceFileInfo.fileName();
             continue;
         }
 
@@ -317,7 +317,7 @@ void KisPSDTest::testSavingAllFormats()
         doc->setOutputMimeType("image/vnd.adobe.photoshop");
         QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + tempPsdName);
 
-        qDebug() << "Saving" << ppVar(dstFileInfo.fileName());
+        dbgKrita << "Saving" << ppVar(dstFileInfo.fileName());
 
         bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
         QVERIFY(retval);

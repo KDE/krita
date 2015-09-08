@@ -26,14 +26,13 @@
 // Qt
 #include <QObject>
 #include <QString>
-
-// KDE
-#include <qtest_kde.h>
+#include <QTest>
 
 // KoChart
 #include "CellRegion.h"
 
 class KoShape;
+class QStringList;
 
 namespace KoChart {
 

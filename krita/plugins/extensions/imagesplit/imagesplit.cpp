@@ -96,7 +96,7 @@ void Imagesplit::slotImagesplit()
     QStringList listFileType;
     foreach(const QString & tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType(tempStr);
-        qDebug() << tempStr << type;
+        dbgKrita << tempStr << type;
         if (type) {
             listFileType.append(type->comment());
             filteredMimeTypes.append(tempStr);

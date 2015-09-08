@@ -6,20 +6,20 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy CMP0017 was introduced in version 2.8.4
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
+if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.3)
     cmake_policy(SET CMP0017 NEW)
-endif()
+endif ()
 
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
+if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.12)
     cmake_policy(SET CMP0022 OLD)
-endif()
+endif ()
 
-if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
+if (NOT ${CMAKE_VERSION} VERSION_LESS 3.0.0)
     cmake_policy(SET CMP0026 OLD) 
     cmake_policy(SET CMP0046 OLD)
-endif()
+endif ()
 
-if(${CMAKE_VERSION} VERSION_GREATER 3.3.0)
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
     cmake_policy(SET CMP0063 OLD)
 endif()
 

@@ -38,7 +38,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2)
     int h2 = image2.height();
 
     if (w1 != w2 || h1 != h2) {
-        qDebug() << w1 << " " << w2 << " " << h1 << " " << h2;
+        dbgKrita << w1 << " " << w2 << " " << h1 << " " << h2;
         pt.setX(-1);
         pt.setY(-1);
         return false;
@@ -53,7 +53,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2)
             }
         }
     }
-//     qDebug() << "compareQImages time elapsed:" << t.elapsed();
+//     dbgKrita << "compareQImages time elapsed:" << t.elapsed();
     return true;
 }
 
@@ -72,7 +72,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //qDebug() << "creating new file for " << f->id();
+        //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -80,10 +80,10 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        //qDebug() << "Read for " << f->id() << "\n" << s;
+        //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
     }
-    qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
+    dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
 
     f->process(dev, dstdev, 0, QRect(QPoint(0,0), qimage.size()), kfc);
 
@@ -110,7 +110,7 @@ bool testFilterNoTransaction(KisFilterSP f)
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //qDebug() << "creating new file for " << f->id();
+        //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -118,10 +118,10 @@ bool testFilterNoTransaction(KisFilterSP f)
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        //qDebug() << "Read for " << f->id() << "\n" << s;
+        //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
     }
-    qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
+    dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
@@ -142,7 +142,7 @@ bool testFilter(KisFilterSP f)
     QString resultFileName = QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png";
     QImage result(resultFileName);
     if (!QFileInfo(resultFileName).exists()) {
-        qDebug() << resultFileName << " not found";
+        dbgKrita << resultFileName << " not found";
         return false;
     }
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -154,7 +154,7 @@ bool testFilter(KisFilterSP f)
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //qDebug() << "creating new file for " << f->id();
+        //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -162,10 +162,10 @@ bool testFilter(KisFilterSP f)
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        //qDebug() << "Read for " << f->id() << "\n" << s;
+        //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
     }
-    qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
+    dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
@@ -174,7 +174,7 @@ bool testFilter(KisFilterSP f)
     delete cmd;
 
     if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
-        qDebug() << errpoint;
+        dbgKrita << errpoint;
         dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("lena_%1.png").arg(f->id()));
         return false;
     }
@@ -196,7 +196,7 @@ bool testFilterWithSelections(KisFilterSP f)
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //qDebug() << "creating new file for " << f->id();
+        //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -204,10 +204,10 @@ bool testFilterWithSelections(KisFilterSP f)
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        //qDebug() << "Read for " << f->id() << "\n" << s;
+        //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
     }
-    qDebug() << f->id();// << "\n"; << kfc->toXML() << "\n";
+    dbgKrita << f->id();// << "\n"; << kfc->toXML() << "\n";
 
     KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
     sel1->pixelSelection()->select(qimage.rect());
@@ -238,7 +238,7 @@ void KisAllFilterTest::testAllFilters()
         else
             failures << *it;
     }
-    qDebug() << "Success: " << successes;
+    dbgKrita << "Success: " << successes;
     if (failures.size() > 0) {
         QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
@@ -257,7 +257,7 @@ void KisAllFilterTest::testAllFiltersNoTransaction()
         else
             failures << *it;
     }
-    qDebug() << "Success (no transaction): " << successes;
+    dbgKrita << "Success (no transaction): " << successes;
     if (failures.size() > 0) {
         QFAIL(QString("Failed filters (no transaction):\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
@@ -277,7 +277,7 @@ void KisAllFilterTest::testAllFiltersSrcNotIsDev()
         else
             failures << *it;
     }
-    qDebug() << "Src!=Dev Success: " << successes;
+    dbgKrita << "Src!=Dev Success: " << successes;
     if (failures.size() > 0) {
         QFAIL(QString("Src!=Dev Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
@@ -297,7 +297,7 @@ void KisAllFilterTest::testAllFiltersWithSelections()
         else
             failures << *it;
     }
-    qDebug() << "Success: " << successes;
+    dbgKrita << "Success: " << successes;
     if (failures.size() > 0) {
         QFAIL(QString("Failed filters with selections:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }

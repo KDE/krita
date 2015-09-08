@@ -2,7 +2,7 @@
 #include <kis_gmic_parser.h>
 #include <Command.h>
 #include <kis_gmic_filter_model.h>
-#include <QDebug>
+#include <kis_debug.h>
 #include <kis_gmic_widget.h>
 
 int main(int argc, char *argv[])
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         definitions << "~/.kde/share/apps/krita/gmic/gmic_def.gmic";
     }
 
-    qDebug() << definitions;
+    dbgKrita << definitions;
 
 
     KisGmicParser parser(definitions);

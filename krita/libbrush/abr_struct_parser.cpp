@@ -20,7 +20,7 @@
 #include <QString>
 #include <QFile>
 #include <QDataStream>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <QDomDocument>
 
@@ -199,7 +199,7 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf)
 
     if (nlen == MAGIC_OBJC_LENGTH) {
         value = p_objc(buf);
-        qDebug() << ABR_PRESET_START  << ABR_OBJECT << value;
+        dbgKrita << ABR_PRESET_START  << ABR_OBJECT << value;
         // start to create the preset here
         m_translator.addEntry(ABR_PRESET_START, ABR_OBJECT, value);
     }
@@ -208,7 +208,7 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf)
         char * name = new char[ nlen + 1 ];
         int status = buf.readRawData(name, nlen);
         if (status == -1) {
-            qDebug() << "Error, name can't be readed";
+            dbgKrita << "Error, name can't be readed";
         }
         name[nlen] = '\0';
 
@@ -232,23 +232,23 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf)
             case P_DOUB: value = p_doub(buf); break;
             case P_ENUM: value = p_enum(buf); break;
             case P_TDTA: value = p_tdta(buf); break;
-            default: qDebug() << "Freak error occurred!"; break;
+            default: dbgKrita << "Freak error occurred!"; break;
             }
 
             QString attributeName = QString::fromLatin1(name);
-            //qDebug() << attributeName << key << value;
+            //dbgKrita << attributeName << key << value;
             m_translator.addEntry(attributeName, key, value);
 
             // airbrush is the last parsed attribute of the preset
             if (attributeName == ABR_AIRBRUSH)    {
                 m_translator.finishPreset();
-                qDebug() << m_translator.toString();
+                dbgKrita << m_translator.toString();
             }
 
         }
         else {
-            qDebug() << "Unknown key:\t" << name << type;
-            //qDebug() << p_unkn(buf);
+            dbgKrita << "Unknown key:\t" << name << type;
+            //dbgKrita << p_unkn(buf);
             return -1;
         }
 
@@ -261,7 +261,7 @@ void AbrStructParser::parse(QString fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Can't open file " << fileName;
+        dbgKrita << "Can't open file " << fileName;
         return;
     }
     QDataStream buf(&file);
@@ -271,7 +271,7 @@ void AbrStructParser::parse(QString fileName)
     short int vermaj, vermin;
     buf >> vermaj;
     buf >> vermin;
-    qDebug() << "Version: " << vermaj << "." << vermin;
+    dbgKrita << "Version: " << vermaj << "." << vermin;
 
     int index = file.readAll().indexOf("8BIMdesc");
     buf.device()->seek(index);
@@ -280,11 +280,11 @@ void AbrStructParser::parse(QString fileName)
         status = parseEntry(buf);
         if (status == -1) {
             // something to break the parsing with fail?
-            qDebug() << "Finishing with fail...";
+            dbgKrita << "Finishing with fail...";
             break;
         }
     }
-    qDebug() << m_doc.toString();
+    dbgKrita << m_doc.toString();
 }
 
 

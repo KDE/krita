@@ -265,8 +265,8 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
     KoPattern *pattern = sortedResources.first();
     Q_ASSERT(pattern);
 
-    qDebug() << ppVar(pattern->name());
-    qDebug() << ppVar(pattern->filename());
+    dbgKrita << ppVar(pattern->name());
+    dbgKrita << ppVar(pattern->filename());
 
     style->patternOverlay()->setEffectEnabled(true);
     style->patternOverlay()->setPattern(pattern);
@@ -335,7 +335,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
         styles = s.styles();
 
-        qDebug() << ppVar(styles.size());
+        dbgKrita << ppVar(styles.size());
     }
 }
 

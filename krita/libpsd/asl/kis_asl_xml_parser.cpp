@@ -56,13 +56,13 @@ public:
         if (path == "/Nm  ") {
             m_name = value;
         } else {
-            qWarning() << "XML (ASL): failed to parse curve object" << path << value;
+            warnKrita << "XML (ASL): failed to parse curve object" << path << value;
         }
     }
 
     void addPoint(const QString &path, const QPointF &value) {
         if (!m_arrayMode) {
-            qWarning() << "XML (ASL): failed to parse curve object (array fault)" << path << value << ppVar(m_arrayMode);
+            warnKrita << "XML (ASL): failed to parse curve object (array fault)" << path << value << ppVar(m_arrayMode);
         }
 
         m_points.append(value);
@@ -85,7 +85,7 @@ QColor parseRGBColorObject(QDomElement parent)
         QString key = childEl.attribute("key", "");
 
         if (type != "Double") {
-            qWarning() << "Unknown color component type:" << ppVar(type) << ppVar(key);
+            warnKrita << "Unknown color component type:" << ppVar(type) << ppVar(key);
             return Qt::red;
         }
 
@@ -98,7 +98,7 @@ QColor parseRGBColorObject(QDomElement parent)
         } else if (key == "Bl  ") {
             color.setBlue(value);
         } else {
-            qWarning() << "Unknown color key value:" << ppVar(key);
+            warnKrita << "Unknown color key value:" << ppVar(key);
             return Qt::red;
         }
 
@@ -147,19 +147,19 @@ void parseColorStopsList(QDomElement parent,
                     QString typeId = childEl.attribute("typeId", "");
 
                     if (typeId != "Clry") {
-                        qWarning() << "WARNING: Invalid typeId of a greadient stop type" << typeId;
+                        warnKrita << "WARNING: Invalid typeId of a greadient stop type" << typeId;
                     }
 
                     QString value = childEl.attribute("value", "");
                     if (value == "BckC" || value == "FrgC") {
-                        qWarning() << "WARNING: Using foreground/background colors in ASL gradients is not yet supported";
+                        warnKrita << "WARNING: Using foreground/background colors in ASL gradients is not yet supported";
                     }
                 }
 
                 child = child.nextSibling();
             }
         } else {
-            qWarning() << "WARNING: Unrecognized object in color stops list" << ppVar(type) << ppVar(key) << ppVar(classId);
+            warnKrita << "WARNING: Unrecognized object in color stops list" << ppVar(type) << ppVar(key) << ppVar(classId);
         }
 
         child = child.nextSibling();
@@ -198,7 +198,7 @@ void parseTransparencyStopsList(QDomElement parent,
                 } else if (type == "UnitFloat" && key == "Opct") {
                     QString unit = childEl.attribute("unit", "");
                     if (unit != "#Prc") {
-                        qWarning() << "WARNING: Invalid unit of a greadient stop transparency" << unit;
+                        warnKrita << "WARNING: Invalid unit of a greadient stop transparency" << unit;
                     }
 
                     qreal value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "100"));
@@ -209,7 +209,7 @@ void parseTransparencyStopsList(QDomElement parent,
             }
 
         } else {
-            qWarning() << "WARNING: Unrecognized object in transparency stops list" << ppVar(type) << ppVar(key) << ppVar(classId);
+            warnKrita << "WARNING: Unrecognized object in transparency stops list" << ppVar(type) << ppVar(key) << ppVar(classId);
         }
 
         child = child.nextSibling();
@@ -258,15 +258,15 @@ bool tryParseDescriptor(const QDomElement &el,
 
 
             if (type == "Boolean" && key == "Cnty") {
-                qWarning() << "WARNING: tryParseDescriptor: The points of the curve object contain \'Cnty\' flag which is unsupported by Krita";
-                qWarning() << "        " << ppVar(type) << ppVar(key) << ppVar(path);
+                warnKrita << "WARNING: tryParseDescriptor: The points of the curve object contain \'Cnty\' flag which is unsupported by Krita";
+                warnKrita << "        " << ppVar(type) << ppVar(key) << ppVar(path);
 
                 child = child.nextSibling();
                 continue;
             }
 
             if (type != "Double") {
-                qWarning() << "Unknown point component type:" << ppVar(type) << ppVar(key) << ppVar(path);
+                warnKrita << "Unknown point component type:" << ppVar(type) << ppVar(key) << ppVar(path);
                 return false;
             }
 
@@ -277,7 +277,7 @@ bool tryParseDescriptor(const QDomElement &el,
             } else if (key == "Vrtc") {
                 point.setY(value);
             } else {
-                qWarning() << "Unknown point key value:" << ppVar(key) << ppVar(path);
+                warnKrita << "Unknown point key value:" << ppVar(key) << ppVar(path);
                 return false;
             }
 
@@ -299,7 +299,7 @@ bool tryParseDescriptor(const QDomElement &el,
 
 
             if (type != "Double" && !(type == "UnitFloat" && unit == "#Prc")) {
-                qWarning() << "Unknown point component type:"  << ppVar(unit) << ppVar(type) << ppVar(key) << ppVar(path);
+                warnKrita << "Unknown point component type:"  << ppVar(unit) << ppVar(type) << ppVar(key) << ppVar(path);
                 return false;
             }
 
@@ -310,7 +310,7 @@ bool tryParseDescriptor(const QDomElement &el,
             } else if (key == "Vrtc") {
                 point.setY(value);
             } else {
-                qWarning() << "Unknown point key value:" << ppVar(key) << ppVar(path);
+                warnKrita << "Unknown point key value:" << ppVar(key) << ppVar(path);
                 return false;
             }
 
@@ -338,7 +338,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 QDomNode dataNode = child.firstChild();
 
                 if (!dataNode.isCDATASection()) {
-                    qWarning() << "WARNING: failed to parse KisPatternData XML section!";
+                    warnKrita << "WARNING: failed to parse KisPatternData XML section!";
                     continue;
                 }
 
@@ -348,7 +348,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 data = qUncompress(data);
 
                 if (data.isEmpty()) {
-                    qWarning() << "WARNING: failed to parse KisPatternData XML section!";
+                    warnKrita << "WARNING: failed to parse KisPatternData XML section!";
                     continue;
                 }
 
@@ -370,7 +370,7 @@ bool tryParseDescriptor(const QDomElement &el,
 
             catcher.addPattern(path, pattern.data());
         } else {
-            qWarning() << "WARNING: failed to load KisPattern XML section!" << ppVar(patternUuid);
+            warnKrita << "WARNING: failed to load KisPattern XML section!" << ppVar(patternUuid);
         }
 
     } else if (classId == "Ptrn") { // reference to an existing pattern
@@ -389,7 +389,7 @@ bool tryParseDescriptor(const QDomElement &el,
             } else if (type == "Text" && key == "Nm  ") {
                 patternName = childEl.attribute("value", "");
             } else {
-                qWarning() << "WARNING: unrecognized pattern-ref section key:"  << ppVar(type) << ppVar(key);
+                warnKrita << "WARNING: unrecognized pattern-ref section key:"  << ppVar(type) << ppVar(key);
             }
 
             child = child.nextSibling();
@@ -424,7 +424,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 QString value = childEl.attribute("value", "");
 
                 if (typeId != "GrdF" || value != "CstS") {
-                    qWarning() << "WARNING: Unsupported gradient type (porbably, noise-based):" << value;
+                    warnKrita << "WARNING: Unsupported gradient type (porbably, noise-based):" << value;
                     return true;
                 }
             } else if (type == "Double" && key == "Intr") {
@@ -440,11 +440,11 @@ bool tryParseDescriptor(const QDomElement &el,
         }
 
         if (colors.size() < 2) {
-            qWarning() << "WARNING: ASL gradient has too few stops" << ppVar(colors.size());
+            warnKrita << "WARNING: ASL gradient has too few stops" << ppVar(colors.size());
         }
 
         if (colors.size() != transparencies.size()) {
-            qWarning() << "WARNING: ASL gradient has inconsistent number of transparency stops. Dropping transparency..." << ppVar(colors.size()) << ppVar(transparencies.size());
+            warnKrita << "WARNING: ASL gradient has inconsistent number of transparency stops. Dropping transparency..." << ppVar(colors.size()) << ppVar(transparencies.size());
             transparencies.resize(colors.size());
             for (int i = 0; i < colors.size(); i++) {
                 transparencies[i] = 1.0;
@@ -535,7 +535,7 @@ void parseElement(const QDomElement &el, const QString &parentPath, KisAslObject
         int v = KisDomUtils::Private::stringToInt(el.attribute("value", "0"));
         catcher.addBoolean(buildPath(parentPath, key), v);
     } else {
-        qWarning() << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(parentPath) << ppVar(key);
+        warnKrita << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(parentPath) << ppVar(key);
     }
 }
 

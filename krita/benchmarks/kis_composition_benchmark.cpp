@@ -46,6 +46,8 @@
 // for posix_memalign()
 #include <stdlib.h>
 
+#include <kis_debug.h>
+
 const int alpha_pos = 3;
 
 enum AlphaRange {
@@ -173,14 +175,14 @@ void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPi
 void printData(int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask)
 {
     for (int i = 0; i < numPixels; i++) {
-        qDebug() << "Src: "
+        dbgKrita << "Src: "
                  << srcPixels[i*4] << "\t"
                  << srcPixels[i*4+1] << "\t"
                  << srcPixels[i*4+2] << "\t"
                  << srcPixels[i*4+3] << "\t"
                  << "Msk:" << mask[i];
 
-        qDebug() << "Dst: "
+        dbgKrita << "Dst: "
                  << dstPixels[i*4] << "\t"
                  << dstPixels[i*4+1] << "\t"
                  << dstPixels[i*4+2] << "\t"
@@ -217,8 +219,8 @@ QVector<Tile> generateTiles(int size,
 #endif
 
     // the 256 are used to make sure that we have a good alignment no matter what build options are used.
-    const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), 256ul);
-    const size_t maskAlignment = qMax(size_t(vecSize), 256ul);
+    const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), size_t(256));
+    const size_t maskAlignment = qMax(size_t(vecSize), size_t(256));
     for (int i = 0; i < size; i++) {
         void *ptr = NULL;
         int error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
@@ -284,19 +286,19 @@ bool compareTwoOpsPixels(QVector<Tile> &tiles, channel_type prec) {
 
     for (int i = 0; i < numPixels; i++) {
         if (!comparePixels<channel_type>(dst1, dst2, prec)) {
-            qDebug() << "Wrong result:" << i;
-            qDebug() << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-            qDebug() << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-            qDebug() << "Dif: " << dst1[0] - dst2[0] << dst1[1] - dst2[1] << dst1[2] - dst2[2] << dst1[3] - dst2[3];
+            dbgKrita << "Wrong result:" << i;
+            dbgKrita << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+            dbgKrita << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            dbgKrita << "Dif: " << dst1[0] - dst2[0] << dst1[1] - dst2[1] << dst1[2] - dst2[2] << dst1[3] - dst2[3];
 
             channel_type *s1 = src1 + 4 * i;
             channel_type *s2 = src2 + 4 * i;
 
-            qDebug() << "SrcA:" << s1[0] << s1[1] << s1[2] << s1[3];
-            qDebug() << "SrcE:" << s2[0] << s2[1] << s2[2] << s2[3];
+            dbgKrita << "SrcA:" << s1[0] << s1[1] << s1[2] << s1[3];
+            dbgKrita << "SrcE:" << s2[0] << s2[1] << s2[2] << s2[3];
 
-            qDebug() << "MskA:" << tiles[0].mask[i];
-            qDebug() << "MskE:" << tiles[1].mask[i];
+            dbgKrita << "MskA:" << tiles[0].mask[i];
+            dbgKrita << "MskE:" << tiles[1].mask[i];
 
             return false;
         }
@@ -415,14 +417,14 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
         op->composite(params);
     }
 
-    qDebug() << testName << "RESULT:" << timer.elapsed() << "msec";
+    dbgKrita << testName << "RESULT:" << timer.elapsed() << "msec";
 
     freeTiles(tiles, srcAlignmentShift, dstAlignmentShift);
 }
 
 void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
 {
-    qDebug() << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
+    dbgKrita << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
 
     benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
     benchmarkCompositeOp(op, true, 0.5, 0.3, 8, 0, ALPHA_RANDOM, ALPHA_RANDOM);
@@ -487,9 +489,9 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
-            //    qDebug() << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
-            //    qDebug() << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-            //    qDebug() << "msk:" << msk2[0];
+            //    dbgKrita << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
+            //    dbgKrita << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            //    dbgKrita << "msk:" << msk2[0];
             //}
 
             Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, params.opacity, optionalParams);
@@ -513,12 +515,12 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             }
 
             if(!compareResult || errorcount > 1) {
-                qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
-                qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-                qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+                dbgKrita << "Wrong rounding in pixel:" << 8 * i + j;
+                dbgKrita << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+                dbgKrita << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
 
-                qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
-                qDebug() << "msk:" << msk1[0];
+                dbgKrita << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
+                dbgKrita << "msk:" << msk1[0];
 
                 QFAIL("Wrong rounding");
             }

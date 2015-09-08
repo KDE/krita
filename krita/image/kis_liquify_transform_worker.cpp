@@ -529,7 +529,7 @@ KisLiquifyTransformWorker* KisLiquifyTransformWorker::fromXML(const QDomElement 
         KisDomUtils::loadValue(liquifyEl, "gridSize", &gridSize);
 
     if (!result) {
-        qWarning() << "WARNING: Failed to load liquify worker from XML";
+        warnKrita << "WARNING: Failed to load liquify worker from XML";
         return new KisLiquifyTransformWorker(QRect(0,0,1024, 1024), 0, 8);
     }
 
@@ -541,13 +541,13 @@ KisLiquifyTransformWorker* KisLiquifyTransformWorker::fromXML(const QDomElement 
     if (numPoints != transformedPoints.size() ||
         numPoints != worker->m_d->originalPoints.size() ||
         gridSize != worker->m_d->gridSize) {
-        qWarning() << "WARNING: Inconsistent number of points!";
-        qWarning() << ppVar(originalPoints.size());
-        qWarning() << ppVar(transformedPoints.size());
-        qWarning() << ppVar(gridSize);
-        qWarning() << ppVar(worker->m_d->originalPoints.size());
-        qWarning() << ppVar(worker->m_d->transformedPoints.size());
-        qWarning() << ppVar(worker->m_d->gridSize);
+        warnKrita << "WARNING: Inconsistent number of points!";
+        warnKrita << ppVar(originalPoints.size());
+        warnKrita << ppVar(transformedPoints.size());
+        warnKrita << ppVar(gridSize);
+        warnKrita << ppVar(worker->m_d->originalPoints.size());
+        warnKrita << ppVar(worker->m_d->transformedPoints.size());
+        warnKrita << ppVar(worker->m_d->gridSize);
 
         return worker;
     }

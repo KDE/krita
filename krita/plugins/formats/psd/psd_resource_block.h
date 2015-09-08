@@ -21,7 +21,7 @@
 class QIODevice;
 
 #include <klocale.h>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QString>
 #include <QBuffer>
 

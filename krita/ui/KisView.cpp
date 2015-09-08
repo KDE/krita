@@ -34,7 +34,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstatusbar.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kurl.h>
 #include <QTemporaryFile>
 #include <kselectaction.h>

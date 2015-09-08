@@ -28,10 +28,10 @@ class KisApplicationPrivate;
 class KCmdLineArgs;
 class QWidget;
 class QStringList;
+class QCommandLineParser;
+class KisApplicationArguments;
 
 #include <KisImportExportManager.h>
-
-#define koApp KisApplication::koApplication()
 
 /**
  *  @brief Base class for all %Calligra apps
@@ -54,7 +54,7 @@ public:
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      */
-    explicit KisApplication(const QString &key);
+    explicit KisApplication(const QString &key, int &argc, char **argv);
 
     /**
      *  Destructor.
@@ -72,7 +72,7 @@ public:
      * It is valid behaviour not to call this method at all. In this case you
      * have to process your command line parameters by yourself.
      */
-    virtual bool start();
+    virtual bool start(const KisApplicationArguments &args);
 
     /**
      * Checks if user is holding ctrl+alt+shift keys and asks if the settings file should be cleared.
@@ -88,40 +88,18 @@ public:
      */
     void setSplashScreen(QWidget *splash);
 
-    /**
-     * return a list of mimetypes this application supports.
-     */
-    QStringList mimeFilter(KisImportExportManager::Direction direction) const;
-
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
 
-    /**
-     * Returns the current application object.
-     *
-     * This is similar to the global QApplication pointer qApp. It
-     * allows access to the single global KisApplication object, since
-     * more than one cannot be created in the same application. It
-     * saves you the trouble of having to pass the pointer explicitly
-     * to every function that may require it.
-     * @return the current application object
-     */
-    static KisApplication* koApplication();
-
-protected:
-
-    // Current application object.
-    static KisApplication *KoApp;
-
 public Q_SLOTS:
 
-    void remoteArguments(const QByteArray &message, QObject*socket);
+    void remoteArguments(QByteArray &message, QObject*socket);
     void fileOpenRequested(const QString & url);
 
 private:
     /// @return the number of autosavefiles opened
     QList<KUrl> checkAutosaveFiles();
-    bool createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow);
+    bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow);
     void clearConfig();
 
 private:

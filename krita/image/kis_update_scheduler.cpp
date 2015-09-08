@@ -36,7 +36,7 @@
 
 #ifdef DEBUG_BALANCING
 #define DEBUG_BALANCING_METRICS(decidedFirst, excl)                     \
-    qDebug() << "Balance decision:" << decidedFirst                     \
+    dbgKrita << "Balance decision:" << decidedFirst                     \
     << "(" << excl << ")"                                               \
     << "updates:" << m_d->updatesQueue->sizeMetric()                    \
     << "strokes:" << m_d->strokesQueue->sizeMetric()

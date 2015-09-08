@@ -26,7 +26,7 @@
 #include "tiles_test_utils.h"
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/kis_tile_data_store.h"
-
+#include <kis_debug.h>
 
 void KisLowMemoryTests::initTestCase()
 {
@@ -74,7 +74,7 @@ public:
                 QRect cloneRect(0, 0, m_numTiles * 64, 64);
                 m_dstDM.bitBltRough(&m_srcDM, cloneRect);
 
-                if(j % 50 == 0) qDebug() << "Producer:" << j << "of" << m_numCycles;
+                if(j % 50 == 0) dbgKrita << "Producer:" << j << "of" << m_numCycles;
 
                 KisTileDataStore::instance()->debugSwapAll();
             }
@@ -90,7 +90,7 @@ public:
                     voidTile->unlock();
                 }
 
-                if(j % 50 == 0) qDebug() << "Consumer_src:" << j << "of" << m_numCycles;
+                if(j % 50 == 0) dbgKrita << "Consumer_src:" << j << "of" << m_numCycles;
 
                 KisTileDataStore::instance()->debugSwapAll();
             }
@@ -106,7 +106,7 @@ public:
                     voidTile->unlock();
                 }
 
-                if(j % 50 == 0) qDebug() << "Consumer_dst:" << j << "of" << m_numCycles;
+                if(j % 50 == 0) dbgKrita << "Consumer_dst:" << j << "of" << m_numCycles;
 
                 KisTileDataStore::instance()->debugSwapAll();
             }

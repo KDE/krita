@@ -19,21 +19,13 @@
 #include "kis_tablet_debugger.h"
 
 #include <QEvent>
-#include <QDebug>
+#include <QMessageBox>
 
+#include <kis_debug.h>
 #include <kglobal.h>
+#include <QMessageBox>
 
 inline QString button(const QWheelEvent &ev) {
-    Q_UNUSED(ev);
-    return "-";
-}
-
-inline QString button(const QTabletEvent &ev) {
-    Q_UNUSED(ev);
-    return "-";
-}
-
-inline QString buttons(const QTabletEvent &ev) {
     Q_UNUSED(ev);
     return "-";
 }
@@ -51,8 +43,8 @@ QString buttons(const T &ev) {
 template <class Event>
     void dumpBaseParams(QTextStream &s, const Event &ev, const QString &prefix)
 {
-    s << qSetFieldWidth(10) << left << prefix << reset << " ";
-    s << qSetFieldWidth(17) << left << exTypeToString(ev.type()) << reset;
+    s << qSetFieldWidth(5)  << left << prefix << reset << " ";
+    s << qSetFieldWidth(17) << left << KisTabletDebugger::exTypeToString(ev.type()) << reset;
 }
 
 template <class Event>
@@ -64,7 +56,7 @@ template <class Event>
     s << "gpos: "  << qSetFieldWidth(4) << ev.globalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalY() << qSetFieldWidth(0) << " ";
 }
 
-QString exTypeToString(QEvent::Type type) {
+QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
     return
         type == QEvent::TabletEnterProximity ? "TabletEnterProximity" :
         type == QEvent::TabletLeaveProximity ? "TabletLeaveProximity" :
@@ -82,9 +74,6 @@ QString exTypeToString(QEvent::Type type) {
         type == QTabletEvent::TabletMove ? "TabletMove" :
         type == QTabletEvent::TabletPress ? "TabletPress" :
         type == QTabletEvent::TabletRelease ? "TabletRelease" :
-        type == (QEvent::Type) KisTabletEvent::TabletMoveEx ? "TabletMoveEx" :
-        type == (QEvent::Type) KisTabletEvent::TabletPressEx ? "TabletPressEx" :
-        type == (QEvent::Type) KisTabletEvent::TabletReleaseEx ? "TabletReleaseEx" :
         "unknown";
 }
 
@@ -103,6 +92,15 @@ KisTabletDebugger* KisTabletDebugger::instance()
 void KisTabletDebugger::toggleDebugging()
 {
     m_debugEnabled = !m_debugEnabled;
+    QMessageBox::information(0, i18nc("@title:window", "Krita"), m_debugEnabled ?
+                             i18n("Tablet Event Logging Enabled") :
+                             i18n("Tablet Event Logging Disabled"));
+    if (m_debugEnabled) {
+        dbgKrita << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
+    }
+    else {
+        dbgKrita << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+    }
 }
 
 bool KisTabletDebugger::debugEnabled() const
@@ -129,6 +127,7 @@ QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &p
 
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
+    s << "Source:" << ev.source();
 
     return string;
 }
@@ -197,11 +196,6 @@ template <class Event>
 }
 
 QString KisTabletDebugger::eventToString(const QTabletEvent &ev, const QString &prefix)
-{
-    return tabletEventToString(ev, prefix);
-}
-
-QString KisTabletDebugger::eventToString(const KisTabletEvent &ev, const QString &prefix)
 {
     return tabletEventToString(ev, prefix);
 }

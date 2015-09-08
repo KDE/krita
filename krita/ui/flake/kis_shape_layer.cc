@@ -29,13 +29,13 @@
 #include <QString>
 #include <QList>
 #include <QMap>
-#include <QDebug>
+#include <kis_debug.h>
 #include <kundo2command.h>
 #include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
 #include <QTemporaryFile>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoIcon.h>
 #include <KoElementReference.h>
@@ -477,10 +477,10 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-    //    qDebug() <<"Start loading OASIS document..." << contents.text();
-    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
 
@@ -528,7 +528,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         // FIXME: investigate what is this
         //        KoShapeLayer * l = new KoShapeLayer();
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load vector layer!";
+            dbgKrita << "Could not load vector layer!";
             return false;
         }
     }

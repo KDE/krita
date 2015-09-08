@@ -18,7 +18,7 @@
 
 #include "kis_extended_modifiers_mapper.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QApplication>
 
 #ifdef HAVE_X11

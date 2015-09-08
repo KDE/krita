@@ -31,10 +31,12 @@
 
 class KisViewManager;
 class KisCanvasResourceProvider;
+class KisCanvas2;
 class KisWorkspaceResource;
 class ColorSetChooser;
 class PaletteModel;
 class Ui_WdgPaletteDock;
+
 
 class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet> {
     Q_OBJECT
@@ -72,9 +74,10 @@ private:
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     PaletteModel *m_model;
     QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
-    KoColorSet* m_currentColorSet;
-    ColorSetChooser* m_colorSetChooser;
-    KisCanvasResourceProvider* m_resourceProvider;
+    KoColorSet *m_currentColorSet;
+    ColorSetChooser *m_colorSetChooser;
+    KisCanvasResourceProvider *m_resourceProvider;
+    KisCanvas2 *m_canvas;
 };
 
 

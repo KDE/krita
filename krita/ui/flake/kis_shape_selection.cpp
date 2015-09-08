@@ -217,35 +217,35 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     odfStore.loadAndParse(errorMessage);
 
     if (!errorMessage.isEmpty()) {
-        qDebug() << errorMessage;
+        dbgKrita << errorMessage;
         return false;
     }
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-//    qDebug() <<"Start loading OASIS document..." << contents.text();
-//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
-//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+//    dbgKrita <<"Start loading OASIS document..." << contents.text();
+//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
+//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
 
     if (body.isNull()) {
-        qDebug() << "No office:body found!";
+        dbgKrita << "No office:body found!";
         //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
         return false;
     }
 
     body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
     if (body.isNull()) {
-        qDebug() << "No office:drawing found!";
+        dbgKrita << "No office:drawing found!";
         //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
         return false;
     }
 
     KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
     if (page.isNull()) {
-        qDebug() << "No office:drawing found!";
+        dbgKrita << "No office:drawing found!";
         //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
         return false;
     }
@@ -265,7 +265,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         pageLayout.loadOdf(*style);
         setSize(QSizeF(pageLayout.width, pageLayout.height));
     } else {
-        kWarning() << "No master page found!";
+        dbgKrita << "No master page found!";
         return false;
     }
 
@@ -275,7 +275,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     KoXmlElement layerElement;
     forEachElement(layerElement, context.stylesReader().layerSet()) {
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load vector layer!";
+            dbgKrita << "Could not load vector layer!";
             return false;
         }
     }

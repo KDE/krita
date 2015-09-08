@@ -408,7 +408,7 @@ namespace KisLsUtils
                      bool alignWithLayer)
     {
         if (scale != 100) {
-            qWarning() << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
+            warnKrita << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
         }
 
         QSize psize(pattern->width(), pattern->height());
@@ -593,7 +593,7 @@ namespace KisLsUtils
 
         } else if (config->fillType() == psd_fill_gradient) {
             if (!config->gradient()) {
-                qWarning() << "KisLsUtils::applyFinalSelection: Gradient object is null! Skipping...";
+                warnKrita << "KisLsUtils::applyFinalSelection: Gradient object is null! Skipping...";
                 return;
             }
 

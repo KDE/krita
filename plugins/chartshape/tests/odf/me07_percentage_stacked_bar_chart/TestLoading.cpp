@@ -24,9 +24,6 @@
 // Qt
 #include <QStandardItemModel>
 
-// KDE
-#include <qtest_kde.h>
-
 // KoChart
 #include "ChartShape.h"
 #include "TableSource.h"
@@ -83,5 +80,4 @@ void TestLoading::testLegend()
     testLegendElements(QStringList() << "Week");
 }
 
-QTEST_KDEMAIN(TestLoading, GUI )
-
+QTEST_MAIN(TestLoading)

@@ -49,7 +49,7 @@ public:
     void activate(int shortcut);
     void deactivate(int shortcut);
     void begin(int shortcut, QEvent *event);
-    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    void cursorMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
     class Private;

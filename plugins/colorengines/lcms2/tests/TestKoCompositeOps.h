@@ -20,7 +20,7 @@
 #ifndef _KOCOMPOSITEOPS_H_
 #define _KOCOMPOSITEOPS_H_
 
-#include <QtTest>
+#include <QObject>
 
 class TestKoCompositeOps : public QObject
 {

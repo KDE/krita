@@ -204,7 +204,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
 
     KisPaintDeviceSP dev = d->view->activeNode()->paintDevice();
     if (!dev) {
-        qWarning() << "KisFilterManager::showFilterDialog(): Filtering was requested for illegal active layer!" << d->view->activeNode();
+        warnKrita << "KisFilterManager::showFilterDialog(): Filtering was requested for illegal active layer!" << d->view->activeNode();
         return;
     }
 

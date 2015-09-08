@@ -20,7 +20,7 @@
 #define _KIS_META_DATA_SCHEMA_H_
 
 #include <kritaimage_export.h>
-#include <QDebug>
+#include <kis_debug.h>
 
 class QString;
 

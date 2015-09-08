@@ -23,10 +23,11 @@
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
-
 #include <KoDpi.h>
 #include "KoGlobal.h"
 #include "KoConfig.h"
+#include <KoHashGeneratorProvider.h>
+#include <KoIcon.h>
 
 #include <kcrash.h>
 #include <klocale.h>
@@ -35,7 +36,7 @@
 #include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -66,6 +67,7 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 
+#include "kis_md5_generator.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
@@ -80,7 +82,9 @@
 #include "opengl/kis_opengl.h"
 #endif
 
-KisApplication* KisApplication::KoApp = 0;
+#include <calligraversion.h>
+#include <calligragitversion.h>
+#include "KisApplicationArguments.h"
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -134,17 +138,42 @@ public:
 
 
 
-KisApplication::KisApplication(const QString &key)
-    : QtSingleApplication(key, KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv())
+KisApplication::KisApplication(const QString &key, int &argc, char **argv)
+    : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
 {
-    KisApplication::KoApp = this;
+    setApplicationDisplayName("Krita");
+    setApplicationName("krita");
+
+    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString version;
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion);
+#else
+    version = calligraVersion;
+#endif
+    setApplicationVersion(version);
 
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
+
+    // for cursors
+    KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+
+    // for images in the paintop box
+    KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
+
+    KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
+
+    // Tell the iconloader about share/apps/calligra/icons
+    KIconLoader::global()->addAppDir("calligra");
+
+    setWindowIcon(koIcon("calligrakrita"));
+
 
 #ifdef HAVE_OPENGL
     KisOpenGL::initialize();
@@ -169,6 +198,7 @@ KisApplication::KisApplication(const QString &key)
         setStyle("Fusion");
     }
 
+    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -199,16 +229,17 @@ BOOL isWow64()
 #endif
 
 
-bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow)
+bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow)
 {
     QString templatePath;
 
-    const KUrl templateUrl = args->url(argNumber);
-    if (templateUrl.isLocalFile() && QFile::exists(templateUrl.toLocalFile())) {
+    const KUrl templateUrl = fileName;
+    if (QFile::exists(fileName)) {
         templatePath = templateUrl.toLocalFile();
-        kDebug(30003) << "using full path...";
-    } else {
-        QString desktopName(args->arg(argNumber));
+        dbgUI << "using full path...";
+    }
+    else {
+        QString desktopName(fileName);
         const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
         QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
@@ -241,7 +272,7 @@ bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber,
             doc->resetURL();
             doc->setEmpty();
             doc->setTitleModified();
-            kDebug(30003) << "Template loaded...";
+            dbgUI << "Template loaded...";
             return true;
         }
         else {
@@ -301,7 +332,7 @@ void KisApplication::askClearConfig()
     }
 }
 
-bool KisApplication::start()
+bool KisApplication::start(const KisApplicationArguments &args)
 {
 
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
@@ -346,35 +377,18 @@ bool KisApplication::start()
 
 #endif
 
-    // Get the command line arguments which we have to parse
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    int argsCount = args->count();
-
-    QString dpiValues = args->getOption("dpi");
-    if (!dpiValues.isEmpty()) {
-        int sep = dpiValues.indexOf(QRegExp("[x, ]"));
-        int dpiX;
-        int dpiY = 0;
-        bool ok = true;
-        if (sep != -1) {
-            dpiY = dpiValues.mid(sep + 1).toInt(&ok);
-            dpiValues.truncate(sep);
-        }
-        if (ok) {
-            dpiX = dpiValues.toInt(&ok);
-            if (ok) {
-                if (!dpiY) dpiY = dpiX;
-                KoDpi::setDPI(dpiX, dpiY);
-            }
-        }
+    int dpiX = args.dpiX();
+    int dpiY = args.dpiY();
+    if (dpiX > 0 && dpiY > 0) {
+        KoDpi::setDPI(dpiX, dpiY);
     }
 
-    const bool doTemplate = args->isSet("template");
-    const bool print = args->isSet("print");
-    const bool exportAs = args->isSet("export");
-    const bool exportAsPdf = args->isSet("export-pdf");
-    const QString exportFileName = args->getOption("export-filename");
-    const QString profileFileName = args->getOption("profile-filename");
+    const bool doTemplate = args.doTemplate();
+    const bool print = args.print();
+    const bool exportAs = args.exportAs();
+    const bool exportAsPdf = args.exportAsPdf();
+    const QString exportFileName = args.exportFileName();
+    const QString profileFileName = args.profileFileName();
 
     const bool batchRun = (print || exportAs || exportAsPdf);
     // print & exportAsPdf do user interaction ATM
@@ -436,6 +450,8 @@ bool KisApplication::start()
         }
     }
 
+    // Get the command line arguments which we have to parse
+    int argsCount = args.filenames().count();
     if (argsCount > 0) {
 
         QTextStream profileoutput;
@@ -449,17 +465,17 @@ bool KisApplication::start()
         // Loop through arguments
         short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {
-            KUrl url = args->url(argNumber);
+            QString fileName = args.filenames().at(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
                 // called in mix with batch options? ignore and silently skip
                 if (batchRun) {
                     continue;
                 }
-                if (createNewDocFromTemplate(args, argNumber, mainWindow)) {
+                if (createNewDocFromTemplate(fileName, mainWindow)) {
                     ++numberOfOpenDocuments;
                 }
-                // now try to load
+            // now try to load
             }
             else {
 
@@ -467,7 +483,7 @@ bool KisApplication::start()
                     KMimeType::Ptr outputMimetype;
                     outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
                     if (outputMimetype->name() == KMimeType::defaultMimeType()) {
-                        kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                        dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;
                     }
 
@@ -476,19 +492,20 @@ bool KisApplication::start()
                     QString outputFormat = outputMimetype->name();
 
                     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-                    KisImportExportManager manager(url.path());
+                    KisImportExportManager manager(fileName);
                     manager.setBatchMode(true);
                     QByteArray mime(outputFormat.toLatin1());
                     status = manager.exportDocument(exportFileName, mime);
 
                     if (status != KisImportExportFilter::OK) {
-                        kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
+                        dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << (int)status;
                     }
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
-                } else if (mainWindow) {
+                }
+                else if (mainWindow) {
                     KisDocument *doc = KisPart::instance()->createDocument();
-                    if (mainWindow->openDocumentInternal(url, doc)) {
+                    if (mainWindow->openDocumentInternal(fileName, doc)) {
                         if (print) {
                             mainWindow->slotFilePrint();
                             nPrinted++;
@@ -516,8 +533,6 @@ bool KisApplication::start()
             return nPrinted > 0;
         }
     }
-
-    args->clear();
     // not calling this before since the program will quit there.
     return true;
 }
@@ -531,14 +546,6 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
 }
-
-QStringList KisApplication::mimeFilter(KisImportExportManager::Direction direction) const
-{
-    return KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                              direction,
-                                              KisDocumentEntry::extraNativeMimeTypes());
-}
-
 
 bool KisApplication::notify(QObject *receiver, QEvent *event)
 {
@@ -555,12 +562,8 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
 
 }
 
-KisApplication *KisApplication::koApplication()
-{
-    return KoApp;
-}
 
-void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
+void KisApplication::remoteArguments(QByteArray &message, QObject *socket)
 {
     Q_UNUSED(socket);
 
@@ -574,29 +577,24 @@ void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
         return;
     }
 
-    QDataStream ds(message);
-    KCmdLineArgs::loadAppArgs(ds);
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    const bool doTemplate = args->isSet("template");
-    const int argsCount = args->count();
+    KisApplicationArguments args = KisApplicationArguments::deserialize(message);
+    const bool doTemplate = args.doTemplate();
+    const int argsCount = args.filenames().count();
 
     if (argsCount > 0) {
         // Loop through arguments
         for (int argNumber = 0; argNumber < argsCount; ++argNumber) {
-            KUrl url = args->url(argNumber);
+            QString filename = args.filenames().at(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                createNewDocFromTemplate(args, argNumber, mw);
+                createNewDocFromTemplate(filename, mw);
             }
-            else if (url.isValid()) {
+            else if (QFile(filename).exists()) {
                 KisDocument *doc = KisPart::instance()->createDocument();
-                mw->openDocumentInternal(url, doc);
+                mw->openDocumentInternal(filename, doc);
             }
         }
     }
-
-    args->clear();
 }
 
 void KisApplication::fileOpenRequested(const QString &url)

@@ -44,10 +44,10 @@ static bool checkForAsymmetricZeros = false;
                 if ((m_filterWeights[i].weight[j] && !m_filterWeights[i].weight[idx2]) || \
                     (!m_filterWeights[i].weight[j] && m_filterWeights[i].weight[idx2])) { \
                                                                         \
-                    qDebug() << "*******";                              \
-                    qDebug() << "Non-symmetric zero found:" << centerSrc; \
-                    qDebug() << "Weight" << j << ":" << m_filterWeights[i].weight[j]; \
-                    qDebug() << "Weight" << idx2 << ":" << m_filterWeights[i].weight[idx2]; \
+                    dbgKrita << "*******";                              \
+                    dbgKrita << "Non-symmetric zero found:" << centerSrc; \
+                    dbgKrita << "Weight" << j << ":" << m_filterWeights[i].weight[j]; \
+                    dbgKrita << "Weight" << idx2 << ":" << m_filterWeights[i].weight[idx2]; \
                     qFatal("Non-symmetric zero -> fail");               \
                 }                                                       \
             }                                                           \
@@ -68,19 +68,19 @@ static bool checkForAsymmetricZeros = false;
 #ifdef DEBUG_ENABLED
 #define DEBUG_ALL()                                                     \
     do {                                                                \
-        qDebug() << "************** i =" << i;                          \
-        qDebug() << ppVar(centerSrc);                                   \
-        qDebug() << ppVar(centerIndex);                                 \
-        qDebug() << ppVar(beginSrc) << ppVar(endSrc);                   \
-        qDebug() << ppVar(beginDst) << ppVar(endDst);                   \
-        qDebug() << ppVar(scaledIter) << ppVar(scaledInc);              \
-        qDebug() << ppVar(span);                                        \
-        qDebug() << "===";                                              \
+        dbgKrita << "************** i =" << i;                          \
+        dbgKrita << ppVar(centerSrc);                                   \
+        dbgKrita << ppVar(centerIndex);                                 \
+        dbgKrita << ppVar(beginSrc) << ppVar(endSrc);                   \
+        dbgKrita << ppVar(beginDst) << ppVar(endDst);                   \
+        dbgKrita << ppVar(scaledIter) << ppVar(scaledInc);              \
+        dbgKrita << ppVar(span);                                        \
+        dbgKrita << "===";                                              \
     } while (0)
 
 #define DEBUG_SAMPLE()                                                  \
     do {                                                                \
-        qDebug() << ppVar(scaledIter) << ppVar(t);                      \
+        dbgKrita << ppVar(scaledIter) << ppVar(t);                      \
     } while (0)
 #else
 #define DEBUG_ALL() Q_UNUSED(beginDst); Q_UNUSED(endDst)

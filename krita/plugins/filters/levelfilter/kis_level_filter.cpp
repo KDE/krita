@@ -236,7 +236,7 @@ void KisLevelConfigWidget::slotAutoLevel(void)
         double this_percentage = static_cast<double>(count_thus_far) /  total_count;
         double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
 
-        //qDebug() << "bin" << bin << "this_percentage" << this_percentage << "next_percentage" << next_percentage;
+        //dbgKrita << "bin" << bin << "this_percentage" << this_percentage << "next_percentage" << next_percentage;
         if (fabs(this_percentage - threshold) < fabs(next_percentage - threshold)) {
             chosen_low_bin = bin;
             break;
@@ -252,7 +252,7 @@ void KisLevelConfigWidget::slotAutoLevel(void)
         double this_percentage = static_cast<double>(count_thus_far) /  total_count;
         double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
 
-        //qDebug() << "hi-bin" << bin << "this_percentage" << this_percentage << "next_percentage" << next_percentage;
+        //dbgKrita << "hi-bin" << bin << "this_percentage" << this_percentage << "next_percentage" << next_percentage;
         if (fabs(this_percentage - threshold) < fabs(next_percentage - threshold)) {
             chosen_high_bin = bin;
             break;

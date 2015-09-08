@@ -26,7 +26,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

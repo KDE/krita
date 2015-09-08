@@ -510,7 +510,7 @@ void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*pr
 void StylesSelector::loadCollection(const QString &fileName)
 {
     if (!QFileInfo(fileName).exists()) {
-        qWarning() << "Loaded style collection doesn't exist!";
+        warnKrita << "Loaded style collection doesn't exist!";
         return;
     }
 

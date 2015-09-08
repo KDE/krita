@@ -123,7 +123,7 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
 
     QPointF newOffset;
     QImage result = worker.runOnQImage(image, QPointF(10, 10), imageToThumbTransform, &newOffset);
-    qDebug() << ppVar(newOffset);
+    dbgKrita << ppVar(newOffset);
 
 
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_qimage", "resultImage");

@@ -1228,7 +1228,7 @@ void KisViewManager::updateIcons()
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
-            kDebug() << "name " << dock->objectName();
+            dbgKrita << "name " << dock->objectName();
             KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
             if (titlebar) {
                 titlebar->updateIcons();

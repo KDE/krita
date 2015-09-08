@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>

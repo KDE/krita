@@ -325,7 +325,7 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
             if (this->showNotifications) {
                 QMessageBox::information(0, i18nc("@title:window", "EXR image will be modified"), msg);
             } else {
-                qWarning() << "WARNING:" << msg;
+                warnKrita << "WARNING:" << msg;
             }
 
             this->warnedAboutChangedAlpha = true;
@@ -528,8 +528,8 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
     bool result = extraInfoLayers == exrLayerNames;
 
     if (!result) {
-        qDebug() << "WARINING: Krita EXR extra layers info is inconsistent!";
-        qDebug() << ppVar(extraInfoLayers.size()) << ppVar(exrLayerNames.size());
+        dbgKrita << "WARINING: Krita EXR extra layers info is inconsistent!";
+        dbgKrita << ppVar(extraInfoLayers.size()) << ppVar(exrLayerNames.size());
 
         std::set<std::string>::const_iterator it1 = extraInfoLayers.begin();
         std::set<std::string>::const_iterator it2 = exrLayerNames.begin();
@@ -538,7 +538,7 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
         std::set<std::string>::const_iterator end2 = exrLayerNames.end();
 
         for (; it1 != end1; ++it1, ++it2) {
-            qDebug() << it1->c_str() << it2->c_str();
+            dbgKrita << it1->c_str() << it2->c_str();
         }
 
     }
@@ -1175,7 +1175,7 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
     if (this->showNotifications) {
         QMessageBox::information(0, i18nc("@title:window", "Layers will be lost"), msg);
     } else {
-        qWarning() << "WARNING:" << msg;
+        warnKrita << "WARNING:" << msg;
     }
 
 }
@@ -1258,7 +1258,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
 void exrConverter::cancel()
 {
-    qWarning() << "WARNING: Cancelling of an EXR loading is not supported!";
+    warnKrita << "WARNING: Cancelling of an EXR loading is not supported!";
 }
 
 

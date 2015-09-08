@@ -21,7 +21,7 @@
 #include <QDesktopWidget>
 #include <QPixmap>
 #include <QCheckBox>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QFile>
 
 #include <KisPart.h>

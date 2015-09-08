@@ -106,7 +106,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
     }
 }
 
-void KisRotateCanvasAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisRotateCanvasAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
     QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());

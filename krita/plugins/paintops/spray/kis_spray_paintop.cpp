@@ -68,7 +68,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     if (!m_shapeProperties.enabled && !m_brushOption.brush()) {
         // in case the preset does not contain the definition for KisBrush
         m_isPresetValid = false;
-        kWarning() << "Preset is not valid. Painting is not possible. Use the preset editor to fix current brush engine preset.";
+        dbgKrita << "Preset is not valid. Painting is not possible. Use the preset editor to fix current brush engine preset.";
     }
 
     m_sprayBrush.setProperties(&m_properties, &m_colorProperties,

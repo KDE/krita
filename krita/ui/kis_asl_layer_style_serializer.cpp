@@ -122,7 +122,7 @@ QString compositeOpToBlendMode(const QString &compositeOp)
     } else if (compositeOp == COMPOSITE_LUMINIZE) {
         mode = "Lmns";
     } else {
-        qDebug() << "Unknown composite op:" << mode << "Returning \"Nrml\"!";
+        dbgKrita << "Unknown composite op:" << mode << "Returning \"Nrml\"!";
     }
 
     return mode;
@@ -145,7 +145,7 @@ QString techniqueToString(psd_technique_type technique, const QString &typeId)
     }
 
     if (typeId == "BETE" && technique == psd_technique_slope_limit) {
-        qWarning() << "WARNING: techniqueToString: invalid technique type!" << ppVar(technique) << ppVar(typeId);
+        warnKrita << "WARNING: techniqueToString: invalid technique type!" << ppVar(technique) << ppVar(typeId);
     }
 
     return result;
@@ -267,7 +267,7 @@ QString fetchPatternUuidSafe(KoPattern *pattern, QHash<KoPattern*, QString> patt
     if (patternToUuid.contains(pattern)) {
         return patternToUuid[pattern];
     } else {
-        qWarning() << "WARNING: the pattern is not present in the Uuid map!";
+        warnKrita << "WARNING: the pattern is not present in the Uuid map!";
         return "invalid-uuid";
     }
 }
@@ -296,7 +296,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                     patternToUuidMap.insert(pattern, uuid);
                 }
             } else {
-                qWarning() << "WARNING: KisAslLayerStyleSerializer::saveToDevice: saved pattern is null!";
+                warnKrita << "WARNING: KisAslLayerStyleSerializer::saveToDevice: saved pattern is null!";
             }
         }
 
@@ -394,7 +394,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 } else if (stopGradient) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
-                    qWarning() << "WARNING: OG: Unknown gradient type!";
+                    warnKrita << "WARNING: OG: Unknown gradient type!";
                     w.writeColor("Clr ", outerGlow->color());
                 }
 
@@ -442,7 +442,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 } else if (stopGradient) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
-                    qWarning() << "WARNING: IG: Unknown gradient type!";
+                    warnKrita << "WARNING: IG: Unknown gradient type!";
                     w.writeColor("Clr ", innerGlow->color());
                 }
 
@@ -649,7 +649,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 } else if (stopGradient) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
-                    qWarning() << "WARNING: Stroke: Unknown gradient type!";
+                    warnKrita << "WARNING: Stroke: Unknown gradient type!";
                     w.writeColor("Clr ", stroke->color());
                 }
 
@@ -787,7 +787,7 @@ void convertAndSetBlendMode(const QString &mode,
     } else if (mode == "Lmns") {
         compositeOp = COMPOSITE_LUMINIZE;
     } else {
-        qDebug() << "Unknown blending mode:" << mode << "Returning COMPOSITE_OVER!";
+        dbgKrita << "Unknown blending mode:" << mode << "Returning COMPOSITE_OVER!";
     }
 
     setBlendMode(compositeOp);
@@ -801,7 +801,7 @@ void convertAndSetCurve(const QString &name,
     Q_UNUSED(points);
     Q_UNUSED(setCurveLookupTable);
 
-    qWarning() << "convertAndSetBlendMode:" << "Curve conversion is not implemented yet";
+    warnKrita << "convertAndSetBlendMode:" << "Curve conversion is not implemented yet";
 }
 
 template <typename T>
@@ -860,7 +860,7 @@ void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern)
     QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
 
     if (m_patternsStore.contains(uuid)) {
-        qWarning() << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[uuid]->name());
+        warnKrita << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[uuid]->name());
     } else {
         KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
         KoPattern *patternToAdd = server->resourceByMD5(pattern->md5());
@@ -883,7 +883,7 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
     KoPattern *pattern = m_patternsStore[patternUuid];
 
     if (!pattern) {
-        qWarning() << "WARNING: ASL style contains inexistent pattern reference!";
+        warnKrita << "WARNING: ASL style contains inexistent pattern reference!";
 
         QImage dumbImage(32, 32, QImage::Format_ARGB32);
         dumbImage.fill(Qt::red);
@@ -1193,7 +1193,7 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     KisAslReader reader;
     QDomDocument doc = reader.readFile(device);
 
-    //qDebug() << ppVar(doc.toString());
+    //dbgKrita << ppVar(doc.toString());
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;

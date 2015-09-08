@@ -29,11 +29,13 @@
 
 #include <math.h>
 
+#include <kis_debug.h>
+
 void CompressionTest::testCompressionRLE()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
     QByteArray compressed = Compression::compress(ba, Compression::RLE);
-    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    dbgKrita << compressed.size() << "uncompressed" << ba.size();
 
     QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
@@ -44,7 +46,7 @@ void CompressionTest::testCompressionRLE()
         ds << rand();
     }
     compressed = Compression::compress(ba, Compression::RLE);
-    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    dbgKrita << compressed.size() << "uncompressed" << ba.size();
     uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
@@ -56,7 +58,7 @@ void CompressionTest::testCompressionZIP()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
     QByteArray compressed = Compression::compress(ba, Compression::ZIP);
-    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    dbgKrita << compressed.size() << "uncompressed" << ba.size();
 
     QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
@@ -67,7 +69,7 @@ void CompressionTest::testCompressionZIP()
         ds << rand();
     }
     compressed = Compression::compress(ba, Compression::ZIP);
-    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    dbgKrita << compressed.size() << "uncompressed" << ba.size();
     uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
@@ -78,7 +80,7 @@ void CompressionTest::testCompressionUncompressed()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
     QByteArray compressed = Compression::compress(ba, Compression::Uncompressed);
-    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    dbgKrita << compressed.size() << "uncompressed" << ba.size();
 
     QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
@@ -89,7 +91,7 @@ void CompressionTest::testCompressionUncompressed()
         ds << rand();
     }
     compressed = Compression::compress(ba, Compression::Uncompressed);
-    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    dbgKrita << compressed.size() << "uncompressed" << ba.size();
     uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 

@@ -452,7 +452,7 @@ void LutDockerDock::resetOcioConfiguration()
         }
     }
     catch (OCIO::Exception &exception) {
-        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+        dbgKrita << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
     }
 
     refillControls();

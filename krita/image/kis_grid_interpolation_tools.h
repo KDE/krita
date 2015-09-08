@@ -482,7 +482,7 @@ struct IncompletePolygonPolicy {
                                                     &dstPoint);
 
                 if (!result) {
-                    //qDebug() << "*NOT* found any valid point" << allSrcPoints[pointToIndex(cellPt)] << "->" << ppVar(pt);
+                    //dbgKrita << "*NOT* found any valid point" << allSrcPoints[pointToIndex(cellPt)] << "->" << ppVar(pt);
                     break;
                 } else {
                     srcPolygon << srcPoint;

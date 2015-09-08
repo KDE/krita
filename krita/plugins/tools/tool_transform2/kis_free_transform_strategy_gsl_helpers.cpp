@@ -153,8 +153,8 @@ namespace GSL
 
             if (status == GSL_SUCCESS)
             {
-                // qDebug() << "*******Converged to minimum";
-                // qDebug() << gsl_vector_get (s->x, 0)
+                // dbgKrita << "*******Converged to minimum";
+                // dbgKrita << gsl_vector_get (s->x, 0)
                 //          << gsl_vector_get (s->x, 1)
                 //          << gsl_vector_get (s->x, 2)
                 //          << "|" << s->fval << size;
@@ -277,8 +277,8 @@ namespace GSL
 
             if (status == GSL_SUCCESS)
             {
-                // qDebug() << "*******Converged to minimum";
-                // qDebug() << gsl_vector_get (s->x, 0)
+                // dbgKrita << "*******Converged to minimum";
+                // dbgKrita << gsl_vector_get (s->x, 0)
                 //          << gsl_vector_get (s->x, 1)
                 //          << gsl_vector_get (s->x, 2)
                 //          << gsl_vector_get (s->x, 3)

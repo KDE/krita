@@ -50,7 +50,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kdiroperator.h>
 #include <kedittoolbar.h>
 #include <kfileitem.h>
@@ -124,7 +124,8 @@
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
 #include "kis_icon_utils.h"
-
+#include <KisImportExportFilter.h>
+#include <KisDocumentEntry.h>
 
 #include "calligraversion.h"
 
@@ -354,7 +355,7 @@ KisMainWindow::KisMainWindow()
 
     createActions();
 
-    setAutoSaveSettings(KisFactory::componentName(), false);
+    setAutoSaveSettings("krita", false);
 
     KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), viewManager());
 
@@ -408,7 +409,7 @@ KisMainWindow::KisMainWindow()
         if(action->shortcut() == QKeySequence(0)) {
             continue;
         }
-        qDebug() << "shortcut " << action->text() << " " << action->shortcut();
+        dbgKrita << "shortcut " << action->text() << " " << action->shortcut();
         Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
         existingShortcuts.insert(action->shortcut());
     }
@@ -442,7 +443,7 @@ KisMainWindow::KisMainWindow()
             act->setChecked(!toolBar->isHidden());
             toolbarList.append(act);
         } else
-            kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+            warnUI << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
     }
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
@@ -465,7 +466,7 @@ KisMainWindow::~KisMainWindow()
 //    foreach(QAction *ac, actionCollection()->actions()) {
 //        KAction *action = qobject_cast<KAction*>(ac);
 //        if (action) {
-//        qDebug() << "<Action"
+//        dbgKrita << "<Action"
 //                 << "name=" << action->objectName()
 //                 << "icon=" << action->icon().name()
 //                 << "text="  << action->text().replace("&", "&amp;")
@@ -479,7 +480,7 @@ KisMainWindow::~KisMainWindow()
 //                 << "/>"   ;
 //        }
 //        else {
-//            qDebug() << "Got a QAction:" << ac->objectName();
+//            dbgKrita << "Got a QAction:" << ac->objectName();
 //        }
 
 //    }
@@ -506,7 +507,7 @@ KisMainWindow::~KisMainWindow()
 
 void KisMainWindow::addView(KisView *view)
 {
-    //qDebug() << "KisMainWindow::addView" << view;
+    //dbgKrita << "KisMainWindow::addView" << view;
     if (d->activeView == view) return;
 
     if (d->activeView) {
@@ -607,7 +608,7 @@ void KisMainWindow::setReadWrite(bool readwrite)
 
 void KisMainWindow::addRecentURL(const KUrl& url)
 {
-    kDebug(30003) << "KisMainWindow::addRecentURL url=" << url.prettyUrl();
+    dbgUI << "KisMainWindow::addRecentURL url=" << url.prettyUrl();
     // Add entry to recent documents list
     // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
     if (!url.isEmpty()) {
@@ -676,7 +677,7 @@ void KisMainWindow::updateCaption()
 
 void KisMainWindow::updateCaption(const QString & caption, bool mod)
 {
-    kDebug(30003) << "KisMainWindow::updateCaption(" << caption << "," << mod << ")";
+    dbgUI << "KisMainWindow::updateCaption(" << caption << "," << mod << ")";
 #ifdef CALLIGRA_ALPHA
     setCaption(QString("ALPHA %1: %2").arg(CALLIGRA_ALPHA).arg(caption), mod);
     return;
@@ -755,7 +756,7 @@ void KisMainWindow::slotLoadCompleted()
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 {
-    kDebug(30003) << "KisMainWindow::slotLoadCanceled";
+    dbgUI << "KisMainWindow::slotLoadCanceled";
     if (!errMsg.isEmpty())   // empty when canceled by user
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
     // ... can't delete the document, it's the one who emitted the signal...
@@ -769,7 +770,7 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 {
-    kDebug(30003) << "KisMainWindow::slotSaveCanceled";
+    dbgUI << "KisMainWindow::slotSaveCanceled";
     if (!errMsg.isEmpty())   // empty when canceled by user
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
     slotSaveCompleted();
@@ -777,7 +778,7 @@ void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 
 void KisMainWindow::slotSaveCompleted()
 {
-    kDebug(30003) << "KisMainWindow::slotSaveCompleted";
+    dbgUI << "KisMainWindow::slotSaveCompleted";
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -831,7 +832,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
-        kDebug(30003) << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
+        dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
@@ -922,11 +923,11 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                //qDebug() << "save to directory: " << newURL.url();
+                //dbgKrita << "save to directory: " << newURL.url();
             }
             else if (specialOutputFlag == KisDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
-                qDebug() << dot;
+                dbgKrita << dot;
                 QString ext = mime->mainExtension();
                 if (!ext.isEmpty()) {
                     if (dot < 0) fileName += ext;
@@ -976,11 +977,11 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                     ret = document->saveAs(newURL);
 
                     if (ret) {
-                        kDebug(30003) << "Successful Save As!";
+                        dbgUI << "Successful Save As!";
                         addRecentURL(newURL);
                         setReadWrite(true);
                     } else {
-                        kDebug(30003) << "Failed Save As!";
+                        dbgUI << "Failed Save As!";
                         document->setUrl(oldURL);
                         document->setLocalFilePath(oldFile);
                         document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
@@ -1020,7 +1021,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             }
 
             if (!ret) {
-                kDebug(30003) << "Failed Save!";
+                dbgUI << "Failed Save!";
                 document->setUrl(oldURL);
                 document->setLocalFilePath(oldFile);
             }
@@ -1107,7 +1108,7 @@ void KisMainWindow::saveWindowSettings()
     if (d->windowSizeDirty ) {
 
         // Save window size into the config file of our componentData
-        kDebug(30003) << "KisMainWindow::saveWindowSettings";
+        dbgUI << "KisMainWindow::saveWindowSettings";
         KConfigGroup group = config->group("MainWindow");
         saveWindowSize(group);
         config->sync();
@@ -1117,7 +1118,7 @@ void KisMainWindow::saveWindowSettings()
     if (!d->activeView || d->activeView->document()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+        KConfigGroup group = KGlobal::config()->group("krita");
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
@@ -1178,7 +1179,9 @@ void KisMainWindow::slotFileOpen()
     QStringList urls;
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                 KisImportExportManager::Import,
+                                                                 KisDocumentEntry::extraNativeMimeTypes()));
     QStringList filters = dialog.nameFilters();
     filters << i18n("All files (*.*)");
     dialog.setNameFilters(filters);
@@ -1195,7 +1198,7 @@ void KisMainWindow::slotFileOpen()
         if (!url.isEmpty()) {
             bool res = openDocument(KUrl::fromLocalFile(url));
             if (!res) {
-                qWarning() << "Loading" << url << "failed";
+                warnKrita << "Loading" << url << "failed";
             }
         }
     }
@@ -1464,7 +1467,7 @@ void KisMainWindow::slotConfigureKeys()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+    KConfigGroup group = KGlobal::config()->group("krita");
     saveMainWindowSettings(group);
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
@@ -1474,7 +1477,7 @@ void KisMainWindow::slotConfigureToolbars()
 
 void KisMainWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
+    applyMainWindowSettings(KGlobal::config()->group("krita"));
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
@@ -1489,7 +1492,7 @@ void KisMainWindow::slotNewToolbarConfig()
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
 {
-    //kDebug(30003) <<"KisMainWindow::slotToolbarToggled" << sender()->name() <<" toggle=" << true;
+    //dbgUI <<"KisMainWindow::slotToolbarToggled" << sender()->name() <<" toggle=" << true;
     // The action (sender) and the toolbar have the same name
     KToolBar * bar = toolBar(sender()->objectName());
     if (bar) {
@@ -1501,11 +1504,11 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
+            KConfigGroup group = KGlobal::config()->group("krita");
             saveMainWindowSettings(group);
         }
     } else
-        kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
+        warnUI << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
@@ -1526,7 +1529,7 @@ void KisMainWindow::slotProgress(int value)
 
     if (!d->progressMutex.tryLock()) return;
 
-    kDebug(30003) << "KisMainWindow::slotProgress" << value;
+    dbgUI << "KisMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
             statusBar()->removeWidget(d->progress);
@@ -1601,7 +1604,7 @@ void KisMainWindow::slotReloadFile()
 
 void KisMainWindow::slotImportFile()
 {
-    kDebug(30003) << "slotImportFile()";
+    dbgUI << "slotImportFile()";
 
     d->isImporting = true;
     slotFileOpen();
@@ -1610,7 +1613,7 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotExportFile()
 {
-    kDebug(30003) << "slotExportFile()";
+    dbgUI << "slotExportFile()";
 
     d->isExporting = true;
     slotFileSaveAs();
@@ -1637,7 +1640,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) {
-            qWarning() << "Could not create docker for" << factory->id();
+            warnKrita << "Could not create docker for" << factory->id();
             return 0;
         }
 
@@ -1676,7 +1679,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             visible = false;
         }
 
-        KConfigGroup group = KGlobal::config()->group(KisFactory::componentName()).group("DockWidget " + factory->id());
+        KConfigGroup group = KGlobal::config()->group("krita").group("DockWidget " + factory->id());
         side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
@@ -1687,11 +1690,11 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
-        group = KGlobal::config()->group(KisFactory::componentName()).group("DockWidget " + factory->id());
+        group = KGlobal::config()->group("krita").group("DockWidget " + factory->id());
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 
-        //qDebug() << "docker" << factory->id() << dockWidget << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
+        //dbgKrita << "docker" << factory->id() << dockWidget << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
 
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
@@ -1745,7 +1748,7 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
             observers << observer;
         }
         else {
-            qWarning() << docker << "is not a canvas observer";
+            warnKrita << docker << "is not a canvas observer";
         }
     }
     return observers;
@@ -1869,11 +1872,11 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
     if (!window) return;
     QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
-    //qDebug() << "setActiveSubWindow();" << subwin << d->activeSubWindow;
+    //dbgKrita << "setActiveSubWindow();" << subwin << d->activeSubWindow;
 
     if (subwin && subwin != d->activeSubWindow) {
         KisView *view = qobject_cast<KisView *>(subwin->widget());
-        //qDebug() << "\t" << view << activeView();
+        //dbgKrita << "\t" << view << activeView();
         if (view && view != activeView()) {
             d->viewManager->setCurrentView(view);
             setActiveView(view);
@@ -1968,7 +1971,7 @@ QPointer<KisView>KisMainWindow::activeKisView()
 {
     if (!d->mdiArea) return 0;
     QMdiSubWindow *activeSubWindow = d->mdiArea->activeSubWindow();
-    //qDebug() << "activeKisView" << activeSubWindow;
+    //dbgKrita << "activeKisView" << activeSubWindow;
     if (!activeSubWindow) return 0;
     return qobject_cast<KisView*>(activeSubWindow->widget());
 }

@@ -291,7 +291,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 allStylesForServer << layerStyle;
                 layer->setLayerStyle(layerStyle->clone());
             } else {
-                qWarning() << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
+                warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }
 
         }

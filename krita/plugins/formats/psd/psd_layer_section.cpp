@@ -66,7 +66,7 @@ bool PSDLayerMaskSection::read(QIODevice* io)
     try {
         retval = readImpl(io);
     } catch (KisAslReaderUtils::ASLParseException &e) {
-        qWarning() << "WARNING: PSD (emb. pattern):" << e.what();
+        warnKrita << "WARNING: PSD (emb. pattern):" << e.what();
         retval = false;
     }
 
@@ -79,7 +79,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice* io)
     SAFE_READ_EX(io, layerInfoSectionSize);
 
     if (layerInfoSectionSize & 0x1) {
-        qWarning() << "WARNING: layerInfoSectionSize is NOT even! Fixing...";
+        warnKrita << "WARNING: layerInfoSectionSize is NOT even! Fixing...";
         layerInfoSectionSize++;
     }
 

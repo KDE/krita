@@ -20,7 +20,6 @@
 #ifndef KOCOMPOSITEOPREGISTRY_H
 #define KOCOMPOSITEOPREGISTRY_H
 
-#include <klocale.h>
 #include <QString>
 #include <QList>
 #include <QMultiMap>

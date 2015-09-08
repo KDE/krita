@@ -75,7 +75,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
     {
         const QRect changeRect = plane.changeRect(rFillRect, KisLayer::N_FILTHY);
-        qDebug() << ppVar(rFillRect) << ppVar(changeRect);
+        dbgKrita << ppVar(rFillRect) << ppVar(changeRect);
 
         plane.recalculate(changeRect, layer);
 
@@ -117,7 +117,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         const QRect changeRect = plane.changeRect(partialSelectionRect, KisLayer::N_FILTHY);
         projection->clear(changeRect);
 
-        qDebug() << ppVar(partialSelectionRect) << ppVar(changeRect);
+        dbgKrita << ppVar(partialSelectionRect) << ppVar(changeRect);
 
         plane.recalculate(changeRect, layer);
 
@@ -136,7 +136,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         const QRect changeRect = plane.changeRect(updateRect1, KisLayer::N_FILTHY);
         projection->clear(changeRect);
 
-        qDebug() << ppVar(updateRect1) << ppVar(changeRect);
+        dbgKrita << ppVar(updateRect1) << ppVar(changeRect);
 
         plane.recalculate(changeRect, layer);
 
@@ -152,7 +152,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         const QRect changeRect = plane.changeRect(updateRect2, KisLayer::N_FILTHY);
         projection->clear(changeRect);
 
-        qDebug() << ppVar(updateRect2) << ppVar(changeRect);
+        dbgKrita << ppVar(updateRect2) << ppVar(changeRect);
 
         plane.recalculate(changeRect, layer);
 

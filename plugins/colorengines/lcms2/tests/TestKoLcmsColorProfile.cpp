@@ -5,6 +5,9 @@
 #include <LcmsColorProfileContainer.h>
 
 #include <KoColor.h>
+
+#include <QTest>
+
 #include <lcms2.h>
 #include <cmath>
 

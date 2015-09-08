@@ -23,6 +23,8 @@
 #include "kis_pressure_mirror_option.h"
 #include "kis_paintop_settings.h"
 
+#include <QElapsedTimer>
+
 #define NOISY_UPDATE_SPEED 50  // Time in ms for outline updates to noisy brushes
 
 struct KisCurrentOutlineFetcher::Private {

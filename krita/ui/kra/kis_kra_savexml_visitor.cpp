@@ -310,7 +310,7 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
             dumbLayerStyle->setUuid(uuid);
             layer->setLayerStyle(dumbLayerStyle);
         } else {
-            qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+            warnKrita << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
         }
     }
 }

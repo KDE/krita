@@ -28,7 +28,7 @@ inline double drand48()
 #include <qtest_kde.h>
 
 #include <QImage>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include "kis_painter_benchmark.h"
 #include "kis_benchmark_values.h"

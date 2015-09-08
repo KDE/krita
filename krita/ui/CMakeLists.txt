@@ -238,6 +238,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     input/kis_input_manager.cpp
+    input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
@@ -336,6 +337,7 @@ set(kritaui_LIB_SRCS
 
     widgets/kis_url_requester.cpp
     kis_md5_generator.cpp
+    KisApplicationArguments.cpp
 )
 
 if(WIN32)

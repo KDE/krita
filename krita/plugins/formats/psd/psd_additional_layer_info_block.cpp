@@ -387,7 +387,7 @@ void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice* io, const QDomDocu
         writer.writePsdLfx2SectionEx(io, stylesXmlDoc);
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
-        qWarning() << "WARNING: Couldn't save layer style lfx2 block:" << PREPEND_METHOD(e.what());
+        warnKrita << "WARNING: Couldn't save layer style lfx2 block:" << PREPEND_METHOD(e.what());
 
         // TODO: make this error recoverable!
         throw e;
@@ -405,7 +405,7 @@ void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice* io, const QDomDocu
         writer.writePatterns();
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
-        qWarning() << "WARNING: Couldn't save layer style patterns block:" << PREPEND_METHOD(e.what());
+        warnKrita << "WARNING: Couldn't save layer style patterns block:" << PREPEND_METHOD(e.what());
 
         // TODO: make this error recoverable!
         throw e;

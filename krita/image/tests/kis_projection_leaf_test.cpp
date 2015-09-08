@@ -56,7 +56,7 @@ bool safeCompare(KisProjectionLeafSP leaf, KisNodeSP node)
 
 void checkNode(KisNodeSP node, const QString &prefix)
 {
-    qDebug() << prefix << node->name();
+    dbgKrita << prefix << node->name();
 
     safeCompare(node->projectionLeaf()->parent(), node->parent());
     safeCompare(node->projectionLeaf()->firstChild(), node->firstChild());
@@ -76,7 +76,7 @@ void checkNode(KisNodeSP node, const QString &prefix)
 
 void printNodes(KisNodeSP node, const QString &prefix = "")
 {
-    qDebug() << prefix << node->name();
+    dbgKrita << prefix << node->name();
 
     KisNodeSP prevNode = node->lastChild();
     while(prevNode) {
@@ -87,7 +87,7 @@ void printNodes(KisNodeSP node, const QString &prefix = "")
 
 void printLeafsBackward(KisProjectionLeafSP leaf, QList<QString> &refNodes, const QString &prefix = "")
 {
-    qDebug() << prefix << leaf->node()->name();
+    dbgKrita << prefix << leaf->node()->name();
     QCOMPARE(leaf->node()->name(), refNodes.takeFirst());
 
     KisProjectionLeafSP prevLeaf = leaf->lastChild();
@@ -103,7 +103,7 @@ void printLeafsBackward(KisProjectionLeafSP leaf, QList<QString> &refNodes, cons
 
 void printLeafsForward(KisProjectionLeafSP leaf, QList<QString> &refNodes, const QString &prefix = "")
 {
-    qDebug() << prefix << leaf->node()->name();
+    dbgKrita << prefix << leaf->node()->name();
     QCOMPARE(leaf->node()->name(), refNodes.takeFirst());
 
     KisProjectionLeafSP prevLeaf = leaf->firstChild();
@@ -115,7 +115,7 @@ void printLeafsForward(KisProjectionLeafSP leaf, QList<QString> &refNodes, const
 
 void printParents(KisProjectionLeafSP leaf, QList<QString> &refNodes, const QString &prefix = "")
 {
-    qDebug() << prefix << leaf->node()->name();
+    dbgKrita << prefix << leaf->node()->name();
     QCOMPARE(leaf->node()->name(), refNodes.takeFirst());
 
     leaf = leaf->parent();
@@ -149,11 +149,11 @@ void KisProjectionLeafTest::testPassThrough()
 
     //checkNode(t.image->root(), "");
 
-    qDebug() << "== Nodes";
+    dbgKrita << "== Nodes";
     printNodes(t.image->root());
 
     {
-        qDebug() << "== Leafs backward";
+        dbgKrita << "== Leafs backward";
 
         QList<QString> refNodes;
         refNodes << "root"
@@ -168,7 +168,7 @@ void KisProjectionLeafTest::testPassThrough()
     }
 
     {
-        qDebug() << "== Leafs forward";
+        dbgKrita << "== Leafs forward";
 
         QList<QString> refNodes;
         refNodes << "root"
@@ -183,21 +183,21 @@ void KisProjectionLeafTest::testPassThrough()
     }
 
     {
-        qDebug() << "== Parents for paint4";
+        dbgKrita << "== Parents for paint4";
         QList<QString> refNodes;
         refNodes << "paint4" << "root";
         printParents(paint4->projectionLeaf(), refNodes);
     }
 
     {
-        qDebug() << "== Parents for paint3";
+        dbgKrita << "== Parents for paint3";
         QList<QString> refNodes;
         refNodes << "paint3" << "root";
         printParents(paint3->projectionLeaf(), refNodes);
     }
 
     {
-        qDebug() << "== Parents for group1";
+        dbgKrita << "== Parents for group1";
         QList<QString> refNodes;
         refNodes << "group1" << "root";
         printParents(group1->projectionLeaf(), refNodes);
@@ -228,11 +228,11 @@ void KisProjectionLeafTest::testNestedPassThrough()
 
     //checkNode(t.image->root(), "");
 
-    qDebug() << "== Nodes";
+    dbgKrita << "== Nodes";
     printNodes(t.image->root());
 
     {
-        qDebug() << "== Leafs backward";
+        dbgKrita << "== Leafs backward";
 
         QList<QString> refNodes;
         refNodes << "root"
@@ -248,7 +248,7 @@ void KisProjectionLeafTest::testNestedPassThrough()
     }
 
     {
-        qDebug() << "== Leafs forward";
+        dbgKrita << "== Leafs forward";
 
         QList<QString> refNodes;
         refNodes << "root"
@@ -266,21 +266,21 @@ void KisProjectionLeafTest::testNestedPassThrough()
     }
 
     {
-        qDebug() << "== Parents for paint4";
+        dbgKrita << "== Parents for paint4";
         QList<QString> refNodes;
         refNodes << "paint4" << "root";
         printParents(paint4->projectionLeaf(), refNodes);
     }
 
     {
-        qDebug() << "== Parents for paint5";
+        dbgKrita << "== Parents for paint5";
         QList<QString> refNodes;
         refNodes << "paint5" << "root";
         printParents(paint5->projectionLeaf(), refNodes);
     }
 
     {
-        qDebug() << "== Parents for group1";
+        dbgKrita << "== Parents for group1";
         QList<QString> refNodes;
         refNodes << "group1" << "root";
         printParents(group1->projectionLeaf(), refNodes);

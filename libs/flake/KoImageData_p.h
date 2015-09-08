@@ -28,6 +28,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QTimer>
+#include <QDir>
 
 #include "KoImageData.h"
 

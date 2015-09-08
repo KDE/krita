@@ -273,7 +273,7 @@ void CompositionDockerDock::updateComposition()
 
 void CompositionDockerDock::renameComposition()
 {
-    kDebug() << "rename";
+    dbgKrita << "rename";
     QModelIndex index = compositionView->currentIndex();
     if (index.isValid()) {
         KisLayerComposition* composition = m_model->compositionFromIndex(index);

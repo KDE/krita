@@ -126,7 +126,7 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
-#add_subdirectory( integration )
+add_subdirectory( integration )
 
 if (WIN32 AND USE_BREAKPAD)
         add_subdirectory( crashreporter )

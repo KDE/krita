@@ -617,47 +617,52 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
 void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
 {
     Q_UNUSED(from);
-    // XXX: Focus handling for non-qwidget based canvases!
-    if (!canvasData) {
+    // no canvas anyway or no focus set anyway?
+    if (!canvasData || to == 0) {
         return;
     }
 
+    // Check if this app is about QWidget-based KoCanvasControllerWidget canvasses
+    // XXX: Focus handling for non-qwidget based canvases!
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (!canvasControllerWidget) {
         return;
     }
 
-    if (to == 0 || to == canvasControllerWidget) {
+    // canvasWidget is set as focusproxy for KoCanvasControllerWidget,
+    // so all focus checks are to be done against canvasWidget objects
+
+    // focus returned to current canvas?
+    if (to == canvasData->canvas->canvas()->canvasWidget()) {
+        // nothing to do
         return;
     }
 
+    // if the 'to' is one of our canvasWidgets, then switch.
+
+    // for code simplicity the current canvas will be checked again,
+    // but would have been catched already in the lines above, so no issue
     KoCanvasController *newCanvas = 0;
-    // if the 'to' is one of our canvasses, or one of its children, then switch.
     foreach(KoCanvasController* canvas, canvasses.keys()) {
-        if (canvasControllerWidget == to || canvas->canvas()->canvasWidget() == to) {
+        if (canvas->canvas()->canvasWidget() == to) {
             newCanvas = canvas;
             break;
         }
     }
 
+    // none of our canvasWidgets got focus?
     if (newCanvas == 0) {
         return;
     }
 
-    if (canvasData && newCanvas == canvasData->canvas) {
-        return;
-    }
-
-    if (!canvasses.contains(newCanvas)) {
-        return;
-    }
+    // switch to canvasdata matching inputdevice used last with this app instance
     foreach(CanvasData *data, canvasses.value(newCanvas)) {
         if (data->inputDevice == inputDevice) {
             switchCanvasData(data);
             return;
         }
     }
-    // no such inputDevice for this canvas...
+    // if no such inputDevice for this canvas, then simply fallback to first one
     switchCanvasData(canvasses.value(newCanvas).first());
 }
 

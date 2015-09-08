@@ -134,18 +134,17 @@ void BigBrotherPlugin::slotOpenPlay()
 
 void BigBrotherPlugin::slotOpenEdit()
 {
-    KUrl url;
-    KisMacro* m = openMacro(&url);
-    if (!m) return;
+    KisMacro *macro = openMacro();
+    if (!macro) return;
     KisActionsEditorDialog aed(m_view->mainWindow());
 
-    aed.actionsEditor()->setMacro(m);
+    aed.actionsEditor()->setMacro(macro);
 
     if (aed.exec() == QDialog::Accepted) {
-        saveMacro(m, url);
+        saveMacro(macro);
     }
 
-    delete m;
+    delete macro;
 }
 
 void BigBrotherPlugin::slotStartRecordingMacro()
@@ -170,16 +169,14 @@ void BigBrotherPlugin::slotStopRecordingMacro()
     m_startRecordingMacroAction->setEnabled(true);
     m_stopRecordingMacroAction->setEnabled(false);
     // Save the macro
-    saveMacro(m_recorder, KUrl());
+    saveMacro(m_recorder);
     // Delete recorder
     delete m_recorder;
     m_recorder = 0;
 }
 
-KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
+KisMacro* BigBrotherPlugin::openMacro()
 {
-
-    Q_UNUSED(url);
     QStringList mimeFilter;
     mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
@@ -220,11 +217,10 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     return 0;
 }
 
-void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
+void BigBrotherPlugin::saveMacro(const KisMacro* macro)
 {
     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "krita/bigbrother");
     dialog.setCaption(i18n("Save Macro"));
-    dialog.setOverrideDir(url.url());
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
 
     QString filename = dialog.filename();

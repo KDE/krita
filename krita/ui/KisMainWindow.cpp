@@ -871,7 +871,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
         dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
-        KUrl newURL = dialog.url();
+        KUrl newURL = dialog.filename();
 
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
@@ -1178,7 +1178,7 @@ void KisMainWindow::slotFileOpen()
     dialog.setHideNameFilterDetailsOption();
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 
-    urls = dialog.urls();
+    urls = dialog.filenames();
 
     if (urls.isEmpty())
         return;
@@ -1403,7 +1403,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
-        KUrl url = dialog.url();
+        KUrl url = dialog.filename();
 
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())

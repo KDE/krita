@@ -194,10 +194,10 @@ void DlgCreateBundle::accept()
 
 void DlgCreateBundle::selectSaveLocation()
 {
-    KoFileDialog dlg(this, KoFileDialog::OpenDirectory, "resourcebundlesavelocation");
-    dlg.setDefaultDir(m_ui->lblSaveLocation->text());
-    dlg.setCaption(i18n("Select a directory to save the bundle"));
-    QString location = dlg.url();
+    KoFileDialog dialog(this, KoFileDialog::OpenDirectory, "resourcebundlesavelocation");
+    dialog.setDefaultDir(m_ui->lblSaveLocation->text());
+    dialog.setCaption(i18n("Select a directory to save the bundle"));
+    QString location = dialog.filename();
     m_ui->lblSaveLocation->setText(location);
 }
 
@@ -378,7 +378,7 @@ void DlgCreateBundle::getPreviewImage()
     dialog.setCaption(i18n("Select file to use as dynamic file layer."));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
-    m_previewImage = dialog.url();
+    m_previewImage = dialog.filename();
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));

@@ -974,7 +974,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
 
     if (filename.isEmpty()) return;
 

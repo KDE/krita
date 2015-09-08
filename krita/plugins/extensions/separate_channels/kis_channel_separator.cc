@@ -237,7 +237,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                 dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
-                KUrl url = dialog.url();
+                KUrl url = dialog.filename();
 
                 if (url.isEmpty())
                     return;

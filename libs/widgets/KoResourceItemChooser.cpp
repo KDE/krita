@@ -227,7 +227,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setNameFilter(filter);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
-        QString filename = dialog.url();
+        QString filename = dialog.filename();
 
         d->model->importResourceFile(filename);
     } else if (button == Button_Remove) {

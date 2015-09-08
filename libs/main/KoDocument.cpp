@@ -2598,7 +2598,7 @@ bool KoDocument::queryClose()
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
                 KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
-                KUrl url = dialog.url();
+                KUrl url = dialog.filename();
                 if (url.isEmpty())
                     return false;
 

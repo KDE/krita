@@ -187,7 +187,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     dialog.setCaption(i18n("Open Macro"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     RecordedActionLoadContext loadContext;
 
     if (!filename.isNull()) {
@@ -227,7 +227,7 @@ void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
     dialog.setOverrideDir(url.url());
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
 
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
 
     if (!filename.isNull()) {
         QDomDocument doc;

@@ -211,7 +211,7 @@ void KisOpenPane::openFileDialog()
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
-    foreach(KUrl url, dialog.urls()) {
+    foreach(KUrl url, dialog.filenames()) {
         emit openExistingFile(url);
     }
 }

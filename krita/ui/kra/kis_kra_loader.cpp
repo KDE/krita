@@ -682,7 +682,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
             dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
-            QString url = dialog.url();
+            QString url = dialog.filename();
 
             if (!QFileInfo(basePath).exists()) {
                 filename = url;

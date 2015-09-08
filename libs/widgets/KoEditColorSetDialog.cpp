@@ -184,7 +184,7 @@ void KoEditColorSetWidget::open()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
     dialog.setDefaultDir(m_activeColorSet->filename());
     dialog.setNameFilter(i18n("Gimp Color Palette (*.gpl)"));
-    QString fileName = dialog.url();
+    QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
     m_colorSets.append(colorSet);

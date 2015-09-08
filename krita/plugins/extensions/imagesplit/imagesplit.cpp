@@ -142,7 +142,7 @@ void Imagesplit::slotImagesplit()
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter);
-                    KUrl url = dialog.url();
+                    KUrl url = dialog.filename();
 
                     KMimeType::Ptr mime = KMimeType::findByUrl(url);
                     QString mimefilter = mime->name();

@@ -272,7 +272,7 @@ void KoFileDialog::createFileDialog()
     connect(d->fileDialog.data(), SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
 }
 
-QString KoFileDialog::url()
+QString KoFileDialog::filename()
 {
     QString url;
     if (!d->useStaticForNative) {
@@ -352,7 +352,7 @@ QString KoFileDialog::url()
     return url;
 }
 
-QStringList KoFileDialog::urls()
+QStringList KoFileDialog::filenames()
 {
     QStringList urls;
 

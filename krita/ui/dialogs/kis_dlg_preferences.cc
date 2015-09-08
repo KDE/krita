@@ -215,7 +215,7 @@ void GeneralTab::getBackgroundImage()
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setImageFilters();
 
-    QString fn = dialog.url();
+    QString fn = dialog.filename();
     // dialog box was canceled or somehow no file was selected
     if (fn.isEmpty()) {
         return;
@@ -324,7 +324,7 @@ void ColorSettingsTab::installProfile()
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setNameFilters(mime);
-    QStringList profileNames = dialog.urls();
+    QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);

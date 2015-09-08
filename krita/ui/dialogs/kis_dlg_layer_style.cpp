@@ -264,7 +264,7 @@ void KisDlgLayerStyle::slotLoadStyle()
     dialog.setCaption(i18n("Select ASL file"));
     //dialog.setDefaultDir(QDir::cleanPath(filename));
     dialog.setNameFilter(i18n("Layer style library (*.asl)"));
-    filename = dialog.url();
+    filename = dialog.filename();
 
     m_stylesSelector->loadCollection(filename);
     wdgLayerStyles.lstStyleSelector->setCurrentRow(0);
@@ -278,7 +278,7 @@ void KisDlgLayerStyle::slotSaveStyle()
     dialog.setCaption(i18n("Select ASL file"));
     //dialog.setDefaultDir(QDir::cleanPath(filename));
     dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
-    filename = dialog.url();
+    filename = dialog.filename();
 
     QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
         new KisPSDLayerStyleCollectionResource(filename));

@@ -976,7 +976,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
-        KUrl newURL = dialog.url();
+        KUrl newURL = dialog.filename();
 
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
@@ -1303,7 +1303,7 @@ void KoMainWindow::slotFileOpen()
                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
-        url = dialog.url();
+        url = dialog.filename();
     } else {
         KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
         dialog.setCaption(i18n("Import Document"));
@@ -1312,7 +1312,7 @@ void KoMainWindow::slotFileOpen()
                                 : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
-        url = dialog.url();
+        url = dialog.filename();
     }
 
     if (url.isEmpty())
@@ -1476,7 +1476,7 @@ KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
-        KUrl url = dialog.url();
+        KUrl url = dialog.filename();
 
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())

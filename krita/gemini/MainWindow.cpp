@@ -555,7 +555,7 @@ QString MainWindow::openImage()
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
 
     dialog.setHideNameFilterDetailsOption();
-    return dialog.url();
+    return dialog.filename();
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)

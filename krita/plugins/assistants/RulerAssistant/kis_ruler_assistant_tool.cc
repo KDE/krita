@@ -637,7 +637,7 @@ void KisRulerAssistantTool::loadAssistants()
     dialog.setCaption(i18n("Select an Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter("Krita Assistant (*.krassistant)");
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     if (filename.isEmpty()) return;
     if (!QFileInfo(filename).exists()) return;
 
@@ -776,7 +776,7 @@ void KisRulerAssistantTool::saveAssistants()
     dialog.setCaption(i18n("Save Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter("Krita Assistant (*.krassistant)");
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     if (filename.isEmpty()) return;
 
     QFile file(filename);

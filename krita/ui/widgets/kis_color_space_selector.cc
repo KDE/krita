@@ -207,7 +207,7 @@ void KisColorSpaceSelector::installProfile()
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setNameFilters(mime);
-    QStringList profileNames = dialog.urls();
+    QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);

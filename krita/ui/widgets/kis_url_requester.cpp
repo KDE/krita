@@ -129,7 +129,7 @@ void KisUrlRequester::slotSelectFile()
         dialog.setNameFilter(m_nameFilter);
     }
 
-    QString url = dialog.url();
+    QString url = dialog.filename();
 
     if (m_basePath.isEmpty())
     {

@@ -176,7 +176,7 @@ void CompositionDockerDock::exportClicked()
     KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/compositiondockerdock");
     dialog.setCaption(i18n("Select a Directory"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    path = dialog.url();
+    path = dialog.filename();
 
 
     if (path.isNull()) return;

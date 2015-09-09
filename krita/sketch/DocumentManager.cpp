@@ -22,12 +22,14 @@
 #include "RecentFileManager.h"
 #include <libs/pigment/KoColor.h>
 #include <KisPart.h>
-#include <kmimetype.h>
+
 
 #include <KoColorSpaceRegistry.h>
 
 #include <KisDocument.h>
 #include <kis_image.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class DocumentManager::Private
 {
@@ -128,7 +130,8 @@ void DocumentManager::delayedNewDocument()
         d->document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QMimeDatabase db;
+            db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);

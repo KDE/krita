@@ -59,7 +59,7 @@
 #include <kmenubar.h>
 #include <kmenu.h>
 #include <QMessageBox>
-#include <kmimetype.h>
+
 #include <krecentdocument.h>
 #include <krecentfilesaction.h>
 #include <kstandarddirs.h>
@@ -812,15 +812,17 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     KUrl suggestedURL = document->url();
 
     QStringList mimeFilter;
-    KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-    if (! mime)
-        mime = KMimeType::defaultMimeTypePtr();
-    if (specialOutputFlag)
-        mimeFilter = mime->patterns();
-    else
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(_native_format);
+
+    if (specialOutputFlag) {
+        mimeFilter = mime.globPatterns();
+    }
+    else {
         mimeFilter = KisImportExportManager::mimeFilter(_native_format,
                                                  KisImportExportManager::Export,
                                                  document->extraNativeMimeTypes());
+    }
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
@@ -835,7 +837,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            const QString ext = mime->mainExtension();
+            const QString ext = mime.preferredSuffix();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;
@@ -876,8 +878,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
-                KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-                fn.append(mime->mainExtension());
+                QMimeDatabase db;
+                QMimeType mime = db.mimeTypeForName(_native_format);
+                fn.append(mime.preferredSuffix());
                 newURL = KUrl::fromPath(fn);
             }
         }
@@ -891,8 +894,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         QByteArray outputFormat = _native_format;
 
         if (!specialOutputFlag) {
-            KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-            QString outputFormatString = mime->name();
+            QMimeType mime = db.mimeTypeForUrl(newURL);
+            QString outputFormatString = mime.name();
             outputFormat = outputFormatString.toLatin1();
         }
 
@@ -920,7 +923,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             else if (specialOutputFlag == KisDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
                 dbgKrita << dot;
-                QString ext = mime->mainExtension();
+                QString ext = mime.preferredSuffix();
                 if (!ext.isEmpty()) {
                     if (dot < 0) fileName += ext;
                     else fileName = fileName.left(dot) + ext;
@@ -1999,9 +2002,10 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
     if (title.isEmpty()) {
         title = d->activeView->document()->url().fileName();
         // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-        KMimeType::Ptr mime = KMimeType::mimeType(d->activeView->document()->outputMimeType());
-        if (mime) {
-            QString extension = mime->mainExtension();
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(d->activeView->document()->outputMimeType());
+        if (mime.isValid()) {
+            QString extension = mime.preferredSuffix();
 
             if (title.endsWith(extension))
                 title.chop(extension.length());
@@ -2228,3 +2232,5 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
 
 
 #include <moc_KisMainWindow.cpp>
+#include <QMimeDatabase>
+#include <QMimeType>

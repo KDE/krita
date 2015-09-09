@@ -49,7 +49,7 @@
 #include <kdialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-#include <kmimetype.h>
+
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kconfig.h>
@@ -474,7 +474,8 @@ void KisPart::openTemplate(const KUrl& url)
     document->undoStack()->clear();
 
     if (ok) {
-        QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+        QMimeDatabase db;
+        QString mimeType = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension).name();
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
@@ -644,3 +645,5 @@ KisInputManager* KisPart::currentInputManager()
 
 
 #include <KisPart.moc>
+#include <QMimeDatabase>
+#include <QMimeType>

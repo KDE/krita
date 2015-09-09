@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kmimetype.h>
+
 
 #include <KisImportExportManager.h>
 #include <KoUpdater.h>
@@ -57,6 +57,8 @@
 #include <kis_paint_device.h>
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
         : m_view(view)
@@ -243,8 +245,9 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                     return;
 
 
-                KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                QString mimefilter = mime->name();
+QMimeDatabase db;
+                QMimeType mime = db.mimeTypeForUrl(url);
+                QString mimefilter = mime.name();
 
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));

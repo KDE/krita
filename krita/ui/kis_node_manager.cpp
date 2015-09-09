@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include <kactioncollection.h>
-#include <kmimetype.h>
+
 #include <kshortcut.h>
 
 #include <KoIcon.h>
@@ -47,6 +47,8 @@
 #include <kis_image.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include "KisPart.h"
 #include "canvas/kis_canvas2.h"
@@ -982,8 +984,9 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (url.isEmpty()) return;
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(url);
-    QString mimefilter = mime->name();
+QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(url);
+    QString mimefilter = mime.name();
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
     d->prepareForImport();

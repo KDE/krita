@@ -50,7 +50,7 @@
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
 
-#include <kmimetype.h>
+
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
@@ -392,9 +392,10 @@ public:
         if (mimeType.isEmpty()) {
             // get the mimetype of the file
             // using findByUrl() to avoid another string -> url conversion
-            KMimeType::Ptr mime = KMimeType::findByUrl(m_url, 0, true /* local file*/);
-            if (mime) {
-                mimeType = mime->name().toLocal8Bit();
+            QMimeDatabase db;
+            QMimeType mime = db.mimeTypeForFile(m_url.toLocalFile());
+            if (mime.isValid()) {
+                mimeType = mime.name().toLocal8Bit();
                 m_bAutoDetectedMime = true;
             }
         }
@@ -1048,26 +1049,25 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
 
     if (!imageMimeTypes.contains(mimeType)) return mimeType;
 
-    int accuracy = 0;
-
     QFile f(url.toLocalFile());
     if (!f.open(QIODevice::ReadOnly)) {
         warnKrita << "Could not open file to check the mimetype" << url;
     }
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
-    KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForData(ba);
     f.close();
 
-    if (!mime) {
+    if (!mime.isValid()) {
         return mimeType;
     }
 
     // Checking the content failed as well, so let's fall back on the extension again
-    if (mime->name() == "application/octet-stream") {
+    if (mime.name() == "application/octet-stream") {
         return mimeType;
     }
 
-    return mime->name();
+    return mime.name();
 }
 
 // Called for embedded documents
@@ -1142,11 +1142,12 @@ QString KisDocument::autoSaveFile(const QString & path) const
     QString retval;
 
     // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
-    if (! mime) {
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(nativeFormatMimeType());
+    if (!mime.isValid()) {
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
-    const QString extension = mime->mainExtension();
+    const QString extension = mime.preferredSuffix();
 
     if (path.isEmpty()) {
         // Never saved?
@@ -1277,7 +1278,8 @@ bool KisDocument::openFile()
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
-        typeName = KMimeType::findByUrl(u, 0, true)->name();
+        QMimeDatabase db;
+        typeName = db.mimeTypeForFile(u.path()).name();
     }
 
     // for images, always check content.
@@ -1288,8 +1290,9 @@ bool KisDocument::openFile()
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
         QString path = u.path();
-        KMimeType::Ptr mime = KMimeType::mimeType(typeName);
-        const QStringList patterns = mime ? mime->patterns() : QStringList();
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(typeName);
+        const QStringList patterns = mime.isValid() ? mime.globPatterns() : QStringList();
         // Find the extension that makes it a backup file, and remove it
         for (QStringList::ConstIterator it = patterns.begin(); it != patterns.end(); ++it) {
             QString ext = *it;
@@ -1301,7 +1304,7 @@ bool KisDocument::openFile()
                 }
             }
         }
-        typeName = KMimeType::findByPath(path, 0, true)->name();
+        typeName = db.mimeTypeForFile(path, QMimeDatabase::MatchExtension).name();
     }
 
     // Special case for flat XML files (e.g. using directory store)
@@ -2635,4 +2638,6 @@ KisUndoStore* KisDocument::createUndoStore()
 }
 
 #include <moc_KisDocument.cpp>
+#include <QMimeDatabase>
+#include <QMimeType>
 

@@ -34,7 +34,7 @@
 #include <kurl.h>
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
-#include <kmimetype.h>
+
 
 #include <KoIcon.h>
 #include <KisImportExportManager.h>
@@ -66,6 +66,8 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 #include <kis_psd_layer_style.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include "KisView.h"
 #include "kis_config.h"
@@ -915,9 +917,10 @@ void KisLayerManager::saveGroupLayers()
     QString mimefilter = fd->currentMimeFilter();
 
     if (mimefilter.isEmpty()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-        extension = mime->extractKnownExtension(path);
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForUrl(url);
+        mimefilter = mime.name();
+        extension = db.suffixForFileName(path);
     }
 
     if (url.isEmpty())

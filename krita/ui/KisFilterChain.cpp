@@ -33,10 +33,12 @@ Boston, MA 02110-1301, USA.
 
 #include <QMetaMethod>
 #include <QTemporaryFile>
-#include <kmimetype.h>
+
 #include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // Those "defines" are needed in the setupConnections method below.
 // Please always keep the strings and the length in sync!
@@ -503,13 +505,14 @@ KisDocument* KisFilterChain::createDocument(const QString& file)
 {
     KUrl url;
     url.setPath(file);
-    KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
-    if (t->name() == KMimeType::defaultMimeType()) {
+    QMimeDatabase db;
+    QMimeType t = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension);
+    if (t.isDefault()) {
         errFile << "No mimetype found for " << file << endl;
         return 0;
     }
 
-    KisDocument *doc = createDocument(t->name().toLatin1());
+    KisDocument *doc = createDocument(t.name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
         errFile << "Couldn't load from the file" << endl;

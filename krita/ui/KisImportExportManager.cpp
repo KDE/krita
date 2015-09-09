@@ -37,7 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <QMessageBox>
 #include <klibloader.h>
 #include <ksqueezedtextlabel.h>
-#include <kmimetype.h>
+
 #include <kis_debug.h>
 
 #include <queue>
@@ -48,24 +48,30 @@ Boston, MA 02110-1301, USA.
 QMap<QString, bool> KisImportExportManager::m_filterAvailable;
 
 KisImportExportManager::KisImportExportManager(KisDocument* document,
-                                 KoProgressUpdater* progressUpdater) :
-        m_document(document), m_parentChain(0), m_graph(""),
-        d(new Private(progressUpdater))
+                                               KoProgressUpdater* progressUpdater)
+    : m_document(document)
+    , m_parentChain(0)
+    , m_graph("")
+    , d(new Private(progressUpdater))
 {
     d->batch = false;
 }
 
 
 KisImportExportManager::KisImportExportManager(const QString& url, const QByteArray& mimetypeHint,
-                                 KisFilterChain* const parentChain) :
-        m_document(0), m_parentChain(parentChain), m_importUrl(url), m_importUrlMimetypeHint(mimetypeHint),
-        m_graph(""), d(new Private)
+                                               KisFilterChain* const parentChain)
+    : m_document(0)
+    , m_parentChain(parentChain)
+    , m_importUrl(url)
+    , m_importUrlMimetypeHint(mimetypeHint)
+    , m_graph("")
+    , d(new Private)
 {
     d->batch = false;
 }
 
 KisImportExportManager::KisImportExportManager(const QByteArray& mimeType) :
-        m_document(0), m_parentChain(0), m_graph(""), d(new Private)
+    m_document(0), m_parentChain(0), m_graph(""), d(new Private)
 {
     d->batch = false;
     d->importMimeType = mimeType;
@@ -77,17 +83,18 @@ KisImportExportManager::~KisImportExportManager()
 }
 
 QString KisImportExportManager::importDocument(const QString& url,
-                                        const QString& documentMimeType,
-                                        KisImportExportFilter::ConversionStatus& status)
+                                               const QString& documentMimeType,
+                                               KisImportExportFilter::ConversionStatus& status)
 {
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
     KUrl u(url);
-    KMimeType::Ptr t;
+    QMimeType t;
     if (documentMimeType.isEmpty()) {
-        t = KMimeType::findByUrl(u, 0, true);
-        if (t)
-            typeName = t->name();
+        QMimeDatabase db;
+        db.mimeTypeForFile(u.path(), QMimeDatabase::MatchExtension);
+        if (t.isValid())
+            typeName = t.name();
     }
     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
 
@@ -104,8 +111,8 @@ QString KisImportExportManager::importDocument(const QString& url,
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KisFilterChooser chooser(0,
-                    KisImportExportManager::mimeFilter(nativeFormat, KisImportExportManager::Import,
-                    m_document->extraNativeMimeTypes()), nativeFormat, u);
+                                     KisImportExportManager::mimeFilter(nativeFormat, KisImportExportManager::Import,
+                                                                        m_document->extraNativeMimeTypes()), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
                 if (f == nativeFormat) {
@@ -122,7 +129,7 @@ QString KisImportExportManager::importDocument(const QString& url,
 
         if (!m_graph.isValid()) {
             errFile << "Couldn't create a valid graph for this source mimetype: "
-                << typeName;
+                    << typeName;
             importErrorHelper(typeName, userCancelled);
             status = KisImportExportFilter::BadConversionGraph;
             return QString();
@@ -203,15 +210,16 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     } else {
         KUrl u;
         u.setPath(m_importUrl);
-        KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
-        if (!t || t->name() == KMimeType::defaultMimeType()) {
+        QMimeDatabase db;
+        QMimeType t = db.mimeTypeForFile(u.path(), QMimeDatabase::MatchExtension);
+        if (!t.isValid() || t.isDefault()) {
             errFile << "No mimetype found for" << m_importUrl;
             return KisImportExportFilter::BadMimeType;
         }
-        m_graph.setSourceMimeType(t->name().toLatin1());
+        m_graph.setSourceMimeType(t.name().toLatin1());
 
         if (!m_graph.isValid()) {
-            warnFile << "Can't open" << t->name() << ", trying filter chooser";
+            warnFile << "Can't open" << t.name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KisFilterChooser chooser(0, KisImportExportManager::mimeFilter(), QString(), u);
@@ -313,72 +321,72 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
     QList<KisFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
     QList<KisFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
     foreach(KisFilterEntry::Ptr filterEntry, filters)
-    for (; it != end; ++it) {
-        QStringList impList; // Import list
-        QStringList expList; // Export list
+        for (; it != end; ++it) {
+            QStringList impList; // Import list
+            QStringList expList; // Export list
 
-        // Now we have to exclude the "stop" mimetypes (in the right direction!)
-        if (direction == KisImportExportManager::Import) {
-            // Import: "stop" mime type should not appear in export
-            foreach(const QString & testIt, (*it)->export_) {
-                if (!stopList.contains(testIt))
-                    expList.append(testIt);
-            }
-            impList = (*it)->import;
-        } else {
-            // Export: "stop" mime type should not appear in import
-            foreach(const QString & testIt, (*it)->import) {
-                if (!stopList.contains(testIt))
-                    impList.append(testIt);
-            }
-            expList = (*it)->export_;
-        }
-
-        if (impList.empty() || expList.empty()) {
-            // This filter cannot be used under these conditions
-            dbgFile << "Filter:" << (*it)->loader()->fileName() << " ruled out";
-            continue;
-        }
-
-        // First add the "starting points" to the dict
-        QStringList::ConstIterator importIt = impList.constBegin();
-        const QStringList::ConstIterator importEnd = impList.constEnd();
-        for (; importIt != importEnd; ++importIt) {
-            const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
-            // already there?
-            if (!vertices[ key ])
-                vertices.insert(key, new Vertex(key));
-        }
-
-        // Are we allowed to use this filter at all?
-        if (KisImportExportManager::filterAvailable(*it)) {
-            QStringList::ConstIterator exportIt = expList.constBegin();
-            const QStringList::ConstIterator exportEnd = expList.constEnd();
-            for (; exportIt != exportEnd; ++exportIt) {
-                // First make sure the export vertex is in place
-                const QByteArray key = (*exportIt).toLatin1();    // latin1 is okay here
-                Vertex* exp = vertices[ key ];
-                if (!exp) {
-                    exp = new Vertex(key);
-                    vertices.insert(key, exp);
+            // Now we have to exclude the "stop" mimetypes (in the right direction!)
+            if (direction == KisImportExportManager::Import) {
+                // Import: "stop" mime type should not appear in export
+                foreach(const QString & testIt, (*it)->export_) {
+                    if (!stopList.contains(testIt))
+                        expList.append(testIt);
                 }
-                // Then create the appropriate edges depending on the
-                // direction (import/export)
-                // This is the chunk of code which actually differs from the
-                // graph stuff (apart from the different vertex class)
-                importIt = impList.constBegin(); // ### TODO: why only the first one?
-                if (direction == KisImportExportManager::Import) {
-                    for (; importIt != importEnd; ++importIt)
-                        exp->addEdge(vertices[(*importIt).toLatin1()]);
-                } else {
-                    for (; importIt != importEnd; ++importIt)
-                        vertices[(*importIt).toLatin1()]->addEdge(exp);
+                impList = (*it)->import;
+            } else {
+                // Export: "stop" mime type should not appear in import
+                foreach(const QString & testIt, (*it)->import) {
+                    if (!stopList.contains(testIt))
+                        impList.append(testIt);
                 }
+                expList = (*it)->export_;
             }
-        } else {
-            dbgFile << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
+
+            if (impList.empty() || expList.empty()) {
+                // This filter cannot be used under these conditions
+                dbgFile << "Filter:" << (*it)->loader()->fileName() << " ruled out";
+                continue;
+            }
+
+            // First add the "starting points" to the dict
+            QStringList::ConstIterator importIt = impList.constBegin();
+            const QStringList::ConstIterator importEnd = impList.constEnd();
+            for (; importIt != importEnd; ++importIt) {
+                const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
+                // already there?
+                if (!vertices[ key ])
+                    vertices.insert(key, new Vertex(key));
+            }
+
+            // Are we allowed to use this filter at all?
+            if (KisImportExportManager::filterAvailable(*it)) {
+                QStringList::ConstIterator exportIt = expList.constBegin();
+                const QStringList::ConstIterator exportEnd = expList.constEnd();
+                for (; exportIt != exportEnd; ++exportIt) {
+                    // First make sure the export vertex is in place
+                    const QByteArray key = (*exportIt).toLatin1();    // latin1 is okay here
+                    Vertex* exp = vertices[ key ];
+                    if (!exp) {
+                        exp = new Vertex(key);
+                        vertices.insert(key, exp);
+                    }
+                    // Then create the appropriate edges depending on the
+                    // direction (import/export)
+                    // This is the chunk of code which actually differs from the
+                    // graph stuff (apart from the different vertex class)
+                    importIt = impList.constBegin(); // ### TODO: why only the first one?
+                    if (direction == KisImportExportManager::Import) {
+                        for (; importIt != importEnd; ++importIt)
+                            exp->addEdge(vertices[(*importIt).toLatin1()]);
+                    } else {
+                        for (; importIt != importEnd; ++importIt)
+                            vertices[(*importIt).toLatin1()]->addEdge(exp);
+                    }
+                }
+            } else {
+                dbgFile << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
+            }
         }
-    }
 }
 
 // This method runs a BFS on the graph to determine the connected
@@ -492,9 +500,9 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
     if (entry->available != "check")
         return true;
 
-// QT5TODO
+    // QT5TODO
 #if 1
-        return true;
+    return true;
 #else
     //dbgFile <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
@@ -506,7 +514,7 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
         KLibrary library(QFile::encodeName(entry->service()->library()));
         if (library.fileName().isEmpty()) {
             warnFile << "Huh?? Couldn't load the lib: "
-                << entry->service()->library();
+                     << entry->service()->library();
             m_filterAvailable[ key ] = false;
             return false;
         }
@@ -515,9 +523,9 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
         QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
         KLibrary::void_function_ptr sym = library.resolveFunction(symname);
         if (!sym) {
-//            warnFile << "The library " << library.objectName()
-//                << " does not offer a check_" << library.objectName()
-//                << " function." << endl;
+            //            warnFile << "The library " << library.objectName()
+            //                << " does not offer a check_" << library.objectName()
+            //                << " function." << endl;
             m_filterAvailable[key] = false;
         } else {
             typedef int (*t_func)();
@@ -557,3 +565,5 @@ KoProgressUpdater* KisImportExportManager::progressUpdater() const
 }
 
 #include <KisImportExportManager.moc>
+#include <QMimeDatabase>
+#include <QMimeType>

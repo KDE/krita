@@ -18,13 +18,15 @@
 
 #include "kis_exr_test.h"
 
-#include <kmimetype.h>
+
 
 #include <QTest>
 #include <QCoreApplication>
 
 #include <qtest_kde.h>
 #include <half.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -62,9 +64,9 @@ void KisExrTest::testRoundTrip()
     QString savedFileName(savedFileURL.toLocalFile());
 
     QString typeName;
-    KMimeType::Ptr t = KMimeType::findByUrl(savedFileURL, 0, true);
-    Q_ASSERT(t);
-    typeName = t->name();
+    QMimeDatabase db;
+    QMimeType t = db.mimeTypeForFile(savedFileURL.path(), QMimeDatabase::MatchExtension);
+    typeName = t.name();
 
     QByteArray mimeType(typeName.toLatin1());
     status = manager.exportDocument(savedFileName, mimeType);

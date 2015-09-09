@@ -37,7 +37,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
-#include <kmimetype.h>
+
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
@@ -83,6 +83,8 @@
 
 #include <calligraversion.h>
 #include <calligragitversion.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 #include "KisApplicationArguments.h"
 
 namespace {
@@ -479,16 +481,17 @@ bool KisApplication::start(const KisApplicationArguments &args)
             else {
 
                 if (exportAs) {
-                    KMimeType::Ptr outputMimetype;
-                    outputMimetype = KMimeType::findByUrl(QUrl::fromLocalFile(exportFileName), 0, false, true /* file doesn't exist */);
-                    if (outputMimetype->name() == KMimeType::defaultMimeType()) {
+                    QMimeType outputMimetype;
+                    QMimeDatabase db;
+                    outputMimetype = db.mimeTypeForFile(exportFileName);
+                    if (outputMimetype.isDefault()) {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;
                     }
 
                     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-                    QString outputFormat = outputMimetype->name();
+                    QString outputFormat = outputMimetype.name();
 
                     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
                     KisImportExportManager manager(fileName);

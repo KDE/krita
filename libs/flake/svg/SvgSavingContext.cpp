@@ -30,7 +30,7 @@
 #include <QTemporaryFile>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
-#include <kurl.h>
+#include <QUrl>
 
 #include <QImage>
 #include <QTransform>
@@ -160,20 +160,22 @@ QString SvgSavingContext::createFileName(const QString &extension)
     if (!file)
         return QString();
 
-    // get url of destination directory
-    KUrl url(file->fileName());
-    QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
-    url.setDirectory(url.directory());
+    QFileInfo fi(file->fileName());
+    QString path = fi.absolutePath();
+    QString dstBaseFilename = fi.baseName();
+
     // create a filename for the image file at the destination directory
     QString fname = dstBaseFilename + '_' + createUID("file");
-    url.setFileName(fname + extension);
+
     // check if file exists already
     int i = 0;
+    QString counter;
     // change filename as long as the filename already exists
-    while (KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
-        url.setFileName(fname + QString("_%1").arg(++i) + extension);
+    while (QFile(path + fname + counter + extension).exists()) {
+        counter = QString("_%1").arg(++i);
+    }
 
-    return url.fileName();
+    return fname + counter + extension;
 }
 
 QString SvgSavingContext::saveImage(const QImage &image)
@@ -205,7 +207,7 @@ QString SvgSavingContext::saveImage(const QImage &image)
             QString dstFilename = createFileName(ext);
 
             // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
+            KIO::Job * job = KIO::move(QUrl(imgFile.fileName()), QUrl(dstFilename));
             if (job && KIO::NetAccess::synchronousRun(job, 0))
                 return dstFilename;
             else
@@ -245,7 +247,7 @@ QString SvgSavingContext::saveImage(KoImageData *image)
             QString dstFilename = createFileName(ext);
 
             // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
+            KIO::Job * job = KIO::move(QUrl(imgFile.fileName()), QUrl(dstFilename));
             if (job && KIO::NetAccess::synchronousRun(job, 0))
                 return dstFilename;
             else

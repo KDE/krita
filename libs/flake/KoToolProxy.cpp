@@ -40,7 +40,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
 
@@ -567,11 +567,10 @@ bool KoToolProxy::paste()
             QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
             foreach (const QUrl &url, urls) {
                 QImage image;
-                KUrl kurl(url);
                 // make sure we download the files before inserting them
-                if (!kurl.isLocalFile()) {
+                if (!url.isLocalFile()) {
                     QString tmpFile;
-                    if( KIO::NetAccess::download(kurl, tmpFile, canvas->canvasWidget())) {
+                    if (KIO::NetAccess::download(url, tmpFile, canvas->canvasWidget())) {
                         image.load(tmpFile);
                         KIO::NetAccess::removeTempFile(tmpFile);
                     } else {
@@ -579,7 +578,7 @@ bool KoToolProxy::paste()
                     }
                 }
                 else {
-                    image.load(kurl.toLocalFile());
+                    image.load(url.toLocalFile());
                 }
                 if (!image.isNull()) {
                     imageList << image;

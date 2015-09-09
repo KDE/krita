@@ -26,7 +26,7 @@
 #include <QStringList>
 #include <QStack>
 
-#include <kurl.h>
+#include <QUrl>
 
 class QWidget;
 
@@ -77,7 +77,7 @@ public:
      * original URL of the remote file
      * (undefined for a local file)
      */
-    KUrl url;
+    QUrl url;
     FileMode fileMode;
     QString localFileName;
     QWidget *window;

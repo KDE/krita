@@ -33,7 +33,7 @@ class QString;
 class QByteArray;
 class QIODevice;
 class QWidget;
-class KUrl;
+class QUrl;
 class KZip;
 class KArchiveDirectory;
 class QTemporaryFile;
@@ -46,7 +46,7 @@ public:
                      bool writeMimetype);
     KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
                      bool writeMimetype);
-    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode,
+    KoEncryptedStore(QWidget *window, const QUrl &url, const QString &filename, Mode mode,
                      const QByteArray &appIdentification, bool writeMimetype);
     ~KoEncryptedStore();
 

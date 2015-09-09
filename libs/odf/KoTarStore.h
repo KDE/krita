@@ -26,7 +26,7 @@
 
 class KTar;
 class KArchiveDirectory;
-class KUrl;
+class QUrl;
 
 class KoTarStore : public KoStore
 {
@@ -36,10 +36,10 @@ public:
     KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                bool writeMimetype);
     /**
-     * KUrl-constructor
+     * QUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoTarStore(QWidget* window, const KUrl& url, const QString & _filename, Mode _mode,
+    KoTarStore(QWidget* window, const QUrl &url, const QString & _filename, Mode _mode,
                const QByteArray & appIdentification, bool writeMimetype = true);
     ~KoTarStore();
 

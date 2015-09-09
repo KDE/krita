@@ -33,7 +33,7 @@
 #include <QFileInfo>
 #include <QFile>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kdebug.h>
 
 #include <klocale.h>
@@ -135,7 +135,7 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
     }
 }
 
-KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
+KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
     const bool automatic = (backend == Auto);
     if (url.isLocalFile())
@@ -176,7 +176,7 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
         return new KoEncryptedStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
 #endif
     default:
-        kWarning(30002) << "Unsupported backend requested for KoStore (KUrl) : " << backend;
+        kWarning(30002) << "Unsupported backend requested for KoStore (QUrl) : " << backend;
         KMessageBox::sorry(window,
                            i18n("The directory mode is not supported for remote locations."),
                            i18n("Calligra Storage"));
@@ -201,13 +201,13 @@ KoStore::~KoStore()
     delete d_ptr;
 }
 
-KUrl KoStore::urlOfStore() const
+QUrl KoStore::urlOfStore() const
 {
     Q_D(const KoStore);
     if (d->fileMode == KoStorePrivate::RemoteRead || d->fileMode == KoStorePrivate::RemoteWrite) {
         return d->url;
     } else {
-        return KUrl(d->localFileName);
+        return QUrl(d->localFileName);
     }
 }
 

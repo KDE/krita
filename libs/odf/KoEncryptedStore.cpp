@@ -103,7 +103,7 @@ KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &
     init(appIdentification);
 }
 
-KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename,
+KoEncryptedStore::KoEncryptedStore(QWidget* window, const QUrl &url, const QString & filename,
                                    Mode mode,
                                    const QByteArray & appIdentification, bool writeMimetype)
     : KoStore(mode, writeMimetype)

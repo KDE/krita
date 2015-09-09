@@ -27,7 +27,7 @@
 
 #include <ktar.h>
 #include <kdebug.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <kio/netaccess.h>
 
@@ -55,13 +55,13 @@ KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentifi
     init(appIdentification);
 }
 
-KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode mode,
+KoTarStore::KoTarStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode mode,
                        const QByteArray & appIdentification, bool writeMimetype)
  : KoStore(mode, writeMimetype)
 {
-    kDebug(30002) << "KoTarStore Constructor url=" << _url.pathOrUrl()
-    << " filename = " << _filename
-    << " mode = " << int(mode) << endl;
+    kDebug(30002) << "KoTarStore Constructor url=" << _url.url(QUrl::PreferLocalFile)
+                  << " filename = " << _filename
+                  << " mode = " << int(mode) << endl;
     Q_D(KoStore);
 
     d->url = _url;

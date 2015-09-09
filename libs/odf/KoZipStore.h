@@ -24,7 +24,7 @@
 
 class KZip;
 class KArchiveDirectory;
-class KUrl;
+class QUrl;
 
 class KoZipStore : public KoStore
 {
@@ -34,10 +34,10 @@ public:
     KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                bool writeMimetype = true);
     /**
-     * KUrl-constructor
+     * QUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoZipStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode,
+    KoZipStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode _mode,
                const QByteArray & appIdentification, bool writeMimetype = true);
     ~KoZipStore();
 

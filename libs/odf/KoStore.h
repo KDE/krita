@@ -26,7 +26,7 @@
 #include "koodf_export.h"
 
 class QWidget;
-class KUrl;
+class QUrl;
 class KoStorePrivate;
 
 /**
@@ -98,7 +98,7 @@ public:
      *
      * @bug saving not completely implemented (fixed temporary file)
      */
-    static KoStore *createStore(QWidget *window, const KUrl &url, Mode mode,
+    static KoStore *createStore(QWidget *window, const QUrl &url, Mode mode,
                                 const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
@@ -111,7 +111,7 @@ public:
      * it can also be empty, if the store is a bytearray
      * @return the url of the store as supplied in the createStore calls
      */
-    KUrl urlOfStore() const;
+    QUrl urlOfStore() const;
 
     /**
      * Open a new file inside the store

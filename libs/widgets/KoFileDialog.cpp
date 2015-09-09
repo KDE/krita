@@ -26,9 +26,11 @@
 
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kmimetype.h>
+
 #include <klocale.h>
 #include <kurl.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
@@ -45,7 +47,6 @@ public:
         , defaultDirectory(defaultDir_)
         , filterList(QStringList())
         , defaultFilter(QString())
-        , mimeType(0)
         , useStaticForNative(false)
         , hideDetails(false)
         , swapExtensionOrder(false)
@@ -95,7 +96,7 @@ public:
     QStringList filterList;
     QString defaultFilter;
     QScopedPointer<QFileDialog> fileDialog;
-    KMimeType::Ptr mimeType;
+    QMimeType mimeType;
     bool useStaticForNative;
     bool hideDetails;
     bool swapExtensionOrder;
@@ -216,8 +217,8 @@ QString KoFileDialog::selectedNameFilter() const
 
 QString KoFileDialog::selectedMimeType() const
 {
-    if (d->mimeType) {
-        return d->mimeType->name();
+    if (d->mimeType.isValid()) {
+        return d->mimeType.name();
     }
     else {
         return "";
@@ -345,9 +346,9 @@ QString KoFileDialog::filename()
             url.append(extension);
         }
 
-        d->mimeType = KMimeType::findByUrl(KUrl(url), 0, true, true);
+        QMimeDatabase db;
+        d->mimeType = db.mimeTypeForFile(url);
         saveUsedDir(url, d->dialogName);
-
     }
     return url;
 }
@@ -415,11 +416,12 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
         entry = entry.remove("*");
         entry = entry.remove(")");
 
-        KMimeType::Ptr mime = KMimeType::findByUrl(KUrl("bla" + entry), 0, true, true);
-        if (mime->name() != "application/octet-stream") {
-            if (!mimeList->contains(mime->name())) {
-                mimeList->append(mime->name());
-                filters.append(mime->comment() + " ( *" + entry + " )");
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName("bla" + entry);
+        if (mime.name() != "application/octet-stream") {
+            if (!mimeList->contains(mime.name())) {
+                mimeList->append(mime.name());
+                filters.append(mime.comment() + " ( *" + entry + " )");
             }
         }
         else {
@@ -442,13 +444,14 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 
     for (QStringList::ConstIterator
          it = mimeList.begin(); it != mimeList.end(); ++it) {
-        KMimeType::Ptr mimeType = KMimeType::mimeType(*it);
-        if (!mimeType) {
+        QMimeDatabase db;
+        QMimeType mimeType = db.mimeTypeForName(*it);
+        if (!mimeType.isValid()) {
             continue;
         }
-        if (!mimeSeen.contains(mimeType->name())) {
+        if (!mimeSeen.contains(mimeType.name())) {
             QString oneFilter;
-            QStringList patterns = mimeType->patterns();
+            QStringList patterns = mimeType.globPatterns();
             QStringList::ConstIterator jt;
             for (jt = patterns.constBegin(); jt != patterns.constEnd(); ++jt) {
                 if (d->swapExtensionOrder) {
@@ -464,9 +467,9 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
                     }
                 }
             }
-            oneFilter = mimeType->comment() + " ( " + oneFilter + ")";
+            oneFilter = mimeType.comment() + " ( " + oneFilter + ")";
             ret << oneFilter;
-            mimeSeen << mimeType->name();
+            mimeSeen << mimeType.name();
         }
     }
 
@@ -497,4 +500,3 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
     group.writeEntry(dialogName, fileInfo.absolutePath());
 
 }
-

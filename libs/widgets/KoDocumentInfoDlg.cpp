@@ -31,7 +31,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
-#include <kmimetype.h>
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
@@ -41,6 +41,8 @@
 
 #include <QLineEdit>
 #include <QDateTime>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
@@ -112,10 +114,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     // Ugly hack, the mimetype should be a parameter, instead
     KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (doc) {
-        KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
-        if (! mime)
-            mime = KMimeType::defaultMimeTypePtr();
-        page->setIcon(KIcon(mime->iconName()));
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(doc->mimeType());
+        if (mime.isValid()) {
+            page->setIcon(KIcon(mime.iconName()));
+        }
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
         d->aboutUi->filePathInfoLabel->setVisible(false);
@@ -196,9 +199,10 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
     if (doc && !doc->mimeType().isEmpty()) {
-        KMimeType::Ptr docmime = KMimeType::mimeType(doc->mimeType());
-        if (docmime)
-            d->aboutUi->lblType->setText(docmime->comment());
+        QMimeDatabase db;
+        QMimeType docmime = db.mimeTypeForName(doc->mimeType());
+        if (docmime.isValid())
+            d->aboutUi->lblType->setText(docmime.comment());
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
@@ -386,8 +390,9 @@ void KoDocumentInfoDlg::saveEncryption()
         // Encrypt
         bool modified = doc->isModified();
         if (!doc->url().isEmpty() && !(doc->mimeType().startsWith("application/vnd.oasis.opendocument.") && doc->specialOutputFlag() == 0)) {
-            KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
-            QString comment = mime ? mime->comment() : i18n("%1 (unknown file type)", QString::fromLatin1(doc->mimeType()));
+            QMimeDatabase db;
+            QMimeType mime = db.mimeTypeForName(doc->mimeType());
+            QString comment = mime.isValid() ? mime.comment() : i18n("%1 (unknown file type)", QString::fromLatin1(doc->mimeType()));
             if (KMessageBox::warningContinueCancel(
                         this,
                         i18n("<qt>The document is currently saved as %1. The document needs to be changed to <b>OASIS OpenDocument</b> to be encrypted."

@@ -83,7 +83,7 @@
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
-#include <kmimetype.h>
+
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <QTextTable>
@@ -519,6 +519,8 @@ void TextTool::createActions()
 #include "tests/MockShapes.h"
 #include <kundo2stack.h>
 #include <braindump/src/Section.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -2876,18 +2878,21 @@ void TextTool::setShrinkToFit(bool enabled)
 
 void TextTool::runUrl(KoPointerEvent *event, QString &url)
 {
-    bool isLocalLink = (url.indexOf("file:") == 0);
-    QString type = KMimeType::findByUrl(url, 0, isLocalLink)->name();
+    QUrl _url = QUrl::fromLocalFile(url);
+    if (_url.isLocalFile()) {
+        QMimeDatabase db;
+        QString type = db.mimeTypeForUrl(_url).name();
 
-    if (KRun::isExecutableFile(url, type)) {
-        QString question = i18n("This link points to the program or script '%1'.\n"
-                                "Malicious programs can harm your computer. "
-                                "Are you sure that you want to run this program?", url);
-        // this will also start local programs, so adding a "don't warn again"
-        // checkbox will probably be too dangerous
-        int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
-        if (choice != KMessageBox::Yes)
-            return;
+        if (KRun::isExecutableFile(url, type)) {
+            QString question = i18n("This link points to the program or script '%1'.\n"
+                                    "Malicious programs can harm your computer. "
+                                    "Are you sure that you want to run this program?", url);
+            // this will also start local programs, so adding a "don't warn again"
+            // checkbox will probably be too dangerous
+            int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
+            if (choice != KMessageBox::Yes)
+                return;
+        }
     }
 
     event->accept();

@@ -29,7 +29,9 @@
 #include <QMap>
 #include <QUrl>
 #include <kdebug.h>
-#include <kmimetype.h>
+#include <QMimeDatabase>
+#include <QMimeType>
+
 
 class VideoCollection::Private
 {
@@ -79,7 +81,8 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(videoData->saveName(), 0 , true)->name());
+                    QMimeDatabase db;
+                    const QString mimetype(db.mimeTypeForFile(videoData->saveName(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(videoData->saveName(), mimetype);
                 } else {
                     kWarning(30006) << "saving video failed";

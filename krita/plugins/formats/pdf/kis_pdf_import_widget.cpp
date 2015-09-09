@@ -21,7 +21,7 @@
 
 #define UNSTABLE_POPPLER_QT4
 // poppler's headers
-#include <poppler/qt5/poppler-qt5.h>
+#include <poppler-qt5.h>
 
 // Qt's headers
 #include <QRadioButton>

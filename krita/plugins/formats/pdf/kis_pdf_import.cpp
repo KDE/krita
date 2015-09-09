@@ -20,7 +20,7 @@
 #include "kis_pdf_import.h"
 
 // poppler's headers
-#include <poppler/qt5/poppler-qt5.h>
+#include <poppler-qt5.h>
 
 // Qt's headers
 #include <QFile>

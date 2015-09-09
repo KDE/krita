@@ -26,7 +26,7 @@
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
 
-#include <kmimetype.h>
+
 #include <QTemporaryFile>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
@@ -38,6 +38,8 @@
 #include <QHash>
 #include <QFile>
 #include <QFileInfo>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class Q_DECL_HIDDEN SvgSavingContext::Private
 {
@@ -181,7 +183,8 @@ QString SvgSavingContext::saveImage(const QImage &image)
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         if (image.save(&buffer, "PNG")) {
-            const QString mimeType(KMimeType::findByContent(ba)->name());
+            QMimeDatabase db;
+            const QString mimeType(db.mimeTypeForData(ba).name());
             const QString header("data:" + mimeType + ";base64,");
             return header + ba.toBase64();
         }
@@ -191,10 +194,11 @@ QString SvgSavingContext::saveImage(const QImage &image)
         if (image.save(&imgFile, "PNG")) {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content
-            KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
+            QMimeDatabase db;
+            QMimeType mimeType = db.mimeTypeForFile(imgFile.fileName());
             // get extension from mimetype
             QString ext;
-            QStringList patterns = mimeType->patterns();
+            QStringList patterns = mimeType.globPatterns();
             if (patterns.count())
                 ext = patterns.first().mid(1);
 
@@ -219,7 +223,8 @@ QString SvgSavingContext::saveImage(KoImageData *image)
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         if (image->saveData(buffer)) {
-            const QString mimeType(KMimeType::findByContent(ba)->name());
+            QMimeDatabase db;
+            const QString mimeType(db.mimeTypeForData(ba).name());
             const QString header("data:" + mimeType + ";base64,");
             return header + ba.toBase64();
         }
@@ -229,10 +234,11 @@ QString SvgSavingContext::saveImage(KoImageData *image)
         if (image->saveData(imgFile)) {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content
-            KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
+            QMimeDatabase db;
+            QMimeType mimeType = db.mimeTypeForFile(imgFile.fileName());
             // get extension from mimetype
             QString ext;
-            QStringList patterns = mimeType->patterns();
+            QStringList patterns = mimeType.globPatterns();
             if (patterns.count())
                 ext = patterns.first().mid(1);
 

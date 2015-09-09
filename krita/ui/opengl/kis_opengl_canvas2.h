@@ -91,6 +91,8 @@ public: // Implement kis_abstract_canvas_widget interface
 
     bool isBusy() const;
 
+    void setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing);
+
 private Q_SLOTS:
     void slotConfigChanged();
 

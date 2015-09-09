@@ -185,7 +185,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
-    setDisplayFilter(colorConverter->displayFilter());
+    setDisplayFilterImpl(colorConverter->displayFilter(), true);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
@@ -197,14 +197,17 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
     delete d;
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
+void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter) {
+    setDisplayFilterImpl(displayFilter, false);
+}
+
+void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing)
 {
 
     bool needsInternalColorManagement =
         !displayFilter || displayFilter->useInternalColorManagement();
 
-    bool needsFullRefresh =
-        d->openGLImageTextures->
+    bool needsFullRefresh = d->openGLImageTextures->
         setInternalColorManagementActive(needsInternalColorManagement);
 
     d->displayFilter = displayFilter;
@@ -215,9 +218,10 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
         d->canvasInitialized = true;
     }
 
-    if (needsFullRefresh) {
+    if (!initializing && needsFullRefresh) {
         canvas()->startUpdateInPatches(canvas()->image()->bounds());
-    } else {
+    }
+    else if (!initializing)  {
         canvas()->updateCanvas();
     }
 }

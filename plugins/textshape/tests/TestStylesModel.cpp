@@ -1,5 +1,4 @@
 #include <qtest_kde.h>
-#include <kcomponentdata.h>
 
 #include <QDebug>
 

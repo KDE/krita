@@ -25,7 +25,6 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>

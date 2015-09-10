@@ -887,11 +887,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"),
-            "This is an experimental build of Krita. Any files saved may be incompatible with any official versions past, present or future. \n\nDO NOT USE FOR ANY WORK YOU WANT TO KEEP.\n\n Use for testing purposes only.",
-            QMessageBox::Ok
-        );
-
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         if (isExporting() && !d->lastExportUrl.isEmpty()) {

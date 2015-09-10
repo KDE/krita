@@ -104,7 +104,7 @@ private:
     MoveToolOptionsWidget* m_optionsWidget;
 
     QPoint m_dragStart;
-    QPoint m_lastDragPos;
+    QPoint m_accumulatedOffset;
 
     KisStrokeId m_strokeId;
 

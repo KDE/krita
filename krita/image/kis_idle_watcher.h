@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,38 +16,44 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_QUEUES_PROGRESS_UPDATER_H
-#define __KIS_QUEUES_PROGRESS_UPDATER_H
+#ifndef __KIS_IDLE_WATCHER_H
+#define __KIS_IDLE_WATCHER_H
 
-#include <QObject>
 #include "kritaimage_export.h"
 
-class KoProgressProxy;
+#include <QScopedPointer>
+#include <QObject>
+#include <QString>
+
+#include "kis_types.h"
 
 
-class KRITAIMAGE_EXPORT KisQueuesProgressUpdater : public QObject
+class KRITAIMAGE_EXPORT KisIdleWatcher : public QObject
 {
     Q_OBJECT
-
 public:
-    KisQueuesProgressUpdater(KoProgressProxy *progressProxy);
-    ~KisQueuesProgressUpdater();
+    KisIdleWatcher(int delay);
+    ~KisIdleWatcher();
 
-    void updateProgress(int queueSizeMetric, const QString &jobName);
-    void hide();
+    bool isIdle() const;
 
-private Q_SLOTS:
-    void startTicking();
-    void stopTicking();
-    void timerTicked();
+    void setTrackedImages(const QVector<KisImageSP> &images);
+    void setTrackedImage(KisImageSP image);
+
 
 Q_SIGNALS:
-    void sigStartTicking();
-    void sigStopTicking();
+    void startedIdleMode();
+
+private Q_SLOTS:
+    void slotImageModified();
+    void slotIdleCheckTick();
+
+    void startIdleCheck();
+    void stopIdleCheck();
 
 private:
     struct Private;
-    Private * const m_d;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_QUEUES_PROGRESS_UPDATER_H */
+#endif /* __KIS_IDLE_WATCHER_H */

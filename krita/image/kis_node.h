@@ -169,6 +169,9 @@ public:
      */
     KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
+    bool isAnimated() const;
+    virtual void enableAnimation();
+
     /**
      * The rendering of the image may not always happen in the order
      * of the main graph. Pass-through nodes ake some subgraphs
@@ -340,6 +343,11 @@ public:
     KisNodeProgressProxy* nodeProgressProxy() const;
 
     KisBusyProgressIndicator* busyProgressIndicator() const;
+
+Q_SIGNALS:
+
+    void animatedAboutToChange(bool);
+    void animatedChanged(bool);
 
 private:
 

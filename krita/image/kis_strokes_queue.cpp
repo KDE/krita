@@ -55,7 +55,7 @@ struct KisStrokesQueue::Private {
     StrokesQueueIterator findNewLodNPos(KisStrokeSP lodN);
     bool shouldWrapInSuspendUpdatesStroke() const;
 
-    void switchDesiredLevelOfDetail();
+    void switchDesiredLevelOfDetail(bool forced);
     bool hasUnfinishedStrokes() const;
 };
 
@@ -355,12 +355,12 @@ qint32 KisStrokesQueue::sizeMetric() const
     if(m_d->strokesQueue.isEmpty()) return 0;
 
     // just a rough approximation
-    return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
+    return qMax(1, m_d->strokesQueue.head()->numJobs()) * m_d->strokesQueue.size();
 }
 
-void KisStrokesQueue::Private::switchDesiredLevelOfDetail()
+void KisStrokesQueue::Private::switchDesiredLevelOfDetail(bool forced)
 {
-    if (nextDesiredLevelOfDetail != desiredLevelOfDetail) {
+    if (forced || nextDesiredLevelOfDetail != desiredLevelOfDetail) {
         foreach (KisStrokeSP stroke, strokesQueue) {
             if (stroke->type() != KisStroke::LEGACY)
                 return;
@@ -375,6 +375,12 @@ void KisStrokesQueue::Private::switchDesiredLevelOfDetail()
     }
 }
 
+void KisStrokesQueue::explicitRegenerateLevelOfDetail()
+{
+    QMutexLocker locker(&m_d->mutex);
+    m_d->switchDesiredLevelOfDetail(true);
+}
+
 void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
 {
     QMutexLocker locker(&m_d->mutex);
@@ -382,7 +388,7 @@ void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
     if (lod == m_d->nextDesiredLevelOfDetail) return;
 
     m_d->nextDesiredLevelOfDetail = lod;
-    m_d->switchDesiredLevelOfDetail();
+    m_d->switchDesiredLevelOfDetail(false);
 }
 
 void KisStrokesQueue::notifyUFOChangedImage()
@@ -483,7 +489,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;
 
-        m_d->switchDesiredLevelOfDetail();
+        m_d->switchDesiredLevelOfDetail(false);
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false, runningLevelOfDetail);

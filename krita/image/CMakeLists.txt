@@ -169,6 +169,7 @@ set(kritaimage_LIB_SRCS
    kis_queues_progress_updater.cpp
    kis_composite_progress_proxy.cpp
    kis_sync_lod_cache_stroke_strategy.cpp
+   kis_lod_capable_layer_offset.cpp
    kis_update_time_monitor.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
@@ -292,6 +293,7 @@ set(kritaimage_LIB_SRCS
    kis_scalar_keyframe_channel.cpp
    kis_raster_keyframe_channel.cpp
    kis_onion_skin_compositor.cpp
+   kis_idle_watcher.cpp
 
    kis_psd_layer_style.cpp
 

@@ -59,7 +59,11 @@ bool KisStroke::supportsSuspension()
 
 void KisStroke::suspendStroke(KisStrokeSP recipient)
 {
-    if (!m_strokeInitialized || m_strokeSuspended) return;
+    if (!m_strokeInitialized || m_strokeSuspended ||
+        (m_strokeEnded && !hasJobs())) {
+
+        return;
+    }
 
     KIS_ASSERT_RECOVER_NOOP(m_suspendStrategy && m_resumeStrategy);
 

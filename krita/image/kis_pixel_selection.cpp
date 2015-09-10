@@ -297,14 +297,18 @@ void KisPixelSelection::move(const QPoint &pt)
 {
     QPoint offset = pt - QPoint(x(), y());
 
-    if (m_d->outlineCacheValid) {
-        m_d->outlineCache.translate(offset);
-    }
+    if (defaultBounds()->currentLevelOfDetail() == 0) {
+        if (m_d->outlineCacheValid) {
+            m_d->outlineCache.translate(offset);
+        }
 
-    if (m_d->thumbnailImageValid) {
-        m_d->thumbnailImageTransform =
-            QTransform::fromTranslate(offset.x(), offset.y()) *
-            m_d->thumbnailImageTransform;
+        if (m_d->thumbnailImageValid) {
+            m_d->thumbnailImageTransform =
+                QTransform::fromTranslate(offset.x(), offset.y()) *
+                m_d->thumbnailImageTransform;
+        }
+    } else {
+        invalidateOutlineCache();
     }
 
     KisPaintDevice::move(pt);

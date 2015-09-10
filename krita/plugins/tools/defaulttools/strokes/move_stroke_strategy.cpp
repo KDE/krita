@@ -30,9 +30,22 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoAdapter),
       m_node(node),
-      m_updatesFacade(updatesFacade)
+      m_updatesFacade(updatesFacade),
+      m_undoEnabled(true),
+      m_updatesEnabled(true)
 {
     setSupportsWrapAroundMode(true);
+}
+
+MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, bool suppressUndo)
+    : KisStrokeStrategyUndoCommandBased(rhs, suppressUndo),
+      m_node(rhs.m_node),
+      m_updatesFacade(rhs.m_updatesFacade),
+      m_finalOffset(rhs.m_finalOffset),
+      m_dirtyRect(rhs.m_dirtyRect),
+      m_undoEnabled(rhs.m_undoEnabled),
+      m_updatesEnabled(rhs.m_updatesEnabled)
+{
 }
 
 void MoveStrokeStrategy::setNode(KisNodeSP node)
@@ -41,9 +54,29 @@ void MoveStrokeStrategy::setNode(KisNodeSP node)
     m_node = node;
 }
 
+void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
+{
+    m_initialNodeOffsets.insert(node, QPoint(node->x(), node->y()));
+
+    KisNodeSP child = node->firstChild();
+    while(child) {
+        saveInitialNodeOffsets(child);
+        child = child->nextSibling();
+    }
+}
+
+void MoveStrokeStrategy::initStrokeCallback()
+{
+    if (m_node) {
+        saveInitialNodeOffsets(m_node);
+    }
+
+    KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+}
+
 void MoveStrokeStrategy::finishStrokeCallback()
 {
-    if(m_node) {
+    if(m_node && m_undoEnabled) {
         KUndo2Command *updateCommand =
             new KisUpdateCommand(m_node, m_dirtyRect, m_updatesFacade, true);
 
@@ -52,6 +85,10 @@ void MoveStrokeStrategy::finishStrokeCallback()
         notifyCommandDone(KUndo2CommandSP(updateCommand),
                           KisStrokeJobData::SEQUENTIAL,
                           KisStrokeJobData::EXCLUSIVE);
+    }
+
+    if (m_node && !m_updatesEnabled) {
+        m_updatesFacade->refreshGraphAsync(m_node, m_dirtyRect);
     }
 
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
@@ -81,7 +118,7 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
          * NOTE: we do not care about threading here, because
          * all our jobs are declared sequential
          */
-        m_finalOffset += d->offset;
+        m_finalOffset = d->offset;
     }
     else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
@@ -93,16 +130,25 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
     QRect dirtyRect = moveNode(m_node, offset);
     m_dirtyRect |= dirtyRect;
 
-    m_updatesFacade->refreshGraphAsync(m_node, dirtyRect);
+    if (m_updatesEnabled) {
+        m_updatesFacade->refreshGraphAsync(m_node, dirtyRect);
+    }
 }
 
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 {
     QRect dirtyRect = node->extent();
-    dirtyRect |= dirtyRect.translated(offset);
+    QPoint newOffset = m_initialNodeOffsets[node] + offset;
 
-    node->setX(node->x() + offset.x());
-    node->setY(node->y() + offset.y());
+    /**
+     * Some layers, e.g. clones need an update to change extent(), so
+     * calculate the dirty rect manually
+     */
+    QPoint currentOffset(node->x(), node->y());
+    dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+
+    node->setX(newOffset.x());
+    node->setY(newOffset.y());
     KisNodeMoveCommand2::tryNotifySelection(node);
 
     KisNodeSP child = node->firstChild();
@@ -125,4 +171,42 @@ void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
         addMoveCommands(child, parent);
         child = child->nextSibling();
     }
+}
+
+void MoveStrokeStrategy::setUndoEnabled(bool value)
+{
+    m_undoEnabled = value;
+}
+
+void MoveStrokeStrategy::setUpdatesEnabled(bool value)
+{
+    m_updatesEnabled = value;
+}
+
+bool checkSupportsLodMoves(KisNodeSP node)
+{
+    if (!node->supportsLodMoves()) {
+        return false;
+    }
+
+    KisNodeSP child = node->firstChild();
+    while(child) {
+        if (!checkSupportsLodMoves(child)) {
+            return false;
+        }
+        child = child->nextSibling();
+    }
+
+    return true;
+}
+
+
+KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    if (!checkSupportsLodMoves(m_node)) return 0;
+
+    MoveStrokeStrategy *clone = new MoveStrokeStrategy(*this, levelOfDetail > 0);
+    clone->setUndoEnabled(false);
+    this->setUpdatesEnabled(false);
+    return clone;
 }

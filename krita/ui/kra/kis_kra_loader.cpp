@@ -704,6 +704,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     }
 
     if (element.hasAttribute(KEYFRAME_FILE)) {
+        node->enableAnimation();
         m_d->keyframeFilenames.insert(node.data(), element.attribute(KEYFRAME_FILE));
     }
 

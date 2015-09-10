@@ -43,12 +43,33 @@ Q_DECLARE_METATYPE(KisUpdateInfoSP)
 #ifdef HAVE_OPENGL
 #include "opengl/kis_texture_tile_update_info.h"
 
+struct ConversionOptions {
+    ConversionOptions() : m_needsConversion(false) {}
+    ConversionOptions(const KoColorSpace *destinationColorSpace,
+                      KoColorConversionTransformation::Intent renderingIntent,
+                      KoColorConversionTransformation::ConversionFlags conversionFlags)
+        : m_needsConversion(true),
+          m_destinationColorSpace(destinationColorSpace),
+          m_renderingIntent(renderingIntent),
+          m_conversionFlags(conversionFlags)
+    {
+    }
+
+
+    bool m_needsConversion;
+    const KoColorSpace *m_destinationColorSpace;
+    KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+};
+
 class KisOpenGLUpdateInfo;
 typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 
 class KisOpenGLUpdateInfo : public KisUpdateInfo
 {
 public:
+    KisOpenGLUpdateInfo(ConversionOptions options);
+
     KisTextureTileUpdateInfoSPList tileList;
 
     QRect dirtyViewportRect();
@@ -56,8 +77,12 @@ public:
 
     void assignDirtyImageRect(const QRect &rect);
 
+    bool needsConversion() const;
+    void convertColorSpace();
+
 private:
     QRect m_dirtyImageRect;
+    ConversionOptions m_options;
 };
 #endif /* HAVE_OPENGL */
 

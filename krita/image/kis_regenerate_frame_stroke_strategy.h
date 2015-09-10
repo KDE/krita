@@ -60,6 +60,10 @@ public:
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
+    KisStrokeStrategy* createLodClone(int levelOfDetail);
+    void suspendStrokeCallback();
+    void resumeStrokeCallback();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

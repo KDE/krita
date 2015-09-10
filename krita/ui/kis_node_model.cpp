@@ -138,14 +138,16 @@ void KisNodeModel::resetIndexConverter()
     m_d->indexConverter = 0;
 
     if(m_d->dummiesFacade) {
-        if(m_d->showRootLayer) {
-            m_d->indexConverter =
-                new KisModelIndexConverterShowAll(m_d->dummiesFacade, this);
-        }
-        else {
-            m_d->indexConverter =
-                new KisModelIndexConverter(m_d->dummiesFacade, this, m_d->showGlobalSelection);
-        }
+        m_d->indexConverter = createIndexConverter();
+    }
+}
+
+KisModelIndexConverterBase *KisNodeModel::createIndexConverter()
+{
+    if(m_d->showRootLayer) {
+        return new KisModelIndexConverterShowAll(m_d->dummiesFacade, this);
+    } else {
+        return new KisModelIndexConverter(m_d->dummiesFacade, this, m_d->showGlobalSelection);
     }
 }
 

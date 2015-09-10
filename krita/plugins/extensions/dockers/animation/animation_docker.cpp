@@ -143,6 +143,10 @@ void AnimationDocker::slotAddBlankFrame()
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
 
+    if (!node->isAnimated()) {
+        node->enableAnimation();
+    }
+
     KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
     if (rasterChannel) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
@@ -158,6 +162,10 @@ void AnimationDocker::slotAddDuplicateFrame()
 
     KisNodeSP node = m_canvas->viewManager()->activeNode();
     if (!node) return;
+
+    if (!node->isAnimated()) {
+        node->enableAnimation();
+    }
 
     KisKeyframeChannel *rasterChannel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
     if (rasterChannel) {
@@ -225,15 +233,18 @@ void AnimationDocker::slotPreviousFrame()
 {
     if (!m_canvas) return;
 
-    int time = m_canvas->image()->animationInterface()->currentTime() - 1;
-    m_canvas->image()->animationInterface()->requestTimeSwitchWithUndo(time);
+    int time = m_canvas->image()->animationInterface()->currentUITime() - 1;
+
+    if (time >= 0) {
+        m_canvas->image()->animationInterface()->requestTimeSwitchWithUndo(time);
+    }
 }
 
 void AnimationDocker::slotNextFrame()
 {
     if (!m_canvas) return;
 
-    int time = m_canvas->image()->animationInterface()->currentTime() + 1;
+    int time = m_canvas->image()->animationInterface()->currentUITime() + 1;
     m_canvas->image()->animationInterface()->requestTimeSwitchWithUndo(time);
 }
 

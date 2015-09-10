@@ -17,13 +17,14 @@
  */
 
 #include "kis_timeline_model.h"
-#include "kis_model_index_converter_base.h"
+#include "kis_model_index_converter_animated_layers.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_keyframe_channel.h"
 #include "kis_dummies_facade_base.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_image_animation_interface.h"
+#include "kis_node.h"
 
 
 struct KisTimelineModel::Private
@@ -78,30 +79,37 @@ void KisTimelineModel::setDummiesFacade(KisDummiesFacadeBase *newDummiesFacade, 
     if(dummiesFacade()) {
         dummiesFacade()->disconnect(this);
 
-        connectAllChannels(dummiesFacade()->rootDummy(), false);
+        connectAllNodes(dummiesFacade()->rootDummy(), false);
     }
 
     m_d->image = image;
     KisNodeModel::setDummiesFacade(newDummiesFacade, image, shapeController);
 
     if (newDummiesFacade) {
-        connectAllChannels(dummiesFacade()->rootDummy(), true);
+        connectAllNodes(dummiesFacade()->rootDummy(), true);
         connect(dummiesFacade(), SIGNAL(sigEndInsertDummy(KisNodeDummy*)), SLOT(slotEndInsertDummy2(KisNodeDummy*)));
         connect(dummiesFacade(), SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)), SLOT(slotBeginRemoveDummy2(KisNodeDummy*)));
     }
 }
 
-void KisTimelineModel::connectAllChannels(KisNodeDummy *nodeDummy, bool needConnect) {
+void KisTimelineModel::connectAllNodes(KisNodeDummy *nodeDummy, bool needConnect) {
     connectChannels(nodeDummy->node(), needConnect);
 
     nodeDummy = nodeDummy->firstChild();
     while(nodeDummy) {
-        connectChannels(nodeDummy->node(), needConnect);
+        connectAllNodes(nodeDummy, needConnect);
         nodeDummy = nodeDummy->nextSibling();
     }
 }
 
 void KisTimelineModel::connectChannels(KisNodeSP node, bool needConnect) {
+    if (needConnect) {
+        connect(node.data(), SIGNAL(animatedAboutToChange(bool)), this, SLOT(slotNodeAnimatedAboutToChange(bool)));
+        connect(node.data(), SIGNAL(animatedChanged(bool)), this, SLOT(slotNodeAnimatedChanged(bool)));
+    } else {
+        disconnect(node.data(), 0, this, 0);
+    }
+
     QList<KisKeyframeChannel*> channels = node->keyframeChannels();
 
     foreach (KisKeyframeChannel *channel, channels) {
@@ -280,6 +288,11 @@ Qt::ItemFlags KisTimelineModel::flags(const QModelIndex &index) const
     }
 }
 
+KisModelIndexConverterBase *KisTimelineModel::createIndexConverter()
+{
+    return new KisModelIndexConverterAnimatedLayers(dummiesFacade(), this);
+}
+
 void KisTimelineModel::slotEndInsertDummy2(KisNodeDummy *dummy)
 {
     connectChannels(dummy->node(), true);
@@ -288,6 +301,27 @@ void KisTimelineModel::slotEndInsertDummy2(KisNodeDummy *dummy)
 void KisTimelineModel::slotBeginRemoveDummy2(KisNodeDummy *dummy)
 {
     connectChannels(dummy->node(), true);
+}
+
+void KisTimelineModel::slotNodeAnimatedAboutToChange(bool animated)
+{
+    if (animated) {
+        KisNode *node = qobject_cast<KisNode*>(QObject::sender());
+        KisNodeDummy *parentDummy = dummiesFacade()->dummyForNode(node->parent());
+        int index = node->parent()->index(node);
+
+        slotBeginInsertDummy(parentDummy, index, "");
+    }
+}
+
+void KisTimelineModel::slotNodeAnimatedChanged(bool animated)
+{
+    if (animated) {
+        KisNode *node = qobject_cast<KisNode*>(QObject::sender());
+        KisNodeDummy *dummy = dummiesFacade()->dummyForNode(node);
+
+        slotEndInsertDummy(dummy);
+    }
 }
 
 void KisTimelineModel::slotKeyframeAboutToBeAdded(KisKeyframe *keyframe)
@@ -344,7 +378,6 @@ void KisTimelineModel::slotKeyframeMoved(KisKeyframe *keyframe)
 
     m_d->skipNoopMove = false;
 }
-
 
 int KisTimelineModel::getInsertionPointByTime(KisKeyframeChannel *channel, int time)
 {

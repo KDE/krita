@@ -33,6 +33,7 @@ struct KisBaseNode::Private
     KisDocumentSectionModel::Property hack_visible; //HACK
     QUuid id;
     bool collapsed;
+    bool supportsLodMoves;
 };
 
 KisBaseNode::KisBaseNode()
@@ -50,6 +51,7 @@ KisBaseNode::KisBaseNode()
     setVisible(true);
     setUserLocked(false);
     setCollapsed(false);
+    setSupportsLodMoves(true);
 
     setSystemLocked(false);
     m_d->compositeOp = COMPOSITE_OVER;
@@ -69,6 +71,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
         m_d->properties.setProperty(iter.key(), iter.value());
     }
     setCollapsed(rhs.collapsed());
+    setSupportsLodMoves(rhs.supportsLodMoves());
 
     setSystemLocked(false);
     m_d->compositeOp = rhs.m_d->compositeOp;
@@ -280,3 +283,12 @@ void KisBaseNode::setUuid(const QUuid& id)
     baseNodeChangedCallback();
 }
 
+bool KisBaseNode::supportsLodMoves() const
+{
+    return m_d->supportsLodMoves;
+}
+
+void KisBaseNode::setSupportsLodMoves(bool value)
+{
+    m_d->supportsLodMoves = value;
+}

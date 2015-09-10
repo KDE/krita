@@ -44,16 +44,14 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
 
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
-                                  int levelOfDetail)
+                                  bool suppressUndo)
   : KisSimpleStrokeStrategy(rhs),
-    m_supportsLevelOfDetail(rhs.m_supportsLevelOfDetail),
+    m_undo(false),
     m_initCommand(rhs.m_initCommand),
     m_finishCommand(rhs.m_finishCommand),
-    m_undoAdapter(rhs.m_undoAdapter)
+    m_undoAdapter(!suppressUndo ? rhs.m_undoAdapter : 0),
+    m_macroCommand(0)
 {
-    // LOD_MERGE_FIXME:
-    Q_UNUSED(levelOfDetail);
-
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_macroCommand &&
                             !rhs.m_undo &&
                             "After the stroke has been started, no copying must happen");

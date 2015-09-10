@@ -103,6 +103,12 @@ public:
     bool tryBarrierLock();
 
     /**
+     * Tells if there are no strokes or updates are running at the
+     * moment. Internally calls to tryBarrierLock(), so it is not O(1).
+     */
+    bool isIdle();
+
+    /**
      * Blocks all the updates from execution. It doesn't affect
      * strokes execution in any way. This type of lock is supposed
      * to be held by the strokes themselves when they need a short
@@ -141,6 +147,13 @@ public:
      * currentLevelOfDetail()
      */
     void setDesiredLevelOfDetail(int lod);
+
+    /**
+     * Explicitly start regeneration of LoD planes of all the devices
+     * in the image. This call should be performed when the user is idle,
+     * just to make the quality of image updates better.
+     */
+    void explicitRegenerateLevelOfDetail();
 
     /**
      * Install a factory of a stroke strategy, that will be started

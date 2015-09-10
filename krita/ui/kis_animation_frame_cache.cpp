@@ -25,9 +25,11 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
+#include "KisPart.h"
 #include "kis_animation_cache_populator.h"
 
 #include "opengl/kis_opengl_image_textures.h"
+
 
 struct KisAnimationFrameCache::Private
 {
@@ -150,7 +152,6 @@ KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures
     : m_d(new Private(textures))
 {
     connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
-    connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(frameReady(int)), Qt::DirectConnection);
 }
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
@@ -163,7 +164,7 @@ bool KisAnimationFrameCache::uploadFrame(int time)
     Private::Frame *frame = m_d->getFrame(time);
 
     if (!frame) {
-        KisAnimationCachePopulator::instance()->regenerate(m_d->image, time);
+        KisPart::instance()->cachePopulator()->regenerate(this, time);
     } else {
         m_d->textures->recalculateCache(frame->openGlFrame);
     }
@@ -193,16 +194,18 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
     emit changed();
 }
 
-void KisAnimationFrameCache::frameReady(int time)
+KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time) const
 {
     if (time != m_d->image->animationInterface()->currentTime()) {
         qWarning() << "WARNING: KisAnimationFrameCache::frameReady image's time doesn't coincide with the requested time!";
         qWarning() << "    "  << ppVar(m_d->image->animationInterface()->currentTime()) << ppVar(time);
     }
 
-    KisOpenGLUpdateInfoSP info =
-        m_d->textures->updateCache(m_d->image->bounds());
+    return m_d->textures->updateCacheNoConversion(m_d->image->bounds());
+}
 
+void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
+{
     KisTimeRange identicalRange = KisTimeRange::infinite(0);
     KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), time, identicalRange, true);
 

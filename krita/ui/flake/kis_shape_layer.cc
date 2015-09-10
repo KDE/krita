@@ -224,6 +224,7 @@ KisShapeLayer::~KisShapeLayer()
 
 void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 {
+    setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
     m_d->converter = new KisImageViewConverter(image());

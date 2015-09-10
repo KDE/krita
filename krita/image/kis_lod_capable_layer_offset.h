@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,38 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_QUEUES_PROGRESS_UPDATER_H
-#define __KIS_QUEUES_PROGRESS_UPDATER_H
+#ifndef __KIS_LOD_CAPABLE_LAYER_OFFSET_H
+#define __KIS_LOD_CAPABLE_LAYER_OFFSET_H
 
-#include <QObject>
+#include <QScopedPointer>
 #include "kritaimage_export.h"
+#include "kis_default_bounds_base.h"
 
-class KoProgressProxy;
 
-
-class KRITAIMAGE_EXPORT KisQueuesProgressUpdater : public QObject
+class KRITAIMAGE_EXPORT KisLodCapableLayerOffset
 {
-    Q_OBJECT
-
 public:
-    KisQueuesProgressUpdater(KoProgressProxy *progressProxy);
-    ~KisQueuesProgressUpdater();
+    KisLodCapableLayerOffset(KisDefaultBoundsBaseSP defaultBounds);
+    KisLodCapableLayerOffset(const KisLodCapableLayerOffset &rhs);
+    KisLodCapableLayerOffset& operator=(const KisLodCapableLayerOffset &rhs);
 
-    void updateProgress(int queueSizeMetric, const QString &jobName);
-    void hide();
+    ~KisLodCapableLayerOffset();
 
-private Q_SLOTS:
-    void startTicking();
-    void stopTicking();
-    void timerTicked();
+    int x() const;
+    int y() const;
 
-Q_SIGNALS:
-    void sigStartTicking();
-    void sigStopTicking();
+    void setX(int value);
+    void setY(int value);
+
+    void syncLodOffset();
 
 private:
     struct Private;
-    Private * const m_d;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_QUEUES_PROGRESS_UPDATER_H */
+#endif /* __KIS_LOD_CAPABLE_LAYER_OFFSET_H */

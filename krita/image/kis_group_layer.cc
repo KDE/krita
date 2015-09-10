@@ -170,15 +170,16 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 
     if (!m_d->paintDevice) {
 
-        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
-        m_d->paintDevice->setX(m_d->x);
-        m_d->paintDevice->setY(m_d->y);
+        KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
+        dev->setX(this->x());
+        dev->setY(this->y());
+        m_d->paintDevice = dev;
     }
     else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
-        dev->setX(m_d->x);
-        dev->setY(m_d->y);
+        dev->setX(this->x());
+        dev->setY(this->y());
         quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
 
         m_d->paintDevice->colorSpace()->
@@ -310,31 +311,27 @@ void KisGroupLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAd
 
 qint32 KisGroupLayer::x() const
 {
-    return m_d->x;
+    return m_d->paintDevice ? m_d->paintDevice->x() : m_d->x;
 }
 
 qint32 KisGroupLayer::y() const
 {
-    return m_d->y;
+    return m_d->paintDevice ? m_d->paintDevice->y() : m_d->y;
 }
 
 void KisGroupLayer::setX(qint32 x)
 {
-    qint32 delta = x - m_d->x;
     m_d->x = x;
     if(m_d->paintDevice) {
-        m_d->paintDevice->setX(m_d->paintDevice->x() + delta);
-        Q_ASSERT(m_d->paintDevice->x() == m_d->x);
+        m_d->paintDevice->setX(x);
     }
 }
 
 void KisGroupLayer::setY(qint32 y)
 {
-    qint32 delta = y - m_d->y;
     m_d->y = y;
     if(m_d->paintDevice) {
-        m_d->paintDevice->setY(m_d->paintDevice->y() + delta);
-        Q_ASSERT(m_d->paintDevice->y() == m_d->y);
+        m_d->paintDevice->setY(y);
     }
 }
 

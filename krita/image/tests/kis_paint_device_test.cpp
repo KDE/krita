@@ -1402,8 +1402,11 @@ void KisPaintDeviceTest::testLodDevice()
     dev->setDefaultBounds(bounds);
 
     // fill device with a gradient
-    QRect rect = dev->defaultBounds()->bounds();
-    fillGradientDevice(dev, rect);
+    // QRect rect = dev->defaultBounds()->bounds();
+    // fillGradientDevice(dev, rect);
+    fillGradientDevice(dev, QRect(50,50,30,30));
+
+    QCOMPARE(dev->exactBounds(), QRect(50,50,30,30));
 
     QImage result;
 
@@ -1414,6 +1417,7 @@ void KisPaintDeviceTest::testLodDevice()
 
     bounds->testingSetLevelOfDetail(1);
     dev->syncLodCache(1);
+    QCOMPARE(dev->exactBounds(), QRect(25,25,15,15));
 
     qDebug() << ppVar(dev->exactBounds());
     result = dev->convertToQImage(0,0,0,100,100);
@@ -1421,6 +1425,7 @@ void KisPaintDeviceTest::testLodDevice()
                                   "lod", "lod1"));
 
     bounds->testingSetLevelOfDetail(2);
+    QCOMPARE(dev->exactBounds(), QRect(25,25,15,15));
 
     qDebug() << ppVar(dev->exactBounds());
     result = dev->convertToQImage(0,0,0,100,100);
@@ -1428,6 +1433,7 @@ void KisPaintDeviceTest::testLodDevice()
                                   "lod", "lod1"));
 
     dev->syncLodCache(2);
+    QCOMPARE(dev->exactBounds(), QRect(12,12,8,8));
 
     qDebug() << ppVar(dev->exactBounds());
     result = dev->convertToQImage(0,0,0,100,100);
@@ -1436,11 +1442,14 @@ void KisPaintDeviceTest::testLodDevice()
 
     bounds->testingSetLevelOfDetail(0);
 
-    dev->setX(6);
-    dev->setY(14);
+    dev->setX(20);
+    dev->setY(10);
 
     bounds->testingSetLevelOfDetail(1);
     dev->syncLodCache(1);
+
+    QCOMPARE(dev->exactBounds(), QRect(35,30,15,15));
+
 
     qDebug() << ppVar(dev->exactBounds()) << ppVar(dev->x()) << ppVar(dev->y());
     result = dev->convertToQImage(0,0,0,100,100);

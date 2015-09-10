@@ -26,10 +26,15 @@
 namespace TestUtil {
 
 struct TestingTimedDefaultBounds : public KisDefaultBoundsBase {
-    TestingTimedDefaultBounds() : m_time(0) {}
+    TestingTimedDefaultBounds(const QRect &bounds = QRect(0,0,100,100))
+        : m_time(0),
+          m_lod(0),
+          m_bounds(bounds)
+    {
+    }
 
     QRect bounds() const {
-        return QRect(0,0,100,100);
+        return m_bounds;
     }
 
     bool wrapAroundMode() const {
@@ -37,7 +42,7 @@ struct TestingTimedDefaultBounds : public KisDefaultBoundsBase {
     }
 
     int currentLevelOfDetail() const {
-        return 0;
+        return m_lod;
     }
 
     int currentTime() const {
@@ -52,8 +57,14 @@ struct TestingTimedDefaultBounds : public KisDefaultBoundsBase {
         m_time = time;
     }
 
+    void testingSetLod(int lod) {
+        m_lod = lod;
+    }
+
 private:
     int m_time;
+    int m_lod;
+    QRect m_bounds;
 };
 
 }

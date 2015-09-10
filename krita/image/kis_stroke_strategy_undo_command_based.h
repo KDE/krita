@@ -109,7 +109,7 @@ protected:
                            KisStrokeJobData::Exclusivity exclusivity);
 
     KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
-                                      int levelOfDetail);
+                                      bool suppressUndo);
 
     virtual void postProcessToplevelCommand(KUndo2Command *command);
 
@@ -118,7 +118,6 @@ private:
 
 private:
     bool m_undo;
-    bool m_supportsLevelOfDetail;
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
     KisPostExecutionUndoAdapter *m_undoAdapter;

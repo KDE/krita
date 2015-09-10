@@ -110,7 +110,8 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 };
 
 KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend)
-    : m_d(new Private)
+    : KisSimpleStrokeStrategy(suspend ? "suspend_stroke_strategy" : "resume_stroke_strategy"),
+      m_d(new Private)
 {
     m_d->image = image;
     m_d->suspend = suspend;

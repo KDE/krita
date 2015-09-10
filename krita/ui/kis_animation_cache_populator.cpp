@@ -18,8 +18,11 @@
 
 #include "kis_animation_cache_populator.h"
 
+#include <boost/bind.hpp>
+
 #include <QTimer>
 #include <QMutex>
+#include <QtConcurrent>
 
 #include "KisPart.h"
 #include "KisDocument.h"
@@ -28,10 +31,18 @@
 #include "kis_canvas2.h"
 #include "kis_time_range.h"
 #include "kis_animation_frame_cache.h"
+#include "kis_update_info.h"
+#include "kis_signal_auto_connection.h"
+#include "kis_idle_watcher.h"
+#include "KisViewManager.h"
+#include "kis_node_manager.h"
+#include "kis_keyframe_channel.h"
+
 
 struct KisAnimationCachePopulator::Private
 {
     KisAnimationCachePopulator *q;
+    KisPart *part;
 
     QTimer timer;
 
@@ -41,89 +52,142 @@ struct KisAnimationCachePopulator::Private
     int idleCounter;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
-    static const int GENERATION_TIMEOUT = 1000;
-    static const int GENERATION_CHECK_INTERVAL = 10;
+    static const int WAITING_FOR_FRAME_TIMEOUT = 3000;
+    static const int BETWEEN_FRAMES_INTERVAL = 10;
 
-    KisImageWSP requestImage;
     int requestedFrame;
+    KisAnimationFrameCacheSP requestCache;
+    KisOpenGLUpdateInfoSP requestInfo;
+    QScopedPointer<KisSignalAutoConnection> imageRequestConnection;
+
+    QFutureWatcher<void> infoConversionWatcher;
+
+
 
     enum State {
+        NotWaitingForAnything,
         WaitingForIdle,
         WaitingForFrame,
+        WaitingForConvertedFrame,
         BetweenFrames
     };
     State state;
 
     QMutex mutex;
 
-    Private(KisAnimationCachePopulator *q)
-        : q(q),
+    Private(KisAnimationCachePopulator *_q, KisPart *_part)
+        : q(_q),
+          part(_part),
           idleCounter(0),
           requestedFrame(-1),
           state(WaitingForIdle)
     {
-        timer.setInterval(IDLE_CHECK_INTERVAL);
+        timer.setSingleShot(true);
+        connect(&infoConversionWatcher, SIGNAL(finished()), q, SLOT(slotInfoConverted()));
     }
 
-    bool checkIdle()
-    {
-        QList<QPointer<KisDocument> > documents = KisPart::instance()->documents();
+    static void processFrameInfo(KisOpenGLUpdateInfoSP info) {
+        if (info->needsConversion()) {
+            info->convertColorSpace();
+        }
+    }
 
-        QPointer<KisDocument> document;
-        foreach (document, documents) {
-            bool lock = document->image()->tryBarrierLock();
-            if (lock) {
-                document->image()->unlock();
-            } else {
-                return false;
-            }
+    void frameReceived(int frame)
+    {
+        if (frame != requestedFrame) return;
+
+        imageRequestConnection.reset();
+        enterState(WaitingForConvertedFrame);
+
+        requestInfo = requestCache->fetchFrameData(frame);
+
+        QFuture<void> requestFuture =
+            QtConcurrent::run(
+                boost::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
+                            requestInfo));
+
+        infoConversionWatcher.setFuture(requestFuture);
+    }
+
+    void infoConverted() {
+        KIS_ASSERT_RECOVER(requestInfo && requestCache) {
+            enterState(WaitingForIdle);
+            return;
         }
 
-        return true;
+        requestCache->addConvertedFrameData(requestInfo, requestedFrame);
+
+        requestedFrame = 0;
+        requestCache = 0;
+        requestInfo = 0;
+        enterState(BetweenFrames);
     }
 
-    void frameReceived()
-    {
-        disconnectImage();
-        enterState(BetweenFrames);
+    void timerTimeout() {
+        switch (state) {
+        case WaitingForIdle:
+        case BetweenFrames:
+            generateIfIdle();
+            break;
+        case WaitingForFrame:
+            // Request timed out :(
+            imageRequestConnection.reset();
+            enterState(WaitingForIdle);
+            break;
+        case WaitingForConvertedFrame:
+            KIS_ASSERT_RECOVER_NOOP(0 && "WaitingForConvertedFrame cannot have a timeout. Just skip this message and report a bug");
+            break;
+        case NotWaitingForAnything:
+            KIS_ASSERT_RECOVER_NOOP(0 && "NotWaitingForAnything cannot have a timeout. Just skip this message and report a bug");
+            break;
+        }
     }
 
     void generateIfIdle()
     {
-        if (state == WaitingForFrame) {
-            // Request timed out
-            disconnectImage();
-            enterState(WaitingForIdle);
-        }
-
-        if (checkIdle()) {
+        if (part->idleWatcher()->isIdle()) {
             idleCounter++;
+
+            if (idleCounter >= IDLE_COUNT_THRESHOLD) {
+                if (!tryRequestGeneration()) {
+                    enterState(NotWaitingForAnything);
+                }
+                return;
+            }
         } else {
-            enterState(WaitingForIdle);
+            idleCounter = 0;
         }
 
-        if (idleCounter >= IDLE_COUNT_THRESHOLD) {
-            bool requested = tryRequestGeneration();
-            if (requested) {
-                return;
-            } else {
-                enterState(WaitingForIdle);
-            }
-        }
+        enterState(WaitingForIdle);
     }
 
 
     bool tryRequestGeneration()
     {
         // Prioritize the active document
+        KisAnimationFrameCacheSP activeDocumentCache = KisAnimationFrameCacheSP(0);
 
-        KisMainWindow *activeWindow = KisPart::instance()->currentMainwindow();
-
+        KisMainWindow *activeWindow = part->currentMainwindow();
         if (activeWindow && activeWindow->activeView()) {
             KisCanvas2 *activeCanvas = activeWindow->activeView()->canvasBase();
 
             if (activeCanvas && activeCanvas->frameCache()) {
-                bool requested = tryRequestGeneration(activeCanvas->frameCache());
+                activeDocumentCache = activeCanvas->frameCache();
+
+                // Let's skip frames affected by changes to the active node (on the active document)
+                // This avoids constant invalidation and regeneration while drawing
+                KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
+                KisTimeRange skipRange;
+                if (activeNode) {
+                    int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
+
+                    KisKeyframeChannel *channel;
+                    foreach (channel, activeNode->keyframeChannels()) {
+                        skipRange |= channel->affectedFrames(currentTime);
+                    }
+                }
+
+                bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
                 if (requested) return true;
             }
         }
@@ -131,14 +195,19 @@ struct KisAnimationCachePopulator::Private
         QList<KisAnimationFrameCache*> caches = KisAnimationFrameCache::caches();
         KisAnimationFrameCache *cache;
         foreach (cache, caches) {
-            bool requested = tryRequestGeneration(cache);
+            if (cache == activeDocumentCache.data()) {
+                // We already handled this one...
+                continue;
+            }
+
+            bool requested = tryRequestGeneration(cache, KisTimeRange());
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
@@ -151,9 +220,18 @@ struct KisAnimationCachePopulator::Private
 
             // TODO: optimize check for fully-cached case
 
-            for (int t = currentRange.start(); t <= currentRange.end(); t++) {
-                if (!cache->frameStatus(t) == KisAnimationFrameCache::Cached) {
-                    return regenerate(image, t);
+            for (int frame = currentRange.start(); frame <= currentRange.end(); frame++) {
+                if (skipRange.contains(frame)) {
+                    if (skipRange.isInfinite()) {
+                        break;
+                    } else {
+                        frame = skipRange.end();
+                        continue;
+                    }
+                }
+
+                if (!cache->frameStatus(frame) == KisAnimationFrameCache::Cached) {
+                    return regenerate(cache, frame);
                 }
             }
         }
@@ -161,67 +239,70 @@ struct KisAnimationCachePopulator::Private
         return false;
     }
 
-    bool regenerate(KisImageSP image, int frame)
+    bool regenerate(KisAnimationFrameCacheSP cache, int frame)
     {
-        mutex.lock();
-
-        if (state == WaitingForFrame) {
-            mutex.unlock();
+        if (state == WaitingForFrame || state == WaitingForConvertedFrame) {
+            // Already busy, deny request
             return false;
         }
 
-        requestImage = image;
+        KIS_ASSERT_RECOVER_NOOP(QThread::currentThread() == q->thread());
+
+        KisImageSP image = cache->image();
+
+        requestCache = cache;
         requestedFrame = frame;
 
-        KisImageAnimationInterface *animation = image->animationInterface();
-        connect(animation, SIGNAL(sigFrameReady(int)), q, SLOT(slotFrameReady(int)));
-        animation->requestFrameRegeneration(frame, image->bounds());
+        imageRequestConnection.reset(
+            new KisSignalAutoConnection(
+                image->animationInterface(), SIGNAL(sigFrameReady(int)),
+                q, SLOT(slotFrameReady(int)),
+                Qt::DirectConnection));
 
+        /**
+         * We should enter the state before the frame is
+         * requested. Otherwise the signal may come earlier than we
+         * enter it.
+         */
         enterState(WaitingForFrame);
-
-        mutex.unlock();
+        image->animationInterface()->requestFrameRegeneration(frame, image->bounds());
 
         return true;
-    }
-
-    void disconnectImage()
-    {
-        KisImageSP image = requestImage;
-        if (image) {
-            disconnect(requestImage->animationInterface(), 0, q, 0);
-        }
-        requestImage = 0;
     }
 
     void enterState(State newState)
     {
         state = newState;
+        int timerTimeout = -1;
 
         switch (state) {
+        case WaitingForIdle:
+            timerTimeout = IDLE_CHECK_INTERVAL;
+            break;
         case WaitingForFrame:
-            timer.setInterval(GENERATION_TIMEOUT);
+            timerTimeout = WAITING_FOR_FRAME_TIMEOUT;
+            break;
+        case NotWaitingForAnything:
+        case WaitingForConvertedFrame:
+            // frame conversion cannot be cancelled,
+            // so there is no timeout
+            timerTimeout = -1;
             break;
         case BetweenFrames:
-            timer.setInterval(GENERATION_CHECK_INTERVAL);
-            break;
-        default:
-            timer.setInterval(IDLE_CHECK_INTERVAL);
+            timerTimeout = BETWEEN_FRAMES_INTERVAL;
             break;
         }
 
-        idleCounter = 0;
-        timer.start();
+        if (timerTimeout >= 0) {
+            timer.start(timerTimeout);
+        } else {
+            timer.stop();
+        }
     }
 };
 
-KisAnimationCachePopulator *KisAnimationCachePopulator::instance()
-{
-    K_GLOBAL_STATIC(KisAnimationCachePopulator, s_instance);
-    return s_instance;
-}
-
-KisAnimationCachePopulator::KisAnimationCachePopulator()
-    : m_d(new Private(this))
+KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
+    : m_d(new Private(this, part))
 {
     connect(&m_d->timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
 }
@@ -229,9 +310,9 @@ KisAnimationCachePopulator::KisAnimationCachePopulator()
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
 {}
 
-bool KisAnimationCachePopulator::regenerate(KisImageSP image, int frame)
+bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int frame)
 {
-    return m_d->regenerate(image, frame);
+    return m_d->regenerate(cache, frame);
 }
 
 void KisAnimationCachePopulator::slotStart()
@@ -241,14 +322,22 @@ void KisAnimationCachePopulator::slotStart()
 
 void KisAnimationCachePopulator::slotTimer()
 {
-    m_d->generateIfIdle();
+    m_d->timerTimeout();
 }
 
 void KisAnimationCachePopulator::slotFrameReady(int frame)
 {
-    if (frame == m_d->requestedFrame) {
-        m_d->frameReceived();
-    }
+    m_d->frameReceived(frame);
+}
+
+void KisAnimationCachePopulator::slotInfoConverted()
+{
+    m_d->infoConverted();
+}
+
+void KisAnimationCachePopulator::slotRequestRegeneration()
+{
+    m_d->enterState(Private::WaitingForIdle);
 }
 
 #include "kis_animation_cache_populator.moc"

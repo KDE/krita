@@ -145,7 +145,6 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 {
     QPoint pos = convertToPixelCoord(event).toPoint();
     m_dragStart = pos;
-    m_lastDragPos = m_dragStart;
     m_moveInProgress = true;
     emit moveInProgressChanged();
 
@@ -201,6 +200,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 
     m_strokeId = image->startStroke(strategy);
     m_currentlyProcessingNode = node;
+    m_accumulatedOffset = QPoint();
 }
 
 void KisToolMove::continueAction(KoPointerEvent *event)
@@ -223,14 +223,15 @@ void KisToolMove::endAction(KoPointerEvent *event)
     QPoint pos = convertToPixelCoord(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
+
+    m_accumulatedOffset += pos - m_dragStart;
 }
 
 void KisToolMove::drag(const QPoint& newPos)
 {
     KisImageWSP image = currentImage();
 
-    QPoint offset = newPos - m_lastDragPos;
-    m_lastDragPos = newPos;
+    QPoint offset = m_accumulatedOffset + newPos - m_dragStart;
 
     image->addJob(m_strokeId,
                   new MoveStrokeStrategy::Data(offset));

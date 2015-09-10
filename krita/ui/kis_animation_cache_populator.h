@@ -22,29 +22,34 @@
 #include <QObject>
 #include "kis_types.h"
 
+class KisPart;
+
 class KisAnimationCachePopulator : public QObject
 {
     Q_OBJECT
 
 public:
-    static KisAnimationCachePopulator *instance();
+    KisAnimationCachePopulator(KisPart *part);
+    ~KisAnimationCachePopulator();
 
     /**
      * Request generation of given frame. The request will
      * be ignored if the populator is already requesting a frame.
      * @return true if generation reqeusted, false if busy
      */
-    bool regenerate(KisImageSP image, int frame);
+    bool regenerate(KisAnimationFrameCacheSP cache, int frame);
+
+public slots:
+    void slotStart();
+
+    void slotRequestRegeneration();
 
 private slots:
-    void slotStart();
     void slotTimer();
     void slotFrameReady(int frame);
+    void slotInfoConverted();
 
 private:
-    KisAnimationCachePopulator();
-    ~KisAnimationCachePopulator();
-
     struct Private;
     QScopedPointer<Private> m_d;
 };

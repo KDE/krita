@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,38 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_QUEUES_PROGRESS_UPDATER_H
-#define __KIS_QUEUES_PROGRESS_UPDATER_H
+#ifndef __MOVE_SELECTION_STROKE_TEST_H
+#define __MOVE_SELECTION_STROKE_TEST_H
 
-#include <QObject>
-#include "kritaimage_export.h"
+#include <QtTest/QtTest>
 
-class KoProgressProxy;
-
-
-class KRITAIMAGE_EXPORT KisQueuesProgressUpdater : public QObject
+class MoveSelectionStrokeTest : public QObject
 {
     Q_OBJECT
-
-public:
-    KisQueuesProgressUpdater(KoProgressProxy *progressProxy);
-    ~KisQueuesProgressUpdater();
-
-    void updateProgress(int queueSizeMetric, const QString &jobName);
-    void hide();
-
-private Q_SLOTS:
-    void startTicking();
-    void stopTicking();
-    void timerTicked();
-
-Q_SIGNALS:
-    void sigStartTicking();
-    void sigStopTicking();
-
-private:
-    struct Private;
-    Private * const m_d;
+private slots:
+    void test();
 };
 
-#endif /* __KIS_QUEUES_PROGRESS_UPDATER_H */
+#endif /* __MOVE_SELECTION_STROKE_TEST_H */

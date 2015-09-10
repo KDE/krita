@@ -232,7 +232,25 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 
 KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 {
-    KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
+    return updateCacheImpl(rect, true);
+}
+
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheNoConversion(const QRect& rect)
+{
+    return updateCacheImpl(rect, false);
+}
+
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect, bool convertColorSpace)
+{
+    const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
+
+    ConversionOptions options;
+
+    if (convertColorSpace) {
+        options = ConversionOptions(dstCS, m_renderingIntent, m_conversionFlags);
+    }
+
+    KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo(options);
 
     QRect updateRect = rect & m_image->bounds();
     if (updateRect.isEmpty() || !(m_initialized)) return info;
@@ -268,7 +286,6 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
-    const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
     const QRect bounds = m_image->bounds();
     const int levelOfDetail = m_image->currentLevelOfDetail();
 
@@ -299,7 +316,10 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
             // Don't update empty tiles
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
-                tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+
+                if (convertColorSpace) {
+                    tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                }
 
                 info->tileList.append(tileInfo);
             }

@@ -53,14 +53,7 @@ void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
 
 void KisSyncLodCacheStrokeStrategy::Private::visitNode(KisNodeSP node)
 {
-    KisPaintDeviceSP device = node->paintDevice();
-
-    if (device) {
-        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
-
-        // TODO: probably, not needed?
-        //node->setDirty(dirtyRegion);
-    }
+    node->syncLodCache();
 
     node = node->firstChild();
     while (node) {

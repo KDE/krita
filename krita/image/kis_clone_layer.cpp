@@ -307,5 +307,10 @@ KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() co
     return l;
 }
 
+void KisCloneLayer::syncLodCache()
+{
+    KisLayer::syncLodCache();
+    m_d->offset.syncLodOffset();
+}
 
 #include "kis_clone_layer.moc"

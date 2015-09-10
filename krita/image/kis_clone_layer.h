@@ -112,6 +112,8 @@ public:
 
     QRect needRectOnSourceForMasks(const QRect &rc) const;
 
+    void syncLodCache();
+
 protected:
     // override from KisNode
     QRect accessRect(const QRect &rect, PositionToFilthy pos) const;

@@ -173,6 +173,13 @@ public:
     virtual void enableAnimation();
 
     /**
+     * Synchronizes LoD caches of the node with the current state of it.
+     * The current level of detail is fetched from the image pointed by
+     * default bounds object
+     */
+    virtual void syncLodCache();
+
+    /**
      * The rendering of the image may not always happen in the order
      * of the main graph. Pass-through nodes ake some subgraphs
      * linear, so it the order of rendering change. projectionLeaf()

@@ -89,7 +89,7 @@ KoRdfSemanticTreeWidgetItem::~KoRdfSemanticTreeWidgetItem()
 {
 }
 
-KAction *KoRdfSemanticTreeWidgetItem::createAction(QWidget *parent, KoCanvasBase *host, const QString  &text)
+QAction *KoRdfSemanticTreeWidgetItem::createAction(QWidget *parent, KoCanvasBase *host, const QString  &text)
 {
     return new RdfSemanticTreeWidgetAction(parent, host, text);
 }
@@ -117,7 +117,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     topMenu->addAction(subMenu);
     foreach (hKoSemanticStylesheet ss, semanticItem()->stylesheets()) {
         kDebug(30015) << "format(), sheet:" << ss->name() << " xmlid:" << xmlid;
-        KAction* action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
+        QAction * action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                    host, ss->name(),
                                                                    semanticItem(), ss);
         subMenu->addAction(action);
@@ -126,7 +126,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     topMenu->addAction(subMenu);
     foreach (hKoSemanticStylesheet ss, semanticItem()->userStylesheets()) {
         kDebug(30015) << "format(), sheet:" << ss->name() << " xmlid:" << xmlid;
-        KAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
+        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                    host, ss->name(),
                                                                    semanticItem(), ss);
         subMenu->addAction(action);
@@ -135,12 +135,12 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     topMenu->addSeparator();
     KoRdfSemanticItemViewSite vs(semanticItem(), xmlid);
     if (hKoSemanticStylesheet ss = vs.stylesheet()) {
-        KAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
+        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                    host, i18n("Reapply Current"),
                                                                    semanticItem(), ss);
         topMenu->addAction(action);
     }
-    KAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
+    QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                host, i18n("Disassociate"),
                                                                semanticItem(), hKoSemanticStylesheet(0));
     topMenu->addAction(action);

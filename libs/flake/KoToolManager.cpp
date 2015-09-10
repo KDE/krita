@@ -57,7 +57,7 @@
 #include <kglobal.h>
 #include <QAction>
 #include <klocalizedstring.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 #include <QStack>
 #include <QLabel>
 
@@ -105,7 +105,7 @@ QString KoToolAction::iconName() const
     return d->toolHelper->iconName();
 }
 
-KShortcut KoToolAction::shortcut() const
+QKeySequence KoToolAction::shortcut() const
 {
     return d->toolHelper->shortcut();
 }

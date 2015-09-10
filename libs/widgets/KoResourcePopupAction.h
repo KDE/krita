@@ -21,7 +21,7 @@
 #ifndef KORESOURCEPOPUPACTION_H
 #define KORESOURCEPOPUPACTION_H
 
-#include <kaction.h>
+#include <QAction>
 
 #include <QSharedPointer>
 
@@ -29,7 +29,7 @@ class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
 
-class KoResourcePopupAction : public KAction
+class KoResourcePopupAction : public QAction
 {
     Q_OBJECT
 

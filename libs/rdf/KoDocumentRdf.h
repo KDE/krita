@@ -51,7 +51,7 @@ class KoTextEditor;
 
 class KoDocumentRdfPrivate;
 
-class KAction;
+class QAction;
 
 /**
  * @short The central access point for the Rdf metadata of an ODF document.
@@ -357,12 +357,12 @@ public:
     /**
      * FIXME? What does this do?
      */
-    KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
+    QAction * createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
 
     /**
      * FIXME? What does this do?
      */
-    QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
+    QList<QAction *> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
     /**
      * Collect together the semantic item, stylehseet, xmlid of the

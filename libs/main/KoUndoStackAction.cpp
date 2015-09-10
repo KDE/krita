@@ -27,7 +27,7 @@
 #include <kstandardshortcut.h>
 
 KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
-    : KAction(stack)
+    : QAction(stack)
     , m_type(type)
 {
     if (m_type == UNDO) {

@@ -21,7 +21,7 @@
 #ifndef KOCOLORPOPUPACTION_H
 #define KOCOLORPOPUPACTION_H
 
-#include <kaction.h>
+#include <QAction>
 
 #include "kowidgets_export.h"
 
@@ -32,7 +32,7 @@ class KoColor;
  * @see KoColorPopupAction
  */
 
-class KOWIDGETS_EXPORT KoColorPopupAction : public KAction
+class KOWIDGETS_EXPORT KoColorPopupAction : public QAction
 {
     Q_OBJECT
 

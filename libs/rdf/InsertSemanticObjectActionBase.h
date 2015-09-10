@@ -21,11 +21,11 @@
 #define __rdf_InsertSemanticObjectActionBase_h__
 
 #include "RdfForward.h"
-#include <kaction.h>
+#include <QAction>
 
 class KoCanvasBase;
 
-class InsertSemanticObjectActionBase : public KAction
+class InsertSemanticObjectActionBase : public QAction
 {
     Q_OBJECT
 public:

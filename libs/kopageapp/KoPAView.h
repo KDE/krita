@@ -39,7 +39,7 @@ class KoRuler;
 class KoShapeManager;
 class KoZoomController;
 class QUrl;
-class KAction;
+class QAction;
 
 class QTextDocument;
 class QTabBar;
@@ -86,7 +86,7 @@ public:
 
     KoCutController* cutController() const;
 
-    KAction* deleteSelectionAction() const;
+    QAction * deleteSelectionAction() const;
 
     void updateReadWrite( bool readwrite );
 

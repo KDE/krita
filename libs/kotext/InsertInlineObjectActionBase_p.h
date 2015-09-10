@@ -20,7 +20,7 @@
 #ifndef INSERTINLINEOBJECTACTIONBASE_H
 #define INSERTINLINEOBJECTACTIONBASE_H
 
-#include <kaction.h>
+#include <QAction>
 
 class KoCanvasBase;
 class KoInlineObject;
@@ -28,7 +28,7 @@ class KoInlineObject;
 /**
  * helper class
  */
-class InsertInlineObjectActionBase : public KAction
+class InsertInlineObjectActionBase : public QAction
 {
     Q_OBJECT
 public:

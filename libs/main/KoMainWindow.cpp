@@ -62,7 +62,7 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <kmenubar.h>
 #include <kmimetype.h>
 #include <k4aboutdata.h>
@@ -200,21 +200,21 @@ public:
     bool windowSizeDirty;
     bool readOnly;
 
-    KAction *showDocumentInfo;
+    QAction *showDocumentInfo;
     QAction *saveAction;
     QAction *saveActionAs;
     QAction *printAction;
     QAction *printActionPreview;
     QAction *sendFileAction;
-    KAction *exportPdf;
+    QAction *exportPdf;
     QAction *closeFile;
     QAction *reloadFile;
-    KAction *showFileVersions;
-    KAction *importFile;
-    KAction *exportFile;
-    KAction *encryptDocument;
+    QAction *showFileVersions;
+    QAction *importFile;
+    QAction *exportFile;
+    QAction *encryptDocument;
 #ifndef NDEBUG
-    KAction *uncompressToDir;
+    QAction *uncompressToDir;
 #endif
     KToggleAction *toggleDockers;
     KToggleAction *toggleDockerTitleBars;
@@ -286,7 +286,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
     d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
 
-    d->exportPdf  = new KAction(i18n("Export as PDF..."), this);
+    d->exportPdf  = new QAction(i18n("Export as PDF..."), this);
     d->exportPdf->setIcon(koIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
@@ -296,39 +296,39 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     d->closeFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
 
-    d->reloadFile  = new KAction(i18n("Reload"), this);
+    d->reloadFile  = new QAction(i18n("Reload"), this);
     actionCollection()->addAction("file_reload_file", d->reloadFile);
     connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->showFileVersions  = new KAction(i18n("Versions..."), this);
+    d->showFileVersions  = new QAction(i18n("Versions..."), this);
     actionCollection()->addAction("file_versions_file", d->showFileVersions);
     connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
 
-    d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
+    d->importFile  = new QAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
     actionCollection()->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KAction(koIcon("document-export"), i18n("E&xport..."), this);
+    d->exportFile  = new QAction(koIcon("document-export"), i18n("E&xport..."), this);
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
-    d->encryptDocument = new KAction(i18n("En&crypt Document"), this);
+    d->encryptDocument = new QAction(i18n("En&crypt Document"), this);
     actionCollection()->addAction("file_encrypt_doc", d->encryptDocument);
     connect(d->encryptDocument, SIGNAL(triggered(bool)), this, SLOT(slotEncryptDocument()));
 
 #ifndef NDEBUG
-    d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
+    d->uncompressToDir = new QAction(i18n("&Uncompress to Directory"), this);
     actionCollection()->addAction("file_uncompress_doc", d->uncompressToDir);
     connect(d->uncompressToDir, SIGNAL(triggered(bool)), this, SLOT(slotUncompressToDir()));
 #endif
 
-    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
+    QAction *actionNewView  = new QAction(koIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
+    d->showDocumentInfo  = new QAction(koIcon("document-properties"), i18n("Document Information"), this);
     actionCollection()->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 

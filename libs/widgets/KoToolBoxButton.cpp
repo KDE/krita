@@ -22,7 +22,7 @@
 #include <KoToolManager.h>
 #include <kicon.h>
 #include <klocalizedstring.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
@@ -45,7 +45,7 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
 void KoToolBoxButton::setDataFromToolAction()
 {
     const QString plainToolTip = m_toolAction->toolTip();
-    const KShortcut shortcut = m_toolAction->shortcut();
+    const QKeySequence shortcut = m_toolAction->shortcut();
     const QString toolTip =
         shortcut.isEmpty() ?
             i18nc("@info:tooltip", "%1", plainToolTip) :

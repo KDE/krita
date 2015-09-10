@@ -21,7 +21,7 @@
 
 #include "dlg_imagesplit.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include <KisViewManager.h>

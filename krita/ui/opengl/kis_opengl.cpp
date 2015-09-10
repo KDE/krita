@@ -31,7 +31,7 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kis_config.h>

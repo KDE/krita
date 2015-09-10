@@ -23,7 +23,7 @@
 #include <QCheckBox>
 #include <QDesktopServices>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoFileDialog.h>
 #include <KisApplication.h>

@@ -24,7 +24,7 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <QWheelEvent>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcolordialog.h>
 
 #include <KoIcon.h>

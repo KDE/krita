@@ -27,7 +27,7 @@
 #include <QDataStream>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 struct Q_DECL_HIDDEN KisApplicationArguments::Private
 {

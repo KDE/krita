@@ -18,7 +18,7 @@
 
 #include "kis_macro_player.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

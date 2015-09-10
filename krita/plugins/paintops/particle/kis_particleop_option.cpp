@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_particleop_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QWidget>
 #include <QRadioButton>

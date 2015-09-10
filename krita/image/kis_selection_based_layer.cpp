@@ -20,7 +20,7 @@
 
 #include "kis_selection_based_layer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_debug.h"
 
 #include <KoCompositeOpRegistry.h>

@@ -17,7 +17,7 @@
  */
 
 #include "kis_base_node.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoProperties.h>

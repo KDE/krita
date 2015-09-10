@@ -32,7 +32,7 @@
 
 #include <kis_transaction.h>
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcombobox.h>
 #include <kglobal.h>
 

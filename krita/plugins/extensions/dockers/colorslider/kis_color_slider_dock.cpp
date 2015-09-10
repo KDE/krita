@@ -24,7 +24,7 @@
 #include <QBitArray>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include "kis_config_notifier.h"
 #include <kconfiggroup.h>

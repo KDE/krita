@@ -21,7 +21,7 @@
 #include <KoConfig.h>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif

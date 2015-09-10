@@ -23,7 +23,7 @@
 #include <QPainter>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <canvas/kis_grid_manager.h>
 #include <canvas/kis_canvas2.h>

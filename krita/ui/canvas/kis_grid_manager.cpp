@@ -23,7 +23,7 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 

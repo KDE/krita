@@ -21,7 +21,7 @@
 
 //#define BENCHMARK
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
 #include <kis_color_option.h>

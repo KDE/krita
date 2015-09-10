@@ -25,7 +25,7 @@
 
 #include "kis_brush_based_paintop.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_types.h>
 #include <kis_paintop_factory.h>

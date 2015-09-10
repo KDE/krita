@@ -20,7 +20,7 @@
 
 #include "kis_paintop_list_widget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"

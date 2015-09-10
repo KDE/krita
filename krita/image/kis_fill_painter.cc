@@ -35,7 +35,7 @@
 #include <QRect>
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoUpdater.h>
 

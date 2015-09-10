@@ -22,7 +22,7 @@
 #include <QListWidget>
 #include <QImage>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>

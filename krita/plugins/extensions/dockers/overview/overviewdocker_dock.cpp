@@ -21,7 +21,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstatusbar.h>
 
 #include "kis_canvas2.h"

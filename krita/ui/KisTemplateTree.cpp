@@ -30,7 +30,7 @@
 
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
 #include <KisTemplate.h>

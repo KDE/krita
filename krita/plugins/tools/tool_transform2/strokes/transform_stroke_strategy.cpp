@@ -23,7 +23,7 @@
 
 #include "kis_node_progress_proxy.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_node.h>
 #include <kis_external_layer_iface.h>
 #include <kis_transaction.h>

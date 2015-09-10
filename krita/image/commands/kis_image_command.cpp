@@ -18,7 +18,7 @@
  */
 
 #include "kis_image_commands.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"

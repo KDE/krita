@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>

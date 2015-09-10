@@ -28,7 +28,7 @@
 #include <QDesktopServices>
 #include <QMenu>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 
 #include <KoIcon.h>

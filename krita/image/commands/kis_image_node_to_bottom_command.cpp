@@ -19,7 +19,7 @@
 #include "kis_image_node_to_bottom_command.h"
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_image.h"
 #include "kis_undo_adapter.h"

@@ -25,7 +25,7 @@
 #include <kis_debug.h>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_fill_painter.h>
 #include <kis_image.h>

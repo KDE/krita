@@ -28,7 +28,7 @@
 
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 

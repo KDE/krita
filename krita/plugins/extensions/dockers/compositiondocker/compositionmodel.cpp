@@ -20,7 +20,7 @@
 #include <KoIcon.h>
 
 #include <QAction>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 CompositionModel::CompositionModel(QObject* parent): QAbstractTableModel(parent)
 {

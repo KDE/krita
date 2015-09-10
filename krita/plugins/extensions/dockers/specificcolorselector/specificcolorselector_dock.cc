@@ -17,7 +17,7 @@
 
 #include "specificcolorselector_dock.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QLayout>
 
 #include <kis_layer.h>

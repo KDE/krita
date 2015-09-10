@@ -22,7 +22,7 @@
 
 #include "kis_brush_mask_applicator_base.h" // vc.h must come first
 #include <KoID.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kritaimage_export.h"
 

@@ -26,7 +26,7 @@
 #include <QColor>
 #include <QToolButton>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <widgets/kis_preset_chooser.h>
 #include <kis_image.h>

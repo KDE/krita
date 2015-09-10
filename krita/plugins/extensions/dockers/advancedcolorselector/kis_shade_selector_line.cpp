@@ -24,7 +24,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_canvas2.h"

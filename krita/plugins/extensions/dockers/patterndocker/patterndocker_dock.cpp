@@ -20,7 +20,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_canvas_resource_provider.h>
 #include <kis_pattern_chooser.h>

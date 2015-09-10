@@ -20,7 +20,7 @@
 #include "kis_actions_editor_dialog.h"
 #include "kis_actions_editor.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KDialog(parent),
         m_actionsEditor(new KisActionsEditor(this))

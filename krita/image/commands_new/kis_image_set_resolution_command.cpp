@@ -18,7 +18,7 @@
 
 #include "kis_image_set_resolution_command.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_image.h>
 
 

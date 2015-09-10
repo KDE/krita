@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QIcon>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_canvas2.h>
 #include "kis_cursor.h"
 #include "KisViewManager.h"

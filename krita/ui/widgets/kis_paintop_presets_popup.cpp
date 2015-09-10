@@ -33,7 +33,7 @@
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <kis_icon_utils.h>

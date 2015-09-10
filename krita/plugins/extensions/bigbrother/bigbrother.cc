@@ -22,7 +22,7 @@
 #include <kis_action.h>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoUpdater.h>

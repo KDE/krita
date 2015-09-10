@@ -29,7 +29,7 @@
 #include <QSortFilterProxyModel>
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoResourceItemChooser.h>

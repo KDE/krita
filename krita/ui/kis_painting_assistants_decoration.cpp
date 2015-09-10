@@ -22,7 +22,7 @@
 
 #include <QList>
 #include <QPointF>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
 #include "kis_debug.h"

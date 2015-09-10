@@ -19,7 +19,7 @@
 #include "kis_paintop_registry.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoGenericRegistry.h>
 #include <KoPluginLoader.h>

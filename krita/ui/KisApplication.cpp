@@ -30,7 +30,7 @@
 #include <KoIcon.h>
 
 #include <kcrash.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>

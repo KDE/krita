@@ -20,7 +20,7 @@
 
 class QIODevice;
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <QString>
 #include <QBuffer>

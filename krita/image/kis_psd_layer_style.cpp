@@ -23,7 +23,7 @@
 #include <psd.h>
 #include <psd_utils.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_global.h"
 

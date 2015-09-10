@@ -34,7 +34,7 @@
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 const int STEP = 25;
 

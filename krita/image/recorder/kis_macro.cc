@@ -20,7 +20,7 @@
 #include <QDomNode>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_image.h"
 #include "recorder/kis_recorded_action.h"

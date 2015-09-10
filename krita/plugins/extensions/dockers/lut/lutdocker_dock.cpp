@@ -31,7 +31,7 @@
 #include <QDesktopWidget>
 #include <QToolButton>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KisMainWindow.h>
 #include <KoFileDialog.h>

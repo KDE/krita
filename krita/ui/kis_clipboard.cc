@@ -27,7 +27,7 @@
 #include <QMessageBox>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include "KoColorSpace.h"

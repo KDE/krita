@@ -24,7 +24,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoAbstractGradient.h>
 #include <KoResource.h>
 #include <KoSegmentGradient.h>

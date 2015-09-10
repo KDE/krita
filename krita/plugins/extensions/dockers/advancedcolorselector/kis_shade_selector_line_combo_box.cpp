@@ -20,7 +20,7 @@
 #include <QGridLayout>
 #include <QPainter>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_shade_selector_line.h"
 #include "kis_shade_selector_line_combo_box_popup.h"

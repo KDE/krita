@@ -17,7 +17,7 @@
  */
 #include "experiment_paintop_plugin.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

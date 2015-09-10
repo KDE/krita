@@ -20,7 +20,7 @@
 
 #include <QPainter>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasController.h>
 

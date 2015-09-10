@@ -38,7 +38,7 @@
 #include <QFile>
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QUrl>
 
 #include <KoColorSpace.h>

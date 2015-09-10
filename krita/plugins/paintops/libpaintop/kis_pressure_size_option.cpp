@@ -18,7 +18,7 @@
  */
 #include "kis_pressure_size_option.h"
 #include "kis_pressure_opacity_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_painter.h>
 #include <KoColor.h>
 

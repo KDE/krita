@@ -18,7 +18,7 @@
 
 #include "dlg_offsetimage.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize imageSize)

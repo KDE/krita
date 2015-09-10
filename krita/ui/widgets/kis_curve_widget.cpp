@@ -44,7 +44,7 @@
 
 #include <kis_debug.h>
 #include <kis_config.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Local includes.
 

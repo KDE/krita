@@ -17,7 +17,7 @@
  */
 
 #include "kis_density_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisDensityOption::KisDensityOption()
     : KisCurveOption("Density", KisPaintOpOption::GENERAL, false)

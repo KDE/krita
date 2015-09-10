@@ -23,7 +23,7 @@
 #include <QPointer>
 #include <QHash>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>

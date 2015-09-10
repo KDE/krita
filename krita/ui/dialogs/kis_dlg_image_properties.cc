@@ -28,7 +28,7 @@
 #include <QPlainTextEdit>
 #include <QTextEdit>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <KoColorSpace.h>

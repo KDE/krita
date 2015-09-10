@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_slider_spin_box.h>
 

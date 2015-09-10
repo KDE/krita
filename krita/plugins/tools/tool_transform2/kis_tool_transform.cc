@@ -37,7 +37,7 @@
 #include <QMatrix4x4>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPointerEvent.h>
 #include <KoID.h>

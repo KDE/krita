@@ -23,7 +23,7 @@
 
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoDockFactoryBase.h>
 

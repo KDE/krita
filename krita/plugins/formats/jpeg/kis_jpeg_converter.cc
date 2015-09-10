@@ -40,7 +40,7 @@ extern "C" {
 
 #include <QMessageBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QUrl>
 
 #include <KoDocumentInfo.h>

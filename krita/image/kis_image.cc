@@ -32,7 +32,7 @@
 #include <QRegion>
 #include <QtConcurrent>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"

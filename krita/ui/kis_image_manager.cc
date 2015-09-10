@@ -22,7 +22,7 @@
 #include <QDesktopServices>
 
 #include <kaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QUrl>
 #include <kcolordialog.h>
 

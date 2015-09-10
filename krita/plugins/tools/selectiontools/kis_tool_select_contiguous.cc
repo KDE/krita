@@ -32,7 +32,7 @@
 #include <QHBoxLayout>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include "KoPointerEvent.h"

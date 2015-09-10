@@ -22,7 +22,7 @@
 #define KIS_OPERATION_UI_WIDGET_FACTORY_H
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_operation_ui_factory.h"
 #include "operations/kis_operation_ui_widget.h"

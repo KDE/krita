@@ -21,7 +21,7 @@
 
 #include <kis_meta_data_io_backend.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KisIptcIO : public KisMetaData::IOBackend
 {

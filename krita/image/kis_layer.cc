@@ -21,7 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>

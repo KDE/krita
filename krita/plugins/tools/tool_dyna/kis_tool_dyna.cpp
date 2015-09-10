@@ -23,7 +23,7 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include "KoPointerEvent.h"

@@ -55,7 +55,7 @@
 #include "KoID.h"
 #include <KoConfigAuthorPage.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>

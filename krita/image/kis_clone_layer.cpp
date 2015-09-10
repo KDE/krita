@@ -19,7 +19,7 @@
 #include "kis_clone_layer.h"
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 

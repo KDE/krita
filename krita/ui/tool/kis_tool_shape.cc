@@ -33,7 +33,7 @@
 #include <KoPatternBackground.h>
 #include <KoDocumentResourceManager.h>
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoPathShape.h>
 
 #include <kis_canvas_resource_provider.h>

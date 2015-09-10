@@ -29,7 +29,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>

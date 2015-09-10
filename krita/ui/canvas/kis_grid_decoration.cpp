@@ -23,7 +23,7 @@
 
 #include <QPainter>
 #include <QPen>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_grid_painter_configuration.h"
 #include "kis_config.h"

@@ -55,7 +55,7 @@
 #include <kfileitem.h>
 #include <kglobalsettings.h>
 #include <khelpmenu.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
 #include <QMessageBox>

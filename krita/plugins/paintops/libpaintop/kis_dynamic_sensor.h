@@ -25,7 +25,7 @@
 
 #include <KoID.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_serializable_configuration.h"
 #include "kis_curve_label.h"

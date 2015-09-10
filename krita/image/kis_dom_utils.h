@@ -24,7 +24,7 @@
 #include <QVector>
 #include <QDomElement>
 #include <QLocale>
-#include "klocale.h"
+#include "klocalizedstring.h"
 #include "kritaimage_export.h"
 #include "kis_debug.h"
 

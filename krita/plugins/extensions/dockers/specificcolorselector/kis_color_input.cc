@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 
 #include <KoChannelInfo.h>

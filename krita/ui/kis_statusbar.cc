@@ -29,7 +29,7 @@
 
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

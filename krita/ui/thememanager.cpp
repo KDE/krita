@@ -42,7 +42,7 @@
 #include <kmenu.h>
 #include <QMessageBox>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>

@@ -44,7 +44,7 @@
 
 #include <kis_debug.h>
 #include <kmenu.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KisDocumentSectionView.h>

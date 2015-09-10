@@ -21,7 +21,7 @@
 #include <QVarLengthArray>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_types.h"
 #include "KisViewManager.h"

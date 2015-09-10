@@ -20,7 +20,7 @@
 
 #include "kis_rate_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_painter.h>
 #include <widgets/kis_curve_widget.h>

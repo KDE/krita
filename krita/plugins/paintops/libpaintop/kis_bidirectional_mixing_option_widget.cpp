@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_bidirectional_mixing_option_widget.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QLabel>
 #include <kis_properties_configuration.h>

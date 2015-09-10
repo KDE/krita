@@ -21,7 +21,7 @@
 #include <QMouseEvent>
 #include <QTabletEvent>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_canvas_decoration.h"
 #include "kis_paintop_transformation_connector.h"

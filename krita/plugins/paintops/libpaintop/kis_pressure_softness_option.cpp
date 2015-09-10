@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "kis_pressure_softness_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisPressureSoftnessOption::KisPressureSoftnessOption()
     : KisCurveOption("Softness", KisPaintOpOption::GENERAL, false, 1.0, 0.1, 1.0)

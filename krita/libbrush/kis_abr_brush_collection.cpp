@@ -33,7 +33,7 @@
 #include <QString>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
 

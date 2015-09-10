@@ -20,7 +20,7 @@
 
 #include <QTest>
 #include <QCoreApplication>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <qtest_kde.h>
 #include "../../../../libpsd/psd_utils.h"
 #include <QByteArray>

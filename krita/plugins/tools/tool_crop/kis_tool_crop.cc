@@ -35,7 +35,7 @@
 #include <QVector>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <KoCanvasBase.h>

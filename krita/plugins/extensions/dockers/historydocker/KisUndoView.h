@@ -64,7 +64,7 @@
 #include <QAction>
 #include <QMenu>
 #include <kis_types.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 #include "kis_canvas2.h"
 

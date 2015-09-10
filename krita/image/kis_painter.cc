@@ -40,7 +40,7 @@
 #include <kundo2command.h>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>

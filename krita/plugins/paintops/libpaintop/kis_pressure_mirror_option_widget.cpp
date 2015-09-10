@@ -24,7 +24,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_pressure_mirror_option.h"
 

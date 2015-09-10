@@ -22,7 +22,7 @@
 #include "KoColorSpace.h"
 #include "kis_image.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace)

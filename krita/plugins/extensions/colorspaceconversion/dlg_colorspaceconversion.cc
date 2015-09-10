@@ -26,7 +26,7 @@
 #include <QComboBox>
 #include <QList>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include "KoColorProfile.h"

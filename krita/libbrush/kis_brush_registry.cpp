@@ -20,7 +20,7 @@
 #include <QString>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPluginLoader.h>
 

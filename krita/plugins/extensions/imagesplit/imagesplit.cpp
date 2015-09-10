@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QDesktopServices>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
 

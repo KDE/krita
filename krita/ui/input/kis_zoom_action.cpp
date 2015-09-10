@@ -20,7 +20,7 @@
 
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>

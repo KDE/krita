@@ -18,7 +18,7 @@
 
 #include "kis_pressure_texture_strength_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisPressureTextureStrengthOption::KisPressureTextureStrengthOption()
     : KisCurveOption("Texture/Strength/", KisPaintOpOption::TEXTURE, false)

@@ -27,7 +27,7 @@
 #include <QOpenGLContext>
 #endif
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>

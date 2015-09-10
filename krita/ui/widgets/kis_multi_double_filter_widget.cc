@@ -25,7 +25,7 @@
 #include <knuminput.h>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
         : KDoubleNumInput(parent)

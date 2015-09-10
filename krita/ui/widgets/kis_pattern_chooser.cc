@@ -26,7 +26,7 @@
 #include <QResizeEvent>
 #include <QShowEvent>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>

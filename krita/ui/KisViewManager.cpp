@@ -46,7 +46,7 @@
 
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
 #include <QMessageBox>

@@ -36,7 +36,7 @@
 #include <QMenu>
 
 #include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>

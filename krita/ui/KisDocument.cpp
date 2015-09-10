@@ -54,7 +54,7 @@
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ksavefile.h>
 #include <kis_debug.h>
 #include <kstandarddirs.h>

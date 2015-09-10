@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QFontMetrics>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
 #include <kglobal.h>

@@ -23,7 +23,7 @@
 #include "kis_tool_fill.h"
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QLabel>
 #include <QLayout>

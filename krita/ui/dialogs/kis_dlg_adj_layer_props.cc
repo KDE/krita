@@ -17,7 +17,7 @@
  */
 
 #include "kis_dlg_adj_layer_props.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QLabel>
 #include <QVBoxLayout>

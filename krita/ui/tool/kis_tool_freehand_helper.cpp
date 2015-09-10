@@ -21,7 +21,7 @@
 #include <QTimer>
 #include <QQueue>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceManager.h>

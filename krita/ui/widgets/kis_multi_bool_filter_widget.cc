@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 #include <filter/kis_filter_configuration.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisBoolWidgetParam::KisBoolWidgetParam(bool ninitvalue, const QString & nlabel, const QString & nname) :
         initvalue(ninitvalue),

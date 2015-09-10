@@ -20,7 +20,7 @@
 
 #include <QString>
 #include <QMessageBox>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_assert_exception.h>
 #include <string>
 

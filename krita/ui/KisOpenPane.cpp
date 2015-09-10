@@ -36,7 +36,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kis_debug.h>
 #include <QUrl>

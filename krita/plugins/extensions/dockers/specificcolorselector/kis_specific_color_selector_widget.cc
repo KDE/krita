@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QSpacerItem>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <kglobal.h>

@@ -21,7 +21,7 @@
 
 #include <cmath>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QtGlobal>
 #include <QLayout>

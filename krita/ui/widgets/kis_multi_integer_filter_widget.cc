@@ -23,7 +23,7 @@
 #include <QGridLayout>
 #include <filter/kis_filter_configuration.h>
 #include <knuminput.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
     : KIntNumInput(parent)

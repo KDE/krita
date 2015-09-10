@@ -19,7 +19,7 @@
 
 #include "kis_image_resize_command.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_image.h"
 
 

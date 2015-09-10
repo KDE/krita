@@ -26,7 +26,7 @@
 #include <QHash>
 #include <QIODevice>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorProfile.h>

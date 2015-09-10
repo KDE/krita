@@ -27,7 +27,7 @@
 
 #include <kis_debug.h>
 #include <kmenu.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kaction.h>
 
 #include <KoSegmentGradient.h>

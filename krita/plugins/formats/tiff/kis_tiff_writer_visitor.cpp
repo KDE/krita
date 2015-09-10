@@ -20,7 +20,7 @@
 #include "kis_tiff_writer_visitor.h"
 
 #include <QMessageBox>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

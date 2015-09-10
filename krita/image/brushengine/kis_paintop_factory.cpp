@@ -17,7 +17,7 @@
  */
 #include "kis_paintop_factory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoColorSpace.h>
 
 KisPaintOpFactory::KisPaintOpFactory(const QStringList & whiteListedCompositeOps)

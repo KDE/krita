@@ -17,7 +17,7 @@
  */
 #include "kis_compositeop_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 
 #include <kis_cmb_composite.h>

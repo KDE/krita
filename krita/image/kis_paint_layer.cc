@@ -22,7 +22,7 @@
 #include "kis_paint_layer.h"
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoColorSpace.h>

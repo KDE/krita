@@ -19,7 +19,7 @@
 #include "image_strip_scene.h"
 #include "image_view.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>

@@ -18,7 +18,7 @@
 
 #include "dlg_clonesarray.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpaceConstants.h>
 

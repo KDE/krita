@@ -29,7 +29,7 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>

@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_node.h"
 #include "commands/kis_node_opacity_command.h"
 

@@ -21,7 +21,7 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 
-#include "klocale.h"
+#include "klocalizedstring.h"
 
 #include "kis_signals_blocker.h"
 #include "kis_slider_spin_box.h"

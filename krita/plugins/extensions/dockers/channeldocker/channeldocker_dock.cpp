@@ -20,7 +20,7 @@
 #include <QGridLayout>
 #include <QTableView>
 #include <QHeaderView>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
 #include "channelmodel.h"

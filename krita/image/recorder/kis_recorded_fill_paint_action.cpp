@@ -20,7 +20,7 @@
 
 #include <QDomElement>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_image.h"
 #include <kis_fill_painter.h>

@@ -22,7 +22,7 @@
 #include <QtNetwork>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
 #include <calligraversion.h>

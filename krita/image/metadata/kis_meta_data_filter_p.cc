@@ -19,7 +19,7 @@
 #include "kis_meta_data_filter_p.h"
 #include <QDate>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <calligraversion.h>
 
 #include "kis_meta_data_entry.h"

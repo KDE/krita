@@ -26,7 +26,7 @@
 #include <QThread>
 #include <QAction>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 
 #include <KoIcon.h>

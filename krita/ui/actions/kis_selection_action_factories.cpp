@@ -18,7 +18,7 @@
 
 #include "kis_selection_action_factories.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kundo2command.h>
 
 #include <KisMainWindow.h>

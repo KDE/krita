@@ -25,7 +25,7 @@
 
 #include <KoColorSpaceConstants.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_mimedata.h"
 #include <kis_debug.h>

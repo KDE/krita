@@ -33,7 +33,7 @@
 #include <math.h>
 
 // For KoAspectButton
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 

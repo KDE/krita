@@ -28,7 +28,7 @@
 #include <QDesktopServices>
 
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QMessageBox>
 #include <kfilewidget.h>
 #include <QUrl>

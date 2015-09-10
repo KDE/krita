@@ -18,7 +18,7 @@
  */
 
 #include "kis_dlg_adjustment_layer.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QGroupBox>
 #include <QLabel>

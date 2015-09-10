@@ -17,7 +17,7 @@
  */
 
 #include "kis_offset_scale_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisOffsetScaleOption::KisOffsetScaleOption()
     : KisCurveOption("Offset scale", KisPaintOpOption::GENERAL, false)

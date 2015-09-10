@@ -22,7 +22,7 @@
 
 #include <math.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include "kis_debug.h"

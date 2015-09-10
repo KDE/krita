@@ -18,7 +18,7 @@
 
 #include "kis_generator_layer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_debug.h"
 
 #include <KoIcon.h>

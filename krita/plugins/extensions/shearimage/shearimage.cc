@@ -20,7 +20,7 @@
 
 #include "shearimage.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
 #include <kis_image.h>

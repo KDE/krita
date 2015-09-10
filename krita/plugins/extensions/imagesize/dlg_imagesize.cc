@@ -25,7 +25,7 @@
 #include <KoUnit.h>
 #include <kis_size_group.h>
 #include <klocalizedstring.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <kis_filter_strategy.h>

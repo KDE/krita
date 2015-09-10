@@ -22,7 +22,7 @@
 #include <KoStore.h>
 
 #include <kwidgetitemdelegate.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

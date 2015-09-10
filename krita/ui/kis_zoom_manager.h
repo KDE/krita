@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoZoomMode.h>
 #include <KoZoomAction.h>

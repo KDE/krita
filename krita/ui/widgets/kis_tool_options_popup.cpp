@@ -34,7 +34,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 #include "kis_config.h"

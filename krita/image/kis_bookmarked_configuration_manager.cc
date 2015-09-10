@@ -22,7 +22,7 @@
 #include <QString>
 
 #include <kconfig.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 

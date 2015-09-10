@@ -30,7 +30,7 @@
 #include <QBuffer>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceMaths.h>

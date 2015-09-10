@@ -19,7 +19,7 @@
 
 #include "dlg_layersplit.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include <KisViewManager.h>

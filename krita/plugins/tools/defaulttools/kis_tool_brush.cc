@@ -24,7 +24,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kglobal.h>

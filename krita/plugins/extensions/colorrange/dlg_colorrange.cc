@@ -29,7 +29,7 @@
 #include <QColor>
 #include <QRadioButton>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include <KoColorConversions.h>

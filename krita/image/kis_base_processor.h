@@ -22,7 +22,7 @@
 
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kshortcut.h>
 
 #include "KoID.h"

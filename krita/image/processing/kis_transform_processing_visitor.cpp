@@ -18,7 +18,7 @@
 
 #include "kis_transform_processing_visitor.h"
 
-#include "klocale.h"
+#include "klocalizedstring.h"
 
 #include <KoUpdater.h>
 

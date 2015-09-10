@@ -25,7 +25,7 @@
 #include <QTimer>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class DocumentListModel::Private
 {

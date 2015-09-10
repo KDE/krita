@@ -32,7 +32,7 @@
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstatusbar.h>
 #include <kis_debug.h>
 #include <QUrl>

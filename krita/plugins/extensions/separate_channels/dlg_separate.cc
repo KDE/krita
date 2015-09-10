@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QComboBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,

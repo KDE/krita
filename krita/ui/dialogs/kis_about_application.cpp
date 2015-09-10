@@ -18,6 +18,8 @@
 #include "kis_about_application.h"
 
 #include <kis_debug.h>
+
+#include <QStandardPaths>
 #include <QTabWidget>
 #include <QLabel>
 #include <QTextEdit>
@@ -28,7 +30,7 @@
 #include <QApplication>
 #include <QFile>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "../data/splash/splash_screen.xpm"
 #include "kis_splash_screen.h"

@@ -18,7 +18,7 @@
 
 #include "kis_color_selector_ng_dock.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_canvas2.h"
 
 #include "kis_color_selector_ng_docker_widget.h"

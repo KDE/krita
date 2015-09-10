@@ -24,7 +24,7 @@
 #endif
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorConversions.h>
 #include <KoColorModelStandardIds.h>

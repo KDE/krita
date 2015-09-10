@@ -21,7 +21,7 @@
 #include <kundo2command.h>
 #include <QRect>
 #include "kis_types.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "filter/kis_filter_configuration.h"
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"

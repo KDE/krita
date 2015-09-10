@@ -19,7 +19,7 @@
 #define _KIS_OVERLAYMODE_OPTION_H_
 
 #include <kis_paintop_option.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QLabel>
 

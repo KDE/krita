@@ -50,7 +50,7 @@
 #include <kdesktopfile.h>
 #include <QMessageBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

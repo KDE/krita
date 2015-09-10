@@ -26,7 +26,7 @@
 #include <QThread>
 
 #include <QMessageBox>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>

@@ -22,7 +22,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCompositeOp.h>
 #include <KoInputDevice.h>

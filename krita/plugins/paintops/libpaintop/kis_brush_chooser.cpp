@@ -31,7 +31,7 @@
 #include <QGridLayout>
 #include <QPainter>
 #include <QAbstractItemDelegate>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoResourceItemChooser.h>
 

@@ -26,7 +26,7 @@
 #include <QApplication>
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_config.h>

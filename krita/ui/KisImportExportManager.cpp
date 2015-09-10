@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QByteArray>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QMessageBox>
 #include <klibloader.h>
 #include <ksqueezedtextlabel.h>

@@ -53,7 +53,7 @@ signals:
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();
-    void uploadFrame();
+    void uploadFrame(int frame);
 
 private:
     struct Private;

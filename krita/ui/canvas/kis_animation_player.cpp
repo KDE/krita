@@ -123,9 +123,7 @@ int KisAnimationPlayer::currentTime()
 
 void KisAnimationPlayer::displayFrame(int time)
 {
-    m_d->playing = true;
-    m_d->currentFrame = time;
-    uploadFrame();
+    uploadFrame(time);
 }
 
 void KisAnimationPlayer::slotUpdate()
@@ -133,12 +131,12 @@ void KisAnimationPlayer::slotUpdate()
     m_d->currentFrame++;
     if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
 
-    uploadFrame();
+    uploadFrame(m_d->currentFrame);
 }
 
-void KisAnimationPlayer::uploadFrame()
+void KisAnimationPlayer::uploadFrame(int frame)
 {
-    if (m_d->canvas->frameCache()->uploadFrame(m_d->currentFrame)) {
+    if (m_d->canvas->frameCache()->uploadFrame(frame)) {
         m_d->canvas->updateCanvas();
         emit sigFrameChanged();
     }

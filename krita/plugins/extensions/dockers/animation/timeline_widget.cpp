@@ -122,9 +122,10 @@ void TimelineWidget::drawRuler(QPainter &painter, QPaintEvent *e, bool dark)
 
 void TimelineWidget::drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark)
 {
-    int time = m_canvas->animationPlayer()->isPlaying() ?
-                m_canvas->animationPlayer()->currentTime() :
-                m_image->animationInterface()->currentUITime();
+    int time = m_isScrubbing ? m_scrubTime :
+               m_canvas->animationPlayer()->isPlaying() ?
+               m_canvas->animationPlayer()->currentTime() :
+               m_image->animationInterface()->currentUITime();
 
     int x = timeToPosition(time) + 4;
     if (m_timelineView->isWithingView(time)) {
@@ -213,11 +214,15 @@ void TimelineWidget::scrubTo(int time, bool preview)
     if (!m_image) return;
 
     if (preview) {
+        m_isScrubbing = true;
+        m_scrubTime = time;
+
         m_canvas->animationPlayer()->displayFrame(time);
         update();
     } else {
         m_image->animationInterface()->requestTimeSwitchWithUndo(time);
-        m_canvas->animationPlayer()->stop();
+
+        m_isScrubbing = false;
     }
 }
 

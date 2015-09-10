@@ -65,6 +65,9 @@ private:
     KisImageWSP m_image;
     KisAnimationFrameCacheSP m_cache;
 
+    bool m_isScrubbing;
+    int m_scrubTime;
+
     void drawRuler(QPainter &painter, QPaintEvent *e, bool dark);
     void drawPlayhead(QPainter &painter, QPaintEvent *e, bool dark);
 };

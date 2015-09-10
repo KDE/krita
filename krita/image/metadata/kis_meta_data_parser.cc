@@ -32,7 +32,7 @@ Parser::~Parser()
 #include <QRegExp>
 #include <QStringList>
 #include <QVariant>
-#include <kdatetime.h>
+
 
 Value IntegerParser::parse(const QString& _v) const
 {
@@ -57,7 +57,7 @@ Value DateParser::parse(const QString& _v) const
     } else if (_v.length() <= 19) {
         return Value(QDateTime::fromString(_v, "yyyy-MM-ddThh:mm:ss"));
     } else {
-        return Value(KDateTime::fromString(_v).toUtc().dateTime());
+        return Value(QDateTime::fromString(_v));
     }
 }
 

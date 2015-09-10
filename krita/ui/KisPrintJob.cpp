@@ -89,9 +89,5 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
         deleteLater();
 }
 
-QList<QWidget*> KisPrintJob::createOptionWidgets() const
-{
-    return QList<QWidget*>();
-}
 
 #include <KisPrintJob.moc>

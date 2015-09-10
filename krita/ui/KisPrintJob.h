@@ -60,10 +60,6 @@ public:
     /// Returns the printer that is used for this print job so others can alter the details of the print-job.
      QPrinter &printer() { return m_printer; }
 
-    /// If this print job is used in combination with a printdialog the option widgets this method
-    /// retuns will be shown in the print dialog.
-     QList<QWidget*> createOptionWidgets() const;
-
      int documentFirstPage() const {
         return 1;
     }

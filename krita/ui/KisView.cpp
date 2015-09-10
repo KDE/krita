@@ -599,8 +599,7 @@ KoPageLayout KisView::pageLayout() const
 
 QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 {
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
-                                                            printJob->createOptionWidgets(), parent);
+    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), this);
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
     printDialog->setEnabledOptions(printJob->printDialogOptions());
     return printDialog;

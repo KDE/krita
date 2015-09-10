@@ -34,7 +34,7 @@
 #include <QMenu>
 #include <QAction>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>

@@ -22,7 +22,7 @@
 #include "KoZoomTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoZoomToolFactory::KoZoomToolFactory()
         : KoToolFactoryBase("KoZoomToolId")

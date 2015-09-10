@@ -52,7 +52,7 @@
 #include <kedittoolbar.h>
 #include <QTemporaryFile>
 #include <krecentdocument.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>

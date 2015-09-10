@@ -19,7 +19,7 @@
 
 #include "ListItemNumberingCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>

@@ -25,7 +25,7 @@
 #include <QHBoxLayout>
 #include <QFileInfo>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcolordialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>

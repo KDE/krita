@@ -27,7 +27,7 @@
 #include <KoToolBase.h>
 #include <KoToolManager.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 

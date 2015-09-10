@@ -32,7 +32,7 @@
 #include <KoIcon.h>
 
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>

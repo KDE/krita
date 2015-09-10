@@ -41,7 +41,7 @@
 #include <QObject>
 
 #include <kpagedialog.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoShapeController::Private
 {

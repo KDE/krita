@@ -23,7 +23,7 @@
 
 #include "ToCGenerator.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"

@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #ifdef Q_OS_WIN
 #include <float.h>

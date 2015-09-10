@@ -56,7 +56,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <QAction>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kshortcut.h>
 #include <QStack>
 #include <QLabel>

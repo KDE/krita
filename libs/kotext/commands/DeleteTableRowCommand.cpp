@@ -26,7 +26,7 @@
 #include <QTextTableCell>
 #include <QTextTable>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 DeleteTableRowCommand::DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent) :

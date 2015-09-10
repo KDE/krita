@@ -20,7 +20,7 @@
 
 #include "KoResourceModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
 #include <KoResourceServerAdapter.h>

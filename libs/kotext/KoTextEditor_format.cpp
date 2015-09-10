@@ -29,7 +29,7 @@
 #include "styles/KoStyleManager.h"
 #include "commands/ParagraphFormattingCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QFontDatabase>
 #include <QTextBlock>

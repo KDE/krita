@@ -21,7 +21,7 @@
 
 #include "KoPathPointMoveCommand.h"
 #include "KoPathPoint.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoPathPointMoveCommandPrivate
 {

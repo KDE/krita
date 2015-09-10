@@ -70,7 +70,7 @@
 #include "commands/NewSectionCommand.h"
 #include "commands/SplitSectionsCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextList>
 #include <QTextBlock>

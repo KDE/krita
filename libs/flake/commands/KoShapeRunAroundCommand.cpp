@@ -20,7 +20,7 @@
 #include "KoShapeRunAroundCommand.h"
 
 #include <QString>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "KoShape.h"
 
 class Q_DECL_HIDDEN KoShapeRunAroundCommand::Private

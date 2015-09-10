@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <kdatetime.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 //Qt includes
 #include <QColor>

@@ -25,7 +25,7 @@
 // main
 #include <KoDocument.h>
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 // Qt
 #include <QComboBox>
 

@@ -21,7 +21,7 @@
 #include "KoPathBreakAtPointCommand.h"
 
 #include "KoPathPoint.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 /*
  * The algorithm to break a multiple open or closed subpaths is:

@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 
 //KDE headers
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 //Qt Headers
 #include <QAbstractItemView>

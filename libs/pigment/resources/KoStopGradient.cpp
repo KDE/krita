@@ -27,7 +27,7 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"

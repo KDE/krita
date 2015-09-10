@@ -33,7 +33,7 @@
 #include <kpassworddialog.h>
 #include <knewpassworddialog.h>
 #include <kwallet.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfilterdev.h>
 #include <kmessage.h>
 #include <kmessagebox.h>

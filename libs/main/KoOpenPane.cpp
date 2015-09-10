@@ -37,7 +37,7 @@
 #include <QMimeData>
 
 #include <QUrl>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 

@@ -33,7 +33,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfilewidget.h>
 #include <kurlrequester.h>
 #include <kdebug.h>

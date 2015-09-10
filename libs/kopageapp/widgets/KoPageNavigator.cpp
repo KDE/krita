@@ -28,7 +28,7 @@
 #include <KoIcon.h>
 // KDE
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 // Qt
 #include <QLabel>

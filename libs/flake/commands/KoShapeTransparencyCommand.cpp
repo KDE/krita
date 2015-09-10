@@ -20,7 +20,7 @@
 #include "KoShapeTransparencyCommand.h"
 #include "KoShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoShapeTransparencyCommand::Private
 {

@@ -24,7 +24,7 @@
 #include "KoShapeGroup.h"
 #include "KoShapeContainer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // static
 KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)

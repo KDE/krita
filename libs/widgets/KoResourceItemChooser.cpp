@@ -39,7 +39,7 @@
 #include <QToolButton>
 #include <QWheelEvent>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #ifdef GHNS
 #include <attica/version.h>

@@ -27,7 +27,7 @@
 #include <KoShapeController.h>
 #include <KoParagraphStyle.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <QTextDocument>

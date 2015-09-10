@@ -22,7 +22,7 @@
 #include "KoShapeGroupCommand_p.h"
 #include "KoShapeContainer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
         const QList<KoShape*> &topLevelShapes, KUndo2Command *parent)

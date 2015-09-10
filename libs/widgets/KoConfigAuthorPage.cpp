@@ -26,10 +26,11 @@
 #include <KoGlobal.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <QLineEdit>
 #include <QStackedWidget>

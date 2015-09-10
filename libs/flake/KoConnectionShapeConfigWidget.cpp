@@ -20,7 +20,7 @@
 #include "KoConnectionShapeConfigWidget.h"
 #include "commands/KoConnectionShapeTypeCommand.h"
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {

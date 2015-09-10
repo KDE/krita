@@ -19,7 +19,7 @@
 
 #include "KoPAPageInsertCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"

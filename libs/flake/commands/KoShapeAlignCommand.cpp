@@ -23,7 +23,7 @@
 #include "KoShapeGroup.h"
 #include "commands/KoShapeMoveCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 // #include <kdebug.h>
 
 class Q_DECL_HIDDEN KoShapeAlignCommand::Private

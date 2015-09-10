@@ -30,7 +30,7 @@
 #include <QGridLayout>
 
 #include <klineedit.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 

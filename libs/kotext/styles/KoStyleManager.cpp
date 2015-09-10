@@ -49,7 +49,7 @@
 #include <QUrl>
 #include <QBuffer>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoStyleManager::Private
 {

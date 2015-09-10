@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kselectaction.h>
 #include <kglobal.h>
 #include <kicon.h>

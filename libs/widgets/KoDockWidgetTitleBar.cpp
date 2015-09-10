@@ -25,7 +25,7 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QAbstractButton>
 #include <QAction>

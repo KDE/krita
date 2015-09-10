@@ -22,7 +22,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeBasedDocumentBase.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoShapeDeleteCommand::Private
 {

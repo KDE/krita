@@ -31,7 +31,7 @@
 #include <kcharsets.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 

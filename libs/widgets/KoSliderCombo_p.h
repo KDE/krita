@@ -37,7 +37,7 @@
 #include <QDoubleSpinBox>
 #include <QDesktopWidget>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 class KoSliderComboContainer : public QMenu

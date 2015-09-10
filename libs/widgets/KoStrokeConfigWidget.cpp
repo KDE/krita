@@ -41,7 +41,7 @@
 #include <QSizePolicy>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoIcon.h>

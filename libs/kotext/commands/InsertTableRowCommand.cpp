@@ -26,7 +26,7 @@
 #include <QTextTableCell>
 #include <QTextTable>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 InsertTableRowCommand::InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, KUndo2Command *parent)

@@ -40,7 +40,7 @@
 #include <KoTextMeta.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kaction.h>
 
 #include <QWeakPointer>

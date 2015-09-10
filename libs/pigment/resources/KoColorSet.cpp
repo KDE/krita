@@ -32,7 +32,7 @@
 #include <QPainter>
 
 #include <DebugPigment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"

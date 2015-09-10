@@ -25,7 +25,7 @@
 #include <QGridLayout>
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <klineedit.h>
 
 #include "KoResource.h"

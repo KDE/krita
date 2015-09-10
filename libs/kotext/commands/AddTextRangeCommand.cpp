@@ -22,7 +22,7 @@
 
 #include "AddTextRangeCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <KoTextRangeManager.h>

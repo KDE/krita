@@ -23,7 +23,7 @@
 
 #include "KoCompositeOpBase.h"
 #include "KoCompositeOpRegistry.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "KoStreamedMath.h"
 
 template<typename channels_type, typename pixel_type>

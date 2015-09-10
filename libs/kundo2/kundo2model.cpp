@@ -57,7 +57,7 @@
 **
 ****************************************************************************/
 #include "kundo2model.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 KUndo2Model::KUndo2Model(QObject *parent)
     : QAbstractItemModel(parent)
 {

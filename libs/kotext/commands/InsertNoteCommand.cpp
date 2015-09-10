@@ -19,7 +19,7 @@
 
 #include "InsertNoteCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>

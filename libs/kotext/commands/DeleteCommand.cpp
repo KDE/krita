@@ -22,7 +22,7 @@
 
 #include "DeleteCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoList.h>
 #include <KoTextEditor.h>

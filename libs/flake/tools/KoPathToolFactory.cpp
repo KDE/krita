@@ -22,7 +22,7 @@
 #include "KoPathShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoPathToolFactory::KoPathToolFactory()
         : KoToolFactoryBase("PathToolFactoryId")

@@ -29,7 +29,7 @@
 #include <kactionmenu.h>
 #include <kpagedialog.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 // Qt
 #include <QVBoxLayout>
 

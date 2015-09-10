@@ -39,7 +39,7 @@
 #include <KoProperties.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QUrl>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>

@@ -33,7 +33,7 @@
 #include "KoShapeBasedDocumentBase.h"
 #include "KoToolSelection.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <QWidget>
 #include <QFile>

@@ -7,7 +7,7 @@ add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
 set(priorityqueue_test_SRCS priorityqueue_test.cpp )
 kde4_add_unit_test(priorityqueue_test TESTNAME libs-komain-priorityQueueTest ${priorityqueue_test_SRCS})
-target_link_libraries(priorityqueue_test KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(priorityqueue_test KF5::I18n KF5::KDELibs4Support Qt5::Test)
 
 ########### next target ###############
 

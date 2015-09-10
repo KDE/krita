@@ -19,7 +19,7 @@
 
 #include "KoPADisplayMasterBackgroundCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoPAPage.h"
 

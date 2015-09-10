@@ -37,7 +37,7 @@
 #include "KoMixColorsOp.h"
 
 #include <DebugPigment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;

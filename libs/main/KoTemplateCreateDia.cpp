@@ -39,7 +39,7 @@
 
 #include <QTemporaryFile>
 #include <klineedit.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 #include <KoDocument.h>
 #include <KoTemplates.h>

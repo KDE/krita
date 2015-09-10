@@ -18,7 +18,7 @@
  */
 
 #include "KoEventActionAddCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoShape.h"
 #include "KoEventAction.h"

@@ -40,7 +40,7 @@
 #include <KoJsonTrader.h>
 #include <KoConfig.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>

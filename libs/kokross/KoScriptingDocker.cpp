@@ -27,7 +27,7 @@
 #include <QToolBar>
 #include <QBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 

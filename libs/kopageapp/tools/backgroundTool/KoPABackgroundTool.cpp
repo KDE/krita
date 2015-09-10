@@ -24,7 +24,7 @@
 #include <QList>
 
 //KDE includes
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 //Calligra includes
 #include <KoPACanvasBase.h>

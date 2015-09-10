@@ -33,7 +33,7 @@
 
 // kde
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kmessagebox.h>

@@ -54,7 +54,7 @@
 
 #include <QAction>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QPainter>
 #include <QBitmap>
 #include <QTabWidget>

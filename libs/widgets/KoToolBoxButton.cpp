@@ -21,7 +21,7 @@
 
 #include <KoToolManager.h>
 #include <kicon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kshortcut.h>
 
 

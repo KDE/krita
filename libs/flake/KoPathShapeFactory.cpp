@@ -26,7 +26,7 @@
 #include "KoShapeLoadingContext.h"
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>

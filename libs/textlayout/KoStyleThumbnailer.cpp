@@ -33,7 +33,7 @@
 
 #include <stdint.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QCache>
 #include <QFont>

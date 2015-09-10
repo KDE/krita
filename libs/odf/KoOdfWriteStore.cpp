@@ -24,7 +24,7 @@
 
 #include <QTemporaryFile>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>

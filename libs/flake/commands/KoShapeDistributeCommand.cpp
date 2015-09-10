@@ -24,7 +24,7 @@
 #include "KoShape.h"
 #include <QMap>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoShapeDistributeCommand::Private
 {

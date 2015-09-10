@@ -28,7 +28,7 @@
 #include <KoIcon.h>
 
 #include <ktoggleaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QPainter>
 #include <QRectF>
 #include <kdebug.h>

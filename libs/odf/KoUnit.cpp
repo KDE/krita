@@ -25,7 +25,7 @@
 
 #include <QTransform>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kdebug.h>
 

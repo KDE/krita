@@ -29,7 +29,7 @@
 #include <QAction>
 #include <QSharedPointer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoGroupButton.h>
 #include <KoIcon.h>

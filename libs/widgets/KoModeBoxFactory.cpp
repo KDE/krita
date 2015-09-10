@@ -19,7 +19,7 @@
  */
 
 #include "KoModeBoxFactory.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "KoModeBox_p.h"
 #include "KoModeBoxDocker_p.h"
 

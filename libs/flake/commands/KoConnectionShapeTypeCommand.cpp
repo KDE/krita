@@ -18,7 +18,7 @@
  */
 
 #include "KoConnectionShapeTypeCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
     KoConnectionShape * connection, KoConnectionShape::Type type, KUndo2Command *parent)

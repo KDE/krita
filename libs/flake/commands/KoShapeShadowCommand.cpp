@@ -21,7 +21,7 @@
 #include "KoShape.h"
 #include "KoShapeShadow.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoShapeShadowCommand::Private
 {

@@ -24,7 +24,7 @@
 #include "KoShape.h"
 #include "KoShapeStrokeModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoShapeStrokeCommand::Private
 {

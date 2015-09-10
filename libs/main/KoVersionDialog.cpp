@@ -35,7 +35,7 @@
 #include <QTreeWidget>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <QTemporaryFile>
 

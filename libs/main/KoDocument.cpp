@@ -54,7 +54,7 @@
 #include <kmimetype.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ksavefile.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>

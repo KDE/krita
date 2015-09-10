@@ -23,7 +23,7 @@
 #include "KoRdfPrefixMapping.h"
 // KDE
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoSopranoTableModel::KoSopranoTableModel(KoDocumentRdf *rdf)
         : m_rdf(rdf)

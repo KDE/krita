@@ -25,7 +25,7 @@
 #include <QToolButton>
 #include <QBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoZoomInput.h"
 #include "KoIcon.h"

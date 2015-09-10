@@ -36,7 +36,7 @@
 #include <QUrl>
 #include <kdebug.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 

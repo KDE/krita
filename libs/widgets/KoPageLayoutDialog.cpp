@@ -22,7 +22,7 @@
 #include "KoPageLayoutWidget.h"
 #include "KoPagePreviewWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <QCheckBox>

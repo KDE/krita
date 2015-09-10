@@ -36,7 +36,7 @@
 #include <QDesktopWidget>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)

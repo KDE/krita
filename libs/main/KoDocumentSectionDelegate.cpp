@@ -34,7 +34,7 @@
 #include <QStyle>
 #include <QStyleOptionViewItem>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoDocumentSectionDelegate::Private
 {

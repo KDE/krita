@@ -25,7 +25,7 @@
 #include <KoTextEditor.h>
 #include <KoSectionUtils.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kundo2command.h>
 
 SplitSectionsCommand::SplitSectionsCommand(QTextDocument *document, SplitType type, int splitPosition)

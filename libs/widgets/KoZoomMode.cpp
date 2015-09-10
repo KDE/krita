@@ -19,7 +19,7 @@
 */
 
 #include "KoZoomMode.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 const char* const KoZoomMode::modes[] =
 {

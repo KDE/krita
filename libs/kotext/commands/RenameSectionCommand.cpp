@@ -22,7 +22,7 @@
 #include <KoTextDocument.h>
 #include <KoSectionModel.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kundo2command.h>
 
 RenameSectionCommand::RenameSectionCommand(KoSection *section, const QString &newName, QTextDocument *document)

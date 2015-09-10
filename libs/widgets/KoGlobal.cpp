@@ -30,7 +30,7 @@
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 

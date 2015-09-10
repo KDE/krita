@@ -169,11 +169,6 @@ void KoTemplateTree::readGroups()
 
 void KoTemplateTree::readTemplates()
 {
-//     QString dontShow = "imperial";
-// 
-//     if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
-//         dontShow = "metric";
-//     }
     QString dontShow = "hide nothing at all - show all the templates, please, and let the user make the choice";
 
     foreach (KoTemplateGroup* group, m_groups) {

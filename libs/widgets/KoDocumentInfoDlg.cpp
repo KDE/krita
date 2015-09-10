@@ -207,14 +207,14 @@ void KoDocumentInfoDlg::initAboutTab()
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
                                             Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblCreated->setText(s + ", " +
                                         d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
     }
 
@@ -295,14 +295,14 @@ void KoDocumentInfoDlg::slotResetMetaData()
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
                                             Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblCreated->setText(s + ", " +
                                         d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
     }
 

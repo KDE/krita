@@ -71,7 +71,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     setEditable(true);
-    setEditText(KGlobal::locale()->formatNumber(0, d->decimals));
+    setEditText(QLocale().toString(0.0, d->decimals));
 
     connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
     connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
@@ -216,7 +216,7 @@ void KoSliderCombo::wheelEvent(QWheelEvent *e)
 
 void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 {
-    qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
+    qreal value = QLocale().toDouble(thePublic->currentText());
     slider->blockSignals(true);
     slider->setValue(int((value - minimum) * 256 / (maximum - minimum) + 0.5));
     slider->blockSignals(false);
@@ -225,15 +225,15 @@ void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
-    thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + (maximum - minimum)*slidervalue/256, decimals));
+    thePublic->setEditText(QLocale().toString(minimum + (maximum - minimum)*slidervalue/256, decimals));
 
-    qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
+    qreal value = QLocale().toDouble(thePublic->currentText());
     emit thePublic->valueChanged(value, false);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderReleased()
 {
-    qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
+    qreal value = QLocale().toDouble(thePublic->currentText());
     emit thePublic->valueChanged(value, true);
 }
 
@@ -254,7 +254,7 @@ qreal KoSliderCombo::decimals() const
 
 qreal KoSliderCombo::value() const
 {
-    return KGlobal::locale()->readNumber(currentText());
+    return QLocale().toDouble(currentText());
 }
 
 void KoSliderCombo::setDecimals(int dec)
@@ -280,7 +280,7 @@ void KoSliderCombo::setValue(qreal value)
         value = d->minimum;
     if(value > d->maximum)
         value = d->maximum;
-    setEditText(KGlobal::locale()->formatNumber(value, d->decimals));
+    setEditText(QLocale().toString(value, d->decimals));
     d->slider->blockSignals(true);
     d->slider->setValue(int((value - d->minimum) * 256 / (d->maximum - d->minimum) + 0.5));
     d->slider->blockSignals(false);

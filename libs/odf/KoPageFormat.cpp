@@ -150,7 +150,13 @@ KoPageFormat::Format KoPageFormat::formatFromString(const QString & string)
 
 KoPageFormat::Format KoPageFormat::defaultFormat()
 {
-    int qprinter = KGlobal::locale()->pageSize();
+    int qprinter;
+    if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
+        qprinter = (int)QPageSize::Letter;
+    }
+    else {
+        qprinter = (int)QPageSize::A4;
+    }
     for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
         if (pageFormatInfo[ i ].qprinter == qprinter)
             return static_cast<Format>(i);

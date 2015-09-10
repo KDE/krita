@@ -148,7 +148,7 @@ int KoChangeTracker::getFormatChangeId(const KUndo2MagicString &title, const QTe
     changeElement->setChangeFormat(format);
     changeElement->setPrevFormat(prevFormat);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(QLocale().decimalPoint(), QString(".")));
 
     changeElement->setCreator(d->changeAuthorName);
 
@@ -168,7 +168,7 @@ int KoChangeTracker::getInsertChangeId(const KUndo2MagicString &title, int exist
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::InsertChange);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(QLocale().decimalPoint(), QString(".")));
 //    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
     changeElement->setCreator(d->changeAuthorName);
 
@@ -188,7 +188,7 @@ int KoChangeTracker::getDeleteChangeId(const KUndo2MagicString &title, const QTe
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::DeleteChange);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(QLocale().decimalPoint(), QString(".")));
     changeElement->setCreator(d->changeAuthorName);
     changeElement->setDeleteData(selection);
 

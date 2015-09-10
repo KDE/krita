@@ -202,9 +202,9 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 
     foreach(qreal value, zoomLevels) {
         if(value>10.0)
-            values << i18n("%1%", KGlobal::locale()->formatNumber(value * 100, 0));
+            values << i18n("%1%", QLocale().toString(value * 100, 0));
         else
-            values << i18n("%1%", KGlobal::locale()->formatNumber(value * 100, 1));
+            values << i18n("%1%", QLocale().toString(value * 100, 1));
     }
 
     setItems( values );
@@ -215,9 +215,9 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
     {
         QString valueString;
         if(zoom*100>10.0)
-            valueString = i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 0));
+            valueString = i18n("%1%", QLocale().toString(zoom*100, 0));
         else
-            valueString = i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 1));
+            valueString = i18n("%1%", QLocale().toString(zoom*100, 1));
 
         setCurrentAction(valueString);
 

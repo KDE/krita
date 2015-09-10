@@ -223,9 +223,10 @@ QString formatTime(qreal value, const QString &format)
 QString formatCurrency(qreal value, const QString &format, const QString& currencySymbol, int precision)
 {
     if (currencySymbol == "CCC") // undocumented hack, see doc attached to comment 6 at bug 282972
-        return KGlobal::locale()->formatMoney(value, "USD", precision);
+        return QLocale().toCurrencyString(value, "USD");
     if (format.isEmpty()) // no format means use locale format
-        return KGlobal::locale()->formatMoney(value, currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : currencySymbol, precision);
+        return QLocale().toCurrencyString(value, currencySymbol.isEmpty() ? QLocale().currencySymbol(QLocale::CurrencySymbol)
+                                                                          : currencySymbol);
     return formatNumber(value, format, precision);
 }
 
@@ -235,7 +236,7 @@ QString formatScientific(qreal value, const QString &format, int precision)
     QString v(QString::number(value, 'E', precision));
     int pos = v.indexOf('.');
     if (pos != -1) {
-        v.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+        v.replace(pos, 1, QLocale().decimalPoint());
     }
     return v;
 }

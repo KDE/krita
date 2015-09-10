@@ -21,12 +21,13 @@
 
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
+#include "kritadefaulttools_export.h"
 
 class KisPostExecutionUndoAdapter;
 class KisUpdatesFacade;
 
 
-class MoveSelectionStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITADEFAULTTOOLS_TEST_EXPORT MoveSelectionStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
     MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
@@ -40,11 +41,18 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
 private:
+    MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs, bool suppressUndo);
+
+    void setUndoEnabled(bool value);
+    KisStrokeStrategy* createLodClone(int levelOfDetail);
+
+private:
     KisPaintLayerSP m_paintLayer;
     KisSelectionSP m_selection;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
     QPoint m_initialDeviceOffset;
+    bool m_undoEnabled;
 };
 
 #endif /* __MOVE_SELECTION_STROKE_STRATEGY_H */

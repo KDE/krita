@@ -40,6 +40,7 @@
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
 #include <kis_iterator_ng.h>
+#include "kis_lod_transform.h"
 
 
 struct KisPixelSelection::Private {
@@ -52,6 +53,8 @@ struct KisPixelSelection::Private {
     bool thumbnailImageValid;
     QImage thumbnailImage;
     QTransform thumbnailImageTransform;
+
+    QPoint lod0CachesOffset;
 
     void invalidateThumbnailImage() {
         thumbnailImageValid = false;
@@ -295,21 +298,23 @@ void KisPixelSelection::invert()
 
 void KisPixelSelection::move(const QPoint &pt)
 {
-    QPoint offset = pt - QPoint(x(), y());
+    const int lod = defaultBounds()->currentLevelOfDetail();
+    const QPoint lod0Point = !lod ? pt :
+        pt * KisLodTransform::lodToInvScale(lod);
 
-    if (defaultBounds()->currentLevelOfDetail() == 0) {
-        if (m_d->outlineCacheValid) {
-            m_d->outlineCache.translate(offset);
-        }
+    const QPoint offset = lod0Point - m_d->lod0CachesOffset;
 
-        if (m_d->thumbnailImageValid) {
-            m_d->thumbnailImageTransform =
-                QTransform::fromTranslate(offset.x(), offset.y()) *
-                m_d->thumbnailImageTransform;
-        }
-    } else {
-        invalidateOutlineCache();
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache.translate(offset);
     }
+
+    if (m_d->thumbnailImageValid) {
+        m_d->thumbnailImageTransform =
+            QTransform::fromTranslate(offset.x(), offset.y()) *
+            m_d->thumbnailImageTransform;
+    }
+
+    m_d->lod0CachesOffset = lod0Point;
 
     KisPaintDevice::move(pt);
 }

@@ -44,7 +44,6 @@
 #include <QMessageBox>
 
 #include <KDebug>
-#include <KLocale>
 #include <KAction>
 #include <QTextDocument>
 #include <QLineEdit>

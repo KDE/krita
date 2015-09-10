@@ -590,3 +590,12 @@ void KisNode::requestTimeSwitch(int time)
         m_d->graphListener->requestTimeSwitch(time);
     }
 }
+
+void KisNode::syncLodCache()
+{
+    KisPaintDeviceSP device = paintDevice();
+    if (device) {
+        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
+        Q_UNUSED(dirtyRegion);
+    }
+}

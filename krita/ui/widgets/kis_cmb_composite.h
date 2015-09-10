@@ -26,7 +26,7 @@
 #include <kritaui_export.h>
 #include "kis_categorized_list_view.h"
 
-class KAction;
+class QAction;
 class KoID;
 class KoColorSpace;
 class KisSortedCompositeOpListModel;
@@ -58,7 +58,7 @@ public:
     void selectCompositeOp(const KoID &op);
     KoID selectedCompositeOp() const;
 
-    QList<KAction*> blendmodeActions();
+    QList<QAction *> blendmodeActions();
 
 private Q_SLOTS:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
@@ -98,7 +98,7 @@ private:
     KisSortedCompositeOpListModel *m_model;
     KisCategorizedListView *m_view;
     bool m_allowToHidePopup;
-    QList<KAction*> m_actions;
+    QList<QAction *> m_actions;
 };
 
 #endif // KIS_COMPOSITEOP_WIDGETS_H_

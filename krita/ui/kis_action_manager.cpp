@@ -234,11 +234,10 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
     const QList<QKeySequence> defaultShortcuts = standardAction->property("defaultShortcuts").value<QList<QKeySequence> >();
     const QKeySequence defaultShortcut = defaultShortcuts.isEmpty() ? QKeySequence() : defaultShortcuts.at(0);
-    action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
-    action->setShortcut(standardAction->shortcut(), KAction::ActiveShortcut);
+    action->setShortcut(standardAction->shortcut());
 #ifdef Q_OS_WIN
     if (actionType == KStandardAction::SaveAs && defaultShortcuts.isEmpty()) {
-        action->setShortcut(QKeySequence("CTRL+SHIFT+S"), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence("CTRL+SHIFT+S"));
     }
 #endif
     action->setCheckable(standardAction->isCheckable());

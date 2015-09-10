@@ -29,7 +29,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-#include <KShortcut>
+#include <QKeySequence>
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
@@ -214,7 +214,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
         setIconName(koIconNameCStr("tool_crop"));
-        setShortcut(KShortcut("C"));
+        setShortcut(QKeySequence("C"));
     }
 
     virtual ~KisToolCropFactory() {}

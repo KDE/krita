@@ -31,7 +31,7 @@
 #include "KisView.h"
 
 class KoZoomHandler;
-class KAction;
+class QAction;
 class KoZoomAction;
 class KoRuler;
 class KoUnit;

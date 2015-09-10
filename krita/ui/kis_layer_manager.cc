@@ -313,7 +313,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     KisAction * action = new KisAction(i18n("Rename current layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("RenameCurrentLayer", action);
-    action->setShortcut(KShortcut(Qt::Key_F2));
+    action->setShortcut(QKeySequence(Qt::Key_F2));
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
     m_rasterizeLayer = new KisAction(i18n("Rasterize Layer"), this);

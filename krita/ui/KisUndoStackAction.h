@@ -21,11 +21,11 @@
 #ifndef KIS_UNDOSTACKACTION_H
 #define KIS_UNDOSTACKACTION_H
 
-#include <kaction.h>
+#include <QAction>
 
 class KUndo2Stack;
 
-class KisUndoStackAction : public KAction
+class KisUndoStackAction : public QAction
 {
     Q_OBJECT
 public:

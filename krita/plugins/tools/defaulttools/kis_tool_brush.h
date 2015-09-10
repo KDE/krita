@@ -27,7 +27,7 @@
 
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -147,7 +147,7 @@ public:
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_freehand"));
-        setShortcut(KShortcut(Qt::Key_B));
+        setShortcut(QKeySequence(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

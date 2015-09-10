@@ -28,7 +28,7 @@
 #endif
 
 #include <klocalizedstring.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -119,19 +119,19 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
     if (!collection->action("toggle_fg_bg")) {
-        KAction *toggleFgBg = new KAction(i18n("Swap Foreground and Background Color"), collection);
+        QAction *toggleFgBg = new QAction(i18n("Swap Foreground and Background Color"), collection);
         toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
         collection->addAction("toggle_fg_bg", toggleFgBg);
     }
 
     if (!collection->action("reset_fg_bg")) {
-        KAction *resetFgBg = new KAction(i18n("Reset Foreground and Background Color"), collection);
+        QAction *resetFgBg = new QAction(i18n("Reset Foreground and Background Color"), collection);
         resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
         collection->addAction("reset_fg_bg", resetFgBg);
     }
 
-    addAction("toggle_fg_bg", dynamic_cast<KAction*>(collection->action("toggle_fg_bg")));
-    addAction("reset_fg_bg", dynamic_cast<KAction*>(collection->action("reset_fg_bg")));
+    addAction("toggle_fg_bg", dynamic_cast<QAction *>(collection->action("toggle_fg_bg")));
+    addAction("reset_fg_bg", dynamic_cast<QAction *>(collection->action("reset_fg_bg")));
 
     setMode(HOVER_MODE);
 }

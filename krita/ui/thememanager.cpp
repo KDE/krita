@@ -52,7 +52,7 @@
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
-#include <kaction.h>
+#include <QAction>
 
 // Calligra
 #include <KoIcon.h>
@@ -218,7 +218,7 @@ void ThemeManager::populateThemeMenu()
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    KAction* action = new KAction(defaultThemeName(), d->themeMenuActionGroup);
+    QAction * action = new QAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
@@ -233,7 +233,7 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        action                  = new KAction(name, d->themeMenuActionGroup);
+        action                  = new QAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
         action->setIcon(icon);
         action->setCheckable(true);

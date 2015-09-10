@@ -26,7 +26,7 @@
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include "canvas/kis_mirror_axis.h"
 

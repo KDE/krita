@@ -28,7 +28,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 
 #include "KisViewManager.h"
@@ -68,15 +68,15 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     connect(this, SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
 
 
-    m_colorSelAction = new KAction("Show color selector", this);
+    m_colorSelAction = new QAction("Show color selector", this);
     m_colorSelAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_I));
     connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()), Qt::UniqueConnection);
 
-    m_mypaintAction = new KAction("Show MyPaint shade selector", this);
+    m_mypaintAction = new QAction("Show MyPaint shade selector", this);
     m_mypaintAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_M));
     connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
 
-    m_minimalAction = new KAction("Show minimal shade selector", this);
+    m_minimalAction = new QAction("Show minimal shade selector", this);
     m_minimalAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_N));
     connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
 

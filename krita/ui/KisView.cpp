@@ -377,12 +377,12 @@ KisViewManager* KisView::viewManager() const
 }
 
 
-KAction *KisView::undoAction() const
+QAction *KisView::undoAction() const
 {
     return d->undo;
 }
 
-KAction *KisView::redoAction() const
+QAction *KisView::redoAction() const
 {
     return d->redo;
 }
@@ -498,13 +498,13 @@ void KisView::dropEvent(QDropEvent *event)
             KMenu popup;
             popup.setObjectName("drop_popup");
 
-            QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
-            QAction *insertManyLayers = new KAction(i18n("Insert Many Layers"), &popup);
+            QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
+            QAction *insertManyLayers = new QAction(i18n("Insert Many Layers"), &popup);
 
-            QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
-            QAction *openManyDocuments = new KAction(i18n("Open Many Documents"), &popup);
+            QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
+            QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
 
-            QAction *cancel = new KAction(i18n("Cancel"), &popup);
+            QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
             popup.addAction(openInNewDocument);

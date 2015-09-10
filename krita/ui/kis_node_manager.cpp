@@ -23,7 +23,7 @@
 
 #include <kactioncollection.h>
 
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include <KoIcon.h>
 #include <KoSelection.h>
@@ -217,7 +217,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 #define NEW_LAYER_ACTION_KEY(id, text, layerType, icon, shortcut)       \
     {                                                                   \
         NEW_LAYER_ACTION(id, text, layerType, icon);                    \
-        action->setShortcut(KShortcut(shortcut));                       \
+        action->setShortcut(QKeySequence(shortcut));                       \
     }
 
 #define NEW_MASK_ACTION(id, text, layerType, icon)                      \
@@ -256,13 +256,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = new KisAction(i18n("Activate next layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setShortcut(KShortcut(Qt::Key_PageUp));
+    action->setShortcut(QKeySequence(Qt::Key_PageUp));
     actionManager->addAction("activateNextLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
     action = new KisAction(i18n("Activate previous layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setShortcut(KShortcut(Qt::Key_PageDown));
+    action->setShortcut(QKeySequence(Qt::Key_PageDown));
     actionManager->addAction("activatePreviousLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 
@@ -273,7 +273,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = new KisAction(themedIcon("edit-copy"), i18n("&Duplicate Layer or Mask"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
+    action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_J));
     actionManager->addAction("duplicatelayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
 

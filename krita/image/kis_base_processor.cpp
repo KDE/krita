@@ -59,7 +59,7 @@ struct Q_DECL_HIDDEN KisBaseProcessor::Private {
     KoID id;
     KoID category; // The category in the filter menu this filter fits
     QString entry; // the i18n'ed accelerated menu text
-    KShortcut shortcut;
+    QKeySequence shortcut;
     bool supportsPainting;
     bool supportsAdjustmentLayers;
     bool supportsThreading;
@@ -138,12 +138,12 @@ QString KisBaseProcessor::menuEntry() const
     return d->entry;
 }
 
-KShortcut KisBaseProcessor::shortcut() const
+QKeySequence KisBaseProcessor::shortcut() const
 {
     return d->shortcut;
 }
 
-void KisBaseProcessor::setShortcut(const KShortcut & shortcut)
+void KisBaseProcessor::setShortcut(const QKeySequence & shortcut)
 {
     d->shortcut = shortcut;
 }

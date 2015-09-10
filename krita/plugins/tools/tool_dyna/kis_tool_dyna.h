@@ -162,7 +162,7 @@ public:
         setToolType(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_dyna"));
         // TODO
-        //setShortcut(KShortcut(Qt::Key_F));
+        //setShortcut(QKeySequence(Qt::Key_F));
         setPriority(10);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

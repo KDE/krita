@@ -31,7 +31,7 @@
 #include <QVector3D>
 #include <QButtonGroup>
 
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include <KoToolFactoryBase.h>
 
@@ -306,7 +306,7 @@ public:
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIconName(koIconNameCStr("krita_tool_transform"));
-        setShortcut(KShortcut( QKeySequence(Qt::CTRL + Qt::Key_T) ));
+        setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

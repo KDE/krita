@@ -49,7 +49,7 @@ struct KoPageLayout;
 class KoCanvasResourceManager;
 
 // KDE classes
-class KAction;
+class QAction;
 class KActionCollection;
 
 // Qt classes
@@ -75,8 +75,8 @@ public:
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
     ~KisView();
 
-    KAction *undoAction() const;
-    KAction *redoAction() const;
+    QAction *undoAction() const;
+    QAction *redoAction() const;
 
     // Temporary while teasing apart view and mainwindow
     void setViewManager(KisViewManager *view);

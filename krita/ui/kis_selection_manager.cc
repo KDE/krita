@@ -26,7 +26,7 @@
 #include <QColor>
 #include <QTimer>
 
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <klocalizedstring.h>
 #include <kstandardaction.h>

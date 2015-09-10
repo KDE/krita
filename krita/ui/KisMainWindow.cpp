@@ -47,7 +47,7 @@
 
 #include <krecentdirs.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kis_debug.h>
 #include <kdiroperator.h>
@@ -457,7 +457,7 @@ void KisMainWindow::setNoCleanup(bool noCleanup)
 KisMainWindow::~KisMainWindow()
 {
 //    foreach(QAction *ac, actionCollection()->actions()) {
-//        KAction *action = qobject_cast<KAction*>(ac);
+//        QAction *action = qobject_cast<QAction*>(ac);
 //        if (action) {
 //        dbgKrita << "<Action"
 //                 << "name=" << action->objectName()
@@ -466,8 +466,8 @@ KisMainWindow::~KisMainWindow()
 //                 << "whatsThis="  << action->whatsThis()
 //                 << "toolTip="  << action->toolTip().replace("<html>", "").replace("</html>", "")
 //                 << "iconText="  << action->iconText().replace("&", "&amp;")
-//                 << "shortcut="  << action->shortcut(KAction::ActiveShortcut).toString()
-//                 << "defaultShortcut="  << action->shortcut(KAction::DefaultShortcut).toString()
+//                 << "shortcut="  << action->shortcut(QAction::ActiveShortcut).toString()
+//                 << "defaultShortcut="  << action->shortcut(QAction::DefaultShortcut).toString()
 //                 << "isCheckable="  << QString((action->isChecked() ? "true" : "false"))
 //                 << "statusTip=" << action->statusTip()
 //                 << "/>"   ;

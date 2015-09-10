@@ -26,7 +26,7 @@
 KisColorBalanceFilter::KisColorBalanceFilter() 
 		: KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Balance.."))
 {
-    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_B)));
+    setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	setSupportsPainting(true);
 }
 

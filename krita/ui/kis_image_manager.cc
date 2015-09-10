@@ -21,7 +21,7 @@
 #include <QString>
 #include <QDesktopServices>
 
-#include <kaction.h>
+#include <QAction>
 #include <klocalizedstring.h>
 #include <QUrl>
 #include <kcolordialog.h>

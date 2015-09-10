@@ -20,7 +20,7 @@
 #include "kis_canvas_controls_manager.h"
 
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <KoCanvasResourceManager.h>
 

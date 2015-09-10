@@ -24,7 +24,7 @@
 #ifndef KIS_TOOL_GRADIENT_H_
 #define KIS_TOOL_GRADIENT_H_
 
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include <KoToolFactoryBase.h>
 
@@ -114,7 +114,7 @@ public:
         setToolTip(i18n("Gradient Tool"));
         setToolType(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_gradient"));
-        setShortcut(KShortcut(Qt::Key_G));
+        setShortcut(QKeySequence(Qt::Key_G));
         setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

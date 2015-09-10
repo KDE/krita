@@ -26,7 +26,7 @@ class KisColorSelector;
 class KisMyPaintShadeSelector;
 class KisMinimalShadeSelector;
 class QBoxLayout;
-class KAction;
+class QAction;
 
 class KisColorSelectorContainer : public QWidget
 {
@@ -59,9 +59,9 @@ private:
 
     QBoxLayout* m_widgetLayout;
 
-    KAction* m_colorSelAction;
-    KAction* m_mypaintAction;
-    KAction* m_minimalAction;
+    QAction * m_colorSelAction;
+    QAction * m_mypaintAction;
+    QAction * m_minimalAction;
 
     QPointer<KisCanvas2> m_canvas;
 };

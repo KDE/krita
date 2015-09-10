@@ -25,7 +25,7 @@
 #include <kconfiggroup.h>
 
 #include <kglobal.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 
 #include "kis_canvas2.h"
@@ -91,12 +91,12 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     emit settingsChanged();
 
-    m_colorHistoryAction = new KAction("Show color history", this);
+    m_colorHistoryAction = new QAction("Show color history", this);
     m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
     connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()), Qt::UniqueConnection);
 
 
-    m_commonColorsAction = new KAction("Show common colors", this);
+    m_commonColorsAction = new QAction("Show common colors", this);
     m_commonColorsAction->setShortcut(QKeySequence(tr("U")));
     connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
 

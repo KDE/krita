@@ -27,7 +27,7 @@
 #include <kritaui_export.h>
 
 class KisPerspectiveGridDecoration;
-class KAction;
+class QAction;
 class KActionCollection;
 class KToggleAction;
 class KisViewManager;
@@ -65,7 +65,7 @@ private:
     
     QPointer<KisView> m_imageView;
     KToggleAction* m_toggleGrid;
-    KAction* m_gridClear;
+    QAction * m_gridClear;
 };
 
 #endif

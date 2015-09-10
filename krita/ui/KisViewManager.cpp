@@ -45,7 +45,7 @@
 #include <QPoint>
 
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
@@ -731,8 +731,7 @@ void KisViewManager::createActions()
     //Workaround, by default has the same shortcut as mirrorCanvas
     KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
     if (a) {
-        a->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        a->setShortcut(QKeySequence(), KAction::ActiveShortcut);        
+        a->setShortcut(QKeySequence());
         a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 

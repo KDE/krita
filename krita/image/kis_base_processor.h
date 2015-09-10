@@ -23,7 +23,7 @@
 #include <QString>
 
 #include <klocalizedstring.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include "KoID.h"
 #include "KoColorSpace.h"
@@ -101,7 +101,7 @@ public:
      *
      * @return the shortcut
      */
-    KShortcut shortcut() const;
+    QKeySequence shortcut() const;
 
     /**
      * Create the configuration widget for this processor.
@@ -152,7 +152,7 @@ protected:
     /**
      * Set the default shortcut for activation of this filter.
      */
-    void setShortcut(const KShortcut & shortcut);
+    void setShortcut(const QKeySequence & shortcut);
 
 protected:
 

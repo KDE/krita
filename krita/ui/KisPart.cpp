@@ -54,7 +54,7 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include <QDialog>
 #include <QGraphicsScene>
@@ -138,9 +138,9 @@ void KisPart::Private::loadActions()
                 QString toolTip = i18n(e.attribute("toolTip").toUtf8().constData());
                 QString statusTip = i18n(e.attribute("statusTip").toUtf8().constData());
                 QString iconText = i18n(e.attribute("iconText").toUtf8().constData());
-                KShortcut shortcut = KShortcut(e.attribute("shortcut"));
+                QKeySequence shortcut = QKeySequence(e.attribute("shortcut"));
                 bool isCheckable = e.attribute("isCheckable") == "true" ? true : false;
-                KShortcut defaultShortcut = KShortcut(e.attribute("defaultShortcut"));
+                QKeySequence defaultShortcut = QKeySequence(e.attribute("defaultShortcut"));
 
                 if (name.isEmpty()) {
                     dbgKrita << text << "has no name! From:" << actionDefinition;
@@ -152,9 +152,8 @@ void KisPart::Private::loadActions()
                 action->setToolTip(toolTip);
                 action->setStatusTip(statusTip);
                 action->setIconText(iconText);
-                action->setShortcut(shortcut, KAction::ActiveShortcut);
+                action->setShortcut(shortcut);
                 action->setCheckable(isCheckable);
-                action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
 
                 if (!actionCollection->action(name)) {
                     actionCollection->addAction(name, action);

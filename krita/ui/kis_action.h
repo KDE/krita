@@ -19,13 +19,13 @@
 #ifndef KIS_ACTION_H
 #define KIS_ACTION_H
 
-#include <kaction.h>
+#include <QWidgetAction>
 #include <kritaui_export.h>
 #include <kis_debug.h>
 #include <kicon.h>
 class KisActionManager;
 
-class KRITAUI_EXPORT KisAction : public KAction
+class KRITAUI_EXPORT KisAction : public QWidgetAction
 {
     Q_OBJECT
 public:

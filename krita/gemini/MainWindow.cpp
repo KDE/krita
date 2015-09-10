@@ -139,8 +139,8 @@ public:
     ViewModeSynchronisationObject* syncObject;
     QTimer* centerer;
 
-    KAction* toDesktop;
-    KAction* toSketch;
+    QAction * toDesktop;
+    QAction * toSketch;
     QToolButton* switcher;
 
     void initSketchView(QObject* parent)
@@ -186,7 +186,7 @@ public:
             }
         }
 
-        toDesktop = new KAction(q);
+        toDesktop = new QAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
         // useful for monkey-testing to crash...
@@ -212,7 +212,7 @@ public:
 
         desktopWindow = new KisMainWindow();
 
-        toSketch = new KAction(desktopWindow);
+        toSketch = new QAction(desktopWindow);
         toSketch->setEnabled(false);
         toSketch->setText(tr("Switch to Sketch"));
         toSketch->setIcon(QIcon::fromTheme("system-reboot"));

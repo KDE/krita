@@ -19,7 +19,7 @@
 
 #include <QList>
 
-#include <kaction.h>
+#include <QAction>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -45,7 +45,7 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(this->canvas());
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
     if (kiscanvas && kiscanvas->viewManager()) {
-        KAction *undo_polygon_selection = new KAction("Undo Polygon Selection Points",this);
+        QAction *undo_polygon_selection = new QAction("Undo Polygon Selection Points",this);
         undo_polygon_selection->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Z));
         collection->addAction("undo_polygon_selection", undo_polygon_selection);
         addAction("undo_polygon_selection", undo_polygon_selection);

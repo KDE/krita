@@ -29,7 +29,7 @@
 #include "kis_tool.h"
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 class KoResource;
 class KoColorSet;
 
@@ -124,7 +124,7 @@ public:
         setToolType(TOOL_TYPE_FILL);
         setPriority(15);
         setIconName(koIconNameCStr("krita_tool_color_picker"));
-        setShortcut(KShortcut(Qt::Key_P));
+        setShortcut(QKeySequence(Qt::Key_P));
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

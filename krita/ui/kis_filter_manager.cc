@@ -59,7 +59,7 @@ struct KisFilterManager::Private {
     }
     KisAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
-    QHash<KisFilter*, KAction*> filters2Action;
+    QHash<KisFilter*, QAction *> filters2Action;
     KActionCollection *actionCollection;
     KisActionManager *actionManager;
     KisViewManager *view;
@@ -134,7 +134,7 @@ void KisFilterManager::insertFilter(const QString & filterName)
     }
 
     KisAction *action = new KisAction(filter->menuEntry(), this);
-    action->setShortcut(filter->shortcut(), KAction::DefaultShortcut);
+    action->setShortcut(filter->shortcut());
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
 
     d->actionManager->addAction(QString("krita_filter_%1").arg(filterName), action);
@@ -157,7 +157,7 @@ void KisFilterManager::updateGUI()
 
     d->reapplyAction->setEnabled(enable);
 
-    for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
+    for (QHash<KisFilter*, QAction *>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
 
         bool localEnable = enable;

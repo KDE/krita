@@ -168,7 +168,7 @@ public:
             const QString programName = parent->componentData().aboutData() ?
                         parent->componentData().aboutData()->programName() : parent->componentData().componentName();
             title = i18n("%1 unsaved document (%2)", programName,
-                         KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
+                         QLocale().toString(QDate::currentDate(), QLocale::ShortFormat));
         }
         printer.setDocName(title);
     }

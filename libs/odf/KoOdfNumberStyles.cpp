@@ -43,9 +43,9 @@ namespace KoOdfNumberStyles
 {
 
     static bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text, bool &antislash);
-    static void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
-    static bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text);
-    static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
+    static void parseOdfDatelocale(KoXmlWriter &elementWriter, QString &format, QString &text);
+    static bool saveOdflocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text);
+    static void parseOdfTimelocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
 QString format(const QString &value, const NumericStyleFormat &format)
@@ -659,11 +659,11 @@ void addTextNumber(QString& text, KoXmlWriter &elementWriter)
     }
 }
 
-void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text)
+void parseOdfTimelocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
-    kDebug(30003) << "parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :" << format;
+    kDebug(30003) << "parseOdfTimelocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :" << format;
     do {
-        if (!saveOdfKlocaleTimeFormat(elementWriter, format, text)) {
+        if (!saveOdflocaleTimeFormat(elementWriter, format, text)) {
             text += format[0];
             format.remove(0, 1);
         }
@@ -671,7 +671,7 @@ void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
     addTextNumber(text, elementWriter);
 }
 
-bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text)
+bool saveOdflocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
     bool changed = false;
     if (format.startsWith("%H")) {   //hh
@@ -773,7 +773,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
     return changed;
 }
 
-QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool klocaleFormat,
+QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool localeFormat,
         const QString &_prefix, const QString &_suffix)
 {
     Q_UNUSED(_prefix);
@@ -785,8 +785,8 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool k
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QString text;
-    if (klocaleFormat) {
-        parseOdfTimeKlocale(elementWriter, format, text);
+    if (localeFormat) {
+        parseOdfTimelocale(elementWriter, format, text);
     } else {
         bool antislash = false;
         do {
@@ -808,8 +808,8 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool k
     return mainStyles.insert(currentStyle, "N");
 }
 
-//convert klocale string to good format
-void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &text)
+//convert locale string to good format
+void parseOdfDatelocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
     kDebug(30003) << format;
     do {
@@ -875,7 +875,7 @@ void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
             number_day_of_week(&elementWriter).set_number_style("long");
             format.remove(0, 2);
         } else {
-            if (!saveOdfKlocaleTimeFormat(elementWriter, format, text)) {
+            if (!saveOdflocaleTimeFormat(elementWriter, format, text)) {
                 text += format[0];
                 format.remove(0, 1);
             }
@@ -884,7 +884,7 @@ void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
     addTextNumber(text, elementWriter);
 }
 
-QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool klocaleFormat,
+QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool localeFormat,
         const QString &_prefix, const QString &_suffix)
 {
     Q_UNUSED(_prefix);
@@ -899,8 +899,8 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QString text;
-    if (klocaleFormat) {
-        parseOdfDateKlocale(elementWriter, format, text);
+    if (localeFormat) {
+        parseOdfDatelocale(elementWriter, format, text);
     } else {
         bool antislash = false;
         do {

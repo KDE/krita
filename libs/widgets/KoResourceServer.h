@@ -33,7 +33,6 @@
 #include <QDir>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kcomponentdata.h>
 
 #include <QTemporaryFile>
 #include <QDomDocument>

@@ -27,8 +27,6 @@
 
 #include <MockShapes.h>
 
-#include <kcomponentdata.h>
-
 #include <QTest>
 
 void TestShapePainting::testPaintShape()
@@ -36,8 +34,6 @@ void TestShapePainting::testPaintShape()
     MockShape *shape1 = new MockShape();
     MockShape *shape2 = new MockShape();
     MockContainer *container = new MockContainer();
-
-    KComponentData componentData("TestShapePainting");    // we need an instance for that canvas
 
     container->addShape(shape1);
     container->addShape(shape2);

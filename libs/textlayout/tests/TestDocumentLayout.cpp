@@ -23,7 +23,6 @@
 #include <QTest>
 
 #include <kdebug.h>
-#include <kcomponentdata.h>
 
 #include <KoTextDocument.h>
 #include <KoStyleManager.h>

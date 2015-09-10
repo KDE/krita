@@ -61,7 +61,7 @@ SpellCheck::SpellCheck()
     KToggleAction *spellCheck = new KToggleAction(i18n("Auto Spell Check"), this);
     addAction("tool_auto_spellcheck", spellCheck);
 
-    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = spellConfig.readEntry("autoSpellCheck", m_enableSpellCheck);
     spellCheck->setChecked(m_enableSpellCheck);
     m_speller = Sonnet::Speller(spellConfig.readEntry("defaultLanguage", "en_US"));
@@ -161,7 +161,7 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
 {
     if (m_enableSpellCheck == on)
         return;
-    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
     if (m_document) {

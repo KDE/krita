@@ -3094,8 +3094,8 @@ void TextTool::insertAnnotation()
     cfg.reparseConfiguration();
     KConfigGroup authorGroup(&cfg, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    KGlobal::config()->reparseConfiguration();
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+     KSharedConfig::openConfig()->reparseConfiguration();
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     QString profile = appAuthorGroup.readEntry("active-profile", "");
     KConfigGroup cgs(&authorGroup, "Author-" + profile);
 

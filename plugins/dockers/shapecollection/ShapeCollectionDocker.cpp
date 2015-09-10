@@ -242,7 +242,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
 
     QStringList quickShapes;
     quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
-    KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {

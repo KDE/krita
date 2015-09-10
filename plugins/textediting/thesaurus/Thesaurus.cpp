@@ -83,7 +83,7 @@ Thesaurus::Thesaurus()
     m_dialog->setHelp(QString(), "thesaurus");
     m_dialog->resize(600, 400);
 
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     m_dataFile = cfg.readEntry("datafile");
     if (m_dataFile.isEmpty())
         m_dataFile = KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt");
@@ -215,7 +215,7 @@ Thesaurus::Thesaurus()
 
 Thesaurus::~Thesaurus()
 {
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("datafile", m_dataFile);
     // FIXME?: this hopefully fixes the problem of a wrong cursor
     // and a crash (when closing e.g. konqueror) when the thesaurus dialog
@@ -287,7 +287,7 @@ void Thesaurus::process()
 void Thesaurus::dialogClosed()
 {
     if (!m_standAlone) return;
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("datafile", m_dataFile);
 }
 

@@ -19,7 +19,7 @@
 #include "kis_raw_import.h"
 
 #include <kpluginfactory.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>
@@ -46,7 +46,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json",
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
         : KisImportExportFilter(parent)
 {
-    m_dialog = new KDialog();
+    m_dialog = new KoDialog();
     m_dialog->enableButtonApply(false);
     QWidget* widget = new QWidget;
     m_rawWidget.setupUi(widget);

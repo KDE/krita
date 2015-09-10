@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportManager.h"
 
 #include <QUrl>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <KoProgressUpdater.h>
 
 #include <QString>
@@ -48,7 +48,7 @@ public:
 
 };
 
-class KisFilterChooser : public KDialog
+class KisFilterChooser : public KoDialog
 {
     Q_OBJECT
 

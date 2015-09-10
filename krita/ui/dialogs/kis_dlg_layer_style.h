@@ -20,7 +20,7 @@
 
 #include <QUuid>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "kis_types.h"
 
@@ -257,7 +257,7 @@ private:
     Ui::WdgStylesSelector ui;
 };
 
-class KisDlgLayerStyle : public KDialog
+class KisDlgLayerStyle : public KoDialog
 {
     Q_OBJECT
 public:

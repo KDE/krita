@@ -24,7 +24,7 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <klocalizedstring.h>
 #include <kdebug.h>
 
@@ -60,9 +60,9 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
     m_startPosition = startPosition;
     m_endPosition = endPosition;
 
-    KDialog *dialog = new KDialog();
+    KoDialog *dialog = new KoDialog();
     dialog->setCaption(i18n("Change case"));
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     QWidget *widget = new QWidget(dialog);
 

@@ -59,7 +59,7 @@ NOT TODO:
 #include <kprocess.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
@@ -77,9 +77,9 @@ Thesaurus::Thesaurus()
     m_thesProc = new KProcess;
     m_wnProc = new KProcess;
 
-    m_dialog = new KDialog(0);
-    m_dialog->setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
-    m_dialog->setDefaultButton(KDialog::Ok);
+    m_dialog = new KoDialog(0);
+    m_dialog->setButtons(KoDialog::Help | KoDialog::Ok | KoDialog::Cancel);
+    m_dialog->setDefaultButton(KoDialog::Ok);
     m_dialog->setHelp(QString(), "thesaurus");
     m_dialog->resize(600, 400);
 
@@ -250,8 +250,8 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_standAlone = true;
         if (document)
             m_word = document->toPlainText();
-        m_dialog->showButton(KDialog::Ok, false);
-        m_dialog->setButtonGuiItem(KDialog::Cancel,
+        m_dialog->showButton(KoDialog::Ok, false);
+        m_dialog->setButtonGuiItem(KoDialog::Cancel,
                 KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
@@ -263,7 +263,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_word = cursor.selectedText();
         m_document = document;
         m_startPosition = startPosition;
-        m_dialog->setButtonGuiItem(KDialog::Ok,
+        m_dialog->setButtonGuiItem(KoDialog::Ok,
                 KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
         slotFindTerm(m_word.trimmed());
         m_replaceLineEdit->setText(m_word.trimmed());

@@ -20,14 +20,14 @@
 #ifndef SECTIONSSPLITDIALOG_H
 #define SECTIONSSPLITDIALOG_H
 
-#include <KDialog>
+#include <KoDialog.h>
 
 class KoTextEditor;
 class KoSection;
 class KoSectionModel;
 
 #include <ui_SectionsSplitDialog.h>
-class SectionsSplitDialog : public KDialog
+class SectionsSplitDialog : public KoDialog
 {
     Q_OBJECT
 

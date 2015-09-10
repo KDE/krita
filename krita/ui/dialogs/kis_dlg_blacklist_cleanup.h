@@ -20,10 +20,10 @@
 #ifndef KIS_DLG_BLACKLIST_CLEANUP_H
 #define KIS_DLG_BLACKLIST_CLEANUP_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <ui_wdgdlgblacklistcleanup.h>
 
-class KisDlgBlacklistCleanup : public KDialog, public Ui_WdgDisplayBlacklist
+class KisDlgBlacklistCleanup : public KoDialog, public Ui_WdgDisplayBlacklist
 {
 
 public:

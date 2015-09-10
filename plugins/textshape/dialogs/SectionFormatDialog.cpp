@@ -110,11 +110,11 @@ private:
 };
 
 SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_editor(editor)
 {
     setCaption(i18n("Configure sections"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
     showButtonSeparator(true);
     QWidget *form = new QWidget;
     m_widget.setupUi(form);

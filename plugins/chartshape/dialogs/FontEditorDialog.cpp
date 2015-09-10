@@ -28,7 +28,7 @@ using namespace KoChart;
 
 
 FontEditorDialog::FontEditorDialog(QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Select Font"));
     setModal(true);

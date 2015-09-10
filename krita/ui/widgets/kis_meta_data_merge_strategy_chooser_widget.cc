@@ -19,7 +19,7 @@
 
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kis_debug.h>
 #include <kis_meta_data_merge_strategy_registry.h>
 
@@ -71,10 +71,10 @@ const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::mergeSt
 
 const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::showDialog(QWidget* parent)
 {
-    KDialog dlg(parent);
+    KoDialog dlg(parent);
     dlg.setCaption(i18n("Choose meta data merge strategy"));
-    dlg.setButtons(KDialog::Ok | KDialog::Cancel);
-    dlg.setDefaultButton(KDialog::Ok);
+    dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    dlg.setDefaultButton(KoDialog::Ok);
 
     KisMetaDataMergeStrategyChooserWidget* wdg = new KisMetaDataMergeStrategyChooserWidget(&dlg);
     wdg->setMinimumSize(wdg->sizeHint());

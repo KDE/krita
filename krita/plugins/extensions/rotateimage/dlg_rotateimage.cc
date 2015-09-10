@@ -28,7 +28,7 @@
 
 DlgRotateImage::DlgRotateImage(QWidget *  parent,
                                const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Rotate Image"));
     setButtons(Ok | Cancel);

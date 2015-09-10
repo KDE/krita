@@ -20,13 +20,13 @@
 #ifndef KISEDITPROFILESDIALOG_H
 #define KISEDITPROFILESDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 /**
  * \brief A dialog that provides facilities to edit all the available profiles.
  *
  */
-class KisEditProfilesDialog : public KDialog
+class KisEditProfilesDialog : public KoDialog
 {
     Q_OBJECT
 public:

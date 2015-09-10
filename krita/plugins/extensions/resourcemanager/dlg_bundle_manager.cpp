@@ -35,7 +35,7 @@
 #define ICON_SIZE 48
 
 DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
     , m_currentBundle(0)
@@ -169,7 +169,7 @@ void DlgBundleManager::accept()
     }
 
 
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void DlgBundleManager::addSelected()

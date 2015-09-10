@@ -22,7 +22,7 @@
 
 #include <klocalizedstring.h>
 
-KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KDialog(parent),
+KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KoDialog(parent),
         m_actionsEditor(new KisActionsEditor(this))
 {
     setMainWidget(m_actionsEditor);

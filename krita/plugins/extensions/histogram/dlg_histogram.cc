@@ -29,7 +29,7 @@
 
 
 DlgHistogram::DlgHistogram(QWidget *  parent, const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Histogram"));
     setButtons(Ok | Cancel);

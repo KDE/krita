@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QUrl>
 

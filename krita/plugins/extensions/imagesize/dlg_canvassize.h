@@ -21,7 +21,7 @@
 #ifndef DLG_CANVASSIZE
 #define DLG_CANVASSIZE
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kicon.h>
 
 
@@ -39,7 +39,7 @@ public:
 
 
 
-class DlgCanvasSize: public KDialog
+class DlgCanvasSize: public KoDialog
 {
 
     Q_OBJECT

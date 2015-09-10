@@ -33,7 +33,7 @@
 #include <KisViewManager.h>
 
 KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_customName(false)
         , m_freezeName(false)
 {

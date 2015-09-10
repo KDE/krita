@@ -19,7 +19,7 @@
 #ifndef KIS_DLG_GENERATORLAYER_H
 #define KIS_DLG_GENERATORLAYER_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QString>
 
 class KisFilter;
@@ -31,7 +31,7 @@ class KisViewManager;
 /**
  * Create a new generator layer
  */
-class KisDlgGeneratorLayer : public KDialog
+class KisDlgGeneratorLayer : public KoDialog
 {
 public:
 

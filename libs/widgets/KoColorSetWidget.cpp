@@ -81,7 +81,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 
     Q_ASSERT(colorSet);
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
-    if (dlg->exec() == KDialog::Accepted ) { // always reload the color set
+    if (dlg->exec() == KoDialog::Accepted ) { // always reload the color set
         KoColorSet * cs = dlg->activeColorSet();
         // check if the selected colorset is predefined
         if( !palettes.contains( cs ) ) {

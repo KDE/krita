@@ -206,12 +206,12 @@ KoColorSet *KoEditColorSetWidget::activeColorSet()
 }
 
 KoEditColorSetDialog::KoEditColorSetDialog(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     ui = new KoEditColorSetWidget(palettes, activePalette, this);
     setMainWidget(ui);
     setCaption(i18n("Add/Remove Colors"));
-    enableButton(KDialog::Ok, ui->isEnabled());
+    enableButton(KoDialog::Ok, ui->isEnabled());
 }
 
 KoEditColorSetDialog::~KoEditColorSetDialog()

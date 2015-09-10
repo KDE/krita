@@ -43,7 +43,7 @@
 
 
 KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Version"));
     setButtons(Close);
@@ -224,7 +224,7 @@ void KoVersionDialog::slotOpen()
 }
 
 KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *info)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Comment"));
     setButtons(Ok | Cancel);

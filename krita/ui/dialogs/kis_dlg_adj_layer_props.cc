@@ -47,7 +47,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
                                          const QString & caption,
                                          QWidget *parent,
                                          const char *name)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_node(node)
     , m_paintDevice(paintDevice)
     , m_currentConfigWidget(0)

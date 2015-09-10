@@ -58,7 +58,7 @@ KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
 }
 
 KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_layerStyle(layerStyle)
     , m_initialLayerStyle(layerStyle->clone())
     , m_isSwitchingPredefinedStyle(false)

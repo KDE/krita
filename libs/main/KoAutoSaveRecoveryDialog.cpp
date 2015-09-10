@@ -175,7 +175,7 @@ public:
 };
 
 KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent) :
-    KDialog(parent)
+    KoDialog(parent)
 {
     setCaption(i18nc("@title:window", "Recover Files"));
     setMinimumSize(650, 500);

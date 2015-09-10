@@ -25,7 +25,7 @@
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <kis_debug.h>
 #include <KisDocument.h>
@@ -151,9 +151,9 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("PPM Export Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsPPM optionsPPM;
 

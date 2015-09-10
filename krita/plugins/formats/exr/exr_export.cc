@@ -23,7 +23,7 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QUrl>
 
@@ -68,9 +68,9 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KDialog dialog;
+    KoDialog dialog;
     dialog.setWindowTitle(i18n("OpenEXR Export Options"));
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
     Ui::ExrExportWidget widget;
     QWidget *page = new QWidget(&dialog);
     widget.setupUi(page);

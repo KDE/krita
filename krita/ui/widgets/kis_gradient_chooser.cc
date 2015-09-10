@@ -39,7 +39,7 @@
 #include "kis_canvas_resource_provider.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KoSegmentGradient* gradient, QWidget * parent, const char *name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Custom Gradient"));
     setButtons(Close);

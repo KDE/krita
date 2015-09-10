@@ -24,7 +24,7 @@
 
 #include "ui_wdgrawimport.h"
 
-class KDialog;
+class KoDialog;
 class WdgRawImport;
 
 namespace KDcrawIface
@@ -51,7 +51,7 @@ private:
     KDcrawIface::RawDecodingSettings rawDecodingSettings();
 private:
     Ui::WdgRawImport m_rawWidget;
-    KDialog* m_dialog;
+    KoDialog* m_dialog;
 };
 
 #endif // KIS_RAW_IMPORT_H_

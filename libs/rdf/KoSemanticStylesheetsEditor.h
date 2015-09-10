@@ -23,7 +23,7 @@
 #include "kordf_export.h"
 #include "RdfForward.h"
 // KDE
-#include <kdialog.h>
+#include <KoDialog.h>
 // Qt
 #include <QSharedPointer>
 
@@ -37,7 +37,7 @@ class QTableWidgetItem;
  * @author Ben Martin <ben.martin@kogmbh.com>
  * @see KoDocument
  */
-class KORDF_EXPORT KoSemanticStylesheetsEditor : public KDialog
+class KORDF_EXPORT KoSemanticStylesheetsEditor : public KoDialog
 {
     Q_OBJECT
 public:

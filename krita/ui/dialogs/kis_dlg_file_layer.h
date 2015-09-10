@@ -19,7 +19,7 @@
 #ifndef KIS_DLG_FILE_LAYER_H
 #define KIS_DLG_FILE_LAYER_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QString>
 
 
@@ -30,7 +30,7 @@
 /**
  * Create a new file layer
  */
-class KisDlgFileLayer : public KDialog
+class KisDlgFileLayer : public KoDialog
 {
 public:
 

@@ -76,7 +76,7 @@ public:
 };
 
 KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , d(new Private(this))
 {
     d->dialog = new KoCsvImportWidget(this);
@@ -92,7 +92,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     d->ignoreDuplicates = false;
     d->codec = QTextCodec::codecForName("UTF-8");
 
-    setButtons( KDialog::Ok|KDialog::Cancel );
+    setButtons( KoDialog::Ok|KoDialog::Cancel );
     setCaption( i18n( "Import Data" ) );
 
     QStringList encodings;

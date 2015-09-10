@@ -23,7 +23,7 @@
 #include <QCheckBox>
 
 #include "kis_types.h"
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "ui_wdglayerproperties.h"
 
@@ -48,7 +48,7 @@ public:
  * The dialog is non modal by default and uses a timer to check for user changes to the
  * configuration, showing a preview of them.
  */
-class KisDlgLayerProperties : public KDialog
+class KisDlgLayerProperties : public KoDialog
 {
     Q_OBJECT
 

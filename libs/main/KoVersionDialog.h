@@ -21,7 +21,7 @@
 #ifndef __VERSION_DIALOG__
 #define __VERSION_DIALOG__
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "KoDocument.h"
 
@@ -29,7 +29,7 @@ class QPushButton;
 class QTreeWidget;
 class QTextEdit;
 
-class KoVersionDialog : public KDialog
+class KoVersionDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -56,7 +56,7 @@ protected:
     KoDocument *m_doc;
 };
 
-class KoVersionModifyDialog : public KDialog
+class KoVersionModifyDialog : public KoDialog
 {
     Q_OBJECT
 public:

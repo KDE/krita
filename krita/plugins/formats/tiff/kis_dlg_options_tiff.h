@@ -20,14 +20,14 @@
 #ifndef KIS_DLG_OPTIONS_TIFF_H
 #define KIS_DLG_OPTIONS_TIFF_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kis_tiff_converter.h>
 
 class Ui_KisWdgOptionsTIFF;
 /**
     @author Cyrille Berger <cberger@cberger.net>
 */
-class KisDlgOptionsTIFF : public KDialog
+class KisDlgOptionsTIFF : public KoDialog
 {
     Q_OBJECT
 public:

@@ -22,7 +22,7 @@
 #ifndef KIS_TEMPLATE_CREATE_DIA_H
 #define KIS_TEMPLATE_CREATE_DIA_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include "kritaui_export.h"
 
 class QString;
@@ -36,7 +36,7 @@ class KisTemplateCreateDiaPrivate;
  *
  ****************************************************************************/
 
-class KRITAUI_EXPORT KisTemplateCreateDia : public KDialog
+class KRITAUI_EXPORT KisTemplateCreateDia : public KoDialog
 {
     Q_OBJECT
 

@@ -21,14 +21,14 @@
 #ifndef KO_CSV_IMPORT_DIALOG
 #define KO_CSV_IMPORT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "kowidgets_export.h"
 
 /**
  * A dialog to choose the options for importing CSV data.
  */
-class KOWIDGETS_EXPORT KoCsvImportDialog : public KDialog
+class KOWIDGETS_EXPORT KoCsvImportDialog : public KoDialog
 {
     Q_OBJECT
 public:

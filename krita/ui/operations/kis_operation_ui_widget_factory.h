@@ -21,7 +21,7 @@
 #ifndef KIS_OPERATION_UI_WIDGET_FACTORY_H
 #define KIS_OPERATION_UI_WIDGET_FACTORY_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <klocalizedstring.h>
 
 #include "kis_operation_ui_factory.h"
@@ -51,7 +51,7 @@ public:
     *  @returns true if the configuration could be constructed (not canceled)
     */
     virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfiguration* configuration) {
-        KDialog * dialog = new KDialog(view->mainWindow());
+        KoDialog * dialog = new KoDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 
         T* configWidget = new T(dialog, view);

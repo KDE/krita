@@ -18,7 +18,7 @@
 #ifndef KIS_DLG_ADJ_LAYER_PROPS_H
 #define KIS_DLG_ADJ_LAYER_PROPS_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KLineEdit;
 
@@ -33,7 +33,7 @@ class KisViewManager;
 /**
  * Create a new adjustment layer.
  */
-class KisDlgAdjLayerProps : public KDialog
+class KisDlgAdjLayerProps : public KoDialog
 {
     Q_OBJECT
 

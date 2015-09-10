@@ -27,7 +27,7 @@
 using namespace MusicCore;
 
 PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Part details"));
     QWidget* w = new QWidget(this);

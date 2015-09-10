@@ -33,7 +33,7 @@
 #include <QTimer>
 
 ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_tool(tool)
         , m_editor(editor)
         , m_styleChanged(false)
@@ -74,7 +74,7 @@ void ParagraphSettingsDialog::styleChanged(bool state)
 void ParagraphSettingsDialog::slotOk()
 {
     slotApply();
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void ParagraphSettingsDialog::slotApply()

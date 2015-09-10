@@ -38,7 +38,7 @@
 
 DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
         const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);

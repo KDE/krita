@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QUrl>
 
 #include <QLineEdit>

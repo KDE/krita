@@ -29,7 +29,7 @@
 #include <recorder/kis_recorded_action_creator_factory.h>
 #include <recorder/kis_recorded_action_creator.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <KoIcon.h>
 
 #include <QMessageBox>
@@ -98,11 +98,11 @@ void KisActionsEditor::slotCreateAction(const QString& _id)
     KisRecordedAction* action = 0;
     if(f->requireCreator())
     {
-        KDialog d;
-        d.setButtons(KDialog::Ok | KDialog::Cancel);
+        KoDialog d;
+        d.setButtons(KoDialog::Ok | KoDialog::Cancel);
         KisRecordedActionCreator* creator = f->createCreator(&d);
         d.setMainWidget(creator);
-        if(d.exec() == KDialog::Accepted)
+        if(d.exec() == KoDialog::Accepted)
         {
             action = creator->createAction();
             if(!action) {

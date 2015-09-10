@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterManager.h"
 
 #include <QUrl>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <KoProgressUpdater.h>
 
 #include <QString>
@@ -47,7 +47,7 @@ public:
 
 };
 
-class KoFilterChooser : public KDialog
+class KoFilterChooser : public KoDialog
 {
     Q_OBJECT
 

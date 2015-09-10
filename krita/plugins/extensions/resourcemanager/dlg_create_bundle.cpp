@@ -48,7 +48,7 @@
 #define ICON_SIZE 48
 
 DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)
 {
@@ -187,7 +187,7 @@ void DlgCreateBundle::accept()
                 cfg.writeEntry<QString>("BundleWebsite", m_ui->editWebsite->text());
                 cfg.writeEntry<QString>("BundleLicense", m_ui->editLicense->text());
             }
-            KDialog::accept();
+            KoDialog::accept();
         }
     }
 }

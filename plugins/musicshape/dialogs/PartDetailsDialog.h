@@ -21,14 +21,14 @@
 
 #include <ui_PartDetailsDialog.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class MusicTool;
 namespace MusicCore {
     class Part;
 }
 
-class PartDetailsDialog : public KDialog {
+class PartDetailsDialog : public KoDialog {
     Q_OBJECT
 public:
     explicit PartDetailsDialog(MusicCore::Part* part, QWidget *parent = 0);

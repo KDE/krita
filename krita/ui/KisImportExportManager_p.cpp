@@ -33,13 +33,13 @@ Boston, MA 02110-1301, USA.
 #include <unistd.h>
 
 KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const QUrl &url)
-        : KDialog(parent),
+        : KoDialog(parent),
         m_mimeTypes(mimeTypes)
 {
     setObjectName("kofilterchooser");
     setInitialSize(QSize(300, 350));
-    setButtons(KDialog::Ok|KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setButtons(KoDialog::Ok|KoDialog::Cancel);
+    setDefaultButton(KoDialog::Ok);
     setCaption(i18n("Choose Filter"));
     setModal(true);
 

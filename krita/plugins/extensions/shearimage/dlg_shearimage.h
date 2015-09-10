@@ -20,7 +20,7 @@
 #ifndef DLG_SHEARIMAGE
 #define DLG_SHEARIMAGE
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "ui_wdg_shearimage.h"
 
@@ -34,7 +34,7 @@ public:
     }
 };
 
-class DlgShearImage: public KDialog
+class DlgShearImage: public KoDialog
 {
 
     Q_OBJECT

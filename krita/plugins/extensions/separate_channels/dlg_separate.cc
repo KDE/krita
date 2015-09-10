@@ -31,7 +31,7 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,
                          QWidget *  parent,
                          const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_imageCS(imageCS)
         , m_layerCS(layerCS)
 {

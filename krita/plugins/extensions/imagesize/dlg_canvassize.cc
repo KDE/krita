@@ -32,7 +32,7 @@
 static const QString percentStr(i18n("Percent (%)"));
 
 DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double resolution)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_keepAspect(true)
         , m_aspectRatio((double)width / height)
         , m_resolution(resolution)

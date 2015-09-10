@@ -20,14 +20,14 @@
 #ifndef SECTIONFORMATDIALOG_H
 #define SECTIONFORMATDIALOG_H
 
-#include <KDialog>
+#include <KoDialog.h>
 
 class KoTextEditor;
 class KoSection;
 class KoSectionModel;
 
 #include <ui_SectionFormatDialog.h>
-class SectionFormatDialog : public KDialog
+class SectionFormatDialog : public KoDialog
 {
     Q_OBJECT
 

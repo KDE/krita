@@ -21,12 +21,12 @@
 
 #include <ui_KeySignatureDialog.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 namespace MusicCore {
     class KeySignature;
 }
 
-class KeySignatureDialog : public KDialog {
+class KeySignatureDialog : public KoDialog {
     Q_OBJECT
 public:
     explicit KeySignatureDialog(QWidget *parent = 0);

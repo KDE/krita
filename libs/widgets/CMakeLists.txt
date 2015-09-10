@@ -9,6 +9,7 @@ if (LIBATTICA_FOUND)
 endif ()
 
 set(kowidgets_LIB_SRCS
+    KoDialog.cpp
     KoGlobal.cpp
     KoZoomWidget.cpp
     KoTagToolButton.cpp

@@ -44,7 +44,7 @@
 #include <QMessageBox>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <KoCanvasBase.h>
 #include <KisMainWindow.h>
@@ -289,13 +289,13 @@ void MainWindow::resetWindowTitle()
     if(url.scheme() == "temp")
         fileName = i18n("Untitled");
 
-    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KisDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
-        flags |= KDialog::ModifiedCaption;
+        flags |= KoDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle( KoDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()

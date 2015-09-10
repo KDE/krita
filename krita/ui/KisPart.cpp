@@ -46,7 +46,7 @@
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <knotification.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
 

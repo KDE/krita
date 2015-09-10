@@ -31,7 +31,7 @@
 // KDE's headers
 #include <kis_debug.h>
 #include <kis_paint_device.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
 #include <QUrl>
@@ -104,7 +104,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
             pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 

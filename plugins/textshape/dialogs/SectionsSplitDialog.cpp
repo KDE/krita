@@ -27,12 +27,12 @@
 #include <klocalizedstring.h>
 
 SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_editor(editor)
 {
     setCaption(i18n("Configure sections"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    enableButton(KDialog::Ok, false);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
+    enableButton(KoDialog::Ok, false);
     showButtonSeparator(true);
     QWidget *form = new QWidget;
     m_widget.setupUi(form);
@@ -56,7 +56,7 @@ SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
 void SectionsSplitDialog::afterListSelection()
 {
     if (m_widget.afterList->selectedItems().size()) { // FIXME: more elegant way to check selection?
-        enableButton(KDialog::Ok, true);
+        enableButton(KoDialog::Ok, true);
         m_widget.beforeList->clearSelection();
     }
 }
@@ -64,7 +64,7 @@ void SectionsSplitDialog::afterListSelection()
 void SectionsSplitDialog::beforeListSelection()
 {
     if (m_widget.beforeList->selectedItems().size()) {
-        enableButton(KDialog::Ok, true);
+        enableButton(KoDialog::Ok, true);
         m_widget.afterList->clearSelection();
     }
 }

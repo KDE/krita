@@ -23,7 +23,7 @@
 using namespace MusicCore;
 
 KeySignatureDialog::KeySignatureDialog(QWidget* parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Set key signature"));
     QWidget* w = new QWidget(this);

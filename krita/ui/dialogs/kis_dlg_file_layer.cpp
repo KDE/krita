@@ -36,7 +36,7 @@
 #include <kis_file_layer.h>
 
 KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, QWidget * parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_basePath(basePath)
 {
     setButtons(Ok | Cancel);

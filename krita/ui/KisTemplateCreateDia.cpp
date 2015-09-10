@@ -100,12 +100,12 @@ public:
 
 KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
                                            const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
-  : KDialog(parent)
+  : KoDialog(parent)
   , d(new KisTemplateCreateDiaPrivate(filePath, thumbnail))
 {
 
-    setButtons( KDialog::Ok|KDialog::Cancel );
-    setDefaultButton( KDialog::Ok );
+    setButtons( KoDialog::Ok|KoDialog::Cancel );
+    setDefaultButton( KoDialog::Ok );
     setCaption( i18n( "Create Template" ) );
     setModal( true );
     setObjectName( "template create dia" );
@@ -248,7 +248,7 @@ void KisTemplateCreateDia::slotOk() {
         item = d->m_groups->topLevelItem(0);
     if(!item) {    // safe :)
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
     // is it a group or a template? anyway - get the group :)
@@ -256,20 +256,20 @@ void KisTemplateCreateDia::slotOk() {
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     KisTemplateGroup *group=d->m_tree->find(item->text(0));
     if(!group) {    // even safer
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     if(d->m_name->text().isEmpty()) {
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
@@ -328,7 +328,7 @@ void KisTemplateCreateDia::slotOk() {
 
     if (!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 

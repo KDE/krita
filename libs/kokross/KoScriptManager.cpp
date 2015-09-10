@@ -294,12 +294,12 @@ bool KoScriptManagerModule::uninstallPackage(Action* action)
 #endif
 
 KoScriptManagerDialog::KoScriptManagerDialog()
-    : KDialog()
+    : KoDialog()
 {
     setCaption(i18n("Script Manager"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setButtonText(KDialog::Ok, i18n("Save"));
-    setButtonIcon(KDialog::Ok, koIcon("document-save"));
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
+    setButtonText(KoDialog::Ok, i18n("Save"));
+    setButtonIcon(KoDialog::Ok, koIcon("document-save"));
     m_collection = new KoScriptManagerCollection(mainWidget());
     setMainWidget(m_collection);
     resize(QSize(520, 380).expandedTo(minimumSizeHint()));

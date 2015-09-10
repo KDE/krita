@@ -369,7 +369,7 @@ void AutocorrectConfig::removeTwoUpperLetterEntry()
 }
 
 AutocorrectConfigDialog::AutocorrectConfigDialog(Autocorrect *autocorrect, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     ui = new AutocorrectConfig(autocorrect, this);
     connect(this, SIGNAL(okClicked()), ui, SLOT(applyConfig()));
@@ -383,7 +383,7 @@ AutocorrectConfigDialog::~AutocorrectConfigDialog()
 }
 
 CharSelectDialog::CharSelectDialog(QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     m_charSelect = new KCharSelect(this, 0,
             KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable);

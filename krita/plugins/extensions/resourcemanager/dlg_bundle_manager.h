@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include "kis_action_manager.h"
 
 class ResourceBundle;
@@ -33,7 +33,7 @@ namespace Ui
 class WdgDlgBundleManager;
 }
 
-class DlgBundleManager : public KDialog
+class DlgBundleManager : public KoDialog
 {
     Q_OBJECT
 public:

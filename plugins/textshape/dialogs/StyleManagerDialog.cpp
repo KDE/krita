@@ -25,7 +25,7 @@
 #include <QMessageBox>
 
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setButtons(Ok | Cancel | Apply);
     m_styleManagerWidget = new StyleManager(this);
@@ -52,7 +52,7 @@ void StyleManagerDialog::accept()
         return;
     }
     m_styleManagerWidget->save();
-    KDialog::accept();
+    KoDialog::accept();
     deleteLater();
 }
 
@@ -74,7 +74,7 @@ void StyleManagerDialog::reject()
             return;
         }
     }
-    KDialog::reject();
+    KoDialog::reject();
     deleteLater();
 }
 

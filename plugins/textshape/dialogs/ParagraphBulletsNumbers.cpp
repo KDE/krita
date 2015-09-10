@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 #include <kcharselect.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <KIO/Job>
@@ -307,17 +307,17 @@ void ParagraphBulletsNumbers::styleChanged(int index)
 
 void ParagraphBulletsNumbers::customCharButtonPressed()
 {
-    KDialog *dialog = new KDialog(this);
+    KoDialog *dialog = new KoDialog(this);
     dialog->setModal(true);
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog->setDefaultButton(KDialog::Ok);
+    dialog->setButtons(KoDialog::Ok | KoDialog::Cancel);
+    dialog->setDefaultButton(KoDialog::Ok);
 
     KCharSelect *kcs = new KCharSelect(dialog, 0,
             KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos
             | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
 
     dialog->setMainWidget(kcs);
-    if (dialog->exec() == KDialog::Accepted) {
+    if (dialog->exec() == KoDialog::Accepted) {
         QChar character = kcs->currentChar();
         widget.customCharacter->setText(character);
 

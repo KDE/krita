@@ -22,7 +22,7 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QUrl>
 
@@ -72,9 +72,9 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("JPEG 2000 Export Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsJP2 optionsJP2;
 

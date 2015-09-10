@@ -28,7 +28,7 @@
 #include "widgets/squeezedcombobox.h"
 
 KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelID, const QString &colorDepthID, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setButtons(Ok);
     setDefaultButton(Ok);

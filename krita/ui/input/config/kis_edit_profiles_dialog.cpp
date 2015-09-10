@@ -40,7 +40,7 @@ public:
 };
 
 KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags flags)
-    : KDialog(parent, flags), d(new Private())
+    : KoDialog(parent, flags), d(new Private())
 {
     QWidget *mainWidget = new QWidget(this);
     d->ui = new Ui::KisEditProfilesDialog();

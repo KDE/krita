@@ -138,7 +138,7 @@ void ManageBookmark::slotBookmarkInsert()
 }
 
 ManageBookmarkDialog::ManageBookmarkDialog(const QList<QString> &nameList, KoTextEditor *editor, QWidget *parent)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     ui = new ManageBookmark(nameList, editor, this);
     setMainWidget(ui);

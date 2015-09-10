@@ -29,7 +29,7 @@ class KLineEdit;
 class KPushButton;
 class KHistoryComboBox;
 class KProcess;
-class KDialog;
+class KoDialog;
 
 class QToolButton;
 class QTextDocument;
@@ -92,7 +92,7 @@ private:
 
     KProcess *m_thesProc;
     KProcess *m_wnProc;
-    KDialog *m_dialog;
+    KoDialog *m_dialog;
     KHistoryComboBox *m_edit;
     KPushButton *m_search;
     KLineEdit *m_replaceLineEdit;

@@ -31,7 +31,7 @@
 #include "KoPAPageThumbnailModel.h"
 
 KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPage *activeMaster, QWidget *parent)
-    : KDialog(parent),
+    : KoDialog(parent),
     m_document(document)
 {
     QSize iconSize(128, 128);

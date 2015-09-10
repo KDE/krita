@@ -19,7 +19,7 @@
 #ifndef KISAUTOSAVERECOVERYDIALOG_H
 #define KISAUTOSAVERECOVERYDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QStringList>
 #include <QModelIndex>
 
@@ -27,7 +27,7 @@ class QListView;
 
 Q_DECLARE_METATYPE(QModelIndex)
 
-class KisAutoSaveRecoveryDialog : public KDialog
+class KisAutoSaveRecoveryDialog : public KoDialog
 {
     Q_OBJECT
 public:

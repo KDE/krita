@@ -23,7 +23,7 @@
 #include <ui_AutocorrectConfig.h>
 #include "Autocorrect.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KCharSelect;
 
@@ -75,7 +75,7 @@ private:
     QHash<QString, QString> m_autocorrectEntries;
 };
 
-class AutocorrectConfigDialog : public KDialog
+class AutocorrectConfigDialog : public KoDialog
 {
     Q_OBJECT
 
@@ -96,7 +96,7 @@ private:
     AutocorrectConfig *ui;
 };
 
-class CharSelectDialog : public KDialog
+class CharSelectDialog : public KoDialog
 {
     Q_OBJECT
 public:

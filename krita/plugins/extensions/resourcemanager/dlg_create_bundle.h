@@ -19,7 +19,7 @@
 #ifndef KOBUNDLECREATIONWIDGET_H
 #define KOBUNDLECREATIONWIDGET_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class ResourceBundle;
 
@@ -28,7 +28,7 @@ namespace Ui
 class WdgDlgCreateBundle;
 }
 
-class DlgCreateBundle : public KDialog
+class DlgCreateBundle : public KoDialog
 {
     Q_OBJECT
 

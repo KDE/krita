@@ -885,7 +885,7 @@ void KisLayerManager::saveGroupLayers()
 {
     QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
 
-    KDialog dlg;
+    KoDialog dlg;
     QWidget *page = new QWidget(&dlg);
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);

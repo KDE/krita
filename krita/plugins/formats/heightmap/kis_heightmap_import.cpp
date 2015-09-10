@@ -28,7 +28,7 @@
 
 #include <kpluginfactory.h>
 #include <QUrl>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <KisImportExportManager.h>
 #include <KoColorSpaceRegistry.h>
@@ -105,9 +105,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
 
     QApplication::restoreOverrideCursor();
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsHeightMap optionsHeightMap;
 

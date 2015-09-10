@@ -47,7 +47,7 @@
 #include <kis_color_manager.h>
 
 KisConfig::KisConfig()
-    : m_cfg(KGlobal::config()->group(""))
+    : m_cfg( KSharedConfig::openConfig()->group(""))
 {
 }
 
@@ -921,13 +921,13 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
 
 bool KisConfig::hideSplashScreen(bool defaultValue) const
 {
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     return (defaultValue ? true : cfg.readEntry("HideSplashAfterStartup", true));
 }
 
 void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
 {
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
@@ -1579,7 +1579,7 @@ const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) 
 {
     const KoColorSpace *cs = 0;
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     if (defaultValue || cfg.readEntry("useCustomColorSpace", true)) {
         KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
         cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
@@ -1592,7 +1592,7 @@ const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) 
 
 void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     cfg.writeEntry("useCustomColorSpace", bool(cs));
     if(cs) {
         cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());

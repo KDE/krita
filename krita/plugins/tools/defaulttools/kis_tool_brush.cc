@@ -84,7 +84,7 @@ void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &sha
     KisToolFreehand::activate(activation, shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
-    m_configGroup = KGlobal::config()->group(toolId());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 
 
 }

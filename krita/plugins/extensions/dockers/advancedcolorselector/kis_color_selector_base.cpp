@@ -432,7 +432,7 @@ void KisColorSelectorBase::updateSettings()
         m_popup->updateSettings();
     }
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
 
    int zoomSelectorOptions =  (int) cfg.readEntry("zoomSelectorOptions", 0) ;

@@ -522,7 +522,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 #endif
 
     if (!alwaysShow) {
-        KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
             QUrl url(fullTemplateName);

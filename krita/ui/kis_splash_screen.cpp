@@ -53,7 +53,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     chkShowAtStartup->hide();
     connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
 
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
@@ -79,7 +79,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblVersion->setText(i18n("Version: %1", version));
     lblVersion->setStyleSheet("color:" + color);
 
-    KConfigGroup cfg2(KGlobal::config(), "RecentFiles");
+    KConfigGroup cfg2( KSharedConfig::openConfig(), "RecentFiles");
     int i = 1;
 
     QString recent = i18n("<html>"
@@ -133,7 +133,7 @@ void KisSplashScreen::show()
 
 void KisSplashScreen::toggleShowAtStartup(bool toggle)
 {
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     cfg.writeEntry("HideSplashAfterStartup", toggle);
 }
 

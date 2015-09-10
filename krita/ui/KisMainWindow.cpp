@@ -478,12 +478,12 @@ KisMainWindow::~KisMainWindow()
 
 //    }
 
-    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());
 
     {
-        KConfigGroup group(KGlobal::config(), "theme");
+        KConfigGroup group( KSharedConfig::openConfig(), "theme");
         group.writeEntry("Theme", d->themeManager->currentThemeName());
     }
 
@@ -574,7 +574,7 @@ void KisMainWindow::slotPreferences()
 void KisMainWindow::slotThemeChanged()
 {
     // save theme changes instantly
-    KConfigGroup group(KGlobal::config(), "theme");
+    KConfigGroup group( KSharedConfig::openConfig(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());
 
     // reload action icons!
@@ -630,7 +630,7 @@ void KisMainWindow::addRecentURL(const QUrl &url)
 void KisMainWindow::saveRecentFiles()
 {
     // Save list of recent files
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
     d->recentFiles->saveEntries(config->group("RecentFiles"));
     config->sync();
 
@@ -642,7 +642,7 @@ void KisMainWindow::saveRecentFiles()
 
 void KisMainWindow::reloadRecentFileList()
 {
-    d->recentFiles->loadEntries(KGlobal::config()->group("RecentFiles"));
+    d->recentFiles->loadEntries( KSharedConfig::openConfig()->group("RecentFiles"));
 }
 
 void KisMainWindow::updateCaption()
@@ -1100,7 +1100,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
 void KisMainWindow::saveWindowSettings()
 {
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
 
     if (d->windowSizeDirty ) {
         dbgUI << "KisMainWindow::saveWindowSettings";
@@ -1113,7 +1113,7 @@ void KisMainWindow::saveWindowSettings()
     if (!d->activeView || d->activeView->document()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group = KGlobal::config()->group("krita");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
@@ -1129,7 +1129,7 @@ void KisMainWindow::saveWindowSettings()
 
     }
 
-    KGlobal::config()->sync();
+     KSharedConfig::openConfig()->sync();
     resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
 
 }
@@ -1381,7 +1381,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         return 0;
 
     if (pdfFileName.isEmpty()) {
-        KConfigGroup group = KGlobal::config()->group("File Dialogs");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
             defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
@@ -1463,7 +1463,7 @@ void KisMainWindow::slotConfigureKeys()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    KConfigGroup group = KGlobal::config()->group("krita");
+    KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
     saveMainWindowSettings(group);
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
@@ -1473,7 +1473,7 @@ void KisMainWindow::slotConfigureToolbars()
 
 void KisMainWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group("krita"));
+    applyMainWindowSettings( KSharedConfig::openConfig()->group("krita"));
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
@@ -1500,7 +1500,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            KConfigGroup group = KGlobal::config()->group("krita");
+            KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
             saveMainWindowSettings(group);
         }
     } else
@@ -1675,7 +1675,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             visible = false;
         }
 
-        KConfigGroup group = KGlobal::config()->group("krita").group("DockWidget " + factory->id());
+        KConfigGroup group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
         side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
@@ -1686,7 +1686,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
-        group = KGlobal::config()->group("krita").group("DockWidget " + factory->id());
+        group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 
@@ -1702,7 +1702,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = d->dockWidgetsMap[factory->id()];
     }
 
-    KConfigGroup group(KGlobal::config(), "GUI");
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     dockWidgetFont.setPointSizeF(qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF()));
@@ -1720,7 +1720,7 @@ void KisMainWindow::forceDockTabFonts()
 {
     foreach(QObject *child, children()) {
         if (child->inherits("QTabBar")) {
-            KConfigGroup group(KGlobal::config(), "GUI");
+            KConfigGroup group( KSharedConfig::openConfig(), "GUI");
             QFont dockWidgetFont  = KGlobalSettings::generalFont();
             qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
             dockWidgetFont.setPointSizeF(qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF()));
@@ -1893,7 +1893,7 @@ void KisMainWindow::configChanged()
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     }
 
-    KConfigGroup group(KGlobal::config(), "theme");
+    KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
     d->viewManager->actionManager()->updateGUI();
 
@@ -1976,7 +1976,7 @@ QPointer<KisView>KisMainWindow::activeKisView()
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
 
-    KConfigGroup group(KGlobal::config(), "GUI");
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
@@ -2032,7 +2032,7 @@ void KisMainWindow::createActions()
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
-    KSharedConfigPtr configPtr = KGlobal::config();
+    KSharedConfigPtr configPtr =  KSharedConfig::openConfig();
     d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
 
     d->saveAction = actionManager->createStandardAction(KStandardAction::Save, this, SLOT(slotFileSave()));
@@ -2168,7 +2168,7 @@ void KisMainWindow::initializeGeometry()
 {
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
-    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     if (!initialGeometrySet()) {
         QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
         if (!restoreGeometry(geom)) {

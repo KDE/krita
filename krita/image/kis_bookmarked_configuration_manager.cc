@@ -63,7 +63,7 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QStr
         else
             return 0;
     }
-    KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group(configEntryGroup());
 
     QDomDocument doc;
     doc.setContent(cfg.readEntry<QString>(configname, ""));
@@ -77,20 +77,20 @@ void KisBookmarkedConfigurationManager::save(const QString & configname, const K
 {
     dbgImage << "Saving configuration " << config << " to " << configname;
     if (!config) return;
-    KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group(configEntryGroup());
     cfg.writeEntry(configname, config->toXML());
 }
 
 bool KisBookmarkedConfigurationManager::exists(const QString & configname) const
 {
-    KSharedConfig::Ptr cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg =  KSharedConfig::openConfig();
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
     return (m.find(configname) != m.end());
 }
 
 QList<QString> KisBookmarkedConfigurationManager::configurations() const
 {
-    KSharedConfig::Ptr cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg =  KSharedConfig::openConfig();
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
     QList<QString> keys = m.keys();
     QList<QString> configsKey;
@@ -120,7 +120,7 @@ QString KisBookmarkedConfigurationManager::configEntryGroup() const
 
 void KisBookmarkedConfigurationManager::remove(const QString & name)
 {
-    KSharedConfig::Ptr cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg =  KSharedConfig::openConfig();
     KConfigGroup group = cfg->group(configEntryGroup());
     group.deleteEntry(name);
 }

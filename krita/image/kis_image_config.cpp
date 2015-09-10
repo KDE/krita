@@ -30,7 +30,7 @@
 
 
 KisImageConfig::KisImageConfig()
-    : m_config(KGlobal::config()->group(""))
+    : m_config( KSharedConfig::openConfig()->group(""))
 {
 }
 

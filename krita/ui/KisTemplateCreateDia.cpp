@@ -372,7 +372,7 @@ void KisTemplateCreateDia::slotOk() {
     if ( d->m_defaultTemplate->isChecked() )
     {
 
-      KConfigGroup grp(KGlobal::config(), "TemplateChooserDialog");
+      KConfigGroup grp( KSharedConfig::openConfig(), "TemplateChooserDialog");
       grp.writeEntry( "LastReturnType", "Template" );
       grp.writePathEntry( "FullTemplateName", dir + '/' + t->file() );
       grp.writePathEntry( "AlwaysUseTemplate", dir + '/' + t->file() );

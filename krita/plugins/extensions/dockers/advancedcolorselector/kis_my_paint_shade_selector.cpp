@@ -82,7 +82,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
         m_realPixelCache->clear();
         m_realCircleBorder->clear();
     }
-	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+	KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
 
     int size = qMin(width(), height());
@@ -232,7 +232,7 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
 
         Acs::ColorRole role = Acs::buttonToRole(e->button());
 
-        KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
         bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
         bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
@@ -255,7 +255,7 @@ KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
 
 void KisMyPaintShadeSelector::setColor(const KoColor &color) {
 
-	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+	KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
 
     R = cfg.readEntry("lumaR", 0.2126);
@@ -277,7 +277,7 @@ void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     if(m_colorUpdateAllowed==false)
         return;
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);

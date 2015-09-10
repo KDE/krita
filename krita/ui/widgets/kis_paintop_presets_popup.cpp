@@ -71,7 +71,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
-    KConfigGroup group(KGlobal::config(), "GUI");
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     m_d->smallFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", m_d->smallFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());

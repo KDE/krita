@@ -122,7 +122,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 
 void KisColorSelectorContainer::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     m_onDockerResizeSetting =  (int)cfg.readEntry("onDockerResize", 0);
 
     QString type = cfg.readEntry("shadeSelectorType", "MyPaint");

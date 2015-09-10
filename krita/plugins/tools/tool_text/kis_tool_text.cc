@@ -145,7 +145,7 @@ QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
     connect(m_optionsWidget->cmbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleIndexChanged(int)));
     connect(m_optionsWidget->m_buttonGroup, SIGNAL(buttonPressed(int)), this, SLOT(textTypeIndexChanged(int)));
 
-    m_configGroup = KGlobal::config()->group(toolId());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 
     return widgets;
 }

@@ -255,7 +255,7 @@ void KisColorPatches::updateSettings()
 {
     KisColorSelectorBase::updateSettings();
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     if(cfg.readEntry(m_configPrefix+"Alignment", false))
         m_direction=Vertical;

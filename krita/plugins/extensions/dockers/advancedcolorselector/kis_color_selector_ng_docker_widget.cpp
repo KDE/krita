@@ -151,7 +151,7 @@ void KisColorSelectorNgDockerWidget::openSettings()
 
 void KisColorSelectorNgDockerWidget::updateLayout()
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
 
     //color patches

@@ -111,7 +111,7 @@ public:
     ~ResetStarting()  {
         if (m_splash) {
 
-            KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+            KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
 
             if (hideSplash) {
@@ -289,7 +289,7 @@ void KisApplication::clearConfig()
 {
     KIS_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
 
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
 
     // find user settings file
     bool createDir = false;

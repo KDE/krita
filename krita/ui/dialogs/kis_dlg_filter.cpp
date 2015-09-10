@@ -93,7 +93,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(this, SIGNAL(accepted()), SLOT(slotOnAccept()));
     connect(this, SIGNAL(rejected()), SLOT(slotOnReject()));
 
-    KConfigGroup group(KGlobal::config(), "filterdialog");
+    KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 
 }
@@ -201,7 +201,7 @@ void KisDlgFilter::enablePreviewToggled(bool state)
         d->filterManager->cancel();
     }
 
-    KConfigGroup group(KGlobal::config(), "filterdialog");
+    KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
 
     group.config()->sync();

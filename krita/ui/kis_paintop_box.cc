@@ -110,7 +110,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
-    KConfigGroup grp = KGlobal::config()->group("krita").group("Toolbar BrushesAndStuff");
+    KConfigGroup grp =  KSharedConfig::openConfig()->group("krita").group("Toolbar BrushesAndStuff");
     int iconsize = grp.readEntry("IconSize", 32);
 
     if (!cfg.toolOptionsInDocker()) {

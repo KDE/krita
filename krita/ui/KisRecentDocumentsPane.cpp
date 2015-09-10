@@ -86,7 +86,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
 
     model()->setSortRole(0); // Disable sorting
 
-    KConfigGroup config(KGlobal::config(), "RecentFiles");
+    KConfigGroup config( KSharedConfig::openConfig(), "RecentFiles");
 
     int i = 1;
     QString path;
@@ -196,7 +196,7 @@ void KisRecentDocumentsPane::openFile(const QModelIndex& index)
 {
     if (!index.isValid()) return;
 
-    KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("LastReturnType", "File");
 
     KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));

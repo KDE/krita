@@ -163,8 +163,8 @@ KIcon KisColorSelectorSettings::icon()
 void KisColorSelectorSettings::savePreferences() const
 {
     // write cfg
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup hsxcfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
     //  advanced color selector
     cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
@@ -385,8 +385,8 @@ void KisColorSelectorSettings::loadPreferences()
     //read cfg
     //don't forget to also add a new entry to the default preferences
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup hsxcfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
 
     // Advanced color selector

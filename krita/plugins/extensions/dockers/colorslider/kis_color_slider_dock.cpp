@@ -77,7 +77,7 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
         //settings//
         QBitArray m_SlidersConfigArray(12);
 
-        KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
         m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
         m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);

@@ -48,7 +48,7 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
 
     KGuiItem openGItem(i18n("Use This Template"));
     m_openButton->setGuiItem(openGItem);
-    KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
     m_alwaysUseCheckBox->setVisible(false);
@@ -134,7 +134,7 @@ void KisTemplatesPane::openFile(const QModelIndex& index)
 {
     if (index.isValid()) {
         QStandardItem* item = model()->itemFromIndex(index);
-        KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
         cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
@@ -157,7 +157,7 @@ void KisTemplatesPane::alwaysUseClicked()
         d->m_alwaysUseTemplate = item->data(Qt::UserRole + 1).toString();
     }
 
-    KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
     cfgGrp.sync();
     emit alwaysUseChanged(this, d->m_alwaysUseTemplate);

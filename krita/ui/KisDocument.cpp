@@ -561,7 +561,7 @@ KisDocument::KisDocument()
     d->pageLayout.rightMargin = 0;
 
 
-    KConfigGroup cfgGrp(KGlobal::config(), "Undo");
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
     connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));

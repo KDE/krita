@@ -143,7 +143,7 @@ KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *disp
 
 KisColorSliderWidget::~KisColorSliderWidget()
 {
-    //KConfigGroup cfg = KGlobal::config()->group("");
+    //KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     //cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
 
 }
@@ -444,7 +444,7 @@ void KisColorSliderWidget::setConfig()
 
     QBitArray m_SlidersConfigArray(12);
     //dbgKrita<<"check";
-    KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
     m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
     m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);

@@ -118,7 +118,7 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
 {
     setObjectName("KisToolOptionsPopup");
 
-    KConfigGroup group(KGlobal::config(), "GUI");
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     d->smallFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", d->smallFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());

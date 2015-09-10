@@ -82,7 +82,7 @@ void KisShadeSelectorLine::setColor(const KoColor &color)
 
 void KisShadeSelectorLine::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     m_gradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
     m_patchCount = cfg.readEntry("minimalShadeSelectorPatchCount", 10);
@@ -214,7 +214,7 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
 
     Acs::ColorRole role = Acs::buttonToRole(e->button());
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
     bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);

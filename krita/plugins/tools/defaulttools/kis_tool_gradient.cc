@@ -88,7 +88,7 @@ void KisToolGradient::resetCursorStyle()
 void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
-    m_configGroup = KGlobal::config()->group(toolId());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)

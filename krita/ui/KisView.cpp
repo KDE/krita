@@ -260,7 +260,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->canvasController->setCanvasMode(KoCanvasController::Infinite);
     d->canvasController->setVastScrolling(cfg.vastScrolling());
 
-    KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
+    KConfigGroup grp( KSharedConfig::openConfig(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
         cfg.setUseOpenGL(false);
     }

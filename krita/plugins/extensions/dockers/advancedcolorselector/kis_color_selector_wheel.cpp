@@ -97,7 +97,7 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     qreal hslH, hslS, hslL;
 	qreal hsiH, hsiS, hsiI;
 	qreal hsyH, hsyS, hsyY;
-	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+	KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 	R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);

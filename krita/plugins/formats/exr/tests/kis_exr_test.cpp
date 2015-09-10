@@ -60,7 +60,7 @@ void KisExrTest::testRoundTrip()
     savedFile.setAutoRemove(false);
     savedFile.open();
 
-    KUrl savedFileURL("file://" + savedFile.fileName());
+    QUrl savedFileURL("file://" + savedFile.fileName());
     QString savedFileName(savedFileURL.toLocalFile());
 
     QString typeName;

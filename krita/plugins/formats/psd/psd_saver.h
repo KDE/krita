@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include "kis_types.h"
 class KisDocument;
@@ -58,7 +58,7 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(const KUrl& uri);
+    KisImageBuilder_Result buildFile(const QUrl &uri);
 
     KisImageWSP image();
 

@@ -58,7 +58,7 @@ KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&
 
     if (!filename.isEmpty()) {
 
-        KUrl url;
+        QUrl url;
         url.setPath(filename);
 
         if (url.isEmpty())

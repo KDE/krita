@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpaceConstants.h>
 #include <KisFilterChain.h>
@@ -108,7 +108,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     KisConfig().setExportConfiguration("JP2", cfg);
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     image->refreshGraph();

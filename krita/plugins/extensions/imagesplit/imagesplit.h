@@ -23,7 +23,7 @@
 
 #include <QVariant>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kis_view_plugin.h>
 
 class Imagesplit : public KisViewPlugin
@@ -36,7 +36,7 @@ public:
 private Q_SLOTS:
 
     void slotImagesplit();
-    void saveAsImage(QRect , QString, KUrl);
+    void saveAsImage(QRect , QString, QUrl);
 };
 
 #endif // IMAGESPLIT_H

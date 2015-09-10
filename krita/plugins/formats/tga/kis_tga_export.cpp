@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 
@@ -60,7 +60,7 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     qApp->processEvents(); // For vector layers to be updated

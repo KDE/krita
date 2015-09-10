@@ -53,7 +53,7 @@
 #include <kservice.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kselectaction.h>
 #include <kxmlguifactory.h>
 
@@ -1002,7 +1002,7 @@ void KisViewManager::slotSaveIncremental()
         return;
     }
     document()->setSaveInBatchMode(true);
-    document()->saveAs(fileName);
+    document()->saveAs(QUrl::fromUserInput(fileName));
     document()->setSaveInBatchMode(false);
 
     if (mainWindow()) {
@@ -1073,7 +1073,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             return;
         }
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(fileName);
+        document()->saveAs(QUrl::fromUserInput(fileName));
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1111,7 +1111,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Save both as backup and on current file for interapplication workflow
         document()->setSaveInBatchMode(true);
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(fileName);
+        document()->saveAs(QUrl::fromUserInput(fileName));
         document()->setSaveInBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();

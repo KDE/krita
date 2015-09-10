@@ -26,7 +26,7 @@
 #include <qendian.h>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -116,7 +116,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& 
         return KisImportExportFilter::FileNotFound;
     }
 
-    KUrl url(filename);
+    QUrl url(filename);
 
     if (url.isEmpty())
         return KisImportExportFilter::FileNotFound;

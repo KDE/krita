@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include "KisImportExportManager.h"
 
-#include <kurl.h>
+#include <QUrl>
 #include <kdialog.h>
 #include <KoProgressUpdater.h>
 
@@ -54,7 +54,7 @@ class KisFilterChooser : public KDialog
 
 public:
     KisFilterChooser(QWidget *parent, const QStringList &mimeTypes,
-                    const QString &nativeFormat = QString(), const KUrl &url = KUrl());
+                    const QString &nativeFormat = QString(), const QUrl &url = QUrl());
     ~KisFilterChooser();
 
     QString filterSelected();

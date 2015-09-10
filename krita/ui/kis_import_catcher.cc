@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisImportExportManager.h>
 
@@ -45,7 +45,7 @@ struct KisImportCatcher::Private
 public:
     KisDocument* doc;
     KisViewManager* view;
-    KUrl url;
+    QUrl url;
     QString layerType;
 
     QString prettyLayerName() const;
@@ -56,7 +56,7 @@ public:
 QString KisImportCatcher::Private::prettyLayerName() const
 {
     QString name = url.fileName();
-    return !name.isEmpty() ? name : url.prettyUrl();
+    return !name.isEmpty() ? name : url.toDisplayString();
 }
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
@@ -82,7 +82,7 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisViewManager * view, const QString &layerType)
+KisImportCatcher::KisImportCatcher(const QUrl &url, KisViewManager * view, const QString &layerType)
     : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();

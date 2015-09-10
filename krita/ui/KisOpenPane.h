@@ -29,7 +29,7 @@ class KisOpenPanePrivate;
 class QPixmap;
 class KisTemplatesPane;
 class KisDetailsPane;
-class KUrl;
+class QUrl;
 class QTreeWidgetItem;
 class QString;
 class QStringList;
@@ -74,8 +74,8 @@ private Q_SLOTS:
     void openFileDialog();
     
 Q_SIGNALS:
-    void openExistingFile(const KUrl&);
-    void openTemplate(const KUrl&);
+    void openExistingFile(const QUrl&);
+    void openTemplate(const QUrl&);
 
     /// Emitted when the always use template has changed
     void alwaysUseChanged(KisTemplatesPane* sender, const QString& alwaysUse);

@@ -41,7 +41,7 @@ extern "C" {
 #include <QMessageBox>
 
 #include <klocale.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -123,7 +123,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
+KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -427,7 +427,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result KisJPEGConverter::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -447,7 +447,7 @@ KisImageWSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;

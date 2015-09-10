@@ -980,7 +980,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (filename.isEmpty()) return;
 
-    KUrl url = KUrl::fromLocalFile(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     if (url.isEmpty()) return;
 

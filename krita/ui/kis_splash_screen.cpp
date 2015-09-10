@@ -94,7 +94,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
         path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
         if (!path.isEmpty()) {
             QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
-            KUrl url(path);
+            QUrl url(path);
             if (name.isEmpty())
                 name = url.fileName();
 
@@ -139,7 +139,7 @@ void KisSplashScreen::toggleShowAtStartup(bool toggle)
 
 void KisSplashScreen::linkClicked(const QString &link)
 {
-    KisPart::instance()->openExistingFile(KUrl(link));
+    KisPart::instance()->openExistingFile(QUrl(link));
     if (isTopLevel()) {
         close();
     }

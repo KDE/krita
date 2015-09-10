@@ -251,7 +251,7 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
 
     if (receiver && member) {
         if (actionType == KStandardAction::OpenRecent) {
-            QObject::connect(action, SIGNAL(urlSelected(KUrl)), receiver, member);
+            QObject::connect(action, SIGNAL(urlSelected(QUrl)), receiver, member);
         }
         else if (actionType == KStandardAction::ConfigureToolbars) {
             QObject::connect(action, SIGNAL(triggered(bool)), receiver, member, Qt::QueuedConnection);

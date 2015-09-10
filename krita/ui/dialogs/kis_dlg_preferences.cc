@@ -332,7 +332,7 @@ void ColorSettingsTab::installProfile()
     QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
-        KUrl file(profileName);
+        QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
             dbgKrita << "Could not install profile!";
             return;

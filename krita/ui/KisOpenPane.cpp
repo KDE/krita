@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kis_debug.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kglobal.h>
 
 #include <KoFileDialog.h>
@@ -211,8 +211,8 @@ void KisOpenPane::openFileDialog()
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
-    foreach(KUrl url, dialog.filenames()) {
-        emit openExistingFile(url);
+    foreach(const QString &filename, dialog.filenames()) {
+        emit openExistingFile(QUrl::fromUserInput(filename));
     }
 }
 
@@ -220,7 +220,7 @@ void KisOpenPane::initRecentDocs()
 {
     QString header = i18n("Recent Documents");
     KisRecentDocumentsPane* recentDocPane = new KisRecentDocumentsPane(this, header);
-    connect(recentDocPane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openExistingFile(const KUrl&)));
+    connect(recentDocPane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openExistingFile(const QUrl&)));
     QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
     connect(recentDocPane, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
             this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)));
@@ -252,7 +252,7 @@ void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 
             KisTemplatesPane* pane = new KisTemplatesPane(this, group->name(),
                                                         group, templateTree.defaultTemplate());
-            connect(pane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
+            connect(pane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openTemplate(const QUrl&)));
             connect(pane, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)),
                     this, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)));
             connect(this, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)),

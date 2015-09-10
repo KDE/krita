@@ -397,7 +397,7 @@ KisMainWindow *KisPart::currentMainwindow() const
 
 }
 
-void KisPart::openExistingFile(const KUrl& url)
+void KisPart::openExistingFile(const QUrl &url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
@@ -464,7 +464,7 @@ void KisPart::configureShortcuts()
     }
 }
 
-void KisPart::openTemplate(const KUrl& url)
+void KisPart::openTemplate(const QUrl &url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
@@ -505,7 +505,7 @@ void KisPart::viewDestroyed()
     }
 }
 
-void KisPart::addRecentURLToAllMainWindows(KUrl url)
+void KisPart::addRecentURLToAllMainWindows(QUrl url)
 {
     // Add to recent actions list in our mainWindows
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
@@ -525,7 +525,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
         KConfigGroup cfgGrp(KGlobal::config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
-            KUrl url(fullTemplateName);
+            QUrl url(fullTemplateName);
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
@@ -536,14 +536,12 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
                 } else {
-                    KUrl templateURL;
                     KDesktopFile f(desktopfile);
-                    templateURL.setPath(KUrl(desktopfile).directory() + '/' + f.readUrl());
-                    fullTemplateName = templateURL.toLocalFile();
+                    fullTemplateName = QFileInfo(desktopfile).absolutePath() + '/' + f.readUrl();
                 }
             }
             if (!fullTemplateName.isEmpty()) {
-                openTemplate(fullTemplateName);
+                openTemplate(QUrl::fromLocalFile(fullTemplateName));
                 return;
             }
         }
@@ -564,8 +562,8 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
         connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
     }
 
-    connect(d->startupWidget, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
-    connect(d->startupWidget, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
+    connect(d->startupWidget, SIGNAL(openExistingFile(const QUrl&)), this, SLOT(openExistingFile(const QUrl&)));
+    connect(d->startupWidget, SIGNAL(openTemplate(const QUrl&)), this, SLOT(openTemplate(const QUrl&)));
 
     d->startupWidget->setParent(mainWindow);
     d->startupWidget->setWindowFlags(Qt::Dialog);

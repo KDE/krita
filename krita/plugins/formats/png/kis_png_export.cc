@@ -216,7 +216,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     delete kdb;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     KisPNGConverter kpc(input);

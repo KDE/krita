@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <QMessageBox>
 #include <kfilewidget.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
 
@@ -113,7 +113,7 @@ public:
     KisSaveGroupVisitor(KisImageWSP image,
                         bool saveInvisible,
                         bool saveTopLevelOnly,
-                        const KUrl &url,
+                        const QUrl &url,
                         const QString &baseName,
                         const QString &extension,
                         const QString &mimeFilter)
@@ -208,10 +208,10 @@ public:
             d->setSaveInBatchMode(true);
 
 
-            KUrl url = m_url;
-            url.adjustPath(KUrl::AddTrailingSlash);
+            QUrl url = m_url;
 
-            url.setFileName(m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
+            url = url.adjusted(QUrl::RemoveFilename);
+            url.setPath(url.path() + m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
 
             d->exportDocument(url);
 
@@ -233,7 +233,7 @@ private:
     KisImageWSP m_image;
     bool m_saveInvisible;
     bool m_saveTopLevelOnly;
-    KUrl m_url;
+    QUrl m_url;
     QString m_baseName;
     QString m_extension;
     QString m_mimeFilter;
@@ -905,10 +905,9 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
+    // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
     //return m_fileWidget->selectedUrl();
-    KUrl url = fd->dirOperator()->url();
-    url.adjustPath(KUrl::AddTrailingSlash);
+    QUrl url = fd->dirOperator()->url();
     QString path = fd->locationEdit()->currentText();
     QFileInfo f(path);
     QString extension = f.completeSuffix();
@@ -943,7 +942,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
 
     QString basePath;
-    KUrl url = m_view->document()->url();
+    QUrl url = m_view->document()->url();
     if (url.isLocalFile()) {
         basePath = QFileInfo(url.toLocalFile()).absolutePath();
     }

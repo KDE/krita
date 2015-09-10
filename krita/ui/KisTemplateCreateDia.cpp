@@ -50,7 +50,7 @@
 #include <kis_debug.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
-#include <kurl.h>
+#include <QUrl>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -293,9 +293,9 @@ void KisTemplateCreateDia::slotOk() {
     else
         warnUI << "Template extension not found!";
 
-    KUrl dest;
+    QUrl dest;
     dest.setPath(templateDir+file+ext);
-    if (QFile::exists( dest.pathOrUrl())) {
+    if (QFile::exists(dest.toLocalFile())) {
         do {
             file.prepend( '_' );
             dest.setPath( templateDir + file + ext );
@@ -332,7 +332,7 @@ void KisTemplateCreateDia::slotOk() {
         return;
     }
 
-    KUrl orig;
+    QUrl orig;
     orig.setPath(d->m_filePath);
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )

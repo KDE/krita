@@ -27,7 +27,7 @@
 #include <QPointer>
 
 
-#include <kurl.h>
+#include <QUrl>
 #include <kxmlguiclient.h>
 
 #include "kritaui_export.h"
@@ -130,7 +130,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(KUrl url);
+    void addRecentURLToAllMainWindows(QUrl url);
 
     KisMainWindow *currentMainwindow() const;
 
@@ -140,7 +140,7 @@ public Q_SLOTS:
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
-    void openExistingFile(const KUrl& url);
+    void openExistingFile(const QUrl &url);
 
     /**
      * @brief configureShortcuts opens the shortcut configuration dialog.
@@ -157,7 +157,7 @@ protected Q_SLOTS:
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
      */
-    void openTemplate(const KUrl& url);
+    void openTemplate(const QUrl &url);
 
 private Q_SLOTS:
 

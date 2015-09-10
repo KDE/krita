@@ -25,7 +25,7 @@
 
 #include <QMessageBox>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
@@ -83,7 +83,7 @@ info_callback(const char *msg, void *client_data)
     fprintf(stdout, "[INFO] %s", msg);
 }
 
-KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
+KisImageBuilder_Result jp2Converter::decode(const QUrl &uri)
 {
     // decompression parameters
     opj_dparameters_t parameters;
@@ -268,7 +268,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
 
 
-KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
+KisImageBuilder_Result jp2Converter::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -286,7 +286,7 @@ KisImageWSP jp2Converter::getImage()
 }
 
 
-KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP layer, const JP2ConvertOptions& options)
+KisImageBuilder_Result jp2Converter::buildFile(const QUrl &uri, KisPaintLayerSP layer, const JP2ConvertOptions& options)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -465,7 +465,7 @@ void jp2Converter::cancel()
     m_stop = true;
 }
 
-int jp2Converter::getFileFormat(const KUrl& uri) const
+int jp2Converter::getFileFormat(const QUrl &uri) const
 {
     QString extension = QFileInfo(uri.fileName()).suffix().toLower();
     if (extension == "j2k" || extension == "j2c") {

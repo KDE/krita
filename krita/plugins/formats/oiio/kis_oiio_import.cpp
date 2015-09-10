@@ -77,7 +77,7 @@ KisImportExportFilter::ConversionStatus KisOiioImport::convert(const QByteArray&
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        KUrl url(filename);
+        QUrl url(filename);
 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;

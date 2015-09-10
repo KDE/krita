@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kritaui_export.h>
 
 class KisViewManager;
@@ -58,7 +58,7 @@ public Q_SLOTS:
      * @param url the url to the image file
      * @return the number of layers added
      */
-    qint32 importImage(const KUrl& url, const QString &layerType = "KisPaintLayer");
+    qint32 importImage(const QUrl &url, const QString &layerType = "KisPaintLayer");
 
     void resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset);
     void scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);

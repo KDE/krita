@@ -33,7 +33,7 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include "QmlGlobalEngine.h"
 
@@ -104,7 +104,7 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
+        d->basePath = QUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
         emit idChanged();
     }
 }

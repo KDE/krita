@@ -68,7 +68,7 @@
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kurlcombobox.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
@@ -247,7 +247,7 @@ public:
 
     KRecentFilesAction *recentFiles;
 
-    KUrl lastExportUrl;
+    QUrl lastExportUrl;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
@@ -599,15 +599,15 @@ void KisMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KisMainWindow::addRecentURL(const KUrl& url)
+void KisMainWindow::addRecentURL(const QUrl &url)
 {
-    dbgUI << "KisMainWindow::addRecentURL url=" << url.prettyUrl();
+    dbgUI << "KisMainWindow::addRecentURL url=" << url.toDisplayString();
     // Add entry to recent documents list
     // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
     if (!url.isEmpty()) {
         bool ok = true;
         if (url.isLocalFile()) {
-            QString path = url.toLocalFile(KUrl::RemoveTrailingSlash);
+            QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
             const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
@@ -617,7 +617,7 @@ void KisMainWindow::addRecentURL(const KUrl& url)
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
             }
         } else {
-            KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
+            KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
         }
         if (ok) {
             d->recentFiles->addUrl(url);
@@ -660,8 +660,8 @@ void KisMainWindow::updateCaption()
 
         updateCaption(caption, d->activeView->document()->isModified());
 
-        if (!d->activeView->document()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())
-            d->saveAction->setToolTip(i18n("Save as %1", d->activeView->document()->url().fileName(KUrl::ObeyTrailingSlash)));
+        if (!d->activeView->document()->url().fileName().isEmpty())
+            d->saveAction->setToolTip(i18n("Save as %1", d->activeView->document()->url().fileName()));
         else
             d->saveAction->setToolTip(i18n("Save"));
     }
@@ -695,7 +695,7 @@ KisView *KisMainWindow::activeView() const
     return 0;
 }
 
-bool KisMainWindow::openDocument(const KUrl & url)
+bool KisMainWindow::openDocument(const QUrl &url)
 {
     if (!QFile(url.toLocalFile()).exists()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
@@ -706,7 +706,7 @@ bool KisMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
+bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
 {
     if (!newdoc) {
         newdoc = KisPart::instance()->createDocument();
@@ -801,7 +801,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
-    KUrl oldURL = document->url();
+    QUrl oldURL = document->url();
     QString oldFile = document->localFilePath();
 
     QByteArray _native_format = document->nativeFormatMimeType();
@@ -809,7 +809,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
     int oldSpecialOutputFlag = document->specialOutputFlag();
 
-    KUrl suggestedURL = document->url();
+    QUrl suggestedURL = document->url();
 
     QStringList mimeFilter;
     QMimeDatabase db;
@@ -850,7 +850,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 }
             }
 
-            suggestedURL.setFileName(suggestedFilename);
+            suggestedURL = suggestedURL.adjusted(QUrl::RemoveFilename);
+            suggestedURL.setPath(suggestedURL.path() + suggestedFilename);
         }
 
         // force the user to choose outputMimeType
@@ -873,7 +874,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
         dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
-        KUrl newURL = dialog.filename();
+        QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
@@ -881,7 +882,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 QMimeDatabase db;
                 QMimeType mime = db.mimeTypeForName(_native_format);
                 fn.append(mime.preferredSuffix());
-                newURL = KUrl::fromPath(fn);
+                newURL = QUrl::fromLocalFile(fn);
             }
         }
 
@@ -930,7 +931,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 } else { // current filename extension wrong anyway
                     if (dot > 0) fileName = fileName.left(dot);
                 }
-                newURL.setFileName(fileName);
+                newURL = newURL.adjusted(QUrl::RemoveFilename);
+                newURL.setPath(newURL.path() + fileName);
             }
         }
 
@@ -1189,7 +1191,7 @@ void KisMainWindow::slotFileOpen()
     foreach(const QString& url, urls) {
 
         if (!url.isEmpty()) {
-            bool res = openDocument(KUrl::fromLocalFile(url));
+            bool res = openDocument(QUrl::fromLocalFile(url));
             if (!res) {
                 warnKrita << "Loading" << url << "failed";
             }
@@ -1199,9 +1201,9 @@ void KisMainWindow::slotFileOpen()
 
 void KisMainWindow::slotFileOpenRecent(const QUrl & url)
 {
-    // Create a copy, because the original KUrl in the map of recent files in
+    // Create a copy, because the original QUrl in the map of recent files in
     // KRecentFilesAction may get deleted.
-    (void) openDocument(KUrl(url));
+    (void) openDocument(QUrl(url));
 }
 
 void KisMainWindow::slotFileSave()
@@ -1383,14 +1385,15 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
             defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
-        KUrl startUrl = KUrl(defaultDir);
+        QUrl startUrl = QUrl(defaultDir);
         KisDocument* pDoc = d->activeView->document();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
             startUrl = pDoc->url();
             QString fileName = startUrl.fileName();
             fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
-            startUrl.setFileName( fileName );
+            startUrl = startUrl.adjusted(QUrl::RemoveFilename);
+            startUrl.setPath(startUrl.path() +  fileName );
         }
 
         QPointer<KoPageLayoutDialog> layoutDlg(new KoPageLayoutDialog(this, pageLayout));
@@ -1406,7 +1409,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
-        KUrl url = dialog.filename();
+        QUrl url = QUrl::fromUserInput(dialog.filename());
 
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())
@@ -1584,7 +1587,7 @@ void KisMainWindow::slotReloadFile()
             return;
     }
 
-    KUrl url = document->url();
+    QUrl url = document->url();
 
     saveWindowSettings();
     if (!document->reload()) {
@@ -1815,7 +1818,7 @@ void KisMainWindow::updateWindowMenu()
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QString title = doc->url().prettyUrl();
+            QString title = doc->url().toDisplayString();
             if (title.isEmpty()) title = doc->image()->objectName();
             QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
@@ -1843,10 +1846,10 @@ void KisMainWindow::updateWindowMenu()
         if (child) {
             QString text;
             if (i < 9) {
-                text = i18n("&%1 %2", i + 1, child->document()->url().prettyUrl());
+                text = i18n("&%1 %2", i + 1, child->document()->url().toDisplayString());
             }
             else {
-                text = i18n("%1 %2", i + 1, child->document()->url().prettyUrl());
+                text = i18n("%1 %2", i + 1, child->document()->url().toDisplayString());
             }
 
             QAction *action  = menu->addAction(text);

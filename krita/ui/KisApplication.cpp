@@ -234,7 +234,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
 {
     QString templatePath;
 
-    const KUrl templateUrl = fileName;
+    const QUrl templateUrl = QUrl::fromLocalFile(fileName);
     if (QFile::exists(fileName)) {
         templatePath = templateUrl.toLocalFile();
         dbgUI << "using full path...";
@@ -260,13 +260,13 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     }
 
     if (!templatePath.isEmpty()) {
-        KUrl templateBase;
+        QUrl templateBase;
         templateBase.setPath(templatePath);
         KDesktopFile templateInfo(templatePath);
 
         QString templateName = templateInfo.readUrl();
-        KUrl templateURL;
-        templateURL.setPath(templateBase.directory() + '/' + templateName);
+        QUrl templateURL;
+        templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
 
         KisDocument *doc = KisPart::instance()->createDocument();
         if (mainWindow->openDocumentInternal(templateURL, doc)) {
@@ -278,7 +278,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         }
         else {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"),
-                                  i18n("Template %1 failed to load.", templateURL.prettyUrl()));
+                                  i18n("Template %1 failed to load.", templateURL.toDisplayString()));
         }
     }
 
@@ -443,9 +443,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    QList<KUrl> urls = checkAutosaveFiles();
+    QList<QUrl> urls = checkAutosaveFiles();
     if (!batchRun && mainWindow) {
-        foreach(const KUrl &url, urls) {
+        foreach(const QUrl &url, urls) {
             KisDocument *doc = KisPart::instance()->createDocument();
             mainWindow->openDocumentInternal(url, doc);
         }
@@ -507,7 +507,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 }
                 else if (mainWindow) {
                     KisDocument *doc = KisPart::instance()->createDocument();
-                    if (mainWindow->openDocumentInternal(fileName, doc)) {
+                    if (mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
                         if (print) {
                             mainWindow->slotFilePrint();
                             nPrinted++;
@@ -593,7 +593,7 @@ void KisApplication::remoteArguments(QByteArray &message, QObject *socket)
             }
             else if (QFile(filename).exists()) {
                 KisDocument *doc = KisPart::instance()->createDocument();
-                mw->openDocumentInternal(filename, doc);
+                mw->openDocumentInternal(QUrl::fromLocalFile(filename), doc);
             }
         }
     }
@@ -604,12 +604,12 @@ void KisApplication::fileOpenRequested(const QString &url)
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
         KisDocument *doc = KisPart::instance()->createDocument();
-        mainWindow->openDocumentInternal(url, doc);
+        mainWindow->openDocumentInternal(QUrl::fromLocalFile(url), doc);
     }
 }
 
 
-QList<KUrl> KisApplication::checkAutosaveFiles()
+QList<QUrl> KisApplication::checkAutosaveFiles()
 {
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
@@ -646,11 +646,11 @@ QList<KUrl> KisApplication::checkAutosaveFiles()
         }
     }
 
-    QList<KUrl> autosaveUrls;
+    QList<QUrl> autosaveUrls;
     if (autoSaveFiles.size() > 0) {
 
         foreach(const QString &autoSaveFile, autoSaveFiles) {
-            KUrl url;
+            QUrl url;
             url.setPath(dir.absolutePath() + "/" + autoSaveFile);
             autosaveUrls << url;
         }

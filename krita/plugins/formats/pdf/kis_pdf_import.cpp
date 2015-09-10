@@ -34,7 +34,7 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
-#include <kurl.h>
+#include <QUrl>
 
 // calligra's headers
 #include <KisFilterChain.h>
@@ -73,7 +73,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KisImportExportFilter::FileNotFound;
 
 
-    KUrl url(filename);
+    QUrl url(filename);
 
     if (!url.isLocalFile()) {
         return KisImportExportFilter::FileNotFound;

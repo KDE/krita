@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -89,7 +89,7 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     KisImageWSP image = input->image();

@@ -27,7 +27,7 @@
 #include <QCursor>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kdialog.h>
 
 #include <KisImportExportManager.h>
@@ -92,7 +92,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         return KisImportExportFilter::FileNotFound;
     }
 
-    KUrl url(filename);
+    QUrl url(filename);
 
 
     dbgFile << "Import: " << url;

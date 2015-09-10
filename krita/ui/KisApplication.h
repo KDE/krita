@@ -98,7 +98,7 @@ public Q_SLOTS:
 
 private:
     /// @return the number of autosavefiles opened
-    QList<KUrl> checkAutosaveFiles();
+    QList<QUrl> checkAutosaveFiles();
     bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow);
     void clearConfig();
 

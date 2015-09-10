@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QHash>
 
-#include <KUrl>
+#include <QUrl>
 
 #include <Command.h>
 #include <kis_config_widget.h>
@@ -72,8 +72,8 @@ private Q_SLOTS:
     void setChoiceIndex(int index);
     void setColorValue(const QColor &color);
     void setTextValue();
-    void setFolderPathValue(const KUrl &kurl);
-    void setFilePathValue(const KUrl &kurl);
+    void setFolderPathValue(const QUrl &kurl);
+    void setFilePathValue(const QUrl &kurl);
 
 };
 

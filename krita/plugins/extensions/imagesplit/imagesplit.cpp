@@ -63,7 +63,7 @@ Imagesplit::~Imagesplit()
 {
 }
 
-void Imagesplit::saveAsImage(QRect imgSize, QString mimeType, KUrl url)
+void Imagesplit::saveAsImage(QRect imgSize, QString mimeType, QUrl url)
 {
     KisImageWSP image = m_view->image();
 
@@ -130,11 +130,11 @@ void Imagesplit::slotImagesplit()
                 for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
                     QMimeDatabase db;
                     QMimeType mimeTypeSelected = db.mimeTypeForName(listMimeFilter.at(dlgImagesplit->cmbIndex));
-                    KUrl url(QDir::homePath());
+                    QUrl url(QDir::homePath());
                     QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + mimeTypeSelected.preferredSuffix();
-                    url.addPath(fileName);
-                    KUrl kurl = url.url();
-                    saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), kurl);
+                    url = url.adjusted(QUrl::StripTrailingSlash);
+                    url.setPath(url.path() + '/' + (fileName));
+                    saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), url);
                 }
             }
         }
@@ -146,7 +146,7 @@ void Imagesplit::slotImagesplit()
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter);
-                    KUrl url = dialog.filename();
+                    QUrl url = QUrl::fromUserInput(dialog.filename());
 
                     QMimeDatabase db;
                     QMimeType mime = db.mimeTypeForUrl(url);

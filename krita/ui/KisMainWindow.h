@@ -27,7 +27,7 @@
 #include <QPrinter>
 
 #include <kxmlguiwindow.h>
-#include <kurl.h>
+#include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -112,7 +112,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL(const KUrl& url);
+    void addRecentURL(const QUrl &url);
 
     /**
      * Load the desired document and show it.
@@ -120,7 +120,7 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const KUrl & url);
+    bool openDocument(const QUrl &url);
 
     void setReadWrite(bool readwrite);
 
@@ -388,7 +388,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const KUrl &url, KisDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KisDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()

@@ -38,7 +38,7 @@
 #include <QGLWidget>
 #include <QDesktopServices>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <QMessageBox>
@@ -284,9 +284,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
     QString fileName = url.fileName();
-    if(url.protocol() == "temp")
+    if(url.scheme() == "temp")
         fileName = i18n("Untitled");
 
     KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;

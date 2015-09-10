@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
@@ -546,7 +546,7 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
     return result;
 }
 
-KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
+KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
     Imf::InputFile file(QFile::encodeName(uri.toLocalFile()));
@@ -835,7 +835,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result exrConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result exrConverter::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -978,7 +978,7 @@ void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& infor
     qDeleteAll(encoders);
 }
 
-KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -1206,7 +1206,7 @@ QString exrConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
     return doc.toString();
 }
 
-KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP layer)
+KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP layer)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;

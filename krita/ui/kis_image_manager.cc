@@ -23,7 +23,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kcolordialog.h>
 
 #include <KoColor.h>
@@ -98,26 +98,26 @@ void KisImageManager::setup(KisActionManager *actionManager)
 
 void KisImageManager::slotImportLayerFromFile()
 {
-    importImage(KUrl(), "KisPaintLayer");
+    importImage(QUrl(), "KisPaintLayer");
 }
 
 void KisImageManager::slotImportLayerAsTransparencyMask()
 {
-    importImage(KUrl(), "KisTransparencyMask");
+    importImage(QUrl(), "KisTransparencyMask");
 }
 
 void KisImageManager::slotImportLayerAsFilterMask()
 {
-    importImage(KUrl(), "KisFilterMask");
+    importImage(QUrl(), "KisFilterMask");
 }
 
 void KisImageManager::slotImportLayerAsSelectionMask()
 {
-    importImage(KUrl(), "KisSelectionMask");
+    importImage(QUrl(), "KisSelectionMask");
 }
 
 
-qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType)
+qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType)
 {
     KisImageWSP currentImage = m_view->image();
 
@@ -125,7 +125,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
         return 0;
     }
 
-    KUrl::List urls;
+    QList<QUrl> urls;
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
@@ -135,7 +135,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
         dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
         QStringList fileNames = dialog.filenames();
         foreach(const QString &fileName, fileNames) {
-            urls << KUrl::fromLocalFile(fileName);
+            urls << QUrl::fromLocalFile(fileName);
         }
 
     } else {
@@ -145,7 +145,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
     if (urls.empty())
         return 0;
 
-    for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
+    for (QList<QUrl>::iterator it = urls.begin(); it != urls.end(); ++it) {
         new KisImportCatcher(*it, m_view, layerType);
     }
 

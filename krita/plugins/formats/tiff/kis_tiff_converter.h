@@ -30,7 +30,7 @@
 #include "kis_annotation.h"
 class KisDocument;
 
-class KUrl;
+class QUrl;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -70,15 +70,15 @@ public:
     KisTIFFConverter(KisDocument *doc);
     virtual ~KisTIFFConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP layer, KisTIFFOptions);
+    KisImageBuilder_Result buildImage(const QUrl &uri);
+    KisImageBuilder_Result buildFile(const QUrl &uri, KisImageWSP layer, KisTIFFOptions);
     /** Retrieve the constructed image
     */
     KisImageWSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const QUrl &uri);
     KisImageBuilder_Result readTIFFDirectory(TIFF* image);
 private:
     KisImageWSP m_image;

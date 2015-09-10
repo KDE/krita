@@ -25,7 +25,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -100,7 +100,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     QString filename = m_chain->outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     exrConverter kpc(input, !m_chain->manager()->getBatchMode());

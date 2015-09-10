@@ -137,7 +137,7 @@ void FileSystemModel::setPath(const QString& path)
 QString FileSystemModel::parentFolder()
 {
     if (path() != Private::drivesPath) {
-        KUrl root = QUrl::fromLocalFile(path());
+        QUrl root = QUrl::fromLocalFile(path());
         if (QRegExp("^[A-Z]{1,3}:/$").exactMatch(root.toLocalFile())) {
             return Private::drivesPath;
         } else {

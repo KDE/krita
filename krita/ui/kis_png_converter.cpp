@@ -39,7 +39,7 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>
@@ -775,7 +775,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result KisPNGConverter::buildImage(const QUrl &uri)
 {
     dbgFile << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
     if (uri.isEmpty())
@@ -785,7 +785,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    m_path = uri.prettyUrl();
+    m_path = uri.toDisplayString();
 
     QFile fp(uri.toLocalFile());
     if (fp.exists()) {
@@ -840,7 +840,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const QUrl &uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     dbgFile << "Start writing PNG File " << uri;
     if (uri.isEmpty())

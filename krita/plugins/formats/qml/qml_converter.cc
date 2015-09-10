@@ -20,7 +20,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -35,7 +35,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const KUrl& uri, KisImageWSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const QUrl &uri, KisImageWSP image)
 {
 
     if (uri.isEmpty())

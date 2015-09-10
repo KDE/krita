@@ -21,7 +21,7 @@
 #include "kis_color_space_selector.h"
 
 #include <kglobal.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoFileDialog.h>
 #include <KoColorProfile.h>
@@ -215,7 +215,7 @@ void KisColorSpaceSelector::installProfile()
     QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
-        KUrl file(profileName);
+        QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
             dbgKrita << "Could not install profile!";
             return;
@@ -254,7 +254,7 @@ void KisColorSpaceSelector::uploadProfile()
     KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
     const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
     if(!profile)  return;
-    dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
+    dialog.setUploadFile(QUrl::fromLocalFile(profile->fileName()));
     dialog.setUploadName(profile->name());
     dialog.exec();
 #endif

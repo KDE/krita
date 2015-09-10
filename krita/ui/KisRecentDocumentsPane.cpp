@@ -27,7 +27,7 @@
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoIcon.h>
 
@@ -99,7 +99,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
         if (!path.isEmpty()) {
             QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
 
-            KUrl url(path);
+            QUrl url(path);
 
             if (name.isEmpty())
                 name = url.fileName();

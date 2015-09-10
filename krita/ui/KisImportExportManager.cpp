@@ -88,7 +88,7 @@ QString KisImportExportManager::importDocument(const QString& url,
 {
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
-    KUrl u(url);
+    QUrl u(url);
     QMimeType t;
     if (documentMimeType.isEmpty()) {
         QMimeDatabase db;
@@ -208,7 +208,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         dbgFile << "Using the mimetype hint:" << m_importUrlMimetypeHint;
         m_graph.setSourceMimeType(m_importUrlMimetypeHint);
     } else {
-        KUrl u;
+        QUrl u;
         u.setPath(m_importUrl);
         QMimeDatabase db;
         QMimeType t = db.mimeTypeForFile(u.path(), QMimeDatabase::MatchExtension);

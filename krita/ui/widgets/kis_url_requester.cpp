@@ -51,7 +51,7 @@ void KisUrlRequester::setStartDir(const QString &path)
 void KisUrlRequester::setFileName(const QString &path)
 {
     m_ui->txtFileName->setText(path);
-    KUrl url(path);
+    QUrl url(path);
     emit urlSelected(url);
 }
 
@@ -60,12 +60,12 @@ QString KisUrlRequester::fileName() const
     return m_ui->txtFileName->text();
 }
 
-KUrl KisUrlRequester::url() const
+QUrl KisUrlRequester::url() const
 {
-    return KUrl(fileName());
+    return QUrl(fileName());
 }
 
-void KisUrlRequester::setUrl(const KUrl &urlObj)
+void KisUrlRequester::setUrl(const QUrl &urlObj)
 {
     QString url = urlObj.path();
 

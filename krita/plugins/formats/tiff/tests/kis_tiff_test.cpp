@@ -83,7 +83,7 @@ void KisTiffTest::testRoundTripRGBF16()
     doc0->setBackupFile(false);
     doc0->setOutputMimeType("image/tiff");
     doc0->setSaveInBatchMode(true);
-    doc0->saveAs(KUrl("file://" + tmpFile.fileName()));
+    doc0->saveAs(QUrl("file://" + tmpFile.fileName()));
 
     KisNodeSP layer0 = doc0->image()->root()->firstChild();
     Q_ASSERT(layer0);

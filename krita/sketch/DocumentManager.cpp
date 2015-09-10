@@ -124,7 +124,7 @@ void DocumentManager::delayedNewDocument()
         d->document->resetURL();
     }
     else if(d->newDocOptions.contains("template")) {
-        KUrl url(d->newDocOptions.value("template").toString().remove("template://"));
+        QUrl url(d->newDocOptions.value("template").toString().remove("template://"));
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
         d->document->undoStack()->clear();
@@ -253,7 +253,7 @@ void DocumentManager::delayedSaveAs()
 
 void DocumentManager::reload()
 {
-    KUrl url = d->document->url();
+    QUrl url = d->document->url();
     closeDocument();
     d->openDocumentFilename = url.toLocalFile();
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));

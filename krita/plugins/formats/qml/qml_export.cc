@@ -21,7 +21,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 
@@ -61,7 +61,7 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
         return KisImportExportFilter::FileNotFound;
     }
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     KisImageWSP image = input->image();

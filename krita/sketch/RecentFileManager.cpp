@@ -21,7 +21,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
@@ -46,7 +46,7 @@ public:
 
         QString value;
         QString nameValue;
-        KUrl url;
+        QUrl url;
 
         KConfigGroup cg = grp;
 
@@ -59,7 +59,7 @@ public:
 
             value = cg.readPathEntry(QString("File%1").arg(i), QString());
             if (value.isEmpty()) continue;
-            url = KUrl(value);
+            url = QUrl(value);
 
             // krita sketch only handles local files
             if (!url.isLocalFile())

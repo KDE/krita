@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kis_debug.h>
-#include <kurl.h>
+#include <QUrl>
 #include <QTemporaryFile>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
@@ -525,7 +525,7 @@ void KisView::dropEvent(QDropEvent *event)
                 foreach(const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
-                        d->viewManager->imageManager()->importImage(KUrl(url));
+                        d->viewManager->imageManager()->importImage(QUrl(url));
                         activateWindow();
                     }
                     else {

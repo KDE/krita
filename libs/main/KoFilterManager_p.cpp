@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 
 #include <unistd.h>
 
-KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const KUrl &url)
+KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const QUrl &url)
         : KDialog(parent),
         m_mimeTypes(mimeTypes)
 {

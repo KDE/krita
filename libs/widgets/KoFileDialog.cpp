@@ -28,7 +28,7 @@
 #include <kconfiggroup.h>
 
 #include <klocale.h>
-#include <kurl.h>
+#include <QUrl>
 #include <QMimeDatabase>
 #include <QMimeType>
 

@@ -171,7 +171,7 @@ bool KoScriptManagerCollection::isModified() const
 #if 0
 bool KoScriptManagerCollection::slotInstall() {
     KFileDialog* filedialog = new KFileDialog(
-        KUrl("kfiledialog:///KrossInstallPackage"), // startdir
+        QUrl("kfiledialog:///KrossInstallPackage"), // startdir
         "*.tar.gz *.tgz *.bz2", // filter
         0, // custom widget
         0 // parent

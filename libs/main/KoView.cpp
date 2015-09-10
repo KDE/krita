@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kselectaction.h>
@@ -242,7 +242,7 @@ void KoView::dropEvent(QDropEvent *event)
         QList<QUrl> urls = event->mimeData()->urls();
         foreach (const QUrl &url, urls) {
             QImage image;
-            KUrl kurl(url);
+            QUrl kurl(url);
             // make sure we download the files before inserting them
             if (!kurl.isLocalFile()) {
                 QString tmpFile;

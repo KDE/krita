@@ -50,7 +50,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kiconloader.h>
@@ -303,12 +303,10 @@ void KoTemplateCreateDia::slotOk() {
     else
         kWarning(30004) << "Template extension not found!";
 
-    KUrl dest;
+    QUrl dest;
     dest.setPath(templateDir+file+ext);
-    if ( QFile::exists( dest.pathOrUrl() ) )
-    {
-        do
-        {
+    if (QFile::exists( dest.toLocalFile())) {
+        do {
             file.prepend( '_' );
             dest.setPath( templateDir + file + ext );
             tmpIcon=".icon/"+file+".png";
@@ -341,7 +339,7 @@ void KoTemplateCreateDia::slotOk() {
         return;
     }
 
-    KUrl orig;
+    QUrl orig;
     orig.setPath(d->m_filePath);
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )

@@ -37,7 +37,7 @@
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kdialog.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <QLineEdit>
 #include <QDateTime>

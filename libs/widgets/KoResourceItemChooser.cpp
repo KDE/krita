@@ -277,7 +277,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
             KoResource *resource = resourceFromModelIndex(index);
             if (resource) {
                 KNS3::UploadDialog dialog(d->knsrcFile, this);
-                dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
+                dialog.setUploadFile(QUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
                 dialog.exec();
             }

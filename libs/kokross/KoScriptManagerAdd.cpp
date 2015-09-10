@@ -98,7 +98,7 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     setLayout(layout);
-    m_filewidget = new KFileWidget(KUrl(startDirOrVariable), this);
+    m_filewidget = new KFileWidget(QUrl(startDirOrVariable), this);
 
     QStringList mimetypes;
     foreach (const QString &interpretername, Kross::Manager::self().interpreters()) {
@@ -183,7 +183,7 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
     action->setText(fi.baseName());
     //action->setDescription();
     if (fi.isFile()) {
-        action->setIconName(KMimeType::iconNameForUrl(KUrl(file)));
+        action->setIconName(KMimeType::iconNameForUrl(QUrl(file)));
         action->setEnabled(fi.exists());
     }
     action->setFile(file);

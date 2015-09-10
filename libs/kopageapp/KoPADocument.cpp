@@ -867,6 +867,6 @@ void KoPADocument::updateDocumentURL()
     if (resourceManager()->hasResource(KoText::InlineTextObjectManager)) {
         QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
         KoInlineTextObjectManager *om = var.value<KoInlineTextObjectManager*>();
-        om->setProperty(KoInlineObject::DocumentURL, url().pathOrUrl());
+        om->setProperty(KoInlineObject::DocumentURL, url().url(QUrl::PreferLocalFile));
     }
 }

@@ -84,15 +84,15 @@ calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLI
 # parts
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN PLUGIN_TEXTSHAPE)
 calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
-calligra_define_product(PART_SHEETS "Sheets engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components"  REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
+calligra_define_product(PART_SHEETS "Sheets engine" UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" UNPORTED REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
 
 # apps
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
 calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE)
-calligra_define_product(APP_SHEETS "Sheets app (for Desktop)"  REQUIRES PART_SHEETS)
+calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)"  REQUIRES PART_WORDS)
-calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KEXI "Kexi app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
@@ -103,13 +103,13 @@ calligra_define_product(APP_GEMINI "The Calligra Gemini application"  REQUIRES P
 calligra_define_product(DOC "Calligra Documentations" UNPORTED)
 
 # extras
-calligra_define_product(APP_CONVERTER "Format converter for commandline"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_CONVERTER "Format converter for commandline" UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(FILEMANAGER_PROPERTIES "Plugin for the KDE file properties dialog"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(FILEMANAGER_THUMBNAIL "Plugins for KDE filesystem thumbnailing"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(FILEMANAGER_THUMBNAIL "Plugins for KDE filesystem thumbnailing"  UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(FILEMANAGER_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(FILEMANAGER_TEMPLATES "File templates for filemanager")
-calligra_define_product(OKULAR_GENERATOR_ODP "Plugin for Okular adding support for ODP"   REQUIRES PART_STAGE)
-calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT"  REQUIRES PART_WORDS)
+calligra_define_product(OKULAR_GENERATOR_ODP "Plugin for Okular adding support for ODP" UNPORTED REQUIRES PART_STAGE)
+calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT" UNPORTED REQUIRES PART_WORDS)
 
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  REQUIRES LIB_CALLIGRA)
@@ -139,7 +139,7 @@ calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter"  REQUIRES LIB_KO
 calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter"  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_SHEETS_TO_XLS "Sheets XLS export filter"  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_CSV_TO_SHEETS "Sheets CSV import filter"  REQUIRES PART_SHEETS)
-calligra_define_product(FILTER_SHEETS_TO_CSV "Sheets CSV export filter"  REQUIRES PART_SHEETS)
+calligra_define_product(FILTER_SHEETS_TO_CSV "Sheets CSV export filter"  REQUIRES  PART_SHEETS)
 calligra_define_product(FILTER_APPLIXSPREAD_TO_KSPREAD "Applix Spreadsheet to KSpread filter"  REQUIRES PART_SHEETS)
 calligra_define_product(FILTER_DBASE_TO_KSPREAD "dBASE to KSpread filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_GNUMERIC_TO_SHEETS "Sheets GNUMERIC import filter"  REQUIRES PART_SHEETS)

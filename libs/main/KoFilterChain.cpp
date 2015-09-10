@@ -501,7 +501,7 @@ KoStoreDevice* KoFilterChain::storageCleanupHelper(KoStore** storage)
 
 KoDocument* KoFilterChain::createDocument(const QString& file)
 {
-    KUrl url;
+    QUrl url;
     url.setPath(file);
     KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
     if (t->name() == KMimeType::defaultMimeType()) {

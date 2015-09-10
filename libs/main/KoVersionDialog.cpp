@@ -213,10 +213,10 @@ void KoVersionDialog::slotOpen()
             return;
         }
         KoMainWindow *mainWindow = part->createMainWindow();
-        mainWindow ->openDocument(tmp.fileName());
+        mainWindow ->openDocument(QUrl::fromLocalFile(tmp.fileName()));
         mainWindow ->show();
     } else {
-        m_doc->openUrl(tmp.fileName());
+        m_doc->openUrl(QUrl::fromUserInput(tmp.fileName()));
     }
 
     tmp.setAutoRemove(true);

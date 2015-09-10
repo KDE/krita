@@ -90,7 +90,7 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <QTemporaryFile>
-#include <kurl.h>
+#include <QUrl>
 
 
 class Q_DECL_HIDDEN KoPAView::Private
@@ -500,7 +500,7 @@ KAction* KoPAView::deleteSelectionAction() const
 
 void KoPAView::importDocument()
 {
-    KFileDialog *dialog = new KFileDialog( KUrl("kfiledialog:///OpenDialog"),QString(), this );
+    KFileDialog *dialog = new KFileDialog( QUrl("kfiledialog:///OpenDialog"),QString(), this );
     dialog->setObjectName( "file dialog" );
     dialog->setMode( KFile::File );
     if ( d->doc->pageType() == KoPageApp::Slide ) {
@@ -519,7 +519,7 @@ void KoPAView::importDocument()
 
     dialog->setMimeFilter( mimeFilter );
     if (dialog->exec() == QDialog::Accepted) {
-        KUrl url(dialog->selectedUrl());
+        QUrl url(dialog->selectedUrl());
         QString tmpFile;
         if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
             QFile file( tmpFile );
@@ -532,11 +532,11 @@ void KoPAView::importDocument()
             data.setData( KoOdf::mimeType( d->doc->documentType() ), ba);
             KoPAPastePage paste( d->doc,d->activePage );
             if ( ! paste.paste( d->doc->documentType(), &data ) ) {
-                KMessageBox::error(0, i18n("Could not import\n%1", url.pathOrUrl()));
+                KMessageBox::error(0, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
             }
         }
         else {
-            KMessageBox::error(0, i18n("Could not import\n%1", url.pathOrUrl()));
+            KMessageBox::error(0, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
         }
     }
     delete dialog;
@@ -982,7 +982,7 @@ QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)
     return d->doc->pageThumbnail(page, size);
 }
 
-bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size,
+bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const QSize& size,
                                     const char * format, int quality )
 {
     bool res = false;
@@ -998,9 +998,9 @@ bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const 
             pix = pix.copy( 0, 0, size.width(), size.height() );
         }
         // save the pixmap to the desired file
-        KUrl fileUrl( url );
-        if ( fileUrl.protocol().isEmpty() ) {
-            fileUrl.setProtocol( "file" );
+        QUrl fileUrl( url );
+        if ( fileUrl.scheme().isEmpty() ) {
+            fileUrl.setScheme( "file" );
         }
         const bool bLocalFile = fileUrl.isLocalFile();
         QTemporaryFile* tmpFile = bLocalFile ? 0 : new QTemporaryFile();

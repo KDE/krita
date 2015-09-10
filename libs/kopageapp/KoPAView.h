@@ -38,7 +38,7 @@ class KoPADocumentStructureDocker;
 class KoRuler;
 class KoShapeManager;
 class KoZoomController;
-class KUrl;
+class QUrl;
 class KAction;
 
 class QTextDocument;
@@ -162,7 +162,7 @@ public:
      *
      * @returns whether the image was successfully saved
      */
-    bool exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size = QSize( 512, 512 ),
+    bool exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const QSize& size = QSize( 512, 512 ),
                               const char * format = 0, int quality = -1 );
 
     /// Update page navigation actions

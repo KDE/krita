@@ -25,7 +25,7 @@
 
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 
@@ -98,7 +98,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
         if (!path.isEmpty()) {
             QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
 
-            KUrl url(path);
+            QUrl url(path);
 
             if (name.isEmpty())
                 name = url.fileName();

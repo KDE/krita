@@ -42,7 +42,7 @@ KoPartAdaptor::~KoPartAdaptor()
 
 void KoPartAdaptor::openUrl(const QString & url)
 {
-    m_pDoc->document()->openUrl(KUrl(url));
+    m_pDoc->document()->openUrl(QUrl(url));
 }
 
 bool KoPartAdaptor::isLoading()
@@ -82,7 +82,7 @@ void KoPartAdaptor::save()
 
 void KoPartAdaptor::saveAs(const QString & url)
 {
-    m_pDoc->document()->saveAs(KUrl(url));
+    m_pDoc->document()->saveAs(QUrl(url));
     m_pDoc->document()->waitSaveComplete(); // see ReadWritePart
 }
 

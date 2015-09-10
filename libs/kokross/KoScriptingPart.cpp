@@ -149,7 +149,7 @@ bool KoScriptingPart::showExecuteScriptFile()
         mimetypes.append(info->mimeTypes().join(" ").trimmed());
     }
     KFileDialog *filedialog = new KFileDialog(
-        KUrl("kfiledialog:///KrossExecuteScript"), // startdir
+        QUrl("kfiledialog:///KrossExecuteScript"), // startdir
         mimetypes.join(" "), // filter
         0, // custom widget
         0 // parent

@@ -24,7 +24,6 @@
 #include <QTimer>
 
 #include <klocalizedstring.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 
 #include <QMessageBox>

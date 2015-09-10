@@ -29,7 +29,6 @@
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
 #include <KoFileDialog.h>

@@ -28,7 +28,6 @@
 #include <CImg.h>
 #include <gmic.h>
 
-#include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 

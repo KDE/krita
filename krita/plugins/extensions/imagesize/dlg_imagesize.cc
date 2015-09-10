@@ -22,9 +22,10 @@
 
 #include "dlg_imagesize.h"
 
+#include <QLocale>
+
 #include <KoUnit.h>
 #include <kis_size_group.h>
-#include <klocalizedstring.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
 
@@ -36,17 +37,17 @@ static const QString pixelsInchStr(i18n("Pixels/Inch"));
 static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
-        : KDialog(parent)
-        , m_aspectRatio(((double) width) / height)
-        , m_originalWidth(width)
-        , m_originalHeight(height)
-        , m_width(width)
-        , m_height(height)
-        , m_printWidth(width / resolution)
-        , m_printHeight(height / resolution)
-        , m_originalResolution(resolution)
-        , m_resolution(resolution)
-        , m_keepAspect(true)        
+    : KDialog(parent)
+    , m_aspectRatio(((double) width) / height)
+    , m_originalWidth(width)
+    , m_originalHeight(height)
+    , m_width(width)
+    , m_height(height)
+    , m_printWidth(width / resolution)
+    , m_printHeight(height / resolution)
+    , m_originalResolution(resolution)
+    , m_resolution(resolution)
+    , m_keepAspect(true)
 {
     setCaption(i18n("Scale To New Size"));
     setButtons(Ok | Cancel);
@@ -86,7 +87,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printResolutionUnit->addItem(pixelsCentimeterStr);
 
     // pick selected print units from user locale
-    if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
+    if (QLocale().measurementSystem() == QLocale::MetricSystem) {
         const int unitIndex = KoUnit(KoUnit::Centimeter).indexInListForUi(KoUnit::HidePixel);
         m_page->printWidthUnit->setCurrentIndex(unitIndex);
         m_page->printHeightUnit->setCurrentIndex(unitIndex);

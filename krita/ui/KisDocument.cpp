@@ -274,7 +274,7 @@ public:
 
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
-        if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+        if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
         } else {
             unit = KoUnit::Centimeter;

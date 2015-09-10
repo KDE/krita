@@ -170,8 +170,7 @@ void KisTemplateTree::readGroups()
 void KisTemplateTree::readTemplates()
 {
     QString dontShow = "imperial";
-
-    if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
+    if ( QLocale().measurementSystem() == QLocale::ImperialSystem) {
         dontShow = "metric";
     }
 

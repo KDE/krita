@@ -2018,7 +2018,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
     if (title.isEmpty()) {
         // #139905
         title = i18n("%1 unsaved document (%2)", qApp->applicationDisplayName(),
-                     KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
+                     QLocale().toString(QDate::currentDate(), QLocale::ShortFormat));
     }
     printer.setDocName(title);
 }

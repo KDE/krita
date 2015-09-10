@@ -64,7 +64,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
 
-    m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
+    m_page->lblResolutionValue->setText(QLocale().toString(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
     m_defaultColorAction = new KoColorPopupAction(this);
     m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());

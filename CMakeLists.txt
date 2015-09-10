@@ -215,11 +215,12 @@ endif()
 
 find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative X11Extras)
+find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
@@ -1044,6 +1045,12 @@ calligra_drop_product_on_bad_condition( PART_QTQUICK
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
 )
 
+calligra_drop_product_on_bad_condition( PART_COMPONENTS
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+    QT_QTQUICK_FOUND "QtQuick not found"
+)
+
 calligra_drop_product_on_bad_condition( APP_GEMINI
     USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
@@ -1131,6 +1138,10 @@ endif()
 
 if(SHOULD_BUILD_PART_QTQUICK)
     add_subdirectory(qtquick)
+endif()
+
+if(SHOULD_BUILD_PART_COMPONENTS)
+    add_subdirectory(components)
 endif()
 
 if(SHOULD_BUILD_GEMINI)

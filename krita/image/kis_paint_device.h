@@ -797,6 +797,7 @@ public:
 
 public:
     QRegion syncLodCache(int levelOfDetail);
+    void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);

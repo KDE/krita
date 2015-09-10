@@ -317,8 +317,9 @@ public:
     }
 
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
-
     QRegion syncLodData(int newLod);
+
+    void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 private:
 
@@ -399,6 +400,8 @@ private:
 
         return dataObjects;
     }
+
+    void transferFromData(Data *data, KisPaintDeviceSP targetDevice);
 
     struct StrategyPolicy;
     typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialConstIterator;
@@ -487,15 +490,20 @@ QRegion KisPaintDevice::Private::syncLodData(int newLod)
 
 struct KisPaintDevice::Private::StrategyPolicy {
     StrategyPolicy(KisPaintDevice::Private::KisPaintDeviceStrategy *strategy,
-                   KisDataManager *dataManager)
-        : m_strategy(strategy), m_dataManager(dataManager) {}
+                   KisDataManager *dataManager, qint32 offsetX, qint32 offsetY)
+        : m_strategy(strategy),
+          m_dataManager(dataManager),
+          m_offsetX(offsetX),
+          m_offsetY(offsetY)
+    {
+    }
 
     KisHLineConstIteratorSP createConstIterator(const QRect &rect) {
-        return m_strategy->createHLineConstIteratorNG(m_dataManager, rect.x(), rect.y(), rect.width());
+        return m_strategy->createHLineConstIteratorNG(m_dataManager, rect.x(), rect.y(), rect.width(), m_offsetX, m_offsetY);
     }
 
     KisHLineIteratorSP createIterator(const QRect &rect) {
-        return m_strategy->createHLineIteratorNG(m_dataManager, rect.x(), rect.y(), rect.width());
+        return m_strategy->createHLineIteratorNG(m_dataManager, rect.x(), rect.y(), rect.width(), m_offsetX, m_offsetY);
     }
 
     int pixelSize() const {
@@ -505,6 +513,8 @@ struct KisPaintDevice::Private::StrategyPolicy {
 
     KisPaintDeviceStrategy *m_strategy;
     KisDataManager *m_dataManager;
+    int m_offsetX;
+    int m_offsetY;
 };
 
 QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
@@ -555,8 +565,8 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
         weights[srcCellSize - 1] = averageWeight - extraWeight;
     }
 
-    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager().data()), srcRect);
-    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager().data()), dstRect);
+    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager().data(), srcData->x(), srcData->y()), srcRect);
+    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager().data(), m_lodData->x(), m_lodData->y()), dstRect);
 
     int rowsRemaining = srcRect.height();
     while (rowsRemaining > 0) {
@@ -606,15 +616,27 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
     return dirtyRegion;
 }
 
-void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+void KisPaintDevice::Private::transferFromData(Data *data, KisPaintDeviceSP targetDevice)
 {
-    Data *data = m_frames[frameId].data();
-
     QRect extent = data->dataManager()->extent();
     extent.translate(data->x(), data->y());
 
     targetDevice->m_d->prepareCloneImpl(q, data);
     targetDevice->m_d->currentStrategy()->fastBitBltRough(data->dataManager(), extent);
+}
+
+void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+{
+    Data *data = m_frames[frameId].data();
+    transferFromData(data, targetDevice);
+}
+
+void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)
+{
+    Data *data = m_lodData.data();
+    Q_ASSERT(data);
+
+    transferFromData(data, targetDevice);
 }
 
 KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
@@ -1326,12 +1348,12 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTran
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
     m_d->cache()->invalidate();
-    return m_d->currentStrategy()->createHLineIteratorNG(m_d->dataManager().data(), x, y, w);
+    return m_d->currentStrategy()->createHLineIteratorNG(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y());
 }
 
 KisHLineConstIteratorSP KisPaintDevice::createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
 {
-    return m_d->currentStrategy()->createHLineConstIteratorNG(m_d->dataManager().data(), x, y, w);
+    return m_d->currentStrategy()->createHLineConstIteratorNG(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y());
 }
 
 KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qint32 w)
@@ -1739,6 +1761,11 @@ KisPaintDeviceFramesInterface::testingGetDataObjects() const
 QList<KisPaintDeviceData*> KisPaintDeviceFramesInterface::testingGetDataObjectsList() const
 {
     return q->m_d->allDataObjects();
+}
+
+void KisPaintDevice::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)
+{
+    m_d->tesingFetchLodDevice(targetDevice);
 }
 
 #include "kis_paint_device.moc"

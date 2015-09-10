@@ -24,7 +24,7 @@
 #include "../core/Chord.h"
 #include "../core/VoiceBar.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 SetAccidentalsCommand::SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals)
     : m_shape(shape), m_note(note), m_oldAccidentals(note->accidentals()), m_newAccidentals(accidentals)

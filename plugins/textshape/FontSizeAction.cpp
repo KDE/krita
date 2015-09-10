@@ -30,7 +30,7 @@
 #include <QToolButton>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kicon.h>
 
 #include "FontSizeAction.h"

@@ -23,7 +23,7 @@
 #include "TemplateToolFactory.h"
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoIcon.h>

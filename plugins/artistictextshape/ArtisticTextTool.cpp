@@ -44,7 +44,7 @@
 #include <KoInteractionStrategy.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <QAction>
 #include <kdebug.h>

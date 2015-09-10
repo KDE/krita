@@ -25,7 +25,7 @@
 #include <QVBoxLayout>
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 Changecase::Changecase()

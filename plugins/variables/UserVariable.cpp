@@ -32,7 +32,7 @@
 #include <KoTextDocument.h>
 
 #include <QTextInlineObject>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 UserVariable::UserVariable()

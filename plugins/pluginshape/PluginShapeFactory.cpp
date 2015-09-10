@@ -29,7 +29,7 @@
 #include <KoShapeLoadingContext.h>
 #include "KoShapeBasedDocumentBase.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 PluginShapeFactory::PluginShapeFactory()

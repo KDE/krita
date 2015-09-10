@@ -29,7 +29,7 @@
 
 #include <QPainter>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 PluginShape::PluginShape()

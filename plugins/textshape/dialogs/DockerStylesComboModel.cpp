@@ -23,7 +23,7 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kdebug.h>
 

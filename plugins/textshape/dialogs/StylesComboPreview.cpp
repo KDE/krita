@@ -46,7 +46,7 @@
 #include <QPushButton>
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kdebug.h>
 

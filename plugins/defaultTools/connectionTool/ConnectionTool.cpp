@@ -54,7 +54,7 @@
 #include <KoIcon.h>
 
 #include <kaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kundo2command.h>

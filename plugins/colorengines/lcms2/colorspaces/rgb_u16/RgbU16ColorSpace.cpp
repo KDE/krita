@@ -21,7 +21,7 @@
 
 #include <QDomElement>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"

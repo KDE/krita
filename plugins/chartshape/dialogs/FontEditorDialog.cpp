@@ -21,7 +21,7 @@
 
 #include "FontEditorDialog.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfontchooser.h>
 
 using namespace KoChart;

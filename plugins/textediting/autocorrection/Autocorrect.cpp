@@ -25,7 +25,7 @@
 #include <QFile>
 #include <QDomDocument>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kcalendarsystem.h>

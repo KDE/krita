@@ -22,7 +22,7 @@
 
 #include "FormulaCommand.h"
 #include "FormulaCursor.h"
-#include <klocale.h> 
+#include <klocalizedstring.h> 
 #include "TokenElement.h"
 #include "BasicElement.h"
 #include "TableElement.h"

@@ -19,7 +19,7 @@
 
 #include "AutocorrectConfigDialog.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcharselect.h>
 
 #include <QHeaderView>

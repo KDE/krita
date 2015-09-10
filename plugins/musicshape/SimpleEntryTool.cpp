@@ -24,7 +24,7 @@
 #include <QInputDialog>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfiledialog.h>
 #include <kaction.h>
 #include <kurl.h>

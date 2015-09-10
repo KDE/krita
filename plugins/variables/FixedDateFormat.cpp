@@ -24,7 +24,7 @@
 #include <QMenu>
 #include <QAction>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 static void createTimeAction(QMenu *parent, const QString &title, const QString &data)
 {

@@ -20,7 +20,7 @@
 #include <QTabWidget>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>

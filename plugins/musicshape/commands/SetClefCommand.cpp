@@ -22,7 +22,7 @@
 
 #include "../MusicShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 using namespace MusicCore;
 

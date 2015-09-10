@@ -25,7 +25,7 @@
 #include <kactionmenu.h>
 #include <kaction.h>
 #include <kmenu.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QSignalMapper>
 

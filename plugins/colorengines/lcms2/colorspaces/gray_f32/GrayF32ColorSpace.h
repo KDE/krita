@@ -18,7 +18,7 @@
 #ifndef COLORSPACE_GRAYSCALE_F32_H_
 #define COLORSPACE_GRAYSCALE_F32_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 #include "LcmsColorSpace.h"

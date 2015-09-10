@@ -22,7 +22,7 @@
 
 #include "../core/Chord.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 AddDotCommand::AddDotCommand(MusicShape* shape, MusicCore::Chord* chord)
     : m_shape(shape), m_chord(chord)

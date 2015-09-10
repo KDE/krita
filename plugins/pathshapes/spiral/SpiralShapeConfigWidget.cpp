@@ -19,7 +19,7 @@
 
 #include "SpiralShapeConfigWidget.h"
 #include "SpiralShapeConfigCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 SpiralShapeConfigWidget::SpiralShapeConfigWidget()
 {

@@ -19,7 +19,7 @@
 
 #include "TableOfContentsEntryDelegate.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoStyleThumbnailer.h>

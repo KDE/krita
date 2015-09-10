@@ -18,7 +18,7 @@
  */
 
 #include "EllipseShapeConfigCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal endAngle, KUndo2Command *parent)
     : KUndo2Command(parent)

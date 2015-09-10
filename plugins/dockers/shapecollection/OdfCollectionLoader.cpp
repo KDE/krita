@@ -28,7 +28,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdf.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kurl.h>

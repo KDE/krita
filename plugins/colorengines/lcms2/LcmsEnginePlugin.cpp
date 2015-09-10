@@ -28,7 +28,7 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kdebug.h>
 

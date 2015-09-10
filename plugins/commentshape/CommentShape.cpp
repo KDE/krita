@@ -36,7 +36,7 @@
 #include <KoApplication.h>
 
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QGradient>

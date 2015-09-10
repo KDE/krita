@@ -18,7 +18,7 @@
 #ifndef KIS_GRAY_COLORSPACE_H_
 #define KIS_GRAY_COLORSPACE_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <LcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"

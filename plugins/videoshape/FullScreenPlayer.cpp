@@ -22,7 +22,7 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <phonon/videowidget.h>
 #include <phonon/audiooutput.h>

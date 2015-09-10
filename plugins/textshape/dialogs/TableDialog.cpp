@@ -19,7 +19,7 @@
 
 #include "TableDialog.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 TableDialog::TableDialog(QWidget *parent)
         : KDialog(parent)

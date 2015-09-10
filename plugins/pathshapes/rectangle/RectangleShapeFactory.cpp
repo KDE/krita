@@ -27,7 +27,7 @@
 #include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 RectangleShapeFactory::RectangleShapeFactory()
     : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))

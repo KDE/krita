@@ -61,7 +61,7 @@ NOT TODO:
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <khistorycombobox.h>
 #include <kpushbutton.h>
 #include <klineedit.h>

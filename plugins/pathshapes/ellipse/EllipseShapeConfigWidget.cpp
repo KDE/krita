@@ -19,7 +19,7 @@
 
 #include "EllipseShapeConfigWidget.h"
 #include "EllipseShapeConfigCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 {

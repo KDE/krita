@@ -24,7 +24,7 @@
 #include <KoColorBackground.h>
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     : KoShapeFactoryBase(ArtisticTextShapeID, i18n("ArtisticTextShape"))

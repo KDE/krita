@@ -18,7 +18,7 @@
 #ifndef KO_STRATEGY_COLORSPACE_RGB_H_
 #define KO_STRATEGY_COLORSPACE_RGB_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <LcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"

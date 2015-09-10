@@ -23,7 +23,7 @@
 #include "MusicTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 MusicToolFactory::MusicToolFactory()

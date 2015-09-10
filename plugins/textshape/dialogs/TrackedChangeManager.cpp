@@ -21,7 +21,7 @@
 
 #include "TrackedChangeModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QModelIndex>
 #include <QTreeView>

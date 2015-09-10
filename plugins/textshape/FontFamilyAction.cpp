@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 #include <kicon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfontchooser.h>
 #include <KoFontComboBox.h>
 

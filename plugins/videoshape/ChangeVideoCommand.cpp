@@ -23,7 +23,7 @@
 #include "VideoShape.h"
 #include "VideoCollection.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ChangeVideoCommand::ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent)
     : KUndo2Command(parent),

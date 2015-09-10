@@ -30,7 +30,7 @@
 #include <KoToolBase.h>
 #include <KoSelection.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <limits>
 #include <math.h>
 

@@ -28,7 +28,7 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QKeyEvent>
 #include <kaction.h>
 #include <QPainter>

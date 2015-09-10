@@ -43,7 +43,7 @@
 
 #include <math.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 FormattingPreview::FormattingPreview(QWidget* parent)

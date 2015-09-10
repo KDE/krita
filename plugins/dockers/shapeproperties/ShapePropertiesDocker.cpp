@@ -30,7 +30,7 @@
 #include <KoParameterShape.h>
 #include <KoUnit.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QStackedWidget>
 

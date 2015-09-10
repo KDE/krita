@@ -22,7 +22,7 @@
 #include "KoFormulaShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoFormulaToolFactory::KoFormulaToolFactory()
            : KoToolFactoryBase("KoFormulaToolFactoryId")

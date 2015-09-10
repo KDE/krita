@@ -27,7 +27,7 @@
 
 #include "SnapGuideDocker.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasObserverBase.h>

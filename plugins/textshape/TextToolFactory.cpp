@@ -23,7 +23,7 @@
 #include "AnnotationTextShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 TextToolFactory::TextToolFactory()
         : KoToolFactoryBase("TextToolFactory_ID")

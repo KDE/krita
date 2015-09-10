@@ -23,7 +23,7 @@
 #include "VideoTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 VideoToolFactory::VideoToolFactory()
     :KoToolFactoryBase("VideoToolFactoryId")

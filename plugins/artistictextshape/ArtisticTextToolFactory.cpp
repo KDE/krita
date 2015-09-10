@@ -22,7 +22,7 @@
 #include "ArtisticTextShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ArtisticTextToolFactory::ArtisticTextToolFactory()
     : KoToolFactoryBase("ArtisticTextToolFactoryID")

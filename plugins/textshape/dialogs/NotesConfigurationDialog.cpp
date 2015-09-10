@@ -22,7 +22,7 @@
 
 #include <KoOdfNumberDefinition.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QWidget>
 #include <QDebug>

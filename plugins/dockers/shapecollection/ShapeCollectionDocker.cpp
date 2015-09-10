@@ -34,7 +34,7 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>

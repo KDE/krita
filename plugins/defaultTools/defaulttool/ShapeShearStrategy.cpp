@@ -36,7 +36,7 @@
 
 #include <math.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool)

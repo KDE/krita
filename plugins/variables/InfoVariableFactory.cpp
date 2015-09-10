@@ -23,7 +23,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QStringList>
 

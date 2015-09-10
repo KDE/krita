@@ -32,7 +32,7 @@
 #include <QMenu>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kfontchooser.h>

@@ -18,7 +18,7 @@
  */
 
 #include "SpiralShapeConfigCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, KUndo2Command *parent)
     : KUndo2Command(parent)

@@ -34,7 +34,7 @@
 #include <QPainter>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // KChart
 #include <KChartDataValueAttributes>

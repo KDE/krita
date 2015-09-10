@@ -37,7 +37,7 @@
 #include <dialogs/SimpleAnnotationWidget.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kaction.h>
 #include <kuser.h>
 

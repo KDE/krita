@@ -31,7 +31,7 @@ set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
 
 kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
 
-target_link_libraries(TestKoLcmsColorProfile  pigmentcms KF5::KDELibs4Support Qt5::Test ${LCMS2_LIBRARIES} kolcmsengine )
+target_link_libraries(TestKoLcmsColorProfile  pigmentcms KF5::I18n KF5::KDELibs4Support Qt5::Test ${LCMS2_LIBRARIES} kolcmsengine )
 
 ########### next target ###############
 
@@ -39,7 +39,7 @@ set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
 
 kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
 
-target_link_libraries(TestKoColorSpaceRegistry  pigmentcms ${LCMS2_LIBRARIES} KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(TestKoColorSpaceRegistry  pigmentcms ${LCMS2_LIBRARIES} KF5::I18n KF5::KDELibs4Support Qt5::Test)
 
 ########### next target ###############
 

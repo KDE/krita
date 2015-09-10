@@ -19,7 +19,7 @@
 
 #include "TableOfContentsStyleDelegate.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QSpinBox>
 

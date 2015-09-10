@@ -23,7 +23,7 @@
 #include "RdfSemanticTreeWidgetSelectAction.h"
 // KDE
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,

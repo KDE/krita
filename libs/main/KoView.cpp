@@ -349,7 +349,7 @@ void KoView::setupGlobalActions()
 
 void KoView::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty()) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
@@ -414,7 +414,7 @@ void KoView::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
     if (profileName == "anonymous") {
         d->actionAuthor->setCurrentItem(1);

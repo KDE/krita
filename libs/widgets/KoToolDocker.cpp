@@ -197,7 +197,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
@@ -234,7 +234,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
 KoToolDocker::~KoToolDocker()
 {
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("DockWidget sharedtooldocker");
     cfg.writeEntry("TabbedMode", d->tabbed);
     cfg.sync();
 

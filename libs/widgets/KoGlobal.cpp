@@ -51,9 +51,9 @@ KoGlobal::KoGlobal()
     }
 
     // Fixes a bug where values from some config files are not picked up
-    // due to KGlobal::config() being initialized before paths have been set up above.
+    // due to  KSharedConfig::openConfig() being initialized before paths have been set up above.
     // NOTE: Values set without a sync() call before KoGlobal has been initialized will not stick
-    KGlobal::config()->reparseConfiguration();
+     KSharedConfig::openConfig()->reparseConfiguration();
 }
 
 KoGlobal::~KoGlobal()

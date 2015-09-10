@@ -483,7 +483,7 @@ QString KoFileDialog::getUsedDir(const QString &dialogName)
 {
     if (dialogName.isEmpty()) return "";
 
-    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString dir = group.readEntry(dialogName);
 
     return dir;
@@ -496,7 +496,7 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
     if (dialogName.isEmpty()) return;
 
     QFileInfo fileInfo(fileName);
-    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     group.writeEntry(dialogName, fileInfo.absolutePath());
 
 }

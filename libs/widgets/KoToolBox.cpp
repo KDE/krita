@@ -132,7 +132,7 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     d->buttons << button;
 
     int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
-    KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
     button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {
@@ -300,7 +300,7 @@ void KoToolBox::slotContextIconSize()
     if (action && d->contextIconSizes.contains(action)) {
         const int iconSize = d->contextIconSizes.value(action);
 
-        KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
         cfg.writeEntry("iconSize", iconSize);
 
         foreach(QToolButton *button, d->buttons) {
@@ -340,7 +340,7 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
             action->setCheckable(true);
         }
     }
-    KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     toolbuttonSize = cfg.readEntry("iconSize", toolbuttonSize);
 
     QMapIterator< QAction*, int > it = d->contextIconSizes;

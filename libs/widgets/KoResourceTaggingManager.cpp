@@ -132,7 +132,7 @@ void KoResourceTaggingManager::showTaggingBar(bool show)
 
     QString tag("All");
     if (show) {
-        KConfigGroup group = KGlobal::config()->group("SelectedTags");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         tag = group.readEntry<QString>(d->model->serverType(), "All");
     }
 

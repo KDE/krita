@@ -62,7 +62,7 @@ public:
         , isDragging(false)
 #endif
     {
-        KSharedConfigPtr config = KGlobal::config();
+        KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup group = config->group("DocumentSectionView");
         mode = (DisplayMode) group.readEntry("DocumentSectionViewMode", (int)DetailedMode);
     }
@@ -102,7 +102,7 @@ void KoDocumentSectionView::setDisplayMode(DisplayMode mode)
 {
     if (d->mode != mode) {
         d->mode = mode;
-        KSharedConfigPtr config = KGlobal::config();
+        KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup group = config->group("DocumentSectionView");
         group.writeEntry("DocumentSectionViewMode", (int)mode);
         scheduleDelayedItemsLayout();

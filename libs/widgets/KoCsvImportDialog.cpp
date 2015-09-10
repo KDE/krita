@@ -280,7 +280,7 @@ void KoCsvImportDialog::setDelimiter(const QString& delimit)
 
 void KoCsvImportDialog::Private::loadSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
     textQuote = configGroup.readEntry("textQuote", "\"")[0];
     delimiter = configGroup.readEntry("delimiter", ",");
     ignoreDuplicates = configGroup.readEntry("ignoreDups", false);
@@ -298,7 +298,7 @@ void KoCsvImportDialog::Private::loadSettings()
 
 void KoCsvImportDialog::Private::saveSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
     configGroup.writeEntry("textQuote", QString(textQuote));
     configGroup.writeEntry("delimiter", delimiter);
     configGroup.writeEntry("ignoreDups", ignoreDuplicates);

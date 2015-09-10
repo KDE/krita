@@ -119,7 +119,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 {
     applicationName = appName;
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     d->iconMode = (IconMode)cfg.readEntry("ModeBoxIconMode", (int)IconAndText);
     d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
     d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
@@ -632,7 +632,7 @@ void KoModeBox::switchIconMode(int mode)
     }
     updateShownTools(QList<QString>());
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
 
 }
@@ -651,7 +651,7 @@ void KoModeBox::switchTabsSide(int side)
             d->layout->addWidget(d->tabBar, 2, 0);
         }
 
-        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
         cfg.writeEntry("ModeBoxVerticalTabsSide", (int)d->verticalTabsSide);
     } else {
         d->horizontalTabsSide = static_cast<HorizontalTabsSide>(side);
@@ -665,7 +665,7 @@ void KoModeBox::switchTabsSide(int side)
             d->layout->addWidget(d->tabBar, 0, 2);
         }
 
-        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
     updateShownTools(QList<QString>());

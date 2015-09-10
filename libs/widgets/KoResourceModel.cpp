@@ -50,7 +50,7 @@ KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter>
 KoResourceModel::~KoResourceModel()
 {
     if (!m_currentTag.isEmpty()) {
-        KConfigGroup group = KGlobal::config()->group("SelectedTags");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         group.writeEntry(serverType(), m_currentTag);
     }
 

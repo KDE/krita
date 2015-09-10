@@ -100,7 +100,7 @@ public:
     ~ResetStarting()  {
         if (m_splash) {
 
-            KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+            KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
             if (hideSplash) {
                 m_splash->hide();

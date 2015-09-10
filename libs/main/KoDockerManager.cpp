@@ -74,7 +74,7 @@ void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWi
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 
-    KConfigGroup group(KGlobal::config(), "GUI");
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());

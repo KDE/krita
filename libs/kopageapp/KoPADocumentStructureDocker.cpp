@@ -176,7 +176,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     connect(m_model, SIGNAL(requestPageSelection(int,int)), this, SLOT(selectPages(int,int)));
     connect(m_model, SIGNAL(modelReset()), this, SIGNAL(dockerReset()));
 
-    KConfigGroup configGroup = KGlobal::config()->group("KoPageApp/DocumentStructureDocker");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     QString viewModeString = configGroup.readEntry("ViewMode", "");
 
     if (viewModeString.isEmpty())
@@ -189,7 +189,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("KoPageApp/DocumentStructureDocker");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     configGroup.writeEntry("ViewMode", viewModeToString(m_sectionView->displayMode()));
 }
 

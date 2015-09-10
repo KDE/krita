@@ -75,7 +75,7 @@ public:
         /**
          * The properties are retrieved from the config using the following construct;
          * /code
-         *  KConfigGroup configGroup = KGlobal::config()->group(config.group);
+         *  KConfigGroup configGroup =  KSharedConfig::openConfig()->group(config.group);
          * /endcode
          * For most cases you can pass the string "calligra" into this variable.
          */

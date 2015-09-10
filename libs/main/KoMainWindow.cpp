@@ -363,7 +363,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->toggleDockerTitleBars = new KToggleAction(i18nc("@action:inmenu", "Show Docker Titlebars"), this);
-    KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+    KConfigGroup configGroupInterface =  KSharedConfig::openConfig()->group("Interface");
     d->toggleDockerTitleBars->setChecked(configGroupInterface.readEntry("ShowDockerTitleBars", true));
     d->toggleDockerTitleBars->setVisible(false);
     actionCollection()->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
@@ -375,7 +375,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
-    KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
+    KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() :  KSharedConfig::openConfig();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
 
@@ -384,7 +384,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
 
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
-    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     if (!initialGeometrySet()) {
         QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
         if (!restoreGeometry(geom)) {
@@ -433,7 +433,7 @@ void KoMainWindow::setNoCleanup(bool noCleanup)
 
 KoMainWindow::~KoMainWindow()
 {
-    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());
 
@@ -640,7 +640,7 @@ void KoMainWindow::addRecentURL(const QUrl &url)
 void KoMainWindow::saveRecentFiles()
 {
     // Save list of recent files
-    KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
+    KSharedConfigPtr config = componentData().isValid() ? componentData().config() :  KSharedConfig::openConfig();
     kDebug(30003) << this << " Saving recent files list into config. componentData()=" << componentData().componentName();
     d->recent->saveEntries(config->group("RecentFiles"));
     config->sync();
@@ -653,7 +653,7 @@ void KoMainWindow::saveRecentFiles()
 
 void KoMainWindow::reloadRecentFileList()
 {
-    KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
+    KSharedConfigPtr config = componentData().isValid() ? componentData().config() :  KSharedConfig::openConfig();
     d->recent->loadEntries(config->group("RecentFiles"));
 }
 
@@ -852,7 +852,7 @@ void KoMainWindow::slotSaveCompleted()
 // returns true if we should save, false otherwise.
 bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 {
-    KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
+    KConfigGroup group =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName());
     if (!group.readEntry("WantExportConfirmation", true)) {
         return true;
     }
@@ -1182,7 +1182,7 @@ void KoMainWindow::saveWindowSettings()
     if ( rootDocument() && d->rootPart) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        KConfigGroup group =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName());
         //kDebug(30003) <<"KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's componentData=" << d->rootPart->componentData().componentName();
         saveMainWindowSettings(group);
 
@@ -1199,7 +1199,7 @@ void KoMainWindow::saveWindowSettings()
 
     }
 
-    KGlobal::config()->sync();
+     KSharedConfig::openConfig()->sync();
     resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
 
 }
@@ -1451,7 +1451,7 @@ KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
     QString pdfFileName = _pdfFileName;
 
     if (pdfFileName.isEmpty()) {
-        KConfigGroup group = KGlobal::config()->group("File Dialogs");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
             defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
@@ -1549,7 +1549,7 @@ void KoMainWindow::slotConfigureKeys()
 void KoMainWindow::slotConfigureToolbars()
 {
     if (rootDocument()) {
-        KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        KConfigGroup componentConfigGroup =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName());
         saveMainWindowSettings(componentConfigGroup);
     }
 
@@ -1561,7 +1561,7 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
     if (rootDocument()) {
-        KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        KConfigGroup componentConfigGroup =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName());
         applyMainWindowSettings(componentConfigGroup);
     }
 
@@ -1587,7 +1587,7 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
             bar->hide();
 
         if (rootDocument()) {
-            KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+            KConfigGroup componentConfigGroup =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName());
             saveMainWindowSettings(componentConfigGroup);
         }
     } else
@@ -1861,7 +1861,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         if (rootDocument()) {
-            KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
+            KConfigGroup group =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
             side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
             if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
         }
@@ -1875,7 +1875,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
         bool locked = false;
         if (rootDocument()) {
-            KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
+            KConfigGroup group =  KSharedConfig::openConfig()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
             collapsed = group.readEntry("Collapsed", collapsed);
             locked = group.readEntry("Locked", locked);
         }
@@ -1885,7 +1885,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
             titleBar->setLocked(true);
 
         if (titleBar) {
-            KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+            KConfigGroup configGroupInterface =  KSharedConfig::openConfig()->group("Interface");
             titleBar->setVisible(configGroupInterface.readEntry("ShowDockerTitleBars", true));
         }
 
@@ -1894,7 +1894,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = d->dockWidgetsMap[ factory->id()];
     }
 
-    KConfigGroup group(KGlobal::config(), "GUI");
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
@@ -2122,7 +2122,7 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);
 
-        KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+        KConfigGroup configGroupInterface =  KSharedConfig::openConfig()->group("Interface");
         const bool showDockerTitleBar = configGroupInterface.readEntry("ShowDockerTitleBars", true);
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -2183,6 +2183,6 @@ void KoMainWindow::showDockerTitleBars(bool show)
         }
     }
 
-    KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+    KConfigGroup configGroupInterface =  KSharedConfig::openConfig()->group("Interface");
     configGroupInterface.writeEntry("ShowDockerTitleBars", show);
 }

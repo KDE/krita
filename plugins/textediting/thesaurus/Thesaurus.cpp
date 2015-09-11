@@ -53,6 +53,7 @@ NOT TODO:
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QGroupBox>
+#include <QTextBrowser>
 
 #include <ktabwidget.h>
 #include <kglobal.h>
@@ -68,7 +69,6 @@ NOT TODO:
 #include <kdebug.h>
 #include <krun.h>
 #include <kcombobox.h>
-#include <ktextbrowser.h>
 #include <kurl.h>
 
 Thesaurus::Thesaurus()
@@ -187,7 +187,7 @@ Thesaurus::Thesaurus()
     wnLayout->addWidget(m_wnComboBox);
     connect(m_wnComboBox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
-    m_resultTextBrowser = new KTextBrowser(wnWidget);
+    m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
     connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
     wnLayout->addWidget(m_resultTextBrowser);

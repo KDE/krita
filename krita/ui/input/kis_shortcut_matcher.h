@@ -29,6 +29,7 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTouchEvent;
+class QString;
 
 class KisStrokeShortcut;
 class KisTouchShortcut;
@@ -208,6 +209,7 @@ private:
     friend class KisInputManagerTest;
 
     void reset();
+    void reset(QString msg);
 
     bool tryRunKeyShortcut(Qt::Key key, QKeyEvent *event);
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);

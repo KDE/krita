@@ -415,7 +415,9 @@ void KisInputManager::slotCompressedMoveEvent()
         (void) d->handleCompressedTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
 
         d->compressedMoveEvent.reset();
-        qDebug() << "Compressed move event received.";
+        dbgKrita << "Compressed move event received.";
+    } else {
+        dbgKrita << "Unexpected empty move event";
     }
 }
 
@@ -448,7 +450,8 @@ void KisInputManager::slotToolChanged()
 
 QPointF KisInputManager::widgetToDocument(const QPointF& position)
 {
-    QPointF pixel = QPointF(position.x() + 0.5f, position.y() + 0.5f);
+    const QPointF half = QPointF(.5f, .5f);
+    QPointF pixel = position + half;
     return d->canvas->coordinatesConverter()->widgetToDocument(pixel);
 }
 
@@ -479,6 +482,6 @@ void KisInputManager::profileChanged()
         }
     }
     else {
-        dbgInput << "No Input Profile Found: canvas interaction will be impossible";
+        dbgKrita << "No Input Profile Found: canvas interaction will be impossible";
     }
 }

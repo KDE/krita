@@ -28,13 +28,17 @@
 
 #ifdef DEBUG_MATCHER
 #include <kis_debug.h>
-#define DEBUG_ACTION(action) dbgInput << __FUNCTION__ << ":" << action;
-#define DEBUG_BUTTON_ACTION(action, button) dbgInput << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
-#define DEBUG_EVENT_ACTION(action, event) if (event) {dbgInput << __FUNCTION__ << ":" << action << "type:" << event->type();}
+#define DEBUG_ACTION(text) dbgInput << __FUNCTION__ << "-" << text;
+#define DEBUG_SHORTCUT(text, shortcut) dbgInput << __FUNCTION__ << "-" << text << "act:" << shortcut->action()->name();
+#define DEBUG_KEY(text) dbgInput << __FUNCTION__ << "-" << text << "keys:" << m_d->keys;
+#define DEBUG_BUTTON_ACTION(text, button) dbgInput << __FUNCTION__ << "-" << text << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#define DEBUG_EVENT_ACTION(text, event) if (event) {dbgInput << __FUNCTION__ << "-" << text << "type:" << event->type();}
 #else
-#define DEBUG_ACTION(action)
-#define DEBUG_BUTTON_ACTION(action, button)
-#define DEBUG_EVENT_ACTION(action, event)
+#define DEBUG_ACTION(text)
+#define DEBUG_KEY(text)
+#define DEBUG_SHORTCUT(text, shortcut)
+#define DEBUG_BUTTON_ACTION(text, button)
+#define DEBUG_EVENT_ACTION(text, event)
 #endif
 
 
@@ -54,12 +58,12 @@ public:
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
 
-    QList<Qt::Key> keys;
-    QList<Qt::MouseButton> buttons;
+    QList <Qt::Key> keys; // Model of currently pressed keys
+    QList <Qt::MouseButton> buttons; // Model of currently pressed buttons
 
     KisStrokeShortcut *runningShortcut;
     KisStrokeShortcut *readyShortcut;
-    QList<KisStrokeShortcut*> readyShortcuts;
+    QList<KisStrokeShortcut*> candidateShortcuts;
 
     KisTouchShortcut *touchShortcut;
 
@@ -74,10 +78,7 @@ public:
 
 KisShortcutMatcher::KisShortcutMatcher()
     : m_d(new Private)
-{
-    m_d->runningShortcut = 0;
-    m_d->readyShortcut = 0;
-}
+{}
 
 KisShortcutMatcher::~KisShortcutMatcher()
 {
@@ -113,13 +114,15 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
 {
     bool retval = false;
 
-    if (m_d->keys.contains(key)) reset();
+    if (m_d->keys.contains(key)) DEBUG_ACTION("Peculiar, records show key was already pressed");
+
 
     if (!m_d->runningShortcut) {
-        retval = tryRunKeyShortcut(key, 0);
+        retval =  tryRunSingleActionShortcutImpl(key, (QEvent*)0, m_d->keys);
     }
 
     m_d->keys.append(key);
+    DEBUG_KEY("Pressed");
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -133,10 +136,13 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 {
     bool retval = false;
 
-    if (!m_d->keys.contains(key)) reset();
+    if (!m_d->keys.contains(key)) DEBUG_ACTION("Peculiar, autorepeated key but can't remember it was pressed");
 
     if (!m_d->runningShortcut) {
-        retval = tryRunKeyShortcut(key, 0);
+        // Autorepeated key should not be included in the shortcut
+        QList<Qt::Key> filteredKeys = m_d->keys;
+        filteredKeys.removeOne(key);
+        retval = tryRunSingleActionShortcutImpl(key, (QEvent*)0, filteredKeys);
     }
 
     return retval;
@@ -144,7 +150,7 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 
 bool KisShortcutMatcher::keyReleased(Qt::Key key)
 {
-    if (!m_d->keys.contains(key)) reset();
+    if (!m_d->keys.contains(key)) reset("Peculiar, key released but can't remember it was pressed");
     else m_d->keys.removeOne(key);
 
     if (!m_d->runningShortcut) {
@@ -165,7 +171,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
         return retval;
     }
 
-    if (m_d->buttons.contains(button)) reset();
+    if (m_d->buttons.contains(button))  DEBUG_ACTION("Peculiar, button was already pressed.");
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -197,7 +203,7 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
         DEBUG_BUTTON_ACTION("ended", button);
     }
 
-    if (!m_d->buttons.contains(button)) reset();
+    if (!m_d->buttons.contains(button)) reset("Peculiar, button released but we can't remember it was pressed");
     else m_d->buttons.removeOne(button);
 
     if (!m_d->runningShortcut) {
@@ -294,7 +300,7 @@ Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
 
 void KisShortcutMatcher::reinitialize()
 {
-    reset();
+    reset("reinitialize");
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
@@ -308,6 +314,14 @@ void KisShortcutMatcher::reset()
     DEBUG_ACTION("reset!");
 }
 
+
+void KisShortcutMatcher::reset(QString msg)
+{
+    m_d->keys.clear();
+    m_d->buttons.clear();
+    DEBUG_ACTION(msg);
+}
+
 void KisShortcutMatcher::suppressAllActions(bool value)
 {
     m_d->suppressAllActions = value;
@@ -315,12 +329,12 @@ void KisShortcutMatcher::suppressAllActions(bool value)
 
 void KisShortcutMatcher::clearShortcuts()
 {
-    reset();
+    reset("Clearing shortcuts");
     qDeleteAll(m_d->singleActionShortcuts);
     m_d->singleActionShortcuts.clear();
     qDeleteAll(m_d->strokeShortcuts);
     m_d->strokeShortcuts.clear();
-    m_d->readyShortcuts.clear();
+    m_d->candidateShortcuts.clear();
     m_d->runningShortcut = 0;
     m_d->readyShortcut = 0;
 }
@@ -328,18 +342,6 @@ void KisShortcutMatcher::clearShortcuts()
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
     return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);
-}
-
-bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key, QKeyEvent *event)
-{
-    /**
-     * Handle the case of autorepeated keys.
-     * The autorepeated key should not be present in modifiers.
-     */
-    QList<Qt::Key> filteredKeys = m_d->keys;
-    filteredKeys.removeOne(key);
-
-    return tryRunSingleActionShortcutImpl(key, event, filteredKeys);
 }
 
 // Note: sometimes event can be zero!!
@@ -374,12 +376,12 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
 
 void KisShortcutMatcher::prepareReadyShortcuts()
 {
-    m_d->readyShortcuts.clear();
+    m_d->candidateShortcuts.clear();
     if (m_d->actionsSuppressed()) return;
 
     foreach(KisStrokeShortcut *s, m_d->strokeShortcuts) {
         if (s->matchReady(m_d->keys, m_d->buttons)) {
-            m_d->readyShortcuts.append(s);
+            m_d->candidateShortcuts.append(s);
         }
     }
 }
@@ -388,7 +390,7 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
 {
     KisStrokeShortcut *goodCandidate = 0;
 
-    foreach(KisStrokeShortcut *s, m_d->readyShortcuts) {
+    foreach(KisStrokeShortcut *s, m_d->candidateShortcuts) {
         if (s->matchBegin(button) &&
             (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
@@ -404,9 +406,11 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
             }
             m_d->readyShortcut = 0;
         } else {
+            DEBUG_EVENT_ACTION("Matched *new* shortcut for event", event);
             goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         }
 
+        DEBUG_SHORTCUT("Starting new action", goodCandidate);
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
         m_d->runningShortcut = goodCandidate;
     }
@@ -418,7 +422,7 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
 {
     KisStrokeShortcut *goodCandidate = 0;
 
-    foreach(KisStrokeShortcut *s, m_d->readyShortcuts) {
+    foreach(KisStrokeShortcut *s, m_d->candidateShortcuts) {
         if (!goodCandidate || s->priority() > goodCandidate->priority()) {
             goodCandidate = s;
         }
@@ -426,15 +430,18 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
 
     if (goodCandidate) {
         if (m_d->readyShortcut && m_d->readyShortcut != goodCandidate) {
+            DEBUG_SHORTCUT("Deactivated previous shortcut action", m_d->readyShortcut);
             m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
             m_d->readyShortcut = 0;
         }
 
         if (!m_d->readyShortcut) {
+            DEBUG_SHORTCUT("Preparing new ready action", goodCandidate);
             goodCandidate->action()->activate(goodCandidate->shortcutIndex());
             m_d->readyShortcut = goodCandidate;
         }
     } else if (m_d->readyShortcut) {
+        DEBUG_SHORTCUT("Deactivating action", m_d->readyShortcut);
         m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
         m_d->readyShortcut = 0;
     }
@@ -447,6 +454,7 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
 
     if (m_d->runningShortcut->matchBegin(button)) {
         if (m_d->runningShortcut->action()) {
+            DEBUG_EVENT_ACTION("Ending running shortcut at event", event);
             KisAbstractInputAction* action = m_d->runningShortcut->action();
             int shortcutIndex = m_d->runningShortcut->shortcutIndex();
             action->end(event);

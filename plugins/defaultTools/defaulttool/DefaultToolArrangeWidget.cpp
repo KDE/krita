@@ -21,7 +21,7 @@
 #include "DefaultToolArrangeWidget.h"
 
 #include <KoInteractionTool.h>
-#include <kaction.h>
+#include <QAction>
 
 DefaultToolArrangeWidget::DefaultToolArrangeWidget( KoInteractionTool* tool,
                                     QWidget* parent ) : QWidget( parent )

@@ -30,7 +30,7 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 #include <QKeyEvent>
-#include <kaction.h>
+#include <QAction>
 #include <QPainter>
 #include <kdebug.h>
 #include <kurl.h>
@@ -439,33 +439,33 @@ void KoFormulaTool::setupActions()
                       "<munderover><mrow><mrow/></mrow><mrow/><mrow/></munderover>", koIconNameCStr("gsubup"));
 
     //only for debugging
-    KAction* action;
-    action = new KAction( "Debug - writeElementTree" , this );
+    QAction * action;
+    action = new QAction( "Debug - writeElementTree" , this );
     addAction( "write_elementTree", action );
 
     QList<QVariant> list;
-    action = new KAction( i18n( "Insert row" ), this );
+    action = new QAction( i18n( "Insert row" ), this );
     list<<true<<true;
     action->setData( list);
     list.clear();
     addAction( "insert_row", action );
     action->setIcon(koIcon("insrow"));
 
-    action = new KAction( i18n( "Insert column" ), this );
+    action = new QAction( i18n( "Insert column" ), this );
     list<<false<<true;
     action->setData( list);
     list.clear();
     addAction( "insert_column", action );
     action->setIcon(koIcon("inscol"));
 
-    action = new KAction( i18n( "Remove row" ), this );
+    action = new QAction( i18n( "Remove row" ), this );
     list<<true<<false;
     action->setData( list);
     list.clear();
     addAction( "remove_row", action );
     action->setIcon(koIcon("remrow"));
 
-    action = new KAction( i18n( "Remove column" ), this );
+    action = new QAction( i18n( "Remove column" ), this );
     list<<false<<false;
     action->setData( list);
     list.clear();
@@ -478,8 +478,8 @@ void KoFormulaTool::setupActions()
 void KoFormulaTool::addTemplateAction(const QString &caption, const QString &name, const QString &data,
                                       const char *iconName)
 {
-    KAction* action;
-    action = new KAction( caption, this );
+    QAction * action;
+    action = new QAction( caption, this );
     m_signalMapper->setMapping(action, data);
     addAction( name , action );
     action->setIcon(KIcon(QLatin1String(iconName)));

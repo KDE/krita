@@ -24,7 +24,7 @@
 #include <KoBibliographyInfo.h>
 #include <KoTextEditor.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>

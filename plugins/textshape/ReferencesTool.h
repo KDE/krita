@@ -104,7 +104,7 @@ private:
     KoCanvasBase *m_canvas;
 };
 
-class KAction;
+class QAction;
 class QLineEdit;
 class QLabel;
 class LabeledWidget : public QWidget
@@ -112,7 +112,7 @@ class LabeledWidget : public QWidget
     Q_OBJECT
 public:
     enum LabelPosition {INLINE, ABOVE};
-    LabeledWidget(KAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
+    LabeledWidget(QAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
     void setWarningText(int pos, const QString &warning);
     void clearLineEdit();
 Q_SIGNALS:
@@ -128,7 +128,7 @@ protected:
 private :
     QLineEdit *m_lineEdit;
     QLabel *m_warningLabel[2];
-    KAction *m_action;
+    QAction *m_action;
 };
 
 #endif // REFERENCESTOOL_H

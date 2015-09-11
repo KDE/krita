@@ -30,7 +30,7 @@
 #include <KoConnectionShape.h>
 #include <QCursor>
 
-class KAction;
+class QAction;
 class QActionGroup;
 class KoShapeConfigWidgetBase;
 class KoInteractionStrategy;
@@ -147,23 +147,23 @@ private:
     QActionGroup *m_alignRelative;
     QActionGroup *m_escapeDirections;
 
-    KAction * m_editConnectionPoint;
+    QAction * m_editConnectionPoint;
 
-    KAction * m_alignPercent;
-    KAction * m_alignLeft;
-    KAction * m_alignCenterH;
-    KAction * m_alignRight;
-    KAction * m_alignTop;
-    KAction * m_alignCenterV;
-    KAction * m_alignBottom;
+    QAction * m_alignPercent;
+    QAction * m_alignLeft;
+    QAction * m_alignCenterH;
+    QAction * m_alignRight;
+    QAction * m_alignTop;
+    QAction * m_alignCenterV;
+    QAction * m_alignBottom;
 
-    KAction * m_escapeAll;
-    KAction * m_escapeHorizontal;
-    KAction * m_escapeVertical;
-    KAction * m_escapeUp;
-    KAction * m_escapeLeft;
-    KAction * m_escapeDown;
-    KAction * m_escapeRight;
+    QAction * m_escapeAll;
+    QAction * m_escapeHorizontal;
+    QAction * m_escapeVertical;
+    QAction * m_escapeUp;
+    QAction * m_escapeLeft;
+    QAction * m_escapeDown;
+    QAction * m_escapeRight;
 
     QList<KoShapeConfigWidgetBase*> m_connectionShapeWidgets;
 };

@@ -27,7 +27,7 @@ class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
 
-class KAction;
+class QAction;
 
 class QPainter;
 class QKeyEvent;
@@ -63,7 +63,7 @@ private:
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
     TextShape *m_textShape;
-    KAction *m_removeAnnotationAction;
+    QAction *m_removeAnnotationAction;
     KoShape *m_currentAnnotationShape;
 };
 

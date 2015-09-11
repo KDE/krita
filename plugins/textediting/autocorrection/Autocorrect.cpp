@@ -21,7 +21,7 @@
 #include "AutocorrectConfigDialog.h"
 
 #include <QTextBlock>
-#include <kaction.h>
+#include <QAction>
 #include <QFile>
 #include <QDomDocument>
 
@@ -35,11 +35,11 @@
 Autocorrect::Autocorrect()
 {
     /* setup actions for this plugin */
-    KAction *configureAction = new KAction(i18n("Configure &Autocorrection..."), this);
+    QAction *configureAction = new QAction(i18n("Configure &Autocorrection..."), this);
     connect(configureAction, SIGNAL(triggered(bool)), this, SLOT(configureAutocorrect()));
     addAction("configure_autocorrection", configureAction);
 
-    m_enabled = new KAction(i18n("Autocorrection"), this);
+    m_enabled = new QAction(i18n("Autocorrection"), this);
     m_enabled->setCheckable(true);
     m_enabled->setChecked(true);
     addAction("enable_autocorrection", m_enabled);

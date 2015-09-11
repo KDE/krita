@@ -33,7 +33,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
@@ -54,7 +54,7 @@ SpellCheck::SpellCheck()
     , m_simpleEdit(false)
 {
     /* setup actions for this plugin */
-    KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
+    QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 

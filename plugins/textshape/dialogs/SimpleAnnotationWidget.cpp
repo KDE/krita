@@ -2,7 +2,7 @@
 
 
 #include "../ReviewTool.h"
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 SimpleAnnotationWidget::SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent) :
     QWidget(parent),

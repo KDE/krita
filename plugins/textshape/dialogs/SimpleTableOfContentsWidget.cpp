@@ -27,7 +27,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>

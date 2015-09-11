@@ -24,7 +24,7 @@
 #include <QPainter>
 
 AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool)
-    : KAction(icon, text, tool)
+    : QAction(icon, text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)
 {
@@ -32,7 +32,7 @@ AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text,
 }
 
 AbstractMusicAction::AbstractMusicAction(const QString& text, SimpleEntryTool* tool)
-    : KAction(text, tool)
+    : QAction(text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)
 {

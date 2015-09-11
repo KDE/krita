@@ -43,7 +43,7 @@
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
 
-#include <kaction.h>
+#include <QAction>
 
 #include <QTextLayout>
 #include <QFlags>
@@ -179,7 +179,7 @@ void SimpleParagraphWidget::fillListButtons()
 
     widget.bulletListButton->addSeparator();
 
-    KAction *action = new KAction(i18n("Change List Level"),this);
+    QAction *action = new QAction(i18n("Change List Level"),this);
     action->setToolTip(i18n("Change the level the list is at"));
 
     QMenu *listLevelMenu = new QMenu();

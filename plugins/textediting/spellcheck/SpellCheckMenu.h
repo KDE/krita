@@ -27,7 +27,7 @@
 #include <sonnet/speller.h>
 
 class KActionMenu;
-class KAction;
+class QAction;
 class QAction;
 class QMenu;
 class QSignalMapper;
@@ -59,8 +59,8 @@ private:
     SpellCheck *m_spellCheck;
     Sonnet::Speller m_speller;
     KActionMenu *m_suggestionsMenuAction;
-    KAction *m_ignoreWordAction;
-    KAction *m_addToDictionaryAction;
+    QAction *m_ignoreWordAction;
+    QAction *m_addToDictionaryAction;
     QMenu *m_suggestionsMenu;
     int m_lengthMisspelled;
     QSignalMapper *m_suggestionsSignalMapper;

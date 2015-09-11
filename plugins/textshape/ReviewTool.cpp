@@ -38,7 +38,7 @@
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kaction.h>
+#include <QAction>
 #include <kuser.h>
 
 #include <QDate>
@@ -62,7 +62,7 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
-    m_removeAnnotationAction = new KAction(i18n("Remove Comment"), this);
+    m_removeAnnotationAction = new QAction(i18n("Remove Comment"), this);
     m_removeAnnotationAction->setToolTip(i18n("Remove Comment"));
     addAction("remove_annotation", m_removeAnnotationAction);
     connect(m_removeAnnotationAction, SIGNAL(triggered()), this, SLOT(removeAnnotation()));

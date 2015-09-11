@@ -35,7 +35,7 @@
 
 
 class KoShape;
-class KAction;
+class QAction;
 
 namespace KChart
 {
@@ -60,7 +60,7 @@ public:
 
     void open(KoShape* shape);
     void save();
-    KAction* createAction();
+    QAction * createAction();
 
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }

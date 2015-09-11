@@ -26,7 +26,7 @@
 #include <QWidgetAction>
 #include <QTableWidget>
 
-#include <kaction.h>
+#include <QAction>
 
 #include <QMenu>
 #include <kdebug.h>

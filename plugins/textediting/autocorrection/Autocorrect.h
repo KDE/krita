@@ -25,7 +25,7 @@
 #include <QTextCharFormat>
 #include <QSet>
 
-class KAction;
+class QAction;
 
 /* struct AutocorrectEntry
 {
@@ -149,7 +149,7 @@ private:
     QHash<QString, QString /*AutocorrectEntry*/> m_autocorrectEntries;
     TypographicQuotes m_typographicSingleQuotes;
     TypographicQuotes m_typographicDoubleQuotes;
-    KAction *m_enabled;
+    QAction *m_enabled;
 };
 
 #endif

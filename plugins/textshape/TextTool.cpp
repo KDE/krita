@@ -79,7 +79,7 @@
 #include <kdebug.h>
 #include <krun.h>
 #include <kstandardshortcut.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
@@ -189,7 +189,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
-            KAction *a = new KAction(factory->title(), this);
+            QAction *a = new QAction(factory->title(), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);
@@ -213,62 +213,62 @@ void TextTool::createActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                              & KoCanvasResourceManager::NoAdvancedText);
 
-    m_actionConfigureSection = new KAction(koIcon("configure"), i18n("Configure current section"), this); //FIXME: Find another icon for this.
+    m_actionConfigureSection = new QAction(koIcon("configure"), i18n("Configure current section"), this); //FIXME: Find another icon for this.
     addAction("configure_section", m_actionConfigureSection);
     connect(m_actionConfigureSection, SIGNAL(triggered(bool)), this, SLOT(configureSection()));
 
-    m_actionInsertSection = new KAction(koIcon("insert-text"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
+    m_actionInsertSection = new QAction(koIcon("insert-text"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
     addAction("insert_section", m_actionInsertSection);
     connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
 
-    m_actionSplitSections = new KAction(koIcon("split"), i18n("Insert paragraph between sections"), this); //FIXME: Find another icon for this.
+    m_actionSplitSections = new QAction(koIcon("split"), i18n("Insert paragraph between sections"), this); //FIXME: Find another icon for this.
     addAction("split_sections", m_actionSplitSections);
     connect(m_actionSplitSections, SIGNAL(triggered(bool)), this, SLOT(splitSections()));
 
-    m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
+    m_actionPasteAsText  = new QAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
     connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
 
-    m_actionFormatBold  = new KAction(koIcon("format-text-bold"), i18n("Bold"), this);
+    m_actionFormatBold  = new QAction(koIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
     connect(m_actionFormatBold, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
 
-    m_actionFormatItalic  = new KAction(koIcon("format-text-italic"), i18n("Italic"), this);
+    m_actionFormatItalic  = new QAction(koIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic);
     m_actionFormatItalic->setShortcut(Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
     connect(m_actionFormatItalic, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
 
-    m_actionFormatUnderline  = new KAction(koIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
+    m_actionFormatUnderline  = new QAction(koIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
     addAction("format_underline", m_actionFormatUnderline);
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
     connect(m_actionFormatUnderline, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
-    m_actionFormatStrikeOut  = new KAction(koIcon("format-text-strikethrough"), i18n("Strikethrough"), this);
+    m_actionFormatStrikeOut  = new QAction(koIcon("format-text-strikethrough"), i18n("Strikethrough"), this);
     addAction("format_strike", m_actionFormatStrikeOut);
     m_actionFormatStrikeOut->setCheckable(true);
     connect(m_actionFormatStrikeOut, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
-    m_actionAlignLeft  = new KAction(koIcon("format-justify-left"), i18n("Align Left"), this);
+    m_actionAlignLeft  = new QAction(koIcon("format-justify-left"), i18n("Align Left"), this);
     addAction("format_alignleft", m_actionAlignLeft);
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
     connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
 
-    m_actionAlignRight  = new KAction(koIcon("format-justify-right"), i18n("Align Right"), this);
+    m_actionAlignRight  = new QAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
-    m_actionAlignCenter  = new KAction(koIcon("format-justify-center"), i18n("Align Center"), this);
+    m_actionAlignCenter  = new QAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
     m_actionAlignCenter->setCheckable(true);
@@ -276,14 +276,14 @@ void TextTool::createActions()
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
-    m_actionAlignBlock  = new KAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
+    m_actionAlignBlock  = new QAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
 
-    m_actionChangeDirection = new KAction(koIcon("format-text-direction-rtl"), i18n("Change text direction"), this);
+    m_actionChangeDirection = new QAction(koIcon("format-text-direction-rtl"), i18n("Change text direction"), this);
     addAction("change_text_direction", m_actionChangeDirection);
     m_actionChangeDirection->setToolTip(i18n("Change writing direction"));
     m_actionChangeDirection->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
@@ -291,13 +291,13 @@ void TextTool::createActions()
     connect(m_actionChangeDirection, SIGNAL(triggered()), this, SLOT(textDirectionChanged()));
 
 
-    m_actionFormatSuper = new KAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_actionFormatSuper = new QAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
     m_actionFormatSuper->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
-    m_actionFormatSub = new KAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_actionFormatSub = new QAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
     m_actionFormatSub->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
@@ -305,7 +305,7 @@ void TextTool::createActions()
 
     const char* const increaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format-indent-less") : koIconNameCStr("format-indent-more");
-    m_actionFormatIncreaseIndent = new KAction(
+    m_actionFormatIncreaseIndent = new QAction(
         KIcon(QLatin1String(increaseIndentActionIconName)),
         i18n("Increase Indent"), this);
     addAction("format_increaseindent", m_actionFormatIncreaseIndent);
@@ -313,23 +313,23 @@ void TextTool::createActions()
 
     const char* const decreaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format-indent-more") : koIconNameCStr("format-indent-less");
-    m_actionFormatDecreaseIndent = new KAction(KIcon(QLatin1String(decreaseIndentActionIconName)),
+    m_actionFormatDecreaseIndent = new QAction(KIcon(QLatin1String(decreaseIndentActionIconName)),
                                                i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-    QAction *action = new KAction(koIcon("format-list-unordered"),  i18n("Bullet list"), this);
+    QAction *action = new QAction(koIcon("format-list-unordered"),  i18n("Bullet list"), this);
     addAction("format_bulletlist", action);
 
-    action = new KAction(koIcon("format-list-ordered"),  i18n("Numbered list"), this);
+    action = new QAction(koIcon("format-list-ordered"),  i18n("Numbered list"), this);
     addAction("format_numberlist", action);
 
-    action = new KAction(i18n("Increase Font Size"), this);
+    action = new QAction(i18n("Increase Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Greater);
     addAction("fontsizeup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(increaseFontSize()));
 
-    action = new KAction(i18n("Decrease Font Size"), this);
+    action = new QAction(i18n("Decrease Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Less);
     addAction("fontsizedown", action);
     connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
@@ -344,33 +344,33 @@ void TextTool::createActions()
     addAction("insert_variable", m_variableMenu);
 
     // ------------------- Actions with a key binding and no GUI item
-    action  = new KAction(i18n("Insert Non-Breaking Space"), this);
+    action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action);
     action->setShortcut(Qt::CTRL + Qt::Key_Space);
     connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingSpace()));
 
-    action  = new KAction(i18n("Insert Non-Breaking Hyphen"), this);
+    action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
     addAction("nonbreaking_hyphen", action);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Minus);
     connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingHyphen()));
 
-    action  = new KAction(i18n("Insert Index"), this);
+    action  = new QAction(i18n("Insert Index"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_T);
     addAction("insert_index", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertIndexMarker()));
 
-    action  = new KAction(i18n("Insert Soft Hyphen"), this);
+    action  = new QAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action);
     //action->setShortcut(Qt::CTRL + Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
     if (useAdvancedText) {
-        action  = new KAction(i18n("Line Break"), this);
+        action  = new QAction(i18n("Line Break"), this);
         addAction("line_break", action);
         action->setShortcut(Qt::SHIFT + Qt::Key_Return);
         connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-        action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
+        action  = new QAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
         addAction("insert_framebreak", action);
         action->setShortcut(Qt::CTRL + Qt::Key_Return);
         connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
@@ -378,7 +378,7 @@ void TextTool::createActions()
         action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
     }
 
-    action  = new KAction(i18n("Font..."), this);
+    action  = new QAction(i18n("Font..."), this);
     addAction("format_font", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_F);
     action->setToolTip(i18n("Change character size, font, boldface, italics etc."));
@@ -403,78 +403,78 @@ void TextTool::createActions()
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
 
-    m_growWidthAction = new KAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
+    m_growWidthAction = new QAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
     addAction("grow_to_fit_width", m_growWidthAction);
     m_growWidthAction->setCheckable(true);
     connect(m_growWidthAction, SIGNAL(triggered(bool)), this, SLOT(setGrowWidthToFit(bool)));
 
-    m_growHeightAction = new KAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
+    m_growHeightAction = new QAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
     addAction("grow_to_fit_height", m_growHeightAction);
     m_growHeightAction->setCheckable(true);
     connect(m_growHeightAction, SIGNAL(triggered(bool)), this, SLOT(setGrowHeightToFit(bool)));
 
-    m_shrinkToFitAction = new KAction(koIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
+    m_shrinkToFitAction = new QAction(koIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
     addAction("shrink_to_fit", m_shrinkToFitAction);
     m_shrinkToFitAction->setCheckable(true);
     connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
 
     if (useAdvancedText) {
-        action = new KAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
+        action = new QAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
         addAction("insert_table", action);
         action->setToolTip(i18n("Insert a table into the document."));
         connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
-        action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+        action  = new QAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
         action->setToolTip(i18n("Insert Row Above"));
         addAction("insert_tablerow_above", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-        action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+        action  = new QAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
         action->setToolTip(i18n("Insert Row Below"));
         addAction("insert_tablerow_below", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-        action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+        action  = new QAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
         action->setToolTip(i18n("Insert Column Left"));
         addAction("insert_tablecolumn_left", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-        action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+        action  = new QAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
         action->setToolTip(i18n("Insert Column Right"));
         addAction("insert_tablecolumn_right", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
-        action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
+        action  = new QAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
         action->setToolTip(i18n("Delete Column"));
         addAction("delete_tablecolumn", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-        action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
+        action  = new QAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
         action->setToolTip(i18n("Delete Row"));
         addAction("delete_tablerow", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-        action  = new KAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
+        action  = new QAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
         addAction("merge_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
 
-        action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
+        action  = new QAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
         addAction("split_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
-        action = new KAction(koIcon("borderpainter"), "", this);
+        action = new QAction(koIcon("borderpainter"), "", this);
         action->setToolTip(i18n("Select a border style and paint that style onto a table"));
         addAction("activate_borderpainter", action);
     }
 
-    action = new KAction(i18n("Paragraph..."), this);
+    action = new QAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     action->setToolTip(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc."));
     action->setWhatsThis(i18n("<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</p><p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.</p><p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
-    action = new KAction(i18n("Style Manager..."), this);
+    action = new QAction(i18n("Style Manager..."), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
     action->setWhatsThis(i18n("<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can be changed using the dialog box.</p>"));
@@ -484,7 +484,7 @@ void TextTool::createActions()
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_select_all", action);
 
-    action = new KAction(i18n("Special Character..."), this);
+    action = new QAction(i18n("Special Character..."), this);
     action->setIcon(koIcon("character-set"));
     action->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
     addAction("insert_specialchar", action);
@@ -492,22 +492,22 @@ void TextTool::createActions()
     action->setWhatsThis(i18n("Insert one or more symbols or characters not found on the keyboard."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertSpecialCharacter()));
 
-    action = new KAction(i18n("Repaint"), this);
+    action = new QAction(i18n("Repaint"), this);
     action->setIcon(koIcon("view-refresh"));
     addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
 
-    action = new KAction(i18n("Insert Comment"), this);
+    action = new QAction(i18n("Insert Comment"), this);
     addAction("insert_annotation", action);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
 
 #ifndef NDEBUG
-    action = new KAction("Paragraph Debug", this); // do NOT add i18n!
+    action = new QAction("Paragraph Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
-    action = new KAction("Styles Debug", this); // do NOT add i18n!
+    action = new QAction("Styles Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_S);
     addAction("detailed_debug_styles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));

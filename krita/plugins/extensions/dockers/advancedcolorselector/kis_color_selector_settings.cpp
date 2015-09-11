@@ -154,7 +154,7 @@ QString KisColorSelectorSettings::header()
 }
 
 
-KIcon KisColorSelectorSettings::icon()
+QIcon KisColorSelectorSettings::icon()
 {
     return koIcon("extended_color_selector");
 }

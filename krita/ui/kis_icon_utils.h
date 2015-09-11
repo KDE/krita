@@ -27,15 +27,15 @@ class QComboBox;
 class QAction;
 class QObject;
 
-#include <kicon.h>
+#include <QIcon>
 
 namespace KisIconUtils
 {
     /**
      * Load a themed icon using its base name. Use it in
-     * Kirta instead of previous themedIcon()
+     * Krita instead of previous themedIcon()
      */
-    KRITAUI_EXPORT KIcon loadIcon(const QString &name);
+    KRITAUI_EXPORT QIcon loadIcon(const QString &name);
 
     /**
      * This function updates an icon of \p object depending on its

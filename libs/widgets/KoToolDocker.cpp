@@ -27,7 +27,7 @@
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
@@ -64,8 +64,8 @@ public:
     KoToolDocker *q;
     Qt::DockWidgetArea dockingArea;
     bool tabbed;
-    KIcon tabIcon;
-    KIcon unTabIcon;
+    QIcon tabIcon;
+    QIcon unTabIcon;
     QToolButton *tabButton;
 
 

@@ -22,7 +22,7 @@
 #define DLG_CANVASSIZE
 
 #include <KoDialog.h>
-#include <kicon.h>
+#include <QIcon>
 
 
 #include "ui_wdg_canvassize.h"

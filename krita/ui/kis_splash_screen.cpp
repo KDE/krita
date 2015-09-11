@@ -33,7 +33,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kicon.h>
+#include <QIcon>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)

@@ -19,11 +19,11 @@
 #include "AbstractMusicAction.h"
 #include "../SimpleEntryTool.h"
 
-#include <kicon.h>
+#include <QIcon>
 
 #include <QPainter>
 
-AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool)
+AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool)
     : QAction(icon, text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)

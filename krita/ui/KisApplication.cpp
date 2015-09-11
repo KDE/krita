@@ -170,9 +170,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
 
-    // Tell the iconloader about share/apps/calligra/icons
-    KIconLoader::global()->addAppDir("calligra");
-
     setWindowIcon(koIcon("calligrakrita"));
 
 

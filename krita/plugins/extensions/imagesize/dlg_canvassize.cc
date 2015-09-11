@@ -589,7 +589,7 @@ void DlgCanvasSize::updateAnchorIcons(int id)
         QAbstractButton *button = m_group->button(i);
 
         if (iconId == NONE) {
-            button->setIcon(KIcon());
+            button->setIcon(QIcon());
         } else {
             button->setIcon(m_anchorIcons[iconId]);
         }

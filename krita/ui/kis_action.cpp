@@ -48,7 +48,7 @@ KisAction::KisAction(const QString& text, QObject* parent)
     connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
-KisAction::KisAction(const KIcon& icon, const QString& text, QObject* parent)
+KisAction::KisAction(const QIcon &icon, const QString& text, QObject* parent)
     : QWidgetAction(parent)
     , d(new Private)
 {

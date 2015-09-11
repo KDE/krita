@@ -23,7 +23,7 @@ Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 
 // KDE
 #include <kiconloader.h>
-#include <kicon.h>
+#include <QIcon>
 
 // Qt
 #include <QStyleOptionToolButton>
@@ -51,7 +51,7 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
     const int size = IconSize(KIconLoader::Small);
     setIconSize(QSize(size, size));
     setAutoRaise(true);
-    setIcon(KIcon(iconName));
+    setIcon(QIcon::fromTheme(iconName));
 }
 
 

@@ -59,10 +59,10 @@ void TableEditorDialog::init()
 {
     tableViewContainer->addWidget( m_tableView );
 
-    const KIcon insertRowIcon(koIconName("edit-table-insert-row-above"));
-    const KIcon deleteRowIcon(koIconName("edit-table-delete-row"));
-    const KIcon insertColIcon(koIconName("edit-table-insert-column-left"));
-    const KIcon deleteColIcon(koIconName("edit-table-delete-column"));
+    const QIcon insertRowIcon(koIconName("edit-table-insert-row-above"));
+    const QIcon deleteRowIcon(koIconName("edit-table-delete-row"));
+    const QIcon insertColIcon(koIconName("edit-table-insert-column-left"));
+    const QIcon deleteColIcon(koIconName("edit-table-delete-column"));
 
     // Create actions.
     m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );

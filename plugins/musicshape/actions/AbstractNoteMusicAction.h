@@ -32,7 +32,7 @@ class AbstractNoteMusicAction : public AbstractMusicAction
 {
     Q_OBJECT
 public:
-    AbstractNoteMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool);
+    AbstractNoteMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool);
     AbstractNoteMusicAction(const QString& text, SimpleEntryTool* tool);
     
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);

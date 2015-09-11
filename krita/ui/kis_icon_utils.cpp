@@ -31,15 +31,7 @@
 namespace KisIconUtils
 {
 
-KIcon loadIcon(const QString &name) {
-
-    static bool firstUse = true;
-    if (firstUse) {
-        // workaround for some kde-related crash
-        bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
-        Q_UNUSED(_unused);
-        firstUse = false;
-    }
+    QIcon loadIcon(const QString &name) {
 
     QString realName;
 
@@ -55,11 +47,11 @@ KIcon loadIcon(const QString &name) {
         realName = name;
     }
 
-    KIcon icon(realName);
+    QIcon icon(realName);
 
     // fallback
     if (icon.isNull()) {
-        return KIcon(name);
+        return QIcon::fromTheme(name);
     }
 
     return icon;

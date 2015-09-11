@@ -75,7 +75,7 @@ CharacterHighlighting::CharacterHighlighting(bool uniqueFormat,QWidget* parent)
     connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
     connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(charStyleChanged()));
 
-    const KIcon clearIcon(koIconName("edit-clear"));
+    const QIcon clearIcon(koIconName("edit-clear"));
     widget.resetTextColor->setIcon(clearIcon);
     widget.resetBackground->setIcon(clearIcon);
     connect(widget.textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));

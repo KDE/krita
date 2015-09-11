@@ -36,7 +36,7 @@
 
 using namespace MusicCore;
 
-AbstractNoteMusicAction::AbstractNoteMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool)
+AbstractNoteMusicAction::AbstractNoteMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool)
     : AbstractMusicAction(icon, text, tool)
 {
 }

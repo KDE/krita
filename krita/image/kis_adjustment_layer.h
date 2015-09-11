@@ -78,7 +78,7 @@ public:
 
     /**
      * gets the adjustmentLayer's tool filter
-     * @return QIcon returns the KIcon tool filter
+     * @return QIcon returns the QIcon tool filter
      */
     QIcon icon() const;
 

@@ -25,7 +25,6 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
-#include <KoIcon.h>
 #include <kis_debug.h>
 
 #include <kis_meta_data_store.h>
@@ -33,7 +32,7 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 #include <kis_meta_data_schema_registry.h>
-
+#include <kis_icon_utils.h>
 #include "kis_entry_editor.h"
 #include <QTableView>
 #include "kis_meta_data_model.h"
@@ -124,7 +123,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
         KPageWidgetItem *page = new KPageWidgetItem(widget, pageName);
         if (!iconName.isEmpty()) {
-            page->setIcon(KIcon(iconName));
+            page->setIcon(KisIconUtils::loadIcon(iconName));
         }
         addPage(page);
     }
@@ -136,7 +135,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     tableView->verticalHeader()->setVisible(false);
     tableView->resizeColumnsToContents();
     KPageWidgetItem *page = new KPageWidgetItem(tableView, i18n("List"));
-    page->setIcon(themedIcon("format-list-unordered"));
+    page->setIcon(KisIconUtils::loadIcon("format-list-unordered"));
     addPage(page);
 }
 

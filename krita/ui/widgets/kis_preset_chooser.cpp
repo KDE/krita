@@ -101,13 +101,13 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {
-        const KIcon icon = koIcon(koIconName("dirty-preset"));
+        const QIcon icon = koIcon(koIconName("dirty-preset"));
         QPixmap pixmap = icon.pixmap(QSize(15,15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
     if (!preset->settings() || !preset->settings()->isValid()) {
-        const KIcon icon(koIconName("broken-preset"));
+        const QIcon icon(koIconName("broken-preset"));
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
     if (option.state & QStyle::State_Selected) {

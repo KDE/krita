@@ -335,7 +335,7 @@ QTreeWidgetItem* KoOpenPane::addPane(const QString &title, const QString &iconNa
 
     int id = d->m_widgetStack->addWidget(widget);
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, sortWeight, id);
-    listItem->setIcon(0, KIcon(iconName));
+    listItem->setIcon(0, QIcon::fromTheme(iconName));
 
     return listItem;
 }

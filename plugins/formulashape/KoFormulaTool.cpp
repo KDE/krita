@@ -482,7 +482,7 @@ void KoFormulaTool::addTemplateAction(const QString &caption, const QString &nam
     action = new QAction( caption, this );
     m_signalMapper->setMapping(action, data);
     addAction( name , action );
-    action->setIcon(KIcon(QLatin1String(iconName)));
+    action->setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     connect( action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 }
 

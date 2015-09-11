@@ -28,7 +28,7 @@
 #include <QColor>
 
 // KDE
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 
 /**
@@ -45,35 +45,27 @@
  */
 
 /// Use these macros for icons without any issues
-#define koIcon(name) (KIcon(QLatin1String(name)))
+#define koIcon(name) (QIcon::fromTheme(QLatin1String(name)))
 #define koIconName(name) (QLatin1String(name))
 #define koIconNameCStr(name) (name)
 #define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
 #define koDesktopIcon(name) (DesktopIcon(QLatin1String(name)))
 
 /// Use these macros if there is a proper icon missing
-#define koIconNeeded(comment, neededName) (KIcon(QLatin1String(neededName)))
-#define koIconNeededWithSubs(comment, neededName, substituteName) (KIcon(QLatin1String(substituteName)))
+#define koIconNeeded(comment, neededName) (QIcon::fromTheme(QLatin1String(neededName)))
+#define koIconNeededWithSubs(comment, neededName, substituteName) (QIcon::fromTheme(QLatin1String(substituteName)))
 #define koIconNameNeeded(comment, neededName) (QLatin1String(neededName))
 #define koIconNameNeededWithSubs(comment, neededName, substituteName) (QLatin1String(substituteName))
 #define koIconNameCStrNeeded(comment, neededName) (neededName)
 #define koIconNameCStrNeededWithSubs(comment, neededName, substituteName) (substituteName)
 
 /// Use these macros if the UI is okay without any icon, but would be better with one.
-#define koIconWanted(comment, wantedName) (KIcon())
+#define koIconWanted(comment, wantedName) (QIcon())
 #define koIconNameWanted(comment, wantedName) (QString())
 
 /// Use this function to load an icon that fits the current color theme
-inline KIcon themedIcon(const QString &name, bool fast = false) {
+inline QIcon themedIcon(const QString &name, bool fast = false) {
     Q_UNUSED(fast);
-
-    static bool firstUse = true;
-    if (firstUse) {
-        // workaround for some kde-related crash
-        bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
-        Q_UNUSED(_unused);
-        firstUse = false;
-    }
 
     // try load themed icon
     QColor background = qApp->palette().background().color();
@@ -81,11 +73,11 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
     const char * const prefix = useDarkIcons ? "dark_" : "light_";
 
     QString realName = QLatin1String(prefix) + name;
-    KIcon icon(realName);
+    QIcon icon(realName);
 
     // fallback
     if (icon.isNull()) {
-        return KIcon(name);
+        return QIcon::fromTheme(name);
     }
 
     return icon;

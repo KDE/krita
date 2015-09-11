@@ -26,7 +26,7 @@
 namespace Ui {
     class KisColorSelectorSettings;
 }
-class KIcon;
+class QIcon;
 
 class KisColorSelectorSettings : public KisPreferenceSet {
     Q_OBJECT
@@ -37,7 +37,7 @@ public:
     virtual QString id();
     virtual QString name();
     virtual QString header();
-    virtual KIcon icon();
+    virtual QIcon icon();
 
 public Q_SLOTS:
     void savePreferences() const;

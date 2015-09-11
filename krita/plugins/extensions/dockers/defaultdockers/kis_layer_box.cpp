@@ -81,7 +81,7 @@
 class ButtonAction : public KisAction
 {
 public:
-    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent)
+    ButtonAction(QAbstractButton* button, const QIcon& icon, const QString& text, QObject* parent)
         : KisAction(icon, text, parent)
         , m_button(button)
     {

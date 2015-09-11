@@ -32,7 +32,7 @@
 #include <klocalizedstring.h>
 #include <kselectaction.h>
 #include <kglobal.h>
-#include <kicon.h>
+#include <QIcon>
 
 #include <QMap>
 #include <QList>
@@ -276,7 +276,7 @@ QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
         }
     }
 
-    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
+    QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
 
     QTextLayout textLayout(toolAction->iconText(), smallFont, p.device());
     QTextOption option;
@@ -337,7 +337,7 @@ QIcon KoModeBox::createSimpleIcon(KoToolAction *toolAction) const
         }
     }
 
-    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
+    QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
 
     return QIcon(QPixmap::fromImage(pm));
 }

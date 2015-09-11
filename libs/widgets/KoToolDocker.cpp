@@ -50,8 +50,8 @@ public:
     Private(KoToolDocker *dock)
         : q(dock)
         , tabbed(false)
-        , tabIcon(koIconName("tab-new"))
-        , unTabIcon(koIconName("tab-close"))
+        , tabIcon(koIcon("tab-new"))
+        , unTabIcon(koIcon("tab-close"))
     {
     }
 

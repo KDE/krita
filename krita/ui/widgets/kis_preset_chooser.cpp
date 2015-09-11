@@ -107,7 +107,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     if (!preset->settings() || !preset->settings()->isValid()) {
-        const QIcon icon(koIconName("broken-preset"));
+        const QIcon icon = koIcon("broken-preset");
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
     if (option.state & QStyle::State_Selected) {

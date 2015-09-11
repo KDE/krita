@@ -51,7 +51,7 @@ VideoShape::VideoShape()
     , m_thumbnailer(new VideoThumbnailer())
 #endif
     , m_oldVideoData(0)
-    , m_icon(koIconName("video-x-generic"))
+    , m_icon(koIcon("video-x-generic"))
 {
     setKeepAspectRatio(true);
     addEventAction(m_videoEventAction);

@@ -22,7 +22,7 @@
 #include "KoShape.h"
 #include "KoShapeBackground.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoShapeBackgroundCommand::Private
 {

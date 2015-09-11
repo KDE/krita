@@ -20,7 +20,7 @@
 
 #include "KoPathSegmentBreakCommand.h"
 #include "KoPathPoint.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <math.h>
 
 KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & pointData, KUndo2Command *parent)

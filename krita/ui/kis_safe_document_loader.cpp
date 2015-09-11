@@ -22,7 +22,7 @@
 #include <QFileSystemWatcher>
 #include <QApplication>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include "KisDocument.h"
 #include "kis_image.h"
@@ -145,16 +145,16 @@ void KisSafeDocumentLoader::delayedLoadStart()
         tempInfo.size() == m_d->initialFileSize) {
 
         m_d->doc.reset(KisPart::instance()->createDocument());
-        successfullyLoaded = m_d->doc->openUrl(m_d->temporaryPath,
+        successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
                                                KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
     } else {
-        qDebug() << "File was modified externally. Restarting.";
-        qDebug() << ppVar(m_d->fileChangedFlag);
-        qDebug() << ppVar(m_d->initialFileSize);
-        qDebug() << ppVar(m_d->initialFileTimeStamp);
-        qDebug() << ppVar(originalInfo.size());
-        qDebug() << ppVar(originalInfo.lastModified());
-        qDebug() << ppVar(tempInfo.size());
+        dbgKrita << "File was modified externally. Restarting.";
+        dbgKrita << ppVar(m_d->fileChangedFlag);
+        dbgKrita << ppVar(m_d->initialFileSize);
+        dbgKrita << ppVar(m_d->initialFileTimeStamp);
+        dbgKrita << ppVar(originalInfo.size());
+        dbgKrita << ppVar(originalInfo.lastModified());
+        dbgKrita << ppVar(tempInfo.size());
     }
 
     QFile::remove(m_d->temporaryPath);

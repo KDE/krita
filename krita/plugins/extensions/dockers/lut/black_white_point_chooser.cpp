@@ -18,7 +18,7 @@
 
 #include "black_white_point_chooser.h"
 
-#include "klocale.h"
+#include "klocalizedstring.h"
 
 #include "kis_global.h"
 

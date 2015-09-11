@@ -39,12 +39,12 @@ public:
      */
     bool regenerate(KisAnimationFrameCacheSP cache, int frame);
 
-public slots:
+public Q_SLOTS:
     void slotStart();
 
     void slotRequestRegeneration();
 
-private slots:
+private Q_SLOTS:
     void slotTimer();
     void slotFrameReady(int frame);
     void slotInfoConverted();

@@ -34,10 +34,9 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
@@ -242,7 +241,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
 
     QStringList quickShapes;
     quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
-    KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
@@ -259,7 +258,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = shapeTemplate.id;
             temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon(shapeTemplate.iconName);
+            temp.icon = QIcon::fromTheme(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
             if(shapeTemplate.family == "funny")
                 funnyList.append(temp);
@@ -286,7 +285,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = factory->id();
             temp.name = factory->name();
             temp.toolTip = factory->toolTip();
-            temp.icon = KIcon(factory->iconName());
+            temp.icon = QIcon::fromTheme(factory->iconName());
             temp.properties = 0;
             if(factory->family() == "funny")
                 funnyList.append(temp);
@@ -571,5 +570,3 @@ void ShapeCollectionDocker::removeCurrentCollection()
 {
 //TODO    removeCollection(m_collectionsCombo->itemData(m_collectionsCombo->currentIndex()).toString());
 }
-
-#include <ShapeCollectionDocker.moc>

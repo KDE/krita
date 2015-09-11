@@ -25,7 +25,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QMetaType>
 #include <klocalizedstring.h>
@@ -99,7 +99,7 @@ void KisGmicWidget::createMainLayout()
         updateBtn->setEnabled(false);
     }
 
-    expandCollapseBtn->setIcon(themedIcon("zoom-in"));
+    expandCollapseBtn->setIcon(KisIconUtils::loadIcon("zoom-in"));
     connect(expandCollapseBtn, SIGNAL(clicked()), this, SLOT(slotExpandCollapse()));
 
     connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
@@ -426,18 +426,16 @@ void KisGmicWidget::slotNotImplemented()
 
 void KisGmicWidget::slotExpandCollapse()
 {
-#if QT_VERSION >= 0x040700
     const QString &iconName = expandCollapseBtn->icon().name();
     if (iconName == "zoom-in")
     {
         m_filterTree->expandAll();
-        expandCollapseBtn->setIcon(themedIcon("zoom-out"));
+        expandCollapseBtn->setIcon(KisIconUtils::loadIcon("zoom-out"));
 
     }
     else if (iconName == "zoom-out")
     {
         m_filterTree->collapseAll();
-        expandCollapseBtn->setIcon(themedIcon("zoom-in"));
+        expandCollapseBtn->setIcon(KisIconUtils::loadIcon("zoom-in"));
     }
-#endif
 }

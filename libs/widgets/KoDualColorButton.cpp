@@ -24,7 +24,6 @@
 #include "dcolorarrow.xbm"
 #include "dcolorreset.xpm"
 
-#include <kglobalsettings.h>
 #include <kcolordialog.h>
 
 #include <QBitmap>
@@ -33,6 +32,7 @@
 #include <QDragEnterEvent>
 #include <QPainter>
 #include <qdrawutil.h>
+#include <QApplication>
 
 class Q_DECL_HIDDEN KoDualColorButton::Private
 {
@@ -241,7 +241,7 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
 void KoDualColorButton::mouseMoveEvent( QMouseEvent *event )
 {
   if ( !d->miniCtlFlag ) {
-    int delay = KGlobalSettings::dndEventDelay();
+    int delay = QApplication::startDragDistance();
 
     if ( event->x() >= d->dragPosition.x() + delay || event->x() <= d->dragPosition.x() - delay ||
          event->y() >= d->dragPosition.y() + delay || event->y() <= d->dragPosition.y() - delay ) {
@@ -302,6 +302,3 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
 
     repaint();
 }
-
-#include <KoDualColorButton.moc>
-;

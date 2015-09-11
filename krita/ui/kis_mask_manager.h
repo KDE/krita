@@ -27,7 +27,7 @@
 class KisViewManager;
 class KActionCollection;
 class KisAction;
-class KAction;
+class QAction;
 class KisNodeCommandsAdapter;
 class KisActionManager;
 

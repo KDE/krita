@@ -22,11 +22,10 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeManager.h>
 
-#include <kcomponentdata.h>
+#include <QTest>
 
 TestShapeReorderCommand::TestShapeReorderCommand()
 {
-    KComponentData componentData("TestShapeReorderCommand");    // we need an instance for the canvas
 }
 
 TestShapeReorderCommand::~TestShapeReorderCommand()
@@ -561,4 +560,3 @@ void TestShapeReorderCommand::testNoCommand()
 }
 
 QTEST_MAIN(TestShapeReorderCommand)
-#include "TestShapeReorderCommand.moc"

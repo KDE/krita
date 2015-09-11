@@ -25,12 +25,12 @@
 #include <QPaintDevice>
 #include <QFont>
 #include <QFontInfo>
+#include <QFontDatabase>
 
 #include <kdebug.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
@@ -51,9 +51,9 @@ KoGlobal::KoGlobal()
     }
 
     // Fixes a bug where values from some config files are not picked up
-    // due to KGlobal::config() being initialized before paths have been set up above.
+    // due to  KSharedConfig::openConfig() being initialized before paths have been set up above.
     // NOTE: Values set without a sync() call before KoGlobal has been initialized will not stick
-    KGlobal::config()->reparseConfiguration();
+     KSharedConfig::openConfig()->reparseConfiguration();
 }
 
 KoGlobal::~KoGlobal()
@@ -63,7 +63,7 @@ KoGlobal::~KoGlobal()
 
 QFont KoGlobal::_defaultFont()
 {
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     // we have to use QFontInfo, in case the font was specified with a pixel size
     if (font.pointSize() == -1) {
         // cache size into m_pointSize, since QFontInfo loads the font -> slow

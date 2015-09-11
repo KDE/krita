@@ -29,7 +29,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KLineEdit" name="klineeditPath"/>
+    <widget class="QLineEdit" name="klineeditPath"/>
    </item>
    <item>
     <widget class="KPushButton" name="kpushbutton"/>
@@ -56,7 +56,7 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

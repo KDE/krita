@@ -5,6 +5,7 @@
 
 #include <QTextTableCellFormat>
 #include <QRectF>
+#include <QTest>
 
 void TestTableCellStyle::testPen()
 {
@@ -127,4 +128,3 @@ void TestTableCellStyle::testMargin()
 }
 
 QTEST_MAIN(TestTableCellStyle)
-#include <TestTableCellStyle.moc>

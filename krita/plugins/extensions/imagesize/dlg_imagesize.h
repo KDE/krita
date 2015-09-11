@@ -21,7 +21,7 @@
 #ifndef DLG_IMAGESIZE
 #define DLG_IMAGESIZE
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KisFilterStrategy;
 class WdgImageSize;
@@ -38,7 +38,7 @@ public:
     }
 };
 
-class DlgImageSize: public KDialog
+class DlgImageSize: public KoDialog
 {
 
     Q_OBJECT

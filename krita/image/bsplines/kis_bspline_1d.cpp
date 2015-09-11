@@ -28,7 +28,7 @@
 
 namespace KisBSplines {
 
-struct KisBSpline1D::Private
+struct Q_DECL_HIDDEN KisBSpline1D::Private
 {
     BorderCondition bc;
     UBspline_1d_s* spline;

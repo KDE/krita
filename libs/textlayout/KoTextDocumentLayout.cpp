@@ -1027,5 +1027,3 @@ void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
         emit layoutProgressChanged(percent);
     }
 }
-
-#include <KoTextDocumentLayout.moc>

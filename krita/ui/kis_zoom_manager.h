@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoZoomMode.h>
 #include <KoZoomAction.h>
@@ -31,7 +31,7 @@
 #include "KisView.h"
 
 class KoZoomHandler;
-class KAction;
+class QAction;
 class KoZoomAction;
 class KoRuler;
 class KoUnit;

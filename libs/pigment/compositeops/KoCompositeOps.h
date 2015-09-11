@@ -79,6 +79,17 @@ struct OptimizedOpsSelector<KoLabU8Traits>
     }
 };
 
+template<>
+struct OptimizedOpsSelector<KoRgbF32Traits>
+{
+    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
+        return new KoCompositeOpAlphaDarken<KoRgbF32Traits>(cs);
+    }
+    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createOverOp128(cs);
+    }
+};
+
 template<class Traits>
 struct AddGeneralOps<Traits, true>
 {

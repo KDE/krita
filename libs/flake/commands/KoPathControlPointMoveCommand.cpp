@@ -19,7 +19,7 @@
  */
 
 #include "KoPathControlPointMoveCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <math.h>
 
 KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(

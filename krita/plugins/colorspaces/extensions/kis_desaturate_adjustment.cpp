@@ -22,7 +22,7 @@
 #include <KoConfig.h>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorConversions.h>
 #include <KoColorModelStandardIds.h>
@@ -167,7 +167,7 @@ KoColorTransformation* KisDesaturateAdjustmentFactory::createTransformation(cons
 {
     KoColorTransformation * adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisDesaturateAdjustmentFactory::createTransformation";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisDesaturateAdjustmentFactory::createTransformation";
         return 0;
     }
     if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
@@ -184,7 +184,7 @@ KoColorTransformation* KisDesaturateAdjustmentFactory::createTransformation(cons
         adj = new KisDesaturateAdjustment< float, KoRgbTraits < float > >();
     }
     else {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisDesaturateAdjustmentFactory::createTransformation";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisDesaturateAdjustmentFactory::createTransformation";
         return 0;
     }
     adj->setParameters(parameters);

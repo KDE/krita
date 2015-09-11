@@ -26,9 +26,9 @@
 #include <QStringList>
 #include <QApplication>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -79,9 +79,9 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("JPEG Export Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsJPEG wdgUi;
     QWidget* wdg = new QWidget(kdb);
@@ -189,7 +189,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     image->refreshGraph();

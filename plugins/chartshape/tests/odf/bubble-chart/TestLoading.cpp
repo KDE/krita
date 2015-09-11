@@ -21,9 +21,6 @@
 // Own
 #include "TestLoading.h"
 
-// KDE
-#include <qtest_kde.h>
-
 // KoChart
 #include "ChartShape.h"
 #include "PlotArea.h"
@@ -89,5 +86,4 @@ void TestLoading::testAxes()
     testElementIsVisible(m_chart->plotArea()->yAxis()->title(), false);
 }
 
-QTEST_KDEMAIN(TestLoading, GUI )
-
+QTEST_MAIN(TestLoading)

@@ -68,7 +68,7 @@ void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
 
         quint64 windowSize = adjustingWindow->defaultSize;
         if(requestedChunk.size() > windowSize) {
-            qWarning() <<
+            warnKrita <<
                 "KisMemoryWindow: the requested chunk is too "
                 "big to fit into the mapping! "
                 "Adjusting mapping to avoid SIGSEGV...";

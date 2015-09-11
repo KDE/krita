@@ -605,5 +605,3 @@ QList<DataSet*> KChartModel::dataSets() const
 {
     return d->dataSets;
 }
-
-#include "KChartModel.moc"

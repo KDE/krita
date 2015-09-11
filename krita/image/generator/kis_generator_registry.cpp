@@ -23,7 +23,7 @@
 #include <QString>
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPluginLoader.h>
 

@@ -27,7 +27,7 @@
 #include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #define SVGSHAPEFACTORYID "SvgShapeFactory"
 

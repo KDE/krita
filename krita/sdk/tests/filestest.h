@@ -23,8 +23,8 @@
 #include <QDir>
 
 #include <kaboutdata.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <kis_debug.h>
 
 #include <KisImportExportManager.h>
 
@@ -35,7 +35,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KisPart.h>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <QFileInfo>
 
 namespace TestUtil
@@ -68,7 +68,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KisImportExportFilter::ConversionStatus status;
             QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
                                                status);
-            qDebug() << s;
+            dbgKrita << s;
 
             if (!doc->image()) {
                 failuresDocImage << sourceFileInfo.fileName();
@@ -83,12 +83,11 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                                                     KoColorConversionTransformation::NoOptimization);
             }
 
-            KTemporaryFile tmpFile;
-            tmpFile.setSuffix(".png");
+            QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".png"));
             tmpFile.open();
             doc->setBackupFile(false);
             doc->setOutputMimeType("image/png");
-            doc->saveAs(KUrl("file://" + tmpFile.fileName()));
+            doc->saveAs(QUrl("file://" + tmpFile.fileName()));
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
@@ -111,9 +110,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
     if (failuresCompare.isEmpty() && failuresDocImage.isEmpty() && failuresFileInfo.isEmpty()) {
         return;
     }
-    qDebug() << "Comparison failures: " << failuresCompare;
-    qDebug() << "No image failures: " << failuresDocImage;
-    qDebug() << "No comparison image: " <<  failuresFileInfo;
+    dbgKrita << "Comparison failures: " << failuresCompare;
+    dbgKrita << "No image failures: " << failuresDocImage;
+    dbgKrita << "No comparison image: " <<  failuresFileInfo;
 
     QFAIL("Failed testing files");
 }

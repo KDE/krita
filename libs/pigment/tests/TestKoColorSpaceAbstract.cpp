@@ -5,6 +5,7 @@
 
 #include <cfloat>
 
+#include <QTest>
 
 template <class T>
 T mixOpExpectedAlpha(T alpha1, T alpha2, const qint16 *weights)
@@ -385,6 +386,4 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
 }
 
 
-QTEST_MAIN(TestKoColorSpaceAbstract)
-#include <TestKoColorSpaceAbstract.moc>
-
+QTEST_GUILESS_MAIN(TestKoColorSpaceAbstract)

@@ -344,7 +344,7 @@ qreal KisPaintInformation::drawingAngle() const
     if (d->drawingAngleOverride) return *d->drawingAngleOverride;
 
     if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        qWarning() << "KisPaintInformation::drawingAngle()" << "Cannot access Distance Info last dab data";
+        warnKrita << "KisPaintInformation::drawingAngle()" << "Cannot access Distance Info last dab data";
         return 0.0;
     }
 
@@ -360,7 +360,7 @@ QPointF KisPaintInformation::drawingDirectionVector() const
     }
 
     if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        qWarning() << "KisPaintInformation::drawingDirectionVector()" << "Cannot access Distance Info last dab data";
+        warnKrita << "KisPaintInformation::drawingDirectionVector()" << "Cannot access Distance Info last dab data";
         return QPointF(1.0, 0.0);
     }
 
@@ -371,7 +371,7 @@ QPointF KisPaintInformation::drawingDirectionVector() const
 qreal KisPaintInformation::drawingDistance() const
 {
     if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
-        qWarning() << "KisPaintInformation::drawingDistance()" << "Cannot access Distance Info last dab data";
+        warnKrita << "KisPaintInformation::drawingDistance()" << "Cannot access Distance Info last dab data";
         return 1.0;
     }
 

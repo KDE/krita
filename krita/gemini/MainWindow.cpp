@@ -38,13 +38,13 @@
 #include <QGLWidget>
 #include <QDesktopServices>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <QMessageBox>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <KoCanvasBase.h>
 #include <KisMainWindow.h>
@@ -57,6 +57,7 @@
 #include <KisImportExportManager.h>
 #include <KoToolManager.h>
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -139,8 +140,8 @@ public:
     ViewModeSynchronisationObject* syncObject;
     QTimer* centerer;
 
-    KAction* toDesktop;
-    KAction* toSketch;
+    QAction * toDesktop;
+    QAction * toSketch;
     QToolButton* switcher;
 
     void initSketchView(QObject* parent)
@@ -182,11 +183,11 @@ public:
 
         if (sketchView->errors().count() > 0) {
             foreach(const QDeclarativeError &error, sketchView->errors()) {
-                qDebug() << error.toString();
+                dbgKrita << error.toString();
             }
         }
 
-        toDesktop = new KAction(q);
+        toDesktop = new QAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
         // useful for monkey-testing to crash...
@@ -212,7 +213,7 @@ public:
 
         desktopWindow = new KisMainWindow();
 
-        toSketch = new KAction(desktopWindow);
+        toSketch = new QAction(desktopWindow);
         toSketch->setEnabled(false);
         toSketch->setText(tr("Switch to Sketch"));
         toSketch->setIcon(QIcon::fromTheme("system-reboot"));
@@ -247,7 +248,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
-    setWindowIcon(koIcon("kritagemini"));
+    setWindowIcon(KisIconUtils::loadIcon("kritagemini"));
 
 	// Load filters and other plugins in the gui thread
 	Q_UNUSED(KisFilterRegistry::instance());
@@ -284,18 +285,18 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
     QString fileName = url.fileName();
-    if(url.protocol() == "temp")
+    if(url.scheme() == "temp")
         fileName = i18n("Untitled");
 
-    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KisDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
-        flags |= KDialog::ModifiedCaption;
+        flags |= KoDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle( KoDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()
@@ -555,7 +556,7 @@ QString MainWindow::openImage()
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
 
     dialog.setHideNameFilterDetailsOption();
-    return dialog.url();
+    return dialog.filename();
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
@@ -746,7 +747,7 @@ void MainWindow::Private::notifySlateModeChange()
         {
                 q->switchToDesktop();
         }
-        //qDebug() << "Slate mode is now" << slateMode;
+        //dbgKrita << "Slate mode is now" << slateMode;
     } 
 #endif
 }
@@ -759,7 +760,7 @@ void MainWindow::Private::notifyDockingModeChange()
     if (docked != bDocked)
     {
         docked = bDocked;
-        //qDebug() << "Docking mode is now" << docked;
+        //dbgKrita << "Docking mode is now" << docked;
     }
 #endif
 }

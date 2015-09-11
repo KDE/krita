@@ -89,7 +89,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition"));
 
     /*More things I know by reading the XML tree. At this point you can just read it with:
-    qDebug() << xMLAnalyzer.toString() ;
+    dbgKrita << xMLAnalyzer.toString() ;
     those QDomElements are the way to navigate the XML tree, read
     http://doc.qt.nokia.com/latest/qdomdocument.html for more information */
     QDomElement firstTag = xMLAnalyzer.documentElement();
@@ -105,7 +105,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     KisCubicCurve CurveSize;
 
     CurveSize.fromString("0,1;1,0.1;");
-    //qDebug() << "\n\n\n" << CurveSize.toString() << "\n\n\n";
+    //dbgKrita << "\n\n\n" << CurveSize.toString() << "\n\n\n";
 
     QVariant QVCurveSize = QVariant::fromValue(CurveSize);
 
@@ -118,7 +118,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
 
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
-        qDebug() << i.key() << ":" << i.value();
+        dbgKrita << i.key() << ":" << i.value();
     */
 
     delete reconfigurationCourier;

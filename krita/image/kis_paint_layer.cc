@@ -22,9 +22,10 @@
 #include "kis_paint_layer.h"
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>
@@ -40,7 +41,7 @@
 #include "kis_onion_skin_compositor.h"
 #include "kis_raster_keyframe_channel.h"
 
-struct KisPaintLayer::Private
+struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
@@ -164,7 +165,7 @@ KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() co
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
 
     // XXX: get right icons
-    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked"), alphaLocked());
 
     if (isAnimated()) {
         l << KisDocumentSectionModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());

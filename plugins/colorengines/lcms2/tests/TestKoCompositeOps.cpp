@@ -20,7 +20,7 @@
 
 #include "TestKoCompositeOps.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpace.h>
 
@@ -1296,6 +1296,4 @@ void TestKoCompositeOps::testCompositeCopy()
 
 }
 
-
-QTEST_KDEMAIN(TestKoCompositeOps, NoGUI)
-#include "TestKoCompositeOps.moc"
+QTEST_GUILESS_MAIN(TestKoCompositeOps)

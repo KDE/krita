@@ -20,7 +20,7 @@
 #ifndef KOPAMASTERPAGEDIALOG_H
 #define KOPAMASTERPAGEDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QListView;
 
@@ -28,7 +28,7 @@ class KoPADocument;
 class KoPAMasterPage;
 class KoPAPageThumbnailModel;
 
-class KoPAMasterPageDialog : public KDialog
+class KoPAMasterPageDialog : public KoDialog
 {
     Q_OBJECT
 public:

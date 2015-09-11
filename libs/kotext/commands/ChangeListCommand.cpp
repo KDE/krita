@@ -26,7 +26,7 @@
 #include <KoParagraphStyle.h>
 #include <KoList.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #define MARGIN_DEFAULT 18 // we consider it the default value

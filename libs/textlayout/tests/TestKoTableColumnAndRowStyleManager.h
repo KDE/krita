@@ -21,7 +21,6 @@
 #define TESTKOTABLECOLUMNANDROWSTYLEMANAGER_H
 
 #include <QObject>
-#include <QtTest>
 
 class TestKoTableColumnAndRowStyleManager : public QObject
 {

@@ -18,7 +18,7 @@
 
 #include "kis_offset_processing_visitor.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "commands_new/kis_node_move_command2.h"
 

@@ -36,8 +36,8 @@
 #include <QDropEvent>
 #include <QMimeData>
 
-#include <kurl.h>
-#include <klocale.h>
+#include <QUrl>
+#include <klocalizedstring.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
@@ -206,7 +206,7 @@ void KoOpenPane::openFileDialog()
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
-    KUrl url = dialog.url();
+    QUrl url = QUrl::fromUserInput(dialog.filename());
     emit openExistingFile(url);
 }
 
@@ -214,7 +214,7 @@ void KoOpenPane::initRecentDocs()
 {
     QString header = i18n("Recent Documents");
     KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_componentData, header);
-    connect(recentDocPane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openExistingFile(const KUrl&)));
+    connect(recentDocPane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openExistingFile(const QUrl&)));
     QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
     connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
             this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
@@ -246,7 +246,7 @@ void KoOpenPane::initTemplates(const QString& templatesResourcePath)
 
             KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_componentData, group->name(),
                     group, templateTree.defaultTemplate());
-            connect(pane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
+            connect(pane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openTemplate(const QUrl&)));
             connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
                     this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
             connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
@@ -335,7 +335,7 @@ QTreeWidgetItem* KoOpenPane::addPane(const QString &title, const QString &iconNa
 
     int id = d->m_widgetStack->addWidget(widget);
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, sortWeight, id);
-    listItem->setIcon(0, KIcon(iconName));
+    listItem->setIcon(0, QIcon::fromTheme(iconName));
 
     return listItem;
 }
@@ -392,5 +392,3 @@ void KoOpenPane::itemClicked(QTreeWidgetItem* item)
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
     }
 }
-
-#include <KoOpenPane.moc>

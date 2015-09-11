@@ -89,5 +89,3 @@ QVector<qreal> KoLineStyleSelector::lineDashes() const
     QPen pen = itemData(currentIndex(), Qt::DecorationRole).value<QPen>();
     return pen.dashPattern();
 }
-
-#include <KoLineStyleSelector.moc>

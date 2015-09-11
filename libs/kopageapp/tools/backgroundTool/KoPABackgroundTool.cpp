@@ -24,7 +24,7 @@
 #include <QList>
 
 //KDE includes
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 //Calligra includes
 #include <KoPACanvasBase.h>
@@ -116,5 +116,3 @@ void KoPABackgroundTool::addOptionWidget(QWidget *widget)
 {
     m_addOnWidgets.append(widget);
 }
-
-#include <KoPABackgroundTool.moc>

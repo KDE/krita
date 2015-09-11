@@ -27,7 +27,7 @@
 using namespace MusicCore;
 
 PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Part details"));
     QWidget* w = new QWidget(this);
@@ -48,5 +48,3 @@ void PartDetailsDialog::showDialog(MusicTool *tool, Part* part, QWidget* parent)
                                                         dlg.widget.staffCount->value()));
     }
 }
-
-#include <PartDetailsDialog.moc>

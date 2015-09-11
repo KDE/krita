@@ -17,27 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSIZEGROUPPRIVATE_H
-#define KOSIZEGROUPPRIVATE_H
+#ifndef KISSIZEGROUPPRIVATE_H
+#define KISSIZEGROUPPRIVATE_H
 
 #include <QObject>
 #include <QWidgetItem>
 #include <QList>
 #include <QSize>
 
-#include "KoSizeGroup.h"
+#include "kis_size_group.h"
 
 class QWidget;
 class QEvent;
 class QTimer;
 
 class GroupItem;
-class KoSizeGroupPrivate : public QObject
+class KisSizeGroupPrivate : public QObject
 {
     Q_OBJECT
 
 public:
-    KoSizeGroupPrivate(KoSizeGroup *q_ptr, KoSizeGroup::mode mode, bool ignoreHidden);
+    KisSizeGroupPrivate(KisSizeGroup *q_ptr, KisSizeGroup::mode mode, bool ignoreHidden);
 
     void addWidget(QWidget *widget);
     void removeWidget(QWidget *widget);
@@ -53,8 +53,8 @@ private Q_SLOTS:
     void updateSize();
 
 public:
-    KoSizeGroup* q;
-    KoSizeGroup::mode m_mode;
+    KisSizeGroup* q;
+    KisSizeGroup::mode m_mode;
     bool m_ignoreHidden;
 
 private:
@@ -82,8 +82,8 @@ public:
 
     bool hidden() const { return m_hidden; }
 
-    KoSizeGroupPrivate* getGroup() { return m_group; }
-    void setGroup(KoSizeGroupPrivate* group) { m_group = group; }
+    KisSizeGroupPrivate* getGroup() { return m_group; }
+    void setGroup(KisSizeGroupPrivate* group) { m_group = group; }
 
     QSize sizeHint() const;
     QSize minimumSize() const;
@@ -93,7 +93,7 @@ public:
 private:
     bool m_hidden;
     QSize m_size;
-    KoSizeGroupPrivate* m_group;
+    KisSizeGroupPrivate* m_group;
 };
 
-#endif // KOSIZEGROUPPRIVATE_H
+#endif // KISSIZEGROUPPRIVATE_H

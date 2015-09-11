@@ -138,5 +138,3 @@ void TestSections::testMoveByMargin()
 
 
 QTEST_KDEMAIN(TestSections, GUI)
-
-#include <TestSections.moc>

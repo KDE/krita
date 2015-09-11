@@ -17,7 +17,7 @@
  */
 
 #include "kis_curves_opacity_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisCurvesOpacityOption::KisCurvesOpacityOption()
     : KisCurveOption("Curves opacity", KisPaintOpOption::GENERAL, false)

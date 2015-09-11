@@ -18,6 +18,7 @@
  */
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"
@@ -53,7 +54,7 @@ KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
 
 QIcon KisFilterMask::icon() const
 {
-    return themedIcon("view-filter");
+    return KisIconUtils::loadIcon("view-filter");
 }
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)

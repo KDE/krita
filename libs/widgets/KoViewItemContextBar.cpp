@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 
 //KDE headers
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 //Qt Headers
 #include <QAbstractItemView>
@@ -196,7 +196,7 @@ void KoViewItemContextBar::updateToggleSelectionButton()
     const bool isHoveredIndexSelected = m_view->selectionModel()->isSelected(m_IndexUnderCursor);
     const char *const iconName = (isHoveredIndexSelected ? koIconNameCStr("list-remove") : koIconNameCStr("list-add"));
 
-    m_ToggleSelectionButton->setIcon(KIcon(QLatin1String(iconName)));
+    m_ToggleSelectionButton->setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     m_ToggleSelectionButton->setToolTip(isHoveredIndexSelected ? i18n("deselect item") : i18n("select item"));
 }
 
@@ -257,5 +257,3 @@ void KoViewItemContextBar::disableContextBar()
 {
     m_enabled = false;
 }
-
-#include "KoViewItemContextBar.moc"

@@ -19,7 +19,7 @@
 #ifndef DLG_LAYERSPLIT
 #define DLG_LAYERSPLIT
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <kis_types.h>
 
@@ -29,7 +29,7 @@
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
  */
-class DlgLayerSplit: public KDialog
+class DlgLayerSplit: public KoDialog
 {
 
     Q_OBJECT

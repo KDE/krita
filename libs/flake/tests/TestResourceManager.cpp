@@ -23,6 +23,7 @@
 #include "KoPathShape.h"
 #include "KoUnit.h"
 #include <QSignalSpy>
+#include <QTest>
 
 void TestResourceManager::koShapeResource()
 {
@@ -49,4 +50,3 @@ void TestResourceManager::testUnitChanged()
 }
 
 QTEST_MAIN(TestResourceManager)
-#include <TestResourceManager.moc>

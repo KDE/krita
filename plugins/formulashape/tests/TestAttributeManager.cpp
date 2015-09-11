@@ -4,6 +4,8 @@
 #include <AttributeManager.h>
 #include <KoXmlReader.h>
 
+#include <QTest>
+
 void TestAttributeManager::initTestCase()
 {
     m_attributeManager = new AttributeManager();
@@ -26,4 +28,3 @@ void TestAttributeManager::testColorConversion()
 }
 
 QTEST_MAIN(TestAttributeManager)
-#include "TestAttributeManager.moc"

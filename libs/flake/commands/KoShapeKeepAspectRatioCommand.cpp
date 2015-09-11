@@ -19,7 +19,7 @@
 
 #include "KoShapeKeepAspectRatioCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoShape.h>
 

@@ -23,7 +23,7 @@
 #ifndef KIS_TOOL_TRANSFORM_H_
 #define KIS_TOOL_TRANSFORM_H_
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QPoint>
 #include <QPointF>
@@ -31,9 +31,8 @@
 #include <QVector3D>
 #include <QButtonGroup>
 
-#include <kshortcut.h>
+#include <QKeySequence>
 
-#include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
 
 #include <kis_shape_selection.h>
@@ -307,7 +306,7 @@ public:
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIconName(koIconNameCStr("krita_tool_transform"));
-        setShortcut(KShortcut( QKeySequence(Qt::CTRL + Qt::Key_T) ));
+        setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

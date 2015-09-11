@@ -24,8 +24,8 @@
 #include <QCheckBox>
 #include <QComboBox>
 
-#include <klocale.h>
-#include <kaction.h>
+#include <klocalizedstring.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kglobal.h>
 
@@ -47,11 +47,11 @@ void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QStri
      * should be unique, so let's be careful with them
      */
     if (!globalCollection->action(id)) {
-        KAction *action = new KAction(name, globalCollection);
+        QAction *action = new QAction(name, globalCollection);
         globalCollection->addAction(id, action);
     }
 
-    KAction *action = dynamic_cast<KAction*>(globalCollection->action(id));
+    QAction *action = dynamic_cast<QAction*>(globalCollection->action(id));
     addAction(id, action);
 
     connect(action, SIGNAL(triggered()), &m_signalMapper, SLOT(map()));
@@ -84,7 +84,7 @@ void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &sha
     KisToolFreehand::activate(activation, shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
-    m_configGroup = KGlobal::config()->group(toolId());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 
 
 }
@@ -431,9 +431,9 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
     
-    KAction *toggleaction = new KAction(i18n("Toggle Assistant"), this);
+    QAction *toggleaction = new QAction(i18n("Toggle Assistant"), this);
     addAction("toggle_assistant", toggleaction);
-    toggleaction->setShortcut(KShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
+    toggleaction->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
     addOptionWidgetOption(m_sliderMagnetism, assistantWidget);

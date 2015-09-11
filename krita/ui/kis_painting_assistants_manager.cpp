@@ -23,7 +23,7 @@
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>

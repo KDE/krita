@@ -26,10 +26,11 @@
 #include <KoGlobal.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <QLineEdit>
 #include <QStackedWidget>
@@ -210,6 +211,3 @@ void KoConfigAuthorPage::apply()
     authorGroup.writeEntry("profile-names", profiles);
     authorGroup.sync();
 }
-
-
-#include <KoConfigAuthorPage.moc>

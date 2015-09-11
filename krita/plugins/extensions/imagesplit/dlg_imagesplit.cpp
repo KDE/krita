@@ -21,7 +21,7 @@
 
 #include "dlg_imagesplit.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include <KisViewManager.h>
@@ -29,7 +29,7 @@
 #include <kis_paint_device.h>
 
 DlgImagesplit::DlgImagesplit(KisViewManager* view, QString suffix, QStringList listMimeFilter)
-    : KDialog(view->mainWindow())
+    : KoDialog(view->mainWindow())
 {
 
     m_page = new WdgImagesplit(this);

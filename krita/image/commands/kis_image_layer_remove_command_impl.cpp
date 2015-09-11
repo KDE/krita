@@ -20,12 +20,12 @@
 #include "kis_image_layer_remove_command_impl.h"
 #include "kis_image.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_layer.h"
 #include "kis_clone_layer.h"
 #include "kis_paint_layer.h"
 
-struct KisImageLayerRemoveCommandImpl::Private {
+struct Q_DECL_HIDDEN KisImageLayerRemoveCommandImpl::Private {
     Private(KisImageLayerRemoveCommandImpl *_q) : q(_q) {}
 
     KisImageLayerRemoveCommandImpl *q;

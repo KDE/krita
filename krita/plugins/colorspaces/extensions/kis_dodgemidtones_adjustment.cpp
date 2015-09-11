@@ -21,7 +21,7 @@
 #include <KoConfig.h>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
@@ -116,7 +116,7 @@ KoColorTransformation* KisDodgeMidtonesAdjustmentFactory::createTransformation(c
 {
     KoColorTransformation * adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisDodgeMidtonesAdjustmentFactory::createTransformation";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisDodgeMidtonesAdjustmentFactory::createTransformation";
         return 0;
     }
     if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
@@ -132,7 +132,7 @@ KoColorTransformation* KisDodgeMidtonesAdjustmentFactory::createTransformation(c
     } else if(colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
         adj = new KisDodgeMidtonesAdjustment< quint8, KoBgrTraits < quint8 > >();
     } else {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisDodgeMidtonesAdjustmentFactory::createTransformation";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisDodgeMidtonesAdjustmentFactory::createTransformation";
         return 0;
     }
     adj->setParameters(parameters);

@@ -21,7 +21,7 @@
 #include <KoSnapGuide.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
     :QWidget(parent)
@@ -203,5 +203,3 @@ void GuidesToolOptionWidget::setUnit(const KoUnit &unit)
     widget.positionList->blockSignals(false);
     widget.position->blockSignals(false);
 }
-
-#include <GuidesToolOptionWidget.moc>

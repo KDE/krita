@@ -17,10 +17,10 @@
 
 #include "compositionmodel.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QAction>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 CompositionModel::CompositionModel(QObject* parent): QAbstractTableModel(parent)
 {
@@ -41,7 +41,7 @@ QVariant CompositionModel::data(const QModelIndex& index, int role) const
             }
             case Qt::DecorationRole:
             {
-                return themedIcon("tools-wizard");
+                return KisIconUtils::loadIcon("tools-wizard");
             }
             case Qt::CheckStateRole: {
                 return m_compositions.at(index.row())->isExportEnabled() ? Qt::Checked : Qt::Unchecked;

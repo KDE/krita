@@ -53,8 +53,8 @@
 
 #include <KoIcon.h>
 
-#include <kaction.h>
-#include <klocale.h>
+#include <QAction>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kundo2command.h>
@@ -74,51 +74,51 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     connectPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_connect.png"));
     m_connectCursor = QCursor(connectPixmap, 4, 1);
 
-    m_editConnectionPoint = new KAction(i18n("Edit connection points"), this);
+    m_editConnectionPoint = new QAction(i18n("Edit connection points"), this);
     m_editConnectionPoint->setCheckable(true);
     addAction("toggle-edit-mode", m_editConnectionPoint);
 
-    m_alignPercent = new KAction(QString("%"), this);
+    m_alignPercent = new QAction(QString("%"), this);
     m_alignPercent->setCheckable(true);
     addAction("align-relative", m_alignPercent);
-    m_alignLeft = new KAction(koIcon("align-horizontal-left"), i18n("Align to left edge"), this);
+    m_alignLeft = new QAction(koIcon("align-horizontal-left"), i18n("Align to left edge"), this);
     m_alignLeft->setCheckable(true);
     addAction("align-left", m_alignLeft);
-    m_alignCenterH = new KAction(koIcon("align-horizontal-center"), i18n("Align to horizontal center"), this);
+    m_alignCenterH = new QAction(koIcon("align-horizontal-center"), i18n("Align to horizontal center"), this);
     m_alignCenterH->setCheckable(true);
     addAction("align-centerh", m_alignCenterH);
-    m_alignRight = new KAction(koIcon("align-horizontal-right"), i18n("Align to right edge"), this);
+    m_alignRight = new QAction(koIcon("align-horizontal-right"), i18n("Align to right edge"), this);
     m_alignRight->setCheckable(true);
     addAction("align-right", m_alignRight);
-    m_alignTop = new KAction(koIcon("align-vertical-top"), i18n("Align to top edge"), this);
+    m_alignTop = new QAction(koIcon("align-vertical-top"), i18n("Align to top edge"), this);
     m_alignTop->setCheckable(true);
     addAction("align-top", m_alignTop);
-    m_alignCenterV = new KAction(koIcon("align-vertical-center"), i18n("Align to vertical center"), this);
+    m_alignCenterV = new QAction(koIcon("align-vertical-center"), i18n("Align to vertical center"), this);
     m_alignCenterV->setCheckable(true);
     addAction("align-centerv", m_alignCenterV);
-    m_alignBottom = new KAction(koIcon("align-vertical-bottom"), i18n("Align to bottom edge"), this);
+    m_alignBottom = new QAction(koIcon("align-vertical-bottom"), i18n("Align to bottom edge"), this);
     m_alignBottom->setCheckable(true);
     addAction("align-bottom", m_alignBottom);
 
-    m_escapeAll = new KAction(koIcon("escape-direction-all"), i18n("Escape in all directions"), this);
+    m_escapeAll = new QAction(koIcon("escape-direction-all"), i18n("Escape in all directions"), this);
     m_escapeAll->setCheckable(true);
     addAction("escape-all", m_escapeAll);
-    m_escapeHorizontal = new KAction(koIcon("escape-direction-horizontal"), i18n("Escape in horizontal directions"), this);
+    m_escapeHorizontal = new QAction(koIcon("escape-direction-horizontal"), i18n("Escape in horizontal directions"), this);
     m_escapeHorizontal->setCheckable(true);
     addAction("escape-horizontal", m_escapeHorizontal);
-    m_escapeVertical = new KAction(koIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);
+    m_escapeVertical = new QAction(koIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);
     m_escapeVertical->setCheckable(true);
     addAction("escape-vertical", m_escapeVertical);
-    m_escapeLeft = new KAction(koIcon("escape-direction-left"), i18n("Escape in left direction"), this);
+    m_escapeLeft = new QAction(koIcon("escape-direction-left"), i18n("Escape in left direction"), this);
     m_escapeLeft->setCheckable(true);
     addAction("escape-left", m_escapeLeft);
-    m_escapeRight = new KAction(koIcon("escape-direction-right"), i18n("Escape in right direction"), this);
+    m_escapeRight = new QAction(koIcon("escape-direction-right"), i18n("Escape in right direction"), this);
     m_escapeRight->setCheckable(true);
     addAction("escape-right", m_escapeRight);
-    m_escapeUp = new KAction(koIcon("escape-direction-up"), i18n("Escape in up direction"), this);
+    m_escapeUp = new QAction(koIcon("escape-direction-up"), i18n("Escape in up direction"), this);
     m_escapeUp->setCheckable(true);
     addAction("escape-up", m_escapeUp);
-    m_escapeDown = new KAction(koIcon("escape-direction-down"), i18n("Escape in down direction"), this);
+    m_escapeDown = new QAction(koIcon("escape-direction-down"), i18n("Escape in down direction"), this);
     m_escapeDown->setCheckable(true);
     addAction("escape-down", m_escapeDown);
 

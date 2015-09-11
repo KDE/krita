@@ -21,7 +21,7 @@
 #include "KoShapeShearCommand.h"
 #include "KoShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoShapeShearCommandPrivate
 {

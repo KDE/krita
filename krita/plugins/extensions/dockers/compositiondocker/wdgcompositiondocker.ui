@@ -26,7 +26,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="KLineEdit" name="saveNameEdit"/>
+    <widget class="QLineEdit" name="saveNameEdit"/>
    </item>
    <item row="1" column="3">
     <widget class="QPushButton" name="exportButton">
@@ -42,7 +42,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

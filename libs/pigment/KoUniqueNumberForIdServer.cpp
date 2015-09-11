@@ -23,7 +23,7 @@
 
 #include <kglobal.h>
 
-struct KoUniqueNumberForIdServer::Private {
+struct Q_DECL_HIDDEN KoUniqueNumberForIdServer::Private {
     Private()
         : currentNumber(0) {}
 

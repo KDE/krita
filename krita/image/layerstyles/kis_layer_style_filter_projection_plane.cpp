@@ -69,7 +69,7 @@ QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNode
 void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
     if (!m_d->sourceLayer || !m_d->filter) {
-        qWarning() << "KisLayerStyleFilterProjectionPlane::apply(): [BUG] is not initialized";
+        warnKrita << "KisLayerStyleFilterProjectionPlane::apply(): [BUG] is not initialized";
         return;
     }
 
@@ -84,7 +84,7 @@ void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect 
 QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     if (!m_d->sourceLayer || !m_d->filter) {
-        qWarning() << "KisLayerStyleFilterProjectionPlane::needRect(): [BUG] is not initialized";
+        warnKrita << "KisLayerStyleFilterProjectionPlane::needRect(): [BUG] is not initialized";
         return rect;
     }
 
@@ -95,7 +95,7 @@ QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::
 QRect KisLayerStyleFilterProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     if (!m_d->sourceLayer || !m_d->filter) {
-        qWarning() << "KisLayerStyleFilterProjectionPlane::changeRect(): [BUG] is not initialized";
+        warnKrita << "KisLayerStyleFilterProjectionPlane::changeRect(): [BUG] is not initialized";
         return rect;
     }
 

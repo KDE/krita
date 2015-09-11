@@ -19,7 +19,7 @@
  */
 
 #include "selection_tools.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

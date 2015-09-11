@@ -19,7 +19,7 @@
 #ifndef _KO_COLOR_SPACES_BENCHMARK_H_
 #define _KO_COLOR_SPACES_BENCHMARK_H_
 
-#include <QtTest>
+#include <QObject>
 
 class KoColorSpacesBenchmark : public QObject
 {

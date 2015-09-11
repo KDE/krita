@@ -28,15 +28,15 @@
 #include <QDesktopServices>
 
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QMessageBox>
 #include <kfilewidget.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
-#include <kmimetype.h>
 
-#include <KoIcon.h>
+
+#include <kis_icon_utils.h>
 #include <KisImportExportManager.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>
@@ -66,6 +66,8 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 #include <kis_psd_layer_style.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include "KisView.h"
 #include "kis_config.h"
@@ -111,7 +113,7 @@ public:
     KisSaveGroupVisitor(KisImageWSP image,
                         bool saveInvisible,
                         bool saveTopLevelOnly,
-                        const KUrl &url,
+                        const QUrl &url,
                         const QString &baseName,
                         const QString &extension,
                         const QString &mimeFilter)
@@ -206,10 +208,10 @@ public:
             d->setSaveInBatchMode(true);
 
 
-            KUrl url = m_url;
-            url.adjustPath(KUrl::AddTrailingSlash);
+            QUrl url = m_url;
 
-            url.setFileName(m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
+            url = url.adjusted(QUrl::RemoveFilename);
+            url.setPath(url.path() + m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
 
             d->exportDocument(url);
 
@@ -231,7 +233,7 @@ private:
     KisImageWSP m_image;
     bool m_saveInvisible;
     bool m_saveTopLevelOnly;
-    KUrl m_url;
+    QUrl m_url;
     QString m_baseName;
     QString m_extension;
     QString m_mimeFilter;
@@ -311,7 +313,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     KisAction * action = new KisAction(i18n("Rename current layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("RenameCurrentLayer", action);
-    action->setShortcut(KShortcut(Qt::Key_F2));
+    action->setShortcut(QKeySequence(Qt::Key_F2));
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
     m_rasterizeLayer = new KisAction(i18n("Rasterize Layer"), this);
@@ -320,7 +322,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_groupLayersSave = new KisAction(themedIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new KisAction(KisIconUtils::loadIcon("document-save"), i18n("Save Group Layers..."), this);
     m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
@@ -330,7 +332,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
-    KisAction *trimToImage = new KisAction(themedIcon("trim-to-image"), i18n("Trim to Image Size"), this);
+    KisAction *trimToImage = new KisAction(KisIconUtils::loadIcon("trim-to-image"), i18n("Trim to Image Size"), this);
     trimToImage->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("trim_to_image", trimToImage);
     connect(trimToImage, SIGNAL(triggered()), this, SLOT(trimToImage()));
@@ -551,7 +553,7 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 
     if (!parent) {
-        qWarning() << "KisLayerManager::adjustLayerPosition:"
+        warnKrita << "KisLayerManager::adjustLayerPosition:"
                    << "No node accepted newly created node";
 
         parent = m_view->image()->root();
@@ -883,12 +885,12 @@ void KisLayerManager::saveGroupLayers()
 {
     QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
 
-    KDialog dlg;
+    KoDialog dlg;
     QWidget *page = new QWidget(&dlg);
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);
 
-    KFileWidget *fd = new KFileWidget(m_view->document()->url().path(), page);
+    KFileWidget *fd = new KFileWidget(QUrl::fromLocalFile(m_view->document()->url().path()), page);
     fd->setUrl(m_view->document()->url());
     fd->setMimeFilter(listMimeFilter);
     fd->setOperationMode(KFileWidget::Saving);
@@ -903,10 +905,9 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
+    // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
     //return m_fileWidget->selectedUrl();
-    KUrl url = fd->dirOperator()->url();
-    url.adjustPath(KUrl::AddTrailingSlash);
+    QUrl url = fd->dirOperator()->url();
     QString path = fd->locationEdit()->currentText();
     QFileInfo f(path);
     QString extension = f.completeSuffix();
@@ -915,9 +916,10 @@ void KisLayerManager::saveGroupLayers()
     QString mimefilter = fd->currentMimeFilter();
 
     if (mimefilter.isEmpty()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-        extension = mime->extractKnownExtension(path);
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForUrl(url);
+        mimefilter = mime.name();
+        extension = db.suffixForFileName(path);
     }
 
     if (url.isEmpty())
@@ -940,7 +942,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
 
     QString basePath;
-    KUrl url = m_view->document()->url();
+    QUrl url = m_view->document()->url();
     if (url.isLocalFile()) {
         basePath = QFileInfo(url.toLocalFile()).absolutePath();
     }

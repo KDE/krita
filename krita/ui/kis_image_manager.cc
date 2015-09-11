@@ -21,13 +21,13 @@
 #include <QString>
 #include <QDesktopServices>
 
-#include <kaction.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <QAction>
+#include <klocalizedstring.h>
+#include <QUrl>
 #include <kcolordialog.h>
 
 #include <KoColor.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KisImportExportManager.h>
 #include <KoFileDialog.h>
 
@@ -63,32 +63,32 @@ void KisImageManager::setup(KisActionManager *actionManager)
     actionManager->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KisAction(themedIcon("configure"), i18n("Properties..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("configure"), i18n("Properties..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
-    action  = new KisAction(themedIcon("document-new"), i18n("as Paint Layer..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("document-new"), i18n("as Paint Layer..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_paint_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KisAction(themedIcon("edit-copy"), i18n("as Transparency Mask..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("edit-copy"), i18n("as Transparency Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_transparency_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
 
-    action  = new KisAction(themedIcon("view-filter"), i18n("as Filter Mask..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("view-filter"), i18n("as Filter Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_filter_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
 
-    action  = new KisAction(themedIcon("edit-paste"), i18n("as Selection Mask..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("edit-paste"), i18n("as Selection Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_selection_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));
 
-    action = new KisAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
+    action = new KisAction(KisIconUtils::loadIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setToolTip(i18n("Change the background color of the image"));
     actionManager->addAction("image_color", action);
@@ -98,26 +98,26 @@ void KisImageManager::setup(KisActionManager *actionManager)
 
 void KisImageManager::slotImportLayerFromFile()
 {
-    importImage(KUrl(), "KisPaintLayer");
+    importImage(QUrl(), "KisPaintLayer");
 }
 
 void KisImageManager::slotImportLayerAsTransparencyMask()
 {
-    importImage(KUrl(), "KisTransparencyMask");
+    importImage(QUrl(), "KisTransparencyMask");
 }
 
 void KisImageManager::slotImportLayerAsFilterMask()
 {
-    importImage(KUrl(), "KisFilterMask");
+    importImage(QUrl(), "KisFilterMask");
 }
 
 void KisImageManager::slotImportLayerAsSelectionMask()
 {
-    importImage(KUrl(), "KisSelectionMask");
+    importImage(QUrl(), "KisSelectionMask");
 }
 
 
-qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType)
+qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType)
 {
     KisImageWSP currentImage = m_view->image();
 
@@ -125,7 +125,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
         return 0;
     }
 
-    KUrl::List urls;
+    QList<QUrl> urls;
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
@@ -133,9 +133,9 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
         dialog.setCaption(i18n("Import Image"));
         dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
         dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
-        QStringList fileNames = dialog.urls();
+        QStringList fileNames = dialog.filenames();
         foreach(const QString &fileName, fileNames) {
-            urls << KUrl::fromLocalFile(fileName);
+            urls << QUrl::fromLocalFile(fileName);
         }
 
     } else {
@@ -145,7 +145,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
     if (urls.empty())
         return 0;
 
-    for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
+    for (QList<QUrl>::iterator it = urls.begin(); it != urls.end(); ++it) {
         new KisImportCatcher(*it, m_view, layerType);
     }
 

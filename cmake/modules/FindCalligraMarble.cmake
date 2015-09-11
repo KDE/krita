@@ -64,7 +64,7 @@ endif ()
 
 find_path( MARBLE_INCLUDE_DIR NAMES marble/MarbleMap.h PATH_SUFFIXES marble)
 find_file( MARBLE_GLOBAL_HEADER NAMES marble/MarbleGlobal.h PATH_SUFFIXES marble)
-find_library( MARBLE_LIBRARIES NAMES marblewidget )
+find_library( MARBLE_LIBRARIES NAMES marblewidget-qt5 )
 
 if(MARBLE_GLOBAL_HEADER)
     file(STRINGS ${MARBLE_GLOBAL_HEADER}

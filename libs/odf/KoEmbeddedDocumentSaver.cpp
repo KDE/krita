@@ -25,7 +25,7 @@
 #include <QList>
 
 #include <kdebug.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
@@ -95,8 +95,8 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase 
 
         // set URL in document so that saveEmbeddedDocuments will save
         // the actual embedded object with the right name in the store.
-        KUrl u;
-        u.setProtocol(INTERNAL_PROTOCOL);
+        QUrl u;
+        u.setScheme(INTERNAL_PROTOCOL);
         u.setPath(name);
         kDebug(30003) << u;
         doc->setUrl(u);
@@ -186,7 +186,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
             path = doc->url().url();
         } else {
             // The name comes from addEmbeddedDocument (which was set while saving the document).
-            Q_ASSERT(doc->url().protocol() == INTERNAL_PROTOCOL);
+            Q_ASSERT(doc->url().scheme() == INTERNAL_PROTOCOL);
             const QString name = doc->url().path();
             kDebug(30003) << "saving" << name;
 
@@ -213,7 +213,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
                 }
             }
 
-            Q_ASSERT(doc->url().protocol() == INTERNAL_PROTOCOL);
+            Q_ASSERT(doc->url().scheme() == INTERNAL_PROTOCOL);
             path = store->currentPath();
             if (!path.isEmpty()) {
                 path += '/';

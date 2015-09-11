@@ -21,7 +21,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 
 #include "kis_shade_selector_line_combo_box.h"
@@ -56,7 +55,7 @@ void KisShadeSelectorLinesSettings::fromString(const QString &stri)
 
 void KisShadeSelectorLinesSettings::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0"));
 
     for(int i=0; i<m_lineList.size(); i++) {

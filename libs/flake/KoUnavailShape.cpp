@@ -574,7 +574,8 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
                     nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
                     unknownNamespaces.insert(attrPair.first, nsShort);
                 }
-                writer.addAttribute("xmlns:" + nsShort.toLatin1(), attrPair.first);
+                QString name = QString("xmlns:") + nsShort;
+                writer.addAttribute(name.toLatin1(), attrPair.first.toLatin1());
             }
             QString attr(nsShort + ':' + attrPair.second);
             writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,

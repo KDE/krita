@@ -55,7 +55,7 @@
 #include "KoID.h"
 #include <KoConfigAuthorPage.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>
@@ -69,7 +69,6 @@
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_preference_set_registry.h"
-#include "kis_factory2.h"
 #include "kis_color_manager.h"
 
 #include "slider_and_spin_box_sync.h"
@@ -216,7 +215,7 @@ void GeneralTab::getBackgroundImage()
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setImageFilters();
 
-    QString fn = dialog.url();
+    QString fn = dialog.filename();
     // dialog box was canceled or somehow no file was selected
     if (fn.isEmpty()) {
         return;
@@ -325,7 +324,7 @@ void ColorSettingsTab::installProfile()
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setNameFilters(mime);
-    QStringList profileNames = dialog.urls();
+    QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
@@ -333,9 +332,9 @@ void ColorSettingsTab::installProfile()
     QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
-        KUrl file(profileName);
+        QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
-            kWarning() << "Could not install profile!";
+            dbgKrita << "Could not install profile!";
             return;
         }
         iccEngine->addProfile(saveLocation + file.fileName());
@@ -426,7 +425,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
     foreach (const KoColorProfile *profile, profileList) {
-//        //qDebug() << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
+//        //dbgKrita << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
             for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());

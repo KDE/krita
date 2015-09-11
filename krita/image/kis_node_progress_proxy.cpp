@@ -22,7 +22,7 @@
 
 #include "kis_node.h"
 
-struct KisNodeProgressProxy::Private {
+struct Q_DECL_HIDDEN KisNodeProgressProxy::Private {
     Private() : minimum(0), maximum(100), value(100), percentage(-1) {
     };
     KisNodeWSP node;

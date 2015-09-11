@@ -20,7 +20,7 @@
 #define KIS_MOVE_COMMAND_COMMON_H
 
 #include <QPoint>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kundo2command.h"
 #include "kritaimage_export.h"
 #include "kis_types.h"

@@ -52,7 +52,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_keepAspectRatio = false;
     m_defaultPoints = true;
 
-    KConfigGroup configGroup = KGlobal::config()->group("KisToolTransform");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
     setFilterId(savedFilterId);
 
@@ -63,7 +63,7 @@ void ToolTransformArgs::setFilterId(const QString &id) {
     m_filter = KisFilterStrategyRegistry::instance()->value(id);
 
     if (m_filter) {
-        KConfigGroup configGroup = KGlobal::config()->group("KisToolTransform");
+        KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
         configGroup.writeEntry("filterId", id);
     }
 }

@@ -40,13 +40,13 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QKeyEvent>
 
 using namespace MusicCore;
 
-static KIcon getIcon(Duration duration, bool isRest)
+static QIcon getIcon(Duration duration, bool isRest)
 {
     const char *const id =
         (duration == BreveNote) ? (isRest?koIconNameCStr("music-rest-breve"):koIconNameCStr("music-note-breve")) :
@@ -60,7 +60,7 @@ static KIcon getIcon(Duration duration, bool isRest)
         (duration == HundredTwentyEighthNote) ? (isRest?koIconNameCStr("music-rest-128th"):koIconNameCStr("music-note-128th")) :
         0;
 
-    return KIcon(QLatin1String(id));
+    return QIcon::fromTheme(QLatin1String(id));
 }
 
 static QString getText(Duration duration, bool isRest)

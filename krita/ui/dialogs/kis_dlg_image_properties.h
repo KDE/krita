@@ -18,7 +18,7 @@
 #ifndef KIS_DLG_IMAGE_PROPERTIES_H_
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
@@ -37,7 +37,7 @@ public:
     }
 };
 
-class KisDlgImageProperties : public KDialog
+class KisDlgImageProperties : public KoDialog
 {
 
     Q_OBJECT

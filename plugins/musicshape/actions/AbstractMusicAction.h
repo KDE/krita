@@ -19,7 +19,7 @@
 #ifndef ABSTRACTMUSICACTION_H
 #define ABSTRACTMUSICACTION_H
 
-#include <kaction.h>
+#include <QAction>
 
 class SimpleEntryTool;
 class MusicCursor;
@@ -27,13 +27,13 @@ namespace MusicCore {
     class Staff;
 }
 
-class KIcon;
+class QIcon;
 
-class AbstractMusicAction : public KAction
+class AbstractMusicAction : public QAction
 {
     Q_OBJECT
 public:
-    AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool);
+    AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool);
     AbstractMusicAction(const QString& text, SimpleEntryTool* tool);
 
     virtual void renderPreview(QPainter& painter, const QPointF& point);

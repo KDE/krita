@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QTreeView>
 #include <QHeaderView>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QResizeEvent>
 #include <QSize>
 
@@ -125,7 +125,7 @@ protected:
         QTreeView::hideEvent(event);
     }
 
-private slots:
+private Q_SLOTS:
     void update_scroll_area(const QModelIndex& i)
     {
         resizeColumnToContents(i.column());

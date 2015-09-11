@@ -26,20 +26,20 @@ Boston, MA 02110-1301, USA.
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kmimetype.h>
 
 #include <unistd.h>
 
-KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const KUrl &url)
-        : KDialog(parent),
+KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const QUrl &url)
+        : KoDialog(parent),
         m_mimeTypes(mimeTypes)
 {
     setObjectName("kofilterchooser");
     setInitialSize(QSize(300, 350));
-    setButtons(KDialog::Ok|KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setButtons(KoDialog::Ok|KoDialog::Cancel);
+    setDefaultButton(KoDialog::Ok);
     setCaption(i18n("Choose Filter"));
     setModal(true);
 
@@ -88,5 +88,3 @@ QString KoFilterChooser::filterSelected()
     QListWidgetItem *item = m_filterList->currentItem();
     return item->data(32).toString();
 }
-
-#include <KoFilterManager_p.moc>

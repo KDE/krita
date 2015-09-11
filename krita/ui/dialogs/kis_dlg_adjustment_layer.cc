@@ -18,7 +18,7 @@
  */
 
 #include "kis_dlg_adjustment_layer.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -51,7 +51,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              const QString &layerName,
                                              const QString &caption,
                                              KisViewManager *view, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_node(node)
     , m_nodeFilterInterface(nfi)
     , m_currentFilter(0)
@@ -141,4 +141,3 @@ void KisDlgAdjustmentLayer::slotFilterWidgetSizeChanged()
     QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
 }
 
-#include "kis_dlg_adjustment_layer.moc"

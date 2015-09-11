@@ -54,7 +54,7 @@
 
 #include <QAction>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QPainter>
 #include <QBitmap>
 #include <QTabWidget>
@@ -966,5 +966,3 @@ KoToolSelection * KoPathTool::selection()
 {
     return &m_pointSelection;
 }
-
-#include <KoPathTool.moc>

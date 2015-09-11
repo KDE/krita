@@ -31,7 +31,7 @@
 #include <kcharsets.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 
@@ -76,7 +76,7 @@ public:
 };
 
 KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , d(new Private(this))
 {
     d->dialog = new KoCsvImportWidget(this);
@@ -92,7 +92,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     d->ignoreDuplicates = false;
     d->codec = QTextCodec::codecForName("UTF-8");
 
-    setButtons( KDialog::Ok|KDialog::Cancel );
+    setButtons( KoDialog::Ok|KoDialog::Cancel );
     setCaption( i18n( "Import Data" ) );
 
     QStringList encodings;
@@ -280,7 +280,7 @@ void KoCsvImportDialog::setDelimiter(const QString& delimit)
 
 void KoCsvImportDialog::Private::loadSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
     textQuote = configGroup.readEntry("textQuote", "\"")[0];
     delimiter = configGroup.readEntry("delimiter", ",");
     ignoreDuplicates = configGroup.readEntry("ignoreDups", false);
@@ -298,7 +298,7 @@ void KoCsvImportDialog::Private::loadSettings()
 
 void KoCsvImportDialog::Private::saveSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
     configGroup.writeEntry("textQuote", QString(textQuote));
     configGroup.writeEntry("delimiter", delimiter);
     configGroup.writeEntry("ignoreDups", ignoreDuplicates);
@@ -784,5 +784,3 @@ void KoCsvImportDialog::encodingChanged(const QString &)
         d->fillTable();
     }
 }
-
-#include <KoCsvImportDialog.moc>

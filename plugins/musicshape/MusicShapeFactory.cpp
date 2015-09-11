@@ -20,7 +20,7 @@
 #include <QFontDatabase>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <KoIcon.h>

@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
@@ -39,7 +39,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
 
 class ColorSetDelegate : public QAbstractItemDelegate
@@ -97,9 +97,9 @@ ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
 
-    m_nameEdit = new KLineEdit(this);
-    m_nameEdit->setClickMessage(i18n("Insert name"));
-    m_nameEdit->setClearButtonShown(true);
+    m_nameEdit = new QLineEdit(this);
+    m_nameEdit->setPlaceholderText(i18n("Insert name"));
+    m_nameEdit->setClearButtonEnabled(true);
 
     m_columnEdit = new QSpinBox(this);
     m_columnEdit->setRange(1, 30);

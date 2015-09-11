@@ -35,15 +35,15 @@
 #include <QEvent>
 #include <QVariant>
 #include <QAction>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoShape.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>
@@ -105,19 +105,19 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
     if (!collection->action("increase_brush_size")) {
-        KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
+        QAction *increaseBrushSize = new QAction(i18n("Increase Brush Size"), collection);
         increaseBrushSize->setShortcut(Qt::Key_BracketRight);
         collection->addAction("increase_brush_size", increaseBrushSize);
     }
 
     if (!collection->action("decrease_brush_size")) {
-        KAction *decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), collection);
+        QAction *decreaseBrushSize = new QAction(i18n("Decrease Brush Size"), collection);
         decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
         collection->addAction("decrease_brush_size", decreaseBrushSize);
     }
 
-    addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
-    addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
+    addAction("increase_brush_size", dynamic_cast<QAction *>(collection->action("increase_brush_size")));
+    addAction("decrease_brush_size", dynamic_cast<QAction *>(collection->action("decrease_brush_size")));
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
     if (kiscanvas && kiscanvas->viewManager()) {
@@ -458,7 +458,7 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setSpacing(1);
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
+        QPushButton* push = new QPushButton(KisIconUtils::loadIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
         QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);

@@ -23,7 +23,7 @@
 
 #include "ToCGenerator.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
@@ -332,5 +332,3 @@ QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
     m_success = false;
     return "###";
 }
-
-#include <ToCGenerator.moc>

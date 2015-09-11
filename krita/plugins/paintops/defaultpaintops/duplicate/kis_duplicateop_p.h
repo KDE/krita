@@ -36,7 +36,7 @@ inline qreal minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
             sol[i] = 1.0;
         }
 
-        qWarning() << "WARNING: healing width or height are smaller than 3 px. The result will have artifacts!";
+        warnKrita << "WARNING: healing width or height are smaller than 3 px. The result will have artifacts!";
 
     } else {
         int rowstride = 3 * w;

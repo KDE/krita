@@ -57,7 +57,6 @@ endif()
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
-   kis_debug.cpp
    kis_distance_information.cpp
    kis_painter.cc
    kis_progress_updater.cpp
@@ -214,6 +213,7 @@ set(kritaimage_LIB_SRCS
    kis_busy_progress_indicator.cpp
    kis_node_visitor.cpp
    kis_paint_device.cc
+   kis_paint_device_debug_utils.cpp
    kis_fixed_paint_device.cpp
    kis_paint_layer.cc
    kis_perspective_grid.cpp
@@ -375,7 +375,6 @@ install( FILES
     kis_convolution_painter.h
     kis_convolution_worker.h
     kis_cubic_curve.h
-    kis_debug.h
     kis_default_bounds.h
     kis_distance_information.h
     filter/kis_filter.h

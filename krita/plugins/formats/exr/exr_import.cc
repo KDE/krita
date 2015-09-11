@@ -20,7 +20,7 @@
 #include "exr_import.h"
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -58,7 +58,7 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
 
     if (!filename.isEmpty()) {
 
-        KUrl url(filename);
+        QUrl url(filename);
 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;

@@ -22,7 +22,7 @@
 #include "KoShapePaste.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>

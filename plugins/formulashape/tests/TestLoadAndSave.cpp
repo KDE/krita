@@ -21,7 +21,7 @@
 
 #include "TestLoadAndSave.h"
 
-#include <QtTest>
+#include <QTest>
 #include <QBuffer>
 #include <QDebug>
 
@@ -1527,4 +1527,3 @@ void TestLoadAndSave::actionElement()
 }
 
 QTEST_MAIN(TestLoadAndSave)
-#include "TestLoadAndSave.moc"

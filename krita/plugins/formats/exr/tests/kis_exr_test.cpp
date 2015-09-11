@@ -18,13 +18,15 @@
 
 #include "kis_exr_test.h"
 
-#include <kmimetype.h>
+
 
 #include <QTest>
 #include <QCoreApplication>
 
 #include <qtest_kde.h>
 #include <half.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -54,18 +56,17 @@ void KisExrTest::testRoundTrip()
     QVERIFY(doc1->image());
 
 
-    KTemporaryFile savedFile;
+    QTemporaryFile savedFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".exr"));
     savedFile.setAutoRemove(false);
-    savedFile.setSuffix(".exr");
     savedFile.open();
 
-    KUrl savedFileURL("file://" + savedFile.fileName());
+    QUrl savedFileURL("file://" + savedFile.fileName());
     QString savedFileName(savedFileURL.toLocalFile());
 
     QString typeName;
-    KMimeType::Ptr t = KMimeType::findByUrl(savedFileURL, 0, true);
-    Q_ASSERT(t);
-    typeName = t->name();
+    QMimeDatabase db;
+    QMimeType t = db.mimeTypeForFile(savedFileURL.path(), QMimeDatabase::MatchExtension);
+    typeName = t.name();
 
     QByteArray mimeType(typeName.toLatin1());
     status = manager.exportDocument(savedFileName, mimeType);

@@ -35,11 +35,11 @@
 #include <KoTableStyle.h>
 #include <KoTextDebug.h>
 
-#include <QtGui>
 #include <QTextCursor>
+#include <QTextTable>
+#include <QTest>
 
 #include <kdebug.h>
-#include <kcomponentdata.h>
 
 #define FRAME_SPACING 10.0
 
@@ -369,6 +369,4 @@ void TestTableLayout::testRowHeightMinimum()
     //QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
 }
 
-QTEST_KDEMAIN(TestTableLayout, GUI)
-
-#include <TestTableLayout.moc>
+QTEST_MAIN(TestTableLayout)

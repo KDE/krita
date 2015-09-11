@@ -18,7 +18,7 @@
 #ifndef KIS_GRADIENT_CHOOSER_H_
 #define KIS_GRADIENT_CHOOSER_H_
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <QFrame>
 
@@ -31,7 +31,7 @@ class KisAutogradient;
 class KoResource;
 class KoResourceItemChooser;
 
-class KisCustomGradientDialog : public KDialog
+class KisCustomGradientDialog : public KoDialog
 {
 
     Q_OBJECT

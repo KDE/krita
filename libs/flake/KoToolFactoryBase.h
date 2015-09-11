@@ -27,7 +27,7 @@
 
 class KoCanvasBase;
 class KoToolBase;
-class KShortcut;
+class QKeySequence;
 
 /**
  * A factory for KoToolBase objects.
@@ -151,7 +151,7 @@ public:
      *
      * @return the shortcut
      */
-    KShortcut shortcut() const;
+    QKeySequence shortcut() const;
 
     /**
      * Returns the main toolType
@@ -193,7 +193,7 @@ public:
     /**
      * Set the default shortcut for activation of this tool.
      */
-    void setShortcut(const KShortcut & shortcut);
+    void setShortcut(const QKeySequence & shortcut);
 
 protected:
     /**

@@ -22,13 +22,13 @@
 
 #include <math.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 DlgRotateImage::DlgRotateImage(QWidget *  parent,
                                const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Rotate Image"));
     setButtons(Ok | Cancel);
@@ -46,8 +46,8 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
 
     m_page->doubleCustom->setSuffix(QChar(Qt::Key_degree));
 
-    m_page->radioCCW->setIcon(themedIcon("transform_icons_liquify_rotateCCW"));
-    m_page->radioCW->setIcon(themedIcon("transform_icons_liquify_rotate"));
+    m_page->radioCCW->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotateCCW"));
+    m_page->radioCW->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotate"));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));

@@ -22,8 +22,8 @@
 #include "canvas/kis_perspective_grid_manager.h"
 
 
-#include <kaction.h>
-#include <klocale.h>
+#include <QAction>
+#include <klocalizedstring.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kguiitem.h>
@@ -75,7 +75,7 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Perspective Grid")));
     m_toggleGrid->setChecked(false);
-    m_gridClear  = new KAction(i18n("Clear Perspective Grid"), this);
+    m_gridClear  = new QAction(i18n("Clear Perspective Grid"), this);
     collection->addAction("view_clear_perspective_grid", m_gridClear);
     connect(m_gridClear, SIGNAL(triggered()), this, SLOT(clearPerspectiveGrid()));
     updateGUI();

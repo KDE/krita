@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_pressure_scatter_option.h"
 #include "kis_pressure_scatter_option_widget.h"

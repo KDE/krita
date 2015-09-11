@@ -23,12 +23,12 @@
 #include <QEvent>
 #include <QPointF>
 #include <KoColor.h>
-#include <KoAbstractGradient.h>
 #include <KoZoomMode.h>
-#include <KoPattern.h>
-#include <KoGridData.h>
 
 class KoShape;
+class KoAbstractGradient;
+class KoPattern;
+class KoGridData;
 struct ViewModeSynchronisationObject {
     ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 

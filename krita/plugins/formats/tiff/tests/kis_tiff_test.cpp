@@ -77,13 +77,13 @@ void KisTiffTest::testRoundTripRGBF16()
     KisDocument *doc0 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
     doc0->newImage("test", testRect.width(), testRect.height(), csf16, KoColor(Qt::blue, csf16), QString(), 1.0);
 
-    KTemporaryFile tmpFile;
-    tmpFile.setSuffix(".tiff");
+    QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".tiff"));
+
     tmpFile.open();
     doc0->setBackupFile(false);
     doc0->setOutputMimeType("image/tiff");
     doc0->setSaveInBatchMode(true);
-    doc0->saveAs(KUrl("file://" + tmpFile.fileName()));
+    doc0->saveAs(QUrl("file://" + tmpFile.fileName()));
 
     KisNodeSP layer0 = doc0->image()->root()->firstChild();
     Q_ASSERT(layer0);
@@ -101,7 +101,7 @@ void KisTiffTest::testRoundTripRGBF16()
                                        QString(),
                                        status);
 
-    qDebug() << s;
+    dbgKrita << s;
     Q_ASSERT(doc1->image());
 
     QImage ref0 = doc0->image()->projection()->convertToQImage(0, testRect);

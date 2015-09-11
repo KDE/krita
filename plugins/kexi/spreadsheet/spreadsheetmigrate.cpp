@@ -23,6 +23,7 @@
 #include <kexiutils/identifier.h>
 
 #include <sheets/Value.h>
+#include <QDebug>
 
 namespace KexiMigration
 {
@@ -64,14 +65,14 @@ bool SpreadsheetMigrate::drv_connect()
 {
   drv_disconnect();
   m_FileName = data()->source->dbPath() + '/' + data()->source->dbFileName();
-  
+
   if (!QFile::exists(m_FileName)) 
     return false;
-  
+
   if (!m_KSDoc) {
       m_KSDoc = new Calligra::Sheets::Doc(new MockPart);
   }
-  kDebug();
+  qDebug();
   return m_KSDoc->openUrl(m_FileName);
 }
 
@@ -88,13 +89,13 @@ bool SpreadsheetMigrate::drv_disconnect()
 bool SpreadsheetMigrate::drv_tableNames(QStringList& tablenames)
 {
     QList<Calligra::Sheets::Sheet*> sheets = m_KSDoc->map()->sheetList();
-  
-    kDebug() << sheets.size() << "sheets" << m_KSDoc->map()->sheetList().size();
-  
+
+    qDebug() << sheets.size() << "sheets" << m_KSDoc->map()->sheetList().size();
+
     foreach(Calligra::Sheets::Sheet *sheet, sheets) {
         tablenames << sheet->sheetName();
     }
-  
+
   return true;
 }
 
@@ -114,7 +115,7 @@ bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB
   
   if (!sheet)
   {
-      kWarning() << "unable to find sheet" << originalName;
+      qWarning() << "unable to find sheet" << originalName;
       return false;
   }
   
@@ -145,7 +146,7 @@ bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB
       KexiDB::Field *fld = new KexiDB::Field(fieldName, KexiDB::Field::Text);
       fld->setCaption(fieldCaption);
       tableSchema.addField( fld );
-      kDebug() << fieldName;
+      qDebug() << fieldName;
       col++;
   }
   

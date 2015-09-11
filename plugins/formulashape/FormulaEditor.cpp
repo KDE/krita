@@ -39,7 +39,7 @@
 #include <QObject>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
 

@@ -175,7 +175,7 @@ int main( int argc, char** argv )
         app.processEvents();
     }
 
-#if defined HAVE_X11 && QT_VERSION >= 0x040800
+#if defined HAVE_X11
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 

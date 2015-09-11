@@ -84,7 +84,7 @@ void KisTileCompressorsTest::doLowLevelRoundTrip(KisAbstractTileCompressor *comp
     quint8 *buffer = new quint8[bufferSize];
     qint32 bytesWritten;
     compressor->compressTileData(td, buffer, bufferSize, bytesWritten);
-    qDebug() << ppVar(bytesWritten);
+    dbgKrita << ppVar(bytesWritten);
 
 
     memset(td->data(), oddPixel2, TILESIZE);
@@ -130,7 +130,7 @@ void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCo
     quint8 *buffer = new quint8[bufferSize];
     qint32 bytesWritten;
     compressor->compressTileData(td, buffer, bufferSize, bytesWritten);
-    qDebug() << ppVar(bytesWritten);
+    dbgKrita << ppVar(bytesWritten);
 
 
     memset(td->data(), oddPixel2, TILESIZE);

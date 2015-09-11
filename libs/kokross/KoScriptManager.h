@@ -25,7 +25,7 @@
 
 #include <QWidget>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KoScriptManagerView;
 
@@ -95,7 +95,7 @@ private:
     KoScriptManagerView *m_view;
 };
 
-class KoScriptManagerDialog : public KDialog
+class KoScriptManagerDialog : public KoDialog
 {
     Q_OBJECT
 public:

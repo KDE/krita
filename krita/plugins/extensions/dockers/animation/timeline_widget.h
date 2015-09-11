@@ -53,7 +53,7 @@ public:
 
     void scrubTo(int time, bool preview);
 
-private slots:
+private Q_SLOTS:
     void imageTimeChanged();
     void cacheChanged();
 

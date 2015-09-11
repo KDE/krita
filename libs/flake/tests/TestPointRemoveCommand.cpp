@@ -24,6 +24,8 @@
 #include "KoShapeController.h"
 #include <MockShapes.h>
 
+#include <QTest>
+
 void TestPointRemoveCommand::redoUndoPointRemove()
 {
     KoPathShape path1;
@@ -299,4 +301,3 @@ void TestPointRemoveCommand::redoUndo()
 }
 
 QTEST_MAIN(TestPointRemoveCommand)
-#include "TestPointRemoveCommand.moc"

@@ -19,7 +19,7 @@
 
 #include "kistoolcropconfigwidget.h"
 #include "kis_tool_crop.h"
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kis_acyclic_signal_connector.h>
 
 
@@ -28,11 +28,11 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     , m_cropTool(cropTool)
 {
     setupUi(this);
-    boolHeight->setIcon(koIcon("height_icon"));
-    boolWidth->setIcon(koIcon("width_icon"));
-    boolRatio->setIcon(koIcon("ratio_icon"));
-    label_horizPos->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
-    label_vertiPos->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
+    boolHeight->setIcon(KisIconUtils::loadIcon("height_icon"));
+    boolWidth->setIcon(KisIconUtils::loadIcon("width_icon"));
+    boolRatio->setIcon(KisIconUtils::loadIcon("ratio_icon"));
+    label_horizPos->setPixmap(KisIconUtils::loadIcon("offset_horizontal").pixmap(16, 16));
+    label_vertiPos->setPixmap(KisIconUtils::loadIcon("offset_vertical").pixmap(16, 16));
 
     // update the UI based off data from crop tool
     intHeight->setValue(m_cropTool->cropHeight());

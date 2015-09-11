@@ -20,7 +20,7 @@
 #ifndef TESTPATHSEGMENT_H
 #define TESTPATHSEGMENT_H
 
-#include <qtest_kde.h>
+#include <QObject>
 
 class TestPathSegment : public QObject
 {

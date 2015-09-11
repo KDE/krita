@@ -26,7 +26,7 @@
 #include <KoColor.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>
@@ -210,5 +210,3 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     action->setMenu(listLevelMenu);
     */
 }
-
-#include <SimpleTableWidget.moc>

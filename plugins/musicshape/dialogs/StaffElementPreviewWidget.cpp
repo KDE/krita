@@ -84,6 +84,3 @@ void StaffElementPreviewWidget::paintEvent(QPaintEvent * event)
     state.clef = m_clef;
     m_renderer->renderStaffElement(painter, m_element, QPointF(20.0 + m_clef->width(), -10.0), state);
 }
-
-
-#include <StaffElementPreviewWidget.moc>

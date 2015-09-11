@@ -99,7 +99,7 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter)
     painter.setPen(pen);
 
     QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
-    while (it != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
+    while (it != d->annotationShapePositions.constEnd() && !d->annotationShapePositions.isEmpty()) {
         KoShape *shape = it->second;
 
         // To make it more beautiful start line from shape a little downer of top-left of annotation shape (shape->position().y() + 20.0).
@@ -161,7 +161,7 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
 void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
 {
     QList< QPair < QPointF, KoShape * > >::iterator it = d->annotationShapePositions.begin();
-    while (it != d->annotationShapePositions.constEnd()) {
+    while (it != d->annotationShapePositions.end()) {
         if (it->second == annotationShape) {
             d->annotationShapePositions.erase(it);
             break;
@@ -179,7 +179,7 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
 void KoAnnotationLayoutManager::updateLayout(KoShape *shape)
 {
     QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
-    while (it != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
+    while (it != d->annotationShapePositions.constEnd() && !d->annotationShapePositions.isEmpty()) {
         if (it->second == shape) {
             layoutAnnotationShapes();
             break;
@@ -194,7 +194,7 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
     qStableSort(d->annotationShapePositions.begin(), d->annotationShapePositions.end(), compare);
 
     QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
-    while (it != d->annotationShapePositions.end()) {
+    while (it != d->annotationShapePositions.constEnd()) {
         KoShape *shape = it->second;
         qreal refPosition = it->first.y();
         if (refPosition > currentY) {

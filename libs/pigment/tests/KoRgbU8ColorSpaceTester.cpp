@@ -21,7 +21,7 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <DebugPigment.h>
 #include <string.h>
 
@@ -265,6 +265,4 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
     }
 }
 
-QTEST_KDEMAIN(KoRgbU8ColorSpaceTester, NoGUI)
-#include <KoRgbU8ColorSpaceTester.moc>
-
+QTEST_GUILESS_MAIN(KoRgbU8ColorSpaceTester)

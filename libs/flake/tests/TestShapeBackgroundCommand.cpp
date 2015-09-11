@@ -24,6 +24,8 @@
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
 
+#include <QTest>
+
 void TestShapeBackgroundCommand::refCounting()
 {
     MockShape * shape1 = new MockShape();
@@ -68,4 +70,3 @@ void TestShapeBackgroundCommand::refCounting()
 }
 
 QTEST_MAIN(TestShapeBackgroundCommand)
-#include "TestShapeBackgroundCommand.moc"

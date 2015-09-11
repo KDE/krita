@@ -29,7 +29,7 @@
 
 class KisActionManager;
 class KisAction;
-class KAction;
+class QAction;
 class KoViewConverter;
 
 class KisViewManager;

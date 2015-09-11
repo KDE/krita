@@ -6,28 +6,36 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy CMP0017 was introduced in version 2.8.4
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
+if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.3)
     cmake_policy(SET CMP0017 NEW)
-endif()
+endif ()
 
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
+if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.12)
     cmake_policy(SET CMP0022 OLD)
-endif()
+endif ()
 
-if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
+if (NOT ${CMAKE_VERSION} VERSION_LESS 3.0.0)
     cmake_policy(SET CMP0026 OLD) 
     cmake_policy(SET CMP0046 OLD)
+endif ()
+
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
+    cmake_policy(SET CMP0059 OLD)
+    cmake_policy(SET CMP0063 OLD)
 endif()
 
-# QT5TODO: remove KDE4_BUILD_TESTS post-3.0
+# QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
 # transitional forward compatibility:
-# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5
-# have BUILD_TESTING overrule KDE4_BUILD_TESTS if set
-# slightly broken approach, if a cache exists then unsetting tests will need both
-# BUILD_TESTING and KDE4_BUILD_TESTS to be set to FALSE
-# better fixes welcome
+# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
+# macros in cmake/transitional. Just, Macros from cmake/transitional,
+# incl. kde4_add_unit_test, are only picked up if no macros from kdelibs4 are installed,
+# because that transitional path is appended. Prepending instead might possibly unwantedly
+# mask ECM/KF5 macros. Not tested.
+# So have BUILD_TESTING define KDE4_BUILD_TESTS.
 if (BUILD_TESTING)
     set(KDE4_BUILD_TESTS TRUE)
+else()
+    set(KDE4_BUILD_TESTS FALSE)
 endif()
 
  ######################
@@ -195,22 +203,24 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Parts KIO
                                      XmlGui Kross Wallet GlobalAccel
                                      Emoticons ConfigWidgets KDELibs4Support
+                                     TextWidgets TextEditor KIO
     OPTIONAL_COMPONENTS
         NotifyConfig
         Activities
-        Declarative
         KHtml
 )
 if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
+                                           Script Svg Test Concurrent)
+find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
@@ -228,10 +238,6 @@ include (MacroAddFileDependencies)
 include (ECMInstallIcons)
 
 if (GHNS)
-    if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
-        set(GHNS FALSE)
-    endif()
-
     find_package(Attica)
     find_package(NewStuff)
     macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
@@ -256,8 +262,20 @@ else()
     set(HAVE_X11 FALSE)
 endif()
 
-# only with this definition will the FOO_TEST_EXPORT macro do something
-if(KDE4_BUILD_TESTS)
+# use sane compile flags
+add_definitions(
+  -DQT_USE_QSTRINGBUILDER
+  -DQT_STRICT_ITERATORS
+  -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+  -DQT_USE_FAST_OPERATOR_PLUS
+  -DQT_USE_FAST_CONCATENATION
+)
+
+# only with this definition will all the FOO_TEST_EXPORT macro do something
+# TODO: check if this can be moved to only those places which make use of it,
+# to reduce global compiler definitions that would trigger a recompile of
+# everything on a change (like adding/removing tests to/from the build)
+if(BUILD_TESTING)
     add_definitions(-DCOMPILING_TESTS)
 endif()
 
@@ -267,15 +285,6 @@ if(WIN32)
     add_definitions(-D_USE_MATH_DEFINES)
     add_definitions(-DNOMINMAX)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
-endif()
-
-# would need more code changes before 4.8.0, e.g. with qPrintable()
-if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
-    # enable QStringBuilder enhancement
-    add_definitions(
-        -DQT_USE_FAST_CONCATENATION
-        -DQT_USE_FAST_OPERATOR_PLUS
-    )
 endif()
 
 # set custom calligra plugin installdir
@@ -407,9 +416,12 @@ macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framewor
 ##
 ## Test for KReport
 ##
-macro_optional_find_package(KReport 2.96.0)
-macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
-                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+macro_optional_find_package(KReport 2.96.1)
+if (KReport_FOUND AND KREPORT_SCRIPTING)
+    set(KReport_WITH_SCRIPTING_FOUND TRUE)
+endif()
+macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats (scripting support required)"
+                                               "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
 
 ##
 ## Test for KProperty
@@ -764,7 +776,7 @@ macro_optional_find_package(Libqgit2)
 ###############################
 
 include(MacroCalligraAddBenchmark)
-include(MacroCalligraBuildTest)
+include(MacroCalligraAddTest)
 
  ####################
 #####################
@@ -933,13 +945,9 @@ calligra_drop_product_on_bad_condition( APP_KRITA
 
 calligra_drop_product_on_bad_condition( APP_KEXI
     KDb_FOUND "KDb not found"
-    KReport_FOUND "KReport not found"
+    KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
     KProperty_FOUND "KProperty not found"
-)
-
-calligra_drop_product_on_bad_condition( APP_ACTIVE
-    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
-    KF5DECLARATIVE_FOUND "KF5Declarative not found"
+    Qt5UiTools_FOUND "Qt5UiTools not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
@@ -1015,10 +1023,6 @@ calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
     NOT_COCOA "not supported with Qt Cocoa"
 )
 
-calligra_drop_product_on_bad_condition( FILTER_MPXJ_IMPORT
-    SHARED_MIME_INFO_FOUND  "SharedMimeInfo not found (needed to install mimetypes)"
-)
-
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
 )
@@ -1026,6 +1030,8 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
+    KReport_FOUND "KReport not found"
+    KProperty_FOUND "KProperty not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
@@ -1037,6 +1043,12 @@ calligra_drop_product_on_bad_condition( PART_QTQUICK
     USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_COMPONENTS
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+    QT_QTQUICK_FOUND "QtQuick not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_GEMINI
@@ -1120,16 +1132,16 @@ if(SHOULD_BUILD_APP_BRAINDUMP)
   add_subdirectory(braindump)
 endif()
 
-if(SHOULD_BUILD_APP_ACTIVE)
-  add_subdirectory(active)
-endif()
-
 if(SHOULD_BUILD_DOC)
     add_subdirectory(doc)
 endif()
 
 if(SHOULD_BUILD_PART_QTQUICK)
     add_subdirectory(qtquick)
+endif()
+
+if(SHOULD_BUILD_PART_COMPONENTS)
+    add_subdirectory(components)
 endif()
 
 if(SHOULD_BUILD_GEMINI)

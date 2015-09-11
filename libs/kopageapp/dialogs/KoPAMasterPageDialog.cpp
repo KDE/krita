@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include "KoPADocument.h"
@@ -31,7 +31,7 @@
 #include "KoPAPageThumbnailModel.h"
 
 KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPage *activeMaster, QWidget *parent)
-    : KDialog(parent),
+    : KoDialog(parent),
     m_document(document)
 {
     QSize iconSize(128, 128);
@@ -94,6 +94,3 @@ void KoPAMasterPageDialog::selectionChanged()
     // TODO: user shouldn't be able to deselect any item
     enableButtonOk(m_listView->selectionModel()->hasSelection());
 }
-
-#include <KoPAMasterPageDialog.moc>
-

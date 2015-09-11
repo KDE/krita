@@ -17,7 +17,7 @@
 
 #include "image_strip_scene.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QApplication>
 #include <QDir>
@@ -27,7 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QMutexLocker>
-#include <QDebug>
+#include <kis_debug.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- ImageLoader ---------------------------------------------------------- //
@@ -48,7 +48,7 @@ void ImageLoader::run()
         if (!img.isNull()) {
             data->image = img.scaled(m_size, m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        //qDebug() << "Loaded" << data->path;
+        //dbgKrita << "Loaded" << data->path;
         data->isLoaded = true;
         emit sigItemContentChanged(data.key());
     }
@@ -76,14 +76,14 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
             painter->drawImage(offset, image);
         }
         else {
-            QIcon   icon = themedIcon("edit-delete");
+            QIcon   icon = KisIconUtils::loadIcon("edit-delete");
             QRect   rect = boundingRect().toRect();
             QPixmap img  = icon.pixmap(rect.size());
             painter->drawPixmap(rect, img, img.rect());
         }
     }
     else {
-        QIcon   icon = themedIcon("folder-pictures");
+        QIcon   icon = KisIconUtils::loadIcon("folder-pictures");
         QRect   rect = boundingRect().toRect();
         QPixmap img  = icon.pixmap(rect.size());
         painter->drawPixmap(rect, img, img.rect());
@@ -155,7 +155,7 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
             QString fileExtension = QFileInfo(path).suffix();
 
             if (!fileExtension.compare("DNG", Qt::CaseInsensitive)) {
-                qWarning() << "WARNING: Qt is known to crash when trying to open a DNG file. Skip it";
+                warnKrita << "WARNING: Qt is known to crash when trying to open a DNG file. Skip it";
                 continue;
             }
 

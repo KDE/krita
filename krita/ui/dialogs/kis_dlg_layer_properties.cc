@@ -29,7 +29,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -70,7 +70,7 @@ struct KisDlgLayerProperties::Private
 };
 
 KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent, const char *name, Qt::WFlags f)
-    : KDialog(parent)
+    : KoDialog(parent)
     , d(new Private())
 {
 
@@ -165,7 +165,7 @@ void KisDlgLayerProperties::updatePreview()
 
 void KisDlgLayerProperties::adjustSize()
 {
-    KDialog::adjustSize();
+    KoDialog::adjustSize();
     setMinimumSize(size());
 }
 

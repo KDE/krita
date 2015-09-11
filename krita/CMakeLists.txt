@@ -1,6 +1,14 @@
 project(krita)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+add_definitions(
+  -DTRANSLATION_DOMAIN=\"krita\"
+  -DQT_USE_QSTRINGBUILDER
+  -DQT_STRICT_ITERATORS
+  -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+  -DQT_USE_FAST_OPERATOR_PLUS
+  -DQT_USE_FAST_CONCATENATION
+)
 
 kde_enable_exceptions()
 
@@ -126,7 +134,7 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
-#add_subdirectory( integration )
+add_subdirectory( integration )
 
 if (WIN32 AND USE_BREAKPAD)
         add_subdirectory( crashreporter )

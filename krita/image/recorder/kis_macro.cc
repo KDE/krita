@@ -20,7 +20,7 @@
 #include <QDomNode>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_image.h"
 #include "recorder/kis_recorded_action.h"
@@ -30,7 +30,7 @@
 #include "kis_node_query_path.h"
 #include <kis_paint_device.h>
 
-struct KisMacro::Private {
+struct Q_DECL_HIDDEN KisMacro::Private {
     QList<KisRecordedAction*> actions;
 };
 

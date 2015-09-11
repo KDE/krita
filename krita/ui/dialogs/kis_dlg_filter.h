@@ -62,7 +62,7 @@ private:
     void setDialogTitle(KisFilterSP f);
     void updatePreview();
 
-private slots:
+private Q_SLOTS:
     void slotFilterWidgetSizeChanged();
 
 private:

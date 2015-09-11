@@ -65,7 +65,7 @@ void KisAnimationExporterUI::exportSequence(KisDocument *document)
     dialog.setCaption(i18n("Export sequence"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
 
     if (filename.isEmpty()) return;
 
@@ -155,8 +155,9 @@ KisAnimationExporter::KisAnimationExporter(KisDocument *document, const QString 
         m_d->filenamePrefix = baseFilename;
     }
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(baseFilename, 0, false, true);
-    QString mimefilter = mime->name();
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(baseFilename);
+    QString mimefilter = mime.name();
     m_d->tmpDoc->setOutputMimeType(mimefilter.toLatin1());
     m_d->tmpDoc->setSaveInBatchMode(true);
 
@@ -199,7 +200,7 @@ void KisAnimationExporter::frameReadyToSave()
 {
     QString frameNumber = QString("%1").arg(m_d->currentFrame, 4, 10, QChar('0'));
     QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
-    m_d->tmpDoc->exportDocument(filename);
+    m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename));
 
     emit sigExportProgress(m_d->currentFrame);
 

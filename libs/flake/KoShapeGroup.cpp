@@ -32,6 +32,8 @@
 #include "KoShapeShadow.h"
 #include "KoInsets.h"
 
+#include <kdebug.h>
+
 #include <QPainter>
 
 class ShapeGroupContainerModel : public SimpleShapeContainerModel

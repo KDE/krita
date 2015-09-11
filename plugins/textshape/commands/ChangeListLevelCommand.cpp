@@ -25,7 +25,7 @@
 #include <KoList.h>
 #include "TextTool.h"
 #include <KoListLevelProperties.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <QTextCursor>

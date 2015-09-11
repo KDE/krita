@@ -22,7 +22,7 @@
 
 #include <QButtonGroup>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <KoID.h>
 
@@ -43,7 +43,7 @@ public:
 /**
  * XXX
  */
-class DlgColorSpaceConversion: public KDialog
+class DlgColorSpaceConversion: public KoDialog
 {
 
     Q_OBJECT

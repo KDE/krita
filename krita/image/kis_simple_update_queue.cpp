@@ -30,7 +30,7 @@
 
 #ifdef ENABLE_DEBUG_JOIN
     #define DEBUG_JOIN(baseRect, newRect, alpha)                     \
-        qDebug() << "Two rects were joined:\t"                       \
+        dbgKrita << "Two rects were joined:\t"                       \
                  << (baseRect) << "+" << (newRect) << "->"           \
                  << ((baseRect) | (newRect)) << "(" << alpha << ")"
 
@@ -44,7 +44,7 @@
     #define ACCUMULATOR_ADD(baseAmount, newAmount) \
         do {_baseAmount += baseAmount; _newAmount += newAmount;} while (0)
     #define ACCUMULATOR_DEBUG() \
-        qDebug() << "Accumulated alpha:" << _newAmount / _baseAmount
+        dbgKrita << "Accumulated alpha:" << _newAmount / _baseAmount
 #else
     #define DECLARE_ACCUMULATOR()
     #define ACCUMULATOR_ADD(baseAmount, newAmount)
@@ -186,7 +186,7 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc,
     else if (type == KisBaseRectsWalker::UPDATE_NO_FILTHY) {
         walker = new KisMergeWalker(cropRect, KisMergeWalker::NO_FILTHY);
     }
-    /* else if(type == KisBaseRectsWalker::UNSUPPORTED) qFatal(); */
+    /* else if(type == KisBaseRectsWalker::UNSUPPORTED) fatalKrita; */
 
     walker->collectRects(node, rc);
 

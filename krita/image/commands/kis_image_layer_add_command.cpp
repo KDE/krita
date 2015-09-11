@@ -20,7 +20,7 @@
 #include "kis_image_commands.h"
 #include "kis_image.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,

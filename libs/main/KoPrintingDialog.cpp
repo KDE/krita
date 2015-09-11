@@ -28,7 +28,7 @@
 
 #include <QCoreApplication>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QPainter>
 #include <QPrinter>
 #include <QGridLayout>
@@ -119,11 +119,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
                 d->pages.append(i);
             break;
-#if QT_VERSION >= 0x040700
         case QAbstractPrintDialog::CurrentPage:
             d->pages.append(documentCurrentPage());
             break;
-#endif
         default:
             return;
         }

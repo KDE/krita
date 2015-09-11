@@ -25,9 +25,9 @@
 #include <QDir>
 #include <QDesktopServices>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
-#include <kmimetype.h>
+
 
 #include <KisImportExportManager.h>
 #include <KoFileDialog.h>
@@ -43,6 +43,8 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_device.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include "dlg_imagesplit.h"
 
@@ -61,7 +63,7 @@ Imagesplit::~Imagesplit()
 {
 }
 
-void Imagesplit::saveAsImage(QRect imgSize, QString mimeType, KUrl url)
+void Imagesplit::saveAsImage(QRect imgSize, QString mimeType, QUrl url)
 {
     KisImageWSP image = m_view->image();
 
@@ -95,10 +97,11 @@ void Imagesplit::slotImagesplit()
     QStringList filteredMimeTypes;
     QStringList listFileType;
     foreach(const QString & tempStr, listMimeFilter) {
-        KMimeType::Ptr type = KMimeType::mimeType(tempStr);
-        qDebug() << tempStr << type;
-        if (type) {
-            listFileType.append(type->comment());
+        QMimeDatabase db;
+        QMimeType type = db.mimeTypeForName(tempStr);
+        dbgKrita << tempStr << type;
+        if (type.isValid()) {
+            listFileType.append(type.comment());
             filteredMimeTypes.append(tempStr);
         }
     }
@@ -125,12 +128,13 @@ void Imagesplit::slotImagesplit()
         if (dlgImagesplit->autoSave()) {
             for (int i = 0, k = 1; i < (numVerticalLines + 1); i++) {
                 for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
-                    KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType(listMimeFilter.at(dlgImagesplit->cmbIndex));
-                    KUrl url(QDir::homePath());
-                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + mimeTypeSelected->mainExtension();
-                    url.addPath(fileName);
-                    KUrl kurl = url.url();
-                    saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), kurl);
+                    QMimeDatabase db;
+                    QMimeType mimeTypeSelected = db.mimeTypeForName(listMimeFilter.at(dlgImagesplit->cmbIndex));
+                    QUrl url(QDir::homePath());
+                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + mimeTypeSelected.preferredSuffix();
+                    url = url.adjusted(QUrl::StripTrailingSlash);
+                    url.setPath(url.path() + '/' + (fileName));
+                    saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), url);
                 }
             }
         }
@@ -142,10 +146,11 @@ void Imagesplit::slotImagesplit()
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter);
-                    KUrl url = dialog.url();
+                    QUrl url = QUrl::fromUserInput(dialog.filename());
 
-                    KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                    QString mimefilter = mime->name();
+                    QMimeDatabase db;
+                    QMimeType mime = db.mimeTypeForUrl(url);
+                    QString mimefilter = mime.name();
 
                     if (url.isEmpty())
                         return;

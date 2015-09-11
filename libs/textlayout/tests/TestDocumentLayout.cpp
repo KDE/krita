@@ -20,10 +20,9 @@
  */
 #include "TestDocumentLayout.h"
 #include "MockRootAreaProvider.h"
-#include <QtGui>
+#include <QTest>
 
 #include <kdebug.h>
-#include <kcomponentdata.h>
 
 #include <KoTextDocument.h>
 #include <KoStyleManager.h>
@@ -192,6 +191,4 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
     QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,0.,0.));
 }
 
-QTEST_KDEMAIN(TestDocumentLayout, GUI)
-
-#include <TestDocumentLayout.moc>
+QTEST_MAIN(TestDocumentLayout)

@@ -29,8 +29,9 @@
 #include <recorder/kis_recorded_action_creator_factory.h>
 #include <recorder/kis_recorded_action_creator.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QMessageBox>
 
@@ -43,7 +44,7 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->setupUi(this);
 
     // Setup buttons
-    m_form->bnAdd->setIcon(themedIcon("list-add"));
+    m_form->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     QSignalMapper* mapper = new QSignalMapper(this);
     connect(mapper, SIGNAL(mapped(QString)), SLOT(slotCreateAction(QString)));
     QMenu* addMenu = new QMenu;
@@ -55,16 +56,16 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->bnAdd->setMenu(addMenu);
     
 
-    m_form->bnDelete->setIcon(themedIcon("edit-delete"));
+    m_form->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
 
-    m_form->bnRaise->setIcon(themedIcon("arrow-up"));
+    m_form->bnRaise->setIcon(KisIconUtils::loadIcon("arrow-up"));
     connect(m_form->bnRaise, SIGNAL(released()), SLOT(slotBtnRaise()));
 
-    m_form->bnLower->setIcon(themedIcon("arrow-down"));
+    m_form->bnLower->setIcon(KisIconUtils::loadIcon("arrow-down"));
     connect(m_form->bnLower, SIGNAL(released()), SLOT(slotBtnLower()));
 
-    m_form->bnDuplicate->setIcon(themedIcon("edit-copy"));
+    m_form->bnDuplicate->setIcon(KisIconUtils::loadIcon("edit-copy"));
     connect(m_form->bnDuplicate, SIGNAL(released()), SLOT(slotBtnDuplicate()));
 
     // Setup actions list
@@ -98,11 +99,11 @@ void KisActionsEditor::slotCreateAction(const QString& _id)
     KisRecordedAction* action = 0;
     if(f->requireCreator())
     {
-        KDialog d;
-        d.setButtons(KDialog::Ok | KDialog::Cancel);
+        KoDialog d;
+        d.setButtons(KoDialog::Ok | KoDialog::Cancel);
         KisRecordedActionCreator* creator = f->createCreator(&d);
         d.setMainWidget(creator);
-        if(d.exec() == KDialog::Accepted)
+        if(d.exec() == KoDialog::Accepted)
         {
             action = creator->createAction();
             if(!action) {

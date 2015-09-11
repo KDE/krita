@@ -28,7 +28,7 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextDocument>
 

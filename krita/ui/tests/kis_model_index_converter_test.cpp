@@ -95,7 +95,7 @@ inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP paren
 
    dummy = parent ? m_dummiesFacade->dummyForNode(parent) : 0;
    result = m_indexConverter->indexFromAddedDummy(dummy, index, type, modelIndex, row);
-   if(!result) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+   if(!result) dbgKrita << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
    QVERIFY(result);
 
    QCOMPARE(modelIndex.isValid(), parentValid);
@@ -105,7 +105,7 @@ inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP paren
        QCOMPARE(modelIndex.column(), 0);
    }
 
-   if(row != childRow) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+   if(row != childRow) dbgKrita << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
    QCOMPARE(row, childRow);
 }
 
@@ -148,8 +148,8 @@ inline void KisModelIndexConverterTest::checkDummyFromRow(KisNodeSP parent, int 
     KisNodeSP resultNode = resultDummy ? resultDummy->node() : 0;
 
     if(resultNode != expectedNode) {
-        qDebug() << "Actual node:  " << (resultNode ? resultNode->name() : "none");
-        qDebug() << "Expected node:" << (expectedNode ? expectedNode->name() : "none");
+        dbgKrita << "Actual node:  " << (resultNode ? resultNode->name() : "none");
+        dbgKrita << "Expected node:" << (expectedNode ? expectedNode->name() : "none");
         QFAIL("Wrong node");
     }
 }
@@ -167,9 +167,9 @@ inline void KisModelIndexConverterTest::checkRowCount(KisNodeSP parent, int rowC
     int resultRowCount = m_indexConverter->rowCount(parentIndex);
 
     if(resultRowCount != rowCount) {
-        qDebug() << "Wrong row count for:" << (parent ? parent->name() : "none");
-        qDebug() << "Actual:  " << resultRowCount;
-        qDebug() << "Expected:" << rowCount;
+        dbgKrita << "Wrong row count for:" << (parent ? parent->name() : "none");
+        dbgKrita << "Actual:  " << resultRowCount;
+        dbgKrita << "Expected:" << rowCount;
         QFAIL("Wrong row count");
     }
 }

@@ -23,7 +23,7 @@
 #include "KoColorSpace.h"
 #include <QThreadStorage>
 
-struct KoColorSpace::Private {
+struct Q_DECL_HIDDEN KoColorSpace::Private {
 
     QString id;
     quint32 idNumber;

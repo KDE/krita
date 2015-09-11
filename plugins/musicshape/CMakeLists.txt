@@ -2,6 +2,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_music\")
 
 include_directories(
     ${FLAKE_INCLUDES}
+    ${kOWIDGETS_INCLUDES}
 )
 
 add_subdirectory( fonts )
@@ -96,5 +97,5 @@ ki18n_wrap_ui(musicshape_LIB_SRCS
 add_library(calligra_shape_music MODULE ${musicshape_LIB_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_music calligra_shape_music.desktop)
 
-target_link_libraries(calligra_shape_music flake KF5::KDELibs4Support Qt5::Svg)
+target_link_libraries(calligra_shape_music flake kowidgets KF5::I18n KF5::KDELibs4Support Qt5::Svg)
 install(TARGETS calligra_shape_music DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

@@ -19,7 +19,7 @@
 
 
 #include "kis_action_manager_test.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KisPart.h>
 #include <KisMainWindow.h>

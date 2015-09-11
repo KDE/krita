@@ -25,8 +25,8 @@
 #include <QTimer>
 #include <QHash>
 
-#include <kshortcut.h>
-#include <kaction.h>
+#include <QKeySequence>
+#include <QAction>
 
 #include "KoInputDevice.h"
 #include "KoToolManager.h"
@@ -136,8 +136,8 @@ public:
     int uniqueId() const {
         return m_uniqueId;
     }
-    /// KAction->shortcut() if it exists, otherwise KoToolFactoryBase::shortcut()
-    KShortcut shortcut() const;
+    /// QAction->shortcut() if it exists, otherwise KoToolFactoryBase::shortcut()
+    QKeySequence shortcut() const;
 
 public Q_SLOTS:
     void activate();
@@ -152,7 +152,7 @@ private Q_SLOTS:
 private:
     KoToolFactoryBase * const m_toolFactory;
     const int m_uniqueId;
-    KShortcut m_customShortcut;
+    QKeySequence m_customShortcut;
     bool m_hasCustomShortcut;
     KoToolAction *m_toolAction;
 };
@@ -177,7 +177,7 @@ private:
 
 /// \internal
 /// Helper class to provide a action for tool shortcuts
-class ShortcutToolAction : public KAction
+class ShortcutToolAction : public QAction
 {
     Q_OBJECT
 public:

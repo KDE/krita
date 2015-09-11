@@ -89,7 +89,7 @@ void KisWarpTransformWorkerTest::testQImage()
     QImage image(TestUtil::fetchDataFileLazy("test_transform_quality_second.png"));
     image = image.convertToFormat(QImage::Format_ARGB32);
 
-    qDebug() << ppVar(image.format());
+    dbgKrita << ppVar(image.format());
 
 
     QVector<QPointF> origPoints;
@@ -126,7 +126,7 @@ void KisWarpTransformWorkerTest::testQImage()
             image, QPointF(), &newOffset);
     }
 
-    qDebug() << ppVar(newOffset);
+    dbgKrita << ppVar(newOffset);
 
     TestUtil::checkQImage(result, "warp_transform_test", "qimage", "tr");
 }
@@ -265,7 +265,7 @@ void KisWarpTransformWorkerTest::testBackwardInterpolatorRoundTrip()
             QPointF fwdPt = f.map(pt);
             QPointF bwdPt = b.map(fwdPt);
 
-            //qDebug() << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
+            //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
             QVERIFY((bwdPt - pt).manhattanLength() < 1e-3);
         }
     }

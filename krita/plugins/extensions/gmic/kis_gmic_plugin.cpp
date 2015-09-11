@@ -23,8 +23,7 @@
 #include <QApplication>
 #include <QTimer>
 
-#include <klocale.h>
-#include <kcomponentdata.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <QMessageBox>

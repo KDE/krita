@@ -29,7 +29,6 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kcomponentdata.h>
 
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
@@ -148,7 +147,7 @@ void KoResourceLoaderThread::barrier()
 }
 
 
-struct KoResourceServerProvider::Private
+struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 {
     KoResourceServer<KoPattern>* patternServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;

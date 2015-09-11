@@ -33,10 +33,12 @@
 #include <KoSharedSavingData.h>
 #include <KoElementReference.h>
 
-#include <kmimetype.h>
+
 #include <kdebug.h>
 #include <QUuid>
 #include <QImage>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class KoShapeSavingContextPrivate {
 public:
@@ -291,7 +293,8 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
             store->close();
             // TODO error handling
             if (ok) {
-                const QString mimetype(KMimeType::findByPath(it.key(), 0 , true)->name());
+                QMimeDatabase db;
+                const QString mimetype(db.mimeTypeForFile(it.key(), QMimeDatabase::MatchExtension).name());
                 manifestWriter->addManifestEntry(it.key(), mimetype);
             }
             else {

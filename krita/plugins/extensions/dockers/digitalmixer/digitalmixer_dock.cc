@@ -21,7 +21,7 @@
 #include <QToolButton>
 #include <QSignalMapper>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorPatch.h>
 #include <KoColorSlider.h>

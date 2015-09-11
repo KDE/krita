@@ -343,7 +343,7 @@ void KisInputManagerTest::testMouseMoves()
     QVERIFY(!m.keyPressed(Qt::Key_Control));
     QCOMPARE(a->m_beginIndex, -1);
 
-    QVERIFY(!m.mouseMoved(&mouseEvent));
+    QVERIFY(!m.cursorMoved(&mouseEvent));
     QCOMPARE(a->m_gotInput, false);
 
     // Complete Ctrl+Shift+LB shortcut

@@ -190,7 +190,7 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
     if (result == Success && propertyType > 0) {
 
         if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-            qDebug() << "# Building tablet axes remapping table:";
+            dbgKrita << "# Building tablet axes remapping table:";
         }
 
         QVector<AxesIndexes> axesMap(nitems, Unused);
@@ -216,7 +216,7 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
             axesMap[axisIndex] = mappedIndex;
 
             if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                qDebug() << XGetAtomName(KIS_X11->display, currentAxisName)
+                dbgKrita << XGetAtomName(KIS_X11->display, currentAxisName)
                          << axisIndex << "->" << mappedIndex;
             }
         }
@@ -405,9 +405,9 @@ void kis_x11_init_tablet()
                 }
 
                 if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                    qDebug() << "###################################";
-                    qDebug() << "# Adding a tablet device:" << devs->name;
-                    qDebug() << "Device Type:" << KisTabletDebugger::tabletDeviceToString(deviceType);
+                    dbgKrita << "###################################";
+                    dbgKrita << "# Adding a tablet device:" << devs->name;
+                    dbgKrita << "Device Type:" << KisTabletDebugger::tabletDeviceToString(deviceType);
                 }
 
                 device_data.savedAxesData.tryFetchAxesMapping(dev);
@@ -435,13 +435,13 @@ void kis_x11_init_tablet()
                         device_data.maxRotation = a[5].max_value;
 
                         if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                            qDebug() << "# Axes limits data";
-                            qDebug() << "X:       " << device_data.minX << device_data.maxX;
-                            qDebug() << "Y:       " << device_data.minY << device_data.maxY;
-                            qDebug() << "Z:       " << device_data.minZ << device_data.maxZ;
-                            qDebug() << "Pressure:" << device_data.minPressure << device_data.maxPressure;
-                            qDebug() << "Rotation:" << device_data.minRotation << device_data.maxRotation;
-                            qDebug() << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
+                            dbgKrita << "# Axes limits data";
+                            dbgKrita << "X:       " << device_data.minX << device_data.maxX;
+                            dbgKrita << "Y:       " << device_data.minY << device_data.maxY;
+                            dbgKrita << "Z:       " << device_data.minZ << device_data.maxZ;
+                            dbgKrita << "Pressure:" << device_data.minPressure << device_data.maxPressure;
+                            dbgKrita << "Rotation:" << device_data.minRotation << device_data.maxRotation;
+                            dbgKrita << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
                         }
 
 #endif
@@ -545,9 +545,9 @@ QTabletEvent::TabletDevice parseWacomDeviceId(quint32 deviceId)
             break;
         default:
             if (deviceId != 0) {
-                qWarning() << "Unrecognized stylus device found! Falling back to usual \'Stylus\' definition";
-                qWarning() << ppVar(deviceId);
-                qWarning() << ppVar((deviceId & CSR_TYPE_SPECIFIC_MASK));
+                warnKrita << "Unrecognized stylus device found! Falling back to usual \'Stylus\' definition";
+                warnKrita << ppVar(deviceId);
+                warnKrita << ppVar((deviceId & CSR_TYPE_SPECIFIC_MASK));
             }
 
             device = QTabletEvent::Stylus;
@@ -583,11 +583,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     KisTabletEvent::ExtraEventType t = KisTabletEvent::TabletMoveEx;
     Qt::KeyboardModifiers modifiers = 0;
 
-#if QT_VERSION >= 0x040800
     modifiers = QApplication::queryKeyboardModifiers();
-#else
-    modifiers = QApplication::keyboardModifiers();
-#endif
 
 #if !defined (Q_OS_IRIX)
     XID device_id = 0;

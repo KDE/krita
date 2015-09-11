@@ -24,22 +24,18 @@
 #include "KoGlobal.h"
 
 #include <kcrash.h>
-#include <kdeversion.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 
 #include <QFile>
 #include <QWidget>

@@ -25,7 +25,7 @@
 #include <QTimer>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class DocumentListModel::Private
 {
@@ -115,7 +115,7 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
 
 QString DocumentListModel::prettyTime( const QDateTime& theTime)
 {
-    return KGlobal::locale()->formatDateTime( theTime, KLocale::FancyShortDate );
+    return QLocale().toString(theTime, QLocale::LongFormat);
 }
 
 QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation, int role) const

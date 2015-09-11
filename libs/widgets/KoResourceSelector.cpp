@@ -211,5 +211,3 @@ void KoResourceSelector::resourceRemoved(KoResource*)
 {
     d->updateIndex(this);
 }
-
-#include <KoResourceSelector.moc>

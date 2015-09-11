@@ -23,9 +23,9 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -68,9 +68,9 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KDialog dialog;
+    KoDialog dialog;
     dialog.setWindowTitle(i18n("OpenEXR Export Options"));
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
     Ui::ExrExportWidget widget;
     QWidget *page = new QWidget(&dialog);
     widget.setupUi(page);
@@ -100,7 +100,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     QString filename = m_chain->outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     exrConverter kpc(input, !m_chain->manager()->getBatchMode());

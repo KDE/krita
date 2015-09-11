@@ -29,7 +29,7 @@
 #include "styles/KoStyleManager.h"
 #include "changetracker/KoChangeTracker.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kundo2magicstring.h>
 

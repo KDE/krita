@@ -23,7 +23,7 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QMessageBox>
 
@@ -86,7 +86,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         return KisImportExportFilter::NotImplemented;
 
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
 
@@ -216,7 +216,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     delete kdb;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     KisPNGConverter kpc(input);

@@ -67,7 +67,7 @@ public:
         image->waitForDone();
 
         if (!checkLayersInitial(image)) {
-            qWarning() << "NOTE: undo is not completely identical to the original image. Falling back to projection comparison";
+            warnKrita << "NOTE: undo is not completely identical to the original image. Falling back to projection comparison";
             QVERIFY(checkLayersInitialRootOnly(image));
         }
     }

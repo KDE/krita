@@ -28,15 +28,14 @@
 #include "KoPageLayout.h"
 #include <KoToolManager.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <kactioncollection.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstatusbar.h>
-#include <kdebug.h>
-#include <kurl.h>
-#include <ktemporaryfile.h>
+#include <kis_debug.h>
+#include <QUrl>
+#include <QTemporaryFile>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
@@ -260,7 +259,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->canvasController->setCanvasMode(KoCanvasController::Infinite);
     d->canvasController->setVastScrolling(cfg.vastScrolling());
 
-    KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
+    KConfigGroup grp( KSharedConfig::openConfig(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
         cfg.setUseOpenGL(false);
     }
@@ -377,12 +376,12 @@ KisViewManager* KisView::viewManager() const
 }
 
 
-KAction *KisView::undoAction() const
+QAction *KisView::undoAction() const
 {
     return d->undo;
 }
 
-KAction *KisView::redoAction() const
+QAction *KisView::redoAction() const
 {
     return d->redo;
 }
@@ -498,13 +497,13 @@ void KisView::dropEvent(QDropEvent *event)
             KMenu popup;
             popup.setObjectName("drop_popup");
 
-            QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
-            QAction *insertManyLayers = new KAction(i18n("Insert Many Layers"), &popup);
+            QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
+            QAction *insertManyLayers = new QAction(i18n("Insert Many Layers"), &popup);
 
-            QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
-            QAction *openManyDocuments = new KAction(i18n("Open Many Documents"), &popup);
+            QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
+            QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
 
-            QAction *cancel = new KAction(i18n("Cancel"), &popup);
+            QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
             popup.addAction(openInNewDocument);
@@ -525,7 +524,7 @@ void KisView::dropEvent(QDropEvent *event)
                 foreach(const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
-                        d->viewManager->imageManager()->importImage(KUrl(url));
+                        d->viewManager->imageManager()->importImage(QUrl(url));
                         activateWindow();
                     }
                     else {
@@ -599,8 +598,8 @@ KoPageLayout KisView::pageLayout() const
 
 QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 {
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
-                                                            printJob->createOptionWidgets(), parent);
+    Q_UNUSED(parent);
+    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), this);
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
     printDialog->setEnabledOptions(printJob->printDialogOptions());
     return printDialog;

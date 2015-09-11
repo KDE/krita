@@ -65,7 +65,7 @@ int main(int argc, char** argv)
     QString graphType = args->getOption("graph");
     QString outputType = args->getOption("output");
     if (args->count() != 1) {
-        kError() << "No output file name specified";
+        errorPigment << "No output file name specified";
         args->usage();
         exit(EXIT_FAILURE);
     }
@@ -79,13 +79,13 @@ int main(int argc, char** argv)
         QString srcKey = args->getOption("src-key");
         QString dstKey = args->getOption("dst-key");
         if (srcKey.isEmpty() || dstKey.isEmpty()) {
-            kError() << "src-key and dst-key must be specified for the graph bestpath";
+            errorPigment << "src-key and dst-key must be specified for the graph bestpath";
             exit(EXIT_FAILURE);
         } else {
             dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot(srcKey, dstKey);
         }
     } else {
-        kError() << "Unknow graph type : " << graphType.toLatin1();
+        errorPigment << "Unknow graph type : " << graphType.toLatin1();
         exit(EXIT_FAILURE);
     }
 
@@ -106,10 +106,10 @@ int main(int argc, char** argv)
         file.close();
 
         if (QProcess::execute(cmd) != 0) {
-            kError() << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
+            errorPigment << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
     } else {
-        kError() << "Unknow output type : " << outputType;
+        errorPigment << "Unknow output type : " << outputType;
         exit(EXIT_FAILURE);
     }
 }

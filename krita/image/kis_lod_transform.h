@@ -71,7 +71,7 @@ public:
         return pi;
     }
 
-    vQPointF map(vQPointF v) const {
+    /*vQPointF map(vQPointF v) const {
         vQPointF::iterator it = v.begin();
         vQPointF::iterator end = v.end();
 
@@ -80,7 +80,7 @@ public:
         }
 
         return v;
-    }
+        }*/
 
     template <class T>
     T map(const T &object) const {

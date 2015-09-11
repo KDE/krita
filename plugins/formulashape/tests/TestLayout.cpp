@@ -18,9 +18,8 @@
 */
 
 #include "TestLayout.h"
-#include <qtest_kde.h>
+#include <QTest>
 
-#include <QtTest>
 #include <QFont>
 #include <QFontMetrics>
 
@@ -111,5 +110,4 @@ void TestLayout::fencedElement()
     delete element;
 }
 
-QTEST_KDEMAIN(TestLayout, GUI)
-#include "TestLayout.moc"
+QTEST_MAIN(TestLayout)

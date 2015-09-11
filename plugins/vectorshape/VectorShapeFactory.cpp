@@ -32,7 +32,7 @@
 #include <KoIcon.h>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 

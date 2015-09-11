@@ -22,7 +22,7 @@
 #include <QListWidget>
 #include <QImage>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
@@ -142,4 +142,3 @@ void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
 
 }
 
-#include "presethistory_dock.moc"

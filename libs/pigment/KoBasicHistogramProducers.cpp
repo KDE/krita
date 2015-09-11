@@ -19,7 +19,7 @@
 #include "KoBasicHistogramProducers.h"
 
 #include <QString>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR

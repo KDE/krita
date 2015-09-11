@@ -23,6 +23,8 @@
 #include "styles/KoTableRowStyle.h"
 #include "../KoTableColumnAndRowStyleManager.h"
 
+#include <QTest>
+
 void TestKoTableColumnAndRowStyleManager::testColumns()
 {
     KoTableColumnAndRowStyleManager manager;
@@ -83,4 +85,3 @@ void TestKoTableColumnAndRowStyleManager::testRows()
 }
 
 QTEST_MAIN(TestKoTableColumnAndRowStyleManager)
-#include <TestKoTableColumnAndRowStyleManager.moc>

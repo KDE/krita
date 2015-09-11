@@ -28,7 +28,7 @@
 #include "kis_antialiasing_fade_maker.h"
 
 
-struct KisCurveRectangleMaskGenerator::Private
+struct Q_DECL_HIDDEN KisCurveRectangleMaskGenerator::Private
 {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)

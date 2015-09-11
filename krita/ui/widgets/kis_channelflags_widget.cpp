@@ -24,7 +24,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>

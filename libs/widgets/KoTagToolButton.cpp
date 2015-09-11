@@ -28,7 +28,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 
@@ -61,7 +61,7 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     QMenu* popup = new QMenu(this);
 
     KoLineEditAction*  addTagAction = new KoLineEditAction(popup);
-    addTagAction->setClickMessage(i18n("New tag"));
+    addTagAction->setPlaceholderText(i18n("New tag"));
     addTagAction->setIcon(koIcon("document-new"));
     addTagAction->closeParentOnTrigger(true);
     popup->addAction(addTagAction);
@@ -70,7 +70,7 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
             this, SIGNAL(newTagRequested(QString)));
 
     d->action_renameTag = new KoLineEditAction(popup);
-    d->action_renameTag->setClickMessage(i18n("Rename tag"));
+    d->action_renameTag->setPlaceholderText(i18n("Rename tag"));
     d->action_renameTag->setIcon(koIcon("edit-rename"));
     d->action_renameTag->closeParentOnTrigger(true);
     popup->addAction(d->action_renameTag);

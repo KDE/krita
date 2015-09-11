@@ -30,7 +30,7 @@
 
 #include <KoTextEditor.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextBlock>
 #include <QTextFragment>
@@ -38,7 +38,7 @@
 #include <QTextCursor>
 
 FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_editor(editor)
         , m_styleChanged(false)
 {
@@ -92,7 +92,7 @@ void FontDia::slotApply()
 void FontDia::slotOk()
 {
     slotApply();
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void FontDia::slotReset()
@@ -100,5 +100,3 @@ void FontDia::slotReset()
     initTabs();
     slotApply(); // ### Should reset() apply?
 }
-
-#include <FontDia.moc>

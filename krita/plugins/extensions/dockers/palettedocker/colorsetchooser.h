@@ -25,7 +25,7 @@
 
 class QSpinBox;
 class KoColorSet;
-class KLineEdit;
+class QLineEdit;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -45,7 +45,7 @@ private Q_SLOTS:
 
 private:
     KoResourceItemChooser * m_itemChooser;
-    KLineEdit* m_nameEdit;
+    QLineEdit* m_nameEdit;
     QSpinBox* m_columnEdit;
 };
 

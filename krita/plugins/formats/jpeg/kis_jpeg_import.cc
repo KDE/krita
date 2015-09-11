@@ -59,7 +59,7 @@ KisImportExportFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&
 
     if (!filename.isEmpty()) {
 
-        KUrl url(filename);
+        QUrl url(filename);
 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;

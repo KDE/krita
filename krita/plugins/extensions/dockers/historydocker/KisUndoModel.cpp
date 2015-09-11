@@ -57,7 +57,7 @@
 **
 ****************************************************************************/
 #include "KisUndoModel.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisUndoModel::KisUndoModel(QObject *parent)
     : QAbstractItemModel(parent)

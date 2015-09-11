@@ -19,7 +19,7 @@
 #ifndef TESTSHAPESHADOWCOMMAND_H
 #define TESTSHAPESHADOWCOMMAND_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestShapeShadowCommand : public QObject
 {

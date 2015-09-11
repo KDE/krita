@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QIcon>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_canvas2.h>
 #include "kis_cursor.h"
 #include "KisViewManager.h"
@@ -171,7 +171,7 @@ void KisGammaExposureAction::begin(int shortcut, QEvent *event)
     }
 }
 
-void KisGammaExposureAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisGammaExposureAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     QPointF diff = -(pos - lastPos);
 

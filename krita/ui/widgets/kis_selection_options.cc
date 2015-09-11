@@ -24,7 +24,7 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"
@@ -55,17 +55,17 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 
     m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
-    m_page->pixel->setIcon(koIcon("select_pixel"));
-    m_page->shape->setIcon(koIcon("select_shape"));
+    m_page->pixel->setIcon(KisIconUtils::loadIcon("select_pixel"));
+    m_page->shape->setIcon(KisIconUtils::loadIcon("select_shape"));
 
     m_page->add->setGroupPosition(KoGroupButton::GroupCenter);
     m_page->subtract->setGroupPosition(KoGroupButton::GroupRight);
     m_page->replace->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->intersect->setGroupPosition(KoGroupButton::GroupCenter);
-    m_page->add->setIcon(koIcon("selection_add"));
-    m_page->subtract->setIcon(koIcon("selection_subtract"));
-    m_page->replace->setIcon(koIcon("selection_replace"));
-    m_page->intersect->setIcon(koIcon("selection_intersect"));
+    m_page->add->setIcon(KisIconUtils::loadIcon("selection_add"));
+    m_page->subtract->setIcon(KisIconUtils::loadIcon("selection_subtract"));
+    m_page->replace->setIcon(KisIconUtils::loadIcon("selection_replace"));
+    m_page->intersect->setIcon(KisIconUtils::loadIcon("selection_intersect"));
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));

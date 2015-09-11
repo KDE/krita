@@ -19,7 +19,7 @@
 
 #include "TestKoColorSpaceSanity.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 
@@ -62,5 +62,4 @@ void TestKoColorSpaceSanity::testChannelsInfo()
     }
 }
 
-QTEST_KDEMAIN(TestKoColorSpaceSanity, NoGUI)
-#include "TestKoColorSpaceSanity.moc"
+QTEST_GUILESS_MAIN(TestKoColorSpaceSanity)

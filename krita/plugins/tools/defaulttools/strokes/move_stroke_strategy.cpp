@@ -18,7 +18,7 @@
 
 #include "move_stroke_strategy.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_image_interfaces.h"
 #include "kis_node.h"
 #include "commands_new/kis_update_command.h"

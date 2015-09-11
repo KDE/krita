@@ -34,13 +34,12 @@
 #include <QSpacerItem>
 
 #include <QMessageBox>
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
 #include <kis_debug.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCompositeOp.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -109,10 +108,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
-    bnPortrait->setIcon(koIcon("portrait"));
+    bnPortrait->setIcon(KisIconUtils::loadIcon("portrait"));
     connect(bnPortrait, SIGNAL(clicked()), SLOT(setPortrait()));
     connect(bnLandscape, SIGNAL(clicked()), SLOT(setLandscape()));
-    bnLandscape->setIcon(koIcon("landscape"));
+    bnLandscape->setIcon(KisIconUtils::loadIcon("landscape"));
 
     connect(doubleWidth, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
     connect(doubleHeight, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
@@ -252,10 +251,10 @@ KisDocument* KisCustomImageWidget::createNewImage()
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
             if (result == QMessageBox::Cancel) {
-                qDebug() << "Model RGB8" << "NOT SUPPORTED";
-                qDebug() << ppVar(cs->name());
-                qDebug() << ppVar(cs->profile()->name());
-                qDebug() << ppVar(cs->profile()->info());
+                dbgKrita << "Model RGB8" << "NOT SUPPORTED";
+                dbgKrita << ppVar(cs->name());
+                dbgKrita << ppVar(cs->profile()->name());
+                dbgKrita << ppVar(cs->profile()->info());
                 return 0;
             }
         }

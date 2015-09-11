@@ -29,7 +29,7 @@
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kcolorscheme.h>
 
@@ -105,8 +105,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     QList<KoFindOption *> options = finder->options()->options();
     foreach(KoFindOption * option, options) {
         if(option->value().type() == QVariant::Bool) {
-            KAction *action = new KAction(option->title(), menu);
-            action->setHelpText(option->description());
+            QAction *action = new QAction(option->title(), menu);
+            action->setStatusTip(option->description());
+            action->setToolTip(option->description());
             action->setObjectName(option->name());
             action->setCheckable(true);
             action->setChecked(option->value().toBool());

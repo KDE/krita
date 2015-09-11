@@ -50,7 +50,7 @@
 /* Substantially revised by Mark Donohoe <donohoe@kde.org>              */
 /*                                                                      */
 /* And by Espen Sand <espen@kde.org> 1999-10-19                         */
-/* (by using KDialog there is almost no code left ;)                    */
+/* (by using KoDialog there is almost no code left ;)                    */
 /*                                                                      */
 /************************************************************************/
 

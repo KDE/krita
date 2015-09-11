@@ -20,8 +20,8 @@
 #include <QPainter>
 #include <QVarLengthArray>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <kis_debug.h>
+#include <klocalizedstring.h>
 
 #include "kis_types.h"
 #include "KisViewManager.h"

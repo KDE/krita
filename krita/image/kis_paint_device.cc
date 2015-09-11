@@ -27,7 +27,7 @@
 #include <QIODevice>
 #include <qmath.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorProfile.h>
@@ -403,7 +403,7 @@ private:
 
     void transferFromData(Data *data, KisPaintDeviceSP targetDevice);
 
-    struct StrategyPolicy;
+    struct Q_DECL_HIDDEN StrategyPolicy;
     typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialConstIterator;
     typedef KisSequentialIteratorBase<WritableIteratorPolicy<StrategyPolicy>, StrategyPolicy> InternalSequentialIterator;
 
@@ -1210,21 +1210,13 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (!profile && colorSpace()->id() == "RGBA") {
-#if QT_VERSION >= 0x040700
         writeBytes(image.constBits(), offsetX, offsetY, image.width(), image.height());
-#else
-        writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
-#endif
     } else {
         try {
             quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
             KoColorSpaceRegistry::instance()
                     ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
-#if QT_VERSION >= 0x040700
                     ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
-#else
-                    ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
-#endif
                                       KoColorConversionTransformation::InternalRenderingIntent,
                                       KoColorConversionTransformation::InternalConversionFlags);
 

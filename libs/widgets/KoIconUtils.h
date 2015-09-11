@@ -1,7 +1,5 @@
 /*
- *  This file is part of Calligra tests
- *
- *  Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "TestSection.h"
+#ifndef __KO_ICON_UTILS_H
+#define __KO_ICON_UTILS_H
 
-#include <QTest>
+#include "kowidgets_export.h"
 
-void TestSection::testSection()
+class QIcon;
+class QString;
+
+namespace KoIconUtils
 {
+    /**
+     * Load a themed icon using its base name. Use it in
+     * Krita instead of previous themedIcon()
+     */
+    KOWIDGETS_EXPORT QIcon themedIcon(const QString &name);
 }
 
-void TestSection::testLoadOdf()
-{
-}
-
-void TestSection::testSaveOdf()
-{
-}
-
-QTEST_MAIN(TestSection)
-#include <TestSection.moc>
+#endif /* __KIS_ICON_UTILS_H */

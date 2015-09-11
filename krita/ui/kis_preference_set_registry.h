@@ -29,7 +29,7 @@
 
 #include <kritaui_export.h>
 
-class KIcon;
+class QIcon;
 
 /**
  * Implement this abstract class to provide a preferences pane for the preferences dialog.
@@ -42,7 +42,7 @@ public:
     virtual QString id() = 0;
     virtual QString name() = 0;
     virtual QString header() = 0;
-    virtual KIcon icon() = 0;
+    virtual QIcon icon() = 0;
 public Q_SLOTS:
     virtual void savePreferences() const = 0;
     virtual void loadPreferences() = 0;

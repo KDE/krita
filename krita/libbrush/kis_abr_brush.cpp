@@ -28,7 +28,7 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
 

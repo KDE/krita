@@ -31,11 +31,11 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 using namespace MusicCore;
 
-static KIcon getIcon(Clef::ClefShape shape)
+static QIcon getIcon(Clef::ClefShape shape)
 {
     const char *const id =
         (shape == Clef::GClef) ? koIconNameCStr("music-clef-trebble") :
@@ -43,7 +43,7 @@ static KIcon getIcon(Clef::ClefShape shape)
         (shape == Clef::CClef) ? koIconNameCStr("music-clef-alto") :
         /* else */               koIconNameCStr("music-clef");
 
-    return KIcon(QLatin1String(id));
+    return QIcon::fromTheme(QLatin1String(id));
 }
 
 static QString getText(Clef::ClefShape shape, int line)

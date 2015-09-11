@@ -27,7 +27,7 @@
 #include <QMessageBox>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include "KoColorSpace.h"
@@ -42,7 +42,6 @@
 #include <kis_annotation.h>
 
 // local
-#include "kis_factory2.h"
 #include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
 

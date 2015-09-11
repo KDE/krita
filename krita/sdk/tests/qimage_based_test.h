@@ -261,7 +261,7 @@ private:
            !TestUtil::compareQImages(temp, ref, image, fuzzy)) {
 
 
-            qDebug() << "--- Wrong image:" << realName;
+            dbgKrita << "--- Wrong image:" << realName;
             valid = false;
 
             image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + realName);

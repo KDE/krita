@@ -58,7 +58,7 @@
 ****************************************************************************/
 
 #include <QDebug>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include "kundo2stack.h"

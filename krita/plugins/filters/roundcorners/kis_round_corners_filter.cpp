@@ -29,7 +29,7 @@
 
 #include <QPoint>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
 #include <KoUpdater.h>

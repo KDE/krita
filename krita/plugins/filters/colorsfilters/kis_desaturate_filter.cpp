@@ -30,7 +30,7 @@
 #include <QPoint>
 #include <QColor>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>
@@ -56,7 +56,7 @@
 KisDesaturateFilter::KisDesaturateFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
-    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U)));
+    setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U));
     setSupportsPainting(true);
 }
 

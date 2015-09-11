@@ -26,7 +26,7 @@
 #include <KoList.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QTextList>
 
 using namespace Lists;

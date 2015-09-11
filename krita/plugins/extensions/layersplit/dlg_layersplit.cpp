@@ -19,7 +19,7 @@
 
 #include "dlg_layersplit.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include <KisViewManager.h>
@@ -33,7 +33,7 @@
 #include <kis_config.h>
 
 DlgLayerSplit::DlgLayerSplit()
-    : KDialog()
+    : KoDialog()
 {
     m_page = new WdgLayerSplit(this);
 

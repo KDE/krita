@@ -28,6 +28,7 @@
 #include <QBuffer>
 #include <QRegExp>
 
+#include <QTest>
 
 #define TEST_BEGIN(publicId,systemId) \
     { \
@@ -375,4 +376,3 @@ void TestKoGenStyles::testStylesDotXml()
 }
 
 QTEST_MAIN(TestKoGenStyles)
-#include <TestKoGenStyles.moc>

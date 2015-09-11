@@ -20,7 +20,7 @@
 #include "FisheyePointAssistant.h"
 
 #include "kis_debug.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QLinearGradient>

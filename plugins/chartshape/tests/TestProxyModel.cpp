@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QString>
 #include <QVariant>
+#include <QTest>
 
 // KoChart
 #include "DataSet.h"

@@ -37,13 +37,13 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <math.h>
 
 using namespace MusicCore;
 
-static KIcon getIcon(int accidentals)
+static QIcon getIcon(int accidentals)
 {
     static const char *const iconNames[5] =
     {
@@ -55,10 +55,10 @@ static KIcon getIcon(int accidentals)
     };
 
     if ((-2 <= accidentals) && (accidentals <= 2)) {
-        return KIcon(QLatin1String(iconNames[accidentals+2]));
+        return QIcon::fromTheme(QLatin1String(iconNames[accidentals+2]));
     }
 
-    return KIcon();
+    return QIcon();
 }
 
 static QString getText(int accidentals)

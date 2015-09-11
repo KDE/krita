@@ -27,7 +27,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>
@@ -123,5 +123,3 @@ void SimpleTableOfContentsWidget::insertCustomToC()
     m_templateGenerator->moveTemplateToUsed(m_templateList.at(0));
     m_referenceTool->insertCustomToC(m_templateList.at(0));
 }
-
-#include <SimpleTableOfContentsWidget.moc>

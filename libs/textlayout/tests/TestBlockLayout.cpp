@@ -31,12 +31,11 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 
-#include <QtGui>
 #include <QSharedPointer>
 #include <QVariant>
+#include <QTest>
 
 #include <kdebug.h>
-#include <kcomponentdata.h>
 
 #define FRAME_SPACING 10.0
 
@@ -1073,6 +1072,4 @@ void TestBlockLayout::testDropCaps()
 }
 
 
-QTEST_KDEMAIN(TestBlockLayout, GUI)
-
-#include <TestBlockLayout.moc>
+QTEST_MAIN(TestBlockLayout)

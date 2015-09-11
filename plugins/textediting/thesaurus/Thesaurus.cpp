@@ -53,22 +53,22 @@ NOT TODO:
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QGroupBox>
+#include <QTextBrowser>
 
 #include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kfiledialog.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <khistorycombobox.h>
 #include <kpushbutton.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kdebug.h>
 #include <krun.h>
 #include <kcombobox.h>
-#include <ktextbrowser.h>
 #include <kurl.h>
 
 Thesaurus::Thesaurus()
@@ -77,13 +77,13 @@ Thesaurus::Thesaurus()
     m_thesProc = new KProcess;
     m_wnProc = new KProcess;
 
-    m_dialog = new KDialog(0);
-    m_dialog->setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
-    m_dialog->setDefaultButton(KDialog::Ok);
+    m_dialog = new KoDialog(0);
+    m_dialog->setButtons(KoDialog::Help | KoDialog::Ok | KoDialog::Cancel);
+    m_dialog->setDefaultButton(KoDialog::Ok);
     m_dialog->setHelp(QString(), "thesaurus");
     m_dialog->resize(600, 400);
 
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     m_dataFile = cfg.readEntry("datafile");
     if (m_dataFile.isEmpty())
         m_dataFile = KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt");
@@ -187,7 +187,7 @@ Thesaurus::Thesaurus()
     wnLayout->addWidget(m_wnComboBox);
     connect(m_wnComboBox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
-    m_resultTextBrowser = new KTextBrowser(wnWidget);
+    m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
     connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
     wnLayout->addWidget(m_resultTextBrowser);
@@ -199,7 +199,7 @@ Thesaurus::Thesaurus()
 
     QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
     topLayout->addLayout(row2);
-    m_replaceLineEdit = new KLineEdit(page);
+    m_replaceLineEdit = new QLineEdit(page);
     m_replaceLabel = new QLabel(i18n("&Replace with:"), page);
     m_replaceLabel->setBuddy(m_replaceLineEdit);
     row2->addWidget(m_replaceLabel, 0);
@@ -215,7 +215,7 @@ Thesaurus::Thesaurus()
 
 Thesaurus::~Thesaurus()
 {
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("datafile", m_dataFile);
     // FIXME?: this hopefully fixes the problem of a wrong cursor
     // and a crash (when closing e.g. konqueror) when the thesaurus dialog
@@ -250,8 +250,8 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_standAlone = true;
         if (document)
             m_word = document->toPlainText();
-        m_dialog->showButton(KDialog::Ok, false);
-        m_dialog->setButtonGuiItem(KDialog::Cancel,
+        m_dialog->showButton(KoDialog::Ok, false);
+        m_dialog->setButtonGuiItem(KoDialog::Cancel,
                 KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
@@ -263,7 +263,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_word = cursor.selectedText();
         m_document = document;
         m_startPosition = startPosition;
-        m_dialog->setButtonGuiItem(KDialog::Ok,
+        m_dialog->setButtonGuiItem(KoDialog::Ok,
                 KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
         slotFindTerm(m_word.trimmed());
         m_replaceLineEdit->setText(m_word.trimmed());
@@ -287,7 +287,7 @@ void Thesaurus::process()
 void Thesaurus::dialogClosed()
 {
     if (!m_standAlone) return;
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("datafile", m_dataFile);
 }
 
@@ -771,5 +771,3 @@ QString Thesaurus::formatLine(const QString &line) const
 
     return l;
 }
-
-#include <Thesaurus.moc>

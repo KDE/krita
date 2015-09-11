@@ -23,7 +23,7 @@
 #include <KoTextEditor.h>
 #include "KoTextEditor_p.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class MergeAutoParagraphStyleVisitor : public KoTextVisitor
 {

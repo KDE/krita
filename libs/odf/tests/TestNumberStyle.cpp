@@ -18,6 +18,9 @@
  */
 #include "TestNumberStyle.h"
 
+#include <KoOdfNumberStyles.h>
+#include <QTest>
+
 QString escapeLocals(const QString &text)
 {
     QString t(text);
@@ -162,4 +165,3 @@ void TestNumberStyle::testCurrency()
 }
 
 QTEST_MAIN(TestNumberStyle)
-#include <TestNumberStyle.moc>

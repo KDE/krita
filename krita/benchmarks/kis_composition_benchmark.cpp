@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,11 +39,14 @@
 #include <Vc/IO>
 
 #include <KoOptimizedCompositeOpOver32.h>
+#include <KoOptimizedCompositeOpOver128.h>
 #include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
 // for posix_memalign()
 #include <stdlib.h>
+
+#include <kis_debug.h>
 
 const int alpha_pos = 3;
 
@@ -52,71 +56,133 @@ enum AlphaRange {
     ALPHA_RANDOM
 };
 
-inline quint8 generateAlphaValue(AlphaRange range) {
-    quint8 value = 0;
+
+template <typename channel_type, class RandomGenerator>
+inline channel_type generateAlphaValue(AlphaRange range, RandomGenerator &rnd) {
+    channel_type value = 0;
 
     switch (range) {
     case ALPHA_ZERO:
         break;
     case ALPHA_UNIT:
-        value = 255;
+        value = rnd.unit();
         break;
     case ALPHA_RANDOM:
-        value = qrand() % 255;
+        value = rnd();
         break;
     }
 
     return value;
 }
 
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_smallint.hpp>
+#include <boost/random/uniform_real.hpp>
+
+template <typename channel_type>
+struct RandomGenerator {
+    channel_type operator() () {
+        qFatal("Wrong template instantiation");
+        return channel_type(0);
+    }
+
+    channel_type unit() {
+        qFatal("Wrong template instantiation");
+        return channel_type(0);
+    }
+};
+
+template <>
+struct RandomGenerator<quint8>
+{
+    RandomGenerator(int seed)
+        : m_smallint(0,255),
+          m_rnd(seed)
+    {
+    }
+
+    quint8 operator() () {
+        return m_smallint(m_rnd);
+    }
+
+    quint8 unit() {
+        return KoColorSpaceMathsTraits<quint8>::unitValue;
+    }
+
+    boost::uniform_smallint<int> m_smallint;
+    boost::mt11213b m_rnd;
+};
+
+template <>
+struct RandomGenerator<float>
+{
+    RandomGenerator(int seed)
+        : m_rnd(seed)
+    {
+    }
+
+    float operator() () {
+        //return float(m_rnd()) / float(m_rnd.max());
+        return m_smallfloat(m_rnd);
+    }
+
+    float unit() {
+        return KoColorSpaceMathsTraits<float>::unitValue;
+    }
+
+    boost::uniform_real<float> m_smallfloat;
+    boost::mt11213b m_rnd;
+};
+
+template <>
+struct RandomGenerator<double> : RandomGenerator<float>
+{
+    RandomGenerator(int seed)
+        : RandomGenerator<float>(seed)
+    {
+    }
+};
+
+
+template <typename channel_type>
 void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask, AlphaRange srcAlphaRange, AlphaRange dstAlphaRange)
 {
     Q_ASSERT(numPixels >= 4);
 
-    for (int i = 0; i < 4; i++) {
-        srcPixels[4*i]   = i * 10 + 30;
-        srcPixels[4*i+1] = i * 10 + 30;
-        srcPixels[4*i+2] = i * 10 + 30;
-        srcPixels[4*i+3] = i * 10 + 35;
+    RandomGenerator<channel_type> rnd(seed);
+    RandomGenerator<quint8> maskRnd(seed + 1);
 
-        dstPixels[4*i]   = i * 10 + 160;
-        dstPixels[4*i+1] = i * 10 + 160;
-        dstPixels[4*i+2] = i * 10 + 160;
-        dstPixels[4*i+3] = i * 10 + 165;
-
-        mask[i] = i * 10 + 225;
-    }
-
-    qsrand(seed);
-    numPixels -= 4;
-    srcPixels += 4 * 4;
-    dstPixels += 4 * 4;
-    mask += 4;
+    channel_type *srcArray = reinterpret_cast<channel_type*>(srcPixels);
+    channel_type *dstArray = reinterpret_cast<channel_type*>(dstPixels);
 
     for (int i = 0; i < numPixels; i++) {
         for (int j = 0; j < 3; j++) {
-            *(srcPixels++) = qrand() % 255;
-            *(dstPixels++) = qrand() % 255;
+            channel_type s = rnd();
+            channel_type d = rnd();
+            *(srcArray++) = s;
+            *(dstArray++) = d;
         }
 
-        *(srcPixels++) = generateAlphaValue(srcAlphaRange);
-        *(dstPixels++) = generateAlphaValue(dstAlphaRange);
+        channel_type sa = generateAlphaValue<channel_type>(srcAlphaRange, rnd);
+        channel_type da = generateAlphaValue<channel_type>(dstAlphaRange, rnd);
+        *(srcArray++) = sa;
+        *(dstArray++) = da;
 
-        *(mask++) = qrand() % 255;
+        *(mask++) = maskRnd();
     }
 }
 
 void printData(int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask)
 {
     for (int i = 0; i < numPixels; i++) {
-        qDebug() << "Src: "
+        dbgKrita << "Src: "
                  << srcPixels[i*4] << "\t"
                  << srcPixels[i*4+1] << "\t"
                  << srcPixels[i*4+2] << "\t"
                  << srcPixels[i*4+3] << "\t"
                  << "Msk:" << mask[i];
 
-        qDebug() << "Dst: "
+        dbgKrita << "Dst: "
                  << dstPixels[i*4] << "\t"
                  << dstPixels[i*4+1] << "\t"
                  << dstPixels[i*4+2] << "\t"
@@ -141,7 +207,8 @@ QVector<Tile> generateTiles(int size,
                             const int srcAlignmentShift,
                             const int dstAlignmentShift,
                             AlphaRange srcAlphaRange,
-                            AlphaRange dstAlphaRange)
+                            AlphaRange dstAlphaRange,
+                            const quint32 pixelSize)
 {
     QVector<Tile> tiles(size);
 
@@ -151,18 +218,34 @@ QVector<Tile> generateTiles(int size,
     const int vecSize = 1;
 #endif
 
-    const size_t pixelAlignment = qMax(size_t(vecSize * 4), sizeof(void*));
-    const size_t maskAlignment = qMax(size_t(vecSize), sizeof(void*));
-
+    // the 256 are used to make sure that we have a good alignment no matter what build options are used.
+    const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), size_t(256));
+    const size_t maskAlignment = qMax(size_t(vecSize), size_t(256));
     for (int i = 0; i < size; i++) {
         void *ptr = NULL;
-        posix_memalign(&ptr, pixelAlignment, numPixels * 4 + srcAlignmentShift);
+        int error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
+        if (error) {
+            qFatal("posix_memalign failed: %d", error);
+        }
         tiles[i].src = (quint8*)ptr + srcAlignmentShift;
-        posix_memalign(&ptr, pixelAlignment, numPixels * 4 + dstAlignmentShift);
+        error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + dstAlignmentShift);
+        if (error) {
+            qFatal("posix_memalign failed: %d", error);
+        }
         tiles[i].dst = (quint8*)ptr + dstAlignmentShift;
-        posix_memalign(&ptr, maskAlignment, numPixels);
+        error = posix_memalign(&ptr, maskAlignment, numPixels);
+        if (error) {
+            qFatal("posix_memalign failed: %d", error);
+        }
         tiles[i].mask = (quint8*)ptr;
-        generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
+
+        if (pixelSize == 4) {
+            generateDataLine<quint8>(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
+        } else if (pixelSize == 16) {
+            generateDataLine<float>(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
+        } else {
+            qFatal("Pixel size %i is not implemented", pixelSize);
+        }
     }
 
     return tiles;
@@ -179,22 +262,58 @@ void freeTiles(QVector<Tile> tiles,
     }
 }
 
-inline bool fuzzyCompare(quint8 a, quint8 b, quint8 prec) {
+template <typename channel_type>
+inline bool fuzzyCompare(channel_type a, channel_type b, channel_type prec) {
     return qAbs(a - b) <= prec;
 }
 
-inline bool comparePixels(quint8 *p1, quint8*p2, quint8 prec) {
+template <typename channel_type>
+inline bool comparePixels(channel_type *p1, channel_type *p2, channel_type prec) {
     return (p1[3] == p2[3] && p1[3] == 0) ||
         (fuzzyCompare(p1[0], p2[0], prec) &&
          fuzzyCompare(p1[1], p2[1], prec) &&
          fuzzyCompare(p1[2], p2[2], prec) &&
          fuzzyCompare(p1[3], p2[3], prec));
+}
 
+template <typename channel_type>
+bool compareTwoOpsPixels(QVector<Tile> &tiles, channel_type prec) {
+    channel_type *dst1 = reinterpret_cast<channel_type*>(tiles[0].dst);
+    channel_type *dst2 = reinterpret_cast<channel_type*>(tiles[1].dst);
+
+    channel_type *src1 = reinterpret_cast<channel_type*>(tiles[0].src);
+    channel_type *src2 = reinterpret_cast<channel_type*>(tiles[1].src);
+
+    for (int i = 0; i < numPixels; i++) {
+        if (!comparePixels<channel_type>(dst1, dst2, prec)) {
+            dbgKrita << "Wrong result:" << i;
+            dbgKrita << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+            dbgKrita << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            dbgKrita << "Dif: " << dst1[0] - dst2[0] << dst1[1] - dst2[1] << dst1[2] - dst2[2] << dst1[3] - dst2[3];
+
+            channel_type *s1 = src1 + 4 * i;
+            channel_type *s2 = src2 + 4 * i;
+
+            dbgKrita << "SrcA:" << s1[0] << s1[1] << s1[2] << s1[3];
+            dbgKrita << "SrcE:" << s2[0] << s2[1] << s2[2] << s2[3];
+
+            dbgKrita << "MskA:" << tiles[0].mask[i];
+            dbgKrita << "MskE:" << tiles[1].mask[i];
+
+            return false;
+        }
+        dst1 += 4;
+        dst2 += 4;
+    }
+    return true;
 }
 
 bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp *op2)
 {
-    QVector<Tile> tiles = generateTiles(2, 16, 16, ALPHA_RANDOM, ALPHA_RANDOM);
+    Q_ASSERT(op1->colorSpace()->pixelSize() == op2->colorSpace()->pixelSize());
+    const quint32 pixelSize = op1->colorSpace()->pixelSize();
+    const int alignment = 16;
+    QVector<Tile> tiles = generateTiles(2, alignment, alignment, ALPHA_RANDOM, ALPHA_RANDOM, op1->colorSpace()->pixelSize());
 
     KoCompositeOp::ParameterInfo params;
     params.dstRowStride  = 4 * rowStride;
@@ -202,7 +321,8 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
     params.maskRowStride = rowStride;
     params.rows          = processRect.height();
     params.cols          = processRect.width();
-    params.opacity       = 0.5*1.0f;
+    // This is a hack as in the old version we get a rounding of opacity to this value
+    params.opacity       = float(Arithmetic::scale<quint8>(0.5*1.0f))/255.0;
     params.flow          = 0.3*1.0f;
     params.channelFlags  = QBitArray();
 
@@ -216,33 +336,20 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
     params.maskRowStart  = haveMask ? tiles[1].mask : 0;
     op2->composite(params);
 
-    quint8 *dst1 = tiles[0].dst;
-    quint8 *dst2 = tiles[1].dst;
-    for (int i = 0; i < numPixels; i++) {
-        if (!comparePixels(dst1, dst2, 7)) {
-
-            qDebug() << "Wrong result:" << i;
-            qDebug() << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-            qDebug() << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-
-            quint8 *src1 = tiles[0].src + 4 * i;
-            quint8 *src2 = tiles[1].src + 4 * i;
-
-            qDebug() << "SrcA:" << src1[0] << src1[1] << src1[2] << src1[3];
-            qDebug() << "SrcE:" << src2[0] << src2[1] << src2[2] << src2[3];
-
-            qDebug() << "MskA:" << tiles[0].mask[i];
-            qDebug() << "MskE:" << tiles[1].mask[i];
-
-            return false;
-        }
-        dst1 += 4;
-        dst2 += 4;
+    bool compareResult = true;
+    if (pixelSize == 4) {
+        compareResult = compareTwoOpsPixels<quint8>(tiles, 10);
+    }
+    else if (pixelSize == 16) {
+        compareResult = compareTwoOpsPixels<float>(tiles, 0);
+    }
+    else {
+        qFatal("Pixel size %i is not implemented", pixelSize);
     }
 
-    freeTiles(tiles, 16, 16);
+    freeTiles(tiles, alignment, alignment);
 
-    return true;
+    return compareResult;
 }
 
 QString getTestName(bool haveMask,
@@ -286,10 +393,7 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
     QString testName = getTestName(haveMask, srcAlignmentShift, dstAlignmentShift, srcAlphaRange, dstAlphaRange);
 
     QVector<Tile> tiles =
-        generateTiles(numTiles, srcAlignmentShift, dstAlignmentShift, srcAlphaRange, dstAlphaRange);
-
-//    qDebug() << "Initial values:";
-//    printData(8, tiles[0].src, tiles[0].dst, tiles[0].mask);
+        generateTiles(numTiles, srcAlignmentShift, dstAlignmentShift, srcAlphaRange, dstAlphaRange, op->colorSpace()->pixelSize());
 
     const int tileOffset = 4 * (processRect.y() * rowStride + processRect.x());
 
@@ -313,17 +417,14 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
         op->composite(params);
     }
 
-    qDebug() << testName << "RESULT:" << timer.elapsed() << "msec";
-
-//    qDebug() << "Final values:";
-//    printData(8, tiles[0].src, tiles[0].dst, tiles[0].mask);
+    dbgKrita << testName << "RESULT:" << timer.elapsed() << "msec";
 
     freeTiles(tiles, srcAlignmentShift, dstAlignmentShift);
 }
 
 void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
 {
-    qDebug() << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
+    dbgKrita << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
 
     benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
     benchmarkCompositeOp(op, true, 0.5, 0.3, 8, 0, ALPHA_RANDOM, ALPHA_RANDOM);
@@ -352,10 +453,10 @@ void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
 #ifdef HAVE_VC
 
 template<class Compositor>
-void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1)
+void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32 pixelSize = 4)
 {
     QVector<Tile> tiles =
-        generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
+        generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM, pixelSize);
 
     const int vecSize = Vc::float_v::Size;
 
@@ -381,33 +482,53 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1)
     params.channelFlags = QBitArray();
     typename Compositor::OptionalParams optionalParams(params);
 
+    // The error count is needed as 38.5 gets rounded to 38 instead of 39 in the vc version.
+    int errorcount = 0;
     for (int i = 0; i < numBlocks; i++) {
         Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, params.opacity, optionalParams);
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
-            //    qDebug() << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
-            //    qDebug() << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-            //    qDebug() << "msk:" << msk2[0];
+            //    dbgKrita << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
+            //    dbgKrita << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            //    dbgKrita << "msk:" << msk2[0];
             //}
 
             Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, params.opacity, optionalParams);
 
-            if(!comparePixels(dst1, dst2, 0)) {
-                qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
-                qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-                qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            bool compareResult = true;
+            if (pixelSize == 4) {
+                compareResult = comparePixels<quint8>(dst1, dst2, 0);
+                if (!compareResult) {
+                    ++errorcount;
+                    compareResult = comparePixels<quint8>(dst1, dst2, 1);
+                    if (!compareResult) {
+                        ++errorcount;
+                    }
+                }
+            }
+            else if (pixelSize == 16) {
+                compareResult = comparePixels<float>(reinterpret_cast<float*>(dst1), reinterpret_cast<float*>(dst2), 0);
+            }
+            else {
+                qFatal("Pixel size %i is not implemented", pixelSize);
+            }
 
-                qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
-                qDebug() << "msk:" << msk1[0];
+            if(!compareResult || errorcount > 1) {
+                dbgKrita << "Wrong rounding in pixel:" << 8 * i + j;
+                dbgKrita << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+                dbgKrita << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+
+                dbgKrita << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
+                dbgKrita << "msk:" << msk1[0];
 
                 QFAIL("Wrong rounding");
             }
 
-            src1 += 4;
-            dst1 += 4;
-            src2 += 4;
-            dst2 += 4;
+            src1 += pixelSize;
+            dst1 += pixelSize;
+            src2 += pixelSize;
+            dst2 += pixelSize;
             msk1++;
             msk2++;
         }
@@ -461,6 +582,13 @@ void KisCompositionBenchmark::checkRoundingOver()
 #endif
 }
 
+void KisCompositionBenchmark::checkRoundingOverRgbaF32()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.3, -1, 16);
+#endif
+}
+
 void KisCompositionBenchmark::compareAlphaDarkenOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -509,6 +637,18 @@ void KisCompositionBenchmark::compareOverOpsNoMask()
     delete opAct;
 }
 
+void KisCompositionBenchmark::compareRgbF32OverOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createOverOp128(cs);
+    KoCompositeOp *opExp = new KoCompositeOpOver<KoRgbF32Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
 void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -541,6 +681,22 @@ void KisCompositionBenchmark::testRgb8CompositeOverOptimized()
     delete op;
 }
 
+void KisCompositionBenchmark::testRgbF32CompositeOverLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *op = new KoCompositeOpOver<KoRgbF32Traits>(cs);
+    benchmarkCompositeOp(op, "RGBF32 Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgbF32CompositeOverOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createOverOp128(cs);
+    benchmarkCompositeOp(op, "RGBF32 Optimized");
+    delete op;
+}
+
 void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenReal_Aligned()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -565,7 +721,7 @@ void KisCompositionBenchmark::testRgb8CompositeCopyLegacy()
 void KisCompositionBenchmark::benchmarkMemcpy()
 {
     QVector<Tile> tiles =
-        generateTiles(numTiles, 0, 0, ALPHA_UNIT, ALPHA_UNIT);
+        generateTiles(numTiles, 0, 0, ALPHA_UNIT, ALPHA_UNIT, 4);
 
     QBENCHMARK_ONCE {
         foreach (const Tile &tile, tiles) {
@@ -588,9 +744,15 @@ void KisCompositionBenchmark::benchmarkUintFloat()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    int error = posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     quint8 *iData = (quint8*)ptr;
-    posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
@@ -612,9 +774,15 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    int error = posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     quint8 *iData = (quint8*)ptr;
-    posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
@@ -636,9 +804,15 @@ void KisCompositionBenchmark::benchmarkFloatUint()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    int error = posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     quint32 *iData = (quint32*)ptr;
-    posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
@@ -660,9 +834,15 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    int error = posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     quint32 *iData = (quint32*)ptr;
-    posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    if (error) {
+        qFatal("posix_memalign failed: %d", error);
+    }
     float *fData = (float*)ptr;
 
     QBENCHMARK {

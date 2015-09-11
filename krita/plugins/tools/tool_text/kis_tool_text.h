@@ -25,7 +25,7 @@
 
 #include <kis_tool_rectangle_base.h>
 #include "kis_text_tool_option_widget.h"
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

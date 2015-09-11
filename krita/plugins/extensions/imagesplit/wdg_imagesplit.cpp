@@ -24,11 +24,8 @@
 #include <QStringList>
 #include <QImage>
 #include <QListWidgetItem>
-#include <QDebug>
+#include <kis_debug.h>
 
-
-
-#include "kis_factory2.h"
 #include "kis_config.h"
 
 WdgImagesplit::WdgImagesplit(QWidget* parent)

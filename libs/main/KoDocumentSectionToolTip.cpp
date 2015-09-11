@@ -23,7 +23,7 @@
 #include <QModelIndex>
 #include <QTextDocument>
 #include <QUrl>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoDocumentSectionToolTip::KoDocumentSectionToolTip()
 {
@@ -66,5 +66,3 @@ QTextDocument *KoDocumentSectionToolTip::createDocument(const QModelIndex &index
 
     return doc;
 }
-
-#include <KoDocumentSectionToolTip.moc>

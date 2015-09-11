@@ -23,7 +23,7 @@
 #include "kis_tool_fill.h"
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QLabel>
 #include <QLayout>
@@ -84,7 +84,7 @@ void KisToolFill::resetCursorStyle()
 void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
-    m_configGroup = KGlobal::config()->group(toolId());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 

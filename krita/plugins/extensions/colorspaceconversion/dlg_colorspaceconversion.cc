@@ -26,7 +26,7 @@
 #include <QComboBox>
 #include <QList>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include "KoColorProfile.h"
@@ -38,7 +38,7 @@
 
 DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
         const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);

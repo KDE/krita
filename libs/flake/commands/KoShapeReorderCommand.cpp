@@ -23,7 +23,7 @@
 #include "KoShapeManager.h"
 #include "KoShapeContainer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <limits.h>
 

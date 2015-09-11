@@ -22,7 +22,7 @@
 
 #include <KoOdfNumberDefinition.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QWidget>
 #include <QDebug>
@@ -235,5 +235,3 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         this->close();
     }
 }
-
-#include <NotesConfigurationDialog.moc>

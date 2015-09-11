@@ -43,7 +43,7 @@
 #include "kis_lod_transform.h"
 
 
-struct KisPixelSelection::Private {
+struct Q_DECL_HIDDEN KisPixelSelection::Private {
     KisSelectionWSP parentSelection;
 
     QPainterPath outlineCache;

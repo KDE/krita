@@ -20,12 +20,6 @@ target_link_libraries(TestKoTableColumnAndRowStyleManager kotext  Qt5::Test)
 
 ########### next target ###############
 
-set(TestSection_test_SRCS TestSection.cpp)
-kde4_add_unit_test(TestSection TESTNAME libs-kotext-TestSection  ${TestSection_test_SRCS})
-target_link_libraries(TestSection kotext  Qt5::Test)
-
-########### next target ###############
-
 set(TestKoTextEditor_test_SRCS TestKoTextEditor.cpp)
 kde4_add_unit_test(TestKoTextEditor TESTNAME libs-kotext-TestKoTextEditor  ${TestKoTextEditor_test_SRCS})
 target_link_libraries(TestKoTextEditor kotext  Qt5::Test)

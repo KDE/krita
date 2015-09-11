@@ -515,11 +515,11 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         byteOrder = Exiv2::ExifParser::decode(exifData, (const Exiv2::byte*)arr.data(), arr.size());
     }
     catch (const std::exception& ex) {
-        qWarning() << "Received exception trying to parse exiv data" << ex.what();
+        warnKrita << "Received exception trying to parse exiv data" << ex.what();
         return false;
     }
     catch (...) {
-        qDebug() << "Received unknown exception trying to parse exiv data";
+        dbgKrita << "Received unknown exception trying to parse exiv data";
         return false;
     }
 

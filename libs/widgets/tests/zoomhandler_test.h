@@ -19,7 +19,7 @@
 #ifndef ZOOMHANDLER_TEST_H
 #define ZOOMHANDLER_TEST_H
 
-#include <QtTest>
+#include <QObject>
 
 class zoomhandler_test : public QObject
 {

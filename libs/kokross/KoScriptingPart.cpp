@@ -33,7 +33,7 @@
 
 // kde
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
@@ -77,7 +77,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
     d->module = module;
     Q_ASSERT(d->module);
 
-    KAction *execAction  = new KAction(i18n("Execute Script File..."), this);
+    QAction *execAction  = new QAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execAction);
     connect(execAction, SIGNAL(triggered(bool)), this, SLOT(slotShowExecuteScriptFile()));
 
@@ -85,7 +85,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
     actionCollection()->addAction("scripts", d->scriptsmenu);
     connect(d->scriptsmenu->menu(), SIGNAL(aboutToShow()), this, SLOT(slotMenuAboutToShow()));
 
-    KAction *manageraction  = new KAction(i18n("Script Manager..."), this);
+    QAction *manageraction  = new QAction(i18n("Script Manager..."), this);
     actionCollection()->addAction("scriptmanager", manageraction);
     connect(manageraction, SIGNAL(triggered(bool)), this, SLOT(slotShowScriptManager()));
 
@@ -149,7 +149,7 @@ bool KoScriptingPart::showExecuteScriptFile()
         mimetypes.append(info->mimeTypes().join(" ").trimmed());
     }
     KFileDialog *filedialog = new KFileDialog(
-        KUrl("kfiledialog:///KrossExecuteScript"), // startdir
+        QUrl("kfiledialog:///KrossExecuteScript"), // startdir
         mimetypes.join(" "), // filter
         0, // custom widget
         0 // parent

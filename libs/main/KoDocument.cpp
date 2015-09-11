@@ -54,15 +54,16 @@
 #include <kmimetype.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ksavefile.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kdirnotify.h>
-#include <ktemporaryfile.h>
-#include <kdeversion.h>
+#include <kglobal.h>
 
+#include <QTemporaryFile>
+#include <QApplication>
 #include <QtGlobal>
 #include <QBuffer>
 #include <QDir>
@@ -76,10 +77,10 @@
 #include <QApplication>
 
 // Define the protocol used here for embedded documents' URL
-// This used to "store" but KUrl didn't like it,
+// This used to "store" but QUrl didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
-// The internal path is a hack to make KUrl happy and for document children
+// The internal path is a hack to make QUrl happy and for document children
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
@@ -181,7 +182,7 @@ public:
 
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
-        if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+        if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
         } else {
             unit = KoUnit::Centimeter;
@@ -240,14 +241,14 @@ public:
     KIO::FileCopyJob * m_job;
     KIO::StatJob * m_statJob;
     KIO::FileCopyJob * m_uploadJob;
-    KUrl m_originalURL; // for saveAs
+    QUrl m_originalURL; // for saveAs
     QString m_originalFilePath; // for saveAs
     bool m_saveOk : 1;
     bool m_waitForSave : 1;
     bool m_duringSaveAs : 1;
     bool m_bTemp: 1;      // If @p true, @p m_file is a temporary file that needs to be deleted later.
     bool m_bAutoDetectedMime : 1; // whether the mimetype in the arguments was detected by the part itself
-    KUrl m_url; // Remote (or local) url - the one displayed to the user.
+    QUrl m_url; // Remote (or local) url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
     QEventLoop m_eventLoop;
 
@@ -310,13 +311,12 @@ public:
         QString extension;
         if (!ext.isEmpty() && m_url.query().isNull()) // not if the URL has a query, e.g. cgi.pl?something
             extension = '.'+ext; // keep the '.'
-        KTemporaryFile tempFile;
-        tempFile.setSuffix(extension);
+        QTemporaryFile tempFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX") + extension);
         tempFile.setAutoRemove(false);
         tempFile.open();
         m_file = tempFile.fileName();
 
-        KUrl destURL;
+        QUrl destURL;
         destURL.setPath( m_file );
         KIO::JobFlags flags = KIO::DefaultFlags;
         flags |= KIO::Overwrite;
@@ -349,7 +349,7 @@ public:
             // We haven't saved yet, or we did but locally - provide a temp file
             if ( m_file.isEmpty() || !m_bTemp )
             {
-                KTemporaryFile tempFile;
+                QTemporaryFile tempFile;
                 tempFile.setAutoRemove(false);
                 tempFile.open();
                 m_file = tempFile.fileName();
@@ -384,11 +384,7 @@ public:
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
-#if KDE_IS_VERSION(4,4,0)
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
-#else
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
-#endif
+            const QUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
                 openLocalFile();
@@ -423,9 +419,7 @@ public:
         }
         else
         {
-            KUrl dirUrl( m_url );
-            dirUrl.setPath( dirUrl.directory() );
-            ::org::kde::KDirNotify::emitFilesAdded( dirUrl.url() );
+            ::org::kde::KDirNotify::emitFilesAdded(QUrl::fromLocalFile(m_url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
 
             m_uploadJob = 0;
             document->setModified( false );
@@ -433,7 +427,7 @@ public:
             m_saveOk = true;
         }
         m_duringSaveAs = false;
-        m_originalURL = KUrl();
+        m_originalURL = QUrl();
         m_originalFilePath.clear();
         if (m_waitForSave) {
             m_eventLoop.quit();
@@ -490,7 +484,7 @@ KoPart *KoDocument::documentPart() const
     return d->parentPart;
 }
 
-bool KoDocument::exportDocument(const KUrl & _url)
+bool KoDocument::exportDocument(const QUrl &_url)
 {
     bool ret;
 
@@ -504,7 +498,7 @@ bool KoDocument::exportDocument(const KUrl & _url)
     // reimplementing saveFile() (Note: importDocument() and exportDocument()
     // will remain non-virtual).
     //
-    KUrl oldURL = url();
+    QUrl oldURL = url();
     QString oldFile = localFilePath();
 
     bool wasModified = isModified();
@@ -563,11 +557,11 @@ bool KoDocument::saveFile()
                                      entry,
                                      d->parentPart->currentMainwindow())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
-                KUrl backup;
+                QUrl backup;
                 if (d->backupPath.isEmpty())
                     backup = url();
                 else
-                    backup = d->backupPath + '/' + url().fileName();
+                    backup = QUrl::fromLocalFile(d->backupPath + '/' + url().fileName());
                 backup.setPath(backup.path() + QString::fromLatin1("~"));
                 KFileItem item(entry, url());
                 Q_ASSERT(item.name() == url().fileName());
@@ -1011,7 +1005,7 @@ bool KoDocument::saveToStream(QIODevice *dev)
     return nwritten == (int)s.size();
 }
 
-QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url) const
+QString KoDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url) const
 {
     if (!url.isLocalFile()) return mimeType;
 
@@ -1057,9 +1051,9 @@ bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
     _store->pushDirectory();
     // Use the path as the internal url
     if (_path.startsWith(STORE_PROTOCOL))
-        setUrl(KUrl(_path));
+        setUrl(QUrl(_path));
     else // ugly hack to pass a relative URI
-        setUrl(KUrl(INTERNAL_PREFIX +  _path));
+        setUrl(QUrl(INTERNAL_PREFIX +  _path));
 
     // In the current directory we're the king :-)
     if (_store->open("root")) {
@@ -1178,9 +1172,9 @@ QString KoDocument::autoSaveFile(const QString & path) const
         retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(QApplication::applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
-        KUrl url = KUrl::fromPath(path);
+        QUrl url = QUrl::fromLocalFile(path);
         Q_ASSERT(url.isLocalFile());
-        QString dir = url.directory(KUrl::AppendTrailingSlash);
+        QString dir = QFileInfo(url.toLocalFile()).absolutePath();
         QString filename = url.fileName();
         retval = QString("%1.%2-autosave%3").arg(dir).arg(filename).arg(extension);
     }
@@ -1192,7 +1186,7 @@ void KoDocument::setDisregardAutosaveFailure(bool disregardFailure)
     d->disregardAutosaveFailure = disregardFailure;
 }
 
-bool KoDocument::importDocument(const KUrl & _url)
+bool KoDocument::importDocument(const QUrl &_url)
 {
     bool ret;
 
@@ -1216,7 +1210,7 @@ bool KoDocument::importDocument(const KUrl & _url)
 }
 
 
-bool KoDocument::openUrl(const KUrl & _url)
+bool KoDocument::openUrl(const QUrl &_url)
 {
     kDebug(30003) << "url=" << _url.url();
     d->lastErrorMessage.clear();
@@ -1229,7 +1223,7 @@ bool KoDocument::openUrl(const KUrl & _url)
 
     abortLoad();
 
-    KUrl url(_url);
+    QUrl url(_url);
     bool autosaveOpened = false;
     d->isLoading = true;
     if (url.isLocalFile() && d->shouldCheckAutoSaveFile) {
@@ -1366,7 +1360,7 @@ bool KoDocument::openFile()
     d->specialOutputFlag = 0;
     QByteArray _native_format = nativeFormatMimeType();
 
-    KUrl u(localFilePath());
+    QUrl u(localFilePath());
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
@@ -1941,9 +1935,9 @@ bool KoDocument::loadFromStore(KoStore *_store, const QString& url)
     _store->pushDirectory();
     // Store as document URL
     if (url.startsWith(STORE_PROTOCOL)) {
-        setUrl(url);
+        setUrl(QUrl::fromUserInput(url));
     } else {
-        setUrl(KUrl(INTERNAL_PREFIX + url));
+        setUrl(QUrl(INTERNAL_PREFIX + url));
         _store->enterDirectory(url);
     }
 
@@ -2115,7 +2109,7 @@ int KoDocument::queryCloseDia()
 
 QString KoDocument::prettyPathOrUrl() const
 {
-    QString _url( url().pathOrUrl() );
+    QString _url(url().toDisplayString());
 #ifdef Q_WS_WIN
     if (url().isLocalFile()) {
         _url = QDir::convertSeparators(_url);
@@ -2279,9 +2273,9 @@ void KoDocument::setStoreInternal(bool i)
 
 bool KoDocument::hasExternURL() const
 {
-    return    !url().protocol().isEmpty()
-            && url().protocol() != STORE_PROTOCOL
-            && url().protocol() != INTERNAL_PROTOCOL;
+    return    !url().scheme().isEmpty()
+            && url().scheme() != STORE_PROTOCOL
+            && url().scheme() != INTERNAL_PROTOCOL;
 }
 
 static const struct {
@@ -2414,7 +2408,7 @@ int KoDocument::defaultAutoSave()
 }
 
 void KoDocument::resetURL() {
-    setUrl(KUrl());
+    setUrl(QUrl());
     setLocalFilePath(QString());
 }
 
@@ -2439,7 +2433,7 @@ bool KoDocument::isReadWrite() const
     return d->readwrite;
 }
 
-KUrl KoDocument::url() const
+QUrl KoDocument::url() const
 {
     return d->m_url;
 }
@@ -2468,7 +2462,7 @@ bool KoDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KoDocument::saveAs( const KUrl & kurl )
+bool KoDocument::saveAs( const QUrl &kurl )
 {
     if (!kurl.isValid())
     {
@@ -2485,7 +2479,7 @@ bool KoDocument::saveAs( const KUrl & kurl )
         d->m_url = d->m_originalURL;
         d->m_file = d->m_originalFilePath;
         d->m_duringSaveAs = false;
-        d->m_originalURL = KUrl();
+        d->m_originalURL = QUrl();
         d->m_originalFilePath.clear();
     }
 
@@ -2558,7 +2552,7 @@ void KoDocument::abortLoad()
 }
 
 
-void KoDocument::setUrl(const KUrl &url)
+void KoDocument::setUrl(const QUrl &url)
 {
     d->m_url = url;
 }
@@ -2602,7 +2596,7 @@ bool KoDocument::queryClose()
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
                 KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
-                KUrl url = dialog.url();
+                QUrl url = QUrl::fromLocalFile(dialog.filename());
                 if (url.isEmpty())
                     return false;
 
@@ -2631,7 +2625,7 @@ bool KoDocument::saveToUrl()
         Q_ASSERT( !d->m_bTemp );
         d->m_saveOk = true;
         d->m_duringSaveAs = false;
-        d->m_originalURL = KUrl();
+        d->m_originalURL = QUrl();
         d->m_originalFilePath.clear();
         return true; // Nothing to do
     }
@@ -2642,11 +2636,11 @@ bool KoDocument::saveToUrl()
             d->m_uploadJob->kill();
             d->m_uploadJob = 0;
         }
-        KTemporaryFile *tempFile = new KTemporaryFile();
+        QTemporaryFile *tempFile = new QTemporaryFile();
         tempFile->open();
         QString uploadFile = tempFile->fileName();
         delete tempFile;
-        KUrl uploadUrl;
+        QUrl uploadUrl;
         uploadUrl.setPath( uploadFile );
         // Create hardlink
         if (::link(QFile::encodeName(d->m_file), QFile::encodeName(uploadFile)) != 0) {
@@ -2666,7 +2660,7 @@ bool KoDocument::saveToUrl()
 }
 
 
-bool KoDocument::openUrlInternal(const KUrl &url)
+bool KoDocument::openUrlInternal(const QUrl &url)
 {
     if ( !url.isValid() )
         return false;

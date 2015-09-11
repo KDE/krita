@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TestKoShapeRegistry.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <QBuffer>
 #include <QFile>
 #include <QDateTime>
@@ -137,5 +137,4 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
 
-QTEST_KDEMAIN(TestKoShapeRegistry, GUI)
-#include <TestKoShapeRegistry.moc>
+QTEST_MAIN(TestKoShapeRegistry)

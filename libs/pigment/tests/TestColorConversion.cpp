@@ -1,6 +1,8 @@
 #include "TestColorConversion.h"
 #include "KoColorConversions.h"
 
+#include <QTest>
+
 void TestColorConversion::testRGBHSV()
 {
     float r, g, b, h, s, v;
@@ -191,5 +193,4 @@ void TestColorConversion::testRGBHSL()
     QCOMPARE(b, 0.75f);
 }
 
-QTEST_MAIN(TestColorConversion)
-#include <TestColorConversion.moc>
+QTEST_GUILESS_MAIN(TestColorConversion)

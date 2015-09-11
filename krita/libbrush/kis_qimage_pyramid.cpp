@@ -188,9 +188,9 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
     {
         QRect testingRect = roundRect(transform.mapRect(baseBounds));
         if (testingRect != expectedDstRect) {
-            qWarning() << "WARNING: expected and real dab rects do not coincide!";
-            qWarning() << "         expected rect:" << expectedDstRect;
-            qWarning() << "         real rect:    " << testingRect;
+            warnKrita << "WARNING: expected and real dab rects do not coincide!";
+            warnKrita << "         expected rect:" << expectedDstRect;
+            warnKrita << "         real rect:    " << testingRect;
         }
     }
 #endif

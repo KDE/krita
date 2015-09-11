@@ -31,7 +31,7 @@
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -48,7 +48,7 @@
 #define ICON_SIZE 48
 
 DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)
 {
@@ -91,10 +91,10 @@ DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
         m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)));
     }
 
-    m_ui->bnAdd->setIcon(themedIcon("arrow-right"));
+    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
 
-    m_ui->bnRemove->setIcon(themedIcon("arrow-left"));
+    m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->cmbResourceTypes->addItem(i18n("Brushes"), QString("brushes"));
@@ -187,17 +187,17 @@ void DlgCreateBundle::accept()
                 cfg.writeEntry<QString>("BundleWebsite", m_ui->editWebsite->text());
                 cfg.writeEntry<QString>("BundleLicense", m_ui->editLicense->text());
             }
-            KDialog::accept();
+            KoDialog::accept();
         }
     }
 }
 
 void DlgCreateBundle::selectSaveLocation()
 {
-    KoFileDialog dlg(this, KoFileDialog::OpenDirectory, "resourcebundlesavelocation");
-    dlg.setDefaultDir(m_ui->lblSaveLocation->text());
-    dlg.setCaption(i18n("Select a directory to save the bundle"));
-    QString location = dlg.url();
+    KoFileDialog dialog(this, KoFileDialog::OpenDirectory, "resourcebundlesavelocation");
+    dialog.setDefaultDir(m_ui->lblSaveLocation->text());
+    dialog.setCaption(i18n("Select a directory to save the bundle"));
+    QString location = dialog.filename();
     m_ui->lblSaveLocation->setText(location);
 }
 
@@ -315,7 +315,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         foreach(KoResource *res, server->resources()) {
             if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
             //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
-            //qDebug()<<res->filename();
+            //dbgKrita<<res->filename();
                 QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
                 item->setData(Qt::UserRole, res->shortFilename());
 
@@ -378,7 +378,7 @@ void DlgCreateBundle::getPreviewImage()
     dialog.setCaption(i18n("Select file to use as dynamic file layer."));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
-    m_previewImage = dialog.url();
+    m_previewImage = dialog.filename();
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));

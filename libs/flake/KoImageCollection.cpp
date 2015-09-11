@@ -28,7 +28,9 @@
 
 #include <QMap>
 #include <kdebug.h>
-#include <kmimetype.h>
+#include <QMimeDatabase>
+#include <QMimeType>
+
 
 class Q_DECL_HIDDEN KoImageCollection::Private
 {
@@ -88,7 +90,8 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(imagesToSaveIter.value(), 0 , true)->name());
+                    QMimeDatabase db;
+                    const QString mimetype(db.mimeTypeForFile(imagesToSaveIter.value(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(imagesToSaveIter.value(), mimetype);
                 } else {
                     kWarning(30006) << "saving image" << imagesToSaveIter.value() << "failed";
@@ -142,7 +145,7 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
     // the tricky thing with a 'store' is that we need to read the data now
     // as the store will no longer be readable after the loading completed.
     //
-    // The solution we use is to read the data, store it in a KTemporaryFile
+    // The solution we use is to read the data, store it in a QTemporaryFile
     // and read and parse it on demand when the image data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual image data. We need the latter so if someone else gets the same

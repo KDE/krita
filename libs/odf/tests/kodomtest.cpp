@@ -21,6 +21,8 @@
 
 #include "KoXmlReader.h"
 
+#include <QTest>
+
 static QString const KoXmlNS_office("urn:oasis:names:tc:opendocument:xmlns:office:1.0");
 static QString const KoXmlNS_text("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
@@ -119,5 +121,3 @@ void KoDomTest::testKoDom()
 
 
 QTEST_MAIN(KoDomTest)
-
-#include <kodomtest.moc>

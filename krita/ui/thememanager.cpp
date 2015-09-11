@@ -42,7 +42,7 @@
 #include <kmenu.h>
 #include <QMessageBox>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
@@ -50,13 +50,11 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
-#include <ktoolinvocation.h>
-#include <kaction.h>
+#include <QAction>
 
 // Calligra
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #ifdef __APPLE__
 #include <QStyle>
@@ -90,8 +88,6 @@ ThemeManager::ThemeManager(QObject *parent)
     : QObject(parent)
     , d(new ThemeManagerPriv)
 {
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 ThemeManager::~ThemeManager()
@@ -136,11 +132,6 @@ void ThemeManager::slotChangePalette()
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
-
-    /*
-    TODO: with recent KDE4 api, we can use KGlobalSettings::createNewApplicationPalette()
-    d->palette = KGlobalSettings::createNewApplicationPalette(config);
-    */
 
     QPalette palette               = qApp->palette();
     QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
@@ -219,7 +210,7 @@ void ThemeManager::populateThemeMenu()
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    KAction* action = new KAction(defaultThemeName(), d->themeMenuActionGroup);
+    QAction * action = new QAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
@@ -234,7 +225,7 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        action                  = new KAction(name, d->themeMenuActionGroup);
+        action                  = new QAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
         action->setIcon(icon);
         action->setCheckable(true);
@@ -251,26 +242,6 @@ void ThemeManager::populateThemeMenu()
     }
 
     updateCurrentKDEdefaultThemePreview();
-
-#ifdef HAVE_X11
-    d->themeMenuAction->addSeparator();
-    KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
-    config->setIcon(koIcon("preferences-desktop-theme"));
-    d->themeMenuAction->addAction(config);
-
-    connect(config, SIGNAL(triggered()),
-            this, SLOT(slotConfigColors()));
-#endif
-}
-
-void ThemeManager::slotConfigColors()
-{
-    int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
-    if (ret > 0)
-    {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot start Colors Settings panel from KDE Control Center. "
-                                                     "Please check your system..."));
-    }
 }
 
 void ThemeManager::updateCurrentKDEdefaultThemePreview()

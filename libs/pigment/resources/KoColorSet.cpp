@@ -32,7 +32,7 @@
 #include <QPainter>
 
 #include <DebugPigment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
@@ -101,7 +101,7 @@ bool KoColorSet::load()
     QFile file(filename());
     if (file.size() == 0) return false;
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        warnPigment << "Can't open file " << filename();
         return false;
     }
     bool res =  loadFromDevice(&file);
@@ -276,7 +276,7 @@ bool KoColorSet::loadGpl()
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
-        kWarning(30009) << "Illegal Gimp palette file: " << filename();
+        warnPigment << "Illegal Gimp palette file: " << filename();
         return false;
     }
 
@@ -294,7 +294,7 @@ bool KoColorSet::loadGpl()
 
     // Read name
     if (!lines[0].startsWith("GIMP") || !lines[1].startsWith("Name: ")) {
-        kWarning(30009) << "Illegal Gimp palette file: " << filename();
+        warnPigment << "Illegal Gimp palette file: " << filename();
         return false;
     }
 
@@ -503,19 +503,19 @@ bool KoColorSet::loadAco()
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else {
-            kWarning() << "Unsupported colorspace in palette" << filename() << "(" << colorSpace << ")";
+            warnPigment << "Unsupported colorspace in palette" << filename() << "(" << colorSpace << ")";
             skip = true;
         }
         if (version == 2) {
             quint16 v2 = readShort(&buf);
             if (v2 != 2) {
-                kWarning() << "Version 2 block is not version 2" << filename() << "(" << v2 << ")";
+                warnPigment << "Version 2 block is not version 2" << filename() << "(" << v2 << ")";
                 return false;
             }
             quint16 size = readShort(&buf);
             QByteArray ba = buf.read(size);
             if (ba.size() != size) {
-                kWarning() << "Version 2 name block is the wrong size" << filename();
+                warnPigment << "Version 2 name block is the wrong size" << filename();
                 return false;
             }
             e.name = QString::fromUtf8(ba.constData(), ba.size());

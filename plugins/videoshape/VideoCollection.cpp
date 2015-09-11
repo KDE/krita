@@ -29,7 +29,9 @@
 #include <QMap>
 #include <QUrl>
 #include <kdebug.h>
-#include <kmimetype.h>
+#include <QMimeDatabase>
+#include <QMimeType>
+
 
 class VideoCollection::Private
 {
@@ -79,7 +81,8 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(videoData->saveName(), 0 , true)->name());
+                    QMimeDatabase db;
+                    const QString mimetype(db.mimeTypeForFile(videoData->saveName(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(videoData->saveName(), mimetype);
                 } else {
                     kWarning(30006) << "saving video failed";
@@ -119,7 +122,7 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
 {
     // the tricky thing with a 'store' is that we need to read the data now
     // as the store will no longer be readable after the loading completed.
-    // The solution we use is to read the data, store it in a KTemporaryFile
+    // The solution we use is to read the data, store it in a QTemporaryFile
     // and read and parse it on demand when the video data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual video data. We need the latter so if someone else gets the same

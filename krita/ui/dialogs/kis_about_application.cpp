@@ -17,7 +17,9 @@
  */
 #include "kis_about_application.h"
 
-#include <QDebug>
+#include <kis_debug.h>
+
+#include <QStandardPaths>
 #include <QTabWidget>
 #include <QLabel>
 #include <QTextEdit>
@@ -25,15 +27,15 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QApplication>
+#include <QFile>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "../data/splash/splash_screen.xpm"
 #include "kis_splash_screen.h"
-#include "kis_aboutdata.h"
-#include "kis_factory2.h"
 
-KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *parent)
+KisAboutApplication::KisAboutApplication(QWidget *parent)
     : QDialog(parent)
 {
     setWindowTitle(i18n("About Krita"));
@@ -43,7 +45,7 @@ KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *
     QTabWidget *wdg = new QTabWidget;
     vlayout->addWidget(wdg);
 
-    KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm), true);
+    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), true);
     splash->setWindowFlags(Qt::Widget);
     splash->setFixedSize(splash->sizeHint());
     wdg->addTab(splash, i18n("About"));
@@ -58,11 +60,12 @@ KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *
                           "<h1 align=\"center\">Created By</h1></p>"
                           "<p>");
 
-    foreach(const K4AboutPerson &author, aboutData->authors()) {
-        authors.append(author.name());
-        if (!author.task().isEmpty()) {
-            authors.append(" (<i>" + author.task() + "</i>)");
-        }
+    QFile fileDevelopers(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/developers.txt"));
+    Q_ASSERT(fileDevelopers.exists());
+    fileDevelopers.open(QIODevice::ReadOnly);
+
+    foreach(const QByteArray &author, fileDevelopers.readAll().split('\n')) {
+        authors.append(QString::fromUtf8(author));
         authors.append(", ");
     }
     authors.chop(2);
@@ -79,15 +82,18 @@ KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *
                           "<h1 align=\"center\">Backed By</h1>"
                           "<p>");
 
-    foreach(const K4AboutPerson &backer, aboutData->credits()) {
-        if (backer.task() ==  ki18n("Krita 2.9 Kickstarter Backer").toString()) {
-            backers.append(backer.name() + ", ");
-        }
+    QFile fileBackers(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/backers.txt"));
+    Q_ASSERT(fileBackers.exists());
+    fileBackers.open(QIODevice::ReadOnly);
+    foreach(const QByteArray &backer, fileBackers.readAll().split('\n')) {
+        backers.append(QString::fromUtf8(backer));
+        backers.append(", ");
     }
     backers.chop(2);
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     lblKickstarter->setText(backers);
     wdg->addTab(lblKickstarter, i18n("Backers"));
+
 
 
     QTextEdit *lblCredits = new QTextEdit();
@@ -97,15 +103,17 @@ KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *
                           "<body>"
                           "<h1 align=\"center\">Thanks To</h1>"
                           "<p>");
-    foreach(const K4AboutPerson &credit, aboutData->credits()) {
-        if (credit.task() !=  ki18n("Krita 2.9 Kickstarter Backer").toString()) {
-            credits.append(credit.name());
-            if (!credit.task().isEmpty()) {
-                credits.append(" (<i>" + credit.task() + "</i>)");
-            }
-            credits.append(", ");
 
-        }
+    QFile fileCredits(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/credits.txt"));
+    Q_ASSERT(fileCredits.exists());
+    fileCredits.open(QIODevice::ReadOnly);
+
+    foreach(const QByteArray &credit, fileCredits.readAll().split('\n')) {
+        QList<QByteArray> creditSplit = credit.split(':');
+        Q_ASSERT(creditSplit.size() == 2);
+        credits.append(QString::fromUtf8(creditSplit.at(0)));
+        credits.append(" (<i>" + QString::fromUtf8(creditSplit.at(1)) + "</i>)");
+        credits.append(", ");
     }
     credits.chop(2);
     credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));
@@ -135,7 +143,11 @@ KisAboutApplication::KisAboutApplication(const K4AboutData *aboutData, QWidget *
                            "to trial or educational versions of commercial software that will forbid your work in commercial situations.</p>"
                            "<br/><hr/><pre>");
 
-    license.append(aboutData->licenses().first().text());
+    QFile licenseFile(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/LICENSE"));
+    Q_ASSERT(licenseFile.exists());
+    licenseFile.open(QIODevice::ReadOnly);
+    QByteArray ba = licenseFile.readAll();
+    license.append(QString::fromUtf8(ba));
     license.append("</pre></body></html>");
     lblLicense->setText(license);
 

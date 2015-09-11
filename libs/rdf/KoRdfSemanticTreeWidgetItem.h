@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QTreeWidgetItem>
 
-class KAction;
+class QAction;
 class KoCanvasBase;
 
 
@@ -48,7 +48,7 @@ class KORDF_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWid
 protected:
     virtual QString uIObjectName() const = 0;
     void addApplyStylesheetActions(QWidget *parent, QList<QAction *> &actions, KoCanvasBase *host);
-    KAction* createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
+    QAction * createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
 
 public:
     enum {

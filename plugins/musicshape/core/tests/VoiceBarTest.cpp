@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QtTest>
+#include <QTest>
 
 #include "VoiceBar.h"
 #include "Sheet.h"
@@ -33,7 +33,7 @@ class VoiceBarTest : public QObject
     Q_OBJECT
 private:
     MusicCore::VoiceBar* voiceBar;
-private slots:
+private Q_SLOTS:
     void init()
     {
             Sheet* sheet = new Sheet();

@@ -26,15 +26,13 @@
 #include <KoShapeStroke.h>
 #include <KoShapeShadow.h>
 
-#include <kcomponentdata.h>
+#include <QTest>
 
 void TestShapeAt::test()
 {
     MockShape shape1;
     MockShape shape2;
     MockShape shape3;
-
-    KComponentData componentData("TestShapeAt");    // we need an instance for that canvas
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
@@ -132,4 +130,3 @@ void TestShapeAt::testShadow()
 }
 
 QTEST_MAIN(TestShapeAt)
-#include "TestShapeAt.moc"

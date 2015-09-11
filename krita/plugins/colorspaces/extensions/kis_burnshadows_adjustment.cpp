@@ -21,7 +21,7 @@
 #include <KoConfig.h>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
@@ -121,7 +121,7 @@ KoColorTransformation* KisBurnShadowsAdjustmentFactory::createTransformation(con
 {
     KoColorTransformation * adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnShadowsAdjustment::createTransformation";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisBurnShadowsAdjustment::createTransformation";
         return 0;
     }
     if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
@@ -137,7 +137,7 @@ KoColorTransformation* KisBurnShadowsAdjustmentFactory::createTransformation(con
     } else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
         adj = new KisBurnShadowsAdjustment< float, KoRgbTraits < float > >();
     } else {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnShadowsAdjustment::createTransformation";
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisBurnShadowsAdjustment::createTransformation";
         return 0;
     }
     adj->setParameters(parameters);

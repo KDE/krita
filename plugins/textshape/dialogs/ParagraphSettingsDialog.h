@@ -21,7 +21,7 @@
 
 #include <KoTextEditor.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class TextTool;
 class ParagraphGeneral;
@@ -30,7 +30,7 @@ class KoImageCollection;
 class KoUnit;
 
 /// A dialog to show the settings for a paragraph
-class ParagraphSettingsDialog : public KDialog
+class ParagraphSettingsDialog : public KoDialog
 {
     Q_OBJECT
 public:

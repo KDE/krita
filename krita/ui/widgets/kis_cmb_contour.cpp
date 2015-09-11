@@ -17,7 +17,7 @@
  */
 #include "kis_cmb_contour.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisCmbContour::KisCmbContour(QWidget *parent) :
     QComboBox(parent)

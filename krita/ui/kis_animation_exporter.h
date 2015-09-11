@@ -35,7 +35,7 @@ public:
     ~KisAnimationExporterUI();
     void exportSequence(KisDocument *document);
 
-private slots:
+private Q_SLOTS:
     void progress(int currentFrame);
     void cancel();
 
@@ -55,13 +55,13 @@ public:
     void startExport();
     void stopExport();
 
-signals:
+Q_SIGNALS:
     void sigExportProgress(int currentFrame);
 
     // Internal, used for getting back to main thread
     void sigFrameReadyToSave();
 
-private slots:
+private Q_SLOTS:
     void frameReadyToCopy(int time);
     void frameReadyToSave();
 

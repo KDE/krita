@@ -40,7 +40,7 @@
 #include "kis_layer.h"
 #include "kis_node_query_path.h"
 
-struct KisRecordedShapePaintAction::Private {
+struct Q_DECL_HIDDEN KisRecordedShapePaintAction::Private {
     Shape shape;
     QRectF rectangle;
 };

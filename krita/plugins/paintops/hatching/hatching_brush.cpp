@@ -269,7 +269,7 @@ void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneli
 double HatchingBrush::separationAsFunctionOfParameter(double parameter, double separation, int numintervals)
 {
     if ((numintervals < 2) || (numintervals > 7)) {
-        qDebug() << "Fix your function" << numintervals << "<> 2-7" ;
+        dbgKrita << "Fix your function" << numintervals << "<> 2-7" ;
         return separation;
     }
 
@@ -290,11 +290,11 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
             upperlimit = 1;
         if ((parameter >= lowerlimit) && (parameter <= upperlimit)) {
             factor = pow(2.0, (basefactor - currentinterval));
-            //qDebug() << factor;
+            //dbgKrita << factor;
             return (separation * factor);
         }
     }
 
-    qDebug() << "Fix your function" << parameter << ">" << upperlimit ;
+    dbgKrita << "Fix your function" << parameter << ">" << upperlimit ;
     return separation;
 }

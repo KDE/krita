@@ -23,14 +23,14 @@
 #ifndef FONTDIA_H
 #define FONTDIA_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <KoCharacterStyle.h>
 
 class KoTextEditor;
 
 class CharacterGeneral;
 
-class FontDia : public KDialog
+class FontDia : public KoDialog
 {
     Q_OBJECT
 public:

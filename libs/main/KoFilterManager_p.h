@@ -23,8 +23,8 @@ Boston, MA 02110-1301, USA.
 
 #include "KoFilterManager.h"
 
-#include <kurl.h>
-#include <kdialog.h>
+#include <QUrl>
+#include <KoDialog.h>
 #include <KoProgressUpdater.h>
 
 #include <QString>
@@ -47,13 +47,13 @@ public:
 
 };
 
-class KoFilterChooser : public KDialog
+class KoFilterChooser : public KoDialog
 {
     Q_OBJECT
 
 public:
     KoFilterChooser(QWidget *parent, const QStringList &mimeTypes,
-                    const QString &nativeFormat = QString(), const KUrl &url = KUrl());
+                    const QString &nativeFormat = QString(), const QUrl &url = QUrl());
     ~KoFilterChooser();
 
     QString filterSelected();

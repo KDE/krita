@@ -33,7 +33,7 @@
 
 #include <kwindowsystem.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kis_debug.h>
 #include "kis_global.h"
 
@@ -131,7 +131,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     , m_priority(priority)
     , m_alignment(alignment)
 {
-    m_icon = koIcon("calligrakrita").pixmap(256, 256).toImage();
+    m_icon = KisIconUtils::loadIcon("calligrakrita").pixmap(256, 256).toImage();
 
     setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
     setFocusPolicy(Qt::NoFocus);

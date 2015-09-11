@@ -29,7 +29,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
-#include <KoInteractionTool.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
 #include <kis_icon_utils.h>
@@ -43,19 +42,19 @@
 #include "KisImportExportManager.h"
 #include "dialogs/KisShortcutsDialog.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <knotification.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-#include <kmimetype.h>
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 
 #include <QDialog>
 #include <QGraphicsScene>
@@ -66,7 +65,6 @@
 
 #include "KisView.h"
 #include "KisDocument.h"
-#include "kis_factory2.h"
 #include "kis_config.h"
 #include "kis_clipboard.h"
 #include "kis_custom_image_widget.h"
@@ -76,7 +74,8 @@
 #include "kis_animation_cache_populator.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
-
+#include "KisImportExportManager.h"
+#include "KisDocumentEntry.h"
 
 #include "kis_color_manager.h"
 
@@ -119,7 +118,7 @@ public:
 
 void KisPart::Private::loadActions()
 {
-    actionCollection = new KActionCollection(part, KisFactory::componentName());
+    actionCollection = new KActionCollection(part, "krita");
 
     KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
     QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
@@ -145,12 +144,12 @@ void KisPart::Private::loadActions()
                 QString toolTip = i18n(e.attribute("toolTip").toUtf8().constData());
                 QString statusTip = i18n(e.attribute("statusTip").toUtf8().constData());
                 QString iconText = i18n(e.attribute("iconText").toUtf8().constData());
-                KShortcut shortcut = KShortcut(e.attribute("shortcut"));
+                QKeySequence shortcut = QKeySequence(e.attribute("shortcut"));
                 bool isCheckable = e.attribute("isCheckable") == "true" ? true : false;
-                KShortcut defaultShortcut = KShortcut(e.attribute("defaultShortcut"));
+                QKeySequence defaultShortcut = QKeySequence(e.attribute("defaultShortcut"));
 
                 if (name.isEmpty()) {
-                    qDebug() << text << "has no name! From:" << actionDefinition;
+                    dbgKrita << text << "has no name! From:" << actionDefinition;
                 }
 
                 KisAction *action = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
@@ -159,15 +158,14 @@ void KisPart::Private::loadActions()
                 action->setToolTip(toolTip);
                 action->setStatusTip(statusTip);
                 action->setIconText(iconText);
-                action->setShortcut(shortcut, KAction::ActiveShortcut);
+                action->setShortcut(shortcut);
                 action->setCheckable(isCheckable);
-                action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
 
                 if (!actionCollection->action(name)) {
                     actionCollection->addAction(name, action);
                 }
 //                else {
-//                    qDebug() << "duplicate action" << name << action << "from" << collection;
+//                    dbgKrita << "duplicate action" << name << action << "from" << collection;
 //                    delete action;
 //                }
             }
@@ -183,7 +181,7 @@ void KisPart::Private::loadActions()
             continue;
         }
         if (existingShortcuts.contains(action->shortcut())) {
-            qDebug() << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
+            dbgKrita << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
         }
         else {
             existingShortcuts[action->shortcut()] = action;
@@ -253,7 +251,7 @@ void KisPart::updateIdleWatcherConnections()
 
 void KisPart::addDocument(KisDocument *document)
 {
-    //qDebug() << "Adding document to part list" << document;
+    //dbgKrita << "Adding document to part list" << document;
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
@@ -387,14 +385,14 @@ void KisPart::addMainWindow(KisMainWindow *mainWindow)
     if (!mainWindow) return;
     if (d->mainWindows.contains(mainWindow)) return;
 
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
+    dbgUI <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
     d->mainWindows.append(mainWindow);
 
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
 {
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
+    dbgUI <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
     if (mainWindow) {
         d->mainWindows.removeAll(mainWindow);
     }
@@ -437,7 +435,7 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
     return d->animationCachePopulator.data();
 }
 
-void KisPart::openExistingFile(const KUrl& url)
+void KisPart::openExistingFile(const QUrl &url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
@@ -503,7 +501,7 @@ void KisPart::configureShortcuts()
     }
 }
 
-void KisPart::openTemplate(const KUrl& url)
+void KisPart::openTemplate(const QUrl &url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
@@ -513,7 +511,8 @@ void KisPart::openTemplate(const KUrl& url)
     document->undoStack()->clear();
 
     if (ok) {
-        QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+        QMimeDatabase db;
+        QString mimeType = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension).name();
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
@@ -542,7 +541,7 @@ void KisPart::viewDestroyed()
     }
 }
 
-void KisPart::addRecentURLToAllMainWindows(KUrl url)
+void KisPart::addRecentURLToAllMainWindows(QUrl url)
 {
     // Add to recent actions list in our mainWindows
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
@@ -555,14 +554,14 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 
 #ifndef NDEBUG
     if (d->templatesResourcePath.isEmpty())
-        kDebug(30003) << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
+        dbgUI << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
 #endif
 
     if (!alwaysShow) {
-        KConfigGroup cfgGrp(KisFactory::componentData().config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
-            KUrl url(fullTemplateName);
+            QUrl url(fullTemplateName);
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
@@ -573,14 +572,12 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
                 } else {
-                    KUrl templateURL;
                     KDesktopFile f(desktopfile);
-                    templateURL.setPath(KUrl(desktopfile).directory() + '/' + f.readUrl());
-                    fullTemplateName = templateURL.toLocalFile();
+                    fullTemplateName = QFileInfo(desktopfile).absolutePath() + '/' + f.readUrl();
                 }
             }
             if (!fullTemplateName.isEmpty()) {
-                openTemplate(fullTemplateName);
+                openTemplate(QUrl::fromLocalFile(fullTemplateName));
                 return;
             }
         }
@@ -589,9 +586,11 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     if (d->startupWidget) {
         delete d->startupWidget;
     }
-    const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                      KisImportExportManager::Import,
+                                                                      KisDocumentEntry::extraNativeMimeTypes());
 
-    d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templatesResourcePath);
+    d->startupWidget = new KisOpenPane(0, mimeFilter, d->templatesResourcePath);
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
     foreach(const CustomDocumentWidgetItem & item, widgetList) {
@@ -599,8 +598,8 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
         connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
     }
 
-    connect(d->startupWidget, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
-    connect(d->startupWidget, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
+    connect(d->startupWidget, SIGNAL(openExistingFile(const QUrl&)), this, SLOT(openExistingFile(const QUrl&)));
+    connect(d->startupWidget, SIGNAL(openTemplate(const QUrl&)), this, SLOT(openTemplate(const QUrl&)));
 
     d->startupWidget->setParent(mainWindow);
     d->startupWidget->setWindowFlags(Qt::Dialog);
@@ -680,3 +679,5 @@ KisInputManager* KisPart::currentInputManager()
 
 
 #include <KisPart.moc>
+#include <QMimeDatabase>
+#include <QMimeType>

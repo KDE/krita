@@ -25,7 +25,7 @@
 #include <QColor>
 #include <QVector>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include "kis_types.h"
 #include "kis_global.h"
@@ -112,7 +112,7 @@ public:
      * temporary location.
      * @param uri the url of the image
      */
-    KisImageBuilder_Result buildImage(const KUrl& uri);
+    KisImageBuilder_Result buildImage(const QUrl &uri);
     /**
      * Load an image from a QIODevice.
      * @param iod device to access the data
@@ -128,7 +128,7 @@ public:
      * @param interlace set to true if you want to generate an interlaced png
      * @param alpha set to true if you want to save the alpha channel
      */
-    KisImageBuilder_Result buildFile(const KUrl& uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(const QUrl &uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     KisImageBuilder_Result buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     /**
      * Retrieve the constructed image

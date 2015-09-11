@@ -21,7 +21,7 @@
 #include "KoCreateShapesToolFactory.h"
 #include "KoCreateShapesTool.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoCreateShapesToolFactory::KoCreateShapesToolFactory()
         : KoToolFactoryBase(KoCreateShapesTool_ID)

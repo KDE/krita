@@ -29,9 +29,7 @@
 #include <QFile>
 #include <QDir>
 
-#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
-#endif
 
 #include <QFileInfo>
 
@@ -52,21 +50,15 @@ struct StrokeTicket
     QRegion dirtyRegion;
 
     void start() {
-#if QT_VERSION >= 0x040700
         m_timer.start();
-#endif
     }
 
     void jobCompleted() {
-#if QT_VERSION >= 0x040700
         m_jobTime = m_timer.restart();
-#endif
     }
 
     void updateCompleted() {
-#if QT_VERSION >= 0x040700
         m_updateTime = m_timer.restart();
-#endif
     }
 
     qint64 jobTime() const {
@@ -78,14 +70,12 @@ struct StrokeTicket
     }
 
 private:
-#if QT_VERSION >= 0x040700
     QElapsedTimer m_timer;
-#endif
     qint64 m_jobTime;
     qint64 m_updateTime;
 };
 
-struct KisUpdateTimeMonitor::Private
+struct Q_DECL_HIDDEN KisUpdateTimeMonitor::Private
 {
     Private()
         : jobsTime(0),
@@ -109,9 +99,7 @@ struct KisUpdateTimeMonitor::Private
 
     qreal mousePath;
     QPointF lastMousePos;
-#if QT_VERSION >= 0x040700
     QElapsedTimer strokeTime;
-#endif
     KisPaintOpPresetSP preset;
 
     bool loggingEnabled;
@@ -120,7 +108,6 @@ struct KisUpdateTimeMonitor::Private
 KisUpdateTimeMonitor::KisUpdateTimeMonitor()
     : m_d(new Private)
 {
-#if QT_VERSION >= 0x040700
     if (m_d->loggingEnabled) {
         QDir dir;
         if (dir.exists("log")) {
@@ -128,7 +115,6 @@ KisUpdateTimeMonitor::KisUpdateTimeMonitor()
         }
         dir.mkdir("log");
     }
-#endif
 }
 
 KisUpdateTimeMonitor::~KisUpdateTimeMonitor()
@@ -144,7 +130,6 @@ KisUpdateTimeMonitor* KisUpdateTimeMonitor::instance()
 
 void KisUpdateTimeMonitor::startStrokeMeasure()
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     QMutexLocker locker(&m_d->mutex);
@@ -158,12 +143,10 @@ void KisUpdateTimeMonitor::startStrokeMeasure()
     m_d->lastMousePos = QPointF();
     m_d->preset = 0;
     m_d->strokeTime.start();
-#endif
 }
 
 void KisUpdateTimeMonitor::endStrokeMeasure()
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     QMutexLocker locker(&m_d->mutex);
@@ -171,21 +154,17 @@ void KisUpdateTimeMonitor::endStrokeMeasure()
     if(m_d->numTickets) {
         printValues();
     }
-#endif
 }
 
 void KisUpdateTimeMonitor::reportPaintOpPreset(KisPaintOpPresetSP preset)
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     m_d->preset = preset;
-#endif
 }
 
 void KisUpdateTimeMonitor::reportMouseMove(const QPointF &pos)
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     QMutexLocker locker(&m_d->mutex);
@@ -196,12 +175,10 @@ void KisUpdateTimeMonitor::reportMouseMove(const QPointF &pos)
     }
 
     m_d->lastMousePos = pos;
-#endif
 }
 
 void KisUpdateTimeMonitor::printValues()
 {
-#if QT_VERSION >= 0x040700
     qint64 strokeTime = m_d->strokeTime.elapsed();
     qreal responseTime = qreal(m_d->responseTime) / m_d->numTickets;
     qreal nonUpdateTime = qreal(m_d->jobsTime) / m_d->numTickets;
@@ -225,12 +202,10 @@ void KisUpdateTimeMonitor::printValues()
            << nonUpdateTime << "\t"
            << responseTime << "\n";
     logFile.close();
-#endif
 }
 
 void KisUpdateTimeMonitor::reportJobStarted(void *key)
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     QMutexLocker locker(&m_d->mutex);
@@ -239,12 +214,10 @@ void KisUpdateTimeMonitor::reportJobStarted(void *key)
     ticket->start();
 
     m_d->preliminaryTickets.insert(key, ticket);
-#endif
 }
 
 void KisUpdateTimeMonitor::reportJobFinished(void *key, const QVector<QRect> &rects)
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     QMutexLocker locker(&m_d->mutex);
@@ -256,12 +229,10 @@ void KisUpdateTimeMonitor::reportJobFinished(void *key, const QVector<QRect> &re
         ticket->dirtyRegion += rect;
     }
     m_d->finishedTickets.insert(ticket);
-#endif
 }
 
 void KisUpdateTimeMonitor::reportUpdateFinished(const QRect &rect)
 {
-#if QT_VERSION >= 0x040700
     if (!m_d->loggingEnabled) return;
 
     QMutexLocker locker(&m_d->mutex);
@@ -279,5 +250,4 @@ void KisUpdateTimeMonitor::reportUpdateFinished(const QRect &rect)
         }
     }
     m_d->numUpdates++;
-#endif
 }

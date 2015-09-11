@@ -21,7 +21,7 @@
 #include "KoShapeLockCommand.h"
 #include "KoShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent)
         : KUndo2Command(parent)

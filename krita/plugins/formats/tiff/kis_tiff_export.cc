@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>
@@ -100,7 +100,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     KisImageSP image;

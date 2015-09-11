@@ -30,11 +30,11 @@
 #include <QLabel>
 #include <QPointer>
 #include <QApplication>
+#include <QFontDatabase>
 
 #include <kglobal.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 #include "kis_config.h"
@@ -118,10 +118,11 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
 {
     setObjectName("KisToolOptionsPopup");
 
-    KConfigGroup group(KGlobal::config(), "GUI");
-    d->smallFont  = KGlobalSettings::generalFont();
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+
+    d->smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = group.readEntry("palettefontsize", d->smallFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
     d->smallFont.setPointSizeF(pointSize);
     setFont(d->smallFont);
 

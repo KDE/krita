@@ -22,7 +22,7 @@
 #include <QDomElement>
 #include <QImage>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>

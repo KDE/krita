@@ -134,7 +134,7 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="KIntSpinBox" name="intNumInputLeftOpacity">
+      <widget class="QSpinBox" name="intNumInputLeftOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -229,7 +229,7 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="KIntSpinBox" name="intNumInputRightOpacity">
+      <widget class="QSpinBox" name="intNumInputRightOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
          <horstretch>0</horstretch>
@@ -366,7 +366,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KIntSpinBox</class>
+   <class>QSpinBox</class>
    <extends>QSpinBox</extends>
    <header>knuminput.h</header>
    <container>1</container>

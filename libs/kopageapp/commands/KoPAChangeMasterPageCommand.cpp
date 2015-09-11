@@ -19,7 +19,7 @@
 
 #include "KoPAChangeMasterPageCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoPAPage.h"
 #include "KoPADocument.h"

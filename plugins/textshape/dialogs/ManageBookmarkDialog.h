@@ -24,7 +24,7 @@
 #include <ui_ManageBookmark.h>
 
 #include <QWidget>
-#include <KDialog>
+#include <KoDialog.h>
 
 class ManageBookmark : public QWidget
 {
@@ -52,7 +52,7 @@ private:
     KoTextEditor *m_editor;
 };
 
-class ManageBookmarkDialog : public KDialog
+class ManageBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:

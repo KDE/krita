@@ -19,7 +19,7 @@
 
 #include "TestKoChannelInfo.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QDomElement>
 
@@ -57,7 +57,5 @@ void TestKoChannelInfo::testdisplayOrderSorted()
     QCOMPARE(sortedChannels[2]->displayPosition(), 2);
     QCOMPARE(sortedChannels[3]->displayPosition(), 3);
 }
-    
-QTEST_KDEMAIN(TestKoChannelInfo, NoGUI)
-#include <TestKoChannelInfo.moc>
 
+QTEST_GUILESS_MAIN(TestKoChannelInfo)

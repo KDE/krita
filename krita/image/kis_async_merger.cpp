@@ -19,7 +19,7 @@
 #include "kis_async_merger.h"
 
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QBitArray>
 
 #include <KoChannelInfo.h>
@@ -53,7 +53,7 @@
 
 #ifdef DEBUG_MERGER
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)            \
-    qDebug() << message << type << ":" << leaf->node()->name() << rect
+    dbgKrita << message << type << ":" << leaf->node()->name() << rect
 #else
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)
 #endif

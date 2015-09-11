@@ -443,11 +443,11 @@ private:
     {
         KisConvolutionWorkerFFTLock::fftwMutex.lock();
         QString filename(QDir::homePath() + "/log_" + f + ".txt");
-        qDebug() << "Log File Name: " << filename;
+        dbgKrita << "Log File Name: " << filename;
         QFile file (filename);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
         {
-            qDebug() << "Failed";
+            dbgKrita << "Failed";
             KisConvolutionWorkerFFTLock::fftwMutex.unlock();
             return;
         }

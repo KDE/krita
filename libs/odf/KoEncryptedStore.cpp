@@ -33,13 +33,13 @@
 #include <kpassworddialog.h>
 #include <knewpassworddialog.h>
 #include <kwallet.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfilterdev.h>
 #include <kmessage.h>
 #include <kmessagebox.h>
 #include <kzip.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kdebug.h>
 
 struct KoEncryptedStore_EncryptionData {
@@ -103,7 +103,7 @@ KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &
     init(appIdentification);
 }
 
-KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename,
+KoEncryptedStore::KoEncryptedStore(QWidget* window, const QUrl &url, const QString & filename,
                                    Mode mode,
                                    const QByteArray & appIdentification, bool writeMimetype)
     : KoStore(mode, writeMimetype)
@@ -124,7 +124,7 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
         m_pZip = new KZip(d->localFileName);
     } else {
         d->fileMode = KoStorePrivate::RemoteWrite;
-        m_tempFile = new KTemporaryFile();
+        m_tempFile = new QTemporaryFile();
         if (!m_tempFile->open()) {
             d->good = false;
         } else {
@@ -153,8 +153,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
             // Write identification
             if (d->writeMimetype) {
                 m_pZip->setCompression(KZip::NoCompression);
-                (void)m_pZip->writeFile(QLatin1String("mimetype"), QString(), QString(),
-                                        appIdentification.data(), appIdentification.length());
+                (void)m_pZip->writeFile(QLatin1String("mimetype"), appIdentification);
             }
             // FIXME: Hmm, seems to be a bug here since this is
             //        inconsistent with the code in openWrite():
@@ -438,8 +437,7 @@ bool KoEncryptedStore::doFinalize()
             }
             m_manifestBuffer = document.toByteArray();
             m_pZip->setCompression(KZip::DeflateCompression);
-            if (!m_pZip->writeFile(QLatin1String(MANIFEST_FILE), QString(), QString(),
-                                   m_manifestBuffer.constData(), m_manifestBuffer.size())) {
+            if (!m_pZip->writeFile(QLatin1String(MANIFEST_FILE), m_manifestBuffer)) {
                 KMessage::message(KMessage::Error, i18n("The manifest file cannot be written. The document will remain unreadable. Please try and save the document again to prevent losing your work."));
                 m_pZip->close();
                 return false;

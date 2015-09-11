@@ -41,7 +41,7 @@ struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;
-class KUrl;
+class QUrl;
 
 /**
  * @brief Main window for a Calligra application
@@ -119,7 +119,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL(const KUrl& url);
+    void addRecentURL(const QUrl &url);
 
     /**
      * Load the desired document and show it.
@@ -127,14 +127,14 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const KUrl & url);
+    bool openDocument(const QUrl &url);
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoPart *newPart, const KUrl & url);
+    bool openDocument(KoPart *newPart, const QUrl &url);
 
     /**
      * Reloads the recent documents list.
@@ -372,7 +372,7 @@ private:
      */
     bool queryClose();
 
-    bool openDocumentInternal(const KUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()

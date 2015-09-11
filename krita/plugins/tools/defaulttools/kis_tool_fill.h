@@ -24,6 +24,7 @@
 #include "kis_tool_paint.h"
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <QPoint>
 #include <kconfig.h>
 #include <kconfiggroup.h>

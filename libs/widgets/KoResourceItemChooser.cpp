@@ -39,7 +39,7 @@
 #include <QToolButton>
 #include <QWheelEvent>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #ifdef GHNS
 #include <attica/version.h>
@@ -227,7 +227,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setNameFilter(filter);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
-        QString filename = dialog.url();
+        QString filename = dialog.filename();
 
         d->model->importResourceFile(filename);
     } else if (button == Button_Remove) {
@@ -277,7 +277,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
             KoResource *resource = resourceFromModelIndex(index);
             if (resource) {
                 KNS3::UploadDialog dialog(d->knsrcFile, this);
-                dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
+                dialog.setUploadFile(QUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
                 dialog.exec();
             }
@@ -593,7 +593,7 @@ bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
 {
     if (d->synced && event->type() == QEvent::Wheel) {
         KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
-        QWheelEvent *qwheel = dynamic_cast<QWheelEvent *>(event);
+        QWheelEvent *qwheel = static_cast<QWheelEvent *>(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
 
             int degrees = qwheel->delta() / 8;
@@ -624,6 +624,3 @@ void KoResourceItemChooser::updateView()
         baseLengthChanged(chooserSync->baseLength());
     }
 }
-
-
-#include <KoResourceItemChooser.moc>

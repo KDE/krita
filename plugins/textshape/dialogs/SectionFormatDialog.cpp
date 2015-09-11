@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,55 +20,108 @@
 #include "SectionFormatDialog.h"
 
 #include <KoTextDocument.h>
+#include <KoSectionModel.h>
 #include <KoSection.h>
+#include <KoTextEditor.h>
 
+#include <QIdentityProxyModel>
 #include <QToolTip>
 #include <KColorScheme>
+#include <klocalizedstring.h>
 
-#include <klocale.h>
+class SectionFormatDialog::ProxyModel : public QIdentityProxyModel
+{
+public:
+    ProxyModel(KoSectionModel *model, QObject *parent = 0)
+        : QIdentityProxyModel(parent)
+    {
+        setSourceModel(model);
+    }
+
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const
+    {
+        Q_UNUSED(parent);
+        return 1; // We have one column with "Name of section"
+    }
+
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const
+    {
+        if (orientation != Qt::Horizontal || section != 0) {
+            return QVariant();
+        }
+
+        if (role == Qt::DisplayRole) {
+            return i18n("Section name");
+        }
+        return QVariant();
+    }
+
+    virtual QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const
+    {
+        if (!proxyIndex.isValid() || proxyIndex.column() != 0) {
+            return QVariant();
+        }
+
+        if (role == Qt::DisplayRole) {
+            KoSection *ptr = getSectionByIndex(proxyIndex);
+            return ptr->name();
+        }
+        return QVariant();
+    }
+
+    KoSection *getSectionByIndex(const QModelIndex &idx) const
+    {
+        return sourceModel()->data(
+            mapToSource(idx),
+            KoSectionModel::PointerRole
+        ).value<KoSection *>();
+    }
+
+private:
+    // Make it private. It is intented to be used only with KoSectionModel that is passed through constructor
+    virtual void setSourceModel(QAbstractItemModel *sourceModel)
+    {
+        QAbstractProxyModel::setSourceModel(sourceModel);
+    }
+};
 
 class SectionFormatDialog::SectionNameValidator : public QValidator
 {
 public:
-    SectionNameValidator(QObject *parent, KoSectionManager *sectionManager, KoSection *section)
-    : QValidator(parent)
-    , m_sectionManager(sectionManager)
-    , m_section(section)
+    SectionNameValidator(QObject *parent, KoSectionModel *sectionManager, KoSection *section)
+        : QValidator(parent)
+        , m_sectionModel(sectionManager)
+        , m_section(section)
     {
     }
 
     virtual State validate(QString &input, int &pos) const
     {
         Q_UNUSED(pos);
-        if (m_section->name() == input || m_sectionManager->isValidNewName(input)) {
+        if (m_section->name() == input || m_sectionModel->isValidNewName(input)) {
             return QValidator::Acceptable;
         }
         return QValidator::Intermediate;
     }
 
 private:
-    KoSectionManager *m_sectionManager;
+    KoSectionModel *m_sectionModel;
     KoSection *m_section;
 };
 
 SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
-    : KDialog(parent)
+    : KoDialog(parent)
     , m_editor(editor)
 {
     setCaption(i18n("Configure sections"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
     showButtonSeparator(true);
     QWidget *form = new QWidget;
     m_widget.setupUi(form);
     setMainWidget(form);
 
-    m_sectionManager = KoTextDocument(editor->document()).sectionManager();
-    QStandardItemModel *model = m_sectionManager->update(true);
-    model->setColumnCount(1);
-    QStringList header;
-    header << i18n("Section name");
-    model->setHorizontalHeaderLabels(header);
-    m_widget.sectionTree->setModel(model);
+    m_sectionModel = KoTextDocument(editor->document()).sectionModel();
+    m_widget.sectionTree->setModel(new ProxyModel(m_sectionModel, this));
     m_widget.sectionTree->expandAll();
 
     m_widget.sectionNameLineEdit->setEnabled(false);
@@ -83,7 +136,6 @@ SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
 void SectionFormatDialog::sectionNameChanged()
 {
     m_editor->renameSection(sectionFromModel(m_curIdx), m_widget.sectionNameLineEdit->text());
-    m_widget.sectionTree->model()->setData(m_curIdx, m_widget.sectionNameLineEdit->text(), Qt::DisplayRole);
     m_widget.sectionNameLineEdit->setModified(false); // value is set to line edit isn't modified (has new default value)
 }
 
@@ -96,7 +148,7 @@ void SectionFormatDialog::sectionSelected(const QModelIndex &idx)
     m_widget.sectionNameLineEdit->setEnabled(true);
     m_widget.sectionNameLineEdit->setText(curSection->name());
     m_widget.sectionNameLineEdit->setValidator(
-        new SectionNameValidator(this, m_sectionManager, curSection));
+        new SectionNameValidator(this, m_sectionModel, curSection));
 }
 
 void SectionFormatDialog::updateTreeState()
@@ -126,7 +178,5 @@ void SectionFormatDialog::updateTreeState()
 
 inline KoSection* SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
 {
-    return m_widget.sectionTree->model()->itemData(idx)[Qt::UserRole + 1].value<KoSection *>();
+    return dynamic_cast<ProxyModel *>(m_widget.sectionTree->model())->getSectionByIndex(idx);
 }
-
-#include <SectionFormatDialog.moc>

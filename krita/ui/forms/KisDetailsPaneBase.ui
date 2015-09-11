@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item row="5" column="0" colspan="3">
-        <widget class="KTextBrowser" name="m_detailsLabel">
+        <widget class="QTextBrowser" name="m_detailsLabel">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -177,11 +177,6 @@
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KTextBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>ktextbrowser.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -20,10 +20,10 @@
 #include "KoToolBoxButton_p.h"
 
 #include <KoToolManager.h>
-#include <kicon.h>
-#include <klocale.h>
-#include <kshortcut.h>
-
+#include <QIcon>
+#include <klocalizedstring.h>
+#include <QKeySequence>
+#include <KoIconUtils.h>
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     : QToolButton(parent)
@@ -33,7 +33,7 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     // ensure same L&F
     setCheckable(true);
     setAutoRaise(true);
-    setIcon(KIcon(m_toolAction->iconName()));
+    setIcon(KoIconUtils::themedIcon(m_toolAction->iconName()));
 
     setDataFromToolAction();
 
@@ -45,7 +45,7 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
 void KoToolBoxButton::setDataFromToolAction()
 {
     const QString plainToolTip = m_toolAction->toolTip();
-    const KShortcut shortcut = m_toolAction->shortcut();
+    const QKeySequence shortcut = m_toolAction->shortcut();
     const QString toolTip =
         shortcut.isEmpty() ?
             i18nc("@info:tooltip", "%1", plainToolTip) :

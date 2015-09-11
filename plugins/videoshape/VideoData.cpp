@@ -30,10 +30,11 @@
 
 #include <kdebug.h>
 
+#include <QApplication>
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <QPainter>
 #include <QAtomicInt>
 #include <QFile>
@@ -49,7 +50,7 @@ public:
     void setSuffix(const QString &fileName);
 
     QAtomicInt refCount;
-    KTemporaryFile *temporaryFile;
+    QTemporaryFile *temporaryFile;
     /**
      * a unique key of the video data
      */
@@ -306,9 +307,8 @@ void VideoData::copyToTemporary(QIODevice &device)
 {
     delete d;
     d = new VideoDataPrivate();
-    d->temporaryFile = new KTemporaryFile();
+    d->temporaryFile = new QTemporaryFile(QLatin1String("KoVideoData/") + qAppName() + QLatin1String("_XXXXXX") );
     d->refCount.ref();
-    d->temporaryFile->setPrefix("KoVideoData");
     if (!d->temporaryFile->open()) {
         kWarning(30006) << "open temporary file for writing failed";
         d->errorCode = VideoData::StorageFailed;
@@ -368,5 +368,3 @@ qint64 VideoData::key()
 {
     return d->key;
 }
-
-#include <VideoData.moc>

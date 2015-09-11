@@ -97,5 +97,3 @@ void DummyDocumentLayout::resizeInlineObject(QTextInlineObject , int , const QTe
 {
 }
 */
-
-#include <DummyDocumentLayout.moc>

@@ -40,6 +40,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include <QTest>
+
 Attribute::Attribute(const QDomElement& element)
     : m_references()
 {
@@ -720,4 +722,3 @@ void TestOpenDocumentStyle::testCharacterStyle()
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)
-#include <TestOpenDocumentStyle.moc>

@@ -17,7 +17,7 @@
  */
 
 #include "kis_color_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "ui_wdgcoloroptions.h"
 

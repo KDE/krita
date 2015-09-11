@@ -62,7 +62,7 @@ public:
     int row;
 };
 
-#include <QDebug>
+#include <kis_debug.h>
 inline QDebug operator<<(QDebug dbg, const KisFillInterval& i)
 {
 #ifndef NODEBUG

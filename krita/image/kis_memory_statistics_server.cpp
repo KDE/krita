@@ -27,7 +27,7 @@
 #include "tiles3/kis_tile_data_store.h"
 
 
-struct KisMemoryStatisticsServer::Private
+struct Q_DECL_HIDDEN KisMemoryStatisticsServer::Private
 {
     Private()
         : updateCompressor(1000 /* ms */, KisSignalCompressor::POSTPONE)

@@ -19,16 +19,17 @@
 
 #include "kritacreator.h"
 
-// Calligra
-#include <KoStore.h>
+#include <kzip.h>
 
 // Qt
 #include <QPainter>
-
+#include <QImage>
+#include <QIODevice>
+#include <QFile>
 
 extern "C"
 {
-    KDE_EXPORT ThumbCreator *new_creator()
+    Q_DECL_EXPORT ThumbCreator *new_creator()
     {
         return new KritaCreator;
     }
@@ -47,53 +48,58 @@ bool KritaCreator::create(const QString &path, int width, int height, QImage &im
     // for now just rely on the rendered data inside the file,
     // do not load Krita code for rendering ourselves, as that currently (2.9)
     // means loading all plugins, resources etc.
-    KoStore *store = KoStore::createStore(path, KoStore::Read);
-
-    if (!store) {
-        return false;
-    }
+    KZip zip(path);
+    if (!zip.open(QIODevice::ReadOnly)) return false;
 
     QImage thumbnail;
     bool biggerSizeNeeded = true;
 
     // first check if normal thumbnail is good enough
-    if (// ORA thumbnail?
-        store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
-        // KRA thumbnail?
-        store->open(QLatin1String("preview.png"))) {
-
-        const QByteArray thumbnailData = store->read(store->size());
-        store->close();
-
-        if (thumbnail.loadFromData(thumbnailData)) {
-            biggerSizeNeeded = (thumbnail.width() < width || thumbnail.height() < height);
-        }
+    // ORA thumbnail?
+    const KArchiveEntry *entry = zip.directory()->entry(QLatin1String("Thumbnails/thumbnail.png"));
+    // KRA thumbnail
+    if (!entry || !entry->isFile()) {
+        entry = zip.directory()->entry(QLatin1String("preview.png"));
     }
 
-    // for bigger sizes see if full rendered image is available, both ORA & KRA
-    if (biggerSizeNeeded && store->open(QLatin1String("mergedimage.png"))) {
-        const QByteArray mergedImageData = store->read(store->size());
+    if (!entry || !entry->isFile()) {
+        return false;
+    }
 
-        QImage mergedImage;
-        if (mergedImage.loadFromData(mergedImageData)) {
-            thumbnail = mergedImage.scaled(width, height,
+    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+    bool thumbLoaded = thumbnail.loadFromData(fileZipEntry->data(), "PNG");
+    if (thumbLoaded) {
+        biggerSizeNeeded = (thumbnail.width() < width || thumbnail.height() < height);
+    }
+
+    if (biggerSizeNeeded || !thumbLoaded) {
+        entry = zip.directory()->entry(QLatin1String("mergedimage.png"));
+    }
+
+    if (entry && entry->isFile()) {
+        fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+        thumbLoaded = thumbnail.loadFromData(fileZipEntry->data(), "PNG");
+        if (thumbLoaded) {
+            thumbnail = thumbnail.scaled(width, height,
                                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
+        else {
+            return false;
+        }
     }
 
-    const bool createdThumbnail = !thumbnail.isNull();
-    if (createdThumbnail) {
+    if (!thumbnail.isNull()) {
         // transparent areas put a white background behind the thumbnail
         // (or better checkerboard?)
         image = QImage(thumbnail.size(), QImage::Format_RGB32);
         image.fill(QColor(Qt::white).rgb());
         QPainter p(&image);
         p.drawImage(QPoint(0, 0), thumbnail);
+
+        return true;
     }
 
-    delete store;
-
-    return createdThumbnail;
+    return false;
 }
 
 ThumbCreator::Flags KritaCreator::flags() const

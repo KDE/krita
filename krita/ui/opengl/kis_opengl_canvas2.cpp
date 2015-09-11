@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006-2013
+ * Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +32,7 @@
 #include <QPoint>
 #include <QPainter>
 #include <QMatrix>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QThread>
 #include <QMessageBox>
 #include <QFile>
@@ -61,6 +62,7 @@
 #include "opengl/kis_opengl_canvas2_p.h"
 #include "kis_coordinates_converter.h"
 #include "canvas/kis_display_filter.h"
+#include "canvas/kis_display_color_converter.h"
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -159,7 +161,7 @@ public:
 
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
@@ -172,8 +174,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
-    d->openGLImageTextures = imageTextures;
-
+    d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(image,
+                                                                      colorConverter->monitorProfile(),
+                                                                      colorConverter->renderingIntent(),
+                                                                      colorConverter->conversionFlags());
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -182,6 +186,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+
+    setDisplayFilterImpl(colorConverter->displayFilter(), true);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
@@ -193,8 +199,19 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
     delete d;
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
+void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter) {
+    setDisplayFilterImpl(displayFilter, false);
+}
+
+void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing)
 {
+
+    bool needsInternalColorManagement =
+        !displayFilter || displayFilter->useInternalColorManagement();
+
+    bool needsFullRefresh = d->openGLImageTextures->
+        setInternalColorManagementActive(needsInternalColorManagement);
+
     d->displayFilter = displayFilter;
     if (d->canvasInitialized) {
         d->canvasInitialized = false;
@@ -202,7 +219,22 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
         initializeCheckerShader();
         d->canvasInitialized = true;
     }
+
+    if (!initializing && needsFullRefresh) {
+        canvas()->startUpdateInPatches(canvas()->image()->bounds());
+    }
+    else if (!initializing)  {
+        canvas()->updateCanvas();
+    }
 }
+
+void KisOpenGLCanvas2::disconnectCurrentCanvas()
+{
+    Q_ASSERT(d->openGLImageTextures);
+    d->openGLImageTextures->disconnect(canvas());
+    d->openGLImageTextures->disconnect(canvas()->image());
+}
+
 
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
@@ -215,30 +247,30 @@ void KisOpenGLCanvas2::initializeGL()
 //    KisConfig cfg;
 //    if (cfg.disableVSync()) {
 //        if (!VSyncWorkaround::tryDisableVSync(this)) {
-//            qWarning();
-//            qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
-//            qWarning() << "WARNING: It means either your hardware or driver doesn't support it,";
-//            qWarning() << "WARNING: or we just don't know about this hardware. Please report us a bug";
-//            qWarning() << "WARNING: with the output of \'glxinfo\' for your card.";
-//            qWarning();
-//            qWarning() << "WARNING: Trying to workaround it by disabling Double Buffering.";
-//            qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
-//            qWarning() << "WARNING: affect the quality of the final image, though.";
-//            qWarning();
+//            warnKrita;
+//            warnKrita << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+//            warnKrita << "WARNING: It means either your hardware or driver doesn't support it,";
+//            warnKrita << "WARNING: or we just don't know about this hardware. Please report us a bug";
+//            warnKrita << "WARNING: with the output of \'glxinfo\' for your card.";
+//            warnKrita;
+//            warnKrita << "WARNING: Trying to workaround it by disabling Double Buffering.";
+//            warnKrita << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+//            warnKrita << "WARNING: affect the quality of the final image, though.";
+//            warnKrita;
 
 //            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
-//                qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
-//                qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
-//                qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
-//                qCritical();
+//                errKrita << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+//                errKrita << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+//                errKrita << "CRITICAL: For an optimal experience, please disable OpenGL";
+//                errKrita;
 //            }
 //        }
 //    }
 
     KisConfig cfg;
-    qDebug() << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    dbgKrita << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
     int glVersion = KisOpenGL::initializeContext(context());
-    qDebug() << "OpenGL: Version found" << glVersion;
+    dbgKrita << "OpenGL: Version found" << glVersion;
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
@@ -475,7 +507,7 @@ void KisOpenGLCanvas2::drawImage()
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
             if (!tile) {
-                qWarning() << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                warnKrita << "OpenGL: Trying to paint texture tile but it has not been created yet.";
                 continue;
             }
 
@@ -552,7 +584,7 @@ void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString 
     KisConfig cfg;
 
     if (cfg.useVerboseOpenGLDebugOutput()) {
-        qDebug() << "GL-log:" << context << log;
+        dbgKrita << "GL-log:" << context << log;
     }
 
     if (result) return;
@@ -728,9 +760,50 @@ void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
     drawDecorations(*painter, boundingRect);
 }
 
+
+void KisOpenGLCanvas2::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+{
+    d->openGLImageTextures->setMonitorProfile(colorConverter->monitorProfile(),
+                                              colorConverter->renderingIntent(),
+                                              colorConverter->conversionFlags());
+}
+
+void KisOpenGLCanvas2::channelSelectionChanged(QBitArray channelFlags)
+{
+    d->openGLImageTextures->setChannelFlags(channelFlags);
+}
+
+
+void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
+{
+    d->openGLImageTextures->slotImageSizeChanged(w, h);
+}
+
+KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)
+{
+    d->openGLImageTextures->setChannelFlags(channelFlags);
+    return d->openGLImageTextures->updateCache(rc);
+}
+
+
+QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
+{
+    // See KisQPainterCanvas::updateCanvasProjection for more info
+    bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+    if (isOpenGLUpdateInfo) {
+        d->openGLImageTextures->recalculateCache(info);
+    }
+    return QRect(); // FIXME: Implement dirty rect for OpenGL
+}
+
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
+}
+
+KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const
+{
+    return d->openGLImageTextures;
 }
 
 #endif // HAVE_OPENGL

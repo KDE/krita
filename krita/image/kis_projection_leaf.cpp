@@ -31,7 +31,7 @@
 #include "kis_async_merger.h"
 
 
-struct KisProjectionLeaf::Private
+struct Q_DECL_HIDDEN KisProjectionLeaf::Private
 {
     Private(KisNode *_node) : node(_node) {}
 

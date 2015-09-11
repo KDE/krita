@@ -19,7 +19,7 @@
 
 #include "kis_pressure_spacing_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 const QString ISOTROPIC_SPACING = "Spacing/Isotropic";
 

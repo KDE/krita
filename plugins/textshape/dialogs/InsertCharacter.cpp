@@ -18,7 +18,7 @@
  */
 #include "InsertCharacter.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcharselect.h>
 
 #include <QMainWindow>
@@ -60,5 +60,3 @@ void InsertCharacter::insertCharacter()
 {
     emit insertCharacter(QString(m_charSelector->currentChar()));
 }
-
-#include <InsertCharacter.moc>

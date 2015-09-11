@@ -23,7 +23,7 @@
 
 #include <QWidget>
 #include <QString>
-#include <kurl.h>
+#include <QUrl>
 #include <KoFileDialog.h>
 
 
@@ -49,8 +49,8 @@ public:
 
     void setStartDir(const QString &path);
 
-    KUrl url() const;
-    void setUrl(const KUrl &url);
+    QUrl url() const;
+    void setUrl(const QUrl &url);
 
     void setMode(KoFileDialog::DialogType mode);
     KoFileDialog::DialogType mode() const;
@@ -73,7 +73,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void textChanged(const QString &fileName);
-    void urlSelected(const KUrl &url);
+    void urlSelected(const QUrl &url);
 
 private:
     QString fileName() const;

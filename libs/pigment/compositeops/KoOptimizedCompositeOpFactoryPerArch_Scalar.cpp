@@ -41,6 +41,14 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<Vc::S
 }
 
 template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpOver<KoRgbF32Traits>(param);
+}
+
+template<>
 KoReportCurrentArch::ReturnType
 KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
 {

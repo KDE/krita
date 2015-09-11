@@ -21,11 +21,10 @@
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
-#include <KoServiceLocator.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>

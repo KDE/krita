@@ -29,15 +29,15 @@
 #include <QString>
 #include <QList>
 #include <QMap>
-#include <QDebug>
+#include <kis_debug.h>
 #include <kundo2command.h>
 #include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
-#include <ktemporaryfile.h>
-#include <kdebug.h>
+#include <QTemporaryFile>
+#include <kis_debug.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -273,7 +273,7 @@ void KisShapeLayer::setParent(KoShapeContainer *parent)
 
 QIcon KisShapeLayer::icon() const
 {
-    return themedIcon("bookmarks");
+    return KisIconUtils::loadIcon("bookmarks");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const
@@ -382,7 +382,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
-    KTemporaryFile masterStyles;
+    QTemporaryFile masterStyles;
     masterStyles.open();
     KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
 
@@ -404,7 +404,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     masterPage.addAttribute("style:page-layout-name", layoutName);
     mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
 
-    KTemporaryFile contentTmpFile;
+    QTemporaryFile contentTmpFile;
     contentTmpFile.open();
     KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
 
@@ -478,10 +478,10 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-    //    qDebug() <<"Start loading OASIS document..." << contents.text();
-    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
 
@@ -529,7 +529,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         // FIXME: investigate what is this
         //        KoShapeLayer * l = new KoShapeLayer();
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load vector layer!";
+            dbgKrita << "Could not load vector layer!";
             return false;
         }
     }

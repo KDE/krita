@@ -18,7 +18,7 @@
 
 #include "kis_take_all_shapes_command.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_shape_selection.h"
 #include <kis_image.h>
 

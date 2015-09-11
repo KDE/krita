@@ -27,7 +27,7 @@
 #include "KoHashGenerator.h"
 #include "KoHashGeneratorProvider.h"
 
-struct KoResource::Private {
+struct Q_DECL_HIDDEN KoResource::Private {
     QString name;
     QString filename;
     bool valid;
@@ -57,6 +57,7 @@ KoResource::KoResource(const KoResource &rhs)
 
 bool KoResource::saveToDevice(QIODevice *dev) const
 {
+    Q_UNUSED(dev)
     d->md5 = QByteArray();
 
     return true;

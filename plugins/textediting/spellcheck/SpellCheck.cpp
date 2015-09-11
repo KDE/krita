@@ -29,11 +29,11 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootAreaProvider.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
@@ -54,14 +54,14 @@ SpellCheck::SpellCheck()
     , m_simpleEdit(false)
 {
     /* setup actions for this plugin */
-    KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
+    QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 
     KToggleAction *spellCheck = new KToggleAction(i18n("Auto Spell Check"), this);
     addAction("tool_auto_spellcheck", spellCheck);
 
-    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = spellConfig.readEntry("autoSpellCheck", m_enableSpellCheck);
     spellCheck->setChecked(m_enableSpellCheck);
     m_speller = Sonnet::Speller(spellConfig.readEntry("defaultLanguage", "en_US"));
@@ -161,7 +161,7 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
 {
     if (m_enableSpellCheck == on)
         return;
-    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
     if (m_document) {
@@ -357,5 +357,3 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition,
     cursor.removeSelectedText();
     cursor.insertText(word);
 }
-
-#include <SpellCheck.moc>

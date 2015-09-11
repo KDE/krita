@@ -34,7 +34,7 @@ extern "C" {
 #include "kis_annotation.h"
 class KisDocument;
 
-class KUrl;
+class QUrl;
 
 namespace KisMetaData
 {
@@ -88,15 +88,15 @@ public:
     KisJPEGConverter(KisDocument *doc, bool batchMode = false);
     virtual ~KisJPEGConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildImage(const QUrl &uri);
+    KisImageBuilder_Result buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
     /** Retrieve the constructed image
     */
     KisImageWSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const QUrl &uri);
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

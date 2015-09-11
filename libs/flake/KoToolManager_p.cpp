@@ -101,8 +101,8 @@ void ToolHelper::shortcutToolActionUpdated()
 {
     ShortcutToolAction *action = static_cast<ShortcutToolAction*>(sender());
     // check if shortcut changed
-    const KShortcut actionShortcut = action->shortcut();
-    const KShortcut currentShortcut = shortcut();
+    const QKeySequence actionShortcut = action->shortcut();
+    const QKeySequence currentShortcut = shortcut();
     if (actionShortcut != currentShortcut) {
         m_hasCustomShortcut = true;
         m_customShortcut = actionShortcut;
@@ -145,7 +145,7 @@ int ToolHelper::priority() const
     return m_toolFactory->priority();
 }
 
-KShortcut ToolHelper::shortcut() const
+QKeySequence ToolHelper::shortcut() const
 {
     if (m_hasCustomShortcut) {
         return m_customShortcut;
@@ -169,7 +169,7 @@ void Connector::selectionChanged()
 
 //   ************ ShortcutToolAction **********
 ShortcutToolAction::ShortcutToolAction(const QString &id, const QString &name, QObject *parent)
-    : KAction(name, parent)
+    : QAction(name, parent)
     , m_toolID(id)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));

@@ -22,12 +22,12 @@
 
 #include <math.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 DlgShearImage::DlgShearImage(QWidget *  parent,
                              const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Shear Image"));
     setButtons(Ok | Cancel);

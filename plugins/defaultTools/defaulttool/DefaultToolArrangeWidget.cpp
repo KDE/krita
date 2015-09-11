@@ -21,7 +21,7 @@
 #include "DefaultToolArrangeWidget.h"
 
 #include <KoInteractionTool.h>
-#include <kaction.h>
+#include <QAction>
 
 DefaultToolArrangeWidget::DefaultToolArrangeWidget( KoInteractionTool* tool,
                                     QWidget* parent ) : QWidget( parent )
@@ -45,5 +45,3 @@ DefaultToolArrangeWidget::DefaultToolArrangeWidget( KoInteractionTool* tool,
     group->setDefaultAction( m_tool->action( "object_group" ) );
     ungroup->setDefaultAction( m_tool->action( "object_ungroup" ) );
 }
-
-#include <DefaultToolArrangeWidget.moc>

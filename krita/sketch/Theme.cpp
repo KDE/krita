@@ -21,7 +21,7 @@
 
 #include <QStringList>
 #include <QUrl>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QFile>
 #include <QDir>
 #include <QColor>
@@ -33,7 +33,7 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include "QmlGlobalEngine.h"
 
@@ -104,7 +104,7 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
+        d->basePath = QUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
         emit idChanged();
     }
 }
@@ -195,7 +195,7 @@ QColor Theme::color(const QString& name)
     }
 
     if(!result.isValid()) {
-        qWarning() << "Unable to find color" << name;
+        warnKrita << "Unable to find color" << name;
     } else {
         d->colorCache.insert(name, result);
     }
@@ -261,7 +261,7 @@ QFont Theme::font(const QString& name)
     if(d->inheritedTheme)
         return d->inheritedTheme->font(name);
 
-    qWarning() << "Unable to find font" << name;
+    warnKrita << "Unable to find font" << name;
     return QFont();
 }
 
@@ -309,7 +309,7 @@ QUrl Theme::icon(const QString& name)
         if(d->inheritedTheme) {
             return d->inheritedTheme->icon(name);
         } else {
-            qWarning() << "Unable to find icon" << url;
+            warnKrita << "Unable to find icon" << url;
         }
     }
 
@@ -336,7 +336,7 @@ QUrl Theme::image(const QString& name)
         if(d->inheritedTheme) {
             return d->inheritedTheme->image(name);
         } else {
-            qWarning() << "Unable to find image" << url;
+            warnKrita << "Unable to find image" << url;
         }
     }
 
@@ -370,13 +370,13 @@ Theme* Theme::load(const QString& id, QObject* parent)
     themeComponent.loadUrl(QUrl::fromLocalFile(qml));
 
     if(themeComponent.isError()) {
-        qWarning() << themeComponent.errorString();
+        warnKrita << themeComponent.errorString();
         return 0;
     }
 
     Theme* theme = qobject_cast<Theme*>(themeComponent.create());
     if(!theme) {
-        qWarning() << "Failed to create theme instance!";
+        warnKrita << "Failed to create theme instance!";
         return 0;
     }
 
@@ -406,7 +406,7 @@ void Theme::Private::rebuildFontCache()
         QFont font = db.font(map.value("family").toString(), map.value("style", "Regular").toString(), 10);
 
         if(font.isCopyOf(qApp->font()))
-            qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
+            warnKrita << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
 
         float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
         float lineHeight = qApp->activeWindow()->height() / lineCount;

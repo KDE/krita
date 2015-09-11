@@ -46,7 +46,7 @@ wavelength, and thus define the outline of the CIE "tongue" diagram.
 #include <QImage>
 #include <cmath>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
 

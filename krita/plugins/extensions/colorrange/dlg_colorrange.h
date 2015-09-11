@@ -22,7 +22,7 @@
 
 #include <QCursor>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <kis_selection.h> // For enums
 #include <kis_pixel_selection.h>
@@ -60,7 +60,7 @@ public:
 * This dialog allows the user to create a selection mask based
 * on a (range of) colors.
 */
-class DlgColorRange: public KDialog
+class DlgColorRange: public KoDialog
 {
 
     Q_OBJECT

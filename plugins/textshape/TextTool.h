@@ -54,7 +54,7 @@ class KoStyleManager;
 class KoTextEditor;
 class UndoTextCommand;
 
-class KAction;
+class QAction;
 class KActionMenu;
 class KoFontFamilyAction;
 class FontSizeAction;
@@ -181,6 +181,8 @@ private Q_SLOTS:
     void insertNewSection();
     /// configures params of the current section
     void configureSection();
+    /// inserts paragraph between sections bounds
+    void splitSections();
     /// paste text from the clipboard without formatting
     void pasteAsText();
     /// make the selected text bold or not
@@ -352,25 +354,26 @@ private:
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
-    KAction *m_actionPasteAsText;
-    KAction *m_actionFormatBold;
-    KAction *m_actionFormatItalic;
-    KAction *m_actionFormatUnderline;
-    KAction *m_actionFormatStrikeOut;
-    KAction *m_actionAlignLeft;
-    KAction *m_actionAlignRight;
-    KAction *m_actionAlignCenter;
-    KAction *m_actionAlignBlock;
-    KAction *m_actionFormatSuper;
-    KAction *m_actionFormatSub;
-    KAction *m_actionFormatIncreaseIndent;
-    KAction *m_actionFormatDecreaseIndent;
-    KAction *m_growWidthAction;
-    KAction *m_growHeightAction;
-    KAction *m_shrinkToFitAction;
-    KAction *m_actionChangeDirection;
-    KAction *m_actionInsertSection;
-    KAction *m_actionConfigureSection;
+    QAction *m_actionPasteAsText;
+    QAction *m_actionFormatBold;
+    QAction *m_actionFormatItalic;
+    QAction *m_actionFormatUnderline;
+    QAction *m_actionFormatStrikeOut;
+    QAction *m_actionAlignLeft;
+    QAction *m_actionAlignRight;
+    QAction *m_actionAlignCenter;
+    QAction *m_actionAlignBlock;
+    QAction *m_actionFormatSuper;
+    QAction *m_actionFormatSub;
+    QAction *m_actionFormatIncreaseIndent;
+    QAction *m_actionFormatDecreaseIndent;
+    QAction *m_growWidthAction;
+    QAction *m_growHeightAction;
+    QAction *m_shrinkToFitAction;
+    QAction *m_actionChangeDirection;
+    QAction *m_actionInsertSection;
+    QAction *m_actionConfigureSection;
+    QAction *m_actionSplitSections;
     KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;

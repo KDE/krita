@@ -24,7 +24,7 @@
 #include <QLayout>
 #include <QGridLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
@@ -33,7 +33,7 @@
 #include <KisViewManager.h>
 
 KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_customName(false)
         , m_freezeName(false)
 {

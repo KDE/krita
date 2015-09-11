@@ -19,7 +19,7 @@
 #ifndef __KIS_FILL_INTERVAL_MAP_P_H
 #define __KIS_FILL_INTERVAL_MAP_P_H
 
-struct KRITAIMAGE_EXPORT KisFillIntervalMap::Private {
+struct KRITAIMAGE_TEST_EXPORT KisFillIntervalMap::Private {
     typedef QMap<int, KisFillInterval> LineIntervalMap;
     typedef QHash<int, LineIntervalMap> GlobalMap;
 

@@ -27,7 +27,7 @@
 
 #include "DebugPigment.h"
 
-struct KoFallBackColorTransformation::Private {
+struct Q_DECL_HIDDEN KoFallBackColorTransformation::Private {
     const KoColorSpace* fallBackColorSpace;
     KoCachedColorConversionTransformation* csToFallBackCache;
     KoCachedColorConversionTransformation* fallBackToCsCache;

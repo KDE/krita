@@ -31,7 +31,7 @@
 #include <QDesktopWidget>
 #include <QToolButton>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KisMainWindow.h>
 #include <KoFileDialog.h>
@@ -41,7 +41,7 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <kis_config.h>
@@ -216,8 +216,8 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
 void LutDockerDock::slotUpdateIcons()
 {
-    m_btnConvertCurrentColor->setIcon(themedIcon("krita_tool_freehand"));
-    m_btmShowBWConfiguration->setIcon(themedIcon("properties"));
+    m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("properties"));
 }
 
 void LutDockerDock::slotShowBWConfiguration()
@@ -417,7 +417,7 @@ void LutDockerDock::selectOcioConfiguration()
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
     dialog.setNameFilter(i18n("OpenColorIO configuration (*.ocio)"));
-    filename = dialog.url();
+    filename = dialog.filename();
     QFile f(filename);
     if (f.exists()) {
         m_txtConfigurationPath->setText(filename);
@@ -452,7 +452,7 @@ void LutDockerDock::resetOcioConfiguration()
         }
     }
     catch (OCIO::Exception &exception) {
-        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+        dbgKrita << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
     }
 
     refillControls();
@@ -546,7 +546,7 @@ void LutDockerDock::selectLut()
     dialog.setCaption(i18n("Select LUT file"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
     dialog.setNameFilter("*.*");
-    filename = dialog.url();
+    filename = dialog.filename();
 
     QFile f(filename);
     if (f.exists() && filename != m_txtLut->text()) {

@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "KisDocument.h"
 #include "KisImportExportFilter.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <KoJsonTrader.h>
 #include <kpluginfactory.h>
 #include <QFile>
@@ -49,9 +49,9 @@ QList<KisFilterEntry::Ptr> KisFilterEntry::query()
 
     QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();
-    kDebug(30500) <<"Query returned" << max <<" offers";
+    dbgFile <<"Query returned" << max <<" offers";
     for (unsigned int i = 0; i < max; i++) {
-        //kDebug(30500) <<"   desktopEntryPath=" << (*it)->entryPath()
+        //dbgFile <<"   desktopEntryPath=" << (*it)->entryPath()
         //               << "   library=" << (*it)->library() << endl;
         // Append converted offer
         lst.append(KisFilterEntry::Ptr(new KisFilterEntry(*it)));
@@ -67,7 +67,7 @@ KisImportExportFilter* KisFilterEntry::createFilter(KisFilterChain* chain, QObje
     KLibFactory *factory = qobject_cast<KLibFactory *>(m_loader->instance());
 
     if (!factory) {
-        kWarning(30003) << m_loader->errorString();
+        warnUI << m_loader->errorString();
         return 0;
     }
 

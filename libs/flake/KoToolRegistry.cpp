@@ -56,7 +56,7 @@ void KoToolRegistry::init()
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
     foreach (const QString& toolID, toolsBlacklist) {
         remove(toolID);

@@ -18,7 +18,7 @@
 */
 #include "kis_md5_generator.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <KoStore.h>
 
 KisMD5Generator::KisMD5Generator()
@@ -36,19 +36,20 @@ QByteArray KisMD5Generator::generateHash(QString filename)
     QByteArray ba;
     if(filename.startsWith("bundle://")) {
         QString bn = filename.mid(9);
-        QString fn = bn.mid(bn.indexOf(":") + 1);
-        bn = bn.left(bn.indexOf(":"));
+        int pos = bn.lastIndexOf(":");
+        QString fn = bn.right(bn.size() - pos - 1);
+        bn = bn.left(pos);
 
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {
-            qWarning() << "Could not open store on bundle" << bn;
+            warnKrita << "Could not open store on bundle" << bn;
             return ba;
         }
 
         if (resourceStore->isOpen()) resourceStore->close();
 
         if (!resourceStore->open(fn)) {
-            qWarning() << "Could not open preset" << fn << "in bundle" << bn;
+            warnKrita << "Could not open preset" << fn << "in bundle" << bn;
             return ba;
         }
 

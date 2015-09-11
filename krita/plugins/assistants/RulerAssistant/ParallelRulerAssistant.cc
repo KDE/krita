@@ -20,7 +20,7 @@
 #include "ParallelRulerAssistant.h"
 
 #include "kis_debug.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QLinearGradient>
@@ -47,7 +47,7 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
             // allow some movement before snapping
             return strokeBegin;
         }
-    //qDebug()<<strokeBegin<< ", " <<*handles()[0];
+    //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
     QLineF snapLine = QLineF(*handles()[0], *handles()[1]);
     QPointF translation = (*handles()[0]-strokeBegin)*-1.0;
     snapLine= snapLine.translated(translation);

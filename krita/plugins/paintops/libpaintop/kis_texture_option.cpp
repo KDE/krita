@@ -31,7 +31,7 @@
 #include <QPainter>
 #include <QBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -294,11 +294,7 @@ void KisTextureProperties::recalculateMask()
         QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-#if QT_VERSION >= 0x040700
     const QRgb* pixel = reinterpret_cast<const QRgb*>(mask.constBits());
-#else
-    const QRgb* pixel = reinterpret_cast<const QRgb*>(mask.bits());
-#endif
     int width = mask.width();
     int height = mask.height();
 
@@ -351,7 +347,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     m_pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     if (!m_pattern) {
-        qWarning() << "WARNING: Couldn't load the pattern for a stroke";
+        warnKrita << "WARNING: Couldn't load the pattern for a stroke";
         m_enabled = false;
         return;
     }

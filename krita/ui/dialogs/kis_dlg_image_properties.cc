@@ -28,26 +28,25 @@
 #include <QPlainTextEdit>
 #include <QTextEdit>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"
 #include "KoColor.h"
 #include "KoColorPopupAction.h"
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 #include "KoID.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_annotation.h"
 #include "kis_config.h"
-#include "kis_factory2.h"
 #include "kis_signal_compressor.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent, const char *name)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -65,11 +64,11 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
 
-    m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
+    m_page->lblResolutionValue->setText(QLocale().toString(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
     m_defaultColorAction = new KoColorPopupAction(this);
     m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());
-    m_defaultColorAction->setIcon(koIcon("format-stroke-color"));
+    m_defaultColorAction->setIcon(KisIconUtils::loadIcon("format-stroke-color"));
     m_defaultColorAction->setToolTip(i18n("Change the background color of the image"));
     m_page->bnBackgroundColor->setDefaultAction(m_defaultColorAction);
 

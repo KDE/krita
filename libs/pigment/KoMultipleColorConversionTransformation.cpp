@@ -23,7 +23,7 @@
 
 #include <KoColorSpace.h>
 
-struct KoMultipleColorConversionTransformation::Private {
+struct Q_DECL_HIDDEN KoMultipleColorConversionTransformation::Private {
     QList<KoColorConversionTransformation*> transfos;
     quint32 maxPixelSize;
 };

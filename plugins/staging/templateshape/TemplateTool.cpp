@@ -27,7 +27,7 @@
 #include <QGridLayout>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 
@@ -134,5 +134,3 @@ void TemplateTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
     openPressed();
 }
-
-#include <TemplateTool.moc>

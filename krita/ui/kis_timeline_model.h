@@ -73,7 +73,7 @@ public: // QAbstractItemModel
 protected:
     KisModelIndexConverterBase *createIndexConverter();
 
-private slots:
+private Q_SLOTS:
     // Base class has these slots. Renamed with "2" to avoid hiding them
     void slotEndInsertDummy2(KisNodeDummy *dummy);
     void slotBeginRemoveDummy2(KisNodeDummy *dummy);

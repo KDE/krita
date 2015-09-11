@@ -20,7 +20,7 @@
 #ifndef DLG_HISTOGRAM
 #define DLG_HISTOGRAM
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "kis_types.h"
 
@@ -32,7 +32,7 @@ class KisHistogramWidget;
  *
  * XXX: Also for complete image?
  */
-class DlgHistogram: public KDialog
+class DlgHistogram: public KoDialog
 {
     Q_OBJECT
 

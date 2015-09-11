@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #ifdef Q_OS_WIN
 #include <float.h>
@@ -198,31 +198,28 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 QString KoUnitDoubleSpinBox::textFromValue( double value ) const
 {
     //kDebug(30004) <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
-    //const QString num(QString("%1%2").arg(KGlobal::locale()->formatNumber(value, d->precision ), m_unit.symbol()));
-    //const QString num ( QString( "%1").arg( KGlobal::locale()->formatNumber( value, d->precision )) );
-    return KGlobal::locale()->formatNumber( value, decimals() );
+    //const QString num(QString("%1%2").arg(QLocale().toString(value, d->precision ), m_unit.symbol()));
+    //const QString num ( QString( "%1").arg( QLocale().toString( value, d->precision )) );
+    return QLocale().toString( value, decimals() );
 }
 
 double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
 {
-    QString str2( str );
-    /* KLocale::readNumber wants the thousand separator exactly at 1000.
-       But when editing, it might be anywhere. So we need to remove it. */
-    const QString sep( KGlobal::locale()->thousandsSeparator() );
-    if ( !sep.isEmpty() )
-        str2.remove( sep );
-    str2.remove(d->unit.symbol());
-    bool ok;
-    const double dbl = KGlobal::locale()->readNumber( str2, &ok );
-#ifdef DEBUG_VALUEFROMTEXT
-    if ( ok )
-      kDebug(30004) <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
-    else
-        kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":";
-#endif
-    return dbl;
+    return QLocale().toDouble(str);
+//    QString str2( str );
+//    /* KLocale::readNumber wants the thousand separator exactly at 1000.
+//       But when editing, it might be anywhere. So we need to remove it. */
+//    const QString sep( KGlobal::locale()->thousandsSeparator() );
+//    if ( !sep.isEmpty() )
+//        str2.remove( sep );
+//    str2.remove(d->unit.symbol());
+//    bool ok;
+//    const double dbl = KGlobal::locale()->readNumber( str2, &ok );
+//#ifdef DEBUG_VALUEFROMTEXT
+//    if ( ok )
+//      kDebug(30004) <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
+//    else
+//        kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":";
+//#endif
+//    return dbl;
 }
-
-
-
-#include <KoUnitDoubleSpinBox.moc>

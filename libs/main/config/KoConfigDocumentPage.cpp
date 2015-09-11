@@ -23,7 +23,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoDocument.h>
 #include <KoPart.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kcomponentdata.h>
 #include <kconfig.h>
@@ -111,5 +111,3 @@ void KoConfigDocumentPage::slotDefault()
     d->autoSave->setValue(d->doc->defaultAutoSave() / 60);
     d->createBackupFile->setChecked(true);
 }
-
-#include <KoConfigDocumentPage.moc>

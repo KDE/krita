@@ -21,7 +21,7 @@
 #define KODOMTEST_H
 
 #include <QByteArray>
-#include <QtTest>
+#include <QObject>
 #include "KoXmlReader.h"
 
 class KoDomTest: public QObject

@@ -35,10 +35,11 @@
 #include <QTreeWidgetItem>
 #include <QGroupBox>
 #include <QStandardPaths>
+#include <QApplication>
 
-#include <ktemporaryfile.h>
-#include <klineedit.h>
-#include <klocale.h>
+#include <QTemporaryFile>
+#include <QLineEdit>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 #include <KoDocument.h>
 #include <KoTemplates.h>
@@ -49,7 +50,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kiconloader.h>
@@ -57,6 +58,7 @@
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kcomponentdata.h>
+#include <kglobal.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -84,7 +86,7 @@ public:
     }
 
     KoTemplateTree *m_tree;
-    KLineEdit *m_name;
+    QLineEdit *m_name;
     QRadioButton *m_default, *m_custom;
     QPushButton *m_select;
     QLabel *m_preview;
@@ -108,12 +110,12 @@ public:
 
 KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &componentData,
                                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
-  : KDialog(parent)
+  : KoDialog(parent)
   , d(new KoTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
 {
 
-    setButtons( KDialog::Ok|KDialog::Cancel );
-    setDefaultButton( KDialog::Ok );
+    setButtons( KoDialog::Ok|KoDialog::Cancel );
+    setDefaultButton( KoDialog::Ok );
     setCaption( i18n( "Create Template" ) );
     setModal( true );
     setObjectName( "template create dia" );
@@ -127,7 +129,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, c
     QHBoxLayout *namefield=new QHBoxLayout();
     leftbox->addLayout( namefield );
     namefield->addWidget(label);
-    d->m_name=new KLineEdit(mainwidget);
+    d->m_name=new QLineEdit(mainwidget);
     d->m_name->setFocus();
     connect(d->m_name, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotNameChanged(const QString &)));
@@ -215,10 +217,10 @@ void KoTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const KComponentData &componentData,
                                          KoDocument *document, QWidget *parent)
 {
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(QLatin1String(suffix));
+    QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/") + qAppName() + QLatin1String("_XXXXXX") + suffix);
     //Check that creation of temp file was successful
     if (!tempFile->open()) {
+        delete tempFile;
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
@@ -256,7 +258,7 @@ void KoTemplateCreateDia::slotOk() {
         item = d->m_groups->topLevelItem(0);
     if(!item) {    // safe :)
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
     // is it a group or a template? anyway - get the group :)
@@ -264,20 +266,20 @@ void KoTemplateCreateDia::slotOk() {
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     KoTemplateGroup *group=d->m_tree->find(item->text(0));
     if(!group) {    // even safer
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     if(d->m_name->text().isEmpty()) {
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
@@ -301,12 +303,10 @@ void KoTemplateCreateDia::slotOk() {
     else
         kWarning(30004) << "Template extension not found!";
 
-    KUrl dest;
+    QUrl dest;
     dest.setPath(templateDir+file+ext);
-    if ( QFile::exists( dest.pathOrUrl() ) )
-    {
-        do
-        {
+    if (QFile::exists( dest.toLocalFile())) {
+        do {
             file.prepend( '_' );
             dest.setPath( templateDir + file + ext );
             tmpIcon=".icon/"+file+".png";
@@ -335,11 +335,11 @@ void KoTemplateCreateDia::slotOk() {
 
     if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
-    KUrl orig;
+    QUrl orig;
     orig.setPath(d->m_filePath);
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )
@@ -537,5 +537,3 @@ void KoTemplateCreateDia::fillGroupTree() {
         }
     }
 }
-
-#include <KoTemplateCreateDia.moc>

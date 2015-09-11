@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,12 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_debug.h"
-
-#include <string>
+#include "kis_paint_device_debug_utils.h"
 
 #include <QRect>
-#include <QString>
 #include <QImage>
 
 #include "kis_paint_device.h"
@@ -44,17 +41,6 @@ void kis_debug_save_device_incremental(KisPaintDeviceSP device,
         saveRect = device->exactBounds();
     }
 
-    qDebug() << "Dumping:" << filename;
+    dbgKrita << "Dumping:" << filename;
     device->convertToQImage(0, saveRect).save(filename);
-}
-
-const char* __methodName(const char *_prettyFunction)
-{
-    std::string prettyFunction(_prettyFunction);
-
-    size_t colons = prettyFunction.find("::");
-    size_t begin = prettyFunction.substr(0,colons).rfind(" ") + 1;
-    size_t end = prettyFunction.rfind("(") - begin;
-
-    return std::string(prettyFunction.substr(begin,end) + "()").c_str();
 }

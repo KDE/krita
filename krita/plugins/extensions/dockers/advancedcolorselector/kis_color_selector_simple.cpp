@@ -22,7 +22,6 @@
 #include <cmath>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 #include "kis_display_color_converter.h"
 #include "kis_acs_pixel_cache_renderer.h"
@@ -124,7 +123,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     qreal hslH, hslS, hslL;
 	qreal hsiH, hsiS, hsiI;
 	qreal hsyH, hsyS, hsyY;
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 	R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
@@ -271,7 +270,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
                                         pixelCacheOffset);
 
 //        if (!pixelCacheOffset.isNull()) {
-//            qWarning() << "WARNING: offset of the rectangle selector is not null!";
+//            warnKrita << "WARNING: offset of the rectangle selector is not null!";
 //        }
     }
 

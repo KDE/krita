@@ -25,7 +25,7 @@
 #include <QToolButton>
 #include <QBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoZoomInput.h"
 #include "KoIcon.h"
@@ -132,5 +132,3 @@ void KoZoomWidget::setAspectMode(bool status)
         d->aspectButton->blockSignals(false);
     }
 }
-
-#include "KoZoomWidget.moc"

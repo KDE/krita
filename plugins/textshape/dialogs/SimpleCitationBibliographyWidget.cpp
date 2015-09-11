@@ -24,7 +24,7 @@
 #include <KoBibliographyInfo.h>
 #include <KoTextEditor.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>
@@ -126,5 +126,3 @@ void SimpleCitationBibliographyWidget::applyTemplate(int templateId)
     m_templateGenerator->moveTemplateToUsed(m_templateList.at(templateId - 1));
     m_referenceTool->editor()->insertBibliography(m_templateList.at(templateId - 1));
 }
-
-#include <SimpleCitationBibliographyWidget.moc>

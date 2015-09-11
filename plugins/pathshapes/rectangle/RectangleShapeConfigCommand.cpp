@@ -19,7 +19,7 @@
 
 #include "RectangleShapeConfigCommand.h"
 #include "RectangleShape.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
     : KUndo2Command(parent)

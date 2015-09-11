@@ -32,7 +32,7 @@
 #endif
 #endif
 
-struct KisRectangleMaskGenerator::Private {
+struct Q_DECL_HIDDEN KisRectangleMaskGenerator::Private {
     double m_c;
     qreal xcoeff;
     qreal ycoeff;

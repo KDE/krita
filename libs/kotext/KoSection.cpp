@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ *  Copyright (c) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoSectionStyle.h>
-#include <KoSectionManager.h>
+#include <KoSectionModel.h>
 #include <KoSectionEnd.h>
 #include <KoTextDocument.h>
 #include <KoTextInlineRdf.h>
@@ -38,18 +38,18 @@
 class KoSectionPrivate
 {
 public:
-    explicit KoSectionPrivate(const QTextDocument *_document)
-        : document(_document)
-        , manager(KoTextDocument(_document).sectionManager())
+    explicit KoSectionPrivate(const QTextCursor &cursor, const QString &_name, KoSection *_parent)
+        : document(cursor.block().document())
+        , name(_name)
         , sectionStyle(0)
+        , boundingCursorStart(cursor)
+        , boundingCursorEnd(cursor)
+        , parent(_parent)
         , inlineRdf(0)
     {
-        Q_ASSERT(manager);
-        name = manager->possibleNewName();
     }
 
     const QTextDocument *document;
-    KoSectionManager *manager;
 
     QString condition;
     QString display;
@@ -60,24 +60,41 @@ public:
     QString style_name;
     KoSectionStyle *sectionStyle;
 
-    QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
-    int level; //< level of the section in document, root sections have 0 level
-    QPair<int, int> bounds; //< start and end position of section in QDocument
+    QScopedPointer<KoSectionEnd> sectionEnd; ///< pointer to the corresponding section end
+    int level; ///< level of the section in document, root sections have 0 level
+    QTextCursor boundingCursorStart; ///< This cursor points to the start of the section
+    QTextCursor boundingCursorEnd; ///< This cursor points to the end of the section (excluding paragraph symbol)
 
-    KoTextInlineRdf *inlineRdf;
+    // Boundings explanation:
+    //
+    // |S|e|c|t|i|o|n|...|t|e|x|t|P|
+    // ^                         ^
+    // |--- Start                |-- End
+
+    QVector<KoSection *> children; ///< List of the section's childrens
+    KoSection *parent; ///< Parent of the section
+
+    KoTextInlineRdf *inlineRdf; ///< Handling associated RDF
 };
 
-KoSection::KoSection(const QTextCursor &cursor)
-    : d_ptr(new KoSectionPrivate(cursor.block().document()))
+KoSection::KoSection(const QTextCursor &cursor, const QString &name, KoSection *parent)
+    : d_ptr(new KoSectionPrivate(cursor, name, parent))
 {
     Q_D(KoSection);
-    d->manager->registerSection(this);
+
+    d->boundingCursorStart.setKeepPositionOnInsert(true); // Start cursor should stay on place
+    d->boundingCursorEnd.setKeepPositionOnInsert(false); // and end one should move forward
+
+    if (parent) {
+        d->level = parent->level() + 1;
+    } else {
+        d->level = 0;
+    }
 }
 
 KoSection::~KoSection()
 {
-    Q_D(KoSection);
-    d->manager->unregisterSection(this);
+    // Here scoped pointer will delete sectionEnd
 }
 
 QString KoSection::name() const
@@ -89,31 +106,16 @@ QString KoSection::name() const
 QPair<int, int> KoSection::bounds() const
 {
     Q_D(const KoSection);
-    d->manager->update();
-    return d->bounds;
+    return QPair<int, int>(
+        d->boundingCursorStart.position(),
+        d->boundingCursorEnd.position()
+    );
 }
 
 int KoSection::level() const
 {
     Q_D(const KoSection);
-    d->manager->update();
     return d->level;
-}
-
-bool KoSection::setName(const QString &name)
-{
-    Q_D(KoSection);
-
-    if (name == d->name) {
-        return true;
-    }
-
-    if (d->manager->isValidNewName(name)) {
-        d->name = name;
-        d->manager->invalidate();
-        return true;
-    }
-    return false;
 }
 
 bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml)
@@ -129,9 +131,10 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
             kWarning(32500) << "Section display is set to \"condition\", but condition is empty.";
         }
 
-        if (!setName(element.attributeNS(KoXmlNS::text, "name"))) {
-            kWarning(32500) << "Sections name \"" << element.attributeNS(KoXmlNS::text, "name")
-                << "\" repeated, but must be unique.";
+        QString newName = element.attributeNS(KoXmlNS::text, "name");
+        if (!KoTextDocument(d->document).sectionModel()->setName(this, newName)) {
+            kWarning(32500) << "Section name \"" << newName
+                << "\" must be unique or is invalid. Resetting it to " << name();
         }
 
         d->text_protected = element.attributeNS(KoXmlNS::text, "text-protected");
@@ -171,7 +174,9 @@ void KoSection::saveOdf(KoShapeSavingContext &context) const
     if (!d->name.isEmpty()) writer->addAttribute("text:name", d->name);
     if (!d->text_protected.isEmpty()) writer->addAttribute("text:text-protected", d->text_protected);
     if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
-    if (!d->protection_key_digest_algorithm.isEmpty()) writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
+    if (!d->protection_key_digest_algorithm.isEmpty()) {
+        writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
+    }
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 
     if (d->inlineRdf) {
@@ -185,22 +190,46 @@ void KoSection::setSectionEnd(KoSectionEnd* sectionEnd)
     d->sectionEnd.reset(sectionEnd);
 }
 
-void KoSection::setBeginPos(int pos)
+void KoSection::setName(const QString &name)
 {
     Q_D(KoSection);
-    d->bounds.first = pos;
-}
-
-void KoSection::setEndPos(int pos)
-{
-    Q_D(KoSection);
-    d->bounds.second = pos;
+    d->name = name;
 }
 
 void KoSection::setLevel(int level)
 {
     Q_D(KoSection);
     d->level = level;
+}
+
+void KoSection::setKeepEndBound(bool state)
+{
+    Q_D(KoSection);
+    d->boundingCursorEnd.setKeepPositionOnInsert(state);
+}
+
+KoSection *KoSection::parent() const
+{
+    Q_D(const KoSection);
+    return d->parent;
+}
+
+QVector<KoSection *> KoSection::children() const
+{
+    Q_D(const KoSection);
+    return d->children;
+}
+
+void KoSection::insertChild(int childIdx, KoSection *section)
+{
+    Q_D(KoSection);
+    d->children.insert(childIdx, section);
+}
+
+void KoSection::removeChild(int childIdx)
+{
+    Q_D(KoSection);
+    d->children.remove(childIdx);
 }
 
 KoTextInlineRdf *KoSection::inlineRdf() const

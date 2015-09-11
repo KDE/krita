@@ -18,7 +18,7 @@
 #include "kis_hairy_ink_option.h"
 #include "kis_hairy_paintop_settings.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "ui_wdgInkOptions.h"
 
 class KisInkOptionsWidget: public QWidget, public Ui::WdgInkOptions

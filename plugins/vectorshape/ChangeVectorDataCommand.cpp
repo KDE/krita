@@ -20,7 +20,7 @@
 #include "ChangeVectorDataCommand.h"
 
 #include <math.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoImageData.h>
 #include <kdebug.h>
 

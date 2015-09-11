@@ -19,7 +19,7 @@
 #include "KoZoomInput.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QComboBox>
 #include <QLabel>
@@ -144,5 +144,3 @@ bool KoZoomInput::eventFilter(QObject* watched, QEvent* event)
     }
     return false;
 }
-
-#include <KoZoomInput.moc>

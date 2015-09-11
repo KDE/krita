@@ -19,12 +19,12 @@
 #include "AbstractMusicAction.h"
 #include "../SimpleEntryTool.h"
 
-#include <kicon.h>
+#include <QIcon>
 
 #include <QPainter>
 
-AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool)
-    : KAction(icon, text, tool)
+AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool)
+    : QAction(icon, text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)
 {
@@ -32,7 +32,7 @@ AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text,
 }
 
 AbstractMusicAction::AbstractMusicAction(const QString& text, SimpleEntryTool* tool)
-    : KAction(text, tool)
+    : QAction(text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)
 {
@@ -64,5 +64,3 @@ void AbstractMusicAction::keyPress(QKeyEvent* event, const MusicCursor& /*cursor
 {
     Q_UNUSED(event);
 }
-
-#include <AbstractMusicAction.moc>

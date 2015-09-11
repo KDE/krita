@@ -19,7 +19,7 @@
  */
 #include "TestKoInlineTextObjectManager.h"
 
-
+#include <QTest>
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -161,5 +161,3 @@ void TestKoInlineTextObjectManager::testListenToProperties()
 
 
 QTEST_MAIN(TestKoInlineTextObjectManager)
-
-#include "TestKoInlineTextObjectManager.moc"

@@ -210,8 +210,8 @@ bool parseTagName(const QString &tagString,
         }
     }
 
-    qWarning() << "WARNING: Unsupported tag. We do not yet support nested tags. The tag will be dropped!";
-    qWarning() << "         Failing tag:" << tagString;
+    warnKrita << "WARNING: Unsupported tag. We do not yet support nested tags. The tag will be dropped!";
+    warnKrita << "         Failing tag:" << tagString;
     return false;
 }
 
@@ -339,7 +339,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 if (!arraysOfStructures[schema][structName][arrayIndex].contains(tagName)) {
                     arraysOfStructures[schema][structName][arrayIndex][tagName] = v;
                 } else {
-                    qWarning() << "WARNING: trying to overwrite tag" << tagName << "in" << structName << arrayIndex;
+                    warnKrita << "WARNING: trying to overwrite tag" << tagName << "in" << structName << arrayIndex;
                 }
             } else {
                 if (!ignoreValue) {

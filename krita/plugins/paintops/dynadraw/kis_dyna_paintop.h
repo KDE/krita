@@ -19,7 +19,7 @@
 #ifndef KIS_DYNA_PAINTOP_H_
 #define KIS_DYNA_PAINTOP_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
 

@@ -384,11 +384,11 @@ inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 
 void KisStrokeBenchmark::benchmarkCircle(QString presetFileName)
 {
-    qDebug() << "(circle)preset : " << presetFileName;
+    dbgKrita << "(circle)preset : " << presetFileName;
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     if (!preset->load()){
-        qDebug() << "Preset was not loaded";
+        dbgKrita << "Preset was not loaded";
         return;
     }
 
@@ -440,10 +440,10 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     bool loadedOk = preset->load();
     if (!loadedOk){
-        qDebug() << "The preset was not loaded correctly. Done.";
+        dbgKrita << "The preset was not loaded correctly. Done.";
         return;
     }else{
-        qDebug() << "preset : " << presetFileName;
+        dbgKrita << "preset : " << presetFileName;
     }
 
     m_painter->setPaintOpPreset(preset, m_layer, m_image);
@@ -467,10 +467,10 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     bool loadedOk = preset->load();
     if (!loadedOk){
-        qDebug() << "The preset was not loaded correctly. Done.";
+        dbgKrita << "The preset was not loaded correctly. Done.";
         return;
     } else {
-        qDebug() << "preset : " << presetFileName;
+        dbgKrita << "preset : " << presetFileName;
     }
 
     m_painter->setPaintOpPreset(preset, m_layer, m_image);
@@ -482,7 +482,7 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
     }
 
 #ifdef SAVE_OUTPUT
-    qDebug() << "Saving output " << m_outputPath + presetFileName + ".png";
+    dbgKrita << "Saving output " << m_outputPath + presetFileName + ".png";
     m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + OUTPUT_FORMAT);
 #endif
 }

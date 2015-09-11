@@ -32,7 +32,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 
@@ -275,12 +275,12 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
             } else if (tag == "title" || tag == "description" || tag == "subject" ||
                        tag == "date" || tag == "language") {
                 QByteArray elementName(QString("dc:" + tag).toLatin1());
-                xmlWriter.startElement(elementName);
+                xmlWriter.startElement(elementName.constData());
                 xmlWriter.addTextNode(aboutInfo(tag));
                 xmlWriter.endElement();
             } else {
                 QByteArray elementName(QString("meta:" + tag).toLatin1());
-                xmlWriter.startElement(elementName);
+                xmlWriter.startElement(elementName.constData());
                 xmlWriter.addTextNode(aboutInfo(tag));
                 xmlWriter.endElement();
             }
@@ -466,5 +466,3 @@ void KoDocumentInfo::setOriginalGenerator(const QString &generator)
 {
     m_generator = generator;
 }
-
-#include <KoDocumentInfo.moc>

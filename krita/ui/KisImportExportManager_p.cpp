@@ -26,20 +26,20 @@ Boston, MA 02110-1301, USA.
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <kmimetype.h>
+
 
 #include <unistd.h>
 
-KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const KUrl &url)
-        : KDialog(parent),
+KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const QUrl &url)
+        : KoDialog(parent),
         m_mimeTypes(mimeTypes)
 {
     setObjectName("kofilterchooser");
     setInitialSize(QSize(300, 350));
-    setButtons(KDialog::Ok|KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setButtons(KoDialog::Ok|KoDialog::Cancel);
+    setDefaultButton(KoDialog::Ok);
     setCaption(i18n("Choose Filter"));
     setModal(true);
 
@@ -60,8 +60,9 @@ KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes
             it != m_mimeTypes.constEnd();
             ++it) {
 
-        KMimeType::Ptr mime = KMimeType::mimeType(*it);
-        const QString name = mime ? mime->comment() : *it;
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(*it);
+        const QString name = mime.isValid() ? mime.comment() : *it;
         if (! name.isEmpty()) {
             QListWidgetItem *item = new QListWidgetItem(name, m_filterList);
             item->setData(32, *it);
@@ -90,3 +91,5 @@ QString KisFilterChooser::filterSelected()
 }
 
 #include <KisImportExportManager_p.moc>
+#include <QMimeDatabase>
+#include <QMimeType>

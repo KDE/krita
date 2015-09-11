@@ -109,7 +109,7 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
         const KisMetaData::Entry& entry = *it;
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
             if (blockedEntries.contains(entry.qualifiedName())) {
-                qWarning() << "skipping" << entry.qualifiedName() << entry.value();
+                warnKrita << "skipping" << entry.qualifiedName() << entry.value();
                 continue;
             }
             try {

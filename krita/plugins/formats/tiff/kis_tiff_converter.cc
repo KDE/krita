@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QApplication>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
@@ -178,7 +178,7 @@ KisTIFFConverter::~KisTIFFConverter()
 {
 }
 
-KisImageBuilder_Result KisTIFFConverter::decode(const KUrl& uri)
+KisImageBuilder_Result KisTIFFConverter::decode(const QUrl &uri)
 {
     dbgFile << "Start decoding TIFF File";
     // Opent the TIFF file
@@ -606,7 +606,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result KisTIFFConverter::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -625,7 +625,7 @@ KisImageWSP KisTIFFConverter::image()
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP kisimage, KisTIFFOptions options)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const QUrl &uri, KisImageWSP kisimage, KisTIFFOptions options)
 {
     dbgFile << "Start writing TIFF File";
     if (!kisimage)

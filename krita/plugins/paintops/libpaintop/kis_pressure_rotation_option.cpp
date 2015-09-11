@@ -20,7 +20,7 @@
 #include "kis_pressure_opacity_option.h"
 #include "sensors/kis_dynamic_sensor_drawing_angle.h"
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <KoColor.h>

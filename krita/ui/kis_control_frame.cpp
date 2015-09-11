@@ -34,10 +34,11 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QWidgetAction>
+#include <QFontDatabase>
 
-#include <kglobalsettings.h>
-#include <klocale.h>
-#include <kaction.h>
+#include <klocalizedstring.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
 #include <KoAbstractGradient.h>
@@ -74,13 +75,14 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
 {
     setObjectName(name);
     KisConfig cfg;
-    m_font  = KGlobalSettings::generalFont();
+    m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     m_patternWidget = new KisIconWidget(parent, "patterns");
     m_patternWidget->setText(i18n("Fill Patterns"));
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(26, 26);
-    KAction * action  = new KAction(i18n("&Patterns"), this);
+    QWidgetAction *action  = new QWidgetAction(this);
+    action->setText(i18n("&Patterns"));
     view->actionCollection()->addAction("patterns", action);
     action->setDefaultWidget(m_patternWidget);
 
@@ -88,7 +90,8 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_gradientWidget->setText(i18n("Gradients"));
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(26, 26);
-    action  = new KAction(i18n("&Gradients"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Gradients"));
     view->actionCollection()->addAction("gradients", action);
     action->setDefaultWidget(m_gradientWidget);
 
@@ -101,7 +104,8 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer,
                                                      view->mainWindow(), view->mainWindow());
     dual->setPopDialog(true);
-    action  = new KAction(i18n("&Color"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Color"));
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
     connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
@@ -117,7 +121,8 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 
     m_paintopBox = new KisPaintopBox(view, parent, "paintopbox");
-    action  = new KAction(i18n("&Painter's Tools"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Painter's Tools"));
     view->actionCollection()->addAction("paintops", action);
     action->setDefaultWidget(m_paintopBox);
 }

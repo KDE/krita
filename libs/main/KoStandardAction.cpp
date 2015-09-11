@@ -20,7 +20,7 @@
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {

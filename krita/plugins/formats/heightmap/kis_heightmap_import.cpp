@@ -27,8 +27,8 @@
 #include <QCursor>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
-#include <kdialog.h>
+#include <QUrl>
+#include <KoDialog.h>
 
 #include <KisImportExportManager.h>
 #include <KoColorSpaceRegistry.h>
@@ -92,7 +92,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         return KisImportExportFilter::FileNotFound;
     }
 
-    KUrl url(filename);
+    QUrl url(filename);
 
 
     dbgFile << "Import: " << url;
@@ -105,9 +105,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
 
     QApplication::restoreOverrideCursor();
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsHeightMap optionsHeightMap;
 

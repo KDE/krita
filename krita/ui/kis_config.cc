@@ -47,14 +47,14 @@
 #include <kis_color_manager.h>
 
 KisConfig::KisConfig()
-    : m_cfg(KGlobal::config()->group(""))
+    : m_cfg( KSharedConfig::openConfig()->group(""))
 {
 }
 
 KisConfig::~KisConfig()
 {
     if (qApp->thread() != QThread::currentThread()) {
-        //qDebug() << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        //dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
         return;
     }
 
@@ -380,7 +380,7 @@ QString KisConfig::monitorProfile(int screen) const
 {
     // Note: keep this in sync with the default profile for the RGB colorspaces!
     QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "sRGB-elle-V2-srgbtrc.icc");
-    //qDebug() << "KisConfig::monitorProfile()" << profile;
+    //dbgKrita << "KisConfig::monitorProfile()" << profile;
     return profile;
 }
 
@@ -408,7 +408,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
     if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
     }
-    //qDebug() << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;
+    //dbgKrita << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;
 
     if (monitorId.isEmpty()) {
         return 0;
@@ -416,15 +416,15 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 
     QByteArray bytes = KisColorManager::instance()->displayProfile(monitorId);
 
-    //qDebug() << "\tgetScreenProfile()" << bytes.size();
+    //dbgKrita << "\tgetScreenProfile()" << bytes.size();
 
     if (bytes.length() > 0) {
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
-        //qDebug() << "\tKisConfig::getScreenProfile for screen" << screen << profile->name();
+        //dbgKrita << "\tKisConfig::getScreenProfile for screen" << screen << profile->name();
         return profile;
     }
     else {
-        //qDebug() << "\tCould not get a system monitor profile";
+        //dbgKrita << "\tCould not get a system monitor profile";
         return 0;
     }
 }
@@ -434,40 +434,40 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
     // if the user plays with the settings, they can override the display profile, in which case
     // we don't want the system setting.
     bool override = useSystemMonitorProfile();
-    //qDebug() << "KisConfig::displayProfile(). Override X11:" << override;
+    //dbgKrita << "KisConfig::displayProfile(). Override X11:" << override;
     const KoColorProfile *profile = 0;
     if (override) {
-        //qDebug() << "\tGoing to get the screen profile";
+        //dbgKrita << "\tGoing to get the screen profile";
         profile = KisConfig::getScreenProfile(screen);
     }
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {
-        //qDebug() << "\tGoing to get the monitor profile";
+        //dbgKrita << "\tGoing to get the monitor profile";
         QString monitorProfileName = monitorProfile(screen);
-        //qDebug() << "\t\tmonitorProfileName:" << monitorProfileName;
+        //dbgKrita << "\t\tmonitorProfileName:" << monitorProfileName;
         if (!monitorProfileName.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         }
         if (profile) {
-            //qDebug() << "\t\tsuitable for display" << profile->isSuitableForDisplay();
+            //dbgKrita << "\t\tsuitable for display" << profile->isSuitableForDisplay();
         }
         else {
-            //qDebug() << "\t\tstill no profile";
+            //dbgKrita << "\t\tstill no profile";
         }
     }
     // if we still don't have a profile, or the profile isn't suitable for display,
     // we need to get a last-resort profile. the built-in sRGB is a good choice then.
     if (!profile || !profile->isSuitableForDisplay()) {
-        //qDebug() << "\tnothing worked, going to get sRGB built-in";
+        //dbgKrita << "\tnothing worked, going to get sRGB built-in";
         profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
     }
 
     if (profile) {
-        //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
+        //dbgKrita << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
     }
     else {
-        //qDebug() << "\tCouldn't get a display profile at all";
+        //dbgKrita << "\tCouldn't get a display profile at all";
     }
 
     return profile;
@@ -577,7 +577,7 @@ bool KisConfig::useOpenGL(bool defaultValue) const
 #endif
         }
 
-        //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
 #ifdef Q_WS_MAC
         return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
@@ -921,13 +921,13 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
 
 bool KisConfig::hideSplashScreen(bool defaultValue) const
 {
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     return (defaultValue ? true : cfg.readEntry("HideSplashAfterStartup", true));
 }
 
 void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
 {
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
@@ -1588,7 +1588,7 @@ const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) 
 {
     const KoColorSpace *cs = 0;
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     if (defaultValue || cfg.readEntry("useCustomColorSpace", true)) {
         KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
         cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
@@ -1601,7 +1601,7 @@ const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) 
 
 void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     cfg.writeEntry("useCustomColorSpace", bool(cs));
     if(cs) {
         cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());

@@ -27,7 +27,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
-struct KoColorSpaceFactory::Private {
+struct Q_DECL_HIDDEN KoColorSpaceFactory::Private {
     QList<KoColorProfile*> colorprofiles;
     QList<KoColorSpace*> colorspaces;
     QHash<QString, KoColorSpace* > availableColorspaces;

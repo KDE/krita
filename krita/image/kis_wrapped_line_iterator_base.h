@@ -113,11 +113,11 @@ public:
     }
 
     void resetPixelPos() {
-        qCritical() << "CRITICAL: resetPixelPos() is not implemented";
+        errKrita << "CRITICAL: resetPixelPos() is not implemented";
     }
 
     void resetRowPos() {
-        qCritical() << "CRITICAL: resetRowPos() is not implemented";
+        errKrita << "CRITICAL: resetRowPos() is not implemented";
     }
 
     void resetColumnPos() {

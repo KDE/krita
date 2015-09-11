@@ -19,7 +19,7 @@
 #ifndef __KIS_ACTIVATE_SELECTION_MASK_COMMAND_H
 #define __KIS_ACTIVATE_SELECTION_MASK_COMMAND_H
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kundo2command.h"
 #include "kritaimage_export.h"
 #include "kis_types.h"

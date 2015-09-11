@@ -18,7 +18,7 @@
 
 #include "kis_update_scheduler.h"
 
-#include "klocale.h"
+#include "klocalizedstring.h"
 #include "kis_image_config.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
@@ -36,7 +36,7 @@
 
 #ifdef DEBUG_BALANCING
 #define DEBUG_BALANCING_METRICS(decidedFirst, excl)                     \
-    qDebug() << "Balance decision:" << decidedFirst                     \
+    dbgKrita << "Balance decision:" << decidedFirst                     \
     << "(" << excl << ")"                                               \
     << "updates:" << m_d->updatesQueue->sizeMetric()                    \
     << "strokes:" << m_d->strokesQueue->sizeMetric()
@@ -45,7 +45,7 @@
 #endif
 
 
-struct KisUpdateScheduler::Private {
+struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     Private(KisUpdateScheduler *_q)
               : q(_q),
                 updatesQueue(0), strokesQueue(0),

@@ -22,7 +22,7 @@
 #define KOCOLORSPACEABSTRACT_H
 
 #include <QBitArray>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>

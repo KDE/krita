@@ -23,7 +23,7 @@
 #include "SelectionDecorator.h"
 #include "SelectionTransformCommand.h"
 
-#include <KoInteractionTool.h>
+#include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
@@ -36,7 +36,7 @@
 
 #include <math.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool)

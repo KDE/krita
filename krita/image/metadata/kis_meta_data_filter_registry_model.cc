@@ -22,7 +22,7 @@
 
 using namespace KisMetaData;
 
-struct FilterRegistryModel::Private {
+struct Q_DECL_HIDDEN FilterRegistryModel::Private {
     QList<bool> enabled;
 };
 

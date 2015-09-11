@@ -21,7 +21,7 @@
 #ifndef DLG_IMAGESPLIT
 #define DLG_IMAGESPLIT
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <kis_types.h>
 
@@ -32,7 +32,7 @@ class KisViewManager;
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
  */
-class DlgImagesplit: public KDialog
+class DlgImagesplit: public KoDialog
 {
 
     Q_OBJECT

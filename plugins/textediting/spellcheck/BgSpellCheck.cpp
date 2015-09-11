@@ -195,5 +195,3 @@ QString BgSpellCheck::currentCountry() const
 {
     return m_currentCountry;
 }
-
-#include <BgSpellCheck.moc>

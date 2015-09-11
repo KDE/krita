@@ -24,7 +24,7 @@
 
 #include <KoCanvasResourceManager.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 
 KoFind::KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac)

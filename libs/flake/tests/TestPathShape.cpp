@@ -24,6 +24,8 @@
 #include "KoPathPointData.h"
 #include "KoPathSegment.h"
 
+#include <QTest>
+
 void TestPathShape::close()
 {
     KoPathShape path;
@@ -781,4 +783,3 @@ void TestPathShape::closeMerge()
 }
 
 QTEST_MAIN(TestPathShape)
-#include <TestPathShape.moc>

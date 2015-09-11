@@ -1,4 +1,6 @@
-add_subdirectory( tests )
+if (BUILD_TESTING)
+    add_subdirectory( tests )
+endif ()
 
 kde_enable_exceptions()
 
@@ -74,12 +76,6 @@ if( QT_QTDBUS_FOUND )
         KoPartAdaptor.cpp
     )
 endif()
-
-if (APPLE)
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
-        MacSupport.mm
-    )
-endif ()
 
 ki18n_wrap_ui( komain_LIB_SRCS
    KoOpenPaneBase.ui

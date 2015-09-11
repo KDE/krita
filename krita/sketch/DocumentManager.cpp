@@ -22,12 +22,14 @@
 #include "RecentFileManager.h"
 #include <libs/pigment/KoColor.h>
 #include <KisPart.h>
-#include <kmimetype.h>
+
 
 #include <KoColorSpaceRegistry.h>
 
 #include <KisDocument.h>
 #include <kis_image.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class DocumentManager::Private
 {
@@ -122,13 +124,14 @@ void DocumentManager::delayedNewDocument()
         d->document->resetURL();
     }
     else if(d->newDocOptions.contains("template")) {
-        KUrl url(d->newDocOptions.value("template").toString().remove("template://"));
+        QUrl url(d->newDocOptions.value("template").toString().remove("template://"));
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
         d->document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QMimeDatabase db;
+            db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);
@@ -250,7 +253,7 @@ void DocumentManager::delayedSaveAs()
 
 void DocumentManager::reload()
 {
-    KUrl url = d->document->url();
+    QUrl url = d->document->url();
     closeDocument();
     d->openDocumentFilename = url.toLocalFile();
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));

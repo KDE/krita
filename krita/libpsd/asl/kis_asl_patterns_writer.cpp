@@ -68,13 +68,7 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray> > *dstPlanes, 
             uncompressedRows[i].append(QByteArray(image.width(), '\0'));
             quint8 *dstPtr = (quint8*)uncompressedRows[i].last().data();
 
-#if QT_VERSION >= 0x040700
-        const quint8 *srcPtr = image.constScanLine(row) + srcRowOffset;
-#else
-        const quint8 *srcPtr = image.scanLine(row) + srcRowOffset;
-#endif
-            
-
+            const quint8 *srcPtr = image.constScanLine(row) + srcRowOffset;
 
             for (int col = 0; col < image.width(); col++) {
                 *dstPtr = *srcPtr;

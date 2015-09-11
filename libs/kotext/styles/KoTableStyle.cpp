@@ -663,5 +663,3 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         }
     }
 }
-
-#include <KoTableStyle.moc>

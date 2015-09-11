@@ -233,7 +233,7 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
     context.waitForDone();
 
     QVERIFY(!counter);
-    qDebug() << "Concurrency observed:" << hadConcurrency
+    dbgKrita << "Concurrency observed:" << hadConcurrency
              << "/" << NUM_CHECKS * NUM_JOBS;
 }
 

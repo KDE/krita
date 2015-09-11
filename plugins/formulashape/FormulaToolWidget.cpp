@@ -26,7 +26,7 @@
 #include <QWidgetAction>
 #include <QTableWidget>
 
-#include <kaction.h>
+#include <QAction>
 
 #include <QMenu>
 #include <kdebug.h>
@@ -159,6 +159,3 @@ QList< QString > FormulaToolWidget::symbolsInRange ( int first, int last )
     }
     return list;
 }
-
-
-#include "FormulaToolWidget.moc"

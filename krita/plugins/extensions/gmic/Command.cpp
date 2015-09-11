@@ -532,7 +532,7 @@ bool Command::hasParameterName(const QString& paramName, const QString& paramTyp
                 }
                 else
                 {
-                    qDebug() << "Ignoring type " << currentParameter->m_type;
+                    dbgKrita << "Ignoring type " << currentParameter->m_type;
                 }
             }
             else

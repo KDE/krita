@@ -75,7 +75,7 @@ public:
         /**
          * The properties are retrieved from the config using the following construct;
          * /code
-         *  KConfigGroup configGroup = KGlobal::config()->group(config.group);
+         *  KConfigGroup configGroup =  KSharedConfig::openConfig()->group(config.group);
          * /endcode
          * For most cases you can pass the string "calligra" into this variable.
          */
@@ -112,8 +112,11 @@ public:
      */
     void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
-private:
+public:
+    /// DO NOT USE! Use instance() instead
+    // TODO: turn KoPluginLoader into namespace and do not expose object at all
     KoPluginLoader();
+private:
     KoPluginLoader(const KoPluginLoader&);
     KoPluginLoader operator=(const KoPluginLoader&);
 

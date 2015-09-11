@@ -17,7 +17,7 @@
  */
 
 #include "kis_abr_translator.h"
-#include <QDebug>
+#include <kis_debug.h>
 #include <QStringList>
 
 KisAbrTranslator::KisAbrTranslator()
@@ -51,7 +51,7 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
             m_currentObjectName = attributeName;
         }
 
-        qDebug() << "---- Object type changed to " << m_currentObjectName;
+        dbgKrita << "---- Object type changed to " << m_currentObjectName;
     }
 
     // behaviour according object's attribute name
@@ -63,7 +63,7 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
             m_root.setAttribute("name", value);
         }
         else {
-            //qDebug() << "--Unknown attribute: " << attributeName;
+            //dbgKrita << "--Unknown attribute: " << attributeName;
         }
     }
     else if (m_currentObjectName == OBJECT_NAME_BRUSH) {
@@ -82,7 +82,7 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
         // TODO
     }
     else {
-        qDebug() << "Unknown attribute of " << m_currentObjectName << "| " << attributeName << type << value << " |";
+        dbgKrita << "Unknown attribute of " << m_currentObjectName << "| " << attributeName << type << value << " |";
     }
 
 
@@ -160,7 +160,7 @@ void AbrBrushProperties::setupProperty(const QString& attributeName, const QStri
         m_flipY = value.toInt();
     }
     else {
-        qDebug() << "Unknown attribute " << attributeName;
+        dbgKrita << "Unknown attribute " << attributeName;
     }
 }
 
@@ -173,7 +173,7 @@ void AbrBrushProperties::setupProperty(const QString& attributeName, const QStri
 void AbrBrushProperties::toXML(QDomDocument& doc, QDomElement& root) const
 {
     if (m_brushType != BRUSH_TYPE_COMPUTED) {
-        qDebug() << m_brushType << "saved as computed brush...";
+        dbgKrita << m_brushType << "saved as computed brush...";
     }
 
     QDomDocument d;
@@ -215,7 +215,7 @@ void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const
 {
     if (type == ABR_OBJECT) {
         if (!m_groups.keys().contains(attributeName)) {
-            qDebug() << "Unknown " << type << " in Tip dynamics called " << attributeName << " : " << value;
+            dbgKrita << "Unknown " << type << " in Tip dynamics called " << attributeName << " : " << value;
         }
         else {
             m_groupType = attributeName;
@@ -259,7 +259,7 @@ void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const
             m_tiltScale = valueDbl;
         }
         else {
-            qDebug() << "Unknown attribute for tip dynamics" << attributeName;
+            dbgKrita << "Unknown attribute for tip dynamics" << attributeName;
         }
 
     } else {
@@ -329,7 +329,7 @@ void AbrGroupProperties::setupProperty(const QString& attributeName, const QStri
         m_bVTy = (enumAbrControllers)value.toInt();
     }
     else {
-        qDebug() << "Unknown attribute for Group!" << attributeName;
+        dbgKrita << "Unknown attribute for Group!" << attributeName;
     }
 
 }

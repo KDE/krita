@@ -60,5 +60,3 @@ void KoColorPopupButton::resizeEvent(QResizeEvent *e)
 
     emit iconSizeChanged();
 }
-
-#include <KoColorPopupButton.moc>

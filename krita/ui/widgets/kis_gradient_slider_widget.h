@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-class KAction;
+class QAction;
 class KMenu;
 class KoGradientSegment;
 class KoSegmentGradient;
@@ -80,7 +80,7 @@ private:
     KoGradientSegment* m_selectedSegment;
     KMenu* m_segmentMenu;
     int m_drag;
-    KAction *m_removeSegmentAction;
+    QAction *m_removeSegmentAction;
 };
 
 #endif

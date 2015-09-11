@@ -39,7 +39,7 @@ public:
     virtual void unsetCanvas();
     void setMainWindow(KisViewManager *kisview);
 
-private slots:
+private Q_SLOTS:
     void slotPreviousFrame();
     void slotNextFrame();
     void slotPlayPause();

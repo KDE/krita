@@ -177,6 +177,3 @@ void IndexGeneratorManager::layoutDone()
             break;
     }
 }
-
-
-#include <IndexGeneratorManager.moc>

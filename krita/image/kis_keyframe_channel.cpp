@@ -274,14 +274,14 @@ KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
 
     int from;
 
-    if (active == m_d->keys.begin()) {
+    if (active == m_d->keys.constBegin()) {
         // First key affects even the frames before it
         from = 0;
     } else {
         from = active.key();
     }
 
-    if (next == m_d->keys.end()) {
+    if (next == m_d->keys.constEnd()) {
         return KisTimeRange::infinite(from);
     } else {
         return KisTimeRange::fromTime(from, next.key() - 1);
@@ -295,8 +295,8 @@ int KisKeyframeChannel::keyframeCount() const
 
 int KisKeyframeChannel::keyframeRowIndexOf(KisKeyframe *keyframe) const
 {
-    KeyframesMap::const_iterator it = m_d->keys.begin();
-    KeyframesMap::const_iterator end = m_d->keys.end();
+    KeyframesMap::const_iterator it = m_d->keys.constBegin();
+    KeyframesMap::const_iterator end = m_d->keys.constEnd();
 
     int row = 0;
 
@@ -313,8 +313,8 @@ int KisKeyframeChannel::keyframeRowIndexOf(KisKeyframe *keyframe) const
 
 KisKeyframe* KisKeyframeChannel::keyframeAtRow(int row) const
 {
-    KeyframesMap::const_iterator it = m_d->keys.begin();
-    KeyframesMap::const_iterator end = m_d->keys.end();
+    KeyframesMap::const_iterator it = m_d->keys.constBegin();
+    KeyframesMap::const_iterator end = m_d->keys.constEnd();
 
     for (; it != end; ++it) {
         if (row <= 0) {
@@ -329,8 +329,8 @@ KisKeyframe* KisKeyframeChannel::keyframeAtRow(int row) const
 
 int KisKeyframeChannel::keyframeInsertionRow(int time) const
 {
-    KeyframesMap::const_iterator it = m_d->keys.begin();
-    KeyframesMap::const_iterator end = m_d->keys.end();
+    KeyframesMap::const_iterator it = m_d->keys.constBegin();
+    KeyframesMap::const_iterator end = m_d->keys.constEnd();
 
     int row = 0;
 
@@ -415,9 +415,9 @@ KisKeyframe * KisKeyframeChannel::insertKeyframe(int time, const KisKeyframe *co
 KisKeyframeChannel::KeyframesMap::const_iterator
 KisKeyframeChannel::activeKeyIterator(int time) const
 {
-    KeyframesMap::const_iterator i = m_d->keys.upperBound(time);
+    KeyframesMap::const_iterator i = const_cast<const KeyframesMap*>(&m_d->keys)->upperBound(time);
 
-    if (i != m_d->keys.begin()) i--;
+    if (i != m_d->keys.constBegin()) i--;
 
     return i;
 }

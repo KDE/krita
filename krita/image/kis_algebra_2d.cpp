@@ -58,15 +58,15 @@ void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPoi
 
 #ifdef SANITY_CHECKS
                 if (kisDistanceToLine(adjustedPoint, QLineF(p0, p1)) < 1e-4) {
-                    qDebug() << ppVar(*pt);
-                    qDebug() << ppVar(adjustedPoint);
-                    qDebug() << ppVar(QLineF(p0, p1));
-                    qDebug() << ppVar(salt);
+                    dbgKrita << ppVar(*pt);
+                    dbgKrita << ppVar(adjustedPoint);
+                    dbgKrita << ppVar(QLineF(p0, p1));
+                    dbgKrita << ppVar(salt);
 
-                    qDebug() << ppVar(poly.containsPoint(*pt, Qt::OddEvenFill));
+                    dbgKrita << ppVar(poly.containsPoint(*pt, Qt::OddEvenFill));
 
-                    qDebug() << ppVar(kisDistanceToLine(*pt, QLineF(p0, p1)));
-                    qDebug() << ppVar(kisDistanceToLine(adjustedPoint, QLineF(p0, p1)));
+                    dbgKrita << ppVar(kisDistanceToLine(*pt, QLineF(p0, p1)));
+                    dbgKrita << ppVar(kisDistanceToLine(adjustedPoint, QLineF(p0, p1)));
                 }
 
                 *pt = adjustedPoint;

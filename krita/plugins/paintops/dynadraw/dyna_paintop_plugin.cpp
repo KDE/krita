@@ -17,7 +17,7 @@
  */
 #include "dyna_paintop_plugin.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kpluginfactory.h>
 

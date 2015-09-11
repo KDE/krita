@@ -32,10 +32,11 @@
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "kis_thread_safe_signal_compressor.h"
 
 
-struct KisSelectionMask::Private
+struct Q_DECL_HIDDEN KisSelectionMask::Private
 {
 public:
     Private(KisSelectionMask *_q) : q(_q) {}
@@ -77,7 +78,7 @@ KisSelectionMask::~KisSelectionMask()
 }
 
 QIcon KisSelectionMask::icon() const {
-    return themedIcon("edit-paste");
+    return KisIconUtils::loadIcon("edit-paste");
 }
 
 void KisSelectionMask::setSelection(KisSelectionSP selection)
@@ -113,7 +114,7 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
 KisDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("Active"), koIcon("local_selection_active"), koIcon("local_selection_inactive"), active());
+    l << KisDocumentSectionModel::Property(i18n("Active"), KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive"), active());
     return l;
 }
 

@@ -29,11 +29,11 @@
 
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -179,11 +179,11 @@ void KisStatusBar::updateSelectionIcon()
 {
     QIcon icon;
     if (!m_view->selectionManager()->displaySelection()) {
-        icon = themedIcon("selection-mode_invisible.png");
+        icon = KisIconUtils::loadIcon("selection-mode_invisible.png");
     } else if (m_view->selectionManager()->showSelectionAsMask()) {
-        icon = themedIcon("selection-mode_mask.png");
+        icon = KisIconUtils::loadIcon("selection-mode_mask.png");
     } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
-        icon = themedIcon("selection-mode_ants.png");
+        icon = KisIconUtils::loadIcon("selection-mode_ants.png");
     }
     m_selectionStatus->setIcon(icon);
 }

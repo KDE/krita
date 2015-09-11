@@ -31,7 +31,7 @@
 #include <KoColor.h>
 
 #include <knuminput.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QLabel>

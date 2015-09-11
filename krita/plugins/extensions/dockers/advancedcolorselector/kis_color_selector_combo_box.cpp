@@ -39,7 +39,7 @@ public:
         QGridLayout* layout = new QGridLayout(this);
         layout->setSpacing(spacing);
 
-        //qDebug()<<"Created list";
+        //dbgKrita<<"Created list";
         
         layout->addWidget(new KisColorSelector(KisColorSelector::Configuration(KisColorSelector::Triangle, KisColorSelector::Ring, KisColorSelector::SL , KisColorSelector::H), this), 0,0);        
         layout->addWidget(new KisColorSelector(KisColorSelector::Configuration(KisColorSelector::Square,   KisColorSelector::Ring, KisColorSelector::SV , KisColorSelector::H), this), 0,1);
@@ -162,7 +162,7 @@ protected:
             parent->setConfiguration(m_lastActiveConfiguration);
             //setList(parent->m_model);
         }
-        //qDebug()<<"mousepress";
+        //dbgKrita<<"mousepress";
         hide();
         e->accept();
     }

@@ -34,7 +34,7 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <kis_types.h>
@@ -111,7 +111,7 @@ public:
      * @param flags Control specific behavior
      * @return success status
      */
-    bool openUrl(const KUrl & url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
+    bool openUrl(const QUrl &url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -123,7 +123,7 @@ public:
      *       Open operation (in any reimplementation of openUrl() or openFile())
      *       call isImporting().
      */
-    bool importDocument(const KUrl &url);
+    bool importDocument(const QUrl &url);
 
     /**
      * Saves the document as @p url without changing the state of the
@@ -135,7 +135,7 @@ public:
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call isExporting().
      */
-    bool exportDocument(const KUrl &url);
+    bool exportDocument(const QUrl &url);
 
     /**
      * @brief Sets whether the document can be edited or is read only.
@@ -485,7 +485,7 @@ public:
      * Sets the document URL to empty URL
      * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
-     * to set the url to KUrl()
+     * to set the url to QUrl()
      */
     void resetURL();
 
@@ -711,12 +711,12 @@ public:
 
     bool isReadWrite() const;
 
-    KUrl url() const;
-    void setUrl(const KUrl &url);
+    QUrl url() const;
+    void setUrl(const QUrl &url);
 
     bool closeUrl(bool promptToSave = true);
 
-    bool saveAs( const KUrl &url );
+    bool saveAs( const QUrl &url );
 
 public Q_SLOTS:
 
@@ -816,7 +816,7 @@ private:
 
     bool saveToStream(QIODevice *dev);
 
-    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
+    QString checkImageMimeTypes(const QString &mimeType, const QUrl &url) const;
 
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 
@@ -825,7 +825,7 @@ private:
     QString prettyPathOrUrl() const;
 
     bool saveToUrl();
-    bool openUrlInternal(const KUrl &url);
+    bool openUrlInternal(const QUrl &url);
 
     class Private;
     Private *const d;

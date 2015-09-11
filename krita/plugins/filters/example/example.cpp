@@ -24,7 +24,7 @@
 #include <QPoint>
 #include <QTime>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>
@@ -50,7 +50,7 @@ KritaExample::~KritaExample()
 
 KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Invert"))
 {
-    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_I)));
+    setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
     setShowConfigurationWidget(false);

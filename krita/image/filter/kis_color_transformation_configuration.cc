@@ -23,7 +23,7 @@
 #include <QThread>
 #include "filter/kis_color_transformation_filter.h"
 
-struct KisColorTransformationConfiguration::Private {
+struct Q_DECL_HIDDEN KisColorTransformationConfiguration::Private {
     Private()
     {}
 

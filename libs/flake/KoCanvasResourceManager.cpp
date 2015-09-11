@@ -165,5 +165,3 @@ void KoCanvasResourceManager::clearResource(int key)
     QVariant empty;
     emit canvasResourceChanged(key, empty);
 }
-
-#include <KoCanvasResourceManager.moc>

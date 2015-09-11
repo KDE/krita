@@ -30,7 +30,7 @@
 #include <QSpinBox>
 #include <QVector>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
 #include <KoUpdater.h>

@@ -25,7 +25,7 @@
 #include "KoRdfCalendarEvent.h"
 // KDE
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 // Qt
 #include <QMimeData>
 

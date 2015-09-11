@@ -425,7 +425,7 @@ protected:
         tempRect.getRect(&x, &y, &w, &h);
         checksum += -x - y + w + h;
 
-//        qCritical() << leaf << requestedRect << "-->" << checksum;
+//        errKrita << leaf << requestedRect << "-->" << checksum;
 
         return checksum;
     }

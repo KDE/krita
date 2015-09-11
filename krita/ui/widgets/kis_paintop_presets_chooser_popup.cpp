@@ -30,7 +30,7 @@
 #include <kis_config.h>
 #include <kis_resource_server_provider.h>
 #include <kis_paintop_preset.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <QCompleter>
 #include "kis_paintop_settings.h"
 
@@ -52,12 +52,12 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
 
-    QAction* action = menu->addAction(themedIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::THUMBNAIL);
     action->setActionGroup(actionGroup);
 
-    action = menu->addAction(themedIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action = menu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);

@@ -23,14 +23,13 @@
 #include <QFile>
 #include <QStandardItemModel>
 
-#include <kdeversion.h>
-#include <kcomponentdata.h>
+#include <kglobal.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
-#include <kurl.h>
-
+#include <QUrl>
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 
 enum KoRecentDocumentRoles {
@@ -75,9 +74,9 @@ public:
 };
 
 
-KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData,
+KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
                                                const QString& header)
-    : KisDetailsPane(parent, _componentData, header)
+    : KisDetailsPane(parent, header)
     , d(new KisRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
@@ -87,7 +86,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponent
 
     model()->setSortRole(0); // Disable sorting
 
-    KConfigGroup config(componentData().config(), "RecentFiles");
+    KConfigGroup config( KSharedConfig::openConfig(), "RecentFiles");
 
     int i = 1;
     QString path;
@@ -100,7 +99,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponent
         if (!path.isEmpty()) {
             QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
 
-            KUrl url(path);
+            QUrl url(path);
 
             if (name.isEmpty())
                 name = url.fileName();
@@ -108,7 +107,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponent
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
                 KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
                 fileList.prepend(fileItem);
-                const QIcon icon = KIcon(fileItem.iconName());
+                const QIcon icon = QIcon::fromTheme(fileItem.iconName());
                 KoFileListItem* item = new KoFileListItem(icon, name, fileItem);
                 item->setEditable(false);
                 rootItem->insertRow(0, item);
@@ -124,12 +123,8 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponent
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-#if KDE_IS_VERSION(4,6,80)
     QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
     KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
-#else
-    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, IconExtent, IconExtent, 0);
-#endif
 
     d->m_previewJobs.append(previewJob);
     connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
@@ -155,13 +150,8 @@ void KisRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         if (preview.isNull()) {
             // need to fetch preview
             const KFileItemList fileList = KFileItemList() << fileItem;
-#if KDE_IS_VERSION(4,6,80)
             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
-#else
-            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, PreviewExtent, PreviewExtent, 0);
-#endif
-
             d->m_previewJobs.append(previewJob);
             connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
             connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
@@ -206,7 +196,7 @@ void KisRecentDocumentsPane::openFile(const QModelIndex& index)
 {
     if (!index.isValid()) return;
 
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("LastReturnType", "File");
 
     KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));

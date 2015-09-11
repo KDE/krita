@@ -25,10 +25,11 @@
 
 #include <QImage>
 #include <QPixmap>
-#include <kurl.h>
+#include <QBuffer>
+#include <QUrl>
 #include <kdebug.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestImageCollection::testGetImageImage()
 {
@@ -115,12 +116,12 @@ void TestImageCollection::testGetImageStore()
     // Opening a KoStore based file we only have the content, and we always have to
     // read the full content anyway due to the store being deleted soon after.
     // So the key is based on the image data.
-    KoImageData *id3 = collection.createExternalImageData(image);
+    KoImageData *id3 = collection.createExternalImageData(QUrl::fromLocalFile(image));
     QCOMPARE(collection.count(), 2);
     QVERIFY(id1->key() != id3->key());
     QVERIFY(id1->priv() != id3->priv());
     QString image2("logo-kpresenter.png");
-    KoImageData *id4 = collection.createExternalImageData(image2);
+    KoImageData *id4 = collection.createExternalImageData(QUrl::fromLocalFile(image2));
     QCOMPARE(id4->hasCachedImage(), false);
     QVERIFY(id1->key() != id4->key());
     QCOMPARE(collection.count(), 3);
@@ -307,5 +308,4 @@ void TestImageCollection::testIsValid()
     QCOMPARE(data.isValid(), false);
 }
 
-QTEST_KDEMAIN(TestImageCollection, GUI)
-#include <TestImageCollection.moc>
+QTEST_MAIN(TestImageCollection)

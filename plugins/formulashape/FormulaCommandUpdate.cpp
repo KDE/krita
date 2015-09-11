@@ -20,7 +20,7 @@
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
 #include "FormulaCursor.h"
-#include <klocale.h> 
+#include <klocalizedstring.h> 
 #include "FormulaData.h"
 
 

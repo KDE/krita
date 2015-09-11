@@ -27,7 +27,7 @@
 typedef QQueue<KisStrokeSP> StrokesQueue;
 typedef QQueue<KisStrokeSP>::iterator StrokesQueueIterator;
 
-struct KisStrokesQueue::Private {
+struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     Private()
         : openedStrokesCounter(0),
           needsExclusiveAccess(false),

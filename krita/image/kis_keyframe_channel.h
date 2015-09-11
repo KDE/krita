@@ -91,7 +91,7 @@ public:
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
-signals:
+Q_SIGNALS:
     void sigKeyframeAboutToBeAdded(KisKeyframe *keyframe);
     void sigKeyframeAdded(KisKeyframe *keyframe);
     void sigKeyframeAboutToBeRemoved(KisKeyframe *keyframe);

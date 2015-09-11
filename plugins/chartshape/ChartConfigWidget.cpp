@@ -32,7 +32,7 @@
 #include <QMenu>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kfontchooser.h>
@@ -662,7 +662,7 @@ void ChartConfigWidget::save()
     command.redo();
 }
 
-KAction* ChartConfigWidget::createAction()
+QAction * ChartConfigWidget::createAction()
 {
     return 0;
 }
@@ -954,7 +954,7 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
 
     const QString iconName = QLatin1String(chartTypeIconName(type, subtype));
     if (!iconName.isEmpty())
-        d->ui.dataSetChartTypeMenu->setIcon(KIcon(iconName));
+        d->ui.dataSetChartTypeMenu->setIcon(QIcon::fromTheme(iconName));
 
     emit dataSetChartTypeChanged(dataSet, type);
     emit dataSetChartSubTypeChanged(dataSet, subtype);
@@ -1187,7 +1187,7 @@ void ChartConfigWidget::update()
         // Set the chart type icon in the chart type button.
         const QString iconName = QLatin1String(chartTypeIconName(d->shape->chartType(), d->shape->chartSubType()));
         if (!iconName.isEmpty())
-            d->ui.chartTypeMenu->setIcon(KIcon(iconName));
+            d->ui.chartTypeMenu->setIcon(QIcon::fromTheme(iconName));
 
         // Make sure we only allow legal chart type combinations
         if (isPolar(d->shape->chartType())) {
@@ -1942,6 +1942,3 @@ void ChartConfigWidget::ui_datasetShowSymbolChanged(bool b)
 
     emit datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b);
 }
-
-#include "ChartConfigWidget.moc"
-

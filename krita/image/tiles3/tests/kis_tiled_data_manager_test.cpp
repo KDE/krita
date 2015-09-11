@@ -32,7 +32,7 @@ bool KisTiledDataManagerTest::checkHole(quint8* buffer,
             quint8 expectedColor = holeRect.contains(x,y) ? holeColor : backgroundColor;
 
             if(*buffer != expectedColor) {
-                qDebug() << "Expected" << expectedColor << "but found" << *buffer;
+                dbgKrita << "Expected" << expectedColor << "but found" << *buffer;
                 return false;
             }
 
@@ -56,11 +56,11 @@ bool KisTiledDataManagerTest::checkTilesShared(KisTiledDataManager *srcDM,
                 : dstDM->getTile(col, row, false);
 
             if(srcTile->tileData() != dstTile->tileData()) {
-                qDebug() << "Expected tile data (" << col << row << ")"
+                dbgKrita << "Expected tile data (" << col << row << ")"
                          << srcTile->extent()
                          << srcTile->tileData()
                          << "but found" << dstTile->tileData();
-                qDebug() << "Expected" << srcTile->data()[0] << "but found" << dstTile->data()[0];
+                dbgKrita << "Expected" << srcTile->data()[0] << "but found" << dstTile->data()[0];
                 return false;
             }
         }
@@ -82,7 +82,7 @@ bool KisTiledDataManagerTest::checkTilesNotShared(KisTiledDataManager *srcDM,
                 : dstDM->getTile(col, row, false);
 
             if(srcTile->tileData() == dstTile->tileData()) {
-                qDebug() << "Expected tiles not be shared:"<< srcTile->extent();
+                dbgKrita << "Expected tiles not be shared:"<< srcTile->extent();
                 return false;
             }
         }

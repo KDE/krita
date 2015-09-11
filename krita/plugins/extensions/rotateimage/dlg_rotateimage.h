@@ -20,7 +20,7 @@
 #ifndef DLG_ROTATEIMAGE
 #define DLG_ROTATEIMAGE
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "kis_global.h"
 
@@ -41,7 +41,7 @@ public:
     }
 };
 
-class DlgRotateImage: public KDialog
+class DlgRotateImage: public KoDialog
 {
 
     Q_OBJECT

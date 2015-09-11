@@ -21,7 +21,7 @@
 
 #include "TestLoad.h"
 
-#include <QtTest>
+#include <QTest>
 #include <QBuffer>
 
 #include <KoXmlReader.h>
@@ -1054,4 +1054,3 @@ void TestLoad::actionElement()
 }
 
 QTEST_MAIN(TestLoad)
-#include "TestLoad.moc"

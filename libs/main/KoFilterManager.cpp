@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QByteArray>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <klibloader.h>
 #include <kmimetype.h>
@@ -81,7 +81,7 @@ QString KoFilterManager::importDocument(const QString& url,
 {
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
-    KUrl u(url);
+    QUrl u(url);
     KMimeType::Ptr t;
     if (documentMimeType.isEmpty()) {
         t = KMimeType::findByUrl(u, 0, true);
@@ -200,7 +200,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
         kDebug(30500) << "Using the mimetype hint:" << m_importUrlMimetypeHint;
         m_graph.setSourceMimeType(m_importUrlMimetypeHint);
     } else {
-        KUrl u;
+        QUrl u;
         u.setPath(m_importUrl);
         KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
         if (!t || t->name() == KMimeType::defaultMimeType()) {
@@ -549,5 +549,3 @@ KoProgressUpdater* KoFilterManager::progressUpdater() const
     }
     return d->progressUpdater.data();
 }
-
-#include <KoFilterManager.moc>

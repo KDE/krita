@@ -22,12 +22,11 @@
 #ifndef KIS_TEMPLATE_CREATE_DIA_H
 #define KIS_TEMPLATE_CREATE_DIA_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include "kritaui_export.h"
 
 class QString;
 class QPixmap;
-class KComponentData;
 class KisDocument;
 class KisTemplateCreateDiaPrivate;
 
@@ -37,18 +36,17 @@ class KisTemplateCreateDiaPrivate;
  *
  ****************************************************************************/
 
-class KRITAUI_EXPORT KisTemplateCreateDia : public KDialog
+class KRITAUI_EXPORT KisTemplateCreateDia : public KoDialog
 {
     Q_OBJECT
 
 private:
-    KisTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &instance,
+    KisTemplateCreateDia(const QString &templatesResourcePath,
                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
     ~KisTemplateCreateDia();
 
 public:
     static void createTemplate(const QString &templatesResourcePath, const char *suffix,
-                               const KComponentData &componentData,
                                KisDocument *document, QWidget *parent = 0);
 
 private Q_SLOTS:

@@ -23,7 +23,7 @@
 #include <QPoint>
 #include <QTime>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

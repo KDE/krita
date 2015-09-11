@@ -20,7 +20,7 @@
 #include <QTabWidget>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -28,7 +28,6 @@
 #include "MusicShape.h"
 
 #include "MusicTool.h"
-#include <MusicTool.moc>
 
 #include "dialogs/PartsWidget.h"
 

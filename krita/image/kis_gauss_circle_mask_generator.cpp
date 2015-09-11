@@ -40,7 +40,7 @@
 #endif
 
 
-struct KisGaussCircleMaskGenerator::Private
+struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
 {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)

@@ -310,19 +310,22 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer, const QString&
             tmp->writeMathML( writer, ns );
         else {
             //We need to use a none element for missing elements in the super/sub scripts
-            writer->startElement( ns.isEmpty() ? "none" : ns.toLatin1() + ":none" );
+            QString s = ns.isEmpty() ? QString::fromLatin1("none") : ns.toLatin1() + QString::fromLatin1(":none");
+            writer->startElement(s.toLatin1());
             writer->endElement();
         }
     }
     if( m_preScripts.isEmpty() ) return;
-    writer->startElement( ns.isEmpty() ? "mprescripts" : ns.toLatin1() + ":mprescripts" );
+    QString s = ns.isEmpty() ? QString::fromLatin1("mprescripts") : ns.toLatin1() + QString::fromLatin1(":mprescripts");
+    writer->startElement(s.toLatin1());
     writer->endElement();
     foreach( BasicElement* tmp, m_preScripts ) {
         if(tmp)
             tmp->writeMathML( writer, ns );
         else {
             //We need to use a none element for missing elements in the super/sub scripts
-            writer->startElement( ns.isEmpty() ? "none" : ns.toLatin1() + ":none" );
+            QString n = ns.isEmpty() ? QString::fromLatin1("none") : ns.toLatin1() + QString::fromLatin1(":none");
+            writer->startElement(n.toLatin1());
             writer->endElement();
         }
     }

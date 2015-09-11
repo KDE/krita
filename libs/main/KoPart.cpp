@@ -29,7 +29,6 @@
 #include "KoView.h"
 #include "KoOpenPane.h"
 #include "KoFilterManager.h"
-#include <KoDocumentInfoDlg.h>
 
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
@@ -245,7 +244,7 @@ KoMainWindow *KoPart::currentMainwindow() const
 
 }
 
-void KoPart::openExistingFile(const KUrl& url)
+void KoPart::openExistingFile(const QUrl &url)
 {
     QApplication::setOverrideCursor(Qt::BusyCursor);
     d->document->openUrl(url);
@@ -253,7 +252,7 @@ void KoPart::openExistingFile(const KUrl& url)
     QApplication::restoreOverrideCursor();
 }
 
-void KoPart::openTemplate(const KUrl& url)
+void KoPart::openTemplate(const QUrl &url)
 {
     QApplication::setOverrideCursor(Qt::BusyCursor);
     bool ok = d->document->loadNativeFormat(url.toLocalFile());
@@ -275,7 +274,7 @@ void KoPart::openTemplate(const KUrl& url)
     QApplication::restoreOverrideCursor();
 }
 
-void KoPart::addRecentURLToAllMainWindows(const KUrl &url)
+void KoPart::addRecentURLToAllMainWindows(const QUrl &url)
 {
     // Add to recent actions list in our mainWindows
     foreach(KoMainWindow *mainWindow, d->mainWindows) {
@@ -295,7 +294,7 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
         KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
-            KUrl url(fullTemplateName);
+            QUrl url(fullTemplateName);
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
@@ -306,14 +305,14 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
                 } else {
-                    KUrl templateURL;
+                    QUrl templateURL;
                     KDesktopFile f(desktopfile);
-                    templateURL.setPath(KUrl(desktopfile).directory() + '/' + f.readUrl());
+                    templateURL.setPath(QFileInfo(desktopfile).absolutePath() + '/' + f.readUrl());
                     fullTemplateName = templateURL.toLocalFile();
                 }
             }
             if (!fullTemplateName.isEmpty()) {
-                openTemplate(fullTemplateName);
+                openTemplate(QUrl::fromUserInput(fullTemplateName));
                 mainWindows().first()->setRootDocument(d->document, this);
                 return;
             }
@@ -383,8 +382,8 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &compon
     }
     openPane->show();
 
-    connect(openPane, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
-    connect(openPane, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
+    connect(openPane, SIGNAL(openExistingFile(const QUrl&)), this, SLOT(openExistingFile(const QUrl&)));
+    connect(openPane, SIGNAL(openTemplate(const QUrl&)), this, SLOT(openTemplate(const QUrl&)));
 
     return openPane;
 }
@@ -393,8 +392,3 @@ void KoPart::setComponentData(const KComponentData &componentData)
 {
     d->m_componentData = componentData;
 }
-
-
-
-
-#include <KoPart.moc>

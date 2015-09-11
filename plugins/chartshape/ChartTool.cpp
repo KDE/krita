@@ -32,7 +32,7 @@
 #include <QPainter>
 
 // KDE
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 // Calligra
@@ -891,5 +891,3 @@ void ChartTool::setShowLegend(bool show)
 
     d->shape->legend()->update();
 }
-
-#include "ChartTool.moc"

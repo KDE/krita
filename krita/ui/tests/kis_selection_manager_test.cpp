@@ -367,15 +367,15 @@ void KisSelectionManagerTest::testScanline16bit()
     KisPaintDeviceSP dev = doc->image()->root()->firstChild()->paintDevice();
     QVERIFY(dev);
 
-    qDebug() << ppVar(dev->colorSpace());
+    dbgKrita << ppVar(dev->colorSpace());
 
     QRect imageRect = doc->image()->bounds();
 
-    qDebug() << ppVar(imageRect);
+    dbgKrita << ppVar(imageRect);
 
     QPoint startPoint = imageRect.center();
 
-    qDebug() << ppVar(startPoint);
+    dbgKrita << ppVar(startPoint);
 
     KisPixelSelectionSP pixelSelection = new KisPixelSelection();
 

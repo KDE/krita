@@ -19,7 +19,7 @@
 #include "TestKoIntegerMaths.h"
 #include "KoIntegerMaths.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestKoIntegerMaths::UINT8Tests()
 {
@@ -91,7 +91,4 @@ void TestKoIntegerMaths::conversionTests()
     QCOMPARE((int)UINT16_TO_UINT8(128 * 257), 128);
 }
 
-QTEST_KDEMAIN(TestKoIntegerMaths, NoGUI)
-#include <TestKoIntegerMaths.moc>
-
-
+QTEST_GUILESS_MAIN(TestKoIntegerMaths)

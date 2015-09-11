@@ -22,6 +22,7 @@
 
 #include <KoUnit.h>
 
+#include <QTest>
 
 Q_DECLARE_METATYPE(KoUnit::Type)
 Q_DECLARE_METATYPE(KoUnit::ListOptions)
@@ -158,5 +159,4 @@ void TestKoUnit::testListForUi()
     QCOMPARE(unit.indexInListForUi(listOptions), index);
 }
 
-QTEST_MAIN(TestKoUnit)
-#include <TestKoUnit.moc>
+QTEST_GUILESS_MAIN(TestKoUnit)

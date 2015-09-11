@@ -22,7 +22,7 @@
 #include "kis_node.h"
 #include <kis_paint_device.h>
 
-struct KisPlayInfo::Private {
+struct Q_DECL_HIDDEN KisPlayInfo::Private {
     KisImageWSP image;
     KisNodeSP currentNode;
 };

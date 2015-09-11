@@ -22,6 +22,7 @@
 #include <QTextStream>
 #include <QTabletEvent>
 #include <input/kis_tablet_event.h>
+#include <QLoggingCategory>
 
 
 class KisTabletDebugger
@@ -43,6 +44,7 @@ public:
 
     static QString tabletDeviceToString(QTabletEvent::TabletDevice device);
     static QString pointerTypeToString(QTabletEvent::PointerType pointer);
+    static QString exTypeToString(QEvent::Type type);
 
 private:
     KisTabletDebugger();

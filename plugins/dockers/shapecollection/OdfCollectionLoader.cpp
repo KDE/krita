@@ -28,7 +28,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdf.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kurl.h>
@@ -199,5 +199,3 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
 
     m_loadingTimer->start();
 }
-
-#include <OdfCollectionLoader.moc>

@@ -33,7 +33,7 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextDocument>
 #include <QtAlgorithms>
@@ -187,5 +187,3 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
 ShowChangesCommand::~ShowChangesCommand()
 {
 }
-
-#include <ShowChangesCommand.moc>

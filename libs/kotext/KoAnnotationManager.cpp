@@ -84,6 +84,3 @@ QList<QString> KoAnnotationManager::annotationNameList() const
 {
     return d->annotationNameList;
 }
-
-#include <KoAnnotationManager.moc>
-

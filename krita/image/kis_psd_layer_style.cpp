@@ -23,12 +23,12 @@
 #include <psd.h>
 #include <psd_utils.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_global.h"
 
 
-struct KisPSDLayerStyle::Private
+struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 {
     Private()
         : version(-1)

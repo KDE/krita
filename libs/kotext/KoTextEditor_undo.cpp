@@ -27,7 +27,7 @@
 
 #include <kundo2command.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextDocument>
 #include <QWeakPointer>

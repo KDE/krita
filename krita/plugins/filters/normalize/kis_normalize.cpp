@@ -25,7 +25,7 @@
 #include <QVector3D>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 
@@ -76,7 +76,6 @@ void KisNormalizeTransformation::transform(const quint8* src, quint8* dst, qint3
 {
     QVector3D normal_vector;
     QVector<float> channelValues(4);
-    quint16 m_rgba[4];
     //if (m_colorSpace->colorDepthId().id()!="F16" && m_colorSpace->colorDepthId().id()!="F32" && m_colorSpace->colorDepthId().id()!="F64") {
     /* I don't know why, but the results of this are unexpected with a floating point space.
      * And manipulating the pixels gives strange results.

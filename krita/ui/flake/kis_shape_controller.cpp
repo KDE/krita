@@ -19,7 +19,7 @@
 #include "kis_shape_controller.h"
 
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoShape.h>
 #include <KoShapeContainer.h>

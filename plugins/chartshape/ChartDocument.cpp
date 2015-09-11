@@ -39,7 +39,6 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoView.h>
-#include <kcomponentdata.h>
 #include <kdebug.h>
 
 // KoChart

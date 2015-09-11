@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestPAPageMoveCommand::initTestCase()
 {
@@ -420,7 +420,4 @@ void TestPAPageMoveCommand::checkOrder( QList<KoPAMasterPage*> & pages )
     }
 }
 
-QTEST_KDEMAIN( TestPAPageMoveCommand, GUI )
-
-#include <TestPAPageMoveCommand.moc>
-
+QTEST_MAIN( TestPAPageMoveCommand )

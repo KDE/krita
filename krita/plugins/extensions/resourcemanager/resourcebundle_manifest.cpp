@@ -82,7 +82,7 @@ bool ResourceBundleManifest::load(QIODevice *device)
     }
 
     if (!errorMessage.isEmpty()) {
-        qWarning() << "Error parsing manifest" << errorMessage << "line" << errorLine << "column" << errorColumn;
+        warnKrita << "Error parsing manifest" << errorMessage << "line" << errorLine << "column" << errorColumn;
         return false;
     }
 

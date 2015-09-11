@@ -1,5 +1,4 @@
 #include <qtest_kde.h>
-#include <kcomponentdata.h>
 
 #include <QDebug>
 
@@ -11,11 +10,11 @@
 class TestStylesModel : public QObject
 {
     Q_OBJECT
-public slots:
+public Q_SLOTS:
     void init();
     void cleanup();
 
-private slots:
+private Q_SLOTS:
     void testPrecalcCache();
     void testSetManager();
 
@@ -110,5 +109,3 @@ void TestStylesModel::fillManager()
 }
 
 QTEST_KDEMAIN(TestStylesModel, GUI)
-
-#include <TestStylesModel.moc>

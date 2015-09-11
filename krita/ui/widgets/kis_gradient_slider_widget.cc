@@ -27,8 +27,8 @@
 
 #include <kis_debug.h>
 #include <kmenu.h>
-#include <klocale.h>
-#include <kaction.h>
+#include <klocalizedstring.h>
+#include <QAction>
 
 #include <KoSegmentGradient.h>
 
@@ -49,7 +49,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
     m_segmentMenu->addAction(i18n("Duplicate Segment"), this, SLOT(slotDuplicateSegment()));
     m_segmentMenu->addAction(i18n("Mirror Segment"), this, SLOT(slotMirrorSegment()));
 
-    m_removeSegmentAction  = new KAction(i18n("Remove Segment"), this);
+    m_removeSegmentAction  = new QAction(i18n("Remove Segment"), this);
     connect(m_removeSegmentAction, SIGNAL(triggered()), this, SLOT(slotRemoveSegment()));
 
     m_segmentMenu->addAction(m_removeSegmentAction);

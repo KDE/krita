@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <QAction>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
@@ -38,7 +38,7 @@
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"
 #include <QGridLayout>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
@@ -93,9 +93,9 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
 
-    m_nameEdit = new KLineEdit(this);
-    m_nameEdit->setClickMessage(i18n("Insert name"));
-    m_nameEdit->setClearButtonShown(true);
+    m_nameEdit = new QLineEdit(this);
+    m_nameEdit->setPlaceholderText(i18n("Insert name"));
+    m_nameEdit->setClearButtonEnabled(true);
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_itemChooser, 0, 0, 1, 2);

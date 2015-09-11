@@ -39,7 +39,7 @@
 #include <time.h>
 #include<kis_types.h>
 
-struct KisPaintOpSettings::Private {
+struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;

@@ -25,7 +25,7 @@
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager):
     m_manager(manager)

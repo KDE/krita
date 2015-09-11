@@ -20,7 +20,7 @@
 
 #include "widgets/kis_cmb_idlist.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <KoID.h>
 

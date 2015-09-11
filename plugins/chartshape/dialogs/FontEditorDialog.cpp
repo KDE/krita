@@ -21,14 +21,14 @@
 
 #include "FontEditorDialog.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kfontchooser.h>
 
 using namespace KoChart;
 
 
 FontEditorDialog::FontEditorDialog(QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Select Font"));
     setModal(true);

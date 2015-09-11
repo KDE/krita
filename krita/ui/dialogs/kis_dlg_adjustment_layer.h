@@ -19,7 +19,7 @@
 #ifndef KISDLGAdjustMENTLAYER_H
 #define KISDLGAdjustMENTLAYER_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QLabel>
 
 class KisFilter;
@@ -33,7 +33,7 @@ class KisViewManager;
 /**
  * Create a new adjustment layer.
  */
-class KisDlgAdjustmentLayer : public KDialog
+class KisDlgAdjustmentLayer : public KoDialog
 {
 
     Q_OBJECT

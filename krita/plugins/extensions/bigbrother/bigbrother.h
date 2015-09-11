@@ -21,11 +21,9 @@
 #include <QVariant>
 #include <kis_view_plugin.h>
 
-
 class KisAction;
 class KisMacro;
 class KisViewManager;
-class KUrl;
 
 class BigBrotherPlugin : public KisViewPlugin
 {
@@ -42,14 +40,14 @@ private Q_SLOTS:
     void slotStopRecordingMacro();
 
 private:
-    void saveMacro(const KisMacro* macro, const KUrl& url);
-    KisMacro* openMacro(KUrl* url = 0);
+    void saveMacro(const KisMacro* macro);
+    KisMacro *openMacro();
 private:
 
-    KisViewManager * m_view;
-    KisMacro * m_recorder;
-    KisAction* m_startRecordingMacroAction;
-    KisAction* m_stopRecordingMacroAction;
+    KisViewManager *m_view;
+    KisMacro *m_recorder;
+    KisAction *m_startRecordingMacroAction;
+    KisAction *m_stopRecordingMacroAction;
 
 };
 

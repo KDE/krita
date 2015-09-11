@@ -20,7 +20,7 @@
 
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
@@ -74,18 +74,7 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
     KoZoomAction *zoomAction = q->inputManager()->canvas()->viewManager()->zoomController()->zoomAction();
 
     if (event) {
-        QPoint pos;
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-        if (mouseEvent) {
-            pos = mouseEvent->pos();
-        } else {
-            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
-            if (wheelEvent) {
-                pos = wheelEvent->pos();
-            } else {
-                qWarning() << "Unhandled type of event";
-            }
-        }
+        QPoint pos = eventPos(event);
 
         float oldZoom = zoomAction->effectiveZoom();
         float newZoom = zoomIn ?
@@ -222,7 +211,7 @@ void KisZoomAction::inputEvent( QEvent* event )
     KisAbstractInputAction::inputEvent(event);
 }
 
-void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisZoomAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     QPointF diff = -(pos - lastPos);
 

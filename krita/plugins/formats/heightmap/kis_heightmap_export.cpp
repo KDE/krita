@@ -33,7 +33,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <kis_debug.h>
 #include <KisDocument.h>
@@ -84,9 +84,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         return KisImportExportFilter::WrongFormat;
     }
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("HeightMap Export Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsHeightMap optionsHeightMap;
 

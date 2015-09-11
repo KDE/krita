@@ -44,6 +44,3 @@ bool KoPAPageLayoutDialog::applyToDocument() const
 {
     return KoPageLayoutDialog::applyToDocument();
 }
-
-#include <KoPAPageLayoutDialog.moc>
-

@@ -4,6 +4,7 @@
 #include "styles/KoTableRowFormat.h"
 
 #include <QBrush>
+#include <QTest>
 
 void TestTableFormats::testTableColumnFormat()
 {
@@ -67,4 +68,3 @@ void TestTableFormats::testTableRowFormat()
 }
 
 QTEST_MAIN(TestTableFormats)
-#include <TestTableFormats.moc>

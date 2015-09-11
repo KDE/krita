@@ -44,9 +44,9 @@
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kselectaction.h>
@@ -242,7 +242,7 @@ void KoView::dropEvent(QDropEvent *event)
         QList<QUrl> urls = event->mimeData()->urls();
         foreach (const QUrl &url, urls) {
             QImage image;
-            KUrl kurl(url);
+            QUrl kurl(url);
             // make sure we download the files before inserting them
             if (!kurl.isLocalFile()) {
                 QString tmpFile;
@@ -349,7 +349,7 @@ void KoView::setupGlobalActions()
 
 void KoView::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty()) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
@@ -414,7 +414,7 @@ void KoView::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
     if (profileName == "anonymous") {
         d->actionAuthor->setCurrentItem(1);

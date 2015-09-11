@@ -35,19 +35,18 @@ public:
 public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
 
-    void forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent);
+    void forwardHoverEvent(QEvent *event);
 
     /**
      * Forwards the event to the active tool and returns true if the
-     * event 'was not ignored'.  That is by default the event is
+     * event was not ignored.  That is by default the event is
      * considered accepted, but the tool can explicitly ignore it.
      * @param state beginning, continuing, or ending the action.
      * @param action alternate tool action requested.
      * @param event the event being sent to the tool by the AbstractInputAction.
      * @param originalEvent the original event received by the AbstractInputAction.
-     * @param lastTabletEvent The event object for the last tablet event.
      */
-    bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent);
+    bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent);
     bool primaryActionSupportsHiResEvents() const;
 
     void setActiveTool(KoToolBase *tool);

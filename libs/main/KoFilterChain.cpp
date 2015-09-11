@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterVertex.h"
 
 #include <QMetaMethod>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kmimetype.h>
 #include <kdebug.h>
 
@@ -292,7 +292,7 @@ void KoFilterChain::manageIO()
 
     if (!m_outputFile.isEmpty()) {
         if (m_outputTempFile == 0) {
-            m_inputTempFile = new KTemporaryFile;
+            m_inputTempFile = new QTemporaryFile;
             m_inputTempFile->setAutoRemove(true);
             m_inputTempFile->setFileName(m_outputFile);
         }
@@ -338,20 +338,20 @@ void KoFilterChain::finalizeIO()
     }
 }
 
-bool KoFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
+bool KoFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
 {
     if (*tempFile) {
         kError(30500) << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
-    *tempFile = new KTemporaryFile();
+    *tempFile = new QTemporaryFile();
     (*tempFile)->setAutoRemove(autoDelete);
     return (*tempFile)->open();
 }
 
-/*  Note about Windows & usage of KTemporaryFile
+/*  Note about Windows & usage of QTemporaryFile
 
-    The KTemporaryFile objects m_inputTempFile and m_outputTempFile are just used
+    The QTemporaryFile objects m_inputTempFile and m_outputTempFile are just used
     to reserve a temporary file with a unique name which then can be used to store
     an intermediate format. The filters themselves do not get access to these objects,
     but can query KoFilterChain only for the filename and then have to open the files
@@ -361,10 +361,10 @@ bool KoFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
     So unless someone finds out which flags might be needed on opening the files on
     Windows to prevent this behaviour (unless these details are hidden away by the
     Qt abstraction and cannot be influenced), a workaround is to destruct the
-    KTemporaryFile objects right after creation again and just take the name,
+    QTemporaryFile objects right after creation again and just take the name,
     to avoid having two file handlers on the same file.
 
-    A better fix might be to use the KTemporaryFile objects also by the filters,
+    A better fix might be to use the QTemporaryFile objects also by the filters,
     instead of having them open the same file on their own again, but that needs more work
     and is left for... you :)
 */
@@ -379,7 +379,7 @@ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alterna
             return;
         }
         m_inputFile = m_inputTempFile->fileName();
-        // See "Note about Windows & usage of KTemporaryFile" above
+        // See "Note about Windows & usage of QTemporaryFile" above
 #ifdef Q_OS_WIN
         m_inputTempFile->close();
         m_inputTempFile->setAutoRemove(true);
@@ -406,7 +406,7 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
     } else {
         m_outputFile = m_outputTempFile->fileName();
 
-        // See "Note about Windows & usage of KTemporaryFile" above
+        // See "Note about Windows & usage of QTemporaryFile" above
 #ifdef Q_OS_WIN
         m_outputTempFile->close();
         m_outputTempFile->setAutoRemove(true);
@@ -501,7 +501,7 @@ KoStoreDevice* KoFilterChain::storageCleanupHelper(KoStore** storage)
 
 KoDocument* KoFilterChain::createDocument(const QString& file)
 {
-    KUrl url;
+    QUrl url;
     url.setPath(file);
     KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
     if (t->name() == KMimeType::defaultMimeType()) {

@@ -22,7 +22,7 @@
 #include <QDesktopServices>
 
 #include <KisImportExportManager.h>
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "kis_debug.h"
 
@@ -33,7 +33,7 @@ KisUrlRequester::KisUrlRequester(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    m_ui->btnSelectFile->setIcon(themedIcon("folder"));
+    m_ui->btnSelectFile->setIcon(KisIconUtils::loadIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
     connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
@@ -51,7 +51,7 @@ void KisUrlRequester::setStartDir(const QString &path)
 void KisUrlRequester::setFileName(const QString &path)
 {
     m_ui->txtFileName->setText(path);
-    KUrl url(path);
+    QUrl url(path);
     emit urlSelected(url);
 }
 
@@ -60,12 +60,12 @@ QString KisUrlRequester::fileName() const
     return m_ui->txtFileName->text();
 }
 
-KUrl KisUrlRequester::url() const
+QUrl KisUrlRequester::url() const
 {
-    return KUrl(fileName());
+    return QUrl(fileName());
 }
 
-void KisUrlRequester::setUrl(const KUrl &urlObj)
+void KisUrlRequester::setUrl(const QUrl &urlObj)
 {
     QString url = urlObj.path();
 
@@ -129,7 +129,7 @@ void KisUrlRequester::slotSelectFile()
         dialog.setNameFilter(m_nameFilter);
     }
 
-    QString url = dialog.url();
+    QString url = dialog.filename();
 
     if (m_basePath.isEmpty())
     {

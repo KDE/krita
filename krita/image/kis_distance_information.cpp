@@ -28,7 +28,7 @@
 #include "kis_lod_transform.h"
 
 
-struct KisDistanceInformation::Private {
+struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     Private() : lastDabInfoValid(false),
                 lastPaintInfoValid(false) {}
 
@@ -222,7 +222,7 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             m_d->distance += KisAlgebra2D::abs(diff);
         }
     } else {
-        qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";
+        warnKrita << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";
     }
 
     return t;

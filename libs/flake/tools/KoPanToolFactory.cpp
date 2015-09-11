@@ -22,7 +22,7 @@
 #include "KoPanTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoPanToolFactory::KoPanToolFactory()
         : KoToolFactoryBase(KoPanTool_ID)

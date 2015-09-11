@@ -25,7 +25,7 @@
 #include "KoRdfLocation.h"
 // KDE
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 KoLocationSemanticItemFactory::KoLocationSemanticItemFactory()

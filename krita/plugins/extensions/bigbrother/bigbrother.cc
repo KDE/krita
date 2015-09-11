@@ -22,9 +22,10 @@
 #include <kis_action.h>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoUpdater.h>
 #include <KoResourceServerProvider.h>
 #include <KoFileDialog.h>
@@ -83,23 +84,23 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
 
         KisAction* action = 0;
         // Open and play action
-        action  = new KisAction(themedIcon("media-playback-start"), i18n("Open and play..."), this);
+        action  = new KisAction(KisIconUtils::loadIcon("media-playback-start"), i18n("Open and play..."), this);
         addAction("Macro_Open_Play", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenPlay()));
 
         // Open and edit action
-        action  = new KisAction(themedIcon("document-edit"), i18n("Open and edit..."), this);
+        action  = new KisAction(KisIconUtils::loadIcon("document-edit"), i18n("Open and edit..."), this);
         addAction("Macro_Open_Edit", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenEdit()));
 
         // Start recording action
-        m_startRecordingMacroAction = new KisAction(themedIcon("media-record"), i18n("Start recording macro"), this);
+        m_startRecordingMacroAction = new KisAction(KisIconUtils::loadIcon("media-record"), i18n("Start recording macro"), this);
         m_startRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
         connect(m_startRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStartRecordingMacro()));
 
         // Save recorded action
-        m_stopRecordingMacroAction  = new KisAction(themedIcon("media-playback-stop"), i18n("Stop recording actions"), this);
+        m_stopRecordingMacroAction  = new KisAction(KisIconUtils::loadIcon("media-playback-stop"), i18n("Stop recording actions"), this);
         m_stopRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction);
         connect(m_stopRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStopRecordingMacro()));
@@ -116,7 +117,7 @@ BigBrotherPlugin::~BigBrotherPlugin()
 void BigBrotherPlugin::slotOpenPlay()
 {
     KisMacro* m = openMacro();
-    qDebug() << m;
+    dbgKrita << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();
@@ -134,18 +135,17 @@ void BigBrotherPlugin::slotOpenPlay()
 
 void BigBrotherPlugin::slotOpenEdit()
 {
-    KUrl url;
-    KisMacro* m = openMacro(&url);
-    if (!m) return;
+    KisMacro *macro = openMacro();
+    if (!macro) return;
     KisActionsEditorDialog aed(m_view->mainWindow());
 
-    aed.actionsEditor()->setMacro(m);
+    aed.actionsEditor()->setMacro(macro);
 
     if (aed.exec() == QDialog::Accepted) {
-        saveMacro(m, url);
+        saveMacro(macro);
     }
 
-    delete m;
+    delete macro;
 }
 
 void BigBrotherPlugin::slotStartRecordingMacro()
@@ -170,16 +170,14 @@ void BigBrotherPlugin::slotStopRecordingMacro()
     m_startRecordingMacroAction->setEnabled(true);
     m_stopRecordingMacroAction->setEnabled(false);
     // Save the macro
-    saveMacro(m_recorder, KUrl());
+    saveMacro(m_recorder);
     // Delete recorder
     delete m_recorder;
     m_recorder = 0;
 }
 
-KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
+KisMacro* BigBrotherPlugin::openMacro()
 {
-
-    Q_UNUSED(url);
     QStringList mimeFilter;
     mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
@@ -187,7 +185,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     dialog.setCaption(i18n("Open Macro"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     RecordedActionLoadContext loadContext;
 
     if (!filename.isNull()) {
@@ -220,14 +218,13 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     return 0;
 }
 
-void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
+void BigBrotherPlugin::saveMacro(const KisMacro* macro)
 {
     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "krita/bigbrother");
     dialog.setCaption(i18n("Save Macro"));
-    dialog.setOverrideDir(url.url());
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
 
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
 
     if (!filename.isNull()) {
         QDomDocument doc;

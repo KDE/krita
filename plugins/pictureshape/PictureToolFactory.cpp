@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 
 #include "PictureShape.h"

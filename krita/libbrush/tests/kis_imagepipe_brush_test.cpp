@@ -35,7 +35,7 @@
 #define COMPARE_ALL(brush, method)                                      \
     foreach(KisGbrBrush *child, brush->testingGetBrushes()) {           \
         if(brush->method() != child->method()) {                        \
-            qDebug() << "Failing method:" << #method                    \
+            dbgKrita << "Failing method:" << #method                    \
                      << "brush index:"                                  \
                      << brush->testingGetBrushes().indexOf(child);      \
             QCOMPARE(brush->method(), child->method());                 \

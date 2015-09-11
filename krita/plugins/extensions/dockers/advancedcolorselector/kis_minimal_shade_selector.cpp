@@ -24,7 +24,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 
 #include "KoCanvasResourceManager.h"
@@ -78,7 +77,7 @@ void KisMinimalShadeSelector::setColor(const KoColor& color)
 void KisMinimalShadeSelector::updateSettings()
 {
     KisColorSelectorBase::updateSettings();
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     QString stri = cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0");
     QStringList strili = stri.split(';', QString::SkipEmptyParts);
@@ -157,7 +156,7 @@ void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     if(m_colorUpdateAllowed==false)
         return;
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);

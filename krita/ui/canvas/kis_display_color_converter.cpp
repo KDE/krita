@@ -564,7 +564,7 @@ KoColor KisDisplayColorConverter::fromHslF(qreal h, qreal s, qreal l, qreal a)
     // generate HSL from sRGB!
     QColor qcolor(QColor::fromHslF(h, s, l, a));
     if (!qcolor.isValid()) {
-        qWarning() << "Could not construct valid color from h" << h << "s" << s << "l" << l << "a" << a;
+        warnKrita << "Could not construct valid color from h" << h << "s" << s << "l" << l << "a" << a;
         qcolor = Qt::black;
     }
     return m_d->approximateFromQColor(qcolor);

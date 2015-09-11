@@ -19,7 +19,7 @@
 
 #include "kis_paintop_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 struct KisPaintOpOption::Private
 {

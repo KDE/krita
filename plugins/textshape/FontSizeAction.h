@@ -30,7 +30,7 @@
 
 #include <kselectaction.h>
 
-class KIcon;
+class QIcon;
 
 /**
  * An action to allow changing of the font size.
@@ -47,7 +47,7 @@ class FontSizeAction : public KSelectAction
 public:
     explicit FontSizeAction(QObject *parent);
     FontSizeAction(const QString &text, QObject *parent);
-    FontSizeAction(const KIcon &icon, const QString &text, QObject *parent);
+    FontSizeAction(const QIcon &icon, const QString &text, QObject *parent);
 
     virtual ~FontSizeAction();
 

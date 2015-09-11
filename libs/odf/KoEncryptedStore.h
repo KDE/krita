@@ -22,16 +22,21 @@
 #ifdef QCA2
 #include "KoStore.h"
 #include <QHash>
+// QCA headers have "slots" and "signals", which QT_NO_SIGNALS_SLOTS_KEYWORDS does not like
+#define slots Q_SLOTS
+#define signals Q_SIGNALS
 #include <QtCrypto>
+#undef slots
+#undef signals
 
 class QString;
 class QByteArray;
 class QIODevice;
 class QWidget;
-class KUrl;
+class QUrl;
 class KZip;
 class KArchiveDirectory;
-class KTemporaryFile;
+class QTemporaryFile;
 struct KoEncryptedStore_EncryptionData;
 
 class KoEncryptedStore : public KoStore
@@ -41,7 +46,7 @@ public:
                      bool writeMimetype);
     KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
                      bool writeMimetype);
-    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode,
+    KoEncryptedStore(QWidget *window, const QUrl &url, const QString &filename, Mode mode,
                      const QByteArray &appIdentification, bool writeMimetype);
     ~KoEncryptedStore();
 
@@ -113,7 +118,7 @@ protected:
     QString m_filename;
     QByteArray m_manifestBuffer;
     KZip *m_pZip;
-    KTemporaryFile *m_tempFile;
+    QTemporaryFile *m_tempFile;
     bool m_bPasswordUsed;
     bool m_bPasswordDeclined;
 

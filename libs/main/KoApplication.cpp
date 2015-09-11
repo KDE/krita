@@ -40,8 +40,7 @@
 #include <KoJsonTrader.h>
 #include <KoConfig.h>
 
-#include <kdeversion.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
@@ -52,10 +51,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 
 #include <QFile>
 #include <QWidget>
@@ -104,7 +100,7 @@ public:
     ~ResetStarting()  {
         if (m_splash) {
 
-            KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+            KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
             if (hideSplash) {
                 m_splash->hide();
@@ -301,13 +297,11 @@ bool KoApplication::start()
     }
     // No argument -> create an empty document
     if (!argsCount) {
-#if KDE_IS_VERSION(4,6,0)
         // if there's no document, add the current working directory
         // to the recent dirs so the open dialog and open pane show
         // the directory from where the app was started, instead of
         // the last directory from where we opened a file
         KRecentDirs::add(":OpenDialog", QDir::currentPath());
-#endif
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
         d->partList << part;
@@ -407,7 +401,7 @@ bool KoApplication::start()
 
         if (autoSaveFiles.size() > 0) {
             short int numberOfOpenDocuments = 0; // number of documents open
-            KUrl url;
+            QUrl url;
             // bah, we need to re-use the document that was already created
             url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
             if (mainWindow->openDocument(part, url)) {
@@ -525,13 +519,13 @@ bool KoApplication::start()
                     }
 
                     if (!templatePath.isEmpty()) {
-                        KUrl templateBase;
+                        QUrl templateBase;
                         templateBase.setPath(templatePath);
                         KDesktopFile templateInfo(templatePath);
 
                         QString templateName = templateInfo.readUrl();
-                        KUrl templateURL;
-                        templateURL.setPath(templateBase.directory() + '/' + templateName);
+                        QUrl templateURL;
+                        templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
                         if (mainWindow->openDocument(part, templateURL)) {
                             doc->resetURL();
                             doc->setEmpty();
@@ -539,7 +533,7 @@ bool KoApplication::start()
                             kDebug(30003) << "Template loaded...";
                             numberOfOpenDocuments++;
                         } else {
-                            KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
+                            KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.toDisplayString()));
                             delete mainWindow;
                         }
                     }
@@ -553,7 +547,7 @@ bool KoApplication::start()
                                           <<"\t100" << endl;
                         }
                         if (!roundtripFileName.isEmpty()) {
-                            part->document()->saveAs(KUrl("file:"+roundtripFileName));
+                            part->document()->saveAs(QUrl("file:"+roundtripFileName));
                         }
                         // close the document
                         mainWindow->slotFileQuit();
@@ -645,5 +639,3 @@ KoApplication *KoApplication::koApplication()
 {
     return KoApp;
 }
-
-#include <KoApplication.moc>

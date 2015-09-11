@@ -30,12 +30,12 @@
 #include <QMenu>
 #include <QAction>
 #include <QShowEvent>
+#include <QFontDatabase>
 
 #include <kconfig.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kis_icon_utils.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_config_widget.h>
@@ -76,10 +76,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
-    KConfigGroup group(KGlobal::config(), "GUI");
-    m_d->smallFont  = KGlobalSettings::generalFont();
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+    m_d->smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = group.readEntry("palettefontsize", m_d->smallFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
     m_d->smallFont.setPointSizeF(pointSize);
     setFont(m_d->smallFont);
 

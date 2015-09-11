@@ -29,7 +29,7 @@
 #include <QAction>
 #include <QSharedPointer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoGroupButton.h>
 #include <KoIcon.h>
@@ -508,5 +508,3 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
-
-#include <KoFillConfigWidget.moc>

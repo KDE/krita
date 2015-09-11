@@ -63,7 +63,7 @@ public:
     KisOpenGLUpdateInfoSP fetchFrameData(int time) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
-signals:
+Q_SIGNALS:
     void changed();
 
 private:
@@ -71,7 +71,7 @@ private:
     struct Private;
     QScopedPointer<Private> m_d;
 
-private slots:
+private Q_SLOTS:
     void framesChanged(const KisTimeRange &range, const QRect &rect);
 };
 

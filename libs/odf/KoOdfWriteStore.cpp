@@ -22,9 +22,9 @@
 
 #include <QBuffer>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -32,7 +32,7 @@
 
 #include "KoXmlNS.h"
 
-struct KoOdfWriteStore::Private {
+struct Q_DECL_HIDDEN KoOdfWriteStore::Private {
     Private(KoStore * store)
             : store(store)
             , storeDevice(0)
@@ -61,7 +61,7 @@ struct KoOdfWriteStore::Private {
 
     KoXmlWriter * bodyWriter;
     KoXmlWriter * manifestWriter;
-    KTemporaryFile * contentTmpFile;
+    QTemporaryFile * contentTmpFile;
 };
 
 KoOdfWriteStore::KoOdfWriteStore(KoStore* store)
@@ -145,7 +145,7 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
 {
     if (!d->bodyWriter) {
         Q_ASSERT(!d->contentTmpFile);
-        d->contentTmpFile = new KTemporaryFile;
+        d->contentTmpFile = new QTemporaryFile;
         if (!d->contentTmpFile->open()) {
             kWarning() << "Failed to open the temporary content file";
             delete d->contentTmpFile;
@@ -170,7 +170,7 @@ bool KoOdfWriteStore::closeContentWriter()
         d->contentWriter->addCompleteElement(d->contentTmpFile);
     }
     d->contentTmpFile->close(); // seek again to the beginning
-    delete d->contentTmpFile; d->contentTmpFile = 0; // and finally close and remove the KTemporaryFile
+    delete d->contentTmpFile; d->contentTmpFile = 0; // and finally close and remove the QTemporaryFile
 
     if (d->contentWriter) {
         d->contentWriter->endElement(); // document-content

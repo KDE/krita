@@ -18,7 +18,7 @@
 
 #include "kis_meta_data_model.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_entry.h>

@@ -19,7 +19,7 @@
 #ifndef TestKoShapeFactoryBase_H
 #define TestKoShapeFactoryBase_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestKoShapeFactory : public QObject
 {

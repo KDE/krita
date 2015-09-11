@@ -18,7 +18,7 @@
 
 #include "kis_macro_player.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -33,7 +33,7 @@
 #include "kundo2magicstring.h"
 
 
-struct KisMacroPlayer::Private
+struct Q_DECL_HIDDEN KisMacroPlayer::Private
 {
     Private(const KisPlayInfo& _info) : info(_info), updater(0) {}
     bool paused;

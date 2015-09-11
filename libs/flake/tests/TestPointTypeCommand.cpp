@@ -22,6 +22,8 @@
 #include "KoPathShape.h"
 #include "KoPathPointTypeCommand.h"
 
+#include <QTest>
+
 void TestPointTypeCommand::redoUndoSymmetric()
 {
     KoPathShape path1;
@@ -156,4 +158,3 @@ void TestPointTypeCommand::redoUndoCorner()
 }
 
 QTEST_MAIN(TestPointTypeCommand)
-#include <TestPointTypeCommand.moc>

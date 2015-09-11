@@ -126,7 +126,9 @@ void TestKoLZF::testArrayRoundtripDifferentSizes_data()
                         data[b] = b % 256;
                     }
                 }
-                QTest::newRow(QByteArray::number(i)+'-'+QByteArray(1, canary[c]).toHex()+'-'+fillMethodName[f])
+
+                QByteArray ba = QByteArray::number(i)+'-'+QByteArray(1, canary[c]).toHex()+'-'+QByteArray(fillMethodName[f]);
+                QTest::newRow(ba.constData())
                     << data << i << canary[c];
             }
         }
@@ -224,8 +226,8 @@ void TestKoLZF::testByteArrayRoundtripDifferentSizes_data()
                     data[b] = b % 256;
                 }
             }
-
-            QTest::newRow(QByteArray::number(i)+'-'+fillMethodName[f]) << data;
+            QByteArray ba = QByteArray::number(i)+'-'+fillMethodName[f];
+            QTest::newRow(ba.constData()) << data;
         }
     }
 }
@@ -243,4 +245,4 @@ void TestKoLZF::testByteArrayRoundtripDifferentSizes()
 }
 
 
-QTEST_MAIN(TestKoLZF)
+QTEST_GUILESS_MAIN(TestKoLZF)

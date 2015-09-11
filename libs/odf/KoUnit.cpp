@@ -25,7 +25,7 @@
 
 #include <QTransform>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
@@ -182,7 +182,7 @@ qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
 
 QString KoUnit::toUserStringValue(qreal ptValue) const
 {
-    return KGlobal::locale()->formatNumber(toUserValue(ptValue));
+    return QLocale().toString(toUserValue(ptValue));
 }
 
 qreal KoUnit::fromUserValue(qreal value) const
@@ -210,7 +210,7 @@ qreal KoUnit::fromUserValue(qreal value) const
 
 qreal KoUnit::fromUserValue(const QString &value, bool *ok) const
 {
-    return fromUserValue(KGlobal::locale()->readNumber(value, ok));
+    return fromUserValue(QLocale().toDouble(value, ok));
 }
 
 qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)

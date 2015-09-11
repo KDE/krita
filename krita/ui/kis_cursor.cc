@@ -31,11 +31,8 @@
 #include <qmath.h>
 
 #include <kglobal.h>
-
-
 #include <kstandarddirs.h>
 
-#include "kis_factory2.h"
 
 KisCursor::KisCursor() {}
 

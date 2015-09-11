@@ -461,5 +461,3 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
 
     delete result;
 }
-
-#include <GuidesTool.moc>

@@ -32,7 +32,7 @@
 
 using namespace KisBSplines;
 
-struct KisCachedGradientShapeStrategy::Private
+struct Q_DECL_HIDDEN KisCachedGradientShapeStrategy::Private
 {
     QRect rc;
     qreal xStep;
@@ -64,18 +64,18 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
     int numSamplesY = std::ceil(qreal(rc.height()) / yStep);
 
     if (numSamplesX < 2 || numSamplesY < 2) {
-        qWarning();
-        qWarning() << "############";
-        qWarning() << "WARNING: KisCachedGradientShapeStrategy numSamplesX/Y is too small!"  << ppVar(numSamplesX) << ppVar(numSamplesY);
-        qWarning() << "WARNING:" << ppVar(rc) << ppVar(xStep) << ppVar(yStep);
-        qWarning() << "WARNING:" << ppVar(numSamplesX) << ppVar(numSamplesY);
+        warnKrita;
+        warnKrita << "############";
+        warnKrita << "WARNING: KisCachedGradientShapeStrategy numSamplesX/Y is too small!"  << ppVar(numSamplesX) << ppVar(numSamplesY);
+        warnKrita << "WARNING:" << ppVar(rc) << ppVar(xStep) << ppVar(yStep);
+        warnKrita << "WARNING:" << ppVar(numSamplesX) << ppVar(numSamplesY);
 
         numSamplesX = qMax(numSamplesX, 2);
         numSamplesY = qMax(numSamplesY, 2);
 
-        qWarning() << "WARNING: adjusting:" << ppVar(numSamplesX) << ppVar(numSamplesY);
-        qWarning() << "############";
-        qWarning();
+        warnKrita << "WARNING: adjusting:" << ppVar(numSamplesX) << ppVar(numSamplesY);
+        warnKrita << "############";
+        warnKrita;
     }
 
     m_d->spline.reset(new KisBSpline2D(xStart, xEnd, numSamplesX, Natural,

@@ -23,7 +23,7 @@
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -85,8 +85,8 @@ QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colo
 
 
 PSDSaver::PSDSaver(KisDocument *doc)
-    : m_doc(doc)
-    , m_image(doc->image())
+    : m_image(doc->image())
+    , m_doc(doc)
     , m_stop(false)
 {
 }
@@ -126,7 +126,7 @@ bool checkIfHasTransparency(KisPaintDeviceSP dev)
     return false;
 }
 
-KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
+KisImageBuilder_Result PSDSaver::buildFile(const QUrl &uri)
 {
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;

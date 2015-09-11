@@ -27,7 +27,7 @@
 
 #include <ktar.h>
 #include <kdebug.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <kio/netaccess.h>
 
@@ -55,13 +55,13 @@ KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentifi
     init(appIdentification);
 }
 
-KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode mode,
+KoTarStore::KoTarStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode mode,
                        const QByteArray & appIdentification, bool writeMimetype)
  : KoStore(mode, writeMimetype)
 {
-    kDebug(30002) << "KoTarStore Constructor url=" << _url.pathOrUrl()
-    << " filename = " << _filename
-    << " mode = " << int(mode) << endl;
+    kDebug(30002) << "KoTarStore Constructor url=" << _url.url(QUrl::PreferLocalFile)
+                  << " filename = " << _filename
+                  << " mode = " << int(mode) << endl;
     Q_D(KoStore);
 
     d->url = _url;
@@ -182,7 +182,8 @@ bool KoTarStore::closeWrite()
     // write the whole bytearray at once into the tar file
 
     kDebug(30002) << "Writing file" << d->fileName << " into TAR archive. size" << d->size;
-    if (!m_pTar->writeFile(d->fileName , "user", "group", m_byteArray.data(), d->size))
+    m_byteArray.resize(d->size); // TODO: check if really needed
+    if (!m_pTar->writeFile(d->fileName, m_byteArray, 0100644, QLatin1String("user"), QLatin1String("group")))
         kWarning(30002) << "Failed to write " << d->fileName;
     m_byteArray.resize(0);   // save memory
     return true;

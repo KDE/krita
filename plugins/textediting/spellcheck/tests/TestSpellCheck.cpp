@@ -9,6 +9,8 @@
 #include <QTextCursor>
 #include <QTextCharFormat>
 
+#include <QTest>
+
 class MySpellCheck : public BgSpellCheck
 {
 public:
@@ -92,6 +94,4 @@ void TestSpellCheck::testFetchMoreText2()
     QCOMPARE(checker.publicFetchMoreText(), QString("Mostly Empty Parags."));
 }
 
-QTEST_KDEMAIN(TestSpellCheck, GUI)
-
-#include <TestSpellCheck.moc>
+QTEST_MAIN(TestSpellCheck)

@@ -21,7 +21,7 @@
 #include "KoPathPointTypeCommand.h"
 
 #include <KoPathSegment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <math.h>
 
 KoPathPointTypeCommand::KoPathPointTypeCommand(

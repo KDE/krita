@@ -21,7 +21,7 @@
 #include <QTimer>
 #include <QQueue>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceManager.h>
@@ -293,7 +293,7 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
             intersection.manhattanLength() > maxSanePoint) {
 
             intersection = 0.5 * (pi1.pos() + pi2.pos());
-//            qDebug() << "WARINING: there is no intersection point "
+//            dbgKrita << "WARINING: there is no intersection point "
 //                     << "in the basic smoothing algoriths";
         }
 
@@ -310,7 +310,7 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
     if (velocity1 == 0.0 || velocity2 == 0.0) {
         velocity1 = 1e-6;
         velocity2 = 1e-6;
-        qWarning() << "WARNING: Basic Smoothing: Velocity is Zero! Please report a bug:" << ppVar(velocity1) << ppVar(velocity2);
+        warnKrita << "WARNING: Basic Smoothing: Velocity is Zero! Please report a bug:" << ppVar(velocity1) << ppVar(velocity2);
     }
 
     qreal similarity = qMin(velocity1/velocity2, velocity2/velocity1);

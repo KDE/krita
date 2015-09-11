@@ -19,7 +19,7 @@
 
 #include "TestCursor.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "FormulaCursor.h"
 #include "FormulaData.h"
 #include <KoDocument.h>
@@ -116,5 +116,4 @@ void TestCursor::moveCursor()
 }
 
 
-QTEST_KDEMAIN(TestCursor,GUI)
-#include "TestCursor.moc"
+QTEST_MAIN(TestCursor)

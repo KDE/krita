@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 
 #include <KoChannelInfo.h>
@@ -170,7 +170,7 @@ void KisFloatColorInput::setValue(double v)
 
 QWidget* KisFloatColorInput::createInput()
 {
-    m_dblNumInput = new KDoubleNumInput(this);
+    m_dblNumInput = new QDoubleSpinBox(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));

@@ -27,7 +27,7 @@
 #include <kzip.h>
 #include <kdebug.h>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kio/netaccess.h>
 
 KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
@@ -54,11 +54,11 @@ KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentifi
     init(appIdentification);
 }
 
-KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _filename, Mode mode,
+KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode mode,
                        const QByteArray & appIdentification, bool writeMimetype)
   : KoStore(mode, writeMimetype)
 {
-    kDebug(30002) << "KoZipStore Constructor url" << _url.pathOrUrl()
+    kDebug(30002) << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile)
     << " filename = " << _filename
     << " mode = " << int(mode)
     << " mimetype = " << appIdentification << endl;
@@ -115,8 +115,7 @@ void KoZipStore::init(const QByteArray& appIdentification)
 
         // Write identification
         if (d->writeMimetype) {
-            (void)m_pZip->writeFile(QLatin1String("mimetype"), QString(), QString(),
-                                    appIdentification.data() , appIdentification.length());
+            (void)m_pZip->writeFile(QLatin1String("mimetype"), appIdentification);
         }
 
         m_pZip->setCompression(KZip::DeflateCompression);

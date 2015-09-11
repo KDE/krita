@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
@@ -111,7 +111,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     PSDSaver kpc(input);

@@ -18,7 +18,7 @@
 
 #include "move_selection_stroke_strategy.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include "kis_image.h"

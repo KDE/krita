@@ -24,7 +24,7 @@
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestPAPageInsertCommand::redoUndo()
 {
@@ -131,5 +131,4 @@ void TestPAPageInsertCommand::redoUndoMaster()
     }
 }
 
-QTEST_KDEMAIN( TestPAPageInsertCommand, GUI )
-#include "TestPAPageInsertCommand.moc"
+QTEST_MAIN( TestPAPageInsertCommand )

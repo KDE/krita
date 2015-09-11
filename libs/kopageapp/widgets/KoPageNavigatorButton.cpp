@@ -21,7 +21,7 @@
 #include "KoPageNavigatorButton_p.h"
 
 // KDE
-#include <kicon.h>
+#include <QIcon>
 #include <kdebug.h>
 // Qt
 #include <QAction>
@@ -31,7 +31,7 @@ KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *pare
   : QToolButton(parent)
   , m_action(0)
 {
-    setIcon(KIcon(QLatin1String(iconName)));
+    setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     setFocusPolicy(Qt::NoFocus);
     setAutoRaise(true);
 }

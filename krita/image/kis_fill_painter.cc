@@ -35,7 +35,7 @@
 #include <QRect>
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoUpdater.h>
 
@@ -199,7 +199,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
             opacity() != MAX_SELECTED ||
             sourceDevice != device()) {
 
-            qWarning() << "WARNING: Fast Flood Fill (no compositioning mode)"
+            warnKrita << "WARNING: Fast Flood Fill (no compositioning mode)"
                        << "does not support compositeOps, opacity, "
                        << "selection enhancements and separate source "
                        << "devices";

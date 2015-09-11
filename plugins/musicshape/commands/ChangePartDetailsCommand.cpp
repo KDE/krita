@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "ChangePartDetailsCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "../core/Part.h"
 #include "../core/Staff.h"
 #include "../core/Clef.h"

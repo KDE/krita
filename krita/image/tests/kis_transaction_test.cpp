@@ -29,6 +29,7 @@
 #include "kis_transaction.h"
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image.h"
+#include "kis_paint_device_debug_utils.h"
 
 void KisTransactionTest::testUndo()
 {

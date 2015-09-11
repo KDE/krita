@@ -18,7 +18,7 @@
 
 #include "KoColorSpacesBenchmark.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
@@ -146,6 +146,4 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
     END_BENCHMARK
 }
 
-QTEST_KDEMAIN(KoColorSpacesBenchmark, GUI)
-
-#include "KoColorSpacesBenchmark.moc"
+QTEST_MAIN(KoColorSpacesBenchmark)

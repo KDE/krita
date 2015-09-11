@@ -45,8 +45,6 @@ SpaceNavigatorDevice::~SpaceNavigatorDevice()
 
 bool SpaceNavigatorDevice::start()
 {
-    kDebug() << "starting spacenavigator device...";
-
     if( m_thread->isRunning() )
         return true;
 
@@ -57,8 +55,6 @@ bool SpaceNavigatorDevice::start()
 
 bool SpaceNavigatorDevice::stop()
 {
-    kDebug() << "stopping spacenavigator device...";
-
     if( ! m_thread->isRunning() )
         return true;
 

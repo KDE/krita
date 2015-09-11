@@ -19,7 +19,7 @@
 #ifndef DLG_OFFSETIMAGE
 #define DLG_OFFSETIMAGE
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kis_global.h>
 
 #include "ui_wdg_offsetimage.h"
@@ -35,7 +35,7 @@ public:
     }
 };
 
-class DlgOffsetImage: public KDialog
+class DlgOffsetImage: public KoDialog
 {
 
     Q_OBJECT

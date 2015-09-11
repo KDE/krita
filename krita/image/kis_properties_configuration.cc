@@ -34,7 +34,7 @@
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
 
-struct KisPropertiesConfiguration::Private {
+struct Q_DECL_HIDDEN KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;
     QStringList notSavedProperties;
 };
@@ -288,7 +288,7 @@ void KisPropertiesConfiguration::removeProperty(const QString & name)
 
 // --- factory ---
 
-struct KisPropertiesConfigurationFactory::Private {
+struct Q_DECL_HIDDEN KisPropertiesConfigurationFactory::Private {
 };
 
 KisPropertiesConfigurationFactory::KisPropertiesConfigurationFactory() : d(new Private)

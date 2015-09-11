@@ -20,11 +20,13 @@
 
 #include <QTest>
 #include <QCoreApplication>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <qtest_kde.h>
 #include "../../../../libpsd/psd_utils.h"
 #include <QByteArray>
 #include <QBuffer>
+
+#include <kis_debug.h>
 
 void PSDUtilsTest::test_psdwrite_quint8()
 {
@@ -207,7 +209,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
     buf.open(QBuffer::ReadOnly);
     psdread_pascalstring(&buf, r, 2);
     QCOMPARE(r, s);
-    qDebug() << buf.bytesAvailable();
+    dbgKrita << buf.bytesAvailable();
     QVERIFY(buf.bytesAvailable() == 0);
 }
 

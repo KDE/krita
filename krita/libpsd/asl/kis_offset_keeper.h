@@ -20,7 +20,7 @@
 #define __KIS_OFFSET_KEEPER_H
 
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QIODevice>
 
 /**

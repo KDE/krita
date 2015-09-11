@@ -46,7 +46,7 @@ KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPage
         // this might result in a different order of master pages when copying to a different document
         QSet<KoPAPageBase *> masterPages;
         foreach( KoPAPageBase * page, m_pages ) {
-            KoPAPage * p = dynamic_cast<KoPAPage *>( page );
+            KoPAPage * p = static_cast<KoPAPage *>( page );
             masterPages.insert( p->masterPage() );
         }
         m_masterPages = masterPages.toList();

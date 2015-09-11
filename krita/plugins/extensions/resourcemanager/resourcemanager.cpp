@@ -26,10 +26,9 @@
 #include <QThread>
 
 #include <QMessageBox>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
 #include <KoFileDialog.h>
@@ -131,8 +130,8 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::slotImport()
 {
-    KoFileDialog dlg(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
-    dlg.setCaption(i18n("Add Resources"));
+    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
+    dialog.setCaption(i18n("Add Resources"));
 
     QMap<QString, QString> filterToTypeMap;
     filterToTypeMap[i18n("Krita Brush Presets (*.kpp)")] = "presets";
@@ -157,10 +156,10 @@ void ResourceManager::slotImport()
 
     QStringList nameFilters = filterToTypeMap.keys();
 
-    dlg.setNameFilters(nameFilters, nameFilters[13]);  // start with resource bundle as default type (filterToTypeMap is alphabetized)
+    dialog.setNameFilters(nameFilters, nameFilters[13]);  // start with resource bundle as default type (filterToTypeMap is alphabetized)
 
-    QStringList resources = dlg.urls();
-    QString resourceType = dlg.selectedNameFilter();
+    QStringList resources = dialog.filenames();
+    QString resourceType = dialog.selectedNameFilter();
     if (!filterToTypeMap.contains(resourceType)) {
         QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("The selected resource type is unknown."));
         return;
@@ -226,7 +225,7 @@ void ResourceManager::slotImport()
         }
     }
     else {
-        qWarning() << "Trying to add a resource of an undefined type";
+        warnKrita << "Trying to add a resource of an undefined type";
     }
 
 }
@@ -322,7 +321,7 @@ void ResourceManager::bundlesLoaded()
 
     foreach(ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
         if (!bundle->install()) {
-            qWarning() << "Could not install resources for bundle" << bundle->name();
+            warnKrita << "Could not install resources for bundle" << bundle->name();
         }
     }
 

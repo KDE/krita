@@ -23,13 +23,14 @@ Boston, MA 02110-1301, USA.
 
 #include "KisImportExportManager.h"
 
-#include <kurl.h>
-#include <kdialog.h>
+#include <QUrl>
+#include <KoDialog.h>
 #include <KoProgressUpdater.h>
 
 #include <QString>
 #include <QStringList>
 #include <QWeakPointer>
+#include <QMimeDatabase>
 
 class QListWidget;
 
@@ -47,13 +48,13 @@ public:
 
 };
 
-class KisFilterChooser : public KDialog
+class KisFilterChooser : public KoDialog
 {
     Q_OBJECT
 
 public:
     KisFilterChooser(QWidget *parent, const QStringList &mimeTypes,
-                    const QString &nativeFormat = QString(), const KUrl &url = KUrl());
+                    const QString &nativeFormat = QString(), const QUrl &url = QUrl());
     ~KisFilterChooser();
 
     QString filterSelected();

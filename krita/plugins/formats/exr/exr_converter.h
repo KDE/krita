@@ -27,7 +27,7 @@
 #include "kis_types.h"
 class KisDocument;
 
-class KUrl;
+class QUrl;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -56,15 +56,15 @@ public:
     exrConverter(KisDocument *doc, bool showNotifications);
     virtual ~exrConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisGroupLayerSP layer);
+    KisImageBuilder_Result buildImage(const QUrl &uri);
+    KisImageBuilder_Result buildFile(const QUrl &uri, KisPaintLayerSP layer);
+    KisImageBuilder_Result buildFile(const QUrl &uri, KisGroupLayerSP layer);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP image();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const QUrl &uri);
 public Q_SLOTS:
     virtual void cancel();
 private:

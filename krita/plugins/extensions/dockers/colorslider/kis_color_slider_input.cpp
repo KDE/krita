@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QFontMetrics>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
 #include <kglobal.h>
@@ -115,7 +115,7 @@ void KisHSXColorSliderInput::setValue(double v)
     qreal h=0.0;
     qreal s=0.0;
     qreal l=0.0;
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);

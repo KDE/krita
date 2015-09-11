@@ -22,10 +22,11 @@
 
 #include "dlg_imagesize.h"
 
+#include <QLocale>
+
 #include <KoUnit.h>
-#include <KoSizeGroup.h>
+#include <kis_size_group.h>
 #include <klocalizedstring.h>
-#include <klocale.h>
 #include <kglobal.h>
 
 #include <kis_filter_strategy.h>
@@ -36,17 +37,17 @@ static const QString pixelsInchStr(i18n("Pixels/Inch"));
 static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
-        : KDialog(parent)
-        , m_aspectRatio(((double) width) / height)
-        , m_originalWidth(width)
-        , m_originalHeight(height)
-        , m_width(width)
-        , m_height(height)
-        , m_printWidth(width / resolution)
-        , m_printHeight(height / resolution)
-        , m_originalResolution(resolution)
-        , m_resolution(resolution)
-        , m_keepAspect(true)        
+    : KoDialog(parent)
+    , m_aspectRatio(((double) width) / height)
+    , m_originalWidth(width)
+    , m_originalHeight(height)
+    , m_width(width)
+    , m_height(height)
+    , m_printWidth(width / resolution)
+    , m_printHeight(height / resolution)
+    , m_originalResolution(resolution)
+    , m_resolution(resolution)
+    , m_keepAspect(true)
 {
     setCaption(i18n("Scale To New Size"));
     setButtons(Ok | Cancel);
@@ -86,7 +87,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printResolutionUnit->addItem(pixelsCentimeterStr);
 
     // pick selected print units from user locale
-    if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
+    if (QLocale().measurementSystem() == QLocale::MetricSystem) {
         const int unitIndex = KoUnit(KoUnit::Centimeter).indexInListForUi(KoUnit::HidePixel);
         m_page->printWidthUnit->setCurrentIndex(unitIndex);
         m_page->printHeightUnit->setCurrentIndex(unitIndex);
@@ -105,7 +106,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printAspectRatioBtn->setKeepAspectRatio(true);
     m_page->constrainProportionsCkb->setChecked(true);
 
-    KoSizeGroup *labelsGroup = new KoSizeGroup(this);
+    KisSizeGroup *labelsGroup = new KisSizeGroup(this);
     labelsGroup->addWidget(m_page->lblPixelWidth);
     labelsGroup->addWidget(m_page->lblPixelHeight);
     labelsGroup->addWidget(m_page->lblPixelFilter);
@@ -113,7 +114,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     labelsGroup->addWidget(m_page->lblPrintHeight);
     labelsGroup->addWidget(m_page->lblResolution);
 
-    KoSizeGroup *spinboxesGroup = new KoSizeGroup(this);
+    KisSizeGroup *spinboxesGroup = new KisSizeGroup(this);
     spinboxesGroup->addWidget(m_page->pixelWidth);
     spinboxesGroup->addWidget(m_page->pixelWidthDouble);
     spinboxesGroup->addWidget(m_page->pixelHeight);
@@ -122,7 +123,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     spinboxesGroup->addWidget(m_page->printHeight);
     spinboxesGroup->addWidget(m_page->printResolution);
 
-    KoSizeGroup *comboboxesGroup = new KoSizeGroup(this);
+    KisSizeGroup *comboboxesGroup = new KisSizeGroup(this);
     comboboxesGroup->addWidget(m_page->pixelWidthUnit);
     comboboxesGroup->addWidget(m_page->pixelHeightUnit);
     comboboxesGroup->addWidget(m_page->printWidthUnit);

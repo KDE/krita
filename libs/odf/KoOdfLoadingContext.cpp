@@ -23,7 +23,7 @@
 
 // KDE
 #include <kdebug.h>
-#include <kmimetype.h>
+
 
 // Calligra
 #include <KoOdfReadStore.h>
@@ -36,6 +36,8 @@
 
 // Qt
 #include <QStandardPaths>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 
 class Q_DECL_HIDDEN KoOdfLoadingContext::Private
@@ -275,8 +277,9 @@ QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) co
                 KoStoreDevice device(d->store);
                 QByteArray data = device.read(16384);
                 d->store->close();
-                KMimeType::Ptr mtp = KMimeType::findByContent(data);
-                mimeType = mtp->name();
+                QMimeDatabase db;
+                QMimeType mtp = db.mimeTypeForData(data);
+                mimeType = mtp.name();
                 if (!mimeType.isEmpty()) {
                     it.value()->setMediaType(mimeType);
                 }

@@ -22,7 +22,7 @@
 #include <KoStore.h>
 
 #include <kwidgetitemdelegate.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -175,7 +175,7 @@ public:
 };
 
 KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent) :
-    KDialog(parent)
+    KoDialog(parent)
 {
     setCaption(i18nc("@title:window", "Recover Files"));
     setMinimumSize(650, 500);

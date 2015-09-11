@@ -162,5 +162,3 @@ void StylesWidget::applyCharacterStyle()
         return;
     }
 }
-
-#include <StylesWidget.moc>

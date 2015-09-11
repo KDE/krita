@@ -22,7 +22,7 @@
 
 #include <ui_TrackedChangeManager.h>
 
-//#include <kdialog.h>
+//#include <KoDialog.h>
 #include <QWidget>
 
 class TrackedChangeModel;

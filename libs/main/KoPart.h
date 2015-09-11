@@ -26,7 +26,7 @@
 #include <QList>
 
 #include <kcomponentdata.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include "komain_export.h"
 
@@ -116,7 +116,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(const KUrl &url);
+    void addRecentURLToAllMainWindows(const QUrl &url);
 
     KoMainWindow *currentMainwindow() const;
 
@@ -126,7 +126,7 @@ public Q_SLOTS:
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
-    virtual void openExistingFile(const KUrl& url);
+    virtual void openExistingFile(const QUrl &url);
 
 protected Q_SLOTS:
 
@@ -134,7 +134,7 @@ protected Q_SLOTS:
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
      */
-    virtual void openTemplate(const KUrl& url);
+    virtual void openTemplate(const QUrl &url);
 
 private Q_SLOTS:
 

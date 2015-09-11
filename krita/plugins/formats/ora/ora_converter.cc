@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -44,7 +44,7 @@ OraConverter::~OraConverter()
 {
 }
 
-KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result OraConverter::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -79,7 +79,7 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes)
+KisImageBuilder_Result OraConverter::buildFile(const QUrl &uri, KisImageWSP image, vKisNodeSP activeNodes)
 {
 
     if (uri.isEmpty())

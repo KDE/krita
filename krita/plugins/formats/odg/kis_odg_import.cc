@@ -140,7 +140,7 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
                                         i18n("Vector Layer"),
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load vector layer!";
+            dbgKrita << "Could not load vector layer!";
             return KisImportExportFilter::CreationError;
         }
         image->addNode(shapeLayer, image->rootLayer(), 0);

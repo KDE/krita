@@ -19,7 +19,7 @@
 
 #include "kis_pressure_sharpness_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <widgets/kis_curve_widget.h>
 

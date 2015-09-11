@@ -59,7 +59,7 @@ struct KisFilterManager::Private {
     }
     KisAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
-    QHash<KisFilter*, KAction*> filters2Action;
+    QHash<KisFilter*, QAction *> filters2Action;
     KActionCollection *actionCollection;
     KisActionManager *actionManager;
     KisViewManager *view;
@@ -134,7 +134,7 @@ void KisFilterManager::insertFilter(const QString & filterName)
     }
 
     KisAction *action = new KisAction(filter->menuEntry(), this);
-    action->setShortcut(filter->shortcut(), KAction::DefaultShortcut);
+    action->setShortcut(filter->shortcut());
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
 
     d->actionManager->addAction(QString("krita_filter_%1").arg(filterName), action);
@@ -157,7 +157,7 @@ void KisFilterManager::updateGUI()
 
     d->reapplyAction->setEnabled(enable);
 
-    for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
+    for (QHash<KisFilter*, QAction *>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
 
         bool localEnable = enable;
@@ -204,7 +204,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
 
     KisPaintDeviceSP dev = d->view->activeNode()->paintDevice();
     if (!dev) {
-        qWarning() << "KisFilterManager::showFilterDialog(): Filtering was requested for illegal active layer!" << d->view->activeNode();
+        warnKrita << "KisFilterManager::showFilterDialog(): Filtering was requested for illegal active layer!" << d->view->activeNode();
         return;
     }
 
@@ -271,9 +271,12 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
                                                        KisSafeFilterConfigurationSP(filterConfig),
                                                        resources));
 
+    QRect processRect = d->view->activeNode()->exactBounds();
+    processRect = filter->changedRect(processRect, filterConfig.data());
+
     if (filter->supportsThreading()) {
         QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(d->view->activeNode()->exactBounds(), size);
+        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
 
         foreach(const QRect &rc, rects) {
             image->addJob(d->currentStrokeId,
@@ -281,7 +284,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         }
     } else {
         image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::Data(d->view->activeNode()->exactBounds(), false));
+                      new KisFilterStrokeStrategy::Data(processRect, false));
     }
 
     d->currentlyAppliedConfiguration = filterConfig;

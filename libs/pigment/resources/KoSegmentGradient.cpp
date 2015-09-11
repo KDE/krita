@@ -37,7 +37,7 @@
 #include "KoMixColorsOp.h"
 
 #include <DebugPigment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
@@ -79,7 +79,7 @@ bool KoSegmentGradient::load()
 {
     QFile file(filename());
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        warnPigment << "Can't open file " << filename();
         return false;
     }
     bool res = loadFromDevice(&file);

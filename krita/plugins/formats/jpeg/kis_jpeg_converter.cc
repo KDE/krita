@@ -40,8 +40,8 @@ extern "C" {
 
 #include <QMessageBox>
 
-#include <klocale.h>
-#include <kurl.h>
+#include <klocalizedstring.h>
+#include <QUrl>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -123,7 +123,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
+KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -152,7 +152,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
 //     setup_read_icc_profile(&cinfo);
     // read header
-    jpeg_read_header(&cinfo, true);
+    jpeg_read_header(&cinfo, (boolean)true);
 
     // start reading
     jpeg_start_decompress(&cinfo);
@@ -427,7 +427,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result KisJPEGConverter::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -447,7 +447,7 @@ KisImageWSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -513,16 +513,16 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Set default compression parameters
     jpeg_set_defaults(&cinfo);
     // Customize them
-    jpeg_set_quality(&cinfo, options.quality, options.baseLineJPEG);
+    jpeg_set_quality(&cinfo, options.quality, (boolean)options.baseLineJPEG);
 
     if (options.progressive) {
         jpeg_simple_progression(&cinfo);
     }
     // Optimize ?
-    cinfo.optimize_coding = options.optimize;
+    cinfo.optimize_coding = (boolean)options.optimize;
 
     // Smoothing
-    cinfo.smoothing_factor = options.smooth;
+    cinfo.smoothing_factor = (boolean)options.smooth;
 
     // Subsampling
     switch (options.subsampling) {
@@ -570,10 +570,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     cinfo.X_density = INCH_TO_POINT(image->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
     cinfo.Y_density = INCH_TO_POINT(image->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
     cinfo.density_unit = 1;
-    cinfo.write_JFIF_header = 1;
+    cinfo.write_JFIF_header = (boolean)true;
 
     // Start compression
-    jpeg_start_compress(&cinfo, true);
+    jpeg_start_compress(&cinfo, (boolean)true);
     // Save exif and iptc information if any available
 
     if (metaData && !metaData->empty()) {

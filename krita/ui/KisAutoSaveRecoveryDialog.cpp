@@ -22,7 +22,7 @@
 #include <KoStore.h>
 
 #include <kwidgetitemdelegate.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -38,7 +38,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QCheckBox>
-#include <QDebug>
+#include <kis_debug.h>
 
 
 struct FileItem {
@@ -61,7 +61,7 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets(const QModelIndex& index) const
+    QList<QWidget*> createItemWidgets(const QModelIndex& /*index*/) const
     {
         // a lump of coal and a piece of elastic will get you through the world
         QModelIndex idx = property("goya:creatingWidgetForIndex").value<QModelIndex>();
@@ -178,7 +178,7 @@ public:
 };
 
 KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent) :
-    KDialog(parent)
+    KoDialog(parent)
 {
     setCaption(i18nc("@title:window", "Recover Files"));
     setMinimumSize(650, 500);

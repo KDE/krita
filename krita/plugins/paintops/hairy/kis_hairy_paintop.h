@@ -20,7 +20,7 @@
 #ifndef KIS_HAIRYPAINTOP_H_
 #define KIS_HAIRYPAINTOP_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_paintop.h>
 #include <kis_paintop_factory.h>
 #include <kis_types.h>

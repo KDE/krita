@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,11 +22,11 @@
 #include <KoSectionEnd.h>
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
-#include <KoSectionManager.h>
 #include <KoTextEditor.h>
 #include <KoSectionUtils.h>
+#include <KoSectionModel.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kundo2command.h>
 
 NewSectionCommand::NewSectionCommand(QTextDocument *document)
@@ -44,31 +44,45 @@ NewSectionCommand::~NewSectionCommand()
 void NewSectionCommand::undo()
 {
     KUndo2Command::undo();
-    KoTextDocument(m_document).sectionManager()->invalidate();
+    //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+
+    // All formatting changes will be undone automatically.
+    // Lets handle Model Level (see KoSectionModel).
+    KoTextDocument(m_document).sectionModel()->deleteFromModel(m_section);
 }
 
 void NewSectionCommand::redo()
 {
-    KoTextDocument(m_document).sectionManager()->invalidate();
+    KoTextDocument koDocument(m_document);
+    KoSectionModel *sectionModel = koDocument.sectionModel();
 
     if (!m_first) {
         KUndo2Command::redo();
+        //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+
+        // All formatting changes will be redone automatically.
+        // Lets handle Model Level (see KoSectionModel).
+        sectionModel->insertToModel(m_section, m_childIdx);
     } else {
         m_first = false;
 
-        KoTextEditor *editor = KoTextDocument(m_document).textEditor();
-
+        KoTextEditor *editor = koDocument.textEditor();
         editor->newLine();
 
-        KoSection *start = new KoSection(editor->constCursor());
-        KoSectionEnd *end = new KoSectionEnd(start);
+        m_section = sectionModel->createSection(
+            editor->constCursor(),
+            sectionModel->sectionAtPosition(editor->constCursor().position())
+        );
+        m_childIdx = sectionModel->findRowOfChild(m_section);
+
+        KoSectionEnd *sectionEnd = sectionModel->createSectionEnd(m_section);
         QTextBlockFormat fmt = editor->blockFormat();
 
         QList<KoSection *> sectionStartings = KoSectionUtils::sectionStartings(fmt);
         QList<KoSectionEnd *> sectionEndings = KoSectionUtils::sectionEndings(fmt);
 
-        sectionStartings.append(start);
-        sectionEndings.prepend(end);
+        sectionStartings.append(m_section);
+        sectionEndings.prepend(sectionEnd);
 
         KoSectionUtils::setSectionStartings(fmt, sectionStartings);
         KoSectionUtils::setSectionEndings(fmt, sectionEndings);

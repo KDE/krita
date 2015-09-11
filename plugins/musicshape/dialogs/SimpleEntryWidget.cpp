@@ -19,7 +19,7 @@
 #include "SimpleEntryWidget.h"
 #include "../SimpleEntryTool.h"
 
-#include <kaction.h>
+#include <QAction>
 
 SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     : QWidget(parent),
@@ -69,5 +69,3 @@ void SimpleEntryWidget::setVoiceListEnabled(bool enabled)
 {
     widget.voiceList->setEnabled(enabled);
 }
-
-#include <SimpleEntryWidget.moc>

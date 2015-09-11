@@ -43,7 +43,7 @@ inline quint64 part(quint64 n1, quint64 n2, int p)
     return quint64(salt[i][j]) << b;
 }
 
-struct KisRandomGenerator::Private {
+struct Q_DECL_HIDDEN KisRandomGenerator::Private {
     quint64 seed;
 };
 

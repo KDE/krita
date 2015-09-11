@@ -26,15 +26,13 @@
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
 
 #include <kdebug.h>
-#include <kglobalsettings.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kselectaction.h>
 #include <kglobal.h>
-#include <kicon.h>
+#include <QIcon>
 
 #include <QMap>
 #include <QList>
@@ -51,6 +49,7 @@
 #include <QTextLayout>
 #include <QMenu>
 #include <QScrollBar>
+#include <QFontDatabase>
 
 class KoModeBox::Private
 {
@@ -120,7 +119,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 {
     applicationName = appName;
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     d->iconMode = (IconMode)cfg.readEntry("ModeBoxIconMode", (int)IconAndText);
     d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
     d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
@@ -259,8 +258,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
 {
     QSize iconSize = d->tabBar->iconSize();
-    QFont smallFont  = KGlobalSettings::generalFont();
-    qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+    QFont smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
     smallFont.setPointSizeF(pointSize);
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.
@@ -277,7 +276,7 @@ QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
         }
     }
 
-    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
+    QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
 
     QTextLayout textLayout(toolAction->iconText(), smallFont, p.device());
     QTextOption option;
@@ -338,7 +337,7 @@ QIcon KoModeBox::createSimpleIcon(KoToolAction *toolAction) const
         }
     }
 
-    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
+    QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
 
     return QIcon(QPixmap::fromImage(pm));
 }
@@ -633,7 +632,7 @@ void KoModeBox::switchIconMode(int mode)
     }
     updateShownTools(QList<QString>());
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
 
 }
@@ -652,7 +651,7 @@ void KoModeBox::switchTabsSide(int side)
             d->layout->addWidget(d->tabBar, 2, 0);
         }
 
-        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
         cfg.writeEntry("ModeBoxVerticalTabsSide", (int)d->verticalTabsSide);
     } else {
         d->horizontalTabsSide = static_cast<HorizontalTabsSide>(side);
@@ -666,7 +665,7 @@ void KoModeBox::switchTabsSide(int side)
             d->layout->addWidget(d->tabBar, 0, 2);
         }
 
-        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
     updateShownTools(QList<QString>());

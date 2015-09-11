@@ -89,7 +89,7 @@ bool checkLayers(KisImageWSP image,
         QPoint temp;
 
         if(!TestUtil::compareQImages(temp, ref, images[i], 1)) {
-            qDebug() << "--- Wrong image:" << names[i];
+            dbgKrita << "--- Wrong image:" << names[i];
             valid = false;
             images[i].save(QString(FILES_OUTPUT_DIR) + QDir::separator() + names[i]);
         }

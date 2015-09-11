@@ -45,16 +45,15 @@
 #include <QPoint>
 
 #include <kactioncollection.h>
-#include <kaction.h>
-#include <klocale.h>
+#include <QAction>
+#include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
 #include <QMessageBox>
-#include <KoServiceLocator.h>
 #include <kservice.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kselectaction.h>
 #include <kxmlguifactory.h>
 
@@ -92,7 +91,6 @@
 #include "kis_coordinates_converter.h"
 #include <KisDocumentEntry.h>
 #include "KisDocument.h"
-#include "kis_factory2.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
@@ -733,7 +731,7 @@ void KisViewManager::createActions()
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     tAction = new KisAction(i18n("Show Canvas Only"), this);
-    tAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    tAction->setActivationFlags(KisAction::NONE);
     tAction->setCheckable(true);
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
@@ -746,8 +744,7 @@ void KisViewManager::createActions()
     //Workaround, by default has the same shortcut as mirrorCanvas
     KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
     if (a) {
-        a->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        a->setShortcut(QKeySequence(), KAction::ActiveShortcut);        
+        a->setShortcut(QKeySequence());
         a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 
@@ -780,7 +777,7 @@ void KisViewManager::createActions()
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
-    d->actionAuthor  = new KSelectAction(themedIcon("im-user"), i18n("Active Author Profile"), this);
+    d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
@@ -881,8 +878,7 @@ int KisViewManager::viewCount() const
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
-    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra",
-                                        KisFactory::componentData(), document(), mainWindow());
+    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra", document(), mainWindow());
 }
 
 void KisViewManager::slotCreateCopy()
@@ -1017,7 +1013,7 @@ void KisViewManager::slotSaveIncremental()
         return;
     }
     document()->setSaveInBatchMode(true);
-    document()->saveAs(fileName);
+    document()->saveAs(QUrl::fromUserInput(fileName));
     document()->setSaveInBatchMode(false);
 
     if (mainWindow()) {
@@ -1088,7 +1084,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             return;
         }
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(fileName);
+        document()->saveAs(QUrl::fromUserInput(fileName));
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1126,7 +1122,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Save both as backup and on current file for interapplication workflow
         document()->setSaveInBatchMode(true);
         QFile::copy(fileName, backupFileName);
-        document()->saveAs(fileName);
+        document()->saveAs(QUrl::fromUserInput(fileName));
         document()->setSaveInBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();
@@ -1238,11 +1234,10 @@ void KisViewManager::openResourcesDirectory()
 
 void KisViewManager::updateIcons()
 {
-#if QT_VERSION >= 0x040700
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
-            kDebug() << "name " << dock->objectName();
+            dbgKrita << "name " << dock->objectName();
             KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
             if (titlebar) {
                 titlebar->updateIcons();
@@ -1258,7 +1253,6 @@ void KisViewManager::updateIcons()
             }
         }
     }
-#endif
 }
 void KisViewManager::makeStatusBarVisible()
 {
@@ -1283,9 +1277,7 @@ void KisViewManager::showFloatingMessage(const QString message, const QIcon& ico
     if (!d->currentImageView) return;
     d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
 
-#if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
-#endif
 }
 
 KisMainWindow *KisViewManager::mainWindow() const

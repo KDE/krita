@@ -31,14 +31,14 @@
 
 
 KisImageConfig::KisImageConfig()
-    : m_config(KGlobal::config()->group(""))
+    : m_config( KSharedConfig::openConfig()->group(""))
 {
 }
 
 KisImageConfig::~KisImageConfig()
 {
     if (qApp->thread() != QThread::currentThread()) {
-        qDebug() << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
+        dbgKrita << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
         return;
     }
 
@@ -281,7 +281,7 @@ void KisImageConfig::setOnionSkinTintColorForward(const QColor &value)
 #include <sys/sysctl.h>
 #endif
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 int KisImageConfig::totalRAM()
 {
@@ -331,7 +331,7 @@ int KisImageConfig::totalRAM()
 #endif
 
     if(error) {
-        kWarning() << "Cannot get the size of your RAM."
+        dbgKrita << "Cannot get the size of your RAM."
                    << "Using default value of 1GiB.";
     }
 

@@ -18,6 +18,7 @@
  */
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"
@@ -49,7 +50,7 @@
 
 #define UPDATE_DELAY 3000 /*ms */
 
-struct KisTransformMask::Private
+struct Q_DECL_HIDDEN KisTransformMask::Private
 {
     Private()
         : worker(0, QTransform(), 0),
@@ -114,7 +115,7 @@ KisPaintDeviceSP KisTransformMask::paintDevice() const
 
 QIcon KisTransformMask::icon() const
 {
-    return themedIcon("edit-cut");
+    return KisIconUtils::loadIcon("edit-cut");
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)
@@ -240,7 +241,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        dbgKrita << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "recalc_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -249,7 +250,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
+        dbgKrita << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -258,7 +259,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        dbgKrita << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "fetch_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "fetch_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -302,7 +303,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
     } else {
         bounds = QRect(0,0,777,777);
         interestRect = QRect(0,0,888,888);
-        qWarning() << "WARNING: transform mask has no parent (change rect)."
+        warnKrita << "WARNING: transform mask has no parent (change rect)."
                    << "Cannot run safe transformations."
                    << "Will limit bounds to" << ppVar(bounds);
     }
@@ -336,7 +337,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
     } else {
         bounds = QRect(0,0,777,777);
         interestRect = QRect(0,0,888,888);
-        qWarning() << "WARNING: transform mask has no parent (need rect)."
+        warnKrita << "WARNING: transform mask has no parent (need rect)."
                    << "Cannot run safe transformations."
                    << "Will limit bounds to" << ppVar(bounds);
     }

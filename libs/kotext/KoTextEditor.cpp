@@ -3,7 +3,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2015 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  * Copyright (C) 2015 Soma Schliszka <soma.schliszka@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -68,8 +68,9 @@
 #include "commands/AddAnnotationCommand.h"
 #include "commands/RenameSectionCommand.h"
 #include "commands/NewSectionCommand.h"
+#include "commands/SplitSectionsCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextList>
 #include <QTextBlock>
@@ -567,7 +568,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
     }
 
     InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
-
+    Q_UNUSED(insertInlineObjectCommand);
     d->caret.endEditBlock();
  
     if (!cmd) {
@@ -1515,14 +1516,36 @@ void KoTextEditor::newSection()
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::splitSectionsStartings(int sectionIdToInsertBefore)
+{
+    if (isEditProtected()) {
+        return;
+    }
+    addCommand(new SplitSectionsCommand(
+        d->document,
+        SplitSectionsCommand::Startings,
+        sectionIdToInsertBefore));
+    emit cursorPositionChanged();
+}
+
+void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
+{
+    if (isEditProtected()) {
+        return;
+    }
+    addCommand(new SplitSectionsCommand(
+        d->document,
+        SplitSectionsCommand::Endings,
+        sectionIdToInsertAfter));
+    emit cursorPositionChanged();
+}
+
 void KoTextEditor::renameSection(KoSection* section, const QString &newName)
 {
     if (isEditProtected()) {
         return;
     }
-
-    RenameSectionCommand *cmd = new RenameSectionCommand(section, newName);
-    addCommand(cmd);
+    addCommand(new RenameSectionCommand(section, newName, document()));
 }
 
 void KoTextEditor::newLine()

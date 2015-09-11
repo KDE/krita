@@ -19,13 +19,13 @@
 #ifndef KIS_DLG_PNG_IMPORT_H
 #define KIS_DLG_PNG_IMPORT_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QString>
 
 #include "ui_wdgdlgpngimport.h"
 
 
-class KisDlgPngImport : public KDialog
+class KisDlgPngImport : public KoDialog
 {
     Q_OBJECT
 

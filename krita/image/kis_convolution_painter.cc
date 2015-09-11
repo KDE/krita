@@ -36,7 +36,7 @@
 #include <QVector>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_convolution_kernel.h"
 #include "kis_global.h"

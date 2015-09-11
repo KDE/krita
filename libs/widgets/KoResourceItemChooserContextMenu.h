@@ -26,7 +26,7 @@
 #include <QLabel>
 class KoResource;
 
-class KLineEdit;
+class QLineEdit;
 
 class ContextMenuExistingTagAction : public QAction
 {
@@ -59,7 +59,7 @@ public:
     void setIcon(QIcon icon);
     void closeParentOnTrigger(bool closeParent);
     bool closeParentOnTrigger();
-    void setClickMessage(const QString& clickMessage);
+    void setPlaceholderText(const QString& clickMessage);
     void setText(const QString& text);
     void setVisible(bool showAction);
 
@@ -72,7 +72,7 @@ protected Q_SLOTS:
 private:
     bool m_closeParentOnTrigger;
     QLabel * m_label;
-    KLineEdit * m_editBox;
+    QLineEdit * m_editBox;
 };
 
 class NewTagAction : public KoLineEditAction

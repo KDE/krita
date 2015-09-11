@@ -23,7 +23,7 @@
 #include <QPointer>
 #include <kis_canvas2.h>
 
-class KAction;
+class QAction;
 
 class KisCommonColors;
 class KisColorHistory;
@@ -54,8 +54,8 @@ private:
     KisColorHistory* m_colorHistoryWidget;
     KisCommonColors* m_commonColorsWidget;
 
-    KAction* m_colorHistoryAction;
-    KAction* m_commonColorsAction;
+    QAction * m_colorHistoryAction;
+    QAction * m_commonColorsAction;
 
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------

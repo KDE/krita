@@ -23,7 +23,7 @@
 #include "KoResourceItemChooser.h"
 #include "kis_paintop_registry.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QAbstractScrollArea>
 #include <QMouseEvent>

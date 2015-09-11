@@ -21,7 +21,7 @@
 #ifndef KIS_FILTER_STRATEGY_H_
 #define KIS_FILTER_STRATEGY_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_types.h"
 #include "KoGenericRegistry.h"

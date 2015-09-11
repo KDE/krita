@@ -22,10 +22,10 @@
 #include <QMessageBox>
 
 #include <kactioncollection.h>
-#include <kmimetype.h>
-#include <kshortcut.h>
 
-#include <KoIcon.h>
+#include <QKeySequence>
+
+#include <kis_icon_utils.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
@@ -47,6 +47,8 @@
 #include <kis_image.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include "KisPart.h"
 #include "canvas/kis_canvas2.h"
@@ -215,7 +217,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 #define NEW_LAYER_ACTION_KEY(id, text, layerType, icon, shortcut)       \
     {                                                                   \
         NEW_LAYER_ACTION(id, text, layerType, icon);                    \
-        action->setShortcut(KShortcut(shortcut));                       \
+        action->setShortcut(QKeySequence(shortcut));                       \
     }
 
 #define NEW_MASK_ACTION(id, text, layerType, icon)                      \
@@ -240,13 +242,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     m_d->layerManager->setup(actionManager);
     m_d->maskManager->setup(actionCollection, actionManager);
 
-    KisAction * action  = new KisAction(themedIcon("symmetry-horizontal"), i18n("Mirror Layer Horizontally"), this);
+    KisAction * action  = new KisAction(KisIconUtils::loadIcon("symmetry-horizontal"), i18n("Mirror Layer Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("mirrorNodeX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KisAction(themedIcon("symmetry-vertical"), i18n("Mirror Layer Vertically"), this);
+    action  = new KisAction(KisIconUtils::loadIcon("symmetry-vertical"), i18n("Mirror Layer Vertically"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("mirrorNodeY", action);
@@ -254,100 +256,100 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = new KisAction(i18n("Activate next layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setShortcut(KShortcut(Qt::Key_PageUp));
+    action->setShortcut(QKeySequence(Qt::Key_PageUp));
     actionManager->addAction("activateNextLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
     action = new KisAction(i18n("Activate previous layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setShortcut(KShortcut(Qt::Key_PageDown));
+    action->setShortcut(QKeySequence(Qt::Key_PageDown));
     actionManager->addAction("activatePreviousLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 
-    action  = new KisAction(themedIcon("document-save"), i18n("Save Layer/Mask..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("document-save"), i18n("Save Layer/Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("save_node_as_image", action);
     connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
 
-    action = new KisAction(themedIcon("edit-copy"), i18n("&Duplicate Layer or Mask"), this);
+    action = new KisAction(KisIconUtils::loadIcon("edit-copy"), i18n("&Duplicate Layer or Mask"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
+    action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_J));
     actionManager->addAction("duplicatelayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
 
 
     NEW_LAYER_ACTION_KEY("add_new_paint_layer", i18n("&Paint Layer"),
-                         "KisPaintLayer", themedIcon("document-new"),
+                         "KisPaintLayer", KisIconUtils::loadIcon("document-new"),
                          Qt::Key_Insert);
 
     NEW_LAYER_ACTION_KEY("add_new_group_layer", i18n("&Group Layer"),
-                     "KisGroupLayer", themedIcon("folder"),
+                     "KisGroupLayer", KisIconUtils::loadIcon("folder"),
                      Qt::ControlModifier + Qt::Key_G);
 
     NEW_LAYER_ACTION("add_new_clone_layer", i18n("&Clone Layer"),
-                     "KisCloneLayer", themedIcon("edit-copy"));
+                     "KisCloneLayer", KisIconUtils::loadIcon("edit-copy"));
 
     NEW_LAYER_ACTION("add_new_shape_layer", i18n("&Vector Layer"),
-                     "KisShapeLayer", themedIcon("bookmarks"));
+                     "KisShapeLayer", KisIconUtils::loadIcon("bookmarks"));
 
     NEW_LAYER_ACTION("add_new_adjustment_layer", i18n("&Filter Layer..."),
-                     "KisAdjustmentLayer", themedIcon("view-filter"));
+                     "KisAdjustmentLayer", KisIconUtils::loadIcon("view-filter"));
 
     NEW_LAYER_ACTION("add_new_fill_layer", i18n("&Fill Layer..."),
-                     "KisGeneratorLayer", themedIcon("krita_tool_color_fill"));
+                     "KisGeneratorLayer", KisIconUtils::loadIcon("krita_tool_color_fill"));
 
     NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer..."),
-                     "KisFileLayer", themedIcon("document-open"));
+                     "KisFileLayer", KisIconUtils::loadIcon("document-open"));
 
     NEW_MASK_ACTION("add_new_transparency_mask", i18n("&Transparency Mask"),
-                    "KisTransparencyMask", themedIcon("edit-copy"));
+                    "KisTransparencyMask", KisIconUtils::loadIcon("edit-copy"));
 
     NEW_MASK_ACTION("add_new_filter_mask", i18n("&Filter Mask..."),
-                    "KisFilterMask", themedIcon("view-filter"));
+                    "KisFilterMask", KisIconUtils::loadIcon("view-filter"));
 
     NEW_MASK_ACTION("add_new_transform_mask", i18n("&Transform Mask..."),
-                    "KisTransformMask", themedIcon("bookmarks"));
+                    "KisTransformMask", KisIconUtils::loadIcon("bookmarks"));
 
     NEW_MASK_ACTION("add_new_selection_mask", i18n("&Local Selection"),
-                    "KisSelectionMask", themedIcon("edit-paste"));
+                    "KisSelectionMask", KisIconUtils::loadIcon("edit-paste"));
 
     connect(&m_d->nodeCreationSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(createNode(const QString &)));
 
     CONVERT_NODE_ACTION("convert_to_paint_layer", i18n("to &Paint Layer"),
-                        "KisPaintLayer", themedIcon("document-new"));
+                        "KisPaintLayer", KisIconUtils::loadIcon("document-new"));
 
     CONVERT_NODE_ACTION("convert_to_selection_mask", i18n("to &Selection Mask"),
-                        "KisSelectionMask", themedIcon("edit-paste"));
+                        "KisSelectionMask", KisIconUtils::loadIcon("edit-paste"));
 
     CONVERT_NODE_ACTION("convert_to_filter_mask", i18n("to &Filter Mask..."),
-                        "KisFilterMask", themedIcon("view-filter"));
+                        "KisFilterMask", KisIconUtils::loadIcon("view-filter"));
 
     CONVERT_NODE_ACTION("convert_to_transparency_mask", i18n("to &Transparency Mask"),
-                        "KisTransparencyMask", themedIcon("edit-copy"));
+                        "KisTransparencyMask", KisIconUtils::loadIcon("edit-copy"));
 
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 
-    action = new KisAction(themedIcon("layer-visible-off"), i18n("&Isolate Layer"), this);
+    action = new KisAction(KisIconUtils::loadIcon("layer-visible-off"), i18n("&Isolate Layer"), this);
     action->setCheckable(true);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("isolate_layer", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
-    action  = new KisAction(themedIcon("edit-copy"), i18n("Alpha into Mask"), this);
+    action  = new KisAction(KisIconUtils::loadIcon("edit-copy"), i18n("Alpha into Mask"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE);
     actionManager->addAction("split_alpha_into_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaIntoMask()));
 
-    action  = new KisAction(themedIcon("transparency-enabled"), i18n("Write as Alpha"), this);
+    action  = new KisAction(KisIconUtils::loadIcon("transparency-enabled"), i18n("Write as Alpha"), this);
     action->setActivationFlags(KisAction::ACTIVE_TRANSPARENCY_MASK);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("split_alpha_write", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaWrite()));
 
-    action  = new KisAction(themedIcon("document-save"), i18n("Save Merged..."), this);
+    action  = new KisAction(KisIconUtils::loadIcon("document-save"), i18n("Save Merged..."), this);
     action->setActivationFlags(KisAction::ACTIVE_TRANSPARENCY_MASK);
     // HINT: we can save even when the nodes are not editable
     actionManager->addAction("split_alpha_save_merged", action);
@@ -554,7 +556,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
         m_d->commandsAdapter->endMacro();
 
     } else {
-        qWarning() << "Unsupported node conversion type:" << nodeType;
+        warnKrita << "Unsupported node conversion type:" << nodeType;
     }
 }
 
@@ -974,16 +976,17 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
 
     if (filename.isEmpty()) return;
 
-    KUrl url = KUrl::fromLocalFile(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     if (url.isEmpty()) return;
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(url);
-    QString mimefilter = mime->name();
+QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(url);
+    QString mimefilter = mime.name();
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
     d->prepareForImport();
@@ -1010,7 +1013,7 @@ void KisNodeManager::saveNodeAsImage()
     KisNodeSP node = activeNode();
 
     if (!node) {
-        qWarning() << "BUG: Save Node As Image was called without any node selected";
+        warnKrita << "BUG: Save Node As Image was called without any node selected";
         return;
     }
 

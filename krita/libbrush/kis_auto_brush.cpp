@@ -210,7 +210,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     }
     else {
         if (dst->data() == 0 || dst->bounds().isEmpty()) {
-            qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
+            warnKrita << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, dstWidth, dstHeight));
         }
         Q_ASSERT(dst->bounds().width() >= dstWidth && dst->bounds().height() >= dstHeight);

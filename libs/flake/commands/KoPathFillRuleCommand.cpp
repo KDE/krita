@@ -20,7 +20,7 @@
 #include "KoPathFillRuleCommand.h"
 #include "KoPathShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoPathFillRuleCommand::Private
 {

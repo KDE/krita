@@ -32,7 +32,7 @@ public:
 
     QRect calculateExtent(const KisPaintDeviceSP device);
 
-public slots:
+public Q_SLOTS:
     void configChanged();
 
 private:

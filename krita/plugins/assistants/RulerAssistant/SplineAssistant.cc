@@ -18,7 +18,7 @@
 
 #include "SplineAssistant.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QLinearGradient>

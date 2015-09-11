@@ -70,5 +70,3 @@ bool VideoShapeConfigWidget::showOnShapeSelect()
 {
     return false;
 }
-
-#include <VideoShapeConfigWidget.moc>

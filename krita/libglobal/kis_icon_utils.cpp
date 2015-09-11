@@ -25,44 +25,15 @@
 #include <QComboBox>
 #include <QIcon>
 
-#include "KoIcon.h"
-
+#include <KoIconUtils.h>
+#include <KoIcon.h>
 
 namespace KisIconUtils
 {
 
-KIcon loadIcon(const QString &name) {
-
-    static bool firstUse = true;
-    if (firstUse) {
-        // workaround for some kde-related crash
-        bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
-        Q_UNUSED(_unused);
-        firstUse = false;
-    }
-
-    QString realName;
-
-    // try load themed icon
-    QColor background = qApp->palette().background().color();
-    bool useDarkIcons = background.value() > 100;
-    const char * const prefix = useDarkIcons ? "dark_" : "light_";
-
-    realName = QLatin1String(prefix) + name;
-
-    bool absent = KIconLoader::global()->iconPath(realName, KIconLoader::User, true).isEmpty();
-    if (absent) {
-        realName = name;
-    }
-
-    KIcon icon(realName);
-
-    // fallback
-    if (icon.isNull()) {
-        return KIcon(name);
-    }
-
-    return icon;
+QIcon loadIcon(const QString &name)
+{
+        return KoIconUtils::themedIcon(name);
 }
 
 bool adjustIcon(QIcon *icon)

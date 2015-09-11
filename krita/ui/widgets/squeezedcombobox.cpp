@@ -28,7 +28,7 @@
 #include <QStyle>
 #include <QApplication>
 #include <QResizeEvent>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
         : QComboBox(parent)

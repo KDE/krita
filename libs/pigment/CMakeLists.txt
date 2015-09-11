@@ -133,15 +133,15 @@ generate_export_header(pigmentcms
 )
 
 if (HAVE_VC)
-    target_link_libraries(pigmentcms KF5::KDELibs4Support)
-    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::KDELibs4Support)
+    target_link_libraries(pigmentcms KF5::I18n KF5::KDELibs4Support)
+    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::I18n KF5::KDELibs4Support)
 endif()
 
 target_link_libraries(
     pigmentcms
     koplugin
     ${EXTRA_LIBRARIES}
-    KF5::KDELibs4Support
+    KF5::I18n KF5::KDELibs4Support
     Qt5::Gui
     Qt5::Xml
     ${WIN32_PLATFORM_NET_LIBS}

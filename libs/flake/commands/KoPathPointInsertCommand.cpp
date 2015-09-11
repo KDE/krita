@@ -22,7 +22,7 @@
 
 #include "KoPathPoint.h"
 #include <KoPathSegment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoPathPointInsertCommandPrivate
 {

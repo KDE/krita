@@ -20,7 +20,7 @@
 
 #include "kis_selection_based_layer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_debug.h"
 
 #include <KoCompositeOpRegistry.h>
@@ -36,7 +36,7 @@
 #include "filter/kis_filter.h"
 
 
-struct KisSelectionBasedLayer::Private
+struct Q_DECL_HIDDEN KisSelectionBasedLayer::Private
 {
 public:
     Private() : useSelectionInProjection(true) {}

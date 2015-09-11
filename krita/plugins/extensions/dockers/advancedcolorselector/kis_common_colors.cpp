@@ -26,11 +26,10 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "KoColor.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
@@ -43,7 +42,7 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     KisColorPatches("commonColors", parent)
 {
     m_reloadButton = new QPushButton();
-    m_reloadButton->setIcon(themedIcon("view-refresh"));
+    m_reloadButton->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_reloadButton->setToolTip(i18n("Create a list of colors from the image"));
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
 
@@ -64,7 +63,7 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 {
     KisColorPatches::setCanvas(canvas);
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     if (cfg.readEntry("commonColorsAutoUpdate", false)) {
         if (m_image) {
             m_image->disconnect(this);
@@ -95,7 +94,7 @@ void KisCommonColors::updateSettings()
     if(!(m_canvas && m_canvas->image()))
         return;
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false)) {
         connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);

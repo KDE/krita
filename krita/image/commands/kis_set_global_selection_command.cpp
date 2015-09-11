@@ -18,7 +18,7 @@
 
 #include "kis_selection_commands.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_image.h"
 #include "kis_selection.h"

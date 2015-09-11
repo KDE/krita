@@ -51,11 +51,10 @@ bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect, int lod = 0) {
         return true;
     }
     else {
-        qCritical() << "walker rect:" << walker->requestedRect();
-        qCritical() << "expected rect:" << rect;
-        qCritical() << "walker lod:" << walker->levelOfDetail();
-        qCritical() << "expected lod:" << lod;
-
+        dbgKrita << "walker rect:" << walker->requestedRect();
+        dbgKrita << "expected rect:" << rect;
+        dbgKrita << "walker lod:" << walker->levelOfDetail();
+        dbgKrita << "expected lod:" << lod;
         return false;
     }
 }

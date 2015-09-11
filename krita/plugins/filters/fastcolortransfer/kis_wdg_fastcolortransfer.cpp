@@ -53,7 +53,7 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration*
 {
     QVariant value;
     if (config->getProperty("filename", value)) {
-        widget()->fileNameURLRequester->setUrl(value.toString());
+        widget()->fileNameURLRequester->setUrl(QUrl::fromUserInput(value.toString()));
     }
 
 }

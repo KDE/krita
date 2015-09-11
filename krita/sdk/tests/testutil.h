@@ -72,7 +72,7 @@ inline QString fetchExternalDataFileName(const QString relativeFileName)
 
     QString path;
     if (!env.contains(unittestsDataDirPath)) {
-        qWarning() << "Environment variable" << unittestsDataDirPath << "is not set";
+        warnKrita << "Environment variable" << unittestsDataDirPath << "is not set";
         return QString();
     } else {
         path = env.value(unittestsDataDirPath, "");
@@ -115,7 +115,7 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
 
 inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
-    qDebug() << node->name();
+    dbgKrita << node->name();
     KisNodeSP child = node->firstChild();
 
     while (child) {
@@ -123,7 +123,7 @@ inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
         if (child->childCount() > 0) {
             dumpNodeStack(child, prefix + "\t");
         } else {
-            qDebug() << prefix << child->name();
+            dbgKrita << prefix << child->name();
         }
         child = child->nextSibling();
     }
@@ -176,7 +176,7 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
     if (w1 != w2 || h1 != h2) {
         pt.setX(-1);
         pt.setY(-1);
-        qDebug() << "Images have different sizes" << image1.size() << image2.size();
+        dbgKrita << "Images have different sizes" << image1.size() << image2.size();
         return false;
     }
 
@@ -201,7 +201,7 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                     pt.setY(y);
                     numFailingPixels++;
 
-                    qDebug() << " Different at" << pt
+                    dbgKrita << " Different at" << pt
                              << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
                              << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
                              << "fuzzy" << fuzzy
@@ -216,8 +216,8 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
             }
         }
     }
-    //     qDebug() << "compareQImages time elapsed:" << t.elapsed();
-    //    qDebug() << "Images are identical";
+    //     dbgKrita << "compareQImages time elapsed:" << t.elapsed();
+    //    dbgKrita << "Images are identical";
     return true;
 }
 
@@ -249,7 +249,7 @@ inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const 
         iter1->nextRow();
         iter2->nextRow();
     }
-    //     qDebug() << "comparePaintDevices time elapsed:" << t.elapsed();
+    //     dbgKrita << "comparePaintDevices time elapsed:" << t.elapsed();
     return true;
 }
 
@@ -260,7 +260,7 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
     QRect rc2 = dev2->exactBounds();
 
     if (rc1 != rc2) {
-        qDebug() << "Devices have different size" << ppVar(rc1) << ppVar(rc2);
+        dbgKrita << "Devices have different size" << ppVar(rc1) << ppVar(rc2);
         return false;
     }
 
@@ -278,9 +278,9 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 
                 if (p1[3] < alphaThreshold && p2[3] < alphaThreshold) continue;
 
-                qDebug() << "Failed compare paint devices:" << iter1->x() << iter1->y();
-                qDebug() << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
-                qDebug() << "dst:" << p2[0] << p2[1] << p2[2] << p2[3];
+                dbgKrita << "Failed compare paint devices:" << iter1->x() << iter1->y();
+                dbgKrita << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
+                dbgKrita << "dst:" << p2[0] << p2[1] << p2[2] << p2[3];
                 return false;
             }
         } while (iter1->nextPixel() && iter2->nextPixel());
@@ -349,15 +349,15 @@ inline bool checkQImageImpl(bool externalTest,
                 QDir directory;
                 directory.mkpath(pathInfo.path());
 
-                qDebug() << "--- Saving reference image:" << name << path;
+                dbgKrita << "--- Saving reference image:" << name << path;
                 image.save(path);
                 saveStandardResults = false;
 
             } else {
-                qDebug() << "--- External image not found. Skipping..." << name;
+                dbgKrita << "--- External image not found. Skipping..." << name;
             }
         } else {
-            qDebug() << "--- Wrong image:" << name;
+            dbgKrita << "--- Wrong image:" << name;
             valid = false;
         }
 
@@ -451,9 +451,9 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
         for (int x = rc.x(); x < rc.x() + rc.width(); x++) {
 
             if(*((quint8*)it->rawData()) != expected) {
-                qCritical() << "At point:" << x << y;
-                qCritical() << "Expected pixel:" << expected;
-                qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
+                errKrita << "At point:" << x << y;
+                errKrita << "Expected pixel:" << expected;
+                errKrita << "Actual pixel:  " << *((quint8*)it->rawData());
                 return false;
             }
             it->nextPixel();
@@ -581,10 +581,10 @@ public:
 private:
     void printValues(bool force = false) {
         if (m_cycles > m_period || force) {
-            qDebug() << "Val / Total:" << qreal(m_val) / qreal(m_total);
-            qDebug() << "Avg. Val:   " << qreal(m_val) / m_cycles;
-            qDebug() << "Avg. Total: " << qreal(m_total) / m_cycles;
-            qDebug() << ppVar(m_val) << ppVar(m_total) << ppVar(m_cycles);
+            dbgKrita << "Val / Total:" << qreal(m_val) / qreal(m_total);
+            dbgKrita << "Avg. Val:   " << qreal(m_val) / m_cycles;
+            dbgKrita << "Avg. Total: " << qreal(m_total) / m_cycles;
+            dbgKrita << ppVar(m_val) << ppVar(m_total) << ppVar(m_cycles);
 
             m_val = 0;
             m_total = 0;

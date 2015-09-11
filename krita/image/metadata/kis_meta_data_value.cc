@@ -24,13 +24,13 @@
 #include <QVariant>
 #include <QStringList>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 
 using namespace KisMetaData;
 
-struct Value::Private {
+struct Q_DECL_HIDDEN Value::Private {
     Private() : type(Invalid) {}
     union {
         QVariant* variant;

@@ -35,7 +35,7 @@
 #include <QVector>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 
 #include <KoCanvasBase.h>
@@ -131,7 +131,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 {
 
     KisTool::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group(toolId()); // save settings to kritarc
+    configGroup =  KSharedConfig::openConfig()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
@@ -247,7 +247,7 @@ bool KisToolCrop::tryContinueLastCropAction()
     bool result = false;
 
     const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
-    const KisCropSavedExtraData *data;
+    const KisCropSavedExtraData *data = 0;
 
     if ((lastCommand = image()->undoAdapter()->presentCommand()) &&
         (data = dynamic_cast<const KisCropSavedExtraData*>(lastCommand->extraData()))) {

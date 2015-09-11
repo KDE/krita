@@ -26,7 +26,7 @@
 #include <QTextCodec>
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

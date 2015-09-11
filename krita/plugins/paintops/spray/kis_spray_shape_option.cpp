@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_spray_shape_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QImage>
 #include <QFile>
@@ -118,7 +118,7 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
     m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
-    m_options->imageUrl->setUrl(setting->getString(SPRAYSHAPE_IMAGE_URL));
+    m_options->imageUrl->setUrl(QUrl::fromUserInput(setting->getString(SPRAYSHAPE_IMAGE_URL)));
 }
 
 

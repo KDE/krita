@@ -19,7 +19,7 @@
 
 #include "EllipseShapeConfigWidget.h"
 #include "EllipseShapeConfigCommand.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 {
@@ -94,5 +94,3 @@ void EllipseShapeConfigWidget::closeEllipse()
 
     emit propertyChanged();
 }
-
-#include <EllipseShapeConfigWidget.moc>

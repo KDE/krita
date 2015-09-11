@@ -28,6 +28,8 @@
 #include <KoShapeGroup.h>
 #include <KoSelection.h>
 
+#include <QTest>
+
 
 void TestShapeContainer::testModel()
 {
@@ -220,4 +222,3 @@ void TestShapeContainer::testScaling2()
 }
 
 QTEST_MAIN(TestShapeContainer)
-#include "TestShapeContainer.moc"

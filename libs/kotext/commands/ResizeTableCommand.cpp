@@ -27,7 +27,7 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 ResizeTableCommand::ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent) :

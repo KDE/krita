@@ -215,6 +215,3 @@ void StylesCombo::showEditIcon(bool show){
     }
     delegate->setEditButtonEnable(show);
 }
-
-#include <StylesCombo.moc>
-

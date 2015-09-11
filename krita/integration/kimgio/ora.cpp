@@ -17,16 +17,6 @@
 
 #include <kzip.h>
 
-#include <kis_image.h>
-#include <KisDocument.h>
-#include <kis_group_layer.h>
-#include <kis_image.h>
-#include <kis_open_raster_stack_load_visitor.h>
-#include "ora_load_context.h"
-#include <kis_paint_layer.h>
-
-#include <kdebug.h>
-
 OraHandler::OraHandler()
 {
 }
@@ -55,17 +45,6 @@ bool OraHandler::read(QImage *image)
     return true;
 }
 
-bool OraHandler::write(const QImage &)
-{
-    // TODO Stub!
-    return false;
-}
-
-QByteArray OraHandler::name() const
-{
-    return "ora";
-}
-
 bool OraHandler::canRead(QIODevice *device)
 {
     if (!device) {
@@ -84,28 +63,23 @@ bool OraHandler::canRead(QIODevice *device)
     return (qstrcmp(fileZipEntry->data().constData(), "image/openraster") == 0);
 }
 
-
-class OraPlugin : public QImageIOPlugin
-{
-public:
-    QStringList keys() const;
-    Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
-    QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
-};
-
-QStringList OraPlugin::keys() const
-{
-    return QStringList() << "ora" << "ORA";
-}
-
 QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
-    Q_UNUSED(device);
-    if (format == "ora" || format == "ORA")
+    if (format == "ora" || format == "ORA") {
         return Capabilities(CanRead);
-    else
+    }
+    if (!format.isEmpty()) {
         return 0;
+    }
+    if (!device->isOpen()) {
+        return 0;
+    }
 
+    Capabilities cap;
+    if (device->isReadable() && OraHandler::canRead(device)) {
+        cap |= CanRead;
+    }
+    return cap;
 }
 
 QImageIOHandler *OraPlugin::create(QIODevice *device, const QByteArray &format) const
@@ -115,6 +89,3 @@ QImageIOHandler *OraPlugin::create(QIODevice *device, const QByteArray &format) 
     handler->setFormat(format);
     return handler;
 }
-
-Q_EXPORT_STATIC_PLUGIN(OraPlugin)
-Q_EXPORT_PLUGIN2(Ora, OraPlugin)

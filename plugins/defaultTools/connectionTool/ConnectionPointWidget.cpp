@@ -20,7 +20,7 @@
 
 #include "ConnectionPointWidget.h"
 #include "ConnectionTool.h"
-#include <kaction.h>
+#include <QAction>
 
 ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * parent)
     :QWidget(parent)
@@ -55,5 +55,3 @@ void ConnectionPointWidget::toggleEditModeCheckbox(bool checked)
         widget.toggleEditMode->setCheckState(Qt::Unchecked);
     widget.toggleEditMode->blockSignals(false);
 }
-
-#include <ConnectionPointWidget.moc>

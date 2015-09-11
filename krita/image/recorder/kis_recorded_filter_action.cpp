@@ -35,7 +35,7 @@
 #include "kis_node_query_path.h"
 #include "kis_play_info.h"
 
-struct KisRecordedFilterAction::Private {
+struct Q_DECL_HIDDEN KisRecordedFilterAction::Private {
     Private()
         : kconfig(0)
     {

@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -62,7 +62,7 @@ PSDLoader::~PSDLoader()
 {
 }
 
-KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
+KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
 {
     // open the file
     QFile f(uri.toLocalFile());
@@ -291,7 +291,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 allStylesForServer << layerStyle;
                 layer->setLayerStyle(layerStyle->clone());
             } else {
-                qWarning() << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
+                warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }
 
         }
@@ -316,7 +316,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
+KisImageBuilder_Result PSDLoader::buildImage(const QUrl &uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;

@@ -34,7 +34,7 @@
         </widget>
        </item>
        <item>
-        <widget class="KLineEdit" name="sectionNameLineEdit">
+        <widget class="QLineEdit" name="sectionNameLineEdit">
         </widget>
        </item>
       </layout>
@@ -58,7 +58,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

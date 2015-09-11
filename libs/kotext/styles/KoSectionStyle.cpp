@@ -570,5 +570,3 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
         style.addChildElement("style:columns", elementContents);
     }
 }
-
-#include <KoSectionStyle.moc>

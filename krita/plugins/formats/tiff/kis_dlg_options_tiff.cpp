@@ -26,7 +26,7 @@
 #include <QApplication>
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
@@ -35,10 +35,10 @@
 #include "ui_kis_wdg_options_tiff.h"
 
 KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
-        : KDialog(parent), wdg(new QWidget)
+        : KoDialog(parent), wdg(new QWidget)
 {
     setWindowTitle(i18n("TIFF Export Options"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
     optionswdg = new Ui_KisWdgOptionsTIFF();
     optionswdg->setupUi(wdg);
     activated(0);
@@ -148,7 +148,7 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     options.faxMode = optionswdg->kComboBoxFaxMode->currentIndex() + 1;
     options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
 
-    qDebug() << options.compressionType << options.predictor << options.alpha << options.jpegQuality << options.deflateCompress << options.faxMode << options.pixarLogCompress;
+    dbgKrita << options.compressionType << options.predictor << options.alpha << options.jpegQuality << options.deflateCompress << options.faxMode << options.pixarLogCompress;
 
     KisPropertiesConfiguration cfg;
     cfg.setProperty("compressiontype", optionswdg->kComboBoxCompressionType->currentIndex());

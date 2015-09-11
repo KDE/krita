@@ -2165,5 +2165,3 @@ void Axis::SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericS
     delete d->numericStyleFormat;
     d->numericStyleFormat = numericStyleFormat;
 }
-
-#include "Axis.moc"

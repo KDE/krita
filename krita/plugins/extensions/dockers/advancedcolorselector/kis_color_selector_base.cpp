@@ -26,7 +26,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 
 #include "KoColorSpace.h"
@@ -433,7 +432,7 @@ void KisColorSelectorBase::updateSettings()
         m_popup->updateSettings();
     }
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
 
    int zoomSelectorOptions =  (int) cfg.readEntry("zoomSelectorOptions", 0) ;

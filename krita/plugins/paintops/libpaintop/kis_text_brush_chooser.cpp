@@ -25,8 +25,7 @@
 #include <QPixmap>
 #include <QLineEdit>
 #include <QString>
-
-#include <kfontdialog.h>
+#include <QFontDialog>
 
 #define showSlider(input) input->setRange(input->minimum(), input->maximum())
 
@@ -51,8 +50,12 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
 
 void KisTextBrushChooser::getFont()
 {
-    KFontDialog::getFont(m_font);
-    rebuildTextBrush();
+    bool ok = false;
+    QFont f = QFontDialog::getFont(&ok);
+    if (ok) {
+        m_font = f;
+        rebuildTextBrush();
+    }
 }
 
 void KisTextBrushChooser::rebuildTextBrush()

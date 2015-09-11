@@ -38,7 +38,7 @@ struct PrecalculatedCoords
 };
 
 
-struct KisGreenCoordinatesMath::Private
+struct Q_DECL_HIDDEN KisGreenCoordinatesMath::Private
 {
     Private () : transformedCageDirection(0) {}
 

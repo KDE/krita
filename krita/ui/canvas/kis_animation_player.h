@@ -42,11 +42,11 @@ public:
     bool isPlaying();
     int currentTime();
 
-public slots:
+public Q_SLOTS:
     void slotUpdate();
     void slotCancelPlayback();
 
-signals:
+Q_SIGNALS:
     void sigFrameChanged();
     void sigPlaybackStopped();
 

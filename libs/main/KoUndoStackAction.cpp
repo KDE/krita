@@ -23,11 +23,11 @@
 #include <KoIcon.h>
 
 #include <kundo2stack.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandardshortcut.h>
 
 KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
-    : KAction(stack)
+    : QAction(stack)
     , m_type(type)
 {
     if (m_type == UNDO) {

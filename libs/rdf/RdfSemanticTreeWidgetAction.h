@@ -22,12 +22,12 @@
 
 #include "kordf_export.h"
 // KDE
-#include <kaction.h>
+#include <QAction>
 
 class KoCanvasBase;
 
 
-class KORDF_EXPORT RdfSemanticTreeWidgetAction : public KAction
+class KORDF_EXPORT RdfSemanticTreeWidgetAction : public QAction
 {
     Q_OBJECT
 

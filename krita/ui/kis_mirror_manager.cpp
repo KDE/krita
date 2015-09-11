@@ -22,11 +22,11 @@
 #include "KisViewManager.h"
 #include <kis_canvas_controller.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include "canvas/kis_mirror_axis.h"
 

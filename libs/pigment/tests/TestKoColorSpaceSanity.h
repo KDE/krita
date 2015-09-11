@@ -20,7 +20,7 @@
 #ifndef _TESTKOCOLORSPACESANITY_H_
 #define _TESTKOCOLORSPACESANITY_H_
 
-#include <QtTest>
+#include <QObject>
 
 class TestKoColorSpaceSanity : public QObject
 {

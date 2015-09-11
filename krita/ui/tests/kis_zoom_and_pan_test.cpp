@@ -131,14 +131,14 @@ inline bool compareWithRounding(const P &pt0, const P &pt1, T tolerance)
 bool verifyOffset(ZoomAndPanTester &t, const QPoint &offset) {
 
     if (t.coordinatesConverter()->documentOffset() != offset) {
-            qDebug() << "########################";
-            qDebug() << "Expected Offset:" << offset;
-            qDebug() << "Actual values:";
-            qDebug() << "Offset:" << t.coordinatesConverter()->documentOffset();
-            qDebug() << "wsize:"  << t.canvasWidget()->size();
-            qDebug() << "vport:"  << t.canvasController()->viewportSize();
-            qDebug() << "pref:"  << t.canvasController()->preferredCenter();
-            qDebug() << "########################";
+            dbgKrita << "########################";
+            dbgKrita << "Expected Offset:" << offset;
+            dbgKrita << "Actual values:";
+            dbgKrita << "Offset:" << t.coordinatesConverter()->documentOffset();
+            dbgKrita << "wsize:"  << t.canvasWidget()->size();
+            dbgKrita << "vport:"  << t.canvasController()->viewportSize();
+            dbgKrita << "pref:"  << t.canvasController()->preferredCenter();
+            dbgKrita << "########################";
     }
 
     return t.coordinatesConverter()->documentOffset() == offset;
@@ -173,26 +173,26 @@ bool KisZoomAndPanTest::checkPan(ZoomAndPanTester &t, QPoint shift)
         !preferredCenterAsExpected ||
         !topLeftAsExpected) {
 
-        qDebug() << "***** PAN *****************";
+        dbgKrita << "***** PAN *****************";
 
         if(!offsetAsExpected) {
-            qDebug() << " ### Offset invariant broken";
+            dbgKrita << " ### Offset invariant broken";
         }
 
         if(!preferredCenterAsExpected) {
-            qDebug() << " ### Preferred center invariant broken";
+            dbgKrita << " ### Preferred center invariant broken";
         }
 
         if(!topLeftAsExpected) {
-            qDebug() << " ### TopLeft invariant broken";
+            dbgKrita << " ### TopLeft invariant broken";
         }
 
-        qDebug() << ppVar(expectedOffset);
-        qDebug() << ppVar(expectedPrefCenter);
-        qDebug() << ppVar(oldOffset) << ppVar(newOffset);
-        qDebug() << ppVar(oldPrefCenter) << ppVar(newPrefCenter);
-        qDebug() << ppVar(newTopLeft);
-        qDebug() << "***************************";
+        dbgKrita << ppVar(expectedOffset);
+        dbgKrita << ppVar(expectedPrefCenter);
+        dbgKrita << ppVar(oldOffset) << ppVar(newOffset);
+        dbgKrita << ppVar(oldPrefCenter) << ppVar(newPrefCenter);
+        dbgKrita << ppVar(newTopLeft);
+        dbgKrita << "***************************";
     }
 
     return offsetAsExpected && preferredCenterAsExpected && topLeftAsExpected;
@@ -243,31 +243,31 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
         !preferredCenterAsExpected ||
         !topLeftAsExpected) {
 
-        qDebug() << "***** ZOOM ****************";
+        dbgKrita << "***** ZOOM ****************";
 
         if(!offsetAsExpected) {
-            qDebug() << " ### Offset invariant broken";
+            dbgKrita << " ### Offset invariant broken";
         }
 
         if(!preferredCenterAsExpected) {
-            qDebug() << " ### Preferred center invariant broken";
+            dbgKrita << " ### Preferred center invariant broken";
         }
 
         if(!topLeftAsExpected) {
-            qDebug() << " ### TopLeft invariant broken";
+            dbgKrita << " ### TopLeft invariant broken";
         }
 
-        qDebug() << ppVar(expectedOffset);
-        qDebug() << ppVar(expectedPreferredCenter);
-        qDebug() << ppVar(oldOffset) << ppVar(newOffset);
-        qDebug() << ppVar(oldPreferredCenter) << ppVar(newPreferredCenter);
-        qDebug() << ppVar(oldPreferredCenterFractionX);
-        qDebug() << ppVar(oldPreferredCenterFractionY);
-        qDebug() << ppVar(oldZoom) << ppVar(newZoom);
-        qDebug() << ppVar(baseFlakePoint);
-        qDebug() << ppVar(newTopLeft);
-        qDebug() << ppVar(roundingTolerance);
-        qDebug() << "***************************";
+        dbgKrita << ppVar(expectedOffset);
+        dbgKrita << ppVar(expectedPreferredCenter);
+        dbgKrita << ppVar(oldOffset) << ppVar(newOffset);
+        dbgKrita << ppVar(oldPreferredCenter) << ppVar(newPreferredCenter);
+        dbgKrita << ppVar(oldPreferredCenterFractionX);
+        dbgKrita << ppVar(oldPreferredCenterFractionY);
+        dbgKrita << ppVar(oldZoom) << ppVar(newZoom);
+        dbgKrita << ppVar(baseFlakePoint);
+        dbgKrita << ppVar(newTopLeft);
+        dbgKrita << ppVar(roundingTolerance);
+        dbgKrita << "***************************";
     }
 
     return offsetAsExpected && preferredCenterAsExpected && topLeftAsExpected;
@@ -522,7 +522,7 @@ void KisZoomAndPanTest::testZoomOnBorderZoomLevels()
 
     QPoint widgetPoint(100,100);
 
-    qWarning() << "WARNING: testZoomOnBorderZoomLevels() is disabled due to some changes in KoZoomMode::minimum/maximumZoom()";
+    warnKrita << "WARNING: testZoomOnBorderZoomLevels() is disabled due to some changes in KoZoomMode::minimum/maximumZoom()";
     return;
 
     // test min zoom level
@@ -594,35 +594,35 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
         !preferredCenterAsExpected ||
         !realCenterPointAsExpected) {
 
-        qDebug() << "***** ROTATE **************";
+        dbgKrita << "***** ROTATE **************";
 
         if(!oldOffsetAsExpected) {
-            qDebug() << " ### Old offset invariant broken";
+            dbgKrita << " ### Old offset invariant broken";
         }
 
         if(!newOffsetAsExpected) {
-            qDebug() << " ### New offset invariant broken";
+            dbgKrita << " ### New offset invariant broken";
         }
 
         if(!preferredCenterAsExpected) {
-            qDebug() << " ### Preferred center invariant broken";
+            dbgKrita << " ### Preferred center invariant broken";
         }
 
         if(!realCenterPointAsExpected) {
-            qDebug() << " ### *Real* center invariant broken";
+            dbgKrita << " ### *Real* center invariant broken";
         }
 
-        qDebug() << ppVar(expectedOldOffset);
-        qDebug() << ppVar(expectedNewOffset);
-        qDebug() << ppVar(expectedPreferredCenter);
-        qDebug() << ppVar(oldOffset) << ppVar(newOffset);
-        qDebug() << ppVar(oldCenteringCorrection) << ppVar(newCenteringCorrection);
-        qDebug() << ppVar(oldPreferredCenter) << ppVar(newPreferredCenter);
-        qDebug() << ppVar(oldRealCenterPoint) << ppVar(newRealCenterPoint);
-        qDebug() << ppVar(oldDocumentSize) << ppVar(newDocumentSize);
-        qDebug() << ppVar(baseAngle) << "deg";
-        qDebug() << ppVar(angle) << "deg";
-        qDebug() << "***************************";
+        dbgKrita << ppVar(expectedOldOffset);
+        dbgKrita << ppVar(expectedNewOffset);
+        dbgKrita << ppVar(expectedPreferredCenter);
+        dbgKrita << ppVar(oldOffset) << ppVar(newOffset);
+        dbgKrita << ppVar(oldCenteringCorrection) << ppVar(newCenteringCorrection);
+        dbgKrita << ppVar(oldPreferredCenter) << ppVar(newPreferredCenter);
+        dbgKrita << ppVar(oldRealCenterPoint) << ppVar(newRealCenterPoint);
+        dbgKrita << ppVar(oldDocumentSize) << ppVar(newDocumentSize);
+        dbgKrita << ppVar(baseAngle) << "deg";
+        dbgKrita << ppVar(angle) << "deg";
+        dbgKrita << "***************************";
     }
 
     return preferredCenterAsExpected && oldOffsetAsExpected && newOffsetAsExpected && realCenterPointAsExpected;
@@ -652,8 +652,8 @@ void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
     QPointF expectedCenterPoint = QPointF(t.image()->bounds().center());
 
     if(!compareWithRounding(realCenterPoint, expectedCenterPoint, 2/zoom)) {
-        qDebug() << "Failed to set initial center point";
-        qDebug() << ppVar(expectedCenterPoint) << ppVar(realCenterPoint);
+        dbgKrita << "Failed to set initial center point";
+        dbgKrita << ppVar(expectedCenterPoint) << ppVar(realCenterPoint);
         QFAIL("FAIL: Failed to set initial center point");
     }
 
@@ -665,7 +665,7 @@ void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
     QVERIFY(checkRotation(t, 5));
 
     if(vastScrolling < 0.5 && zoom < 1) {
-        qWarning() << "Disabling a few tests for vast scrolling ="
+        warnKrita << "Disabling a few tests for vast scrolling ="
                    << vastScrolling << ". See comment for more";
         /**
          * We have to disable a couple of tests here for the case when

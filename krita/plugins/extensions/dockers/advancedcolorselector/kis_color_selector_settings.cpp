@@ -27,7 +27,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
@@ -154,17 +154,17 @@ QString KisColorSelectorSettings::header()
 }
 
 
-KIcon KisColorSelectorSettings::icon()
+QIcon KisColorSelectorSettings::icon()
 {
-    return koIcon("extended_color_selector");
+    return KisIconUtils::loadIcon("extended_color_selector");
 }
 
 
 void KisColorSelectorSettings::savePreferences() const
 {
     // write cfg
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup hsxcfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
     //  advanced color selector
     cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
@@ -385,8 +385,8 @@ void KisColorSelectorSettings::loadPreferences()
     //read cfg
     //don't forget to also add a new entry to the default preferences
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup hsxcfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
 
     // Advanced color selector

@@ -17,7 +17,7 @@
 
 #include "smallcolorselector_dock.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoCanvasBase.h>
 
 #include "kis_small_color_widget.h"

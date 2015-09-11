@@ -19,7 +19,8 @@
 
 #include "KoColorProfile.h"
 #include "DebugPigment.h"
-struct KoColorProfile::Private {
+
+struct Q_DECL_HIDDEN KoColorProfile::Private {
     QString name;
     QString info;
     QString fileName;

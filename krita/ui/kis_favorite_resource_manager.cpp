@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QPoint>
 #include <QStringList>
 #include <QString>
@@ -347,7 +347,7 @@ void KisFavoriteResourceManager::init()
     if (!m_initialized) {
         m_initialized = true;
         KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(true);
-        KConfigGroup group(KGlobal::config(), "favoriteList");
+        KConfigGroup group( KSharedConfig::openConfig(), "favoriteList");
         QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
 
         KisConfig cfg;

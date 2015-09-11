@@ -23,7 +23,7 @@
 
 #include <math.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QLayout>
 #include <QPixmap>
@@ -296,5 +296,4 @@ void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConf
 }
 
 
-#include "kis_brightness_contrast_filter.moc"
 

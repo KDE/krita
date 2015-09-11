@@ -21,7 +21,7 @@
 
 #include <QVariant>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kis_view_plugin.h>
 
 class LayerSplit : public KisViewPlugin

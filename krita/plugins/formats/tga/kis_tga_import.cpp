@@ -25,7 +25,7 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>
@@ -66,9 +66,9 @@ static QDataStream & operator>> (QDataStream & s, TgaHeader & head)
     s >> head.pixel_size;
     s >> head.flags;
 
-    /*qDebug() << "id_length: " << head.id_length << " - colormap_type: " << head.colormap_type << " - image_type: " << head.image_type;
-    qDebug() << "colormap_index: " << head.colormap_index << " - colormap_length: " << head.colormap_length << " - colormap_size: " << head.colormap_size;
-    qDebug() << "x_origin: " << head.x_origin << " - y_origin: " << head.y_origin << " - width:" << head.width << " - height:" << head.height << " - pixelsize: " << head.pixel_size << " - flags: " << head.flags;*/
+    /*dbgKrita << "id_length: " << head.id_length << " - colormap_type: " << head.colormap_type << " - image_type: " << head.image_type;
+    dbgKrita << "colormap_index: " << head.colormap_index << " - colormap_length: " << head.colormap_length << " - colormap_size: " << head.colormap_size;
+    dbgKrita << "x_origin: " << head.x_origin << " - y_origin: " << head.y_origin << " - width:" << head.width << " - height:" << head.height << " - pixelsize: " << head.pixel_size << " - flags: " << head.flags;*/
 
     return s;
 }
@@ -131,7 +131,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
     uint size = tga.width * tga.height * pixel_size;
 
     if (size < 1) {
-        kDebug(399) << "This TGA file is broken with size " << size;
+        dbgFile << "This TGA file is broken with size " << size;
         return false;
     }
 
@@ -257,7 +257,7 @@ KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        KUrl url(filename);
+        QUrl url(filename);
 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;

@@ -22,10 +22,6 @@
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
-#include <kcomponentdata.h>
-#include <kglobalsettings.h>
-
-
 ////////////////////////////////////
 // class KisDetailsPane
 ///////////////////////////////////
@@ -33,22 +29,21 @@
 class KisDetailsPanePrivate
 {
 public:
-    KisDetailsPanePrivate(const KComponentData &componentData)
-            : m_componentData(componentData) {
+    KisDetailsPanePrivate()
+    {
         m_model = new QStandardItemModel;
     }
     ~KisDetailsPanePrivate() {
         delete m_model;
     }
 
-    KComponentData m_componentData;
     QStandardItemModel* m_model;
 };
 
-KisDetailsPane::KisDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
+KisDetailsPane::KisDetailsPane(QWidget* parent, const QString& header)
         : QWidget(parent),
         Ui_KisDetailsPaneBase(),
-        d(new KisDetailsPanePrivate(_componentData))
+        d(new KisDetailsPanePrivate())
 {
     d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
@@ -62,8 +57,6 @@ KisDetailsPane::KisDetailsPane(QWidget* parent, const KComponentData &_component
 
     changePalette();
 
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
-
     connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(selectionChanged(const QModelIndex&)));
     connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
@@ -74,11 +67,6 @@ KisDetailsPane::KisDetailsPane(QWidget* parent, const KComponentData &_component
 KisDetailsPane::~KisDetailsPane()
 {
     delete d;
-}
-
-KComponentData KisDetailsPane::componentData()
-{
-    return d->m_componentData;
 }
 
 bool KisDetailsPane::eventFilter(QObject* watched, QEvent* e)

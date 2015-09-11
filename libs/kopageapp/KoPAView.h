@@ -38,8 +38,8 @@ class KoPADocumentStructureDocker;
 class KoRuler;
 class KoShapeManager;
 class KoZoomController;
-class KUrl;
-class KAction;
+class QUrl;
+class QAction;
 
 class QTextDocument;
 class QTabBar;
@@ -86,7 +86,7 @@ public:
 
     KoCutController* cutController() const;
 
-    KAction* deleteSelectionAction() const;
+    QAction * deleteSelectionAction() const;
 
     void updateReadWrite( bool readwrite );
 
@@ -162,7 +162,7 @@ public:
      *
      * @returns whether the image was successfully saved
      */
-    bool exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size = QSize( 512, 512 ),
+    bool exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const QSize& size = QSize( 512, 512 ),
                               const char * format = 0, int quality = -1 );
 
     /// Update page navigation actions

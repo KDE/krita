@@ -37,7 +37,7 @@ struct PathElement {
     unsigned int index;
 };
 
-struct KisNodeQueryPath::Private {
+struct Q_DECL_HIDDEN KisNodeQueryPath::Private {
     QList<PathElement> elements;
     bool relative;
     /// This function will remove uneeded call to parent, for instance, "1/../3/../5" => "5"
@@ -84,7 +84,7 @@ struct KisNodeQueryPath::Private {
                 if (_node->parent()) {
                     queryLevel(_level + 1, _node->parent(), _result);
                 } else {
-                    kWarning() << "No parent";
+                    dbgKrita << "No parent";
                 }
                 break;
             }
@@ -92,7 +92,7 @@ struct KisNodeQueryPath::Private {
                 if (pe.index < _node->childCount()) {
                     queryLevel(_level + 1, _node->at(pe.index), _result);
                 } else {
-                    kWarning() << "No parent";
+                    dbgKrita << "No parent";
                 }
                 break;
             }

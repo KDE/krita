@@ -26,7 +26,7 @@
 #include <KWindowSystem>
 #include <kfinddialog.h>
 #include <kfind.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QTextDocument>
 #include <QTextCursor>

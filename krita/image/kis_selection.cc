@@ -28,7 +28,7 @@
 #include "kis_default_bounds.h"
 #include "kis_iterator_ng.h"
 
-struct KisSelection::Private {
+struct Q_DECL_HIDDEN KisSelection::Private {
     Private()
         : isVisible(true),
           shapeSelection(0)

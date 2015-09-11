@@ -30,7 +30,7 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <QBoxLayout>
@@ -171,7 +171,7 @@ bool KoScriptManagerCollection::isModified() const
 #if 0
 bool KoScriptManagerCollection::slotInstall() {
     KFileDialog* filedialog = new KFileDialog(
-        KUrl("kfiledialog:///KrossInstallPackage"), // startdir
+        QUrl("kfiledialog:///KrossInstallPackage"), // startdir
         "*.tar.gz *.tgz *.bz2", // filter
         0, // custom widget
         0 // parent
@@ -294,12 +294,12 @@ bool KoScriptManagerModule::uninstallPackage(Action* action)
 #endif
 
 KoScriptManagerDialog::KoScriptManagerDialog()
-    : KDialog()
+    : KoDialog()
 {
     setCaption(i18n("Script Manager"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setButtonText(KDialog::Ok, i18n("Save"));
-    setButtonIcon(KDialog::Ok, koIcon("document-save"));
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
+    setButtonText(KoDialog::Ok, i18n("Save"));
+    setButtonIcon(KoDialog::Ok, koIcon("document-save"));
     m_collection = new KoScriptManagerCollection(mainWidget());
     setMainWidget(m_collection);
     resize(QSize(520, 380).expandedTo(minimumSizeHint()));

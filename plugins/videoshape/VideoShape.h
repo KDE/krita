@@ -24,7 +24,7 @@
 #include <KoShape.h>
 #include <KoFrameShape.h>
 
-#include <kicon.h>
+#include <QIcon>
 
 #include <QPixmap>
 
@@ -81,7 +81,7 @@ private:
     VideoThumbnailer *m_thumbnailer;
 #endif
     VideoData *m_oldVideoData;
-    KIcon m_icon;
+    QIcon m_icon;
     QRectF m_playIconArea;
 };
 

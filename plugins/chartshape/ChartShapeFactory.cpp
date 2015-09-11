@@ -27,7 +27,7 @@
 // KDE
 #include <kiconloader.h>
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoIcon.h>

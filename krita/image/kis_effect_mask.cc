@@ -20,6 +20,7 @@
 #include "kis_effect_mask.h"
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 
 KisEffectMask::KisEffectMask()
@@ -38,6 +39,6 @@ KisEffectMask::KisEffectMask(const KisEffectMask& rhs)
 
 QIcon KisEffectMask::icon() const
 {
-    return themedIcon("bookmarks");
+    return KisIconUtils::loadIcon("bookmarks");
 }
 

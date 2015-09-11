@@ -28,7 +28,7 @@
 //#define DEBUG_TRANSACTIONS
 
 #ifdef DEBUG_TRANSACTIONS
-    #define DEBUG_ACTION(action) qDebug() << action << "for" << m_d->device->dataManager()
+    #define DEBUG_ACTION(action) dbgKrita << action << "for" << m_d->device->dataManager()
 #else
     #define DEBUG_ACTION(action)
 #endif

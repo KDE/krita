@@ -21,7 +21,7 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer)

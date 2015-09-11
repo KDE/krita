@@ -40,7 +40,7 @@ public:
     virtual void unsetCanvas();
     void setMainWindow(KisViewManager *kisview);
 
-private slots:
+private Q_SLOTS:
     void toggleOnionSkin();
 
 private:

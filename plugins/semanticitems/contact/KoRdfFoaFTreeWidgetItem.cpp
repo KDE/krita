@@ -56,7 +56,7 @@ void KoRdfFoaFTreeWidgetItem::insert(KoCanvasBase *host)
 QList<QAction *> KoRdfFoaFTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
     QList<QAction *> m_actions;
-    KAction *action = 0;
+    QAction *action = 0;
 
     action = createAction(parent, host, i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));

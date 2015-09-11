@@ -20,7 +20,7 @@
 
 #include "dlg_histogram.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include "kis_types.h"
@@ -29,7 +29,7 @@
 
 
 DlgHistogram::DlgHistogram(QWidget *  parent, const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Histogram"));
     setButtons(Ok | Cancel);

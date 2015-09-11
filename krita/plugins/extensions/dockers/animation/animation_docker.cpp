@@ -21,7 +21,7 @@
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include <klocale.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_image_animation_interface.h"
@@ -261,14 +261,14 @@ void AnimationDocker::slotPlayPause()
 
 void AnimationDocker::slotUpdateIcons()
 {
-    m_previousFrameAction->setIcon(themedIcon("prevframe"));
-    m_nextFrameAction->setIcon(themedIcon("nextframe"));
-    m_playPauseAction->setIcon(themedIcon("playpause"));
-    m_addBlankFrameAction->setIcon(themedIcon("addblankframe"));
-    m_addDuplicateFrameAction->setIcon(themedIcon("addduplicateframe"));
-    m_deleteKeyframeAction->setIcon(themedIcon("deletekeyframe"));
+    m_previousFrameAction->setIcon(KisIconUtils::loadIcon("prevframe"));
+    m_nextFrameAction->setIcon(KisIconUtils::loadIcon("nextframe"));
+    m_playPauseAction->setIcon(KisIconUtils::loadIcon("playpause"));
+    m_addBlankFrameAction->setIcon(KisIconUtils::loadIcon("addblankframe"));
+    m_addDuplicateFrameAction->setIcon(KisIconUtils::loadIcon("addduplicateframe"));
+    m_deleteKeyframeAction->setIcon(KisIconUtils::loadIcon("deletekeyframe"));
 
-    m_animationWidget->btnOnionSkinOptions->setIcon(themedIcon("onion_skin_options"));
+    m_animationWidget->btnOnionSkinOptions->setIcon(KisIconUtils::loadIcon("onion_skin_options"));
     m_animationWidget->btnOnionSkinOptions->setIconSize(QSize(22, 22));
 
     m_animationWidget->btnPreviousFrame->setIconSize(QSize(22, 22));

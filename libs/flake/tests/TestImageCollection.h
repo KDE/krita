@@ -20,7 +20,7 @@
 #ifndef TESTIMAGECOLLECTION_H
 #define TESTIMAGECOLLECTION_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestImageCollection : public QObject
 {

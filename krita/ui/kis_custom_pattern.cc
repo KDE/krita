@@ -29,7 +29,7 @@
 #include <QShowEvent>
 
 #include <kglobal.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 #include "KisDocument.h"
 #include "KisViewManager.h"
@@ -109,9 +109,7 @@ void KisCustomPattern::slotAddPredefined()
 
     QString tempFileName;
     {
-        KTemporaryFile file;
-        file.setPrefix(dir);
-        file.setSuffix(".pat");
+        QTemporaryFile file(dir +  QLatin1String("/krita_XXXXXX") + QLatin1String(".pat") );
         file.setAutoRemove(false);
         file.open();
         tempFileName = file.fileName();

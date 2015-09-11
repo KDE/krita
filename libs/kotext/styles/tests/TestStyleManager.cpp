@@ -35,6 +35,8 @@
 #include <QTextDocument>
 #include <QVariant>
 
+#include <QTest>
+
 void TestStyleManager::initTestCase()
 {
     // Needed to use them in QVariant (for QSignalSpy).
@@ -367,4 +369,3 @@ void TestStyleManager::cleanup()
 }
 
 QTEST_MAIN(TestStyleManager)
-#include <TestStyleManager.moc>

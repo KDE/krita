@@ -21,7 +21,7 @@
 
 #include "TrackedChangeModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QModelIndex>
 #include <QTreeView>
@@ -58,5 +58,3 @@ void TrackedChangeManager::selectItem(const QModelIndex &newIndex)
     widget.treeView->setCurrentIndex(newIndex);
     currentChanged(newIndex, currentIndex);
 }
-
-#include <TrackedChangeManager.moc>

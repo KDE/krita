@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include "kis_types.h"
 
@@ -53,7 +53,7 @@ public:
     QMLConverter();
     virtual ~QMLConverter();
 public:
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image);
+    KisImageBuilder_Result buildFile(const QUrl &uri, KisImageWSP image);
 
 private:
     void writeString(QTextStream& out, int spacing, const QString& setting, const QString& value);

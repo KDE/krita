@@ -21,7 +21,7 @@
 #include "kis_node.h"
 #include <kis_debug.h>
 
-struct KisNodeFacade::Private
+struct Q_DECL_HIDDEN KisNodeFacade::Private
 {
 public:
     KisNodeWSP root;

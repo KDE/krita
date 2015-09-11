@@ -23,7 +23,7 @@
 #include <QMenu>
 #include <QTimer>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "ui_kis_mouse_input_editor.h"
 
@@ -44,8 +44,8 @@ KisMouseInputEditor::KisMouseInputEditor(QWidget *parent)
     d->ui->setupUi(popup);
     d->ui->mouseButton->setType(KisInputButton::MouseType);
 
-    d->ui->clearModifiersButton->setIcon(themedIcon("edit-clear"));
-    d->ui->clearMouseButton->setIcon(themedIcon("edit-clear"));
+    d->ui->clearModifiersButton->setIcon(KisIconUtils::loadIcon("edit-clear"));
+    d->ui->clearMouseButton->setIcon(KisIconUtils::loadIcon("edit-clear"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

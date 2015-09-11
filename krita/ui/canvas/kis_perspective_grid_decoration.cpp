@@ -23,7 +23,7 @@
 
 #include <QPainter>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_perspective_grid.h"
 #include "canvas/kis_grid_painter_configuration.h"
 #include "KisView.h"
@@ -158,7 +158,7 @@ KisPerspectiveGridDecoration::getSubdivisionsInfo(const LineWrapper &l0,
 
 void KisPerspectiveGridDecoration::drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info)
 {
-    kDebug() << " subdivs " << info.numSubdivisions;
+    dbgKrita << " subdivs " << info.numSubdivisions;
     for(int i = info.numSubdivisions - 1; i > 0; i--) {
         QPointF start = info.startPoint + i*info.shift;
         QPointF end =

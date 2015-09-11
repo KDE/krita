@@ -24,7 +24,7 @@
 #include <QBitArray>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include "kis_config_notifier.h"
 #include <kconfiggroup.h>
@@ -77,7 +77,7 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
         //settings//
         QBitArray m_SlidersConfigArray(12);
 
-        KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
 
         m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
         m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);

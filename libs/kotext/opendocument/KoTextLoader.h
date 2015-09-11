@@ -129,7 +129,7 @@ private:
     /**
     * Load a list-item into the cursor
     */
-    void loadListItem(KoXmlElement &e, QTextCursor &cursor, int level);
+    void loadListItem(const KoXmlElement &e, QTextCursor &cursor, int level);
 
     /**
     * Load the section from the \p element into the \p cursor .
@@ -157,17 +157,17 @@ private:
     /**
      * Loads a table column
      */
-    void loadTableColumn(KoXmlElement &element, QTextTable *table, int &columns);
+    void loadTableColumn(const KoXmlElement &element, QTextTable *table, int &columns);
 
     /**
      * Loads a table-row into the cursor
      */
-    void loadTableRow(KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &rows);
+    void loadTableRow(const KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &rows);
 
     /**
      * Loads a table-cell into the cursor
      */
-    void loadTableCell(KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell);
+    void loadTableCell(const KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell);
 
     /**
      * Load a note \p element into the \p cursor.

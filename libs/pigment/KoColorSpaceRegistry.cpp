@@ -26,9 +26,6 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <klocale.h>
 #include <kglobal.h>
 
 #include "KoPluginLoader.h"
@@ -47,7 +44,7 @@
 #include "colorspaces/KoSimpleColorSpaceEngine.h"
 #include "KoColorSpace_p.h"
 
-struct KoColorSpaceRegistry::Private {
+struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
     QList<KoColorSpaceFactory *> localFactories;
     QHash<QString, KoColorProfile * > profileMap;

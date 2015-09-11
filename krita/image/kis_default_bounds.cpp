@@ -32,7 +32,7 @@ const QRect KisDefaultBounds::infiniteRect =
 /*                  KisDefaultBounds                              */
 /******************************************************************/
 
-struct KisDefaultBounds::Private
+struct Q_DECL_HIDDEN KisDefaultBounds::Private
 {
     KisImageWSP image;
 };
@@ -83,7 +83,7 @@ bool KisDefaultBounds::externalFrameActive() const
 /*                  KisSelectionDefaultBounds                     */
 /******************************************************************/
 
-struct KisSelectionDefaultBounds::Private
+struct Q_DECL_HIDDEN KisSelectionDefaultBounds::Private
 {
     KisPaintDeviceSP parentDevice;
 };

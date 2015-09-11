@@ -20,11 +20,11 @@
 #ifndef _KIS_ACTIONS_EDITOR_DIALOG_H_
 #define _KIS_ACTIONS_EDITOR_DIALOG_H_
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KisActionsEditor;
 
-class KisActionsEditorDialog : public KDialog
+class KisActionsEditorDialog : public KoDialog
 {
 public:
     KisActionsEditorDialog(QWidget* parent);

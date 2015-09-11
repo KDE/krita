@@ -20,7 +20,7 @@
 #include "KoCompositeOpRegistry.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoID.h>
 #include <QList>
 
@@ -164,9 +164,7 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoI
     KoIDMap::const_iterator end = beg + num;
 
     KoIDList list;
-#if QT_VERSION >= 0x040700
     list.reserve(num);
-#endif
 
     if(colorSpace) {
         for(; beg!=end; ++beg){
@@ -188,9 +186,7 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoC
     KoIDMap::const_iterator end = m_map.end();
 
     KoIDList list;
-#if QT_VERSION >= 0x040700
     list.reserve(m_map.size());
-#endif
 
     if(colorSpace) {
         for(; beg!=end; ++beg){

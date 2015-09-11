@@ -29,7 +29,7 @@
 #include <QColor>
 #include <QRadioButton>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include <KoColorConversions.h>
@@ -161,7 +161,7 @@ quint32 matchColors(const QColor & c, enumAction action)
 }
 
 DlgColorRange::DlgColorRange(KisViewManager *view, QWidget *parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selectionCommandsAdded(0)
 {
     setCaption(i18n("Color Range"));

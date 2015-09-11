@@ -28,7 +28,7 @@
 #include <changetracker/KoChangeTrackerElement.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPair>
 #include <QStack>
@@ -122,5 +122,3 @@ void RejectChangeCommand::undo()
     UndoRedoFinalizer finalizer(this);
     emit acceptRejectChange();
 }
-
-#include <RejectChangeCommand.moc>

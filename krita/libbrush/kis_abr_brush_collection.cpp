@@ -29,11 +29,11 @@
 #include <QColor>
 #include <QtEndian>
 #include <QByteArray>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QString>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
 
@@ -159,19 +159,19 @@ static bool abr_reach_8BIM_section(QDataStream & abr, const QString name)
         r = abr.readRawData(tag, 4);
 
         if (r != 4) {
-            qWarning() << "Error: Cannot read 8BIM tag ";
+            warnKrita << "Error: Cannot read 8BIM tag ";
             return false;
         }
 
         if (strncmp(tag, "8BIM", 4)) {
-            qWarning() << "Error: Start tag not 8BIM but " << (int)tag[0] << (int)tag[1] << (int)tag[2] << (int)tag[3] << " at position " << abr.device()->pos();
+            warnKrita << "Error: Start tag not 8BIM but " << (int)tag[0] << (int)tag[1] << (int)tag[2] << (int)tag[3] << " at position " << abr.device()->pos();
             return false;
         }
 
         r = abr.readRawData(tagname, 4);
 
         if (r != 4) {
-            qWarning() << "Error: Cannot read 8BIM tag name";
+            warnKrita << "Error: Cannot read 8BIM tag name";
             return false;
         }
         tagname[4] = '\0';
@@ -240,7 +240,7 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
     // set stream to samples data
     abr.device()->seek(data_start);
 
-    //qDebug() <<"samples : "<< samples;
+    //dbgKrita <<"samples : "<< samples;
     return samples;
 }
 

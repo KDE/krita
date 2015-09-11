@@ -263,5 +263,3 @@ void Staff::updateAccidentals(Bar* fromBar)
 }
 
 } // namespace MusicCore
-
-#include <Staff.moc>

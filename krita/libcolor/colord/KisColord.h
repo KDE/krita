@@ -29,8 +29,6 @@
 #include <QMap>
 #include <QString>
 
-#include <kdatetime.h>
-
 #include <QMetaType>
 
 

@@ -141,12 +141,12 @@ void KisTransparencyMaskTest::testMoveParentLayer()
     layer->setX(100);
     layer->setY(100);
 
-    qDebug() << "Sel. rect before:" << mask->selection()->selectedExactRect();
+    dbgKrita << "Sel. rect before:" << mask->selection()->selectedExactRect();
 
     mask->setX(100);
     mask->setY(100);
 
-    qDebug() << "Sel. rect after:" << mask->selection()->selectedExactRect();
+    dbgKrita << "Sel. rect after:" << mask->selection()->selectedExactRect();
 
     QRect finalRect(100,100,200,100);
     QCOMPARE(layer->exactBounds(), finalRect);
@@ -186,19 +186,19 @@ void KisTransparencyMaskTest::testMoveMaskItself()
     //layer->setX(100);
     //layer->setY(100);
 
-    qDebug() << "Sel. rect before:" << mask->selection()->selectedExactRect();
+    dbgKrita << "Sel. rect before:" << mask->selection()->selectedExactRect();
 
     mask->setX(50);
     mask->setY(25);
 
-    qDebug() << "Sel. rect after:" << mask->selection()->selectedExactRect();
+    dbgKrita << "Sel. rect after:" << mask->selection()->selectedExactRect();
 
 
     QCOMPARE(mask->selection()->selectedExactRect(), QRect(100, 75, 100, 100));
     QCOMPARE(layer->paintDevice()->exactBounds(), initialRect);
     QCOMPARE(layer->projection()->exactBounds(), QRect(50, 50, 100, 50));
 
-    qDebug() << "";
+    dbgKrita << "";
 
     QRect updateRect(0,0,300,300);
 

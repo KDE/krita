@@ -17,7 +17,7 @@
  */
 
 #include "kis_meta_data_merge_strategy_p.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "kis_debug.h"
 

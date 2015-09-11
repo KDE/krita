@@ -97,7 +97,7 @@ void KoFileDialogTester::testOpenFile()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QString url = dlg.url();
+    QString url = dlg.filename();
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
@@ -134,7 +134,7 @@ void KoFileDialogTester::testOpenFiles()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QStringList urls = dlg.urls();
+    QStringList urls = dlg.filenames();
     foreach(const QString &url, urls) {
         ui->listResults->addItem(url);
     }
@@ -172,7 +172,7 @@ void KoFileDialogTester::testOpenDirectory()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QString url = dlg.url();
+    QString url = dlg.filename();
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
@@ -211,7 +211,7 @@ void KoFileDialogTester::testImportFile()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QString url = dlg.url();
+    QString url = dlg.filename();
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
@@ -248,7 +248,7 @@ void KoFileDialogTester::testImportFiles()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QStringList urls = dlg.urls(); foreach(const QString &url, urls) {
+    QStringList urls = dlg.filenames(); foreach(const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());
@@ -285,7 +285,7 @@ void KoFileDialogTester::testImportDirectory()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QString url = dlg.url();
+    QString url = dlg.filename();
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
@@ -321,7 +321,7 @@ void KoFileDialogTester::testSaveFile()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QString url = dlg.url();
+    QString url = dlg.filename();
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());

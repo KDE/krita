@@ -89,5 +89,3 @@ void StarShapeConfigWidget::typeChanged()
         widget.innerRadius->setEnabled(true);
     }
 }
-
-#include <StarShapeConfigWidget.moc>

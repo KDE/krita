@@ -19,7 +19,7 @@
 #include "ChangeImageCommand.h"
 
 #include <cmath>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoImageData.h>
 #include <kdebug.h>
 

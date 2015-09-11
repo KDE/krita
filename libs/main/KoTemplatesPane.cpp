@@ -24,7 +24,7 @@
 
 #include <QStandardItemModel>
 #include <kcomponentdata.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kconfiggroup.h>
 
 class KoTemplatesPanePrivate
@@ -137,7 +137,7 @@ void KoTemplatesPane::openFile(const QModelIndex& index)
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
         cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
-        emit openUrl(KUrl(item->data(Qt::UserRole + 1).toString()));
+        emit openUrl(QUrl(item->data(Qt::UserRole + 1).toString()));
     }
 }
 
@@ -176,5 +176,3 @@ void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane* sender, const QSt
 
     d->m_alwaysUseTemplate = alwaysUse;
 }
-
-#include <KoTemplatesPane.moc>

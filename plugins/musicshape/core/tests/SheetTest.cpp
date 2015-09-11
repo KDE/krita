@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QtTest>
+#include <QTest>
 
 #include "Sheet.h"
 #include "Part.h"
@@ -31,7 +31,7 @@ class SheetTest : public QObject
     Q_OBJECT
 private:
     Sheet* sheet;
-private slots:
+private Q_SLOTS:
     void init()
     {
             sheet = new Sheet();

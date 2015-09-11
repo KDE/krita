@@ -32,11 +32,13 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterVertex.h"
 
 #include <QMetaMethod>
-#include <ktemporaryfile.h>
-#include <kmimetype.h>
-#include <kdebug.h>
+#include <QTemporaryFile>
+
+#include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // Those "defines" are needed in the setupConnections method below.
 // Please always keep the strings and the length in sync!
@@ -83,7 +85,7 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     }
 
     if (!m_chainLinks.current()) {
-        kWarning(30500) << "Huh?? Found a null pointer in the chain";
+        warnFile << "Huh?? Found a null pointer in the chain";
         return KisImportExportFilter::StupidError;
     }
 
@@ -114,7 +116,7 @@ QString KisFilterChain::inputFile()
     if (m_inputQueried == File)
         return m_inputFile;
     else if (m_inputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different source.";
+        warnFile << "You already asked for some different source.";
         return QString();
     }
     m_inputQueried = File;
@@ -137,12 +139,12 @@ QString KisFilterChain::outputFile()
     // sanity check: No embedded filter should ask for a plain file
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if (filterManagerParentChain())
-        kWarning(30500) << "An embedded filter has to use storageFile()!";
+        warnFile << "An embedded filter has to use storageFile()!";
 
     if (m_outputQueried == File)
         return m_outputFile;
     else if (m_outputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different destination.";
+        warnFile << "You already asked for some different destination.";
         return QString();
     }
     m_outputQueried = File;
@@ -175,7 +177,7 @@ KoStoreDevice* KisFilterChain::storageFile(const QString& name, KoStore::Mode mo
         return storageHelper(outputFile(), name, KoStore::Write,
                              &m_outputStorage, &m_outputStorageDevice);
     else {
-        kWarning(30500) << "Oooops, how did we get here? You already asked for a"
+        warnFile << "Oooops, how did we get here? You already asked for a"
         << " different source/destination?" << endl;
         return 0;
     }
@@ -186,7 +188,7 @@ KisDocument* KisFilterChain::inputDocument()
     if (m_inputQueried == Document)
         return m_inputDocument;
     else if (m_inputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different source.";
+        warnFile << "You already asked for some different source.";
         return 0;
     }
 
@@ -206,14 +208,14 @@ KisDocument* KisFilterChain::outputDocument()
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if (filterManagerParentChain()) {
-        kWarning(30500) << "An embedded filter has to use storageFile()!";
+        warnFile << "An embedded filter has to use storageFile()!";
         return 0;
     }
 
     if (m_outputQueried == Document)
         return m_outputDocument;
     else if (m_outputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different destination.";
+        warnFile << "You already asked for some different destination.";
         return 0;
     }
 
@@ -230,13 +232,13 @@ KisDocument* KisFilterChain::outputDocument()
 
 void KisFilterChain::dump()
 {
-    kDebug(30500) << "########## KisFilterChain with" << m_chainLinks.count() << " members:";
+    dbgFile << "########## KisFilterChain with" << m_chainLinks.count() << " members:";
     ChainLink* link = m_chainLinks.first();
     while (link) {
         link->dump();
         link = m_chainLinks.next();
     }
-    kDebug(30500) << "########## KisFilterChain (done) ##########";
+    dbgFile << "########## KisFilterChain (done) ##########";
 }
 
 void KisFilterChain::appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
@@ -292,7 +294,7 @@ void KisFilterChain::manageIO()
 
     if (!m_outputFile.isEmpty()) {
         if (m_outputTempFile == 0) {
-            m_inputTempFile = new KTemporaryFile;
+            m_inputTempFile = new QTemporaryFile;
             m_inputTempFile->setAutoRemove(true);
             m_inputTempFile->setFileName(m_outputFile);
         }
@@ -331,27 +333,27 @@ void KisFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if (m_inputDocument &&
             static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Export) {
-        kDebug(30500) << "Saving the output document to the export file " << m_chainLinks.current()->to();
+        dbgFile << "Saving the output document to the export file " << m_chainLinks.current()->to();
         m_inputDocument->setOutputMimeType(m_chainLinks.current()->to());
         m_inputDocument->saveNativeFormat(filterManagerExportFile());
         m_inputFile = filterManagerExportFile();
     }
 }
 
-bool KisFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
+bool KisFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
 {
     if (*tempFile) {
-        kError(30500) << "Ooops, why is there already a temp file???" << endl;
+        errFile << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
-    *tempFile = new KTemporaryFile();
+    *tempFile = new QTemporaryFile();
     (*tempFile)->setAutoRemove(autoDelete);
     return (*tempFile)->open();
 }
 
-/*  Note about Windows & usage of KTemporaryFile
+/*  Note about Windows & usage of QTemporaryFile
 
-    The KTemporaryFile objects m_inputTempFile and m_outputTempFile are just used
+    The QTemporaryFile objects m_inputTempFile and m_outputTempFile are just used
     to reserve a temporary file with a unique name which then can be used to store
     an intermediate format. The filters themselves do not get access to these objects,
     but can query KisFilterChain only for the filename and then have to open the files
@@ -361,10 +363,10 @@ bool KisFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
     So unless someone finds out which flags might be needed on opening the files on
     Windows to prevent this behaviour (unless these details are hidden away by the
     Qt abstraction and cannot be influenced), a workaround is to destruct the
-    KTemporaryFile objects right after creation again and just take the name,
+    QTemporaryFile objects right after creation again and just take the name,
     to avoid having two file handlers on the same file.
 
-    A better fix might be to use the KTemporaryFile objects also by the filters,
+    A better fix might be to use the QTemporaryFile objects also by the filters,
     instead of having them open the same file on their own again, but that needs more work
     and is left for... you :)
 */
@@ -379,7 +381,7 @@ void KisFilterChain::inputFileHelper(KisDocument* document, const QString& alter
             return;
         }
         m_inputFile = m_inputTempFile->fileName();
-        // See "Note about Windows & usage of KTemporaryFile" above
+        // See "Note about Windows & usage of QTemporaryFile" above
 #ifdef Q_OS_WIN
         m_inputTempFile->close();
         m_inputTempFile->setAutoRemove(true);
@@ -406,7 +408,7 @@ void KisFilterChain::outputFileHelper(bool autoDelete)
     } else {
         m_outputFile = m_outputTempFile->fileName();
 
-        // See "Note about Windows & usage of KTemporaryFile" above
+        // See "Note about Windows & usage of QTemporaryFile" above
 #ifdef Q_OS_WIN
         m_outputTempFile->close();
         m_outputTempFile->setAutoRemove(true);
@@ -439,7 +441,7 @@ KoStoreDevice* KisFilterChain::storageHelper(const QString& file, const QString&
     if (file.isEmpty())
         return 0;
     if (*storage) {
-        kDebug(30500) << "Uh-oh, we forgot to clean up...";
+        dbgFile << "Uh-oh, we forgot to clean up...";
         return 0;
     }
 
@@ -481,7 +483,7 @@ KoStoreDevice* KisFilterChain::storageCreateFirstStream(const QString& streamNam
         return 0;
 
     if (*device) {
-        kDebug(30500) << "Uh-oh, we forgot to clean up the storage device!";
+        dbgFile << "Uh-oh, we forgot to clean up the storage device!";
         (*storage)->close();
         return storageCleanupHelper(storage);
     }
@@ -501,18 +503,19 @@ KoStoreDevice* KisFilterChain::storageCleanupHelper(KoStore** storage)
 
 KisDocument* KisFilterChain::createDocument(const QString& file)
 {
-    KUrl url;
+    QUrl url;
     url.setPath(file);
-    KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
-    if (t->name() == KMimeType::defaultMimeType()) {
-        kError(30500) << "No mimetype found for " << file << endl;
+    QMimeDatabase db;
+    QMimeType t = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension);
+    if (t.isDefault()) {
+        errFile << "No mimetype found for " << file << endl;
         return 0;
     }
 
-    KisDocument *doc = createDocument(t->name().toLatin1());
+    KisDocument *doc = createDocument(t.name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
-        kError(30500) << "Couldn't load from the file" << endl;
+        errFile << "Couldn't load from the file" << endl;
         delete doc;
         return 0;
     }

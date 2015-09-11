@@ -41,6 +41,7 @@
 #include "kis_psd_layer_style.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_keyframe_channel.h"
+#include "kis_paint_device_debug_utils.h"
 
 void KisPaintLayerTest::testProjection()
 {

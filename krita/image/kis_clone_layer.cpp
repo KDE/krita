@@ -19,9 +19,10 @@
 #include "kis_clone_layer.h"
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
@@ -39,7 +40,7 @@
 #include "kis_lod_capable_layer_offset.h"
 
 
-struct KisCloneLayer::Private
+struct Q_DECL_HIDDEN KisCloneLayer::Private
 {
     Private(KisDefaultBoundsBaseSP defaultBounds)
         : offset(defaultBounds)
@@ -296,7 +297,7 @@ void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 
 QIcon KisCloneLayer::icon() const
 {
-    return themedIcon("edit-copy");
+    return KisIconUtils::loadIcon("edit-copy");
 }
 
 KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const

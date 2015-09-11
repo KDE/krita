@@ -159,7 +159,7 @@ bool KisChunkAllocator::sanityCheck(bool pleaseCrash)
     i = m_list.end();
     if(HAS_PREVIOUS(m_list, i)) {
         if(PEEK_PREVIOUS(i).m_end >= m_storeSize) {
-            qWarning() << "Last chunk exceeds the store size!";
+            warnKrita << "Last chunk exceeds the store size!";
             failed = true;
         }
     }
@@ -196,14 +196,14 @@ qreal KisChunkAllocator::debugFragmentation(bool toStderr)
         fragmentation = qreal(free) / totalSize;
 
     if(toStderr) {
-        qDebug() << "Hard store limit:\t" << m_storeMaxSize;
-        qDebug() << "Slab size:\t\t" << m_storeSlabSize;
-        qDebug() << "Num slabs:\t\t" << m_storeSize / m_storeSlabSize;
-        qDebug() << "Store size:\t\t" << m_storeSize;
-        qDebug() << "Total used:\t\t" << totalSize;
-        qDebug() << "Allocated:\t\t" << allocated;
-        qDebug() << "Free:\t\t\t" << free;
-        qDebug() << "Fragmentation:\t\t" << fragmentation;
+        dbgKrita << "Hard store limit:\t" << m_storeMaxSize;
+        dbgKrita << "Slab size:\t\t" << m_storeSlabSize;
+        dbgKrita << "Num slabs:\t\t" << m_storeSize / m_storeSlabSize;
+        dbgKrita << "Store size:\t\t" << m_storeSize;
+        dbgKrita << "Total used:\t\t" << totalSize;
+        dbgKrita << "Allocated:\t\t" << allocated;
+        dbgKrita << "Free:\t\t\t" << free;
+        dbgKrita << "Fragmentation:\t\t" << fragmentation;
         DEBUG_FAIL_COUNTER();
     }
 

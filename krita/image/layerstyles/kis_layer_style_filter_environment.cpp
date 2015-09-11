@@ -35,7 +35,7 @@
 #include "kis_pixel_selection.h"
 
 
-struct KisLayerStyleFilterEnvironment::Private
+struct Q_DECL_HIDDEN KisLayerStyleFilterEnvironment::Private
 {
     KisLayer *sourceLayer;
     KisPixelSelectionSP cachedRandomSelection;

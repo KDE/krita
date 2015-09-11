@@ -29,10 +29,10 @@
 
 #include <QDesktopServices>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kmimetype.h>
+
 
 #include <KisImportExportManager.h>
 #include <KoUpdater.h>
@@ -57,6 +57,8 @@
 #include <kis_paint_device.h>
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
         : m_view(view)
@@ -237,15 +239,14 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                 dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
-                KUrl url = dialog.url();
+                QUrl url = QUrl::fromUserInput(dialog.filename());
 
                 if (url.isEmpty())
                     return;
 
-
-                KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                QString mimefilter = mime->name();
-
+                QMimeDatabase db;
+                QMimeType mime = db.mimeTypeForUrl(url);
+                QString mimefilter = mime.name();
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();

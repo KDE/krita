@@ -41,7 +41,7 @@
 #include <KoPAPastePage.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <QMimeData>
@@ -759,5 +759,3 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
     }
     return false;
 }
-
-#include <KoPADocumentModel.moc>

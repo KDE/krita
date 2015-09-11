@@ -34,7 +34,7 @@
 #include "commands/kis_selection_commands.h"
 #include "kis_shape_controller.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "kis_processing_applicator.h"
 #include "kis_transaction_based_command.h"
 #include "kis_gui_context_command.h"
@@ -136,7 +136,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
             i18n("Shape selection does not fully "
                  "support wraparound mode. Please "
                  "use pixel selection instead"),
-                 koIcon("selection-info"));
+                 KisIconUtils::loadIcon("selection-info"));
     }
 
     KisProcessingApplicator applicator(view->image(),

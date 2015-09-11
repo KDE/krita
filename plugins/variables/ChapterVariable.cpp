@@ -41,7 +41,7 @@
 #include <QComboBox>
 #include <QGridLayout>
 #include <knuminput.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ChapterVariable::ChapterVariable()
         : KoVariable(true)

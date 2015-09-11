@@ -30,8 +30,8 @@
 #include <QToolButton>
 
 #include <kdebug.h>
-#include <klocale.h>
-#include <kicon.h>
+#include <klocalizedstring.h>
+#include <QIcon>
 
 #include "FontSizeAction.h"
 
@@ -70,7 +70,7 @@ FontSizeAction::FontSizeAction(const QString &text, QObject *parent)
   d->init();
 }
 
-FontSizeAction::FontSizeAction(const KIcon &icon, const QString &text, QObject *parent)
+FontSizeAction::FontSizeAction(const QIcon &icon, const QString &text, QObject *parent)
   : KSelectAction(icon, text, parent),
     d(new Private(this))
 {
@@ -152,5 +152,3 @@ void FontSizeAction::actionTriggered( QAction* action )
     emit fontSizeChanged( action->text().toDouble() );
     KSelectAction::actionTriggered( action );
 }
-
-#include "FontSizeAction.moc"

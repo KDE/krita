@@ -19,7 +19,7 @@
 #ifndef DLG_CLONESARRAY
 #define DLG_CLONESARRAY
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kis_global.h>
 
 #include "kis_types.h"
@@ -39,7 +39,7 @@ public:
     }
 };
 
-class DlgClonesArray: public KDialog
+class DlgClonesArray: public KoDialog
 {
 
     Q_OBJECT

@@ -35,8 +35,8 @@
 #include <QToolBar>
 
 #include <kdebug.h>
-#include <kicon.h>
-#include <klocale.h>
+#include <QIcon>
+#include <klocalizedstring.h>
 #include <kfontchooser.h>
 #include <KoFontComboBox.h>
 
@@ -94,7 +94,7 @@ KoFontFamilyAction::KoFontFamilyAction(const QString & text, QObject *parent)
     setEditable( true );
 }
 
-KoFontFamilyAction::KoFontFamilyAction(const KIcon &icon, const QString &text, QObject *parent)
+KoFontFamilyAction::KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent)
   : KSelectAction(icon, text, parent), d(new KoFontFamilyActionPrivate(this))
 {
     QStringList list;

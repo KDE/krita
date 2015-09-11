@@ -28,7 +28,7 @@
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_ellipse_base.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 
 

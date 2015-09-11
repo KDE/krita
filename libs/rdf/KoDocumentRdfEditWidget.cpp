@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 // Qt
 #include <QComboBox>
 #include <QPointer>

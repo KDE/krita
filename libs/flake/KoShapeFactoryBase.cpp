@@ -30,10 +30,10 @@
 #include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
 #include <KoStyleStack.h>
+#include <KoJsonTrader.h>
 
-#include <kservice.h>
-#include <KoServiceLocator.h>
-
+#include <KPluginFactory>
+#include <QPluginLoader>
 #include <QMutexLocker>
 #include <QMutex>
 
@@ -247,11 +247,13 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Deferred");
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Deferred", QString());
     Q_ASSERT(offers.size() > 0);
 
-    foreach(KService::Ptr service, offers) {
-        KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
+        KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
+
         if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
         }

@@ -29,9 +29,8 @@
 #include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
-#include <kshortcut.h>
-
-
+#include <QKeySequence>
+#include <kis_icon_utils.h>
 
 class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 {
@@ -75,7 +74,7 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_elliptical_selection"));
-        setShortcut(KShortcut(Qt::Key_J));
+        setShortcut(QKeySequence(Qt::Key_J));
         setPriority(53);
     }
 

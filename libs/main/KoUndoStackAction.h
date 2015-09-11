@@ -21,11 +21,11 @@
 #ifndef KOUNDOSTACKACTION_H
 #define KOUNDOSTACKACTION_H
 
-#include <kaction.h>
+#include <QAction>
 
 class KUndo2Stack;
 
-class KoUndoStackAction : public KAction
+class KoUndoStackAction : public QAction
 {
     Q_OBJECT
 public:

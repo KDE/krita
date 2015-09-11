@@ -122,19 +122,11 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
 
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
-#if QT_VERSION >= 0x040700
         memcpy(data(), image.constBits(), image.byteCount());
-#else
-        memcpy(data(), image.bits(), image.byteCount());
-#endif
     } else {
         KoColorSpaceRegistry::instance()
             ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
-#if QT_VERSION >= 0x040700
             ->convertPixelsTo(image.constBits(), data(), colorSpace(), image.width() * image.height(),
-#else
-            ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(),
-#endif
                               KoColorConversionTransformation::InternalRenderingIntent,
                               KoColorConversionTransformation::InternalConversionFlags);
     }

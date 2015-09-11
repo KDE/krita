@@ -19,7 +19,7 @@
 #ifndef TESTPATHTOOL_H
 #define TESTPATHTOOL_H
 
-#include <qtest_kde.h>
+#include <QObject>
 
 class TestPathTool : public QObject
 {

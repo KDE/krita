@@ -21,7 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
@@ -29,6 +29,7 @@
 #include <QMutexLocker>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoProperties.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
@@ -110,7 +111,7 @@ private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
 
-struct KisLayer::Private
+struct Q_DECL_HIDDEN KisLayer::Private
 {
     KisImageWSP image;
     QBitArray channelFlags;
@@ -214,10 +215,10 @@ KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
-        l << KisDocumentSectionModel::Property(i18n("Layer Style"), koIcon("layer-style-enabled"), koIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
+        l << KisDocumentSectionModel::Property(i18n("Layer Style"), KisIconUtils::loadIcon("layer-style-enabled"), KisIconUtils::loadIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
     }
 
-    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), themedIcon("transparency-disabled"), themedIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), KisIconUtils::loadIcon("transparency-disabled"), KisIconUtils::loadIcon("transparency-enabled"), alphaChannelDisabled());
 
     return l;
 }

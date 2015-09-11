@@ -188,7 +188,7 @@ KUndo2Command* KisFileLayer::crop(const QRect & rect)
 
 KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
 {
-    qWarning() << "WARNING: File Layer does not support transformations!" << name();
+    warnKrita << "WARNING: File Layer does not support transformations!" << name();
     return 0;
 }
 

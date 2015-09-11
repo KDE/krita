@@ -36,7 +36,7 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <math.h>
 

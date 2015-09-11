@@ -20,7 +20,7 @@
 #include "KoConnectionShapeConfigWidget.h"
 #include "commands/KoConnectionShapeTypeCommand.h"
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {
@@ -71,5 +71,3 @@ KUndo2Command * KoConnectionShapeConfigWidget::createCommand()
         return new KoConnectionShapeTypeCommand(m_connection, type);
     }
 }
-
-#include <KoConnectionShapeConfigWidget.moc>

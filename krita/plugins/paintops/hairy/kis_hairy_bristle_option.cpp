@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_hairy_bristle_option.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "ui_wdgbristleoptions.h"
 #include "kis_paintop_lod_limitations.h"

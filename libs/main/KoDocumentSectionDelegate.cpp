@@ -34,7 +34,7 @@
 #include <QStyle>
 #include <QStyleOptionViewItem>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoDocumentSectionDelegate::Private
 {
@@ -528,6 +528,3 @@ void KoDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOptionV
         p->restore();
     }
 }
-
-
-#include <KoDocumentSectionDelegate.moc>

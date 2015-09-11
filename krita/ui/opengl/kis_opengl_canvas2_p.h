@@ -61,10 +61,10 @@ namespace VSyncWorkaround {
 
         bool triedDisable = false;
         Display *dpy = QX11Info::display();
-        qDebug() << "OpenGL architecture is" << gl_library_name();
+        dbgKrita << "OpenGL architecture is" << gl_library_name();
 
         if (ctx->hasExtension("GLX_EXT_swap_control")) {
-            qDebug() << "Swap control extension found.";
+            dbgKrita << "Swap control extension found.";
             typedef WId (*k_glXGetCurrentDrawable)(void);
             typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
             k_glXGetCurrentDrawable kis_glXGetCurrentDrawable = (k_glXGetCurrentDrawable)ctx->getProcAddress("glXGetCurrentDrawable");
@@ -85,10 +85,10 @@ namespace VSyncWorkaround {
 
                 result = !swap;
             } else {
-                qDebug() << "Couldn't load glXSwapIntervalEXT extension function";
+                dbgKrita << "Couldn't load glXSwapIntervalEXT extension function";
             }
         } else if (ctx->hasExtension("GLX_MESA_swap_control")) {
-            qDebug() << "MESA swap control extension found.";
+            dbgKrita << "MESA swap control extension found.";
             typedef int (*kis_glXSwapIntervalMESA)(unsigned int);
             typedef int (*kis_glXGetSwapIntervalMESA)(void);
 
@@ -104,24 +104,24 @@ namespace VSyncWorkaround {
                 if (glXGetSwapIntervalMESA) {
                     swap = glXGetSwapIntervalMESA();
                 } else {
-                    qDebug() << "Couldn't load glXGetSwapIntervalMESA extension function";
+                    dbgKrita << "Couldn't load glXGetSwapIntervalMESA extension function";
                 }
 
                 result = !retval && !swap;
             } else {
-                qDebug() << "Couldn't load glXSwapIntervalMESA extension function";
+                dbgKrita << "Couldn't load glXSwapIntervalMESA extension function";
             }
         } else {
-            qDebug() << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
+            dbgKrita << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
         }
 
         if (triedDisable && !result) {
-            qCritical();
-            qCritical() << "CRITICAL: Your video driver forbids disabling VSync!";
-            qCritical() << "CRITICAL: Try toggling some VSync- or VBlank-related options in your driver configuration dialog.";
-            qCritical() << "CRITICAL: NVIDIA users can do:";
-            qCritical() << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
-            qCritical();
+            errKrita;
+            errKrita << "CRITICAL: Your video driver forbids disabling VSync!";
+            errKrita << "CRITICAL: Try toggling some VSync- or VBlank-related options in your driver configuration dialog.";
+            errKrita << "CRITICAL: NVIDIA users can do:";
+            errKrita << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
+            errKrita;
         }
         return result;
     }
@@ -139,12 +139,12 @@ namespace VSyncWorkaround {
             int interval = ((wglGetSwapIntervalEXT)ctx->getProcAddress("wglGetSwapIntervalEXT"))();
 
             if (interval) {
-                qWarning() << "Failed to disable VSync with WGL_EXT_swap_control";
+                warnKrita << "Failed to disable VSync with WGL_EXT_swap_control";
             }
 
             retval = !interval;
         } else {
-            qWarning() << "WGL_EXT_swap_control extension is not available. Found extensions" << ctx->extensions();
+            warnKrita << "WGL_EXT_swap_control extension is not available. Found extensions" << ctx->extensions();
         }
         return retval;
     }

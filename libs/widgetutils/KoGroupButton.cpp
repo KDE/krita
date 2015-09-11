@@ -26,8 +26,8 @@
 #include <QStylePainter>
 #include <QToolButton>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoGroupButton::Private
 {
@@ -142,5 +142,3 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
         setToolTip(i18nc("@info:tooltip of custom triple button", "%1", action->toolTip()));
     }
 }
-
-#include <KoGroupButton.moc>

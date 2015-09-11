@@ -41,7 +41,7 @@ private:
     QVector<QSlider*> forwardOpacities;
     QVector<QSlider*> backwardOpacities;
 
-private slots:
+private Q_SLOTS:
     void changed();
 };
 

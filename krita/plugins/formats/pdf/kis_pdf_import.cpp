@@ -20,7 +20,7 @@
 #include "kis_pdf_import.h"
 
 // poppler's headers
-#include <poppler/qt5/poppler-qt5.h>
+#include <poppler-qt5.h>
 
 // Qt's headers
 #include <QFile>
@@ -31,10 +31,10 @@
 // KDE's headers
 #include <kis_debug.h>
 #include <kis_paint_device.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
-#include <kurl.h>
+#include <QUrl>
 
 // calligra's headers
 #include <KisFilterChain.h>
@@ -73,7 +73,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KisImportExportFilter::FileNotFound;
 
 
-    KUrl url(filename);
+    QUrl url(filename);
 
     if (!url.isLocalFile()) {
         return KisImportExportFilter::FileNotFound;
@@ -104,7 +104,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
             pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 

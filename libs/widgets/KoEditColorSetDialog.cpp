@@ -25,7 +25,7 @@
 #include <QHBoxLayout>
 #include <QFileInfo>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcolordialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -184,7 +184,7 @@ void KoEditColorSetWidget::open()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
     dialog.setDefaultDir(m_activeColorSet->filename());
     dialog.setNameFilter(i18n("Gimp Color Palette (*.gpl)"));
-    QString fileName = dialog.url();
+    QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
     m_colorSets.append(colorSet);
@@ -206,12 +206,12 @@ KoColorSet *KoEditColorSetWidget::activeColorSet()
 }
 
 KoEditColorSetDialog::KoEditColorSetDialog(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     ui = new KoEditColorSetWidget(palettes, activePalette, this);
     setMainWidget(ui);
     setCaption(i18n("Add/Remove Colors"));
-    enableButton(KDialog::Ok, ui->isEnabled());
+    enableButton(KoDialog::Ok, ui->isEnabled());
 }
 
 KoEditColorSetDialog::~KoEditColorSetDialog()
@@ -223,5 +223,3 @@ KoColorSet *KoEditColorSetDialog::activeColorSet()
 {
     return ui->activeColorSet();
 }
-
-#include <KoEditColorSetDialog.moc>

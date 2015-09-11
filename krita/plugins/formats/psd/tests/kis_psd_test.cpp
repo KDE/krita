@@ -33,6 +33,7 @@
 #include <KoPattern.h>
 #include "kis_group_layer.h"
 #include "kis_psd_layer_style.h"
+#include "kis_paint_device_debug_utils.h"
 
 
 void KisPSDTest::testFiles()
@@ -52,7 +53,7 @@ void KisPSDTest::testOpening()
     KisImportExportFilter::ConversionStatus status;
     QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
                                        status);
-    qDebug() << s;
+    dbgKrita << s;
 
     Q_ASSERT(doc->image());
 }
@@ -86,7 +87,7 @@ void KisPSDTest::testTransparencyMask()
     doc->setBackupFile(false);
     doc->setOutputMimeType("image/vnd.adobe.photoshop");
     QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_tmask.psd");
-    bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
+    bool retval = doc->saveAs(QUrl(dstFileInfo.absoluteFilePath()));
     QVERIFY(retval);
 
     {
@@ -210,7 +211,7 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
     doc->setBackupFile(false);
     doc->setOutputMimeType("image/vnd.adobe.photoshop");
     QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_save_styles.psd");
-    bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
+    bool retval = doc->saveAs(QUrl(dstFileInfo.absoluteFilePath()));
     QVERIFY(retval);
 
     {
@@ -263,12 +264,12 @@ void KisPSDTest::testOpeningAllFormats()
             //continue;
         }
 
-        //qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());
+        //dbgKrita << "Opening" << ppVar(sourceFileInfo.fileName());
 
         QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
 
         if (!doc->image()) {
-            qCritical() << "FAILED to open" << sourceFileInfo.fileName();
+            errKrita << "FAILED to open" << sourceFileInfo.fileName();
             continue;
         }
 
@@ -293,12 +294,12 @@ void KisPSDTest::testSavingAllFormats()
             //continue;
         }
 
-        qDebug() << "Opening" << ppVar(sourceFileInfo.fileName());
+        dbgKrita << "Opening" << ppVar(sourceFileInfo.fileName());
 
         QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
 
         if (!doc->image()) {
-            qCritical() << "FAILED to open" << sourceFileInfo.fileName();
+            errKrita << "FAILED to open" << sourceFileInfo.fileName();
             continue;
         }
 
@@ -317,9 +318,9 @@ void KisPSDTest::testSavingAllFormats()
         doc->setOutputMimeType("image/vnd.adobe.photoshop");
         QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + tempPsdName);
 
-        qDebug() << "Saving" << ppVar(dstFileInfo.fileName());
+        dbgKrita << "Saving" << ppVar(dstFileInfo.fileName());
 
-        bool retval = doc->saveAs(KUrl(dstFileInfo.absoluteFilePath()));
+        bool retval = doc->saveAs(QUrl(dstFileInfo.absoluteFilePath()));
         QVERIFY(retval);
 
         {

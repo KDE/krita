@@ -22,7 +22,7 @@
 #ifndef DLG_LAYERSIZE
 #define DLG_LAYERSIZE
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "ui_wdg_layersize.h"
 
@@ -38,7 +38,7 @@ public:
 
 class KisFilterStrategy;
 
-class DlgLayerSize: public KDialog
+class DlgLayerSize: public KoDialog
 {
 
     Q_OBJECT

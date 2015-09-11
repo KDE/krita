@@ -25,7 +25,7 @@
 #include "kis_tool_select_base.h"
 #include "kis_delegated_tool.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 class KoCanvasBase;
 class KisToolSelectPath;

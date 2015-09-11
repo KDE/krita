@@ -33,6 +33,7 @@
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include "kis_signal_compressor.h"
+#include <kis_icon_utils.h>
 #include <KoIcon.h>
 
 class QPoint;

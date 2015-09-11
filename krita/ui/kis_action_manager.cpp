@@ -22,6 +22,7 @@
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 
+#include <kis_icon_utils.h>
 #include "KisPart.h"
 #include "kis_action.h"
 #include "KisViewManager.h"
@@ -31,8 +32,6 @@
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
 #include "KisDocument.h"
-
-
 
 
 class Q_DECL_HIDDEN KisActionManager::Private {
@@ -231,14 +230,15 @@ void KisActionManager::updateGUI()
 KisAction *KisActionManager::createStandardAction(KStandardAction::StandardAction actionType, const QObject *receiver, const char *member)
 {
     QAction *standardAction = KStandardAction::create(actionType, receiver, member, 0);
-    KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
+    QString iconName = standardAction->icon().name();
+    KisAction *action = new KisAction(KisIconUtils::loadIcon(iconName), standardAction->text());
+
     const QList<QKeySequence> defaultShortcuts = standardAction->property("defaultShortcuts").value<QList<QKeySequence> >();
     const QKeySequence defaultShortcut = defaultShortcuts.isEmpty() ? QKeySequence() : defaultShortcuts.at(0);
-    action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
-    action->setShortcut(standardAction->shortcut(), KAction::ActiveShortcut);
+    action->setShortcut(standardAction->shortcut());
 #ifdef Q_OS_WIN
     if (actionType == KStandardAction::SaveAs && defaultShortcuts.isEmpty()) {
-        action->setShortcut(QKeySequence("CTRL+SHIFT+S"), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence("CTRL+SHIFT+S"));
     }
 #endif
     action->setCheckable(standardAction->isCheckable());
@@ -251,7 +251,7 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
 
     if (receiver && member) {
         if (actionType == KStandardAction::OpenRecent) {
-            QObject::connect(action, SIGNAL(urlSelected(KUrl)), receiver, member);
+            QObject::connect(action, SIGNAL(urlSelected(QUrl)), receiver, member);
         }
         else if (actionType == KStandardAction::ConfigureToolbars) {
             QObject::connect(action, SIGNAL(triggered(bool)), receiver, member, Qt::QueuedConnection);

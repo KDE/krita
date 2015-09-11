@@ -27,7 +27,7 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"
@@ -54,7 +54,7 @@ bool KoStopGradient::load()
 {
     QFile f(filename());
     if (!f.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        warnPigment << "Can't open file " << filename();
         return false;
     }
     bool res = loadFromDevice(&f);

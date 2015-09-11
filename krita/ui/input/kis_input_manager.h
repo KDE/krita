@@ -97,12 +97,6 @@ public:
     KisToolProxy *toolProxy() const;
 
     /**
-     * Returns the event object for the last tablet event
-     * happened. Returns null if there was no tablet event recently
-     */
-    QTabletEvent *lastTabletEvent() const;
-
-    /**
      * Touch events are special, too.
      *
      * \return a touch event if there was one, otherwise 0

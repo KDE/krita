@@ -24,7 +24,7 @@
 
 #include <QMessageBox>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
@@ -382,7 +382,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
             collection->assignAllLayerStyles(image->root());
         } else {
-            qWarning() << "WARNING: Couldn't load layer styles library from .kra!";
+            warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
             delete collection;
         }
     }
@@ -669,7 +669,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
                 dumbLayerStyle->setUuid(uuid);
                 layer->setLayerStyle(dumbLayerStyle);
             } else {
-                qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+                warnKrita << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
             }
         }
     }
@@ -779,7 +779,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
             dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
-            QString url = dialog.url();
+            QString url = dialog.filename();
 
             if (!QFileInfo(basePath).exists()) {
                 filename = url;

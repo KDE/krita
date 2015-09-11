@@ -1,4 +1,4 @@
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBuffer>
 #include <QFile>
@@ -15,7 +15,7 @@
 class TestXmlReaderWithoutSpaces : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testNode();
     void testElement();
     void testAttributes();
@@ -2691,6 +2691,6 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     xmlfile.remove();
 }
 
-QTEST_MAIN(TestXmlReaderWithoutSpaces)
+QTEST_GUILESS_MAIN(TestXmlReaderWithoutSpaces)
 #include <TestXmlReaderWithoutSpaces.moc>
 

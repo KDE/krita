@@ -18,21 +18,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KoDockerManager.h"
 #include "KoDockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
 
 #include "KoToolDocker.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"
+
+#include <QFontDatabase>
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -74,10 +76,10 @@ void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWi
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 
-    KConfigGroup group(KGlobal::config(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
 
     foreach(QWidget *w, optionWidgetList) {

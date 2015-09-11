@@ -19,7 +19,7 @@
 #ifndef STYLEMANAGERDIALOG_H
 #define STYLEMANAGERDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <QCloseEvent>
 
 class StyleManager;
@@ -29,7 +29,7 @@ class KoParagraphStyle;
 class KoStyleManager;
 class KoUnit;
 
-class StyleManagerDialog : public KDialog
+class StyleManagerDialog : public KoDialog
 {
     Q_OBJECT
 public:

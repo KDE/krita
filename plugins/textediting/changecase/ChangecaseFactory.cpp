@@ -20,7 +20,7 @@
 #include "ChangecaseFactory.h"
 #include "Changecase.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ChangecaseFactory::ChangecaseFactory()
     : KoTextEditingFactory("changecase")

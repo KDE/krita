@@ -38,7 +38,7 @@ class KoShape;
 class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
 class ToolHelper;
-class KShortcut;
+class QKeySequence;
 
 class QCursor;
 
@@ -64,7 +64,7 @@ public:
     QString iconText() const;       ///< The icontext of the tool
     QString toolTip() const;        ///< The tooltip of the tool
     QString iconName() const;       ///< The icon name of the tool
-    KShortcut shortcut() const;     ///< The shortcut to activate the tool
+    QKeySequence shortcut() const;     ///< The shortcut to activate the tool
 
     QString section() const;        ///< The section the tool wants to be in.
     int priority() const;           ///< Lower number (higher priority) means coming first in the section.

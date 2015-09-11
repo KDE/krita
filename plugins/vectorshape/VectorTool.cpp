@@ -24,7 +24,7 @@
 
 #include <QToolButton>
 #include <QGridLayout>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <KIO/Job>
@@ -116,5 +116,3 @@ void VectorTool::setImageData(KJob *job)
 
     canvas()->addCommand(cmd);
 }
-
-#include <VectorTool.moc>

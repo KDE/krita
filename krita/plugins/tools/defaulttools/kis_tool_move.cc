@@ -62,7 +62,7 @@ void KisToolMove::resetCursorStyle()
 void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group(toolId());
+    configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 

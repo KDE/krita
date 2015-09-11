@@ -21,6 +21,7 @@
 #include "kis_group_layer.h"
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -38,7 +39,7 @@
 #include "kis_psd_layer_style.h"
 
 
-struct KisGroupLayer::Private
+struct Q_DECL_HIDDEN KisGroupLayer::Private
 {
 public:
     Private()
@@ -131,7 +132,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 
 QIcon KisGroupLayer::icon() const
 {
-    return themedIcon("folder");
+    return KisIconUtils::loadIcon("folder");
 }
 
 void KisGroupLayer::setImage(KisImageWSP image)
@@ -284,7 +285,7 @@ KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() co
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     // XXX: get right icons
-    l << KisDocumentSectionModel::Property(i18n("Pass Through"), koIcon("passthrough-enabled"), koIcon("passthrough-disabled"), passThroughMode());
+    l << KisDocumentSectionModel::Property(i18n("Pass Through"), KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled"), passThroughMode());
     return l;
 }
 

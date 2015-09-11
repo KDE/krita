@@ -24,7 +24,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_canvas2.h"
@@ -37,8 +37,8 @@
 KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProxy,
                                            QWidget *parent)
     : KisShadeSelectorLineBase(parent),
-      m_displayHelpText(false),
       m_cachedColorSpace(0),
+      m_displayHelpText(false),
       m_parentProxy(parentProxy)
 {
     setParam(0, 0, 0, 0, 0, 0);
@@ -49,8 +49,8 @@ KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProx
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta,
                                            KisColorSelectorBaseProxy *parentProxy, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
     KisShadeSelectorLineBase(parent),
-    m_displayHelpText(false),
     m_cachedColorSpace(0),
+    m_displayHelpText(false),
     m_parentProxy(parentProxy)
 {
     setParam(hueDelta, satDelta, valDelta, hueShift, satShift, valShift);
@@ -82,7 +82,7 @@ void KisShadeSelectorLine::setColor(const KoColor &color)
 
 void KisShadeSelectorLine::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     m_gradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
     m_patchCount = cfg.readEntry("minimalShadeSelectorPatchCount", 10);
@@ -214,7 +214,7 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
 
     Acs::ColorRole role = Acs::buttonToRole(e->button());
 
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
     bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);

@@ -28,7 +28,7 @@
 
 #ifdef DEBUG_TILES
 #define PRETTY_TILE(idx, td)                                    \
-    qDebug() << "tile" << i                                     \
+    dbgKrita << "tile" << i                                     \
              << "\tusers" << td->numUsers()                     \
              << "\tclones" << td->m_clonesStack.size()          \
              << "\tage" << td->age();

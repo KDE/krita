@@ -173,7 +173,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KDoubleNumInput</class>
+   <class>QDoubleSpinBox</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
   </customwidget>

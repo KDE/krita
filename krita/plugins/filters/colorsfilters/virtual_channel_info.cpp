@@ -17,7 +17,7 @@
  */
 
 #include "virtual_channel_info.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
 

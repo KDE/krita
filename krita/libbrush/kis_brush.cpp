@@ -30,7 +30,7 @@
 #include <QBuffer>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceMaths.h>
@@ -502,11 +502,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     bool hasColor = this->hasColor();
 
     for (int y = 0; y < maskHeight; y++) {
-#if QT_VERSION >= 0x040700
         const quint8* maskPointer = outputImage.constScanLine(y);
-#else
-        const quint8* maskPointer = outputImage.scanLine(y);
-#endif
         if (coloringInformation) {
             for (int x = 0; x < maskWidth; x++) {
                 if (color) {

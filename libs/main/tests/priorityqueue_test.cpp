@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <QList>
 #include <ctime>
+#include <QTest>
 
 struct Node
 {
@@ -101,4 +102,3 @@ void PriorityQueue_test::testQueue()
 }
 
 QTEST_MAIN(PriorityQueue_test)
-#include <priorityqueue_test.moc>

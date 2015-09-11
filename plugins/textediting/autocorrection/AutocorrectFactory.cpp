@@ -20,7 +20,7 @@
 #include "AutocorrectFactory.h"
 #include "Autocorrect.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 AutocorrectFactory::AutocorrectFactory()
     : KoTextEditingFactory("autocorrection")

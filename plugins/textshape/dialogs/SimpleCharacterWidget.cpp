@@ -27,7 +27,7 @@
 #include "StylesDelegate.h"
 #include <KoStyleThumbnailer.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kselectaction.h>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
@@ -261,5 +261,3 @@ void SimpleCharacterWidget::slotCharacterStyleApplied(const KoCharacterStyle *st
 {
     m_sortedStylesModel->styleApplied(style);
 }
-
-#include <SimpleCharacterWidget.moc>

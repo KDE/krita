@@ -46,7 +46,7 @@ void KisConfigWidget::kickTimer()
 void KisConfigWidget::setView(KisViewManager *view)
 {
     if (!view) {
-        qWarning() << "KisConfigWidget::setView has got view == 0. That's a bug! Please report it!";
+        warnKrita << "KisConfigWidget::setView has got view == 0. That's a bug! Please report it!";
     }
 }
 

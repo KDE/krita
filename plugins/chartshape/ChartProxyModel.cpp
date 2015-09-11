@@ -930,5 +930,3 @@ QList<DataSet*> ChartProxyModel::dataSets() const
 {
     return d->dataSets;
 }
-
-#include "ChartProxyModel.moc"

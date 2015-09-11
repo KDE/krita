@@ -21,31 +21,25 @@
 #include <QDesktopWidget>
 #include <QPixmap>
 #include <QCheckBox>
-#include <QDebug>
+#include <kis_debug.h>
 #include <QFile>
 
 #include <KisPart.h>
 #include <KisApplication.h>
 
+#include <kis_icon_utils.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
-#include <kaboutdata.h>
-#include <k4aboutdata.h>
-#include <kicon.h>
-
-#include <kis_factory2.h>
+#include <QIcon>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
-
-    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
-
+    setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     QString color = "#FFFFFF";
     if (themed && qApp->palette().background().color().value() >100) {
@@ -59,7 +53,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     chkShowAtStartup->hide();
     connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
 
-    KConfigGroup cfg(KisFactory::componentData().config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
@@ -85,7 +79,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblVersion->setText(i18n("Version: %1", version));
     lblVersion->setStyleSheet("color:" + color);
 
-    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
+    KConfigGroup cfg2( KSharedConfig::openConfig(), "RecentFiles");
     int i = 1;
 
     QString recent = i18n("<html>"
@@ -100,7 +94,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
         path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
         if (!path.isEmpty()) {
             QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
-            KUrl url(path);
+            QUrl url(path);
             if (name.isEmpty())
                 name = url.fileName();
 
@@ -139,13 +133,13 @@ void KisSplashScreen::show()
 
 void KisSplashScreen::toggleShowAtStartup(bool toggle)
 {
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
     cfg.writeEntry("HideSplashAfterStartup", toggle);
 }
 
 void KisSplashScreen::linkClicked(const QString &link)
 {
-    KisPart::instance()->openExistingFile(KUrl(link));
+    KisPart::instance()->openExistingFile(QUrl(link));
     if (isTopLevel()) {
         close();
     }

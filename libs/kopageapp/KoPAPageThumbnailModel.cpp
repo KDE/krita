@@ -21,7 +21,7 @@
 
 #include <QIcon>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoPAPageBase.h"
 
@@ -82,6 +82,3 @@ void KoPAPageThumbnailModel::setIconSize(const QSize &size)
 {
     m_iconSize = size;
 }
-
-#include <KoPAPageThumbnailModel.moc>
-

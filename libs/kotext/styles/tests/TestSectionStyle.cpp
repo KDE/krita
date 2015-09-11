@@ -21,6 +21,7 @@
 #include "styles/KoSectionStyle.h"
 
 #include <QTextFrameFormat>
+#include <QTest>
 
 void TestSectionStyle::testSectionStyle()
 {
@@ -41,4 +42,3 @@ void TestSectionStyle::testSectionStyle()
 }
 
 QTEST_MAIN(TestSectionStyle)
-#include <TestSectionStyle.moc>

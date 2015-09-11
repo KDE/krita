@@ -30,7 +30,7 @@
 #include <KoID.h>
 
 #include <KoConfig.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
@@ -41,14 +41,13 @@
 #include <QTextBrowser>
 #include <QScrollBar>
 
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
-#include <kurl.h>
-
-#include "kis_factory2.h"
+#include <QUrl>
 
 #include "ui_wdgcolorspaceselectoradvanced.h"
+
+#include <kis_debug.h>
 
 struct KisAdvancedColorSpaceSelector::Private {
     Ui_WdgColorSpaceSelectorAdvanced* colorSpaceSelector;
@@ -67,12 +66,12 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon(themedIcon("download"));
+    d->colorSpaceSelector->bnDownloadProfile->setIcon(KisIconUtils::loadIcon("download"));
     d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
     d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
     d->colorSpaceSelector->bnDownloadProfile->hide();
 
-    d->colorSpaceSelector->bnUploadProfile->setIcon(themedIcon("arrow-up"));
+    d->colorSpaceSelector->bnUploadProfile->setIcon(KisIconUtils::loadIcon("arrow-up"));
     d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
     d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
     d->colorSpaceSelector->bnUploadProfile->hide();
@@ -82,7 +81,7 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     d->colorSpaceSelector->bnDownloadProfile->show();
 #endif
 
-    d->colorSpaceSelector->bnInstallProfile->setIcon(themedIcon("document-open"));
+    d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
             this, SLOT(fillCmbDepths(const KoID &)));
@@ -153,16 +152,16 @@ void KisAdvancedColorSpaceSelector::fillCmbDepths(const KoID& id)
     if (depths.contains(Integer8BitsColorDepthID)) {
         sortedDepths << Integer8BitsColorDepthID;
     }
-    else if (depths.contains(Integer16BitsColorDepthID)) {
+    if (depths.contains(Integer16BitsColorDepthID)) {
         sortedDepths << Integer16BitsColorDepthID;
     }
-    else if (depths.contains(Float16BitsColorDepthID)) {
+    if (depths.contains(Float16BitsColorDepthID)) {
         sortedDepths << Float16BitsColorDepthID;
     }
-    else if (depths.contains(Float32BitsColorDepthID)) {
+    if (depths.contains(Float32BitsColorDepthID)) {
         sortedDepths << Float32BitsColorDepthID;
     }
-    else if (depths.contains(Float64BitsColorDepthID)) {
+    if (depths.contains(Float64BitsColorDepthID)) {
         sortedDepths << Float64BitsColorDepthID;
     }
 
@@ -280,11 +279,15 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
 
     d->colorSpaceSelector->textProfileDescription->clear();
-    d->colorSpaceSelector->textProfileDescription->append("<h3>About "  +  currentColorSpace()->name()  +  "/"  +  profileName  +  "</h3>");
+    if (profileList.isEmpty()==false) {
+        d->colorSpaceSelector->textProfileDescription->append("<h3>"+i18nc("About <Profilename>","About ")  +  currentColorSpace()->name()  +  "/"  +  profileName  +  "</h3>");
+    } else {
+        d->colorSpaceSelector->textProfileDescription->append("<h3>" + profileName  +  "</h3>");
+    }
 
     if (currentModelStr == "RGBA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is RGB",
-                                                                    "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, Green, Blue)</a></b>, is the color model used by screens and other light-based media.</br>"
+                                                                    "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, Green, Blue)</a></b>, is the color model used by screens and other light-based media.<br/>"
                                                                     "RGB is an additive color model: adding colors together makes them brighter. This color "
                                                                     "model is the most extensive of all color models, and is recommended as a model for painting,"
                                                                     "that you can later convert to other spaces. RGB is also the recommended colorspace for HDR editing."));
@@ -294,7 +297,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "is the model used by printers and other ink-based media.<p>"
                                                                     "CMYK is a subtractive model, meaning that adding colors together will turn them darker. Because of CMYK "
                                                                     "profiles being very specific per printer, it is recommended to work in RGB space, and then later convert "
-                                                                    "to a CMYK profile, preferably one delivered by your printer. <br>"
+                                                                    "to a CMYK profile, preferably one delivered by your printer. <br/>"
                                                                     "CMYK is <b>not</b> recommended for painting."
                                                                     "Unfortunately, Krita cannot retrieve colorants or the TRC for this space."));
     } else if (currentModelStr == "XYZA") {
@@ -307,18 +310,18 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     } else if (currentModelStr == "GRAYA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is Grayscale",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Grayscale</a></b> only allows for "
-                                                                    "gray values and transparent values. Grayscale images use half"
-                                                                    "the memory and disk space compared to an RGB image of the same bit-depth.<br>"
+                                                                    "gray values and transparent values. Grayscale images use half "
+                                                                    "the memory and disk space compared to an RGB image of the same bit-depth.<br/>"
                                                                     "Grayscale is useful for inking and greyscale images. In "
                                                                     "Krita, you can mix Grayscale and RGB layers in the same image."));
     } else if (currentModelStr == "LABA") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is LAB",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. <b>L<b> stands for Lightness, "
-                                                                    "the <b>a</b> and <b>b</b> components represent color channels.</br>"
+                                                                    "the <b>a</b> and <b>b</b> components represent color channels.<br/>"
                                                                     "L*a*b is a special model for color correction. It is based on human perception, meaning that it "
                                                                     "tries to encode the difference in lightness, red-green balance and yellow-blue balance. "
                                                                     "This makes it useful for color correction, but the vast majority of color maths in the blending "
-                                                                    "modes do <b>not</b> work as expected here.<br>"
+                                                                    "modes do <b>not</b> work as expected here.<br/>"
                                                                     "Similarly, Krita does not support HDR in LAB, meaning that HDR images converted to LAB lose color "
                                                                     "information. This colorspace is <b>not</b> recommended for painting, nor for export, "
                                                                     "but best as a space to do post-processing in. The Tone Response Curve is assumed to be the L* TRC."));
@@ -343,7 +346,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
     else if (currentDepthStr == "U16") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 16",
-                                                                    "<b>16 bit integer>/b>: Also known as 'deep color'. 16 bit is ideal for editing images with a linear TRC, large "
+                                                                    "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for editing images with a linear TRC, large "
                                                                     "color space, or just when you need more precise color blending. This does take twice as much space on "
                                                                     "the RAM and hard-drive than any given 8 bit image of the same properties, and for some devices it "
                                                                     "takes much more processing power. We recommend watching the RAM usage of the file carefully, or "
@@ -352,7 +355,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
     else if (currentDepthStr == "F16") {
         d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 16 bit float",
-                                                                    "<b>16 bit floaing point</b>: Also known as 'Half Floating Point', and the standard in VFX industry images. "
+                                                                    "<b>16 bit floating point</b>: Also known as 'Half Floating Point', and the standard in VFX industry images. "
                                                                     "16 bit float is ideal for editing images with a linear Tone Response Curve, large color space, or just when you need "
                                                                     "more precise color blending. It being floating point is an absolute requirement for Scene Referred "
                                                                     "(HDR) images. This does take twice as much space on the RAM and hard-drive than any given 8 bit image "
@@ -390,7 +393,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>Quoting Wikipedia, 'Academy Color Encoding System (ACES) is a color image "
-                                                                        "encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for"
+                                                                        "encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for "
                                                                         "a fully encompassing color accurate workflow, with 'seamless interchange of high quality motion "
                                                                         "picture images regardless of source'."));
         }
@@ -440,7 +443,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "is probably the right E white point to use when making the CIERGB color space profile. "
                                                                         "It's not clear to me what the correct CIERGB primaries really are. "
                                                                         "Lindbloom gives one set. The LCMS version 1 tutorial gives a different set. "
-                                                                        "Experts in the field contend thatthe real primaries "
+                                                                        "Experts in the field contend that the real primaries "
                                                                         "should be calculated from the spectral wavelengths, so I did."));
         }
         if (profileName.contains("IdentityRGB-")) {
@@ -621,7 +624,7 @@ const KoColorSpace* KisAdvancedColorSpaceSelector::currentColorSpace()
     QString check = "";
     if (d->colorSpaceSelector->lstProfile->currentItem()) {
         check = d->colorSpaceSelector->lstProfile->currentItem()->text();
-    } else {
+    } else if (d->colorSpaceSelector->lstProfile->item(0)) {
         check = d->colorSpaceSelector->lstProfile->item(0)->text();
     }
     return KoColorSpaceRegistry::instance()->colorSpace(d->colorSpaceSelector->cmbColorModels->currentItem().id(),
@@ -672,7 +675,7 @@ void KisAdvancedColorSpaceSelector::installProfile()
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setNameFilters(mime);
-    QStringList profileNames = dialog.urls();
+    QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
@@ -680,9 +683,9 @@ void KisAdvancedColorSpaceSelector::installProfile()
     QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
-        KUrl file(profileName);
+        QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation  +  file.fileName())) {
-            kWarning() << "Could not install profile!";
+            dbgKrita << "Could not install profile!";
             return;
         }
         iccEngine->addProfile(saveLocation  +  file.fileName());
@@ -719,7 +722,7 @@ void KisAdvancedColorSpaceSelector::uploadProfile()
     KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
     const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->lstProfile->currentText());
     if (!profile)  return;
-    dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
+    dialog.setUploadFile(QUrl::fromLocalFile(profile->fileName()));
     dialog.setUploadName(profile->name());
     dialog.exec();
 #endif
@@ -744,4 +747,3 @@ void KisAdvancedColorSpaceSelector::buttonUpdate()
     d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
 }
 
-#include "kis_advanced_color_space_selector.moc"

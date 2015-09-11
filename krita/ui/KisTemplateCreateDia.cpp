@@ -34,10 +34,10 @@
 #include <QTreeWidgetItem>
 #include <QGroupBox>
 
-#include <ktemporaryfile.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <KoIcon.h>
+#include <QTemporaryFile>
+#include <QLineEdit>
+#include <klocalizedstring.h>
+#include <kis_icon_utils.h>
 #include <KisDocument.h>
 #include <KisTemplates.h>
 #include <KisTemplateTree.h>
@@ -47,23 +47,18 @@
 #include <kinputdialog.h>
 #include <QMessageBox>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kiconloader.h>
-#include <kaboutdata.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
-#include <kis_factory2.h>
-#include <kurl.h>
-#include <k4aboutdata.h>
+#include <QUrl>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
 
 class KisTemplateCreateDiaPrivate {
 public:
-    KisTemplateCreateDiaPrivate(const KComponentData &componentData, const QString &filePath, const QPixmap &thumbnail)
-         : m_componentData( componentData )
-         , m_filePath(filePath)
+    KisTemplateCreateDiaPrivate(const QString &filePath, const QPixmap &thumbnail)
+         : m_filePath(filePath)
          , m_thumbnail(thumbnail)
     {
         m_tree=0;
@@ -82,7 +77,7 @@ public:
     }
 
     KisTemplateTree *m_tree;
-    KLineEdit *m_name;
+    QLineEdit *m_name;
     QRadioButton *m_default, *m_custom;
     QPushButton *m_select;
     QLabel *m_preview;
@@ -91,7 +86,6 @@ public:
     QTreeWidget *m_groups;
     QPushButton *m_add, *m_remove;
     QCheckBox *m_defaultTemplate;
-    KComponentData m_componentData;
     QString m_filePath;
     QPixmap m_thumbnail;
     bool m_changed;
@@ -104,14 +98,14 @@ public:
  *
  ****************************************************************************/
 
-KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &componentData,
-                                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
-  : KDialog(parent)
-  , d(new KisTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
+KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
+                                           const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
+  : KoDialog(parent)
+  , d(new KisTemplateCreateDiaPrivate(filePath, thumbnail))
 {
 
-    setButtons( KDialog::Ok|KDialog::Cancel );
-    setDefaultButton( KDialog::Ok );
+    setButtons( KoDialog::Ok|KoDialog::Cancel );
+    setDefaultButton( KoDialog::Ok );
     setCaption( i18n( "Create Template" ) );
     setModal( true );
     setObjectName( "template create dia" );
@@ -125,7 +119,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     QHBoxLayout *namefield=new QHBoxLayout();
     leftbox->addLayout( namefield );
     namefield->addWidget(label);
-    d->m_name=new KLineEdit(mainwidget);
+    d->m_name=new QLineEdit(mainwidget);
     d->m_name->setFocus();
     connect(d->m_name, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotNameChanged(const QString &)));
@@ -140,7 +134,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSortingEnabled(true);
 
-    d->m_tree = new KisTemplateTree(templatesResourcePath, componentData, true);
+    d->m_tree = new KisTemplateTree(templatesResourcePath, true);
     fillGroupTree();
     d->m_groups->sortItems(0, Qt::AscendingOrder);
 
@@ -178,7 +172,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts", KisFactory::componentData().aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip(i18n("Use the new template every time Krita starts"));
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);
@@ -210,13 +204,12 @@ void KisTemplateCreateDia::slotSelectionChanged()
 
 void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const char *suffix,
-                                         const KComponentData &componentData,
                                          KisDocument *document, QWidget *parent)
 {
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(QLatin1String(suffix));
+    QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(QLatin1String(suffix)));
     //Check that creation of temp file was successful
     if (!tempFile->open()) {
+        delete tempFile;
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
@@ -228,7 +221,7 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
 
     const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
 
-    KisTemplateCreateDia *dia = new KisTemplateCreateDia(templatesResourcePath, componentData, fileName, thumbnail, parent);
+    KisTemplateCreateDia *dia = new KisTemplateCreateDia(templatesResourcePath, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
 
@@ -254,7 +247,7 @@ void KisTemplateCreateDia::slotOk() {
         item = d->m_groups->topLevelItem(0);
     if(!item) {    // safe :)
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
     // is it a group or a template? anyway - get the group :)
@@ -262,20 +255,20 @@ void KisTemplateCreateDia::slotOk() {
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     KisTemplateGroup *group=d->m_tree->find(item->text(0));
     if(!group) {    // even safer
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     if(d->m_name->text().isEmpty()) {
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
@@ -297,11 +290,11 @@ void KisTemplateCreateDia::slotOk() {
     if ( pos > -1 )
         ext = d->m_filePath.mid(pos);
     else
-        kWarning(30004) << "Template extension not found!";
+        warnUI << "Template extension not found!";
 
-    KUrl dest;
+    QUrl dest;
     dest.setPath(templateDir+file+ext);
-    if (QFile::exists( dest.pathOrUrl())) {
+    if (QFile::exists(dest.toLocalFile())) {
         do {
             file.prepend( '_' );
             dest.setPath( templateDir + file + ext );
@@ -311,7 +304,7 @@ void KisTemplateCreateDia::slotOk() {
         while (QFile(dest.toLocalFile()).exists());
     }
     bool ignore = false;
-    kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
+    dbgUI <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
     KisTemplate *t=new KisTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
     if (!group->add(t)) {
         KisTemplate *existingTemplate=group->find(d->m_name->text());
@@ -334,11 +327,11 @@ void KisTemplateCreateDia::slotOk() {
 
     if (!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
-        slotButtonClicked( KDialog::Cancel );
+        slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
-    KUrl orig;
+    QUrl orig;
     orig.setPath(d->m_filePath);
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )
@@ -351,7 +344,7 @@ void KisTemplateCreateDia::slotOk() {
         } else if(!d->m_customPixmap.isNull()) {
             saveAsQuadraticPng(d->m_customPixmap, icon);
         } else {
-            kWarning(30004) << "Could not save the preview picture!";
+            warnUI << "Could not save the preview picture!";
         }
     }
 
@@ -366,7 +359,7 @@ void KisTemplateCreateDia::slotOk() {
                 dest.setPath(dir + "/.directory");
                 // We copy the file with overwrite
                 if (!QFile(orig.toLocalFile()).copy(dest.toLocalFile())) {
-                    qWarning() << "Failed to copy from" << orig.toLocalFile() << "to" << dest.toLocalFile();
+                    warnKrita << "Failed to copy from" << orig.toLocalFile() << "to" << dest.toLocalFile();
                 }
                 ready = true;
             }
@@ -378,7 +371,7 @@ void KisTemplateCreateDia::slotOk() {
     if ( d->m_defaultTemplate->isChecked() )
     {
 
-      KConfigGroup grp( d->m_componentData.config(), "TemplateChooserDialog" );
+      KConfigGroup grp( KSharedConfig::openConfig(), "TemplateChooserDialog");
       grp.writeEntry( "LastReturnType", "Template" );
       grp.writePathEntry( "FullTemplateName", dir + '/' + t->file() );
       grp.writePathEntry( "AlwaysUseTemplate", dir + '/' + t->file() );
@@ -507,13 +500,13 @@ void KisTemplateCreateDia::updatePixmap() {
         d->m_preview->setPixmap(d->m_thumbnail);
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
-            kDebug(30004) <<"Trying to load picture" << d->m_customFile;
+            dbgUI <<"Trying to load picture" << d->m_customFile;
             // use the code in KisTemplate to load the image... hacky, I know :)
             KisTemplate t("foo", "bar", QString(), d->m_customFile);
             d->m_customPixmap=t.loadPicture();
         }
         else
-            kWarning(30004) << "Trying to load picture";
+            warnUI << "Trying to load picture";
 
         if(!d->m_customPixmap.isNull())
             d->m_preview->setPixmap(d->m_customPixmap);

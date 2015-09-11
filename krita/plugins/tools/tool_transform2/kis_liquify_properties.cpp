@@ -20,11 +20,9 @@
 
 #include <QDomElement>
 
-
-#include <kglobal.h>
-#include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "kis_debug.h"
 #include "kis_dom_utils.h"
@@ -73,7 +71,7 @@ QString liquifyModeString(KisLiquifyProperties::LiquifyMode mode)
 void KisLiquifyProperties::saveMode() const
 {
     KConfigGroup cfg =
-        KGlobal::config()->group(liquifyModeString(m_mode));
+         KSharedConfig::openConfig()->group(liquifyModeString(m_mode));
 
     cfg.writeEntry("size", m_size);
     cfg.writeEntry("amount", m_amount);
@@ -84,14 +82,14 @@ void KisLiquifyProperties::saveMode() const
     cfg.writeEntry("useWashMode", m_useWashMode);
     cfg.writeEntry("flow", m_flow);
 
-    KConfigGroup globalCfg = KGlobal::config()->group("LiquifyTool");
+    KConfigGroup globalCfg =  KSharedConfig::openConfig()->group("LiquifyTool");
     globalCfg.writeEntry("mode", (int)m_mode);
 }
 
 void KisLiquifyProperties::loadMode()
 {
     KConfigGroup cfg =
-        KGlobal::config()->group(liquifyModeString(m_mode));
+         KSharedConfig::openConfig()->group(liquifyModeString(m_mode));
 
     m_size = cfg.readEntry("size", m_size);
     m_amount = cfg.readEntry("amount", m_amount);
@@ -105,7 +103,7 @@ void KisLiquifyProperties::loadMode()
 
 void KisLiquifyProperties::loadAndResetMode()
 {
-    KConfigGroup globalCfg = KGlobal::config()->group("LiquifyTool");
+    KConfigGroup globalCfg =  KSharedConfig::openConfig()->group("LiquifyTool");
     m_mode = (LiquifyMode) globalCfg.readEntry("mode", (int)m_mode);
 
     loadMode();

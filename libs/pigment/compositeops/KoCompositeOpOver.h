@@ -22,7 +22,7 @@
 
 #include "KoCompositeOpAlphaBase.h"
 #include <KoCompositeOpRegistry.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 template<class _CSTraits, int channel>
 struct KoCompositeOpOverCompositor {

@@ -586,11 +586,11 @@ bool fuzzyCompareRects(const QRectF rc1, const QRectF rc2, qreal accuracy)
         qAbs(rc1.height() - rc2.height()) < 2 * accuracy;
 
     if(!result) {
-        qDebug() << "Failed to fuzzy compare rects";
-        qDebug() << "\t" << ppVar(accuracy);
-        qDebug() << "\t" << "actual  " << rc1;
-        qDebug() << "\t" << "expected" << rc2;
-        qDebug() << "+---------------------------+";
+        dbgKrita << "Failed to fuzzy compare rects";
+        dbgKrita << "\t" << ppVar(accuracy);
+        dbgKrita << "\t" << "actual  " << rc1;
+        dbgKrita << "\t" << "expected" << rc2;
+        dbgKrita << "+---------------------------+";
     }
 
     return result;
@@ -675,7 +675,7 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
     image = QImage();
     image.load(QString(FILES_DATA_DIR) + QDir::separator() + resFileName);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        qDebug() << filePrefix;
+        dbgKrita << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
         QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
@@ -890,7 +890,7 @@ void generateTestImage(QString inputFileName, qreal scale, qreal rotation, qreal
             QString("transform_%1_%2_%3_%4_%5_new.png")
             .arg(tmp[0]).arg(scale).arg(rotation).arg(xshear).arg(filter->name());
 
-        qDebug() << filename;
+        dbgKrita << filename;
 
         dev->convertToQImage(0).save(filename);
     }

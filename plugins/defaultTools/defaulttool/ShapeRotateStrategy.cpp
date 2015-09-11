@@ -22,7 +22,7 @@
 #include "SelectionDecorator.h"
 #include "SelectionTransformCommand.h"
 
-#include <KoInteractionTool.h>
+#include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
@@ -31,7 +31,7 @@
 
 #include <QPointF>
 #include <math.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons)
 : KoInteractionStrategy(tool)

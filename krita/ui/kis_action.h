@@ -19,13 +19,13 @@
 #ifndef KIS_ACTION_H
 #define KIS_ACTION_H
 
-#include <kaction.h>
+#include <QWidgetAction>
 #include <kritaui_export.h>
-#include <kdebug.h>
-#include <kicon.h>
+#include <kis_debug.h>
+#include <QIcon>
 class KisActionManager;
 
-class KRITAUI_EXPORT KisAction : public KAction
+class KRITAUI_EXPORT KisAction : public QWidgetAction
 {
     Q_OBJECT
 public:
@@ -59,7 +59,7 @@ public:
     
     explicit KisAction(QObject* parent = 0);
     KisAction(const QString& text, QObject* parent = 0);
-    KisAction(const KIcon& icon, const QString& text, QObject* parent = 0);
+    KisAction(const QIcon& icon, const QString& text, QObject* parent = 0);
     virtual ~KisAction();
 
     void setActivationFlags(ActivationFlags flags);

@@ -21,8 +21,7 @@
 
 #include "kis_time_range.h"
 
-
-struct KisNodeGraphListener::Private
+struct Q_DECL_HIDDEN KisNodeGraphListener::Private
 {
     Private() : sequenceNumber(0) {}
     int sequenceNumber;

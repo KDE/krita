@@ -20,7 +20,7 @@
 #include "kis_pressure_flow_opacity_option.h"
 #include "kis_paint_action_type_option.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_painter.h>
 #include <kis_paint_information.h>

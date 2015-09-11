@@ -34,17 +34,17 @@
 #include <QGLWidget>
 #include <QTimer>
 
-#include <kurl.h>
+#include <QUrl>
 #include <kstandarddirs.h>
-#include <kdialog.h>
-#include <kdebug.h>
+#include <KoDialog.h>
+#include <kis_debug.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include <KoZoomController.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "KisViewManager.h"
 #include <kis_canvas_controller.h>
@@ -83,7 +83,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow(this);
 
     setWindowTitle(i18n("Krita Sketch"));
-    setWindowIcon(koIcon("kritasketch"));
+    setWindowIcon(KisIconUtils::loadIcon("kritasketch"));
 
     // Load filters and other plugins in the gui thread
     Q_UNUSED(KisFilterRegistry::instance());
@@ -137,7 +137,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     if (view->errors().count() > 0) {
         foreach(const QDeclarativeError &error, view->errors()) {
-            kDebug() << error.toString();
+            dbgKrita << error.toString();
         }
     }
 
@@ -146,18 +146,18 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
     QString fileName = url.fileName();
-    if(url.protocol() == "temp")
+    if(url.scheme() == "temp")
         fileName = i18n("Untitled");
 
-    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KisDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
-        flags |= KDialog::ModifiedCaption;
+        flags |= KoDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle( KoDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 bool MainWindow::allowClose() const

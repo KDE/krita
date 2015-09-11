@@ -195,23 +195,23 @@ static void initWinTabFunctions()
 
 void printContext(const LOGCONTEXT &lc)
 {
-    qDebug() << "Context data:";
-    qDebug() << ppVar(lc.lcName);
-    qDebug() << ppVar(lc.lcDevice);
-    qDebug() << ppVar(lc.lcInOrgX);
-    qDebug() << ppVar(lc.lcInOrgY);
-    qDebug() << ppVar(lc.lcInExtX);
-    qDebug() << ppVar(lc.lcInExtY);
-    qDebug() << ppVar(lc.lcOutOrgX);
-    qDebug() << ppVar(lc.lcOutOrgY);
-    qDebug() << ppVar(lc.lcOutExtX);
-    qDebug() << ppVar(lc.lcOutExtY);
-    qDebug() << ppVar(lc.lcSysOrgX);
-    qDebug() << ppVar(lc.lcSysOrgY);
-    qDebug() << ppVar(lc.lcSysExtX);
-    qDebug() << ppVar(lc.lcSysExtY);
+    dbgKrita << "Context data:";
+    dbgKrita << ppVar(lc.lcName);
+    dbgKrita << ppVar(lc.lcDevice);
+    dbgKrita << ppVar(lc.lcInOrgX);
+    dbgKrita << ppVar(lc.lcInOrgY);
+    dbgKrita << ppVar(lc.lcInExtX);
+    dbgKrita << ppVar(lc.lcInExtY);
+    dbgKrita << ppVar(lc.lcOutOrgX);
+    dbgKrita << ppVar(lc.lcOutOrgY);
+    dbgKrita << ppVar(lc.lcOutExtX);
+    dbgKrita << ppVar(lc.lcOutExtY);
+    dbgKrita << ppVar(lc.lcSysOrgX);
+    dbgKrita << ppVar(lc.lcSysOrgY);
+    dbgKrita << ppVar(lc.lcSysExtX);
+    dbgKrita << ppVar(lc.lcSysExtY);
 
-    qDebug() << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
+    dbgKrita << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
 }
 
 /**
@@ -237,7 +237,7 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     ptrWTGet(hTab, &lc);
 
     if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-        qDebug() << "# Getting current context:";
+        dbgKrita << "# Getting current context:";
         printContext(lc);
     }
 
@@ -275,8 +275,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     QRect wintabDesktopRect(lc.lcSysOrgX, lc.lcSysOrgY,
                             lc.lcSysExtX, lc.lcSysExtY);
 
-    qDebug() << ppVar(qtDesktopRect);
-    qDebug() << ppVar(wintabDesktopRect);
+    dbgKrita << ppVar(qtDesktopRect);
+    dbgKrita << ppVar(wintabDesktopRect);
 
     QRect desktopRect = wintabDesktopRect;
 
@@ -307,21 +307,21 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.sysExtY = desktopRect.height();
 
     if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-        qDebug() << "# Axes configuration";
-        qDebug() << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
-        qDebug() << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
-        qDebug() << ppVar(qt_tablet_tilt_support);
-        qDebug() << ppVar(tdd.minX) << ppVar(tdd.maxX);
-        qDebug() << ppVar(tdd.minY) << ppVar(tdd.maxY);
-        qDebug() << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
-        qDebug().nospace() << "# csr type: 0x" << hex << csr_type;
+        dbgKrita << "# Axes configuration";
+        dbgKrita << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
+        dbgKrita << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
+        dbgKrita << ppVar(qt_tablet_tilt_support);
+        dbgKrita << ppVar(tdd.minX) << ppVar(tdd.maxX);
+        dbgKrita << ppVar(tdd.minY) << ppVar(tdd.maxY);
+        dbgKrita << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
+        dbgKrita.nospace() << "# csr type: 0x" << hex << csr_type;
 
         LOGCONTEXT lcMine;
 
         /* get default region */
         ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
 
-        qDebug() << "# Getting default context:";
+        dbgKrita << "# Getting default context:";
         printContext(lcMine);
     }
 
@@ -372,7 +372,7 @@ static void tabletChangeCursor(QTabletDeviceData &tdd, const UINT newCursor)
     default:
         tdd.currentPointerType = QTabletEvent::UnknownPointer;
     }
-    qDebug() << "WinTab: updating cursor type" << ppVar(newCursor);
+    dbgKrita << "WinTab: updating cursor type" << ppVar(newCursor);
     currentCursor = newCursor;
 }
 
@@ -403,7 +403,7 @@ static void tabletUpdateCursor(const UINT newCursor)
     ptrWTInfo(WTI_DEVICES, DVC_NAME, dvcName);
     QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
     delete dvcName;
-    qDebug() << "DVC_NAME =" << qDvcName;
+    dbgKrita << "DVC_NAME =" << qDvcName;
     if (qDvcName == QString::fromLatin1("N-trig DuoSense device")) {
         inlineSwitching = true;
     } else {
@@ -423,13 +423,13 @@ static void tabletUpdateCursor(const UINT newCursor)
 
 
     if (isInit && KisTabletDebugger::instance()->initializationDebugEnabled()) {
-        qDebug() << "--------------------------";
-        qDebug() << "--- Tablet buttons map ---";
+        dbgKrita << "--------------------------";
+        dbgKrita << "--- Tablet buttons map ---";
         for (int i = 0; i < 16; i++) {
-            qDebug() << "( 1 <<" << 2*i << ")" << "->" << logicalButtons[2*i]
+            dbgKrita << "( 1 <<" << 2*i << ")" << "->" << logicalButtons[2*i]
                      << "( 1 <<" << 2*i+1 << ")" << "->" << logicalButtons[2*i+1];
         }
-        qDebug() << "--------------------------";
+        dbgKrita << "--------------------------";
     }
 
 }
@@ -510,12 +510,12 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
 
 
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
-            qDebug() << "WinTab (RC):"
+            dbgKrita << "WinTab (RC):"
                      << "Dsk:"  << QRect(currentTabletPointer.sysOrgX, currentTabletPointer.sysOrgY, currentTabletPointer.sysExtX,  currentTabletPointer.sysExtY)
                      << "Raw:" << ptNew.x << ptNew.y
                      << "Scaled:" << hiResGlobal;
 
-            qDebug() << "WinTab (BN):"
+            dbgKrita << "WinTab (BN):"
                      << "old:" << btnOld
                      << "new:" << btnNew
                      << "diff:" << (btnOld ^ btnNew)
@@ -616,7 +616,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
             ort = localPacketBuf[i].pkOrientation;
 
-            qDebug() << "WinTab (RS):"
+            dbgKrita << "WinTab (RS):"
                      << "NP:" << localPacketBuf[i].pkNormalPressure
                      << "TP:" << localPacketBuf[i].pkTangentPressure
                      << "Az:" << ort.orAzimuth

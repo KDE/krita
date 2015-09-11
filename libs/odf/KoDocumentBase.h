@@ -28,7 +28,7 @@ class KoOdfReadStore;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
 
-class KUrl;
+class QUrl;
 class QByteArray;
 class QString;
 
@@ -72,9 +72,9 @@ public:
     /**
      * @return the current URL
      */
-    virtual KUrl url() const = 0;
+    virtual QUrl url() const = 0;
 
-    virtual void setUrl(const KUrl &url) = 0;
+    virtual void setUrl(const QUrl &url) = 0;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
@@ -162,7 +162,7 @@ public:
      * Sets the document URL to empty URL
      * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
-     * to set the url to KUrl()
+     * to set the url to QUrl()
      */
     virtual void resetURL() = 0;
 

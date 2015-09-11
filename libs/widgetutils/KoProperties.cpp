@@ -105,7 +105,7 @@ void KoProperties::save(QDomElement &root) const
         QByteArray bytes;
         QDataStream out(&bytes, QIODevice::WriteOnly);
         out << v;
-        QDomText text = doc.createCDATASection(QString::fromLatin1(bytes, bytes.size()));
+        QDomText text = doc.createCDATASection(QString::fromLatin1(bytes));
         e.appendChild(text);
         root.appendChild(e);
     }

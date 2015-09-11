@@ -28,7 +28,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QValidator>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 #include <kdebug.h>

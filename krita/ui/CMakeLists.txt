@@ -82,7 +82,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
-    kis_aboutdata.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
@@ -99,7 +98,6 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
-    kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
     kis_splash_screen.cpp
@@ -230,6 +228,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_preset_selector_strip.cpp
     widgets/kis_tree_view_popup.cc
     widgets/kis_slider_spin_box.cpp
+    widgets/kis_size_group.cpp
+    widgets/kis_size_group_p.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
@@ -239,6 +239,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
     input/kis_input_manager.cpp
+    input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
@@ -324,7 +325,6 @@ set(kritaui_LIB_SRCS
     KisView.cpp
 
     thememanager.cpp
-    kis_icon_utils.cpp
 
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
@@ -343,6 +343,7 @@ set(kritaui_LIB_SRCS
     kis_animation_exporter.cpp
 
     kis_md5_generator.cpp
+    KisApplicationArguments.cpp
 )
 
 if(WIN32)
@@ -369,13 +370,6 @@ if(UNIX)
             )
     endif()
 endif()
-
-if (APPLE)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            MacSupport.mm
-        )
-endif ()
 
 kde_enable_exceptions()
 
@@ -462,7 +456,7 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::GlobalAccel KF5::KDELibs4Support)
+target_link_libraries(kritaui KF5::GlobalAccel KF5::I18n KF5::KDELibs4Support)
 if (NOT WIN32)
   target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
 endif()
@@ -492,7 +486,7 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms KF5::KDELibs4Support ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms KF5::I18n KF5::KDELibs4Support ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

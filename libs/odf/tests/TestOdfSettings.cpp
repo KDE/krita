@@ -1,4 +1,4 @@
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QObject>
 
@@ -11,7 +11,7 @@ class TestOdfSettings : public QObject
 public:
     TestOdfSettings() { }
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void testParseConfigItemString();
     void testSelectItemSet();
@@ -94,6 +94,6 @@ void TestOdfSettings::testNamedMap()
     QVERIFY(secondView.isNull());
 }
 
-QTEST_KDEMAIN(TestOdfSettings, GUI)
+QTEST_GUILESS_MAIN(TestOdfSettings)
 
 #include <TestOdfSettings.moc>

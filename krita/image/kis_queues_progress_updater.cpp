@@ -23,7 +23,7 @@
 #include <KoProgressProxy.h>
 
 
-struct KisQueuesProgressUpdater::Private
+struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
 {
     Private()
         : queueSizeMetric(0)

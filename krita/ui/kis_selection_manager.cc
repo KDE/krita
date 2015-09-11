@@ -26,9 +26,9 @@
 #include <QColor>
 #include <QTimer>
 
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
@@ -45,7 +45,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_node_manager.h"
@@ -150,18 +150,18 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
-    m_selectAll = new KisAction(themedIcon("select-all"), i18n("Select &All"), this);
+    m_selectAll = new KisAction(KisIconUtils::loadIcon("select-all"), i18n("Select &All"), this);
     actionManager->addAction("select_all", m_selectAll);
     m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    m_deselect = new KisAction(themedIcon("select-clear"), i18n("Deselect"), this);
+    m_deselect = new KisAction(KisIconUtils::loadIcon("select-clear"), i18n("Deselect"), this);
     m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     actionManager->addAction("deselect", m_deselect);
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
-    m_clear = new KisAction(themedIcon("select-clear"), i18n("Clear"), this);
+    m_clear = new KisAction(KisIconUtils::loadIcon("select-clear"), i18n("Clear"), this);
     m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));

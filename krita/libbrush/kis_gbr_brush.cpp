@@ -34,7 +34,7 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -286,7 +286,7 @@ bool KisGbrBrush::init()
         }
     }
     else {
-        qWarning() << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
+        warnKrita << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
         return false;
     }
 

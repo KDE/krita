@@ -20,7 +20,7 @@
 #include "CommentShapeFactory.h"
 #include "CommentShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDocumentBase.h>

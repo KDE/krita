@@ -27,7 +27,7 @@
 #include <QRect>
 #include <QThreadPool>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoCanvasController.h>

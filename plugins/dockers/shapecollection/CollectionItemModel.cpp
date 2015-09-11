@@ -121,5 +121,3 @@ const KoProperties* CollectionItemModel::properties(const QModelIndex& index) co
 
     return m_shapeTemplateList[index.row()].properties;
 }
-
-#include <CollectionItemModel.moc>

@@ -24,7 +24,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 PageVariableFactory::PageVariableFactory()

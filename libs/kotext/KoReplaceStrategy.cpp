@@ -23,7 +23,7 @@
 #include <kfind.h>
 #include <kreplacedialog.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "FindDirection_p.h"
 

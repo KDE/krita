@@ -172,7 +172,7 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     delete cmd;
 
     // We are veeeery bad! Never do like this! >:)
-    qDebug() << "Ref. count:" << group1->refCount();
+    dbgKrita << "Ref. count:" << group1->refCount();
     KisNodeWSP group1_wsp = group1;
     KisNode *group1_ptr = group1.data();
     group1 = 0;

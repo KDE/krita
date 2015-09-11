@@ -25,11 +25,11 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>
@@ -96,7 +96,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
 
     // prepare a list of the ICC profiles
-    KGlobal::dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
+    KGlobal::dirs()->addResourceType("icc_profiles", "data", "color/icc");
 
     QStringList profileFilenames;
     profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);

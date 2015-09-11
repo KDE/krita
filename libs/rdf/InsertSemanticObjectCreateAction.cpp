@@ -25,7 +25,7 @@
 #include "KoTextEditor.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpagedialog.h>
 
 #include <QVBoxLayout>

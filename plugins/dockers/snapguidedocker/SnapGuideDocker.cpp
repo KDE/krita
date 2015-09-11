@@ -27,7 +27,7 @@
 
 #include "SnapGuideDocker.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasObserverBase.h>
@@ -85,5 +85,3 @@ void SnapGuideDocker::locationChanged(Qt::DockWidgetArea area)
 {
     Q_UNUSED(area);
 }
-
-#include <SnapGuideDocker.moc>

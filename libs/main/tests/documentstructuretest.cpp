@@ -20,10 +20,7 @@
 #include "documentstructuretest.h"
 
 #include <QDebug>
-#include <QtTest>
-#include <QtGui>
-
-
+#include <QTest>
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
@@ -159,5 +156,3 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     return QTest::qExec(new DocumentStructureTest, argc, argv);
 }
-
-#include <documentstructuretest.moc>

@@ -26,7 +26,7 @@
 
 using namespace KisMetaData;
 
-struct Entry::Private {
+struct Q_DECL_HIDDEN Entry::Private {
     QString name;
     const Schema* schema;
     Value value;

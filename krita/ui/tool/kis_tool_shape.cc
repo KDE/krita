@@ -33,7 +33,7 @@
 #include <KoPatternBackground.h>
 #include <KoDocumentResourceManager.h>
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoPathShape.h>
 
 #include <kis_canvas_resource_provider.h>
@@ -64,7 +64,7 @@ KisToolShape::~KisToolShape()
 void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
-    m_configGroup = KGlobal::config()->group(toolId());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 

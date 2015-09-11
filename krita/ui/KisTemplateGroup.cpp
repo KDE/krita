@@ -64,7 +64,7 @@ bool KisTemplateGroup::add(KisTemplate *t, bool force, bool touch)
         m_touched = touch;
         return true;
     } else if (myTemplate && force) {
-        //kDebug( 30003 ) <<"removing :" << myTemplate->fileName();
+        //dbgUI <<"removing :" << myTemplate->fileName();
         QFile::remove(myTemplate->fileName());
         QFile::remove(myTemplate->picture());
         QFile::remove(myTemplate->file());

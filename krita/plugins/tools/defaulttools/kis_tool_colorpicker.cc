@@ -34,7 +34,7 @@
 #include <QVector>
 
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QMessageBox>
 
@@ -98,7 +98,7 @@ void KisToolColorPicker::Configuration::save(ToolActivation activation) const
     props.setProperty("sampleMerged", sampleMerged);
     props.setProperty("radius", radius);
 
-    KConfigGroup config = KGlobal::config()->group(CONFIG_GROUP_NAME);
+    KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
 
     config.writeEntry(getConfigKey(activation), props.toXML());
 }
@@ -107,7 +107,7 @@ void KisToolColorPicker::Configuration::load(ToolActivation activation)
 {
     KisPropertiesConfiguration props;
 
-    KConfigGroup config = KGlobal::config()->group(CONFIG_GROUP_NAME);
+    KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
     props.fromXML(config.readEntry(getConfigKey(activation)));
 
     toForegroundColor = props.getBool("toForegroundColor", true);

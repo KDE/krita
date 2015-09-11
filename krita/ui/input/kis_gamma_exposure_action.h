@@ -50,7 +50,7 @@ public:
     void deactivate(int shortcut);
 
     void begin(int shortcut, QEvent *event = 0);
-    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    void cursorMoved(const QPointF &lastPos, const QPointF &pos);
 
     bool isShortcutRequired(int shortcut) const;
 

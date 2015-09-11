@@ -34,7 +34,7 @@
 #endif
 #endif
 
-struct KisCageTransformWorker::Private
+struct Q_DECL_HIDDEN KisCageTransformWorker::Private
 {
     Private(KisPaintDeviceSP _dev,
             const QVector<QPointF> &_origCage,
@@ -220,7 +220,7 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
             std::isnan(transformedPoints[i].y())) {
 #endif
 
-            qWarning() << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
+            warnKrita << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
             transformedPoints[i] = validPoints[i];
         }
 

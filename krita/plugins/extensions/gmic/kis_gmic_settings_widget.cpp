@@ -36,7 +36,6 @@
 
 //
 #include "widgets/kis_url_requester.h"
-#include <kdeversion.h>
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
@@ -281,9 +280,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     colorButton = new KColorButton;
-#if KDE_IS_VERSION(4,5,0)
                     colorButton->setAlphaChannelEnabled(colorParam->m_hasAlpha);
-#endif
                     m_widgetToParameterIndexMapper[colorButton] = i;
                     mapParameterWidget(colorParam, colorButton);
 
@@ -321,8 +318,8 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(folderParam, urlRequester);
 
-                    connect(urlRequester, SIGNAL(urlSelected(KUrl)), this, SIGNAL(sigConfigurationItemChanged()));
-                    connect(urlRequester, SIGNAL(urlSelected(KUrl)), this, SLOT(setFolderPathValue(KUrl)));
+                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SIGNAL(sigConfigurationItemChanged()));
+                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SLOT(setFolderPathValue(QUrl)));
 
                     gridLayout->addWidget(new QLabel(folderParam->name()), row, 0);
                     gridLayout->addWidget(urlRequester, row, 1, 1, 3);
@@ -335,7 +332,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(KUrl(folderParam->toUiValue()));
+                    urlRequester->setUrl(QUrl(folderParam->toUiValue()));
                 }
                 else
                 {
@@ -356,8 +353,8 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);
 
-                    connect(urlRequester, SIGNAL(urlSelected(KUrl)), this, SIGNAL(sigConfigurationItemChanged()));
-                    connect(urlRequester, SIGNAL(urlSelected(KUrl)), this, SLOT(setFilePathValue(KUrl)));
+                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SIGNAL(sigConfigurationItemChanged()));
+                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SLOT(setFilePathValue(QUrl)));
 
                     gridLayout->addWidget(new QLabel(fileParam->name()), row, 0);
                     gridLayout->addWidget(urlRequester, row, 1, 1, 3);
@@ -370,7 +367,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(KUrl(fileParam->toUiValue()));
+                    urlRequester->setUrl(QUrl(fileParam->toUiValue()));
                 }
                 else
                 {
@@ -635,7 +632,7 @@ QWidget* KisGmicSettingsWidget::widget(Parameter* parameter)
 
 
 
-void KisGmicSettingsWidget::setFolderPathValue(const KUrl& kurl)
+void KisGmicSettingsWidget::setFolderPathValue(const QUrl &kurl)
 {
     Parameter * p = parameter(sender());
     if (!p)
@@ -652,7 +649,7 @@ void KisGmicSettingsWidget::setFolderPathValue(const KUrl& kurl)
     folderParam->fromUiValue(kurl.path());
 }
 
-void KisGmicSettingsWidget::setFilePathValue(const KUrl& kurl)
+void KisGmicSettingsWidget::setFilePathValue(const QUrl &kurl)
 {
     Parameter * p = parameter(sender());
     if (!p)

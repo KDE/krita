@@ -95,7 +95,7 @@ public:
 
 
 KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf)
-        : KDialog(parent),
+        : KoDialog(parent),
         d(new Private())
 {
     d->m_rdf = rdf;

@@ -66,7 +66,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotChangePalette();
-    void slotConfigColors();
     void slotSettingsChanged();
 
 private:

@@ -81,16 +81,16 @@
 
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
-#include <kurl.h>
+#include <QTemporaryFile>
+#include <QUrl>
 
 
 class Q_DECL_HIDDEN KoPAView::Private
@@ -114,19 +114,19 @@ public:
     KoCutController *cutController;
 
     QAction *editPaste;
-    KAction *deleteSelectionAction;
+    QAction *deleteSelectionAction;
 
     KToggleAction *actionViewSnapToGrid;
     KToggleAction *actionViewShowMasterPages;
 
-    KAction *actionInsertPage;
-    KAction *actionCopyPage;
-    KAction *actionDeletePage;
+    QAction *actionInsertPage;
+    QAction *actionCopyPage;
+    QAction *actionDeletePage;
 
-    KAction *actionMasterPage;
-    KAction *actionPageLayout;
+    QAction *actionMasterPage;
+    QAction *actionPageLayout;
 
-    KAction *actionConfigure;
+    QAction *actionConfigure;
 
     KoRuler *horizontalRuler;
     KoRuler *verticalRuler;
@@ -356,7 +356,7 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    d->deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction = new QAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction );
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     d->deleteSelectionAction->setEnabled(false);
@@ -387,30 +387,30 @@ void KoPAView::initActions()
     connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
     setShowRulers(d->doc->rulersVisible());
 
-    d->actionInsertPage = new KAction(koIcon("document-new"), i18n("Insert Page"), this);
+    d->actionInsertPage = new QAction(koIcon("document-new"), i18n("Insert Page"), this);
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     d->actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
     connect( d->actionInsertPage, SIGNAL( triggered() ), proxyObject, SLOT( insertPage() ) );
 
-    d->actionCopyPage = new KAction( i18n( "Copy Page" ), this );
+    d->actionCopyPage = new QAction( i18n( "Copy Page" ), this );
     actionCollection()->addAction( "page_copypage", d->actionCopyPage );
     d->actionCopyPage->setToolTip( i18n( "Copy the current page" ) );
     d->actionCopyPage->setWhatsThis( i18n( "Copy the current page" ) );
     connect( d->actionCopyPage, SIGNAL( triggered() ), this, SLOT( copyPage() ) );
 
-    d->actionDeletePage = new KAction( i18n( "Delete Page" ), this );
+    d->actionDeletePage = new QAction( i18n( "Delete Page" ), this );
     d->actionDeletePage->setEnabled( d->doc->pageCount() > 1 );
     actionCollection()->addAction( "page_deletepage", d->actionDeletePage );
     d->actionDeletePage->setToolTip( i18n( "Delete the current page" ) );
     d->actionDeletePage->setWhatsThis( i18n( "Delete the current page" ) );
     connect( d->actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
 
-    d->actionMasterPage = new KAction(i18n("Master Page..."), this);
+    d->actionMasterPage = new QAction(i18n("Master Page..."), this);
     actionCollection()->addAction("format_masterpage", d->actionMasterPage);
     connect(d->actionMasterPage, SIGNAL(triggered()), this, SLOT(formatMasterPage()));
 
-    d->actionPageLayout = new KAction( i18n( "Page Layout..." ), this );
+    d->actionPageLayout = new QAction( i18n( "Page Layout..." ), this );
     actionCollection()->addAction( "format_pagelayout", d->actionPageLayout );
     connect( d->actionPageLayout, SIGNAL( triggered() ), this, SLOT( formatPageLayout() ) );
 
@@ -425,11 +425,11 @@ void KoPAView::initActions()
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
-    KAction * am = new KAction(i18n("Import Document..."), this);
+    QAction * am = new QAction(i18n("Import Document..."), this);
     actionCollection()->addAction("import_document", am);
     connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    d->actionConfigure = new KAction(koIcon("configure"), i18n("Configure..."), this);
+    d->actionConfigure = new QAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
     // not sure why this isn't done through KStandardAction, but since it isn't
@@ -493,14 +493,14 @@ KoCutController* KoPAView::cutController() const
     return d->cutController;
 }
 
-KAction* KoPAView::deleteSelectionAction() const
+QAction * KoPAView::deleteSelectionAction() const
 {
     return d->deleteSelectionAction;
 }
 
 void KoPAView::importDocument()
 {
-    KFileDialog *dialog = new KFileDialog( KUrl("kfiledialog:///OpenDialog"),QString(), this );
+    KFileDialog *dialog = new KFileDialog( QUrl("kfiledialog:///OpenDialog"),QString(), this );
     dialog->setObjectName( "file dialog" );
     dialog->setMode( KFile::File );
     if ( d->doc->pageType() == KoPageApp::Slide ) {
@@ -519,7 +519,7 @@ void KoPAView::importDocument()
 
     dialog->setMimeFilter( mimeFilter );
     if (dialog->exec() == QDialog::Accepted) {
-        KUrl url(dialog->selectedUrl());
+        QUrl url(dialog->selectedUrl());
         QString tmpFile;
         if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
             QFile file( tmpFile );
@@ -532,11 +532,11 @@ void KoPAView::importDocument()
             data.setData( KoOdf::mimeType( d->doc->documentType() ), ba);
             KoPAPastePage paste( d->doc,d->activePage );
             if ( ! paste.paste( d->doc->documentType(), &data ) ) {
-                KMessageBox::error(0, i18n("Could not import\n%1", url.pathOrUrl()));
+                KMessageBox::error(0, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
             }
         }
         else {
-            KMessageBox::error(0, i18n("Could not import\n%1", url.pathOrUrl()));
+            KMessageBox::error(0, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
         }
     }
     delete dialog;
@@ -912,7 +912,7 @@ void KoPAView::insertPage()
         page = masterPage;
     }
     else {
-        KoPAPage * activePage = dynamic_cast<KoPAPage*>( d->activePage );
+        KoPAPage * activePage = static_cast<KoPAPage*>( d->activePage );
         KoPAMasterPage * masterPage = activePage->masterPage();
         page = d->doc->newPage( masterPage );
     }
@@ -982,7 +982,7 @@ QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)
     return d->doc->pageThumbnail(page, size);
 }
 
-bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size,
+bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const QSize& size,
                                     const char * format, int quality )
 {
     bool res = false;
@@ -998,12 +998,12 @@ bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const 
             pix = pix.copy( 0, 0, size.width(), size.height() );
         }
         // save the pixmap to the desired file
-        KUrl fileUrl( url );
-        if ( fileUrl.protocol().isEmpty() ) {
-            fileUrl.setProtocol( "file" );
+        QUrl fileUrl( url );
+        if ( fileUrl.scheme().isEmpty() ) {
+            fileUrl.setScheme( "file" );
         }
         const bool bLocalFile = fileUrl.isLocalFile();
-        KTemporaryFile* tmpFile = bLocalFile ? 0 : new KTemporaryFile();
+        QTemporaryFile* tmpFile = bLocalFile ? 0 : new QTemporaryFile();
         if( bLocalFile || tmpFile->open() ) {
             QFile file( bLocalFile ? fileUrl.path() : tmpFile->fileName() );
             if ( file.open( QIODevice::ReadWrite ) ) {
@@ -1285,6 +1285,3 @@ void KoPAView::updateUnit(const KoUnit &unit)
     d->verticalRuler->setUnit(unit);
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
-
-#include <KoPAView.moc>
-

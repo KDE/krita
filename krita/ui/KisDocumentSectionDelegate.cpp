@@ -37,7 +37,7 @@
 #include <QStyle>
 #include <QStyleOptionViewItem>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KisDocumentSectionDelegate::Private
 {

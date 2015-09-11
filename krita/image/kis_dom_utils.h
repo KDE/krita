@@ -24,7 +24,7 @@
 #include <QVector>
 #include <QDomElement>
 #include <QLocale>
-#include "klocale.h"
+#include "klocalizedstring.h"
 #include "kritaimage_export.h"
 #include "kis_debug.h"
 
@@ -56,7 +56,7 @@ namespace KisDomUtils {
             }
 
             if (!ok) {
-                qWarning() << "WARNING: KisDomUtils::stringToInt failed:" << ppVar(str);
+                warnKrita << "WARNING: KisDomUtils::stringToInt failed:" << ppVar(str);
                 value = 0;
             }
 
@@ -85,7 +85,7 @@ namespace KisDomUtils {
             }
 
             if (!ok) {
-                qWarning() << "WARNING: KisDomUtils::stringToDouble failed:" << ppVar(str);
+                warnKrita << "WARNING: KisDomUtils::stringToDouble failed:" << ppVar(str);
                 value = 0;
             }
 

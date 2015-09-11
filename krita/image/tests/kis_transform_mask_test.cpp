@@ -32,6 +32,7 @@
 #include "kis_safe_transform.h"
 #include "kis_clone_layer.h"
 #include "kis_group_layer.h"
+#include "kis_paint_device_debug_utils.h"
 
 
 
@@ -94,11 +95,11 @@ void KisTransformMaskTest::testSafeTransform()
     gc.setBrush(Qt::green);
     gc.drawPolygon(t2.dstClipPolygon());
 
-    qDebug() << ppVar(testRect);
-    qDebug() << ppVar(fwdPoly);
-    qDebug() << ppVar(fwdRect);
-    qDebug() << ppVar(bwdPoly);
-    qDebug() << ppVar(bwdRect);
+    dbgKrita << ppVar(testRect);
+    dbgKrita << ppVar(fwdPoly);
+    dbgKrita << ppVar(fwdRect);
+    dbgKrita << ppVar(bwdPoly);
+    dbgKrita << ppVar(bwdRect);
 
     gc.setBrush(Qt::yellow);
     gc.drawPolygon(testRect);
@@ -165,12 +166,12 @@ void KisTransformMaskTest::testSafeTransformSingleVanishingPoint()
     QRectF bwdNastyRect = t2.mapRectBackward(fwdNastyRect);
 
 /*
-    qDebug() << ppVar(testRect);
-    qDebug() << ppVar(fwdPoly);
-    qDebug() << ppVar(fwdRect);
-    qDebug() << ppVar(bwdPoly);
-    qDebug() << ppVar(bwdRect);
-    qDebug() << ppVar(bwdNastyRect);
+    dbgKrita << ppVar(testRect);
+    dbgKrita << ppVar(fwdPoly);
+    dbgKrita << ppVar(fwdRect);
+    dbgKrita << ppVar(bwdPoly);
+    dbgKrita << ppVar(bwdRect);
+    dbgKrita << ppVar(bwdNastyRect);
 */
 
     QPolygon ref;

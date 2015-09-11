@@ -40,7 +40,7 @@
 #include <kundo2command.h>
 
 #include <kis_debug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -74,7 +74,7 @@
 
 #endif
 
-struct KisPainter::Private {
+struct Q_DECL_HIDDEN KisPainter::Private {
     Private(KisPainter *_q) : q(_q) {}
 
     KisPainter *q;
@@ -2583,7 +2583,7 @@ void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisNodeSP node, Kis
         d->paintOp = paintop;
     }
     else {
-        qWarning() << "Could not create paintop for preset " << preset->name();
+        warnKrita << "Could not create paintop for preset " << preset->name();
     }
 }
 

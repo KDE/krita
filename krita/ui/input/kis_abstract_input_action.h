@@ -20,6 +20,7 @@
 #define KIS_ABSTRACT_INPUT_ACTION_H
 
 #include <QHash>
+#include <QPoint>
 #include "kritaui_export.h"
 
 class QPointF;
@@ -47,9 +48,6 @@ class KisInputManager;
  *    will be of QMouseEvent type, representing the event happened.
  *    All the mouse move events between begin() and end() will be
  *    redirected to the inputEvent() method.
- *
- *    You can fetch the QTabletEvent data for the current mouse event
- *    with inputManager()->lastTabletEvent().
  */
 class KRITAUI_EXPORT KisAbstractInputAction
 {
@@ -101,7 +99,7 @@ public:
      * Process an input event.
      *
      * By default handles MouseMove events and passes the data to
-     * a convenience mouseMoved() method
+     * a convenience cursorMoved() method
      *
      * \param event An event to process.
      */
@@ -186,10 +184,25 @@ protected:
     void setShortcutIndexes(const QHash<QString, int> &indexes);
 
     /**
-     * Convenience method for handling the mouse moves. It is
-     * called by the default implementation of inputEvent
+     * Convenience method for handling cursor movement for tablet, mouse and touch.
+     * The default implementation of inputEvent calls this function.
      */
-    virtual void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    virtual void cursorMoved(const QPointF &lastPos, const QPointF &pos);
+
+    /**
+     * Convenience method to extract the position from a cursor movement event.
+     *
+     * \param event A mouse or tablet event.
+     */
+    static QPoint eventPos(const QEvent *event);
+
+    /**
+     * Convenience method to extract the floating point position from a
+     * cursor movement event.
+     *
+     * \param event A mouse or tablet event.
+     */
+    static QPointF eventPosF(const QEvent *event);
 
 private:
     friend class KisInputManager;

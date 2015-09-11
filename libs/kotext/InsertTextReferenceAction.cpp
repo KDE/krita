@@ -24,7 +24,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <QVBoxLayout>

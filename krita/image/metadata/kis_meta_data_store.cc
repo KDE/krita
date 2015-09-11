@@ -35,7 +35,7 @@ uint qHash(const Entry& e)
     return qHash(e.qualifiedName());
 }
 
-struct Store::Private {
+struct Q_DECL_HIDDEN Store::Private {
     QHash<QString, Entry> entries;
 };
 

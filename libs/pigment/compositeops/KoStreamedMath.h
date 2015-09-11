@@ -25,7 +25,9 @@
 
 #include <stdint.h>
 #include <KoAlwaysInline.h>
+#include <iostream>
 
+#define BLOCKDEBUG 0
 
 #pragma GCC diagnostic ignored "-Wcast-align"
 
@@ -35,13 +37,13 @@ struct KoStreamedMath {
 /**
  * Composes src into dst without using vector instructions
  */
-template<bool useMask, bool useFlow, class Compositor>
-    static void genericComposite32_novector(const KoCompositeOp::ParameterInfo& params)
+template<bool useMask, bool useFlow, class Compositor, int pixelSize>
+    static void genericComposite_novector(const KoCompositeOp::ParameterInfo& params)
 {
     using namespace Arithmetic;
 
-    const qint32 linearInc = 4;
-    qint32 srcLinearInc = params.srcRowStride ? 4 : 0;
+    const qint32 linearInc = pixelSize;
+    qint32 srcLinearInc = params.srcRowStride ? pixelSize : 0;
 
     quint8*       dstRowStart  = params.dstRowStart;
     const quint8* maskRowStart = params.maskRowStart;
@@ -72,6 +74,18 @@ template<bool useMask, bool useFlow, class Compositor>
             maskRowStart += params.maskRowStride;
         }
     }
+}
+
+template<bool useMask, bool useFlow, class Compositor>
+    static void genericComposite32_novector(const KoCompositeOp::ParameterInfo& params)
+{
+    genericComposite_novector<useMask, useFlow, Compositor, 4>(params);
+}
+
+template<bool useMask, bool useFlow, class Compositor>
+    static void genericComposite128_novector(const KoCompositeOp::ParameterInfo& params)
+{
+    genericComposite_novector<useMask, useFlow, Compositor, 16>(params);
 }
 
 static inline quint8 round_float_to_uint(float value) {
@@ -148,6 +162,48 @@ static inline void fetch_colors_32(const quint8 *data,
 }
 
 /**
+ *
+ */
+template <bool aligned>
+static inline void fetch_all_32(const quint8 *data,
+                            Vc::float_v &alpha,
+                            Vc::float_v &c1,
+                            Vc::float_v &c2,
+                            Vc::float_v &c3) {
+    Vc::uint_v data_i;
+    if (aligned) {
+        data_i.load((const quint32*)data, Vc::Aligned);
+    } else {
+        data_i.load((const quint32*)data, Vc::Unaligned);
+    }
+
+    const quint32 lowByteMask = 0xFF;
+    Vc::uint_v mask(lowByteMask);
+
+    alpha = Vc::float_v(Vc::int_v(data_i >> 24));
+    c1 = Vc::float_v(Vc::int_v((data_i >> 16) & mask));
+    c2 = Vc::float_v(Vc::int_v((data_i >> 8)  & mask));
+    c3 = Vc::float_v(Vc::int_v( data_i        & mask));
+}
+
+template <bool aligned>
+static inline void fetch_8_offset(const quint8 *data,
+                                  Vc::float_v &value,
+                                  const quint32 offset) {
+    Vc::uint_v data_i;
+    if (aligned) {
+        data_i.load((const quint32*)data, Vc::Aligned);
+    } else {
+        data_i.load((const quint32*)data, Vc::Unaligned);
+    }
+
+    const quint32 lowByteMask = 0xFF;
+    Vc::uint_v mask(lowByteMask);
+
+    value = Vc::float_v(Vc::int_v((data_i >> offset) & mask));
+}
+
+/**
  * Pack color and alpha values to Vc::float_v::Size pixels 32-bit each
  * (4 channels, 8 bit per channel).  The color data is considered
  * to be stored in the 3 least significant bytes of the pixel, alpha -
@@ -186,16 +242,16 @@ static inline void write_channels_32(quint8 *data,
  * colorspaces. Uses \p Compositor strategy parameter for doing actual
  * math of the composition
  */
-template<bool useMask, bool useFlow, class Compositor>
-    static void genericComposite32(const KoCompositeOp::ParameterInfo& params)
+template<bool useMask, bool useFlow, class Compositor, int pixelSize>
+    static void genericComposite(const KoCompositeOp::ParameterInfo& params)
 {
     using namespace Arithmetic;
 
     const int vectorSize = Vc::float_v::Size;
-    const qint32 vectorInc = 4 * vectorSize;
-    const qint32 linearInc = 4;
+    const qint32 vectorInc = pixelSize * vectorSize;
+    const qint32 linearInc = pixelSize;
     qint32 srcVectorInc = vectorInc;
-    qint32 srcLinearInc = 4;
+    qint32 srcLinearInc = pixelSize;
 
     quint8*       dstRowStart  = params.dstRowStart;
     const quint8* maskRowStart = params.maskRowStart;
@@ -209,6 +265,12 @@ template<bool useMask, bool useFlow, class Compositor>
         srcLinearInc = 0;
         srcVectorInc = 0;
     }
+#if BLOCKDEBUG
+    int totalBlockAlign = 0;
+    int totalBlockAlignedVector = 0;
+    int totalBlockUnalignedVector = 0;
+    int totalBlockRest = 0;
+#endif
 
     for(quint32 r=params.rows; r>0; --r) {
         // Hint: Mask is allowed to be unaligned
@@ -243,9 +305,22 @@ template<bool useMask, bool useFlow, class Compositor>
         } else if (params.cols > 2 * vectorSize) {
             blockAlign = (vectorInc - dstAlignment) / 4;
             const int restCols = params.cols - blockAlign;
-            *vectorBlock = restCols / vectorSize;
-            blockRest = restCols % vectorSize;
+            if (restCols > 0) {
+                *vectorBlock = restCols / vectorSize;
+                blockRest = restCols % vectorSize;
+            }
+            else {
+                blockAlign = params.cols;
+                *vectorBlock = 0;
+                blockRest = 0;
+            }
         }
+#if BLOCKDEBUG
+        totalBlockAlign += blockAlign;
+        totalBlockAlignedVector += blockAlignedVector;
+        totalBlockUnalignedVector += blockUnalignedVector;
+        totalBlockRest += blockRest;
+#endif
 
         for(int i = 0; i < blockAlign; i++) {
             Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
@@ -296,10 +371,74 @@ template<bool useMask, bool useFlow, class Compositor>
         }
     }
 
+#if BLOCKDEBUG
+    qDebug() << "I" << params.rows << totalBlockAlign << totalBlockAlignedVector << totalBlockUnalignedVector << totalBlockRest; // << srcAlignment << dstAlignment;
+#endif
+
     if (!params.srcRowStride) {
         Vc::free<float>(reinterpret_cast<float*>(const_cast<quint8*>(srcRowStart)));
     }
 }
+
+template<bool useMask, bool useFlow, class Compositor>
+    static void genericComposite32(const KoCompositeOp::ParameterInfo& params)
+{
+    genericComposite<useMask, useFlow, Compositor, 4>(params);
+}
+
+template<bool useMask, bool useFlow, class Compositor>
+    static void genericComposite128(const KoCompositeOp::ParameterInfo& params)
+{
+    genericComposite<useMask, useFlow, Compositor, 16>(params);
+}
+
 };
+
+namespace KoStreamedMathFunctions {
+
+template<int pixelSize>
+ALWAYS_INLINE void clearPixel(quint8* dst)
+{
+    qFatal("Not implemented");
+}
+
+template<>
+ALWAYS_INLINE void clearPixel<4>(quint8* dst)
+{
+    quint32 *d = reinterpret_cast<quint32*>(dst);
+    *d = 0;
+}
+
+template<>
+ALWAYS_INLINE void clearPixel<16>(quint8* dst)
+{
+    quint64 *d = reinterpret_cast<quint64*>(dst);
+    d[0] = 0;
+    d[1] = 0;
+}
+
+template<int pixelSize>
+ALWAYS_INLINE void copyPixel(const quint8 *src, quint8* dst)
+{
+    qFatal("Not implemented");
+}
+
+template<>
+ALWAYS_INLINE void copyPixel<4>(const quint8 *src, quint8* dst)
+{
+    const quint32 *s = reinterpret_cast<const quint32*>(src);
+    quint32 *d = reinterpret_cast<quint32*>(dst);
+    *d = *s;
+}
+
+template<>
+ALWAYS_INLINE void copyPixel<16>(const quint8 *src, quint8* dst)
+{
+    const quint64 *s = reinterpret_cast<const quint64*>(src);
+    quint64 *d = reinterpret_cast<quint64*>(dst);
+    d[0] = s[0];
+    d[1] = s[1];
+}
+}
 
 #endif /* __KOSTREAMED_MATH_H */

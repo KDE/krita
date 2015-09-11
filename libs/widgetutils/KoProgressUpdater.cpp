@@ -232,5 +232,3 @@ void KoProgressUpdater::Private::logEvents(QTextStream& out,
         }
     }
 }
-
-#include <KoProgressUpdater.moc>

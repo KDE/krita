@@ -53,7 +53,7 @@ void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
             memcpy(it.rawData(), bytes, colorSpace->pixelSize());
         } while (it.nextPixel());
 
-        qDebug() << "SequentialIterator run " << i  << "took" << t.elapsed();
+        dbgKrita << "SequentialIterator run " << i  << "took" << t.elapsed();
         t.restart();
     }
 
@@ -65,7 +65,7 @@ void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
             //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
         } while (it.nextPixel());
 
-        qDebug() << "SequentialConstIterator run " << i  << "took" << t.elapsed();
+        dbgKrita << "SequentialConstIterator run " << i  << "took" << t.elapsed();
         t.restart();
     }
 
@@ -93,7 +93,7 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
             it->nextRow();
         }
 
-        qDebug() << "HLineIteratorNG run " << i  << "took" << t.elapsed();
+        dbgKrita << "HLineIteratorNG run " << i  << "took" << t.elapsed();
         t.restart();
     }
 
@@ -108,7 +108,7 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
             it->nextRow();
         }
 
-        qDebug() << "HLineIteratorNG with nConseqHPixels run " << i  << "took" << t.elapsed();
+        dbgKrita << "HLineIteratorNG with nConseqHPixels run " << i  << "took" << t.elapsed();
         t.restart();
     }
 
@@ -120,7 +120,7 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
         cit->nextRow();
     }
 
-    qDebug() << "const HLineIteratorNG took" << t.elapsed();
+    dbgKrita << "const HLineIteratorNG took" << t.elapsed();
 
     delete[] bytes;
 }
@@ -144,7 +144,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
             it->nextColumn();
         }
 
-        qDebug() << "VLineIteratorNG run " << i  << " took" << t.elapsed();
+        dbgKrita << "VLineIteratorNG run " << i  << " took" << t.elapsed();
         t.restart();
     }
 
@@ -153,7 +153,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
         do {} while(cit->nextPixel());
         cit->nextColumn();
     }
-    qDebug() << "const VLineIteratorNG took" << t.elapsed();
+    dbgKrita << "const VLineIteratorNG took" << t.elapsed();
 
     delete[] bytes;
 
@@ -178,7 +178,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
             }
         }
 
-        qDebug() << "RandomIterator run " << i  << " took" << t.elapsed();
+        dbgKrita << "RandomIterator run " << i  << " took" << t.elapsed();
         t.restart();
     }
 
@@ -205,7 +205,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
             y += numContiguousRows;
         }
 
-        qDebug() << "RandomIterator run (with strides)" << i  << " took" << t.elapsed();
+        dbgKrita << "RandomIterator run (with strides)" << i  << " took" << t.elapsed();
         t.restart();
     }
 
@@ -216,7 +216,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
         }
     }
 
-    qDebug() << "const RandomIterator took" << t.elapsed();
+    dbgKrita << "const RandomIterator took" << t.elapsed();
 
     delete[] bytes;
 }

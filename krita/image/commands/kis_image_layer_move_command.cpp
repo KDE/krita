@@ -21,7 +21,7 @@
 #include <QString>
 #include <QBitArray>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoColor.h"
 #include "KoColorProfile.h"

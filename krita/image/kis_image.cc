@@ -32,7 +32,7 @@
 #include <QRegion>
 #include <QtConcurrent>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
@@ -1047,7 +1047,7 @@ void filterMergableNodes(QList<KisNodeSP> &nodes)
         if (!dynamic_cast<KisLayer*>(it->data()) ||
             checkIsChildOf(*it, nodes)) {
 
-            qDebug() << "Skipping node" << ppVar((*it)->name());
+            dbgKrita << "Skipping node" << ppVar((*it)->name());
             it = nodes.erase(it);
         } else {
             ++it;

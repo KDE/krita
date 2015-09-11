@@ -2,6 +2,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_video\")
 
 include_directories(
     ${FLAKE_INCLUDES}
+    ${KOWIDGETS_INCLUDES}
     ${PHONON_INCLUDES}
 )
 
@@ -38,7 +39,7 @@ ki18n_wrap_ui(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 add_library(calligra_shape_video MODULE ${videoshape_LIB_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_video calligra_shape_video.desktop)
 
-target_link_libraries(calligra_shape_video flake
+target_link_libraries(calligra_shape_video flake kowidgets
     ${PHONON_LIBS}
 )
 

@@ -121,7 +121,7 @@ void KisGmicTests::testColorizeFilter()
     KisGmicFilterSetting filterSettings;
     if (cmd == 0)
     {
-            qDebug() << "Filter not found!";
+            dbgKrita << "Filter not found!";
     }else
     {
         cmd->setParameter("Input layers", "Lineart + color spots");
@@ -180,13 +180,13 @@ void KisGmicTests::testBlacklisterSearchByParamName()
         const QString& expectedFilterName = paramFilters.at(i).second;
         if (beVerbose)
         {
-            qDebug() << "Searching for filter by parameter name :" << paramName;
+            dbgKrita << "Searching for filter by parameter name :" << paramName;
         }
 
         QList<Command *> filters = KisGmicBlacklister::findFilterByParamName(m_root, paramName, "file");
         if (filters.size() == 0)
         {
-            qDebug() << "Can't find filter by param name: " << paramName;
+            dbgKrita << "Can't find filter by param name: " << paramName;
         }
         QCOMPARE(filters.size(), 1);
 
@@ -194,7 +194,7 @@ void KisGmicTests::testBlacklisterSearchByParamName()
         QCOMPARE(c->name(), expectedFilterName);
         if (beVerbose)
         {
-            qDebug() << "FilterName: << \"" + c->name() + "\" << \"" + KisGmicBlacklister::toPlainText(c->parent()->name()) + "\"" << " passed!";
+            dbgKrita << "FilterName: << \"" + c->name() + "\" << \"" + KisGmicBlacklister::toPlainText(c->parent()->name()) + "\"" << " passed!";
         }
     }
 }
@@ -288,7 +288,7 @@ void KisGmicTests::testAllFilters()
         {
             Command * cmd = static_cast<Command *>(c);
             cmd->writeConfiguration(&filterSettings);
-            //qDebug() << "Filter: " << c->name() << filterSettings.gmicCommand();
+            //dbgKrita << "Filter: " << c->name() << filterSettings.gmicCommand();
             if (!filterSettings.gmicCommand().startsWith("-_none_"))
             {
                 filterCount++;
@@ -299,20 +299,20 @@ void KisGmicTests::testAllFilters()
 
                 if (isAlreadyThere( filePathify( filterName ) ))
                 {
-                    qDebug() << "Already works, skipping filter" << filterName;
+                    dbgKrita << "Already works, skipping filter" << filterName;
                     success++;
                 }
                 else if (m_blacklister->isBlacklisted(filterName, categoryName))
                 {
-                    qDebug() << "Blacklisted filter, increase fails" << filterName;
+                    dbgKrita << "Blacklisted filter, increase fails" << filterName;
                     failed++;
                     failedFilters.append(categoryName+":"+filterName);
                 }
                 else
                 {
-                    qDebug() << "Filtering with:";
-                    qDebug() << QString("<category name=\"%0\">").arg(categoryName);
-                    qDebug() << QString("<filter name=\"%0\" />").arg(filterName);
+                    dbgKrita << "Filtering with:";
+                    dbgKrita << QString("<category name=\"%0\">").arg(categoryName);
+                    dbgKrita << QString("<filter name=\"%0\" />").arg(filterName);
 
                     // clear previous data?
                     m_images.assign(1);
@@ -320,7 +320,7 @@ void KisGmicTests::testAllFilters()
                     m_images._data[0] = m_gmicImage;
                     bool result = filterWithGmic(&filterSettings, filterName, m_images);
                     result ? success++ : failed++;
-                    qDebug() << "Progress status:" << "Failed:" << failed << " Success: " << success;
+                    dbgKrita << "Progress status:" << "Failed:" << failed << " Success: " << success;
                     if (result == false)
                     {
                         failedFilters.append(categoryName+":"+filterName);
@@ -339,11 +339,11 @@ void KisGmicTests::testAllFilters()
     }
 
 #ifdef RUN_FILTERS
-    qDebug() << "Finish status:" << "Failed:" << failed << " Success: " << success;
-    qDebug() << "== Failed filters ==";
+    dbgKrita << "Finish status:" << "Failed:" << failed << " Success: " << success;
+    dbgKrita << "== Failed filters ==";
     foreach (const QString &item, failedFilters)
     {
-        qDebug() << item;
+        dbgKrita << item;
     }
 
 
@@ -357,7 +357,7 @@ void KisGmicTests::testAllFilters()
 bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const QString &filterName, gmic_list<float> &images)
 {
     QString fileName = filePathify(filterName);
-    qDebug() << "Filename for filter " << filterName << " : " << fileName;
+    dbgKrita << "Filename for filter " << filterName << " : " << fileName;
     // Second step : Call G'MIC API to process input images.
     //------------------------------------------------------
     std::fprintf(stderr,"\n- 2st step : Call G'MIC interpreter.\n");
@@ -413,11 +413,11 @@ bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const
         bool isSaved = result.save(fullFileName);
         if (!isSaved)
         {
-            qDebug() << "Saving " << fileName  << "failed";
+            dbgKrita << "Saving " << fileName  << "failed";
             return false;
         }else
         {
-            qDebug() << "Saved " << fullFileName << " -- OK";
+            dbgKrita << "Saved " << fullFileName << " -- OK";
         }
     }
 
@@ -606,7 +606,7 @@ void KisGmicTests::testFilterOnlySelection()
     KisGmicFilterSetting filterSettings;
     if (gmicCmd == 0)
     {
-            qDebug() << "Filter not found!";
+            dbgKrita << "Filter not found!";
     }
     else
     {
@@ -690,8 +690,8 @@ void KisGmicTests::testCompareToKrita()
     QFileInfo info(filePath);
     if (!info.exists())
     {
-        qWarning() << "Reference xml file for the krita parser does not exist, creating one!";
-        qWarning() << "Creating it at " << filePath;
+        warnKrita << "Reference xml file for the krita parser does not exist, creating one!";
+        warnKrita << "Creating it at " << filePath;
         generateXmlDump(filePath);
     }
 
@@ -749,7 +749,7 @@ void KisGmicTests::testCompareToKrita()
                     }
                     else
                     {
-                            qWarning() << "Unexpected element #20151819 " << iter.tagName();
+                            warnKrita << "Unexpected element #20151819 " << iter.tagName();
                     }
                     iter = iter.parentNode().toElement();
                 }
@@ -791,9 +791,9 @@ void KisGmicTests::testCompareToKrita()
 
             if (filterSettings.gmicCommand() != gmicCommand)
             {
-                qDebug() << "Filter  : " <<  pathToString(path);
-                qDebug() << "  Actual: " << filterSettings.gmicCommand();
-                qDebug() << "Expected: " << gmicCommand;
+                dbgKrita << "Filter  : " <<  pathToString(path);
+                dbgKrita << "  Actual: " << filterSettings.gmicCommand();
+                dbgKrita << "Expected: " << gmicCommand;
             }
             else
             {
@@ -805,7 +805,7 @@ void KisGmicTests::testCompareToKrita()
     int count = filterDescriptions.size();
     if (success != count)
     {
-        qDebug() << "Number of failed filters: " << count - success;
+        dbgKrita << "Number of failed filters: " << count - success;
     }
 
     QCOMPARE(success, count);
@@ -866,7 +866,7 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
             commands = KisGmicBlacklister::filtersByName(m_root, fd.filterName);
             if (commands.size() == 0)
             {
-                qWarning() << "Can't find "<< "filterName: " << fd.filterName;
+                warnKrita << "Can't find "<< "filterName: " << fd.filterName;
                 continue;
             }
 
@@ -874,10 +874,10 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
             if (commands.size() > 1)
             {
 
-                qDebug() << "Multiple entries found:";
+                dbgKrita << "Multiple entries found:";
                 foreach (Command * c, commands)
                 {
-                    qDebug() << "filter: " << c->name() << "category: " << c->parent()->name();
+                    dbgKrita << "filter: " << c->name() << "category: " << c->parent()->name();
                 }
             }
             #endif
@@ -887,7 +887,7 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
             Command * c = KisGmicBlacklister::findFilter(m_root, fd.category, fd.filterName);
             if (c == 0)
             {
-                qWarning() << "Can't find "<< "filterName: " << fd.filterName << "category: " << fd.category;
+                warnKrita << "Can't find "<< "filterName: " << fd.filterName << "category: " << fd.category;
                 continue;
             }else
             {
@@ -929,17 +929,17 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
             }
             else
             {
-                qDebug() << "Filter " << fd.category << " / " << fd.filterName << " does not match any  of " << commands.size() << " filter definitions!";
-                qDebug() << "Expected: " << fd.gmicCommand;
+                dbgKrita << "Filter " << fd.category << " / " << fd.filterName << " does not match any  of " << commands.size() << " filter definitions!";
+                dbgKrita << "Expected: " << fd.gmicCommand;
                 if (commands.size() == 1)
                 {
-                    qDebug() << "  Actual: " << lastGmicCommand;
+                    dbgKrita << "  Actual: " << lastGmicCommand;
                 }
                 else
                 {
-                    qDebug() << "=== BEGIN ==";
-                    qDebug() << errors;
-                    qDebug() << "===  END  ===";
+                    dbgKrita << "=== BEGIN ==";
+                    dbgKrita << errors;
+                    dbgKrita << "===  END  ===";
                 }
             }
 
@@ -948,9 +948,9 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
 
     if (success != count)
     {
-        qDebug() << "=== Stats ===";
-        qDebug() << "Number of failed filters (with expected failures): " << count - success;
-        qDebug() << "Number of expected failures:" << expectedFail;
+        dbgKrita << "=== Stats ===";
+        dbgKrita << "Number of failed filters (with expected failures): " << count - success;
+        dbgKrita << "Number of expected failures:" << expectedFail;
     }
 
     int realSuccess = success + expectedFail;

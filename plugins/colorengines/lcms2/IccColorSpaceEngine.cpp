@@ -22,11 +22,11 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "LcmsColorSpace.h"
 
-#include "QDebug"
+#include <kdebug.h>
 
 // -- KoLcmsColorConversionTransformation --
 

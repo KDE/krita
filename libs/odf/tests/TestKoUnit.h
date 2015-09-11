@@ -22,7 +22,7 @@
 #define TESTKOUNIT_H
 
 // Qt
-#include <QtTest>
+#include <QObject>
 
 class TestKoUnit : public QObject
 {

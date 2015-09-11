@@ -22,9 +22,9 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpaceConstants.h>
 #include <KisFilterChain.h>
@@ -72,9 +72,9 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KDialog* kdb = new KDialog(0);
+    KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("JPEG 2000 Export Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     Ui::WdgOptionsJP2 optionsJP2;
 
@@ -108,7 +108,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     KisConfig().setExportConfiguration("JP2", cfg);
 
-    KUrl url;
+    QUrl url;
     url.setPath(filename);
 
     image->refreshGraph();

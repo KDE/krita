@@ -27,7 +27,7 @@
 #include <QPrinter>
 
 #include <kxmlguiwindow.h>
-#include <kurl.h>
+#include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -107,7 +107,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL(const KUrl& url);
+    void addRecentURL(const QUrl &url);
 
     /**
      * Load the desired document and show it.
@@ -115,7 +115,7 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const KUrl & url);
+    bool openDocument(const QUrl &url);
 
     void setReadWrite(bool readwrite);
 
@@ -173,14 +173,6 @@ Q_SIGNALS:
     void guiLoadingFinished();
 
 public Q_SLOTS:
-
-    /**
-     * Slot for eMailing the document using KMail
-     *
-     * This is a very simple extension that will allow any document
-     * that is currently being edited to be emailed using KMail.
-     */
-    void slotEmailFile();
 
     /**
      *  Slot for opening a new document.
@@ -404,7 +396,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const KUrl &url, KisDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KisDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -453,7 +445,7 @@ protected:
 
     void moveEvent(QMoveEvent *e);
 
-private slots:
+private Q_SLOTS:
     void initializeGeometry();
     void showManual();
 

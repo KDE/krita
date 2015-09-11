@@ -37,7 +37,7 @@
 #include <QTextStream>
 
 #include <DebugPigment.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 namespace
 {

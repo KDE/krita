@@ -19,7 +19,7 @@
 #include "kis_paintop_registry.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoGenericRegistry.h>
 #include <KoPluginLoader.h>
@@ -99,7 +99,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
             return op;
         }
     }
-    qWarning() << "Could not create paintop for factory" << id << "with settings" << settings;
+    warnKrita << "Could not create paintop for factory" << id << "with settings" << settings;
     return 0;
 }
 

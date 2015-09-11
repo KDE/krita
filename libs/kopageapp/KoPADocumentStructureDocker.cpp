@@ -46,7 +46,7 @@
 
 #include <kglobal.h>
 #include <kmenu.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
@@ -176,7 +176,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     connect(m_model, SIGNAL(requestPageSelection(int,int)), this, SLOT(selectPages(int,int)));
     connect(m_model, SIGNAL(modelReset()), this, SIGNAL(dockerReset()));
 
-    KConfigGroup configGroup = KGlobal::config()->group("KoPageApp/DocumentStructureDocker");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     QString viewModeString = configGroup.readEntry("ViewMode", "");
 
     if (viewModeString.isEmpty())
@@ -189,7 +189,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("KoPageApp/DocumentStructureDocker");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     configGroup.writeEntry("ViewMode", viewModeToString(m_sectionView->displayMode()));
 }
 
@@ -685,7 +685,7 @@ void KoPADocumentStructureDocker::editPaste()
     }
     else {
         // Paste Pages
-        KoPACanvas * canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
+        KoPACanvas * canvas = static_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
         canvas->koPAView()->pagePaste();
     }
 }
@@ -704,6 +704,5 @@ void KoPADocumentStructureDocker::selectPages(int start, int count)
         }
     }
 }
-#include <KoPADocumentStructureDocker.moc>
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

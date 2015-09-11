@@ -25,7 +25,7 @@
 #include <QFile>
 
 #include <kpluginfactory.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <KoColorSpaceRegistry.h>
 #include <KisFilterChain.h>
@@ -72,7 +72,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& 
         return KisImportExportFilter::FileNotFound;
     }
 
-    KUrl url(filename);
+    QUrl url(filename);
 
     if (url.isEmpty())
         return KisImportExportFilter::FileNotFound;

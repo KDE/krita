@@ -30,7 +30,7 @@
 #include <KoColor.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QWidgetAction>
@@ -71,7 +71,7 @@ public:
 };
 
 KoColorPopupAction::KoColorPopupAction(QObject *parent)
-    : KAction(parent),
+    : QAction(parent),
     d(new KoColorPopupActionPrivate())
 {
     d->menu = new QMenu();
@@ -244,5 +244,3 @@ void KoColorPopupAction::slotTriggered(bool)
         d->firstTime = false;
     }
 }
-
-#include <KoColorPopupAction.moc>

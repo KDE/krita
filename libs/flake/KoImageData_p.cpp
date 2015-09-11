@@ -23,7 +23,8 @@
 #include "KoImageData_p.h"
 #include "KoImageCollection.h"
 
-#include <ktemporaryfile.h>
+#include <QApplication>
+#include <QTemporaryFile>
 #include <QImageWriter>
 #include <QCryptographicHash>
 #include <QFileInfo>
@@ -111,8 +112,7 @@ void KoImageDataPrivate::setSuffix(const QString &name)
 void KoImageDataPrivate::copyToTemporary(QIODevice &device)
 {
     delete temporaryFile;
-    temporaryFile = new KTemporaryFile();
-    temporaryFile->setPrefix("KoImageData");
+    temporaryFile = new QTemporaryFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX"));
     if (!temporaryFile->open()) {
         kWarning(30006) << "open temporary file for writing failed";
         errorCode = KoImageData::StorageFailed;

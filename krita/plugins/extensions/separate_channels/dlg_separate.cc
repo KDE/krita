@@ -25,13 +25,13 @@
 #include <QLabel>
 #include <QComboBox>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,
                          QWidget *  parent,
                          const char * name)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_imageCS(imageCS)
         , m_layerCS(layerCS)
 {

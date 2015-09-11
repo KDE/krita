@@ -30,7 +30,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
 #include <KoTemplate.h>
@@ -169,11 +169,6 @@ void KoTemplateTree::readGroups()
 
 void KoTemplateTree::readTemplates()
 {
-//     QString dontShow = "imperial";
-// 
-//     if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
-//         dontShow = "metric";
-//     }
     QString dontShow = "hide nothing at all - show all the templates, please, and let the user make the choice";
 
     foreach (KoTemplateGroup* group, m_groups) {
@@ -288,7 +283,7 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     if (t->isHidden() && QFile::exists(fileName))
         return;
     QString fill;
-    while (KIO::NetAccess::exists(fileName, KIO::NetAccess::SourceSide, 0)) {
+    while (QFile(fileName).exists()) {
         fill += '_';
         fileName = path + fill + name + ".desktop";
     }

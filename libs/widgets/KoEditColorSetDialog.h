@@ -22,7 +22,7 @@
 
 #include <ui_KoEditColorSet.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "kowidgets_export.h"
 
@@ -72,7 +72,7 @@ private:
  * - Save changes to the file
  * @see KoColorSetWidget
  */
-class KOWIDGETS_EXPORT KoEditColorSetDialog : public KDialog
+class KOWIDGETS_EXPORT KoEditColorSetDialog : public KoDialog
 {
     Q_OBJECT
 

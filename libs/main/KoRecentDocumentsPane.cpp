@@ -23,10 +23,9 @@
 #include <QFile>
 #include <QStandardItemModel>
 
-#include <kdeversion.h>
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 
@@ -99,7 +98,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
         if (!path.isEmpty()) {
             QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
 
-            KUrl url(path);
+            QUrl url(path);
 
             if (name.isEmpty())
                 name = url.fileName();
@@ -107,7 +106,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
                 KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
                 fileList.prepend(fileItem);
-                const QIcon icon = KIcon(fileItem.iconName());
+                const QIcon icon = QIcon::fromTheme(fileItem.iconName());
                 KoFileListItem* item = new KoFileListItem(icon, name, fileItem);
                 item->setEditable(false);
                 rootItem->insertRow(0, item);
@@ -123,12 +122,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-#if KDE_IS_VERSION(4,6,80)
     QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
     KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
-#else
-    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, IconExtent, IconExtent, 0);
-#endif
 
     d->m_previewJobs.append(previewJob);
     connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
@@ -154,12 +149,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         if (preview.isNull()) {
             // need to fetch preview
             const KFileItemList fileList = KFileItemList() << fileItem;
-#if KDE_IS_VERSION(4,6,80)
             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
-#else
-            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, PreviewExtent, PreviewExtent, 0);
-#endif
 
             d->m_previewJobs.append(previewJob);
             connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
@@ -265,5 +256,3 @@ void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap&
         }
     }
 }
-
-#include <KoRecentDocumentsPane.moc>

@@ -21,7 +21,7 @@
 #include "KoApplicationAdaptor.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
 #include "KoApplication.h"
@@ -95,5 +95,3 @@ QStringList KoApplicationAdaptor::getWindows()
     }
     return lst;
 }
-
-#include <KoApplicationAdaptor.moc>

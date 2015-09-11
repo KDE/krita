@@ -20,12 +20,13 @@
 #include <KoXmlWriter.h>
 
 #include <QString>
-#include <qtest_kde.h>
+#include <QBuffer>
+#include <QTest>
 
 class TestXmlWriter : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testDocytype();
     void testEmtpyElement();
     void testAttributes();
@@ -248,6 +249,6 @@ void TestXmlWriter::speedTest()
     // TODO we might want to convert this into a QBenchmark test
 }
 
-QTEST_MAIN(TestXmlWriter)
+QTEST_GUILESS_MAIN(TestXmlWriter)
 #include <TestXmlWriter.moc>
 

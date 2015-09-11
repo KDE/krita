@@ -77,7 +77,7 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
     foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilters << "image/" + format;
+        imageFilters << QString("image/") + format;
     }
     m_fileWidget->setMimeFilter(imageFilters);
     //m_fileWidget->setFilter("image/png image/jpeg image/gif");

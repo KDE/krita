@@ -18,7 +18,7 @@
 
 #include "dlg_clonesarray.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpaceConstants.h>
 
@@ -33,7 +33,7 @@
 
 
 DlgClonesArray::DlgClonesArray(KisViewManager *view, QWidget *parent)
-    :   KDialog(parent),
+    :   KoDialog(parent),
         m_view(view),
         m_applicator(0),
         m_baseLayer(m_view->activeLayer())

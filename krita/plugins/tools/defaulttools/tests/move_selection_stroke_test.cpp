@@ -30,6 +30,7 @@
 #include "kis_paint_layer.h"
 #include "kis_image_barrier_locker.h"
 #include "kis_paint_device_frames_interface.h"
+#include "kis_paint_device_debug_utils.h"
 
 
 KisPaintDeviceSP lodDevice(KisPaintDeviceSP dev)

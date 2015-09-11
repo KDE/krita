@@ -21,7 +21,7 @@
 
 #include "KoColorTransformationFactory.h"
 
-struct KoColorTransformationFactoryRegistry::Private {
+struct Q_DECL_HIDDEN KoColorTransformationFactoryRegistry::Private {
     static KoColorTransformationFactoryRegistry* s_registry;
 };
 

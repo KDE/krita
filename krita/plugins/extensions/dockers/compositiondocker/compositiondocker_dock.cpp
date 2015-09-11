@@ -28,10 +28,10 @@
 #include <QDesktopServices>
 #include <QMenu>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCanvasBase.h>
 #include <KoFileDialog.h>
 
@@ -55,9 +55,9 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
     compositionView->installEventFilter(this);
-    deleteButton->setIcon(themedIcon("edit-delete"));
-    saveButton->setIcon(themedIcon("list-add"));
-    exportButton->setIcon(themedIcon("document-export"));
+    deleteButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    saveButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    exportButton->setIcon(KisIconUtils::loadIcon("document-export"));
 
     deleteButton->setToolTip(i18n("Delete Composition"));
     saveButton->setToolTip(i18n("New Composition"));
@@ -76,9 +76,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
     connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
-#if QT_VERSION >= 0x040700
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
-#endif
 
     updateAction  = new KisAction(i18n("Update Composition"), this);
     updateAction->setObjectName("update_composition");
@@ -178,7 +176,7 @@ void CompositionDockerDock::exportClicked()
     KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/compositiondockerdock");
     dialog.setCaption(i18n("Select a Directory"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    path = dialog.url();
+    path = dialog.filename();
 
 
     if (path.isNull()) return;
@@ -224,7 +222,7 @@ void CompositionDockerDock::exportClicked()
         d->setOutputMimeType("image/png");
         d->setSaveInBatchMode(true);
 
-        d->exportDocument(KUrl(path + composition->name() + ".png"));
+        d->exportDocument(QUrl(path + composition->name() + ".png"));
 
         delete d;
 
@@ -275,7 +273,7 @@ void CompositionDockerDock::updateComposition()
 
 void CompositionDockerDock::renameComposition()
 {
-    kDebug() << "rename";
+    dbgKrita << "rename";
     QModelIndex index = compositionView->currentIndex();
     if (index.isValid()) {
         KisLayerComposition* composition = m_model->compositionFromIndex(index);

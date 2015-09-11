@@ -30,7 +30,7 @@
 #include <KoParameterShape.h>
 #include <KoUnit.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QStackedWidget>
 
@@ -174,5 +174,3 @@ void ShapePropertiesDocker::canvasResourceChanged(int key, const QVariant &varia
     if (key == KoCanvasResourceManager::Unit && d->currentPanel)
         d->currentPanel->setUnit(variant.value<KoUnit>());
 }
-
-#include <ShapePropertiesDocker.moc>

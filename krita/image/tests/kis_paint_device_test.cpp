@@ -583,7 +583,7 @@ void KisPaintDeviceTest::testBltPerformance()
         gc.bitBlt(QPoint(0, 0), fdev, image.rect());
     }
 
-    qDebug() << x
+    dbgKrita << x
     << "blits"
     << " done in "
     << t.elapsed()
@@ -603,14 +603,14 @@ void KisPaintDeviceTest::testDeviceDuplication()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP device = new KisPaintDevice(cs);
 
-//    qDebug()<<"FILLING";
+//    dbgKrita<<"FILLING";
     device->fill(fillRect.left(), fillRect.top(),
                  fillRect.width(), fillRect.height(),fillPixel);
     referenceImage = device->convertToQImage(0);
 
 
     KisTransaction transaction1(device);
-//    qDebug()<<"CLEARING";
+//    dbgKrita<<"CLEARING";
     device->clear(clearRect);
 
     transaction1.revert();
@@ -621,7 +621,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
     KisPaintDeviceSP clone =  new KisPaintDevice(*device);
 
     KisTransaction transaction(clone);
-//    qDebug()<<"CLEARING";
+//    dbgKrita<<"CLEARING";
     clone->clear(clearRect);
 
     transaction.revert();

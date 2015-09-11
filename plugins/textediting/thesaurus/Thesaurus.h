@@ -25,7 +25,7 @@
 
 #include <QUrl>
 
-class KLineEdit;
+class QLineEdit;
 class KPushButton;
 class KHistoryComboBox;
 class KProcess;
@@ -95,7 +95,7 @@ private:
     KoDialog *m_dialog;
     KHistoryComboBox *m_edit;
     KPushButton *m_search;
-    KLineEdit *m_replaceLineEdit;
+    QLineEdit *m_replaceLineEdit;
 
     QString m_word;
     QString m_noMatch;

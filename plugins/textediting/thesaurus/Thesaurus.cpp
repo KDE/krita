@@ -64,7 +64,7 @@ NOT TODO:
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
 #include <kpushbutton.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kdebug.h>
 #include <krun.h>
 #include <kcombobox.h>
@@ -199,7 +199,7 @@ Thesaurus::Thesaurus()
 
     QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
     topLayout->addLayout(row2);
-    m_replaceLineEdit = new KLineEdit(page);
+    m_replaceLineEdit = new QLineEdit(page);
     m_replaceLabel = new QLabel(i18n("&Replace with:"), page);
     m_replaceLabel->setBuddy(m_replaceLineEdit);
     row2->addWidget(m_replaceLabel, 0);

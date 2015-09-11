@@ -454,8 +454,7 @@ void KisPart::openExistingFile(const KUrl& url)
         mw = currentMainwindow();
     }
 
-    KisView *view = createView(document, mw->resourceManager(), mw->actionCollection(), mw);
-    mw->addView(view);
+    mw->addViewAndNotifyLoadingCompleted(document);
 
     if (d->startupWidget) {
         d->startupWidget->setParent(0);
@@ -523,8 +522,7 @@ void KisPart::openTemplate(const KUrl& url)
 
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
     if (!mw) mw = currentMainwindow();
-    KisView *view = createView(document, mw->resourceManager(), mw->actionCollection(), mw);
-    mw->addView(view);
+    mw->addViewAndNotifyLoadingCompleted(document);
 
     d->startupWidget->setParent(0);
     d->startupWidget->hide();
@@ -663,8 +661,8 @@ void KisPart::startCustomDocument(KisDocument* doc)
     addDocument(doc);
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
     if (!mw) mw = currentMainwindow();
-    KisView *view = createView(doc, mw->resourceManager(), mw->actionCollection(), mw);
-    mw->addView(view);
+
+    mw->addViewAndNotifyLoadingCompleted(doc);
 
     d->startupWidget->setParent(0);
     d->startupWidget->hide();

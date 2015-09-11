@@ -133,12 +133,26 @@ public:
     KisAnimationFrameCacheSP frameCache;
 
     bool lodAllowedInCanvas;
+    bool bootsrapLodBlocked;
+
+    bool effectiveLodAllowedInCanvas() {
+        return lodAllowedInCanvas && !bootsrapLodBlocked;
+    }
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
+    /**
+     * While loading LoD should be blocked. Only when GUI has finished
+     * loading and zoom level settled down, LoD is given a green
+     * light.
+     */
+    m_d->bootsrapLodBlocked = true;
+    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()),
+            SLOT(bootstrapFinished()));
+
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
@@ -765,7 +779,7 @@ void KisCanvas2::notifyZoomChanged()
 
 void KisCanvas2::notifyLevelOfDetailChange()
 {
-    if (!m_d->lodAllowedInCanvas) return;
+    if (!m_d->effectiveLodAllowedInCanvas()) return;
 
     KisImageSP image = this->image();
 
@@ -965,6 +979,14 @@ bool KisCanvas2::wrapAroundViewingMode() const
     return false;
 }
 
+void KisCanvas2::bootstrapFinished()
+{
+    if (!m_d->bootsrapLodBlocked) return;
+
+    m_d->bootsrapLodBlocked = false;
+    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
+}
+
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
 #ifdef HAVE_OPENGL
@@ -979,8 +1001,9 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     KisImageSP image = this->image();
 
-    if (m_d->lodAllowedInCanvas != !image->levelOfDetailBlocked()) {
-        image->setLevelOfDetailBlocked(!m_d->lodAllowedInCanvas);
+    if (m_d->effectiveLodAllowedInCanvas() != !image->levelOfDetailBlocked()) {
+
+        image->setLevelOfDetailBlocked(!m_d->effectiveLodAllowedInCanvas());
         notifyLevelOfDetailChange();
     }
 

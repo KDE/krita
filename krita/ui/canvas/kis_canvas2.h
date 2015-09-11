@@ -235,6 +235,8 @@ private Q_SLOTS:
 
     void slotDoCanvasUpdate();
 
+    void bootstrapFinished();
+
 public:
 
     bool isPopupPaletteVisible();

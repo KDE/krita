@@ -132,17 +132,23 @@ void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
     const psd_layer_effects_stroke *config = style->stroke();
     if (!config->effectEnabled()) return;
 
-    applyStroke(src, dst, applyRect, config, env);
+    KisLsUtils::LodWrapper<psd_layer_effects_stroke> w(env->currentLevelOfDetail(), config);
+    applyStroke(src, dst, applyRect, w.config, env);
 }
 
-QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     Q_UNUSED(style);
     return rect;
 }
 
-QRect KisLsStrokeFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsStrokeFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
-    const int borderSize = style->stroke()->size() + 1;
+    const psd_layer_effects_stroke *config = style->stroke();
+    if (!config->effectEnabled()) return rect;
+
+    KisLsUtils::LodWrapper<psd_layer_effects_stroke> w(env->currentLevelOfDetail(), config);
+
+    const int borderSize = w.config->size() + 1;
     return kisGrowRect(rect, borderSize);
 }

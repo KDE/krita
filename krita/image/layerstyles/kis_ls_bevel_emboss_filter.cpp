@@ -462,17 +462,28 @@ void KisLsBevelEmbossFilter::processDirectly(KisPaintDeviceSP src,
     const psd_layer_effects_bevel_emboss *config = style->bevelAndEmboss();
     if (!config->effectEnabled()) return;
 
-    applyBevelEmboss(src, dst, applyRect, config, env);
+    KisLsUtils::LodWrapper<psd_layer_effects_bevel_emboss> w(env->currentLevelOfDetail(), config);
+    applyBevelEmboss(src, dst, applyRect, w.config, env);
 }
 
-QRect KisLsBevelEmbossFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsBevelEmbossFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
-    BevelEmbossRectCalculator d(rect, style->bevelAndEmboss());
-    return d.totalNeedRect(rect, style->bevelAndEmboss());
+    const psd_layer_effects_bevel_emboss *config = style->bevelAndEmboss();
+    if (!config->effectEnabled()) return rect;
+
+    KisLsUtils::LodWrapper<psd_layer_effects_bevel_emboss> w(env->currentLevelOfDetail(), config);
+
+    BevelEmbossRectCalculator d(rect, w.config);
+    return d.totalNeedRect(rect, w.config);
 }
 
-QRect KisLsBevelEmbossFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsBevelEmbossFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
-    BevelEmbossRectCalculator d(rect, style->bevelAndEmboss());
-    return d.totalChangeRect(rect, style->bevelAndEmboss());
+    const psd_layer_effects_bevel_emboss *config = style->bevelAndEmboss();
+    if (!config->effectEnabled()) return rect;
+
+    KisLsUtils::LodWrapper<psd_layer_effects_bevel_emboss> w(env->currentLevelOfDetail(), config);
+
+    BevelEmbossRectCalculator d(rect, w.config);
+    return d.totalChangeRect(rect, w.config);
 }

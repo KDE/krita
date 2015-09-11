@@ -98,6 +98,12 @@ QRect KisLayerStyleFilterEnvironment::defaultBounds() const
         m_d->sourceLayer->original()->defaultBounds()->bounds() : QRect();
 }
 
+int KisLayerStyleFilterEnvironment::currentLevelOfDetail() const
+{
+    return m_d->sourceLayer ?
+        m_d->sourceLayer->original()->defaultBounds()->currentLevelOfDetail() : 0;
+}
+
 QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
 {
     // TODO: make it really cachable!

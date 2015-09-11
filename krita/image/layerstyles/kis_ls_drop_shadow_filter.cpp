@@ -39,6 +39,8 @@
 #include "kis_psd_layer_style.h"
 
 #include "kis_ls_utils.h"
+#include "kis_layer_style_filter_environment.h"
+
 
 
 KisLsDropShadowFilter::KisLsDropShadowFilter(Mode mode)
@@ -254,24 +256,27 @@ void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
     const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
     if (!shadowStruct->effectEnabled()) return;
 
-    applyDropShadow(src, dst, applyRect, style->context(), shadowStruct, env);
+    KisLsUtils::LodWrapper<psd_layer_effects_shadow_base> w(env->currentLevelOfDetail(), shadowStruct);
+    applyDropShadow(src, dst, applyRect, style->context(), w.config, env);
 }
 
-QRect KisLsDropShadowFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsDropShadowFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
     if (!shadowStruct->effectEnabled()) return rect;
 
-    ShadowRectsData d(rect, style->context(), shadowStruct, ShadowRectsData::NEED_RECT);
+    KisLsUtils::LodWrapper<psd_layer_effects_shadow_base> w(env->currentLevelOfDetail(), shadowStruct);
+    ShadowRectsData d(rect, style->context(), w.config, ShadowRectsData::NEED_RECT);
     return rect | d.finalNeedRect();
 }
 
-QRect KisLsDropShadowFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsDropShadowFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
     if (!shadowStruct->effectEnabled()) return rect;
 
-    ShadowRectsData d(rect, style->context(), shadowStruct, ShadowRectsData::CHANGE_RECT);
+    KisLsUtils::LodWrapper<psd_layer_effects_shadow_base> w(env->currentLevelOfDetail(), shadowStruct);
+    ShadowRectsData d(rect, style->context(), w.config, ShadowRectsData::CHANGE_RECT);
     return style->context()->keep_original ?
         d.finalChangeRect() : rect | d.finalChangeRect();
 }

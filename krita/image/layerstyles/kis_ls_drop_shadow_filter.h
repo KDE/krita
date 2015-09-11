@@ -46,8 +46,8 @@ public:
                          KisPSDLayerStyleSP style,
                          KisLayerStyleFilterEnvironment *env) const;
 
-    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
-    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const;
+    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const;
 
 private:
     const psd_layer_effects_shadow_base* getShadowStruct(KisPSDLayerStyleSP style) const;

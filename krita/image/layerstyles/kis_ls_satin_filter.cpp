@@ -38,7 +38,7 @@
 #include "kis_psd_layer_style.h"
 
 #include "kis_ls_utils.h"
-
+#include "kis_layer_style_filter_environment.h"
 
 
 KisLsSatinFilter::KisLsSatinFilter()
@@ -204,24 +204,27 @@ void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,
     const psd_layer_effects_satin *config = style->satin();
     if (!config->effectEnabled()) return;
 
-    applySatin(src, dst, applyRect, style->context(), config, env);
+    KisLsUtils::LodWrapper<psd_layer_effects_satin> w(env->currentLevelOfDetail(), config);
+    applySatin(src, dst, applyRect, style->context(), w.config, env);
 }
 
-QRect KisLsSatinFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsSatinFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     const psd_layer_effects_satin *config = style->satin();
     if (!config->effectEnabled()) return rect;
 
-    SatinRectsData d(rect, style->context(), config, SatinRectsData::NEED_RECT);
+    KisLsUtils::LodWrapper<psd_layer_effects_satin> w(env->currentLevelOfDetail(), config);
+    SatinRectsData d(rect, style->context(), w.config, SatinRectsData::NEED_RECT);
     return rect | d.finalNeedRect();
 }
 
-QRect KisLsSatinFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsSatinFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     const psd_layer_effects_satin *config = style->satin();
     if (!config->effectEnabled()) return rect;
 
-    SatinRectsData d(rect, style->context(), config, SatinRectsData::CHANGE_RECT);
+    KisLsUtils::LodWrapper<psd_layer_effects_satin> w(env->currentLevelOfDetail(), config);
+    SatinRectsData d(rect, style->context(), w.config, SatinRectsData::CHANGE_RECT);
     return style->context()->keep_original ?
         d.finalChangeRect() : rect | d.finalChangeRect();
 }

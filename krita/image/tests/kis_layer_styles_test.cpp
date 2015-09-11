@@ -229,8 +229,11 @@ void testDropShadowNeedChangeRects(int distance,
     c.writeProperties(style);
 
 
-    QCOMPARE(lsFilter.neededRect(applyRect, style), needRect);
-    QCOMPARE(lsFilter.changedRect(applyRect, style), changeRect);
+    TestUtil::MaskParent parent;
+    KisLayerStyleFilterEnvironment env(parent.layer.data());
+
+    QCOMPARE(lsFilter.neededRect(applyRect, style, &env), needRect);
+    QCOMPARE(lsFilter.changedRect(applyRect, style, &env), changeRect);
 }
 
 void KisLayerStylesTest::testLayerStylesRects()

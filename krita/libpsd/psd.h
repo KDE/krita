@@ -434,6 +434,11 @@ public:
         m_gradient = value;
     }
 
+    virtual void scaleLinearSizes(qreal scale) {
+        m_distance *= scale;
+        m_size *= scale;
+    }
+
 private:
     // internal
     bool m_invertsSelection;
@@ -849,6 +854,11 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureVerticalPhase = value;
     }
 
+    virtual void scaleLinearSizes(qreal scale) {
+        psd_layer_effects_shadow_base::scaleLinearSizes(scale);
+        m_soften *= scale;
+        m_textureScale *= scale;
+    }
 
 private:
     psd_bevel_style m_style;
@@ -982,6 +992,11 @@ public:
 
     QPointF patternPhase() const {
         return QPointF(m_horizontalPhase, m_verticalPhase);
+    }
+
+    virtual void scaleLinearSizes(qreal scale) {
+        psd_layer_effects_shadow_base::scaleLinearSizes(scale);
+        m_scale *= scale;
     }
 
 private:

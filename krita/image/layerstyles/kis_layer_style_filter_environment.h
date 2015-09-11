@@ -39,6 +39,7 @@ public:
 
     QRect layerBounds() const;
     QRect defaultBounds() const;
+    int currentLevelOfDetail() const;
 
     QPainterPath layerOutlineCache() const;
 

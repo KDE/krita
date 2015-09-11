@@ -89,7 +89,7 @@ QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::
     }
 
     KIS_ASSERT_RECOVER_NOOP(pos == KisLayer::N_ABOVE_FILTHY);
-    return m_d->filter->neededRect(rect, m_d->style);
+    return m_d->filter->neededRect(rect, m_d->style, m_d->environment.data());
 }
 
 QRect KisLayerStyleFilterProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
@@ -100,7 +100,7 @@ QRect KisLayerStyleFilterProjectionPlane::changeRect(const QRect &rect, KisLayer
     }
 
     KIS_ASSERT_RECOVER_NOOP(pos == KisLayer::N_ABOVE_FILTHY);
-    return m_d->filter->changedRect(rect, m_d->style);
+    return m_d->filter->changedRect(rect, m_d->style, m_d->environment.data());
 }
 
 QRect KisLayerStyleFilterProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const

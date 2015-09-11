@@ -21,6 +21,8 @@
 
 #include "kis_types.h"
 
+#include "kis_lod_transform.h"
+
 
 struct psd_layer_effects_context;
 class psd_layer_effects_shadow_base;
@@ -89,6 +91,31 @@ namespace KisLsUtils
                              const psd_layer_effects_context *context,
                              const psd_layer_effects_shadow_base *config,
                              const KisLayerStyleFilterEnvironment *env);
+
+    template<class ConfigStruct>
+    struct LodWrapper
+    {
+        LodWrapper(int lod,
+                   const ConfigStruct *srcStruct)
+
+            {
+                if (lod > 0) {
+                    storage.reset(new ConfigStruct(*srcStruct));
+
+                    const qreal lodScale = KisLodTransform::lodToScale(lod);
+                    storage->scaleLinearSizes(lodScale);
+
+                    config = storage.data();
+                } else {
+                    config = srcStruct;
+                }
+            }
+
+        const ConfigStruct *config;
+
+    private:
+        QScopedPointer<ConfigStruct> storage;
+    };
 
 }
 

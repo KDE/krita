@@ -126,14 +126,16 @@ void KisLsOverlayFilter::processDirectly(KisPaintDeviceSP src,
     applyOverlay(src, dst, applyRect, config, env);
 }
 
-QRect KisLsOverlayFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsOverlayFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     Q_UNUSED(style);
+    Q_UNUSED(env);
     return rect;
 }
 
-QRect KisLsOverlayFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
+QRect KisLsOverlayFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     Q_UNUSED(style);
+    Q_UNUSED(env);
     return rect;
 }

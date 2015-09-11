@@ -641,6 +641,13 @@ target_link_libraries(KisLayerStyleProjectionPlaneTest  ${KDE4_KDEUI_LIBS} krita
 
 ########### next target ###############
 
+set(kis_layer_style_filter_environment_test_SRCS kis_layer_style_filter_environment_test.cpp )
+kde4_add_unit_test(KisLayerStyleFilterEnvironmentTest TESTNAME kritaimage-layer_style_filter_environment_test ${kis_layer_style_filter_environment_test_SRCS})
+target_link_libraries(KisLayerStyleFilterEnvironmentTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+
+########### next target ###############
+
 set(kis_projection_leaf_test_SRCS kis_projection_leaf_test.cpp )
 kde4_add_unit_test(KisProjectionLeafTest TESTNAME kritaimage-projection_leaf_test ${kis_projection_leaf_test_SRCS})
 target_link_libraries(KisProjectionLeafTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

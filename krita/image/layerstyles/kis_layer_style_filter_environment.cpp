@@ -29,12 +29,52 @@
 
 #include "krita_utils.h"
 
+#include <boost/random/mersenne_twister.hpp>
+#include "kis_random_accessor_ng.h"
+#include "kis_iterator_ng.h"
+#include "kis_pixel_selection.h"
+
 
 struct KisLayerStyleFilterEnvironment::Private
 {
     KisLayer *sourceLayer;
+    KisPixelSelectionSP cachedRandomSelection;
+
+    static KisPixelSelectionSP generateRandomSelection(const QRect &rc);
 };
 
+
+KisPixelSelectionSP
+KisLayerStyleFilterEnvironment::Private::
+generateRandomSelection(const QRect &rc)
+{
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    KisSequentialIterator dstIt(selection, rc);
+
+    boost::mt11213b uniformSource;
+
+    if (uniformSource.max() >= 0x00FFFFFF) {
+        do {
+            int randValue = uniformSource();
+            *dstIt.rawData() = (quint8) randValue;
+            if (!dstIt.nextPixel()) break;
+
+            randValue >>= 8;
+            *dstIt.rawData() = (quint8) randValue;
+            if (!dstIt.nextPixel()) break;
+
+            randValue >>= 8;
+            *dstIt.rawData() = (quint8) randValue;
+        } while(dstIt.nextPixel());
+
+    } else {
+        do {
+            *dstIt.rawData() = (quint8) uniformSource();
+        } while(dstIt.nextPixel());
+    }
+
+    return selection;
+}
 
 KisLayerStyleFilterEnvironment::KisLayerStyleFilterEnvironment(KisLayer *sourceLayer)
     : m_d(new Private)
@@ -84,4 +124,22 @@ void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,
     gc->setOpacity(KritaUtils::mergeOpacity(opacity, m_d->sourceLayer->opacity()));
     gc->setChannelFlags(KritaUtils::mergeChannelFlags(channelFlags, m_d->sourceLayer->channelFlags()));
 
+}
+
+KisPixelSelectionSP KisLayerStyleFilterEnvironment::cachedRandomSelection(const QRect &requestedRect) const
+{
+    KisPixelSelectionSP selection = m_d->cachedRandomSelection;
+
+    QRect existingRect;
+
+    if (selection) {
+        existingRect = selection->selectedExactRect();
+    }
+
+    if (!existingRect.contains(requestedRect)) {
+        m_d->cachedRandomSelection =
+            Private::generateRandomSelection(requestedRect | existingRect);
+    }
+
+    return m_d->cachedRandomSelection;
 }

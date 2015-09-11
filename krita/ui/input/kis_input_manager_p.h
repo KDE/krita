@@ -87,7 +87,7 @@ public:
       if (!KisTabletDebugger::instance()->debugEnabled()) return;
       QString msg1 = useBlocking && ignoreQtCursorEvents() ? "[BLOCKED] " : "[       ]";
       Event *specificEvent = static_cast<Event*>(event);
-      dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
+      dbgInput << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
     }
 
     class ProximityNotifier : public QObject

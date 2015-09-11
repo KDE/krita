@@ -479,6 +479,6 @@ void KisInputManager::profileChanged()
         }
     }
     else {
-        dbgKrita << "No Input Profile Found: canvas interaction will be impossible";
+        dbgInput << "No Input Profile Found: canvas interaction will be impossible";
     }
 }

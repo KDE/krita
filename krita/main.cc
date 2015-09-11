@@ -74,10 +74,12 @@ extern "C" int main(int argc, char **argv)
     SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
 #endif
 
-    // Disable all debug output by default
+    // Disable most debug output by default.
+    // krita.input is kept on for tablet debugging.
     // You can re-enable debug output by starting Krita like "QT_LOGGING_RULES="krita*=true" krita"
     // See: http://doc.qt.io/qt-5/qloggingcategory.html
-    QLoggingCategory::setFilterRules("*=false");
+    QLoggingCategory::setFilterRules("*=false\n"
+                                     "krita.input=true");
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita" +

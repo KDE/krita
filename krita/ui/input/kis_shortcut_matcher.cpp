@@ -28,9 +28,9 @@
 
 #ifdef DEBUG_MATCHER
 #include <kis_debug.h>
-#define DEBUG_ACTION(action) dbgKrita << __FUNCTION__ << ":" << action;
-#define DEBUG_BUTTON_ACTION(action, button) dbgKrita << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
-#define DEBUG_EVENT_ACTION(action, event) if (event) {dbgKrita << __FUNCTION__ << ":" << action << "type:" << event->type();}
+#define DEBUG_ACTION(action) dbgInput << __FUNCTION__ << ":" << action;
+#define DEBUG_BUTTON_ACTION(action, button) dbgInput << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#define DEBUG_EVENT_ACTION(action, event) if (event) {dbgInput << __FUNCTION__ << ":" << action << "type:" << event->type();}
 #else
 #define DEBUG_ACTION(action)
 #define DEBUG_BUTTON_ACTION(action, button)

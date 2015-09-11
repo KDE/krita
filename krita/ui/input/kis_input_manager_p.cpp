@@ -47,7 +47,7 @@ public:
             if (KisTabletDebugger::instance()->debugEnabled()) {
                 QString pre = QString("[BLOCKED]");
                 QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-                dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
+                dbgInput << KisTabletDebugger::instance()->eventToString(*ev,pre);
             }
             peckish = false;
             return true;
@@ -58,14 +58,14 @@ public:
     void activate()
     {
         if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-            dbgTablet << "Ignoring mouse events.";
+            dbgInput << "Ignoring mouse events.";
         hungry = true;
     }
 
     void deactivate()
     {
         if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-            dbgTablet << "Accepting mouse events.";
+            dbgInput << "Accepting mouse events.";
         hungry = false;
     }
 
@@ -417,7 +417,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTab
     retval = q->eventFilter(object, tevent);
 
     if (!retval && !tevent->isAccepted()) {
-        dbgTablet << "Rejected a compressed tablet event.";
+        dbgInput << "Rejected a compressed tablet event.";
     }
 
     return retval;

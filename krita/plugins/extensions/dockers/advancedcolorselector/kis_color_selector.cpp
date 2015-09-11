@@ -32,7 +32,7 @@
 #include <kis_debug.h>
 
 #include <KoCanvasResourceManager.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "kis_color_selector_ring.h"
 #include "kis_color_selector_triangle.h"
@@ -327,7 +327,7 @@ void KisColorSelector::init()
 
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);
-        m_button->setIcon(themedIcon("configure"));
+        m_button->setIcon(KisIconUtils::loadIcon("configure"));
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }
 

@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 #include <kcolordialog.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -123,11 +123,11 @@ PaletteDockerDock::PaletteDockerDock( )
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_wdgPaletteDock->setupUi(mainWidget);
-    m_wdgPaletteDock->bnAdd->setIcon(themedIcon("list-add"));
+    m_wdgPaletteDock->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnAddDialog->setIcon(themedIcon("document-new"));
+    m_wdgPaletteDock->bnAddDialog->setIcon(KisIconUtils::loadIcon("document-new"));
     m_wdgPaletteDock->bnAddDialog->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnRemove->setIcon(themedIcon("edit-delete"));
+    m_wdgPaletteDock->bnRemove->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
@@ -161,7 +161,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_colorSetChooser = new ColorSetChooser(this);
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
-    m_wdgPaletteDock->bnColorSets->setIcon(koIcon("hi16-palette_library"));
+    m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 

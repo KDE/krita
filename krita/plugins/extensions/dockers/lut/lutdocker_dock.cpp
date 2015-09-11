@@ -41,7 +41,7 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <kis_config.h>
@@ -216,8 +216,8 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
 void LutDockerDock::slotUpdateIcons()
 {
-    m_btnConvertCurrentColor->setIcon(themedIcon("krita_tool_freehand"));
-    m_btmShowBWConfiguration->setIcon(themedIcon("properties"));
+    m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("properties"));
 }
 
 void LutDockerDock::slotShowBWConfiguration()

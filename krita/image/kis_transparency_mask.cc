@@ -21,6 +21,7 @@
 #include "kis_debug.h"
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
@@ -89,7 +90,7 @@ QRect KisTransparencyMask::needRect(const QRect &rect, PositionToFilthy pos) con
 
 QIcon KisTransparencyMask::icon() const
 {
-    return themedIcon("view-filter");
+    return KisIconUtils::loadIcon("view-filter");
 }
 
 bool KisTransparencyMask::accept(KisNodeVisitor &v)

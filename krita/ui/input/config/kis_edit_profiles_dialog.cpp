@@ -24,7 +24,7 @@
 #include <KLocalizedString>
 #include <QMessageBox>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_input_profile_model.h"
 
@@ -50,10 +50,10 @@ KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags fl
     d->profileModel = new KisInputProfileModel(this);
     d->ui->profileList->setModel(d->profileModel);
 
-    d->ui->removeButton->setIcon(themedIcon("edit-delete"));
-    d->ui->duplicateButton->setIcon(themedIcon("edit-copy"));
-    d->ui->renameButton->setIcon(themedIcon("document-edit"));
-    d->ui->resetButton->setIcon(themedIcon("view-refresh"));
+    d->ui->removeButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    d->ui->duplicateButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
+    d->ui->renameButton->setIcon(KisIconUtils::loadIcon("document-edit"));
+    d->ui->resetButton->setIcon(KisIconUtils::loadIcon("view-refresh"));
 
     connect(d->ui->removeButton, SIGNAL(clicked(bool)), SLOT(removeButtonClicked()));
     connect(d->ui->duplicateButton, SIGNAL(clicked(bool)), SLOT(duplicateButtonClicked()));

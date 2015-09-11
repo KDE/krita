@@ -16,7 +16,7 @@
 
 #include "kis_rectangle_constraint_widget.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisToolRectangleBase *tool) : QWidget(parent) 
 {
@@ -24,9 +24,9 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
     
     setupUi(this);
     
-    chkHeight->setIcon(koIcon("height_icon"));
-    chkWidth->setIcon(koIcon("width_icon"));
-    chkRatio->setIcon(koIcon("ratio_icon"));
+    chkHeight->setIcon(KisIconUtils::loadIcon("height_icon"));
+    chkWidth->setIcon(KisIconUtils::loadIcon("width_icon"));
+    chkRatio->setIcon(KisIconUtils::loadIcon("ratio_icon"));
     
     connect(chkWidth, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
     connect(chkHeight, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));

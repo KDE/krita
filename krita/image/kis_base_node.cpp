@@ -19,7 +19,7 @@
 #include "kis_base_node.h"
 #include <klocalizedstring.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
@@ -136,8 +136,8 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
 KisDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l;
-    l << KisDocumentSectionModel::Property(i18n("Visible"), themedIcon("visible"), themedIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KisDocumentSectionModel::Property(i18n("Locked"), themedIcon("layer-locked"), themedIcon("layer-unlocked"), userLocked());
+    l << KisDocumentSectionModel::Property(i18n("Visible"), KisIconUtils::loadIcon("visible"), KisIconUtils::loadIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KisDocumentSectionModel::Property(i18n("Locked"), KisIconUtils::loadIcon("layer-locked"), KisIconUtils::loadIcon("layer-unlocked"), userLocked());
     return l;
 }
 

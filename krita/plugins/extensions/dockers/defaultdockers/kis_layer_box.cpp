@@ -46,7 +46,7 @@
 #include <kmenu.h>
 #include <klocalizedstring.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KisDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
@@ -145,11 +145,11 @@ KisLayerBox::KisLayerBox()
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
-    actions << m_viewModeMenu->addAction(themedIcon("view-list-text"),
+    actions << m_viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-text"),
                                          i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(themedIcon("view-list-details"),
+    actions << m_viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-details"),
                                          i18n("Detailed View"), this, SLOT(slotDetailedView()));
-    actions << m_viewModeMenu->addAction(themedIcon("view-preview"),
+    actions << m_viewModeMenu->addAction(KisIconUtils::loadIcon("view-preview"),
                                          i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
 
     for (int i = 0, n = actions.count(); i < n; ++i) {
@@ -157,39 +157,39 @@ KisLayerBox::KisLayerBox()
         actions[i]->setActionGroup(group);
     }
 
-    m_wdgLayerBox->bnAdd->setIcon(themedIcon("addlayer"));
+    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_wdgLayerBox->bnViewMode->setIcon(themedIcon("view-choose"));
+    m_wdgLayerBox->bnViewMode->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    m_wdgLayerBox->bnDelete->setIcon(themedIcon("deletelayer"));
+    m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRaise->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setIcon(themedIcon("arrowupblr"));
+    m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnLower->setIcon(themedIcon("arrowdown"));
+    m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLeft->setEnabled(true);
-    m_wdgLayerBox->bnLeft->setIcon(themedIcon("removefromfolder"));
+    m_wdgLayerBox->bnLeft->setIcon(KisIconUtils::loadIcon("removefromfolder"));
     m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRight->setEnabled(true);
-    m_wdgLayerBox->bnRight->setIcon(themedIcon("addtofolder"));
+    m_wdgLayerBox->bnRight->setIcon(KisIconUtils::loadIcon("addtofolder"));
     m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnProperties->setIcon(themedIcon("properties"));
+    m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDuplicate->setIcon(themedIcon("duplicatelayer"));
+    m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, themedIcon("deletelayer"), i18n("&Remove Layer"), this);
+    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, KisIconUtils::loadIcon("deletelayer"), i18n("&Remove Layer"), this);
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     m_removeAction->setObjectName("remove_layer");
@@ -212,7 +212,7 @@ KisLayerBox::KisLayerBox()
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
-    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, themedIcon("properties"), i18n("&Properties..."),this);
+    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, KisIconUtils::loadIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     m_propertiesAction->setObjectName("layer_properties");

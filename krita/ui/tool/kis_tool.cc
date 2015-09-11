@@ -33,7 +33,7 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
@@ -749,7 +749,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(message, KisIconUtils::loadIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -762,7 +762,7 @@ bool KisTool::selectionEditable()
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        kiscanvas->viewManager()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(i18n("Local selection is locked."), KisIconUtils::loadIcon("object-locked"));
     }
     return editable;
 }

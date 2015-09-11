@@ -28,7 +28,7 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"
@@ -97,10 +97,10 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));
     d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
     d->mirrorVertical = d->resourceProvider->mirrorVertical();
-    d->horizontalIcon = koIcon("mirrorAxis-HorizontalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->verticalIcon = koIcon("mirrorAxis-VerticalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->horizontalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->verticalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    d->horizontalIcon = KisIconUtils::loadIcon("mirrorAxis-HorizontalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    d->verticalIcon = KisIconUtils::loadIcon("mirrorAxis-VerticalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
     setVisible(d->mirrorHorizontal || d->mirrorVertical);
 
     int imageWidth = parent->canvasBase()->image()->width();
@@ -130,10 +130,10 @@ void KisMirrorAxis::setHandleSize(float newSize)
 {
     if(d->handleSize != newSize) {
         d->handleSize = newSize;
-        d->horizontalIcon = koIcon("symmetry-horyzontal").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-        d->verticalIcon = koIcon("symmetry-vertical").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-        d->horizontalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-        d->verticalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horyzontal").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+        d->verticalIcon = KisIconUtils::loadIcon("symmetry-vertical").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+        d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+        d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
         d->minHandlePosition = d->sideMargin + newSize;
         emit handleSizeChanged();
     }

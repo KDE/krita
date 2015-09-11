@@ -25,7 +25,7 @@
 #include <QMetaClassInfo>
 #include <QKeySequence>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "input/kis_abstract_input_action.h"
 #include "input/kis_input_profile.h"
@@ -123,7 +123,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
             return d->action->shortcutIndexes().key(d->shortcuts.at(index.row())->mode());
 
         case 3:
-            return themedIcon("edit-delete");
+            return KisIconUtils::loadIcon("edit-delete");
 
         default:
             break;

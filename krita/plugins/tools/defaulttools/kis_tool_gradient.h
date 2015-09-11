@@ -33,7 +33,7 @@
 #include <kis_types.h>
 #include <kis_gradient_painter.h>
 #include <flake/kis_node_shape.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

@@ -36,7 +36,7 @@
 #include <kurlcombobox.h>
 
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KisImportExportManager.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>
@@ -322,7 +322,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_groupLayersSave = new KisAction(themedIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new KisAction(KisIconUtils::loadIcon("document-save"), i18n("Save Group Layers..."), this);
     m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
@@ -332,7 +332,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
-    KisAction *trimToImage = new KisAction(themedIcon("trim-to-image"), i18n("Trim to Image Size"), this);
+    KisAction *trimToImage = new KisAction(KisIconUtils::loadIcon("trim-to-image"), i18n("Trim to Image Size"), this);
     trimToImage->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("trim_to_image", trimToImage);
     connect(trimToImage, SIGNAL(triggered()), this, SLOT(trimToImage()));

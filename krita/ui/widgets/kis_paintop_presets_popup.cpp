@@ -35,7 +35,7 @@
 #include <kconfig.h>
 #include <klocalizedstring.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kis_icon_utils.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_config_widget.h>

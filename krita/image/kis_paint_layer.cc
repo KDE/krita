@@ -25,6 +25,7 @@
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>
@@ -147,7 +148,7 @@ KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() co
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
 
     // XXX: get right icons
-    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked"), alphaLocked());
 
     return l;
 }

@@ -31,7 +31,7 @@
 #include <KoID.h>
 
 #include <KoConfig.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
@@ -62,15 +62,15 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnInstallProfile->setIcon(themedIcon("document-open"));
+    d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon(themedIcon("download"));
+    d->colorSpaceSelector->bnDownloadProfile->setIcon(KisIconUtils::loadIcon("download"));
     d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
     d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
     d->colorSpaceSelector->bnDownloadProfile->hide();
 
-    d->colorSpaceSelector->bnUploadProfile->setIcon(themedIcon("arrow-up"));
+    d->colorSpaceSelector->bnUploadProfile->setIcon(KisIconUtils::loadIcon("arrow-up"));
     d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
     d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
     d->colorSpaceSelector->bnUploadProfile->hide();

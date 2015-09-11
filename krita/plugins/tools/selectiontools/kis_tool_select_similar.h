@@ -20,7 +20,7 @@
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
 #include <KoToolFactoryBase.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kconfig.h>
 #include "kis_tool_select_base.h"
 #include <kconfiggroup.h>

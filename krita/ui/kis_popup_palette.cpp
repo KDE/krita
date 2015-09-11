@@ -22,7 +22,7 @@
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
 #include "kis_favorite_resource_manager.h"
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
 #include <KoTriangleColorSelector.h>
@@ -35,7 +35,7 @@
 #include <QWhatsThis>
 #include <math.h>
 #include "kis_signal_compressor.h"
-
+#include <QApplication>
 
 #define brushInnerRadius 94.0
 #define brushOuterRadius 145.0
@@ -357,7 +357,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 
     int side = qMin(width(), height());
-    QPixmap settingIcon = themedIcon("configure").pixmap(QSize(22,22));
+    QPixmap settingIcon = KisIconUtils::loadIcon("configure").pixmap(QSize(22,22));
     painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
     
 }

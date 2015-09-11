@@ -20,7 +20,7 @@
 
 #include "KisUndoStackAction.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <kundo2stack.h>
 #include <klocalizedstring.h>
@@ -34,7 +34,7 @@ KisUndoStackAction::KisUndoStackAction(KUndo2Stack* stack, Type type)
         connect(this, SIGNAL(triggered()), stack, SLOT(undo()));
         connect(stack, SIGNAL(canUndoChanged(bool)), this, SLOT(setEnabled(bool)));
         connect(stack, SIGNAL(undoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
-        setIcon(themedIcon("edit-undo"));
+        setIcon(KisIconUtils::loadIcon("edit-undo"));
         setText(i18n("Undo"));
         setShortcuts(KStandardShortcut::undo());
         setEnabled(stack->canUndo());
@@ -42,7 +42,7 @@ KisUndoStackAction::KisUndoStackAction(KUndo2Stack* stack, Type type)
         connect(this, SIGNAL(triggered()), stack, SLOT(redo()));
         connect(stack, SIGNAL(canRedoChanged(bool)), this, SLOT(setEnabled(bool)));
         connect(stack, SIGNAL(redoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
-        setIcon(themedIcon("edit-redo"));
+        setIcon(KisIconUtils::loadIcon("edit-redo"));
         setText(i18n("Redo"));
         setShortcuts(KStandardShortcut::redo());
         setEnabled(stack->canRedo());

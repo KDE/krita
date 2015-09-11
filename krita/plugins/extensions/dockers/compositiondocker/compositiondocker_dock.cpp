@@ -31,7 +31,7 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCanvasBase.h>
 #include <KoFileDialog.h>
 
@@ -55,9 +55,9 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
     compositionView->installEventFilter(this);
-    deleteButton->setIcon(themedIcon("edit-delete"));
-    saveButton->setIcon(themedIcon("list-add"));
-    exportButton->setIcon(themedIcon("document-export"));
+    deleteButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    saveButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    exportButton->setIcon(KisIconUtils::loadIcon("document-export"));
 
     deleteButton->setToolTip(i18n("Delete Composition"));
     saveButton->setToolTip(i18n("New Composition"));

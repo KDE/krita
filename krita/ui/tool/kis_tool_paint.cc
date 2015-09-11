@@ -43,7 +43,7 @@
 #include <kactioncollection.h>
 #include <QAction>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoShape.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>
@@ -458,7 +458,7 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setSpacing(1);
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
+        QPushButton* push = new QPushButton(KisIconUtils::loadIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
         QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);

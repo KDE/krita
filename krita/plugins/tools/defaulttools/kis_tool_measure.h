@@ -29,7 +29,7 @@
 #include "kis_types.h"
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 class QPointF;
 class QWidget;

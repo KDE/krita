@@ -31,6 +31,7 @@
 
 #include <klocalizedstring.h>
 
+
 #include <KoIcon.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceModel.h>
@@ -44,8 +45,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-
-
+#include <kis_icon_utils.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -101,7 +101,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {
-        const QIcon icon = koIcon(koIconName("dirty-preset"));
+        const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
         QPixmap pixmap = icon.pixmap(QSize(15,15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }

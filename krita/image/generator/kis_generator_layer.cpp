@@ -22,6 +22,7 @@
 #include "kis_debug.h"
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "kis_selection.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_processing_information.h"
@@ -131,7 +132,7 @@ void KisGeneratorLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *un
 
 QIcon KisGeneratorLayer::icon() const
 {
-    return themedIcon("krita_tool_color_fill");
+    return KisIconUtils::loadIcon("krita_tool_color_fill");
 }
 
 KisDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties() const

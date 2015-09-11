@@ -51,7 +51,7 @@ void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     KisCanvasDecoration* decoration = m_canvas->decoration("grid");
     if (decoration && !decoration->visible()) {
         m_canvas->viewManager()->showFloatingMessage(i18n("The grid is not visible. Press Return to show the grid."),
-                                              koIcon("krita_tool_grid"));
+                                              KisIconUtils::loadIcon("krita_tool_grid"));
     }
 }
 

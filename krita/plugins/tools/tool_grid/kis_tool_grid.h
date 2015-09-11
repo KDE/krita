@@ -20,7 +20,7 @@
 
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 class KisCanvas2;
 

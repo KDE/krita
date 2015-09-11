@@ -103,3 +103,4 @@ private:
 };
 
 #endif // H_KIS_WIDGET_CHOOSER_H_
+

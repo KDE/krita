@@ -23,7 +23,7 @@
 #ifndef KIS_TOOL_TRANSFORM_H_
 #define KIS_TOOL_TRANSFORM_H_
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QPoint>
 #include <QPointF>

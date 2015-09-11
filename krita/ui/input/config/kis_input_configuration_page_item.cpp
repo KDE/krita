@@ -19,7 +19,7 @@
 
 #include "kis_input_configuration_page_item.h"
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "input/kis_abstract_input_action.h"
 #include "input/kis_input_profile_manager.h"
@@ -43,7 +43,7 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     ui->shortcutsView->header()->setResizeMode(QHeaderView::Stretch);
     setExpanded(false);
 
-    QAction *deleteAction = new QAction(themedIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
+    QAction *deleteAction = new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
     connect(deleteAction, SIGNAL(triggered(bool)), SLOT(deleteShortcut()));
     ui->shortcutsView->addAction(deleteAction);
     ui->shortcutsView->setContextMenuPolicy(Qt::ActionsContextMenu);

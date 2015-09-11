@@ -31,6 +31,7 @@
 #include <QMessageBox>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoFileDialog.h>
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
@@ -570,10 +571,10 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         KisPaintingAssistant::drawPath(_gc, path);
     }
 
-    QPixmap iconDelete = themedIcon("edit-delete").pixmap(16, 16);
-    QPixmap iconSnapOn = koIcon("visible").pixmap(16, 16);
-    QPixmap iconSnapOff = koIcon("novisible").pixmap(16, 16);
-    QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
+    QPixmap iconDelete = KisIconUtils::loadIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
+    QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
+    QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
     foreach(KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
@@ -798,9 +799,9 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
         specialSpacer->setFixedSize(0, 0);
         m_optionsWidget->layout()->addWidget(specialSpacer);
 
-        m_options.loadButton->setIcon(themedIcon("document-open"));
-        m_options.saveButton->setIcon(themedIcon("document-save"));
-        m_options.deleteButton->setIcon(themedIcon("edit-delete"));
+        m_options.loadButton->setIcon(KisIconUtils::loadIcon("document-open"));
+        m_options.saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
+        m_options.deleteButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);

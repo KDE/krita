@@ -27,7 +27,7 @@
 #include <QPoint>
 #include <KoToolFactoryBase.h>
 #include "krita/ui/tool/kis_tool_select_base.h"
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 class QPainterPath;
 

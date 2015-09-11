@@ -23,7 +23,7 @@
 #include <QMenu>
 #include <QTimer>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "ui_kis_key_input_editor.h"
 
@@ -43,7 +43,7 @@ KisKeyInputEditor::KisKeyInputEditor(QWidget *parent)
     d->ui = new Ui::KisKeyInputEditor;
     d->ui->setupUi(popup);
 
-    d->ui->clearKeysButton->setIcon(themedIcon("edit-clear"));
+    d->ui->clearKeysButton->setIcon(KisIconUtils::loadIcon("edit-clear"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

@@ -22,7 +22,7 @@
 #include <QDesktopServices>
 
 #include <KisImportExportManager.h>
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "kis_debug.h"
 
@@ -33,7 +33,7 @@ KisUrlRequester::KisUrlRequester(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    m_ui->btnSelectFile->setIcon(themedIcon("folder"));
+    m_ui->btnSelectFile->setIcon(KisIconUtils::loadIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
     connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));

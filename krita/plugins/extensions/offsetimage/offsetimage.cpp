@@ -23,7 +23,7 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kis_image.h>
 #include <kis_types.h>
 #include <KisViewManager.h>

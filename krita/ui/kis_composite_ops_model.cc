@@ -21,7 +21,7 @@
 
 #include <KoCompositeOp.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "kis_debug.h"
 #include "kis_config.h"
@@ -105,7 +105,7 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
         Q_ASSERT(item);
 
         if (!item->isCategory() && !item->isEnabled()) {
-            return themedIcon("dialog-warning");
+            return KisIconUtils::loadIcon("dialog-warning");
         }
     }
 

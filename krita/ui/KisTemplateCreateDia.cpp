@@ -37,7 +37,7 @@
 #include <QTemporaryFile>
 #include <QLineEdit>
 #include <klocalizedstring.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KisDocument.h>
 #include <KisTemplates.h>
 #include <KisTemplateTree.h>
@@ -172,8 +172,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",
-                                           qApp->applicationDisplayName()));
+    d->m_defaultTemplate->setToolTip(i18n("Use the new template every time Krita starts"));
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);

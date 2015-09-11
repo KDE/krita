@@ -17,7 +17,7 @@
 
 #include "image_strip_scene.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QApplication>
 #include <QDir>
@@ -76,14 +76,14 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
             painter->drawImage(offset, image);
         }
         else {
-            QIcon   icon = themedIcon("edit-delete");
+            QIcon   icon = KisIconUtils::loadIcon("edit-delete");
             QRect   rect = boundingRect().toRect();
             QPixmap img  = icon.pixmap(rect.size());
             painter->drawPixmap(rect, img, img.rect());
         }
     }
     else {
-        QIcon   icon = themedIcon("folder-pictures");
+        QIcon   icon = KisIconUtils::loadIcon("folder-pictures");
         QRect   rect = boundingRect().toRect();
         QPixmap img  = icon.pixmap(rect.size());
         painter->drawPixmap(rect, img, img.rect());

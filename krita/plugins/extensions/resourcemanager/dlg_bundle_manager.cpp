@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QMessageBox>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "kis_action.h"
 
 #define ICON_SIZE 48
@@ -57,10 +57,10 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
     connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->listInactive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
-    m_ui->bnAdd->setIcon(themedIcon("arrow-right"));
+    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
 
-    m_ui->bnRemove->setIcon(themedIcon("arrow-left"));
+    m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));

@@ -27,7 +27,7 @@
 #include "KoGlobal.h"
 #include "KoConfig.h"
 #include <KoHashGeneratorProvider.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <kcrash.h>
 #include <klocalizedstring.h>
@@ -170,7 +170,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
 
-    setWindowIcon(koIcon("calligrakrita"));
+    setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
 
 #ifdef HAVE_OPENGL

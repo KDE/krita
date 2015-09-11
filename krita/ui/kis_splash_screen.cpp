@@ -27,7 +27,7 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
@@ -39,7 +39,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
-    setWindowIcon(koIcon("calligrakrita"));
+    setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     QString color = "#FFFFFF";
     if (themed && qApp->palette().background().color().value() >100) {

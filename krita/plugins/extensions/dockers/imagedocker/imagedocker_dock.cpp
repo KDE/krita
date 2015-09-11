@@ -24,7 +24,7 @@
 #include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QFileSystemModel>
 #include <QImageReader>
@@ -190,16 +190,16 @@ ImageDockerDock::ImageDockerDock():
     m_proxyModel->setSourceModel(m_model);
     m_proxyModel->setDynamicSortFilter(true);
 
-    m_ui->bnBack->setIcon(themedIcon("arrow-left"));
-    m_ui->bnUp->setIcon(themedIcon("arrow-up"));
-    m_ui->bnHome->setIcon(themedIcon("go-home"));
-    m_ui->bnImgPrev->setIcon(themedIcon("arrow-left"));
-    m_ui->bnImgNext->setIcon(themedIcon("arrow-right"));
-    m_ui->bnImgClose->setIcon(themedIcon("window-close"));
+    m_ui->bnBack->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    m_ui->bnUp->setIcon(KisIconUtils::loadIcon("arrow-up"));
+    m_ui->bnHome->setIcon(KisIconUtils::loadIcon("go-home"));
+    m_ui->bnImgPrev->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    m_ui->bnImgNext->setIcon(KisIconUtils::loadIcon("arrow-right"));
+    m_ui->bnImgClose->setIcon(KisIconUtils::loadIcon("window-close"));
     m_ui->thumbView->setScene(m_imageStripScene);
     m_ui->treeView->setModel(m_proxyModel);
     m_ui->cmbImg->setModel(m_imgListModel);
-    m_ui->bnPopup->setIcon(themedIcon("zoom-original"));
+    m_ui->bnPopup->setIcon(KisIconUtils::loadIcon("zoom-original"));
     m_ui->bnPopup->setPopupWidget(m_popupUi);
 
     m_popupUi->zoomSlider->setRange(5, 500);
@@ -214,12 +214,12 @@ ImageDockerDock::ImageDockerDock():
 
     installEventFilter(this);
 
-    m_ui->cmbPath->addItem(themedIcon("folder-pictures"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    m_ui->cmbPath->addItem(themedIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    m_ui->cmbPath->addItem(themedIcon("go-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-pictures"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    m_ui->cmbPath->addItem(KisIconUtils::loadIcon("go-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
 
     foreach(const QFileInfo &info, QDir::drives()) {
-        m_ui->cmbPath->addItem(themedIcon("drive-harddisk"), info.absolutePath());
+        m_ui->cmbPath->addItem(KisIconUtils::loadIcon("drive-harddisk"), info.absolutePath());
     }
 
     connect(m_ui->cmbPath, SIGNAL(activated(const QString&)), SLOT(slotChangeRoot(const QString&)));

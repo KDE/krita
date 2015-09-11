@@ -22,6 +22,7 @@
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
@@ -293,7 +294,7 @@ void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 
 QIcon KisCloneLayer::icon() const
 {
-    return themedIcon("edit-copy");
+    return KisIconUtils::loadIcon("edit-copy");
 }
 
 KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const

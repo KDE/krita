@@ -25,7 +25,7 @@
 
 #include "KoToolFactoryBase.h"
 #include "kis_tool_select_base.h"
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

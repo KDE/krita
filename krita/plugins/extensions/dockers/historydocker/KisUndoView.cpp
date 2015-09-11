@@ -304,7 +304,7 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::RightButton)
     {
         QMenu menu(this);
-        QAction* action1 = menu.addAction(themedIcon("link"),stack()->useCumulativeUndoRedo()?i18n("Disable Cumulative Undo"):i18n("Enable Cumulative Undo"));
+        QAction* action1 = menu.addAction(KisIconUtils::loadIcon("link"),stack()->useCumulativeUndoRedo()?i18n("Disable Cumulative Undo"):i18n("Enable Cumulative Undo"));
         connect(action1, SIGNAL(triggered()), this, SLOT(toggleCumulativeUndoRedo()));
         QLabel *l = new QLabel("Start merging time");
         QDoubleSpinBox *s = new QDoubleSpinBox();

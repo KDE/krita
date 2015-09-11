@@ -30,8 +30,7 @@
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 #include <QKeySequence>
-
-
+#include <kis_icon_utils.h>
 
 class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 {

@@ -19,7 +19,7 @@
 
 #include <QAction>
 #include <klocalizedstring.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 TasksetModel::TasksetModel(QObject* parent): QAbstractTableModel(parent)
 {
@@ -42,7 +42,7 @@ QVariant TasksetModel::data(const QModelIndex& index, int role) const
             {
                 const QIcon icon = m_actions.at(index.row())->icon();
                 if (icon.isNull()) {
-                    return themedIcon("tools-wizard");
+                    return KisIconUtils::loadIcon("tools-wizard");
                 }
                 return icon;
             }

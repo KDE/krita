@@ -18,7 +18,7 @@
 
 #include "kis_widget_chooser.h"
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <QGridLayout>
 #include <QHBoxLayout>

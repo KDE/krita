@@ -19,7 +19,7 @@
 #ifndef KIS_EXTERNAL_LAYER_IFACE_
 #define KIS_EXTERNAL_LAYER_IFACE_
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 #include "kis_types.h"
 
@@ -42,7 +42,7 @@ public:
             : KisLayer(image, name, opacity) {}
 
     virtual QIcon icon() const {
-        return themedIcon("view-refresh");
+        return KisIconUtils::loadIcon("view-refresh");
     }
 
     virtual void resetCache() {

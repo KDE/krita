@@ -31,7 +31,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "KisViewManager.h"
 #include "kis_global.h"
@@ -75,11 +75,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     QWidget* buttonWidget = new QWidget(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
 
-    QPushButton* addGradient = new QPushButton(themedIcon("list-add"), i18n("Add..."), this);
+    QPushButton* addGradient = new QPushButton(KisIconUtils::loadIcon("list-add"), i18n("Add..."), this);
     connect(addGradient, SIGNAL(clicked()), this, SLOT(addGradient()));
     buttonLayout->addWidget(addGradient);
 
-    m_editGradient = new QPushButton(themedIcon("configure"), i18n("Edit..."));
+    m_editGradient = new QPushButton(KisIconUtils::loadIcon("configure"), i18n("Edit..."));
     m_editGradient->setEnabled(false);
     connect(m_editGradient, SIGNAL(clicked()), this, SLOT(editGradient()));
     buttonLayout->addWidget(m_editGradient);

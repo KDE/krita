@@ -63,24 +63,4 @@
 #define koIconWanted(comment, wantedName) (QIcon())
 #define koIconNameWanted(comment, wantedName) (QString())
 
-/// Use this function to load an icon that fits the current color theme
-inline QIcon themedIcon(const QString &name, bool fast = false) {
-    Q_UNUSED(fast);
-
-    // try load themed icon
-    QColor background = qApp->palette().background().color();
-    bool useDarkIcons = background.value() > 100;
-    const char * const prefix = useDarkIcons ? "dark_" : "light_";
-
-    QString realName = QLatin1String(prefix) + name;
-    QIcon icon(realName);
-
-    // fallback
-    if (icon.isNull()) {
-        return QIcon::fromTheme(name);
-    }
-
-    return icon;
-}
-
 #endif

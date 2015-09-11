@@ -26,11 +26,12 @@
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <QKeySequence>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <KoIcon.h>
 
 class QCheckBox;
 class QComboBox;

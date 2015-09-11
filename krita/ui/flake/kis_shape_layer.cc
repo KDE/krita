@@ -37,7 +37,7 @@
 #include <QTemporaryFile>
 #include <kis_debug.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -272,7 +272,7 @@ void KisShapeLayer::setParent(KoShapeContainer *parent)
 
 QIcon KisShapeLayer::icon() const
 {
-    return themedIcon("bookmarks");
+    return KisIconUtils::loadIcon("bookmarks");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const

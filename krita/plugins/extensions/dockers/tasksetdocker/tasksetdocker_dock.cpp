@@ -29,7 +29,7 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <KoCanvasBase.h>
 #include <KoResourceItemChooser.h>
@@ -91,13 +91,13 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_model = new TasksetModel(this);
     tasksetView->setModel(m_model);
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
-    recordButton->setIcon(themedIcon("media-record"));
+    recordButton->setIcon(KisIconUtils::loadIcon("media-record"));
     recordButton->setCheckable(true);
-    clearButton->setIcon(themedIcon("edit-delete"));
-    saveButton->setIcon(themedIcon("document-save"));
+    clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
     saveButton->setEnabled(false);
 
-    chooserButton->setIcon(themedIcon("edit-copy"));
+    chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
 
     KGlobal::dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");

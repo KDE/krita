@@ -31,7 +31,7 @@
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -91,10 +91,10 @@ DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
         m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)));
     }
 
-    m_ui->bnAdd->setIcon(themedIcon("arrow-right"));
+    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
 
-    m_ui->bnRemove->setIcon(themedIcon("arrow-left"));
+    m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->cmbResourceTypes->addItem(i18n("Brushes"), QString("brushes"));

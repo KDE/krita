@@ -24,7 +24,7 @@
 #include <QPoint>
 #include <QPainterPath>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

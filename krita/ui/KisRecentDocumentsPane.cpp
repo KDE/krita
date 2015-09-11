@@ -28,8 +28,8 @@
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
 #include <QUrl>
-
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 
 enum KoRecentDocumentRoles {

@@ -19,7 +19,7 @@
 #ifndef __KIS_ICON_UTILS_H
 #define __KIS_ICON_UTILS_H
 
-#include "kritaui_export.h"
+#include "kritaglobal_export.h"
 
 class QIcon;
 class QAbstractButton;
@@ -28,35 +28,36 @@ class QAction;
 class QObject;
 
 #include <QIcon>
+#include <KoIcon.h>
 
 namespace KisIconUtils
 {
     /**
      * Load a themed icon using its base name. Use it in
-     * Krita instead of previous themedIcon()
+     * Krita instead of previous KisIconUtils::loadIcon()
      */
-    KRITAUI_EXPORT QIcon loadIcon(const QString &name);
+    KRITAGLOBAL_EXPORT QIcon loadIcon(const QString &name);
 
     /**
      * This function updates an icon of \p object depending on its
      * type. See updateIcon() overrides to see the supported types
      */
-    KRITAUI_EXPORT void updateIconCommon(QObject *object);
+    KRITAGLOBAL_EXPORT void updateIconCommon(QObject *object);
 
     /**
      * Update an icon of \p button according to the current theme
      */
-    KRITAUI_EXPORT void updateIcon(QAbstractButton *button);
+    KRITAGLOBAL_EXPORT void updateIcon(QAbstractButton *button);
 
     /**
      * Update an icon of \p comboBox according to the current theme
      */
-    KRITAUI_EXPORT void updateIcon(QComboBox *comboBox);
+    KRITAGLOBAL_EXPORT void updateIcon(QComboBox *comboBox);
 
     /**
      * Update an icon of \p action according to the current theme
      */
-    KRITAUI_EXPORT void updateIcon(QAction *action);
+    KRITAGLOBAL_EXPORT void updateIcon(QAction *action);
 }
 
 #endif /* __KIS_ICON_UTILS_H */

@@ -20,7 +20,7 @@
 #include "kis_dlg_blacklist_cleanup.h"
 #include <kis_resource_server_provider.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_paintop_preset.h>
@@ -38,7 +38,7 @@ KisDlgBlacklistCleanup::KisDlgBlacklistCleanup()
     QWidget* page = new QWidget(this);
     setupUi(page);
     setMainWidget(page);
-    labelWarning->setPixmap(themedIcon("dialog-warning").pixmap(32, 32));
+    labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
 }
 
 void KisDlgBlacklistCleanup::accept()

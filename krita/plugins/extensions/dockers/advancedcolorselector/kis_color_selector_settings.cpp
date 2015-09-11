@@ -27,7 +27,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
@@ -156,7 +156,7 @@ QString KisColorSelectorSettings::header()
 
 QIcon KisColorSelectorSettings::icon()
 {
-    return koIcon("extended_color_selector");
+    return KisIconUtils::loadIcon("extended_color_selector");
 }
 
 

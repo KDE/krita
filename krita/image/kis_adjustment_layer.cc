@@ -23,6 +23,7 @@
 #include "kis_debug.h"
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_image.h"
@@ -118,7 +119,7 @@ void KisAdjustmentLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *u
 
 QIcon KisAdjustmentLayer::icon() const
 {
-    return themedIcon("view-filter");
+    return KisIconUtils::loadIcon("view-filter");
 }
 
 KisDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const

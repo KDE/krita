@@ -27,7 +27,7 @@
 #include "kis_tool_rectangle_base.h"
 #include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <QKeySequence>
 
 

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include <kis_gmic_input_output_widget.h>
 
@@ -55,8 +55,8 @@ KisFilterPreviewWidget* KisGmicInputOutputWidget::previewWidget()
 
 void KisGmicInputOutputWidget::createMainLayout()
 {
-    zoomInButton->setIcon(themedIcon("zoom-in"));
-    zoomOutButton->setIcon(themedIcon("zoom-out"));
+    zoomInButton->setIcon(KisIconUtils::loadIcon("zoom-in"));
+    zoomOutButton->setIcon(KisIconUtils::loadIcon("zoom-out"));
 
     QStringList outputModeStrings = QStringList()
             << i18n("In place (default)")

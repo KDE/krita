@@ -29,7 +29,9 @@
 #include "kis_tool.h"
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <QKeySequence>
+
 class KoResource;
 class KoColorSet;
 

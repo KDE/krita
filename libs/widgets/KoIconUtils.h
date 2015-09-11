@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- *
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,28 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_effect_mask.h"
+#ifndef __KO_ICON_UTILS_H
+#define __KO_ICON_UTILS_H
 
-#include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include "kowidgets_export.h"
 
+class QIcon;
+class QString;
 
-KisEffectMask::KisEffectMask()
-        : KisMask("effect")
+namespace KoIconUtils
 {
+    /**
+     * Load a themed icon using its base name. Use it in
+     * Krita instead of previous themedIcon()
+     */
+    KOWIDGETS_EXPORT QIcon themedIcon(const QString &name);
 }
 
-KisEffectMask::~KisEffectMask()
-{
-}
-
-KisEffectMask::KisEffectMask(const KisEffectMask& rhs)
-        : KisMask(rhs)
-{
-}
-
-QIcon KisEffectMask::icon() const
-{
-    return KisIconUtils::loadIcon("bookmarks");
-}
-
+#endif /* __KIS_ICON_UTILS_H */

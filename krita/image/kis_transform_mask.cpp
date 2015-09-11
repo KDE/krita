@@ -18,6 +18,7 @@
  */
 
 #include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"
@@ -114,7 +115,7 @@ KisPaintDeviceSP KisTransformMask::paintDevice() const
 
 QIcon KisTransformMask::icon() const
 {
-    return themedIcon("edit-cut");
+    return KisIconUtils::loadIcon("edit-cut");
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)

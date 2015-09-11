@@ -21,7 +21,7 @@
 #include "ui_wdgnodequerypatheditor.h"
 #include <QWhatsThis>
 #include <recorder/kis_node_query_path.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 struct KisNodeQueryPathEditor::Private
 {
@@ -35,7 +35,7 @@ KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget* parent) : QWidget(parent
     connect(d->form.radioButtonCurrentLayer, SIGNAL(clicked(bool)), SLOT(currentLayerEnabled(bool)));
     connect(d->form.radioButtonCustomPath, SIGNAL(clicked(bool)), SLOT(customPathEnabled(bool)));
     
-    d->form.kpushbutton->setIcon(themedIcon("system-help"));
+    d->form.kpushbutton->setIcon(KisIconUtils::loadIcon("system-help"));
     connect(d->form.kpushbutton, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
     currentLayerEnabled(true);
 

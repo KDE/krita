@@ -24,7 +24,7 @@
 #include <QShowEvent>
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
@@ -111,7 +111,7 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
 
-            QIcon icon = locked ? themedIcon("locked") : themedIcon("unlocked");
+            QIcon icon = locked ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked");
 
             QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
 

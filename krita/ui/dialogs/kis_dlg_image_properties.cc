@@ -35,7 +35,7 @@
 #include "KoColorProfile.h"
 #include "KoColor.h"
 #include "KoColorPopupAction.h"
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 #include "KoID.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -68,7 +68,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_defaultColorAction = new KoColorPopupAction(this);
     m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());
-    m_defaultColorAction->setIcon(koIcon("format-stroke-color"));
+    m_defaultColorAction->setIcon(KisIconUtils::loadIcon("format-stroke-color"));
     m_defaultColorAction->setToolTip(i18n("Change the background color of the image"));
     m_page->bnBackgroundColor->setDefaultAction(m_defaultColorAction);
 

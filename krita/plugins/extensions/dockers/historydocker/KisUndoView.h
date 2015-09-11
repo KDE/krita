@@ -65,7 +65,7 @@
 #include <QMenu>
 #include <kis_types.h>
 #include <klocalizedstring.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include "kis_canvas2.h"
 
 #ifndef QT_NO_UNDOVIEW

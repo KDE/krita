@@ -25,7 +25,7 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
@@ -49,7 +49,7 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setup(KisActionManager* actionManager)
 {
-    m_toggleGrid = new KisAction(themedIcon("view-grid"), i18n("Show Grid"), 0);
+    m_toggleGrid = new KisAction(KisIconUtils::loadIcon("view-grid"), i18n("Show Grid"), 0);
     m_toggleGrid->setCheckable(true);
     m_toggleGrid->setActivationFlags(KisAction::ACTIVE_NODE);
     m_toggleGrid->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Apostrophe));

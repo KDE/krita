@@ -24,7 +24,7 @@
 #include <QWidgetAction>
 #include <QTimer>
 
-#include "KoIcon.h"
+#include "kis_icon_utils.h"
 
 class KisWheelInputEditor::Private
 {
@@ -43,8 +43,8 @@ KisWheelInputEditor::KisWheelInputEditor(QWidget *parent)
     d->ui->setupUi(popup);
     d->ui->wheelButton->setType(KisInputButton::WheelType);
 
-    d->ui->clearModifiersButton->setIcon(themedIcon("edit-clear"));
-    d->ui->clearWheelButton->setIcon(themedIcon("edit-clear"));
+    d->ui->clearModifiersButton->setIcon(KisIconUtils::loadIcon("edit-clear"));
+    d->ui->clearWheelButton->setIcon(KisIconUtils::loadIcon("edit-clear"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

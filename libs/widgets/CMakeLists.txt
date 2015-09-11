@@ -88,6 +88,8 @@ set(kowidgets_LIB_SRCS
 
     KoGlobal.cpp
     KoTableView.cpp
+    
+    KoIconUtils.cpp
 )
 
 ki18n_wrap_ui( kowidgets_LIB_SRCS

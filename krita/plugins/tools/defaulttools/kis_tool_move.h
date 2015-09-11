@@ -25,7 +25,7 @@
 #include <kis_types.h>
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
-#include <KoIcon.h>
+#include <kis_icon_utils.h>
 #include <QKeySequence>
 #include <QWidget>
 #include <QGroupBox>

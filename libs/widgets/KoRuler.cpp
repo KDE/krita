@@ -29,12 +29,12 @@
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
 
 #include <QPainter>
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QFontDatabase>
 
 #include <KoViewConverter.h>
 
@@ -257,7 +257,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
 //    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
 
-    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
     painter.setFont(font);
 
@@ -431,7 +431,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
 QSize HorizontalPaintingStrategy::sizeHint()
 {
     // assumes that digits for the number only use glyphs which do not go below the baseline
-    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
+    const QFontMetrics fm(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
@@ -485,7 +485,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     if (numberStepPixel <= 0)
         return;
 
-    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
     painter.setFont(font);
 
@@ -594,7 +594,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 QSize VerticalPaintingStrategy::sizeHint()
 {
     // assumes that digits for the number only use glyphs which do not go below the baseline
-    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
+    const QFontMetrics fm(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
@@ -619,7 +619,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     QPointF midPoint = line.pointAt(0.5);
 
     // Draw the label text
-    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
             d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();

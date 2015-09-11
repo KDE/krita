@@ -25,10 +25,10 @@
 #include <QPaintDevice>
 #include <QFont>
 #include <QFontInfo>
+#include <QFontDatabase>
 
 #include <kdebug.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
@@ -63,7 +63,7 @@ KoGlobal::~KoGlobal()
 
 QFont KoGlobal::_defaultFont()
 {
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     // we have to use QFontInfo, in case the font was specified with a pixel size
     if (font.pointSize() == -1) {
         // cache size into m_pointSize, since QFontInfo loads the font -> slow

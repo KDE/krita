@@ -23,8 +23,6 @@
 #include <QKeyEvent>
 
 #include <kcomponentdata.h>
-#include <kglobalsettings.h>
-
 
 ////////////////////////////////////
 // class KoDetailsPane
@@ -61,8 +59,6 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentDa
     m_splitter->setSizes(QList<int>() << 2 << 1);
 
     changePalette();
-
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
 
     connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(selectionChanged(const QModelIndex&)));

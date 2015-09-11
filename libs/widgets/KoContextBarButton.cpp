@@ -24,7 +24,6 @@ Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 // KDE
 #include <kiconloader.h>
 #include <kicon.h>
-#include <kglobalsettings.h>
 
 // Qt
 #include <QStyleOptionToolButton>
@@ -123,8 +122,7 @@ void KoContextBarButton::startFading()
 {
     Q_ASSERT(!m_fadingTimeLine);
 
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    const int duration = animate ? 300 : 1;
+    const int duration = 300;
 
     m_fadingTimeLine = new QTimeLine(duration, this);
     connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),

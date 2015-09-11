@@ -28,7 +28,6 @@
 #include <KoShapeLayer.h>
 
 #include <kdebug.h>
-#include <kglobalsettings.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>
@@ -50,6 +49,7 @@
 #include <QTextLayout>
 #include <QMenu>
 #include <QScrollBar>
+#include <QFontDatabase>
 
 class KoModeBox::Private
 {
@@ -258,8 +258,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
 {
     QSize iconSize = d->tabBar->iconSize();
-    QFont smallFont  = KGlobalSettings::generalFont();
-    qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+    QFont smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
     smallFont.setPointSizeF(pointSize);
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.

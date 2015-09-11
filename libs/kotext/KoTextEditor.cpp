@@ -568,7 +568,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
     }
 
     InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
-
+    Q_UNUSED(insertInlineObjectCommand);
     d->caret.endEditBlock();
  
     if (!cmd) {

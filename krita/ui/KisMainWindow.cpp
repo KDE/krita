@@ -1474,7 +1474,7 @@ void KisMainWindow::slotConfigureToolbars()
 
 void KisMainWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings( KSharedConfig::openConfig()->group("krita"));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group("krita"));
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);

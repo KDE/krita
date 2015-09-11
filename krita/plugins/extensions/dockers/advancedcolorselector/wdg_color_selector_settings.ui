@@ -124,7 +124,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="KDoubleNumInput" name="l_lumaG">
+           <widget class="QDoubleSpinBox" name="l_lumaG">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -169,7 +169,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="KDoubleNumInput" name="l_lumaR">
+           <widget class="QDoubleSpinBox" name="l_lumaR">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -188,7 +188,7 @@
            </widget>
           </item>
           <item row="0" column="5">
-           <widget class="KDoubleNumInput" name="l_lumaB">
+           <widget class="QDoubleSpinBox" name="l_lumaB">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -1355,7 +1355,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KDoubleNumInput</class>
+   <class>QDoubleSpinBox</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
   </customwidget>

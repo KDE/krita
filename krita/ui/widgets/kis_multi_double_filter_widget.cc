@@ -28,7 +28,7 @@
 #include <klocalizedstring.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
-        : KDoubleNumInput(parent)
+    : QDoubleSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

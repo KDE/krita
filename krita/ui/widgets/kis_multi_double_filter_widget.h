@@ -24,7 +24,7 @@
 #include <kis_config_widget.h>
 #include "kritaui_export.h"
 
-class KisDelayedActionDoubleInput : public KDoubleNumInput
+class KisDelayedActionDoubleInput : public QDoubleSpinBox
 {
     Q_OBJECT
 

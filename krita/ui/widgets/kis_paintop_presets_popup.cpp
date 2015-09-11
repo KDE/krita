@@ -30,9 +30,9 @@
 #include <QMenu>
 #include <QAction>
 #include <QShowEvent>
+#include <QFontDatabase>
 
 #include <kconfig.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
@@ -72,9 +72,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 {
     setObjectName("KisPaintOpPresetsPopup");
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    m_d->smallFont  = KGlobalSettings::generalFont();
+    m_d->smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = group.readEntry("palettefontsize", m_d->smallFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
     m_d->smallFont.setPointSizeF(pointSize);
     setFont(m_d->smallFont);
 

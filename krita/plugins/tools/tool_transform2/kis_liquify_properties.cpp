@@ -20,11 +20,9 @@
 
 #include <QDomElement>
 
-
-#include <kglobal.h>
-#include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "kis_debug.h"
 #include "kis_dom_utils.h"

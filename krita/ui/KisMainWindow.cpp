@@ -44,6 +44,7 @@
 #include <QSignalMapper>
 #include <QTabBar>
 #include <QMoveEvent>
+#include <QFontDatabase>
 
 #include <krecentdirs.h>
 #include <kactioncollection.h>
@@ -1703,9 +1704,9 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     }
 
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
+    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    dockWidgetFont.setPointSizeF(qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF()));
+    dockWidgetFont.setPointSizeF(qMax(pointSize,QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
 #ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
@@ -1721,9 +1722,9 @@ void KisMainWindow::forceDockTabFonts()
     foreach(QObject *child, children()) {
         if (child->inherits("QTabBar")) {
             KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-            QFont dockWidgetFont  = KGlobalSettings::generalFont();
+            QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
             qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-            dockWidgetFont.setPointSizeF(qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF()));
+            dockWidgetFont.setPointSizeF(qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
             ((QTabBar *)child)->setFont(dockWidgetFont);
         }
     }
@@ -1977,9 +1978,9 @@ void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
 {
 
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
+    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    dockWidgetFont.setPointSizeF(qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
     dockWidgetFont.setPointSizeF(pointSize);
 
     foreach(QWidget *w, optionWidgetList) {

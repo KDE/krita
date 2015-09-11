@@ -50,7 +50,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
 #include <QAction>
 
@@ -89,8 +88,6 @@ ThemeManager::ThemeManager(QObject *parent)
     : QObject(parent)
     , d(new ThemeManagerPriv)
 {
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 ThemeManager::~ThemeManager()
@@ -135,11 +132,6 @@ void ThemeManager::slotChangePalette()
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
-
-    /*
-    TODO: with recent KDE4 api, we can use KGlobalSettings::createNewApplicationPalette()
-    d->palette = KGlobalSettings::createNewApplicationPalette(config);
-    */
 
     QPalette palette               = qApp->palette();
     QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };

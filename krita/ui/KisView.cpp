@@ -31,7 +31,6 @@
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kstatusbar.h>
 #include <kis_debug.h>

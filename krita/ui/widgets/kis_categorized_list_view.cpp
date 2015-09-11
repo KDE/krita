@@ -23,7 +23,6 @@
 #include <QAction>
 #include <QShowEvent>
 #include <kconfig.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <KoIcon.h>
 

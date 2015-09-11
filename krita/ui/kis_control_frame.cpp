@@ -35,8 +35,8 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QFontDatabase>
 
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <QAction>
 #include <kactioncollection.h>
@@ -75,7 +75,7 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
 {
     setObjectName(name);
     KisConfig cfg;
-    m_font  = KGlobalSettings::generalFont();
+    m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     m_patternWidget = new KisIconWidget(parent, "patterns");
     m_patternWidget->setText(i18n("Fill Patterns"));

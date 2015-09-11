@@ -22,10 +22,6 @@
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
-
-#include <kglobalsettings.h>
-
-
 ////////////////////////////////////
 // class KisDetailsPane
 ///////////////////////////////////
@@ -60,8 +56,6 @@ KisDetailsPane::KisDetailsPane(QWidget* parent, const QString& header)
     m_splitter->setSizes(QList<int>() << 2 << 1);
 
     changePalette();
-
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
 
     connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(selectionChanged(const QModelIndex&)));

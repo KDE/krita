@@ -38,7 +38,7 @@
 #include <QApplication>
 
 #include <QTemporaryFile>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocalizedstring.h>
 #include <KoIcon.h>
 #include <KoDocument.h>
@@ -86,7 +86,7 @@ public:
     }
 
     KoTemplateTree *m_tree;
-    KLineEdit *m_name;
+    QLineEdit *m_name;
     QRadioButton *m_default, *m_custom;
     QPushButton *m_select;
     QLabel *m_preview;
@@ -129,7 +129,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, c
     QHBoxLayout *namefield=new QHBoxLayout();
     leftbox->addLayout( namefield );
     namefield->addWidget(label);
-    d->m_name=new KLineEdit(mainwidget);
+    d->m_name=new QLineEdit(mainwidget);
     d->m_name->setFocus();
     connect(d->m_name, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotNameChanged(const QString &)));

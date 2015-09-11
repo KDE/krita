@@ -29,7 +29,7 @@
 #include <QAction>
 #include <QGridLayout>
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
@@ -39,7 +39,7 @@ class KoTagFilterWidget::Private
 public:
     QString tagSearchBarTooltip_saving_disabled;
     QString tagSearchBarTooltip_saving_enabled;
-    KLineEdit* tagSearchLineEdit;
+    QLineEdit* tagSearchLineEdit;
     QPushButton* tagSearchSaveButton;
     QGridLayout* filterBarLayout;
 };
@@ -76,9 +76,9 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
     QGridLayout* filterBarLayout = new QGridLayout;
 
 
-    d->tagSearchLineEdit = new KLineEdit(this);
-    d->tagSearchLineEdit->setClearButtonShown(true);
-    d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
+    d->tagSearchLineEdit = new QLineEdit(this);
+    d->tagSearchLineEdit->setClearButtonEnabled(true);
+    d->tagSearchLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
     d->tagSearchLineEdit->setEnabled(true);
 

@@ -20,7 +20,7 @@
 
 #include <KoDialog.h>
 
-class KLineEdit;
+class QLineEdit;
 
 class KisFilter;
 class KisFilterConfiguration;
@@ -71,7 +71,7 @@ private:
     KisConfigWidget *m_currentConfigWidget;
     KisFilter *m_currentFilter;
     KisFilterConfiguration *m_currentConfiguration;
-    KLineEdit *m_layerName;
+    QLineEdit *m_layerName;
     KisNodeFilterInterface *m_nodeFilterInterface;
 };
 

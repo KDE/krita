@@ -804,7 +804,9 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
+                   ${CMAKE_SOURCE_DIR}/libs/store
                    ${CMAKE_BINARY_DIR}/libs/odf
+                   ${CMAKE_BINARY_DIR}/libs/store
                    ${KOVERSION_INCLUDES} 
                    )
 

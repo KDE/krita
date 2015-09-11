@@ -3,33 +3,21 @@ include_directories( ${KOODF_INCLUDES} )
 
 ########### next target ###############
 
-set(lzftest_SRCS ../KoLZF.cpp TestKoLZF.cpp )
-kde4_add_unit_test(TestKoLZF TESTNAME libs-odf-TestKoLZF ${lzftest_SRCS})
-target_link_libraries(TestKoLZF Qt5::Test)
-
-########### next target ###############
-
-set(xmlvectortest_SRCS ../KoLZF.cpp TestKoXmlVector.cpp )
-kde4_add_unit_test(TestKoXmlVector TESTNAME libs-odf-TestKoXmlVector ${xmlvectortest_SRCS})
-target_link_libraries(TestKoXmlVector Qt5::Test)
-
-########### next target ###############
-
 set(TestKoGenStyles_SRCS TestKoGenStyles.cpp )
 kde4_add_unit_test(TestKoGenStyles TESTNAME libs-odf-TestKoGenStyles ${TestKoGenStyles_SRCS})
-target_link_libraries(TestKoGenStyles koodf KF5::I18n KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(TestKoGenStyles koodf KF5::I18n  Qt5::Test)
 
 ########### next target ###############
 
 set(TestOdfSettings_SRCS TestOdfSettings.cpp )
 kde4_add_unit_test(TestOdfSettings TESTNAME libs-odf-TestOdfSettings ${TestOdfSettings_SRCS})
-target_link_libraries(TestOdfSettings koodf KF5::I18n KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(TestOdfSettings koodf KF5::I18n  Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoOdfLoadingContext_SRCS TestKoOdfLoadingContext.cpp )
 kde4_add_unit_test(TestKoOdfLoadingContext TESTNAME libs-odf-TestKoOdfLoadingContext ${TestKoOdfLoadingContext_SRCS})
-target_link_libraries(TestKoOdfLoadingContext koodf KF5::I18n KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(TestKoOdfLoadingContext koodf KF5::I18n  Qt5::Test)
 
 ########### next target ###############
 
@@ -57,7 +45,7 @@ set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
 
-target_link_libraries(storedroptest koodf KF5::I18n KF5::KDELibs4Support Qt5::Widgets)
+target_link_libraries(storedroptest koodf KF5::I18n  Qt5::Widgets)
 
 ########### next target ###############
 
@@ -71,7 +59,7 @@ target_link_libraries(kodomtest koodf Qt5::Test )
 
 set(storageTest_SRCS TestStorage.cpp )
 kde4_add_unit_test(TestStorage TESTNAME libs-store-storage ${storageTest_SRCS})
-target_link_libraries(TestStorage koodf KF5::I18n KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(TestStorage koodf KF5::I18n  Qt5::Test)
 
 ########### next target ###############
 

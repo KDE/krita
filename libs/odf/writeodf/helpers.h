@@ -22,6 +22,8 @@
 #include "writeodf/writeodfconfig.h"
 #include "writeodf/writeodftext.h"
 
+#include "koodf_export.h"
+
 namespace writeodf {
 
 template <class T>

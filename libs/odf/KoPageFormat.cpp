@@ -24,7 +24,7 @@
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
-#include <kglobal.h>
+
 // paper formats ( mm )
 #define PG_A3_WIDTH             297.0
 #define PG_A3_HEIGHT            420.0

@@ -27,7 +27,6 @@
 #include <QDateTime>
 #include <QTime>
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kdebug.h>
 

@@ -31,7 +31,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>

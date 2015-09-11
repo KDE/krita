@@ -26,7 +26,6 @@
 #include <QTransform>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kdebug.h>
 
 // ensure the same order as in KoUnit::Unit

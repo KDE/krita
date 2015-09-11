@@ -24,7 +24,7 @@
 
 #include <QMap>
 #include <QIODevice>
-#include "koodf_export.h"
+#include "kostore_export.h"
 
 /**
  * A class for writing out XML (to any QIODevice), with a special attention on performance.
@@ -32,7 +32,7 @@
  * document in memory (like QDom does), and avoids using QTextStream at all
  * (which in Qt3 has major performance issues when converting to utf8).
  */
-class KOODF_EXPORT KoXmlWriter
+class KOSTORE_EXPORT KoXmlWriter
 {
 public:
     /**

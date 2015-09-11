@@ -59,6 +59,8 @@ struct KisAnimationFrameCache::Private
         if (frames.isEmpty()) return 0;
 
         QMap<int, Frame*>::iterator it = frames.upperBound(time);
+        if (it == frames.end()) return 0;
+
         if (it != frames.begin()) it--;
 
         int start = it.key();
@@ -87,7 +89,7 @@ struct KisAnimationFrameCache::Private
     void invalidate(const KisTimeRange& range)
     {
         QMap<int, Frame*>::iterator it = frames.lowerBound(range.start());
-        if (it.key() != range.start()) it--;
+        if (it != frames.end() && it.key() != range.start()) it--;
 
         while (it != frames.end()) {
             Frame *frame = it.value();

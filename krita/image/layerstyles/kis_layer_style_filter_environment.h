@@ -23,6 +23,7 @@
 #include <QRect>
 
 #include <kritaimage_export.h>
+#include "kis_types.h"
 
 class KisPainter;
 class KisLayer;
@@ -44,6 +45,8 @@ public:
     void setupFinalPainter(KisPainter *gc,
                            quint8 opacity,
                            const QBitArray &channelFlags) const;
+
+    KisPixelSelectionSP cachedRandomSelection(const QRect &requestedRect) const;
 
 private:
     struct Private;

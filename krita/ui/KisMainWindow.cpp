@@ -522,7 +522,6 @@ KisMainWindow::~KisMainWindow()
 
 void KisMainWindow::addView(KisView *view)
 {
-    //qDebug() << "KisMainWindow::addView" << view;
     if (d->activeView == view) return;
 
     if (d->activeView) {
@@ -536,7 +535,6 @@ void KisMainWindow::addView(KisView *view)
     if (d->activeView) {
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
-
 }
 
 void KisMainWindow::showView(KisView *imageView)
@@ -757,17 +755,25 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
     return true;
 }
 
+void KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
+{
+    KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
+    addView(view);
+
+    emit guiLoadingFinished();
+}
+
 // Separate from openDocument to handle async loading (remote URLs)
 void KisMainWindow::slotLoadCompleted()
 {
     KisDocument *newdoc = qobject_cast<KisDocument*>(sender());
 
-    KisView *view = KisPart::instance()->createView(newdoc, resourceManager(), actionCollection(), this);
-    addView(view);
+    addViewAndNotifyLoadingCompleted(newdoc);
 
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+
     emit loadCompleted();
 }
 

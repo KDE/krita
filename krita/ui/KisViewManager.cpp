@@ -902,8 +902,7 @@ void KisViewManager::slotCreateCopy()
     doc->setCurrentImage(newImage);
     KisPart::instance()->addDocument(doc);
     KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
-    KisView *view = KisPart::instance()->createView(doc, resourceProvider()->resourceManager(), mw->actionCollection(), mw);
-    mw->addView(view);
+    mw->addViewAndNotifyLoadingCompleted(doc);
 }
 
 

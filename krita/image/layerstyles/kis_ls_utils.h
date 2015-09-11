@@ -57,7 +57,8 @@ namespace KisLsUtils
     void applyNoise(KisPixelSelectionSP selection,
                     const QRect &applyRect,
                     int noise,
-                    const psd_layer_effects_context *context);
+                    const psd_layer_effects_context *context,
+                    const KisLayerStyleFilterEnvironment *env);
 
     void knockOutSelection(KisPixelSelectionSP selection,
                            KisPixelSelectionSP knockOutSelection,

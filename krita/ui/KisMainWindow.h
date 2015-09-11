@@ -88,11 +88,6 @@ public:
     void setNoCleanup(bool noCleanup);
 
     /**
-     * Add a the given view to the list of views of this mainwindow.
-     */
-    void addView(KisView *view);
-
-    /**
      * @brief showView shows the given view. Override this if you want to show
      * the view in a different way than by making it the central widget, for instance
      * as an QMdiSubWindow
@@ -151,6 +146,8 @@ public:
 
     KisViewManager *viewManager() const;
 
+    void addViewAndNotifyLoadingCompleted(KisDocument *document);
+
 Q_SIGNALS:
 
     /**
@@ -172,6 +169,8 @@ Q_SIGNALS:
 
     /// This signal is emitted when the shortcut key configuration has changed
     void keyBindingsChanged();
+
+    void guiLoadingFinished();
 
 public Q_SLOTS:
 
@@ -386,6 +385,13 @@ protected:
     void setToolbarList(QList<QAction*> toolbarList);
 
 private:
+    /**
+     * Add a the given view to the list of views of this mainwindow.
+     * This is a private implementation. For public usage please use
+     * newView() and addViewAndNotifyLoadingCompleted().
+     */
+    void addView(KisView *view);
+
 
     friend class KisApplication;
 

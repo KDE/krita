@@ -422,8 +422,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     KisPart::instance()->addDocument(doc);
 
     KisMainWindow *win = viewManager->mainWindow();
-    KisView *view = KisPart::instance()->createView(doc, win->resourceManager(), win->actionCollection(), win);
-    win->addView(view);
+    win->addViewAndNotifyLoadingCompleted(doc);
 }
 
 void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)

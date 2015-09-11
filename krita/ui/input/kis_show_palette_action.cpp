@@ -46,12 +46,8 @@ int KisShowPaletteAction::priority() const
 
 void KisShowPaletteAction::begin(int, QEvent *event)
 {
-    QPoint pos;
-
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    if (mouseEvent) {
-        pos = mouseEvent->pos();
-    } else {
+    QPoint pos = eventPos(event);
+    if (pos.isNull()) {
         pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
     }
 

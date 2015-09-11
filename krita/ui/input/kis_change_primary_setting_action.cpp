@@ -80,8 +80,7 @@ void KisChangePrimarySettingAction::end(QEvent *event)
 
 void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
-    // Is there a reason to restrict to only mouse and tablet events?
-    if (event && (event->type() != QEvent::MouseMove && event->type() != QEvent::TabletMove)) {
+    if (event && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove)) {
         QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, KisTool::AlternateChangeSize, &targetEvent, event);
     }

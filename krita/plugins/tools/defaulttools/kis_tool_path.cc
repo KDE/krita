@@ -54,6 +54,7 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
 // This is the simplest way to accommodate the popup palette binding.
 bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 {
+    Q_UNUSED(obj);
     if (event->type() == QEvent::MouseButtonPress ||
         event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

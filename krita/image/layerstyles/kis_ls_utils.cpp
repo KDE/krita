@@ -118,34 +118,6 @@ namespace KisLsUtils
     }
 
     namespace Private {
-        KisPixelSelectionSP generateRandomSelection(const QRect &rc)
-        {
-            KisPixelSelectionSP selection = new KisPixelSelection();
-            KisSequentialIterator dstIt(selection, rc);
-
-            if (RAND_MAX >= 0x00FFFFFF) {
-                do {
-                    int randValue = qrand();
-                    *dstIt.rawData() = (quint8) randValue;
-                    if (!dstIt.nextPixel()) break;
-
-                    randValue >>= 8;
-                    *dstIt.rawData() = (quint8) randValue;
-                    if (!dstIt.nextPixel()) break;
-
-                    randValue >>= 8;
-                    *dstIt.rawData() = (quint8) randValue;
-                } while(dstIt.nextPixel());
-
-            } else {
-                do {
-                    *dstIt.rawData() = (quint8) rand();
-                } while(dstIt.nextPixel());
-            }
-
-            return selection;
-        }
-
         void getGradientTable(const KoAbstractGradient *gradient,
                               QVector<KoColor> *table,
                               const KoColorSpace *colorSpace)
@@ -171,8 +143,10 @@ namespace KisLsUtils
 
         struct JitterGradientIndex
         {
-            JitterGradientIndex(const QRect &applyRect, int jitter)
-                : randomSelection(generateRandomSelection(applyRect)),
+            JitterGradientIndex(const QRect &applyRect,
+                                int jitter,
+                                const KisLayerStyleFilterEnvironment *env)
+                : randomSelection(env->cachedRandomSelection(applyRect)),
                   noiseIt(randomSelection, applyRect),
                   m_jitterCoeff(jitter * 255 / 100)
                 {
@@ -250,13 +224,14 @@ namespace KisLsUtils
                            const QRect &applyRect,
                            const QVector<KoColor> &table,
                            bool edgeHidden,
-                           int jitter)
+                           int jitter,
+                           const KisLayerStyleFilterEnvironment *env)
         {
             if (!jitter) {
                 LinearGradientIndex fetcher;
                 applyGradientImpl(device, selection, applyRect, table, edgeHidden, fetcher);
             } else {
-                JitterGradientIndex fetcher(applyRect, jitter);
+                JitterGradientIndex fetcher(applyRect, jitter, env);
                 applyGradientImpl(device, selection, applyRect, table, edgeHidden, fetcher);
             }
         }
@@ -267,13 +242,14 @@ namespace KisLsUtils
     void applyNoise(KisPixelSelectionSP selection,
                     const QRect &applyRect,
                     int noise,
-                    const psd_layer_effects_context *context)
+                    const psd_layer_effects_context *context,
+                    const KisLayerStyleFilterEnvironment *env)
     {
         Q_UNUSED(context);
 
         const QRect overlayRect = kisGrowRect(applyRect, noiseNeedBorder);
 
-        KisPixelSelectionSP randomSelection = Private::generateRandomSelection(overlayRect);
+        KisPixelSelectionSP randomSelection = env->cachedRandomSelection(overlayRect);
         KisPixelSelectionSP randomOverlay = new KisPixelSelection();
 
         KisSequentialConstIterator noiseIt(randomSelection, overlayRect);
@@ -605,7 +581,7 @@ namespace KisLsUtils
 
             Private::applyGradient(overlayDevice, baseSelection->pixelSelection(),
                                    effectRect, table,
-                                   true, config->jitter());
+                                   true, config->jitter(), env);
 
             KisPainter gc(dstDevice);
             gc.setCompositeOp(compositeOp);

@@ -188,7 +188,8 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         KisLsUtils::applyNoise(selection,
                                d.srcRect,
                                shadow->noise(),
-                               context);
+                               context,
+                               env);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_selection_noise.png");
 

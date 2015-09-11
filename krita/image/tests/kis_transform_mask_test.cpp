@@ -32,6 +32,7 @@
 #include "kis_safe_transform.h"
 #include "kis_clone_layer.h"
 #include "kis_group_layer.h"
+#include "kis_paint_device_debug_utils.h"
 
 
 

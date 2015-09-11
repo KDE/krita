@@ -39,6 +39,7 @@
 
 #include "layerstyles/kis_layer_style_projection_plane.h"
 #include "kis_psd_layer_style.h"
+#include "kis_paint_device_debug_utils.h"
 
 
 void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QString testName)

@@ -1195,24 +1195,3 @@ KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
 {
     return new MemoryReleaseObject();
 }
-
-void kis_debug_save_device_incremental(KisPaintDeviceSP device,
-                                       int i,
-                                       const QRect &rc,
-                                       const QString &suffix, const QString &prefix)
-{
-    QString filename = QString("%1_%2.png").arg(i).arg(suffix);
-
-    if (!prefix.isEmpty()) {
-        filename = QString("%1_%2.png").arg(prefix).arg(filename);
-    }
-
-    QRect saveRect(rc);
-
-    if (saveRect.isEmpty()) {
-        saveRect = device->exactBounds();
-    }
-
-    dbgKrita << "Dumping:" << filename;
-    device->convertToQImage(0, saveRect).save(filename);
-}

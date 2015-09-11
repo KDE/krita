@@ -42,7 +42,7 @@ QIcon themedIcon(const QString &name) {
         realName = name;
     }
 
-    QIcon icon(realName);
+    QIcon icon = QIcon::fromTheme(realName);
 
     // fallback
     if (icon.isNull()) {

@@ -82,7 +82,7 @@ calligra_define_feature(FEATURE_RDF "RDF feature")
 calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLIGRA)
 
 # parts
-calligra_define_product(PART_WORDS "Words engine" UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN PLUGIN_TEXTSHAPE)
+calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN PLUGIN_TEXTSHAPE)
 calligra_define_product(PART_STAGE "Stage engine" UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(PART_SHEETS "Sheets engine" UNPORTED REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" UNPORTED REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)

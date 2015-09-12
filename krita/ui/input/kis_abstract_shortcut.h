@@ -21,7 +21,7 @@
 #define __KIS_ABSTRACT_SHORTCUT_H
 
 #include <Qt>
-#include <QList>
+#include <QSet>
 #include <kritaui_export.h>
 class KisAbstractInputAction;
 
@@ -56,8 +56,8 @@ public:
     int shortcutIndex() const;
 
 protected:
-    bool compareKeys(const QList<Qt::Key> &keys1,
-                     const QList<Qt::Key> &keys2);
+    bool compareKeys(const QSet<Qt::Key> &keys1,
+                     const QSet<Qt::Key> &keys2);
 
 private:
     class Private;

@@ -256,7 +256,7 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     }
 
     if (buttonList.size() > 0) {
-        strokeShortcut->setButtons(modifiers, buttonList);
+        strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
         matcher.addShortcut(strokeShortcut);
     }
 }
@@ -273,8 +273,9 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
     //which is the reason we use the last key here since most users will enter
     //shortcuts as "Shift + V". Ideally this should not happen, but this is
     //the way the shortcut matcher is currently implemented.
-    QList<Qt::Key> modifiers = keys;
-    Qt::Key key = modifiers.takeLast();
+    QList<Qt::Key> allKeys = keys;
+    Qt::Key key = allKeys.takeLast();
+    QSet<Qt::Key> modifiers = QSet<Qt::Key>::fromList(allKeys);
     keyShortcut->setKey(modifiers, key);
     matcher.addShortcut(keyShortcut);
 }
@@ -304,7 +305,7 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
         return;
     }
 
-    keyShortcut->setWheel(modifiers, a);
+    keyShortcut->setWheel(QSet<Qt::Key>::fromList(modifiers), a);
     matcher.addShortcut(keyShortcut);
 }
 

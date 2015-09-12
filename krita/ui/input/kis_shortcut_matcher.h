@@ -212,7 +212,7 @@ private:
     void reset(QString msg);
 
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
-    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QList<Qt::Key> &keysState);
+    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState);
 
     void prepareReadyShortcuts();
 

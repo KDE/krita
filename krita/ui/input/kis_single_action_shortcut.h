@@ -42,11 +42,11 @@ public:
 
     int priority() const;
 
-    void setKey(const QList<Qt::Key> &modifiers, Qt::Key key);
-    void setWheel(const QList<Qt::Key> &modifiers, WheelAction wheelAction);
+    void setKey(const QSet<Qt::Key> &modifiers, Qt::Key key);
+    void setWheel(const QSet<Qt::Key> &modifiers, WheelAction wheelAction);
 
-    bool match(const QList<Qt::Key> &modifiers, Qt::Key key);
-    bool match(const QList<Qt::Key> &modifiers, WheelAction wheelAction);
+    bool match(const QSet<Qt::Key> &modifiers, Qt::Key key);
+    bool match(const QSet<Qt::Key> &modifiers, WheelAction wheelAction);
 
 private:
     class Private;

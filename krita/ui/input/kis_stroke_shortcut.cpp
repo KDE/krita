@@ -23,8 +23,8 @@
 class Q_DECL_HIDDEN KisStrokeShortcut::Private
 {
 public:
-    QList<Qt::Key> modifiers;
-    QList<Qt::MouseButton> buttons;
+    QSet<Qt::Key> modifiers;
+    QSet<Qt::MouseButton> buttons;
 };
 
 
@@ -49,8 +49,8 @@ int KisStrokeShortcut::priority() const
     return m_d->modifiers.size() * 0xFFFF + buttonScore * 0xFF + action()->priority();
 }
 
-void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,
-                                   const QList<Qt::MouseButton> &buttons)
+void KisStrokeShortcut::setButtons(const QSet<Qt::Key> &modifiers,
+                                   const QSet<Qt::MouseButton> &buttons)
 {
     if (buttons.size() == 0) return;
 
@@ -58,8 +58,8 @@ void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,
     m_d->buttons = buttons;
 }
 
-bool KisStrokeShortcut::matchReady(const QList<Qt::Key> &modifiers,
-                                   const QList<Qt::MouseButton> &buttons)
+bool KisStrokeShortcut::matchReady(const QSet<Qt::Key> &modifiers,
+                                   const QSet<Qt::MouseButton> &buttons)
 {
     bool modifiersOk =
         (m_d->modifiers.isEmpty() && action()->canIgnoreModifiers()) ||

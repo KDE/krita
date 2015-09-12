@@ -53,8 +53,8 @@ public:
      * \param buttons mouse buttons that should be pressed (simultaneously)
      *                for the shortcut to trigger
      */
-    void setButtons(const QList<Qt::Key> &modifiers,
-                    const QList<Qt::MouseButton> &buttons);
+    void setButtons(const QSet<Qt::Key> &modifiers,
+                    const QSet<Qt::MouseButton> &buttons);
 
     /**
      * Reports whether all but one buttons and modifiers are pressed
@@ -63,8 +63,8 @@ public:
      * action. This can be done with, e.g. changing the cursor.
      */
 
-    bool matchReady(const QList<Qt::Key> &modifiers,
-                    const QList<Qt::MouseButton> &buttons);
+    bool matchReady(const QSet<Qt::Key> &modifiers,
+                    const QSet<Qt::MouseButton> &buttons);
     /**
      * Reports whether the shortcut can transit form the "Ready"
      * to "Running" state. It means that the last button of the shortcut

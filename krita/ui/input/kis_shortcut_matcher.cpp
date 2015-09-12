@@ -58,8 +58,8 @@ public:
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
 
-    QList <Qt::Key> keys; // Model of currently pressed keys
-    QList <Qt::MouseButton> buttons; // Model of currently pressed buttons
+    QSet<Qt::Key> keys; // Model of currently pressed keys
+    QSet<Qt::MouseButton> buttons; // Model of currently pressed buttons
 
     KisStrokeShortcut *runningShortcut;
     KisStrokeShortcut *readyShortcut;
@@ -121,7 +121,7 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
         retval =  tryRunSingleActionShortcutImpl(key, (QEvent*)0, m_d->keys);
     }
 
-    m_d->keys.append(key);
+    m_d->keys.insert(key);
     DEBUG_KEY("Pressed");
 
     if (!m_d->runningShortcut) {
@@ -140,8 +140,8 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 
     if (!m_d->runningShortcut) {
         // Autorepeated key should not be included in the shortcut
-        QList<Qt::Key> filteredKeys = m_d->keys;
-        filteredKeys.removeOne(key);
+        QSet<Qt::Key> filteredKeys = m_d->keys;
+        filteredKeys.remove(key);
         retval = tryRunSingleActionShortcutImpl(key, (QEvent*)0, filteredKeys);
     }
 
@@ -151,7 +151,7 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 bool KisShortcutMatcher::keyReleased(Qt::Key key)
 {
     if (!m_d->keys.contains(key)) reset("Peculiar, key released but can't remember it was pressed");
-    else m_d->keys.removeOne(key);
+    else m_d->keys.remove(key);
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -178,7 +178,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
         retval = tryRunReadyShortcut(button, event);
     }
 
-    m_d->buttons.append(button);
+    m_d->buttons.insert(button);
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -204,7 +204,7 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
     }
 
     if (!m_d->buttons.contains(button)) reset("Peculiar, button released but we can't remember it was pressed");
-    else m_d->buttons.removeOne(button);
+    else m_d->buttons.remove(button);
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -346,7 +346,7 @@ bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelActio
 
 // Note: sometimes event can be zero!!
 template<typename T, typename U>
-bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QList<Qt::Key> &keysState)
+bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState)
 {
     if (m_d->actionsSuppressed()) {
         DEBUG_EVENT_ACTION("Event suppressed", event)

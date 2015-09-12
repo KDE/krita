@@ -23,6 +23,7 @@
 #include <QTransform>
 #include <kis_paint_information.h>
 
+
 class KisLodTransform {
 public:
     KisLodTransform(int levelOfDetail) {
@@ -38,6 +39,15 @@ public:
         m_transform = QTransform::fromScale(scale, scale);
         m_levelOfDetail = levelOfDetail;
     }
+
+#ifdef Q_CC_MSVC
+    static double log2( double n )
+    {
+        // log(n)/log(2) is log2.
+        return log( n ) / log( 2 );
+    }
+#endif
+
 
     static int scaleToLod(qreal scale, int maxLod) {
         return qMin(maxLod, qMax(0, qFloor(log2(1.0 / scale))));

@@ -20,7 +20,7 @@
 
 
 #include <QtGlobal>
-
+#include <QRect>
 
 KisProjectionUpdatesFilter::~KisProjectionUpdatesFilter()
 {

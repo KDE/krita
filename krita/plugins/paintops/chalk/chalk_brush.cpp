@@ -29,6 +29,14 @@
 #include <cmath>
 #include <ctime>
 
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+inline double drand48()
+{
+    return double(rand()) / RAND_MAX;
+}
+#endif
+
 
 ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation* transformation)
 {

@@ -22,10 +22,6 @@
 #include <QWidget>
 #include <QPolygonF>
 #include <QTransform>
-#ifdef HAVE_OPENGL
-#include <QOpenGLShaderProgram>
-#include <QOpenGLContext>
-#endif
 
 #include <klocalizedstring.h>
 #include <QAction>
@@ -73,8 +69,6 @@
 #include <KisView.h>
 
 
-typedef void (*kis_glLogicOp)(int);
-
 
 struct KisTool::Private {
     Private()
@@ -83,9 +77,6 @@ struct KisTool::Private {
           currentExposure(1.0),
           currentGenerator(0),
           optionWidget(0)
-#ifdef HAVE_OPENGL
-        , cursorShader(0)
-#endif
     {
     }
 
@@ -100,10 +91,6 @@ struct KisTool::Private {
     KisFilterConfiguration* currentGenerator;
     QWidget* optionWidget;
 
-#ifdef HAVE_OPENGL
-    QOpenGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
-    int cursorShaderModelViewProjectionUniform;
-#endif
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -138,9 +125,6 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
 KisTool::~KisTool()
 {
-#ifdef HAVE_OPENGL
-    delete d->cursorShader;
-#endif
     delete d;
 }
 
@@ -598,71 +582,9 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
 #ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    if (canvasWidget && ctx)  {
+    if (canvasWidget)  {
         painter->beginNativePainting();
-
-        if (d->cursorShader == 0) {
-            d->cursorShader = new QOpenGLShaderProgram();
-            d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
-            d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
-            d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-            if (! d->cursorShader->link()) {
-                dbgKrita << "OpenGL error" << canvasWidget->glGetError();
-                qFatal("Failed linking cursor shader");
-            }
-            Q_ASSERT(d->cursorShader->isLinked());
-            d->cursorShaderModelViewProjectionUniform = d->cursorShader->uniformLocation("modelViewProjection");
-        }
-
-        d->cursorShader->bind();
-
-        // setup the mvp transformation
-        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        Q_ASSERT(kritaCanvas);
-        const KisCoordinatesConverter *converter = kritaCanvas->coordinatesConverter();
-
-        QMatrix4x4 projectionMatrix;
-        projectionMatrix.setToIdentity();
-        projectionMatrix.ortho(0, canvasWidget->width(), canvasWidget->height(), 0, NEAR_VAL, FAR_VAL);
-
-        // Set view/projection matrices
-        QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
-        modelMatrix.optimize();
-        modelMatrix = projectionMatrix * modelMatrix;
-        d->cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
-
-        canvasWidget->glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        // XXX: glLogicOp not in ES 2.0 -- in that case, it would be better to use another method.
-        // It is defined in 3.1 core profile onward.
-        canvasWidget->glEnable(GL_COLOR_LOGIC_OP);
-        kis_glLogicOp ptr_glLogicOp = (kis_glLogicOp)ctx->getProcAddress("glLogicOp");  //Doing this lookup in a loop is a bit expensive.
-        if (ptr_glLogicOp) {
-            ptr_glLogicOp(GL_XOR);
-        }
-
-
-        // setup the array of vertices
-        QVector<QVector3D> vertices;
-        QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-        for (int i=0; i<subPathPolygons.size(); i++) {
-            const QPolygonF& polygon = subPathPolygons.at(i);
-            for (int j=0; j < polygon.count(); j++) {
-                QPointF p = polygon.at(j);
-                vertices << QVector3D(p.x(), p.y(), 0.f);
-            }
-            d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
-
-            canvasWidget->glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-
-            vertices.clear();
-        }
-
-        canvasWidget->glDisable(GL_COLOR_LOGIC_OP);
-
-        d->cursorShader->release();
-
+        canvasWidget->paintToolOutline(path);
         painter->endNativePainting();
     }
     else

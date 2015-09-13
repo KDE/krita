@@ -29,6 +29,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPainterPath>
 #include <QPoint>
 #include <QPainter>
 #include <QMatrix>
@@ -81,6 +82,11 @@ namespace
 const GLuint NO_PROGRAM = 0;
 }
 
+
+typedef void (*kis_glLogicOp)(int);
+static kis_glLogicOp ptr_glLogicOp = 0;
+
+
 struct KisOpenGLCanvas2::Private
 {
 public:
@@ -88,6 +94,7 @@ public:
         : canvasInitialized(false)
         , displayShader(0)
         , checkerShader(0)
+        , cursorShader(0)
         , glSyncObject(0)
         , wrapAroundMode(false)
 
@@ -99,6 +106,7 @@ public:
     ~Private() {
         delete displayShader;
         delete checkerShader;
+        delete cursorShader;
 
         delete[] vertices;
         delete[] texCoords;
@@ -124,6 +132,11 @@ public:
     QOpenGLShaderProgram *checkerShader;
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
+
+    QOpenGLShaderProgram *cursorShader;
+    int cursorShaderModelViewProjectionUniform;
+
+
 
     KisDisplayFilter* displayFilter;
     KisTextureTile::FilterMode filterMode;
@@ -277,6 +290,8 @@ void KisOpenGLCanvas2::initializeGL()
     initializeCheckerShader();
     initializeDisplayShader();
 
+    ptr_glLogicOp = (kis_glLogicOp)(context()->getProcAddress("glLogicOp"));
+
     Sync::init();
 
 
@@ -336,6 +351,75 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
+}
+
+QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
+{
+    if (d->cursorShader == 0) {
+        d->cursorShader = new QOpenGLShaderProgram();
+        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
+        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
+        d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
+        if (! d->cursorShader->link()) {
+            dbgKrita << "OpenGL error" << glGetError();
+            qFatal("Failed linking cursor shader");
+        }
+        Q_ASSERT(d->cursorShader->isLinked());
+        d->cursorShaderModelViewProjectionUniform = d->cursorShader->uniformLocation("modelViewProjection");
+    }
+
+    return d->cursorShader;
+}
+
+void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
+{
+
+    QOpenGLShaderProgram *cursorShader = getCursorShader();
+    cursorShader->bind();
+
+    // setup the mvp transformation
+    KisCoordinatesConverter *converter = coordinatesConverter();
+
+    QMatrix4x4 projectionMatrix;
+    projectionMatrix.setToIdentity();
+    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+    // Set view/projection matrices
+    QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
+    modelMatrix.optimize();
+    modelMatrix = projectionMatrix * modelMatrix;
+    cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
+
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+    // XXX: glLogicOp not in ES 2.0 -- in that case, it would be better to use another method.
+    // It is defined in 3.1 core profile onward.
+    glEnable(GL_COLOR_LOGIC_OP);
+    if (ptr_glLogicOp) {
+        ptr_glLogicOp(GL_XOR);
+    }
+
+    // setup the array of vertices
+    QVector<QVector3D> vertices;
+    QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
+    for (int i=0; i<subPathPolygons.size(); i++) {
+        const QPolygonF& polygon = subPathPolygons.at(i);
+        for (int j=0; j < polygon.count(); j++) {
+            QPointF p = polygon.at(j);
+            vertices << QVector3D(p.x(), p.y(), 0.f);
+        }
+        cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+        cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+
+        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
+        vertices.clear();
+    }
+
+    glDisable(GL_COLOR_LOGIC_OP);
+
+    cursorShader->release();
+
 }
 
 bool KisOpenGLCanvas2::isBusy() const

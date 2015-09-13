@@ -39,6 +39,8 @@ class QWidget;
 class QPaintEvent;
 class KisCanvas2;
 class KisDisplayColorConverter;
+class QOpenGLShaderProgram;
+class QPainterPath;
 
 
 /**
@@ -73,6 +75,7 @@ public:
     void initializeDisplayShader();
     void renderCanvasGL();
     void renderDecorations(QPainter *painter);
+    void paintToolOutline(const QPainterPath &path);
 
 
 public: // Implement kis_abstract_canvas_widget interface
@@ -101,6 +104,7 @@ protected: // KisCanvasWidgetBase
 
 private:
     void reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log);
+    QOpenGLShaderProgram *getCursorShader();
     void drawImage();
     void drawCheckers();
     QByteArray buildFragmentShader();

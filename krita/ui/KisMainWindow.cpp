@@ -125,8 +125,6 @@
 #include <KisImportExportFilter.h>
 #include <KisDocumentEntry.h>
 
-#include "calligraversion.h"
-
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:

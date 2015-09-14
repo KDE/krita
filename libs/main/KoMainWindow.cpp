@@ -90,8 +90,6 @@
 #include <QMutexLocker>
 #include <QFontDatabase>
 
-#include "calligraversion.h"
-
 class KoMainWindowPrivate
 {
 public:

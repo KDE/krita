@@ -304,8 +304,8 @@ set(einspline_SRCS
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 # generate_export_header(kritaimage BASE_NAME kritaimage)
 
-target_link_libraries(kritaimage kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage koversion kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koversion kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

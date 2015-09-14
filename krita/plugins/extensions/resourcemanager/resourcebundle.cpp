@@ -49,8 +49,8 @@
 #include <kis_brush_server.h>
 #include <kis_debug.h>
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
+#include <CalligraVersionWrapper.h>
+
 
 #include "resourcemanager.h"
 
@@ -60,17 +60,7 @@ ResourceBundle::ResourceBundle(QString const& fileName)
       m_bundleVersion("1")
 {
     setName(QFileInfo(fileName).baseName());
-
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
-
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
-#else
-    version = calligraVersion;
-#endif
-    m_metadata["generator"] = "Krita (" + version + ")";
+    m_metadata["generator"] = "Krita (" + CalligraVersionWrapper::versionString(true) + ")";
 }
 
 ResourceBundle::~ResourceBundle()

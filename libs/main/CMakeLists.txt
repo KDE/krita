@@ -89,6 +89,7 @@ add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
 target_link_libraries(komain
     kowidgets
     kotextlayout
+    koversion
 )
 
 if( KF5_Activities_FOUND )
@@ -100,7 +101,7 @@ if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
 endif ()
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KIO_LIBS})
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES koversion kotext kowidgets ${KDE4_KIO_LIBS})
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

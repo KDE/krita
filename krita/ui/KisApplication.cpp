@@ -81,11 +81,11 @@
 #include "opengl/kis_opengl.h"
 #endif
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include "KisApplicationArguments.h"
+
+#include <CalligraVersionWrapper.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -146,14 +146,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationDisplayName("Krita");
     setApplicationName("krita");
 
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion);
-#else
-    version = calligraVersion;
-#endif
+    QString version = CalligraVersionWrapper::versionString(true);
     setApplicationVersion(version);
 
     // Tell the iconloader about share/apps/calligra/icons

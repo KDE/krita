@@ -39,7 +39,7 @@
 #include <QTextTable>
 #include <QTest>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #define FRAME_SPACING 10.0
 

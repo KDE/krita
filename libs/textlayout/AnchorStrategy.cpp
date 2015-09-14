@@ -25,7 +25,7 @@
 
 #include <KoShapeContainer.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 
 

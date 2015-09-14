@@ -37,7 +37,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 
 #include <QTextDocument>
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 #include <KoBookmark.h>
 #include <KoTextRangeManager.h>
 

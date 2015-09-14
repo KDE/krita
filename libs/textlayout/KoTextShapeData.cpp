@@ -31,7 +31,6 @@
 
 #include <KoTextLayoutRootArea.h>
 
-#include <kdebug.h>
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -52,6 +51,7 @@
 #include "opendocument/KoTextLoader.h"
 #include "opendocument/KoTextWriter.h"
 
+#include <TextLayoutDebug.h>
 
 class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {
@@ -284,7 +284,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
                     element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
                     context.odfLoadingContext().useStylesAutoStyles());
         if (!style) {
-            kDebug(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
+            warnTextLayout << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
         }
     }
     if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
@@ -292,7 +292,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
                     element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
                     context.odfLoadingContext().useStylesAutoStyles());
         if (!style) {
-            kDebug(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
+            warnTextLayout << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
         }
     }
 

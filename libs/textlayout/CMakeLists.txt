@@ -28,14 +28,15 @@ set(textlayout_LIB_SRCS
     DummyDocumentLayout.cpp
     IndexGeneratorManager.cpp
     KoStyleThumbnailer.cpp
+    TextLayoutDebug.cpp
 )
 
 
 add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
 generate_export_header(kotextlayout BASE_NAME kotextlayout)
 
-target_link_libraries(kotextlayout kotext KF5::KDELibs4Support)
-target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext KF5::KDELibs4Support)
+target_link_libraries(kotextlayout kotext)
+target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext)
 
 set_target_properties(kotextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

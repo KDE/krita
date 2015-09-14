@@ -25,7 +25,7 @@
 #include <KoTextDocument.h>
 #include <KoList.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 #include <klocalizedstring.h>
 #include <QTextList>
 
@@ -39,7 +39,7 @@ QString Lists::intToRoman(int n)
     static const QString RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
 
     if (n <= 0) {
-        kWarning(32500) << "intToRoman called with negative number: n=" << n;
+        warnTextLayout << "intToRoman called with negative number: n=" << n;
         return QString::number(n);
     }
 
@@ -268,7 +268,7 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 
 void ListItemsHelper::recalculateBlock(QTextBlock &block)
 {
-    //kDebug(32500);
+    //warnTextLayout;
     const QTextListFormat format = m_textList->format();
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(format.style());
 
@@ -490,7 +490,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     }
     blockData.setCounterWidth(width);
     blockData.setCounterSpacing(counterSpacing);
-    //kDebug(32500);
+    //warnTextLayout;
 }
 
 // static

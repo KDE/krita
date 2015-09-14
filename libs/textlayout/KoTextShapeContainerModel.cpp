@@ -29,7 +29,7 @@
 #include <QTextLine>
 #include <QTextDocument>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 struct Relation
 {
@@ -181,7 +181,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 
     QPointF newPosition = child->position() + move/* + relation.anchor->offset()*/;
     const QRectF parentShapeRect(QPointF(0, 0), child->parent()->size());
-//kDebug(32500) <<"proposeMove:" /*<< move <<" |"*/ << newPosition <<" |" << parentShapeRect;
+//warnTextLayout <<"proposeMove:" /*<< move <<" |"*/ << newPosition <<" |" << parentShapeRect;
 
     QTextLayout *layout = 0;
     int anchorPosInParag = -1;

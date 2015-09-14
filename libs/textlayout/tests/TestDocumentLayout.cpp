@@ -22,7 +22,7 @@
 #include "MockRootAreaProvider.h"
 #include <QTest>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #include <KoTextDocument.h>
 #include <KoStyleManager.h>

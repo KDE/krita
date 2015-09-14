@@ -25,8 +25,7 @@
 #include <QReadWriteLock>
 #include <QStringList>
 #include <QDir>
-
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include "KoPluginLoader.h"
 #include "KoGenericRegistry.h"
@@ -43,6 +42,9 @@
 #include "colorspaces/KoRgbU8ColorSpace.h"
 #include "colorspaces/KoSimpleColorSpaceEngine.h"
 #include "KoColorSpace_p.h"
+
+Q_GLOBAL_STATIC(KoColorSpaceRegistry, s_instance)
+
 
 struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
@@ -61,7 +63,6 @@ struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoColorSpaceRegistry, s_instance);
     if (!s_instance.exists()) {
         s_instance->init();
     }

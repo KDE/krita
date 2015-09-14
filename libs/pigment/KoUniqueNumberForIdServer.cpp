@@ -20,8 +20,9 @@
 #include "KoUniqueNumberForIdServer.h"
 
 #include <QHash>
+#include <QGlobalStatic>
 
-#include <kglobal.h>
+Q_GLOBAL_STATIC(KoUniqueNumberForIdServer, s_instance)
 
 struct Q_DECL_HIDDEN KoUniqueNumberForIdServer::Private {
     Private()
@@ -43,7 +44,6 @@ KoUniqueNumberForIdServer::~KoUniqueNumberForIdServer()
 
 KoUniqueNumberForIdServer* KoUniqueNumberForIdServer::instance()
 {
-    K_GLOBAL_STATIC(KoUniqueNumberForIdServer, s_instance);
     return s_instance;
 }
 

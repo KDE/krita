@@ -19,13 +19,17 @@
 
 #include "KoCompositeOpRegistry.h"
 
-#include <kglobal.h>
-#include <klocalizedstring.h>
-#include <KoID.h>
+#include <QGlobalStatic>
 #include <QList>
 
+#include <klocalizedstring.h>
+
+#include <KoID.h>
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
+
+Q_GLOBAL_STATIC(KoCompositeOpRegistry, registry)
+
 
 KoCompositeOpRegistry::KoCompositeOpRegistry()
 {
@@ -132,7 +136,6 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
 
 const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoCompositeOpRegistry, registry);
     return *registry;
 }
 

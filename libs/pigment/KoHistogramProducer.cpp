@@ -19,14 +19,15 @@
 #include "KoHistogramProducer.h"
 
 #include <QList>
-
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <KoID.h>
 
 #include "KoBasicHistogramProducers.h"
 
 #include "KoColorSpace.h"
+
+Q_GLOBAL_STATIC(KoHistogramProducerFactoryRegistry, s_instance)
 
 KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry()
 {
@@ -39,7 +40,6 @@ KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry()
 
 KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoHistogramProducerFactoryRegistry, s_instance);
     return s_instance;
 
 }

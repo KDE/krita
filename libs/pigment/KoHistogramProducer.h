@@ -126,13 +126,13 @@ class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
         : public KoGenericRegistry<KoHistogramProducerFactory*>
 {
 public:
+    KoHistogramProducerFactoryRegistry();
     virtual ~KoHistogramProducerFactoryRegistry();
     static KoHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
     QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace) const;
 
 private:
-    KoHistogramProducerFactoryRegistry();
     KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);
     KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry&);
 };

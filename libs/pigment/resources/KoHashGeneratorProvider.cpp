@@ -19,12 +19,13 @@
 #include "KoHashGeneratorProvider.h"
 
 #include <QMutexLocker>
+#include <QGlobalStatic>
 
 #include "KoMD5Generator.h"
 
-#include <kglobal.h>
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = 0;
-
+Q_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
+    
 KoHashGeneratorProvider::KoHashGeneratorProvider()
 {
     // Initialize default generators
@@ -53,6 +54,5 @@ void KoHashGeneratorProvider::setGenerator(QString algorithm, KoHashGenerator *g
 
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance()
 {
-    K_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
     return s_instance;
 }

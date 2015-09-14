@@ -44,6 +44,8 @@ class KoColorConversionCache;
 class PIGMENTCMS_EXPORT KoColorSpaceRegistry
 {
 public:
+    KoColorSpaceRegistry();
+
     enum ColorSpaceListVisibility {
         OnlyUserVisible = 1, ///< Only user visible color space
         AllColorSpaces = 4 ///< All color space even those not visible to the user
@@ -332,7 +334,6 @@ private:
     QString idsToCacheName(const QString & csId, const QString & profileName) const;
 
 private:
-    KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);
     KoColorSpaceRegistry operator=(const KoColorSpaceRegistry&);
     void init();

@@ -65,6 +65,8 @@ bool KisIdleWatcher::isIdle() const
     bool idle = true;
 
     foreach(KisImageSP image, m_d->trackedImages) {
+        if (!image) continue;
+
         if (!image->isIdle()) {
             idle = false;
             break;

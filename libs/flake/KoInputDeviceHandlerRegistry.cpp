@@ -18,9 +18,12 @@
  */
 
 #include "KoInputDeviceHandlerRegistry.h"
-#include <kglobal.h>
+
+#include <QGlobalStatic>
 
 #include <KoPluginLoader.h>
+
+Q_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
 
 KoInputDeviceHandlerRegistry::KoInputDeviceHandlerRegistry()
 {
@@ -60,7 +63,6 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 
 KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

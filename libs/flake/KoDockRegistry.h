@@ -36,6 +36,7 @@
 class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
 {
 public:
+    KoDockRegistry();
     ~KoDockRegistry();
 
     /**
@@ -45,7 +46,7 @@ public:
     static KoDockRegistry *instance();
 
 private:
-    KoDockRegistry();
+
     KoDockRegistry(const KoDockRegistry&);
     KoDockRegistry operator=(const KoDockRegistry&);
     void init();

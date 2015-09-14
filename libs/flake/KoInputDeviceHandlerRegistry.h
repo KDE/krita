@@ -33,6 +33,7 @@
 class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler*>
 {
 public:
+    KoInputDeviceHandlerRegistry();
     ~KoInputDeviceHandlerRegistry();
 
     /**
@@ -42,7 +43,6 @@ public:
     static KoInputDeviceHandlerRegistry *instance();
 
 private:
-    KoInputDeviceHandlerRegistry();
     KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry&);
     KoInputDeviceHandlerRegistry operator=(const KoInputDeviceHandlerRegistry&);
     void init();

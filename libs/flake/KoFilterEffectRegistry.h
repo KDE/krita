@@ -31,6 +31,7 @@ class KoFilterEffectLoadingContext;
 class FLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase*>
 {
 public:
+    KoFilterEffectRegistry();
     virtual ~KoFilterEffectRegistry();
 
     /**
@@ -47,7 +48,7 @@ public:
     KoFilterEffect *createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
 
 private:
-    KoFilterEffectRegistry();
+
     KoFilterEffectRegistry(const KoFilterEffectRegistry&);
     KoFilterEffectRegistry operator=(const KoFilterEffectRegistry&);
     void init();

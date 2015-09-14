@@ -20,14 +20,16 @@
 #include "KoEventActionRegistry.h"
 
 #include <QHash>
-#include <KoPluginLoader.h>
-#include <kglobal.h>
+#include <QGlobalStatic>
+
 #include <kdebug.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include "KoEventActionFactoryBase.h"
 #include "KoEventAction.h"
+#include <KoPluginLoader.h>
+
 
 class KoEventActionRegistry::Singleton
 {
@@ -39,7 +41,7 @@ public:
     bool initDone;
 };
 
-K_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
+Q_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
 
 class Q_DECL_HIDDEN KoEventActionRegistry::Private
 {

@@ -143,6 +143,7 @@ class FLAKE_EXPORT KoToolManager : public QObject
     Q_OBJECT
 
 public:
+    KoToolManager();
     /// Return the toolmanager singleton
     static KoToolManager* instance();
     ~KoToolManager();
@@ -319,7 +320,6 @@ Q_SIGNALS:
     void addedTool(KoToolAction *toolAction, KoCanvasController *canvas);
 
 private:
-    KoToolManager();
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
 

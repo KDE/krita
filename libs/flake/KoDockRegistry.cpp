@@ -20,8 +20,9 @@
 #include "KoDockRegistry.h"
 
 #include "KoPluginLoader.h"
+#include <QGlobalStatic>
 
-#include <kglobal.h>
+Q_GLOBAL_STATIC(KoDockRegistry, s_instance)
 
 KoDockRegistry::KoDockRegistry()
   : d(0)
@@ -47,7 +48,7 @@ KoDockRegistry::~KoDockRegistry()
 
 KoDockRegistry* KoDockRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoDockRegistry, s_instance)
+
     if (!s_instance.exists()) {
         s_instance->init();
     }

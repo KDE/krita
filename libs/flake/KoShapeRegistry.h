@@ -38,6 +38,7 @@ class KoShapeLoadingContext;
 class FLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase*>
 {
 public:
+    KoShapeRegistry();
     ~KoShapeRegistry();
 
     /**
@@ -74,7 +75,6 @@ public:
     QList<KoShapeFactoryBase*> factoriesForElement(const QString &nameSpace, const QString &elementName);
 
 private:
-    KoShapeRegistry();
     KoShapeRegistry(const KoShapeRegistry&);
     KoShapeRegistry operator=(const KoShapeRegistry&);
 

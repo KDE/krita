@@ -43,9 +43,11 @@
 #include <QHash>
 #include <QMultiMap>
 #include <QPainter>
+#include <QGlobalStatic>
 
 #include <kdebug.h>
-#include <kglobal.h>
+
+Q_GLOBAL_STATIC(KoShapeRegistry, s_instance)
 
 class Q_DECL_HIDDEN KoShapeRegistry::Private
 {
@@ -105,7 +107,6 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
 
 KoShapeRegistry* KoShapeRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoShapeRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->d->init(s_instance);
     }

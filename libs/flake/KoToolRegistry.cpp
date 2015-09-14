@@ -19,7 +19,7 @@
  */
 
 #include "KoToolRegistry.h"
-#include <kglobal.h>
+
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -32,8 +32,11 @@
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
 #include "KoToolManager.h"
-
 #include <KoPluginLoader.h>
+
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KoToolRegistry, s_instance)
 
 KoToolRegistry::KoToolRegistry()
   : d(0)
@@ -71,7 +74,6 @@ KoToolRegistry::~KoToolRegistry()
 
 KoToolRegistry* KoToolRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoToolRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

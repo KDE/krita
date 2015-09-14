@@ -54,12 +54,15 @@
 #include <QApplication>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <kglobal.h>
+
 #include <QAction>
 #include <klocalizedstring.h>
 #include <QKeySequence>
 #include <QStack>
 #include <QLabel>
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KoToolManager, s_instance)
 
 class Q_DECL_HIDDEN KoToolAction::Private
 {
@@ -1107,7 +1110,6 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
 KoToolManager* KoToolManager::instance()
 {
-    K_GLOBAL_STATIC(KoToolManager, s_instance)
     return s_instance;
 }
 

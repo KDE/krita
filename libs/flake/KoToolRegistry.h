@@ -33,6 +33,7 @@
 class FLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryBase*>
 {
 public:
+    KoToolRegistry();
     ~KoToolRegistry();
 
     /**
@@ -49,7 +50,6 @@ public:
     void addDeferred(KoToolFactoryBase *toolFactory);
 
 private:
-    KoToolRegistry();
     KoToolRegistry(const KoToolRegistry&);
     KoToolRegistry operator=(const KoToolRegistry&);
     void init();

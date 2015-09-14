@@ -19,7 +19,7 @@
 
 #include "TestKoColor.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QDomElement>
 
@@ -73,4 +73,4 @@ void TestKoColor::testSerialization()
     //testForModel(YCbCrAColorModelID.id());
 }
 
-QTEST_KDEMAIN(TestKoColor, NoGUI)
+QTEST_GUILESS_MAIN(TestKoColor)

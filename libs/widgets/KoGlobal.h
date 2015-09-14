@@ -33,6 +33,8 @@ class KConfig;
 class KOWIDGETS_EXPORT KoGlobal
 {
 public:
+    KoGlobal();
+
     /// For KoApplication
     static void initialize()  {
         (void)self(); // I don't want to make KGlobal instances public, so self() is private
@@ -76,7 +78,7 @@ public:
 
 private:
     static KoGlobal* self();
-    KoGlobal();
+
     QFont _defaultFont();
     QStringList _listOfLanguages();
     QStringList _listOfLanguageTags();

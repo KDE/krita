@@ -26,30 +26,25 @@
 #include <QFont>
 #include <QFontInfo>
 #include <QFontDatabase>
+#include <QGlobalStatic>
 
 #include <kdebug.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
 
+Q_GLOBAL_STATIC(KoGlobal, s_instance)
 
 KoGlobal* KoGlobal::self()
 {
-    K_GLOBAL_STATIC(KoGlobal, s_instance)
     return s_instance;
 }
 
 KoGlobal::KoGlobal()
-        : m_pointSize(-1), m_calligraConfig(0)
+    : m_pointSize(-1)
+    , m_calligraConfig(0)
 {
-    // When running unittests, there is not necessarily a main component
-    if (KGlobal::hasMainComponent()) {
-        // Tell KStandardDirs about the calligra prefix
-        KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);
-    }
-
     // Fixes a bug where values from some config files are not picked up
     // due to  KSharedConfig::openConfig() being initialized before paths have been set up above.
     // NOTE: Values set without a sync() call before KoGlobal has been initialized will not stick
@@ -93,55 +88,56 @@ QStringList KoGlobal::_listOfLanguages()
 
 void KoGlobal::createListOfLanguages()
 {
-    KConfig config("all_languages", KConfig::NoGlobals);
-    // Note that we could also use KLocale::allLanguagesTwoAlpha
+// QT5TODO: restoring finding all languages (we can spellcheck for?)
+//    KConfig config("all_languages", KConfig::NoGlobals);
+//    // Note that we could also use KLocale::allLanguagesTwoAlpha
 
-    QMap<QString, bool> seenLanguages;
-    const QStringList langlist = config.groupList();
-    for (QStringList::ConstIterator itall = langlist.begin();
-            itall != langlist.end(); ++itall) {
-        const QString tag = *itall;
-        const QString name = config.group(tag).readEntry("Name", tag);
-        // e.g. name is "French" and tag is "fr"
+//    QMap<QString, bool> seenLanguages;
+//    const QStringList langlist = config.groupList();
+//    for (QStringList::ConstIterator itall = langlist.begin();
+//            itall != langlist.end(); ++itall) {
+//        const QString tag = *itall;
+//        const QString name = config.group(tag).readEntry("Name", tag);
+//        // e.g. name is "French" and tag is "fr"
 
-        // The QMap does the sorting on the display-name, so that
-        // comboboxes are sorted.
-        m_langMap.insert(name, tag);
+//        // The QMap does the sorting on the display-name, so that
+//        // comboboxes are sorted.
+//        m_langMap.insert(name, tag);
 
-        seenLanguages.insert(tag, true);
-    }
+//        seenLanguages.insert(tag, true);
+//    }
 
-    // Also take a look at the installed translations.
-    // Many of them are already in all_languages but all_languages doesn't
-    // currently have en_GB or en_US etc.
+//    // Also take a look at the installed translations.
+//    // Many of them are already in all_languages but all_languages doesn't
+//    // currently have en_GB or en_US etc.
 
-    const QStringList translationList = KGlobal::dirs()->findAllResources("locale",
-                                        QString::fromLatin1("*/entry.desktop"));
-    for (QStringList::ConstIterator it = translationList.begin();
-            it != translationList.end(); ++it) {
-        // Extract the language tag from the directory name
-        QString tag = *it;
-        int index = tag.lastIndexOf('/');
-        tag = tag.left(index);
-        index = tag.lastIndexOf('/');
-        tag = tag.mid(index + 1);
+//    const QStringList translationList = KGlobal::dirs()->findAllResources("locale",
+//                                        QString::fromLatin1("*/entry.desktop"));
+//    for (QStringList::ConstIterator it = translationList.begin();
+//            it != translationList.end(); ++it) {
+//        // Extract the language tag from the directory name
+//        QString tag = *it;
+//        int index = tag.lastIndexOf('/');
+//        tag = tag.left(index);
+//        index = tag.lastIndexOf('/');
+//        tag = tag.mid(index + 1);
 
-        if (seenLanguages.find(tag) == seenLanguages.end()) {
-            KConfig entry(*it, KConfig::SimpleConfig);
+//        if (seenLanguages.find(tag) == seenLanguages.end()) {
+//            KConfig entry(*it, KConfig::SimpleConfig);
 
-            const QString name = entry.group("KCM Locale").readEntry("Name", tag);
-            // e.g. name is "US English" and tag is "en_US"
-            m_langMap.insert(name, tag);
+//            const QString name = entry.group("KCM Locale").readEntry("Name", tag);
+//            // e.g. name is "US English" and tag is "en_US"
+//            m_langMap.insert(name, tag);
 
-            // enable this if writing a third way of finding languages below
-            //seenLanguages.insert( tag, true );
-        }
+//            // enable this if writing a third way of finding languages below
+//            //seenLanguages.insert( tag, true );
+//        }
 
-    }
+//    }
 
-    // #### We also might not have an entry for a language where spellchecking is supported,
-    //      but no KDE translation is available, like fr_CA.
-    // How to add them?
+//    // #### We also might not have an entry for a language where spellchecking is supported,
+//    //      but no KDE translation is available, like fr_CA.
+//    // How to add them?
 }
 
 QString KoGlobal::tagOfLanguage(const QString & _lang)

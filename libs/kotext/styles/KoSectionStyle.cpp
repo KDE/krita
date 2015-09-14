@@ -26,8 +26,6 @@
 #include <KoGenStyle.h>
 #include "Styles_p.h"
 
-#include <kdebug.h>
-
 #include <QTextFrame>
 #include <QTextFrameFormat>
 #include <QBuffer>
@@ -38,6 +36,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+
+#include "TextDebug.h"
 
 
 Q_DECLARE_METATYPE(QList<KoColumns::ColumnDatum>)

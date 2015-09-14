@@ -26,7 +26,7 @@
 #include <Soprano/Soprano>
 #endif
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 KoDocumentRdfBase::KoDocumentRdfBase(QObject *parent)
         : QObject(parent)

@@ -22,8 +22,6 @@
 
 #include "AddAnnotationCommand.h"
 
-#include <kdebug.h>
-
 #include <KoAnnotation.h>
 #include <KoShapeController.h>
 #include <KoShapeBasedDocumentBase.h>

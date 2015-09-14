@@ -27,7 +27,7 @@
 #include <KoPluginLoader.h>
 
 #include <kglobal.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 class Q_DECL_HIDDEN KoInlineObjectRegistry::Private
 {
@@ -50,12 +50,12 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     foreach (KoInlineObjectFactoryBase *factory, q->values()) {
         QString nameSpace = factory->odfNameSpace();
         if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
-            kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
+            debugText << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
         } else {
             foreach (const QString &elementName, factory->odfElementNames()) {
                 factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
 
-                kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
+                debugText << "Inserting variable factory" << factory->id() << " for"
                     << nameSpace << ":" << elementName;
             }
         }
@@ -82,7 +82,7 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
             }
 #ifndef NDEBUG
            if (factory->templates().isEmpty()) {
-                kWarning(32500) << "Variable factory" << factory->id() << "has no templates, skipping.";
+                warnText << "Variable factory" << factory->id() << "has no templates, skipping.";
            }
 #endif
         }
@@ -95,7 +95,7 @@ KoInlineObject *KoInlineObjectRegistry::createFromOdf(const KoXmlElement &elemen
     KoInlineObjectFactoryBase *factory = d->factories.value(
             QPair<QString, QString>(element.namespaceURI(), element.tagName()));
     if (factory == 0) {
-        kDebug(32500) << "No factory for" << element.namespaceURI() << ":" << element.tagName();
+        debugText << "No factory for" << element.namespaceURI() << ":" << element.tagName();
         return 0;
     }
 

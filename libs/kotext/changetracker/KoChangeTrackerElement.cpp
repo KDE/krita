@@ -19,7 +19,7 @@
 
 #include "KoChangeTrackerElement.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <kundo2magicstring.h>
 
 #include <QTextFormat>

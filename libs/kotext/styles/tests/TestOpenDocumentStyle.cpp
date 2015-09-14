@@ -34,7 +34,7 @@
 #include <KoXmlNS.h>
 #include <KoShadowStyle.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QBuffer>
 #include <QDomDocument>
@@ -164,7 +164,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                         result << mergedAllowedValues;
                     }
                 } else {
-                    kWarning() << "On line " << valueChild.lineNumber() << ":";
+                    warnText << "On line " << valueChild.lineNumber() << ":";
                     kFatal() << "Unrecognized choice element in " << m_name << " : " << valueChild.tagName();
                 }
                 valueChild = valueChild.nextSiblingElement();
@@ -178,7 +178,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (content.tagName() == "value") {
             m_values << content.text();
         } else {
-            kWarning() << "On line " << content.lineNumber() << ":";
+            warnText << "On line " << content.lineNumber() << ":";
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
     }
@@ -282,7 +282,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "C" << "a" << "l" << "L" << "i" <<"G" << "r" << "A";
         } else if (reference == "string") {
             // Now, that sucks !
-            kWarning() << "Found a string reference in " << m_name;
+            warnText << "Found a string reference in " << m_name;
             result << "";
         } else {
             kFatal() << "Unhandled reference " << reference << "( in " << m_name << ")";
@@ -363,7 +363,7 @@ void TestOpenDocumentStyle::initTestCase()
     // Parse the relaxng file quickly
     //QString fileName(SPECS_DATA_DIR "OpenDocument-schema-v1.1.rng");
     QString fileName(SPECS_DATA_DIR "OpenDocument-v1.2-cs01-schema.rng");
-    kDebug() << fileName;
+    debugText << fileName;
     QFile specFile(fileName);
     specFile.open(QIODevice::ReadOnly);
     QDomDocument specDocument;
@@ -434,7 +434,7 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
                     choiceChild = choiceChild.nextSiblingElement();
                 } while (!choiceChild.isNull());
             } else {
-                kWarning() << "On line " << child.lineNumber() << ":";
+                warnText << "On line " << child.lineNumber() << ":";
                 kFatal() << "Unrecognized element : " << child.tagName();
             }
             child = child.nextSiblingElement();
@@ -574,7 +574,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
 
     KoXmlDocument *generatedXmlReader = new KoXmlDocument;
     if (!generatedXmlReader->setContent(generatedXmlOutput)) {
-        kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
+        debugText << "Output XML seems not to be valid : " << generatedXmlOutput;
         kFatal() << "Unable to set content";
     }
 
@@ -583,8 +583,8 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     QString outputPropertyValue = properties.attribute(attribute->name());
     if (properties.attributeNames().count() > 1)
     {
-        //kWarning(32500) << "Warning : got more than one attribute !";
-        //kDebug(32500) << generatedXmlOutput;
+        //warnText << "Warning : got more than one attribute !";
+        //debugText << generatedXmlOutput;
     }
     if (attribute->hasReference("__border")) {
         KoBorder original, output;
@@ -594,9 +594,9 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     }
     bool result = attribute->compare(value, outputPropertyValue);
     if (!result) {
-        kDebug(32500) << "Comparison failed : " << outputPropertyValue << "obtained for " << value;
-        kDebug(32500) << generatedXmlOutput;
-        kDebug(32500) << properties.attributeNames();
+        debugText << "Comparison failed : " << outputPropertyValue << "obtained for " << value;
+        debugText << generatedXmlOutput;
+        debugText << properties.attributeNames();
     }
     return result;
 }

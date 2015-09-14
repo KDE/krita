@@ -28,7 +28,7 @@
 #include <QTextDocument>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 ResizeTableCommand::ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent) :
     KUndo2Command (parent)

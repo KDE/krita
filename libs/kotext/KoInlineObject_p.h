@@ -20,7 +20,7 @@
 #ifndef KOINLINEOBJECT_P_H
 #define KOINLINEOBJECT_P_H
 
-#include <QDebug>
+#include "TextDebug.h"
 class KoTextInlineRdf;
 
 class KoInlineObjectPrivate

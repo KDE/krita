@@ -27,7 +27,7 @@
 #include <QVariant>
 #include <QVariantList>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <KoTextDebug.h>
 
 #include <kundo2stack.h>

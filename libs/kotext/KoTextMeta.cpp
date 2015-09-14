@@ -28,7 +28,7 @@
 #include <QTextInlineObject>
 #include <QWeakPointer>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
@@ -61,9 +61,9 @@ void KoTextMeta::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter &writer = context.xmlWriter();
 
-    kDebug(30015) << "kom.save() this:" << (void*)this << " d->type:" << d->type;
+    debugText << "kom.save() this:" << (void*)this << " d->type:" << d->type;
     if (inlineRdf()) {
-        kDebug(30015) << "kom.save() have inline Rdf";
+        debugText << "kom.save() have inline Rdf";
     }
 
     if (d->type == StartBookmark) {
@@ -74,17 +74,17 @@ void KoTextMeta::saveOdf(KoShapeSavingContext &context)
             inlineRdf()->saveOdf(context, &writer);
         }
     } else {
-        kDebug(30015) << "adding endelement.";
+        debugText << "adding endelement.";
         writer.endElement();
     }
-    kDebug(30015) << "kom.save() done this:" << (void*)this << " d->type:" << d->type;
+    debugText << "kom.save() done this:" << (void*)this << " d->type:" << d->type;
 }
 
 bool KoTextMeta::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element);
     Q_UNUSED(context);
-    kDebug(30015) << "kom.load()";
+    debugText << "kom.load()";
     return true;
 }
 

@@ -31,7 +31,7 @@
 
 #include <float.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
@@ -488,7 +488,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
     const QString styleName = style.attributeNS(KoXmlNS::text, "style-name", QString());
     KoCharacterStyle *cs = 0;
     if (!styleName.isEmpty()) {
-//         kDebug(32500) << "Should use the style =>" << styleName << "<=";
+//         debugText << "Should use the style =>" << styleName << "<=";
 
         KoSharedLoadingData *sharedData = scontext.sharedData(KOTEXT_SHARED_LOADING_ID);
         KoTextSharedLoadingData *textSharedData = 0;
@@ -498,11 +498,11 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         if (textSharedData) {
             cs = textSharedData->characterStyle(styleName, context.useStylesAutoStyles());
             if (!cs) {
-               kWarning(32500) << "Missing KoCharacterStyle!";
+               warnText << "Missing KoCharacterStyle!";
             }
             else {
-//                kDebug(32500) << "==> cs.name:" << cs->name();
-//                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
+//                debugText << "==> cs.name:" << cs->name();
+//                debugText << "==> cs.styleId:" << cs->styleId();
                 setCharacterStyleId(cs->styleId());
             }
         }
@@ -510,12 +510,12 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
         // special case bullets:
-        //qDebug() << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
+        //debugText << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
         //<< QChar(0xE00A) << QChar(0x27A2)<< QChar(0x2794) << QChar(0x2714) << QChar(0x2d) << QChar(0x2717);
 
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.attributeNS(KoXmlNS::text, "bullet-char", QString());
-//         kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
+//         debugText << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
         if (bulletChar.isEmpty()) {  // list without any visible bullets
             setStyle(KoListStyle::CustomCharItem);
             setBulletCharacter(QChar());
@@ -553,8 +553,8 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 break;
             default:
                 QChar customBulletChar = bulletChar[0];
-                kDebug(32500) << "Unhandled bullet code 0x" << QString::number((uint)customBulletChar.unicode(), 16) << bulletChar;
-                kDebug(32500) << "Should use the style =>" << style.attributeNS(KoXmlNS::text, "style-name", QString()) << "<=";
+                debugText << "Unhandled bullet code 0x" << QString::number((uint)customBulletChar.unicode(), 16) << bulletChar;
+                debugText << "Should use the style =>" << style.attributeNS(KoXmlNS::text, "style-name", QString()) << "<=";
                 setStyle(KoListStyle::CustomCharItem);
                 /*
                 QString customBulletFont;
@@ -562,12 +562,12 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
                 {
                     customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString() );
-                    kDebug(32500) <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString() );
+                    debugText <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString() );
                 }
                 else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
                 {
                     customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString() );
-                    kDebug(32500) <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString() );
+                    debugText <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString() );
                 }
                 // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                 */
@@ -682,7 +682,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
     }
     else { // if not defined, we have do nothing
-//         kDebug(32500) << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
+//         debugText << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
         setStyle(KoListStyle::DecimalItem);
         setListItemSuffix(".");
     }
@@ -928,12 +928,12 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         liststyle.writeStyleProperties(writer, KoGenStyle::TextType);
     }
 
-//   kDebug(32500) << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
-//   kDebug(32500) << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
-//   kDebug(32500) << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
-//   kDebug(32500) << "Key KoListStyle::RelativeBulletSize :" << d->stylesPrivate.value(KoListStyle::RelativeBulletSize);
-//   kDebug(32500) << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
-//   kDebug(32500) << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
+//   debugText << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
+//   debugText << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
+//   debugText << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
+//   debugText << "Key KoListStyle::RelativeBulletSize :" << d->stylesPrivate.value(KoListStyle::RelativeBulletSize);
+//   debugText << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
+//   debugText << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
 
     writer->endElement();
 }

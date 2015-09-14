@@ -26,7 +26,7 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QTextCursor>
 

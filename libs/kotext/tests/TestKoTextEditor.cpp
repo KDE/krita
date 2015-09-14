@@ -47,6 +47,7 @@
 #include <KoSectionModel.h>
 #include <kundo2stack.h>
 
+#include "TextDebug.h"
 /**
  * Convenient class to create a document and assign
  * stuff like KoTextRangeManager, etc. automatically.
@@ -275,14 +276,14 @@ bool TestKoTextEditor::checkStartings(const QVector<QString> &needStartings, KoT
     QList<KoSection *> lst = KoSectionUtils::sectionStartings(editor->blockFormat());
 
     if (lst.size() != needStartings.size()) {
-        kDebug() << QString("Startings list size is wrong."
+        debugText << QString("Startings list size is wrong."
                     " Found %1, Expected %2.").arg(lst.size()).arg(needStartings.size());
         return false;
     }
 
     for (int i = 0; i < needStartings.size(); i++) {
         if (lst[i]->name() != needStartings[i]) {
-            kDebug() << QString("Found unexpected section starting."
+            debugText << QString("Found unexpected section starting."
                         " Expected %1 section.").arg(needStartings[i]);
             return false;
         }
@@ -296,14 +297,14 @@ bool TestKoTextEditor::checkEndings(const QVector<QString> &needEndings, KoTextE
     QList<KoSectionEnd *> lst = KoSectionUtils::sectionEndings(editor->blockFormat());
 
     if (lst.size() != needEndings.size()) {
-        kDebug() << QString("Endings list size is wrong."
+        debugText << QString("Endings list size is wrong."
                     " Found %1, expected %2.").arg(lst.size()).arg(needEndings.size());
         return false;
     }
 
     for (int i = 0; i < needEndings.size(); i++) {
         if (lst[i]->correspondingSection()->name() != needEndings[i]) {
-            kDebug() << QString("Found unexpected section ending."
+            debugText << QString("Found unexpected section ending."
                         " Expected %1 section.").arg(needEndings[i]);
             return false;
         }

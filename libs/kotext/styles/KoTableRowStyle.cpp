@@ -26,12 +26,12 @@
 #include <KoGenStyle.h>
 #include "Styles_p.h"
 
-#include <kdebug.h>
-
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
+
+#include "TextDebug.h"
 
 
 class Q_DECL_HIDDEN KoTableRowStyle::Private : public QSharedData

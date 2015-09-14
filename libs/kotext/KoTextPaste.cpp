@@ -32,7 +32,7 @@
 #include <KoTextSharedLoadingData.h>
 #include <KoSectionModel.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
 #include "KoSectionModel.h"
@@ -81,26 +81,26 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 
     KoTextLoader loader(context);
 
-    kDebug(30015) << "text paste";
+    debugText << "text paste";
     // load the paste directly into the editor's cursor -- which breaks encapsulation
     loader.loadBody(body, *d->editor->cursor(), KoTextLoader::PasteMode);   // now let's load the body from the ODF KoXmlElement.
 
 //     context.sectionModel()->invalidate(); FIXME!!
 
 #ifdef SHOULD_BUILD_RDF
-    kDebug(30015) << "text paste, rdf handling" << d->rdfModel;
+    debugText << "text paste, rdf handling" << d->rdfModel;
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
     if (d->rdfModel)
     {
         QSharedPointer<Soprano::Model> tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
-        kDebug(30015) << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();
-        kDebug(30015) << "existing rdf model.sz:" << d->rdfModel->statementCount();
+        debugText << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();
+        debugText << "existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
 #endif
         d->rdfModel->addStatements(tmpmodel->listStatements().allElements());
-        kDebug(30015) << "done... existing rdf model.sz:" << d->rdfModel->statementCount();
+        debugText << "done... existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("Imported RDF after C+P", d->rdfModel);
 #endif

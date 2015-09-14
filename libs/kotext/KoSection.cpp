@@ -31,9 +31,9 @@
 #include <KoTextDocument.h>
 #include <KoTextInlineRdf.h>
 
-#include <KDebug>
-
 #include <QTextBlock>
+
+#include "TextDebug.h"
 
 class KoSectionPrivate
 {
@@ -128,12 +128,12 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
         d->display = element.attributeNS(KoXmlNS::text, "display");
 
         if (d->display == "condition" && d->condition.isEmpty()) {
-            kWarning(32500) << "Section display is set to \"condition\", but condition is empty.";
+            warnText << "Section display is set to \"condition\", but condition is empty.";
         }
 
         QString newName = element.attributeNS(KoXmlNS::text, "name");
         if (!KoTextDocument(d->document).sectionModel()->setName(this, newName)) {
-            kWarning(32500) << "Section name \"" << newName
+            warnText << "Section name \"" << newName
                 << "\" must be unique or is invalid. Resetting it to " << name();
         }
 

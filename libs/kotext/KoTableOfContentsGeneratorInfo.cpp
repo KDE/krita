@@ -50,13 +50,13 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntryTemplate)
-  :
-   m_indexScope("document")
-  , m_outlineLevel(10)
-  , m_relativeTabStopPosition(true)
-  , m_useIndexMarks(true)
-  , m_useIndexSourceStyles(false)
-  , m_useOutlineLevel(true)
+    :
+      m_indexScope("document")
+    , m_outlineLevel(10)
+    , m_relativeTabStopPosition(true)
+    , m_useIndexMarks(true)
+    , m_useIndexSourceStyles(false)
+    , m_useOutlineLevel(true)
 {
     // index-title-template
     // m_indexTitleTemplate.text = "title";
@@ -137,7 +137,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
             m_indexTitleTemplate.styleName = p.attribute("style-name");
             m_indexTitleTemplate.styleId = styleNameToStyleId(sharedLoadingData, m_indexTitleTemplate.styleName);
             m_indexTitleTemplate.text = p.text();
-        // second child
+            // second child
         } else if (p.localName() == "table-of-content-entry-template") {
             TocEntryTemplate tocEntryTemplate;
             tocEntryTemplate.outlineLevel = p.attribute("outline-level").toInt();
@@ -153,8 +153,8 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
                 if (indexEntry.localName() == "index-entry-chapter") {
                     // use null String if the style name is not present, it means that we inherit it from the parent
                     IndexEntryChapter *entryChapter = new IndexEntryChapter(
-                        indexEntry.attribute("style-name", QString())
-                    );
+                                indexEntry.attribute("style-name", QString())
+                                );
 
                     // display can be "name", "number", "number-and-name", "plain-number" or "plain-number-and-name"
                     // "number" is default according the specs ODF v1.2
@@ -198,22 +198,21 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
             }
             m_entryTemplate.append(tocEntryTemplate);
 
-        // third child
+            // third child
         } else if (p.localName() == "index-source-styles" && p.namespaceURI() == KoXmlNS::text) {
-            qDebug() <<"index-source-styles";
-                IndexSourceStyles indexStyles;
-                indexStyles.outlineLevel = p.attribute("outline-level").toInt();
+            IndexSourceStyles indexStyles;
+            indexStyles.outlineLevel = p.attribute("outline-level").toInt();
 
-                IndexSourceStyle indexStyle;
-                KoXmlElement sourceElement;
-                forEachElement(sourceElement, p) {
-                    if (sourceElement.localName() == "index-source-style") {
-                        indexStyle.styleName = sourceElement.attribute("style-name");
-                        indexStyle.styleId = styleNameToStyleId(sharedLoadingData, indexStyle.styleName);
-                        indexStyles.styles.append(indexStyle);
-                    }
+            IndexSourceStyle indexStyle;
+            KoXmlElement sourceElement;
+            forEachElement(sourceElement, p) {
+                if (sourceElement.localName() == "index-source-style") {
+                    indexStyle.styleName = sourceElement.attribute("style-name");
+                    indexStyle.styleId = styleNameToStyleId(sharedLoadingData, indexStyle.styleName);
+                    indexStyles.styles.append(indexStyle);
                 }
-                m_indexSourceStyles.append(indexStyles);
+            }
+            m_indexSourceStyles.append(indexStyles);
         }
     }// forEachElement
 }
@@ -222,22 +221,22 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
 {
     writer->startElement("text:table-of-content-source");
-        writer->addAttribute("text:index-scope", m_indexScope);
-        writer->addAttribute("text:outline-level", m_outlineLevel);
-        writer->addAttribute("text:relative-tab-stop-position", m_relativeTabStopPosition);
-        writer->addAttribute("text:use-index-marks", m_useIndexMarks);
-        writer->addAttribute("text:use-index-source-styles", m_useIndexSourceStyles);
-        writer->addAttribute("text:use-outline-level", m_useOutlineLevel);
+    writer->addAttribute("text:index-scope", m_indexScope);
+    writer->addAttribute("text:outline-level", m_outlineLevel);
+    writer->addAttribute("text:relative-tab-stop-position", m_relativeTabStopPosition);
+    writer->addAttribute("text:use-index-marks", m_useIndexMarks);
+    writer->addAttribute("text:use-index-source-styles", m_useIndexSourceStyles);
+    writer->addAttribute("text:use-outline-level", m_useOutlineLevel);
 
-        m_indexTitleTemplate.saveOdf(writer);
+    m_indexTitleTemplate.saveOdf(writer);
 
-        foreach (const TocEntryTemplate &entry, m_entryTemplate) {
-            entry.saveOdf(writer);
-        }
+    foreach (const TocEntryTemplate &entry, m_entryTemplate) {
+        entry.saveOdf(writer);
+    }
 
-        foreach (const IndexSourceStyles &sourceStyle, m_indexSourceStyles) {
-            sourceStyle.saveOdf(writer);
-        }
+    foreach (const IndexSourceStyles &sourceStyle, m_indexSourceStyles) {
+        sourceStyle.saveOdf(writer);
+    }
 
     writer->endElement(); // text:table-of-content-source
 }

@@ -37,6 +37,8 @@
 
 #include <QTest>
 
+#include "TextDebug.h"
+
 void TestStyleManager::initTestCase()
 {
     // Needed to use them in QVariant (for QSignalSpy).
@@ -54,7 +56,7 @@ void TestStyleManager::initTestCase()
 
 void TestStyleManager::init()
 {
-qDebug() << "init";
+debugText << "init";
     // Each test case starts with a document containing
     // "foo\nbar" and an empty style manager.
     m_doc = new QTextDocument();
@@ -62,7 +64,7 @@ qDebug() << "init";
     QTextCursor(m_doc).insertText("foo\nbar");
     m_styleManager = new KoStyleManager(0);
     m_koDoc->setStyleManager(m_styleManager);
-qDebug() << "init done";
+debugText << "init done";
 }
 
 void TestStyleManager::testAddRemoveCharacterStyle()

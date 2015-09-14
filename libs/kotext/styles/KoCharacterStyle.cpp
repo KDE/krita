@@ -55,7 +55,7 @@
 #include FT_SFNT_NAMES_H
 #endif
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include "KoTextDebug.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
@@ -470,7 +470,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
                 format.setProperty(it.key(), it.value());
             }
             else {
-                kDebug(32500) << "setProperty" << it.key() << it.value();
+                debugText << "setProperty" << it.key() << it.value();
                 format.setProperty(it.key(), it.value());
             }
 
@@ -489,7 +489,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
     }
 
     foreach (int property, clearProperty) {
-        kDebug(32500) << "clearProperty" << property;
+        debugText << "clearProperty" << property;
         format.clearProperty(property);
     }
     if (emitSignal) {

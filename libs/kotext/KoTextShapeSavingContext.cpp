@@ -21,7 +21,7 @@
 
 #include <KoGenChanges.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 KoTextShapeSavingContext::KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
         KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes)

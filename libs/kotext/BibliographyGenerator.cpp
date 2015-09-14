@@ -21,8 +21,6 @@
 #include "KoInlineCite.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
-
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
@@ -131,7 +129,6 @@ void BibliographyGenerator::generate()
                 bibEntryTemplate.styleName = bibTemplateStyle->name();
             }
         } else {
-            qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->bibliographyType();
             continue;
         }
 
@@ -174,7 +171,6 @@ void BibliographyGenerator::generate()
                     break;
                 }
                 default:{
-                    qDebug() << "New or unknown index entry";
                     break;
                 }
             }

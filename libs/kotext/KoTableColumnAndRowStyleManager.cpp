@@ -28,7 +28,7 @@
 #include <QVariant>
 #include <QTextTable>
 
-#include <QDebug>
+#include "TextDebug.h"
 
 class Q_DECL_HIDDEN KoTableColumnAndRowStyleManager::Private : public QSharedData
 {

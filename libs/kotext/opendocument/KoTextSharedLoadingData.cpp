@@ -27,7 +27,6 @@
 #include <QString>
 #include <QHash>
 
-#include <kdebug.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -49,6 +48,8 @@
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfBibliographyConfiguration.h"
 #include "KoTextTableTemplate.h"
+
+#include "TextDebug.h"
 
 class Q_DECL_HIDDEN KoTextSharedLoadingData::Private
 {
@@ -195,8 +196,8 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
 
     addTableTemplate(shapeContext, styleManager);
 
-    kDebug(32500) << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
-    kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
+    debugText << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
+    debugText << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
 }
 
 void KoTextSharedLoadingData::addParagraphStyles(KoShapeLoadingContext &context, const QList<KoXmlElement*> &styleElements,

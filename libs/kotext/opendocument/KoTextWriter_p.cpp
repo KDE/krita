@@ -48,7 +48,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoVariable.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QTextTable>
 
@@ -239,7 +239,7 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
 
 void KoTextWriter::Private::openTagRegion(ElementType elementType, TagInformation& tagInformation)
 {
-    //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
+    //debugText << "tag:" << tagInformation.name() << openedTagStack.size();
     if (tagInformation.name()) {
     writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
     foreach (const Attribute &attribute, tagInformation.attributes()) {
@@ -247,15 +247,15 @@ void KoTextWriter::Private::openTagRegion(ElementType elementType, TagInformatio
     }
     }
     openedTagStack.push(tagInformation.name());
-    //kDebug(30015) << "stack" << openedTagStack.size();
+    //debugText << "stack" << openedTagStack.size();
 }
 
 void KoTextWriter::Private::closeTagRegion()
 {
     // the tag needs to be closed even if there is no change tracking
-    //kDebug(30015) << "stack" << openedTagStack.size();
+    //debugText << "stack" << openedTagStack.size();
     const char *tagName = openedTagStack.pop();
-    //kDebug(30015) << "tag:" << tagName << openedTagStack.size();
+    //debugText << "tag:" << tagName << openedTagStack.size();
     if (tagName) {
         writer->endElement(); // close the tag
     }
@@ -469,7 +469,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     QTextBlock::iterator it;
     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(blockCharFormat)) {
         // Write xml:id here for Rdf
-        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId() << "active xml id" << xmlid.toString();
+        debugText << "have inline rdf xmlid:" << inlineRdf->xmlId() << "active xml id" << xmlid.toString();
         inlineRdf->saveOdf(context, writer, xmlid);
     }
 
@@ -519,7 +519,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 }
                 if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                     // Write xml:id here for Rdf
-                    kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                    debugText << "have inline rdf xmlid:" << inlineRdf->xmlId();
                     saveInlineRdf(inlineRdf, &linkTagInformation);
                 }
                 openTagRegion(KoTextWriter::Private::Span, linkTagInformation);
@@ -595,7 +595,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 // ODF
                 //
                 if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
-                    kDebug(30015) << "found kometa, type:" << z->type();
+                    debugText << "found kometa, type:" << z->type();
                     if (z->type() == KoTextMeta::StartBookmark)
                         currentPairedInlineObjectsStack->push(z->endBookmark());
                     if (z->type() == KoTextMeta::EndBookmark

@@ -28,7 +28,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <QBuffer>
 
 class Q_DECL_HIDDEN KoListStyle::Private

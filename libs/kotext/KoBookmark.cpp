@@ -31,7 +31,7 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>

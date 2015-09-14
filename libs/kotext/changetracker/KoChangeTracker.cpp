@@ -35,8 +35,7 @@
 #include <kundo2magicstring.h>
 
 //KDE includes
-#include <kdebug.h>
-#include <kdatetime.h>
+#include "TextDebug.h"
 #include <kglobal.h>
 #include <klocalizedstring.h>
 
@@ -52,6 +51,8 @@
 #include <QTextDocumentFragment>
 #include <QTextList>
 #include <QTextTable>
+#include <QDateTime>
+#include <QLocale>
 
 class Q_DECL_HIDDEN KoChangeTracker::Private
 {
@@ -148,7 +149,8 @@ int KoChangeTracker::getFormatChangeId(const KUndo2MagicString &title, const QTe
     changeElement->setChangeFormat(format);
     changeElement->setPrevFormat(prevFormat);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(QLocale().decimalPoint(), QString(".")));
+    QLocale l;
+    changeElement->setDate(l.toString(QDateTime::currentDateTime()).replace(QLocale().decimalPoint(), QString(".")));
 
     changeElement->setCreator(d->changeAuthorName);
 
@@ -168,8 +170,9 @@ int KoChangeTracker::getInsertChangeId(const KUndo2MagicString &title, int exist
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::InsertChange);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(QLocale().decimalPoint(), QString(".")));
-//    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
+    QLocale l;
+    changeElement->setDate(l.toString(QDateTime::currentDateTime()).replace(QLocale().decimalPoint(), QString(".")));
+
     changeElement->setCreator(d->changeAuthorName);
 
     changeElement->setEnabled(d->recordChanges);
@@ -188,7 +191,9 @@ int KoChangeTracker::getDeleteChangeId(const KUndo2MagicString &title, const QTe
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::DeleteChange);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(QLocale().decimalPoint(), QString(".")));
+    QLocale l;
+    changeElement->setDate(l.toString(QDateTime::currentDateTime()).replace(QLocale().decimalPoint(), QString(".")));
+
     changeElement->setCreator(d->changeAuthorName);
     changeElement->setDeleteData(selection);
 
@@ -407,7 +412,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                                 //TODO load comments
 /*                              KoXmlElement extra = metadata.namedItem("dc-").toElement();
                                 if (!date.isNull()) {
-                                    kDebug() << "creator: " << creator.text();
+                                    debugText << "creator: " << creator.text();
                                     changeElement->setCreator(creator.text());
                                 }*/
                             }

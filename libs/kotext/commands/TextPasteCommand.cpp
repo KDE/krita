@@ -28,7 +28,7 @@
 #include <KoParagraphStyle.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QTextDocument>
 #include <QMimeData>

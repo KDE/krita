@@ -25,8 +25,6 @@
 #include <QMimeData>
 #include <QString>
 
-#include <kdebug.h>
-
 #include <KoStore.h>
 #include <KoGenStyles.h>
 #include <KoGenChanges.h>
@@ -43,6 +41,8 @@
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
 #endif
+
+#include "TextDebug.h"
 
 KoTextDrag::KoTextDrag()
         : m_mimeData(0)
@@ -90,12 +90,12 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
         if (!sharedData) {
             context->addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedData);
         } else {
-            kWarning(32500) << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
+            warnText << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
             Q_ASSERT(false);
         }
     }
 #ifdef SHOULD_BUILD_RDF
-    kDebug(30015) << "helper.model:" << helper.rdfModel();
+    debugText << "helper.model:" << helper.rdfModel();
     textSharedData->setRdfModel(helper.rdfModel());
 #endif
     if (!helper.writeBody()) {
@@ -114,13 +114,13 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     //add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
-    kDebug(30015) << "testing to see if we should add rdf to odf file?";
+    debugText << "testing to see if we should add rdf to odf file?";
 
 #ifdef SHOULD_BUILD_RDF
-    kDebug(30015) << "helper has model" << ( helper.rdfModel() != 0 );
+    debugText << "helper has model" << ( helper.rdfModel() != 0 );
     // RDF: Copy relevant RDF to output ODF
     if (QSharedPointer<Soprano::Model> m = helper.rdfModel()) {
-        kDebug(30015) << "rdf model size:" << m->statementCount();
+        debugText << "rdf model size:" << m->statementCount();
         KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
                                              store.data(), manifestWriter);
     }
@@ -131,14 +131,14 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     }
 
     if (!context->saveDataCenter(store.data(), manifestWriter)) {
-        kDebug(32500) << "save data centers failed";
+        debugText << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
     KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug(32500) << "save embedded documents failed";
+        debugText << "save embedded documents failed";
         return false;
     }
 

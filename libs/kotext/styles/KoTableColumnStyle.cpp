@@ -28,7 +28,7 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QTextTable>
 #include <QTextTableFormat>

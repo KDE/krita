@@ -25,7 +25,7 @@
 
 #include <KoShape.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <QTextDocument>
 #include <QTextList>
 #include <QTextInlineObject>
@@ -107,7 +107,7 @@ void KoTextLocator::updatePosition(const QTextDocument *document, int posInDocum
         d->dirty = true;
         d->document = document;
         d->cursorPosition = posInDocument;
-//kDebug(32500) <<"KoTextLocator page:" << pageNumber() <<", chapter:" << chapter() <<", '" << word() <<"'";
+//debugText <<"KoTextLocator page:" << pageNumber() <<", chapter:" << chapter() <<", '" << word() <<"'";
     }
 }
 

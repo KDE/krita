@@ -122,11 +122,11 @@ KRITAGLOBAL_EXPORT QString kisBacktrace();
 #define ppVar( var ) #var << "=" << var
 
 #ifdef __GNUC__
-#define ENTER_FUNCTION() dbgKrita << "Entering" << __func__
-#define LEAVE_FUNCTION() dbgKrita << "Leaving " << __func__
+#define ENTER_FUNCTION() qDebug() << "Entering" << __func__
+#define LEAVE_FUNCTION() qDebug() << "Leaving " << __func__
 #else
-#define ENTER_FUNCTION() dbgKrita << "Entering" << "<unknown>"
-#define LEAVE_FUNCTION() dbgKrita << "Leaving " << "<unknown>"
+#define ENTER_FUNCTION() qDebug() << "Entering" << "<unknown>"
+#define LEAVE_FUNCTION() qDebug() << "Leaving " << "<unknown>"
 #endif
 
 #  ifndef QT_NO_DEBUG

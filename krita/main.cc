@@ -30,8 +30,6 @@
 #include <QDate>
 #include <QLoggingCategory>
 
-#include <kis_debug.h>
-
 #include <KisApplication.h>
 #include <KoConfig.h>
 
@@ -78,8 +76,14 @@ extern "C" int main(int argc, char **argv)
     // krita.input is kept on for tablet debugging.
     // You can re-enable debug output by starting Krita like "QT_LOGGING_RULES="krita*=true" krita"
     // See: http://doc.qt.io/qt-5/qloggingcategory.html
-    QLoggingCategory::setFilterRules("*=false\n"
+    QLoggingCategory::setFilterRules("calligra*=false\n"
+                                     "krita*=false\n"
                                      "krita.input=true");
+
+    qDebug() << ">>>>>>>>>>>>>: debug" << QLoggingCategory::isDebugEnabled()
+             << "info:" << QLoggingCategory::isInfoEnabled()
+             << "warning:" << QLoggingCategory::isWarningEnabled()
+             << "critical:" << QLoggingCategory::isCriticalEnabled();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita" +

@@ -80,11 +80,6 @@ extern "C" int main(int argc, char **argv)
                                      "krita*=false\n"
                                      "krita.input=true");
 
-    qDebug() << ">>>>>>>>>>>>>: debug" << QLoggingCategory::isDebugEnabled()
-             << "info:" << QLoggingCategory::isInfoEnabled()
-             << "warning:" << QLoggingCategory::isWarningEnabled()
-             << "critical:" << QLoggingCategory::isCriticalEnabled();
-
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");

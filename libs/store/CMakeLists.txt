@@ -18,6 +18,7 @@ set(kostore_LIB_SRCS
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoZipStore.cpp
+    StoreDebug.cpp
 )
 
 add_library(kostore SHARED ${kostore_LIB_SRCS})

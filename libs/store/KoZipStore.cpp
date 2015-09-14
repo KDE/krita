@@ -25,7 +25,7 @@
 #include <QByteArray>
 
 #include <kzip.h>
-#include <kdebug.h>
+#include <StoreDebug.h>
 
 #include <QUrl>
 #include <kio/netaccess.h>
@@ -34,7 +34,7 @@ KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & 
                        bool writeMimetype)
   : KoStore(mode, writeMimetype)
 {
-    kDebug(30002) << "KoZipStore Constructor filename =" << _filename
+    debugStore << "KoZipStore Constructor filename =" << _filename
     << " mode = " << int(mode)
     << " mimetype = " << appIdentification << endl;
     Q_D(KoStore);
@@ -58,7 +58,7 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
                        const QByteArray & appIdentification, bool writeMimetype)
   : KoStore(mode, writeMimetype)
 {
-    kDebug(30002) << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile)
+    debugStore << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile)
     << " filename = " << _filename
     << " mode = " << int(mode)
     << " mimetype = " << appIdentification << endl;
@@ -83,7 +83,7 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
 KoZipStore::~KoZipStore()
 {
     Q_D(KoStore);
-    kDebug(30002) << "KoZipStore::~KoZipStore";
+    debugStore << "KoZipStore::~KoZipStore";
     if (!d->finalized)
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pZip;
@@ -108,7 +108,7 @@ void KoZipStore::init(const QByteArray& appIdentification)
         return;
 
     if (d->mode == Write) {
-        //kDebug(30002) <<"KoZipStore::init writing mimetype" << appIdentification;
+        //debugStore <<"KoZipStore::init writing mimetype" << appIdentification;
 
         m_pZip->setCompression(KZip::NoCompression);
         m_pZip->setExtraField(KZip::NoExtraField);
@@ -154,7 +154,7 @@ bool KoZipStore::openRead(const QString& name)
         return false;
     }
     if (entry->isDirectory()) {
-        kWarning(30002) << name << " is a directory !";
+        warnStore << name << " is a directory !";
         return false;
     }
     // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual!
@@ -169,14 +169,14 @@ qint64 KoZipStore::write(const char* _data, qint64 _len)
 {
     Q_D(KoStore);
     if (_len == 0) return 0;
-    //kDebug(30002) <<"KoZipStore::write" << _len;
+    //debugStore <<"KoZipStore::write" << _len;
 
     if (!d->isOpen) {
-        kError(30002) << "KoStore: You must open before writing" << endl;
+        errorStore << "KoStore: You must open before writing" << endl;
         return 0;
     }
     if (d->mode != Write) {
-        kError(30002) << "KoStore: Can not write to store that is opened for reading" << endl;
+        errorStore << "KoStore: Can not write to store that is opened for reading" << endl;
         return 0;
     }
 
@@ -202,7 +202,7 @@ QStringList KoZipStore::directoryList() const
 bool KoZipStore::closeWrite()
 {
     Q_D(KoStore);
-    kDebug(30002) << "Wrote file" << d->fileName << " into ZIP archive. size" << d->size;
+    debugStore << "Wrote file" << d->fileName << " into ZIP archive. size" << d->size;
     return m_pZip->finishWriting(d->size);
 }
 

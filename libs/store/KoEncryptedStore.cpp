@@ -40,7 +40,7 @@
 #include <kzip.h>
 #include <kio/netaccess.h>
 #include <QTemporaryFile>
-#include <kdebug.h>
+#include <StoreDebug.h>
 
 struct KoEncryptedStore_EncryptionData {
     // Needed for Key Derivation
@@ -508,7 +508,7 @@ bool KoEncryptedStore::openRead(const QString& name)
         return false;
     }
     if (fileArchiveEntry->isDirectory()) {
-        kWarning(30002) << name << " is a directory!";
+        warnStore << name << " is a directory!";
         return false;
     }
     const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(fileArchiveEntry);
@@ -534,7 +534,7 @@ bool KoEncryptedStore::openRead(const QString& name)
             d->stream->close();
             delete d->stream;
             d->stream = NULL;
-            kWarning(30002) << "read error";
+            warnStore << "read error";
             return false;
         }
         d->stream->close();
@@ -578,7 +578,7 @@ bool KoEncryptedStore::openRead(const QString& name)
 
             decrypted = decryptFile(encryptedFile, encData, password);
             if (decrypted.isEmpty()) {
-                kError(30002) << "empty decrypted file" << endl;
+                errorStore << "empty decrypted file" << endl;
                 return false;
             }
 

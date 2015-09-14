@@ -28,7 +28,7 @@
 #include <StoreDebug.h>
 
 #include <QUrl>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 
 KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)

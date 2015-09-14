@@ -38,7 +38,7 @@
 #include <kmessage.h>
 #include <kmessagebox.h>
 #include <kzip.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <QTemporaryFile>
 #include <StoreDebug.h>
 

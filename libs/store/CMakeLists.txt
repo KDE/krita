@@ -19,6 +19,7 @@ set(kostore_LIB_SRCS
     KoXmlWriter.cpp
     KoZipStore.cpp
     StoreDebug.cpp
+    KoNetAccess.cpp # temporary while porting
 )
 
 add_library(kostore SHARED ${kostore_LIB_SRCS})

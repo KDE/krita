@@ -38,7 +38,7 @@
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 
 #define DefaultFormat KoStore::Zip
 

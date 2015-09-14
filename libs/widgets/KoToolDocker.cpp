@@ -26,11 +26,10 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
-#include <QIcon>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
+#include <QIcon>
 #include <QApplication>
 #include <QPointer>
 #include <QGridLayout>
@@ -43,6 +42,7 @@
 #include <QToolButton>
 #include <QTabWidget>
 
+#include <WidgetsDebug.h>
 
 class Q_DECL_HIDDEN KoToolDocker::Private
 {

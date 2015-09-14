@@ -35,9 +35,9 @@
 #include <QDoubleSpinBox>
 #include <QDesktopWidget>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)
    : QComboBox(parent)

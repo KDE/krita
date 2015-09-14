@@ -23,7 +23,7 @@
 #include "KoModeBox_p.h"
 #include <KoCanvasController.h>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 
 KoModeBoxDocker::KoModeBoxDocker(KoModeBox *modeBox)

@@ -38,9 +38,9 @@
 #include <QButtonGroup>
 #include <QComboBox>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <math.h>
 

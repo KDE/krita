@@ -29,10 +29,10 @@
 #include <QMessageBox>
 #include <QPointer>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"

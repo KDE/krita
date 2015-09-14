@@ -25,7 +25,7 @@
 #include <KoIcon.h>
 #include <KoIconUtils.h>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <klocalizedstring.h>
 
 #include <QAbstractButton>

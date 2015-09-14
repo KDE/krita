@@ -90,6 +90,8 @@ set(kowidgets_LIB_SRCS
     KoTableView.cpp
     
     KoIconUtils.cpp
+
+    WidgetsDebug.cpp
 )
 
 ki18n_wrap_ui( kowidgets_LIB_SRCS
@@ -106,7 +108,7 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 generate_export_header(kowidgets BASE_NAME kowidgets)
 
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::KDELibs4Support)
+target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes)
 
 if(GHNS)
     target_link_libraries(kowidgets KF5::NewStuff)
@@ -117,7 +119,7 @@ if(X11_FOUND)
 endif()
 
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils KF5::KDELibs4Support)
+target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils)
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

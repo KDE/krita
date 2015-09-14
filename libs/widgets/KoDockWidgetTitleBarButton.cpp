@@ -20,7 +20,7 @@
 
 #include "KoDockWidgetTitleBarButton.h"
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QAbstractButton>
 #include <QAction>

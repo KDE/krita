@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,25 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef WIDGETS_DEBUG_H_
+#define WIDGETS_DEBUG_H_
 
-#include "zoomcontroller_test.h"
+#include <QDebug>
+#include <QLoggingCategory>
+#include <kowidgets_export.h>
 
-#include <QTest>
-#include <QCoreApplication>
+extern const KOWIDGETS_EXPORT QLoggingCategory &WIDGETS_LOG();
 
-#include <kactioncollection.h>
-#include <WidgetsDebug.h>
+#define debugWidgets qCDebug(WIDGETS_LOG)
+#define warnWidgets qCWarning(WIDGETS_LOG)
+#define errorWidgets qCCritical(WIDGETS_LOG)
 
-#include "KoCanvasControllerWidget.h"
-#include "KoZoomHandler.h"
-#include "KoZoomController.h"
-
-void zoomcontroller_test::testApi()
-{
-    KoZoomHandler zoomHandler;
-    KoZoomController zoomController(new KoCanvasControllerWidget(0), &zoomHandler, new KActionCollection(this), KoZoomAction::AspectMode);
-    Q_UNUSED(zoomController);
-
-}
-
-QTEST_MAIN(zoomcontroller_test)
+#endif

@@ -28,7 +28,7 @@
 #include <KoToolManager.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QPainter>
 #include <QResizeEvent>

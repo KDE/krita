@@ -22,7 +22,7 @@
 #define KORESOURCETAGSTORE_H
 
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include "kowidgets_export.h"
 
 class KoResourceServerBase;

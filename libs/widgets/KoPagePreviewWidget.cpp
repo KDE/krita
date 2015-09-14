@@ -26,7 +26,7 @@
 #include <KoColumns.h>
 
 #include <QPainter>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 class Q_DECL_HIDDEN KoPagePreviewWidget::Private
 {

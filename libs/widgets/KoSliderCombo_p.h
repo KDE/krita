@@ -38,7 +38,7 @@
 #include <QDesktopWidget>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 class KoSliderComboContainer : public QMenu
 {

@@ -26,9 +26,8 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QDir>
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <QStandardPaths>
+#include <QGlobalStatic>
 
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
@@ -160,23 +159,24 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    KGlobal::dirs()->addResourceType("ko_patterns", "data", "krita/patterns/", true);
-    KGlobal::dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-    KGlobal::dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+//    QT5TODO: How to configure QStandardPaths to look in places other than the default ones?
+//    KGlobal::dirs()->addResourceType("ko_patterns", "data", "krita/patterns/", true);
+//    KGlobal::dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
+//    KGlobal::dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
-    KGlobal::dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
-    KGlobal::dirs()->addResourceType("ko_gradients", "data", "krita/gradients/", true);
-    KGlobal::dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-    KGlobal::dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+//    KGlobal::dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
+//    KGlobal::dirs()->addResourceType("ko_gradients", "data", "krita/gradients/", true);
+//    KGlobal::dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
+//    KGlobal::dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-    KGlobal::dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
-    KGlobal::dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
-    KGlobal::dirs()->addResourceType("ko_palettes", "data", "krita/palettes/", true);
+//    KGlobal::dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
+//    KGlobal::dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
+//    KGlobal::dirs()->addResourceType("ko_palettes", "data", "krita/palettes/", true);
 
-    KGlobal::dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
-    KGlobal::dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+//    KGlobal::dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
+//    KGlobal::dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
+    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     if (!QFileInfo(d->patternServer->saveLocation()).exists()) {
         QDir().mkpath(d->patternServer->saveLocation());
     }
@@ -187,7 +187,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
         d->patternThread->wait();
     }
 
-    d->gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
+    d->gradientServer = new GradientResourceServer("gradients", "*.kgr:*.svg:*.ggr");
     if (!QFileInfo(d->gradientServer->saveLocation()).exists()) {
         QDir().mkpath(d->gradientServer->saveLocation());
     }
@@ -198,7 +198,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
         d->gradientThread->wait();
     }
 
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
     if (!QFileInfo(d->paletteServer->saveLocation()).exists()) {
         QDir().mkpath(d->paletteServer->saveLocation());
     }
@@ -223,9 +223,10 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d;
 }
 
+Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
+
 KoResourceServerProvider* KoResourceServerProvider::instance()
 {
-    K_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
     return s_instance;
 }
 

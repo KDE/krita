@@ -35,8 +35,8 @@ class KOWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
 {
     Q_OBJECT
 public:
+    KoResourceItemChooserSync();
     virtual ~KoResourceItemChooserSync();
-
     static KoResourceItemChooserSync* instance();
 
     /// Gets the base length
@@ -53,7 +53,7 @@ Q_SIGNALS:
     void baseLenghtChanged(int length);
     
 private:
-    KoResourceItemChooserSync();
+
     KoResourceItemChooserSync(const KoResourceItemChooserSync&);
     KoResourceItemChooserSync operator=(const KoResourceItemChooserSync&);
 

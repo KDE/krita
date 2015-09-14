@@ -30,10 +30,10 @@
 // KDE
 #include <kcharsets.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include "ui_KoCsvImportDialog.h"
 
@@ -98,7 +98,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     QStringList encodings;
     encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ,"UTF-8" );
     encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
-    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    encodings += KCharsets::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
@@ -328,7 +328,7 @@ void KoCsvImportDialog::Private::fillTable()
     int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(data, QIODevice::ReadOnly);
-    kDebug(30501) <<"Encoding:" << codec->name();
+    debugWidgets <<"Encoding:" << codec->name();
     inputStream.setCodec( codec );
 
     int delimiterIndex = 0;
@@ -688,7 +688,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
     else if (id == group->id(d->dialog->m_radioSemicolon))
         d->delimiter = ';';
 
-    kDebug(30501) << "Delimiter" << d->delimiter << "selected.";
+    debugWidgets << "Delimiter" << d->delimiter << "selected.";
     d->fillTable();
 }
 
@@ -745,8 +745,8 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
 
 QTextCodec* KoCsvImportDialog::Private::updateCodec() const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30501) <<"Encoding:" << strCodec;
+    const QString strCodec( KCharsets::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
+    debugWidgets <<"Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
@@ -758,14 +758,14 @@ QTextCodec* KoCsvImportDialog::Private::updateCodec() const
     }
     else
     {
-        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+        codec = KCharsets::charsets()->codecForName( strCodec, ok );
     }
 
     // Still nothing?
     if ( !codec || !ok )
     {
         // Default: UTF-8
-        kWarning(30502) << "Cannot find encoding:" << strCodec;
+        warnWidgets << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
         KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
         return 0;

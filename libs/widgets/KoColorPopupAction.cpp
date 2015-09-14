@@ -29,7 +29,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <klocalizedstring.h>
 
 #include <QPainter>
@@ -138,7 +138,7 @@ void KoColorPopupAction::setCurrentColor( const QColor &_color )
 {
 #ifndef NDEBUG
     if (!_color.isValid()) {
-        kWarning(30004) << "Invalid color given, defaulting to black";
+        warnWidgets << "Invalid color given, defaulting to black";
     }
 #endif
     const QColor color(_color.isValid() ? _color : QColor(0,0,0,255));

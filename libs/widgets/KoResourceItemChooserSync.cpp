@@ -20,7 +20,9 @@
 
 #include "KoResourceItemChooserSync.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KoResourceItemChooserSync, s_instance)
 
 struct Q_DECL_HIDDEN KoResourceItemChooserSync::Private
 {
@@ -40,7 +42,6 @@ KoResourceItemChooserSync::~KoResourceItemChooserSync()
 
 KoResourceItemChooserSync* KoResourceItemChooserSync::instance()
 {
-    K_GLOBAL_STATIC(KoResourceItemChooserSync, s_instance);
     return s_instance;
 }
 

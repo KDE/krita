@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "zoomcontroller_test.h"
+#include "WidgetsDebug.h"
 
-#include <QTest>
-#include <QCoreApplication>
-
-#include <kactioncollection.h>
-#include <WidgetsDebug.h>
-
-#include "KoCanvasControllerWidget.h"
-#include "KoZoomHandler.h"
-#include "KoZoomController.h"
-
-void zoomcontroller_test::testApi()
+const QLoggingCategory &WIDGETS_LOG() \
 {
-    KoZoomHandler zoomHandler;
-    KoZoomController zoomController(new KoCanvasControllerWidget(0), &zoomHandler, new KActionCollection(this), KoZoomAction::AspectMode);
-    Q_UNUSED(zoomController);
-
+    static const QLoggingCategory category("calligra.lib.widgets");
+    return category;
 }
 
-QTEST_MAIN(zoomcontroller_test)
+

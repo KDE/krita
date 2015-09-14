@@ -24,10 +24,10 @@
 #include <QImageReader>
 #include <QClipboard>
 
-#include <kglobal.h>
 #include <kconfiggroup.h>
-
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
+
 #include <QUrl>
 #include <QMimeDatabase>
 #include <QMimeType>

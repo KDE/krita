@@ -28,7 +28,7 @@
 #include <QFontDatabase>
 #include <QGlobalStatic>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
@@ -67,8 +67,8 @@ QFont KoGlobal::_defaultFont()
         Q_ASSERT(m_pointSize != -1);
         font.setPointSize(m_pointSize);
     }
-    //kDebug( 30003 )<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
-    //kDebug( 30003 )<<"font.name() :"<<font.family ();
+    //debugWidgets<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
+    //debugWidgets<<"font.name() :"<<font.family ();
     return font;
 }
 

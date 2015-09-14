@@ -23,7 +23,7 @@
 #include "KoPagePreviewWidget.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QCheckBox>
 #include <QDialogButtonBox>

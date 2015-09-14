@@ -23,7 +23,7 @@
 #include <QStyle>
 #include <QStyleOptionToolButton>
 
-#include "kdebug.h"
+#include "WidgetsDebug.h"
 
 KoColorPopupButton::KoColorPopupButton(QWidget *parent)
     : QToolButton(parent)

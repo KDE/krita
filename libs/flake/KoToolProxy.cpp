@@ -41,7 +41,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <QUrl>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kmessagebox.h>
 
 #include <QTimer>

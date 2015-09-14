@@ -52,7 +52,7 @@
 #include <kstandarddirs.h>
 #include <QUrl>
 #include <kdebug.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kiconloader.h>
 #include <k4aboutdata.h>
 #include <kconfiggroup.h>

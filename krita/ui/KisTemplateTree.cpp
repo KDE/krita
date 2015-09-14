@@ -29,7 +29,7 @@
 #include <kglobal.h>
 
 #include <kstandarddirs.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 

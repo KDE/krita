@@ -48,7 +48,7 @@
 #include <ktoggleaction.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kedittoolbar.h>
 #include <QTemporaryFile>
 #include <krecentdocument.h>

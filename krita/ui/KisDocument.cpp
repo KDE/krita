@@ -52,7 +52,7 @@
 
 
 #include <kfileitem.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
 #include <ksavefile.h>

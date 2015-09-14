@@ -21,7 +21,7 @@
 
 #include <QUrl>
 #include <kfiledialog.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 
 #include <KoImageCollection.h>
 #include <KoPatternBackground.h>

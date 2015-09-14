@@ -13,3 +13,10 @@ set(xmlvectortest_SRCS ../KoLZF.cpp TestKoXmlVector.cpp )
 kde4_add_unit_test(TestKoXmlVector TESTNAME libs-odf-TestKoXmlVector ${xmlvectortest_SRCS})
 target_link_libraries(TestKoXmlVector Qt5::Test)
 
+########### next target ###############
+
+set(storedroptest_SRCS storedroptest.cpp )
+kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
+target_link_libraries(storedroptest kostore KF5::I18n Qt5::Widgets)
+
+

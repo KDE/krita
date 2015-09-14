@@ -16,10 +16,8 @@
  *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA 02110-1301, USA.
  */
-
-#include <kapplication.h>
-#include <kcmdlineargs.h>
 #include <KoStore.h>
+
 #include <QStringList>
 #include <QBuffer>
 #include <QMimeData>
@@ -29,6 +27,8 @@
 #include <QDragMoveEvent>
 #include <QKeyEvent>
 #include <QDropEvent>
+#include <QApplication>
+#include <QCommandLineParser>
 
 class StoreDropTest : public QTextBrowser
 {
@@ -48,10 +48,7 @@ private:
 
 int main(int argc, char** argv)
 {
-    //KApplication::disableAutoDcopRegistration();
-    KCmdLineArgs::init(argc, argv, "storedroptest", 0, KLocalizedString(), 0, KLocalizedString());
-    KApplication app;
-
+    QApplication app(argc, argv);
     StoreDropTest* window = new StoreDropTest(0);
     window->resize(500, 500);
     window->show();

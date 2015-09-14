@@ -41,18 +41,8 @@ target_link_libraries(TestXmlReaderWithoutSpaces koodf Qt5::Test)
 
 ########### next target ###############
 
-set(storedroptest_SRCS storedroptest.cpp )
-
-kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
-
-target_link_libraries(storedroptest koodf KF5::I18n  Qt5::Widgets)
-
-########### next target ###############
-
 set(kodomtest_SRCS kodomtest.cpp )
-
 kde4_add_unit_test(kodomtest TESTNAME libs-store-kodomtest ${kodomtest_SRCS})
-
 target_link_libraries(kodomtest koodf Qt5::Test )
 
 ########### next target ###############

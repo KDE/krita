@@ -30,7 +30,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>
@@ -299,7 +299,7 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
             continue;
         }
 
-        //kDebug( 30003 )<<"localName="<<e.localName();
+        //debugOdf<<"localName="<<e.localName();
         if (tag == "keyword") {
             if (!e.text().isEmpty())
                 keywords << e.text().trimmed();

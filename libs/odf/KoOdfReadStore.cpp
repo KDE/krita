@@ -20,7 +20,7 @@
 
 #include "KoOdfReadStore.h"
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include <klocalizedstring.h>
 
 #include <KoStore.h>
@@ -107,7 +107,7 @@ bool KoOdfReadStore::loadAndParse(const QString &fileName, KoXmlDocument &doc, Q
 
     if (!d->store->isOpen()) {
         if (!d->store->open(fileName)) {
-            kDebug(30003) << "Entry " << fileName << " not found!"; // not a warning as embedded stores don't have to have all files
+            debugOdf << "Entry " << fileName << " not found!"; // not a warning as embedded stores don't have to have all files
             errorMessage = i18n("Could not find %1", fileName);
             return false;
         }
@@ -133,13 +133,13 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
 
     bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
-        kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
+        errorOdf << "Parsing error in " << fileName << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
         errorMessage = i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
                             , errorLine , errorColumn , errorMsg);
     } else {
-        kDebug(30003) << "File" << fileName << " loaded and parsed";
+        debugOdf << "File" << fileName << " loaded and parsed";
     }
     return ok;
 }

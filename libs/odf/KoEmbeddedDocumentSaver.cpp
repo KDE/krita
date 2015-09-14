@@ -24,7 +24,7 @@
 
 #include <QList>
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include <QUrl>
 
 #include <KoStore.h>
@@ -98,14 +98,14 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase 
         QUrl u;
         u.setScheme(INTERNAL_PROTOCOL);
         u.setPath(name);
-        kDebug(30003) << u;
+        debugOdf << u;
         doc->setUrl(u);
         ref = "./" + name;
     } else {
         ref = doc->url().url();
     }
 
-    kDebug(30003) << "saving reference to embedded document as" << ref;
+    debugOdf << "saving reference to embedded document as" << ref;
     writer.addAttribute("xlink:href", /*"#" + */ref);
 
     //<draw:object xlink:type="simple" xlink:show="embed"
@@ -146,7 +146,7 @@ void KoEmbeddedDocumentSaver::embedFile(KoXmlWriter &writer, const char *element
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
 
-    kDebug(30003) << "saving reference to embedded file as" << path;
+    debugOdf << "saving reference to embedded file as" << path;
     writer.addAttribute("xlink:href", path);
     writer.endElement();
 }
@@ -161,7 +161,7 @@ void KoEmbeddedDocumentSaver::saveFile(const QString &path, const QByteArray &mi
     entry->contents = contents;
     d->files.append(entry);
 
-    kDebug(30003) << "saving reference to embedded file as" << path;
+    debugOdf << "saving reference to embedded file as" << path;
 }
 
 /**
@@ -182,17 +182,17 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
     foreach(KoDocumentBase *doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
-            kDebug(30003) << " external (don't save) url:" << doc->url().url();
+            debugOdf << " external (don't save) url:" << doc->url().url();
             path = doc->url().url();
         } else {
             // The name comes from addEmbeddedDocument (which was set while saving the document).
             Q_ASSERT(doc->url().scheme() == INTERNAL_PROTOCOL);
             const QString name = doc->url().path();
-            kDebug(30003) << "saving" << name;
+            debugOdf << "saving" << name;
 
             if (doc->nativeOasisMimeType().isEmpty()) {
                 // Embedded object doesn't support OpenDocument, save in the old format.
-                kDebug(30003) << "Embedded object doesn't support OpenDocument, save in the old format.";
+                debugOdf << "Embedded object doesn't support OpenDocument, save in the old format.";
 
                 if (!doc->saveToStore(store, name)) {
                     return false;
@@ -208,7 +208,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
                 store->popDirectory();
 
                 if (!ok) {
-                    kWarning(30003) << "KoEmbeddedDocumentSaver::saveEmbeddedDocuments failed";
+                    warnOdf << "KoEmbeddedDocumentSaver::saveEmbeddedDocuments failed";
                     return false;
                 }
             }
@@ -235,7 +235,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
     // Write the embedded files.
     foreach(FileEntry *entry, d->files) {
         QString path = entry->path;
-        kDebug(30003) << "saving" << path;
+        debugOdf << "saving" << path;
 
         // To make the children happy cd to the correct directory
         store->pushDirectory();

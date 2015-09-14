@@ -23,7 +23,7 @@
 #include <QBuffer>
 
 #include <QTemporaryFile>
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include <klocalizedstring.h>
 
 #include <KoStore.h>
@@ -147,7 +147,7 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
         Q_ASSERT(!d->contentTmpFile);
         d->contentTmpFile = new QTemporaryFile;
         if (!d->contentTmpFile->open()) {
-            kWarning() << "Failed to open the temporary content file";
+            warnOdf << "Failed to open the temporary content file";
             delete d->contentTmpFile;
             d->contentTmpFile = 0;
             return 0;

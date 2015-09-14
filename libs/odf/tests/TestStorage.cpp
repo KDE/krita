@@ -23,7 +23,7 @@
 
 #include <KoStore.h>
 #include <KoEncryptionChecker.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include <stdlib.h>
 
 #include <string.h>

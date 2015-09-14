@@ -24,7 +24,7 @@
 #include <QString>
 #include "koodf_export.h"
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 class KoGenChanges;
 class KoXmlWriter;

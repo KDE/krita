@@ -25,7 +25,7 @@
 #include "KoXmlNS.h"
 #include "KoUnit.h"
 // KDE
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 static const int defaultColumnCount = 1;
 static const KoColumns::SeparatorStyle defaultSeparatorStyle = KoColumns::None;
@@ -232,7 +232,7 @@ void KoColumns::loadOdf(const KoXmlElement &style)
         }
 
         if (! columnData.isEmpty() && count != columnData.count()) {
-            kWarning() << "Found not as many <style:column> elements as attribut fo:column-count has set:"<< count;
+            warnOdf << "Found not as many <style:column> elements as attribut fo:column-count has set:"<< count;
             columnData.clear();
         }
     } else {

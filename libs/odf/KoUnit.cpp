@@ -26,7 +26,7 @@
 #include <QTransform>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 // ensure the same order as in KoUnit::Unit
 static const char* const unitNameList[KoUnit::TypeCount] =
@@ -249,7 +249,7 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
         return DM_TO_POINT(val * 10.0);
     else if (symbol == QLatin1String("km"))
         return DM_TO_POINT(val * 10000.0);
-    kWarning() << "KoUnit::parseValue: Unit " << symbol << " is not supported, please report.";
+    warnOdf << "KoUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
     return defaultVal;

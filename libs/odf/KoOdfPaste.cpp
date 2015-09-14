@@ -24,7 +24,7 @@
 #include <QMimeData>
 #include <QString>
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
@@ -60,7 +60,7 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
 
     QString errorMessage;
     if (! odfStore.loadAndParse(errorMessage)) {
-        kWarning(30002) << "loading and parsing failed:" << errorMessage;
+        warnOdf << "loading and parsing failed:" << errorMessage;
         delete store;
         return false;
     }
@@ -69,7 +69,7 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
 
     if (realBody.isNull()) {
-        kWarning(30002) << "No body tag found";
+        warnOdf << "No body tag found";
         delete store;
         return false;
     }
@@ -77,7 +77,7 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(documentType, false));
 
     if (body.isNull()) {
-        kWarning(30002) << "No" << KoOdf::bodyContentElement(documentType, true) << "tag found";
+        warnOdf << "No" << KoOdf::bodyContentElement(documentType, true) << "tag found";
         delete store;
         return false;
     }

@@ -24,7 +24,7 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 #include <KoUnit.h>
 #include <KoXmlNS.h>
@@ -974,7 +974,7 @@ void KoBorder::parseAndSetBorder(const QString &borderString,
         return;
     }
 
-    //kDebug() << "*** *** Found border: " << border;
+    //debugOdf << "*** *** Found border: " << border;
     QColor bordersColor;
     BorderStyle bordersStyle;
     qreal bordersWidth;

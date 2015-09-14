@@ -23,7 +23,7 @@
 #include "KoPageFormat.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 // paper formats ( mm )
 #define PG_A3_WIDTH             297.0
@@ -98,11 +98,11 @@ const PageFormatInfo pageFormatInfo[] = {
 QPrinter::PageSize KoPageFormat::printerPageSize(KoPageFormat::Format format)
 {
     if (format == ScreenSize) {
-        kWarning() << "You use the page layout SCREEN. Printing in ISO A4 Landscape.";
+        warnOdf << "You use the page layout SCREEN. Printing in ISO A4 Landscape.";
         return QPrinter::A4;
     }
     if (format == CustomSize) {
-        kWarning() << "The used page layout (Custom) is not supported by KQPrinter. Printing in A4.";
+        warnOdf << "The used page layout (Custom) is not supported by KQPrinter. Printing in A4.";
         return QPrinter::A4;
     }
     return pageFormatInfo[ format ].qprinter;

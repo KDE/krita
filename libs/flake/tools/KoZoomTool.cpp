@@ -20,13 +20,15 @@
  */
 
 #include "KoZoomTool.h"
+
+#include <QStandardPaths>
+
 #include "KoZoomStrategy.h"
 #include "KoZoomToolWidget.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 
-#include <kstandarddirs.h>
 #include <FlakeDebug.h>
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
@@ -34,8 +36,8 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         m_temporary(false), m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
-    inPixmap.load(KStandardDirs::locate("data", "calligra/icons/zoom_in_cursor.png"));
-    outPixmap.load(KStandardDirs::locate("data", "calligra/icons/zoom_out_cursor.png"));
+    inPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/zoom_in_cursor.png"));
+    outPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/zoom_out_cursor.png"));
     m_inCursor = QCursor(inPixmap, 4, 4);
     m_outCursor = QCursor(outPixmap, 4, 4);
 }

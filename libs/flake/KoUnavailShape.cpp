@@ -31,10 +31,7 @@
 #include <QPixmap>
 #include <QStringList>
 #include <QSvgRenderer>
-
-// KDE
-#include <kstandarddirs.h>
-#include <FlakeDebug.h>
+#include <QStandardPaths>
 
 // Calligra
 #include <KoUnit.h>
@@ -49,6 +46,8 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeBackground.h"
+
+#include <FlakeDebug.h>
 
 
 // The XML of a frame looks something like this:
@@ -153,7 +152,7 @@ KoUnavailShape::Private::Private(KoUnavailShape* qq)
 , q(qq)
 {
     // Get the question mark "icon".
-    questionMark.load(KStandardDirs::locate("data", "calligra/icons/questionmark.png"));
+    questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/questionmark.png"));
 }
 
 KoUnavailShape::Private::~Private()
@@ -236,7 +235,7 @@ void KoUnavailShape::Private::draw(QPainter &painter) const
         // Get the question mark "icon".
         // FIXME: We should be able to use d->questionMark here.
         QPixmap questionMark;
-        questionMark.load(KStandardDirs::locate("data", "calligra/icons/questionmark.png"));
+        questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/questionmark.png"));
 
         // The size of the image is:
         //  - the size of the shape if  shapesize < 2cm

@@ -25,7 +25,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
-#include <kstandarddirs.h>
+#include <QStandardPaths>
 #include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoMarkerCollection::Private
@@ -75,7 +75,8 @@ void KoMarkerCollection::loadDefaultMarkers()
     KoOdfLoadingContext odfContext(markerReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
     KoXmlDocument doc;
-    QString filePath(KStandardDirs::locate("data", "calligra/styles/markers.xml"));
+    QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/styles/markers.xml");
+
     if (!filePath.isEmpty()) {
         QFile file(filePath);
         QString errorMessage;

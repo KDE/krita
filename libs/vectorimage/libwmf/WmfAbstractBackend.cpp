@@ -21,7 +21,7 @@
 #include "WmfAbstractBackend.h"
 #include "WmfParser.h"
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 #include <QFile>
 #include <QString>
@@ -49,7 +49,7 @@ bool WmfAbstractBackend::load(const QString& filename)
     QFile file(filename);
 
     if (!file.open(QIODevice::ReadOnly)) {
-        kDebug() << "Cannot open file" << QFile::encodeName(filename);
+        debugVectorImage << "Cannot open file" << QFile::encodeName(filename);
         return false;
     }
 

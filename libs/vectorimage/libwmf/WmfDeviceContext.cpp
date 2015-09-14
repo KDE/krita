@@ -22,7 +22,7 @@
 
 #include <QtGlobal>
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 
 /**
@@ -128,7 +128,7 @@ void WmfDeviceContext::recalculateWorldTransform()
         windowViewportScaleX = qreal(viewportExt.width()) / qreal(windowExt.width());
         windowViewportScaleY = qreal(viewportExt.height()) / qreal(windowExt.height());
 #if 0
-        kDebug(31000) << "Scale for Window -> Viewport"
+        debugVectorImage << "Scale for Window -> Viewport"
                       << windowViewportScaleX << windowViewportScaleY;
 #endif
     }
@@ -137,7 +137,7 @@ void WmfDeviceContext::recalculateWorldTransform()
         windowViewportScaleX = qreal(1.0);
         windowViewportScaleY = qreal(1.0);
 #if 0
-        kDebug(31000) << "Only one of Window or Viewport set: scale window -> viewport = 1";
+        debugVectorImage << "Only one of Window or Viewport set: scale window -> viewport = 1";
 #endif
     }
 
@@ -158,11 +158,11 @@ void WmfDeviceContext::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
+        debugVectorImage << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
         m_worldTransform.translate(midpointX, midpointY);
         m_worldTransform.scale(scaleX, scaleY);
         m_worldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << m_worldTransform;
+        //debugVectorImage << "After flipping for window" << m_worldTransform;
     }
 
     // Calculate the world transform.
@@ -181,7 +181,7 @@ void WmfDeviceContext::recalculateWorldTransform()
         if (windowExt.height() < 0) 
             m_worldTransform.translate(qreal(0.0), windowOrg.y() + windowExt.height());
     }
-    //kDebug(31000) << "After window viewport calculation" << m_worldTransform;
+    //debugVectorImage << "After window viewport calculation" << m_worldTransform;
 }
 
 

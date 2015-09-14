@@ -32,7 +32,7 @@ DESCRIPTION
 #include <QPolygon>
 #include <QFile>
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 
 #define PI (3.14159265358979323846)

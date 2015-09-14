@@ -29,7 +29,7 @@
 #include <QPolygon>
 
 // KDE
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 // Libsvm
 #include "SvmEnums.h"
@@ -144,19 +144,19 @@ bool SvmParser::parse(const QByteArray &data)
     soakBytes(mainStream, 6);
     SvmHeader header(mainStream);
 #if DEBUG_SVMPARSER
-    kDebug(31000) << "================ SVM HEADER ================";
-    kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
-    kDebug(31000) << "compressionMode:" << header.compressionMode;
-    kDebug(31000) << "mapMode:" << "Origin" << header.mapMode.origin
+    debugVectorImage << "================ SVM HEADER ================";
+    debugVectorImage << "version, length:" << header.versionCompat.version << header.versionCompat.length;
+    debugVectorImage << "compressionMode:" << header.compressionMode;
+    debugVectorImage << "mapMode:" << "Origin" << header.mapMode.origin
                   << "scaleX"
                   << header.mapMode.scaleX.numerator << header.mapMode.scaleX.denominator
                   << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.denominator)
                   << "scaleY"
                   << header.mapMode.scaleY.numerator << header.mapMode.scaleY.denominator
                   << (qreal(header.mapMode.scaleY.numerator) / header.mapMode.scaleY.denominator);
-    kDebug(31000) << "size:" << header.width << header.height;
-    kDebug(31000) << "actionCount:" << header.actionCount;
-    kDebug(31000) << "================ SVM HEADER ================";
+    debugVectorImage << "size:" << header.width << header.height;
+    debugVectorImage << "actionCount:" << header.actionCount;
+    debugVectorImage << "================ SVM HEADER ================";
 #endif    
 
     mBackend->init(header);
@@ -204,7 +204,7 @@ bool SvmParser::parse(const QByteArray &data)
             else
                 name = "(out of bounds)";
 
-            kDebug(31000) << name << "(" << actionType << ")" << "version" << version
+            debugVectorImage << name << "(" << actionType << ")" << "version" << version
                           << "totalSize" << totalSize;
         }
 #endif
@@ -224,7 +224,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QRect  rect;
 
                 parseRect(stream, rect);
-                kDebug(31000) << "Rect:"  << rect;
+                debugVectorImage << "Rect:"  << rect;
                 mBackend->rect(mContext, rect);
             }
             break;
@@ -243,7 +243,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QPolygon  polygon;
 
                 parsePolygon(stream, polygon);
-                kDebug(31000) << "Polyline:"  << polygon;
+                debugVectorImage << "Polyline:"  << polygon;
                 mBackend->polyLine(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
@@ -256,7 +256,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QPolygon  polygon;
 
                 parsePolygon(stream, polygon);
-                kDebug(31000) << "Polygon:"  << polygon;
+                debugVectorImage << "Polygon:"  << polygon;
                 mBackend->polygon(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
@@ -268,20 +268,20 @@ bool SvmParser::parse(const QByteArray &data)
             {
                 quint16 polygonCount;
                 stream >> polygonCount;
-                //kDebug(31000) << "Number of polygons:"  << polygonCount;
+                //debugVectorImage << "Number of polygons:"  << polygonCount;
 
                 QList<QPolygon> polygons;
                 for (quint16 i = 0 ; i < polygonCount ; i++) {
                     QPolygon polygon;
                     parsePolygon(stream, polygon);
                     polygons << polygon;
-                    //kDebug(31000) << "Polygon:"  << polygon;
+                    //debugVectorImage << "Polygon:"  << polygon;
                 }
                 
                 if (version > 1) {
                     quint16 complexPolygonCount;
                     stream >> complexPolygonCount;
-                    //kDebug(31000) << "Number of complex polygons:"  << complexPolygonCount;
+                    //debugVectorImage << "Number of complex polygons:"  << complexPolygonCount;
 
                     // Parse the so called "complex polygons". For
                     // each one, there is an index and a polygon.  The
@@ -293,7 +293,7 @@ bool SvmParser::parse(const QByteArray &data)
 
                         QPolygon polygon;
                         parsePolygon(stream, polygon);
-                        //kDebug(31000) << "polygon index:"  << complexPolygonIndex << polygon;
+                        //debugVectorImage << "polygon index:"  << complexPolygonIndex << polygon;
 
                         // FIXME: The so called complex polygons have something to do
                         //        with modifying the polygons, but I have not yet been
@@ -325,7 +325,7 @@ bool SvmParser::parse(const QByteArray &data)
                 if (dxArrayLen > 0) {
                     quint32 maxDxArrayLen = totalSize - stream.device()->pos();
                     if (dxArrayLen > maxDxArrayLen) {
-                        qDebug() << "Defined dxArrayLen= " << dxArrayLen << "exceeds availalable size" << maxDxArrayLen;
+                        debugVectorImage << "Defined dxArrayLen= " << dxArrayLen << "exceeds availalable size" << maxDxArrayLen;
                         dxArrayLen = maxDxArrayLen;
                     }
 
@@ -343,15 +343,15 @@ bool SvmParser::parse(const QByteArray &data)
                 }
 
 #if 0
-                kDebug(31000) << "Text: " << startPoint << string
+                debugVectorImage << "Text: " << startPoint << string
                               << startIndex << len;
                 if (dxArrayLen > 0) {
-                    kDebug(31000) << "dxArrayLen:" << dxArrayLen;
+                    debugVectorImage << "dxArrayLen:" << dxArrayLen;
                     for (uint i = 0; i < dxArrayLen; ++i)
-                        kDebug(31000) << dxArray[i];
+                        debugVectorImage << dxArray[i];
                 }
                 else
-                    kDebug(31000) << "dxArrayLen = 0";
+                    debugVectorImage << "dxArrayLen = 0";
 #endif
                 mBackend->textArray(mContext, startPoint, string, startIndex, len,
                                     dxArrayLen, dxArray);
@@ -404,7 +404,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> mContext.lineColorSet;
 
                 mContext.lineColor = QColor::fromRgb(colorData);
-                kDebug(31000) << "Color:"  << mContext.lineColor 
+                debugVectorImage << "Color:"  << mContext.lineColor 
                               << '(' << mContext.lineColorSet << ')';
                 mContext.changedItems |= GCLineColor;
             }
@@ -417,7 +417,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> mContext.fillColorSet;
                 //mContext.fillColorSet = false;
                 
-                kDebug(31000) << "Fill color :" << hex << colorData << dec
+                debugVectorImage << "Fill color :" << hex << colorData << dec
                               << '(' << mContext.fillColorSet << ')';
 
                 mContext.fillColor = QColor::fromRgb(colorData);
@@ -430,7 +430,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
 
                 mContext.textColor = QColor::fromRgb(colorData);
-                kDebug(31000) << "Color:"  << mContext.textColor;
+                debugVectorImage << "Color:"  << mContext.textColor;
                 mContext.changedItems |= GCTextColor;
             }
             break;
@@ -441,11 +441,11 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> mContext.textFillColorSet;
                 
-                kDebug(31000) << "Text fill color :" << hex << colorData << dec
+                debugVectorImage << "Text fill color :" << hex << colorData << dec
                               << '(' << mContext.textFillColorSet << ')';
 
                 mContext.textFillColor = QColor::fromRgb(colorData);
-                kDebug(31000) << "Color:"  << mContext.textFillColor
+                debugVectorImage << "Color:"  << mContext.textFillColor
                               << '(' << mContext.textFillColorSet << ')';
                 mContext.changedItems |= GCTextFillColor;
             }
@@ -456,14 +456,14 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> textAlign;
 
                 mContext.textAlign = (TextAlign)textAlign;
-                kDebug(31000) << "TextAlign:"  << mContext.textAlign;
+                debugVectorImage << "TextAlign:"  << mContext.textAlign;
                 mContext.changedItems |= GCTextAlign;
             }
             break;
         case META_MAPMODE_ACTION:
             {
                 stream >> mContext.mapMode;
-                kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
+                debugVectorImage << "mapMode:" << "Origin" << mContext.mapMode.origin
                               << "scaleX"
                               << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
                               << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator)
@@ -476,24 +476,24 @@ bool SvmParser::parse(const QByteArray &data)
         case META_FONT_ACTION:
             {
                 parseFont(stream, mContext.font);
-                kDebug(31000) << "Font:"  << mContext.font;
+                debugVectorImage << "Font:"  << mContext.font;
                 mContext.changedItems |= GCFont;
             }
             break;
         case META_PUSH_ACTION:
             {
-                kDebug(31000) << "Push action : " << totalSize;
+                debugVectorImage << "Push action : " << totalSize;
                 quint16 pushValue;
                 stream >> pushValue;
-                kDebug(31000) << "Push value : " << pushValue;
+                debugVectorImage << "Push value : " << pushValue;
             }
             break;
         case META_POP_ACTION:
             {
-                kDebug(31000) << "Pop action : " << totalSize;
+                debugVectorImage << "Pop action : " << totalSize;
                 /*quint16 pushValue;
                 stream >> pushValue;
-                kDebug(31000) << "Push value : " << pushValue;*/
+                debugVectorImage << "Push value : " << pushValue;*/
             }
             break;
         case META_RASTEROP_ACTION:
@@ -515,7 +515,7 @@ bool SvmParser::parse(const QByteArray &data)
         case META_LAYOUTMODE_ACTION:
             {
                 stream >> mContext.layoutMode;
-                kDebug(31000) << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
+                debugVectorImage << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
             }
             break;
         case META_TEXTLANGUAGE_ACTION:
@@ -527,7 +527,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> mContext.overlineColorSet;
                 
-                kDebug(31000) << "Overline color :" << colorData
+                debugVectorImage << "Overline color :" << colorData
                               << '(' << mContext.overlineColorSet << ')';
 
                 mContext.overlineColor = QColor::fromRgb(colorData);
@@ -542,7 +542,7 @@ bool SvmParser::parse(const QByteArray &data)
 
         default:
 #if DEBUG_SVMPARSER
-            kDebug(31000) << "unknown action type:" << actionType;
+            debugVectorImage << "unknown action type:" << actionType;
 #endif
             break;
         }
@@ -669,11 +669,11 @@ void SvmParser::parseFont(QDataStream &stream, QFont &font)
 
 void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
 {
-    qDebug() << "Version: " << version;
+    debugVectorImage << "Version: " << version;
     for (uint i = 0; i < totalSize; ++i) {
         quint8  temp;
         stream >> temp;
-        qDebug() << hex << i << temp << dec;
+        debugVectorImage << hex << i << temp << dec;
     }
 }
 

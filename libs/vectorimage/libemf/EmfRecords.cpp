@@ -22,7 +22,7 @@
 #include "EmfObjects.h"
 #include "Bitmap.h"
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 namespace Libemf
 {
@@ -34,8 +34,8 @@ namespace Libemf
 BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     : m_bitmap(0)
 {
-    //kDebug(31000) << "stream position at the start: " << stream.device()->pos();
-    //kDebug(31000) << "record size: " << recordSize;
+    //debugVectorImage << "stream position at the start: " << stream.device()->pos();
+    //debugVectorImage << "record size: " << recordSize;
 
     stream >> m_bounds;
 
@@ -43,16 +43,16 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> m_yDest;
     stream >> m_cxDest;         // width, height of the rectangle in logical coords.
     stream >> m_cyDest;
-    //kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
+    //debugVectorImage << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
 
     stream >> m_BitBltRasterOperation;
-    //kDebug(31000) << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
+    //debugVectorImage << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
 
     stream >> m_xSrc;           // x, y of the source
     stream >> m_ySrc;
-    //kDebug(31000) << "Source" << m_xSrc << m_ySrc;
+    //debugVectorImage << "Source" << m_xSrc << m_ySrc;
 
-    //kDebug(31000) << "position before the matrix: " << stream.device()->pos();
+    //debugVectorImage << "position before the matrix: " << stream.device()->pos();
     stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
     float M11, M12, M21, M22, Dx, Dy;
     stream >> M11;              // Transformation matrix
@@ -62,35 +62,35 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> Dx;
     stream >> Dy;
     m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
-    //kDebug(31000) << "Matrix" << m_XFormSrc;
-    //kDebug(31000) << "position after the matrix: " << stream.device()->pos();
+    //debugVectorImage << "Matrix" << m_XFormSrc;
+    //debugVectorImage << "position after the matrix: " << stream.device()->pos();
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
-    //kDebug(31000) << "Background color" << m_red << m_green << m_blue << m_reserved;
-    //kDebug(31000) << "position after background color: " << stream.device()->pos();
+    //debugVectorImage << "Background color" << m_red << m_green << m_blue << m_reserved;
+    //debugVectorImage << "position after background color: " << stream.device()->pos();
 
     stream >> m_UsageSrc;
-    //kDebug(31000) << "Color table interpretation" << m_UsageSrc;
+    //debugVectorImage << "Color table interpretation" << m_UsageSrc;
 
     stream >> m_offBmiSrc;      // Offset to start of bitmap header from start of record
     stream >> m_cbBmiSrc;       // Size of source bitmap header
     stream >> m_offBitsSrc;     // Offset to source bitmap from start of record
     stream >> m_cbBitsSrc;      // Size of source bitmap
 #if 0
-    kDebug(31000) << "header offset:" << m_offBmiSrc;
-    kDebug(31000) << "header size:  " << m_cbBmiSrc;
-    kDebug(31000) << "bitmap offset:" << m_offBitsSrc;
-    kDebug(31000) << "bitmap size:  " << m_cbBitsSrc;
+    debugVectorImage << "header offset:" << m_offBmiSrc;
+    debugVectorImage << "header size:  " << m_cbBmiSrc;
+    debugVectorImage << "bitmap offset:" << m_offBitsSrc;
+    debugVectorImage << "bitmap size:  " << m_cbBitsSrc;
 #endif
 
-    //kDebug(31000) << "stream position before the image: " << stream.device()->pos();
+    //debugVectorImage << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
         m_bitmap = new Bitmap( stream, recordSize, 8 + 23 * 4, // header + 23 ints
                                m_offBmiSrc, m_cbBmiSrc,
                                m_offBitsSrc, m_cbBitsSrc );
     }
 
-    //kDebug(31000) << "stream position at the end: " << stream.device()->pos();
+    //debugVectorImage << "stream position at the end: " << stream.device()->pos();
 }
 
 BitBltRecord::~BitBltRecord()
@@ -121,14 +121,14 @@ QImage BitBltRecord::image()
         if ( m_BmiSrc->compression() == 0x00 ) {
             format = QImage::Format_RGB555;
         } else {
-            kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
+            debugVectorImage << "Unexpected compression format for BI_BITCOUNT_4:"
                      << m_BmiSrc->compression();
             Q_ASSERT( 0 );
         }
     } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
     } else {
-        kDebug(33100) << "Unexpected format:" << m_BmiSrc->bitCount();
+        debugVectorImage << "Unexpected format:" << m_BmiSrc->bitCount();
         Q_ASSERT( 0 );
     }
     m_image = new QImage( (const uchar*)m_imageData.constData(),
@@ -142,8 +142,8 @@ QImage BitBltRecord::image()
 StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSize )
     : m_bitmap(0)
 {
-    //kDebug(31000) << "stream position at the start: " << stream.device()->pos();
-    //kDebug(31000) << "recordSize =" << recordSize;
+    //debugVectorImage << "stream position at the start: " << stream.device()->pos();
+    //debugVectorImage << "recordSize =" << recordSize;
 
     stream >> m_Bounds;
     stream >> m_xDest;
@@ -163,25 +163,25 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     stream >> m_cxDest;
     stream >> m_cyDest;
 #if 0
-    kDebug(31000) << "bounds:" << m_Bounds;
-    kDebug(31000) << "destination:" << QPoint(m_xDest, m_yDest) << QSize(m_cxDest, m_cyDest);
-    kDebug(31000) << "source:" << QPoint(m_xSrc, m_ySrc) << QSize(m_cxSrc, m_cySrc);
-    kDebug(31000) << "header offset:" << m_offBmiSrc;
-    kDebug(31000) << "header size:  " << m_cbBmiSrc;
-    kDebug(31000) << "bitmap offset:" << m_offBitsSrc;
-    kDebug(31000) << "bitmap size:  " << m_cbBitsSrc;
+    debugVectorImage << "bounds:" << m_Bounds;
+    debugVectorImage << "destination:" << QPoint(m_xDest, m_yDest) << QSize(m_cxDest, m_cyDest);
+    debugVectorImage << "source:" << QPoint(m_xSrc, m_ySrc) << QSize(m_cxSrc, m_cySrc);
+    debugVectorImage << "header offset:" << m_offBmiSrc;
+    debugVectorImage << "header size:  " << m_cbBmiSrc;
+    debugVectorImage << "bitmap offset:" << m_offBitsSrc;
+    debugVectorImage << "bitmap size:  " << m_cbBitsSrc;
 
-    kDebug(31000) << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
+    debugVectorImage << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
 #endif
 
-    //kDebug(31000) << "stream position before the image: " << stream.device()->pos();
+    //debugVectorImage << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
         m_bitmap = new Bitmap( stream, recordSize, 8 + 18 * 4, // header + 18 ints
                                m_offBmiSrc, m_cbBmiSrc,
                                m_offBitsSrc, m_cbBitsSrc );
     }
 
-    //kDebug(31000) << "stream position at the end: " << stream.device()->pos();
+    //debugVectorImage << "stream position at the end: " << stream.device()->pos();
 #if 0
     // Read away those bytes that preceed the header.  These are undefined
     // according to the spec.  80 is the size of the record above.
@@ -235,14 +235,14 @@ QImage StretchDiBitsRecord::image()
         if ( m_BmiSrc->compression() == BI_RGB ) {
             format = QImage::Format_RGB555;
         } else {
-            kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
+            debugVectorImage << "Unexpected compression format for BI_BITCOUNT_4:"
                           << m_BmiSrc->compression();
             Q_ASSERT( 0 );
         }
     } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
     } else {
-        kDebug(31000) << "Unexpected format:" << m_BmiSrc->bitCount();
+        debugVectorImage << "Unexpected format:" << m_BmiSrc->bitCount();
         //Q_ASSERT(0);
     }
 
@@ -343,7 +343,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
 	    m_fullName.append( myChar[i] );
 	}
     }
-    kDebug(33100) << "fullName:" << m_fullName;
+    debugVectorImage << "fullName:" << m_fullName;
 
     for ( int i = 0; i < 32; ++i ) {
 	stream >> myChar[i];
@@ -354,7 +354,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
 	    m_style.append( myChar[i] );
 	}
     }
-    kDebug(33100) << "style:" << m_style;
+    debugVectorImage << "style:" << m_style;
 
     for ( int i = 0; i < 32; ++i ) {
 	stream >> myChar[i];
@@ -365,7 +365,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
 	    m_script.append( myChar[i] );
 	}
     }
-    kDebug(33100) << "script:" << m_script;
+    debugVectorImage << "script:" << m_script;
 #endif
     soakBytes( stream, size ); // rest of the record.
 }

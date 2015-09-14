@@ -27,7 +27,7 @@
 #include <QPainter>
 
 // KDE
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 // Libsvm
 #include "SvmEnums.h"
@@ -64,7 +64,7 @@ void SvmPainterBackend::init(const SvmHeader &header)
     qreal  scaleY = qreal( m_outputSize.height() ) / header.height;
 
 #if DEBUG_SVMPAINT
-    kDebug(31000) << "scale before:" << scaleX << ", " << scaleY;
+    debugVectorImage << "scale before:" << scaleX << ", " << scaleY;
 #endif
 
     // Keep aspect ratio.  Use the smaller value so that we don't get
@@ -76,8 +76,8 @@ void SvmPainterBackend::init(const SvmHeader &header)
         scaleY = scaleX;
 #endif
 #if DEBUG_SVMPAINT
-    kDebug(31000) << "shape size:" << m_outputSize;
-    kDebug(31000) << "scale after:" << scaleX << ", " << scaleY;
+    debugVectorImage << "shape size:" << m_outputSize;
+    debugVectorImage << "scale after:" << scaleX << ", " << scaleY;
 #endif
 
     // Transform the SVM object so that it fits in the shape as much
@@ -175,7 +175,7 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
             pen.setStyle(Qt::NoPen);
         m_painter->setPen(pen);
 #if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting line color to" << context.lineColor;
+        debugVectorImage << "*** Setting line color to" << context.lineColor;
 #endif
     }
     if (context.changedItems & GCFillColor) {
@@ -189,9 +189,9 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
         m_painter->setBrush(brush);
 #if DEBUG_SVMPAINT
         if (context.fillColorSet)
-            kDebug(31000) << "*** Setting fill color to" << context.fillColor;
+            debugVectorImage << "*** Setting fill color to" << context.fillColor;
         else
-            kDebug(31000) << "*** Unsetting fill color";
+            debugVectorImage << "*** Unsetting fill color";
 #endif
     }
     // GCTextColor: We don't need to do anything here since text color
@@ -209,7 +209,7 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
     if (context.changedItems & GCFont) {
         m_painter->setFont(context.font);
 #if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting font to" << context.font;
+        debugVectorImage << "*** Setting font to" << context.font;
 #endif
     }
     if (context.changedItems & GCOverlineColor) {

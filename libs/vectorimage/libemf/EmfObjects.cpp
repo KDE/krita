@@ -18,7 +18,7 @@
 
 #include "EmfObjects.h"
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 
 namespace Libemf
@@ -34,11 +34,11 @@ EmrTextObject::EmrTextObject( QDataStream &stream, quint32 size, TextType textTy
 {
     stream >> m_referencePoint;
     size -= 8;
-    //kDebug(33100) << "Text ref. point:" << m_referencePoint;
+    //debugVectorImage << "Text ref. point:" << m_referencePoint;
 
     stream >> m_charCount;
     size -= 4;
-    //kDebug(33100) << "Number of characters in string:" << m_charCount;
+    //debugVectorImage << "Number of characters in string:" << m_charCount;
 
     stream >> m_offString;
     size -= 4;

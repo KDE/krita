@@ -521,7 +521,11 @@ if(HAVE_VC)
 
     include (VcMacros)
 
-    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+    if(Vc_COMPILER_IS_CLANG)
+        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+    else()
+        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+    endif()
 
     #Handle Vc master
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)

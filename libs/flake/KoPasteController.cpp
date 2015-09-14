@@ -23,7 +23,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QAction>
 
 KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)

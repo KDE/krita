@@ -70,7 +70,7 @@
 #include <QList>
 #include <QMap>
 #include <QByteArray>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <limits>
 #include "KoOdfGradientBackground.h"
@@ -1589,7 +1589,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
         foreach(const KoShapeLoadingContext::AdditionalAttributeData &attributeData, additionalAttributeData) {
             if (element.hasAttributeNS(attributeData.ns, attributeData.tag)) {
                 QString value = element.attributeNS(attributeData.ns, attributeData.tag);
-                //kDebug(30006) << "load additional attribute" << attributeData.tag << value;
+                //debugFlake << "load additional attribute" << attributeData.tag << value;
                 setAdditionalAttribute(attributeData.name, value);
             }
         }
@@ -1759,13 +1759,13 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         // with point from xml now, we'll add it back later
         if(id.isEmpty() || index < KoConnectionPoint::FirstCustomConnectionPoint ||
                 (index != KoConnectionPoint::FirstCustomConnectionPoint && d->connectors.contains(index))) {
-            kWarning(30006) << "glue-point with no or invalid id";
+            warnFlake << "glue-point with no or invalid id";
             continue;
         }
         QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
         QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
         if(xStr.isEmpty() || yStr.isEmpty()) {
-            kWarning(30006) << "glue-point with invald position";
+            warnFlake << "glue-point with invald position";
             continue;
         }
 
@@ -1778,7 +1778,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             KoOdfWorkaround::fixGluePointPosition(yStr, context);
 #endif
             if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
-                kWarning(30006) << "glue-point with invald position";
+                warnFlake << "glue-point with invald position";
                 continue;
             }
             // x and y are relative to drawing object center
@@ -1811,7 +1811,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             } else if (align == "bottom-right") {
                 connector.alignment = KoConnectionPoint::AlignBottomRight;
             }
-            kDebug(30006) << "using alignment" << align;
+            debugFlake << "using alignment" << align;
         }
         const QString escape = child.attributeNS(KoXmlNS::draw, "escape-direction", QString());
         if (!escape.isEmpty()) {
@@ -1828,20 +1828,20 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             } else if (escape == "down") {
                 connector.escapeDirection = KoConnectionPoint::DownDirection;
             }
-            kDebug(30006) << "using escape direction" << escape;
+            debugFlake << "using escape direction" << escape;
         }
         d->connectors[index] = connector;
-        kDebug(30006) << "loaded glue-point" << index << "at position" << connector.position;
+        debugFlake << "loaded glue-point" << index << "at position" << connector.position;
         if (d->connectors[index].position == QPointF(0.5, 0.5)) {
             hasCenterGluePoint = true;
-            kDebug(30006) << "center glue-point found at id " << index;
+            debugFlake << "center glue-point found at id " << index;
         }
     }
     if (!hasCenterGluePoint) {
         d->connectors[d->connectors.count()] = KoConnectionPoint(QPointF(0.5, 0.5),
                      KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
     }
-    kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
+    debugFlake << "shape has now" << d->connectors.count() << "glue-points";
 }
 
 void KoShape::loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor)
@@ -1855,7 +1855,7 @@ void KoShape::loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingCont
         if (child.localName() != "contour-polygon")
             continue;
 
-        kDebug(30006) << "shape loads contour-polygon";
+        debugFlake << "shape loads contour-polygon";
         KoPathShape *ps = new KoPathShape();
         ps->loadContourOdf(child, context, scaleFactor);
         ps->setTransformation(transformation());
@@ -2152,7 +2152,7 @@ void KoShape::saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &or
 {
     Q_D(const KoShape);
 
-    kDebug(30006) << "shape saves contour-polygon";
+    debugFlake << "shape saves contour-polygon";
     if (d->clipPath && !d->clipPath->clipPathShapes().isEmpty()) {
         // This will loose data as odf can only save one set of contour wheras
         // svg loading and at least karbon editing can produce more than one

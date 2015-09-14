@@ -26,7 +26,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoMarkerCollection::Private
 {
@@ -55,7 +55,7 @@ KoMarkerCollection::~KoMarkerCollection()
 
 bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
 {
-    kDebug(30006);
+    debugFlake;
     QHash<QString, KoMarker*> lookupTable;
 
     const QHash<QString, KoXmlElement*> markers = context.odfLoadingContext().stylesReader().drawStyles("marker");
@@ -87,11 +87,11 @@ void KoMarkerCollection::loadDefaultMarkers()
             loadOdfMarkers(defaultMarkers, shapeContext, lookupTable);
         }
         else {
-            kWarning(30006) << "reading of" << filePath << "failed:" << errorMessage;
+            warnFlake << "reading of" << filePath << "failed:" << errorMessage;
         }
     }
     else {
-        kDebug(30006) << "markers.xml not found";
+        debugFlake << "markers.xml not found";
     }
 }
 
@@ -103,7 +103,7 @@ void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement*> &mar
         if (marker->loadOdf(*(it.value()), context)) {
             KoMarker *m = addMarker(marker);
             lookupTable.insert(it.key(), m);
-            kDebug(30006) << "loaded marker" << it.key() << marker << m;
+            debugFlake << "loaded marker" << it.key() << marker << m;
             if (m != marker) {
                 delete marker;
             }
@@ -130,7 +130,7 @@ KoMarker * KoMarkerCollection::addMarker(KoMarker *marker)
             return marker;
         }
         if (m && *marker == *m) {
-            kDebug(30006) << "marker is the same as other";
+            debugFlake << "marker is the same as other";
             return m.data();
         }
     }

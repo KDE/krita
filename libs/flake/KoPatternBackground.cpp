@@ -32,7 +32,7 @@
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QBrush>
 #include <QPainter>

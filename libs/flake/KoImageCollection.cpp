@@ -27,7 +27,7 @@
 #include <KoXmlWriter.h>
 
 #include <QMap>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QMimeDatabase>
 #include <QMimeType>
 
@@ -74,7 +74,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
     while (imagesToSaveIter != imagesToSave.end()) {
         if (knownImagesIter == d->images.end()) {
             // this should not happen
-            kWarning(30006) << "image not found";
+            warnFlake << "image not found";
             Q_ASSERT(0);
             break;
         }
@@ -94,10 +94,10 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                     const QString mimetype(db.mimeTypeForFile(imagesToSaveIter.value(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(imagesToSaveIter.value(), mimetype);
                 } else {
-                    kWarning(30006) << "saving image" << imagesToSaveIter.value() << "failed";
+                    warnFlake << "saving image" << imagesToSaveIter.value() << "failed";
                 }
             } else {
-                kWarning(30006) << "saving image failed: open store failed";
+                warnFlake << "saving image failed: open store failed";
             }
             ++knownImagesIter;
             ++imagesToSaveIter;
@@ -105,7 +105,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
             ++knownImagesIter;
         } else {
             // this should not happen
-            kWarning(30006) << "image not found";
+            warnFlake << "image not found";
             abort();
             Q_ASSERT(0);
         }

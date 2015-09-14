@@ -20,7 +20,7 @@
 
 #include "KoToolRegistry.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 

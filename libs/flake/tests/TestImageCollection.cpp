@@ -27,7 +27,7 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QUrl>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QTest>
 

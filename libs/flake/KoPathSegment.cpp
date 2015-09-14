@@ -19,7 +19,7 @@
 
 #include "KoPathSegment.h"
 #include "KoPathPoint.h"
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QPainterPath>
 #include <QTransform>
 #include <math.h>
@@ -254,7 +254,7 @@ public:
     {
         int index = 0;
         foreach (const QPointF &p, points) {
-            kDebug(30006) << QString("P%1 ").arg(index++) << p;
+            debugFlake << QString("P%1 ").arg(index++) << p;
         }
     }
 #endif
@@ -513,7 +513,7 @@ qreal KoPathSegment::Private::chordLength() const
 
 QList<QPointF> KoPathSegment::Private::linesIntersection(const KoPathSegment &segment) const
 {
-    //kDebug(30006) << "intersecting two lines";
+    //debugFlake << "intersecting two lines";
     /*
     we have to line segments:
 
@@ -770,16 +770,16 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
 
     QRectF myBound = boundingRect();
     QRectF otherBound = segment.boundingRect();
-    //kDebug(30006) << "my boundingRect =" << myBound;
-    //kDebug(30006) << "other boundingRect =" << otherBound;
+    //debugFlake << "my boundingRect =" << myBound;
+    //debugFlake << "other boundingRect =" << otherBound;
     if (!myBound.intersects(otherBound)) {
-        //kDebug(30006) << "segments do not intersect";
+        //debugFlake << "segments do not intersect";
         return isects;
     }
 
     // short circuit lines intersection
     if (degree1 == 1 && degree2 == 1) {
-        //kDebug(30006) << "intersecting two lines";
+        //debugFlake << "intersecting two lines";
         isects += d->linesIntersection(segment);
         return isects;
     }
@@ -810,7 +810,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
         }
     }
 
-    //kDebug(30006) << "using fat line: dmax =" << dmax << " dmin =" << dmin;
+    //debugFlake << "using fat line: dmax =" << dmax << " dmin =" << dmin;
 
     /*
       the other segment is given as a bezier curve of the form:
@@ -850,7 +850,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
         QPointF p3(1.0, d->distanceFromChord(segment.second()->point()));
         dt = KoPathSegment(p0, p1, p2, p3);
     } else {
-        //kDebug(30006) << "invalid degree of segment -> exiting";
+        //debugFlake << "invalid degree of segment -> exiting";
         return isects;
     }
 
@@ -867,7 +867,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
     for (int i = 0; i < hullCount; ++i) {
         QPointF p1 = hull[i];
         QPointF p2 = hull[(i+1) % hullCount];
-        //kDebug(30006) << "intersecting hull edge (" << p1 << p2 << ")";
+        //debugFlake << "intersecting hull edge (" << p1 << p2 << ")";
         // hull edge is completely above dmax
         if (p1.y() > dmax && p2.y() > dmax)
             continue;
@@ -883,10 +883,10 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
                 tmax = qMax(tmax, p1.x());
                 if (dmaxIntersection) {
                     intersectionsFoundMax = true;
-                    //kDebug(30006) << "found intersection with dmax at " << p1.x() << "," << dmax;
+                    //debugFlake << "found intersection with dmax at " << p1.x() << "," << dmax;
                 } else {
                     intersectionsFoundMin = true;
-                    //kDebug(30006) << "found intersection with dmin at " << p1.x() << "," << dmin;
+                    //debugFlake << "found intersection with dmin at " << p1.x() << "," << dmin;
                 }
             }
         } else if (p1.y() == p2.y()) {
@@ -894,12 +894,12 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
             if (p1.y() == dmin || p1.y() == dmax) {
                 if (p1.y() == dmin) {
                     intersectionsFoundMin = true;
-                    //kDebug(30006) << "found intersection with dmin at " << p1.x() << "," << dmin;
-                    //kDebug(30006) << "found intersection with dmin at " << p2.x() << "," << dmin;
+                    //debugFlake << "found intersection with dmin at " << p1.x() << "," << dmin;
+                    //debugFlake << "found intersection with dmin at " << p2.x() << "," << dmin;
                 } else {
                     intersectionsFoundMax = true;
-                    //kDebug(30006) << "found intersection with dmax at " << p1.x() << "," << dmax;
-                    //kDebug(30006) << "found intersection with dmax at " << p2.x() << "," << dmax;
+                    //debugFlake << "found intersection with dmax at " << p1.x() << "," << dmax;
+                    //debugFlake << "found intersection with dmax at " << p2.x() << "," << dmax;
                 }
                 tmin = qMin(tmin, p1.x());
                 tmin = qMin(tmin, p2.x());
@@ -916,14 +916,14 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
                 tmin = qMin(tmin, t1);
                 tmax = qMax(tmax, t1);
                 intersectionsFoundMax = true;
-                //kDebug(30006) << "found intersection with dmax at " << t1 << "," << dmax;
+                //debugFlake << "found intersection with dmax at " << t1 << "," << dmax;
             }
             qreal t2 = (dmin - n) / m;
             if (t2 >= 0.0 && t2 < 1.0) {
                 tmin = qMin(tmin, t2);
                 tmax = qMax(tmax, t2);
                 intersectionsFoundMin = true;
-                //kDebug(30006) << "found intersection with dmin at " << t2 << "," << dmin;
+                //debugFlake << "found intersection with dmin at " << t2 << "," << dmin;
             }
         }
     }
@@ -931,10 +931,10 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
     bool intersectionsFound = intersectionsFoundMin && intersectionsFoundMax;
 
     //if (intersectionsFound)
-    //    kDebug(30006) << "clipping segment to interval [" << tmin << "," << tmax << "]";
+    //    debugFlake << "clipping segment to interval [" << tmin << "," << tmax << "]";
 
     if (!intersectionsFound || (1.0 - (tmax - tmin)) <= 0.2) {
-        //kDebug(30006) << "could not clip enough -> split segment";
+        //debugFlake << "could not clip enough -> split segment";
         // we could not reduce the interval significantly
         // so split the curve and calculate intersections
         // with the remaining parts
@@ -946,15 +946,15 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
             isects += segment.intersections(parts.second);
         }
     } else if (qAbs(tmin - tmax) < 1e-5) {
-        //kDebug(30006) << "Yay, we found an intersection";
+        //debugFlake << "Yay, we found an intersection";
         // the inteval is pretty small now, just calculate the intersection at this point
         isects.append(segment.pointAt(tmin));
     } else {
         QPair<KoPathSegment, KoPathSegment> clip1 = segment.splitAt(tmin);
-        //kDebug(30006) << "splitting segment at" << tmin;
+        //debugFlake << "splitting segment at" << tmin;
         qreal t = (tmax - tmin) / (1.0 - tmin);
         QPair<KoPathSegment, KoPathSegment> clip2 = clip1.second.splitAt(t);
-        //kDebug(30006) << "splitting second part at" << t << "("<<tmax<<")";
+        //debugFlake << "splitting second part at" << t << "("<<tmax<<")";
         isects += clip2.first.intersections(*this);
     }
 
@@ -1457,23 +1457,23 @@ KoPathSegment KoPathSegment::interpolate(const QPointF &p0, const QPointF &p1, c
 void KoPathSegment::printDebug() const
 {
     int deg = degree();
-    kDebug(30006) << "degree:" << deg;
+    debugFlake << "degree:" << deg;
     if (deg < 1)
         return;
 
-    kDebug(30006) << "P0:" << d->first->point();
+    debugFlake << "P0:" << d->first->point();
     if (deg == 1) {
-        kDebug(30006) << "P2:" << d->second->point();
+        debugFlake << "P2:" << d->second->point();
     } else if (deg == 2) {
         if (d->first->activeControlPoint2())
-            kDebug(30006) << "P1:" << d->first->controlPoint2();
+            debugFlake << "P1:" << d->first->controlPoint2();
         else
-            kDebug(30006) << "P1:" << d->second->controlPoint1();
-        kDebug(30006) << "P2:" << d->second->point();
+            debugFlake << "P1:" << d->second->controlPoint1();
+        debugFlake << "P2:" << d->second->point();
     } else if (deg == 3) {
-        kDebug(30006) << "P1:" << d->first->controlPoint2();
-        kDebug(30006) << "P2:" << d->second->controlPoint1();
-        kDebug(30006) << "P3:" << d->second->point();
+        debugFlake << "P1:" << d->first->controlPoint2();
+        debugFlake << "P2:" << d->second->controlPoint1();
+        debugFlake << "P3:" << d->second->point();
     }
 }
 #endif

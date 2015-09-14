@@ -36,7 +36,7 @@
 
 #include <KoXmlReader.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {

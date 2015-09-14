@@ -35,7 +35,7 @@
 #include <QPen>
 #include <QColor>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 static bool s_workaroundPresentationPlaceholderBug = false;
 
@@ -43,7 +43,7 @@ void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
 {
     if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice && pen.widthF() == 0.0) {
         pen.setWidthF(0.5);
-        kDebug(30003) << "Work around OO bug with pen width 0";
+        debugFlake << "Work around OO bug with pen width 0";
     }
 }
 

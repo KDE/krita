@@ -203,6 +203,8 @@ set(flake_SRCS
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
+
+    FlakeDebug.cpp
 )
 
 ki18n_wrap_ui(flake_SRCS
@@ -215,7 +217,7 @@ ki18n_wrap_ui(flake_SRCS
 add_library(flake SHARED ${flake_SRCS})
 # generate_export_header(flake BASE_NAME flake)
 
-target_link_libraries(flake pigmentcms kowidgetutils koodf kundo2 Qt5::Svg KF5::KDELibs4Support)
+target_link_libraries(flake pigmentcms kowidgetutils koodf kundo2 Qt5::Svg)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf kundo2)
 
 if(HAVE_OPENGL)

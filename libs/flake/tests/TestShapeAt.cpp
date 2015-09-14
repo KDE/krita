@@ -20,7 +20,7 @@
 #include "TestShapeAt.h"
 #include <MockShapes.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShapeStroke.h>

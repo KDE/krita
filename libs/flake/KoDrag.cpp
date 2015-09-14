@@ -28,7 +28,7 @@
 #include <QMimeData>
 #include <QString>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <KoStore.h>
 #include <KoGenStyles.h>
@@ -102,14 +102,14 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
     }
 
     if (!context->saveDataCenter(store, manifestWriter)) {
-        kDebug(30006) << "save data centers failed";
+        debugFlake << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
     KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug(30006) << "save embedded documents failed";
+        debugFlake << "save embedded documents failed";
         return false;
     }
 

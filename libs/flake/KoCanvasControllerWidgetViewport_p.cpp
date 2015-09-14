@@ -36,7 +36,7 @@
 
 #include <KoProperties.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QPainter>
 #include <QDragEnterEvent>
@@ -132,7 +132,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
         if (! factory) {
-            kWarning(30006) << "Application requested a shape that is not registered '" <<
+            warnFlake << "Application requested a shape that is not registered '" <<
             id << "', Ignoring";
             event->ignore();
             return;
@@ -299,7 +299,7 @@ void Viewport::resetLayout()
     int resizeW = viewW;
     int resizeH = viewH;
 
-//     kDebug(30006) <<"viewH:" << viewH << endl
+//     debugFlake <<"viewH:" << viewH << endl
 //              << "docH: " << docH << endl
 //              << "viewW: " << viewW << endl
 //              << "docW: " << docW << endl;
@@ -372,8 +372,8 @@ void Viewport::resetLayout()
 
     emit sizeChanged();
 #if 0
-     kDebug(30006) <<"View port geom:" << geometry();
+     debugFlake <<"View port geom:" << geometry();
      if (m_canvas)
-        kDebug(30006) <<"Canvas widget geom:" << m_canvas->geometry();
+        debugFlake <<"Canvas widget geom:" << m_canvas->geometry();
 #endif
 }

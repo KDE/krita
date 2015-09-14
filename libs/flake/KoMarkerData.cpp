@@ -19,7 +19,7 @@
 
 #include "KoMarkerData.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>

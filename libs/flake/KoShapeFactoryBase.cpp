@@ -39,7 +39,7 @@
 
 
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoShapeFactoryBase::Private
 {

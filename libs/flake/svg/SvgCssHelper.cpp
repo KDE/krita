@@ -19,7 +19,7 @@
 
 #include "SvgCssHelper.h"
 #include <KoXmlReader.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QPair>
 
 /// Token types used for tokenizing complex selectors
@@ -541,7 +541,7 @@ public:
 
         QChar ch = expr[0];
         if (ch.isSpace() || ch == '>' || ch == '+') {
-            kWarning(30514) << "selector starting with combinator is not allowed:" << selector;
+            debugFlake << "selector starting with combinator is not allowed:" << selector;
             return tokenList;
         } else {
             state = InSelector;

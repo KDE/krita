@@ -24,7 +24,7 @@
 #include <QList>
 #include <QTransform>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoShapeTransformCommand::Private
 {

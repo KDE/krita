@@ -33,7 +33,7 @@
 
 #include <QRectF>
 #include <QTransform>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <KoGenChanges.h>
 

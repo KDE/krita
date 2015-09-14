@@ -21,7 +21,7 @@
 #ifndef SVGGRADIENTHELPER_H
 #define SVGGRADIENTHELPER_H
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QTransform>
 

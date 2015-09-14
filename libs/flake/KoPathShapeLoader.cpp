@@ -20,7 +20,7 @@
 #include "KoPathShapeLoader.h"
 #include "KoPathShape.h"
 #include <math.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class KoPathShapeLoaderPrivate
 {
@@ -298,7 +298,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             default: {
                 // when svg parser is used for a parsing an odf path an unknown command
                 // can be encountered, so we stop parsing here
-                kDebug(30006) << "KoSvgPathParser::parseSVG(): unknown command \"" << command << "\"";
+                debugFlake << "KoSvgPathParser::parseSVG(): unknown command \"" << command << "\"";
                 return;
             }
             }

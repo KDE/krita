@@ -48,12 +48,12 @@
 #include <KoClipPath.h>
 #include <KoXmlWriter.h>
 
-#include <kmimetype.h>
-
 #include <QBuffer>
 #include <QGradient>
 #include <QLinearGradient>
 #include <QRadialGradient>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -357,7 +357,8 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     if (pattern->pattern().save(&buffer, "PNG")) {
-        const QString mimeType(KMimeType::findByContent(ba)->name());
+        QMimeDatabase db;
+        const QString mimeType = db.mimeTypeForData(ba).name();
         context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
     }
 

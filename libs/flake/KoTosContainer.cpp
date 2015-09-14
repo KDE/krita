@@ -32,7 +32,7 @@
 #include "KoXmlNS.h"
 #include "KoGenStyle.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QTextCursor>
 #include <QTextDocument>
@@ -179,7 +179,7 @@ void KoTosContainer::setPlainText(const QString &text)
 {
     KoShape *textShape = this->textShape();
     if (textShape == 0) {
-        kWarning(30006) << "No text shape present in KoTosContainer";
+        warnFlake << "No text shape present in KoTosContainer";
         return;
     }
     KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
@@ -211,7 +211,7 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
 
     KoShape *textShape = this->textShape();
     if (textShape == 0) {
-        kWarning(30006) << "No text shape present in KoTosContainer";
+        warnFlake << "No text shape present in KoTosContainer";
         return;
     }
 
@@ -235,7 +235,7 @@ Qt::Alignment KoTosContainer::textAlignment() const
 {
     KoShape *textShape = this->textShape();
     if (textShape == 0) {
-        kWarning(30006) << "No text shape present in KoTosContainer";
+        warnFlake << "No text shape present in KoTosContainer";
         return Qt::AlignTop;
     }
 
@@ -257,9 +257,9 @@ void KoTosContainer::setPreferredTextRect(const QRectF &rect)
     Q_D(KoTosContainer);
     d->preferredTextRect = rect;
     KoShape *textShape = this->textShape();
-    //kDebug(30006) << rect << textShape << d->resizeBehavior;
+    //debugFlake << rect << textShape << d->resizeBehavior;
     if (d->resizeBehavior == TextFollowsPreferredTextRect && textShape) {
-        //kDebug(30006) << rect;
+        //debugFlake << rect;
         textShape->setPosition(rect.topLeft());
         textShape->setSize(rect.size());
     }
@@ -274,7 +274,7 @@ QRectF KoTosContainer::preferredTextRect() const
 KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentResources)
 {
     if (!documentResources) {
-        kWarning(30006) << "KoDocumentResourceManager not found";
+        warnFlake << "KoDocumentResourceManager not found";
         return 0;
     }
 
@@ -312,7 +312,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
         // textShape->setZIndex(zIndex() + 1); // not needed as there as the text shape is the only sub shape
         delegates << textShape;
     } else {
-        kWarning(30006) << "Text shape factory not found";
+        warnFlake << "Text shape factory not found";
     }
     setToolDelegates(delegates);
     return textShape;

@@ -28,7 +28,7 @@
 #include <QImageWriter>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QBuffer>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
@@ -59,7 +59,7 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
     // also fixes the problem that gif images are empty after saving-
     if (temporaryFile) {
         if (!temporaryFile->open()) {
-            kWarning(30006) << "Read file from temporary store failed";
+            warnFlake << "Read file from temporary store failed";
             return false;
         }
         char buf[4096];
@@ -114,7 +114,7 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
     delete temporaryFile;
     temporaryFile = new QTemporaryFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX"));
     if (!temporaryFile->open()) {
-        kWarning(30006) << "open temporary file for writing failed";
+        warnFlake << "open temporary file for writing failed";
         errorCode = KoImageData::StorageFailed;
         return;
     }

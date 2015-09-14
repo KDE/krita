@@ -29,7 +29,7 @@
 
 #include <QKeyEvent>
 #include <QScrollBar>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
         : KoToolBase(canvas),

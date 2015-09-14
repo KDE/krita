@@ -22,7 +22,7 @@
 #include "KoPathPoint.h"
 #include "KoPathShape.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QPainter>
 #include <QPointF>
 

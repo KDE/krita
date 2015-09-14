@@ -183,7 +183,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
 
     foreach(KoShape *shape, sortedObjects) {
-        //kDebug(30006) <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
+        //debugFlake <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
         if (!shape->isVisible())
             continue;
         if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects

@@ -22,7 +22,7 @@
 #include "KoParameterShape_p.h"
 
 #include <QPainter>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 KoParameterShape::KoParameterShape()
     : KoPathShape(*(new KoParameterShapePrivate(this)))
@@ -42,7 +42,7 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
 {
     Q_D(KoParameterShape);
     if (handleId >= d->handles.size()) {
-        kWarning(30006) << "handleId out of bounds";
+        warnFlake << "handleId out of bounds";
         return;
     }
 

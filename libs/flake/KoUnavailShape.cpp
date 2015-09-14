@@ -34,7 +34,7 @@
 
 // KDE
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 // Calligra
 #include <KoUnit.h>
@@ -192,7 +192,7 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, 
     applyConversion(painter, converter);
 
     // If the frame is empty, just draw a background.
-    kDebug(30006) << "Number of objects:" << d->objectEntries.size();
+    debugFlake << "Number of objects:" << d->objectEntries.size();
     if (d->objectEntries.isEmpty()) {
         // But... only try to draw the background if there's one such
         if (background()) {
@@ -280,7 +280,7 @@ void KoUnavailShape::Private::drawNull(QPainter &painter) const
 
 void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 {
-    kDebug(30006) << "START SAVING ##################################################";
+    debugFlake << "START SAVING ##################################################";
 
     KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
     KoXmlWriter &writer = context.xmlWriter();
@@ -337,12 +337,12 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             if (!fileName.startsWith(objectName))
                 continue;
 
-            kDebug(30006) << "Object name: " << objectName << "newName: " << newName
+            debugFlake << "Object name: " << objectName << "newName: " << newName
             << "filename: " << fileName << "isDir: " << entry->isDir;
 
             fileName.replace(objectName, newName);
             fileName.prepend("./");
-            kDebug(30006) << "New filename: " << fileName;
+            debugFlake << "New filename: " << fileName;
 
             // FIXME: Check if we need special treatment of directories.
             fileSaver.saveFile(fileName, entry->mimeType.toLatin1(), entry->contents);
@@ -363,8 +363,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
 bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingContext &context)
 {
-    kDebug(30006) << "START LOADING ##################################################";
-    //kDebug(30006) << "Loading ODF frame in the KoUnavailShape. Element = "
+    debugFlake << "START LOADING ##################################################";
+    //debugFlake << "Loading ODF frame in the KoUnavailShape. Element = "
     //              << frameElement.tagName();
 
     loadOdfAttributes(frameElement, context, OdfAllAttributes);
@@ -377,9 +377,9 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
     QList<KoOdfManifestEntry*> manifest = context.odfLoadingContext().manifestEntries();
 
 #if 0   // Enable to show all manifest entries.
-    kDebug(30006) << "MANIFEST: ";
+    debugFlake << "MANIFEST: ";
     foreach (KoOdfManifestEntry *entry, manifest) {
-        kDebug(30006) << entry->mediaType() << entry->fullPath() << entry->version();
+        debugFlake << entry->mediaType() << entry->fullPath() << entry->version();
     }
 #endif
 
@@ -392,10 +392,10 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
 
 #if 1
     // Debug only
-    kDebug(30006) << "----------------------------------------------------------------";
-    kDebug(30006) << "After storeObjects():";
+    debugFlake << "----------------------------------------------------------------";
+    debugFlake << "After storeObjects():";
     foreach (ObjectEntry *object, d->objectEntries) {
-        kDebug(30006) << "objectXmlContents: " << object->objectXmlContents
+        debugFlake << "objectXmlContents: " << object->objectXmlContents
         << "objectName: " << object->objectName;
         // Note: at this point, isDir and manifestEntry are not set.
 #endif
@@ -415,7 +415,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
         if (objectName.isEmpty())
             continue;
 
-        kDebug(30006) << "Storing files for object named:" << objectName;
+        debugFlake << "Storing files for object named:" << objectName;
 
         // Try to find out if the entry is a directory.
         // If the object is a directory, then save all the files
@@ -455,7 +455,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
         // If we have not already found a preview in previous times
         // through the loop, then see if this one may be a preview.
         if (!foundPreview) {
-            kDebug(30006) << "Attempting to load preview from " << objectName;
+            debugFlake << "Attempting to load preview from " << objectName;
             QByteArray previewData = d->loadFile(objectName, context);
             // Check to see if we know the mimetype for this entry. Specifically:
             // 1. Check to see if the item is a loadable SVG file
@@ -464,7 +464,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
             //        seems to work well.
             d->scalablePreview->load(previewData);
             if (d->scalablePreview->isValid()) {
-                kDebug(30006) << "Found scalable preview image!";
+                debugFlake << "Found scalable preview image!";
                 d->scalablePreview->setViewBox(d->scalablePreview->boundsOnElement("svg"));
                 foundPreview = true;
                 continue;
@@ -472,23 +472,23 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
             // 2. Otherwise check to see if it's a loadable pixmap file
             d->pixmapPreview.loadFromData(previewData);
             if (!d->pixmapPreview.isNull()) {
-                kDebug(30006) << "Found pixel based preview image!";
+                debugFlake << "Found pixel based preview image!";
                 foundPreview = true;
             }
         }
     }
 
 #if 0   // Enable to get more detailed debug messages
-    kDebug(30006) << "Object manifest entries:";
+    debugFlake << "Object manifest entries:";
     for (int i = 0; i < d->manifestEntries.size(); ++i) {
         KoOdfManifestEntry *entry = d->manifestEntries.value(i);
-        kDebug(30006) << i << ":" << entry;
+        debugFlake << i << ":" << entry;
         if (entry)
-            kDebug(30006) << entry->fullPath() << entry->mediaType() << entry->version();
+            debugFlake << entry->fullPath() << entry->mediaType() << entry->version();
         else
-            kDebug(30006) << "--";
+            debugFlake << "--";
     }
-    kDebug(30006) << "END LOADING ####################################################";
+    debugFlake << "END LOADING ####################################################";
 #endif
 
     return true;
@@ -511,7 +511,7 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
     // Loop through all the child elements of the draw:frame and save them.
     KoXmlNode n = element.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
-        kDebug(30006) << "In draw:frame, node =" << n.nodeName();
+        debugFlake << "In draw:frame, node =" << n.nodeName();
 
         // This disregards #text, but that's not in the spec anyway so
         // it doesn't need to be saved.
@@ -606,7 +606,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
  */
 void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingContext &context)
 {
-    kDebug(30006) << "Saving file: " << fileName;
+    debugFlake << "Saving file: " << fileName;
 
     // Directories need to be saved too, but they don't have any file contents.
     if (fileName.endsWith('/')) {
@@ -631,7 +631,7 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
         entry->contents = fileContent;
         embeddedFiles.append(entry);
 
-        kDebug(30006) << "File length: " << fileContent.size();
+        debugFlake << "File length: " << fileContent.size();
 }
 
 QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoadingContext &context)
@@ -652,6 +652,6 @@ QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoa
     fileContent = store->read(fileSize);
     store->close();
 
-    //kDebug(30006) << "File content: " << fileContent;
+    //debugFlake << "File content: " << fileContent;
     return fileContent;
 }

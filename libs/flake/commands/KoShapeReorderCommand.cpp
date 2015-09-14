@@ -24,7 +24,7 @@
 #include "KoShapeContainer.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <limits.h>
 
 

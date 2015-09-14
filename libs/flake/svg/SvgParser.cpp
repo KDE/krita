@@ -47,7 +47,7 @@
 #include <KoClipPath.h>
 #include <KoXmlNS.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QColor>
 
@@ -738,7 +738,7 @@ void SvgParser::applyFilter(KoShape *shape)
         KoXmlElement primitive = n.toElement();
         KoFilterEffect *filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
-            kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
+            debugFlake << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
         }
 
@@ -829,10 +829,10 @@ void SvgParser::applyClipping(KoShape *shape)
     if (! clipPath)
         return;
 
-    kDebug(30514) << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
+    debugFlake << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
 
     const bool boundingBoxUnits = clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox;
-    kDebug(30514) << "using" << (boundingBoxUnits ? "boundingBoxUnits" : "userSpaceOnUse");
+    debugFlake << "using" << (boundingBoxUnits ? "boundingBoxUnits" : "userSpaceOnUse");
 
     QTransform shapeMatrix = shape->absoluteTransformation(0);
     // TODO:
@@ -875,7 +875,7 @@ void SvgParser::applyClipping(KoShape *shape)
             delete clipShape;
         }
         if (path) {
-            kDebug(30514) << "using shape" << path->name() << "as clip path";
+            debugFlake << "using shape" << path->name() << "as clip path";
             pathShapes.append(path);
             if (boundingBoxUnits)
                 path->applyAbsoluteTransformation(shapeMatrix);
@@ -1285,13 +1285,13 @@ KoShape * SvgParser::createShape(const QString &shapeID)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
     if (!factory) {
-        kWarning(30514) << "Could not find factory for shape id" << shapeID;
+        debugFlake << "Could not find factory for shape id" << shapeID;
         return 0;
     }
 
     KoShape *shape = factory->createDefaultShape(m_documentResourceManager);
     if (!shape) {
-        kWarning(30514) << "Could not create Default shape for shape id" << shapeID;
+        debugFlake << "Could not create Default shape for shape id" << shapeID;
         return 0;
     }
     if (shape->shapeId().isEmpty())

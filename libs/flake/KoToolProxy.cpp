@@ -38,7 +38,7 @@
 #include <kundo2command.h>
 #include <KoProperties.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QUrl>
 #include <KoNetAccess.h>
@@ -49,6 +49,7 @@
 #include <QTouchEvent>
 #include <QClipboard>
 
+#include "FlakeDebug.h"
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -162,8 +163,6 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
-#include <KDebug>
-
 void KoToolProxy::touchEvent(QTouchEvent *event)
 {
     QPointF point;
@@ -228,13 +227,13 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     // don't process tablet events for stylus middle and right mouse button
     // they will be re-send as mouse events with the correct button. there is no possibility to get the button from the QTabletEvent.
     if(qFuzzyIsNull(event->pressure()) && d->tabletPressed==false && event->type()!=QEvent::TabletMove) {
-        //kDebug()<<"don't accept tablet event: "<< point;
+        //debugFlake<<"don't accept tablet event: "<< point;
         return;
     }
     else {
         // Accept the tablet events as they are useless to parent widgets and they will
         // get re-send as mouseevents if we don't accept them.
-        //kDebug()<<"accept tablet event: "<< point;
+        //debugFlake<<"accept tablet event: "<< point;
         event->accept();
     }
 

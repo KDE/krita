@@ -29,7 +29,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QBuffer>
 #include <QCryptographicHash>
@@ -192,7 +192,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
             if (!image.save(&buffer, d->suffix.toLatin1())) {
-                kWarning(30006) << "Write temporary file failed";
+                warnFlake << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
                 d->temporaryFile = 0;
@@ -291,13 +291,13 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
                 }
             }
             if (!device.open(QIODevice::ReadOnly)) {
-                kWarning(30006) << "open file from store " << url << "failed";
+                warnFlake << "open file from store " << url << "failed";
                 d->errorCode = OpenFailed;
                 return;
             }
             d->copyToTemporary(device);
         } else {
-            kWarning(30006) << "Find file in store " << url << "failed";
+            warnFlake << "Find file in store " << url << "failed";
             d->errorCode = OpenFailed;
             return;
         }

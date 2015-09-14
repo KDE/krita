@@ -24,7 +24,7 @@
 #include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <KoXmlReader.h>
 
 Q_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)

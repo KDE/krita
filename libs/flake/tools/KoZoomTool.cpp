@@ -27,7 +27,7 @@
 #include "KoCanvasController.h"
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         : KoInteractionTool(canvas),

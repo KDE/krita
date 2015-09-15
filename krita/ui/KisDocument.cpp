@@ -57,7 +57,7 @@
 #include <klocalizedstring.h>
 #include <ksavefile.h>
 #include <kis_debug.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kfileitem.h>
@@ -1774,7 +1774,7 @@ void KisDocument::setModified(bool mod)
         return;
 
     if ( !d->readwrite && d->modified ) {
-        kError(1000) << "Can't set a read-only document to 'modified' !" << endl;
+        errKrita << "Can't set a read-only document to 'modified' !" << endl;
         return;
     }
 
@@ -2278,7 +2278,7 @@ bool KisDocument::saveAs( const QUrl &kurl )
 {
     if (!kurl.isValid())
     {
-        kError(1000) << "saveAs: Malformed URL " << kurl.url() << endl;
+        errKrita << "saveAs: Malformed URL " << kurl.url() << endl;
         return false;
     }
     d->m_duringSaveAs = true;

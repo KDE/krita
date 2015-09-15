@@ -114,8 +114,7 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
 {
     bool retval = false;
 
-    if (m_d->keys.contains(key)) DEBUG_ACTION("Peculiar, records show key was already pressed");
-
+    if (m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, records show key was already pressed"); }
 
     if (!m_d->runningShortcut) {
         retval =  tryRunSingleActionShortcutImpl(key, (QEvent*)0, m_d->keys);
@@ -136,7 +135,7 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 {
     bool retval = false;
 
-    if (!m_d->keys.contains(key)) DEBUG_ACTION("Peculiar, autorepeated key but can't remember it was pressed");
+    if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, autorepeated key but can't remember it was pressed"); }
 
     if (!m_d->runningShortcut) {
         // Autorepeated key should not be included in the shortcut
@@ -171,7 +170,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
         return retval;
     }
 
-    if (m_d->buttons.contains(button))  DEBUG_ACTION("Peculiar, button was already pressed.");
+    if (m_d->buttons.contains(button)) { DEBUG_ACTION("Peculiar, button was already pressed."); }
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -319,6 +318,7 @@ void KisShortcutMatcher::reset(QString msg)
 {
     m_d->keys.clear();
     m_d->buttons.clear();
+    Q_UNUSED(msg);
     DEBUG_ACTION(msg);
 }
 

@@ -26,8 +26,12 @@
 #include <KoXmlReader.h>
 #include <KoPluginLoader.h>
 
-#include <kglobal.h>
+#include <QGlobalStatic>
+
 #include "TextDebug.h"
+
+Q_GLOBAL_STATIC(KoInlineObjectRegistry, s_instance)
+
 
 class Q_DECL_HIDDEN KoInlineObjectRegistry::Private
 {
@@ -64,7 +68,6 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
 
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoInlineObjectRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->d->init(s_instance);
     }

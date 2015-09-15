@@ -11,6 +11,7 @@ set(kritaglobal_LIB_SRCS
 )
 
 kde4_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
+generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
 target_link_libraries(kritaglobal kowidgets Qt5::Concurrent ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS})
 target_link_libraries(kritaglobal LINK_INTERFACE_LIBRARIES kowidgets Qt5::Concurrent ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})

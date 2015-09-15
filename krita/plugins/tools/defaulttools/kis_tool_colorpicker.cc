@@ -33,6 +33,7 @@
 #include <QWidget>
 #include <QVector>
 
+#include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 

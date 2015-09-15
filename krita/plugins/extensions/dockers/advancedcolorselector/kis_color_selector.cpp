@@ -28,6 +28,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <kis_debug.h>
 

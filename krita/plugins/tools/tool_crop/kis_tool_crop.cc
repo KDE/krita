@@ -36,7 +36,7 @@
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
-
+#include <ksharedconfig.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>

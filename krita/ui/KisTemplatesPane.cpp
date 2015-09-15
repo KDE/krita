@@ -26,6 +26,7 @@
 
 #include <QUrl>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 class KisTemplatesPanePrivate
 {

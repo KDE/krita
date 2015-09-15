@@ -23,10 +23,11 @@
 #include <QTimer>
 #include <QCursor>
 #include <QPainter>
+#include <QMimeData>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
+#include <ksharedconfig.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"

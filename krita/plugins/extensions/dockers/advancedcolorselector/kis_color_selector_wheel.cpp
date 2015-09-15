@@ -23,6 +23,7 @@
 #include <cmath>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "kis_display_color_converter.h"
 #include "kis_acs_pixel_cache_renderer.h"

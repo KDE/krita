@@ -29,10 +29,11 @@
 #include <QLayout>
 #include <QCheckBox>
 #include <QComboBox>
-
 #include <QVector>
 #include <QRect>
 #include <QColor>
+
+#include <ksharedconfig.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>

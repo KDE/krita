@@ -34,10 +34,9 @@
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
-
+#include <ksharedconfig.h>
 
 #include <QDoubleSpinBox>
-
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

@@ -27,7 +27,7 @@
 
 #include <QPushButton>
 
-
+#include <ksharedconfig.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>

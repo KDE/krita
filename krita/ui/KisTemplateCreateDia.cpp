@@ -52,6 +52,8 @@
 #include <kconfiggroup.h>
 #include <QUrl>
 
+#include <ksharedconfig.h>
+
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
 

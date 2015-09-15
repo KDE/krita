@@ -26,6 +26,8 @@
 #include <QGlobalStatic>
 #include <QMessageBox>
 
+#include <klocalizedstring.h>
+
 Q_GLOBAL_STATIC(KisTabletDebugger, s_instance)
 
 

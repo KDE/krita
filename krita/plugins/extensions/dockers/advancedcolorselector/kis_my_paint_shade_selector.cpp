@@ -35,7 +35,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
+#include <ksharedconfig.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"

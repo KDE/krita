@@ -21,13 +21,14 @@
 #include "KisRecentDocumentsPane.h"
 
 #include <QFile>
+#include <QUrl>
 #include <QStandardItemModel>
-
 
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
-#include <QUrl>
+#include <ksharedconfig.h>
+
 #include <KoIcon.h>
 #include <kis_icon_utils.h>
 

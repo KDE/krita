@@ -19,7 +19,7 @@
 
 #include <QString>
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <klocalizedstring.h>
 
 #include <KoPluginLoader.h>
@@ -31,6 +31,8 @@
 #include "kis_auto_brush_factory.h"
 #include "kis_text_brush_factory.h"
 #include "kis_predefined_brush_factory.h"
+
+Q_GLOBAL_STATIC(KisBrushRegistry, s_instance)
 
 
 KisBrushRegistry::KisBrushRegistry()
@@ -48,7 +50,6 @@ KisBrushRegistry::~KisBrushRegistry()
 
 KisBrushRegistry* KisBrushRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisBrushRegistry, s_instance);
     if (!s_instance.exists()) {
         s_instance->add(new KisAutoBrushFactory());
         s_instance->add(new KisPredefinedBrushFactory("gbr_brush"));

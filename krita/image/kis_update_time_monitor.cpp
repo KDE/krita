@@ -18,7 +18,7 @@
 
 #include "kis_update_time_monitor.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <QHash>
 #include <QSet>
 #include <QMutex>
@@ -39,6 +39,8 @@
 
 
 #include "kis_paintop_preset.h"
+
+Q_GLOBAL_STATIC(KisUpdateTimeMonitor, s_instance)
 
 
 struct StrokeTicket
@@ -124,7 +126,6 @@ KisUpdateTimeMonitor::~KisUpdateTimeMonitor()
 
 KisUpdateTimeMonitor* KisUpdateTimeMonitor::instance()
 {
-    K_GLOBAL_STATIC(KisUpdateTimeMonitor, s_instance);
     return s_instance;
 }
 

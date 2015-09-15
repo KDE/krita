@@ -42,6 +42,7 @@ class KRITAUI_EXPORT KisResourceServerProvider : public QObject
     Q_OBJECT
 
 public:
+    KisResourceServerProvider();
     virtual ~KisResourceServerProvider();
 
     static KisResourceServerProvider* instance();
@@ -57,7 +58,6 @@ Q_SIGNALS:
 
 private:
 
-    KisResourceServerProvider();
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 

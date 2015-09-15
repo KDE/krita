@@ -24,9 +24,10 @@
 
 #include <QDir>
 #include <QApplication>
+#include <QGlobalStatic>
+
 #include <kis_debug.h>
 
-#include <kglobal.h>
 #include <kstandarddirs.h>
 
 #include <KoResource.h>
@@ -41,6 +42,8 @@
 #include <kis_psd_layer_style_resource.h>
 
 #include <kis_brush_server.h>
+
+Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -110,7 +113,6 @@ KisResourceServerProvider::~KisResourceServerProvider()
 
 KisResourceServerProvider* KisResourceServerProvider::instance()
 {
-    K_GLOBAL_STATIC(KisResourceServerProvider, s_instance);
     return s_instance;
 }
 

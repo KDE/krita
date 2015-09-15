@@ -27,10 +27,12 @@
 
 #include <KoStore.h>
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <QPen>
 #include <QPainter>
 #include <QPixmapCache>
+
+Q_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance)
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -682,7 +684,6 @@ KisPaintingAssistantFactoryRegistry::~KisPaintingAssistantFactoryRegistry()
 
 KisPaintingAssistantFactoryRegistry* KisPaintingAssistantFactoryRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance);
     return s_instance;
 }
 

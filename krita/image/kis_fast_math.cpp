@@ -24,7 +24,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <QtGlobal>
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 // Algorithm from http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
 const qreal MAX_SECOND_DERIV_IN_RANGE = 0.6495;
@@ -57,7 +57,7 @@ struct KisATanTable {
     qreal* ATanTable;
 };
 
-K_GLOBAL_STATIC(KisATanTable, kisATanTable);
+Q_GLOBAL_STATIC(KisATanTable, kisATanTable);
 
 /// private functions
 

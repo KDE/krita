@@ -23,12 +23,13 @@
 #include <QtAlgorithms>
 #include <QList>
 #include <QWidget>
-
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <kis_debug.h>
 #include "kis_recorded_action_creator_factory.h"
 #include "kis_recorded_filter_action_creator.h"
+
+Q_GLOBAL_STATIC(KisRecordedActionCreatorFactoryRegistry, s_instance)
 
 struct KisRecordedActionCreatorFactoryRegistry::Private {
     KoGenericRegistry<KisRecordedActionCreatorFactory*> factories;
@@ -47,7 +48,6 @@ KisRecordedActionCreatorFactoryRegistry::~KisRecordedActionCreatorFactoryRegistr
 
 KisRecordedActionCreatorFactoryRegistry* KisRecordedActionCreatorFactoryRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisRecordedActionCreatorFactoryRegistry, s_instance);
     return s_instance;
 }
 

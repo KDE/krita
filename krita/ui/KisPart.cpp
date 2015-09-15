@@ -62,6 +62,7 @@
 #include <QGraphicsProxyWidget>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QGlobalStatic>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -77,6 +78,9 @@
 #include "kis_color_manager.h"
 
 #include "kis_action.h"
+
+Q_GLOBAL_STATIC(KisPart, s_instance)
+
 
 class Q_DECL_HIDDEN KisPart::Private
 {
@@ -186,7 +190,6 @@ void KisPart::Private::loadActions()
 
 KisPart* KisPart::instance()
 {
-    K_GLOBAL_STATIC(KisPart, s_instance)
     return s_instance;
 }
 

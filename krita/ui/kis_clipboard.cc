@@ -26,9 +26,9 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QBuffer>
+#include <QGlobalStatic>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"
@@ -44,6 +44,8 @@
 // local
 #include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
+
+Q_GLOBAL_STATIC(KisClipboard, s_instance)
 
 KisClipboard::KisClipboard()
 {
@@ -67,7 +69,6 @@ KisClipboard::~KisClipboard()
 
 KisClipboard* KisClipboard::instance()
 {
-    K_GLOBAL_STATIC(KisClipboard, s_instance);
     qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
     return s_instance;
 }

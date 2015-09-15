@@ -37,6 +37,7 @@ class BRUSH_EXPORT KisBrushRegistry : public QObject, public KoGenericRegistry<K
     Q_OBJECT
 
 public:
+    KisBrushRegistry();
     virtual ~KisBrushRegistry();
 
     static KisBrushRegistry* instance();
@@ -44,7 +45,6 @@ public:
     KisBrushSP getOrCreateBrush(const QDomElement& element);
 
 private:
-    KisBrushRegistry();
     KisBrushRegistry(const KisBrushRegistry&);
     KisBrushRegistry operator=(const KisBrushRegistry&);
 };

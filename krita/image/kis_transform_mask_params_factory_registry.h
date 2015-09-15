@@ -36,11 +36,11 @@ typedef QMap<QString, KisTransformMaskParamsFactory> KisTransformMaskParamsFacto
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
 {
-private:
+
+public:
     KisTransformMaskParamsFactoryRegistry();
     ~KisTransformMaskParamsFactoryRegistry();
 
-public:
     void addFactory(const QString &id, const KisTransformMaskParamsFactory &factory);
     KisTransformMaskParamsInterfaceSP createParams(const QString &id, const QDomElement &e);
 

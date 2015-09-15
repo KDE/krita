@@ -20,9 +20,12 @@
 #include "kis_meta_data_filter_p.h"
 #include "kis_debug.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 using namespace KisMetaData;
+
+Q_GLOBAL_STATIC(FilterRegistry, s_instance)
+
 
 FilterRegistry::FilterRegistry()
 {
@@ -51,7 +54,6 @@ FilterRegistry::~FilterRegistry()
 
 FilterRegistry* FilterRegistry::instance()
 {
-    K_GLOBAL_STATIC(FilterRegistry, s_instance);
     return s_instance;
 }
 

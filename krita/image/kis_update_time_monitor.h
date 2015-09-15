@@ -31,8 +31,9 @@ class QRect;
 class KRITAIMAGE_EXPORT KisUpdateTimeMonitor
 {
 public:
-    static KisUpdateTimeMonitor* instance();
+    KisUpdateTimeMonitor();
     ~KisUpdateTimeMonitor();
+    static KisUpdateTimeMonitor* instance();
 
     void startStrokeMeasure();
     void endStrokeMeasure();
@@ -45,8 +46,6 @@ public:
     void reportJobFinished(void *key, const QVector<QRect> &rects);
     void reportUpdateFinished(const QRect &rect);
 
-private:
-    KisUpdateTimeMonitor();
 
 private:
     struct Private;

@@ -18,7 +18,7 @@
 
 #include "kis_memory_statistics_server.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include "kis_image.h"
 #include "kis_image_config.h"
@@ -26,6 +26,7 @@
 
 #include "tiles3/kis_tile_data_store.h"
 
+Q_GLOBAL_STATIC(KisMemoryStatisticsServer, s_instance)
 
 struct Q_DECL_HIDDEN KisMemoryStatisticsServer::Private
 {
@@ -50,7 +51,6 @@ KisMemoryStatisticsServer::~KisMemoryStatisticsServer()
 
 KisMemoryStatisticsServer* KisMemoryStatisticsServer::instance()
 {
-    K_GLOBAL_STATIC(KisMemoryStatisticsServer, s_instance);
     return s_instance;
 }
 

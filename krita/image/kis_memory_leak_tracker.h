@@ -44,9 +44,9 @@
  */
 class KRITAIMAGE_EXPORT KisMemoryLeakTracker
 {
+public:
     KisMemoryLeakTracker();
     ~KisMemoryLeakTracker();
-public:
     static KisMemoryLeakTracker* instance();
     void reference(const void* what, const void* bywho, const char* whatName = 0);
     void dereference(const void* what, const void* bywho);

@@ -21,18 +21,19 @@
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
 
-#include <kglobal.h>
-
+#include <QGlobalStatic>
 #include <QImage>
 #include <QPainter>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
+Q_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance)
+
+
 class TextBrushInitializationWorkaround
 {
 public:
     static TextBrushInitializationWorkaround* instance() {
-        K_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance);
         return s_instance;
     }
 

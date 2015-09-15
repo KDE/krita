@@ -28,6 +28,7 @@
 class KisTabletDebugger
 {
 public:
+    KisTabletDebugger();
     static KisTabletDebugger* instance();
 
     void toggleDebugging();
@@ -46,8 +47,6 @@ public:
     static QString pointerTypeToString(QTabletEvent::PointerType pointer);
     static QString exTypeToString(QEvent::Type type);
 
-private:
-    KisTabletDebugger();
 
 private:
     bool m_debugEnabled;

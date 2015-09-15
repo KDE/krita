@@ -22,12 +22,14 @@
 #include "kis_recorded_shape_paint_action.h"
 #include "kis_recorded_fill_paint_action.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <kis_debug.h>
+
+Q_GLOBAL_STATIC(KisRecordedActionFactoryRegistry, s_instance)
+
 
 KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisRecordedActionFactoryRegistry, s_instance);
     return s_instance;
 }
 

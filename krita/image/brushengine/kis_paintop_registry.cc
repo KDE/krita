@@ -18,7 +18,8 @@
 
 #include "kis_paintop_registry.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
+
 #include <klocalizedstring.h>
 
 #include <KoGenericRegistry.h>
@@ -38,6 +39,8 @@
 #include "kis_image.h"
 #include "kis_paintop_config_widget.h"
 
+Q_GLOBAL_STATIC(KisPaintOpRegistry, s_instance)
+
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
 }
@@ -52,7 +55,7 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
 
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
+
     if (!s_instance.exists()) {
         KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
 

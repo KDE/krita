@@ -151,13 +151,12 @@ class KRITAIMAGE_EXPORT KisMathToolboxRegistry
 {
 
 public:
-
+    KisMathToolboxRegistry();
     virtual ~KisMathToolboxRegistry();
     static KisMathToolboxRegistry * instance();
 
 private:
 
-    KisMathToolboxRegistry();
     KisMathToolboxRegistry(const KisMathToolboxRegistry&);
     KisMathToolboxRegistry operator=(const KisMathToolboxRegistry&);
 };

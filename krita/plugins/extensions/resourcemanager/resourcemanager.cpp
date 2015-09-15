@@ -26,8 +26,9 @@
 #include <QThread>
 
 #include <QMessageBox>
+#include <QGlobalStatic>
+
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kpluginfactory.h>
 
@@ -47,6 +48,8 @@
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
 
+Q_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance)
+
 ResourceBundleServerProvider::ResourceBundleServerProvider()
 {
     // user-local
@@ -61,7 +64,6 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
 
 ResourceBundleServerProvider *ResourceBundleServerProvider::instance()
 {
-    K_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance);
     return s_instance;
 }
 

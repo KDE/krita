@@ -19,13 +19,13 @@
 
 #include "kis_operation_registry.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include "actions/kis_selection_action_factories.h"
 
+Q_GLOBAL_STATIC(KisOperationRegistry, s_instance)
 
 KisOperationRegistry* KisOperationRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisOperationRegistry, s_instance);
     return s_instance;
 }
 

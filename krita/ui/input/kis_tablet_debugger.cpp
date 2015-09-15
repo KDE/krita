@@ -22,8 +22,12 @@
 #include <QMessageBox>
 
 #include <kis_debug.h>
-#include <kglobal.h>
+
+#include <QGlobalStatic>
 #include <QMessageBox>
+
+Q_GLOBAL_STATIC(KisTabletDebugger, s_instance)
+
 
 inline QString button(const QWheelEvent &ev) {
     Q_UNUSED(ev);
@@ -85,7 +89,6 @@ KisTabletDebugger::KisTabletDebugger()
 
 KisTabletDebugger* KisTabletDebugger::instance()
 {
-    K_GLOBAL_STATIC(KisTabletDebugger, s_instance);
     return s_instance;
 }
 

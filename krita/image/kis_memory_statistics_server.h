@@ -68,6 +68,7 @@ public:
 
 
 public:
+    KisMemoryStatisticsServer();
     ~KisMemoryStatisticsServer();
     static KisMemoryStatisticsServer* instance();
 
@@ -79,8 +80,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sigUpdateMemoryStatistics();
 
-private:
-    KisMemoryStatisticsServer();
 
 private:
     struct Private;

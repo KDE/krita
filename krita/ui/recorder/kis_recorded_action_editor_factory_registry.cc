@@ -21,13 +21,14 @@
 #include <QtAlgorithms>
 #include <QList>
 #include <QWidget>
-
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <kis_debug.h>
 #include "kis_recorded_action_editor_factory.h"
 #include "kis_recorded_filter_action_editor.h"
 #include "kis_recorded_paint_action_editor.h"
+
+Q_GLOBAL_STATIC(KisRecordedActionEditorFactoryRegistry, s_instance)
 
 struct KisRecordedActionEditorFactoryRegistry::Private {
     QList< KisRecordedActionEditorFactory* > factories;
@@ -49,7 +50,6 @@ KisRecordedActionEditorFactoryRegistry::~KisRecordedActionEditorFactoryRegistry(
 
 KisRecordedActionEditorFactoryRegistry* KisRecordedActionEditorFactoryRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisRecordedActionEditorFactoryRegistry, s_instance);
     return s_instance;
 }
 

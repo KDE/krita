@@ -18,7 +18,7 @@
 
 #include "kis_display_color_converter.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <KoColor.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -39,6 +39,8 @@
 #include "kis_config.h"
 #include "kis_paint_device.h"
 #include "kis_iterator_ng.h"
+
+Q_GLOBAL_STATIC(KisDisplayColorConverter, s_instance)
 
 
 struct KisDisplayColorConverter::Private
@@ -181,7 +183,6 @@ KisDisplayColorConverter::~KisDisplayColorConverter()
 
 KisDisplayColorConverter* KisDisplayColorConverter::dumbConverterInstance()
 {
-    K_GLOBAL_STATIC(KisDisplayColorConverter, s_instance);
     return s_instance;
 }
 

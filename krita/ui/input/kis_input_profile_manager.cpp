@@ -23,8 +23,8 @@
 #include <QMap>
 #include <QStringList>
 #include <QDir>
+#include <QGlobalStatic>
 
-#include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -59,7 +59,7 @@ public:
     QList<KisAbstractInputAction *> actions;
 };
 
-K_GLOBAL_STATIC(KisInputProfileManager, inputProfileManager)
+Q_GLOBAL_STATIC(KisInputProfileManager, inputProfileManager)
 
 KisInputProfileManager *KisInputProfileManager::instance()
 {

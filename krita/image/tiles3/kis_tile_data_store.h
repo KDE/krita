@@ -36,13 +36,10 @@ class KisTileDataStoreClockIterator;
  */
 class KRITAIMAGE_EXPORT KisTileDataStore
 {
-private:
-    KisTileDataStore();
-
 public:
-    static KisTileDataStore* instance();
-
+    KisTileDataStore();
     ~KisTileDataStore();
+    static KisTileDataStore* instance();
 
     void debugPrintList();
 

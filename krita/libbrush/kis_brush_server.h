@@ -43,7 +43,7 @@ class BRUSH_EXPORT KisBrushServer : public QObject
     Q_OBJECT
 
 public:
-
+    KisBrushServer();
     virtual ~KisBrushServer();
     KisBrushResourceServer* brushServer(bool block = true);
 
@@ -54,7 +54,7 @@ public Q_SLOTS:
 
 private:
 
-    KisBrushServer();
+
     KisBrushServer(const KisBrushServer&);
     KisBrushServer operator=(const KisBrushServer&);
 

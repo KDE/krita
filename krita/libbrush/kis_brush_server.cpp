@@ -20,7 +20,7 @@
 #include <QDir>
 #include <QApplication>
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <kstandarddirs.h>
 
 #include <KoResource.h>
@@ -34,6 +34,9 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
+
+Q_GLOBAL_STATIC(KisBrushServer, s_instance)
+
 
 class BrushResourceServer : public KisBrushResourceServer
 {
@@ -144,7 +147,6 @@ KisBrushServer::~KisBrushServer()
 
 KisBrushServer* KisBrushServer::instance()
 {
-    K_GLOBAL_STATIC(KisBrushServer, s_instance);
     return s_instance;
 }
 

@@ -18,7 +18,10 @@
 
 #include "kis_color_manager.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KisColorManager, s_instance)
+
 
 class KisColorManager::Private {
 public:
@@ -53,6 +56,5 @@ QByteArray KisColorManager::displayProfile(const QString &device, int profile) c
 
 KisColorManager *KisColorManager::instance()
 {
-    K_GLOBAL_STATIC(KisColorManager, s_instance);
     return s_instance;
 }

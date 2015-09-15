@@ -35,7 +35,7 @@ class KRITACOLOR_EXPORT KisColorManager : public QObject
     Q_OBJECT
 
 public:
-
+    explicit KisColorManager();
     virtual ~KisColorManager();
 
     enum DeviceType {
@@ -64,7 +64,6 @@ public Q_SLOTS:
 
 private:
 
-    explicit KisColorManager();
     KisColorManager(const KisColorManager&);
     KisColorManager operator=(const KisColorManager&);
 

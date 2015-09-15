@@ -181,6 +181,8 @@ class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<Kis
 
 public:
 
+    KisFilterStrategyRegistry();
+    ~KisFilterStrategyRegistry();
     static KisFilterStrategyRegistry* instance();
 
     /**
@@ -197,8 +199,6 @@ public:
 
 private:
 
-    KisFilterStrategyRegistry();
-    ~KisFilterStrategyRegistry();
     KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
     KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
 

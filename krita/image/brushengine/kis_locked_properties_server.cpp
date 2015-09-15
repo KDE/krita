@@ -18,6 +18,12 @@
  */
 #include "kis_locked_properties_server.h"
 
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KisLockedPropertiesServer, s_instance);
+
+
+
 KisLockedPropertiesServer::KisLockedPropertiesServer()
 {
     m_lockedProperties = new KisLockedProperties();
@@ -31,13 +37,11 @@ KisLockedPropertiesServer::~KisLockedPropertiesServer()
 
 KisLockedPropertiesProxy* KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfiguration* config)
 {
-    KisLockedPropertiesProxy* m = new KisLockedPropertiesProxy(config, lockedProperties());
+     KisLockedPropertiesProxy* m = new KisLockedPropertiesProxy(config, lockedProperties());
     return m;
 }
 KisLockedPropertiesServer* KisLockedPropertiesServer::instance()
 {
-    K_GLOBAL_STATIC(KisLockedPropertiesServer, s_instance);
-
     if (s_instance) {
         return s_instance;
     }

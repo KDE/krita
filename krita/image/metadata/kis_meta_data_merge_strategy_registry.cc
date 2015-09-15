@@ -15,11 +15,14 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include "kis_debug.h"
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_meta_data_merge_strategy_p.h"
+
+Q_GLOBAL_STATIC(KisMetaData::MergeStrategyRegistry, s_instance)
+
 
 using namespace KisMetaData;
 
@@ -50,7 +53,6 @@ MergeStrategyRegistry::~MergeStrategyRegistry()
 
 MergeStrategyRegistry* MergeStrategyRegistry::instance()
 {
-    K_GLOBAL_STATIC(MergeStrategyRegistry, s_instance);
     return s_instance;
 }
 

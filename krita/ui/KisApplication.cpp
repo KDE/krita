@@ -555,7 +555,7 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
 }
 
 
-void KisApplication::remoteArguments(QByteArray &message, QObject *socket)
+void KisApplication::remoteArguments(QByteArray message, QObject *socket)
 {
     Q_UNUSED(socket);
 

@@ -183,7 +183,7 @@ void KisHistogramView::setColor(bool set)
 void KisHistogramView::setActiveChannel(int channel)
 {
     ComboboxInfo info = m_comboInfo.at(channel);
-    if (info.producer.data() != m_currentProducer.data()) {
+    if (info.producer != m_currentProducer) {
         m_currentProducer = info.producer;
         m_currentProducer->setView(m_from, m_width);
         m_histogram->setProducer(m_currentProducer);

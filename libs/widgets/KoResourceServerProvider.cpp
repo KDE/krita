@@ -175,7 +175,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
+    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     if (!QFileInfo(d->patternServer->saveLocation()).exists()) {
         QDir().mkpath(d->patternServer->saveLocation());
     }
@@ -186,7 +186,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
         d->patternThread->wait();
     }
 
-    d->gradientServer = new GradientResourceServer("gradients", "*.kgr:*.svg:*.ggr");
+    d->gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
     if (!QFileInfo(d->gradientServer->saveLocation()).exists()) {
         QDir().mkpath(d->gradientServer->saveLocation());
     }
@@ -197,7 +197,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
         d->gradientThread->wait();
     }
 
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
     if (!QFileInfo(d->paletteServer->saveLocation()).exists()) {
         QDir().mkpath(d->paletteServer->saveLocation());
     }

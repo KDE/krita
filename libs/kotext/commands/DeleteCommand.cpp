@@ -38,7 +38,6 @@
 #include <KoSectionModel.h>
 #include <KoSectionEnd.h>
 #include <KoShapeController.h>
-#include <KoDocument.h>
 
 bool DeleteCommand::SectionDeleteInfo::operator<(const DeleteCommand::SectionDeleteInfo &other) const
 {

@@ -36,7 +36,6 @@
 
 //KDE includes
 #include "TextDebug.h"
-#include <kglobal.h>
 #include <klocalizedstring.h>
 
 //Qt includes

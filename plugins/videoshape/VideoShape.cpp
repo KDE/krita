@@ -138,17 +138,17 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         const QString href = element.attribute("href");
         // this can happen in case it is a presentation:placeholder
         if (!href.isEmpty()) {
-            QUrl url(href);
+            QUrl url = QUrl::fromUserInput(href);
             VideoData *data=0;
 
             if(href.startsWith("../")) {
                 // file is outside store
                 KUrl storePath = context.odfLoadingContext().store()->urlOfStore();
                 KUrl extName(storePath, href.mid(3));
-                data = m_videoCollection->createExternalVideoData(extName.url(), false);
+                data = m_videoCollection->createExternalVideoData(extName, false);
             } else if(!url.isRelative()) {
                 // file is outside store and absolute
-                data = m_videoCollection->createExternalVideoData(href, false);
+                data = m_videoCollection->createExternalVideoData(QUrl::fromUserInput(href), false);
             } else {
                 // file is inside store
                 KoStore *store = context.odfLoadingContext().store();

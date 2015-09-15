@@ -22,6 +22,7 @@
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <KoResourceServerAdapter.h>
 #include <math.h>

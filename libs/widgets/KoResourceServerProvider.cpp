@@ -32,7 +32,7 @@
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
 #include "KoColorSpaceRegistry.h"
-
+#include "KoResourcePaths.h"
 #include <iostream>
 using namespace std;
 
@@ -159,22 +159,21 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-//    QT5TODO: How to configure QStandardPaths to look in places other than the default ones?
-//    KGlobal::dirs()->addResourceType("ko_patterns", "data", "krita/patterns/", true);
-//    KGlobal::dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-//    KGlobal::dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+    KoResourcePaths::addResourceType("ko_patterns", "data", "krita/patterns/", true);
+    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
+    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
-//    KGlobal::dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
-//    KGlobal::dirs()->addResourceType("ko_gradients", "data", "krita/gradients/", true);
-//    KGlobal::dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-//    KGlobal::dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+    KoResourcePaths::addResourceType("ko_gradients", "data", "karbon/gradients/");
+    KoResourcePaths::addResourceType("ko_gradients", "data", "krita/gradients/", true);
+    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
+    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-//    KGlobal::dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
-//    KGlobal::dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
-//    KGlobal::dirs()->addResourceType("ko_palettes", "data", "krita/palettes/", true);
+    KoResourcePaths::addResourceType("ko_palettes", "data", "calligra/palettes/");
+    KoResourcePaths::addResourceType("ko_palettes", "data", "karbon/palettes/");
+    KoResourcePaths::addResourceType("ko_palettes", "data", "krita/palettes/", true);
 
-//    KGlobal::dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
-//    KGlobal::dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
+    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
     d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     if (!QFileInfo(d->patternServer->saveLocation()).exists()) {

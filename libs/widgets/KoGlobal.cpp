@@ -21,6 +21,7 @@
 #include "KoGlobal.h"
 
 #include <KoConfig.h>
+#include <KoResourcePaths.h>
 
 #include <QPaintDevice>
 #include <QFont>
@@ -88,56 +89,55 @@ QStringList KoGlobal::_listOfLanguages()
 
 void KoGlobal::createListOfLanguages()
 {
-// QT5TODO: restoring finding all languages (we can spellcheck for?)
-//    KConfig config("all_languages", KConfig::NoGlobals);
-//    // Note that we could also use KLocale::allLanguagesTwoAlpha
+    KConfig config("all_languages", KConfig::NoGlobals);
+    // Note that we could also use KLocale::allLanguagesTwoAlpha
 
-//    QMap<QString, bool> seenLanguages;
-//    const QStringList langlist = config.groupList();
-//    for (QStringList::ConstIterator itall = langlist.begin();
-//            itall != langlist.end(); ++itall) {
-//        const QString tag = *itall;
-//        const QString name = config.group(tag).readEntry("Name", tag);
-//        // e.g. name is "French" and tag is "fr"
+    QMap<QString, bool> seenLanguages;
+    const QStringList langlist = config.groupList();
+    for (QStringList::ConstIterator itall = langlist.begin();
+            itall != langlist.end(); ++itall) {
+        const QString tag = *itall;
+        const QString name = config.group(tag).readEntry("Name", tag);
+        // e.g. name is "French" and tag is "fr"
 
-//        // The QMap does the sorting on the display-name, so that
-//        // comboboxes are sorted.
-//        m_langMap.insert(name, tag);
+        // The QMap does the sorting on the display-name, so that
+        // comboboxes are sorted.
+        m_langMap.insert(name, tag);
 
-//        seenLanguages.insert(tag, true);
-//    }
+        seenLanguages.insert(tag, true);
+    }
 
-//    // Also take a look at the installed translations.
-//    // Many of them are already in all_languages but all_languages doesn't
-//    // currently have en_GB or en_US etc.
+    // Also take a look at the installed translations.
+    // Many of them are already in all_languages but all_languages doesn't
+    // currently have en_GB or en_US etc.
 
-//    const QStringList translationList = KGlobal::dirs()->findAllResources("locale",
-//                                        QString::fromLatin1("*/entry.desktop"));
-//    for (QStringList::ConstIterator it = translationList.begin();
-//            it != translationList.end(); ++it) {
-//        // Extract the language tag from the directory name
-//        QString tag = *it;
-//        int index = tag.lastIndexOf('/');
-//        tag = tag.left(index);
-//        index = tag.lastIndexOf('/');
-//        tag = tag.mid(index + 1);
+    const QStringList translationList = KoResourcePaths::findAllResources("locale",
+                                        QString::fromLatin1("*/entry.desktop"));
+    for (QStringList::ConstIterator it = translationList.begin();
+            it != translationList.end(); ++it) {
+        // Extract the language tag from the directory name
+        QString tag = *it;
+        int index = tag.lastIndexOf('/');
+        tag = tag.left(index);
+        index = tag.lastIndexOf('/');
+        tag = tag.mid(index + 1);
 
-//        if (seenLanguages.find(tag) == seenLanguages.end()) {
-//            KConfig entry(*it, KConfig::SimpleConfig);
+        if (seenLanguages.find(tag) == seenLanguages.end()) {
+            KConfig entry(*it, KConfig::SimpleConfig);
 
-//            const QString name = entry.group("KCM Locale").readEntry("Name", tag);
-//            // e.g. name is "US English" and tag is "en_US"
-//            m_langMap.insert(name, tag);
+            const QString name = entry.group("KCM Locale").readEntry("Name", tag);
+            // e.g. name is "US English" and tag is "en_US"
+            m_langMap.insert(name, tag);
 
-//            // enable this if writing a third way of finding languages below
-//            //seenLanguages.insert( tag, true );
-//        }
+            // enable this if writing a third way of finding languages below
+            //seenLanguages.insert( tag, true );
+        }
 
-//    }
+    }
 
-//    // #### We also might not have an entry for a language where spellchecking is supported,
-//    //      but no KDE translation is available, like fr_CA.
-//    // How to add them?
+    // #### We also might not have an entry for a language where spellchecking is supported,
+    //      but no KDE translation is available, like fr_CA.
+    // How to add them?
 }
 
 QString KoGlobal::tagOfLanguage(const QString & _lang)

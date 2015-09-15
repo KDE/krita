@@ -31,10 +31,6 @@
 #include <QList>
 #include <QFileInfo>
 #include <QDir>
-#include <QApplication>
-#include <QDirIterator>
-
-#include <ksharedconfig.h>
 
 #include <QTemporaryFile>
 #include <QDomDocument>
@@ -42,10 +38,10 @@
 #include "KoResourceServerPolicies.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagStore.h"
+#include "KoResourcePaths.h"
 
 #include "kowidgets_export.h"
-
-#include <WidgetsDebug.h>
+#include "WidgetsDebug.h"
 
 class KoResource;
 
@@ -57,7 +53,7 @@ class KOWIDGETS_EXPORT KoResourceServerBase {
 public:
     /**
     * Constructs a KoResourceServerBase
-    * @param resource type
+    * @param resource type, has to be the same as used by KoResourcePaths
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
@@ -86,16 +82,7 @@ public:
         QStringList fileNames;
 
         foreach (const QString &extension, extensionList) {
-            QStringList files;
-            const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, type(), QStandardPaths::LocateDirectory);
-            Q_FOREACH (const QString& dir, dirs) {
-                QDirIterator it(dir, QStringList() << QStringLiteral("*.") + extension);
-                while (it.hasNext()) {
-                    files.append(it.next());
-                }
-            }
-
-
+            fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
 
         }
         return fileNames;
@@ -147,7 +134,7 @@ public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
-        m_blackListFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, type + ".blacklist");
+        m_blackListFile = KoResourcePaths::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
         m_tagStore = new KoResourceTagStore(this);
         m_tagStore->loadTags();
@@ -361,7 +348,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + type();
+        return KoResourcePaths::saveLocation(type().toLatin1());
     }
 
     /**

@@ -294,7 +294,7 @@ void Thesaurus::dialogClosed()
 void Thesaurus::slotChangeLanguage()
 {
     QString filename = KFileDialog::getOpenFileName(
-            KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt"));
+            QUrl::fromLocalFile(KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt")));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();

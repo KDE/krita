@@ -2883,7 +2883,7 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
         QMimeDatabase db;
         QString type = db.mimeTypeForUrl(_url).name();
 
-        if (KRun::isExecutableFile(url, type)) {
+        if (KRun::isExecutableFile(_url, type)) {
             QString question = i18n("This link points to the program or script '%1'.\n"
                                     "Malicious programs can harm your computer. "
                                     "Are you sure that you want to run this program?", url);
@@ -2896,7 +2896,7 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
     }
 
     event->accept();
-    new KRun(url, 0);
+    new KRun(_url, 0);
 }
 
 void TextTool::debugTextDocument()

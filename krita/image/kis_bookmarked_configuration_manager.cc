@@ -22,6 +22,7 @@
 #include <QString>
 
 #include <kconfig.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 

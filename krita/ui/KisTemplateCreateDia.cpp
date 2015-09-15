@@ -46,7 +46,7 @@
 #include <kicondialog.h>
 #include <kinputdialog.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kis_debug.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
@@ -273,7 +273,7 @@ void KisTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -325,7 +325,8 @@ void KisTemplateCreateDia::slotOk() {
         }
     }
 
-    if (!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
+    QDir path;
+    if (!path.mkpath(templateDir) || !path.mkpath(iconDir)) {
         d->m_tree->writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
@@ -433,7 +434,7 @@ void KisTemplateCreateDia::slotAddGroup() {
         QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=name;
     KisTemplateGroup *newGroup=new KisTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);

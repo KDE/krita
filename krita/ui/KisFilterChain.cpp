@@ -503,8 +503,7 @@ KoStoreDevice* KisFilterChain::storageCleanupHelper(KoStore** storage)
 
 KisDocument* KisFilterChain::createDocument(const QString& file)
 {
-    QUrl url;
-    url.setPath(file);
+    QUrl url = QUrl::fromLocalFile(file);
     QMimeDatabase db;
     QMimeType t = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension);
     if (t.isDefault()) {

@@ -100,8 +100,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     QString filename = m_chain->outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     exrConverter kpc(input, !m_chain->manager()->getBatchMode());
 

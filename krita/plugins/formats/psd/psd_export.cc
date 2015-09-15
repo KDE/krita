@@ -111,8 +111,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     PSDSaver kpc(input);
     KisImageBuilder_Result res;

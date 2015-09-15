@@ -719,6 +719,7 @@ bool KisDocument::saveFile()
         KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
+        dbgFile << "Export status was" << status;
     } else {
         // Native format => normal save
         Q_ASSERT(!localFilePath().isEmpty());
@@ -1270,7 +1271,7 @@ bool KisDocument::openFile()
     d->specialOutputFlag = 0;
     QByteArray _native_format = nativeFormatMimeType();
 
-    QUrl u(localFilePath());
+    QUrl u = QUrl::fromLocalFile(localFilePath());
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {

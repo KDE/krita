@@ -100,8 +100,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     KisImageSP image;
 

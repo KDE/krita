@@ -58,11 +58,11 @@ KisImportExportManager::KisImportExportManager(KisDocument* document,
 }
 
 
-KisImportExportManager::KisImportExportManager(const QString& url, const QByteArray& mimetypeHint,
+KisImportExportManager::KisImportExportManager(const QString& location, const QByteArray& mimetypeHint,
                                                KisFilterChain* const parentChain)
     : m_document(0)
     , m_parentChain(parentChain)
-    , m_importUrl(url)
+    , m_importUrl(locationToUrl(location))
     , m_importUrlMimetypeHint(mimetypeHint)
     , m_graph("")
     , d(new Private)
@@ -82,13 +82,14 @@ KisImportExportManager::~KisImportExportManager()
     delete d;
 }
 
-QString KisImportExportManager::importDocument(const QString& url,
+QString KisImportExportManager::importDocument(const QString& location,
                                                const QString& documentMimeType,
                                                KisImportExportFilter::ConversionStatus& status)
 {
+    QUrl u = locationToUrl(location);
+
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
-    QUrl u(url);
     QMimeType t;
     if (documentMimeType.isEmpty()) {
         QMimeDatabase db;
@@ -118,7 +119,7 @@ QString KisImportExportManager::importDocument(const QString& url,
                 if (f == nativeFormat) {
                     status = KisImportExportFilter::OK;
                     QApplication::restoreOverrideCursor();
-                    return url;
+                    return u.toString();
                 }
 
                 m_graph.setSourceMimeType(f);
@@ -170,9 +171,8 @@ QString KisImportExportManager::importDocument(const QString& url,
 
     // Okay, let's invoke the filters one after the other
     m_direction = Import; // vital information!
-    m_importUrl = url;  // We want to load that file
-    m_exportUrl.clear();  // This is null for sure, as embedded stuff isn't
-    // allowed to use that method
+    m_importUrl = u;
+    m_exportUrl.clear();
     status = chain->invokeChain();
 
     m_importUrl.clear();  // Reset the import URL
@@ -182,14 +182,14 @@ QString KisImportExportManager::importDocument(const QString& url,
     return QString();
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& url, QByteArray& mimeType)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType)
 {
     bool userCancelled = false;
 
     // The import url should already be set correctly (null if we have a KisDocument
     // file manager and to the correct URL if we have an embedded manager)
     m_direction = Export; // vital information!
-    m_exportUrl = url;
+    m_exportUrl = locationToUrl(location);
 
     KisFilterChain::Ptr chain;
     if (m_document) {
@@ -208,12 +208,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         dbgFile << "Using the mimetype hint:" << m_importUrlMimetypeHint;
         m_graph.setSourceMimeType(m_importUrlMimetypeHint);
     } else {
-        QUrl u;
-        u.setPath(m_importUrl);
         QMimeDatabase db;
-        QMimeType t = db.mimeTypeForFile(u.path(), QMimeDatabase::MatchExtension);
+        QMimeType t = db.mimeTypeForUrl(m_importUrl);
         if (!t.isValid() || t.isDefault()) {
-            errFile << "No mimetype found for" << m_importUrl;
+            errFile << "No mimetype found for" << m_importUrl.toDisplayString();
             return KisImportExportFilter::BadMimeType;
         }
         m_graph.setSourceMimeType(t.name().toLatin1());
@@ -222,7 +220,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
             warnFile << "Can't open" << t.name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
-            KisFilterChooser chooser(0, KisImportExportManager::mimeFilter(), QString(), u);
+            KisFilterChooser chooser(0, KisImportExportManager::mimeFilter(), QString(), m_importUrl);
             if (chooser.exec())
                 m_graph.setSourceMimeType(chooser.filterSelected().toLatin1());
             else
@@ -562,6 +560,12 @@ KoProgressUpdater* KisImportExportManager::progressUpdater() const
         return 0;
     }
     return d->progressUpdater.data();
+}
+
+QUrl KisImportExportManager::locationToUrl(QString location) const
+{
+    QUrl u = QUrl::fromLocalFile(location);
+    return (u.isEmpty()) ? QUrl(location) : u;
 }
 
 #include <KisImportExportManager.moc>

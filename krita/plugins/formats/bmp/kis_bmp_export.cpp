@@ -57,8 +57,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();

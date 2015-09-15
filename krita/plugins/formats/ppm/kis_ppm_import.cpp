@@ -72,7 +72,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& 
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     if (url.isEmpty())
         return KisImportExportFilter::FileNotFound;

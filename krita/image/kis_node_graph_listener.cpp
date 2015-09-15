@@ -19,6 +19,8 @@
 
 #include "kis_node_graph_listener.h"
 
+#include <QtGlobal>
+
 struct Q_DECL_HIDDEN KisNodeGraphListener::Private
 {
     Private() : sequenceNumber(0) {}

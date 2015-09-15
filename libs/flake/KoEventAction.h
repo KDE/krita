@@ -22,6 +22,8 @@
 
 #include "flake_export.h"
 #include "KoXmlReaderForward.h"
+
+class QString;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 

@@ -26,7 +26,7 @@
 #include "KoPathShape.h"
 
 /// The undo / redo command for removing a subpath
-class FLAKE_TEST_EXPORT KoSubpathRemoveCommand : public KUndo2Command
+class FLAKE_EXPORT KoSubpathRemoveCommand : public KUndo2Command
 {
 public:
     /**

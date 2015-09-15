@@ -30,7 +30,7 @@ class KoShapeController;
 class KoPathPointRemoveCommandPrivate;
 
 /// The undo / redo command for removing path points.
-class FLAKE_TEST_EXPORT KoPathPointRemoveCommand : public KUndo2Command
+class FLAKE_EXPORT KoPathPointRemoveCommand : public KUndo2Command
 {
 public:
     /**

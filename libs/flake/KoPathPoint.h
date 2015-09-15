@@ -24,6 +24,8 @@
 
 #include "flake_export.h"
 
+#include <QFlags>
+
 class KoPathShape;
 class QPointF;
 class QTransform;

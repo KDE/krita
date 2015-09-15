@@ -22,6 +22,8 @@
 
 #include "flake_export.h"
 
+#include <QtGlobal>
+
 class QPointF;
 class QRectF;
 class QSizeF;

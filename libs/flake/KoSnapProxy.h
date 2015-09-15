@@ -32,7 +32,7 @@ class QRectF;
 /**
  * This class provides access to different shape related snap targets to snap strategies.
  */
-class FLAKE_TEST_EXPORT KoSnapProxy
+class FLAKE_EXPORT KoSnapProxy
 {
 public:
     KoSnapProxy(KoSnapGuide *snapGuide);

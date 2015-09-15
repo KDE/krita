@@ -874,7 +874,8 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout
+                   ${CMAKE_BINARY_DIR}/libs/textlayout)
 
 # Widgets depends on kotext and flake
 set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}

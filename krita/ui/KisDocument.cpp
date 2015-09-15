@@ -256,6 +256,14 @@ public:
         storeInternal(false),
         isLoading(false),
         undoStack(0),
+        m_job(0),
+        m_statJob(0),
+        m_uploadJob(0),
+        m_saveOk(false),
+        m_waitForSave(false),
+        m_duringSaveAs(false),
+        m_bTemp(false),
+        m_bAutoDetectedMime(false),
         modified(false),
         readwrite(true),
         disregardAutosaveFailure(false),
@@ -263,17 +271,6 @@ public:
         macroNestDepth(0),
         kraLoader(0)
     {
-        m_job = 0;
-        m_statJob = 0;
-        m_uploadJob = 0;
-        m_saveOk = false;
-        m_waitForSave = false;
-        m_duringSaveAs = false;
-        m_bTemp = false;
-        m_bAutoDetectedMime = false;
-
-        confirmNonNativeSave[0] = true;
-        confirmNonNativeSave[1] = true;
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
         } else {
@@ -301,7 +298,7 @@ public:
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
-    bool confirmNonNativeSave [2]; // used to pop up a dialog when saving for the
+    bool confirmNonNativeSave [2] = {true, true}; // used to pop up a dialog when saving for the
     // first time if the file is in a foreign format
     // (Save/Save As, Export)
     int specialOutputFlag; // See KoFileDialog in koMainWindow.cc

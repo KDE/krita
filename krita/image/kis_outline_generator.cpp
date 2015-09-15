@@ -22,7 +22,6 @@
  */
 
 #include "kis_outline_generator.h"
-#include "kdebug.h"
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 

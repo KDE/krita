@@ -136,7 +136,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
 
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
-    KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
+    KoHistogramProducer *producer = new KoGenericLabHistogramProducer();
     m_histogram.reset( new KisHistogram(dev, dev->exactBounds(), producer, LINEAR) );
     m_histlog = false;
     m_page.histview->resize(288,100);

@@ -229,7 +229,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
+    KoHistogramProducer *producer = new KoGenericLabHistogramProducer();
     KisHistogram histogram(dev, dev->exactBounds(), producer, LINEAR);
     QPixmap pix(256, height);
     pix.fill();

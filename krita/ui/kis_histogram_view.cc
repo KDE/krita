@@ -112,7 +112,7 @@ void KisHistogramView::setView(double from, double size)
     updateHistogram();
 }
 
-KoHistogramProducerSP KisHistogramView::currentProducer()
+KoHistogramProducer *KisHistogramView::currentProducer()
 {
     return m_currentProducer;
 }
@@ -136,7 +136,7 @@ void KisHistogramView::setCurrentChannels(const KoID& producerID, QList<KoChanne
         channels);
 }
 
-void KisHistogramView::setCurrentChannels(KoHistogramProducerSP producer, QList<KoChannelInfo *> channels)
+void KisHistogramView::setCurrentChannels(KoHistogramProducer *producer, QList<KoChannelInfo *> channels)
 {
     m_currentProducer = producer;
     m_currentProducer->setView(m_from, m_width);
@@ -241,7 +241,7 @@ void KisHistogramView::setChannels()
         addProducerChannels(f.generate());
     } else {
         foreach (const QString &id, list) {
-            KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
+            KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
             if (producer) {
                 addProducerChannels(producer);
             }
@@ -255,7 +255,7 @@ void KisHistogramView::setChannels()
     m_channelToOffset.append(0);
 }
 
-void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer)
+void KisHistogramView::addProducerChannels(KoHistogramProducer *producer)
 {
     if (!producer) return;
 

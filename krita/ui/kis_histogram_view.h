@@ -71,7 +71,7 @@ public:
 
     void setView(double from, double size);
 
-    KoHistogramProducerSP currentProducer();
+    KoHistogramProducer *currentProducer();
 
     QStringList channelStrings();
 
@@ -82,7 +82,7 @@ public:
     void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);
 
     /** Be careful, producer will be modified */
-    void setCurrentChannels(KoHistogramProducerSP producer, QList<KoChannelInfo *> channels);
+    void setCurrentChannels(KoHistogramProducer *producer, QList<KoChannelInfo *> channels);
 
     bool hasColor();
 
@@ -108,11 +108,11 @@ private:
 
     void setChannels();
 
-    void addProducerChannels(KoHistogramProducerSP producer);
+    void addProducerChannels(KoHistogramProducer *producer);
 
     typedef struct {
         bool isProducer;
-        KoHistogramProducerSP producer;
+        KoHistogramProducer *producer;
         KoChannelInfo * channel;
     } ComboboxInfo;
 
@@ -120,7 +120,7 @@ private:
     QPixmap m_pix;
     KisHistogramSP m_histogram;
     const KoColorSpace* m_cs;
-    KoHistogramProducerSP m_currentProducer;
+    KoHistogramProducer *m_currentProducer;
     QList<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
     QVector<qint32> m_channelToOffset;

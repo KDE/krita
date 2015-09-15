@@ -37,17 +37,9 @@
 #include <cmath>
 #include <ctime>
 
-#if defined(_WIN32) || defined(_WIN64)
-#define srand48 srand
-inline double drand48()
-{
-    return double(rand()) / RAND_MAX;
-}
-#endif
 
 HairyBrush::HairyBrush()
 {
-    srand48(time(0));
     m_counter = 0;
     m_lastAngle = 0.0;
     m_oldPressure = 1.0f;

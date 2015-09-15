@@ -164,9 +164,10 @@ public:
 
 class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistantFactory*>
 {
+  public:
     KisPaintingAssistantFactoryRegistry();
     ~KisPaintingAssistantFactoryRegistry();
-  public:
+
     static KisPaintingAssistantFactoryRegistry* instance();
   
 };

@@ -30,12 +30,12 @@
 class ResourceBundleServerProvider {
 public:
     static ResourceBundleServerProvider *instance();
+    ResourceBundleServerProvider();
     ~ResourceBundleServerProvider();
 
     KoResourceServer<ResourceBundle> *resourceBundleServer();
 
 private:
-    ResourceBundleServerProvider();
 
     KoResourceServer<ResourceBundle> *m_resourceBundleServer;
 

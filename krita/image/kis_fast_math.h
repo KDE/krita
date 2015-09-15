@@ -22,6 +22,8 @@
 #ifndef _KIS_IMAGE_FAST_
 #define _KIS_IMAGE_FAST_
 
+#include <QtGlobal>
+
 #include "kritaimage_export.h"
 
 /**

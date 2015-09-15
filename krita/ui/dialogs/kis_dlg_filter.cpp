@@ -20,7 +20,7 @@
 
 #include "kis_dlg_filter.h"
 
-#include <kglobal.h>
+
 
 #include <KStandardDirs>
 #include <QPushButton>

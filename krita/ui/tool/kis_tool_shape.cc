@@ -23,7 +23,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QGridLayout>
-#include <kglobal.h>
+
 
 #include <KoShape.h>
 #include <KoGradientBackground.h>

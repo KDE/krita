@@ -35,7 +35,7 @@
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 #include <QMessageBox>
 
 #include "kis_layer.h"

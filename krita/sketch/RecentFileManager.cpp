@@ -22,7 +22,7 @@
 #include <QDir>
 
 #include <QUrl>
-#include <kglobal.h>
+
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocalizedstring.h>

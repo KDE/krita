@@ -23,7 +23,7 @@
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
+
 
 #include <kis_debug.h>
 

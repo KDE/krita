@@ -30,7 +30,7 @@
 
 #include <QPixmap>
 #include <QShowEvent>
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 
 #include "kis_image.h"

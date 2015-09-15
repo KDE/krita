@@ -26,7 +26,7 @@
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kis_debug.h>
-#include <kglobal.h>
+
 
 #include <kstandarddirs.h>
 #include <KoNetAccess.h>

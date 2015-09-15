@@ -20,7 +20,7 @@
 
 #include "kis_color_space_selector.h"
 
-#include <kglobal.h>
+
 #include <QUrl>
 
 #include <KoFileDialog.h>
@@ -41,7 +41,7 @@
 #include <QDesktopServices>
 
 #include <kstandarddirs.h>
-#include <kglobal.h>
+
 
 #include <kis_debug.h>
 

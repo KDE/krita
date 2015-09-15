@@ -33,7 +33,7 @@
 #include <kis_debug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
-#include <kglobal.h>
+
 #include <kconfiggroup.h>
 #include <krecentdirs.h>
 

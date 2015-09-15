@@ -20,7 +20,7 @@
 #include "kis_tool_text.h"
 
 
-#include <kglobal.h>
+
 
 #include <KoShapeRegistry.h>
 #include <KoShapeController.h>

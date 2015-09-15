@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 #include <QBitArray>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include "kis_config_notifier.h"

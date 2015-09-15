@@ -24,7 +24,7 @@
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>

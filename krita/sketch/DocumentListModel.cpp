@@ -24,7 +24,7 @@
 #include <QThreadPool>
 #include <QTimer>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 class DocumentListModel::Private

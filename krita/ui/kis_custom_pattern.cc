@@ -28,7 +28,7 @@
 #include <QPixmap>
 #include <QShowEvent>
 
-#include <kglobal.h>
+
 #include <QTemporaryFile>
 
 #include "KisDocument.h"

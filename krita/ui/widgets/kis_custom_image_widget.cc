@@ -35,7 +35,7 @@
 
 #include <QMessageBox>
 #include <kstandarddirs.h>
-#include <kglobal.h>
+
 
 #include <kis_debug.h>
 

@@ -31,7 +31,7 @@
 #include <QWidget>
 #include <QDeclarativeComponent>
 
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 #include <QUrl>
 

@@ -23,8 +23,6 @@
 #include <QColor>
 #include <QPoint>
 
-#include "kglobal.h"
-
 #include "kis_global.h"
 #include <kstandarddirs.h>
 

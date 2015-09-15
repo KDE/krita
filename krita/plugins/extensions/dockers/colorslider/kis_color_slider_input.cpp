@@ -35,7 +35,7 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-#include <kglobal.h>
+
 #include <QDoubleSpinBox>
 
 

@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QStandardItemModel>
 
-#include <kglobal.h>
+
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>

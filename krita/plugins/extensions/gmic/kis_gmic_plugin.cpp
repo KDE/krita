@@ -24,7 +24,7 @@
 #include <QTimer>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 
 #include <QMessageBox>
 #include <kstandarddirs.h>

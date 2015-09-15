@@ -32,7 +32,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include <kglobal.h>
+
 #include <kconfig.h>
 #include <klocalizedstring.h>
 

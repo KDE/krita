@@ -26,7 +26,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"

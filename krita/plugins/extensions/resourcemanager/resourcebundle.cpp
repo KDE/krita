@@ -25,7 +25,7 @@
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
 
-#include <kglobal.h>
+
 
 #include <kstandarddirs.h>
 

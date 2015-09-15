@@ -29,7 +29,7 @@
 #include <QTextEdit>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"

@@ -23,7 +23,6 @@
 #include "kis_locked_properties.h"
 #include "kis_locked_properties_proxy.h"
 #include "kis_properties_configuration.h"
-#include "kglobal.h"
 
 class KisLockedPropertiesProxy;
 
@@ -48,9 +47,7 @@ public:
     KisLockedPropertiesProxy* createLockedPropertiesProxy(const KisPropertiesConfiguration*);
     bool hasProperty(const QString &p);
 
-
 private:
-
 
     KisLockedProperties *m_lockedProperties;
     bool m_propertiesFromLocked;

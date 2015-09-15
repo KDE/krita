@@ -27,7 +27,7 @@
 #include "kis_input_configuration_page_item.h"
 #include <QDir>
 #include <KStandardDirs>
-#include <kglobal.h>
+
 
 #include "kis_icon_utils.h"
 

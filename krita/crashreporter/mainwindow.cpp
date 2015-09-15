@@ -21,7 +21,7 @@
 #include <QtGui>
 #include <QtNetwork>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 

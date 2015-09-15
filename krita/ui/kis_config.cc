@@ -27,7 +27,7 @@
 #include <QThread>
 #include <QStringList>
 
-#include <kglobal.h>
+
 #include <kconfig.h>
 
 #include <KisDocument.h>

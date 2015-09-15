@@ -42,7 +42,7 @@
 #include <QScrollBar>
 
 #include <kstandarddirs.h>
-#include <kglobal.h>
+
 #include <QUrl>
 
 #include "ui_wdgcolorspaceselectoradvanced.h"

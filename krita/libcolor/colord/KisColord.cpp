@@ -21,7 +21,7 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
-#include <kglobal.h>
+
 
 #include "CdInterface.h"
 #include "CdProfileInterface.h"

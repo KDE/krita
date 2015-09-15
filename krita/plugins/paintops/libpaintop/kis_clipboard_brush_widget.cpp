@@ -26,7 +26,7 @@
 #include <QShowEvent>
 #include <QPushButton>
 
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 
 #include <kis_debug.h>

@@ -23,7 +23,7 @@
 #include "KisTemplate.h"
 
 #include <QStandardItemModel>
-#include <kglobal.h>
+
 #include <QUrl>
 #include <kconfiggroup.h>
 

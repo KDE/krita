@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 #include <QAction>
 #include <kactioncollection.h>
-#include <kglobal.h>
+
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

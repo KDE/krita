@@ -24,7 +24,7 @@
 #include <QDoubleSpinBox>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 
 #include "KoPointerEvent.h"
 

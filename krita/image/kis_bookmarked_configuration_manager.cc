@@ -24,7 +24,7 @@
 #include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 
 #include <KoID.h>
 

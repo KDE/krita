@@ -37,7 +37,7 @@
 #include <kactioncollection.h>
 #include <kacceleratormanager.h>
 #include <QKeySequence>
-#include <kglobal.h>
+
 
 #include <kis_icon_utils.h>
 #include <KoColorSpace.h>

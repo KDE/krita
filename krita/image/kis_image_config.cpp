@@ -19,7 +19,7 @@
 #include "kis_image_config.h"
 
 #include <ksharedconfig.h>
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 
 #include <KoConfig.h>

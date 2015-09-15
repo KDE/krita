@@ -28,7 +28,7 @@
 #include <CImg.h>
 #include <gmic.h>
 
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 
 KisGmicUpdater::KisGmicUpdater(const QString &updateurl, QObject *parent): QObject(parent),m_url(updateurl)

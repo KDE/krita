@@ -25,7 +25,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 
 #include "kis_canvas2.h"
 #include "KoCanvasResourceManager.h"

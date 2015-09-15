@@ -35,7 +35,7 @@
 #include <kundo2stack.h>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 
 #include <kis_types.h>
 #include <kis_painting_assistant.h>

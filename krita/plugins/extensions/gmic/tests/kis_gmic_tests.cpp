@@ -39,7 +39,7 @@
 #include <kis_input_output_mapper.h>
 #include <kis_gmic_applicator.h>
 
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 #include <QDomDocument>
 

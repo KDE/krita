@@ -30,7 +30,7 @@
 #include <QtGlobal>
 #include <qmath.h>
 
-#include <kglobal.h>
+
 #include <kstandarddirs.h>
 
 

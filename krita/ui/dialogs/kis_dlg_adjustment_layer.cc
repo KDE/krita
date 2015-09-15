@@ -32,7 +32,7 @@
 #include <QDialogButtonBox>
 
 #include <KStandardDirs>
-#include <kglobal.h>
+
 
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"

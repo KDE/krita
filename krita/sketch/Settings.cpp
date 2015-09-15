@@ -20,7 +20,7 @@
 #include "Settings.h"
 #include <QApplication>
 
-#include <kglobal.h>
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 

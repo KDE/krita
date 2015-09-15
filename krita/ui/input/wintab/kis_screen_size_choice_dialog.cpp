@@ -23,7 +23,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 
 #include "kis_debug.h"
 

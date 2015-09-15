@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 #include <KoColorPopupAction.h>
-#include <kglobal.h>
+
 
 #include "recorder/kis_recorded_paint_action.h"
 #include <kis_paintop_preset.h>

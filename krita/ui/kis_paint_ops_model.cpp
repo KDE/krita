@@ -25,7 +25,7 @@
 #include <kis_paintop_factory.h>
 #include <kstandarddirs.h>
 
-#include <kglobal.h>
+
 
 KisPaintOpListModel::KisPaintOpListModel(QObject *parent)
     : BasePaintOpCategorizedListModel(parent)

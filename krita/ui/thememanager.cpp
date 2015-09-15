@@ -41,7 +41,7 @@
 
 #include <kmenu.h>
 #include <QMessageBox>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>

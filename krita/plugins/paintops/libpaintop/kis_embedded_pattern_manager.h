@@ -26,7 +26,7 @@ class KoAbstractGradient;
 class KisPropertiesConfiguration;
 
 
-class PAINTOP_TEST_EXPORT KisEmbeddedPatternManager
+class PAINTOP_EXPORT KisEmbeddedPatternManager
 {
 public:
     static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);

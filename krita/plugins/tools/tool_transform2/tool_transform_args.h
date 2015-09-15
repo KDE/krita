@@ -40,7 +40,7 @@ class QDomElement;
  * memory.
  */
 
-class KRITATOOLTRANSFORM_TEST_EXPORT ToolTransformArgs
+class KRITATOOLTRANSFORM_EXPORT ToolTransformArgs
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,

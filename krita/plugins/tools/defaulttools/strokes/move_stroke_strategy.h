@@ -27,10 +27,10 @@ class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITADEFAULTTOOLS_TEST_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITADEFAULTTOOLS_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class KRITADEFAULTTOOLS_TEST_EXPORT Data : public KisStrokeJobData {
+    class KRITADEFAULTTOOLS_EXPORT Data : public KisStrokeJobData {
     public:
         Data(QPoint _offset)
             : KisStrokeJobData(SEQUENTIAL, EXCLUSIVE),

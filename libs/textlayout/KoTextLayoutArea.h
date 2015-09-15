@@ -67,8 +67,8 @@ public:
      * is related to tables (and paragraphs) split over more than one page,
      * in which case these methods just don't give correct or enough information.
      */
-    KDE_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
-    KDE_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
+    Q_DECL_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
+    Q_DECL_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
     bool layout(FrameIterator *cursor);

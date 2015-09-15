@@ -163,7 +163,6 @@ install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${
 
 install(
     FILES
-    kotext_export.h
     KoDocumentRdfBase.h
     KoInlineObject.h
     KoTextEditor.h

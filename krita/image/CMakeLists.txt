@@ -381,7 +381,6 @@ install( FILES
     kis_shared_ptr.h
     kis_transaction.h
     kis_types.h
-    kritaimage_export.h
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h

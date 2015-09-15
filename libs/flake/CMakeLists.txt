@@ -243,7 +243,6 @@ install( FILES
 
 install(
     FILES
-    flake_export.h
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasControllerWidget.h

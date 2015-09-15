@@ -20,7 +20,6 @@
 #define _KO_HISTOGRAM_PRODUCER_
 
 #include <QtGlobal>
-#include <ksharedptr.h>
 
 #include "pigment_export.h"
 
@@ -48,7 +47,7 @@ class KoColorSpace;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class PIGMENTCMS_EXPORT KoHistogramProducer : public KShared
+class PIGMENTCMS_EXPORT KoHistogramProducer
 {
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
@@ -99,28 +98,32 @@ protected:
     bool m_skipUnselected;
 };
 
-typedef KSharedPtr<KoHistogramProducer> KoHistogramProducerSP;
-
 class PIGMENTCMS_EXPORT KoHistogramProducerFactory
 {
 public:
     explicit KoHistogramProducerFactory(const KoID &id) : m_id(id) {}
     virtual ~KoHistogramProducerFactory() {}
+
     /// Factory method, generates a new KoHistogramProducer
-    virtual KoHistogramProducerSP generate() = 0;
+    virtual KoHistogramProducer *generate() = 0;
+
     /// Returns if a colorspace can be used with this producer
     virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const = 0;
+
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
     virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const = 0;
+
     virtual QString id() const {
         return m_id.id();
     }
+
     virtual QString name() const {
         return m_id.name();
     }
 protected:
     KoID m_id;
 };
+
 
 class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
         : public KoGenericRegistry<KoHistogramProducerFactory*>

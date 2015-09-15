@@ -35,7 +35,7 @@
 #include <QTimer>
 
 #include <QUrl>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <KoDialog.h>
 #include <kis_debug.h>
 
@@ -122,8 +122,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
-    view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
+    view->engine()->addImportPath(KoResourcePaths::findDirs("lib", "calligra/imports").value(0));
+    QString mainqml = KoResourcePaths::findResource("data", "kritasketch/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));

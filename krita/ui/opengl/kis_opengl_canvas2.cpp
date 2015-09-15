@@ -44,7 +44,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 
 #include "KoToolProxy.h"
@@ -357,8 +357,8 @@ QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
 {
     if (d->cursorShader == 0) {
         d->cursorShader = new QOpenGLShaderProgram();
-        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
-        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
+        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KoResourcePaths::findResource("data", "krita/shaders/cursor.vert"));
+        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KoResourcePaths::findResource("data", "krita/shaders/cursor.frag"));
         d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
         if (! d->cursorShader->link()) {
             dbgKrita << "OpenGL error" << glGetError();
@@ -682,11 +682,11 @@ void KisOpenGLCanvas2::initializeCheckerShader()
     QString fragmentShaderName;
 
     if (KisOpenGL::supportsGLSL13()) {
-        vertexShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert");
-        fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture.frag");
+        vertexShaderName = KoResourcePaths::findResource("data", "krita/shaders/matrix_transform.vert");
+        fragmentShaderName = KoResourcePaths::findResource("data", "krita/shaders/simple_texture.frag");
     } else {
-        vertexShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert");
-        fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture_legacy.frag");
+        vertexShaderName = KoResourcePaths::findResource("data", "krita/shaders/matrix_transform_legacy.vert");
+        fragmentShaderName = KoResourcePaths::findResource("data", "krita/shaders/simple_texture_legacy.frag");
     }
 
     bool result;
@@ -734,7 +734,7 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
         .arg(filterPostfix);
 
     {
-        QFile prefaceFile(KGlobal::dirs()->findResource("data", prefaceKey));
+        QFile prefaceFile(KoResourcePaths::findResource("data", prefaceKey));
         prefaceFile.open(QIODevice::ReadOnly);
         shaderText.append(prefaceFile.readAll());
     }
@@ -744,7 +744,7 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
     }
 
     {
-        QFile mainFile(KGlobal::dirs()->findResource("data", mainKey));
+        QFile mainFile(KoResourcePaths::findResource("data", mainKey));
         mainFile.open(QIODevice::ReadOnly);
         shaderText.append(mainFile.readAll());
     }
@@ -763,9 +763,9 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
     if (KisOpenGL::supportsGLSL13()) {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KoResourcePaths::findResource("data", "krita/shaders/matrix_transform.vert"));
     } else {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KoResourcePaths::findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
     }
     reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
 

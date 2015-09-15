@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QMatrix4x4>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include "kis_coordinates_converter.h"
 #include "tool_transform_args.h"
@@ -73,7 +73,7 @@ struct KisFreeTransformStrategy::Private
         scaleCursors[6] = KisCursor::sizeVerCursor();
         scaleCursors[7] = KisCursor::sizeBDiagCursor();
 
-        shearCursorPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
+        shearCursorPixmap.load(KoResourcePaths::locate("data", "calligra/icons/cursor_shear.png"));
 
     }
 

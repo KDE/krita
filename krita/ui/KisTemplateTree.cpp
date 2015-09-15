@@ -28,7 +28,7 @@
 #include <kis_debug.h>
 
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <KoNetAccess.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
@@ -61,7 +61,7 @@ void KisTemplateTree::readTemplateTree()
 
 void KisTemplateTree::writeTemplateTree()
 {
-    QString localDir = KGlobal::dirs()->saveLocation("data", m_templatesResourcePath);
+    QString localDir = KoResourcePaths::saveLocation("data", m_templatesResourcePath);
 
     foreach (KisTemplateGroup *group, m_groups) {
         //dbgUI <<"---------------------------------";
@@ -77,7 +77,8 @@ void KisTemplateTree::writeTemplateTree()
             //dbgUI <<"touched";
             if (!group->isHidden()) {
                 //dbgUI <<"not hidden";
-                KStandardDirs::makeDir(localDir + group->name()); // create the local group dir
+                QDir path;
+                path.mkpath(localDir + group->name()); // create the local group dir
             } else {
                 //dbgUI <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
@@ -86,7 +87,8 @@ void KisTemplateTree::writeTemplateTree()
                     //dbgUI <<"removing:" << group->dirs().first();
                 } else {
                     //dbgUI <<"global";
-                    KStandardDirs::makeDir(localDir + group->name());
+                    QDir path;
+                    path.mkpath(localDir + group->name());
                 }
             }
         }
@@ -138,7 +140,7 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 void KisTemplateTree::readGroups()
 {
 
-    QStringList dirs = KGlobal::dirs()->findDirs("data", m_templatesResourcePath);
+    QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
         //dbgUI <<"dir:" << *it;
         QDir dir(dirName);

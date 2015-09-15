@@ -22,7 +22,7 @@
 #include "kis_action_manager.h"
 #include "operations/kis_operation.h"
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 KisViewPlugin::KisViewPlugin(QObject* parent)
     : m_view(0)

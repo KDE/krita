@@ -100,7 +100,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 {
     Q_ASSERT(view != 0);
 
-    KGlobal::dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
+    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
 
     setObjectName(name);
     KisConfig cfg;
@@ -499,7 +499,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
     if (pixmapName.isEmpty())
         return QPixmap();
 
-    return QPixmap(KGlobal::dirs()->findResource("kis_images", pixmapName));
+    return QPixmap(KoResourcePaths::findResource("kis_images", pixmapName));
 }
 
 KoID KisPaintopBox::currentPaintop()
@@ -561,7 +561,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString pixFilename = KGlobal::dirs()->findResource("kis_images", paintOp->pixmap());
+    QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
     m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
     m_resourceProvider->setPaintOpPreset(preset);
@@ -589,7 +589,7 @@ KoID KisPaintopBox::defaultPaintOp()
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString defaultName = paintOp.id() + ".kpp";
-    QString path = KGlobal::dirs()->findResource("kis_defaultpresets", defaultName);
+    QString path = KoResourcePaths::findResource("kis_defaultpresets", defaultName);
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 

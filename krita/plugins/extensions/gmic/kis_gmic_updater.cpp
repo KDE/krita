@@ -29,7 +29,7 @@
 #include <gmic.h>
 
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 KisGmicUpdater::KisGmicUpdater(const QString &updateurl, QObject *parent): QObject(parent),m_url(updateurl)
 {
@@ -72,7 +72,7 @@ void KisGmicUpdater::finishedDownload(QNetworkReply*reply)
     dbgPlugins << "bytes available: " << reply->bytesAvailable();
     dbgPlugins << reply->url() << " finished";
 
-    QString path = KGlobal::dirs()->saveLocation("gmic_definitions");
+    QString path = KoResourcePaths::saveLocation("gmic_definitions");
     QString fileName = reply->url().path().split("/").last();
 
     QByteArray data = reply->readAll();

@@ -21,7 +21,7 @@
 #include <QApplication>
 
 #include <QGlobalStatic>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include <KoResource.h>
 #include <KoResourceServerProvider.h>
@@ -121,9 +121,9 @@ private:
 
 KisBrushServer::KisBrushServer()
 {
-    KGlobal::dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-    KGlobal::dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-    KGlobal::dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
+    KoResourcePaths::addResourceType("kis_brushes", "data", "krita/brushes/");
+    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
+    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
 
     m_brushServer = new BrushResourceServer();
     if (!QFileInfo(m_brushServer->saveLocation()).exists()) {

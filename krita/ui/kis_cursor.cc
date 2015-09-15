@@ -31,7 +31,7 @@
 #include <qmath.h>
 
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 
 KisCursor::KisCursor() {}
@@ -397,7 +397,7 @@ QCursor KisCursor::rotateCursor()
 
 QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
 {
-    QString filename = KGlobal::dirs()->findResource("kis_pics", iconName);
+    QString filename = KoResourcePaths::findResource("kis_pics", iconName);
     QImage cursorImage;
 
     cursorImage.load(filename);

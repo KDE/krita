@@ -34,7 +34,7 @@
 #include <QSpacerItem>
 
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 
 #include <kis_debug.h>
@@ -328,7 +328,7 @@ void KisCustomImageWidget::fillPredefined()
 
     cmbPredefined->addItem("");
 
-    QStringList definitions = KGlobal::dirs()->findAllResources("data", "krita/predefined_image_sizes/*", KStandardDirs::Recursive);
+    QStringList definitions = KoResourcePaths::findAllResources("data", "krita/predefined_image_sizes/*", KoResourcePaths::Recursive);
     definitions.sort();
 
     if (!definitions.empty()) {
@@ -382,7 +382,7 @@ void KisCustomImageWidget::saveAsPredefined()
     if (fileName.isEmpty()) {
         return;
     }
-    QString saveLocation = KGlobal::dirs()->saveLocation("data");
+    QString saveLocation = KoResourcePaths::saveLocation("data");
 
     QDir d;
     d.mkpath(saveLocation + "krita/predefined_image_sizes/");

@@ -24,7 +24,7 @@
 #include <QPoint>
 
 #include "kis_global.h"
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent)
         : QLabel(parent)
@@ -32,8 +32,8 @@ KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent)
     m_redChannel = 0;
     m_greenChannel = 2;
     m_blueChannel = 4;
-    //TODO: this can be changed in frameworks to  KGlobal::dirs()->findResource("kis_images", "krita-tangetnormal.png");
-    m_fileName = KGlobal::dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
+    //TODO: this can be changed in frameworks to  KoResourcePaths::findResource("kis_images", "krita-tangetnormal.png");
+    m_fileName = KoResourcePaths::findResource("kis_images", "krita-tangentnormal-preview.png");
     QImage preview = QImage(m_fileName);
     setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 }

@@ -31,7 +31,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kiconloader.h>
 
 #include "MainWindow.h"

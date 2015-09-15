@@ -43,7 +43,7 @@
 #include "dialogs/KisShortcutsDialog.h"
 
 #include <kis_debug.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kxmlguifactory.h>
 #include <knotification.h>
 #include <KoDialog.h>
@@ -118,8 +118,8 @@ void KisPart::Private::loadActions()
 {
     actionCollection = new KActionCollection(part, "krita");
 
-    KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
-    QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+    KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions/");
+    QStringList actionDefinitions = KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
 
     foreach(const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
@@ -531,9 +531,9 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
-                QString desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + "*/" + fullTemplateName);
+                QString desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + "*/" + fullTemplateName);
                 if (desktopfile.isEmpty()) {
-                    desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + fullTemplateName);
+                    desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + fullTemplateName);
                 }
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();

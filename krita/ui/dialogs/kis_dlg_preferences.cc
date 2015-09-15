@@ -58,7 +58,7 @@
 #include <klocalizedstring.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -329,7 +329,7 @@ void ColorSettingsTab::installProfile()
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
 
-    QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
+    QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
         QUrl file(profileName);

@@ -63,7 +63,7 @@
 
 #include <krecentdocument.h>
 #include <krecentfilesaction.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kstatusbar.h>
 #include <QTemporaryFile>
 #include <ktoggleaction.h>
@@ -410,11 +410,11 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     QString doc;
-    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
+    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
     KIS_ASSERT(allFiles.size() > 0); // We need at least one krita.rc file!
 
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.rc"));
 
     guiFactory()->addClient(this);
 
@@ -607,7 +607,7 @@ void KisMainWindow::addRecentURL(const QUrl &url)
         bool ok = true;
         if (url.isLocalFile()) {
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
+            const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource

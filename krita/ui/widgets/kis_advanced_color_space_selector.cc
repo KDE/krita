@@ -41,7 +41,7 @@
 #include <QTextBrowser>
 #include <QScrollBar>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include <QUrl>
 
@@ -680,7 +680,7 @@ void KisAdvancedColorSpaceSelector::installProfile()
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
 
-    QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
+    QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
         QUrl file(profileName);

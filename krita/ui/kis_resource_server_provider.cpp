@@ -28,7 +28,7 @@
 
 #include <kis_debug.h>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include <KoResource.h>
 #include <KoResourceServer.h>
@@ -58,10 +58,10 @@ KisResourceServerProvider::KisResourceServerProvider()
 {
     KisBrushServer *brushServer = KisBrushServer::instance();
 
-    KGlobal::dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
-    KGlobal::dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
-    KGlobal::dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
-    KGlobal::dirs()->addResourceType("psd_layer_style_collections", "data", "krita/asl");
+    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
+    KoResourcePaths::addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
+    KoResourcePaths::addResourceType("kis_workspaces", "data", "krita/workspaces/");
+    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "krita/asl");
 
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {

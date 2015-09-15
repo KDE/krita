@@ -39,7 +39,7 @@
 #include <QDesktopServices>
 
 #include <QUrl>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kactioncollection.h>
 #include <QMessageBox>
 #include <kmenubar.h>
@@ -168,8 +168,8 @@ public:
         sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/kritagemini/kritagemini.qml";
 #else
-        sketchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-        QString mainqml = KGlobal::dirs()->findResource("data", "kritagemini/kritagemini.qml");
+        sketchView->engine()->addImportPath(KoResourcePaths::findDirs("lib", "calligra/imports").value(0));
+        QString mainqml = KoResourcePaths::findResource("data", "kritagemini/kritagemini.qml");
 #endif
 
         Q_ASSERT(QFile::exists(mainqml));

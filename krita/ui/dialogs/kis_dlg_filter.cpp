@@ -22,7 +22,7 @@
 
 
 
-#include <KStandardDirs>
+#include <KoResourcePaths.h>
 #include <QPushButton>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -72,7 +72,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
 
     d->uiFilterDialog.filterGalleryToggle->setChecked(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
-    d->uiFilterDialog.filterGalleryToggle->setIcon(QPixmap(KGlobal::dirs()->findResource("data", "krita/pics/sidebaricon.png")));
+    d->uiFilterDialog.filterGalleryToggle->setIcon(QPixmap(KoResourcePaths::findResource("data", "krita/pics/sidebaricon.png")));
     d->uiFilterDialog.filterGalleryToggle->setMaximumWidth(d->uiFilterDialog.filterGalleryToggle->height());
     connect(d->uiFilterDialog.filterSelection, SIGNAL(sigFilterGalleryToggled(bool)), d->uiFilterDialog.filterGalleryToggle, SLOT(setChecked(bool)));
     connect(d->uiFilterDialog.filterGalleryToggle, SIGNAL(toggled(bool)), d->uiFilterDialog.filterSelection, SLOT(showFilterGallery(bool)));

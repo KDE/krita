@@ -34,7 +34,7 @@
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
 
@@ -156,12 +156,12 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     KoGlobal::initialize();
 
     // for cursors
-    KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
 
     // for images in the paintop box
-    KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
+    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
 
-    KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
@@ -233,9 +233,9 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QString desktopName(fileName);
         const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
-        QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
+        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {
-            paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
+            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
         }
 
         if (paths.isEmpty()) {
@@ -283,7 +283,7 @@ void KisApplication::clearConfig()
 
     // find user settings file
     bool createDir = false;
-    QString kritarcPath = KStandardDirs::locateLocal("config", "kritarc", createDir);
+    QString kritarcPath = KoResourcePaths::locateLocal("config", "kritarc", createDir);
 
     QFile configFile(kritarcPath);
     if (configFile.exists()) {
@@ -343,8 +343,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     QDir appdir(applicationDirPath());
     appdir.cdUp();
 
-    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
-    KGlobal::dirs()->addPrefix(appdir.absolutePath());
+    KoResourcePaths::addXdgDataPrefix(appdir.absolutePath() + "/share");
+    KoResourcePaths::addPrefix(appdir.absolutePath());
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.

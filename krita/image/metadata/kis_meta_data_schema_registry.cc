@@ -21,7 +21,7 @@
 #include <QString>
 
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include "kis_debug.h"
 #include "kis_meta_data_schema_p.h"
@@ -50,10 +50,10 @@ SchemaRegistry::SchemaRegistry()
     : d(new Private)
 {
 
-    KGlobal::dirs()->addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
+    KoResourcePaths::addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
 
     QStringList schemasFilenames;
-    schemasFilenames += KGlobal::dirs()->findAllResources("metadata_schema", "*.schema");
+    schemasFilenames += KoResourcePaths::findAllResources("metadata_schema", "*.schema");
 
     foreach(const QString& fileName, schemasFilenames) {
         Schema* schema = new Schema();

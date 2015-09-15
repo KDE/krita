@@ -27,7 +27,7 @@
 #include "ui_wdgtangenttiltoption.h"
 
 #include "kis_global.h"
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 class KisTangentTiltOptionWidget: public QWidget, public Ui::WdgTangentTiltOptions
 {

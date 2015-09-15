@@ -27,7 +27,7 @@
 
 
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include <QScopedPointer>
 #include <QProcessEnvironment>
@@ -288,7 +288,7 @@ bool ResourceBundle::save()
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    QDir bundleDir = KGlobal::dirs()->saveLocation("data", "krita/bundles");
+    QDir bundleDir = KoResourcePaths::saveLocation("data", "krita/bundles");
     bundleDir.cdUp();
 
     QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));

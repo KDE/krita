@@ -28,7 +28,7 @@
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
 #include <kmimetype.h>

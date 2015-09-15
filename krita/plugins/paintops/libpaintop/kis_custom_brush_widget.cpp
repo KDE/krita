@@ -31,7 +31,7 @@
 #include <QPixmap>
 #include <QShowEvent>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -120,7 +120,7 @@ void KisCustomBrushWidget::slotAddPredefined()
 {
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/brushes
     // a unique file with this brushname
-    QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
+    QString dir = KoResourcePaths::saveLocation("data", "krita/brushes");
     QString extension;
 
     if (brushStyle->currentIndex() == 0) {

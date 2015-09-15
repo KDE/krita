@@ -40,7 +40,7 @@
 
 #include <QDesktopServices>
 
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 
 #include <kis_debug.h>
@@ -212,7 +212,7 @@ void KisColorSpaceSelector::installProfile()
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
 
-    QString saveLocation = KGlobal::dirs()->saveLocation("icc_profiles");
+    QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
     foreach (const QString &profileName, profileNames) {
         QUrl file(profileName);

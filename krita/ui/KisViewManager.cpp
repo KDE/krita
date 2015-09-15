@@ -51,7 +51,7 @@
 #include <kmenu.h>
 #include <QMessageBox>
 #include <kservice.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kstatusbar.h>
 #include <QUrl>
 #include <kselectaction.h>
@@ -1216,7 +1216,7 @@ void KisViewManager::toggleTabletLogger()
 
 void KisViewManager::openResourcesDirectory()
 {
-    QString dir = KStandardDirs::locateLocal("data", "krita");
+    QString dir = KoResourcePaths::locateLocal("data", "krita");
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 

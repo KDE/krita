@@ -27,7 +27,7 @@
 
 
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <QTime>
@@ -91,8 +91,8 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     connect(action, SIGNAL(triggered()), this, SLOT(slotShowGmicDialog()));
     addAction("gmic", action);
 
-    KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
-    m_blacklistPath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
+    KoResourcePaths::addResourceType("gmic_definitions", "data", "krita/gmic/");
+    m_blacklistPath = KoResourcePaths::findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
     dumpCompiletimeFeatures();
 
@@ -141,7 +141,7 @@ void KisGmicPlugin::dumpCompiletimeFeatures()
 
 void KisGmicPlugin::setupDefinitionPaths()
 {
-    m_definitionFilePaths = KGlobal::dirs()->findAllResources("gmic_definitions", "*.gmic");
+    m_definitionFilePaths = KoResourcePaths::findAllResources("gmic_definitions", "*.gmic");
     QMutableStringListIterator it(m_definitionFilePaths);
 
     // remove all instances of gmic_def.gmic and updateXXXX.gmic, they cause problems when merged/mixed
@@ -162,10 +162,10 @@ void KisGmicPlugin::setupDefinitionPaths()
     // if we don't have updateXXXX.gmic for current version, prepend standard gmic_def.gmic
     int gmicVersion = gmic_version;
     QString updateFileName = "update" + QString::number(gmicVersion) + ".gmic";
-    QString updatedGmicDefinitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", updateFileName);
+    QString updatedGmicDefinitionFilePath = KoResourcePaths::findResource("gmic_definitions", updateFileName);
     if (updatedGmicDefinitionFilePath.isEmpty())
     {
-        QString standardGmicDefinitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
+        QString standardGmicDefinitionFilePath = KoResourcePaths::findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
         m_definitionFilePaths.prepend(standardGmicDefinitionFilePath);
     }
     else

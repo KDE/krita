@@ -287,6 +287,7 @@ add_definitions(
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
   -DQT_USE_FAST_OPERATOR_PLUS
   -DQT_USE_FAST_CONCATENATION
+  -DQT_NO_URL_CAST_FROM_STRING
 )
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something

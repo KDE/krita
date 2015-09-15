@@ -69,7 +69,6 @@ KisClipboard::~KisClipboard()
 
 KisClipboard* KisClipboard::instance()
 {
-    qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
     return s_instance;
 }
 

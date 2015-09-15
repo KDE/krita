@@ -22,7 +22,7 @@
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <KoIcon.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -58,7 +58,7 @@ KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) cons
 {
     static bool loadedFont = false;
     if (!loadedFont) {
-        QString fontFile = KStandardDirs::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
+        QString fontFile = KoResourcePaths::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
         if (QFontDatabase::addApplicationFont(fontFile) == -1) {
             kWarning() << "Could not load emmentaler font";
         }

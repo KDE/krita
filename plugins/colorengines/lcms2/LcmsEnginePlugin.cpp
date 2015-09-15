@@ -26,7 +26,7 @@
 #include <QDir>
 
 #include <kpluginfactory.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -96,13 +96,13 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
 
     // prepare a list of the ICC profiles
-    KGlobal::dirs()->addResourceType("icc_profiles", "data", "color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "color/icc");
 
     QStringList profileFilenames;
-    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icm",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICM",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
 
     // Load the profiles
     if (!profileFilenames.empty()) {

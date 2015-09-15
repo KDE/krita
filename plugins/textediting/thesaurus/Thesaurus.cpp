@@ -58,7 +58,7 @@ NOT TODO:
 #include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kmessagebox.h>
 #include <KoDialog.h>
 #include <kfiledialog.h>
@@ -86,7 +86,7 @@ Thesaurus::Thesaurus()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     m_dataFile = cfg.readEntry("datafile");
     if (m_dataFile.isEmpty())
-        m_dataFile = KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt");
+        m_dataFile = KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt");
     setCaption();
 
     m_noMatch = i18n("(No match)");
@@ -294,7 +294,7 @@ void Thesaurus::dialogClosed()
 void Thesaurus::slotChangeLanguage()
 {
     QString filename = KFileDialog::getOpenFileName(
-            QUrl::fromLocalFile(KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt")));
+            QUrl::fromLocalFile(KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt")));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();

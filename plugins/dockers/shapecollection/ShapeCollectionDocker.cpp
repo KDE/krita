@@ -35,7 +35,7 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
@@ -198,7 +198,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     connect(m_closeCollectionButton, SIGNAL(clicked()),
             this, SLOT(removeCurrentCollection()));
 
-    if(! KGlobal::dirs()->resourceDirs("app_shape_collections").isEmpty())
+    if(! KoResourcePaths::resourceDirs("app_shape_collections").isEmpty())
     {
         buildAddCollectionMenu();
     }
@@ -401,7 +401,7 @@ bool ShapeCollectionDocker::addCollection(const QString& id, const QString& titl
 
 void ShapeCollectionDocker::buildAddCollectionMenu()
 {
-    QStringList dirs = KGlobal::dirs()->resourceDirs("app_shape_collections");
+    QStringList dirs = KoResourcePaths::resourceDirs("app_shape_collections");
     QMenu* menu = new QMenu(m_addCollectionButton);
     m_addCollectionButton->setMenu(menu);
 

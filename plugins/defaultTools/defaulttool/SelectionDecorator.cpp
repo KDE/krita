@@ -23,7 +23,7 @@
 
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kglobal.h>
 
 #define HANDLE_DISTANCE 10
@@ -44,7 +44,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 {
 #if 0
     if(s_rotateCursor == 0) {
-        s_rotateCursor->load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+        s_rotateCursor->load(KoResourcePaths::locate("data", "calligra/icons/cursor_rotate.png"));
     }
 #endif
 }

@@ -35,7 +35,6 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
@@ -52,6 +51,7 @@
 #include <QDir>
 #include <QMenu>
 #include <QPainter>
+#include <QDebug>
 
 //This class is needed so that the menu returns a sizehint based on the layout and not on the number (0) of menu items
 class CollectionMenu : public QMenu
@@ -381,7 +381,7 @@ void ShapeCollectionDocker::activateShapeCollection(QListWidgetItem *item)
         m_collectionView->setModel(m_modelMap[id]);
     }
     else
-        kWarning(31000) << "Didn't find a model with id ==" << id;
+        qCritical() << "Didn't find a model with id ==" << id;
 
     m_closeCollectionButton->setEnabled(id != "default");
 }
@@ -431,7 +431,6 @@ void ShapeCollectionDocker::scanCollectionDir(const QString& path, QMenu* menu)
     QString name = dg.readEntry("Name");
     QString icon = dg.readEntry("Icon");
     QString type = dg.readEntry("X-KDE-DirType");
-    //kDebug() << name << type;
 
     if(type == "subdir") {
         QMenu* submenu = menu->addMenu(QIcon(dir.absoluteFilePath(icon)), name);
@@ -500,7 +499,7 @@ void ShapeCollectionDocker::onLoadingFinished()
 
     if(!loader)
     {
-        kWarning(31000) << "Not called by a OdfCollectionLoader!";
+        qWarning() << "Not called by a OdfCollectionLoader!";
         return;
     }
 

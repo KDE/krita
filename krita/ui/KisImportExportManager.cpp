@@ -137,7 +137,7 @@ QString KisImportExportManager::importDocument(const QString& location,
         }
     }
 
-    KisFilterChain::Ptr chain(0);
+    KisFilterChainSP chain(0);
     // Are we owned by a KisDocument?
     if (m_document) {
         QByteArray mimeType = m_document->nativeFormatMimeType();
@@ -148,7 +148,7 @@ QString KisImportExportManager::importDocument(const QString& location,
         while (i < n) {
             QByteArray extraMime = extraMimes[i].toUtf8();
             // TODO check if its the same target mime then continue
-            KisFilterChain::Ptr newChain(0);
+            KisFilterChainSP newChain(0);
             newChain = m_graph.chain(this, extraMime);
             if (!chain || (newChain && newChain->weight() < chain->weight()))
                 chain = newChain;
@@ -191,7 +191,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     m_direction = Export; // vital information!
     m_exportUrl = locationToUrl(location);
 
-    KisFilterChain::Ptr chain;
+    KisFilterChainSP chain;
     if (m_document) {
         // We have to pick the right native mimetype as source.
         QStringList nativeMimeTypes;
@@ -315,10 +315,10 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
         ++partIt;
     }
 
-    QList<KisFilterEntry::Ptr> filters = KisFilterEntry::query(); // no constraint here - we want *all* :)
-    QList<KisFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
-    QList<KisFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
-    foreach(KisFilterEntry::Ptr filterEntry, filters)
+    QList<KisFilterEntrySP> filters = KisFilterEntry::query(); // no constraint here - we want *all* :)
+    QList<KisFilterEntrySP>::ConstIterator it = filters.constBegin();
+    QList<KisFilterEntrySP>::ConstIterator end = filters.constEnd();
+    foreach(KisFilterEntrySP filterEntry, filters)
         for (; it != end; ++it) {
             QStringList impList; // Import list
             QStringList expList; // Export list
@@ -491,7 +491,7 @@ QStringList KisImportExportManager::mimeFilter()
 
 // Here we check whether the filter is available. This stuff is quite slow,
 // but I don't see any other convenient (for the user) way out :}
-bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
+bool KisImportExportManager::filterAvailable(KisFilterEntrySP entry)
 {
     if (!entry)
         return false;

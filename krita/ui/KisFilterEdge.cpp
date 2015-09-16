@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 
 namespace CalligraFilter {
 
-Edge::Edge(Vertex* vertex, KisFilterEntry::Ptr filterEntry) :
+Edge::Edge(Vertex* vertex, KisFilterEntrySP filterEntry) :
         m_vertex(vertex), m_filterEntry(filterEntry), d(0)
 {
 }

@@ -32,7 +32,8 @@ Boston, MA 02110-1301, USA.
 
 
 KisFilterEntry::KisFilterEntry(QPluginLoader *loader)
-        : m_loader(loader)
+    : KisShared()
+    , m_loader(loader)
 {
     import = loader->metaData().value("MetaData").toObject().value("X-KDE-Import").toString().split(',');
     export_ = loader->metaData().value("MetaData").toObject().value("X-KDE-Export").toString().split(',');
@@ -41,9 +42,9 @@ KisFilterEntry::KisFilterEntry(QPluginLoader *loader)
     available = loader->metaData().value("MetaData").toObject().value("X-KDE-Available").toString();
 }
 
-QList<KisFilterEntry::Ptr> KisFilterEntry::query()
+QList<KisFilterEntrySP> KisFilterEntry::query()
 {
-    QList<KisFilterEntry::Ptr> lst;
+    QList<KisFilterEntrySP> lst;
 
     QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Krita/FileFilter", QString());
 
@@ -54,7 +55,7 @@ QList<KisFilterEntry::Ptr> KisFilterEntry::query()
         //dbgFile <<"   desktopEntryPath=" << (*it)->entryPath()
         //               << "   library=" << (*it)->library() << endl;
         // Append converted offer
-        lst.append(KisFilterEntry::Ptr(new KisFilterEntry(*it)));
+        lst.append(KisFilterEntrySP(new KisFilterEntry(*it)));
         // Next service
         it++;
     }

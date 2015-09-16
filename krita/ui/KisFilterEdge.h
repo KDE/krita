@@ -32,13 +32,13 @@ class Edge
 
 public:
     // creates a new edge to "vertex" with the given weight.
-    Edge(Vertex* vertex, KisFilterEntry::Ptr filterEntry);
+    Edge(Vertex* vertex, KisFilterEntrySP filterEntry);
     ~Edge() {}
 
     unsigned int weight() const {
         return m_filterEntry ? m_filterEntry->weight : 0;
     }
-    KisFilterEntry::Ptr filterEntry() const {
+    KisFilterEntrySP filterEntry() const {
         return m_filterEntry;
     }
     const Vertex* vertex() const {
@@ -60,7 +60,7 @@ private:
     Edge& operator=(const Edge& rhs);
 
     Vertex* m_vertex;
-    KisFilterEntry::Ptr m_filterEntry;
+    KisFilterEntrySP m_filterEntry;
 
     class Private;
     Private * const d;

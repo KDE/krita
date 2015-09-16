@@ -21,23 +21,30 @@ Boston, MA 02110-1301, USA.
 #ifndef KIS_FILTER_ENTRY_H
 #define KIS_FILTER_ENTRY_H
 
-#include <ksharedptr.h>
 #include <QList>
 #include <QStringList>
+
+#include "kis_shared.h"
+#include "kis_shared_ptr.h"
+
 #include "kritaui_export.h"
 
 class QObject;
 class QPluginLoader;
 class KisImportExportFilter;
 class KisFilterChain;
+
+
+class KisFilterEntry;
+typedef KisSharedPtr<KisFilterEntry> KisFilterEntrySP;
+
 /**
  *  Represents an available filter.
  */
-class KRITAUI_EXPORT KisFilterEntry : public KShared
+class KRITAUI_EXPORT KisFilterEntry : public KisShared
 {
 
 public:
-    typedef KSharedPtr<KisFilterEntry> Ptr;
 
     //KisFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
     explicit KisFilterEntry(QPluginLoader *loader);
@@ -82,7 +89,7 @@ public:
     /**
      *  This function will query KDED to find all available filters.
      */
-    static QList<KisFilterEntry::Ptr> query();
+    static QList<KisFilterEntrySP> query();
 
     QPluginLoader *loader() const {
         return m_loader;
@@ -91,5 +98,6 @@ public:
 private:
     QPluginLoader *m_loader;
 };
+
 
 #endif

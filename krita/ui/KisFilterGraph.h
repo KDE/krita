@@ -54,7 +54,7 @@ public:
     // closest Calligra mimetype and use that as destination.
     // After such a search "to" will contain the dest. mimetype (return value)
     // if the search was successful. Might return 0!
-    KisFilterChain::Ptr chain(const KisImportExportManager* manager, QByteArray& to) const;
+    KisFilterChainSP chain(const KisImportExportManager* manager, QByteArray& to) const;
 
     // debugging
     void dump() const;

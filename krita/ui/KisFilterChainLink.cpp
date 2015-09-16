@@ -51,7 +51,7 @@ namespace
 
 namespace CalligraFilter {
 
-    ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntry::Ptr filterEntry,
+    ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntrySP filterEntry,
                          const QByteArray& from, const QByteArray& to)
         : m_chain(chain)
         , m_filterEntry(filterEntry)

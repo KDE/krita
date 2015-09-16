@@ -134,7 +134,7 @@ public:
      * Method used to check if that filter is available at all.
      * @note Slow, but cached
      */
-    static bool filterAvailable(KisFilterEntry::Ptr entry);
+    static bool filterAvailable(KisFilterEntrySP entry);
 
     //@}
 

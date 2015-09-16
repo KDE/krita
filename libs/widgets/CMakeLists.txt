@@ -9,6 +9,7 @@ if (LIBATTICA_FOUND)
 endif ()
 
 set(kowidgets_LIB_SRCS
+    KoGradientEditWidget.cpp
     KoResourcePaths.cpp
     KoVBox.cpp
     KoDialog.cpp

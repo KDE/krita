@@ -7,6 +7,7 @@ add_subdirectory(tests)
 add_subdirectory(pics)
 
 set(flake_SRCS
+    KoGradientHelper.cpp
     KoFlake.cpp
     KoCanvasBase.cpp
     KoResourceManager_p.cpp

@@ -1,0 +1,108 @@
+Adapted from the Inkscape tutorial by:
+  Copyright (C) 2004-2006 Bulia Byak <buliabyak@users.sf.net>
+  Copyright (C) 2004-2006 Josh Andler <scislac@users.sf.net>
+
+Adaptation to Karbon by:
+  Copyright (C) 2008 Fela Winkelmolen <fela.kde@gmail.com>
+
+This tutorial is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
+
+
+
+
+
+
+One of the many great tools available in Karbon is the Calligraphy tool. This tutorial will help you become acquainted with how that tool works, as well as demonstrate some basic techniques of the art of Calligraphy.
+
+History and Styles
+==================
+Going by the dictionary definition, calligraphy means "beautiful writing" or "fair or elegant penmanship". Essentially, calligraphy is the art of making beautiful or elegant handwriting. It may sound intimidating, but with a little practice, anyone can master the basics of this art.
+
+The earliest forms of calligraphy date back to cave-man paintings. Up until roughly 1440 AD, before the printing press was around, calligraphy was the way books and other publications were made. A scribe had to handwrite every individual copy of every book or publication. The handwriting was done with a quill and ink onto materials such as parchment or vellum. The lettering styles used throughout the ages include Rustic, Carolingian, Blackletter, etc. Perhaps the most common place where the average person will run across calligraphy today is on wedding invitations.
+There are three main styles of calligraphy:
+* Western or Roman
+* Arabic
+* Chinese or Oriental
+This tutorial focuses mainly on Western calligraphy, as the other two styles tend to use a brush (instead of a pen with nib), which is not how our Calligraphy tool currently functions.
+One great advantage that we have over the scribes of the past is the Undo command: If you make a mistake, the entire page is not ruined.
+
+Hardware
+========
+You'll get the best results if you use a tablet and pen (e.g. Wacom). However, even with mouse you can do some beginning calligraphy, though you will have difficulty producing fast sweeping strokes.
+
+Calligraphy Tool Options
+========================
+Switch to the Calligraphy tool by clicking on its button in the tools docker. In the "Tool options" docker you can set several parameters, most of those are shown only after pressing "show details >>". The following sections will explain their use.
+  <image1 ("Tool obtions" docker)>
+
+Following an Existing Path
+==========================
+When checking the "Follow selected path" option the stroke will follow the outline of the currently selected path, instead of following the mouse or tablet position. This way you can use the calligraphy tool to draw poligons, stars, etc. Or you can fist use the path tool to create a precise guide path, and than use the calligraphy tool on the created path.
+  <image2 (example of following a flower path)>
+
+Width & Thinning
+================
+This pair of options control the width of your pen.
+Since pen width is changed often, you can adjust it without going to the docker, using the left and right arrow keys. The best thing about these keys is that they work while you're drawing, so you can change the width of your pen gradually in the middle of the stroke.
+  <image3 (stroke of differend widths)>
+Pen width may also depend on the velocity, as controlled by the thinning parameter. This parameter can take values from -1 to 1; zero means the width is independent of velocity, positive values make faster strokes thinner, negative values make faster strokes broader. Here are a few examples, the two left strokes having positive thinning, and the right two negative thinning, all strokes are drawn with the same width.
+  <image4 (examples of positive and negative thinning)>
+For fun, set the thinning to 1 (maximum) and draw with jerky movements to get strangely naturalistic, neuron-like shapes:
+  <image5 (thinning at 1)>
+
+Angle & Fixation
+================
+After width, angle is the most important calligraphy parameter. It is the angle of your pen in degrees, changing from 0 (horizontal) to 179 passing through 90 (vertical):
+  <image6 (taken from the Inkscape tutorial)>
+Each traditional calligraphy style has its own prevalent pen angle. For example, the Unicial hand uses the angle of 25 degrees. More complex hands and more experienced calligraphers will often vary the angle while drawing, and Karbon makes this possible by pressing up and down arrow keys. For beginning calligraphy lessons, however, keeping the angle constant will work best. Here are examples of strokes drawn at different angles (fixation = 1):
+  <image7 (taken from the Inkscape tutorial)>
+As you can see, the stroke is at its thinnest when it is drawn parallel to its angle, and at its broadest when drawn perpendicular. Positive angles are the most natural and traditional for right-handed calligraphy.
+The level of contrast between the thinnest and the thickest is controlled by the fixation parameter. The value of 1 means that the angle is always constant, as set in the Angle field. Decreasing fixation lets the pen turn a little against the direction of the stroke. With fixation=0, pen rotates freely to be always perpendicular to the stroke, and Angle has no effect anymore:
+  <image8 (taken from the Inkscape tutorial)>
+Typographically speaking, maximum fixation and therefore maximum stroke width contrast (above left) are the features of antique serif typefaces, such as Times or Bodoni (because these typefaces were historically an imitation of fixed-pen calligraphy). Zero fixation and zero width contrast (above right), on the other hand, suggest modern sans serif typefaces such as Helvetica.
+
+Mass & Drag
+===========
+Unlike width and angle, these two last parameters define how the tool "feels" rather than affect its visual output. So there won't be any illustrations in this section; instead just try them yourself to get a better idea.
+In physics, mass is what causes inertia; the higher the mass of the Karbon calligraphy tool, the more it lags behind your mouse pointer and the more it smoothes out sharp turns and quick jerks in your stroke. When this value is small the tool is fast and responsive, but you increase the mass to get slower and smoother pen.
+Drag is the resistance of the paper to the movement of the pen. Lowering this parameter makes paper "slippery": if the mass is big, the pen tends to run away on sharp turns; if the mass is zero, low drag makes the pen to wiggle wildly.
+
+Calligraphy examples
+====================
+Now that you know the basic capabilities of the tool, you can try to produce some real calligraphy. If you are new to this art, get yourself a good calligraphy book and study it with Inkscape. This section will show you just a few simple examples.
+First of all, to do letters, you need to create a pair of rulers to guide you. If you're going to write in a slanted or cursive hand, add some slanted guides across the two rulers as well, for example:
+  <image9 (taken from the Inkscape tutorial)>
+
+Then zoom in so that the height between the rulers corresponds to your most natural hand movement range, adjust width and angle, and off you go!
+
+Probably the first thing you would do as a beginner calligrapher is practice the basic elements of letters -- vertical and horizontal stems, round strokes, slanted stems. Here are some letter elements for the Unicial hand:
+  <image10  (taken from the Inkscape tutorial)>
+
+Some useful tips:
+* Double clicking on a calligraphic shape will allow you to edit the control points of the guide path. For further finetuning you can convert the calligraphic shape into a simple path clicking on the "Convert To Path" button.
+* If your last stroke is bad, just undo it (Ctrl+Z). However, if its shape is good but the position or size are slightly off, it's better to switch to the default tool temporarily and nudge/scale/rotate it as needed, then return to the calligraphy tool.
+* Having done a word, switch to the default tool again to adjust stem uniformity and letterspacing. Don't overdo this, however; good calligraphy must retain somewhat irregular handwritten look. Resist the temptation to copy over letters and letter elements; each stroke must be original.
+
+And here are some complete lettering examples (taken from the original Inkscape tutorial as a lot of the other images and text):
+<image10>
+
+Profiles
+========
+Karbon allows you to easily load and save predifined and custom sets of options, called profiles. The combo box in the top of the "Tool options" docker allows you to choose the profile. To save a profile just click on the "Save profile as..." button (if the details are hidden first press "Show details >>") after which you will be asked to enter a name for the new profile.
+
+Conclusion
+==========
+Calligraphy is not only fun; it's a deeply spiritual art that may transform your outlook on everything you do and see. Inkscape's calligraphy tool can only serve as a modest introduction. And yet it is very nice to play with and may be useful in real design. Enjoy!

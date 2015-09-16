@@ -22,6 +22,7 @@
 #include <QButtonGroup>
 
 #include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
 
@@ -103,7 +104,7 @@ QRect KisScreenSizeChoiceDialog::screenRect() const
 
 void KisScreenSizeChoiceDialog::loadSettings(const QRect &defaultRect)
 {
-    KConfigGroup cfg = KGlobal::config()->group("ScreenSizeWorkaroundDialog");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("ScreenSizeWorkaroundDialog");
     int index = qBound(0, cfg.readEntry("choiceIndex", 0), 2);
 
     m_dataSource->button(index)->setChecked(true);
@@ -118,7 +119,7 @@ void KisScreenSizeChoiceDialog::loadSettings(const QRect &defaultRect)
 
 void KisScreenSizeChoiceDialog::saveSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("ScreenSizeWorkaroundDialog");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("ScreenSizeWorkaroundDialog");
 
     cfg.writeEntry("choiceIndex", m_dataSource->checkedId());
 

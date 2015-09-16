@@ -151,7 +151,7 @@ if(WIN32 AND USE_BREAKPAD)
     set(BREAKPAD_LIBS breakpad)
 endif()
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-apps-calligrakrita.png")
 kde4_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(krita ${krita_SRCS})

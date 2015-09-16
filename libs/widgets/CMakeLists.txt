@@ -10,6 +10,7 @@ endif ()
 
 set(kowidgets_LIB_SRCS
     KoResourcePaths.cpp
+    KoVBox.cpp
     KoDialog.cpp
     KoGlobal.cpp
     KoZoomWidget.cpp

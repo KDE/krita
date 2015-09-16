@@ -99,8 +99,6 @@ public:
         , wrapAroundMode(false)
 
     {
-        vertices = new QVector3D[6];
-        texCoords = new QVector2D[6];
     }
 
     ~Private() {
@@ -108,16 +106,13 @@ public:
         delete checkerShader;
         delete cursorShader;
 
-        delete[] vertices;
-        delete[] texCoords;
-
         Sync::deleteSync(glSyncObject);
     }
 
     bool canvasInitialized;
 
-    QVector3D *vertices;
-    QVector2D *texCoords;
+    QVector3D vertices[6];
+    QVector2D texCoords[6];
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
@@ -258,41 +253,41 @@ void KisOpenGLCanvas2::initializeGL()
 //    KisConfig cfg;
 //    if (cfg.disableVSync()) {
 //        if (!VSyncWorkaround::tryDisableVSync(this)) {
-//            warnKrita;
-//            warnKrita << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
-//            warnKrita << "WARNING: It means either your hardware or driver doesn't support it,";
-//            warnKrita << "WARNING: or we just don't know about this hardware. Please report us a bug";
-//            warnKrita << "WARNING: with the output of \'glxinfo\' for your card.";
-//            warnKrita;
-//            warnKrita << "WARNING: Trying to workaround it by disabling Double Buffering.";
-//            warnKrita << "WARNING: You may see some flickering when painting with some tools. It doesn't";
-//            warnKrita << "WARNING: affect the quality of the final image, though.";
-//            warnKrita;
+//            warnUI;
+//            warnUI << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+//            warnUI << "WARNING: It means either your hardware or driver doesn't support it,";
+//            warnUI << "WARNING: or we just don't know about this hardware. Please report us a bug";
+//            warnUI << "WARNING: with the output of \'glxinfo\' for your card.";
+//            warnUI;
+//            warnUI << "WARNING: Trying to workaround it by disabling Double Buffering.";
+//            warnUI << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+//            warnUI << "WARNING: affect the quality of the final image, though.";
+//            warnUI;
 
 //            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
-//                errKrita << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
-//                errKrita << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
-//                errKrita << "CRITICAL: For an optimal experience, please disable OpenGL";
-//                errKrita;
+//                errUI << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+//                errUI << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+//                errUI << "CRITICAL: For an optimal experience, please disable OpenGL";
+//                errUI;
 //            }
 //        }
 //    }
 
     KisConfig cfg;
-    dbgKrita << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    dbgUI << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
     int glVersion = KisOpenGL::initializeContext(context());
-    dbgKrita << "OpenGL: Version found" << glVersion;
+    dbgUI << "OpenGL: Version found" << glVersion;
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
-    d->openGLImageTextures->initGL((QOpenGLFunctions *)this);
+    d->openGLImageTextures->initGL(static_cast<QOpenGLFunctions*>(this));
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
     initializeDisplayShader();
 
     ptr_glLogicOp = (kis_glLogicOp)(context()->getProcAddress("glLogicOp"));
 
-    Sync::init();
+    Sync::init(context());
 
 
 
@@ -361,7 +356,7 @@ QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
         d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KoResourcePaths::findResource("data", "krita/shaders/cursor.frag"));
         d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
         if (! d->cursorShader->link()) {
-            dbgKrita << "OpenGL error" << glGetError();
+            dbgUI << "OpenGL error" << glGetError();
             qFatal("Failed linking cursor shader");
         }
         Q_ASSERT(d->cursorShader->isLinked());
@@ -589,7 +584,7 @@ void KisOpenGLCanvas2::drawImage()
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
             if (!tile) {
-                warnKrita << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                warnUI << "OpenGL: Trying to paint texture tile but it has not been created yet.";
                 continue;
             }
 
@@ -658,7 +653,7 @@ void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString 
     KisConfig cfg;
 
     if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgKrita << "GL-log:" << context << log;
+        dbgUI << "GL-log:" << context << log;
     }
 
     if (result) return;

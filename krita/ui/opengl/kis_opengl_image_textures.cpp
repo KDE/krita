@@ -192,7 +192,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     QOpenGLFunctions *f = ctx->functions();
 
     m_initialized = true;
-    dbgKrita  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
+    dbgUI  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
 
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
@@ -210,7 +210,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     }
     }
     else {
-        dbgKrita << "Tried to init texture tiles without a current OpenGL Context.";
+        dbgUI << "Tried to init texture tiles without a current OpenGL Context.";
     }
 }
 
@@ -284,7 +284,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
                 info->tileList.append(tileInfo);
             }
             else {
-                dbgKrita << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
+                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
             }
         }
     }
@@ -296,7 +296,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 {
     if (!m_initialized) {
-        dbgKrita << "OpenGL: Tried to edit image texture cache before it was initialized.";
+        dbgUI << "OpenGL: Tried to edit image texture cache before it was initialized.";
         return;
     }
 
@@ -316,7 +316,7 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
 
     if (m_glFuncs) {
-        dbgKrita << "Attaching checker texture" << checkerTexture();
+        dbgUI << "Attaching checker texture" << checkerTexture();
         m_glFuncs->glBindTexture(GL_TEXTURE_2D, checkerTexture());
 
         m_glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -334,7 +334,7 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
                     0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
     }
     else {
-        dbgKrita << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
+        dbgUI << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
     }
 
 }
@@ -369,7 +369,7 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 
 void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    //dbgKrita << "Setting monitor profile to" << monitorProfile->name() << renderingIntent << conversionFlags;
+    //dbgUI << "Setting monitor profile to" << monitorProfile->name() << renderingIntent << conversionFlags;
     m_monitorProfile = monitorProfile;
     m_renderingIntent = renderingIntent;
     m_conversionFlags = conversionFlags;
@@ -409,7 +409,7 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
         m_glFuncs->glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
     }
     else {
-        dbgKrita << "OpenGL: Tried to read texture size before OpenGL was initialized.";
+        dbgUI << "OpenGL: Tried to read texture size before OpenGL was initialized.";
         maxTextureSize = GL_MAX_TEXTURE_SIZE;
     }
 
@@ -535,11 +535,11 @@ void KisOpenGLImageTextures::updateTextureFormat()
                                        "OpenColorIO will now be deactivated."));
         }
 
-        warnKrita << "WARNING: Internal color management was forcely enabled";
-        warnKrita << "Color Management Mode: " << cm;
-        warnKrita << ppVar(m_image->colorSpace());
-        warnKrita << ppVar(destinationColorModelId);
-        warnKrita << ppVar(destinationColorDepthId);
+        warnUI << "WARNING: Internal color management was forcely enabled";
+        warnUI << "Color Management Mode: " << cm;
+        warnUI << ppVar(m_image->colorSpace());
+        warnUI << ppVar(destinationColorModelId);
+        warnUI << ppVar(destinationColorDepthId);
 
         cfg.setOcioColorManagementMode(KisConfig::INTERNAL);
         m_internalColorManagementActive = true;

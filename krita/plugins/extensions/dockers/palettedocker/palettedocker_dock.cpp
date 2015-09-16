@@ -24,13 +24,14 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <QWheelEvent>
-#include <klocalizedstring.h>
-#include <kcolordialog.h>
+#include <QColorDialog>
 
-#include <kis_icon_utils.h>
+#include <klocalizedstring.h>
+
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <kis_icon_utils.h>
 #include <kis_layer.h>
 #include <kis_node_manager.h>
 #include <kis_config.h>
@@ -267,11 +268,9 @@ void PaletteDockerDock::addColor()
             m_canvas->displayColorConverter()->displayRendererInterface();
 
         KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
-        QColor color;
+        QColor color = QColorDialog::getColor(displayRenderer->toQColor(currentFgColor));
 
-        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
-
-        if (result == KColorDialog::Accepted) {
+        if (color.isValid()) {
             KoColorSetEntry newEntry;
             newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
             m_currentColorSet->add(newEntry);

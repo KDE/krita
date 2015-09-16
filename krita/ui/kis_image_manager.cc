@@ -22,18 +22,18 @@
 #include <QDesktopServices>
 
 #include <QAction>
-#include <klocalizedstring.h>
 #include <QUrl>
-#include <kcolordialog.h>
+#include <QColorDialog>
+
+#include <klocalizedstring.h>
 
 #include <KoColor.h>
-#include <kis_icon_utils.h>
-#include <KisImportExportManager.h>
 #include <KoFileDialog.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
-
+#include <kis_icon_utils.h>
+#include <KisImportExportManager.h>
 #include "kis_import_catcher.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
@@ -192,9 +192,9 @@ void KisImageManager::slotImageProperties()
     delete dlg;
 }
 
-void updateImageBackgroundColor(KisImageSP image, const KColorDialog *dlg)
+void updateImageBackgroundColor(KisImageSP image, const QColorDialog *dlg)
 {
-    QColor newColor = dlg->color();
+    QColor newColor = dlg->selectedColor();
     KoColor bg = image->defaultProjectionColor();
     bg.fromQColor(newColor);
     image->setDefaultProjectionColor(bg);
@@ -206,12 +206,11 @@ void KisImageManager::slotImageColor()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KColorDialog dlg;
-    dlg.setAlphaChannelEnabled(true);
+    QColorDialog dlg;
+    dlg.setOption(QColorDialog::ShowAlphaChannel, true);
 
     KoColor bg = image->defaultProjectionColor();
-    dlg.setColor(bg.toQColor());
-    dlg.setButtons(KColorDialog::Ok | KColorDialog::Cancel);
+    dlg.setCurrentColor(bg.toQColor());
 
     KisSignalCompressor compressor(200, KisSignalCompressor::FIRST_INACTIVE);
 
@@ -221,9 +220,7 @@ void KisImageManager::slotImageColor()
     connect(&dlg, SIGNAL(colorSelected(const QColor&)), &compressor, SLOT(start()));
     connect(&compressor, SIGNAL(timeout()), &proxy, SLOT(start()));
 
-    if (dlg.exec() == KColorDialog::Accepted) {
-        // TODO: undo!!!
-    }
+    dlg.exec();
 }
 
 

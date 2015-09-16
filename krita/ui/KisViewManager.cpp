@@ -43,17 +43,16 @@
 #include <QScrollBar>
 #include <QMainWindow>
 #include <QPoint>
+#include <QAction>
+#include <QMessageBox>
+#include <QUrl>
 
 #include <kactioncollection.h>
-#include <QAction>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
-#include <QMessageBox>
 #include <kservice.h>
 #include <KoResourcePaths.h>
-#include <kstatusbar.h>
-#include <QUrl>
 #include <kselectaction.h>
 #include <kxmlguifactory.h>
 

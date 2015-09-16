@@ -45,6 +45,10 @@
 #include <QTabBar>
 #include <QMoveEvent>
 #include <QFontDatabase>
+#include <QUrl>
+#include <QMessageBox>
+#include <QTemporaryFile>
+#include <QStatusBar>
 
 #include <krecentdirs.h>
 #include <kactioncollection.h>
@@ -59,17 +63,13 @@
 #include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
-#include <QMessageBox>
 
 #include <krecentdocument.h>
 #include <krecentfilesaction.h>
 #include <KoResourcePaths.h>
-#include <kstatusbar.h>
-#include <QTemporaryFile>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kurlcombobox.h>
-#include <QUrl>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>

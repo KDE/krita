@@ -110,10 +110,6 @@ public:  // Krita specific interfaces
       * KisView will take care of removing the items when the view GUI is deactivated
       * and readding them when it is reactivated.
       * The parameters are the same as QStatusBar::addWidget().
-      *
-      * Note that you can't use KStatusBar methods (inserting text items by id).
-      * But you can create a KStatusBarLabel with a dummy id instead, and use
-      * it directly, to get the same look and feel.
       */
     void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
 

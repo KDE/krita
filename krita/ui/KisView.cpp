@@ -32,17 +32,16 @@
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kstatusbar.h>
 #include <kis_debug.h>
-#include <QUrl>
-#include <QTemporaryFile>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-#include <QMessageBox>
 
+#include <QMessageBox>
+#include <QUrl>
+#include <QTemporaryFile>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDockWidget>

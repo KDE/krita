@@ -25,10 +25,9 @@
 #include <QPushButton>
 #include <QAction>
 #include <QToolTip>
-
+#include <QStatusBar>
 
 #include <ksqueezedtextlabel.h>
-#include <kstatusbar.h>
 #include <klocalizedstring.h>
 
 #include <KoColorProfile.h>
@@ -73,7 +72,6 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
 
     view->addStatusBarItem(m_selectionStatus);
 
-    // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);

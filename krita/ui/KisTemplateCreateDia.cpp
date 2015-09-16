@@ -33,9 +33,10 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGroupBox>
-
+#include <QInputDialog>
 #include <QTemporaryFile>
 #include <QLineEdit>
+
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
 #include <KisDocument.h>
@@ -44,7 +45,6 @@
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
 #include <kicondialog.h>
-#include <kinputdialog.h>
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 #include <kis_debug.h>
@@ -426,13 +426,10 @@ void KisTemplateCreateDia::slotNameChanged(const QString &name) {
 }
 
 void KisTemplateCreateDia::slotAddGroup() {
-    bool ok=false;
-    const QString name ( KInputDialog::getText( i18n("Add Group"), i18n("Enter group name:"), QString(), &ok, this ) );
-    if(!ok)
-        return;
-    KisTemplateGroup *group=d->m_tree->find(name);
-    if(group && !group->isHidden())
-    {
+
+    const QString name = QInputDialog::getText(this, i18n("Add Group"), i18n("Enter group name:"));
+    KisTemplateGroup *group = d->m_tree->find(name);
+    if (group && !group->isHidden()) {
         QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
@@ -534,5 +531,3 @@ void KisTemplateCreateDia::fillGroupTree() {
         }
     }
 }
-
-#include <KisTemplateCreateDia.moc>

@@ -19,7 +19,7 @@
 #ifndef __KIS_SIGNAL_COMPRESSOR_H
 #define __KIS_SIGNAL_COMPRESSOR_H
 
-#include <QObject>
+#include <QTimer>
 #include "kritaimage_export.h"
 
 class QTimer;
@@ -30,14 +30,16 @@ class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 
 public:
     enum Mode {
-        POSTPONE, /* every start() porspones event by \p delay ms */
+        POSTPONE, /* every start() portpones event by \p delay ms */
         FIRST_ACTIVE, /* fist call to start() emits a signal, the latter will happen not earlier after \p delay ms */
         FIRST_INACTIVE /* the first signal will be emitted not earlier that after \p delay ms after the first call to start() */
     };
 
 public:
+    KisSignalCompressor();
     KisSignalCompressor(int delay, Mode mode, QObject *parent = 0);
     bool isActive() const;
+    void setMode(Mode mode);
     void setDelay(int delay);
 
 public Q_SLOTS:
@@ -51,7 +53,7 @@ Q_SIGNALS:
     void timeout();
 
 private:
-    QTimer *m_timer;
+    QTimer m_timer;
     Mode m_mode;
     bool m_gotSignals;
 };

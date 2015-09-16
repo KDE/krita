@@ -54,9 +54,9 @@
 #include <KoConfig.h>
 #include "KoID.h"
 #include <KoConfigAuthorPage.h>
+#include <KoVBox.h>
 
 #include <klocalizedstring.h>
-#include <kvbox.h>
 #include <kundo2stack.h>
 #include <KoResourcePaths.h>
 
@@ -874,7 +874,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     setFaceType(KPageDialog::List);
 
     // General
-    KVBox *vbox = new KVBox();
+    KoVBox *vbox = new KoVBox();
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setObjectName("general");
     page->setHeader(i18n("General"));
@@ -883,7 +883,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_general = new GeneralTab(vbox);
 
     // Display
-    vbox = new KVBox();
+    vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setObjectName("display");
     page->setHeader(i18n("Display"));
@@ -892,7 +892,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_displaySettings = new DisplaySettingsTab(vbox);
 
     // Color
-    vbox = new KVBox();
+    vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
@@ -901,7 +901,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_colorSettings = new ColorSettingsTab(vbox);
 
     // Performance
-    vbox = new KVBox();
+    vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
@@ -910,7 +910,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_performanceSettings = new PerformanceTab(vbox);
 
     // Grid
-    vbox = new KVBox();
+    vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setObjectName("grid");
     page->setHeader(i18n("Grid"));
@@ -919,7 +919,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_gridSettings = new GridSettingsTab(vbox);
 
     // Tablet
-    vbox = new KVBox();
+    vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
@@ -928,7 +928,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_tabletSettings = new TabletSettingsTab(vbox);
 
     // full-screen mode
-    vbox = new KVBox();
+    vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
@@ -960,7 +960,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
         KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
-        vbox = new KVBox();
+        vbox = new KoVBox();
         page = new KPageWidgetItem(vbox, preferenceSet->name());
         page->setHeader(preferenceSet->header());
         page->setIcon(preferenceSet->icon());

@@ -83,7 +83,7 @@ public Q_SLOTS:
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
-    void slotUpdateThemedIcons();
+    void updateThemedIcons();
 
 Q_SIGNALS:
     void savePresetClicked();

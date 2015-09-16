@@ -370,7 +370,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
 }
 
-void KisPaintOpPresetsPopup::slotUpdateThemedIcons()
+void KisPaintOpPresetsPopup::updateThemedIcons()
  {
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KisIconUtils::loadIcon("document-new"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();

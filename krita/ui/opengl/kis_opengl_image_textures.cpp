@@ -94,7 +94,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f) {
     if (f) {
         m_glFuncs = f;
     } else {
-        fatalUI << "Tried to create OpenGLImageTextures with uninitialized QOpenGLFunctions";
+        errUI << "Tried to create OpenGLImageTextures with uninitialized QOpenGLFunctions";
     }
 
     getTextureSize(&m_texturesInfo);

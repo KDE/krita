@@ -53,6 +53,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 #define dbgScript qCDebug(_41011)
 #define dbgInput qCDebug(_41012)
 
+// Defined in Qt 5.6
+/*
 #define infoResources qCInfo(_30009)
 #define infoKrita qCInfo(_41000)
 #define infoImage qCInfo(_41001)
@@ -67,6 +69,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 #define infoRender qCInfo(_41010)
 #define infoScript qCInfo(_41011)
 #define infoInput qCInfo(_41012)
+*/
 
 #define warnResources qCWarning(_30009)
 #define warnKrita qCWarning(_41000)
@@ -98,6 +101,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 #define errScript qCCritical(_41011)
 #define errInput qCCritical(_41012)
 
+// Qt does not yet define qCFatal (TODO: submit a patch upstream)
+/*
 #define fatalResources qCFatal(_30009)
 #define fatalKrita qCFatal(_41000)
 #define fatalImage qCFatal(_41001)
@@ -112,6 +117,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 #define fatalRender qCFatal(_41010)
 #define fatalScript qCFatal(_41011)
 #define fatalInput qCFatal(_41012)
+*/
 
 
 KRITAGLOBAL_EXPORT QString kisBacktrace();

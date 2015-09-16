@@ -29,9 +29,9 @@ add_library(kritapsdimport MODULE ${kritapsdimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritapsdimport krita_psd_import.desktop)
 
 if (WIN32)
-	target_link_libraries(kritapsdimport kritaui kritapsd ${KDE4_KIO_LIBS} ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
+	target_link_libraries(kritapsdimport kritaui kritapsd  ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()
-	target_link_libraries(kritapsdimport kritaui kritapsd ${KDE4_KIO_LIBS} ${ZLIB_LIBRARIES})
+	target_link_libraries(kritapsdimport kritaui kritapsd  ${ZLIB_LIBRARIES})
 endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

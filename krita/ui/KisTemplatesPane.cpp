@@ -23,8 +23,9 @@
 #include "KisTemplate.h"
 
 #include <QStandardItemModel>
-
 #include <QUrl>
+
+#include <kguiitem.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
@@ -48,7 +49,7 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
     setFocusProxy(m_documentList);
 
     KGuiItem openGItem(i18n("Use This Template"));
-    m_openButton->setGuiItem(openGItem);
+    KGuiItem::assign(m_openButton, openGItem);
     KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
@@ -179,4 +180,3 @@ void KisTemplatesPane::changeAlwaysUseTemplate(KisTemplatesPane* sender, const Q
     d->m_alwaysUseTemplate = alwaysUse;
 }
 
-#include <KisTemplatesPane.moc>

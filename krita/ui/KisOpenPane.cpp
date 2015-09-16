@@ -38,7 +38,6 @@
 
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
-#include <kpushbutton.h>
 #include <kis_debug.h>
 #include <QUrl>
 

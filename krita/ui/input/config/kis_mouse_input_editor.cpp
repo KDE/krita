@@ -36,7 +36,7 @@ public:
 };
 
 KisMouseInputEditor::KisMouseInputEditor(QWidget *parent)
-    : KPushButton(parent), d(new Private)
+    : QPushButton(parent), d(new Private)
 {
     QWidget *popup = new QWidget();
 

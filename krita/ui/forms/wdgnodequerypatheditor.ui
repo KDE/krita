@@ -32,7 +32,7 @@
     <widget class="QLineEdit" name="klineeditPath"/>
    </item>
    <item>
-    <widget class="KPushButton" name="kpushbutton"/>
+    <widget class="QPushButton" name="kpushbutton"/>
    </item>
    <item>
     <spacer name="horizontalSpacer">
@@ -49,18 +49,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -20,7 +20,7 @@
 #ifndef KISINPUTBUTTON_H
 #define KISINPUTBUTTON_H
 
-#include <KPushButton>
+#include <QPushButton>
 
 #include "input/kis_shortcut_configuration.h"
 
@@ -32,7 +32,7 @@
  * later reused for shortcuts or similar.
  *
  */
-class KisInputButton : public KPushButton
+class KisInputButton : public QPushButton
 {
     Q_OBJECT
 public:

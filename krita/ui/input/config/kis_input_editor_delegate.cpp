@@ -20,6 +20,7 @@
 #include "kis_input_editor_delegate.h"
 
 #include <QApplication>
+#include <QPushButton>
 
 #include <KLocalizedString>
 
@@ -49,7 +50,7 @@ KisInputEditorDelegate::~KisInputEditorDelegate()
 
 QWidget *KisInputEditorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const
 {
-    KPushButton *editor = 0;
+    QPushButton *editor = 0;
     KisShortcutConfiguration *s = index.data(Qt::EditRole).value<KisShortcutConfiguration *>();
 
     switch (s->type()) {

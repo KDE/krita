@@ -28,6 +28,7 @@
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <kguiitem.h>
 
 #include <KoIcon.h>
 #include <kis_icon_utils.h>
@@ -82,7 +83,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
 {
     setFocusProxy(m_documentList);
     KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
-    m_openButton->setGuiItem(openGItem);
+    KGuiItem::assign(m_openButton, openGItem);
     m_alwaysUseCheckBox->hide();
 
     model()->setSortRole(0); // Disable sorting

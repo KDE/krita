@@ -447,7 +447,7 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::GlobalAccel KF5::I18n KF5::KDELibs4Support)
+target_link_libraries(kritaui KF5::CoreAddons KF5::GlobalAccel KF5::I18n KF5::ItemViews KF5::KIOCore KF5::KIOFileWidgets)
 if (NOT WIN32)
   target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
 endif()

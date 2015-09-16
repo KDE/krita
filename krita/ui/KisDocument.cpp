@@ -55,7 +55,6 @@
 #include <KoNetAccess.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
-#include <ksavefile.h>
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
 #include <kdesktopfile.h>
@@ -65,6 +64,7 @@
 #include <kdirnotify.h>
 #include <QTemporaryFile>
 #include "kundo2stack.h"
+#include <kbackup.h>
 
 #include <QApplication>
 #include <QBuffer>

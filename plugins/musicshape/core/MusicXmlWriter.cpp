@@ -33,8 +33,6 @@
 
 #include <KoXmlWriter.h>
 
-#include <kdebug.h>
-
 using namespace MusicCore;
 
 MusicXmlWriter::MusicXmlWriter()

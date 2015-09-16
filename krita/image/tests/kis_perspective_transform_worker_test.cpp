@@ -18,7 +18,7 @@
 
 #include "kis_perspective_transform_worker_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "testutil.h"
 #include "qimage_based_test.h"
@@ -70,4 +70,4 @@ void KisPerspectiveTransformWorkerTest::testSimpleTransform()
     t.checkLayer("simple_transform");
 }
 
-QTEST_KDEMAIN(KisPerspectiveTransformWorkerTest, GUI)
+QTEST_MAIN(KisPerspectiveTransformWorkerTest)

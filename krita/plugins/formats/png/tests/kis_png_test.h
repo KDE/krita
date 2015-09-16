@@ -19,7 +19,7 @@
 #ifndef _KIS_PNG_TEST_H_
 #define _KIS_PNG_TEST_H_
 
-#include <QObject>
+#include <QtTest>
 
 class KisPngTest : public QObject
 {

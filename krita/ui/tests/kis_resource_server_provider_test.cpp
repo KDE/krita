@@ -18,7 +18,7 @@
 
 #include "kis_resource_server_provider_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_resource_server_provider.h"
 
 void KisResourceServerProviderTest::testFetchResource()
@@ -33,4 +33,4 @@ void KisResourceServerProviderTest::testFetchResource()
 }
 
 
-QTEST_KDEMAIN(KisResourceServerProviderTest, GUI)
+QTEST_MAIN(KisResourceServerProviderTest)

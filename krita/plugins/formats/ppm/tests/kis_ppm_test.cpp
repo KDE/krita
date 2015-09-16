@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "filestest.h"
 
@@ -34,5 +34,5 @@ void KisPPMTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
 }
-QTEST_KDEMAIN(KisPPMTest, GUI)
+QTEST_MAIN(KisPPMTest)
 

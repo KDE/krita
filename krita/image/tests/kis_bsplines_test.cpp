@@ -18,7 +18,7 @@
 
 #include "kis_bsplines_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <cmath>
 
@@ -178,4 +178,4 @@ void KisBSplinesTest::testNU2D()
 
 }
 
-QTEST_KDEMAIN(KisBSplinesTest, GUI)
+QTEST_MAIN(KisBSplinesTest)

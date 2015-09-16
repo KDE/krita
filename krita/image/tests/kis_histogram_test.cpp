@@ -18,7 +18,7 @@
 
 #include "kis_histogram_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoHistogramProducer.h>
@@ -46,4 +46,4 @@ void KisHistogramTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisHistogramTest, GUI)
+QTEST_MAIN(KisHistogramTest)

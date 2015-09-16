@@ -18,7 +18,7 @@
 
 #include "kis_processings_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
@@ -114,4 +114,4 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
     tester.test("transform_scale_rotate", visitor);
 }
 
-QTEST_KDEMAIN(KisProcessingsTest, GUI)
+QTEST_MAIN(KisProcessingsTest)

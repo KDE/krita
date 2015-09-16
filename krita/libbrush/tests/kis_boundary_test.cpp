@@ -18,7 +18,7 @@
 
 #include "kis_boundary_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_boundary.h"
 #include "kis_types.h"
 #include "kis_fixed_paint_device.h"
@@ -33,4 +33,4 @@ void KisBoundaryTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisBoundaryTest, GUI)
+QTEST_MAIN(KisBoundaryTest)

@@ -17,7 +17,7 @@
  */
 
 #include "kis_cs_conversion_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QTime>
 
@@ -97,6 +97,6 @@ void KisCsConversionTest::testColorSpaceConversion()
     }
 }
 
-QTEST_KDEMAIN(KisCsConversionTest, GUI)
+QTEST_MAIN(KisCsConversionTest)
 
 

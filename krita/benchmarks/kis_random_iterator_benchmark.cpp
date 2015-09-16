@@ -25,7 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kis_random_accessor_ng.h>
 
 
@@ -235,4 +235,4 @@ void KisRandomIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
 }
 
 
-QTEST_KDEMAIN(KisRandomIteratorBenchmark, GUI)
+QTEST_MAIN(KisRandomIteratorBenchmark)

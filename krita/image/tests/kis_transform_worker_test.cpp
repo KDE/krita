@@ -18,7 +18,7 @@
 
 #include "kis_transform_worker_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoProgressUpdater.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -994,4 +994,4 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
-QTEST_KDEMAIN(KisTransformWorkerTest, GUI)
+QTEST_MAIN(KisTransformWorkerTest)

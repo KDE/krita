@@ -18,7 +18,7 @@
 
 #include "kis_low_memory_benchmark.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_benchmark_values.h"
 
@@ -228,4 +228,4 @@ void KisLowMemoryBenchmark::memory2000History100Pool500HugeBrush()
                       2000, 600, 500, 0);
 }
 
-QTEST_KDEMAIN(KisLowMemoryBenchmark, GUI)
+QTEST_MAIN(KisLowMemoryBenchmark)

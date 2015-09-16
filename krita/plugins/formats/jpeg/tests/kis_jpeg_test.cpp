@@ -18,11 +18,9 @@
 
 #include "kis_jpeg_test.h"
 
-
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
 #include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
 #include "jpeglib.h"
@@ -51,5 +49,5 @@ void KisJpegTest::testFiles()
     }
 
 }
-QTEST_KDEMAIN(KisJpegTest, GUI)
+QTEST_MAIN(KisJpegTest)
 

@@ -25,7 +25,7 @@
 #include <KoColor.h>
 #include <kis_surrogate_undo_adapter.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <QImage>
 #include <QTextDocument>
 
@@ -965,5 +965,5 @@ void KisGmicTests::testFindFilterByName()
 
 
 
-QTEST_KDEMAIN(KisGmicTests, NoGUI)
+QTEST_MAIN(KisGmicTests)
 

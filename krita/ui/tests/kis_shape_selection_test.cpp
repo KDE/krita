@@ -17,7 +17,7 @@
  */
 
 #include "kis_shape_selection_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <kis_debug.h>
 #include <QRect>
@@ -73,6 +73,6 @@ void KisShapeSelectionTest::testAddChild()
     selection->updateProjection();
 }
 
-QTEST_KDEMAIN(KisShapeSelectionTest, NoGUI)
+QTEST_MAIN(KisShapeSelectionTest)
 
 

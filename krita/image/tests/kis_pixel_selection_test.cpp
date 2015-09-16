@@ -17,7 +17,7 @@
  */
 
 #include "kis_pixel_selection_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include <kis_debug.h>
@@ -378,5 +378,5 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
     }
 }
 
-QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)
+QTEST_MAIN(KisPixelSelectionTest)
 

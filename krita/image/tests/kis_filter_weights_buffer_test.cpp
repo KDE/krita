@@ -18,7 +18,7 @@
 
 #include "kis_filter_weights_buffer_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_filter_strategy.h"
 
@@ -137,4 +137,4 @@ void KisFilterWeightsBufferTest::testMitchell()
 
 
 
-QTEST_KDEMAIN(KisFilterWeightsBufferTest, GUI)
+QTEST_MAIN(KisFilterWeightsBufferTest)

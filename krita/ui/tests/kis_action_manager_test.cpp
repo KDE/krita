@@ -133,4 +133,4 @@ void KisActionManagerTest::testTakeAction()
 }
 
 
-QTEST_KDEMAIN(KisActionManagerTest, GUI)
+QTEST_MAIN(KisActionManagerTest)

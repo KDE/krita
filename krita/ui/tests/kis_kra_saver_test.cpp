@@ -18,7 +18,7 @@
 
 #include "kis_kra_saver_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBitArray>
 
@@ -245,4 +245,4 @@ void KisKraSaverTest::testRoundTripLayerStyles()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_KDEMAIN(KisKraSaverTest, GUI)
+QTEST_MAIN(KisKraSaverTest)

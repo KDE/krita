@@ -17,7 +17,7 @@
  */
 
 #include "kis_base_node_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <limits.h>
 #include "kis_types.h"
 #include "kis_global.h"
@@ -120,6 +120,6 @@ void KisBaseNodeTest::testProperties()
     }
 }
 
-QTEST_KDEMAIN(KisBaseNodeTest, GUI)
+QTEST_MAIN(KisBaseNodeTest)
 
 

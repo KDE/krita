@@ -18,7 +18,7 @@
 
 #include "kis_projection_leaf_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "qimage_based_test.h"
 #include "kis_projection_leaf.h"
 #include "kis_group_layer.h"
@@ -287,4 +287,4 @@ void KisProjectionLeafTest::testNestedPassThrough()
     }
 }
 
-QTEST_KDEMAIN(KisProjectionLeafTest, GUI)
+QTEST_MAIN(KisProjectionLeafTest)

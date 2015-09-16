@@ -18,7 +18,7 @@
 
 #include "kis_node_shapes_graph_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_node_shapes_graph.h"
 #include "node_shapes_utils.h"
@@ -148,4 +148,4 @@ void KisNodeShapesGraphTest::testRemoveRootNode()
     QCOMPARE(m_shapesGraph->shapesCount(), 0);
 }
 
-QTEST_KDEMAIN(KisNodeShapesGraphTest, GUI)
+QTEST_MAIN(KisNodeShapesGraphTest)

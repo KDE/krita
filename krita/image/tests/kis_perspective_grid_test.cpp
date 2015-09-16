@@ -18,7 +18,7 @@
 
 #include "kis_perspective_grid_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_perspective_grid.h"
 
 void KisPerspectiveGridTest::testCreation()
@@ -27,4 +27,4 @@ void KisPerspectiveGridTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPerspectiveGridTest, GUI)
+QTEST_MAIN(KisPerspectiveGridTest)

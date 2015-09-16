@@ -18,7 +18,7 @@
 
 #include "kis_math_toolbox_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_math_toolbox.h"
@@ -34,4 +34,4 @@ void KisMathToolboxTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisMathToolboxTest, GUI)
+QTEST_MAIN(KisMathToolboxTest)

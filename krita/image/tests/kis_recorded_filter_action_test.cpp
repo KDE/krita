@@ -18,7 +18,7 @@
 
 #include "kis_recorded_filter_action_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "recorder/kis_recorded_filter_action.h"
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -42,4 +42,4 @@ void KisRecordedFilterActionTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisRecordedFilterActionTest, GUI)
+QTEST_MAIN(KisRecordedFilterActionTest)

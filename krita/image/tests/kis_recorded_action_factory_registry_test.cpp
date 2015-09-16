@@ -18,7 +18,7 @@
 
 #include "kis_recorded_action_factory_registry_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "recorder/kis_recorded_action_factory_registry.h"
 
 void KisRecordedActionFactoryRegistryTest::testCreation()
@@ -27,4 +27,4 @@ void KisRecordedActionFactoryRegistryTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisRecordedActionFactoryRegistryTest, GUI)
+QTEST_MAIN(KisRecordedActionFactoryRegistryTest)

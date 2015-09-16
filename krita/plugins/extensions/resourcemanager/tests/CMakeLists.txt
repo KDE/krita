@@ -12,4 +12,4 @@ macro_add_unittest_definitions()
 
 set(ResourceBundleTest_SRCS ResourceBundleTest.cpp ../resourcebundle.cpp ../resourcebundle_manifest.cpp)
 kde4_add_unit_test(ResourceBundleTest TESTNAME krita-resourcemanager-ResourceBundleTest ${ResourceBundleTest_SRCS})
-target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop Qt5::Test ${KDE4_KDEUI_LIBS})
+target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop Qt5::Test )

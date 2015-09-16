@@ -18,7 +18,7 @@
 
 #include "kis_file_layer_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 
@@ -143,4 +143,4 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_KDEMAIN(KisFileLayerTest, GUI)
+QTEST_MAIN(KisFileLayerTest)

@@ -17,7 +17,7 @@
  */
 
 #include "kis_fixed_paint_device_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QTime>
 
@@ -367,4 +367,4 @@ void KisFixedPaintDeviceTest::testMirroring()
     }
 }
 
-QTEST_KDEMAIN(KisFixedPaintDeviceTest, GUI)
+QTEST_MAIN(KisFixedPaintDeviceTest)

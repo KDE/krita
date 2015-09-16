@@ -18,7 +18,7 @@
 
 #include "kis_fast_math_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_fast_math.h"
 
 void KisFastMathTest::testAtan2()
@@ -40,4 +40,4 @@ void KisFastMathTest::testAtan2()
 }
 
 
-QTEST_KDEMAIN(KisFastMathTest, GUI)
+QTEST_MAIN(KisFastMathTest)

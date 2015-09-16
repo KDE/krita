@@ -19,7 +19,7 @@
 #include "kis_image_test.h"
 #include <QApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -621,4 +621,4 @@ void KisImageTest::testMergeCrossColorSpace()
     testMergeCrossColorSpaceImpl(false, true);
 }
 
-QTEST_KDEMAIN(KisImageTest, NoGUI)
+QTEST_MAIN(KisImageTest)

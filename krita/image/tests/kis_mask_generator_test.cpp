@@ -19,7 +19,7 @@
 
 #include "kis_mask_generator_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_mask_generator.h"
 
 #include <QDomDocument>
@@ -102,4 +102,4 @@ void KisMaskGeneratorTest::testSquareSerialisation()
     delete cmg2;
 }
 
-QTEST_KDEMAIN(KisMaskGeneratorTest, GUI)
+QTEST_MAIN(KisMaskGeneratorTest)

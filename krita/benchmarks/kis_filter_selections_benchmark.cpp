@@ -20,7 +20,7 @@
 
 #include "kis_painter.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "testutil.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
@@ -291,4 +291,4 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
         dbgKrita << "bitBlt with sel:\t\t\t" << avTime;
 }
 
-QTEST_KDEMAIN(KisFilterSelectionsBenchmark, GUI)
+QTEST_MAIN(KisFilterSelectionsBenchmark)

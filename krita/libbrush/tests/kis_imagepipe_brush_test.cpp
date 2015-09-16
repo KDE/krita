@@ -18,7 +18,7 @@
 
 #include "kis_imagepipe_brush_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <QPainter>
 
 #include <KoColor.h>
@@ -274,4 +274,4 @@ void KisImagePipeBrushTest::testTextBrushPiped()
     delete brush;
 }
 
-QTEST_KDEMAIN(KisImagePipeBrushTest, GUI)
+QTEST_MAIN(KisImagePipeBrushTest)

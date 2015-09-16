@@ -17,7 +17,7 @@
  */
 
 #include "kis_layer_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QRect>
 #include <QIcon>
@@ -314,5 +314,5 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
 }
 
 
-QTEST_KDEMAIN(KisLayerTest, NoGUI)
+QTEST_MAIN(KisLayerTest)
 

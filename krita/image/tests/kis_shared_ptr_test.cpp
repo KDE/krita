@@ -17,7 +17,7 @@
  */
 
 #include "kis_shared_ptr_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include "kis_shared_ptr.h"
@@ -268,6 +268,6 @@ void KisSharedPtrTest::testWeakSPToWeakSPCopy()
 }
 
 
-QTEST_KDEMAIN(KisSharedPtrTest, NoGUI)
+QTEST_MAIN(KisSharedPtrTest)
 
 

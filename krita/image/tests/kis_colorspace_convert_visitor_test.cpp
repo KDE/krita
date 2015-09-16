@@ -18,7 +18,7 @@
 
 #include "kis_colorspace_convert_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorTransformation.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -43,4 +43,4 @@ void KisColorSpaceConvertVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisColorSpaceConvertVisitorTest, GUI)
+QTEST_MAIN(KisColorSpaceConvertVisitorTest)

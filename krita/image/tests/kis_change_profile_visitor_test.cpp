@@ -18,7 +18,7 @@
 
 #include "kis_change_profile_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_change_profile_visitor.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -32,4 +32,4 @@ void KisChangeProfileVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisChangeProfileVisitorTest, GUI)
+QTEST_MAIN(KisChangeProfileVisitorTest)

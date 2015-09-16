@@ -18,7 +18,7 @@
 
 #include "kis_adjustment_layer_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include <KoColorSpace.h>
@@ -114,4 +114,4 @@ void KisAdjustmentLayerTest::testSelectionParent()
     }
 }
 
-QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI)
+QTEST_MAIN(KisAdjustmentLayerTest)

@@ -18,7 +18,7 @@
 
 #include "kis_kra_savexml_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBitArray>
 #include <QDomDocument>
@@ -86,4 +86,4 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
     //delete doc;
 }
 
-QTEST_KDEMAIN(KisKraSaveXmlVisitorTest, GUI)
+QTEST_MAIN(KisKraSaveXmlVisitorTest)

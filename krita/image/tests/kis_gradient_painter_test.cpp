@@ -18,7 +18,7 @@
 
 #include "kis_gradient_painter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_gradient_painter.h"
 
 #include "kis_paint_device.h"
@@ -334,4 +334,4 @@ void KisGradientPainterTest::testCachedStrategy()
     QVERIFY(maxError < 2 * maxRelError);
 }
 
-QTEST_KDEMAIN(KisGradientPainterTest, GUI)
+QTEST_MAIN(KisGradientPainterTest)

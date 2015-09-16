@@ -17,7 +17,7 @@
  */
 
 #include "kis_count_visitor_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <QStringList>
 #include <KoProperties.h>
 
@@ -142,6 +142,6 @@ void KisCountVisitorTest::testCounting()
     }
 }
 
-QTEST_KDEMAIN(KisCountVisitorTest, NoGUI)
+QTEST_MAIN(KisCountVisitorTest)
 
 

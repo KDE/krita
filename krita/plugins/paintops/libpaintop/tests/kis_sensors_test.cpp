@@ -19,7 +19,7 @@
 #include "kis_sensors_test.h"
 #include <kis_dynamic_sensor.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 KisSensorsTest::KisSensorsTest()
 {
@@ -48,4 +48,4 @@ void KisSensorsTest::testBound(KisDynamicSensorSP sensor)
     }
 }
 
-QTEST_KDEMAIN(KisSensorsTest, GUI)
+QTEST_MAIN(KisSensorsTest)

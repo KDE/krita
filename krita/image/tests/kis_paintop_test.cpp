@@ -18,7 +18,7 @@
 
 #include "kis_paintop_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_paintop.h"
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -44,4 +44,4 @@ void KisPaintopTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPaintopTest, GUI)
+QTEST_MAIN(KisPaintopTest)

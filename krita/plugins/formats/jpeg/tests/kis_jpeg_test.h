@@ -19,7 +19,7 @@
 #ifndef _KIS_JPEG_TEST_H_
 #define _KIS_JPEG_TEST_H_
 
-#include <QObject>
+#include <QtTest>
 
 class KisJpegTest : public QObject
 {

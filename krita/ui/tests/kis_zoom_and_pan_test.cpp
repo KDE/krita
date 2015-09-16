@@ -19,7 +19,7 @@
 #include "kis_zoom_and_pan_test.h"
 
 #include <cmath>
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "testutil.h"
 #include "qimage_based_test.h"
@@ -761,4 +761,4 @@ void KisZoomAndPanTest::testImageCropped()
     QVERIFY(compareWithRounding(oldStillPoint, newStillPoint, 1.0));
 }
 
-QTEST_KDEMAIN(KisZoomAndPanTest, GUI)
+QTEST_MAIN(KisZoomAndPanTest)

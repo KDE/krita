@@ -18,7 +18,7 @@
 
 #include "kis_kra_loader_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KisDocument.h>
 #include <KoDocumentInfo.h>
@@ -109,4 +109,4 @@ void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
 }
 
 
-QTEST_KDEMAIN(KisKraLoaderTest, GUI)
+QTEST_MAIN(KisKraLoaderTest)

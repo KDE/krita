@@ -23,7 +23,7 @@
 #include "kis_refresh_subtree_walker.h"
 #include "kis_full_refresh_walker.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include "kis_image.h"
@@ -1224,5 +1224,5 @@ void KisWalkersTest::testGraphStructureChecksum()
     QCOMPARE(walker.checksumValid(), true);
 }
 
-QTEST_KDEMAIN(KisWalkersTest, NoGUI)
+QTEST_MAIN(KisWalkersTest)
 

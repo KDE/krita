@@ -20,7 +20,7 @@
 
 #include "testutil.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <floodfill/kis_scanline_fill.h>
 #include <floodfill/kis_fill_interval.h>
 #include <floodfill/kis_fill_interval_map.h>
@@ -247,4 +247,4 @@ void KisScanlineFillTest::testFillBackwardCollisionSanityCheck()
 #endif /* ENABLE_FILL_SANITY_CHECKS */
 }
 
-QTEST_KDEMAIN(KisScanlineFillTest, GUI)
+QTEST_MAIN(KisScanlineFillTest)

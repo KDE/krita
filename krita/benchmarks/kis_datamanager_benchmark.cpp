@@ -19,7 +19,7 @@
 #include "kis_datamanager_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kis_datamanager.h>
 
 // RGBA
@@ -199,4 +199,4 @@ void KisDatamanagerBenchmark::benchmarkMemCpy()
 }
 
 
-QTEST_KDEMAIN(KisDatamanagerBenchmark, GUI)
+QTEST_MAIN(KisDatamanagerBenchmark)

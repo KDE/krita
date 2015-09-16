@@ -18,7 +18,7 @@
 
 #include "kis_asl_parser_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "testutil.h"
 
@@ -329,4 +329,4 @@ void KisAslParserTest::testParserWithPatterns()
     }
 }
 
-QTEST_KDEMAIN(KisAslParserTest, GUI)
+QTEST_MAIN(KisAslParserTest)

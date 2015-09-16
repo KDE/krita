@@ -17,7 +17,7 @@
  */
 
 #include "kis_strokes_queue_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "scheduler_utils.h"
 #include "kis_strokes_queue.h"
@@ -367,4 +367,4 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
     VERIFY_EMPTY(jobs[2]);
 }
 
-QTEST_KDEMAIN(KisStrokesQueueTest, NoGUI)
+QTEST_MAIN(KisStrokesQueueTest)

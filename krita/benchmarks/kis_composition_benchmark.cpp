@@ -19,7 +19,7 @@
 
 #include "kis_composition_benchmark.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -859,5 +859,5 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
 #endif
 }
 
-QTEST_KDEMAIN(KisCompositionBenchmark, GUI)
+QTEST_MAIN(KisCompositionBenchmark)
 

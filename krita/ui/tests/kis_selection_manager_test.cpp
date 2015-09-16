@@ -19,7 +19,7 @@
 #include "kis_selection_manager_test.h"
 #include <operations/kis_operation_configuration.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "ui_manager_test.h"
 
@@ -415,4 +415,4 @@ void KisSelectionManagerTest::testScanline16bit()
 
 }
 
-QTEST_KDEMAIN(KisSelectionManagerTest, GUI)
+QTEST_MAIN(KisSelectionManagerTest)

@@ -31,7 +31,7 @@
 #include "ResourceBundleTest.h"
 #include "../resourcebundle.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void ResourceBundleTest::testCreateBundle()
 {
@@ -175,5 +175,5 @@ void ResourceBundleTest::testInstallUninstall()
 }
 
 
-QTEST_KDEMAIN(ResourceBundleTest, GUI)
+QTEST_MAIN(ResourceBundleTest)
 

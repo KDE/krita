@@ -19,7 +19,7 @@
 #ifndef _COMPRESSION_TEST_H_
 #define _COMPRESSION_TEST_H_
 
-#include <QObject>
+#include <QtTest>
 
 class CompressionTest : public QObject
 {

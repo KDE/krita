@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "filestest.h"
 
@@ -111,5 +111,5 @@ void KisTiffTest::testRoundTripRGBF16()
 #endif
 }
 
-QTEST_KDEMAIN(KisTiffTest, GUI)
+QTEST_MAIN(KisTiffTest)
 

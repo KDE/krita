@@ -18,7 +18,7 @@
 
 #include "kis_name_server_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_name_server.h"
 
 void KisNameServerTest::testCreation()
@@ -27,4 +27,4 @@ void KisNameServerTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisNameServerTest, GUI)
+QTEST_MAIN(KisNameServerTest)

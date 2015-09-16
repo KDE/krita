@@ -18,7 +18,7 @@
 
 #include "kis_warp_transform_worker_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "testutil.h"
 
 #include "kis_warptransform_worker.h"
@@ -325,4 +325,4 @@ void KisWarpTransformWorkerTest::testBackwardInterpolatorExtrapolation()
 }
 
 
-QTEST_KDEMAIN(KisWarpTransformWorkerTest, GUI)
+QTEST_MAIN(KisWarpTransformWorkerTest)

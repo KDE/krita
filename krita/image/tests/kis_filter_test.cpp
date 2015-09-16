@@ -18,7 +18,7 @@
 
 #include "kis_filter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
@@ -237,4 +237,4 @@ void KisFilterTest::testBlurFilterApplicationRect()
 }
 
 
-QTEST_KDEMAIN(KisFilterTest, GUI)
+QTEST_MAIN(KisFilterTest)

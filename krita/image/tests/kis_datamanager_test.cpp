@@ -18,7 +18,7 @@
 
 #include "kis_datamanager_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_datamanager.h"
 
 void KisDataManagerTest::testCreation()
@@ -100,4 +100,4 @@ void KisDataManagerTest::testDefaultPixel()
 //
 //void KisDataManagerTest::testThreadedReadWriteAccess() {}
 
-QTEST_KDEMAIN(KisDataManagerTest, GUI)
+QTEST_MAIN(KisDataManagerTest)

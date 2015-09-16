@@ -18,7 +18,7 @@
 
 #include "kis_selection_mask_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -76,4 +76,4 @@ void KisSelectionMaskTest::testActivation()
 }
 
 
-QTEST_KDEMAIN(KisSelectionMaskTest, GUI)
+QTEST_MAIN(KisSelectionMaskTest)

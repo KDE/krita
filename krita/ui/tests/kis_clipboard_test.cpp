@@ -18,7 +18,7 @@
 
 #include "kis_clipboard_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -64,4 +64,4 @@ void KisClipboardTest::testRoundTrip()
 }
 
 
-QTEST_KDEMAIN(KisClipboardTest, GUI)
+QTEST_MAIN(KisClipboardTest)

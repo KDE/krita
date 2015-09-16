@@ -25,7 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_iterator_ng.h"
 
@@ -191,4 +191,4 @@ void KisHLineIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy(){
 
 
 
-QTEST_KDEMAIN(KisHLineIteratorBenchmark, GUI)
+QTEST_MAIN(KisHLineIteratorBenchmark)

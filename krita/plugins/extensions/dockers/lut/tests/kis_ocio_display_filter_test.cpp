@@ -18,7 +18,7 @@
 
 #include "kis_ocio_display_filter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QFile>
 
@@ -116,4 +116,4 @@ dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace()
 
 }
 
-QTEST_KDEMAIN(KisOcioDisplayFilterTest, GUI)
+QTEST_MAIN(KisOcioDisplayFilterTest)

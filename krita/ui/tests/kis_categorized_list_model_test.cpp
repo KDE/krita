@@ -18,7 +18,7 @@
 
 #include "kis_categorized_list_model_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "testing_categories_mapper.h"
 #include "kis_categorized_list_model.h"
 
@@ -30,4 +30,4 @@ void KisCategorizedListModelTest::test()
     ModelTest modelTest(&model);
 }
 
-QTEST_KDEMAIN(KisCategorizedListModelTest, GUI)
+QTEST_MAIN(KisCategorizedListModelTest)

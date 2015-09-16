@@ -20,7 +20,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_registry_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void KisFilterRegistryTest::testCreation()
 {
@@ -29,4 +29,4 @@ void KisFilterRegistryTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisFilterRegistryTest, GUI)
+QTEST_MAIN(KisFilterRegistryTest)

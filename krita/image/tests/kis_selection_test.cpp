@@ -17,7 +17,7 @@
  */
 
 #include "kis_selection_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include <kis_debug.h>
@@ -335,6 +335,6 @@ void KisSelectionTest::testOutlineGeneration()
     QVERIFY(isClosed);
 }
 
-QTEST_KDEMAIN(KisSelectionTest, NoGUI)
+QTEST_MAIN(KisSelectionTest)
 
 

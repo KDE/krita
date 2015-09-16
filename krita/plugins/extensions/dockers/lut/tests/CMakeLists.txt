@@ -5,4 +5,4 @@ include_directories( ${OCIO_INCLUDE_DIR})
 
 set(kis_ocio_display_filter_test_SRCS kis_ocio_display_filter_test.cpp ../../../../../sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(KisOcioDisplayFilterTest TESTNAME krita-ocio-KisOcioDisplayFilterTest ${kis_ocio_display_filter_test_SRCS})
-target_link_libraries(KisOcioDisplayFilterTest  ${KDE4_KDEUI_LIBS} kritaimage kritaui kritalutdocker ${OCIO_LIBRARIES} KF5::I18n  Qt5::Test)
+target_link_libraries(KisOcioDisplayFilterTest   kritaimage kritaui kritalutdocker ${OCIO_LIBRARIES} KF5::I18n  Qt5::Test)

@@ -19,7 +19,7 @@
 #ifndef _PSD_UTILS_TEST_H_
 #define _PSD_UTILS_TEST_H_
 
-#include <QObject>
+#include <QtTest>
 
 class PSDUtilsTest : public QObject
 {

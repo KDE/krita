@@ -17,7 +17,7 @@
  */
 
 #include "kis_updater_context_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QAtomicInt>
 #include <KoColorSpace.h>
@@ -176,5 +176,5 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
              << "/" << NUM_CHECKS * NUM_JOBS;
 }
 
-QTEST_KDEMAIN(KisUpdaterContextTest, NoGUI)
+QTEST_MAIN(KisUpdaterContextTest)
 

@@ -18,7 +18,7 @@
 
 #include "kis_asl_layer_style_serializer_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QDomDocument>
 
@@ -419,4 +419,4 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
     }
 }
 
-QTEST_KDEMAIN(KisAslLayerStyleSerializerTest, GUI)
+QTEST_MAIN(KisAslLayerStyleSerializerTest)

@@ -17,7 +17,7 @@
  */
 
 #include "kis_all_filter_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
@@ -305,4 +305,4 @@ void KisAllFilterTest::testAllFiltersWithSelections()
 
 
 
-QTEST_KDEMAIN(KisAllFilterTest, GUI)
+QTEST_MAIN(KisAllFilterTest)

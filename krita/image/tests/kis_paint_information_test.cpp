@@ -19,7 +19,7 @@
 
 #include "kis_paint_information_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_paint_information.h"
 
 #include <QDomDocument>
@@ -56,4 +56,4 @@ void KisPaintInformationTest::testSerialisation()
 }
 
 
-QTEST_KDEMAIN(KisPaintInformationTest, GUI)
+QTEST_MAIN(KisPaintInformationTest)

@@ -18,7 +18,7 @@
 
 #include "kis_dummies_facade_base_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_node_dummies_graph.h"
 #include "kis_dummies_facade.h"

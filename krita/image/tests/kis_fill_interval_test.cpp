@@ -18,7 +18,7 @@
 
 #include "kis_fill_interval_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <floodfill/kis_fill_interval.h>
 
@@ -34,4 +34,4 @@ void KisFillIntervalTest::testIsValid()
     QVERIFY(!i2.isValid());
 }
 
-QTEST_KDEMAIN(KisFillIntervalTest, GUI)
+QTEST_MAIN(KisFillIntervalTest)

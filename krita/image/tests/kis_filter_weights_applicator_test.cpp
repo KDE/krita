@@ -18,7 +18,7 @@
 
 #include "kis_filter_weights_applicator_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -457,4 +457,4 @@ void KisFilterWeightsApplicatorTest::benchmarkProcesssLine()
     }
 }
 
-QTEST_KDEMAIN(KisFilterWeightsApplicatorTest, GUI)
+QTEST_MAIN(KisFilterWeightsApplicatorTest)

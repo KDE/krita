@@ -19,7 +19,7 @@
 #ifndef _KIS_PPM_TEST_H_
 #define _KIS_PPM_TEST_H_
 
-#include <QObject>
+#include <QtTest>
 
 class KisPPMTest : public QObject
 {

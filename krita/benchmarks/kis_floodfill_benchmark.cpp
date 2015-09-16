@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <kundo2command.h>
 #include "kis_benchmark_values.h"
@@ -111,4 +111,4 @@ void KisFloodFillBenchmark::cleanupTestCase()
 
 }
 
-QTEST_KDEMAIN(KisFloodFillBenchmark, NoGUI)
+QTEST_MAIN(KisFloodFillBenchmark)

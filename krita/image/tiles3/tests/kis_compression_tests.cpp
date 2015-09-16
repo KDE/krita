@@ -17,7 +17,7 @@
  */
 
 #include "kis_compression_tests.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QImage>
 
@@ -262,5 +262,5 @@ void KisCompressionTests::benchmarkDecompressionLzfTwoPass()
     delete compression;
 }
 
-QTEST_KDEMAIN(KisCompressionTests, NoGUI)
+QTEST_MAIN(KisCompressionTests)
 

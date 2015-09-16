@@ -18,7 +18,7 @@
 
 #include "kis_node_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_node_visitor.h"
 
 class TestNodeVisitor : public KisNodeVisitor
@@ -85,4 +85,4 @@ void KisNodeVisitorTest::testFullImage()
 }
 
 
-QTEST_KDEMAIN(KisNodeVisitorTest, GUI)
+QTEST_MAIN(KisNodeVisitorTest)

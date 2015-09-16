@@ -18,7 +18,7 @@
 
 #include "kis_transparency_mask_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_transparency_mask.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -211,4 +211,4 @@ void KisTransparencyMaskTest::testMoveMaskItself()
     QCOMPARE(layer->projection()->exactBounds(), QRect(100, 75, 100, 25));
 }
 
-QTEST_KDEMAIN(KisTransparencyMaskTest, GUI)
+QTEST_MAIN(KisTransparencyMaskTest)

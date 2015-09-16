@@ -18,7 +18,7 @@
 
 #include "kis_layer_styles_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_transaction.h"
 #include "testutil.h"
@@ -271,4 +271,4 @@ void KisLayerStylesTest::testLayerStylesRects()
     testDropShadowNeedChangeRects(0, 0, 10, 75, applyRect, needRect, changeRect);
 }
 
-QTEST_KDEMAIN(KisLayerStylesTest, GUI)
+QTEST_MAIN(KisLayerStylesTest)

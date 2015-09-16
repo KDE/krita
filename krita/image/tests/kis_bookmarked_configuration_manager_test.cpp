@@ -18,7 +18,7 @@
 
 #include "kis_bookmarked_configuration_manager_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_serializable_configuration.h"
 
@@ -60,4 +60,4 @@ void KisBookmarkedConfigurationManagerTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisBookmarkedConfigurationManagerTest, GUI)
+QTEST_MAIN(KisBookmarkedConfigurationManagerTest)

@@ -18,7 +18,7 @@
 
 #include "kis_embedded_pattern_manager_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_embedded_pattern_manager.h"
 
@@ -230,4 +230,4 @@ void KisEmbeddedPatternManagerTest::testLoadingOnServerPathNameMd5()
     checkOneConfig(PATH, true, "__test_pattern", true);
 }
 
-QTEST_KDEMAIN(KisEmbeddedPatternManagerTest, GUI)
+QTEST_MAIN(KisEmbeddedPatternManagerTest)

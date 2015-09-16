@@ -18,7 +18,7 @@
 
 #include "kis_image_signal_router_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_image_signal_router.h"
 
 
@@ -66,4 +66,4 @@ void KisImageSignalRouterTest::testSignalForwarding()
     checkComplexSignal(emitAboutToRemoveANode(m_layer3.data(),0), SIGNAL(sigRemoveNodeAsync(KisNodeSP)));
 }
 
-QTEST_KDEMAIN(KisImageSignalRouterTest, GUI)
+QTEST_MAIN(KisImageSignalRouterTest)

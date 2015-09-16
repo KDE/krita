@@ -17,7 +17,7 @@
  */
 
 #include "kis_memory_window_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -100,5 +100,5 @@ void KisMemoryWindowTest::testTopReports()
     }
 }
 
-QTEST_KDEMAIN(KisMemoryWindowTest, NoGUI)
+QTEST_MAIN(KisMemoryWindowTest)
 

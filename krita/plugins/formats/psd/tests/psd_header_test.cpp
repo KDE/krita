@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
-#include <qtest_kde.h>
+#include <QTest>
 #include "../psd_header.h"
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -86,5 +86,5 @@ void PSDHeaderTest::testRoundTripping()
 
 
 
-QTEST_KDEMAIN(PSDHeaderTest, GUI)
+QTEST_MAIN(PSDHeaderTest)
 

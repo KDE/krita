@@ -17,7 +17,7 @@
  */
 
 #include "kis_swapped_data_store_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -131,5 +131,5 @@ void KisSwappedDataStoreTest::testRandomAccess()
         delete tileDataList[i];
 }
 
-QTEST_KDEMAIN(KisSwappedDataStoreTest, NoGUI)
+QTEST_MAIN(KisSwappedDataStoreTest)
 

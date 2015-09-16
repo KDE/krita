@@ -18,7 +18,7 @@
 
 #include "kis_fast_math_benchmark.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <kis_fast_math.h>
 
@@ -54,5 +54,5 @@ void KisFastMathBenchmark::benchmarkLibCAtan2()
     }
 }
 
-QTEST_KDEMAIN(KisFastMathBenchmark, GUI)
+QTEST_MAIN(KisFastMathBenchmark)
 

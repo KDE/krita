@@ -26,7 +26,7 @@ inline double drand48()
 }
 #endif
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_stroke_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -510,4 +510,4 @@ void KisStrokeBenchmark::benchmarkRand()
 }
 
 
-QTEST_KDEMAIN(KisStrokeBenchmark, GUI)
+QTEST_MAIN(KisStrokeBenchmark)

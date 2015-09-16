@@ -17,7 +17,7 @@
  */
 
 #include "kis_transaction_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -164,6 +164,6 @@ void KisTransactionTest::testDeviceMove()
     QCOMPARE(dev->y(), 11);
 }
 
-QTEST_KDEMAIN(KisTransactionTest, GUI)
+QTEST_MAIN(KisTransactionTest)
 
 

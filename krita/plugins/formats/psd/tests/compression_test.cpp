@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
-#include <qtest_kde.h>
+#include <QTest>
 #include "../../../../libpsd/compression.h"
 #include <QByteArray>
 #include <QBuffer>
@@ -98,5 +98,5 @@ void CompressionTest::testCompressionUncompressed()
 
 }
 
-QTEST_KDEMAIN(CompressionTest, GUI)
+QTEST_MAIN(CompressionTest)
 

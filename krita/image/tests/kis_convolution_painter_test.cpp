@@ -18,7 +18,7 @@
 
 #include "kis_convolution_painter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBitArray>
 
@@ -437,4 +437,4 @@ void KisConvolutionPainterTest::testGaussianDetailsFFTW()
     testGaussianDetails(true);
 }
 
-QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)
+QTEST_MAIN(KisConvolutionPainterTest)

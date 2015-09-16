@@ -18,7 +18,7 @@
 
 #include "kis_low_memory_tests.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QThreadPool>
 
@@ -212,4 +212,4 @@ void KisLowMemoryTests::hangingTilesTest()
     dstTile = 0;
 }
 
-QTEST_KDEMAIN(KisLowMemoryTests, GUI)
+QTEST_MAIN(KisLowMemoryTests)

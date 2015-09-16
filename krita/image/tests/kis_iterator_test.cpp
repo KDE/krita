@@ -19,7 +19,7 @@
 #include "kis_iterator_test.h"
 #include <QApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -483,4 +483,4 @@ void KisIteratorTest::stressTest()
     threadPool.waitForDone();
 }
 
-QTEST_KDEMAIN(KisIteratorTest, NoGUI)
+QTEST_MAIN(KisIteratorTest)

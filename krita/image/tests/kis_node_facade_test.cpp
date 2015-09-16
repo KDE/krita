@@ -17,7 +17,7 @@
  */
 
 #include "kis_node_facade_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <limits.h>
 
 
@@ -363,4 +363,4 @@ void KisNodeFacadeTest::testMove()
 
 }
 
-QTEST_KDEMAIN(KisNodeFacadeTest, NoGUI)
+QTEST_MAIN(KisNodeFacadeTest)

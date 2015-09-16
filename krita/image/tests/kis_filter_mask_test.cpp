@@ -17,7 +17,7 @@
  */
 
 #include "kis_filter_mask_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpaceRegistry.h>
 
@@ -122,4 +122,4 @@ void KisFilterMaskTest::testProjectionSelected()
 
 }
 
-QTEST_KDEMAIN(KisFilterMaskTest, GUI)
+QTEST_MAIN(KisFilterMaskTest)

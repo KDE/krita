@@ -17,7 +17,7 @@
  */
 
 #include "kis_chunk_allocator_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -121,5 +121,5 @@ void KisChunkAllocatorTest::testFragmentation()
 }
 
 
-QTEST_KDEMAIN(KisChunkAllocatorTest, NoGUI)
+QTEST_MAIN(KisChunkAllocatorTest)
 

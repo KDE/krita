@@ -17,7 +17,7 @@
  */
 
 #include "kis_paint_device_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QTime>
 
@@ -1375,4 +1375,4 @@ void KisPaintDeviceTest::testCacheState()
     pool.waitForDone();
 }
 
-QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
+QTEST_MAIN(KisPaintDeviceTest)

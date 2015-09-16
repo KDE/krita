@@ -20,7 +20,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QSize>
 #include <QImage>
@@ -470,6 +470,6 @@ void KisPrescaledProjectionTest::testQtScaling()
     QCOMPARE(canvas, expectedResult);
 }
 
-QTEST_KDEMAIN(KisPrescaledProjectionTest, GUI)
+QTEST_MAIN(KisPrescaledProjectionTest)
 
 

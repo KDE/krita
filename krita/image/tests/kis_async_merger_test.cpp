@@ -22,7 +22,7 @@
 #include "kis_full_refresh_walker.h"
 #include "kis_async_merger.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include "kis_image.h"
@@ -287,5 +287,5 @@ void KisAsyncMergerTest::testSubgraphingWithoutUpdatingParent()
     }
 }
 
-QTEST_KDEMAIN(KisAsyncMergerTest, NoGUI)
+QTEST_MAIN(KisAsyncMergerTest)
 

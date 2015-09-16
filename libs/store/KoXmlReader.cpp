@@ -723,12 +723,10 @@ namespace {
         doc.addElement(xml.qualifiedName().toString(),
                        fixNamespace(xml.namespaceUri().toString()));
         QXmlStreamAttributes attr = xml.attributes();
-        QXmlStreamAttributes::const_iterator a = attr.constBegin();
-        while (a != attr.constEnd()) {
-            doc.addAttribute(a->qualifiedName().toString(),
-                             a->namespaceUri().toString(),
-                             a->value().toString());
-            ++a;
+        for  (int a = 0; a < attr.count(); a++) {
+            doc.addAttribute(attr[a].qualifiedName().toString(),
+                             attr[a].namespaceUri().toString(),
+                             attr[a].value().toString());
         }
         if (stripSpaces)
           parseElementContentsStripSpaces(xml, doc);

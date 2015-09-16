@@ -20,13 +20,14 @@
 #include <QLabel>
 #include <QLayout>
 #include <QTimer>
+#include <QSpinBox>
 #include <QGridLayout>
+
 #include <filter/kis_filter_configuration.h>
-#include <knuminput.h>
 #include <klocalizedstring.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
-    : KIntNumInput(parent)
+    : QSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

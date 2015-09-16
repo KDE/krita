@@ -1355,11 +1355,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDoubleSpinBox</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KTabWidget</class>
    <extends>QTabWidget</extends>
    <header>ktabwidget.h</header>

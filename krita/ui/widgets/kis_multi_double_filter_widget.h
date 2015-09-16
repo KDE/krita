@@ -20,7 +20,9 @@
 #define _KIS_MULTI_DOUBLE_FILTER_WIDGET_H_
 
 #include <vector>
-#include <knuminput.h>
+
+#include <QDoubleSpinBox>
+
 #include <kis_config_widget.h>
 #include "kritaui_export.h"
 

@@ -63,14 +63,14 @@
        </widget>
       </item>
       <item row="1" column="5">
-       <widget class="KIntNumInput" name="intYOffset">
+       <widget class="QSpinBox" name="intYOffset">
         <property name="minimum">
          <number>0</number>
         </property>
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="KIntNumInput" name="intXOffset">
+       <widget class="QSpinBox" name="intXOffset">
         <property name="minimum">
          <number>0</number>
         </property>
@@ -116,7 +116,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="intHSpacing">
+       <widget class="QSpinBox" name="intHSpacing">
         <property name="value">
          <number>10</number>
         </property>
@@ -126,7 +126,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KIntNumInput" name="intVSpacing">
+       <widget class="QSpinBox" name="intVSpacing">
         <property name="value">
          <number>10</number>
         </property>
@@ -136,7 +136,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="KIntNumInput" name="intSubdivision">
+       <widget class="QSpinBox" name="intSubdivision">
         <property name="value">
          <number>2</number>
         </property>
@@ -343,12 +343,6 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KoAspectButton</class>

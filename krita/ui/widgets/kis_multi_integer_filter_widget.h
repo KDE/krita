@@ -19,7 +19,6 @@
 #ifndef _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 #define _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 
-#include <knuminput.h>
 #include <kis_config_widget.h>
 #include "kritaui_export.h"
 #include <kis_debug.h>
@@ -27,7 +26,7 @@
 
 #include <vector>
 
-class KisDelayedActionIntegerInput : public KIntNumInput
+class KisDelayedActionIntegerInput : public QSpinBox
 {
     Q_OBJECT
 

@@ -313,12 +313,6 @@
     <header>kis_slider_spin_box.h</header>
     <container>1</container>
   </customwidget>
-
-  <customwidget>
-   <class>QDoubleSpinBox</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

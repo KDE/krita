@@ -366,12 +366,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisGradientSliderWidget</class>
    <extends></extends>
    <header>widgets/kis_gradient_slider_widget.h</header>

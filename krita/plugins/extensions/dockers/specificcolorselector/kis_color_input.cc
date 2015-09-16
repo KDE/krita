@@ -31,9 +31,10 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 #include <klocalizedstring.h>
-#include <knuminput.h>
 
 #include <KoChannelInfo.h>
 #include <KoColor.h>

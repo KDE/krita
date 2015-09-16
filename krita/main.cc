@@ -68,10 +68,6 @@ extern "C" int main(int argc, char **argv)
     Q_UNUSED(crashHandler);
 #endif
 
-#if defined Q_OS_WIN
-    SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
-#endif
-
     // Disable most debug output by default.
     // krita.input is kept on for tablet debugging.
     // You can re-enable debug output by starting Krita like "QT_LOGGING_RULES="krita*=true" krita"

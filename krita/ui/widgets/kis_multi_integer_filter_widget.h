@@ -23,6 +23,7 @@
 #include "kritaui_export.h"
 #include <kis_debug.h>
 #include <QVector>
+#include <QSpinBox>
 
 #include <vector>
 

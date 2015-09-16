@@ -29,9 +29,7 @@
 #include <KoHashGeneratorProvider.h>
 #include <kis_icon_utils.h>
 
-#include <kcrash.h>
 #include <klocalizedstring.h>
-#include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
 #include <KoResourcePaths.h>

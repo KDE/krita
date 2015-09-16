@@ -45,7 +45,6 @@
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
 #include <kxmlguifactory.h>
-#include <knotification.h>
 #include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>

@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QFile>
 #include <QUrl>
-#include <kmimetype.h>
 #include <QTemporaryFile>
 #include <kis_debug.h>
 #include <QStack>

@@ -60,7 +60,6 @@
 #include <kdiroperator.h>
 #include <kedittoolbar.h>
 #include <kfileitem.h>
-#include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 

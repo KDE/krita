@@ -39,6 +39,7 @@
 #include <QApplication>
 #include <QMenu>
 #include <QMenuBar>
+#include <QStatusBar>
 
 // KDE includes
 
@@ -49,10 +50,8 @@
 #include <kactioncollection.h>
 #include <KoResourcePaths.h>
 #include <kactionmenu.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kxmlguiwindow.h>
 #include <QAction>
 
 // Calligra

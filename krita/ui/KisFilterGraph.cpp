@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QMetaMethod>
 #include <QTemporaryFile>
-#include <kmimetype.h>
 #include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX

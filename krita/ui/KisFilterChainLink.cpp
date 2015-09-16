@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #include <QMetaMethod>
 #include <QPluginLoader>
 #include <QTemporaryFile>
-#include <kmimetype.h>
 #include <kis_debug.h>
 #include "KisFilterEntry.h"
 #include "KisImportExportManager.h"

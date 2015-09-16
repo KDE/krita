@@ -31,7 +31,6 @@
 #include <KoResourcePaths.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
-#include <kmimetype.h>
 #include <kconfig.h>
 
 #include <kconfiggroup.h>

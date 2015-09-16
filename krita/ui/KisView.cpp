@@ -35,7 +35,6 @@
 #include <kis_debug.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
-#include <kdeprintdialog.h>
 #include <kactioncollection.h>
 
 #include <QMenu>

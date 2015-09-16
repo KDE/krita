@@ -29,28 +29,30 @@
 #include "KisViewManager.h"
 #include <QPrinter>
 
+#include <QAction>
+#include <QApplication>
+#include <QBuffer>
+#include <QByteArray>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QGridLayout>
-#include <QRect>
-#include <QWidget>
-#include <QToolBar>
-#include <QApplication>
-#include <QPrintDialog>
-#include <QObject>
-#include <QByteArray>
-#include <QBuffer>
-#include <QScrollBar>
 #include <QMainWindow>
-#include <QPoint>
-#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
 #include <QMessageBox>
+#include <QObject>
+#include <QPoint>
+#include <QPrintDialog>
+#include <QRect>
+#include <QScrollBar>
+#include <QStatusBar>
+#include <QToolBar>
 #include <QUrl>
+#include <QWidget>
+
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
-#include <kmenu.h>
 #include <kservice.h>
 #include <KoResourcePaths.h>
 #include <kselectaction.h>

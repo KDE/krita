@@ -24,9 +24,9 @@
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QPaintEvent>
+#include <QMenu>
 
 #include <kis_debug.h>
-#include <kmenu.h>
 #include <klocalizedstring.h>
 #include <QAction>
 
@@ -44,7 +44,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
     setObjectName(name);
     setMinimumHeight(30);
 
-    m_segmentMenu = new KMenu();
+    m_segmentMenu = new QMenu();
     m_segmentMenu->addAction(i18n("Split Segment"), this, SLOT(slotSplitSegment()));
     m_segmentMenu->addAction(i18n("Duplicate Segment"), this, SLOT(slotDuplicateSegment()));
     m_segmentMenu->addAction(i18n("Mirror Segment"), this, SLOT(slotMirrorSegment()));

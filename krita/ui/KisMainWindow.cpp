@@ -49,6 +49,8 @@
 #include <QMessageBox>
 #include <QTemporaryFile>
 #include <QStatusBar>
+#include <QMenu>
+#include <QMenuBar>
 
 #include <krecentdirs.h>
 #include <kactioncollection.h>
@@ -61,8 +63,6 @@
 #include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
-#include <kmenu.h>
 
 #include <krecentdocument.h>
 #include <krecentfilesaction.h>

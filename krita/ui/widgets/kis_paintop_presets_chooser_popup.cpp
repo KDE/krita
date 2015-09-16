@@ -21,17 +21,17 @@
 #include "kis_paintop_presets_chooser_popup.h"
 
 #include <QToolButton>
+#include <QCompleter>
+#include <QMenu>
 
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>
-#include <kmenu.h>
 #include <kis_config.h>
 #include <kis_resource_server_provider.h>
 #include <kis_paintop_preset.h>
 #include <kis_icon_utils.h>
-#include <QCompleter>
 #include "kis_paintop_settings.h"
 
 struct KisPaintOpPresetsChooserPopup::Private
@@ -46,7 +46,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     , m_d(new Private())
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
-    KMenu* menu = new KMenu(this);
+    QMenu* menu = new QMenu(this);
 
     QActionGroup *actionGroup = new QActionGroup(this);
 

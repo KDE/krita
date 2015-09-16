@@ -23,9 +23,9 @@
 #include <QInputDialog>
 #include <QDomDocument>
 #include <QFile>
+#include <QMenuBar>
 #include <kactioncollection.h>
 #include <kis_debug.h>
-#include <kmenubar.h>
 
 #include <KisMainWindow.h>
 #include "KisViewManager.h"

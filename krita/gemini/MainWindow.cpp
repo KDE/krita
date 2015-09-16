@@ -42,7 +42,6 @@
 #include <KoResourcePaths.h>
 #include <kactioncollection.h>
 #include <QMessageBox>
-#include <kmenubar.h>
 #include <kxmlguifactory.h>
 #include <KoDialog.h>
 

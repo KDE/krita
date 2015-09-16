@@ -36,10 +36,12 @@
 #include <QPixmap>
 #include <QDate>
 #include <QDesktopWidget>
+#include <QApplication>
+#include <QMenu>
+#include <QMenuBar>
 
 // KDE includes
 
-#include <kmenu.h>
 #include <QMessageBox>
 
 #include <klocalizedstring.h>

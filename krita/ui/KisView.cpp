@@ -36,9 +36,9 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
-#include <kmenu.h>
 #include <kactioncollection.h>
 
+#include <QMenu>
 #include <QMessageBox>
 #include <QUrl>
 #include <QTemporaryFile>
@@ -493,7 +493,7 @@ void KisView::dropEvent(QDropEvent *event)
         QList<QUrl> urls = event->mimeData()->urls();
         if (urls.length() > 0) {
 
-            KMenu popup;
+            QMenu popup;
             popup.setObjectName("drop_popup");
 
             QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);

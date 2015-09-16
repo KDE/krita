@@ -41,9 +41,9 @@
 #include <QList>
 #include <QVector>
 #include <QLabel>
+#include <QMenu>
 
 #include <kis_debug.h>
-#include <kmenu.h>
 #include <klocalizedstring.h>
 
 #include <kis_icon_utils.h>
@@ -141,7 +141,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->listLayers, SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
 
-    m_viewModeMenu = new KMenu(this);
+    m_viewModeMenu = new QMenu(this);
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
@@ -243,7 +243,7 @@ KisLayerBox::KisLayerBox()
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 
-    m_newLayerMenu = new KMenu(this);
+    m_newLayerMenu = new QMenu(this);
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
 

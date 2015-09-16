@@ -21,6 +21,7 @@
 #include <QIcon>
 #include <QApplication>
 #include <QPalette>
+#include <QDebug>
 
 #include <kiconloader.h>
 
@@ -37,19 +38,14 @@ QIcon themedIcon(const QString &name) {
 
     realName = QLatin1String(prefix) + name;
 
-    bool absent = KIconLoader::global()->iconPath(realName, KIconLoader::User, true).isEmpty();
-    if (absent) {
+//    qDebug() << ">>>>>>>" << realName << KIconLoader::global()->iconPath(realName, KIconLoader::User, true) << "\n\t"
+//             << name  << KIconLoader::global()->iconPath(name, KIconLoader::User, true);
+
+    if (KIconLoader::global()->iconPath(realName, KIconLoader::User, true).isEmpty()) {
         realName = name;
     }
 
-    QIcon icon = QIcon::fromTheme(realName);
-
-    // fallback
-    if (icon.isNull()) {
-        return QIcon::fromTheme(name);
-    }
-
-    return icon;
+    return QIcon::fromTheme(realName);
 
 }
 

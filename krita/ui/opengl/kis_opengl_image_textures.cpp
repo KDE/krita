@@ -91,7 +91,11 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
 }
 
 void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f) {
-    m_glFuncs = f;
+    if (f) {
+        m_glFuncs = f;
+    } else {
+        fatalUI << "Tried to create OpenGLImageTextures with uninitialized QOpenGLFunctions";
+    }
 
     getTextureSize(&m_texturesInfo);
     m_glFuncs->glGenTextures(1, &m_checkerTexture);

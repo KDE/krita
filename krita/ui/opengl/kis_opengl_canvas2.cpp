@@ -280,7 +280,7 @@ void KisOpenGLCanvas2::initializeGL()
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
-    d->openGLImageTextures->initGL(static_cast<QOpenGLFunctions*>(this));
+    d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
     initializeDisplayShader();

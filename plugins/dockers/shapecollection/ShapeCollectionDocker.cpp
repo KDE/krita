@@ -39,7 +39,7 @@
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include <QGridLayout>
 #include <QListView>

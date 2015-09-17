@@ -71,6 +71,8 @@ private Q_SLOTS:
     void testFramesLeaking();
     void testFramesUndoRedo();
     void testFramesUndoRedoWithChannel();
+
+    void testCompositionAssociativity();
 };
 
 #endif

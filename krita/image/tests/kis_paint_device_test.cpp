@@ -1912,4 +1912,88 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
     QVERIFY(o.m_currentData == o.m_frames.begin().value());
 }
 
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_smallint.hpp>
+
+#include "KoCompositeOpRegistry.h"
+
+
+using namespace boost::accumulators;
+
+accumulator_set<qreal, stats<tag::variance, tag::max, tag::min> > accum;
+
+
+void KisPaintDeviceTest::testCompositionAssociativity()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    qsrand(500);
+
+    boost::mt11213b _rnd0(qrand());
+    boost::mt11213b _rnd1(qrand());
+    boost::mt11213b _rnd2(qrand());
+    boost::mt11213b _rnd3(qrand());
+
+    boost::uniform_smallint<int> rnd0(0, 255);
+    boost::uniform_smallint<int> rnd1(0, 255);
+    boost::uniform_smallint<int> rnd2(0, 255);
+    boost::uniform_smallint<int> rnd3(0, 255);
+
+    QList<KoCompositeOp*> allCompositeOps = cs->compositeOps();
+
+    foreach(const KoCompositeOp *op, allCompositeOps) {
+
+        accumulator_set<qreal, stats<tag::variance, tag::max, tag::min> > accum;
+
+        const int numIterations = 10000;
+
+        for (int j = 0; j < numIterations; j++) {
+            KoColor c1(QColor(rnd0(_rnd0), rnd1(_rnd1), rnd2(_rnd2), rnd3(_rnd3)), cs);
+            KoColor c2(QColor(rnd0(_rnd0), rnd1(_rnd1), rnd2(_rnd2), rnd3(_rnd3)), cs);
+            KoColor c3(QColor(rnd0(_rnd0), rnd1(_rnd1), rnd2(_rnd2), rnd3(_rnd3)), cs);
+            //KoColor c4(QColor(rnd0(_rnd0), rnd1(_rnd1), rnd2(_rnd2), rnd3(_rnd3)), cs);
+            //KoColor c5(QColor(rnd0(_rnd0), rnd1(_rnd1), rnd2(_rnd2), rnd3(_rnd3)), cs);
+
+            KoColor r1(QColor(Qt::transparent), cs);
+            KoColor r2(QColor(Qt::transparent), cs);
+            KoColor r3(QColor(Qt::transparent), cs);
+
+            op->composite(r1.data(), 0, c1.data(), 0, 0,0, 1,1, 255);
+            op->composite(r1.data(), 0, c2.data(), 0, 0,0, 1,1, 255);
+            op->composite(r1.data(), 0, c3.data(), 0, 0,0, 1,1, 255);
+            //op->composite(r1.data(), 0, c4.data(), 0, 0,0, 1,1, 255);
+            //op->composite(r1.data(), 0, c5.data(), 0, 0,0, 1,1, 255);
+
+            op->composite(r3.data(), 0, c2.data(), 0, 0,0, 1,1, 255);
+            op->composite(r3.data(), 0, c3.data(), 0, 0,0, 1,1, 255);
+            //op->composite(r3.data(), 0, c4.data(), 0, 0,0, 1,1, 255);
+            //op->composite(r3.data(), 0, c5.data(), 0, 0,0, 1,1, 255);
+
+            op->composite(r2.data(), 0, c1.data(), 0, 0,0, 1,1, 255);
+            op->composite(r2.data(), 0, r3.data(), 0, 0,0, 1,1, 255);
+
+            const quint8 *p1 = r1.data();
+            const quint8 *p2 = r2.data();
+
+            if (memcmp(p1, p2, 4) != 0) {
+                for (int i = 0; i < 4; i++) {
+                    accum(qAbs(p1[i] - p2[i]));
+                }
+            }
+
+        }
+
+        qDebug("Errors for op %25s err rate %7.2f var %7.2f max %7.2f",
+               op->id().toAscii().data(),
+               (qreal(count(accum)) / (4 * numIterations)),
+               variance(accum),
+               count(accum) > 0 ? (max)(accum) : 0);
+    }
+}
+
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

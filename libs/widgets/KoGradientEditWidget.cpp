@@ -28,7 +28,7 @@
 #include <KoSliderCombo.h>
 #include <KoColorPopupAction.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QDoubleSpinBox>
 #include <QComboBox>

@@ -55,7 +55,7 @@
 
 #include <QAction>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <KoResourcePaths.h>
 #include <kundo2command.h>
 

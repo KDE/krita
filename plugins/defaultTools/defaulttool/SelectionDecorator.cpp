@@ -24,13 +24,8 @@
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <KoResourcePaths.h>
-#include <kglobal.h>
 
 #define HANDLE_DISTANCE 10
-
-#if 0
-K_GLOBAL_STATIC(QImage, s_rotateCursor)
-#endif
 
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 

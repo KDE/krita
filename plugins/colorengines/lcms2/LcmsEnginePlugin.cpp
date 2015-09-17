@@ -28,8 +28,7 @@
 #include <kpluginfactory.h>
 #include <KoResourcePaths.h>
 #include <klocalizedstring.h>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>
@@ -76,7 +75,7 @@
 #endif
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
-    kError(31000) << "Lcms2 error: " << ErrorCode << Text;
+    qCritical() << "Lcms2 error: " << ErrorCode << Text;
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
@@ -85,7 +84,7 @@ K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    kDebug(31000) << "Initializing the lcms engine plugin";
+    qDebug() << "Initializing the lcms engine plugin";
 
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);
@@ -113,10 +112,10 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
             profile->load();
             if (profile->valid()) {
-                kDebug(31000) << "Valid profile : " << profile->fileName() << profile->name();
+                qDebug() << "Valid profile : " << profile->fileName() << profile->name();
                 registry->addProfileToMap(profile);
             } else {
-                kDebug(31000) << "Invalid profile : " << profile->fileName() << profile->name();
+                qDebug() << "Invalid profile : " << profile->fileName() << profile->name();
                 delete profile;
             }
         }

@@ -20,7 +20,7 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 
 #include <KoIntegerMaths.h>

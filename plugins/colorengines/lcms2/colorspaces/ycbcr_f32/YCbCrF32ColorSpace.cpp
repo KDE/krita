@@ -20,7 +20,7 @@
 #include "YCbCrF32ColorSpace.h"
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"

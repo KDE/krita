@@ -834,7 +834,9 @@ void KisOpenGLCanvas2::channelSelectionChanged(QBitArray channelFlags)
 
 void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
-    d->openGLImageTextures->slotImageSizeChanged(w, h);
+    if (d->canvasInitialized) {
+        d->openGLImageTextures->slotImageSizeChanged(w, h);
+    }
 }
 
 KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)

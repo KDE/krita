@@ -166,8 +166,10 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     delete verticalcurve;
 }
 
-QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration* config) const
+QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration* config, int lod) const
 {
+    Q_UNUSED(lod);
+
     QVariant value;
     int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;

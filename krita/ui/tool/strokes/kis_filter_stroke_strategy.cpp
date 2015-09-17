@@ -34,6 +34,8 @@ struct KisFilterStrokeStrategy::Private {
     KisPaintDeviceSP filterDevice;
     QRect filterDeviceBounds;
     KisTransaction *secondaryTransaction;
+
+    int levelOfDetail;
 };
 
 
@@ -52,9 +54,19 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
     m_d->updatesFacade = resources->image().data();
     m_d->cancelSilently = false;
     m_d->secondaryTransaction = 0;
+    m_d->levelOfDetail = 0;
 
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
+}
+
+KisFilterStrokeStrategy::KisFilterStrokeStrategy(const KisFilterStrokeStrategy &rhs, int levelOfDetail)
+    : KisPainterBasedStrokeStrategy(rhs, levelOfDetail),
+      m_d(new Private(*rhs.m_d))
+{
+    // only non-started transaction are allowed
+    KIS_ASSERT_RECOVER_NOOP(!m_d->secondaryTransaction);
+    m_d->levelOfDetail = levelOfDetail;
 }
 
 KisFilterStrokeStrategy::~KisFilterStrokeStrategy()
@@ -92,10 +104,10 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         dynamic_cast<CancelSilentlyMarker*>(data);
 
     if (d) {
-        QRect rc = d->processRect;
+        const QRect rc = d->processRect;
 
         if (!m_d->filterDeviceBounds.intersects(
-                m_d->filter->neededRect(rc, m_d->filterConfig.data()))) {
+                m_d->filter->neededRect(rc, m_d->filterConfig.data(), m_d->levelOfDetail))) {
 
             return;
         }
@@ -142,4 +154,13 @@ void KisFilterStrokeStrategy::finishStrokeCallback()
     m_d->filterDevice = 0;
 
     KisPainterBasedStrokeStrategy::finishStrokeCallback();
+}
+
+KisStrokeStrategy* KisFilterStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    if (!m_d->filter->supportsLevelOfDetail(m_d->filterConfig.data(), levelOfDetail)) return 0;
+
+    KisFilterStrokeStrategy *clone = new KisFilterStrokeStrategy(*this, levelOfDetail);
+    clone->setUndoEnabled(false);
+    return clone;
 }

@@ -31,6 +31,7 @@
 #include <KoUpdater.h>
 #include <KoConvolutionOp.h>
 #include <kis_paint_device.h>
+#include "kis_lod_transform.h"
 
 #include "kis_wdg_unsharp.h"
 #include "ui_wdgunsharp.h"
@@ -41,7 +42,17 @@
 KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), categoryEnhance(), i18n("&Unsharp Mask..."))
 {
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(false);
+    setSupportsAdjustmentLayers(true);
+    setSupportsThreading(true);
+
+    /**
+     * Officially Unsharp Mask doesn't support LoD, because it
+     * generates subtle artifacts when the unsharp radius is smaller
+     * than current zoom level. But LoD devices can still appear when
+     * the filter is used in Adjustment Layer. So the actual LoD is
+     * still counted on.
+     */
+    setSupportsLevelOfDetail(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -82,7 +93,10 @@ void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
-    const qreal halfSize = (config->getProperty("halfSize", value)) ? value.toDouble() : 1.0;
+
+    KisLodTransformScalar t(device);
+
+    const qreal halfSize = t.scale(config->getProperty("halfSize", value) ? value.toDouble() : 1.0);
     const qreal amount = (config->getProperty("amount", value)) ? value.toDouble() : 25;
     const uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 0;
     const uint lightnessOnly = (config->getProperty("lightnessOnly", value)) ? value.toBool() : true;
@@ -191,4 +205,24 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
         } while (dstIt->nextPixel());
         dstIt->nextRow();
     }
+}
+
+QRect KisUnsharpFilter::neededRect(const QRect & rect, const KisFilterConfiguration* config, int lod) const
+{
+    KisLodTransformScalar t(lod);
+
+    QVariant value;
+    const qreal halfSize = t.scale(config->getProperty("halfSize", value) ? value.toDouble() : 1.0);
+
+    return rect.adjusted(-halfSize * 2, -halfSize * 2, halfSize * 2, halfSize * 2);
+}
+
+QRect KisUnsharpFilter::changedRect(const QRect & rect, const KisFilterConfiguration* config, int lod) const
+{
+    KisLodTransformScalar t(lod);
+
+    QVariant value;
+    const qreal halfSize = t.scale(config->getProperty("halfSize", value) ? value.toDouble() : 1.0);
+
+    return rect.adjusted( -halfSize, -halfSize, halfSize, halfSize);
 }

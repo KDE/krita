@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <kritaimage_export.h>
 
-#include <QTimer>
+#include "kis_signal_compressor.h"
 
 class KisViewManager;
 class KisPropertiesConfiguration;
@@ -42,7 +42,7 @@ class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 
 protected:
 
-    KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0, int delay = 500);
+    KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0, int delay = 200);
 
 public:
     virtual ~KisConfigWidget();
@@ -83,10 +83,9 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotConfigChanged();
-    void kickTimer();
 
 private:
-    QTimer m_timer;
+    KisSignalCompressor m_compressor;
     int m_delay;
 };
 

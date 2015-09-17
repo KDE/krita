@@ -34,6 +34,7 @@
 
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
 {
+    setSupportsLevelOfDetail(true);
 }
 
 KisColorTransformationFilter::~KisColorTransformationFilter()

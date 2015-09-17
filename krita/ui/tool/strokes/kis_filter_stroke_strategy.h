@@ -21,6 +21,7 @@
 
 #include "kis_types.h"
 #include "kis_painter_based_stroke_strategy.h"
+#include "kis_lod_transform.h"
 
 
 class KRITAUI_EXPORT KisFilterStrokeStrategy : public KisPainterBasedStrokeStrategy
@@ -31,7 +32,21 @@ public:
         Data(const QRect &_processRect, bool concurrent)
             : KisStrokeJobData(concurrent ? CONCURRENT : SEQUENTIAL),
               processRect(_processRect) {}
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) {
+            return new Data(*this, levelOfDetail);
+        }
+
         QRect processRect;
+
+    private:
+        Data(const Data &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs)
+         {
+             KisLodTransform t(levelOfDetail);
+             processRect = t.map(rhs.processRect);
+         }
+
     };
 
     class CancelSilentlyMarker : public KisStrokeJobData {
@@ -39,19 +54,27 @@ public:
         CancelSilentlyMarker()
             : KisStrokeJobData(SEQUENTIAL)
         {}
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) {
+            return new CancelSilentlyMarker(*this);
+        }
     };
 
 public:
     KisFilterStrokeStrategy(KisFilterSP filter,
                             KisSafeFilterConfigurationSP filterConfig,
                             KisResourcesSnapshotSP resources);
+    KisFilterStrokeStrategy(const KisFilterStrokeStrategy &rhs, int levelOfDetail);
+
     ~KisFilterStrokeStrategy();
+
 
     void initStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
     void cancelStrokeCallback();
     void finishStrokeCallback();
 
+    KisStrokeStrategy* createLodClone(int levelOfDetail);
 
 private:
     struct Private;

@@ -42,6 +42,9 @@ public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
+    QRect changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
+    QRect neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
+
 private:
     void processLightnessOnly(KisPaintDeviceSP device,
                               const QRect &rect,

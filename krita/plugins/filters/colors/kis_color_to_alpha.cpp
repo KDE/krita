@@ -40,6 +40,7 @@ KisFilterColorToAlpha::KisFilterColorToAlpha()
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
+    setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 

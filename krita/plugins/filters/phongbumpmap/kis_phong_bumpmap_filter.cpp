@@ -38,6 +38,7 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
+    setSupportsLevelOfDetail(true);
 }
 
 void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
@@ -218,12 +219,12 @@ KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPai
     return config;
 }
 
-QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
+QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration* /*config*/, int /*lod*/) const
 {
     return rect.adjusted(-1, -1, 1, 1);
 }
 
-QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
+QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/, int /*lod*/) const
 {
     return rect;
 }

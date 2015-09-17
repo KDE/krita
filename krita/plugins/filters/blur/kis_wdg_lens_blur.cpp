@@ -55,7 +55,7 @@ KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
     config->setProperty("irisRadius", m_widget->irisRadiusSlider->value());
     config->setProperty("irisRotation", m_widget->irisRotationSlider->value());
 
-    QSize halfSize = KisLensBlurFilter::getKernelHalfSize(config);
+    QSize halfSize = KisLensBlurFilter::getKernelHalfSize(config, 0);
     config->setProperty("halfWidth", halfSize.width());
     config->setProperty("halfHeight", halfSize.height());
 

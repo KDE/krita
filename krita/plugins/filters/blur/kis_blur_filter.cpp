@@ -32,11 +32,14 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include "kis_mask_generator.h"
+#include "kis_lod_transform.h"
+
 
 KisBlurFilter::KisBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
+    setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -66,11 +69,14 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     Q_ASSERT(device != 0);
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
+    KisLodTransformScalar t(device);
+
     QVariant value;
+    const uint halfWidth = t.scale((config->getProperty("halfWidth", value)) ? value.toUInt() : 5);
+    const uint halfHeight = t.scale((config->getProperty("halfHeight", value)) ? value.toUInt() : 5);
+
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
-    uint halfWidth = (config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
     uint width = 2 * halfWidth + 1;
-    uint halfHeight = (config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
     uint height = 2 * halfHeight + 1;
     float aspectRatio = (float) width / height;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
@@ -108,20 +114,24 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
 
 }
 
-QRect KisBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const
 {
+    KisLodTransformScalar t(lod);
+
     QVariant value;
-    const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
-    const int halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
+    const int halfWidth = t.scale(_config->getProperty("halfWidth", value) ? value.toUInt() : 5);
+    const int halfHeight = t.scale(_config->getProperty("halfHeight", value) ? value.toUInt() : 5);
 
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const
 {
+    KisLodTransformScalar t(lod);
+
     QVariant value;
-    const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
-    const int halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
+    const int halfWidth = t.scale(_config->getProperty("halfWidth", value) ? value.toUInt() : 5);
+    const int halfHeight = t.scale(_config->getProperty("halfHeight", value) ? value.toUInt() : 5);
 
     return rect.adjusted(-halfWidth, -halfHeight, halfWidth, halfHeight);
 }

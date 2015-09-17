@@ -122,7 +122,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 
 
     // Filter the paint device
-    QRect neededRect = m_filter->neededRect(dstRect, m_filterConfiguration);
+    QRect neededRect = m_filter->neededRect(dstRect, m_filterConfiguration, painter()->device()->defaultBounds()->currentLevelOfDetail());
 
     KisPainter p(m_tmpDevice);
     if (!m_smudgeMode) {

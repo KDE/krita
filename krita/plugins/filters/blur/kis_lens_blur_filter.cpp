@@ -33,6 +33,8 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include "kis_lod_transform.h"
+
 
 #include <QPainter>
 
@@ -43,6 +45,7 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
+    setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -51,9 +54,9 @@ KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, 
     return new KisWdgLensBlur(parent);
 }
 
-QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfiguration* config)
+QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfiguration* config, int lod)
 {
-    QPolygonF iris = getIrisPolygon(config);
+    QPolygonF iris = getIrisPolygon(config, lod);
     QRect rect = iris.boundingRect().toAlignedRect();
 
     int w = std::ceil(qreal(rect.width()) / 2.0);
@@ -69,22 +72,24 @@ KisFilterConfiguration* KisLensBlurFilter::factoryConfiguration(const KisPaintDe
     config->setProperty("irisRadius", 5);
     config->setProperty("irisRotation", 0);
 
-    QSize halfSize = getKernelHalfSize(config);
+    QSize halfSize = getKernelHalfSize(config, 0);
     config->setProperty("halfWidth", halfSize.width());
     config->setProperty("halfHeight", halfSize.height());
 
     return config;
 }
 
-QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfiguration* config)
+QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfiguration* config, int lod)
 {
     KIS_ASSERT_RECOVER(config) { return QPolygonF(); }
+
+    KisLodTransformScalar t(lod);
 
     QVariant value;
     config->getProperty("irisShape", value);
     QString irisShape = value.toString();
     config->getProperty("irisRadius", value);
-    uint irisRadius = value.toUInt();
+    uint irisRadius = t.scale(value.toUInt());
     config->getProperty("irisRotation", value);
     uint irisRotation = value.toUInt();
 
@@ -138,7 +143,8 @@ void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
-    QPolygonF transformedIris = getIrisPolygon(config);
+    const int lod = device->defaultBounds()->currentLevelOfDetail();
+    QPolygonF transformedIris = getIrisPolygon(config, lod);
     if (transformedIris.isEmpty()) return;
 
     QRectF boundingRect = transformedIris.boundingRect();
@@ -175,20 +181,24 @@ void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
     painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
 }
 
-QRect KisLensBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisLensBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const
 {
+    KisLodTransformScalar t(lod);
+
     QVariant value;
-    const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
-    const int halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
+    const int halfWidth = t.scale(_config->getProperty("halfWidth", value) ? value.toUInt() : 5);
+    const int halfHeight = t.scale(_config->getProperty("halfHeight", value) ? value.toUInt() : 5);
 
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisLensBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisLensBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const
 {
+    KisLodTransformScalar t(lod);
+
     QVariant value;
-    const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
-    const int halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
+    const int halfWidth = t.scale(_config->getProperty("halfWidth", value) ? value.toUInt() : 5);
+    const int halfHeight = t.scale(_config->getProperty("halfHeight", value) ? value.toUInt() : 5);
 
     return rect.adjusted(-halfWidth, -halfHeight, halfWidth, halfHeight);
 }

@@ -96,7 +96,7 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 
     filter->process(src, dst, 0, rc, filterConfig.data(), 0);
 
-    QRect r = filter->changedRect(rc, filterConfig.data());
+    QRect r = filter->changedRect(rc, filterConfig.data(), dst->defaultBounds()->currentLevelOfDetail());
     return r;
 }
 
@@ -125,8 +125,12 @@ QRect KisFilterMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 
     KisSafeFilterConfigurationSP filterConfig = filter();
     if (filterConfig) {
+        KisNodeSP parent = this->parent();
+        const int lod = parent && parent->projection() ?
+            parent->projection()->defaultBounds()->currentLevelOfDetail() : 0;
+
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
-        filteredRect = filter->changedRect(rect, filterConfig.data());
+        filteredRect = filter->changedRect(rect, filterConfig.data(), lod);
     }
 
     /**
@@ -158,6 +162,10 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
     KisSafeFilterConfigurationSP filterConfig = filter();
     if (!filterConfig) return rect;
 
+    KisNodeSP parent = this->parent();
+    const int lod = parent && parent->projection() ?
+        parent->projection()->defaultBounds()->currentLevelOfDetail() : 0;
+
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
 
     /**
@@ -166,6 +174,6 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
      * And no KisMask::needRect will prevent us from doing this! ;)
      * That's why simply we do not call KisMask::needRect here :)
      */
-    return filter->neededRect(rect, filterConfig.data());
+    return filter->neededRect(rect, filterConfig.data(), lod);
 }
 

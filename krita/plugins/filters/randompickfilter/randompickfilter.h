@@ -53,7 +53,7 @@ public:
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    virtual QRect neededRect(const QRect& rect, const KisFilterConfiguration* config = 0) const;
+    virtual QRect neededRect(const QRect& rect, const KisFilterConfiguration* config, int lod = 0) const;
 };
 
 #endif

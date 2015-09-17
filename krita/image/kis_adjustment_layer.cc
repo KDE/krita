@@ -74,7 +74,7 @@ QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const
 
     if (filterConfig) {
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
-        filteredRect = filter->changedRect(rect, filterConfig.data());
+        filteredRect = filter->changedRect(rect, filterConfig.data(), projection()->defaultBounds()->currentLevelOfDetail());
     }
 
     /**
@@ -104,7 +104,7 @@ QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) cons
      * That's why simply we do not call
      * KisSelectionBasedLayer::needRect here :)
      */
-    return filter->neededRect(rect, filterConfig.data());
+    return filter->neededRect(rect, filterConfig.data(), projection()->defaultBounds()->currentLevelOfDetail());
 }
 
 bool KisAdjustmentLayer::accept(KisNodeVisitor & v)

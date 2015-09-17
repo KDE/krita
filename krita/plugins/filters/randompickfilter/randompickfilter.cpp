@@ -144,8 +144,10 @@ KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaint
     return config;
 }
 
-QRect KisFilterRandomPick::neededRect(const QRect& rect, const KisFilterConfiguration* config) const
+QRect KisFilterRandomPick::neededRect(const QRect& rect, const KisFilterConfiguration* config, int lod) const
 {
+    Q_UNUSED(lod);
+
     QVariant value;
     int windowsize = ceil((config && config->getProperty("windowsize", value)) ? value.toDouble() : 2.5);
     return rect.adjusted(-windowsize, -windowsize, windowsize, windowsize);

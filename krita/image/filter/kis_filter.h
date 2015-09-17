@@ -109,7 +109,7 @@ public:
      * Some filters need pixels outside the current processing rect to compute the new
      * value (for instance, convolution filters)
      */
-    virtual QRect neededRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
+    virtual QRect neededRect(const QRect & rect, const KisFilterConfiguration *config, int lod) const;
 
     /**
     * Similar to \ref neededRect: some filters will alter a lot of pixels that are
@@ -117,13 +117,22 @@ public:
     * in a device, the actual rectangle that will feel the influence of this change
     * might be bigger. Use this function to determine that rect.
      */
-    virtual QRect changedRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
+    virtual QRect changedRect(const QRect & rect, const KisFilterConfiguration *config, int lod) const;
+
+    /**
+     * Returns true if the filter is capable of handling LoD scaled planes
+     * when generating preview.
+     */
+    virtual bool supportsLevelOfDetail(const KisFilterConfiguration *config, int lod) const;
 
 protected:
 
     QString configEntryGroup() const;
+    void setSupportsLevelOfDetail(bool value);
 
 
+private:
+    bool m_supportsLevelOfDetail;
 };
 
 

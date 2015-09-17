@@ -42,8 +42,8 @@ public:
                      KoUpdater *progressUpdater
                      ) const;
 
-    QRect neededRect(const QRect &rect, const KisFilterConfiguration *config) const;
-    QRect changedRect(const QRect &rect, const KisFilterConfiguration *config) const;
+    QRect neededRect(const QRect &rect, const KisFilterConfiguration *config, int lod) const;
+    QRect changedRect(const QRect &rect, const KisFilterConfiguration *config, int lod) const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;

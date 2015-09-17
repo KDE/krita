@@ -46,16 +46,16 @@ public:
 
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
-    static QSize getKernelHalfSize(const KisFilterConfiguration* config);
+    static QSize getKernelHalfSize(const KisFilterConfiguration* config, int lod);
 
-    QRect neededRect(const QRect & rect, const KisFilterConfiguration* _config) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfiguration* _config) const;
+    QRect neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
+    QRect changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
 
 public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
 private:
-    static QPolygonF getIrisPolygon(const KisFilterConfiguration* config);
+    static QPolygonF getIrisPolygon(const KisFilterConfiguration* config, int lod);
 };
 
 #endif

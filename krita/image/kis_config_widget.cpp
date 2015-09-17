@@ -22,11 +22,10 @@
 
 KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f, int delay)
         : QWidget(parent, f)
-        , m_delay(delay)
+        , m_compressor(delay, KisSignalCompressor::FIRST_ACTIVE)
 {
-    m_timer.setSingleShot(true);
-    connect(&m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(sigConfigurationItemChanged()), SLOT(kickTimer()));
+    connect(&m_compressor, SIGNAL(timeout()), SLOT(slotConfigChanged()));
+    connect(this, SIGNAL(sigConfigurationItemChanged()), &m_compressor, SLOT(start()));
 }
 
 KisConfigWidget::~KisConfigWidget()
@@ -36,11 +35,6 @@ KisConfigWidget::~KisConfigWidget()
 void KisConfigWidget::slotConfigChanged()
 {
     emit sigConfigurationUpdated();
-}
-
-void KisConfigWidget::kickTimer()
-{
-    m_timer.start(m_delay);
 }
 
 void KisConfigWidget::setView(KisViewManager *view)

@@ -82,7 +82,8 @@ KoID KisFilter::categoryOther()
 
 
 KisFilter::KisFilter(const KoID& _id, const KoID & category, const QString & entry)
-        : KisBaseProcessor(_id, category, entry)
+    : KisBaseProcessor(_id, category, entry),
+      m_supportsLevelOfDetail(false)
 {
     init(id() + "_filter_bookmarks");
 }
@@ -107,7 +108,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
                         KoUpdater* progressUpdater ) const
 {
     if (applyRect.isEmpty()) return;
-    QRect needRect = neededRect(applyRect, config);
+    QRect needRect = neededRect(applyRect, config, src->defaultBounds()->currentLevelOfDetail());
 
     KisPaintDeviceSP temporary;
     KisTransaction *transaction = 0;
@@ -138,15 +139,28 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
 }
 
-QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c) const
+QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c, int lod) const
 {
     Q_UNUSED(c);
+    Q_UNUSED(lod);
     return rect;
 }
 
-QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfiguration* c) const
+QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfiguration* c, int lod) const
 {
     Q_UNUSED(c);
+    Q_UNUSED(lod);
     return rect;
 }
 
+bool KisFilter::supportsLevelOfDetail(const KisFilterConfiguration *config, int lod) const
+{
+    Q_UNUSED(config);
+    Q_UNUSED(lod);
+    return m_supportsLevelOfDetail;
+}
+
+void KisFilter::setSupportsLevelOfDetail(bool value)
+{
+    m_supportsLevelOfDetail = value;
+}

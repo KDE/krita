@@ -68,6 +68,7 @@ void minimize(const quint8* s, quint8* d, uint nbpixels)
 KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize Channel"))
 {
     setSupportsPainting(true);
+    setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(false);
 }

@@ -44,7 +44,7 @@ public:
     }
 
     static qreal lodToScale(int levelOfDetail) {
-        return 1.0 / (1 << qMax(0, levelOfDetail));
+        return levelOfDetail > 0 ? 1.0 / (1 << qMax(0, levelOfDetail)) : 1.0;
     }
 
     static qreal lodToInvScale(int levelOfDetail) {
@@ -178,6 +178,25 @@ private:
 private:
     QTransform m_transform;
     int m_levelOfDetail;
+};
+
+class KisLodTransformScalar {
+public:
+    KisLodTransformScalar(int lod) {
+        m_scale = KisLodTransform::lodToScale(lod);
+    }
+
+    template <class PaintDeviceTypeSP>
+    KisLodTransformScalar(PaintDeviceTypeSP device) {
+        m_scale = KisLodTransform::lodToScale(device->defaultBounds()->currentLevelOfDetail());
+    }
+
+    qreal scale(qreal value) {
+        return m_scale * value;
+    }
+
+private:
+    qreal m_scale;
 };
 
 #endif /* __KIS_LOD_TRANSFORM_H */

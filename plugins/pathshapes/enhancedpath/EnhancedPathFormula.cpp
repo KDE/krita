@@ -22,7 +22,7 @@
 #include <QStack>
 #include <math.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 /*
     The formula parsing, compiling and evaluating is based on
@@ -207,7 +207,7 @@ qreal EnhancedPathFormula::evaluate()
             // sanity check, this should not happen unless opcode is wrong
             // (i.e. there's a bug in the compile() function)
             if (stack.count() < index) {
-                kWarning() << "not enough arguments for function " << m_text;
+                qWarning() << "not enough arguments for function " << m_text;
                 m_error = ErrorValue; // not enough arguments
                 return 0.0;
             }
@@ -629,7 +629,7 @@ bool EnhancedPathFormula::compile(const TokenList &tokens)
     if (! m_valid) {
         m_constants.clear();
         m_codes.clear();
-        kWarning() << "compiling of "<< m_text << " failed";
+        qWarning() << "compiling of "<< m_text << " failed";
     }
 
     return m_valid;
@@ -793,7 +793,7 @@ void EnhancedPathFormula::debugTokens(const TokenList &tokens)
 {
 #ifndef NDEBUG
     for (int i = 0; i < tokens.count(); i++)
-        kDebug() << tokens[i].text();
+        qDebug() << tokens[i].text();
 #else
     Q_UNUSED(tokens);
 #endif
@@ -815,7 +815,7 @@ void EnhancedPathFormula::debugOpcodes()
         case Opcode::Neg: ctext = "Neg"; break;
         default: ctext = "Unknown"; break;
         }
-        kDebug() << ctext;
+        qDebug() << ctext;
     }
 #endif
 }

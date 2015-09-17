@@ -22,13 +22,11 @@
 #include <QStringList>
 #include <QMap>
 #include <QStandardPaths>
-
-// XXX: temporary!
-#include <kstandarddirs.h>
-#include <kglobal.h>
+#include <QDir>
+#include <QFileInfo>
+#include <QDebug>
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
-
 
 #ifdef Q_OS_WIN
 static const Qt::CaseSensitivity cs = Qt::CaseInsensitive;
@@ -58,6 +56,9 @@ public:
             return QStandardPaths::CacheLocation;
         }
         else if (type == "locale") {
+            return QStandardPaths::GenericDataLocation;
+        }
+        else {
             return QStandardPaths::GenericDataLocation;
         }
     }
@@ -127,12 +128,8 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
     if (relativename.isEmpty()) return;
 
     QString copy = relativename;
-    if (!basetype.isNull()) {
-        copy = QLatin1Char('%') + basetype + QLatin1Char('/');
-        if (relativename != QLatin1String("/")) {
-            copy += relativename;
-        }
-    }
+
+    Q_ASSERT(basetype == "data");
 
     if (!copy.endsWith(QLatin1Char('/'))) {
         copy += QLatin1Char('/');
@@ -148,7 +145,7 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
         }
     }
 
-    KGlobal::dirs()->addResourceType(type.toLatin1(), basetype.toLatin1(), relativename, priority);
+    //qDebug() << "addResourceType: type" << type << "basetype" << basetype << "relativename" << relativename << "priority" << priority << d->relatives[type];
 }
 
 void KoResourcePaths::addResourceDirInternal(const QString &type, const QString &absdir, bool priority)
@@ -169,57 +166,166 @@ void KoResourcePaths::addResourceDirInternal(const QString &type, const QString 
             paths.append(copy);
         }
     }
-    KGlobal::dirs()->addResourceDir(type.toLatin1(), absdir, priority);
+
+    //qDebug() << "addResourceDir: type" << type << "absdir" << absdir << "priority" << priority << d->absolutes[type];
 }
 
 QString KoResourcePaths::findResourceInternal(const QString &type, const QString &fileName)
 {
-    return KGlobal::dirs()->findResource(type.toLatin1(), fileName);
+    QString resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), fileName, QStandardPaths::LocateFile);
+    //qDebug() << "findResource: type" << type << "filename" << fileName << "resource" << resource;
+    return resource;
 }
 
 QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString &relDir)
 {
-    return KGlobal::dirs()->findDirs(type.toLatin1(), relDir);
+    QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
+    //qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
+    return dirs;
+}
+
+
+QStringList filesInDir(const QString &startdir, const QString & filter, bool noduplicates, bool recursive)
+{
+    //qDebug() << "filesInDir: startdir" << startdir << "filter" << filter << "noduplicates" << noduplicates << "recursive" << recursive;
+    QStringList result;
+
+    // First the entries in this path
+    const QStringList fileNames = QDir(startdir).entryList(QStringList() << filter);
+    Q_FOREACH (const QString &fileName, fileNames) {
+        QString file = startdir + '/' + fileName;
+        if (noduplicates) {
+            if (!result.contains(file)) {
+                result << file;
+            }
+        }
+        else {
+            result << file;
+        }
+    }
+
+    // And then everything underneath, if recursive is specified
+    if (recursive) {
+        const QStringList entries = QDir(startdir).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        Q_FOREACH (const QString &subdir, entries) {
+            result << filesInDir(subdir, filter, noduplicates, recursive);
+        }
+    }
+    return result;
 }
 
 QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
-                                                      const QString &filter,
+                                                      const QString &_filter,
                                                       SearchOptions options) const
 {
-    KStandardDirs::SearchOptions o;
-    if (options == KoResourcePaths::NoSearchOptions) {
-        o = KStandardDirs::NoSearchOptions;
+    //qDebug() << "=====================================================";
+    //qDebug() << "findAllResources: type" << type << "filter" << _filter;
+
+    QStringList aliases;
+    QString filter = _filter;
+
+    // In cases where the filter  is like "color-schemes/*.colors" instead of "*.kpp", used with unregistgered resource types
+    if (filter.indexOf('*') > 0) {
+        aliases << filter.split('*').first();
+        filter = '*' + filter.split('*')[1];
     }
-    else {
-        if (options & KoResourcePaths::Recursive) {
-            o |= KStandardDirs::Recursive;
-        }
-        if (options & KoResourcePaths::NoDuplicates) {
-            o |= KStandardDirs::NoDuplicates;
-        }
-        if (options & KoResourcePaths::IgnoreExecBit) {
-            o |= KStandardDirs::IgnoreExecBit;
+
+    if (d->relatives.contains(type)) {
+        aliases += d->relatives[type];
+    }
+
+    //qDebug() << "\trelatives" << aliases;
+
+    if (d->absolutes.contains(type)) {
+        aliases += d->absolutes[type];
+    }
+
+    //qDebug() << "\trelatives + absolutes" << aliases;
+
+    QStringList resources;
+    if (aliases.isEmpty()) {
+        resources << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), filter, QStandardPaths::LocateFile);
+    }
+
+    //qDebug() << "\tresources 1" << resources;
+
+    foreach(const QString &alias, aliases) {
+        //qDebug() << "\t\talias:" << alias;
+        const QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        //qDebug() << "\t\tdirs:" << dirs;
+        Q_FOREACH (const QString &dir, dirs) {
+            resources << filesInDir(dir, filter, options |= KoResourcePaths::NoDuplicates, options |= KoResourcePaths::Recursive);
         }
     }
-    return KGlobal::dirs()->findAllResources(type.toLatin1(), filter, o);
+    //qDebug() << "=====================================================";
+    return resources;
 }
 
 QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 {
-    return KGlobal::dirs()->resourceDirs(type.toLatin1());
+    //return KGlobal::dirs()->resourceDirs(type.toLatin1());
+    QStringList resourceDirs;
+    QStringList aliases;
+
+    if (d->relatives.contains(type)) {
+        aliases += d->relatives[type];
+    }
+
+    if (d->absolutes.contains(type)) {
+        aliases += d->absolutes[type];
+    }
+
+    foreach(const QString &alias, aliases) {
+        resourceDirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+    }
+
+    //qDebug() << "resourceDirs: type" << type << resourceDirs;
+
+    return resourceDirs;
 }
 
 QString KoResourcePaths::saveLocationInternal(const QString &type, const QString &suffix, bool create)
 {
-    return KGlobal::dirs()->saveLocation(type.toLatin1(), suffix, create);
+    QString path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + suffix;
+    QDir d(path);
+    if (!d.exists() && create) {
+        d.mkpath(path);
+    }
+    //qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
+
+    return path;
 }
 
 QString KoResourcePaths::locateInternal(const QString &type, const QString &filename)
 {
-    return KGlobal::dirs()->locate(type.toLatin1(), filename);
+    QStringList aliases;
+
+    if (d->relatives.contains(type)) {
+        aliases += d->relatives[type];
+    }
+
+    if (d->absolutes.contains(type)) {
+        aliases += d->absolutes[type];
+    }
+
+    QStringList locations;
+    foreach(const QString &alias, aliases) {
+
+        locations << QStandardPaths::locate(d->mapTypeToQStandardPaths(type),
+                                            (alias.endsWith('/') ? alias : alias + '/') + filename, QStandardPaths::LocateFile);
+    }
+    //qDebug() << "locate: type" << type << "filename" << filename << "locations" << locations;
+    if (locations.size() > 0) {
+        return locations.first();
+    }
+    else {
+        return "";
+    }
 }
 
 QString KoResourcePaths::locateLocalInternal(const QString &type, const QString &filename, bool createDir)
 {
-    return KGlobal::dirs()->locateLocal(type.toLatin1(), filename, createDir);
+    QString path = saveLocationInternal(type, "", createDir);
+    //qDebug() << "locateLocal: type" << type << "filename" << filename << "CreateDir" << createDir << "path" << path;
+    return path + '/' + filename;
 }

@@ -309,6 +309,10 @@ QString KoResourcePaths::locateInternal(const QString &type, const QString &file
     }
 
     QStringList locations;
+    if (aliases.isEmpty()) {
+        locations << QStandardPaths::locate(d->mapTypeToQStandardPaths(type), filename, QStandardPaths::LocateFile);
+    }
+
     foreach(const QString &alias, aliases) {
 
         locations << QStandardPaths::locate(d->mapTypeToQStandardPaths(type),

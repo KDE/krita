@@ -19,24 +19,7 @@
 #ifndef _KO_FONT_COMBO_BOX_H_
 #define _KO_FONT_COMBO_BOX_H_
 
-/**
- * The implementation of KFontComboBox has a bug on Windows
- * which results in a hang-up during its construction and
- * destruction.
- *
- * Reproducible: Windows 8 Rus
- * Not-reproducible: Windows 7 Eng
- *
- * Related bugreport to KDELibs:
- * https://bugs.kde.org/show_bug.cgi?id=330608
- */
-
-#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
 #include <QFontComboBox>
 typedef QFontComboBox KoFontComboBox;
-#else
-#include <kfontcombobox.h>
-typedef KFontComboBox KoFontComboBox;
-#endif
 
 #endif // _KO_FONT_COMBO_BOX_H_

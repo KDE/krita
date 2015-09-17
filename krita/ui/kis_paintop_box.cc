@@ -374,7 +374,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);       
     m_presetsPopup->switchDetached(false);
-    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(slotUpdateKisIconUtils::loadIcons()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(slotUpdateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setFixedSize(500, 600);

@@ -21,7 +21,7 @@
 #include <TextDocumentStructureModel.h>
 
 // KDE
-#include <kdebug.h>
+#include <QDebug>
 // Qt
 #include <QTextDocument>
 #include <QTextFrame>
@@ -66,7 +66,7 @@ int TextDocumentStructureModel::columnCount(const QModelIndex &index) const
 
 int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
 {
-    kDebug(32500) << "-------------------------- index:"<<index<<m_textDocument;
+    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
     if (! m_textDocument) {
         return 0;
     }
@@ -122,7 +122,7 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
 
 QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 {
-    kDebug(32500) << "-------------------------- index:"<<index<<m_textDocument;
+    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
     if (! m_textDocument || ! index.isValid()) {
         return QModelIndex();
     }
@@ -169,7 +169,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 
 QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelIndex &parentIndex) const
 {
-    kDebug(32500) << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
+    qDebug() << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
     if (! m_textDocument) {
         return QModelIndex();
     }
@@ -210,7 +210,7 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
 
 bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) const
 {
-    kDebug(32500) << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
+    qDebug() << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
     if (! m_textDocument) {
         return false;
     }
@@ -286,7 +286,7 @@ void TextDocumentStructureModel::onContentsChanged()
 
 void TextDocumentStructureModel::onModelReset()
 {
-    kDebug(32500) << "-------------------------- "<<m_textDocument;
+    qDebug() << "-------------------------- "<<m_textDocument;
     m_nodeDataTable.clear();
     m_blockNumberTable.clear();
     m_frameTable.clear();

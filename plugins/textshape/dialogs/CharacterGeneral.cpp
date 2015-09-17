@@ -34,7 +34,7 @@
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 
-#include "kdebug.h"
+#include <QDebug>
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
         : QWidget(parent)

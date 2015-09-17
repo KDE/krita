@@ -29,7 +29,7 @@
 
 #include <QtGui>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #define FRAME_SPACING 10.0
 

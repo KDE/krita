@@ -26,12 +26,13 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <KoUnit.h>
-
-#include <kdebug.h>
-#include <kcharselect.h>
+#include <KoFileDialog.h>
 #include <KoDialog.h>
-#include <kurl.h>
-#include <kfiledialog.h>
+
+#include <QDebug>
+#include <QUrl>
+
+#include <kcharselect.h>
 #include <KIO/Job>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
@@ -356,7 +357,9 @@ void ParagraphBulletsNumbers::setImageCollection(KoImageCollection *imageCollect
 
 void ParagraphBulletsNumbers::selectListImage()
 {
-    KUrl url = KFileDialog::getOpenUrl();
+    KoFileDialog dlg(0, KoFileDialog::OpenFile, "bullets");
+    dlg.setCaption(i18n("Select a list image"));
+    QUrl url = QUrl::fromLocalFile(dlg.filename());
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));

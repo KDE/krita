@@ -36,7 +36,7 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kundo2stack.h>
 #include <QTextCursor>
 

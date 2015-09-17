@@ -22,7 +22,7 @@
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QMenu>
 #include <QFrame>

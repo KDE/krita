@@ -61,7 +61,7 @@
 #include <QPen>
 #include <QTextLayout>
 
-#include <kdebug.h>
+#include <QDebug>
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
         : KoShapeContainer(new KoTextShapeContainerModel())

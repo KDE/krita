@@ -43,7 +43,7 @@
 #include <KoIcon.h>
 #include <QMessageBox>
 
-#include <KDebug>
+#include <QDebug>
 #include <QAction>
 #include <QTextDocument>
 #include <QLineEdit>

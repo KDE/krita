@@ -48,7 +48,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 StylesComboPreview::StylesComboPreview(QWidget *parent) :
     QLineEdit(parent),

@@ -26,7 +26,7 @@
 #include <QModelIndex>
 #include <QTreeView>
 
-#include <kdebug.h>
+#include <QDebug>
 
 TrackedChangeManager::TrackedChangeManager(QWidget* parent): QWidget(parent),
     m_model(0)

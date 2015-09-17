@@ -24,7 +24,7 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 ValidParentStylesProxyModel::ValidParentStylesProxyModel(QObject *parent):
     StylesFilteredModelBase(parent),

@@ -32,7 +32,7 @@
 #include <QCollator>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 
 StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
     : AbstractStylesModel(parent),

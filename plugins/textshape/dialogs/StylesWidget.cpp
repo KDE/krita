@@ -27,7 +27,7 @@
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <QHeaderView>
 #include <QFormLayout>
 #include <QRadioButton>

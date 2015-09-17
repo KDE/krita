@@ -25,7 +25,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "StylesModel.h"
 

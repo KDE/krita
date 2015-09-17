@@ -36,7 +36,7 @@
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 #include <QAction>
 #include <kuser.h>

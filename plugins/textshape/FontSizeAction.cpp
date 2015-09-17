@@ -29,7 +29,7 @@
 #include <QToolBar>
 #include <QToolButton>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 #include <QIcon>
 
@@ -107,7 +107,7 @@ void FontSizeAction::setFontSize( qreal size )
     }
 
     if ( size < 1 ) {
-        kWarning() << "FontSizeAction: Size " << size << " is out of range";
+        qWarning() << "FontSizeAction: Size " << size << " is out of range";
         return;
     }
 

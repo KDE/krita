@@ -22,7 +22,7 @@
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingPlugin.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
     : QObject(parent)
@@ -31,7 +31,7 @@ TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (m_textEditingPlugins.contains(factory->id())) {
-            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")";
+            qWarning() << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")";
             continue;
         }
         KoTextEditingPlugin *plugin = factory->create();

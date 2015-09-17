@@ -45,11 +45,12 @@ public:
     explicit Surface(PlotArea *parent);
     ~Surface();
 
+    // QT5TODO: reenable the KDE_DEPRECATED flag or better remove this method
     /**
      * Old method of loading a pattern style; Use the Flake KoPatternBackground now.
      * Not all properties can be stored in a QBrush so this concept is obsolete.
      */
-    KDE_DEPRECATED static QBrush loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext &context, const QSizeF &size);
+    /*KDE_DEPRECATED*/ static QBrush loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext &context, const QSizeF &size);
 
     QPointF position() const;
     int width() const;

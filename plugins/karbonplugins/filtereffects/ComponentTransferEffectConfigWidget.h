@@ -24,7 +24,7 @@
 #include "ComponentTransferEffect.h"
 
 class KoFilterEffect;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 class KComboBox;
 class KLineEdit;
 class QStackedWidget;
@@ -56,11 +56,11 @@ private:
     QStackedWidget * m_stack;
     KLineEdit * m_tableValues;
     KLineEdit * m_discreteValues;
-    KDoubleNumInput * m_slope;
-    KDoubleNumInput * m_intercept;
-    KDoubleNumInput * m_amplitude;
-    KDoubleNumInput * m_exponent;
-    KDoubleNumInput * m_offset;
+    QDoubleSpinBox * m_slope;
+    QDoubleSpinBox * m_intercept;
+    QDoubleSpinBox * m_amplitude;
+    QDoubleSpinBox * m_exponent;
+    QDoubleSpinBox * m_offset;
     ComponentTransferEffect::Channel m_currentChannel;
 };
 

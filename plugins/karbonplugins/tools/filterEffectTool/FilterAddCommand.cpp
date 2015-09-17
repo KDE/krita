@@ -22,7 +22,7 @@
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, KUndo2Command *parent)
         : KUndo2Command(parent), m_filterEffect(filterEffect), m_shape(shape), m_isAdded(false)

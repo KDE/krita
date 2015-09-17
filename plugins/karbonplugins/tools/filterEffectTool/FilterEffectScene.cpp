@@ -23,7 +23,7 @@
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kcombobox.h>
 
 #include <QGraphicsProxyWidget>

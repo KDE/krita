@@ -37,8 +37,8 @@
 #include <KoFillConfigWidget.h>
 
 #include <QAction>
-#include <kdebug.h>
-#include <klocale.h>
+#include <QDebug>
+#include <klocalizedstring.h>
 #include <QPainter>
 
 #include <cmath>
@@ -205,7 +205,7 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
     if (m_deviceSupportsTilt) {
         if (event->xTilt() == 0 && event->yTilt() == 0)
             return; // leave as is
-        kDebug(38000) << "using tilt" << m_angle;
+        qDebug() << "using tilt" << m_angle;
 
         if (event->x() == 0) {
             m_angle = M_PI / 2;
@@ -216,7 +216,7 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
         m_angle = std::atan(static_cast<double>(-event->yTilt() / event->xTilt())) + M_PI / 2;
     } else {
         m_angle = event->rotation() + M_PI / 2;
-        kDebug(38000) << "using rotation" << m_angle;
+        qDebug() << "using rotation" << m_angle;
     }
 }
 

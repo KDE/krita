@@ -24,7 +24,7 @@
 
 class KoFilterEffect;
 class BlurEffect;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 
 class BlurEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -40,7 +40,7 @@ private Q_SLOTS:
 
 private:
     BlurEffect * m_effect;
-    KDoubleNumInput * m_stdDeviation;
+    QDoubleSpinBox * m_stdDeviation;
 };
 
 #endif // BLUREFFECTCONFIGWIDGET_H

@@ -22,7 +22,7 @@
 #include "KoFilterEffect.h"
 #include "MatrixDataModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcombobox.h>
 #include <QDialog>
 

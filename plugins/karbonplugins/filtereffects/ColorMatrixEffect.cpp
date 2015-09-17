@@ -22,7 +22,7 @@
 #include <KoFilterEffectRenderContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QRect>
 #include <QImage>
 #include <math.h>

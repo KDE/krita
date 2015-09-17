@@ -64,7 +64,7 @@ public:
             return m_prev.point();
 
         // m_next != 0
-        kDebug() << "not implemented yet!!!!";
+        qDebug() << "not implemented yet!!!!";
         return QPointF();
     }
 

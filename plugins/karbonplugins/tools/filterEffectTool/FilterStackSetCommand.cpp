@@ -21,7 +21,7 @@
 #include "KoShape.h"
 #include "KoFilterEffectStack.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent)
         : KUndo2Command(parent), m_newFilterStack(newStack), m_shape(shape)

@@ -21,7 +21,7 @@
 #include "MorphologyEffect.h"
 #include "MorphologyEffectConfigWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 MorphologyEffectFactory::MorphologyEffectFactory()
         : KoFilterEffectFactoryBase(MorphologyEffectId, i18n("Morphology"))

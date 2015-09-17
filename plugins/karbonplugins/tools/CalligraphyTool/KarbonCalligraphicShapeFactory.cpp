@@ -21,7 +21,7 @@
 #include "KarbonCalligraphicShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoShapeLoadingContext.h>
 
 

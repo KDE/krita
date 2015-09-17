@@ -36,15 +36,15 @@
 
 #include <KoIcon.h>
 
-#include <kinputdialog.h>
-#include <kdebug.h>
+#include <QInputDialog>
+#include <QDebug>
 
 #include <QGraphicsItem>
 #include <QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
-        : QWidget(parent), m_scene(new FilterEffectScene(this))
-        , m_shape(0), m_canvas(0), m_effects(0)
+    : QWidget(parent), m_scene(new FilterEffectScene(this))
+    , m_shape(0), m_canvas(0), m_effects(0)
 {
     setupUi(this);
 
@@ -345,11 +345,11 @@ void FilterEffectEditWidget::addToPresets()
         return;
 
     bool ok = false;
-    QString effectName = KInputDialog::getText(i18n("Effect name"),
-                         i18n("Please enter a name for the filter effect"),
-                         QString(),
-                         &ok,
-                         this);
+    QString effectName = QInputDialog::getText(this, i18n("Effect name"),
+                                               i18n("Please enter a name for the filter effect"),
+                                               QLineEdit::Normal,
+                                               QString(),
+                                               &ok);
     if (!ok)
         return;
 

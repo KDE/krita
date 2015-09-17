@@ -20,10 +20,10 @@
 #include "ComponentTransferEffectConfigWidget.h"
 #include "KoFilterEffect.h"
 
-#include <knuminput.h>
+#include <QSpinBox>
 #include <kcombobox.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QGridLayout>
 #include <QLabel>
@@ -95,12 +95,14 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     QWidget * linearWidget = new QWidget(m_stack);
     QGridLayout * linearLayout = new QGridLayout(linearWidget);
     linearLayout->addWidget(new QLabel(i18n("Slope"), linearWidget), 0, 0);
-    m_slope = new KDoubleNumInput(linearWidget);
-    m_slope->setRange(m_slope->minimum(), m_slope->maximum(), ValueStep, false);
+    m_slope = new QDoubleSpinBox(linearWidget);
+    m_slope->setRange(m_slope->minimum(), m_slope->maximum());
+    m_slope->setSingleStep(ValueStep);
     linearLayout->addWidget(m_slope, 0, 1);
     linearLayout->addWidget(new QLabel(i18n("Intercept")), 1, 0);
-    m_intercept = new KDoubleNumInput(linearWidget);
-    m_intercept->setRange(m_intercept->minimum(), m_intercept->maximum(), ValueStep, false);
+    m_intercept = new QDoubleSpinBox(linearWidget);
+    m_intercept->setRange(m_intercept->minimum(), m_intercept->maximum());
+    m_intercept->setSingleStep(ValueStep);
     linearLayout->addWidget(m_intercept, 1, 1);
     linearLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 2, 0);
     linearLayout->setContentsMargins(0, 0, 0, 0);
@@ -110,16 +112,19 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     QWidget * gammaWidget = new QWidget(m_stack);
     QGridLayout * gammaLayout = new QGridLayout(gammaWidget);
     gammaLayout->addWidget(new QLabel(i18n("Amplitude"), gammaWidget), 0, 0);
-    m_amplitude = new KDoubleNumInput(gammaWidget);
-    m_amplitude->setRange(m_amplitude->minimum(), m_amplitude->maximum(), ValueStep, false);
+    m_amplitude = new QDoubleSpinBox(gammaWidget);
+    m_amplitude->setRange(m_amplitude->minimum(), m_amplitude->maximum());
+    m_amplitude->setSingleStep(ValueStep);
     gammaLayout->addWidget(m_amplitude, 0, 1);
     gammaLayout->addWidget(new QLabel(i18n("Exponent"), gammaWidget), 1, 0);
-    m_exponent = new KDoubleNumInput(gammaWidget);
-    m_exponent->setRange(m_exponent->minimum(), m_exponent->maximum(), ValueStep, false);
+    m_exponent = new QDoubleSpinBox(gammaWidget);
+    m_exponent->setRange(m_exponent->minimum(), m_exponent->maximum());
+    m_exponent->setSingleStep(ValueStep);
     gammaLayout->addWidget(m_exponent, 1, 1);
     gammaLayout->addWidget(new QLabel(i18n("Offset"), gammaWidget), 2, 0);
-    m_offset = new KDoubleNumInput(gammaWidget);
-    m_offset->setRange(m_offset->minimum(), m_offset->maximum(), ValueStep, false);
+    m_offset = new QDoubleSpinBox(gammaWidget);
+    m_offset->setRange(m_offset->minimum(), m_offset->maximum());
+    m_offset->setSingleStep(ValueStep);
     gammaLayout->addWidget(m_offset, 2, 1);
     gammaLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 3, 0);
     gammaLayout->setContentsMargins(0, 0, 0, 0);

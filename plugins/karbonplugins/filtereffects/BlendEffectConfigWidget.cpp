@@ -22,7 +22,7 @@
 #include "KoFilterEffect.h"
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QGridLayout>
 #include <QLabel>

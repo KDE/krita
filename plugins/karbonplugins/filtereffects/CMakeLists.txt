@@ -42,6 +42,6 @@ add_library(karbon_filtereffects MODULE ${karbon_filtereffects_PART_SRCS})
 
 kcoreaddons_desktop_to_json(karbon_filtereffects karbon_filtereffects.desktop)
 
-target_link_libraries(karbon_filtereffects flake kowidgets KF5::KDELibs4Support)
+target_link_libraries(karbon_filtereffects flake kowidgets)
 
 install(TARGETS karbon_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

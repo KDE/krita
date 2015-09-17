@@ -24,7 +24,7 @@
 #include <KoFilterEffectLoadingContext.h>
 #include <KoXmlWriter.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QFile>
 #include <QBuffer>
@@ -150,7 +150,7 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
         KoXmlElement primitive = n.toElement();
         KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
-            kWarning(38000) << "filter effect" << primitive.tagName() << "is not implemented yet";
+            qWarning() << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
         }
 

@@ -21,7 +21,7 @@
 #include "MergeEffect.h"
 #include "MergeEffectConfigWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 MergeEffectFactory::MergeEffectFactory()
         : KoFilterEffectFactoryBase(MergeEffectId, i18n("Merge"))

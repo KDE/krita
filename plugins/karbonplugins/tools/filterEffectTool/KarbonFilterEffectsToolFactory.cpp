@@ -21,7 +21,7 @@
 #include "KarbonFilterEffectsTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
         : KoToolFactoryBase("KarbonFilterEffectsTool")

@@ -24,7 +24,7 @@
 
 class KoFilterEffect;
 class CompositeEffect;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 class KComboBox;
 
 class CompositeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
@@ -43,7 +43,7 @@ private Q_SLOTS:
 private:
     CompositeEffect * m_effect;
     KComboBox * m_operation;
-    KDoubleNumInput * m_k[4];
+    QDoubleSpinBox * m_k[4];
     QWidget * m_arithmeticWidget;
 };
 

@@ -43,7 +43,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 

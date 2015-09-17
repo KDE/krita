@@ -21,7 +21,7 @@
 #include "ColorMatrixEffect.h"
 #include "ColorMatrixEffectConfigWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ColorMatrixEffectFactory::ColorMatrixEffectFactory()
         : KoFilterEffectFactoryBase(ColorMatrixEffectId, i18n("Color matrix"))

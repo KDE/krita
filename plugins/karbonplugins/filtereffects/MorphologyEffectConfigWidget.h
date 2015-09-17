@@ -24,7 +24,7 @@
 
 class KoFilterEffect;
 class MorphologyEffect;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 class QButtonGroup;
 
 class MorphologyEffectConfigWidget : public KoFilterEffectConfigWidgetBase
@@ -43,8 +43,8 @@ private Q_SLOTS:
 private:
     MorphologyEffect * m_effect;
     QButtonGroup *m_operator;
-    KDoubleNumInput *m_radiusX;
-    KDoubleNumInput *m_radiusY;
+    QDoubleSpinBox *m_radiusX;
+    QDoubleSpinBox *m_radiusY;
 };
 
 #endif // MORPHOLOGYEFFECTCONFIGWIDGET_H

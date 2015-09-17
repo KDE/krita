@@ -21,8 +21,8 @@
 #include "KarbonGradientTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <QDebug>
 
 KarbonGradientToolFactory::KarbonGradientToolFactory()
         : KoToolFactoryBase("KarbonGradientTool")

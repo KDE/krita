@@ -21,7 +21,7 @@
 #include "BlendEffect.h"
 #include "BlendEffectConfigWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 BlendEffectFactory::BlendEffectFactory()
         : KoFilterEffectFactoryBase(BlendEffectId, i18n("Blend"))

@@ -22,7 +22,7 @@
 #include <KoCurveFit.h>
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
-#include <kdebug.h>
+#include <QDebug>
 
 /*
 the algorithm proceeds as following:
@@ -177,7 +177,7 @@ KoSubpath KarbonSimplifyPath::subdivideAux(KoPathPoint *p1,
 
     ++recursiveDepth;
     if (recursiveDepth >= MAX_RECURSIVE_DEPTH) {
-        kDebug(38000) << "reached MAX_RECURSIVE_DEPTH";
+        qDebug() << "reached MAX_RECURSIVE_DEPTH";
         --recursiveDepth;
         return QList<KoPathPoint *>();
     }

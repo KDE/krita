@@ -42,9 +42,9 @@
 #include <KoIcon.h>
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QDialog>
-#include <knuminput.h>
+#include <QSpinBox>
 
 #include <QWidget>
 #include <QGridLayout>
@@ -193,10 +193,10 @@ public:
     KoResourceSelector * filterSelector;
     KComboBox * configSelector;
     QStackedWidget * configStack;
-    KDoubleNumInput * posX;
-    KDoubleNumInput * posY;
-    KDoubleNumInput * posW;
-    KDoubleNumInput * posH;
+    QDoubleSpinBox * posX;
+    QDoubleSpinBox * posY;
+    QDoubleSpinBox * posW;
+    QDoubleSpinBox * posH;
     QToolButton *clearButton;
     KoFilterEffect * currentEffect;
     KoFilterEffectConfigWidgetBase * currentPanel;
@@ -491,25 +491,25 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     filterRegionWidget->setObjectName("EffectRegion");
     QGridLayout * filterRegionLayout = new QGridLayout(filterRegionWidget);
 
-    d->posX = new KDoubleNumInput(filterRegionWidget);
+    d->posX = new QDoubleSpinBox(filterRegionWidget);
     d->posX->setSuffix("%");
     connect(d->posX, SIGNAL(valueChanged(double)), this, SLOT(regionXChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("X:")), 0, 0);
     filterRegionLayout->addWidget(d->posX, 0, 1);
 
-    d->posY = new KDoubleNumInput(filterRegionWidget);
+    d->posY = new QDoubleSpinBox(filterRegionWidget);
     d->posY->setSuffix("%");
     connect(d->posY, SIGNAL(valueChanged(double)), this, SLOT(regionYChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("Y:")), 1, 0);
     filterRegionLayout->addWidget(d->posY, 1, 1);
 
-    d->posW = new KDoubleNumInput(filterRegionWidget);
+    d->posW = new QDoubleSpinBox(filterRegionWidget);
     d->posW->setSuffix("%");
     connect(d->posW, SIGNAL(valueChanged(double)), this, SLOT(regionWidthChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("W:")), 0, 2);
     filterRegionLayout->addWidget(d->posW, 0, 3);
 
-    d->posH = new KDoubleNumInput(filterRegionWidget);
+    d->posH = new QDoubleSpinBox(filterRegionWidget);
     d->posH->setSuffix("%");
     connect(d->posH, SIGNAL(valueChanged(double)), this, SLOT(regionHeightChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("H:")), 1, 2);

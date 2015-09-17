@@ -21,9 +21,9 @@
 #include "CompositeEffect.h"
 #include "KoFilterEffect.h"
 
-#include <knuminput.h>
+#include <QSpinBox>
 #include <kcombobox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QGridLayout>
 #include <QLabel>
@@ -47,7 +47,7 @@ CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
     m_arithmeticWidget = new QWidget(this);
     QGridLayout * arithmeticLayout = new QGridLayout(m_arithmeticWidget);
     for (int i = 0; i < 4; ++i) {
-        m_k[i] = new KDoubleNumInput(m_arithmeticWidget);
+        m_k[i] = new QDoubleSpinBox(m_arithmeticWidget);
         arithmeticLayout->addWidget(new QLabel(QString("k%1").arg(i + 1)), i / 2, (2*i) % 4);
         arithmeticLayout->addWidget(m_k[i], i / 2, (2*i + 1) % 4);
         connect(m_k[i], SIGNAL(valueChanged(double)), this, SLOT(valueChanged()));

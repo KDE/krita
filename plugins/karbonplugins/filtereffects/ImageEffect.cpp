@@ -18,17 +18,21 @@
  */
 
 #include "ImageEffect.h"
+
 #include "KoFilterEffectRenderContext.h"
 #include "KoFilterEffectLoadingContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <klocale.h>
-#include <kmimetype.h>
+
+#include <QMimeDatabase>
+#include <QMimeType>
 #include <QBuffer>
 #include <QPainter>
+#include <QDebug>
 
-#include <kdebug.h>
+#include <klocalizedstring.h>
+
 
 ImageEffect::ImageEffect()
     : KoFilterEffect(ImageEffectId, i18n("Image"))
@@ -84,7 +88,8 @@ void ImageEffect::save(KoXmlWriter &writer)
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     if (m_image.save(&buffer, "PNG")) {
-        const QString mimeType(KMimeType::findByContent(ba)->name());
+        QMimeDatabase db;
+        const QString mimeType(db.mimeTypeForData(ba).name());
         writer.addAttribute("xlink:href", "data:" + mimeType + ";base64," + ba.toBase64());
     }
 

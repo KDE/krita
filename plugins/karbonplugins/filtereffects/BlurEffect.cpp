@@ -23,7 +23,7 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QColor>
 #include <QImage>
 

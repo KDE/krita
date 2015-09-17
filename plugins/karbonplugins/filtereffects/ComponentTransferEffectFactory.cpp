@@ -21,7 +21,7 @@
 #include "ComponentTransferEffect.h"
 #include "ComponentTransferEffectConfigWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ComponentTransferEffectFactory::ComponentTransferEffectFactory()
         : KoFilterEffectFactoryBase(ComponentTransferEffectId, i18n("Component transfer"))

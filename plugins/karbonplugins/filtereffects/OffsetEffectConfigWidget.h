@@ -24,7 +24,7 @@
 
 class KoFilterEffect;
 class OffsetEffect;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 
 class OffsetEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -40,8 +40,8 @@ private Q_SLOTS:
 
 private:
     OffsetEffect * m_effect;
-    KDoubleNumInput * m_offsetX;
-    KDoubleNumInput * m_offsetY;
+    QDoubleSpinBox * m_offsetX;
+    QDoubleSpinBox * m_offsetY;
 };
 
 #endif // OFFSETEFFECTCONFIGWIDGET_H

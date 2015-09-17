@@ -21,7 +21,7 @@
 #include "CompositeEffect.h"
 #include "CompositeEffectConfigWidget.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 CompositeEffectFactory::CompositeEffectFactory()
         : KoFilterEffectFactoryBase(CompositeEffectId, i18n("Composite"))

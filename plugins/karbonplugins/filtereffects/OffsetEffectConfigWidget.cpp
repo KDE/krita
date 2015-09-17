@@ -20,8 +20,8 @@
 #include "OffsetEffectConfigWidget.h"
 #include "OffsetEffect.h"
 #include "KoFilterEffect.h"
-#include <knuminput.h>
-#include <klocale.h>
+#include <QSpinBox>
+#include <klocalizedstring.h>
 #include <QGridLayout>
 #include <QLabel>
 
@@ -33,13 +33,15 @@ OffsetEffectConfigWidget::OffsetEffectConfigWidget(QWidget *parent)
     QGridLayout * g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("dx"), this), 0, 0);
-    m_offsetX = new KDoubleNumInput(this);
-    m_offsetX->setRange(-OffsetLimit, OffsetLimit, 1.0, false);
+    m_offsetX = new QDoubleSpinBox(this);
+    m_offsetX->setRange(-OffsetLimit, OffsetLimit);
+    m_offsetX->setSingleStep(1.0);
     g->addWidget(m_offsetX, 0, 1);
 
     g->addWidget(new QLabel(i18n("dy"), this), 0, 2);
-    m_offsetY = new KDoubleNumInput(this);
-    m_offsetY->setRange(-OffsetLimit, OffsetLimit, 1.0, false);
+    m_offsetY = new QDoubleSpinBox(this);
+    m_offsetY->setRange(-OffsetLimit, OffsetLimit);
+    m_offsetY->setSingleStep(1.0);
     g->addWidget(m_offsetY, 0, 3);
     setLayout(g);
 

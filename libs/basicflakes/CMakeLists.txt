@@ -18,7 +18,7 @@ ki18n_wrap_ui( basicflakes_LIB_SRCS
 add_library(basicflakes SHARED ${basicflakes_LIB_SRCS})
 generate_export_header(basicflakes)
 
-target_link_libraries(basicflakes kowidgets flake pigmentcms KF5::KDELibs4Support)
+target_link_libraries(basicflakes kowidgets flake pigmentcms)
 
 set_target_properties(basicflakes PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

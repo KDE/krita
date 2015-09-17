@@ -719,7 +719,8 @@ namespace {
 
     void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc, bool stripSpaces)
     {
-        // reader.tokenType() is now QXmlStreamReader::StartElement
+        // Unfortunately MSVC fails using QXmlStreamReader::const_iterator
+        // so we apply a for loop instead. https://bugreports.qt.io/browse/QTBUG-45368
         doc.addElement(xml.qualifiedName().toString(),
                        fixNamespace(xml.namespaceUri().toString()));
         QXmlStreamAttributes attr = xml.attributes();

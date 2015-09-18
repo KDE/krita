@@ -277,6 +277,7 @@ bool KisToolBrush::stabilizeSensors() const
 void KisToolBrush::updateSettingsViews()
 {
     m_cmbSmoothingType->setCurrentIndex(smoothingOptions()->smoothingType());
+
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
     m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
@@ -430,6 +431,9 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkOnlyOneAssistant->setCheckState(Qt::Checked);//turn on by default.
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
     addOptionWidgetOption(m_chkOnlyOneAssistant, new QLabel(i18n("Snap single:")));
+
+    KisConfig cfg;
+    slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;
 }

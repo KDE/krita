@@ -40,6 +40,7 @@
 #include "KoApplication.h"
 #include <KoIcon.h>
 #include <KoConfig.h>
+#include "calligraversion.h"
 
 #include <krecentdirs.h>
 #include <khelpmenu.h>

@@ -77,7 +77,7 @@ public:
     bool stabilizeSensors() const;
 
 protected:
-    KConfigGroup m_configGroup;
+    KConfigGroup m_configGroup; // only used in the multihand tool for now
 
 protected Q_SLOTS:
     virtual void resetCursorStyle();

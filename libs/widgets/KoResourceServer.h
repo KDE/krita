@@ -654,7 +654,7 @@ protected:
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         root = doc.createElement("resourceFilesList");
         doc.appendChild(root);
-        
+
         foreach(QString filename, m_blackListFileNames) {
             QDomElement fileEl = doc.createElement("file");
             QDomElement nameEl = doc.createElement("name");
@@ -663,11 +663,9 @@ protected:
             fileEl.appendChild(nameEl);
             root.appendChild(fileEl);
         }
-        
-        
 
         QTextStream metastream(&f);
-        metastream << doc.toByteArray();
+        metastream << doc.toString();
         f.close();
     }
 

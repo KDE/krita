@@ -24,6 +24,7 @@
 #include <QDebug>
 
 #include <kiconloader.h>
+#include <kiconengine.h>
 
 namespace KoIconUtils
 {
@@ -45,7 +46,13 @@ QIcon themedIcon(const QString &name) {
         realName = name;
     }
 
-    return QIcon::fromTheme(realName);
+    QIcon icon = QIcon(new KIconEngine(realName, KIconLoader::global()));
+
+    // fallback
+    if (icon.isNull())
+        icon = QIcon::fromTheme(name);
+
+    return icon;
 
 }
 

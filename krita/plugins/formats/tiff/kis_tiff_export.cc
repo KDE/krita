@@ -59,27 +59,28 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-
-    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
-
     KisDocument *input = m_chain->inputDocument();
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
+    KisDlgOptionsTIFF dlg;
     const KoColorSpace* cs = input->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
+
     if (type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) {
-        kdb->optionswdg->kComboBoxPredictor->removeItem(1);
+        dlg.optionswdg->kComboBoxPredictor->removeItem(1);
     } else {
-        kdb->optionswdg->kComboBoxPredictor->removeItem(2);
+        dlg.optionswdg->kComboBoxPredictor->removeItem(2);
     }
 
     if (cs->colorModelId() == CMYKAColorModelID) {
-        kdb->optionswdg->alpha->setChecked(false);
-        kdb->optionswdg->alpha->setEnabled(false);
+        dlg.optionswdg->alpha->setChecked(false);
+        dlg.optionswdg->alpha->setEnabled(false);
     }
+
     if (!m_chain->manager()->getBatchMode()) {
-        if (kdb->exec() == QDialog::Rejected) {
+        if (dlg.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
@@ -89,12 +90,11 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
     }
     input->image()->waitForDone();
 
-    KisTIFFOptions options = kdb->options();
+    KisTIFFOptions options = dlg.options();
 
-    if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
+    if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !! (62456a7b47636548c6507593df3e2bdf440f7544, BUG:135649)
         options.predictor = 3;
     }
-    delete kdb;
 
     QString filename = m_chain->outputFile();
 

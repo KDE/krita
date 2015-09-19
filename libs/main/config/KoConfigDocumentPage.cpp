@@ -24,7 +24,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoPart.h>
 
 #include <klocalizedstring.h>
-#include <knuminput.h>
 #include <kcomponentdata.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -32,6 +31,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFormLayout>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QSpinBox>
 
 class Q_DECL_HIDDEN KoConfigDocumentPage::Private
 {
@@ -43,7 +43,7 @@ public:
     KoDocument* doc;
     KSharedConfigPtr config;
 
-    KIntNumInput* autoSave;
+    QSpinBox* autoSave;
     int oldAutoSave;
     QCheckBox *createBackupFile;
     bool oldBackupFile;
@@ -69,10 +69,12 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
         d->oldBackupFile = interfaceGroup.readEntry("BackupFile", d->oldBackupFile);
     }
 
-    d->autoSave = new KIntNumInput(d->oldAutoSave, gbDocumentSettings);
-    d->autoSave->setRange(0, 60, 1);
+    d->autoSave = new QSpinBox(gbDocumentSettings);
+    d->autoSave->setRange(0, 60);
+    d->autoSave->setSingleStep(1);
     d->autoSave->setSpecialValueText(i18n("No autosave"));
     d->autoSave->setSuffix(i18nc("unit symbol for minutes, leading space as separator", " min"));
+    d->autoSave->setValue(d->oldAutoSave);
     layout->addRow(i18n("Autosave interval:"), d->autoSave);
 
     d->createBackupFile = new QCheckBox(gbDocumentSettings);

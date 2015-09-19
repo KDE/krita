@@ -117,6 +117,8 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     wdgUi.chkForceSRGB->setVisible(!sRGB);
     wdgUi.chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
 
+    wdgUi.chkSaveProfile->setChecked(cfg.getBool("saveProfile", true));
+
     QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(',');
     wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
     wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
@@ -145,6 +147,9 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     options.forceSRGB = wdgUi.chkForceSRGB->isChecked();
     cfg.setProperty("forceSRGB", options.forceSRGB);
+
+    options.saveProfile = wdgUi.chkSaveProfile->isChecked();
+    cfg.setProperty("saveProfile", options.saveProfile);
 
     // Advanced
     options.optimize = wdgUi.optimize->isChecked();

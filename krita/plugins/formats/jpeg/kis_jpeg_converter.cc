@@ -632,8 +632,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         }
     }
 
-    const KoColorProfile* colorProfile = layer->colorSpace()->profile();
-    QByteArray colorProfileData = colorProfile->rawData();
 
     KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());
     KoColor c(options.transparencyFillColor, layer->colorSpace());
@@ -642,7 +640,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
     gc.bitBlt(QPoint(0, 0), layer->paintDevice(), QRect(0, 0, width, height));
     gc.end();
 
-    write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
+
+    if (options.saveProfile) {
+        const KoColorProfile* colorProfile = layer->colorSpace()->profile();
+        QByteArray colorProfileData = colorProfile->rawData();
+        write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
+    }
 
     // Write data information
 

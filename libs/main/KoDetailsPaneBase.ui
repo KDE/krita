@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item row="5" column="0" colspan="3">
-        <widget class="KTextBrowser" name="m_detailsLabel">
+        <widget class="QTextBrowser" name="m_detailsLabel">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -172,13 +172,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KTextBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>ktextbrowser.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>m_documentList</tabstop>
   <tabstop>m_alwaysUseCheckBox</tabstop>

@@ -197,7 +197,7 @@ You can uncheck the box if you are not using transparency and you want to make t
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
-     <widget class="QWidget" name="widget">
+     <widget class="QWidget" name="widget1">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
@@ -217,7 +217,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="widget">
+     <widget class="QWidget" name="widget2">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
@@ -317,7 +317,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="widget">
+     <widget class="QWidget" name="widget3">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
@@ -430,7 +430,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="widget">
+     <widget class="QWidget" name="widget4">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
@@ -484,7 +484,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="widget">
+     <widget class="QWidget" name="widget5">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>

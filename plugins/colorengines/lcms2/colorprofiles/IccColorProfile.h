@@ -116,7 +116,7 @@ protected:
 public:
     LcmsColorProfileContainer* asLcms() const;
 protected:
-    virtual bool init();
+    bool init();
     void CalculateFloatUIMinMax(void);
 private:
     struct Private;

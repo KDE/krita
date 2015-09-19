@@ -30,7 +30,7 @@ CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
 {
     const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
     Q_ASSERT(icc_p);
-    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->GetFloatUIMinMax());
+    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->getFloatUIMinMax());
     Q_ASSERT(uiRanges.size() == 4);
 
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::cyan, uiRanges[0]));

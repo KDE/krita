@@ -218,7 +218,7 @@ bool IccColorProfile::init()
         setName(d->shared->lcmsProfile->name());
         setInfo(d->shared->lcmsProfile->info());
         if (d->shared->lcmsProfile->valid())
-            CalculateFloatUIMinMax();
+            calculateFloatUIMinMax();
         return true;
     } else {
         return false;
@@ -240,13 +240,13 @@ bool IccColorProfile::operator==(const KoColorProfile& rhs) const
     return false;
 }
 
-const QVector<KoChannelInfo::DoubleRange> & IccColorProfile::GetFloatUIMinMax(void) const
+const QVector<KoChannelInfo::DoubleRange> & IccColorProfile::getFloatUIMinMax(void) const
 {
     Q_ASSERT(!d->shared->uiMinMaxes.isEmpty());
     return d->shared->uiMinMaxes;
 }
 
-void IccColorProfile::CalculateFloatUIMinMax(void)
+void IccColorProfile::calculateFloatUIMinMax(void)
 {
     QVector<KoChannelInfo::DoubleRange> &ret = d->shared->uiMinMaxes;
 

@@ -105,7 +105,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
                 name = url.fileName();
 
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-                KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+                KFileItem fileItem(url);
                 fileList.prepend(fileItem);
                 const QIcon icon = QIcon::fromTheme(fileItem.iconName());
                 KoFileListItem* item = new KoFileListItem(icon, name, fileItem);

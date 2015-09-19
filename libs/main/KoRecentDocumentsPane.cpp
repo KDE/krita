@@ -79,8 +79,9 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
         , d(new KoRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
-    KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
-    m_openButton->setGuiItem(openGItem);
+    m_openButton->setText(i18n("Open This Document"));
+    m_openButton->setIcon(koIcon("document-open"));
+
     m_alwaysUseCheckBox->hide();
 
     model()->setSortRole(0); // Disable sorting

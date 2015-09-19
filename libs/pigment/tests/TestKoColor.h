@@ -27,8 +27,10 @@ class TestKoColor : public QObject
     Q_OBJECT
 private:
     void testForModel(QString model);
+
 private Q_SLOTS:
     void testSerialization();
+    void testConversion();
 };
 
 #endif

@@ -616,11 +616,11 @@ void KoMainWindow::addRecentURL(const QUrl &url)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
             if (ok) {
-                KRecentDocument::add(path);
+                KRecentDocument::add(QUrl::fromLocalFile(path));
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
             }
         } else {
-            KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
+            KRecentDocument::add(url.adjusted(QUrl::StripTrailingSlash));
         }
         if (ok) {
             d->recent->addUrl(url);

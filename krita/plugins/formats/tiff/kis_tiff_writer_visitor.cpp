@@ -66,7 +66,7 @@ namespace
             return true;
         }
         if (cs->id() == "LABA") {
-            color_type = PHOTOMETRIC_CIELAB;
+            color_type = PHOTOMETRIC_ICCLAB;
             return true;
         }
 
@@ -252,7 +252,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
                 r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
             }
             break;
-        case PHOTOMETRIC_CIELAB: {
+        case PHOTOMETRIC_ICCLAB: {
                 quint8 poses[] = { 0, 1, 2, 3 };
                 r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }

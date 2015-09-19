@@ -76,30 +76,30 @@ public:
     }
 };
 
-class KisTIFFPostProcessorICCLABtoCIELAB : public KisTIFFPostProcessor
+class KisTIFFPostProcessorCIELABtoICCLAB : public KisTIFFPostProcessor
 {
 public:
-    KisTIFFPostProcessorICCLABtoCIELAB(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
-    virtual ~KisTIFFPostProcessorICCLABtoCIELAB() {}
+    KisTIFFPostProcessorCIELABtoICCLAB(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
+    virtual ~KisTIFFPostProcessorCIELABtoICCLAB() {}
 public:
     void postProcess8bit(quint8* data) {
         qint8* ds = (qint8*) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
-            ds[i] = data[i] - quint8_MAX / 2;
+            ds[i] = data[i] + quint8_MAX / 2;
         }
     }
     void postProcess16bit(quint16* data) {
         quint16* d = (quint16*) data;
         qint16* ds = (qint16*) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
-            ds[i] = d[i] - quint16_MAX / 2;
+            ds[i] = d[i] + quint16_MAX / 2;
         }
     }
     void postProcess32bit(quint32* data) {
         quint32* d = (quint32*) data;
         qint32* ds = (qint32*) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
-            ds[i] = d[i] - quint32_MAX / 2;
+            ds[i] = d[i] + quint32_MAX / 2;
         }
     }
 };

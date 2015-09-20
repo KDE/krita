@@ -28,7 +28,7 @@ class QChildEvent;
 /**
  * A container widget which arranges its children vertically.
  * 
- * When using a KHBox you don't need to create a layout nor
+ * When using a KoVBox you don't need to create a layout nor
  * to add the child widgets to it.
  *
  * Both margin and spacing are initialized to 0. Use QHBoxLayout

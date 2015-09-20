@@ -21,13 +21,13 @@
 #ifndef KOCONFIGDOCUMENTPAGE_H
 #define KOCONFIGDOCUMENTPAGE_H
 
-#include <kvbox.h>
+#include <KoVBox.h>
 
 #include "komain_export.h"
 
 class KoDocument;
 
-class KOMAIN_EXPORT KoConfigDocumentPage : public KVBox
+class KOMAIN_EXPORT KoConfigDocumentPage : public KoVBox
 {
     Q_OBJECT
 

@@ -68,6 +68,7 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
 
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
+        case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
             doc->setErrorMessage(i18n("Krita does support this type of EXR file."));
             return KisImportExportFilter::NotImplemented;
 
@@ -93,6 +94,7 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
             Q_ASSERT(ib.image());
             doc -> setCurrentImage(ib.image());
             return KisImportExportFilter::OK;
+
         default:
             break;
         }

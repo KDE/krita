@@ -1155,9 +1155,11 @@ void exrConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
                 // TODO should probably inform that one of the layer cannot be saved.
             }
 
-        } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
+        }
+        else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
             recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + '.', groupLayer);
-        } else {
+        }
+        else {
             /**
              * The EXR can store paint and group layers only. The rest will
              * go to /dev/null :(
@@ -1259,7 +1261,12 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP 
         if (info.pixelType < Imf::NUM_PIXELTYPES) {
             foreach(const QString& channel, info.channels) {
                 dbgFile << channel << " " << info.pixelType;
-                header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
+                QString s = channel;
+                if (channel.contains(i18n("HDR Layer"))) {
+                    s = channel.mid(channel.indexOf('.') + 1);
+                }
+
+                header.channels().insert(s.toUtf8().data(), Imf::Channel(info.pixelType));
             }
         }
     }

@@ -629,6 +629,9 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
 
     for (std::set<std::string>::const_iterator i = layerNames.begin();
          i != layerNames.end(); ++i) {
+
+        info = ExrPaintLayerInfo();
+
         dbgFile << "layer name = " << i->c_str();
         info.name = i->c_str();
         Imf::ChannelList::ConstIterator layerBegin, layerEnd;
@@ -658,7 +661,6 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
             }
         }
     }
-
 
     dbgFile << "File has" << informationObjects.size() << "layer(s)";
 
@@ -741,6 +743,9 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
 
                 info.channelMap = newChannelMap;
             }
+        }
+        else {
+            dbgFile << info.name << "has" << info.channelMap.size() << "channels, and we don't know what to do.";
         }
         if (!modelId.isEmpty()) {
             info.colorSpace = kisTypeToColorSpace(modelId, info.imageType);

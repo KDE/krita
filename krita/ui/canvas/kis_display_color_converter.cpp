@@ -19,6 +19,7 @@
 #include "kis_display_color_converter.h"
 
 #include <QGlobalStatic>
+#include <QPointer>
 
 #include <KoColor.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -60,7 +61,7 @@ struct KisDisplayColorConverter::Private
     {
     }
 
-    KisDisplayColorConverter * const q;
+    KisDisplayColorConverter *const q;
 
     KoCanvasResourceManager *resourceManager;
 
@@ -142,7 +143,7 @@ struct KisDisplayColorConverter::Private
 
     private:
         KisDisplayColorConverter *m_parent;
-        KoCanvasResourceManager *m_resourceManager;
+        QPointer<KoCanvasResourceManager> m_resourceManager;
     };
 
     QScopedPointer<KoColorDisplayRendererInterface> displayRenderer;

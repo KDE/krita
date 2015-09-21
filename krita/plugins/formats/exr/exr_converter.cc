@@ -603,14 +603,19 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
         dbgFile << "Channel name = " << i.name() << " type = " << channel.type;
 
         QString qname = i.name();
-        QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B";
+        QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B"  << ".A" << ".R" << ".G" << ".B"  << "A." << "R." << "G." << "B.";;
         if (topLevelChannelNames.contains(qname)) {
             topLevelRGBFound = true;
             dbgFile << "Found top-level channel" << qname;
             info.channelMap[qname] = qname;
             info.updateImageType(imfTypeToKisType(channel.type));
         }
-        else if (qname.startsWith('.') || !qname.contains('.')) {
+        // Channel names that don't contain a "." or that contain a
+        // "." only at the beginning or at the end are not considered
+        // to be part of any layer.
+        else if (!qname.contains('.')
+                 || !qname.mid(1).contains('.')
+                 || !qname.left(qname.size() - 1).contains('.')) {
             warnFile << "Found a top-level channel that is not part of the rendered image" << qname << ". Krita will not load this channel.";
         }
     }

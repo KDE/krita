@@ -13,6 +13,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/cmyk_f32
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u8
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u16
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f32
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/lab_u8
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/lab_u16
@@ -52,6 +53,7 @@ set ( lcmsengine_SRCS
 
     colorspaces/gray_u8/GrayU8ColorSpace.cpp
     colorspaces/gray_u16/GrayU16ColorSpace.cpp
+    colorspaces/gray_f16/GrayF16ColorSpace.cpp
     colorspaces/gray_f32/GrayF32ColorSpace.cpp
 
     colorspaces/lab_u8/LabU8ColorSpace.cpp

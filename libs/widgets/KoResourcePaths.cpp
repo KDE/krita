@@ -148,7 +148,7 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
 
     QString copy = relativename;
 
-    Q_ASSERT(basetype == "data");
+    //Q_ASSERT(basetype == "data");
 
     if (!copy.endsWith(QLatin1Char('/'))) {
         copy += QLatin1Char('/');
@@ -202,7 +202,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
             }
         }
     }
-    Q_ASSERT(!resource.isEmpty());
+    //Q_ASSERT(!resource.isEmpty());
     //qDebug() << "findResource: type" << type << "filename" << fileName << "resource" << resource;
     return resource;
 }
@@ -215,7 +215,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
     foreach(const QString &alias, aliases) {
         dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/' + relDir, QStandardPaths::LocateDirectory);
     }
-    Q_ASSERT(!dirs.isEmpty());
+    //Q_ASSERT(!dirs.isEmpty());
     //qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
     return dirs;
 }
@@ -287,7 +287,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     //qDebug() << "\tresources also from aliases:" << resources.size();
     //qDebug() << "=====================================================";
 
-    Q_ASSERT(!resources.isEmpty());
+    //Q_ASSERT(!resources.isEmpty());
 
     return resources;
 }

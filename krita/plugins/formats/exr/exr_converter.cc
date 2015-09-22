@@ -57,6 +57,8 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_value.h>
 
+// Do not translate!
+#define HDR_LAYER "HDR Layer"
 
 template<typename _T_>
 struct Rgba {
@@ -527,7 +529,10 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
 
     while(!el.isNull()) {
         KIS_ASSERT_RECOVER(el.hasAttribute(EXR_NAME)) { return false; };
-        extraInfoLayers.insert(el.attribute(EXR_NAME).toUtf8().constData());
+        QString layerName = el.attribute(EXR_NAME).toUtf8();
+        if (layerName != QString(HDR_LAYER)) {
+            extraInfoLayers.insert(el.attribute(EXR_NAME).toUtf8().constData());
+        }
         el = el.nextSiblingElement();
     }
 
@@ -596,7 +601,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
     dbgFile << "Checking for ARGB channels, they can occur in single-layer _or_ multi-layer images:";
     ExrPaintLayerInfo info;
     bool topLevelRGBFound = false;
-    info.name = i18n("HDR Layer");
+    info.name = HDR_LAYER;
 
     for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
         const Imf::Channel &channel = i.channel();
@@ -627,8 +632,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
 
     dbgFile << "Extra layers:" << layerNames.size();
 
-    for (std::set<std::string>::const_iterator i = layerNames.begin();
-         i != layerNames.end(); ++i) {
+    for (std::set<std::string>::const_iterator i = layerNames.begin();i != layerNames.end(); ++i) {
 
         info = ExrPaintLayerInfo();
 
@@ -678,7 +682,8 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
                 info.channelMap.clear();
                 info.channelMap["G"] = channel;
             }
-        } else if (info.channelMap.size() == 2) {
+        }
+        else if (info.channelMap.size() == 2) {
             modelId = GrayAColorModelID.id();
 
             QMap<QString,QString>::iterator it = info.channelMap.begin();
@@ -700,7 +705,8 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
             info.channelMap.remove(failingChannelKey);
             info.channelMap["G"] = failingChannelValue;
 
-        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+        }
+        else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
 
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
@@ -944,7 +950,7 @@ void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 
 Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width)
 {
-    //     bool hasAlpha = info.layer->colorSpace()->channelCount() != info.layer->colorSpace()->colorChannelCount();
+    dbgFile << "Create encoder for" << info.layer->name() << info.channels << info.layer->colorSpace()->channelCount();
     switch (info.layer->colorSpace()->channelCount()) {
     case 1: {
         if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
@@ -1119,50 +1125,73 @@ void exrConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
 
     for (uint i = 0; i < parent->childCount(); ++i) {
         KisNodeSP node = parent->at(i);
+
         if (KisPaintLayerSP paintLayer = dynamic_cast<KisPaintLayer*>(node.data())) {
             QMap<QString, QString> current2original;
+
             if (paintLayer->metaData()->containsEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap")) {
+
                 const KisMetaData::Entry& entry = paintLayer->metaData()->getEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap");
                 QList< KisMetaData::Value> values = entry.value().asArray();
+
                 foreach(const KisMetaData::Value& value, values) {
                     QMap<QString, KisMetaData::Value> map = value.asStructure();
                     if (map.contains("original") && map.contains("current")) {
                         current2original[map["current"].toString()] = map["original"].toString();
                     }
                 }
+
             }
+
             ExrPaintLayerSaveInfo info;
             info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
-            if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "R"));
-                info.channels.push_back(info.name + remap(current2original, "G"));
-                info.channels.push_back(info.name + remap(current2original, "B"));
-                info.channels.push_back(info.name + remap(current2original, "A"));
-            } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "G"));
-                info.channels.push_back(info.name + remap(current2original, "A"));
-            } else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "G"));
-            } else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "X"));
-                info.channels.push_back(info.name + remap(current2original, "Y"));
-                info.channels.push_back(info.name + remap(current2original, "Z"));
-                info.channels.push_back(info.name + remap(current2original, "A"));
+
+            if (info.name == QString(HDR_LAYER) + ".") {
+                info.channels.push_back("R");
+                info.channels.push_back("G");
+                info.channels.push_back("B");
+                info.channels.push_back("A");
             }
-            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            else {
+
+                if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "R"));
+                    info.channels.push_back(info.name + remap(current2original, "G"));
+                    info.channels.push_back(info.name + remap(current2original, "B"));
+                    info.channels.push_back(info.name + remap(current2original, "A"));
+                }
+                else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "G"));
+                    info.channels.push_back(info.name + remap(current2original, "A"));
+                }
+                else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "G"));
+                }
+                else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "X"));
+                    info.channels.push_back(info.name + remap(current2original, "Y"));
+                    info.channels.push_back(info.name + remap(current2original, "Z"));
+                    info.channels.push_back(info.name + remap(current2original, "A"));
+                }
+
+            }            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
-            } else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            }
+            else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
                 info.pixelType = Imf::FLOAT;
-            } else {
+            }
+            else {
                 info.pixelType = Imf::NUM_PIXELTYPES;
             }
 
-            if(info.pixelType < Imf::NUM_PIXELTYPES)
-            {
+            if (info.pixelType < Imf::NUM_PIXELTYPES) {
+                dbgFile << "Going to save layer" << info.name;
                 informationObjects.push_back(info);
-            } else {
-                // TODO should probably inform that one of the layer cannot be saved.
+            }
+            else {
+                warnFile << "Will not save layer" << info.name;
+                layersNotSaved << node;
             }
 
         }
@@ -1211,13 +1240,16 @@ QString exrConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
 {
     KIS_ASSERT_RECOVER_NOOP(!informationObjects.isEmpty());
 
+    if (informationObjects.size() == 1 && informationObjects[0].name == QString(HDR_LAYER) + ".") {
+        return QString();
+    }
+
     QDomDocument doc("krita-extra-layers-info");
     doc.appendChild(doc.createElement("root"));
     QDomElement rootElement = doc.documentElement();
 
     for (int i = 0; i < informationObjects.size(); i++) {
         ExrPaintLayerSaveInfo &info = informationObjects[i];
-
         quint32 unused;
         KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
         QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
@@ -1262,21 +1294,16 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP 
     m_d->makeLayerNamesUnique(informationObjects);
 
     QByteArray extraLayersInfo = m_d->fetchExtraLayersInfo(informationObjects).toUtf8();
-    header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
-
-
-    dbgFile << informationObjects.size() << " layers to save";
+    if (!extraLayersInfo.isNull()) {
+        header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
+    }
+     dbgFile << informationObjects.size() << " layers to save";
 
     foreach(const ExrPaintLayerSaveInfo& info, informationObjects) {
         if (info.pixelType < Imf::NUM_PIXELTYPES) {
             foreach(const QString& channel, info.channels) {
                 dbgFile << channel << " " << info.pixelType;
-                QString s = channel;
-                if (channel.contains(i18n("HDR Layer"))) {
-                    s = channel.mid(channel.indexOf('.') + 1);
-                }
-
-                header.channels().insert(s.toUtf8().data(), Imf::Channel(info.pixelType));
+                header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
             }
         }
     }

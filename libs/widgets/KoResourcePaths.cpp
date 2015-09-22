@@ -270,16 +270,19 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     //qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
+    bool noDuplicates = options & KoResourcePaths::NoDuplicates;
+    bool recursive = options & KoResourcePaths::Recursive;
+
     foreach(const QString &alias, aliases) {
         //qDebug() << "\t\talias:" << alias;
         const QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
         //qDebug() << "\t\tdirs:" << dirs;
         Q_FOREACH (const QString &dir, dirs) {
-            resources << filesInDir(dir, filter, options |= KoResourcePaths::NoDuplicates, options |= KoResourcePaths::Recursive);
+            resources << filesInDir(dir, filter, noDuplicates, recursive);
         }
     }
 
-    if (options |= KoResourcePaths::NoDuplicates) {
+    if (noDuplicates) {
         QSet<QString> s = QSet<QString>::fromList(resources);
         resources = s.toList();
     }

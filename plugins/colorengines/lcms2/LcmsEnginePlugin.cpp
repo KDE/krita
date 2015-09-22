@@ -99,10 +99,10 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoResourcePaths::addResourceType("icc_profiles", "data", "color/icc");
 
     QStringList profileFilenames;
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icm",  KoResourcePaths::Recursive);
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICM",  KoResourcePaths::Recursive);
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icm",  KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICM",  KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
 
     // Load the profiles
     if (!profileFilenames.empty()) {
@@ -113,7 +113,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
             profile->load();
             if (profile->valid()) {
-                qDebug() << "Valid profile : " << profile->fileName() << profile->name();
+                //qDebug() << "Valid profile : " << profile->fileName() << profile->name();
                 registry->addProfileToMap(profile);
             } else {
                 qDebug() << "Invalid profile : " << profile->fileName() << profile->name();

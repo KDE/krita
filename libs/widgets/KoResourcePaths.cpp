@@ -148,7 +148,7 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
 
     QString copy = relativename;
 
-    //Q_ASSERT(basetype == "data");
+    Q_ASSERT(basetype == "data");
 
     if (!copy.endsWith(QLatin1Char('/'))) {
         copy += QLatin1Char('/');

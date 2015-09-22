@@ -788,7 +788,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
     }
 
     // Load the layers
-    for (int i = 0; i < informationObjects.size(); ++i) {
+    for (int i = informationObjects.size() - 1; i >= 0; --i) {
         ExrPaintLayerInfo& info = informationObjects[i];
         if (info.colorSpace) {
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();

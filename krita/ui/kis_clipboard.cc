@@ -297,15 +297,17 @@ void KisClipboard::clipboardDataChanged()
     if (!m_pushedClipboard) {
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
-        QImage qimage = cb->image();
-        const QMimeData *cbData = cb->mimeData();
-        QByteArray mimeType("application/x-krita-selection");
+        if (cb->mimeData()->hasImage()) {
+            QImage qimage = cb->image();
+            const QMimeData *cbData = cb->mimeData();
+            QByteArray mimeType("application/x-krita-selection");
 
-        if (cbData && cbData->hasFormat(mimeType))
-            m_hasClip = true;
+            if (cbData && cbData->hasFormat(mimeType))
+                m_hasClip = true;
 
-        if (!qimage.isNull())
-            m_hasClip = true;
+            if (!qimage.isNull())
+                m_hasClip = true;
+        }
     }
     if (m_hasClip) {
         emit clipCreated();
@@ -371,8 +373,11 @@ QSize KisClipboard::clipSize() const
 
         return clip->exactBounds().size();
     } else {
-        QImage qimage = cb->image();
-        return qimage.size();
+        if (cb->mimeData()->hasImage()) {
+            QImage qimage = cb->image();
+            return qimage.size();
+        }
     }
+    return QSize();
 }
 

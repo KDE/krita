@@ -54,9 +54,9 @@ KoImageDataPrivate::~KoImageDataPrivate()
 // called from the collection
 bool KoImageDataPrivate::saveData(QIODevice &device)
 {
-    // if we have a temp file save that to the store. This is needed as to not loose data when
-    // saving lossy formats. Also wrinting out gif is not supported by qt so saving temp file
-    // also fixes the problem that gif images are empty after saving-
+    // if we have a temp file save that to the store. This is needed as to not lose data when
+    // saving lossy formats. Also writing out gif is not supported by qt so saving temp file
+    // also fixes the problem that gif images are empty after saving.
     if (temporaryFile) {
         if (!temporaryFile->open()) {
             warnFlake << "Read file from temporary store failed";

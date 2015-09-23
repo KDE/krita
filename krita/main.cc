@@ -93,9 +93,14 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 #endif
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
+
+    KLocalizedString::setApplicationDomain("krita");
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
     // If we should clear the config, it has to be done as soon as possible after
     // KisApplication has been created. Otherwise the config file may have been read
     // and stored in a KConfig object we have no control over.

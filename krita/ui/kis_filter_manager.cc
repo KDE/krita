@@ -97,7 +97,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
 
     // Setup reapply action
     d->reapplyAction = new KisAction(i18n("Apply Filter Again"), this);
-    d->reapplyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
+    d->reapplyAction->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
     d->actionManager->addAction("filter_apply_again", d->reapplyAction);
 
     d->reapplyAction->setEnabled(false);
@@ -134,7 +134,7 @@ void KisFilterManager::insertFilter(const QString & filterName)
     }
 
     KisAction *action = new KisAction(filter->menuEntry(), this);
-    action->setShortcut(filter->shortcut());
+    action->setDefaultShortcut(filter->shortcut());
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
 
     d->actionManager->addAction(QString("krita_filter_%1").arg(filterName), action);

@@ -2061,7 +2061,7 @@ void KisMainWindow::createActions()
 
     d->closeAll = new KisAction(i18nc("@action:inmenu", "Close All"));
     d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->closeAll->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
+    d->closeAll->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
     actionManager->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 

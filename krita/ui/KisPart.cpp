@@ -155,7 +155,7 @@ void KisPart::Private::loadActions()
                 action->setToolTip(toolTip);
                 action->setStatusTip(statusTip);
                 action->setIconText(iconText);
-                action->setShortcut(shortcut);
+                action->setDefaultShortcut(shortcut);
                 action->setCheckable(isCheckable);
 
                 if (!actionCollection->action(name)) {

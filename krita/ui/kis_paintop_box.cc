@@ -78,6 +78,7 @@
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
+#include "kis_action_manager.h"
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -138,7 +139,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     KisAction* eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    eraseAction->setShortcut(Qt::Key_E);
+    eraseAction->setDefaultShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
     m_viewManager->actionCollection()->addAction("erase_action", eraseAction);
@@ -246,8 +247,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    foreach(QAction * a, m_cmbCompositeOp->blendmodeActions()) {
-        m_viewManager->actionCollection()->addAction(a->text(), a);
+    foreach(KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
+        m_viewManager->actionManager()->addAction(a->text(), a);
     }
 
     m_workspaceWidget = new KisPopupButton(this);
@@ -313,39 +314,40 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     action = new QWidgetAction(this);
     action->setText(i18n("Next Favourite Preset"));
     view->actionCollection()->addAction("next_favorite_preset", action);
-    action->setShortcut(QKeySequence(Qt::Key_Comma));
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Comma));
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Previous Favourite Preset"));
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(QKeySequence(Qt::Key_Period));
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Period));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Switch to Previous Preset"));
     view->actionCollection()->addAction("previous_preset", action);
-    action->setShortcut(QKeySequence(Qt::Key_Slash));
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Slash));
+
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     if (!cfg.toolOptionsInDocker()) {
         action = new QWidgetAction(this);
         action->setText(i18n("Show Tool Options"));
         view->actionCollection()->addAction("show_tool_options", action);
-        action->setShortcut(Qt::Key_Backslash);
+        view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Backslash));
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
     action = new QWidgetAction(this);
     action->setText(i18n("Show Brush Editor"));
     view->actionCollection()->addAction("show_brush_editor", action);
-    action->setShortcut(Qt::Key_F5);
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F5));
     connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Show Brush Presets"));
     view->actionCollection()->addAction("show_brush_presets", action);
-    action->setShortcut(Qt::Key_F6);
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F6));
     connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
 
     QWidget* mirrorActions = new QWidget(this);

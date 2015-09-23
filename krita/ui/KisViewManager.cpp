@@ -657,13 +657,13 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 void KisViewManager::createActions()
 {
     d->saveIncremental = new KisAction(i18n("Save Incremental &Version"), this);
-    d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
+    d->saveIncremental->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
     d->saveIncremental->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("save_incremental_version", d->saveIncremental);
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
     d->saveIncrementalBackup = new KisAction(i18n("Save Incremental Backup"), this);
-    d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
+    d->saveIncrementalBackup->setDefaultShortcut(Qt::Key_F4);
     d->saveIncrementalBackup->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("save_incremental_backup", d->saveIncrementalBackup);
     connect(d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
@@ -675,7 +675,7 @@ void KisViewManager::createActions()
 
     KisAction *tabletDebugger = new KisAction(i18n("Toggle Tablet Debugger"), this);
     actionManager()->addAction("tablet_debugger", tabletDebugger );
-    tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
+    tabletDebugger->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
     d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
@@ -697,18 +697,18 @@ void KisViewManager::createActions()
     d->rotateCanvasRight = new KisAction(i18n("Rotate Canvas Right"), this);
     actionManager()->addAction("rotate_canvas_right", d->rotateCanvasRight);
     d->rotateCanvasRight->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
+    d->rotateCanvasRight->setDefaultShortcut(QKeySequence("Ctrl+]"));
 
     d->rotateCanvasLeft = new KisAction(i18n("Rotate Canvas Left"), this);
     actionManager()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
     d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
+    d->rotateCanvasLeft->setDefaultShortcut(QKeySequence("Ctrl+["));
 
     d->wrapAroundAction = new KisAction(i18n("Wrap Around Mode"), this);
     d->wrapAroundAction->setCheckable(true);
     d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
-    d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
+    d->wrapAroundAction->setDefaultShortcut(QKeySequence(Qt::Key_W));
 
     KisAction *tAction = new KisAction(i18n("Show Status Bar"), this);
     tAction->setCheckable(true);
@@ -732,7 +732,7 @@ void KisViewManager::createActions()
     //Workaround, by default has the same shortcut as mirrorCanvas
     KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
     if (a) {
-        a->setShortcut(QKeySequence());
+        a->setDefaultShortcut(QKeySequence());
         a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 
@@ -760,7 +760,7 @@ void KisViewManager::createActions()
     d->zoomTo100pct = new KisAction(i18n("Reset zoom"), this);
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
-    d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+    d->zoomTo100pct->setDefaultShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");

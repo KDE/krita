@@ -62,6 +62,9 @@ public:
     KisAction(const QIcon& icon, const QString& text, QObject* parent = 0);
     virtual ~KisAction();
 
+    void setDefaultShortcut(const QKeySequence & shortcut);
+    QKeySequence defaultShortcut() const;
+
     void setActivationFlags(ActivationFlags flags);
     ActivationFlags activationFlags();
 

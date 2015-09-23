@@ -45,9 +45,10 @@ void KisMirrorManager::setup(KActionCollection * collection)
 {
     m_mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_mirrorCanvas->setChecked(false);
-    m_mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
+    //m_mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
 
     collection->addAction("mirror_canvas", m_mirrorCanvas);
+    collection->setDefaultShortcut(m_mirrorCanvas, QKeySequence(Qt::Key_M));
 
     updateAction();
 }

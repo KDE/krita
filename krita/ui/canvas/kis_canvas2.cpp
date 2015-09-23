@@ -592,7 +592,6 @@ void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 
 void KisCanvas2::updateCanvas()
 {
-    qDebug() << "KisCanvas2::updateCanvas" << m_d;
     updateCanvasWidgetImpl();
 }
 

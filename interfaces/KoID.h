@@ -72,7 +72,9 @@ public:
     }
 
     QString name() const {
-        if(m_name.isEmpty()) m_name = m_localizedString.toString();
+        if (m_name.isEmpty() && !m_localizedString.isEmpty()) {
+            m_name = m_localizedString.toString();
+        }
         return m_name;
     }
 

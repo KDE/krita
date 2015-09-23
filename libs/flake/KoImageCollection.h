@@ -65,16 +65,6 @@ public:
      * The collection will create an image data in a way that if there is an
      * existing data object with the same image the returned KoImageData will
      * share its data.
-     * @param url a valid, local url to point to an image on the filesystem.
-     * @see KoImageData::isValid()
-     */
-    KoImageData *createExternalImageData(const QUrl &url);
-
-    /**
-     * Create a data object for the image data.
-     * The collection will create an image data in a way that if there is an
-     * existing data object with the same image the returned KoImageData will
-     * share its data.
      * @param href the name of the image inside the store.
      * @param store the KoStore object.
      * @see KoImageData::isValid()

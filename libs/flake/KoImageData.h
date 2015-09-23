@@ -39,16 +39,13 @@ class KoStore;
 
 /**
  * This class is meant to represent the image data so it can be shared between image shapes.
- * In Calligra there is a picture shape and a krita shape which both can both show
- * an image.  To allow smooth transition of image data between shapes, as well as allowing
- * lower-resolution data to be shown this class will actually be the backing store of
- * the image data and it can create a pre-rendered QPixmap without deminishing the backing-store
- * data.
+ *
  * This class inherits from KoShapeUserData which means you can set it on any KoShape using
  * KoShape::setUserData() and get it using KoShape::userData().  The pictureshape plugin
  * uses this class to show its image data.
- * Such plugins are suggested to not make a copy of the pixmap data, but use the fact that this
- * image data caches one for every request to pixmap()
+ *
+ * Plugins should not make a copy of the pixmap data, but use the pixmap() method, which
+ * handles caching.
  */
 class FLAKE_EXPORT KoImageData : public KoShapeUserData
 {
@@ -83,9 +80,22 @@ public:
     /// returns true only if pixmap() would return immediately with a cached pixmap
     bool hasCachedPixmap() const;
 
+    /**
+     * Return the internal store of the image.
+     * @see isValid(), hasCachedImage()
+     */
+    QImage image() const;
+
+    /// returns true only if image() would return immediately with a cached image
+    bool hasCachedImage() const;
+
+    /**
+     * The size of the image in points
+     */
+    QSizeF imageSize();
+
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const QByteArray &imageData, KoImageCollection *collection = 0);
-    void setExternalImage(const QUrl &location, KoImageCollection *collection = 0);
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
 
     /**
@@ -95,19 +105,6 @@ public:
      * @return returns true if load was successful.
      */
     bool saveData(QIODevice &device);
-
-    /**
-     * Return the internal store of the image.
-     * @see isValid(), hasCachedImage()
-     */
-    QImage image() const;
-    /// returns true only if image() would return immediately with a cached image
-    bool hasCachedImage() const;
-
-    /**
-     * The size of the image in points
-     */
-    QSizeF imageSize();
 
     KoImageData &operator=(const KoImageData &other);
 

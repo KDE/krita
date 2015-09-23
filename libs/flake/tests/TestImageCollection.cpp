@@ -72,28 +72,6 @@ void TestImageCollection::testGetImageImage()
     delete id5;
 }
 
-void TestImageCollection::testGetExternalImage()
-{
-    KoImageCollection collection;
-    QUrl url = QUrl::fromLocalFile(KDESRCDIR "/logo-calligra.png");
-    KoImageData *id1 = collection.createExternalImageData(url);
-    QCOMPARE(id1->suffix(), QString("png"));
-    QCOMPARE(id1->hasCachedImage(), false);
-    KoImageData *id2 = collection.createExternalImageData(url);
-    QCOMPARE(id2->hasCachedImage(), false);
-    QCOMPARE(id1->priv(), id2->priv());
-    KoImageData *id3 = collection.createExternalImageData(url);
-    QCOMPARE(id1->key(), id3->key());
-    QCOMPARE(id1->priv(), id3->priv());
-    QUrl url2 = QUrl::fromLocalFile(KDESRCDIR "/logo-kpresenter.png");
-    KoImageData *id4 = collection.createExternalImageData(url2);
-    QCOMPARE(id4->hasCachedImage(), false);
-    QVERIFY(id1->key() != id4->key());
-    QCOMPARE(collection.size(), 2);
-    delete id4;
-    QCOMPARE(collection.size(), 1);
-}
-
 void TestImageCollection::testGetImageStore()
 {
     KoImageCollection collection;
@@ -108,25 +86,6 @@ void TestImageCollection::testGetImageStore()
     QCOMPARE(id1->key(), id2->key());
     QCOMPARE(collection.count(), 1);
 
-    // opening the exact same file from either a KoStore or a "File://" url may
-    // naively make you think it should have the same key, but thats not the case.
-    // Opening a file from your local filesystem prioritizes over the url instead
-    // of on the content since if the user updates the image on his filesystem we
-    // want to data to be refreshed.  So the key is based on the url.
-    // Opening a KoStore based file we only have the content, and we always have to
-    // read the full content anyway due to the store being deleted soon after.
-    // So the key is based on the image data.
-    KoImageData *id3 = collection.createExternalImageData(QUrl::fromLocalFile(image));
-    QCOMPARE(collection.count(), 2);
-    QVERIFY(id1->key() != id3->key());
-    QVERIFY(id1->priv() != id3->priv());
-    QString image2("logo-kpresenter.png");
-    KoImageData *id4 = collection.createExternalImageData(QUrl::fromLocalFile(image2));
-    QCOMPARE(id4->hasCachedImage(), false);
-    QVERIFY(id1->key() != id4->key());
-    QCOMPARE(collection.count(), 3);
-    delete id4;
-    QCOMPARE(collection.count(), 2);
     delete store;
 }
 
@@ -198,27 +157,6 @@ void TestImageCollection::testPreload1()
     QPixmap pixmap3 = data.pixmap();
     QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
     QCOMPARE(data.hasCachedImage(), true);
-}
-
-void TestImageCollection::testPreload2()
-{
-    KoImageData data;
-    QUrl url = QUrl::fromLocalFile(KDESRCDIR "/logo-calligra.png");
-    data.setExternalImage(url);
-
-    QCOMPARE(data.hasCachedImage(), false);
-    QCOMPARE(data.hasCachedPixmap(), false);
-    QPixmap pixmap = data.pixmap(QSize(40, 41));
-    QCOMPARE(data.hasCachedImage(), true);
-    QCOMPARE(pixmap.width(), 40);
-    QCOMPARE(pixmap.height(), 41);
-    QCOMPARE(data.hasCachedPixmap(), true);
-    QCOMPARE(data.hasCachedImage(), true);
-    QPixmap pixmap2 = data.pixmap(QSize(40, 41));
-    QCOMPARE(pixmap.cacheKey(), pixmap2.cacheKey());
-
-    QPixmap pixmap3 = data.pixmap();
-    QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
 }
 
 void TestImageCollection::testPreload3()

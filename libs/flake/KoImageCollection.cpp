@@ -123,23 +123,6 @@ KoImageData *KoImageCollection::createImageData(const QImage &image)
     return data;
 }
 
-KoImageData *KoImageCollection::createExternalImageData(const QUrl &url)
-{
-    Q_ASSERT(!url.isEmpty() && url.isValid());
-
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(url.toEncoded());
-    qint64 key = KoImageDataPrivate::generateKey(md5.result());
-    if (d->images.contains(key))
-        return new KoImageData(d->images.value(key));
-    KoImageData *data = new KoImageData();
-    data->setExternalImage(url);
-    data->priv()->collection = this;
-    Q_ASSERT(data->key() == key);
-    d->images.insert(key, data->priv());
-    return data;
-}
-
 KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *store)
 {
     // the tricky thing with a 'store' is that we need to read the data now

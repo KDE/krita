@@ -221,34 +221,6 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 
 }
 
-void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *collection)
-{
-    if (collection) {
-        // let the collection first check if it already has one. If it doesn't it'll call this method
-        // again and we'll go to the other clause
-        KoImageData *other = collection->createExternalImageData(location);
-        this->operator=(*other);
-        delete other;
-    } else {
-        if (d == 0) {
-            d = new KoImageDataPrivate(this);
-            d->refCount.ref();
-        } else {
-            d->clear();
-        }
-        d->imageLocation = location;
-        d->setSuffix(location.toEncoded());
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(location.toEncoded());
-        qint64 oldKey = d->key;
-        d->key = KoImageDataPrivate::generateKey(md5.result());
-        if (oldKey != 0 && d->collection) {
-            d->collection->update(oldKey, d->key);
-        }
-        d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
-    }
-}
-
 void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection *collection)
 {
     if (collection) {

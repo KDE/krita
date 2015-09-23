@@ -230,7 +230,7 @@ QStringList filesInDir(const QString &startdir, const QString & filter, bool nod
     QStringList nameFilters;
     nameFilters << filter;
     const QStringList fileNames = QDir(startdir).entryList(nameFilters, QDir::Files | QDir::CaseSensitive, QDir::Name);
-    qDebug() << "\tFound:" << fileNames.size() << ":" << fileNames;
+    //qDebug() << "\tFound:" << fileNames.size() << ":" << fileNames;
     Q_FOREACH (const QString &fileName, fileNames) {
         QString file = startdir + '/' + fileName;
         result << file;

@@ -95,11 +95,9 @@ public:
         , popupPalette(0)
         , displayColorConverter(new KisDisplayColorConverter(resourceManager, view))
     {
-        qDebug() << "Creating" << this;
     }
 
     ~KisCanvas2Private() {
-        qDebug() << "Deleting" << this;
         delete shapeManager;
         delete toolProxy;
     }

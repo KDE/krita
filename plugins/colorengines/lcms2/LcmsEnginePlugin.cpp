@@ -85,8 +85,6 @@ K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    qDebug() << "Initializing the lcms engine plugin";
-
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);
 

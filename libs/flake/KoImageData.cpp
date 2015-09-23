@@ -284,15 +284,15 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         KoImageData *other = collection->createImageData(imageData);
         this->operator=(*other);
         delete other;
-    } else {
+    }
+    else {
         if (d == 0) {
             d = new KoImageDataPrivate(this);
             d->refCount.ref();
         }
-        delete d->temporaryFile;
-        d->temporaryFile = 0;
-        d->clear();
+
         d->suffix = "png"; // good default for non-lossy storage.
+
         if (imageData.size() <= MAX_MEMORY_IMAGESIZE) {
             QImage image;
             if (!image.loadFromData(imageData)) {
@@ -304,6 +304,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             d->image = image;
             d->dataStoreState = KoImageDataPrivate::StateImageOnly;
         }
+
         if (imageData.size() > MAX_MEMORY_IMAGESIZE
                 || d->errorCode == OpenFailed) {
             d->image = QImage();
@@ -313,6 +314,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             buffer.open(QIODevice::ReadOnly);
             d->copyToTemporary(buffer);
         }
+
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(imageData);
         qint64 oldKey = d->key;

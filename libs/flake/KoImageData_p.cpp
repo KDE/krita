@@ -134,7 +134,6 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
 
     temporaryFile->close();
 
-    //QFileInfo fi(*temporaryFile);
     dataStoreState = StateNotLoaded;
 }
 

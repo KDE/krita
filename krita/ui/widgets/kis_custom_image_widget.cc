@@ -325,10 +325,11 @@ void KisCustomImageWidget::screenSizeClicked()
 void KisCustomImageWidget::fillPredefined()
 {
     cmbPredefined->clear();
+    m_predefined.clear();
 
     cmbPredefined->addItem("");
 
-    QStringList definitions = KoResourcePaths::findAllResources("data", "krita/predefined_image_sizes/*", KoResourcePaths::Recursive);
+    QStringList definitions = KoResourcePaths::findAllResources("data", "krita/predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
     definitions.sort();
 
     if (!definitions.empty()) {
@@ -382,12 +383,8 @@ void KisCustomImageWidget::saveAsPredefined()
     if (fileName.isEmpty()) {
         return;
     }
-    QString saveLocation = KoResourcePaths::saveLocation("data");
-
-    QDir d;
-    d.mkpath(saveLocation + "krita/predefined_image_sizes/");
-
-    QFile f(saveLocation + "krita/predefined_image_sizes/" + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
+    QString saveLocation = KoResourcePaths::saveLocation("data", "krita/predefined_image_sizes/", true);
+    QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);
     KisPropertiesConfiguration *predefined = new KisPropertiesConfiguration();

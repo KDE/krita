@@ -44,7 +44,6 @@
 #include <QSignalMapper>
 #include <QTabBar>
 #include <QMoveEvent>
-#include <QFontDatabase>
 #include <QUrl>
 #include <QMessageBox>
 #include <QTemporaryFile>
@@ -1639,12 +1638,14 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
+
         // Check if the dock widget is supposed to be collapsable
         if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
             titleBar->setCollapsable(factory->isCollapsable());
         }
+        titleBar->setFont(KoDockRegistry::dockFont());
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
@@ -1692,22 +1693,20 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
+
         if (titleBar && locked)
             titleBar->setLocked(true);
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
-    } else {
+    }
+    else {
         dockWidget = d->dockWidgetsMap[factory->id()];
     }
 
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    dockWidgetFont.setPointSizeF(qMax(pointSize,QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
 #ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-    dockWidget->setFont(dockWidgetFont);
+    dockWidget->setFont(KoDockRegistry::dockFont());
 
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
@@ -1718,11 +1717,7 @@ void KisMainWindow::forceDockTabFonts()
 {
     foreach(QObject *child, children()) {
         if (child->inherits("QTabBar")) {
-            KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-            QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-            qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-            dockWidgetFont.setPointSizeF(qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
-            ((QTabBar *)child)->setFont(dockWidgetFont);
+            ((QTabBar *)child)->setFont(KoDockRegistry::dockFont());
         }
     }
 }
@@ -1973,18 +1968,11 @@ QPointer<KisView>KisMainWindow::activeKisView()
 
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
-
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    dockWidgetFont.setPointSizeF(qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
-    dockWidgetFont.setPointSizeF(pointSize);
-
     foreach(QWidget *w, optionWidgetList) {
 #ifdef Q_OS_MAC
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-        w->setFont(dockWidgetFont);
+        w->setFont(KoDockRegistry::dockFont());
     }
 
     if (d->toolOptionsDocker) {

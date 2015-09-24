@@ -32,6 +32,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 
+#include <KoDockRegistry.h>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -119,12 +120,7 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
     setObjectName("KisToolOptionsPopup");
 
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-
-    d->smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", d->smallFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
-    d->smallFont.setPointSizeF(pointSize);
-    setFont(d->smallFont);
+    setFont(KoDockRegistry::dockFont());
 
     KisConfig cfg;
     d->detached = !cfg.paintopPopupDetached();

@@ -13,7 +13,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/cmyk_f32
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u8
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u16
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f32
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/lab_u8
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/lab_u16
@@ -32,6 +31,7 @@ include_directories(
 
 if (HAVE_LCMS24 AND OPENEXR_FOUND)
 include_directories( 
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/xyz_f16
 )
@@ -53,7 +53,6 @@ set ( lcmsengine_SRCS
 
     colorspaces/gray_u8/GrayU8ColorSpace.cpp
     colorspaces/gray_u16/GrayU16ColorSpace.cpp
-    colorspaces/gray_f16/GrayF16ColorSpace.cpp
     colorspaces/gray_f32/GrayF32ColorSpace.cpp
 
     colorspaces/lab_u8/LabU8ColorSpace.cpp
@@ -82,6 +81,7 @@ set ( lcmsengine_SRCS
 if (HAVE_LCMS24 AND OPENEXR_FOUND)
     set ( lcmsengine_SRCS
         ${lcmsengine_SRCS}
+        colorspaces/gray_f16/GrayF16ColorSpace.cpp
         colorspaces/rgb_f16/RgbF16ColorSpace.cpp
         colorspaces/xyz_f16/XyzF16ColorSpace.cpp
     )

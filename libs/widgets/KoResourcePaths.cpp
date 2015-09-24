@@ -252,7 +252,11 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
                                                       SearchOptions options) const
 {
     //qDebug() << "=====================================================";
-    //qDebug() << "findAllResources: type" << type << "filter" << _filter;
+
+    bool noDuplicates = options & KoResourcePaths::NoDuplicates;
+    bool recursive = options & KoResourcePaths::Recursive;
+
+    //qDebug() << "findAllResources: type" << type << "filter" << _filter << "no dups" << noDuplicates << "recursive" << recursive;
 
     QStringList aliases = d->aliases(type);
     QString filter = _filter;
@@ -261,6 +265,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     if (filter.indexOf('*') > 0) {
         aliases << filter.split('*').first();
         filter = '*' + filter.split('*')[1];
+        //qDebug() << "Split up alias" << aliases << "filter" << filter;
     }
 
     QStringList resources;
@@ -268,16 +273,16 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         resources << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), filter, QStandardPaths::LocateFile);
     }
 
-    //qDebug() << "\tresources from qstandardpaths:" << resources.size();
+    ////qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
-    bool noDuplicates = options & KoResourcePaths::NoDuplicates;
-    bool recursive = options & KoResourcePaths::Recursive;
 
     foreach(const QString &alias, aliases) {
         //qDebug() << "\t\talias:" << alias;
         const QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        QSet<QString> s = QSet<QString>::fromList(dirs);
+
         //qDebug() << "\t\tdirs:" << dirs;
-        Q_FOREACH (const QString &dir, dirs) {
+        Q_FOREACH (const QString &dir, s) {
             resources << filesInDir(dir, filter, noDuplicates, recursive);
         }
     }

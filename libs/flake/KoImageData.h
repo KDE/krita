@@ -59,6 +59,8 @@ public:
         LoadFailed
     };
 
+    /// default constructor, creates an invalid imageData object
+    KoImageData();
 
     virtual ~KoImageData();
     KoImageData(const KoImageData &imageData);
@@ -66,6 +68,7 @@ public:
     inline bool operator!=(const KoImageData &other) const { return !operator==(other); }
     bool operator==(const KoImageData &other) const;
 
+    void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
 
     /**
      * Renders a pixmap the first time you request it is called and returns it.
@@ -101,6 +104,8 @@ public:
     /// @return the original image file's extension, e.g. "png" or "gif"
     QString suffix() const;
 
+    ErrorCode errorCode() const;
+
     /// returns if this is a valid imageData with actual image data present on it.
     bool isValid() const;
 
@@ -112,8 +117,6 @@ private:
     friend class TestImageCollection;
 
 
-    /// default constructor, creates an invalid imageData object
-    KoImageData();
     KoImageData(KoImageDataPrivate *priv);
 
     /// returns true only if pixmap() would return immediately with a cached pixmap
@@ -124,9 +127,6 @@ private:
 
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const QByteArray &imageData, KoImageCollection *collection = 0);
-    void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
-
-    ErrorCode errorCode() const;
 
 
 private:

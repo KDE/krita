@@ -21,26 +21,13 @@
 
 #include "KisApplication.h"
 
-#include <KoPluginLoader.h>
-#include <KoShapeRegistry.h>
-#include <KoDpi.h>
-#include "KoGlobal.h"
-#include "KoConfig.h"
-#include <KoHashGeneratorProvider.h>
-#include <kis_icon_utils.h>
+#include <stdlib.h>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tchar.h>
+#endif
 
-#include <klocalizedstring.h>
-#include <kdesktopfile.h>
 #include <QMessageBox>
-#include <KoResourcePaths.h>
-#include <kiconloader.h>
-#include <kis_debug.h>
-
-#include <kconfig.h>
-
-#include <kconfiggroup.h>
-#include <krecentdirs.h>
-
 #include <QFile>
 #include <QWidget>
 #include <QSysInfo>
@@ -49,13 +36,24 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QDesktopWidget>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QTimer>
 
-#include <stdlib.h>
+#include <klocalizedstring.h>
+#include <kdesktopfile.h>
+#include <kiconloader.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <krecentdirs.h>
 
-#ifdef Q_OS_WIN
-#include <windows.h>
-#include <tchar.h>
-#endif
+#include <KoPluginLoader.h>
+#include <KoShapeRegistry.h>
+#include <KoDpi.h>
+#include "KoGlobal.h"
+#include "KoConfig.h"
+#include <KoHashGeneratorProvider.h>
+#include <KoResourcePaths.h>
 
 #include "KisPrintJob.h"
 #include "KisDocumentEntry.h"
@@ -63,7 +61,7 @@
 #include "KisMainWindow.h"
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
-
+#include <kis_icon_utils.h>
 #include "kis_md5_generator.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
@@ -74,14 +72,12 @@
 #include <kis_paintop_registry.h>
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
+#include "KisApplicationArguments.h"
+#include <kis_debug.h>
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
 #endif
-
-#include <QMimeDatabase>
-#include <QMimeType>
-#include "KisApplicationArguments.h"
 
 #include <CalligraVersionWrapper.h>
 
@@ -424,7 +420,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
-            mainWindow->show();
+            QTimer::singleShot(1, mainWindow, SLOT(show()));
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open

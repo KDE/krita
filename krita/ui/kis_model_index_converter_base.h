@@ -67,7 +67,7 @@ public:
      *        real nodes.
      * Return whether the new dummy will be shown in the model
      */
-    virtual bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, QModelIndex &parentIndex, int &row) = 0;
+    virtual bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, bool isAnimated, QModelIndex &parentIndex, int &row) = 0;
 
     /**
      * Returns the number of children of the given index of the model

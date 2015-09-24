@@ -81,7 +81,7 @@ Q_SIGNALS:
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
 protected Q_SLOTS:
-    void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);
+    void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType, bool isAnimated);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
     void slotEndRemoveDummy();

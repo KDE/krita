@@ -266,8 +266,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
             connectDummies(rootDummy, true);
         }
 
-        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*,int,QString)),
-                SLOT(slotBeginInsertDummy(KisNodeDummy*,int,QString)));
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*,int,QString,bool)),
+                SLOT(slotBeginInsertDummy(KisNodeDummy*,int,QString,bool)));
         connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
         connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
@@ -288,7 +288,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     }
 }
 
-void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
+void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType, bool isAnimated)
 {
     int row = 0;
     QModelIndex parentIndex;
@@ -296,6 +296,7 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const Q
     bool willAdd =
         m_d->indexConverter->indexFromAddedDummy(parent, index,
                                                  metaObjectType,
+                                                 isAnimated,
                                                  parentIndex, row);
 
     if(willAdd) {

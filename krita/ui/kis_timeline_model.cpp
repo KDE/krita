@@ -310,7 +310,7 @@ void KisTimelineModel::slotNodeAnimatedAboutToChange(bool animated)
         KisNodeDummy *parentDummy = dummiesFacade()->dummyForNode(node->parent());
         int index = node->parent()->index(node);
 
-        slotBeginInsertDummy(parentDummy, index, "");
+        slotBeginInsertDummy(parentDummy, index, "", animated);
     }
 }
 

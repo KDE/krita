@@ -79,13 +79,17 @@ QModelIndex KisModelIndexConverterAnimatedLayers::indexFromDummy(KisNodeDummy *d
     return m_model->createIndex(row, 0, (void*)dummy);
 }
 
-bool KisModelIndexConverterAnimatedLayers::indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, QModelIndex &parentIndex, int &row)
+bool KisModelIndexConverterAnimatedLayers::indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, bool isAnimated, QModelIndex &parentIndex, int &row)
 {
     Q_UNUSED(newNodeMetaObjectType);
 
     // adding a root node
     if (!parentDummy) {
         Q_ASSERT(!index);
+        return false;
+    }
+
+    if (!isAnimated) {
         return false;
     }
 

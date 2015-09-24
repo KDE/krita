@@ -126,6 +126,7 @@ QModelIndex KisModelIndexConverter::indexFromDummy(KisNodeDummy *dummy)
 bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy,
                                                  int index,
                                                  const QString &newNodeMetaObjectType,
+                                                 bool isAnimated,
                                                  QModelIndex &parentIndex,
                                                  int &row)
 {

@@ -33,7 +33,7 @@ public:
     KisNodeDummy *dummyFromRow(int row, QModelIndex parent);
     KisNodeDummy *dummyFromIndex(QModelIndex index);
     QModelIndex indexFromDummy(KisNodeDummy *dummy);
-    bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, QModelIndex &parentIndex, int &row);
+    bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, bool isAnimated, QModelIndex &parentIndex, int &row);
     int rowCount(QModelIndex parent);
 
 private:

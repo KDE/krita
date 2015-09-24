@@ -78,7 +78,7 @@ extern "C" int main(int argc, char **argv)
 
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita" +
+    QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 

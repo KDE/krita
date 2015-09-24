@@ -26,15 +26,13 @@
 
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"
-#include "kis_tool_invocation_action.h"
-#include "kis_alternate_invocation_action.h"
 #include "kis_shortcut_configuration.h"
 #include "kis_canvas2.h"
 #include "kis_tool_proxy.h"
 #include "kis_signal_compressor.h"
 #include "input/kis_tablet_debugger.h"
 
-#include "kis_abstract_input_action.h"
+class KisToolInvocationAction;
 
 
 class KisInputManager::Private

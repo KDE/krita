@@ -25,7 +25,6 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 
-class QPainter;
 
 class KisHairyPaintOpSettings : public KisBrushBasedPaintOpSettings
 {

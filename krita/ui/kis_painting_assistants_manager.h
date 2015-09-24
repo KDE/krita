@@ -24,10 +24,11 @@
 #include <QPointer>
 
 #include "KisView.h"
-#include "kis_action.h"
 
 class KisViewManager;
 class KisPaintingAssistantsDecoration;
+class KisAction;
+class KisActionManager;
 
 
 class KisPaintingAssistantsManager : public QObject

@@ -19,6 +19,7 @@
  */
 
 #include "kis_color_space_selector.h"
+#include "kis_advanced_color_space_selector.h"
 
 
 #include <QUrl>

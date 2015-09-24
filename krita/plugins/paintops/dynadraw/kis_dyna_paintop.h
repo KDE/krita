@@ -25,9 +25,9 @@
 
 #include "dyna_brush.h"
 
-#include "kis_dyna_paintop_settings.h"
 
 class KisPainter;
+class KisDynaPaintOpSettings;
 
 class KisDynaPaintOp : public KisPaintOp
 {

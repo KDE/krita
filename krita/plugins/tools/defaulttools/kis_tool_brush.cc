@@ -26,6 +26,7 @@
 
 #include <klocalizedstring.h>
 #include <QAction>
+#include <QLabel>
 #include <kactioncollection.h>
 
 
@@ -35,6 +36,7 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_slider_spin_box.h"
+#include "kundo2magicstring.h"
 
 #define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000

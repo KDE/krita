@@ -23,12 +23,13 @@
 #include <QScopedPointer>
 #include <QtGlobal>
 
+#include "kis_input_manager.h"
 #include "kis_config.h"
 #include "kis_abstract_input_action.h"
+#include "kis_tool_invocation_action.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 #include "kis_input_profile_manager.h"
-#include "input/kis_tablet_debugger.h"
 
 
 

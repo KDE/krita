@@ -26,7 +26,6 @@ class QRect;
 
 class KoToolProxy;
 
-class KisCanvas2;
 class KisCanvasDecoration;
 class KisDisplayFilter;
 class KisDisplayColorConverter;

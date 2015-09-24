@@ -34,7 +34,6 @@
 #include <kis_icon_utils.h>
 
 #include "KisApplication.h"
-#include "KisMainWindow.h"
 #include "KisDocument.h"
 #include "KisView.h"
 #include "KisViewManager.h"
@@ -48,7 +47,6 @@
 #include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfig.h>

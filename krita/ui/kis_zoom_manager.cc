@@ -39,7 +39,6 @@
 
 #include "KisDocument.h"
 #include "KisViewManager.h"
-#include "KisView.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"

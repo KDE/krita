@@ -27,7 +27,6 @@
 #include <ktoggleaction.h>
 #include "kis_debug.h"
 
-#include "kis_painting_assistant.h"
 #include <QPainter>
 
 struct KisPaintingAssistantsDecoration::Private {

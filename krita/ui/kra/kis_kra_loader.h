@@ -26,7 +26,6 @@ class QStringList;
 class KoStore;
 
 class KisDocument;
-class KisNode;
 class KoColorSpace;
 class KisPaintingAssistant;
 

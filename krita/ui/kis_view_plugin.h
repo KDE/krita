@@ -21,9 +21,10 @@
 #define KIS_VIEW_PLUGIN_H
 
 #include <kritaui_export.h>
-#include "operations/kis_operation_ui_factory.h"
+#include <QObject>
 
 class KisOperation;
+class KisOperationUIFactory;
 class KisAction;
 class KisViewManager;
 

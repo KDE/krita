@@ -22,7 +22,7 @@
 
 #ifdef HAVE_OPENGL
 
-#include "kis_texture_tile_update_info.h"
+class KisTextureTileUpdateInfo;
 
 #include <QRect>
 #include <QRectF>

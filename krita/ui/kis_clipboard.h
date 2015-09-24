@@ -25,7 +25,6 @@
 #include "kis_types.h"
 #include <kritaui_export.h>
 
-class QImage;
 class QRect;
 
 enum enumPasteBehaviour {

@@ -25,10 +25,7 @@
 
 class KisMainWindow;
 class KisApplicationPrivate;
-class KCmdLineArgs;
 class QWidget;
-class QStringList;
-class QCommandLineParser;
 class KisApplicationArguments;
 
 #include <KisImportExportManager.h>

@@ -24,7 +24,6 @@
 #include <QPointer>
 
 #include <KisMainWindow.h>
-#include <KisView.h>
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
@@ -32,18 +31,15 @@
 #include <kis_types.h>
 
 #include "kis_floating_message.h"
-#include "KisView.h"
 
-class KisAction;
 class QPoint;
-
+class KisView;
 
 class KisCanvas2;
 class KisCanvasResourceProvider;
 class KisDocument;
 class KisFilterManager;
 class KisGridManager;
-class KisImage;
 class KisImageManager;
 class KisNodeManager;
 class KisPaintingAssistantsManager;

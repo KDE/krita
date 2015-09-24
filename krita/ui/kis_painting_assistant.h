@@ -35,7 +35,6 @@ class QRect;
 class QRectF;
 class KoStore;
 class KisCoordinatesConverter;
-class KisDocument;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>

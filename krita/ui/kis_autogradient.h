@@ -22,7 +22,6 @@
 
 #include "ui_wdgautogradient.h"
 
-class KoResource;
 class KoGradientSegment;
 class KoSegmentGradient;
 

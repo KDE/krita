@@ -22,12 +22,10 @@
 #include <QWidget>
 
 #include "kis_canvas_widget_base.h"
-#include "kis_prescaled_projection.h"
 #include "kis_ui_types.h"
 
 class QImage;
 class QPaintEvent;
-class QPainter;
 class KisCanvas2;
 class KisDisplayColorConverter;
 

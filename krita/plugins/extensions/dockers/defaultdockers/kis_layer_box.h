@@ -36,6 +36,7 @@
 
 #include <kis_types.h>
 
+#include "kis_action.h"
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 

@@ -22,8 +22,8 @@
 #include <QtTest>
 
 class KisPaintDevice;
-class KoColorSpace;
 class KoColor;
+class KoColorSpace;
 
 
 class KisVLineIteratorBenchmark : public QObject

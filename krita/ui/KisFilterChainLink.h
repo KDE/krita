@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #include <KisFilterChain.h>
 
 class QByteArray;
-class KoUpdater;
 
 namespace CalligraFilter {
 

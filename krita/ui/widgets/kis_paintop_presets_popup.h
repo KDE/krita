@@ -28,7 +28,6 @@
 #include <kis_paintop_factory.h>
 
 class QString;
-class KisPaintOpPreset;
 class KisCanvasResourceProvider;
 class KoResource;
 

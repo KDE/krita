@@ -37,7 +37,6 @@
 #include "KoColorPopupAction.h"
 #include "kis_icon_utils.h"
 #include "KoID.h"
-#include "kis_types.h"
 #include "kis_image.h"
 #include "kis_annotation.h"
 #include "kis_config.h"

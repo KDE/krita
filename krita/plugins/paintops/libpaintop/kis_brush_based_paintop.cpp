@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_brush_based_paintop.h"
-#include "kis_brush.h"
 #include "kis_properties_configuration.h"
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>

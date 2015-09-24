@@ -21,7 +21,6 @@
 #include <kundo2command.h>
 #include "kis_benchmark_values.h"
 
-#include "kis_paint_device.h"
 #include "kis_random_accessor_ng.h"
 
 #include <KoColorSpace.h>

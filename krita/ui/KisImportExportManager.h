@@ -27,10 +27,10 @@ Boston, MA 02110-1301, USA.
 #include <QByteArray>
 #include <QUrl>
 
-#include "KisFilterChain.h"
 #include "KisFilterGraph.h"
 
 #include "kritaui_export.h"
+class KisFilterChain;
 class KisDocument;
 class KoProgressUpdater;
 

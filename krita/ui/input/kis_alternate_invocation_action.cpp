@@ -25,7 +25,6 @@
 #include <kis_canvas2.h>
 
 #include "kis_input_manager.h"
-#include "kis_tool.h"
 #include "kis_cursor.h"
 
 struct KisAlternateInvocationAction::Private

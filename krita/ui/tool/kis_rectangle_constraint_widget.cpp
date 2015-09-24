@@ -15,6 +15,7 @@
  */
 
 #include "kis_rectangle_constraint_widget.h"
+#include "kis_tool_rectangle_base.h"
 
 #include <kis_icon_utils.h>
 

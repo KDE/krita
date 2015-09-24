@@ -26,7 +26,6 @@
 #include <kis_types.h>
 
 
-class KoColorSpace;
 
 class KisPainterBenchmark : public QObject
 {

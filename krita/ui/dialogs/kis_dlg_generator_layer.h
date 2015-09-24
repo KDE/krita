@@ -22,7 +22,6 @@
 #include <KoDialog.h>
 #include <QString>
 
-class KisFilter;
 class KisFilterConfiguration;
 class KisViewManager;
 

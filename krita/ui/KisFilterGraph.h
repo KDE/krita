@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 
 #include "kritaui_export.h"
 #include "KisFilterChain.h"
-#include "KisFilterVertex.h"
 #include <QByteArray>
 #include <QHash>
 

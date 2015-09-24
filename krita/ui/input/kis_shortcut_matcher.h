@@ -19,14 +19,11 @@
 #ifndef __KIS_SHORTCUT_MATCHER_H
 #define __KIS_SHORTCUT_MATCHER_H
 
-#include "kis_abstract_shortcut.h"
 
 #include <QList>
 #include "kis_single_action_shortcut.h"
 
 class QEvent;
-class QMouseEvent;
-class QKeyEvent;
 class QWheelEvent;
 class QTouchEvent;
 class QString;

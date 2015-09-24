@@ -36,7 +36,6 @@ const QString TANGENT_MIX_VAL = "Tangent/mixValue";
 //const QString TANGENT_DIR_MAX = "Tangent/directionMaximum";
 
 class KisPropertiesConfiguration;
-class KisPainter;
 class KisTangentTiltOptionWidget;
 
 class KisTangentTiltOption: public KisPaintOpOption//not really//

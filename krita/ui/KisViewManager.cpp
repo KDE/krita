@@ -98,7 +98,6 @@
 #include <kis_image.h>
 #include "kis_image_manager.h"
 #include <kis_layer.h>
-#include "KisMainWindow.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_mask_manager.h"
 #include "kis_mimedata.h"

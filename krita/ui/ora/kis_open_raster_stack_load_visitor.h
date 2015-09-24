@@ -26,11 +26,8 @@
 class QDomElement;
 
 
-class KisAdjustmentLayer;
 class KisUndoStore;
-class KisGroupLayer;
 class KisOpenRasterLoadContext;
-class KisPaintLayer;
 
 class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor
 {

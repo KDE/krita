@@ -30,13 +30,11 @@
 #include "kis_sprayop_option.h"
 
 
-#include "random_gauss.h"
-
 #include <QImage>
 #include <kis_brush.h>
 
 class KisPaintInformation;
-class KisBrush;
+class RandomGauss;
 
 class SprayBrush
 {

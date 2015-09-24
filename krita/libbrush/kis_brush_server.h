@@ -28,7 +28,6 @@
 #include "kritabrush_export.h"
 #include "kis_brush.h"
 
-class KoResource;
 class KoResourceLoaderThread;
 
 typedef KoResourceServer<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServer;

@@ -26,7 +26,6 @@
 #include <KisImportExportManager.h>
 
 #include "kis_node_manager.h"
-#include "kis_types.h"
 #include "kis_count_visitor.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"

@@ -20,10 +20,10 @@
 
 #include <QObject>
 #include <QList>
+#include <QPointer>
 
 #include <kis_image.h>
-#
-#include "KisDocument.h"
+#include "KisView.h"
 
 #include <kritaui_export.h>
 
@@ -31,9 +31,9 @@ class KisActionManager;
 class KisAction;
 class QAction;
 class KoViewConverter;
+class KisDocument;
 
 class KisViewManager;
-class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
 class KisView;

@@ -36,7 +36,6 @@
 #include "kis_ui_types.h"
 
 class QWidget;
-class QPaintEvent;
 class KisCanvas2;
 class KisDisplayColorConverter;
 class QOpenGLShaderProgram;

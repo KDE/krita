@@ -24,7 +24,6 @@
 #include <QPixmap>
 #include <QList>
 
-class KConfig;
 class KisOpenPanePrivate;
 class QPixmap;
 class KisTemplatesPane;

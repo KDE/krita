@@ -26,7 +26,6 @@
 #include "kis_types.h"
 #include "KisView.h"
 
-class QAction;
 
 class KisViewManager;
 class KisFilterConfiguration;

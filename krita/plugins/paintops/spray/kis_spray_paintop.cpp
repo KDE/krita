@@ -27,6 +27,7 @@
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
+#include <kis_node.h>
 
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>

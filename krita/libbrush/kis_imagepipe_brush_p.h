@@ -38,9 +38,8 @@
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
-#include "kis_brush.h"
 #include "kis_layer.h"
-#include "kis_boundary.h"
+
 
 /**
  * The parasite info that gets loaded from the terribly documented gimp pipe brush parasite.

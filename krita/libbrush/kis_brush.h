@@ -32,7 +32,6 @@ class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;
-class QPoint;
 class KoColor;
 class KoColorSpace;
 

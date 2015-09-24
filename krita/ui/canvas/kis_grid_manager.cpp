@@ -35,7 +35,6 @@
 #include "KisViewManager.h"
 #include "KisDocument.h"
 #include "KisView.h"
-#include "kis_action.h"
 
 KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
 {

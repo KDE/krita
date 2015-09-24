@@ -27,10 +27,10 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_paint_information.h"
-#include "kis_abr_brush_collection.h"
 #include "kritabrush_export.h"
 
 class KisQImagemask;
+class KisAbrBrushCollection;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;

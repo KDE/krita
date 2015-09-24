@@ -18,7 +18,6 @@
  */
 
 #include "kis_mirror_manager.h"
-#include "KisView.h"
 #include "KisViewManager.h"
 #include <kis_canvas_controller.h>
 

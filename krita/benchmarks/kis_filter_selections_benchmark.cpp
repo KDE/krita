@@ -22,7 +22,6 @@
 
 #include <QTest>
 #include "testutil.h"
-#include "kis_selection.h"
 #include "kis_transaction.h"
 #include <KoCompositeOpRegistry.h>
 #include "kis_datamanager.h"

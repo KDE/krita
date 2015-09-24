@@ -63,7 +63,6 @@
 #include <kfileitem.h>
 #include <kdirnotify.h>
 #include <QTemporaryFile>
-#include "kundo2stack.h"
 #include <kbackup.h>
 
 #include <QApplication>

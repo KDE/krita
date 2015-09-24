@@ -27,8 +27,6 @@
 #include <kis_canvas2.h>
 #include <KisView.h>
 
-class QPoint;
-class QRect;
 class QRectF;
 class QPainter;
 class KisCoordinatesConverter;

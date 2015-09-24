@@ -22,7 +22,6 @@
 #include <kritaui_export.h>
 #include <KoID.h>
 
-class KisRecordedAction;
 class KisRecordedActionCreatorFactory;
 
 /**

@@ -32,7 +32,6 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "recorder/kis_recorded_paint_action.h"
-#include "kis_default_bounds.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 

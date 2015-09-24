@@ -103,7 +103,6 @@
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
-#include "KisView.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"

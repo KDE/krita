@@ -24,8 +24,6 @@
 #include <KoColor.h>
 #include <kis_paint_device.h>
 
-class KisPaintDevice;
-class KoColorSpace;
 class KoColor;
 
 class KisBlurBenchmark : public QObject

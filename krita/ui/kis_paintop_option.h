@@ -26,7 +26,6 @@
 #include <kis_locked_properties_proxy.h>
 
 class QWidget;
-class QString;
 
 /**
  * Base interface for paintop options. A paintop option

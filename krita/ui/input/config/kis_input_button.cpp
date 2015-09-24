@@ -27,7 +27,6 @@
 
 #include "kis_icon_utils.h"
 
-#include "input/kis_shortcut_configuration.h"
 
 class KisInputButton::Private
 {

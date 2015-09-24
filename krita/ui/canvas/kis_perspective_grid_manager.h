@@ -21,8 +21,9 @@
 #ifndef KIS_PERSPECTIVE_GRID_MANAGER_H
 #define KIS_PERSPECTIVE_GRID_MANAGER_H
 
-#include "kis_canvas_decoration.h"
 #include <QPainter>
+#include <QPointer>
+#include "KisView.h"
 
 #include <kritaui_export.h>
 

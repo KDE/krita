@@ -30,6 +30,7 @@
 
 class KisPropertiesConfiguration;
 class KisPressureSpacingOption;
+class KisDabCache;
 
 /// Internal
 class TextBrushInitializationWorkaround

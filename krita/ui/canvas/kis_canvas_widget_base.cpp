@@ -38,6 +38,7 @@
 #include "kis_canvas2.h"
 #include "../KisViewManager.h"
 #include "../kis_selection_manager.h"
+#include "../KisDocument.h"
 
 struct KisCanvasWidgetBase::Private
 {

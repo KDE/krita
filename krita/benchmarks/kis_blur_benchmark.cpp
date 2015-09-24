@@ -21,7 +21,6 @@
 #include "kis_blur_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include "kis_paint_device.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

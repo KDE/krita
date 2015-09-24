@@ -23,7 +23,6 @@
 
 class KisDocument;
 class KisNameServer;
-class KisShapeController;
 
 
 class KisShapeControllerTest : public KisDummiesFacadeBaseTest

@@ -34,11 +34,9 @@
 
 #include "psd.h"
 #include "kis_global.h"
-#include "kis_psd_layer_style.h"
 
 #include "asl/kis_asl_reader.h"
 #include "asl/kis_asl_xml_parser.h"
-#include "asl/kis_asl_callback_object_catcher.h"
 #include "asl/kis_asl_writer_utils.h"
 
 #include "asl/kis_asl_xml_writer.h"

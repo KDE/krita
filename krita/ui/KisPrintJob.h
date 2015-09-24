@@ -29,8 +29,6 @@
 
 #include <kis_types.h>
 
-class QWidget;
-
 /**
  * A print job is an interface that the KisView uses to create an application-specific
  * class that can take care of printing.

@@ -69,7 +69,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-#include "KisView.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"

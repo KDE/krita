@@ -177,11 +177,11 @@ void KisStatusBar::updateSelectionIcon()
 {
     QIcon icon;
     if (!m_view->selectionManager()->displaySelection()) {
-        icon = KisIconUtils::loadIcon("selection-mode_invisible.png");
+        icon = KisIconUtils::loadIcon("selection-mode_invisible");
     } else if (m_view->selectionManager()->showSelectionAsMask()) {
-        icon = KisIconUtils::loadIcon("selection-mode_mask.png");
+        icon = KisIconUtils::loadIcon("selection-mode_mask");
     } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
-        icon = KisIconUtils::loadIcon("selection-mode_ants.png");
+        icon = KisIconUtils::loadIcon("selection-mode_ants");
     }
     m_selectionStatus->setIcon(icon);
 }

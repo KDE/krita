@@ -20,12 +20,11 @@
 #define __KIS_STROKE_STRATEGY_H
 
 #include <QString>
-#include "kis_stroke_job_strategy.h"
 #include "kis_types.h"
 #include "kundo2magicstring.h"
 
-class KisStrokeStrategy;
-
+class KisStrokeJobStrategy;
+class KisStrokeJobData;
 
 class KRITAIMAGE_EXPORT KisStrokeStrategy
 {

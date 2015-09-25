@@ -22,6 +22,7 @@
 #include <QTransform>
 #include <KoUnit.h>
 #include "tool_transform_args.h"
+#include "kis_paint_device.h"
 
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;

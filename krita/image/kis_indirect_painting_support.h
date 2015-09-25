@@ -22,13 +22,13 @@
 
 #include "kritaimage_export.h"
 #include "kis_types.h"
-#include "kis_node.h"
 
 class QBitArray;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisPainter;
 class KUndo2MagicString;
+class KoCompositeOp;
 
 /**
  * For classes that support indirect painting.

@@ -3,7 +3,6 @@
 
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
-#include "kis_properties_configuration.h"
 
 
 

@@ -22,7 +22,6 @@
 #include <QScopedPointer>
 
 #include "kis_paintop.h"
-#include "kis_distance_information.h"
 #include "kis_algebra_2d.h"
 
 

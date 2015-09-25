@@ -23,7 +23,6 @@
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
-#include "kis_paint_device.h"
 
 struct Q_DECL_HIDDEN KisBaseNode::Private
 {

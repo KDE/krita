@@ -28,8 +28,8 @@
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
-#include "kis_paint_device.h"
 #include <new>
+#include "kis_paint_device.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4290) // disable "C++ exception specification ignored" warning

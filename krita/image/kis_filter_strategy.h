@@ -23,7 +23,6 @@
 
 #include <klocalizedstring.h>
 
-#include "kis_types.h"
 #include "KoGenericRegistry.h"
 #include "KoID.h"
 #include "kritaimage_export.h"

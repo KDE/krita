@@ -20,7 +20,6 @@
 
 #include <kritaimage_export.h>
 #include <KoColorSpace.h>
-#include "kis_global.h"
 #include "kis_shared.h"
 #include <kis_shared_ptr.h>
 

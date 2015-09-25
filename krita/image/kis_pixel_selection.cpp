@@ -35,7 +35,6 @@
 
 #include "kis_layer.h"
 #include "kis_debug.h"
-#include "kis_types.h"
 #include "kis_image.h"
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"

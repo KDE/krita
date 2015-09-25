@@ -40,6 +40,7 @@
 #include "kis_painter.h"
 #include "kis_filter_weights_applicator.h"
 #include "kis_progress_update_helper.h"
+#include "kis_pixel_selection.h"
 
 
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,

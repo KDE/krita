@@ -19,7 +19,6 @@
 #ifndef __KIS_MERGE_WALKER_H
 #define __KIS_MERGE_WALKER_H
 
-#include "kis_node.h"
 #include "kis_types.h"
 #include "kis_base_rects_walker.h"
 

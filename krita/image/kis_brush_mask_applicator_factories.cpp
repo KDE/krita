@@ -21,7 +21,7 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_circle_mask_generator_p.h"
 #include "kis_brush_mask_applicators.h"
-
+#include "kis_brush_mask_applicator_base.h"
 
 #define a(_s) #_s
 #define b(_s) a(_s)

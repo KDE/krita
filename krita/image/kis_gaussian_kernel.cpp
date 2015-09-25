@@ -20,6 +20,7 @@
 
 #include "kis_convolution_kernel.h"
 #include <kis_convolution_painter.h>
+#include <QRect>
 
 
 qreal KisGaussianKernel::sigmaFromRadius(qreal radius)

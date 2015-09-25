@@ -32,7 +32,6 @@
 #include "kis_painter.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
-#include "kis_clone_info.h"
 #include "kis_paint_layer.h"
 
 #include <QStack>

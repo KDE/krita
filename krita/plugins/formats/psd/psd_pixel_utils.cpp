@@ -30,6 +30,7 @@
 
 #include <netinet/in.h> // htonl
 
+#include "kis_global.h"
 #include <asl/kis_asl_writer_utils.h>
 #include <asl/kis_asl_reader_utils.h>
 

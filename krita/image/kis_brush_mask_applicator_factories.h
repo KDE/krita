@@ -21,8 +21,7 @@
 
 #include "KoVcMultiArchBuildSupport.h"
 
-#include "kis_brush_mask_applicator_base.h"
-
+class KisBrushMaskApplicatorBase;
 
 template<class MaskGenerator, Vc::Implementation _impl>
 struct KisBrushMaskScalarApplicator;

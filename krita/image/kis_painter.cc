@@ -52,7 +52,6 @@
 #include "kis_paint_device.h"
 #include "kis_fixed_paint_device.h"
 #include "kis_transaction.h"
-#include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_iterator_ng.h"
 #include "kis_random_accessor_ng.h"
@@ -65,6 +64,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_perspective_math.h"
 #include "tiles3/kis_random_accessor.h"
+#include "kis_distance_information.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.

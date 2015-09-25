@@ -25,7 +25,6 @@
 #include "kis_tiled_data_manager.h"
 #include "kis_random_accessor_ng.h"
 
-class KisTile;
 
 class KisRandomAccessor2 : public KisRandomAccessorNG
 {

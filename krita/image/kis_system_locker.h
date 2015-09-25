@@ -19,7 +19,6 @@
 #ifndef _KIS_SYSTEM_LOCKER_H_
 #define _KIS_SYSTEM_LOCKER_H_
 
-#include "kis_base_node.h"
 
 /**
  * This class will lock a \ref KisBaseNode upon construction, and unlock it

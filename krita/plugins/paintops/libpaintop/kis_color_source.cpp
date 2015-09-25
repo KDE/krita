@@ -25,6 +25,7 @@
 #include <kis_datamanager.h>
 #include <kis_fill_painter.h>
 #include "kis_iterator_ng.h"
+#include "kis_selection.h"
 
 KisColorSource::~KisColorSource() { }
 

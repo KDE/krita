@@ -19,11 +19,8 @@
 #ifndef KIS_LOCKED_PROPERTIES_PROXY_H
 #define KIS_LOCKED_PROPERTIES_PROXY_H
 
-#include "kis_locked_properties.h"
 #include "kis_properties_configuration.h"
-#include "kis_locked_properties_server.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_settings.h"
+
 
 /**
  * This class acts as a proxy for all transfers between KisLockedPropertiesServer
@@ -38,6 +35,7 @@
  * suffix are destroyed.
  */
 class KisLockedPropertiesServer;
+class KisLockedProperties;
 
 class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {

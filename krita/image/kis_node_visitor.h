@@ -19,9 +19,9 @@
 #ifndef KIS_NODE_VISITOR_H_
 #define KIS_NODE_VISITOR_H_
 
-#include "kis_node.h"
 #include "kritaimage_export.h"
 
+class KisNode;
 class KisPaintLayer;
 class KisGroupLayer;
 class KisAdjustmentLayer;
@@ -30,6 +30,8 @@ class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
 class KisSelectionMask;
+class KisGeneratorLayer;
+class KisTransformMask;
 
 class KRITAIMAGE_EXPORT KisNodeVisitor
 {

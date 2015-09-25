@@ -22,7 +22,6 @@
 #include <QStack>
 
 #include "kis_layer.h"
-#include "kis_mask.h"
 
 #include "kis_abstract_projection_plane.h"
 #include "kis_projection_leaf.h"

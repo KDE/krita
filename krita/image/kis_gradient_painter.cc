@@ -24,9 +24,9 @@
 #include <KoAbstractGradient.h>
 #include <KoUpdater.h>
 
+#include "kis_global.h"
 #include "kis_paint_device.h"
 #include "KoPattern.h"
-#include "kis_types.h"
 #include "kis_selection.h"
 
 #include "kis_iterator_ng.h"

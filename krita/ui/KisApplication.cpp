@@ -69,6 +69,7 @@
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
+#include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 #include <kis_paintop_registry.h>

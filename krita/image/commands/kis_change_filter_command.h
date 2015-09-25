@@ -32,8 +32,6 @@
 #include "generator/kis_generator.h"
 
 
-class KisNode;
-
 class KisChangeFilterCmd : public KUndo2Command
 {
 

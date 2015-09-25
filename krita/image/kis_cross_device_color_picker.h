@@ -19,8 +19,7 @@
 #ifndef __KIS_CROSS_DEVICE_COLOR_PICKER_H
 #define __KIS_CROSS_DEVICE_COLOR_PICKER_H
 
-#include "kis_paint_device.h"
-#include "kis_fixed_paint_device.h"
+#include "KoColorSpace.h"
 #include "kis_random_sub_accessor.h"
 
 

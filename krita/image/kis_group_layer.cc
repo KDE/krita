@@ -27,7 +27,6 @@
 #include <KoColor.h>
 
 
-#include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_debug.h"

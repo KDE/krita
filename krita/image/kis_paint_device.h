@@ -28,7 +28,6 @@
 #include <KoColorConversionTransformation.h>
 
 #include "kis_types.h"
-#include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_default_bounds_base.h"
 

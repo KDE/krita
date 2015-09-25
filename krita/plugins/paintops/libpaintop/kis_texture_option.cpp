@@ -49,6 +49,7 @@
 #include <kis_gradient_slider.h>
 #include "kis_embedded_pattern_manager.h"
 #include "kis_algebra_2d.h"
+#include "kis_selection.h"
 
 #include <time.h>
 

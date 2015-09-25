@@ -22,6 +22,7 @@
 #include <QThreadPool>
 
 #include "kis_update_job_item.h"
+#include "kis_stroke_job.h"
 
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount)

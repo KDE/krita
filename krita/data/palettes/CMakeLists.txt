@@ -14,4 +14,4 @@ install( FILES
     swatche.gpl
     swatch-rgb.gpl
     web.gpl
-DESTINATION ${DATA_INSTALL_DIR}/calligra/palettes)
+DESTINATION ${DATA_INSTALL_DIR}/krita/palettes)

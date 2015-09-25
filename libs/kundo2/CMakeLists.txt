@@ -18,15 +18,3 @@ set_target_properties(kundo2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/kundo2_export.h
-    kundo2stack.h
-    kundo2qstack.h
-    kundo2group.h
-    kundo2view.h
-    kundo2model.h
-    kundo2command.h
-    kundo2magicstring.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
-)

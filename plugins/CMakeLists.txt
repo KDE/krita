@@ -9,10 +9,6 @@ if (SHOULD_BUILD_PLUGIN_COLORENGINES)
     add_subdirectory( colorengines )
 endif ()
 
-if (SHOULD_BUILD_PLUGIN_MUSICSHAPE)
-    add_subdirectory( musicshape )
-endif ()
-
 if (SHOULD_BUILD_PLUGIN_SPACENAVIGATOR)
     macro_optional_find_package(Spnav)
     macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin") 
@@ -29,26 +25,12 @@ if (SHOULD_BUILD_PLUGIN_DOCKERS)
     add_subdirectory( dockers )
 endif ()
 
-if (SHOULD_BUILD_PLUGIN_TEXTEDITING)
-    add_subdirectory( textediting )
-endif()
-
-add_subdirectory( kexi )
-
 if (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
     add_subdirectory( defaultTools )
 endif ()
 
 if (SHOULD_BUILD_PLUGIN_PATHSHAPES)
     add_subdirectory( pathshapes )
-endif ()
-
-if (SHOULD_BUILD_PLUGIN_VARIABLES)
-    add_subdirectory( variables )
-endif ()
-
-if (SHOULD_BUILD_PLUGIN_CHARTSHAPE)
-    add_subdirectory( chartshape )
 endif ()
 
 if (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
@@ -59,29 +41,8 @@ if (SHOULD_BUILD_PLUGIN_TEXTSHAPE)
     add_subdirectory( textshape )
 endif()
 
-if (SHOULD_BUILD_PLUGIN_PLUGINSHAPE)
-    add_subdirectory( pluginshape )
-endif ()
-
-if (SHOULD_BUILD_PLUGIN_FORMULASHAPE)
-    add_subdirectory( formulashape )
-endif ()
-
 if (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
-    # ??? old comment: as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
     add_subdirectory( vectorshape )
 endif ()
 
-if (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
-    add_subdirectory( videoshape )
-endif ()
-
-if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
-    add_subdirectory( semanticitems )
-endif()
-
-#add_subdirectory( videoshape )
-#add_subdirectory( commentshape )
-
-add_subdirectory( staging )
 add_subdirectory( karbonplugins )

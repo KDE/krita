@@ -42,15 +42,3 @@ set_target_properties(kotextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(
-    FILES
-    KoTextDocumentLayout.h
-    KoTextLayoutArea.h
-    KoTextLayoutRootArea.h
-    KoTextShapeData.h
-    KoPointedAt.h
-    KoStyleThumbnailer.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
-)

@@ -30,16 +30,3 @@ set_target_properties(kowidgetutils
 )
 
 install(TARGETS kowidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(FILES
-    KoGroupButton.h
-    KoProgressBar.h
-    KoProgressProxy.h
-    KoProgressUpdater.h
-    KoUpdater.h
-    KoProperties.h
-    KoFileDialog.h
-    ${CMAKE_CURRENT_BINARY_DIR}/kowidgetutils_export.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
-    COMPONENT Devel
-)

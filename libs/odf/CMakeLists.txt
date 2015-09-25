@@ -53,39 +53,3 @@ set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-
-install( FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/koodf_export.h
-    KoOdf.h
-    KoOdfManifestEntry.h
-    KoGenStyle.h
-    KoGenStyles.h
-    KoFontFace.h
-    KoOdfLoadingContext.h
-    KoOasisSettings.h
-    KoOdfStylesReader.h
-    KoOdfNotesConfiguration.h
-    KoOdfBibliographyConfiguration.h
-    KoOdfNumberStyles.h
-    KoOdfNumberDefinition.h
-    KoOdfLineNumberingConfiguration.h
-    KoOdfPaste.h
-    KoOdfReadStore.h
-    KoOdfWriteStore.h
-    KoStyleStack.h
-    KoOdfGraphicStyles.h
-    KoDocumentBase.h
-    KoGenChange.h
-    KoGenChanges.h
-    KoEmbeddedDocumentSaver.h
-    KoBorder.h
-    Ko3dScene.h
-    KoShadowStyle.h
-    KoPageLayout.h
-    KoPageFormat.h
-    KoColumns.h
-    KoUnit.h
-    KoElementReference.h
-    KoTableTemplate.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

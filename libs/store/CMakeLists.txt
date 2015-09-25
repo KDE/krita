@@ -36,8 +36,3 @@ set_target_properties(kostore PROPERTIES
 )
 install(TARGETS kostore ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-
-install( FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/kostore_export.h
-    KoStore.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

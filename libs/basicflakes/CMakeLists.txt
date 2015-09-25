@@ -25,12 +25,3 @@ set_target_properties(basicflakes PROPERTIES
 )
 
 install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install( FILES
-    tools/KoCreatePathTool.h
-    tools/KoPencilTool.h
-    ${CMAKE_CURRENT_BINARY_DIR}/basicflakes_export.h
-
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra
-COMPONENT Devel)

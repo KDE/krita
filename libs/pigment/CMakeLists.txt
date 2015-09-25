@@ -81,45 +81,6 @@ set(pigmentcms_SRCS
     resources/KoSegmentGradient.cpp
 )
 
-
-set(PIGMENT_INSTALL_FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/pigment_export.h
-        DebugPigment.h
-        KoBasicHistogramProducers.h
-        KoChannelInfo.h
-        KoColor.h
-        KoColorConversionTransformation.h
-        KoColorConversionTransformationAbstractFactory.h
-        KoColorConversionTransformationFactory.h
-        KoColorModelStandardIds.h
-        KoColorProfile.h
-        KoColorSpace.h
-        KoColorSpaceEngine.h
-        KoColorSpaceFactory.h
-        KoColorSpaceAbstract.h
-        KoColorSpaceConstants.h
-        KoColorSpaceMaths.h
-        KoColorSpaceRegistry.h
-        KoCmykColorSpaceTraits.h
-        KoColorSpaceTraits.h
-        KoGrayColorSpaceTraits.h
-        KoLabColorSpaceTraits.h
-        KoRgbColorSpaceTraits.h
-        KoXyzColorSpaceTraits.h
-        KoYcbcrColorSpaceTraits.h
-        KoColorTransformation.h
-        KoColorTransformationFactory.h
-        KoColorTransformationFactoryRegistry.h
-        KoCompositeOp.h
-        KoConvolutionOp.h
-        KoFallBackColorTransformation.h
-        KoIntegerMaths.h
-        KoLabDarkenColorTransformation.h
-        KoMixColorsOp.h
-        KoMixColorsOpImpl.h
-        KoHistogramProducer.h
-)
-
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
@@ -159,6 +120,3 @@ set_target_properties(pigmentcms PROPERTIES
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-install( FILES ${PIGMENT_INSTALL_FILES}
-         DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

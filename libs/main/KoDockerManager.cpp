@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include "KoToolDocker.h"
+#include "KoDockRegistry.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -75,7 +76,7 @@ KoDockerManager::~KoDockerManager()
 void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
-    dockWidgetFont.setPointSizeF(KoDockRegistry::dockFont());
+    QFont dockWidgetFont = KoDockRegistry::dockFont();
 
     foreach(QWidget *w, optionWidgetList) {
 #ifdef Q_OS_MAC

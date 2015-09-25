@@ -39,6 +39,8 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QTimer>
+#include <QStyle>
+#include <QStyleFactory>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
@@ -112,7 +114,7 @@ public:
                 m_splash->hide();
             }
             else {
-                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
+                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
@@ -174,14 +176,19 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
-
-    if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-        setStyle("Plastique");
-        setStyle("Breeze");
-        setStyle("Oxygen");
-        setStyle("Fusion");
+    qDebug() << "Available styles:" << QStyleFactory::keys();
+    QStringList styles = QStringList()/* << "Breeze" */<< "Oxygen" << "Plastique" << "Fusion";
+    foreach(const QString & style, styles) {
+        if (!setStyle(style)) {
+            qDebug() << "No" << style << "available.";
+        }
+        else {
+            break;
+        }
     }
+    qDebug() << "Style:" << QApplication::style();
+
+
 
     KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }

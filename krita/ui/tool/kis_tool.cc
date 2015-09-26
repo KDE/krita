@@ -26,8 +26,6 @@
 #include <klocalizedstring.h>
 #include <QAction>
 #include <kactioncollection.h>
-#include <KoResourcePaths.h>
-
 
 #include <kis_icon_utils.h>
 #include <KoColorSpaceRegistry.h>

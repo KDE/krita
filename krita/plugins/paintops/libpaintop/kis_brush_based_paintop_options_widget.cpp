@@ -17,8 +17,9 @@
  */
 
 #include "kis_brush_based_paintop_options_widget.h"
+
 #include "kis_brush_option_widget.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)

@@ -189,7 +189,8 @@ private:
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*         m_favoriteResourceManager;
     QToolButton*                        m_reloadButton;
-
+    KisAction*                          m_eraseAction;
+    KisAction*                          m_reloadAction;
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;

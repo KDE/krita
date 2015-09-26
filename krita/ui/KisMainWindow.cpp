@@ -567,6 +567,9 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::slotThemeChanged()
 {
+
+    qDebug() << "trying to reset icon themes";
+
     // save theme changes instantly
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());

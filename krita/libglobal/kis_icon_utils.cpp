@@ -43,11 +43,7 @@ QIcon loadIcon(const QString &name)
 
     realName = QLatin1String(prefix) + '_' + name;
 
-    QStringList names = QStringList() << ":/" + name
-                                      << ":/" + name + ".png"
-                                      << ":/pics/" + name + ".svg"
-                                      << ":/pics/" + name + ".png"
-                                      << ":/pics/" + realName + ".svg"
+    QStringList names = QStringList() << ":/pics/" + realName + ".svg"
                                       << ":/pics/" + realName + ".png"
                                       << ":/pics/layerbox" + realName + ".svg"
                                       << ":/pics/layerbox" + realName + ".png"
@@ -59,7 +55,10 @@ QIcon loadIcon(const QString &name)
                                       << ":/pics/tool_transform/16/" + realName + ".png"
                                       << ":/pics/Breeze-" + QLatin1String(prefix) + '/' + realName + ".svg"
                                       << ":/pics/Breeze-" + QLatin1String(prefix) + '/' + realName + ".png"
-
+                                      << ":/" + name
+                                      << ":/" + name + ".png"
+                                      << ":/pics/" + name + ".svg"
+                                      << ":/pics/" + name + ".png"
                                          ;
 
     foreach(const QString &resname, names) {

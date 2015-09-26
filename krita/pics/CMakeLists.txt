@@ -1,6 +1,4 @@
 install(FILES  
-arrow-down.png
-arrow-right.png
 broken-preset.png
 delete.png
 height_icon.png

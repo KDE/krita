@@ -519,7 +519,6 @@ void TextTool::createActions()
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
 #include <kundo2stack.h>
-#include <braindump/src/Section.h>
 #include <QMimeDatabase>
 #include <QMimeType>
 

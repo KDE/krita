@@ -131,7 +131,7 @@ void DocumentManager::delayedNewDocument()
 
         if (ok) {
             QMimeDatabase db;
-            db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
+            QString mimeType = db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);

@@ -58,7 +58,8 @@ FileSystemModel::~FileSystemModel()
 QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid()) {
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, d->list.at(index.row()).absoluteFilePath(), false);
+        const QUrl absoluteFilePath = QUrl::fromLocalFile(d->list.at(index.row()).absoluteFilePath());
+        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, absoluteFilePath, false);
         if (!item.isNull()) {
             switch(role) {
                 case FileNameRole:
@@ -74,7 +75,7 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
                     return item.mimetype();
                     break;
                 case FileDateRole:
-                    return item.time(KFileItem::ModificationTime).dateTime().toString(Qt::SystemLocaleShortDate);
+                    return item.time(KFileItem::ModificationTime).toString(Qt::SystemLocaleShortDate);
             }
         }
     }
@@ -137,12 +138,12 @@ void FileSystemModel::setPath(const QString& path)
 QString FileSystemModel::parentFolder()
 {
     if (path() != Private::drivesPath) {
-        QUrl root = QUrl::fromLocalFile(path());
-        if (QRegExp("^[A-Z]{1,3}:/$").exactMatch(root.toLocalFile())) {
+        if (QRegExp("^[A-Z]{1,3}:/$").exactMatch(path())) {
             return Private::drivesPath;
         } else {
-            root.cd("..");
-            return root.toLocalFile();
+            QDir root(path());
+            root.cdUp();
+            return root.path();
         }
     } else {
         return Private::drivesPath;

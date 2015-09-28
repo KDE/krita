@@ -245,7 +245,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    d->document->saveAs(d->saveAsFilename);
+    d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();

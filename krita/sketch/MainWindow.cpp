@@ -39,6 +39,9 @@
 #include <KoDialog.h>
 #include <kis_debug.h>
 
+#include <kstandarddirs.h>
+#include <kglobal.h>
+
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_paintop.h"
@@ -122,7 +125,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
-    view->engine()->addImportPath(KoResourcePaths::findDirs("lib", "calligra/imports").value(0));
+    const QStringList qmlImportDirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
+    foreach(const QString &dir, qmlImportDirs) {
+        view->engine()->addImportPath(dir);
+    }
+//     QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
     QString mainqml = KoResourcePaths::findResource("data", "kritasketch/kritasketch.qml");
 #endif
 

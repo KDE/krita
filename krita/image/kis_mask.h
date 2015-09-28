@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.b
  */
 #ifndef _KIS_MASK_
 #define _KIS_MASK_
@@ -23,8 +23,8 @@
 #include <QRect>
 
 #include "kis_types.h"
-#include "kis_node.h"
 #include "kis_global.h"
+#include "kis_node.h"
 #include "kis_indirect_painting_support.h"
 
 #include <kritaimage_export.h>

@@ -23,7 +23,6 @@
 
 #include "kis_types.h"
 #include "kritaimage_export.h"
-#include "kis_paint_device.h"
 
 #include <QImage>
 #include <QPolygon>

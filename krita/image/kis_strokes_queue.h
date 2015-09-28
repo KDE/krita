@@ -21,11 +21,13 @@
 
 #include "kritaimage_export.h"
 #include "kis_types.h"
-#include "kis_stroke_job_strategy.h"
-#include "kis_stroke_strategy.h"
+#include "kundo2magicstring.h"
 
 class KisUpdaterContext;
 class KisStroke;
+class KisStrokeStrategy;
+class KisStrokeJobData;
+
 
 class KRITAIMAGE_EXPORT KisStrokesQueue
 {

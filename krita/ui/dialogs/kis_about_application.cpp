@@ -109,11 +109,13 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     fileCredits.open(QIODevice::ReadOnly);
 
     foreach(const QByteArray &credit, fileCredits.readAll().split('\n')) {
-        QList<QByteArray> creditSplit = credit.split(':');
-        Q_ASSERT(creditSplit.size() == 2);
-        credits.append(QString::fromUtf8(creditSplit.at(0)));
-        credits.append(" (<i>" + QString::fromUtf8(creditSplit.at(1)) + "</i>)");
-        credits.append(", ");
+        if (!credit.isEmpty()) {
+            QList<QByteArray> creditSplit = credit.split(':');
+            Q_ASSERT(creditSplit.size() == 2);
+            credits.append(QString::fromUtf8(creditSplit.at(0)));
+            credits.append(" (<i>" + QString::fromUtf8(creditSplit.at(1)) + "</i>)");
+            credits.append(", ");
+        }
     }
     credits.chop(2);
     credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));

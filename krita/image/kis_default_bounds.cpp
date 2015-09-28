@@ -21,6 +21,7 @@
 #include "kis_global.h"
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
+#include "kis_image.h"
 
 const QRect KisDefaultBounds::infiniteRect =
     QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);

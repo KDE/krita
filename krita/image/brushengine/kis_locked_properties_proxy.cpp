@@ -17,6 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_locked_properties_proxy.h"
+#include "kis_locked_properties.h"
+#include "kis_locked_properties_server.h"
+#include "kis_paintop_settings.h"
+#include "kis_paintop_preset.h"
 
 KisLockedPropertiesProxy ::KisLockedPropertiesProxy()
     : m_lockedProperties(0)

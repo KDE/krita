@@ -27,6 +27,7 @@
 #include <kis_filter_strategy.h>
 #include "kis_liquify_properties.h"
 #include "kritatooltransform_export.h"
+#include "kis_global.h"
 
 
 #include <QScopedPointer>

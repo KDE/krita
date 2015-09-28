@@ -29,10 +29,8 @@
 #include <KoCompositeOp.h>
 #include <KoID.h>
 
-#include "kis_types.h"
 
 #include "kis_paint_device.h"
-#include "kis_paintop.h"
 #include "kis_painter.h"
 #include "kis_debug.h"
 #include "kis_layer.h"

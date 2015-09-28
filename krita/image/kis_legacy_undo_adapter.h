@@ -20,6 +20,7 @@
 #define __KIS_LEGACY_UNDO_ADAPTER_H
 
 #include "kis_undo_adapter.h"
+#include "kis_types.h"
 
 
 /**

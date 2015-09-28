@@ -41,6 +41,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
 #include "kis_abstract_projection_plane.h"
 #include "kis_projection_leaf.h"
+#include "kis_undo_adapter.h"
 
 
 /**

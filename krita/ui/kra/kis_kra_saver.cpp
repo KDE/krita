@@ -33,6 +33,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
+#include <KoColor.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 

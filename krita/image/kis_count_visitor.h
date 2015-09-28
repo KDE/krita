@@ -26,7 +26,6 @@
 
 #include "kis_node.h"
 #include "kis_paint_layer.h"
-#include "kis_paint_device.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_external_layer_iface.h"

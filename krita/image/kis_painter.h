@@ -30,8 +30,6 @@
 #include <KoColorConversionTransformation.h>
 
 #include "kundo2magicstring.h"
-#include "kis_distance_information.h"
-#include "kis_global.h"
 #include "kis_types.h"
 #include <kritaimage_export.h>
 
@@ -54,6 +52,8 @@ class KoPattern;
 class KisFilterConfiguration;
 class KisPaintInformation;
 class KisPaintOp;
+class KisDistanceInformation;
+
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
  * KisPaintDevice. This is the same kind of abstraction as used in Qt

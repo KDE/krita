@@ -22,7 +22,6 @@
 #include <QAtomicInt>
 
 #include "kis_lockless_stack.h"
-#include "kis_memory_pool.h"
 #include "swap/kis_chunk_allocator.h"
 
 class KisTileData;

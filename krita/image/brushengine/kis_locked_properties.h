@@ -20,7 +20,6 @@
 #define KISLOCKEDPROPERTIES_H
 
 #include "kis_properties_configuration.h"
-#include "kis_paintop_settings.h"
 
 /**
  * This class maintains a list of all the PaintOp Options that are supposed to be

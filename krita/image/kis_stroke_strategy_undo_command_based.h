@@ -25,12 +25,11 @@
 
 #include "kis_types.h"
 #include "kis_simple_stroke_strategy.h"
-#include "commands_new/kis_saved_commands.h"
 
 
 class KisStrokeJob;
 class KisPostExecutionUndoAdapter;
-
+class KisSavedMacroCommand;
 
 class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisSimpleStrokeStrategy
 {

@@ -21,7 +21,6 @@
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
-#include "kis_tile_data_store.h"
 #include "kis_tile.h"
 
 

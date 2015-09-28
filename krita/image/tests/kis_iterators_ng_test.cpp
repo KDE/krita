@@ -31,6 +31,7 @@
 
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
+#include "kis_global.h"
 
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))

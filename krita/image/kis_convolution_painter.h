@@ -18,8 +18,6 @@
 #ifndef KIS_CONVOLUTION_PAINTER_H_
 #define KIS_CONVOLUTION_PAINTER_H_
 
-#include "kis_shared.h"
-#include "kis_shared_ptr.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_image.h"

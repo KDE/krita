@@ -37,6 +37,7 @@
 #include "kis_circle_mask_generator_p.h"
 #include "kis_base_mask_generator.h"
 #include "kis_brush_mask_applicator_factories.h"
+#include "kis_brush_mask_applicator_base.h"
 
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)

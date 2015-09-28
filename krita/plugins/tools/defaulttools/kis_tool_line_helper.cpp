@@ -19,6 +19,7 @@
 #include "kis_tool_line_helper.h"
 
 #include "kis_painting_information_builder.h"
+#include "kis_image.h"
 
 struct KisToolLineHelper::Private
 {

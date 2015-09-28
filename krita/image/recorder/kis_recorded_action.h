@@ -22,8 +22,6 @@
 class QDomDocument;
 class QDomElement;
 class QString;
-class KisUndoAdapter;
-class KisNodeQueryPath;
 class KisPlayInfo;
 class KisRecordedActionLoadContext;
 class KisRecordedActionSaveContext;

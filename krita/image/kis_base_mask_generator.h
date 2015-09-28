@@ -20,7 +20,7 @@
 #ifndef _KIS_MASK_GENERATOR_H_
 #define _KIS_MASK_GENERATOR_H_
 
-#include "kis_brush_mask_applicator_base.h" // vc.h must come first
+#include <KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <KoID.h>
 #include <klocalizedstring.h>
 
@@ -28,6 +28,7 @@
 
 class QDomElement;
 class QDomDocument;
+class KisBrushMaskApplicatorBase;
 
 const KoID DefaultId("default", ki18n("Default")); ///< generate Krita default mask generator
 const KoID SoftId("soft", ki18n("Soft")); ///< generate brush mask from former softbrush paintop, where softness is based on curve

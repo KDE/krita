@@ -21,6 +21,7 @@
 #define KIS_TIFF_WRITER_VISITOR_H
 
 #include <kis_node_visitor.h>
+#include "kis_types.h"
 
 #include <tiffio.h>
 

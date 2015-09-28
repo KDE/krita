@@ -26,7 +26,6 @@
 #include "kis_distance_information.h"
 #include "kis_shared.h"
 #include "kis_types.h"
-#include "kis_paintop_settings.h"
 
 #include <kritaimage_export.h>
 

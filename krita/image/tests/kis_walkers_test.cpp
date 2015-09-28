@@ -19,14 +19,12 @@
 #include "kis_walkers_test.h"
 
 #include "kis_base_rects_walker.h"
-#include "kis_merge_walker.h"
 #include "kis_refresh_subtree_walker.h"
 #include "kis_full_refresh_walker.h"
 
 #include <QTest>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
-#include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_clone_layer.h"

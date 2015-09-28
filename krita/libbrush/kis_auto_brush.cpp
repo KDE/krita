@@ -41,6 +41,7 @@
 #include "kis_paint_information.h"
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
+#include "kis_brush_mask_applicator_base.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>

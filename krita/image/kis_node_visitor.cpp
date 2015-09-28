@@ -18,6 +18,7 @@
  */
 
 #include "kis_node_visitor.h"
+#include "kis_node.h"
 
 bool KisNodeVisitor::visitAll(KisNode * node, bool breakOnFail)
 {

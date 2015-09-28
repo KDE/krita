@@ -19,7 +19,6 @@
 #include "kis_image_signal_router_test.h"
 
 #include <QTest>
-#include "kis_image_signal_router.h"
 
 
 inline void KisImageSignalRouterTest::checkNotification(KisImageSignalType notification, const char *signal)

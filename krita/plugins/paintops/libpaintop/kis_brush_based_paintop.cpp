@@ -17,6 +17,7 @@
  */
 #include "kis_brush_based_paintop.h"
 #include "kis_properties_configuration.h"
+#include "kis_paintop_settings.h"
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
 

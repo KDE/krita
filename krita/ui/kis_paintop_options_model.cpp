@@ -20,6 +20,9 @@
 
 #include "kis_paintop_options_model.h"
 
+#include <klocalizedstring.h>
+
+
 KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
     : BaseOptionCategorizedListModel(parent)
 {

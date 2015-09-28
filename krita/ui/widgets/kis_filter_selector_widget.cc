@@ -35,6 +35,7 @@
 #include <filter/kis_filter.h>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
+#include "kis_default_bounds.h"
 
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"

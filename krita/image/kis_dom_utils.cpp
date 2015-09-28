@@ -21,7 +21,6 @@
 #include <QTransform>
 #include <kis_debug.h>
 
-#include "kis_debug.h"
 
 namespace KisDomUtils {
 

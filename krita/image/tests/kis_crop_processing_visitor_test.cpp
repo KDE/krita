@@ -29,6 +29,7 @@
 #include "testutil.h"
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image.h"
+#include "kis_pixel_selection.h"
 
 void KisCropProcessingVisitorTest::testUndo()
 {

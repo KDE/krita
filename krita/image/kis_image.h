@@ -33,7 +33,6 @@
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
-#include "kis_default_bounds.h"
 #include "kis_image_interfaces.h"
 
 #include <kritaimage_export.h>
@@ -53,6 +52,7 @@ class KoColorProfile;
 class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
+class KUndo2MagicString;
 
 namespace KisMetaData
 {

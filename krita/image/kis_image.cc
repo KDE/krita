@@ -36,7 +36,6 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
-#include "KoColorConversionTransformation.h"
 #include "KoColorProfile.h"
 #include <KoCompositeOpRegistry.h>
 
@@ -52,13 +51,11 @@
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"
-#include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_perspective_grid.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
-#include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
 #include "kis_memory_statistics_server.h"
 

@@ -36,8 +36,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
 
-#include "kis_global.h"
-#include "kis_types.h"
+#include "kis_image.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 #include "kis_node.h"

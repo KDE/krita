@@ -69,6 +69,7 @@
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
+#include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 #include <kis_paintop_registry.h>
@@ -177,7 +178,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #endif
 
     qDebug() << "Available styles:" << QStyleFactory::keys();
-    QStringList styles = QStringList()/* << "Breeze" */<< "Oxygen" << "Plastique" << "Fusion";
+    QStringList styles = QStringList() << "Breeze" << "Oxygen" << "Plastique" << "Fusion";
     foreach(const QString & style, styles) {
         if (!setStyle(style)) {
             qDebug() << "No" << style << "available.";

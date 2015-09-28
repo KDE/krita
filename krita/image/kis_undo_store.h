@@ -23,7 +23,6 @@
 #include <QVector>
 
 #include <kritaimage_export.h>
-#include "kis_types.h"
 
 class KUndo2Command;
 class KUndo2MagicString;

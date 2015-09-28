@@ -22,6 +22,7 @@
 
 #include <QUuid>
 #include <QString>
+#include "kritaimage_export.h"
 #include "kis_node.h"
 
 class KRITAIMAGE_EXPORT KisCloneInfo

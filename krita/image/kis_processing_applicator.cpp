@@ -19,7 +19,6 @@
 #include "kis_processing_applicator.h"
 
 #include "kis_image.h"
-#include "kis_image_signal_router.h"
 #include "kis_node.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_visitor.h"

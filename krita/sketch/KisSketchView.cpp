@@ -47,7 +47,6 @@
 
 #include "ProgressProxy.h"
 
-#include <kis_factory2.h>
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -141,7 +140,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
     setAcceptHoverEvents(true);
 
-    d->actionCollection = new KActionCollection(this, KComponentData(KisFactory::aboutData()));
+    d->actionCollection = new KActionCollection(this, "krita");
     d->viewManager = new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
     grabGesture(Qt::PanGesture);
@@ -704,3 +703,5 @@ void KisSketchView::activate()
     controller->activate();
 }
 
+// for private slots
+#include "moc_KisSketchView.cpp"

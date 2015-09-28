@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(${KOWIDGETS_INCLUDES} ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
+include_directories(${KOWIDGETS_INCLUDES} ${KOWIDGETS_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 macro_add_unittest_definitions()
 

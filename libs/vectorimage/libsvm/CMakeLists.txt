@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} )
+include_directories( ${KOWIDGETS_INCLUDES} )
 
 #add_subdirectory(demo)
 

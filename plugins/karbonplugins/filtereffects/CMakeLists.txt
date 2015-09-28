@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories( ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(karbon_filtereffects_PART_SRCS
     FilterEffectsPlugin.cpp

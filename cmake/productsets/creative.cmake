@@ -3,8 +3,6 @@
 calligra_define_productset(CREATIVE "Creative suite"
     OPTIONAL
         # apps
-        KARBON
         KRITA
         # extras
-        APP_CONVERTER
 )

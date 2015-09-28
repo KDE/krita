@@ -38,7 +38,6 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 #include <kis_meta_data_schema_registry.h>
-#include <filters/libmsooxml/MsooXmlDiagramReader_p.h>
 
 struct KisExifIO::Private {
 };

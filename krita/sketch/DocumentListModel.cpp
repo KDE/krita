@@ -23,6 +23,7 @@
 #include <QRunnable>
 #include <QThreadPool>
 #include <QTimer>
+#include <QLocale>
 
 
 #include <klocalizedstring.h>

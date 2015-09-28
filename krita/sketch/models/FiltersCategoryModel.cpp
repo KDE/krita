@@ -32,6 +32,8 @@
 #include <kis_canvas2.h>
 #include <kis_filter_manager.h>
 
+#include <QApplication>
+
 bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
 {
     return s1->categoryName.toLower() < s2->categoryName.toLower();

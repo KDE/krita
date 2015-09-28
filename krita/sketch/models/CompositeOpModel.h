@@ -21,6 +21,7 @@
 #define COMPOSITEOPMODEL_H
 
 #include <QModelIndex>
+#include <kis_layer.h>
 #include <kis_types.h>
 
 class KoCanvasController;

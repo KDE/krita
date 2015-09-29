@@ -87,16 +87,6 @@ namespace KisLsUtils
     void applyFinalSelection(const QString &projectionId,
                              KisSelectionSP baseSelection,
                              KisPaintDeviceSP srcDevice,
-                             KisPaintDeviceSP dstDevice,
-                             const QRect &srcRect,
-                             const QRect &dstRect,
-                             const psd_layer_effects_context *context,
-                             const psd_layer_effects_shadow_base *config,
-                             const KisLayerStyleFilterEnvironment *env);
-
-    void applyFinalSelection(const QString &projectionId,
-                             KisSelectionSP baseSelection,
-                             KisPaintDeviceSP srcDevice,
                              KisMultipleProjection *dst,
                              const QRect &srcRect,
                              const QRect &dstRect,

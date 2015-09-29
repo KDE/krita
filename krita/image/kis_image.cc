@@ -419,8 +419,7 @@ bool KisImage::tryBarrierLock()
 
 bool KisImage::isIdle()
 {
-    KIS_ASSERT_RECOVER_NOOP(!locked());
-    return m_d->scheduler->isIdle();
+    return !locked() && m_d->scheduler->isIdle();
 }
 
 void KisImage::lock()

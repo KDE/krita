@@ -222,7 +222,7 @@ var values = {
         },
 
         menu: {
-            base: "#00000",
+            base: "#000000",
             text: "#ffffff",
             buttonHighlight: "#dcdcdc",
         },

@@ -30,6 +30,7 @@
 #include "layerstyles/kis_layer_style_filter_environment.h"
 #include "layerstyles/kis_ls_drop_shadow_filter.h"
 #include "kis_psd_layer_style.h"
+#include "layerstyles/kis_multiple_projection.h"
 
 
 struct TestConfig {
@@ -84,6 +85,8 @@ void testDropShadowImpl(const TestConfig &config,
                         const QString &testName,
                         bool useSeparateDevices)
 {
+    Q_UNUSED(useSeparateDevices);
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QRect srcRect(50, 50, 100, 100);
@@ -92,26 +95,25 @@ void testDropShadowImpl(const TestConfig &config,
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(srcRect, KoColor(Qt::red, cs));
 
-    KisPaintDeviceSP dst = dev;
-
-    if (useSeparateDevices) {
-        dst = new KisPaintDevice(cs);
-    }
+    KisMultipleProjection projection;
 
     KisLsDropShadowFilter lsFilter;
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
     config.writeProperties(style);
 
-    KisTransaction t(dst);
+
 
     TestUtil::MaskParent parent;
     KisLayerStyleFilterEnvironment env(parent.layer.data());
 
     foreach (const QRect &rc, applyRects) {
-        lsFilter.processDirectly(dev, dst, rc, style, &env);
+        lsFilter.processDirectly(dev, &projection, rc, style, &env);
     }
 
-    t.end();
+
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    projection.apply(dst, dstRect);
 
     QImage resultImage =
         dst->convertToQImage(0, dstRect);

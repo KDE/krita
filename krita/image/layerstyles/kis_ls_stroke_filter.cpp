@@ -42,7 +42,7 @@
 #include "kis_layer_style_filter_environment.h"
 
 #include "kis_ls_utils.h"
-
+#include "kis_multiple_projection.h"
 
 
 KisLsStrokeFilter::KisLsStrokeFilter()
@@ -63,7 +63,7 @@ void paintPathOnSelection(KisPixelSelectionSP selection,
 }
 
 void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
-                                    KisPaintDeviceSP dstDevice,
+                                    KisMultipleProjection *dst,
                                     const QRect &applyRect,
                                     const psd_layer_effects_stroke *config,
                                     KisLayerStyleFilterEnvironment *env) const
@@ -105,15 +105,17 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_stroke.png");
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(srcDevice->colorSpace());
     KisLsUtils::fillOverlayDevice(fillDevice, applyRect, config, env);
 
 
-    KisPainter gc(dstDevice);
     const QString compositeOp = config->blendMode();
     const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+    KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(), compositeOp, srcDevice);
+    dstDevice->clear(applyRect);
 
-    gc.setCompositeOp(compositeOp);
+    KisPainter gc(dstDevice);
+    gc.setCompositeOp(COMPOSITE_OVER);
     env->setupFinalPainter(&gc, opacityU8, QBitArray());
     gc.setSelection(baseSelection);
 
@@ -121,7 +123,7 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 }
 
 void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
-                                         KisPaintDeviceSP dst,
+                                        KisMultipleProjection *dst,
                                          const QRect &applyRect,
                                          KisPSDLayerStyleSP style,
                                          KisLayerStyleFilterEnvironment *env) const
@@ -130,7 +132,7 @@ void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_stroke *config = style->stroke();
-    if (!config->effectEnabled()) return;
+    if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     KisLsUtils::LodWrapper<psd_layer_effects_stroke> w(env->currentLevelOfDetail(), config);
     applyStroke(src, dst, applyRect, w.config, env);

@@ -38,6 +38,7 @@
 #include "kis_gradient_painter.h"
 #include "kis_layer_style_filter_environment.h"
 #include "kis_selection_filters.h"
+#include "kis_multiple_projection.h"
 
 
 namespace KisLsUtils
@@ -534,9 +535,10 @@ namespace KisLsUtils
         }
     }
 
-    void applyFinalSelection(KisSelectionSP baseSelection,
+    void applyFinalSelection(const QString &projectionId,
+                             KisSelectionSP baseSelection,
                              KisPaintDeviceSP srcDevice,
-                             KisPaintDeviceSP dstDevice,
+                             KisMultipleProjection *dst,
                              const QRect &srcRect,
                              const QRect &dstRect,
                              const psd_layer_effects_context *context,
@@ -545,23 +547,14 @@ namespace KisLsUtils
     {
         const KoColor effectColor(config->color(), srcDevice->colorSpace());
 
-        KisPaintDeviceSP tempDevice;
-        if (srcDevice == dstDevice) {
-            if (context->keep_original) {
-                tempDevice = new KisPaintDevice(*srcDevice);
-            }
-            srcDevice->clear(srcRect);
-        } else {
-            tempDevice = srcDevice;
-        }
-
         const QRect effectRect(dstRect);
         const QString compositeOp = config->blendMode();
         const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+        KisPaintDeviceSP dstDevice = dst->getProjection(projectionId, compositeOp, srcDevice);
 
         if (config->fillType() == psd_fill_solid_color) {
             KisFillPainter gc(dstDevice);
-            gc.setCompositeOp(compositeOp);
+            gc.setCompositeOp(COMPOSITE_OVER);
             env->setupFinalPainter(&gc, opacityU8, QBitArray());
             gc.setSelection(baseSelection);
             gc.fillSelection(effectRect, effectColor);
@@ -584,18 +577,35 @@ namespace KisLsUtils
                                    true, config->jitter(), env);
 
             KisPainter gc(dstDevice);
-            gc.setCompositeOp(compositeOp);
+            gc.setCompositeOp(COMPOSITE_OVER);
             env->setupFinalPainter(&gc, opacityU8, QBitArray());
             gc.bitBlt(effectRect.topLeft(), overlayDevice, effectRect);
             gc.end();
         }
 
         //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("6_device_shadow.png");
+    }
 
-        if (context->keep_original) {
-            KisPainter gc(dstDevice);
-            // FIXME: opacity?
-            gc.bitBlt(dstRect.topLeft(), tempDevice, dstRect);
+    void applyFinalSelection(const QString &projectionId,
+                             KisSelectionSP baseSelection,
+                             KisPaintDeviceSP srcDevice,
+                             KisPaintDeviceSP dstDevice,
+                             const QRect &srcRect,
+                             const QRect &dstRect,
+                             const psd_layer_effects_context *context,
+                             const psd_layer_effects_shadow_base *config,
+                             const KisLayerStyleFilterEnvironment *env)
+    {
+    }
+
+    bool checkEffectEnabled(const psd_layer_effects_shadow_base *config, KisMultipleProjection *dst)
+    {
+        bool result = config->effectEnabled();
+
+        if (!result) {
+            dst->freeAllProjections();
         }
+
+        return result;
     }
 }

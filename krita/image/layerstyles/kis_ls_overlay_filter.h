@@ -41,7 +41,7 @@ public:
     KisLsOverlayFilter(Mode mode);
 
     void processDirectly(KisPaintDeviceSP src,
-                         KisPaintDeviceSP dst,
+                         KisMultipleProjection *dst,
                          const QRect &applyRect,
                          KisPSDLayerStyleSP style,
                          KisLayerStyleFilterEnvironment *env) const;
@@ -53,7 +53,7 @@ private:
     const psd_layer_effects_overlay_base* getOverlayStruct(KisPSDLayerStyleSP style) const;
 
     void applyOverlay(KisPaintDeviceSP srcDevice,
-                      KisPaintDeviceSP dstDevice,
+                      KisMultipleProjection *dst,
                       const QRect &applyRect,
                       const psd_layer_effects_overlay_base *config,
                       KisLayerStyleFilterEnvironment *env) const;

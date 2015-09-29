@@ -37,6 +37,7 @@
 
 #include "kis_psd_layer_style.h"
 
+#include "kis_multiple_projection.h"
 #include "kis_ls_utils.h"
 #include "kis_layer_style_filter_environment.h"
 
@@ -121,7 +122,7 @@ void blendAndOffsetSatinSelection(KisPixelSelectionSP dstSelection,
 }
 
 void applySatin(KisPaintDeviceSP srcDevice,
-                KisPaintDeviceSP dstDevice,
+                KisMultipleProjection *dst,
                 const QRect &applyRect,
                 const psd_layer_effects_context *context,
                 const psd_layer_effects_satin *config,
@@ -181,9 +182,10 @@ void applySatin(KisPaintDeviceSP srcDevice,
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knocked_out.png");
 
-    KisLsUtils::applyFinalSelection(baseSelection,
+    KisLsUtils::applyFinalSelection(KisMultipleProjection::defaultProjectionId(),
+                                    baseSelection,
                                     srcDevice,
-                                    dstDevice,
+                                    dst,
                                     d.srcRect,
                                     d.dstRect,
                                     context,
@@ -194,7 +196,7 @@ void applySatin(KisPaintDeviceSP srcDevice,
 }
 
 void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,
-                                       KisPaintDeviceSP dst,
+                                       KisMultipleProjection *dst,
                                        const QRect &applyRect,
                                        KisPSDLayerStyleSP style,
                                        KisLayerStyleFilterEnvironment *env) const
@@ -202,7 +204,7 @@ void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_satin *config = style->satin();
-    if (!config->effectEnabled()) return;
+    if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     KisLsUtils::LodWrapper<psd_layer_effects_satin> w(env->currentLevelOfDetail(), config);
     applySatin(src, dst, applyRect, style->context(), w.config, env);

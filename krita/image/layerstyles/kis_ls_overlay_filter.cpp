@@ -42,6 +42,7 @@
 #include "kis_layer_style_filter_environment.h"
 
 #include "kis_ls_utils.h"
+#include "kis_multiple_projection.h"
 
 
 
@@ -54,40 +55,41 @@ KisLsOverlayFilter::KisLsOverlayFilter(Mode mode)
 
 
 void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
-                                      KisPaintDeviceSP dstDevice,
+                                      KisMultipleProjection *dst,
                                       const QRect &applyRect,
                                       const psd_layer_effects_overlay_base *config,
                                       KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
 
-    KisPaintDeviceSP tempDevice = new KisPaintDevice(dstDevice->colorSpace());
+    KisPaintDeviceSP tempDevice = new KisPaintDevice(srcDevice->colorSpace());
 
     {
         // Create overlay device
 
-        KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
+        KisPaintDeviceSP fillDevice = new KisPaintDevice(srcDevice->colorSpace());
         KisLsUtils::fillOverlayDevice(fillDevice, applyRect, config, env);
 
         KisPainter gc(tempDevice);
         gc.setCompositeOp(COMPOSITE_OVER);
         gc.bitBlt(applyRect.topLeft(), srcDevice, applyRect);
 
-        QBitArray channelFlags = dstDevice->colorSpace()->channelFlags(true, false);
+        QBitArray channelFlags = srcDevice->colorSpace()->channelFlags(true, false);
         gc.setChannelFlags(channelFlags);
         gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
         gc.end();
     }
 
     {
-        // Paint over destivation
-
-        KisPainter gc(dstDevice);
+        // Paint over destination
 
         const QString compositeOp = config->blendMode();
         const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+        KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(), compositeOp, srcDevice);
 
-        gc.setCompositeOp(compositeOp);
+        KisPainter gc(dstDevice);
+
+        gc.setCompositeOp(COMPOSITE_OVER);
         env->setupFinalPainter(&gc, opacityU8, QBitArray());
 
         gc.bitBlt(applyRect.topLeft(), tempDevice, applyRect);
@@ -112,7 +114,7 @@ KisLsOverlayFilter::getOverlayStruct(KisPSDLayerStyleSP style) const
 }
 
 void KisLsOverlayFilter::processDirectly(KisPaintDeviceSP src,
-                                         KisPaintDeviceSP dst,
+                                         KisMultipleProjection *dst,
                                          const QRect &applyRect,
                                          KisPSDLayerStyleSP style,
                                          KisLayerStyleFilterEnvironment *env) const
@@ -121,7 +123,7 @@ void KisLsOverlayFilter::processDirectly(KisPaintDeviceSP src,
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_overlay_base *config = getOverlayStruct(style);
-    if (!config->effectEnabled()) return;
+    if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     applyOverlay(src, dst, applyRect, config, env);
 }

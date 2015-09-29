@@ -297,6 +297,7 @@ set(kritaimage_LIB_SRCS
 
    kis_psd_layer_style.cpp
 
+   layerstyles/kis_multiple_projection.cpp
    layerstyles/kis_layer_style_filter.cpp
    layerstyles/kis_layer_style_filter_environment.cpp
    layerstyles/kis_layer_style_filter_projection_plane.cpp

@@ -147,7 +147,17 @@ KisAbstractProjectionPlaneSP KisLayerStyleProjectionPlane::factoryObject(KisLaye
 QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
 {
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
-    return sourcePlane->recalculate(rect, filthyNode);
+    QRect result = sourcePlane->recalculate(rect, filthyNode);
+
+    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+        plane->recalculate(rect, filthyNode);
+    }
+
+    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+        plane->recalculate(rect, filthyNode);
+    }
+
+    return result;
 }
 
 void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)

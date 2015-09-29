@@ -27,6 +27,7 @@
 
 
 #include "kis_painter.h"
+#include "kis_multiple_projection.h"
 
 
 struct KisLayerStyleFilterProjectionPlane::Private
@@ -36,6 +37,8 @@ struct KisLayerStyleFilterProjectionPlane::Private
     QScopedPointer<KisLayerStyleFilter> filter;
     KisPSDLayerStyleSP style;
     QScopedPointer<KisLayerStyleFilterEnvironment> environment;
+
+    KisMultipleProjection projection;
 };
 
 KisLayerStyleFilterProjectionPlane::
@@ -59,25 +62,25 @@ void KisLayerStyleFilterProjectionPlane::setStyle(KisLayerStyleFilter *filter, K
 
 QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
 {
-    Q_UNUSED(rect);
     Q_UNUSED(filthyNode);
 
-    /// do nothing
-    return QRect();
+    if (!m_d->sourceLayer || !m_d->filter) {
+        warnKrita() << "KisLayerStyleFilterProjectionPlane::recalculate(): [BUG] is not initialized";
+        return QRect();
+    }
+
+    m_d->projection.clear(rect);
+    m_d->filter->processDirectly(m_d->sourceLayer->projection(),
+                                 &m_d->projection,
+                                 rect,
+                                 m_d->style,
+                                 m_d->environment.data());
+    return rect;
 }
 
 void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
-    if (!m_d->sourceLayer || !m_d->filter) {
-        warnKrita << "KisLayerStyleFilterProjectionPlane::apply(): [BUG] is not initialized";
-        return;
-    }
-
-    m_d->filter->processDirectly(m_d->sourceLayer->projection(),
-                                 painter->device(),
-                                 rect,
-                                 m_d->style,
-                                 m_d->environment.data());
+    m_d->projection.apply(painter->device(), rect);
 }
 
 

@@ -41,7 +41,7 @@ public:
     KisLsDropShadowFilter(Mode mode = DropShadow);
 
     void processDirectly(KisPaintDeviceSP src,
-                         KisPaintDeviceSP dst,
+                         KisMultipleProjection *dst,
                          const QRect &applyRect,
                          KisPSDLayerStyleSP style,
                          KisLayerStyleFilterEnvironment *env) const;

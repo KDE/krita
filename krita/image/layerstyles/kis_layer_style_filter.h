@@ -27,7 +27,7 @@
 
 class KisPSDLayerStyle;
 class KisLayerStyleFilterEnvironment;
-
+class KisMultipleProjection;
 
 class KRITAIMAGE_EXPORT KisLayerStyleFilter : public KisShared
 {
@@ -41,7 +41,7 @@ public:
     QString id() const;
 
     virtual void processDirectly(KisPaintDeviceSP src,
-                                 KisPaintDeviceSP dst,
+                                 KisMultipleProjection *dst,
                                  const QRect &applyRect,
                                  KisPSDLayerStyleSP style,
                                  KisLayerStyleFilterEnvironment *env) const = 0;

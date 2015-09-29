@@ -34,7 +34,7 @@ public:
     KisLsBevelEmbossFilter();
 
     void processDirectly(KisPaintDeviceSP src,
-                         KisPaintDeviceSP dst,
+                         KisMultipleProjection *dst,
                          const QRect &applyRect,
                          KisPSDLayerStyleSP style,
                          KisLayerStyleFilterEnvironment *env) const;
@@ -44,7 +44,7 @@ public:
 
 private:
     void applyBevelEmboss(KisPaintDeviceSP srcDevice,
-                          KisPaintDeviceSP dstDevice,
+                          KisMultipleProjection *dst,
                           const QRect &applyRect,
                           const psd_layer_effects_bevel_emboss *config,
                           KisLayerStyleFilterEnvironment *env) const;

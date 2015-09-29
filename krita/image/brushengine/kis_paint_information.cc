@@ -498,7 +498,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
     result.d->levelOfDetail = pi1.d->levelOfDetail;
-    result.setRandomSource(pi1.randomSource());
+    result.d->randomSource = pi1.d->randomSource;
     result.d->canvasRotation = pi2.canvasRotation();
     result.d->canvasMirroredH = pi2.canvasMirroredH();
 

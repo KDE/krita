@@ -153,10 +153,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
-    QString fileName = url.fileName();
-    if(url.scheme() == "temp")
-        fileName = i18n("Untitled");
+    const QString currentFile = DocumentManager::instance()->settingsManager()->currentFile();
+    const QString fileName =
+        currentFile.startsWith(QLatin1String("temp://")) ? i18n("Untitled") : QFileInfo(currentFile).fileName();
 
     KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KisDocument* document = DocumentManager::instance()->document();

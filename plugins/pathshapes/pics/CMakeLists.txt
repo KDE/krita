@@ -2,7 +2,6 @@ ecm_install_icons( ICONS
     22-actions-callout-shape.png
     22-actions-circular-arrow-shape.png
     22-actions-cross-shape.png
-    22-actions-divine-shape.png
     22-actions-ellipse-shape.png
     22-actions-flower-shape.png
     22-actions-gearhead-shape.png

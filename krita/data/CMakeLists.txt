@@ -16,17 +16,6 @@ add_subdirectory( paintoppresets )
 
 ########### install files ###############
 
-install( FILES  
-    krita_filter.desktop      
-    krita_filefilter.desktop
-    krita_brush.desktop      
-    krita_paintop.desktop      
-    krita_plugin.desktop      
-    krita_tool.desktop
-    krita_generator.desktop
-    krita_dock.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
 install( FILES
     kritarc
     kritapresets.knsrc

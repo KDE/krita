@@ -232,15 +232,6 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES
-    flake.desktop
-    flaketool.desktop
-    flakeshape.desktop
-    flakedevice.desktop
-    presentationeventaction.desktop
-    scripteventaction.desktop
-    filtereffect.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(
     FILES

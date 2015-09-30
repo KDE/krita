@@ -111,7 +111,6 @@ install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
-install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 
 if (APPLE)

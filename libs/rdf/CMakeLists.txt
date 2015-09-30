@@ -47,8 +47,6 @@ VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSI
 )
 install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES calligra_semanticitem.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
 install( FILES
     kordf_export.h
     RdfForward.h

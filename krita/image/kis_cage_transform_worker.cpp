@@ -332,7 +332,7 @@ void KisCageTransformWorker::run()
 
 QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
 {
-    if (m_d->isGridEmpty()) QImage();
+    if (m_d->isGridEmpty()) return QImage();
 
     KIS_ASSERT_RECOVER(m_d->origCage.size() >= 3 &&
                        m_d->origCage.size() == m_d->transfCage.size()) {

@@ -683,7 +683,6 @@ add_subdirectory(interfaces)
 add_subdirectory(cmake)
 add_subdirectory(pics)
 add_subdirectory(plugins)
-add_subdirectory(servicetypes)
 add_subdirectory(devtools)
 
 macro_display_feature_log()

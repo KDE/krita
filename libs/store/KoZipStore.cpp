@@ -23,20 +23,20 @@
 
 #include <QBuffer>
 #include <QByteArray>
+#include <QTemporaryFile>
 
 #include <kzip.h>
 #include <StoreDebug.h>
 
 #include <QUrl>
-#include <KoNetAccess.h>
 
 KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
-  : KoStore(mode, writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
     debugStore << "KoZipStore Constructor filename =" << _filename
-    << " mode = " << int(mode)
-    << " mimetype = " << appIdentification << endl;
+               << " mode = " << int(mode)
+               << " mimetype = " << appIdentification << endl;
     Q_D(KoStore);
 
     d->localFileName = _filename;
@@ -48,7 +48,7 @@ KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & 
 
 KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
-  : KoStore(mode, writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
     m_pZip = new KZip(dev);
     init(appIdentification);
@@ -56,24 +56,24 @@ KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentifi
 
 KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode mode,
                        const QByteArray & appIdentification, bool writeMimetype)
-  : KoStore(mode, writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
     debugStore << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile)
-    << " filename = " << _filename
-    << " mode = " << int(mode)
-    << " mimetype = " << appIdentification << endl;
+               << " filename = " << _filename
+               << " mode = " << int(mode)
+               << " mimetype = " << appIdentification << endl;
     Q_D(KoStore);
 
     d->url = _url;
     d->window = window;
 
     if (mode == KoStore::Read) {
-        d->fileMode = KoStorePrivate::RemoteRead;
         d->localFileName = _filename;
-
     } else {
-        d->fileMode = KoStorePrivate::RemoteWrite;
-        d->localFileName = QLatin1String("/tmp/kozip"); // ### FIXME with KTempFile
+        QTemporaryFile f("kozip");
+        f.open();
+        d->localFileName = f.fileName();
+        f.close();
     }
 
     m_pZip = new KZip(d->localFileName);
@@ -88,12 +88,12 @@ KoZipStore::~KoZipStore()
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pZip;
 
-    // Now we have still some job to do for remote files.
-    if (d->fileMode == KoStorePrivate::RemoteRead) {
-        KIO::NetAccess::removeTempFile(d->localFileName);
-    } else if (d->fileMode == KoStorePrivate::RemoteWrite) {
-        KIO::NetAccess::upload(d->localFileName, d->url, d->window);
-        // ### FIXME: delete temp file
+    // When writing, we write to a temp file that then gets copied over the original filename
+    if (d->mode == Write) {
+        QFile f(d->localFileName);
+        if (f.copy(d->url.toLocalFile())) {
+            f.remove();
+        }
     }
 }
 
@@ -130,7 +130,7 @@ void KoZipStore::setCompressionEnabled(bool e)
     if (e) {
         m_pZip->setCompression(KZip::DeflateCompression);
     } else {
-        m_pZip->setCompression(KZip::NoCompression);        
+        m_pZip->setCompression(KZip::NoCompression);
     }
 }
 

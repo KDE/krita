@@ -22,12 +22,8 @@
 #include "KoStore.h"
 #include "KoStore_p.h"
 
-#include "KoTarStore.h"
 #include "KoZipStore.h"
 #include "KoDirectoryStore.h"
-#ifdef QCA2
-#include "KoEncryptedStore.h"
-#endif
 
 #include <QBuffer>
 #include <QFileInfo>
@@ -38,7 +34,6 @@
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <KoNetAccess.h>
 
 #define DefaultFormat KoStore::Zip
 
@@ -47,8 +42,6 @@ static KoStore::Backend determineBackend(QIODevice *dev)
     unsigned char buf[5];
     if (dev->read((char *)buf, 4) < 4)
         return DefaultFormat; // will create a "bad" store (bad()==true)
-    if (buf[0] == 0037 && buf[1] == 0213)   // gzip -> tar.gz
-        return KoStore::Tar;
     if (buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
         return KoStore::Zip;
     return DefaultFormat; // fallback
@@ -56,9 +49,7 @@ static KoStore::Backend determineBackend(QIODevice *dev)
 
 KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
-    bool automatic = false;
     if (backend == Auto) {
-        automatic = true;
         if (mode == KoStore::Write)
             backend = DefaultFormat;
         else {
@@ -75,22 +66,10 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
         }
     }
     switch (backend) {
-    case Tar:
-        return new KoTarStore(fileName, mode, appIdentification, writeMimetype);
     case Zip:
-#ifdef QCA2
-        if (automatic && mode == Read) {
-            // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(fileName, Read, appIdentification, writeMimetype);
-        }
-#endif
         return new KoZipStore(fileName, mode, appIdentification, writeMimetype);
     case Directory:
         return new KoDirectoryStore(fileName /* should be a dir name.... */, mode, writeMimetype);
-#ifdef QCA2
-    case Encrypted:
-        return new KoEncryptedStore(fileName, mode, appIdentification, writeMimetype);
-#endif
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
         return 0;
@@ -99,9 +78,7 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
 
 KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
-    bool automatic = false;
     if (backend == Auto) {
-        automatic = true;
         if (mode == KoStore::Write)
             backend = DefaultFormat;
         else {
@@ -112,76 +89,21 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         }
     }
     switch (backend) {
-    case Tar:
-        return new KoTarStore(device, mode, appIdentification, writeMimetype);
     case Directory:
         errorStore << "Can't create a Directory store for a memory buffer!" << endl;
         // fallback
     case Zip:
-#ifdef QCA2
-        if (automatic && mode == Read) {
-            // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(device, Read, appIdentification, writeMimetype);
-        }
-#endif
         return new KoZipStore(device, mode, appIdentification, writeMimetype);
-#ifdef QCA2
-    case Encrypted:
-        return new KoEncryptedStore(device, mode, appIdentification, writeMimetype);
-#endif
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
         return 0;
     }
 }
 
-KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
+KoStore* KoStore::createStore(const QUrl &url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
-    const bool automatic = (backend == Auto);
-    if (url.isLocalFile())
-        return createStore(url.toLocalFile(), mode,  appIdentification, backend, writeMimetype);
-
-    QString tmpFile;
-    if (mode == KoStore::Write) {
-        if (automatic)
-            backend = DefaultFormat;
-    } else {
-        const bool downloaded =
-            KIO::NetAccess::download(url, tmpFile, window);
-
-        if (!downloaded) {
-            errorStore << "Could not download file!" << endl;
-            backend = DefaultFormat; // will create a "bad" store (bad()==true)
-        } else if (automatic) {
-            QFile file(tmpFile);
-            if (file.open(QIODevice::ReadOnly)) {
-                backend = determineBackend(&file);
-                file.close();
-            }
-        }
-    }
-    switch (backend) {
-    case Tar:
-        return new KoTarStore(window, url, tmpFile, mode, appIdentification);
-    case Zip:
-#ifdef QCA2
-        if (automatic && mode == Read) {
-            // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(window, url, tmpFile, Read, appIdentification, writeMimetype);
-        }
-#endif
-        return new KoZipStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
-#ifdef QCA2
-    case Encrypted:
-        return new KoEncryptedStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
-#endif
-    default:
-        warnStore << "Unsupported backend requested for KoStore (QUrl) : " << backend;
-        KMessageBox::sorry(window,
-                           i18n("The directory mode is not supported for remote locations."),
-                           i18n("Calligra Storage"));
-        return 0;
-    }
+    Q_ASSERT(url.isLocalFile());
+    return createStore(url.toLocalFile(), mode,  appIdentification, backend, writeMimetype);
 }
 
 namespace
@@ -199,16 +121,6 @@ KoStore::~KoStore()
     Q_D(KoStore);
     delete d->stream;
     delete d_ptr;
-}
-
-QUrl KoStore::urlOfStore() const
-{
-    Q_D(const KoStore);
-    if (d->fileMode == KoStorePrivate::RemoteRead || d->fileMode == KoStorePrivate::RemoteWrite) {
-        return d->url;
-    } else {
-        return QUrl(d->localFileName);
-    }
 }
 
 bool KoStore::open(const QString & _name)

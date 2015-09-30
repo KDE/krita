@@ -81,8 +81,6 @@ protected:  // QWidget API
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
     void slotResetMetaData();
-    /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
-    void slotToggleEncryption();
 
 Q_SIGNALS:
     void saveRequested();
@@ -94,8 +92,6 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-    /** Saves the document with changed encryption */
-    void saveEncryption();
 
     class KoDocumentInfoDlgPrivate;
     KoDocumentInfoDlgPrivate * const d;

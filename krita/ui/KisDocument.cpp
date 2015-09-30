@@ -52,7 +52,6 @@
 
 
 #include <kfileitem.h>
-#include <KoNetAccess.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -685,26 +684,8 @@ bool KisDocument::saveFile()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     if (backupFile()) {
-        if (url().isLocalFile())
-            KBackup::backupFile(url().toLocalFile(), d->backupPath);
-        else {
-            KIO::UDSEntry entry;
-            if (KIO::NetAccess::stat(url(),
-                                     entry,
-                                     KisPart::instance()->currentMainwindow())) {     // this file exists => backup
-                emit statusBarMessage(i18n("Making backup..."));
-                QUrl backup;
-                if (d->backupPath.isEmpty())
-                    backup = url();
-                else
-                    backup = QUrl::fromLocalFile(d->backupPath + '/' + url().fileName());
-                backup.setPath(backup.path() + QString::fromLatin1("~"));
-                KFileItem item(entry, url());
-                Q_ASSERT(item.name() == url().fileName());
-                KIO::FileCopyJob *job = KIO::file_copy(url(), backup, item.permissions(), KIO::Overwrite | KIO::HideProgressInfo);
-                job->exec();
-            }
-        }
+        Q_ASSERT(url().isLocalFile());
+        KBackup::backupFile(url().toLocalFile(), d->backupPath);
     }
 
     emit statusBarMessage(i18n("Saving..."));

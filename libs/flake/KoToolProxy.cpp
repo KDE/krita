@@ -41,7 +41,6 @@
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QUrl>
-#include <KoNetAccess.h>
 #include <kmessagebox.h>
 
 #include <QTimer>
@@ -562,7 +561,9 @@ bool KoToolProxy::paste()
 
         if (!image.isNull()) {
             imageList << image;
-        } else if (data->hasUrls()) {
+        }
+        /// QT5TODO
+        /* else if (data->hasUrls()) {
             QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
             foreach (const QUrl &url, urls) {
                 QImage image;
@@ -583,7 +584,7 @@ bool KoToolProxy::paste()
                     imageList << image;
                 }
             }
-        }
+        }*/
 
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
         QWidget *canvasWidget = canvas->canvasWidget();

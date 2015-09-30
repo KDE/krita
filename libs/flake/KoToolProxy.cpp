@@ -516,7 +516,6 @@ bool KoToolProxy::hasSelection() const
 
 void KoToolProxy::cut()
 {
-    // TODO maybe move checking the active layer to KoPasteController ?
     if (d->activeTool && d->isActiveLayerEditable())
         d->activeTool->cut();
 }
@@ -532,7 +531,6 @@ bool KoToolProxy::paste()
     bool success = false;
     KoCanvasBase *canvas = d->controller->canvas();
 
-    // TODO maybe move checking the active layer to KoPasteController ?
     if (d->activeTool && d->isActiveLayerEditable())
         success = d->activeTool->paste();
 

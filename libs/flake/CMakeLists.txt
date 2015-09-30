@@ -21,7 +21,6 @@ set(kritaflake_SRCS
     KoDockRegistry.cpp
     KoDataCenterBase.cpp
     KoInsets.cpp
-    KoPasteController.cpp
     KoGuidesData.cpp
     KoGridData.cpp
     KoPathShape.cpp

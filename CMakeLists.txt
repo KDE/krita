@@ -299,8 +299,8 @@ if(WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
-# set custom calligra plugin installdir
-set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
+# set custom krita plugin installdir
+set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
 
 # TEMPORARY: for initial Qt5/KF5 build porting phase deprecation warnings are only annoying noise
 # remove once code porting phase starts, perhaps first locally in product subdirs

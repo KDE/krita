@@ -567,6 +567,7 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::slotThemeChanged()
 {
+
     // save theme changes instantly
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());

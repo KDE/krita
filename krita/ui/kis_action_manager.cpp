@@ -19,7 +19,6 @@
 #include "kis_action_manager.h"
 
 #include <QList>
-#include <KoResourcePaths.h>
 #include <kactioncollection.h>
 
 #include <kis_icon_utils.h>

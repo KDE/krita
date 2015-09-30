@@ -136,13 +136,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_eraseModeButton->setFixedSize(iconsize, iconsize);
     m_eraseModeButton->setCheckable(true);
 
-    KisAction* eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    eraseAction->setDefaultShortcut(Qt::Key_E);
-    eraseAction->setCheckable(true);
-    m_eraseModeButton->setDefaultAction(eraseAction);
-    m_viewManager->actionCollection()->addAction("erase_action", eraseAction);
+    m_eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
+    m_eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
+    m_eraseAction->setDefaultShortcut(Qt::Key_E);
+    m_eraseAction->setCheckable(true);
+    m_eraseModeButton->setDefaultAction(m_eraseAction);
+    m_viewManager->actionCollection()->addAction("erase_action", m_eraseAction);
 
     eraserBrushSize = 0; // brush size changed when using erase mode
 
@@ -150,11 +150,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setFixedSize(iconsize, iconsize);
     m_reloadButton->setCheckable(true);
 
-    KisAction* reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
-    reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
-    m_reloadButton->setDefaultAction(reloadAction);
-    m_viewManager->actionCollection()->addAction("reload_preset_action", reloadAction);
+    m_reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
+    m_reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    m_reloadButton->setDefaultAction(m_reloadAction);
+    m_viewManager->actionCollection()->addAction("reload_preset_action", m_reloadAction);
 
     m_alphaLockButton = new QToolButton(this);
     m_alphaLockButton->setFixedSize(iconsize, iconsize);
@@ -406,11 +406,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
-    connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(m_eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
     connect(m_hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(m_vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
-    connect(reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
+    connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -1189,5 +1189,6 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
 
-
+    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
+    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
 }

@@ -24,7 +24,6 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
-#include <KoResourcePaths.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>

@@ -44,6 +44,8 @@ public:
     QRect changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
     QRect accessRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
 
+    void syncLodCache();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

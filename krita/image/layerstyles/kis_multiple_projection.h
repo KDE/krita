@@ -40,6 +40,8 @@ public:
 
     void apply(KisPaintDeviceSP dstDevice, const QRect &rect);
 
+    void syncLodCache();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

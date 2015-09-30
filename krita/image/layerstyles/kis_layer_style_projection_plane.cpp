@@ -179,6 +179,25 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     }
 }
 
+void KisLayerStyleProjectionPlane::syncLodCache()
+{
+    KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
+
+    if (m_d->style->isEnabled()) {
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+            plane->syncLodCache();
+        }
+
+        sourcePlane->syncLodCache();
+
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+            plane->syncLodCache();
+        }
+    } else {
+        sourcePlane->syncLodCache();
+    }
+}
+
 QRect KisLayerStyleProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();

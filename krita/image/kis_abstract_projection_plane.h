@@ -78,6 +78,12 @@ public:
      * transformations of the layer
      */
     virtual QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos = KisLayer::N_FILTHY) const = 0;
+
+    /**
+     * Synchronizes the LoD cache of all the internal paint devices
+     * included into the projection.
+     */
+    virtual void syncLodCache() = 0;
 };
 
 /**
@@ -93,6 +99,8 @@ public:
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
     QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
+
+    void syncLodCache();
 };
 
 #endif /* __KIS_ABSTRACT_PROJECTION_PLANE_H */

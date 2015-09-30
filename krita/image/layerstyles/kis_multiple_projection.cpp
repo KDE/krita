@@ -128,3 +128,17 @@ void KisMultipleProjection::apply(KisPaintDeviceSP dstDevice, const QRect &rect)
         gc.bitBlt(rect.topLeft(), it->device, rect);
     }
 }
+
+void KisMultipleProjection::syncLodCache()
+{
+    QReadLocker readLocker(&m_d->lock);
+
+    PlanesMap::const_iterator it = m_d->planes.constBegin();
+    PlanesMap::const_iterator end = m_d->planes.constEnd();
+
+    for (; it != end; ++it) {
+        KisPaintDeviceSP device = it->device;
+        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
+        Q_UNUSED(dirtyRegion);
+    }
+}

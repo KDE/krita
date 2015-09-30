@@ -58,3 +58,7 @@ QRect KisDumbProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionTo
     return rect;
 }
 
+void KisDumbProjectionPlane::syncLodCache()
+{
+    // Ermm... what? ;)
+}

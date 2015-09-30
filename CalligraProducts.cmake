@@ -82,7 +82,6 @@ calligra_define_product(APP_KRITA "Krita app (for Desktop)" REQUIRES LIB_CALLIGR
 
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" REQUIRES LIB_CALLIGRA)
@@ -109,7 +108,6 @@ calligra_define_productset(KRITA "Full Krita"
         PLUGIN_DOCKERS
         PLUGIN_PATHSHAPES
         PLUGIN_TEXTSHAPE
-        PLUGIN_SPACENAVIGATOR
         PLUGIN_VECTORSHAPE
 )
 

@@ -1,6 +1,5 @@
 # plugin/tools have their own catalog
-remove_definitions(-DTRANSLATION_DOMAIN=\"karbon\")
-add_definitions(-DTRANSLATION_DOMAIN=\"KarbonTools\")
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_karbontools\")
 
 include_directories(
     ${FLAKE_INCLUDES}
@@ -45,13 +44,13 @@ ki18n_wrap_ui(karbon_tools_PART_SRCS
     KarbonPatternOptionsWidget.ui
 )
 
-add_library(karbon_tools MODULE ${karbon_tools_PART_SRCS})
+add_library(krita_karbontools MODULE ${karbon_tools_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
+kcoreaddons_desktop_to_json(krita_karbontools karbon_tools.desktop)
 
-target_link_libraries(karbon_tools kritawidgets)
+target_link_libraries(krita_karbontools kritawidgets)
 
-install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ecm_install_icons( ICONS
     22-actions-calligraphy.png

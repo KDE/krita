@@ -1,6 +1,6 @@
 project( textPlugin)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_text\")
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
 
 # only build the textdocument inspector in non-release builds
 if(NOT RELEASE_BUILD)
@@ -174,19 +174,19 @@ ki18n_wrap_ui(textshape_SRCS
 
 )
 
-add_library(calligra_shape_text MODULE ${textshape_SRCS})
+add_library(krita_shape_text MODULE ${textshape_SRCS})
 
-kcoreaddons_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
+kcoreaddons_desktop_to_json(krita_shape_text calligra_shape_text.desktop)
 
-target_link_libraries(calligra_shape_text kritatext kritatextlayout kritawidgets KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::ItemViews KF5::WidgetsAddons
+target_link_libraries(krita_shape_text kritatext kritatextlayout kritawidgets KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::ItemViews KF5::WidgetsAddons
 )
 
 if( SHOULD_BUILD_FEATURE_RDF )
-    target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
+    target_link_libraries(krita_shape_text ${SOPRANO_LIBRARIES})
 endif()
 
 
-install(TARGETS calligra_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

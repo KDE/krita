@@ -1,4 +1,5 @@
 include_directories( ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} )
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_filtereffects\")
 
 set(karbon_filtereffects_PART_SRCS
     FilterEffectsPlugin.cpp
@@ -38,10 +39,10 @@ set(karbon_filtereffects_PART_SRCS
     MatrixDataModel.cpp
     )
 
-add_library(karbon_filtereffects MODULE ${karbon_filtereffects_PART_SRCS})
+add_library(krita_filtereffects MODULE ${karbon_filtereffects_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_filtereffects karbon_filtereffects.desktop)
+kcoreaddons_desktop_to_json(krita_filtereffects karbon_filtereffects.desktop)
 
-target_link_libraries(karbon_filtereffects kritaflake kritawidgets)
+target_link_libraries(krita_filtereffects kritaflake kritawidgets)
 
-install(TARGETS karbon_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

@@ -2,7 +2,7 @@ project( lcmsengine )
 
 if(NOT WIN32)
 ## Only test if on non-Windows system
-	add_subdirectory(tests)
+    add_subdirectory(tests)
 endif()
 
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
@@ -89,9 +89,9 @@ endif ()
 
 
 
-add_library(kolcmsengine MODULE ${lcmsengine_SRCS})
-kcoreaddons_desktop_to_json(kolcmsengine kolcmsengine.desktop)
+add_library(kritalcmsengine MODULE ${lcmsengine_SRCS})
+kcoreaddons_desktop_to_json(kritalcmsengine kolcmsengine.desktop)
 
-target_link_libraries(kolcmsengine kritapigment kritawidgets KF5::I18n  ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
-install(TARGETS kolcmsengine DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+target_link_libraries(kritalcmsengine kritapigment kritawidgets KF5::I18n  ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
+install(TARGETS kritalcmsengine DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

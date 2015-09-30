@@ -9,14 +9,6 @@ if (SHOULD_BUILD_PLUGIN_COLORENGINES)
     add_subdirectory( colorengines )
 endif ()
 
-if (SHOULD_BUILD_PLUGIN_SPACENAVIGATOR)
-    macro_optional_find_package(Spnav)
-    macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin") 
-    if (SPNAV_FOUND)
-        add_subdirectory( spacenavigator )
-    endif ()
-endif ()
-
 if (SHOULD_BUILD_PLUGIN_ARTISTICTEXTSHAPE)
     add_subdirectory( artistictextshape )
 endif ()
@@ -31,10 +23,6 @@ endif ()
 
 if (SHOULD_BUILD_PLUGIN_PATHSHAPES)
     add_subdirectory( pathshapes )
-endif ()
-
-if (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
-    add_subdirectory( pictureshape )
 endif ()
 
 if (SHOULD_BUILD_PLUGIN_TEXTSHAPE)

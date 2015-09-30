@@ -12,8 +12,3 @@ kcoreaddons_desktop_to_json(kritaqmlexport krita_qml_export.desktop)
 target_link_libraries(kritaqmlexport kritaui )
 
 install(TARGETS kritaqmlexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  krita_qml_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

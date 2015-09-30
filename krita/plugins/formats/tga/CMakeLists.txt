@@ -11,7 +11,6 @@ target_link_libraries(kritatgaexport kritaui)
 
 install(TARGETS kritatgaexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  krita_tga_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 set(kritatgaimport_PART_SRCS
     kis_tga_import.cpp
     )
@@ -24,6 +23,4 @@ kcoreaddons_desktop_to_json(kritatgaimport krita_tga_import.desktop)
 target_link_libraries(kritatgaimport kritaui )
 
 install(TARGETS kritatgaimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-install( FILES  krita_tga_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_tga.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

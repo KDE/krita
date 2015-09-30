@@ -229,15 +229,4 @@ set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-########### install files ###############
-
 install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES
-    kritaflake.desktop
-    kritaflaketool.desktop
-    kritaflakeshape.desktop
-    kritaflakedevice.desktop
-    presentationeventaction.desktop
-    scripteventaction.desktop
-    filtereffect.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})

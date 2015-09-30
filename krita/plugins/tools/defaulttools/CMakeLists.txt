@@ -46,8 +46,6 @@ install( FILES
     tool_gradient_cursor.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
-install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
 install( FILES
     KisToolPath.action
     KisToolPencil.action

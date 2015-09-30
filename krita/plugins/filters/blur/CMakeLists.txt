@@ -26,8 +26,3 @@ kcoreaddons_desktop_to_json(kritablurfilter kritablurfilter.desktop)
 target_link_libraries(kritablurfilter kritaui)
 
 install(TARGETS kritablurfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritablurfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

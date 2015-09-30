@@ -14,9 +14,3 @@ kcoreaddons_desktop_to_json(kritaimageenhancement kritaimageenhancement.desktop)
 target_link_libraries(kritaimageenhancement kritaui)
 
 install(TARGETS kritaimageenhancement  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaimageenhancement.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

@@ -30,5 +30,4 @@ install(TARGETS kritappmexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_ppm_import.desktop krita_ppm_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_ppm.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

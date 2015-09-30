@@ -7,9 +7,3 @@ kcoreaddons_desktop_to_json(kritapatterndocker krita_patterndocker.desktop)
 target_link_libraries(kritapatterndocker kritaui)
 
 install(TARGETS kritapatterndocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  krita_patterndocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

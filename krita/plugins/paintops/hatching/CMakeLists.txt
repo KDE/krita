@@ -19,10 +19,5 @@ kcoreaddons_desktop_to_json(kritahatchingpaintop kritahatchingpaintop.desktop)
 target_link_libraries(kritahatchingpaintop kritalibpaintop)
 
 install(TARGETS kritahatchingpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritahatchingpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  krita-hatching.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

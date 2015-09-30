@@ -14,12 +14,9 @@ target_link_libraries(kritatoolpolyline kritaui)
 
 install(TARGETS kritatoolpolyline  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
 ########### install files ###############
 
 install( FILES  tool_polyline_cursor.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritatoolpolyline.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
 
 install( FILES
     KisToolPolyline.action

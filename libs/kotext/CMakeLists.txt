@@ -138,7 +138,3 @@ set_target_properties(kritatext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kritatext  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install files ###############
-
-install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

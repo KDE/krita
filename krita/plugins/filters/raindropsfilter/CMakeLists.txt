@@ -10,9 +10,3 @@ kcoreaddons_desktop_to_json(kritaraindropsfilter kritaraindropsfilter.desktop)
 target_link_libraries(kritaraindropsfilter kritaui)
 
 install(TARGETS kritaraindropsfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaraindropsfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

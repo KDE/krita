@@ -13,9 +13,3 @@ kcoreaddons_desktop_to_json(kritaphongbumpmap kritaphongbumpmapfilter.desktop)
 target_link_libraries(kritaphongbumpmap kritaui)
 
 install(TARGETS kritaphongbumpmap  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaphongbumpmapfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

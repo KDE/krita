@@ -8,4 +8,3 @@ target_link_libraries(kritaseparatechannels kritaui)
 
 install(TARGETS kritaseparatechannels  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install( FILES  imageseparate.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritaseparatechannels.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -19,11 +19,6 @@ kcoreaddons_desktop_to_json(kritahairypaintop kritahairypaintop.desktop)
 target_link_libraries(kritahairypaintop kritalibpaintop)
 
 install(TARGETS kritahairypaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritahairypaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
     krita-sumi.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

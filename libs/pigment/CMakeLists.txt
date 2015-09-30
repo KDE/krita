@@ -115,5 +115,3 @@ set_target_properties(kritapigment PROPERTIES
 )
 
 install(TARGETS kritapigment  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

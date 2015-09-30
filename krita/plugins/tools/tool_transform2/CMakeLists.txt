@@ -42,9 +42,10 @@ install(TARGETS kritatooltransform  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  rotate_cursor.xpm
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritatooltransform.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  
+    rotate_cursor.xpm
+DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+
 install( FILES
     KisToolTransform.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

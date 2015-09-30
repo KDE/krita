@@ -24,7 +24,7 @@
 #ifndef KOSTYLEMANAGER_H
 #define KOSTYLEMANAGER_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 #include "KoOdfNotesConfiguration.h"
 
 #include <QObject>
@@ -49,7 +49,7 @@ class KoOdfBibliographyConfiguration;
  * Manages all character, paragraph, table and table cell styles for any number
  * of documents.
  */
-class KOTEXT_EXPORT KoStyleManager : public QObject
+class KRITATEXT_EXPORT KoStyleManager : public QObject
 {
     Q_OBJECT
 public:

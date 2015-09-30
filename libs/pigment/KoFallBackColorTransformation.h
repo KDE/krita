@@ -22,7 +22,7 @@
 
 #include "KoColorTransformation.h"
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoColorSpace;
 class KoColorConversionTransformation;
@@ -31,7 +31,7 @@ class KoColorConversionTransformation;
  * Use this color transformation to encapsulate another KoColorTransformation
  * and perform a color conversion before and after using that KoColorTransformation.
  */
-class PIGMENTCMS_EXPORT KoFallBackColorTransformation : public KoColorTransformation
+class KRITAPIGMENT_EXPORT KoFallBackColorTransformation : public KoColorTransformation
 {
 public:
     /**

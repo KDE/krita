@@ -24,7 +24,7 @@
 #include <QWidgetAction>
 #include <QFrame>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KoColor;
 class KoColorSet;
@@ -35,7 +35,7 @@ class KoColorSet;
  * KoColorSetWidget is a widget for choosing a color (colormanaged via pigment). It shows a a color
  * set plus optionally a checkbox to filter away bad matching colors.
  */
-class KOWIDGETS_EXPORT KoColorSetWidget : public QFrame
+class KRITAWIDGETS_EXPORT KoColorSetWidget : public QFrame
 {
 
     Q_OBJECT

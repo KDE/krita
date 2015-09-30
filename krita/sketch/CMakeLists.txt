@@ -124,7 +124,7 @@ target_link_libraries(kritasketchlib
     Qt5::Core
     ${QT_LIBRARIES}
     kritaui
-    kowidgets
+    kritawidgets
     
 )
 
@@ -165,7 +165,7 @@ target_link_libraries(kritasketchplugin
     Qt5::Core
     ${QT_LIBRARIES}
     kritaui
-    kowidgets
+    kritawidgets
     
     kritasketchlib
 )

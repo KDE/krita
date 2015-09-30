@@ -21,7 +21,7 @@
 
 #include <QTableView>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class QEvent;
 class QModelIndex;
@@ -29,7 +29,7 @@ class QModelIndex;
 /**
  * @brief The KoTableView class provides a QTableView with fixed columns or rows
  */
-class KOWIDGETS_EXPORT KoTableView: public QTableView
+class KRITAWIDGETS_EXPORT KoTableView: public QTableView
 {
     Q_OBJECT
 

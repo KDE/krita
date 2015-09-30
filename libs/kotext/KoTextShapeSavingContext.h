@@ -20,7 +20,7 @@
 #ifndef KOTEXTSHAPESAVINGCONTEXT_H
 #define KOTEXTSHAPESAVINGCONTEXT_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <KoShapeSavingContext.h>
 
@@ -29,7 +29,7 @@ class KoGenChanges;
 /**
  * The set of data for the ODF file format used during saving of a shape.
  */
-class KOTEXT_EXPORT KoTextShapeSavingContext : public KoShapeSavingContext
+class KRITATEXT_EXPORT KoTextShapeSavingContext : public KoShapeSavingContext
 {
 public:
 

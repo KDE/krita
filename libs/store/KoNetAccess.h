@@ -32,7 +32,7 @@
 class QStringList;
 class QWidget;
 
-#include <kostore_export.h>
+#include <kritastore_export.h>
 
 
 template<typename T, typename K> class QMap;
@@ -67,7 +67,7 @@ class NetAccessPrivate;
  *
  * @short Provides a blocking interface to KIO file operations.
  */
-class KOSTORE_EXPORT NetAccess : public QObject
+class KRITASTORE_EXPORT NetAccess : public QObject
 {
     Q_OBJECT
 

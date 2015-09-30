@@ -124,7 +124,7 @@ target_link_libraries(TestChangesDatabase ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRA
 #    ../InlineAnchorStrategy.cpp
 #)
 #kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-#target_link_libraries(TestStylesModel kotext  ${QT_QTTEST_LIBRARY})
+#target_link_libraries(TestStylesModel kritatext  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -143,7 +143,7 @@ set(TestTableLayout_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
-target_link_libraries(TestTableLayout kotext  ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestTableLayout kritatext  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -162,7 +162,7 @@ set(TestSections_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
-target_link_libraries(TestSections kotext  ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestSections kritatext  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -303,5 +303,5 @@ set(TestChangeTrackedDelete_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
-target_link_libraries(TestChangeTrackedDelete  kotext ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestChangeTrackedDelete  kritatext ${QT_QTTEST_LIBRARY})
 

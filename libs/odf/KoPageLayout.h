@@ -27,7 +27,7 @@
 #include "KoXmlReaderForward.h"
 #include "KoBorder.h"
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoGenStyle;
 
@@ -88,24 +88,24 @@ struct KoPageLayout {
     /// page border definition
     KoBorder  border;
 
-    KOODF_EXPORT bool operator==(const KoPageLayout &l) const;
-    KOODF_EXPORT bool operator!=(const KoPageLayout& l) const;
+    KRITAODF_EXPORT bool operator==(const KoPageLayout &l) const;
+    KRITAODF_EXPORT bool operator!=(const KoPageLayout& l) const;
 
     /**
      * Save this page layout to ODF.
      */
-    KOODF_EXPORT KoGenStyle saveOdf() const;
+    KRITAODF_EXPORT KoGenStyle saveOdf() const;
 
     /**
      * Load this page layout from ODF
      */
-    KOODF_EXPORT void loadOdf(const KoXmlElement &style);
+    KRITAODF_EXPORT void loadOdf(const KoXmlElement &style);
 
     /**
      * Construct a page layout with the default page size depending on the locale settings,
      * default margins (2 cm), and portrait orientation.
      */
-    KOODF_EXPORT KoPageLayout();
+    KRITAODF_EXPORT KoPageLayout();
 };
 
 #endif /* KOPAGELAYOUT_H */

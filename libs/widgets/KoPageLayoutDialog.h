@@ -20,7 +20,7 @@
 #ifndef KO_PAGE_LAYOUT_DIALOG
 #define KO_PAGE_LAYOUT_DIALOG
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <KoText.h>
 
@@ -29,7 +29,7 @@
 struct KoPageLayout;
 
 /// A dialog to show the settings for one page and apply them afterwards.
-class KOWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog
+class KRITAWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog
 {
     Q_OBJECT
 public:

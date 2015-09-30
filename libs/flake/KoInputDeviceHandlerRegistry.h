@@ -22,7 +22,7 @@
 
 #include "KoGenericRegistry.h"
 #include <KoInputDeviceHandler.h>
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * This singleton class keeps a register of all custom input devices
@@ -30,7 +30,7 @@
  * These will get routed the active tools which can then do whatever
  * they like with it.
  */
-class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler*>
+class KRITAFLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler*>
 {
 public:
     KoInputDeviceHandlerRegistry();

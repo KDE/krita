@@ -19,7 +19,7 @@
 #ifndef KOINLINEOBJECTBASE_H
 #define KOINLINEOBJECTBASE_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 #include <KoXmlReaderForward.h>
 
 #include <QObject>
@@ -47,7 +47,7 @@ class KoShapeLoadingContext;
  *
  * @see KoInlineTextObjectManager
  */
-class KOTEXT_EXPORT KoInlineObject : public QObject
+class KRITATEXT_EXPORT KoInlineObject : public QObject
 {
     Q_OBJECT
 public:
@@ -231,9 +231,9 @@ protected:
 
 private:
     Q_DECLARE_PRIVATE(KoInlineObject)
-    friend KOTEXT_EXPORT QDebug operator<<(QDebug, const KoInlineObject *);
+    friend KRITATEXT_EXPORT QDebug operator<<(QDebug, const KoInlineObject *);
 };
 
-KOTEXT_EXPORT QDebug operator<<(QDebug dbg, const KoInlineObject *o);
+KRITATEXT_EXPORT QDebug operator<<(QDebug dbg, const KoInlineObject *o);
 
 #endif

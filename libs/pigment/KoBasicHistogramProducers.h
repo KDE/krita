@@ -27,10 +27,10 @@
 
 #include "KoColorSpace.h"
 #include "KoID.h"
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 #include "KoColorSpaceRegistry.h"
 
-class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer
+class KRITAPIGMENT_EXPORT KoBasicHistogramProducer : public KoHistogramProducer
 {
 public:
     explicit KoBasicHistogramProducer(const KoID& id, int channelCount, int nrOfBins);
@@ -101,7 +101,7 @@ protected:
     QVector<qint32> m_external;
 };
 
-class PIGMENTCMS_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramProducer
+class KRITAPIGMENT_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
@@ -112,7 +112,7 @@ public:
     }
 };
 
-class PIGMENTCMS_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramProducer
+class KRITAPIGMENT_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
@@ -121,7 +121,7 @@ public:
     virtual qreal maximalZoom() const;
 };
 
-class PIGMENTCMS_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramProducer
+class KRITAPIGMENT_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
@@ -132,7 +132,7 @@ public:
 
 
 #ifdef HAVE_OPENEXR
-class PIGMENTCMS_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer
+class KRITAPIGMENT_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoBasicF16HalfHistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
@@ -181,7 +181,7 @@ protected:
  * Registry, because it isCompatibleWith all colorspaces, and should only be used in extreme
  * cases (like no other producer being available
  **/
-class PIGMENTCMS_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogramProducer
+class KRITAPIGMENT_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoGenericRGBHistogramProducer();
@@ -194,7 +194,7 @@ protected:
 };
 
 /** KoGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
-class  PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory
+class  KRITAPIGMENT_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
     KoGenericRGBHistogramProducerFactory();
@@ -220,7 +220,7 @@ public:
  * to L*a*b*, and then does its counting.
  * It isCompatibleWith all colorspaces
  **/
-class  PIGMENTCMS_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogramProducer
+class  KRITAPIGMENT_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoGenericLabHistogramProducer();
@@ -234,7 +234,7 @@ protected:
 };
 
 /** KoGenericLabHistogramProducer his special Factory that isCompatibleWith everything. */
-class /*PIGMENTCMS_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHistogramProducerFactory
+class /*KRITAPIGMENT_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
     KoGenericLabHistogramProducerFactory();

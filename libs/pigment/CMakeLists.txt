@@ -1,4 +1,4 @@
-project(pigmentcms)
+project(kritapigment)
 
 # we have to repeat platform specifics from top-level
 if (WIN32)
@@ -33,7 +33,7 @@ endif()
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
-set(pigmentcms_SRCS
+set(kritapigment_SRCS
     DebugPigment.cpp
     KoBasicHistogramProducers.cpp
     KoColor.cpp
@@ -88,20 +88,17 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-add_library(pigmentcms SHARED ${pigmentcms_SRCS})
-generate_export_header(pigmentcms
-    BASE_NAME pigment
-    EXPORT_MACRO_NAME PIGMENTCMS_EXPORT
-)
+add_library(kritapigment SHARED ${kritapigment_SRCS})
+generate_export_header(kritapigment)
 
 if (HAVE_VC)
-    target_link_libraries(pigmentcms KF5::I18n )
-    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::I18n )
+    target_link_libraries(kritapigment KF5::I18n )
+    target_link_libraries(kritapigment LINK_INTERFACE_LIBRARIES KF5::I18n )
 endif()
 
 target_link_libraries(
-    pigmentcms
-    koplugin
+    kritapigment
+    kritaplugin
     ${EXTRA_LIBRARIES}
     KF5::I18n 
     Qt5::Gui
@@ -110,13 +107,13 @@ target_link_libraries(
     )
 
 target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES koplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
+    kritapigment LINK_INTERFACE_LIBRARIES kritaplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
 )
 
-set_target_properties(pigmentcms PROPERTIES
+set_target_properties(kritapigment PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritapigment  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

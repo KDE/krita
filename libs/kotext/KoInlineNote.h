@@ -20,7 +20,7 @@
 #define KOINLINENOTE_H
 
 #include "KoInlineObject.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class QTextFrame;
 
@@ -28,7 +28,7 @@ class QTextFrame;
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
  * Typical notes that use this are Footnotes, Endnotes and Annotations (also known as comments).
  */
-class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
+class KRITATEXT_EXPORT KoInlineNote : public KoInlineObject
 {
     Q_OBJECT
 public:

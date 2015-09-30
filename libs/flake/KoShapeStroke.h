@@ -27,7 +27,7 @@
 #include "KoInsets.h"
 #include "KoShapeStrokeModel.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QMetaType>
 #include <QColor>
@@ -41,7 +41,7 @@ class KoViewConverter;
 /**
  * A border for shapes that draws a single line around the object.
  */
-class FLAKE_EXPORT KoShapeStroke : public KoShapeStrokeModel
+class KRITAFLAKE_EXPORT KoShapeStroke : public KoShapeStrokeModel
 {
 public:
     /// Constructor for a thin line in black

@@ -20,7 +20,7 @@
 #ifndef KORESOURCESERVEROBSERVER_H
 #define KORESOURCESERVEROBSERVER_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include "KoResourceServerPolicies.h"
 

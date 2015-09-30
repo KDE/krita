@@ -21,13 +21,13 @@
 
 #include <QWidget>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KoColor;
 class KoColorDisplayRendererInterface;
 
 
-class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
+class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
     Q_OBJECT
     public:
         explicit KoTriangleColorSelector(QWidget *parent);

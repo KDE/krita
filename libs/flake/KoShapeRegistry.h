@@ -24,7 +24,7 @@
 #include <KoGenericRegistry.h>
 #include <KoShapeFactoryBase.h>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KoShapeLoadingContext;
@@ -35,7 +35,7 @@ class KoShapeLoadingContext;
  * or rather, of the factories that applications can use to create flake
  * shape objects.
  */
-class FLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase*>
+class KRITAFLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase*>
 {
 public:
     KoShapeRegistry();

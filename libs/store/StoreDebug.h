@@ -20,9 +20,9 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-#include <kostore_export.h>
+#include <kritastore_export.h>
 
-extern const KOSTORE_EXPORT QLoggingCategory &STORE_LOG();
+extern const KRITASTORE_EXPORT QLoggingCategory &STORE_LOG();
 
 #define debugStore qCDebug(STORE_LOG)
 #define warnStore qCWarning(STORE_LOG)

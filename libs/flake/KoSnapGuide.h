@@ -20,7 +20,7 @@
 #ifndef KOSNAPGUIDE_H
 #define KOSNAPGUIDE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QList>
 #include <Qt>
@@ -52,7 +52,7 @@ class QRectF;
  * widget in guiutils.
  *
  */
-class FLAKE_EXPORT KoSnapGuide
+class KRITAFLAKE_EXPORT KoSnapGuide
 {
 public:
     /// the different possible snap Strategies

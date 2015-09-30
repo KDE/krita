@@ -21,7 +21,7 @@
 #ifndef KOSHAPEMOVECOMMAND_H
 #define KOSHAPEMOVECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -30,7 +30,7 @@
 class KoShape;
 
 /// The undo / redo command for shape moving.
-class FLAKE_EXPORT KoShapeMoveCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeMoveCommand : public KUndo2Command
 {
 public:
     /**

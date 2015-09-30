@@ -21,7 +21,7 @@
 #define KOTEXTPASTE_H
 
 #include <KoOdfPaste.h>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoTextEditor;
 class KoShapeController;
@@ -34,7 +34,7 @@ namespace Soprano
     class Model;
 }
 
-class KOTEXT_EXPORT KoTextPaste : public KoOdfPaste
+class KRITATEXT_EXPORT KoTextPaste : public KoOdfPaste
 {
 public:
     /**

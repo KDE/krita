@@ -21,7 +21,7 @@
 #ifndef KOSHAPEDELETECOMMAND_H
 #define KOSHAPEDELETECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 #include <QList>
 
@@ -29,7 +29,7 @@ class KoShape;
 class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for deleting shapes
-class FLAKE_EXPORT KoShapeDeleteCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeDeleteCommand : public KUndo2Command
 {
 public:
     /**

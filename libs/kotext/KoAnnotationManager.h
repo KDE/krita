@@ -21,7 +21,7 @@
 #ifndef KOANNOTATIONMANAGER_H
 #define KOANNOTATIONMANAGER_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 #include <QList>
@@ -37,7 +37,7 @@ class KoAnnotationManagerPrivate;
  * This class also maintains a list of annotation names so that it can be easily used to
  * show all available annotation.
  */
-class KOTEXT_EXPORT KoAnnotationManager : public QObject
+class KRITATEXT_EXPORT KoAnnotationManager : public QObject
 {
     Q_OBJECT
 public:

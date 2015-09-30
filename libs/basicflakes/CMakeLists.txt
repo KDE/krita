@@ -6,22 +6,22 @@ include_directories(
     ${FLAKE_INCLUDES}
 )
 
-set(basicflakes_LIB_SRCS
+set(kritabasicflakes_LIB_SRCS
     tools/KoCreatePathTool.cpp
     tools/KoPencilTool.cpp
 )
 
-ki18n_wrap_ui( basicflakes_LIB_SRCS
+ki18n_wrap_ui( kritabasicflakes_LIB_SRCS
 )
 
 
-add_library(basicflakes SHARED ${basicflakes_LIB_SRCS})
-generate_export_header(basicflakes)
+add_library(kritabasicflakes SHARED ${kritabasicflakes_LIB_SRCS})
+generate_export_header(kritabasicflakes)
 
-target_link_libraries(basicflakes kowidgets flake pigmentcms)
+target_link_libraries(kritabasicflakes kritawidgets kritaflake kritapigment)
 
-set_target_properties(basicflakes PROPERTIES
+set_target_properties(kritabasicflakes PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritabasicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})

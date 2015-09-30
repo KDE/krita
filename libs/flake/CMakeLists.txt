@@ -1,4 +1,4 @@
-project(flake)
+project(kritaflake)
 
 include_directories(${FLAKE_INCLUDES} )
 
@@ -6,7 +6,7 @@ add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)
 
-set(flake_SRCS
+set(kritaflake_SRCS
     KoGradientHelper.cpp
     KoFlake.cpp
     KoCanvasBase.cpp
@@ -208,35 +208,35 @@ set(flake_SRCS
     FlakeDebug.cpp
 )
 
-ki18n_wrap_ui(flake_SRCS
+ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
     SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 
-add_library(flake SHARED ${flake_SRCS})
-generate_export_header(flake BASE_NAME flake)
+add_library(kritaflake SHARED ${kritaflake_SRCS})
+generate_export_header(kritaflake BASE_NAME kritaflake)
 
-target_link_libraries(flake pigmentcms kowidgetutils koodf kundo2 KF5::IconThemes Qt5::Svg)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf kundo2)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::IconThemes Qt5::Svg)
+target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2)
 
 if(HAVE_OPENGL)
-    target_link_libraries(flake ${OPENGL_LIBRARIES} Qt5::OpenGL)
+    target_link_libraries(kritaflake ${OPENGL_LIBRARIES} Qt5::OpenGL)
 endif()
 
-set_target_properties(flake PROPERTIES
+set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 ########### install files ###############
 
-install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
-    flake.desktop
-    flaketool.desktop
-    flakeshape.desktop
-    flakedevice.desktop
+    kritaflake.desktop
+    kritaflaketool.desktop
+    kritaflakeshape.desktop
+    kritaflakedevice.desktop
     presentationeventaction.desktop
     scripteventaction.desktop
     filtereffect.desktop

@@ -27,9 +27,9 @@
 #define KOTAGCHOOSERWIDGET_H
 
 #include <QWidget>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
-class KOWIDGETS_EXPORT KoTagChooserWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoTagChooserWidget : public QWidget
 {
     Q_OBJECT
 

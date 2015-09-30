@@ -21,7 +21,7 @@
 #define KOTEXTSHAPEDATA_H
 
 #include "KoText.h"
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include <KoTextShapeDataBase.h>
 #include <KoXmlReaderForward.h>
@@ -42,7 +42,7 @@ class KoTextLayoutRootArea;
  * multiple instances of this shape data) can share one QTextDocument by providing a
  * different view on (a different part of) the QTextDocument.
  */
-class KOTEXTLAYOUT_EXPORT KoTextShapeData : public KoTextShapeDataBase
+class KRITATEXTLAYOUT_EXPORT KoTextShapeData : public KoTextShapeDataBase
 {
     Q_OBJECT
 public:

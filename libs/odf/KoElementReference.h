@@ -26,7 +26,7 @@
 
 #include "KoXmlReaderForward.h"
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoXmlWriter;
 
@@ -62,7 +62,7 @@ public:
  *
  * Element references are implicitly shared, so you can and should pass them along by value.
  */
-class KOODF_EXPORT KoElementReference
+class KRITAODF_EXPORT KoElementReference
 {
 public:
 

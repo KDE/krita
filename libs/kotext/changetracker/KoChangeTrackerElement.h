@@ -21,7 +21,7 @@
 
 #include <KoGenChange.h>
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KUndo2MagicString;
 class QString;
@@ -29,7 +29,7 @@ class QTextFormat;
 class QTextDocumentFragment;
 
 
-class KOTEXT_EXPORT KoChangeTrackerElement
+class KRITATEXT_EXPORT KoChangeTrackerElement
 {
 public:
 

@@ -21,7 +21,7 @@
 #ifndef KORESOURCEFILTER_H
 #define KORESOURCEFILTER_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <QList>
 
@@ -30,7 +30,7 @@ class KoResource;
 class QStringList;
 class QString;
 
-class KOWIDGETS_EXPORT KoResourceFiltering
+class KRITAWIDGETS_EXPORT KoResourceFiltering
 {
 
 public:

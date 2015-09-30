@@ -6,7 +6,7 @@ add_subdirectory( tests )
 add_subdirectory( styles/tests )
 
 ########### next target ###############
-set(kotext_LIB_SRCS
+set(kritatext_LIB_SRCS
     KoDocumentRdfBase.cpp
     KoText.cpp
     KoTextBlockData.cpp
@@ -128,34 +128,16 @@ set(kotext_LIB_SRCS
     TextDebug.cpp
 )
 
-if( SHOULD_BUILD_FEATURE_RDF )
-    set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
-        KoTextRdfCore.cpp
-    )
-endif()
+add_library(kritatext SHARED ${kritatext_LIB_SRCS})
+generate_export_header(kritatext BASE_NAME kritatext)
 
-add_library(kotext SHARED ${kotext_LIB_SRCS})
-generate_export_header(kotext BASE_NAME kotext)
+target_link_libraries(kritatext kritaflake Qt5::Gui KF5::TextWidgets KF5::XmlGui KF5::WindowSystem)
+target_link_libraries(kritatext LINK_INTERFACE_LIBRARIES kritaflake Qt5::Gui KF5::TextWidgets)
 
-target_link_libraries(kotext flake KF5::TextWidgets KF5::XmlGui KF5::WindowSystem)
-if( SHOULD_BUILD_FEATURE_RDF )
-    target_link_libraries(kotext ${SOPRANO_LIBRARIES})
-endif()
-target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake KF5::TextWidgets)
-
-if( FONTCONFIG_FOUND )
-    target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
-endif()
-
-if( FREETYPE_FOUND )
-    target_link_libraries(kotext ${FREETYPE_LIBRARIES})
-endif()
-
-
-set_target_properties(kotext PROPERTIES
+set_target_properties(kritatext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritatext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

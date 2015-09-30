@@ -19,7 +19,7 @@
 #ifndef KOPASTECONTROLLER_H
 #define KOPASTECONTROLLER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 
@@ -33,7 +33,7 @@ class KoCanvasBase;
  * Additionally; when the tool does not allow pasting (KoToolBase::hasSelection() returns false)
  * the signal pasteRequested will be emitted for applications to connect to.
  */
-class FLAKE_EXPORT KoPasteController : public QObject
+class KRITAFLAKE_EXPORT KoPasteController : public QObject
 {
     Q_OBJECT
 public:

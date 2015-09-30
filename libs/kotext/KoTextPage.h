@@ -20,7 +20,7 @@
 #ifndef KOTEXTPAGE_H
 #define KOTEXTPAGE_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QRectF>
 #include <QMetaType>
@@ -34,7 +34,7 @@ class QString;
  * application specific functionality for single pages.
  * @see KoTextShapeData::setPage();
  */
-class KOTEXT_EXPORT KoTextPage
+class KRITATEXT_EXPORT KoTextPage
 {
 public:
     /// Constructor.

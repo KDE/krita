@@ -27,7 +27,7 @@
 #include <QVariant>
 #include <QPair>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoOdfLoadingContext;
 class KoShapeLayer;
@@ -44,7 +44,7 @@ class KoSectionModel;
  * This class holds various variables as well as a context full of variables which all together
  * form the context of a loading operation.
  */
-class FLAKE_EXPORT KoShapeLoadingContext
+class KRITAFLAKE_EXPORT KoShapeLoadingContext
 {
 public:
     /**

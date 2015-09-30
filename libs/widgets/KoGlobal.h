@@ -26,11 +26,11 @@
 #include <QFont>
 #include <QMap>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KConfig;
 
-class KOWIDGETS_EXPORT KoGlobal
+class KRITAWIDGETS_EXPORT KoGlobal
 {
 public:
     KoGlobal();

@@ -20,13 +20,13 @@
 #ifndef _KOLINESTYLESELECTOR_H_
 #define _KOLINESTYLESELECTOR_H_
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <QComboBox>
 
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KOWIDGETS_EXPORT KoLineStyleSelector : public QComboBox
+class KRITAWIDGETS_EXPORT KoLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:

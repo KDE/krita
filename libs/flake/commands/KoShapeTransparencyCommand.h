@@ -20,7 +20,7 @@
 #ifndef KOSHAPETRANSPARENCYCOMMAND_H
 #define KOSHAPETRANSPARENCYCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -28,7 +28,7 @@
 class KoShape;
 
 /// The undo / redo command for setting the shape transparency
-class FLAKE_EXPORT KoShapeTransparencyCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeTransparencyCommand : public KUndo2Command
 {
 public:
     /**

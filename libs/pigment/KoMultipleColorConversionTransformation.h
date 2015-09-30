@@ -22,7 +22,7 @@
 
 #include <KoColorConversionTransformation.h>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 /**
  * This color conversion transformation allows to create a chain of color conversion between two color
@@ -33,7 +33,7 @@
  *  KoMultipleColorConversionTransformation::appendTransfo a transformation from CSA to CSB and a
  * transformation from CSB to CSC.
  */
-class PIGMENTCMS_EXPORT KoMultipleColorConversionTransformation : public KoColorConversionTransformation
+class KRITAPIGMENT_EXPORT KoMultipleColorConversionTransformation : public KoColorConversionTransformation
 {
 public:
     /**

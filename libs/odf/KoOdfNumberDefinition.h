@@ -21,7 +21,7 @@
 #define KOODFNUMBERDEFINITION_H
 
 #include "KoXmlReader.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoXmlWriter;
 
@@ -33,7 +33,7 @@ class KoXmlWriter;
  * • Display format specification, for example, A, B, C, or 1, 2, 3
  * • Suffix – the text that is displayed after the number
  */
-class KOODF_EXPORT KoOdfNumberDefinition
+class KRITAODF_EXPORT KoOdfNumberDefinition
 {
 public:
     explicit KoOdfNumberDefinition();

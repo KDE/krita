@@ -201,4 +201,4 @@ target_link_libraries(KisFileLayerTest    kritaui kritaimage Qt5::Test)
 
 set(kis_asl_layer_style_serializer_test_SRCS kis_asl_layer_style_serializer_test.cpp )
 kde4_add_unit_test(KisAslLayerStyleSerializerTest TESTNAME krita-ui-KisAslLayerStyleSerializerTest ${kis_asl_layer_style_serializer_test_SRCS})
-target_link_libraries(KisAslLayerStyleSerializerTest   kritaui kritaimage kowidgets ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisAslLayerStyleSerializerTest   kritaui kritaimage kritawidgets ${QT_QTTEST_LIBRARY})

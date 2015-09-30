@@ -21,7 +21,7 @@
 
 #include <KoShapeContainerModel.h>
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 class KoShapeAnchor;
 class KoShapeContainer;
@@ -31,7 +31,7 @@ class KoShapeContainer;
  * All anchored frames are children of the text shape, and they get positioned
  * by the text layouter.
  */
-class KOTEXTLAYOUT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel
+class KRITATEXTLAYOUT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel
 {
 public:
     /// constructor

@@ -23,7 +23,7 @@
 #ifndef KOSHAPESTROKEMODEL_H
 #define KOSHAPESTROKEMODEL_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KoGenStyle;
@@ -42,7 +42,7 @@ class QPainter;
  * and preferred behavior, to have one instance of a stroke that is reused on several
  * objects.
  */
-class FLAKE_EXPORT KoShapeStrokeModel
+class KRITAFLAKE_EXPORT KoShapeStrokeModel
 {
 public:
     KoShapeStrokeModel();

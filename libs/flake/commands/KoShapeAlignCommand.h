@@ -21,7 +21,7 @@
 #ifndef KOSHAPEALIGNCOMMAND_H
 #define KOSHAPEALIGNCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -30,7 +30,7 @@ class KoShape;
 class QRectF;
 
 /// The undo / redo command for aligning shapes
-class FLAKE_EXPORT KoShapeAlignCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeAlignCommand : public KUndo2Command
 {
 public:
     /// The different alignment options for this command

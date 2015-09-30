@@ -19,7 +19,7 @@
 #ifndef KOTEXTTABLETEMPLATE_H
 #define KOTEXTTABLETEMPLATE_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 
@@ -29,7 +29,7 @@ class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoTextSharedSavingData;
 
-class KOTEXT_EXPORT KoTextTableTemplate : public QObject
+class KRITATEXT_EXPORT KoTextTableTemplate : public QObject
 {
 public:
     enum Property {

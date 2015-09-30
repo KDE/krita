@@ -35,7 +35,7 @@
 
 //#include <KoSnapData.h>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QPainter;
 class QRectF;
@@ -105,7 +105,7 @@ struct KoInsets;
  * KoShape::setCollisionDetection(bool) to enable this.
  * </ol>
  */
-class FLAKE_EXPORT KoShape
+class KRITAFLAKE_EXPORT KoShape
 {
 public:
     /// Used by shapeChanged() to select which change was made

@@ -23,7 +23,7 @@
 #ifndef KOLISTSTYLE_H
 #define KOLISTSTYLE_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QTextFormat>
 #include <QTextListFormat>
@@ -59,7 +59,7 @@ class QTextBlock;
  * the counter will increase. If you want a paragraph to be on a sub level you do however need to
  * create a new paragraph-style when another listLevel set.
  */
-class  KOTEXT_EXPORT KoListStyle : public QObject
+class  KRITATEXT_EXPORT KoListStyle : public QObject
 {
     Q_OBJECT
     Q_ENUMS(Style Property)

@@ -23,12 +23,12 @@
 
 #include <QString>
 #include <QFlags>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * The ZoomMode container
  */
-class KOWIDGETS_EXPORT KoZoomMode
+class KRITAWIDGETS_EXPORT KoZoomMode
 {
 public:
     enum Mode

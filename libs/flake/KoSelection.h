@@ -29,7 +29,7 @@
 #include "KoShape.h"
 #include "KoFlake.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoViewConverter;
 class KoShapeLayer;
@@ -48,7 +48,7 @@ class KoSelectionPrivate;
  * A selection, however, should not be selectable. We need to think
  * a little about the interaction here.
  */
-class FLAKE_EXPORT KoSelection : public QObject, public KoShape
+class KRITAFLAKE_EXPORT KoSelection : public QObject, public KoShape
 {
     Q_OBJECT
 

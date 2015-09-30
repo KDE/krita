@@ -20,7 +20,7 @@
 #ifndef KOVIEWCONVERTER_H
 #define KOVIEWCONVERTER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QtGlobal>
 
@@ -39,7 +39,7 @@ class QSizeF;
  * The zoom level is expressed on a scale of 0.0 to 1.0 to infinite, where 1.0 is
  * 100%
  */
-class FLAKE_EXPORT KoViewConverter
+class KRITAFLAKE_EXPORT KoViewConverter
 {
 public:
     KoViewConverter();

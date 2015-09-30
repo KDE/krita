@@ -23,7 +23,7 @@
 #define KOVIEWITEMCONTEXTBAR_H
 
 #include <QObject>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <QModelIndex>
 
 class QAbstractItemView;
@@ -38,7 +38,7 @@ class QRect;
  * which allows to select/deselect the current item, other buttons for
  * custom actions could be added using addContextButton method.
  */
-class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
+class KRITAWIDGETS_EXPORT KoViewItemContextBar : public QObject
 {
     Q_OBJECT
 

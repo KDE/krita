@@ -25,7 +25,7 @@
 #define KOUNIT_H
 
 // Calligra
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 // Qt
 #include <QString>
 #include <QDebug>
@@ -66,7 +66,7 @@ class QStringList;
  * bound to the order in the enum (so ABI-compatible extension is possible) and
  * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
-class KOODF_EXPORT KoUnit
+class KRITAODF_EXPORT KoUnit
 {
 public:
     /** Length units supported by Calligra. */
@@ -267,7 +267,7 @@ private:
 };
 
 #ifndef QT_NO_DEBUG_STREAM
-KOODF_EXPORT QDebug operator<<(QDebug, const KoUnit &);
+KRITAODF_EXPORT QDebug operator<<(QDebug, const KoUnit &);
 #endif
 
 Q_DECLARE_METATYPE(KoUnit)

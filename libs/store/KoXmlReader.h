@@ -23,7 +23,7 @@
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
 
-#include "kostore_export.h"
+#include "kritastore_export.h"
 
 #include <QPair>
 #include <QtXml>
@@ -77,7 +77,7 @@ enum KoXmlNamedItemType {
 *
 * @author Ariya Hidayat <ariya@kde.org>
 */
-class KOSTORE_EXPORT KoXmlNode
+class KRITASTORE_EXPORT KoXmlNode
 {
 public:
 
@@ -171,7 +171,7 @@ protected:
 * @author Ariya Hidayat <ariya@kde.org>
 */
 
-class KOSTORE_EXPORT KoXmlElement: public KoXmlNode
+class KRITASTORE_EXPORT KoXmlElement: public KoXmlNode
 {
 public:
     KoXmlElement();
@@ -201,7 +201,7 @@ private:
 * KoXmlText represents a text in a DOM tree.
 * @author Ariya Hidayat <ariya@kde.org>
 */
-class KOSTORE_EXPORT KoXmlText: public KoXmlNode
+class KRITASTORE_EXPORT KoXmlText: public KoXmlNode
 {
 public:
     KoXmlText();
@@ -223,7 +223,7 @@ private:
 * KoXmlCDATASection represents a CDATA section in a DOM tree.
 * @author Ariya Hidayat <ariya@kde.org>
 */
-class KOSTORE_EXPORT KoXmlCDATASection: public KoXmlText
+class KRITASTORE_EXPORT KoXmlCDATASection: public KoXmlText
 {
 public:
     KoXmlCDATASection();
@@ -247,7 +247,7 @@ private:
 * @author Ariya Hidayat <ariya@kde.org>
 */
 
-class KOSTORE_EXPORT KoXmlDocumentType: public KoXmlNode
+class KRITASTORE_EXPORT KoXmlDocumentType: public KoXmlNode
 {
 public:
     KoXmlDocumentType();
@@ -277,7 +277,7 @@ private:
 * @author Ariya Hidayat <ariya@kde.org>
 */
 
-class KOSTORE_EXPORT KoXmlDocument: public KoXmlNode
+class KRITASTORE_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
     explicit KoXmlDocument(bool stripSpaces = false);
@@ -360,7 +360,7 @@ namespace KoXml
  *
  * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
  */
-KOSTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
+KRITASTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
                                         const QString& nsURI, const QString& localName);
 
 /**
@@ -374,7 +374,7 @@ KOSTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
  * give fast access to certain sections of the document using
  * the office-text-content-prelude condition as @a KoXmlNamedItemType .
  */
-KOSTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
+KRITASTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
                                       const QString& nsURI, const QString& localName,
                                       KoXmlNamedItemType type);
 
@@ -382,23 +382,23 @@ KOSTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
  * Explicitly load child nodes of specified node, up to given depth.
  * This function has no effect if QDom is used.
  */
-KOSTORE_EXPORT void load(KoXmlNode& node, int depth = 1);
+KRITASTORE_EXPORT void load(KoXmlNode& node, int depth = 1);
 
 /**
  * Unload child nodes of specified node.
  * This function has no effect if QDom is used.
  */
-KOSTORE_EXPORT void unload(KoXmlNode& node);
+KRITASTORE_EXPORT void unload(KoXmlNode& node);
 
 /**
  * Get the number of child nodes of specified node.
  */
-KOSTORE_EXPORT int childNodesCount(const KoXmlNode& node);
+KRITASTORE_EXPORT int childNodesCount(const KoXmlNode& node);
 
 /**
  * Return the name of all attributes of specified node.
  */
-KOSTORE_EXPORT QStringList attributeNames(const KoXmlNode& node);
+KRITASTORE_EXPORT QStringList attributeNames(const KoXmlNode& node);
 
 /**
  * Convert KoXmlNode classes to the corresponding QDom classes, which has
@@ -411,7 +411,7 @@ KOSTORE_EXPORT QStringList attributeNames(const KoXmlNode& node);
  * 
  * @see asQDomDocument, asQDomElement
  */
-KOSTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
+KRITASTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
 
 /**
  * Convert KoXmlNode classes to the corresponding QDom classes, which has
@@ -421,13 +421,13 @@ KOSTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
  * NOTE: If ownerDoc is not empty, this may fail, @see QDomDocument
  *
  */
-KOSTORE_EXPORT void asQDomElement(QDomDocument& ownerDoc, const KoXmlElement& element);
+KRITASTORE_EXPORT void asQDomElement(QDomDocument& ownerDoc, const KoXmlElement& element);
 
 /**
  * Converts the whole @p document into a QDomDocument
  * If KOXML_USE_QDOM is defined, just returns @p document
  */
-KOSTORE_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
+KRITASTORE_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
 
 /*
  * Load an XML document from specified device to a document. You can of
@@ -438,7 +438,7 @@ KOSTORE_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
  *
  * Note: it is assumed that the XML uses UTF-8 encoding.
  */
-KOSTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
+KRITASTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
                                 bool namespaceProcessing, QString* errorMsg = 0,
                                 int* errorLine = 0, int* errorColumn = 0);
 }

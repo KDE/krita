@@ -20,7 +20,7 @@
 #ifndef KOSHAPEREORDERCOMMAND_H
 #define KOSHAPEREORDERCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -30,7 +30,7 @@ class KoShapeManager;
 class KoShapeReorderCommandPrivate;
 
 /// This command allows you to change the zIndex of a number of shapes.
-class FLAKE_EXPORT KoShapeReorderCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeReorderCommand : public KUndo2Command
 {
 public:
     /**

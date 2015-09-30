@@ -20,7 +20,7 @@
 #ifndef KOPATHSEGMENT_H
 #define KOPATHSEGMENT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QList>
 #include <QPair>
 
@@ -30,7 +30,7 @@ class QPointF;
 class QRectF;
 
 /// A KoPathSegment consist of two neighboring KoPathPoints
-class FLAKE_EXPORT KoPathSegment
+class KRITAFLAKE_EXPORT KoPathSegment
 {
 public:
     /**

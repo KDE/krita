@@ -24,7 +24,7 @@
 #ifndef KOCANVASCONTROLLER_H
 #define KOCANVASCONTROLLER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QObject>
 
 #include <QSize>
@@ -66,7 +66,7 @@ class KoCanvasControllerProxyObject;
  * In your canvas widget code, you can find the right place in your
  * document in view coordinates (pixels) by adding the documentOffset
  */
-class FLAKE_EXPORT KoCanvasController
+class KRITAFLAKE_EXPORT KoCanvasController
 {
 public:
     /// An enum to alter the positioning and size of the canvas inside the canvas controller
@@ -324,7 +324,7 @@ private:
  * a QObject directly. The interface of this class should be considered public interface
  * for KoCanvasController.
  */
-class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
+class KRITAFLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(KoCanvasControllerProxyObject)
@@ -429,7 +429,7 @@ private:
     KoCanvasController *m_canvasController;
 };
 
-class FLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController {
+class KRITAFLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController {
 
 public:
 

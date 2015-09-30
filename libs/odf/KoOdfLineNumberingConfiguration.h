@@ -23,7 +23,7 @@
 #include <QObject>
 
 #include "KoXmlReader.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoXmlWriter;
 class KoOdfNumberDefinition;
@@ -53,7 +53,7 @@ class KoOdfNumberDefinition;
  * The following element may be included in the <text:linenumbering-separator> element:
  * <li> Separator
  */
-class KOODF_EXPORT KoOdfLineNumberingConfiguration : public QObject
+class KRITAODF_EXPORT KoOdfLineNumberingConfiguration : public QObject
 {
     Q_OBJECT
 public:

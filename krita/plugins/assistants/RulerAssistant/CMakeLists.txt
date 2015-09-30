@@ -20,7 +20,7 @@ ki18n_wrap_ui(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
 add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_PART_SRCS})
 kcoreaddons_desktop_to_json(kritarulerassistanttool kritarulerassistanttool.desktop)
 
-target_link_libraries(kritarulerassistanttool kritaui flake   )
+target_link_libraries(kritarulerassistanttool kritaui kritaflake   )
 
 install(TARGETS kritarulerassistanttool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

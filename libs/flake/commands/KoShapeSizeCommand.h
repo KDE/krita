@@ -21,7 +21,7 @@
 #ifndef KOSHAPESIZECOMMAND_H
 #define KOSHAPESIZECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -29,7 +29,7 @@
 class KoShape;
 
 /// The undo / redo command for shape sizing.
-class FLAKE_EXPORT KoShapeSizeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeSizeCommand : public KUndo2Command
 {
 public:
     /**

@@ -24,7 +24,7 @@
 
 #include <kundo2command.h>
 #include <QPointF>
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoParameterShape;
 

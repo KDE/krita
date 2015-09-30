@@ -26,7 +26,7 @@
 #include <QList>
 #include <QHash>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KoCanvasBase;
@@ -61,7 +61,7 @@ class QTouchEvent;
  * There exists an instance of every tool for every pointer device.
  * These instances are managed by the toolmanager..
  */
-class FLAKE_EXPORT KoToolBase : public QObject
+class KRITAFLAKE_EXPORT KoToolBase : public QObject
 {
     Q_OBJECT
 public:

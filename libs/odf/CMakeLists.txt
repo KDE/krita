@@ -3,9 +3,9 @@ add_subdirectory( writeodf )
 
 include_directories( ${KOODF_INCLUDES} )
 
-########### libkoodf ###############
+########### libkritaodf ###############
 
-set(koodf_LIB_SRCS
+set(kritaodf_LIB_SRCS
     KoOdf.cpp
     KoOdfManifestEntry.cpp
     KoDocumentInfo.cpp
@@ -42,14 +42,14 @@ set(koodf_LIB_SRCS
     OdfDebug.cpp
 )
 
-add_library(koodf SHARED ${koodf_LIB_SRCS})
-add_dependencies(koodf writeodf.h-target)
-generate_export_header(koodf BASE_NAME koodf)
+add_library(kritaodf SHARED ${kritaodf_LIB_SRCS})
+add_dependencies(kritaodf writeodf.h-target)
+generate_export_header(kritaodf BASE_NAME kritaodf)
 
-target_link_libraries(koodf koversion kostore KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaodf kritaversion kritastore KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaodf LINK_INTERFACE_LIBRARIES kritastore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
 
-set_target_properties(koodf PROPERTIES
+set_target_properties(kritaodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kritaodf ${INSTALL_TARGETS_DEFAULT_ARGS} )

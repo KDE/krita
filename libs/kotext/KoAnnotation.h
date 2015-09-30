@@ -23,7 +23,7 @@
 #define KOANNOTATION_H
 
 #include "KoTextRange.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoShape;
 class KoAnnotationManager;
@@ -40,7 +40,7 @@ class KoAnnotationManager;
  *
  * @see KoAnnotationManager
  */
-class KOTEXT_EXPORT KoAnnotation : public KoTextRange
+class KRITATEXT_EXPORT KoAnnotation : public KoTextRange
 {
     Q_OBJECT
 public:

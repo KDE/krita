@@ -19,7 +19,7 @@
 #ifndef KOPROGRESSUPDATER_H
 #define KOPROGRESSUPDATER_H
 
-#include "kowidgetutils_export.h"
+#include "kritawidgetutils_export.h"
 
 #include <QString>
 #include <QObject>
@@ -63,7 +63,7 @@ class QTime;
  * Also to prevent jumps in the progress-calculation and -display it is recommed
  * to first create all the subtasks and then start to use setProgress on them.
  */
-class KOWIDGETUTILS_EXPORT KoProgressUpdater : public QObject
+class KRITAWIDGETUTILS_EXPORT KoProgressUpdater : public QObject
 {
     Q_OBJECT
 public:

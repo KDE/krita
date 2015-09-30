@@ -27,10 +27,10 @@
 //#include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /// The undo / redo command for changing the path point type.
-class FLAKE_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
+class KRITAFLAKE_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
 {
 public:
     /// The type of the point

@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-set(kowidgetutils_LIB_SRCS
+set(kritawidgetutils_LIB_SRCS
     KoGroupButton.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp
@@ -11,10 +11,10 @@ set(kowidgetutils_LIB_SRCS
 )
 
 
-add_library(kowidgetutils SHARED ${kowidgetutils_LIB_SRCS})
-generate_export_header(kowidgetutils BASE_NAME kowidgetutils)
+add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
+generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)
 
-target_link_libraries(kowidgetutils
+target_link_libraries(kritawidgetutils
     PUBLIC
         Qt5::Widgets
         Qt5::Gui
@@ -25,8 +25,8 @@ target_link_libraries(kowidgetutils
         KF5::ConfigCore
 )
 
-set_target_properties(kowidgetutils
+set_target_properties(kritawidgetutils
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kowidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritawidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})

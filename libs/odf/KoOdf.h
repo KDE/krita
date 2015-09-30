@@ -20,7 +20,7 @@
 #ifndef KOODF_H
 #define KOODF_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 namespace KoOdf
 {
@@ -41,7 +41,7 @@ namespace KoOdf
      * @param documentType the document type
      * @return the mime type used for the given document type
      */
-    KOODF_EXPORT const char * mimeType(DocumentType documentType);
+    KRITAODF_EXPORT const char * mimeType(DocumentType documentType);
 
     /**
      * Get the mime type
@@ -49,7 +49,7 @@ namespace KoOdf
      * @param documentType the document type
      * @return the mime type used for templates of the given document type
      */
-    KOODF_EXPORT const char * templateMimeType(DocumentType documentType);
+    KRITAODF_EXPORT const char * templateMimeType(DocumentType documentType);
 
     /**
      * Get the mime type
@@ -59,7 +59,7 @@ namespace KoOdf
      *                      if false only the element is returned
      * @return the body element name for the given document type
      */
-    KOODF_EXPORT const char * bodyContentElement(DocumentType documentType, bool withNamespace);
+    KRITAODF_EXPORT const char * bodyContentElement(DocumentType documentType, bool withNamespace);
 }
 
 #endif /* KOODF_H */

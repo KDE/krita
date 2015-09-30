@@ -23,7 +23,7 @@
 #include <QMetaType>
 #include <QSharedData>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoXmlElement;
 class KoShapeLoadingContext;
@@ -31,7 +31,7 @@ class KoShapeSavingContext;
 class QString;
 class QPainterPath;
 
-class  FLAKE_EXPORT KoMarker : public QSharedData
+class  KRITAFLAKE_EXPORT KoMarker : public QSharedData
 {
 public:
     KoMarker();

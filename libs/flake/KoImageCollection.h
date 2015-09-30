@@ -19,7 +19,7 @@
 #ifndef KOIMAGECOLLECTION_H
 #define KOIMAGECOLLECTION_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 #include <KoDataCenterBase.h>
@@ -33,7 +33,7 @@ class KoImageData;
  * A collection of KoImageData objects to allow loading and saving them all together to the KoStore.
  * It also makes sure that if the same image is added to the collection that they share the internal data structure.
  */
-class FLAKE_EXPORT KoImageCollection : public QObject, public KoDataCenterBase
+class KRITAFLAKE_EXPORT KoImageCollection : public QObject, public KoDataCenterBase
 {
     Q_OBJECT
 public:

@@ -23,7 +23,7 @@
 #define KOTABLECELLSTYLE_H
 
 #include "KoText.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <KoXmlReaderForward.h>
 
@@ -53,7 +53,7 @@ class QVariant;
  * a specific KoTableCellStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoTableCellStyle : public QObject
+class KRITATEXT_EXPORT KoTableCellStyle : public QObject
 {
     Q_OBJECT
 public:

@@ -22,7 +22,7 @@
 
 #include <QColor>
 #include <QMetaType>
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 #include "KoColorConversionTransformation.h"
 
 
@@ -36,7 +36,7 @@ class KoColorSpace;
  * A KoColor describes a color in a certain colorspace. The color is stored in a buffer
  * that can be manipulated by the function of the color space.
  */
-class PIGMENTCMS_EXPORT KoColor
+class KRITAPIGMENT_EXPORT KoColor
 {
 
 public:

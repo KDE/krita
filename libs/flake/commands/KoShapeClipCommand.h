@@ -20,7 +20,7 @@
 #ifndef KOSHAPECLIPCOMMAND_H
 #define KOSHAPECLIPCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 #include <QList>
 
@@ -29,7 +29,7 @@ class KoPathShape;
 class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for setting the shape clip path
-class FLAKE_EXPORT KoShapeClipCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeClipCommand : public KUndo2Command
 {
 public:
     /**

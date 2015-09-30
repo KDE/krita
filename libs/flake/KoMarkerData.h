@@ -22,14 +22,14 @@
 
 #include <QtGlobal>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoGenStyle;
 class KoMarker;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 
-class FLAKE_EXPORT KoMarkerData
+class KRITAFLAKE_EXPORT KoMarkerData
 {
 public:
     /// Property enum

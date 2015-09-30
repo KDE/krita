@@ -22,13 +22,13 @@
 
 #include <QToolButton>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * @short A widget for 
  *
  */
-class KOWIDGETS_EXPORT KoColorPopupButton: public QToolButton
+class KRITAWIDGETS_EXPORT KoColorPopupButton: public QToolButton
 {
     Q_OBJECT
 

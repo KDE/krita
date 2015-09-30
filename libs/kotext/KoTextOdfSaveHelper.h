@@ -25,12 +25,12 @@
 #include <Soprano/Soprano>
 #include <QSharedPointer>
 #endif
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class QTextDocument;
 class KoStyleManager;
 
-class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
+class KRITATEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
 public:
     KoTextOdfSaveHelper(const QTextDocument *document, int from, int to);

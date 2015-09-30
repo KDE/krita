@@ -22,7 +22,7 @@
 
 #include "KoColorTransformation.h"
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoColorSpace;
 class KoColorConversionCache;
@@ -30,7 +30,7 @@ class KoColorConversionCache;
 /**
  * This is the base class of all color transform that convert the color of a pixel
  */
-class PIGMENTCMS_EXPORT KoColorConversionTransformation : public KoColorTransformation
+class KRITAPIGMENT_EXPORT KoColorConversionTransformation : public KoColorTransformation
 {
     friend class KoColorConversionCache;
     struct Private;

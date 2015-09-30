@@ -60,7 +60,7 @@ class KoFontFace;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOODF_EXPORT KoGenStyles
+class KRITAODF_EXPORT KoGenStyles
 {
 public:
     /// Single style with assigned name
@@ -244,7 +244,7 @@ public:
     void insertStyleRelation(const QString &source, const QString &target, const char *tagName);
 
 private:
-    friend KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
+    friend KRITAODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
 
     class Private;
     Private * const d;
@@ -253,6 +253,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoGenStyles::InsertionFlags)
 
 //! Debug stream operator.
-KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
+KRITAODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
 
 #endif /* KOGENSTYLES_H */

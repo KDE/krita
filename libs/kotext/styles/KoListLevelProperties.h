@@ -36,7 +36,7 @@ class QTextList;
 /**
  * Properties per list level.
  */
-class KOTEXT_EXPORT KoListLevelProperties : public QObject
+class KRITATEXT_EXPORT KoListLevelProperties : public QObject
 {
     Q_OBJECT
 public:

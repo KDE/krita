@@ -20,7 +20,7 @@
 #ifndef KODOCKFACTORY_H
 #define KODOCKFACTORY_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QDockWidget;
 class QString;
@@ -30,7 +30,7 @@ class QString;
  * @see KoDockRegistry
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockFactoryBase
+class KRITAFLAKE_EXPORT KoDockFactoryBase
 {
 public:
     enum DockPosition {

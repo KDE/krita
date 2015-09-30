@@ -23,7 +23,7 @@
 
 
 #include <WidgetsDebug.h>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KoResourceServerBase;
 class KoResource;
@@ -33,7 +33,7 @@ class QString;
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
-class KOWIDGETS_EXPORT KoResourceTagStore
+class KRITAWIDGETS_EXPORT KoResourceTagStore
 {
 public:
 

@@ -21,7 +21,7 @@
 #define KOODFREADSTORE_H
 
 #include "KoXmlReaderForward.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class QString;
 class QIODevice;
@@ -35,7 +35,7 @@ class KoOdfStylesReader;
  *
  * @author: David Faure <faure@kde.org>
  */
-class KOODF_EXPORT KoOdfReadStore
+class KRITAODF_EXPORT KoOdfReadStore
 {
 public:
     /// @param store recontents the property of the caller

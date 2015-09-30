@@ -27,7 +27,7 @@
 #include <QString>
 #include <QList>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <KoXmlReader.h>
 
@@ -46,7 +46,7 @@ class KoDocumentResourceManager;
  * particular variant of a shape object, together with a name, a description
  * and an icon for use in the user interface.
  */
-struct FLAKE_EXPORT KoShapeTemplate {
+struct KRITAFLAKE_EXPORT KoShapeTemplate {
     KoShapeTemplate() {
         properties = 0;
     }
@@ -85,7 +85,7 @@ public:
  * After you created the factory you should create a plugin that can announce the factory to the
  * KoShapeRegistry.  See the KoPluginLoader as well.
  */
-class FLAKE_EXPORT KoShapeFactoryBase : public QObject
+class KRITAFLAKE_EXPORT KoShapeFactoryBase : public QObject
 {
     Q_OBJECT
 public:

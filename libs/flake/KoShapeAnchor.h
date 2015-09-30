@@ -21,7 +21,7 @@
 #ifndef KOSHAPEANCHOR_H
 #define KOSHAPEANCHOR_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 
 class KoShape;
@@ -61,7 +61,7 @@ class QString;
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
  * @see PlacementStrategy for more information about the layout of anchors/shapes.
  */
-class FLAKE_EXPORT KoShapeAnchor
+class KRITAFLAKE_EXPORT KoShapeAnchor
 {
 public:
     /**

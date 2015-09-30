@@ -20,7 +20,7 @@
 #ifndef KOCLIPPATH_H
 #define KOCLIPPATH_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QList>
 #include <QSharedData>
 #include <qnamespace.h>
@@ -34,7 +34,7 @@ class QPainterPath;
 class QSizeF;
 
 /// Shared clip path data
-class FLAKE_EXPORT KoClipData : public QSharedData
+class KRITAFLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
     /// Creates clip path data from a single path shape, takes ownership of the path shape
@@ -58,7 +58,7 @@ private:
 };
 
 /// Clip path used to clip shapes
-class FLAKE_EXPORT KoClipPath
+class KRITAFLAKE_EXPORT KoClipPath
 {
 public:
     /**

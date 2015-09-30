@@ -22,7 +22,7 @@
 #define KOODFGRADIENTBACKGROUND_H
 
 #include "KoShapeBackground.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QImage;
 

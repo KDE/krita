@@ -23,12 +23,12 @@
 
 #include <KoDialog.h>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * A dialog to choose the options for importing CSV data.
  */
-class KOWIDGETS_EXPORT KoCsvImportDialog : public KoDialog
+class KRITAWIDGETS_EXPORT KoCsvImportDialog : public KoDialog
 {
     Q_OBJECT
 public:

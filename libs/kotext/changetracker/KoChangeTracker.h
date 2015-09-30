@@ -20,7 +20,7 @@
 #ifndef KOCHANGETRACKER_H
 #define KOCHANGETRACKER_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 #include <KoXmlReaderForward.h>
 
 #include <QObject>
@@ -41,7 +41,7 @@ class QString;
 class QTextDocumentFragment;
 class QTextList;
 
-class KOTEXT_EXPORT KoChangeTracker : public QObject
+class KRITATEXT_EXPORT KoChangeTracker : public QObject
 {
     Q_OBJECT
 public:

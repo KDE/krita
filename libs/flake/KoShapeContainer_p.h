@@ -20,14 +20,14 @@
 #define KOSHAPECONTAINERPRIVATE_H
 
 #include "KoShape_p.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeContainerModel;
 
 /**
  * \internal used private d-pointer class for the \a KoShapeContainer class.
  */
-class FLAKE_EXPORT KoShapeContainerPrivate : public KoShapePrivate
+class KRITAFLAKE_EXPORT KoShapeContainerPrivate : public KoShapePrivate
 {
 public:
     explicit KoShapeContainerPrivate(KoShapeContainer *q);

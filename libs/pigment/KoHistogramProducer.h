@@ -21,7 +21,7 @@
 
 #include <QtGlobal>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 #include <KoGenericRegistry.h>
 #include <KoID.h>
@@ -47,7 +47,7 @@ class KoColorSpace;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class PIGMENTCMS_EXPORT KoHistogramProducer
+class KRITAPIGMENT_EXPORT KoHistogramProducer
 {
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
@@ -98,7 +98,7 @@ protected:
     bool m_skipUnselected;
 };
 
-class PIGMENTCMS_EXPORT KoHistogramProducerFactory
+class KRITAPIGMENT_EXPORT KoHistogramProducerFactory
 {
 public:
     explicit KoHistogramProducerFactory(const KoID &id) : m_id(id) {}
@@ -125,7 +125,7 @@ protected:
 };
 
 
-class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
+class KRITAPIGMENT_EXPORT KoHistogramProducerFactoryRegistry
         : public KoGenericRegistry<KoHistogramProducerFactory*>
 {
 public:

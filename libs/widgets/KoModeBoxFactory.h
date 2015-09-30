@@ -23,7 +23,7 @@
 #define KOMODEBOXFACTORY_H
 
 #include <KoDockFactoryBase.h>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <QString>
 #include <QDockWidget>
@@ -34,7 +34,7 @@ class KoCanvasControllerWidget;
  * Factory class to create a new KoModeBox that contains a QToolBox which acts
  * as a replacement for KoToolBox and KoDockerManagers options docker.
  */
-class KOWIDGETS_EXPORT KoModeBoxFactory : public KoDockFactoryBase
+class KRITAWIDGETS_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
 public:
     explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString& appName);

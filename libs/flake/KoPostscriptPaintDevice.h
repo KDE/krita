@@ -22,7 +22,7 @@
 
 #include <QPaintDevice>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * Helper class to disable any screen conversion as that is done in flake.
@@ -41,7 +41,7 @@
  *
  * Note: never try to actually paint on this paint device, since that will noisily crash.
  */
-class FLAKE_EXPORT KoPostscriptPaintDevice : public QPaintDevice
+class KRITAFLAKE_EXPORT KoPostscriptPaintDevice : public QPaintDevice
 {
 public:
     /// constructor

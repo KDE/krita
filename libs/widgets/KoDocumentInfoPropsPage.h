@@ -21,9 +21,9 @@
 #define _KODOCUMENTINFOPROPSPAGE_H_
 
 #include <kpropertiesdialog.h>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
-class KOWIDGETS_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
+class KRITAWIDGETS_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
 {
     Q_OBJECT
 

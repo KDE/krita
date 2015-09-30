@@ -21,14 +21,14 @@
 #define KOEVENTACTIONREMOVECOMMAND_H
 
 #include <kundo2command.h>
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KoEventAction;
 class KoEventActionRemoveCommandPrivate;
 
 /// API docs go here
-class FLAKE_EXPORT KoEventActionRemoveCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoEventActionRemoveCommand : public KUndo2Command
 {
 public:
     KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent = 0);

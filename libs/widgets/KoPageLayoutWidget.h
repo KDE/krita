@@ -20,7 +20,7 @@
 #ifndef KO_PAGE_LAYOUT_WIDGET
 #define KO_PAGE_LAYOUT_WIDGET
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <KoText.h>
 #include <KoPageLayout.h>
@@ -29,7 +29,7 @@
 class KoUnit;
 
 /// the widget that shows the size/margins and other page settings.
-class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
 {
     Q_OBJECT
 

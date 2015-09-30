@@ -22,7 +22,7 @@
 #include "writeodf/writeodfconfig.h"
 #include "writeodf/writeodftext.h"
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 namespace writeodf {
 
@@ -80,7 +80,7 @@ void addConfigItem(T& config, const QString & configName, short value)
  * @param text the text to write
  * @param tabCache optional map allowing to find a tab for a given character index
  */
-void KOODF_EXPORT addTextSpan(group_paragraph_content& content,
+void KRITAODF_EXPORT addTextSpan(group_paragraph_content& content,
                               const QString& text,
                               const QMap<int, int>& tabCache);
 

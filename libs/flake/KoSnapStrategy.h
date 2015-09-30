@@ -32,7 +32,7 @@ class KoViewConverter;
 class QTransform;
 class QPainterPath;
 
-class FLAKE_EXPORT KoSnapStrategy
+class KRITAFLAKE_EXPORT KoSnapStrategy
 {
 public:
     KoSnapStrategy(KoSnapGuide::Strategy type);
@@ -62,7 +62,7 @@ private:
 };
 
 /// snaps to x- or y-coordinates of path points
-class FLAKE_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
@@ -74,7 +74,7 @@ private:
 };
 
 /// snaps to path points
-class FLAKE_EXPORT NodeSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
@@ -83,7 +83,7 @@ public:
 };
 
 /// snaps extension lines of path shapes
-class FLAKE_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
 {
     friend class TestSnapStrategy;
 public:
@@ -98,7 +98,7 @@ private:
 };
 
 /// snaps to intersections of shapes
-class FLAKE_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
@@ -107,7 +107,7 @@ public:
 };
 
 /// snaps to the canvas grid
-class FLAKE_EXPORT GridSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT GridSnapStrategy : public KoSnapStrategy
 {
 public:
     GridSnapStrategy();
@@ -116,7 +116,7 @@ public:
 };
 
 /// snaps to shape bounding boxes
-class FLAKE_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
 {
     friend class TestSnapStrategy;
 public:
@@ -129,7 +129,7 @@ private:
 };
 
 /// snaps to line guides
-class FLAKE_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
+class KRITAFLAKE_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
 {
 public:
     LineGuideSnapStrategy();

@@ -19,12 +19,12 @@
 #ifndef KO_ENCRYPTION_CHECKER
 #define KO_ENCRYPTION_CHECKER
 
-#include "kostore_export.h"
+#include "kritastore_export.h"
 
 namespace KoEncryptionChecker
 {
 
-KOSTORE_EXPORT bool isEncryptionSupported();
+KRITASTORE_EXPORT bool isEncryptionSupported();
 
 }
 

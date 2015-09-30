@@ -23,7 +23,7 @@
 #ifndef KOSHAPESAVINGCONTEXT_H
 #define KOSHAPESAVINGCONTEXT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <KoElementReference.h>
 #include <QMap>
@@ -46,7 +46,7 @@ class QTransform;
 /**
  * The set of data for the ODF file format used during saving of a shape.
  */
-class FLAKE_EXPORT KoShapeSavingContext
+class KRITAFLAKE_EXPORT KoShapeSavingContext
 {
 public:
     /// The Style used for saving the shape

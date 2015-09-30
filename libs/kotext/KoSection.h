@@ -20,7 +20,7 @@
 #ifndef KOSECTION_H
 #define KOSECTION_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QMetaType>
 #include <QList>
@@ -54,7 +54,7 @@ class KoSectionPrivate;
  * </ul>
  * (odf spec v.12)
  */
-class KOTEXT_EXPORT KoSection
+class KRITATEXT_EXPORT KoSection
 {
 public:
     ~KoSection();

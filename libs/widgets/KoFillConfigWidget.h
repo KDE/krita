@@ -21,7 +21,7 @@
 #ifndef FILLCONFIGWIDGET_H
 #define FILLCONFIGWIDGET_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <QWidget>
 #include <QSharedPointer>
@@ -31,7 +31,7 @@ class KoShapeBackground;
 class KoShape;
 
 /// A widget for configuring the fill of a shape
-class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoFillConfigWidget : public QWidget
 {
     Q_OBJECT
     enum StyleButton {

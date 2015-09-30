@@ -22,12 +22,12 @@
 
 #include <kundo2command.h>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoPathPointData;
 
 /// The undo / redo command for merging two subpath end points
-class FLAKE_EXPORT KoPathPointMergeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathPointMergeCommand : public KUndo2Command
 {
 public:
     /**

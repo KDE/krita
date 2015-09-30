@@ -20,7 +20,7 @@
 #ifndef KOTEXTWRITER_H
 #define KOTEXTWRITER_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoShapeSavingContext;
 class KoStyleManager;
@@ -36,7 +36,7 @@ class KoDocumentRdfBase;
 /**
  * KoTextWriter saves the text ODF of a shape
  */
-class KOTEXT_EXPORT KoTextWriter
+class KRITATEXT_EXPORT KoTextWriter
 {
 public:
     /**

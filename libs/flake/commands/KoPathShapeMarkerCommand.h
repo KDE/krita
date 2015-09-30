@@ -21,7 +21,7 @@
 #ifndef KoPathShapeMarkerCommand_H
 #define KoPathShapeMarkerCommand_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include "KoMarkerData.h"
 #include <kundo2command.h>
@@ -31,7 +31,7 @@ class KoPathShape;
 class KoMarker;
 
 /// The undo / redo command for setting the shape marker
-class FLAKE_EXPORT KoPathShapeMarkerCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathShapeMarkerCommand : public KUndo2Command
 {
 public:
     /**

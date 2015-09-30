@@ -20,7 +20,7 @@
 #ifndef KOPATHFILLRULECOMMAND_H
 #define KOPATHFILLRULECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -28,7 +28,7 @@
 class KoPathShape;
 
 /// The undo / redo command for setting the fill rule of a path shape
-class FLAKE_EXPORT KoPathFillRuleCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathFillRuleCommand : public KUndo2Command
 {
 public:
     /**

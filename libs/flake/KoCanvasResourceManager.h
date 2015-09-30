@@ -23,7 +23,7 @@
 
 #include <QObject>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KoShapeStroke;
@@ -54,7 +54,7 @@ class QSizeF;
  *  document = static_cast<QTextDocument*>(var.value<void*>());
  * @endcode
  */
-class FLAKE_EXPORT KoCanvasResourceManager : public QObject
+class KRITAFLAKE_EXPORT KoCanvasResourceManager : public QObject
 {
     Q_OBJECT
 

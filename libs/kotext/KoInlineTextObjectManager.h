@@ -21,7 +21,7 @@
 
 #include "KoInlineObject.h"
 #include "KoVariableManager.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 // Qt + kde
 #include <QHash>
@@ -41,7 +41,7 @@ class QAction;
  * insert a placeholder in the text and you should add the KoInlineTextObjectManager to the
  * KoTextDocument.
  */
-class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
+class KRITATEXT_EXPORT KoInlineTextObjectManager : public QObject
 {
     Q_OBJECT
 public:

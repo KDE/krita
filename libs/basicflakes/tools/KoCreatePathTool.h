@@ -21,7 +21,7 @@
 #ifndef KOCREATEPATHTOOL_H
 #define KOCREATEPATHTOOL_H
 
-#include "basicflakes_export.h"
+#include "kritabasicflakes_export.h"
 
 #include <KoToolBase.h>
 
@@ -37,7 +37,7 @@ class KoCreatePathToolPrivate;
 /**
  * Tool for creating path shapes.
  */
-class BASICFLAKES_EXPORT KoCreatePathTool : public KoToolBase
+class KRITABASICFLAKES_EXPORT KoCreatePathTool : public KoToolBase
 {
     Q_OBJECT
 public:

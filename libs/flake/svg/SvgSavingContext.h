@@ -28,10 +28,10 @@ class QString;
 class QTransform;
 class QImage;
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /// Context for saving svg files
-class FLAKE_EXPORT SvgSavingContext
+class KRITAFLAKE_EXPORT SvgSavingContext
 {
 public:
     /// Creates a new svg saving context on the specified output device

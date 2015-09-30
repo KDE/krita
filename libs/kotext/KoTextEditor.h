@@ -23,7 +23,7 @@
 #ifndef KOTEXTEDITOR_H
 #define KOTEXTEDITOR_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <kundo2magicstring.h>
 #include <KoGenChange.h>
@@ -65,7 +65,7 @@ class QMimeData;
  * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change
  * tracking for all editing commands.
  */
-class KOTEXT_EXPORT KoTextEditor: public QObject
+class KRITATEXT_EXPORT KoTextEditor: public QObject
 {
     Q_OBJECT
 public:

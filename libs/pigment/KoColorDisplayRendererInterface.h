@@ -36,7 +36,7 @@ class KoChannelInfo;
  * reimplement this class and provide its instance to a supporting
  * widget.
  */
-class PIGMENTCMS_EXPORT KoColorDisplayRendererInterface : public QObject
+class KRITAPIGMENT_EXPORT KoColorDisplayRendererInterface : public QObject
 {
     Q_OBJECT
 
@@ -92,7 +92,7 @@ private:
  * conversion implementation which efectively renders the color into
  * sRGB color space.
  */
-class PIGMENTCMS_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface
+class KRITAPIGMENT_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface
 {
 public:
     QColor toQColor(const KoColor &c) const;

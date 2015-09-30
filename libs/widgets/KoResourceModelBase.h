@@ -21,12 +21,12 @@
 #define KORESOURCEMODELBASE_H
 
 #include <QAbstractTableModel>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KoResource;
 
 /// The resource model managing the resource data
-class KOWIDGETS_EXPORT KoResourceModelBase : public QAbstractTableModel
+class KRITAWIDGETS_EXPORT KoResourceModelBase : public QAbstractTableModel
 {
     Q_OBJECT
 public:

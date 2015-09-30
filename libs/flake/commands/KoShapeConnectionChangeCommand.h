@@ -20,12 +20,12 @@
 #ifndef KOSHAPECONNECTIONCHANGECOMMAND_H
 #define KOSHAPECONNECTIONCHANGECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 #include "KoConnectionShape.h"
 
 /// A command to add a connection between two shapes
-class FLAKE_EXPORT KoShapeConnectionChangeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeConnectionChangeCommand : public KUndo2Command
 {
 public:
     /**

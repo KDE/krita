@@ -20,13 +20,13 @@
 #ifndef KOFILTEREFFECTCONFIGWIDGETBASE_H
 #define KOFILTEREFFECTCONFIGWIDGETBASE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QWidget>
 
 class KoFilterEffect;
 
 /// Base class for filter effects config widgets
-class FLAKE_EXPORT KoFilterEffectConfigWidgetBase : public QWidget
+class KRITAFLAKE_EXPORT KoFilterEffectConfigWidgetBase : public QWidget
 {
     Q_OBJECT
 public:

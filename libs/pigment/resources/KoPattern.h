@@ -19,12 +19,12 @@
 #define KOPATTERN_H
 
 #include "KoResource.h"
-#include <pigment_export.h>
+#include <kritapigment_export.h>
 
 #include <QMetaType>
 
 /// Write API docs here
-class PIGMENTCMS_EXPORT KoPattern : public KoResource
+class KRITAPIGMENT_EXPORT KoPattern : public KoResource
 {
 
 public:

@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QList>
 #include <QString>
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 #include <KoGenericRegistry.h>
 #include <KoColorSpace.h>
@@ -41,7 +41,7 @@ class KoColorConversionCache;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class PIGMENTCMS_EXPORT KoColorSpaceRegistry
+class KRITAPIGMENT_EXPORT KoColorSpaceRegistry
 {
 public:
     KoColorSpaceRegistry();

@@ -21,7 +21,7 @@
 #ifndef _WMFABSTRACTBACKEND_H_
 #define _WMFABSTRACTBACKEND_H_
 
-#include "kovectorimage_export.h"
+#include "kritavectorimage_export.h"
 
 #include <QRect>
 #include <QRegion>
@@ -54,7 +54,7 @@ class WmfDeviceContext;
  *
  */
 
-class KOVECTORIMAGE_EXPORT WmfAbstractBackend
+class KRITAVECTORIMAGE_EXPORT WmfAbstractBackend
 {
 public:
     WmfAbstractBackend();

@@ -20,7 +20,7 @@
 #ifndef _WMFWRITER_H_
 #define _WMFWRITER_H_
 
-#include "kovectorimage_export.h"
+#include "kritavectorimage_export.h"
 
 #include <QPainter>
 
@@ -53,7 +53,7 @@ class WmfWriterPrivate;
  *   wmf.end();
  *   </pre>
  */
-class KOVECTORIMAGE_EXPORT WmfWriter
+class KRITAVECTORIMAGE_EXPORT WmfWriter
 {
 public:
     explicit WmfWriter(const QString& fileName);

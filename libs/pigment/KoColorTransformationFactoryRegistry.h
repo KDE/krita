@@ -22,7 +22,7 @@
 
 #include <KoGenericRegistry.h>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoColorSpace;
 class KoColorTransformationFactory;
@@ -32,7 +32,7 @@ class KoColorTransformationFactory;
  * that class is for adding new factory use the static method
  * KoColorTransformationFactoryRegistry::add.
  */
-class PIGMENTCMS_EXPORT KoColorTransformationFactoryRegistry : private KoGenericRegistry<KoColorTransformationFactory*>
+class KRITAPIGMENT_EXPORT KoColorTransformationFactoryRegistry : private KoGenericRegistry<KoColorTransformationFactory*>
 {
     friend class KoColorSpace;
 public:

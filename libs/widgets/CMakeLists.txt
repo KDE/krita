@@ -8,7 +8,7 @@ if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif ()
 
-set(kowidgets_LIB_SRCS
+set(kritawidgets_LIB_SRCS
     KoGradientEditWidget.cpp
     KoResourcePaths.cpp
     KoVBox.cpp
@@ -97,7 +97,7 @@ set(kowidgets_LIB_SRCS
 
 )
 
-ki18n_wrap_ui( kowidgets_LIB_SRCS
+ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     KoCsvImportDialog.ui
     koDocumentInfoAboutWidget.ui
@@ -108,23 +108,23 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 )
 
 
-add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
-generate_export_header(kowidgets BASE_NAME kowidgets)
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
+add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
+generate_export_header(kritawidgets BASE_NAME kritawidgets)
+target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::ConfigWidgets KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
 
 if(GHNS)
-    target_link_libraries(kowidgets KF5::NewStuff)
+    target_link_libraries(kritawidgets KF5::NewStuff)
 endif ()
 
 if(X11_FOUND)
-    target_link_libraries(kowidgets Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils)
+target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES kritatext kritapigment kritawidgetutils)
 
-set_target_properties(kowidgets PROPERTIES
+set_target_properties(kritawidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritawidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})

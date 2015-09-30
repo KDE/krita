@@ -24,7 +24,7 @@
 #include <QObject>
 
 #include "KoXmlReader.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoXmlWriter;
 
@@ -38,7 +38,7 @@ typedef QPair<QString, Qt::SortOrder> SortKeyPair;
  * • Sort by position
  * • Sort algorithm
  */
-class KOODF_EXPORT KoOdfBibliographyConfiguration : public QObject
+class KRITAODF_EXPORT KoOdfBibliographyConfiguration : public QObject
 {
     Q_OBJECT
 public:

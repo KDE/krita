@@ -41,6 +41,6 @@ add_library(calligra_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
 kcoreaddons_desktop_to_json(calligra_shape_artistictext calligra_shape_artistictext.desktop)
 
-target_link_libraries(calligra_shape_artistictext flake)
+target_link_libraries(calligra_shape_artistictext kritaflake)
 
 install( TARGETS calligra_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

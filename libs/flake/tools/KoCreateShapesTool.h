@@ -24,7 +24,7 @@
 
 #include "KoInteractionTool.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QString>
 
@@ -37,7 +37,7 @@ class KoCreateShapesToolPrivate;
 /**
  * A tool to create shapes with.
  */
-class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
+class KRITAFLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
 public:
     /**

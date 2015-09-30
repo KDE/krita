@@ -25,7 +25,7 @@
 #include "KoGenericRegistry.h"
 #include "KoDockFactoryBase.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * This singleton class keeps a register of all available dockers,
@@ -36,7 +36,7 @@
  *
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
+class KRITAFLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
 {
 public:
     KoDockRegistry();

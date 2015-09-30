@@ -25,7 +25,7 @@
 
 #include "KoShapeAnchor.h"
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoAnchorInlineObjectPrivate;
 
@@ -51,7 +51,7 @@ class KoAnchorInlineObjectPrivate;
  * <li> Use anchor->loadOdf() to load additional attributes like the "text:anchor-type"
  * <li> if type is as-char create KoAnchorInlineObject *anchorObj = new KoAnchorInlineObject(anchor);
  */
-class KOTEXT_EXPORT KoAnchorInlineObject : public KoInlineObject, public KoShapeAnchor::TextLocation
+class KRITATEXT_EXPORT KoAnchorInlineObject : public KoInlineObject, public KoShapeAnchor::TextLocation
 {
     Q_OBJECT
 public:

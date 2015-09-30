@@ -30,13 +30,13 @@ class KoColorTransformation;
 class KoColorSpace;
 class KoID;
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 /**
  * Allow to extend the number of color transformation of a
  * colorspace.
  */
-class PIGMENTCMS_EXPORT KoColorTransformationFactory
+class KRITAPIGMENT_EXPORT KoColorTransformationFactory
 {
 public:
     explicit KoColorTransformationFactory(const QString &id);

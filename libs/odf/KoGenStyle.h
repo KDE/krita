@@ -28,7 +28,7 @@
 #include <QList>
 #include <QMap>
 #include <QString>
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class QTextLength;
 class KoGenStyles;
@@ -41,7 +41,7 @@ class KoXmlWriter;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOODF_EXPORT KoGenStyle
+class KRITAODF_EXPORT KoGenStyle
 {
 public:
     /**

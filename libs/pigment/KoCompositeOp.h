@@ -25,7 +25,7 @@
 #include <QMultiMap>
 #include <QBitArray>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoColorSpace;
 
@@ -34,7 +34,7 @@ class KoColorSpace;
 /**
  * Base for colorspace-specific blending modes.
  */
-class PIGMENTCMS_EXPORT KoCompositeOp
+class KRITAPIGMENT_EXPORT KoCompositeOp
 {
 public:
     static QString categoryColor();
@@ -50,7 +50,7 @@ public:
     static QString categoryMix();
     static QString categoryMisc();
 
-    struct PIGMENTCMS_EXPORT ParameterInfo
+    struct KRITAPIGMENT_EXPORT ParameterInfo
     {
         ParameterInfo();
         ParameterInfo(const ParameterInfo &rhs);

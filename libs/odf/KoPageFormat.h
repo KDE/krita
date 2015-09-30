@@ -23,7 +23,7 @@
 #ifndef KOPAGEFORMAT_H
 #define KOPAGEFORMAT_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <QPrinter>
 
@@ -85,58 +85,58 @@ enum Orientation {
  * (you may want to take care of those cases separately).
  * Usually passed to KPrinter::setPageSize().
  */
-KOODF_EXPORT QPrinter::PageSize printerPageSize(Format format);
+KRITAODF_EXPORT QPrinter::PageSize printerPageSize(Format format);
 
 /**
  * Returns the width (in mm) for a given page format and orientation
  * 'Custom' isn't supported by this function, obviously.
  */
-KOODF_EXPORT qreal width(Format format, Orientation orientation = Landscape);
+KRITAODF_EXPORT qreal width(Format format, Orientation orientation = Landscape);
 
 /**
  * Returns the height (in mm) for a given page format and orientation
  * 'Custom' isn't supported by this function, obviously.
  */
-KOODF_EXPORT qreal height(Format format, Orientation orientation  = Landscape);
+KRITAODF_EXPORT qreal height(Format format, Orientation orientation  = Landscape);
 
 /**
  * Returns the internal name of the given page format.
  * Use for saving.
  */
-KOODF_EXPORT QString formatString(Format format);
+KRITAODF_EXPORT QString formatString(Format format);
 
 /**
  * Convert a format string (internal name) to a page format value.
  * Use for loading.
  */
-KOODF_EXPORT Format formatFromString(const QString &string);
+KRITAODF_EXPORT Format formatFromString(const QString &string);
 
 /**
  * Returns the default format (based on the KControl settings)
  */
-KOODF_EXPORT Format defaultFormat();
+KRITAODF_EXPORT Format defaultFormat();
 
 /**
  * Returns the translated name of the given page format.
  * Use for showing the user.
  */
-KOODF_EXPORT QString name(Format format);
+KRITAODF_EXPORT QString name(Format format);
 
 /**
  * Lists the translated names of all the available formats
  */
-KOODF_EXPORT QStringList localizedPageFormatNames();
+KRITAODF_EXPORT QStringList localizedPageFormatNames();
 
 /**
  * Lists the non-translated names of all the available formats
  */
-KOODF_EXPORT QStringList pageFormatNames();
+KRITAODF_EXPORT QStringList pageFormatNames();
 
 /**
  * Try to find the paper format for the given width and height (in mm).
  * Useful to some import filters.
  */
-KOODF_EXPORT Format guessFormat(qreal width, qreal height);
+KRITAODF_EXPORT Format guessFormat(qreal width, qreal height);
 }
 
 #endif

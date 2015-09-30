@@ -19,7 +19,7 @@
 #ifndef KODOCKWIDGETTITLEBAR_H_
 #define KODOCKWIDGETTITLEBAR_H_
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <QDockWidget>
 
 /**
@@ -29,7 +29,7 @@
  * 
  * @see KoDockWidgetTitleBarButton
  */
-class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
+class KRITAWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
 {
     Q_OBJECT
 public:

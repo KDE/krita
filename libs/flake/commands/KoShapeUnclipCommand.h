@@ -20,7 +20,7 @@
 #ifndef KOSHAPEUNCLIPCOMMAND_H
 #define KOSHAPEUNCLIPCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 #include <QList>
 
@@ -28,7 +28,7 @@ class KoShape;
 class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for removing the shape clip path
-class FLAKE_EXPORT KoShapeUnclipCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeUnclipCommand : public KUndo2Command
 {
 public:
     /**

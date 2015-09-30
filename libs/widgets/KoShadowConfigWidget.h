@@ -21,14 +21,14 @@
 #ifndef KOSHADOWCONFIGWIDGET_H
 #define KOSHADOWCONFIGWIDGET_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <QWidget>
 
 class KoUnit;
 class KoCanvasBase;
 
 /// A widget for configuring the shadow of a shape
-class KOWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
 {
     Q_OBJECT
 public:

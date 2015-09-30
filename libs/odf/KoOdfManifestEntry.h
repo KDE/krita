@@ -20,14 +20,14 @@
 #ifndef KOODFMANIFEST_H
 #define KOODFMANIFEST_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 
 class QString;
 
 
 // A class that holds a manifest:file-entry.
-class KOODF_EXPORT KoOdfManifestEntry
+class KRITAODF_EXPORT KoOdfManifestEntry
 {
 public:
     KoOdfManifestEntry(const QString &fullPath, const QString &mediatType, const QString &version);

@@ -23,7 +23,7 @@
 #define KOBOOKMARK_H
 
 #include "KoTextRange.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoBookmarkManager;
 
@@ -35,7 +35,7 @@ class KoBookmarkManager;
  * bookmark can be retrieved from the bookmark manager by using name as identifier.
  * @see KoBookmarkManager
  */
-class KOTEXT_EXPORT KoBookmark : public KoTextRange
+class KRITATEXT_EXPORT KoBookmark : public KoTextRange
 {
     Q_OBJECT
 public:

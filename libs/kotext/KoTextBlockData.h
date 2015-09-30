@@ -23,7 +23,7 @@
 
 #include <QTextBlockUserData>
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoTextBlockBorderData;
 class KoTextBlockPaintStrategyBase;
@@ -32,7 +32,7 @@ class KoTextBlockPaintStrategyBase;
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
  * instances.
  */
-class KOTEXT_EXPORT KoTextBlockData
+class KRITATEXT_EXPORT KoTextBlockData
 {
 public:
     /**

@@ -20,14 +20,14 @@
 #ifndef KOINSETS_H
 #define KOINSETS_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QDebug>
 
 /**
  * An Insets object is a representation of the strokes of a shape.
  */
-struct FLAKE_EXPORT KoInsets
+struct KRITAFLAKE_EXPORT KoInsets
 {
 public:
     /**
@@ -65,7 +65,7 @@ public:
 };
 
 #ifndef QT_NO_DEBUG_STREAM
-FLAKE_EXPORT QDebug operator<<(QDebug, const KoInsets &);
+KRITAFLAKE_EXPORT QDebug operator<<(QDebug, const KoInsets &);
 #endif
 
 #endif

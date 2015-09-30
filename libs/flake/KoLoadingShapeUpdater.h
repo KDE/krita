@@ -20,7 +20,7 @@
 #ifndef KOLOADINGSHAPEUPDATER_H
 #define KOLOADINGSHAPEUPDATER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 
@@ -34,7 +34,7 @@ class KoShape;
  * @see KoConnectionShape
  * @see KoShapeLoadingContext::updateShape
  */
-class FLAKE_EXPORT KoLoadingShapeUpdater
+class KRITAFLAKE_EXPORT KoLoadingShapeUpdater
 {
 public:
     KoLoadingShapeUpdater();

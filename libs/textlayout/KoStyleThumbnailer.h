@@ -26,7 +26,7 @@
 #ifndef KOSTYLETHUMBNAILER_H
 #define KOSTYLETHUMBNAILER_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include <QSize>
 
@@ -38,7 +38,7 @@ class QImage;
 /**
  * Helper class to create (and cache) thumbnails of styles
  */
-class KOTEXTLAYOUT_EXPORT KoStyleThumbnailer
+class KRITATEXTLAYOUT_EXPORT KoStyleThumbnailer
 {
 public:
     enum KoStyleThumbnailerFlag {

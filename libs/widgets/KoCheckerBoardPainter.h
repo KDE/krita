@@ -22,11 +22,11 @@
 
 #include <QPixmap>
 #include <QColor>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class QPainter;
 
-class KOWIDGETS_EXPORT KoCheckerBoardPainter
+class KRITAWIDGETS_EXPORT KoCheckerBoardPainter
 {
 public:
     explicit KoCheckerBoardPainter( int checkerSize );

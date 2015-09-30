@@ -36,7 +36,7 @@
  * Conversion System that can convert to any other node supported by the
  * engine.
  */
-class PIGMENTCMS_EXPORT KoColorSpaceEngine : public KoColorConversionTransformationAbstractFactory
+class KRITAPIGMENT_EXPORT KoColorSpaceEngine : public KoColorConversionTransformationAbstractFactory
 {
 public:
     KoColorSpaceEngine(const QString& id, const QString& name);
@@ -50,7 +50,7 @@ private:
     Private* const d;
 };
 
-class PIGMENTCMS_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry< KoColorSpaceEngine* >
+class KRITAPIGMENT_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry< KoColorSpaceEngine* >
 {
 public:
     KoColorSpaceEngineRegistry();

@@ -21,7 +21,7 @@
 #ifndef KOIMAGEDATA_H
 #define KOIMAGEDATA_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QSize>
 #include <QMetaType>
@@ -47,7 +47,7 @@ class KoStore;
  * Plugins should not make a copy of the pixmap data, but use the pixmap() method, which
  * handles caching.
  */
-class FLAKE_EXPORT KoImageData : public KoShapeUserData
+class KRITAFLAKE_EXPORT KoImageData : public KoShapeUserData
 {
     Q_OBJECT
 public:

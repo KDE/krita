@@ -21,14 +21,14 @@
 #define KOCOLORBACKGROUND_H
 
 #include "KoShapeBackground.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <Qt>
 
 class KoColorBackgroundPrivate;
 class QColor;
 
 /// A simple solid color shape background
-class FLAKE_EXPORT KoColorBackground : public KoShapeBackground
+class KRITAFLAKE_EXPORT KoColorBackground : public KoShapeBackground
 {
 public:
     KoColorBackground();

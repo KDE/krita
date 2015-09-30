@@ -20,7 +20,7 @@
 #ifndef KODEFERREDSHAPEFACTORYBASE_H
 #define KODEFERREDSHAPEFACTORYBASE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 
@@ -35,7 +35,7 @@ class QString;
  * class that this class really creates the shape; it's the plugin entry point for the
  * actualy shape plugins.
  */
-class FLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
+class KRITAFLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
 {
     Q_OBJECT
 public:

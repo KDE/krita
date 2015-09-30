@@ -20,7 +20,7 @@
 #define KONAMEDVARIABLE_H
 
 #include "KoVariable.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 /**
  * This inlineObject shows the curent value of a variable as registered in the KoVariableManager.

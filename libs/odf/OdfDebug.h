@@ -20,9 +20,9 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-#include <koodf_export.h>
+#include <kritaodf_export.h>
 
-extern const KOODF_EXPORT QLoggingCategory &ODF_LOG();
+extern const KRITAODF_EXPORT QLoggingCategory &ODF_LOG();
 
 #define debugOdf qCDebug(ODF_LOG)
 #define warnOdf qCWarning(ODF_LOG)

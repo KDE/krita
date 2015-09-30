@@ -21,7 +21,7 @@
 #ifndef KO_PAGE_PREVIEW_WIDGET
 #define KO_PAGE_PREVIEW_WIDGET
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <QWidget>
 
@@ -30,7 +30,7 @@
 #include <KoColumns.h>
 
 /// A widget to preview the KoPageLayout and KoColumns data structures.
-class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
+class KRITAWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
     Q_OBJECT
 public:
     explicit KoPagePreviewWidget(QWidget *parent = 0);

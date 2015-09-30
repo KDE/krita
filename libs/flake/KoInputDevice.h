@@ -21,7 +21,7 @@
 #ifndef KO_INPUT_DEVICE_H_
 #define KO_INPUT_DEVICE_H_
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QHash>
 #include <QTabletEvent>
@@ -31,7 +31,7 @@
  * This class represents an input device.
  * A user can manipulate flake-shapes using a large variety of input devices. This ranges from
  * a mouse to a paintbrush-like tool connected to a tablet. */
-class FLAKE_EXPORT KoInputDevice
+class KRITAFLAKE_EXPORT KoInputDevice
 {
 public:
     /**
@@ -95,7 +95,7 @@ private:
 
 Q_DECLARE_METATYPE(KoInputDevice)
 
-FLAKE_EXPORT QDebug operator<<(QDebug debug, const KoInputDevice &device);
+KRITAFLAKE_EXPORT QDebug operator<<(QDebug debug, const KoInputDevice &device);
 
 inline uint qHash(const KoInputDevice &key)
 {

@@ -25,7 +25,7 @@
 #include <QVariant>
 #include <QtGlobal>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 
 /**
@@ -43,7 +43,7 @@
  * transfo->transform( pixelsSrc, pixelsDst, nbpixels );
  * @endcode
  */
-class PIGMENTCMS_EXPORT KoColorTransformation
+class KRITAPIGMENT_EXPORT KoColorTransformation
 {
 public:
     virtual ~KoColorTransformation();

@@ -24,7 +24,7 @@
 
 #include "KoShapeContainer.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoTosContainerPrivate;
 class KoDocumentResourceManager;
@@ -35,7 +35,7 @@ class KoDocumentResourceManager;
  * Path shapes inherit from this class to make it possible to have text associated
  * with them.
  */
-class FLAKE_EXPORT KoTosContainer : public KoShapeContainer
+class KRITAFLAKE_EXPORT KoTosContainer : public KoShapeContainer
 {
 public:
     KoTosContainer();

@@ -53,5 +53,5 @@ ki18n_wrap_ui(defaulttools_SRCS
 
 add_library(calligra_tool_defaults MODULE ${defaulttools_SRCS})
 kcoreaddons_desktop_to_json(calligra_tool_defaults calligra_tool_defaults.desktop)
-target_link_libraries(calligra_tool_defaults flake kowidgets KF5::IconThemes )
+target_link_libraries(calligra_tool_defaults kritaflake kritawidgets KF5::IconThemes )
 install(TARGETS calligra_tool_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

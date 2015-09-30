@@ -20,13 +20,13 @@
 #ifndef KOSHAPERUNAROUNDCOMMAND_H
 #define KOSHAPERUNAROUNDCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 
 #include <KoShape.h>
 
 /// API docs go here
-class FLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command
 {
 public:
     KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent = 0);

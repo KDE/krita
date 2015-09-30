@@ -23,12 +23,12 @@
 
 #include "KoShapeContainerModel.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * A default implementation of the KoShapeContainerModel.
  */
-class FLAKE_EXPORT KoShapeContainerDefaultModel : public KoShapeContainerModel
+class KRITAFLAKE_EXPORT KoShapeContainerDefaultModel : public KoShapeContainerModel
 {
 public:
     KoShapeContainerDefaultModel();

@@ -20,9 +20,9 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-#include <flake_export.h>
+#include <kritaflake_export.h>
 
-extern const FLAKE_EXPORT QLoggingCategory &FLAKE_LOG();
+extern const KRITAFLAKE_EXPORT QLoggingCategory &FLAKE_LOG();
 
 #define debugFlake qCDebug(FLAKE_LOG)
 #define warnFlake qCWarning(FLAKE_LOG)

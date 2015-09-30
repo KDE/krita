@@ -21,7 +21,7 @@
 #ifndef KO_TOOL_FACTORY_H
 #define KO_TOOL_FACTORY_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QString>
 
@@ -51,7 +51,7 @@ K_PLUGIN_FACTORY_WITH_JSON((MyToolFactoryFactory, "mytool.json", registerPlugin<
 </pre>
 
  */
-class FLAKE_EXPORT KoToolFactoryBase
+class KRITAFLAKE_EXPORT KoToolFactoryBase
 {
 public:
     /**

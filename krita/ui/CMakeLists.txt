@@ -457,9 +457,9 @@ if(APPLE)
 endif ()
 
 if(GHNS)
-    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
+    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
 else()
-    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif ()
 
 if(HAVE_OPENGL)
@@ -477,7 +477,7 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms KF5::I18n  ${GL_INTERFACE_LIBRARIES})
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment KF5::I18n  ${GL_INTERFACE_LIBRARIES})
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

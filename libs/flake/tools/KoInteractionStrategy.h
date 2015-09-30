@@ -23,7 +23,7 @@
 #ifndef KOINTERACTIONSTRATEGY_H
 #define KOINTERACTIONSTRATEGY_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <Qt>
 
@@ -47,7 +47,7 @@ class QPainter;
  * The mouseMove events are forwarded to the handleMouseMove() method and the interaction
  * is either finished with finishInteraction() or cancelInteraction() (never both).
  */
-class FLAKE_EXPORT KoInteractionStrategy
+class KRITAFLAKE_EXPORT KoInteractionStrategy
 {
 public:
     /// constructor

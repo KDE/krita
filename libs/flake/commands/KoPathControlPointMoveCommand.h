@@ -25,11 +25,11 @@
 #include <QPointF>
 #include "KoPathPointData.h"
 #include "KoPathPoint.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 
 /// The undo / redo command for path point moving.
-class FLAKE_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
 {
 public:
     /**

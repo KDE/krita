@@ -30,7 +30,7 @@
 #ifndef STROKECONFIGWIDGET_H
 #define STROKECONFIGWIDGET_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 #include <QWidget>
 #include <KoMarkerData.h>
@@ -42,7 +42,7 @@ class KoCanvasBase;
 class KoShapeStroke;
 
 /// A widget for configuring the stroke of a shape
-class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:

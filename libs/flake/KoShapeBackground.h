@@ -20,7 +20,7 @@
 #ifndef KOSHAPEBACKGROUND_H
 #define KOSHAPEBACKGROUND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QtGlobal>
 
@@ -39,7 +39,7 @@ class KoViewConverter;
  * Derived classes are used to paint the background of
  * a shape within a given painter path.
  */
-class FLAKE_EXPORT KoShapeBackground
+class KRITAFLAKE_EXPORT KoShapeBackground
 {
 public:
     KoShapeBackground();

@@ -32,14 +32,14 @@ class QUrl;
 class QByteArray;
 class QString;
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 /**
  * Base class for documents that can load and save ODF. Most of the
  * implementation is still in KoDocument, though that should probably
  * change.
  */
-class KOODF_EXPORT KoDocumentBase
+class KRITAODF_EXPORT KoDocumentBase
 {
 public:
 

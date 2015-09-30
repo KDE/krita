@@ -25,7 +25,7 @@
 #define KODATACENTER_H
 
 #include <QtGlobal>
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeSavingContext;
 class KoStore;
@@ -37,7 +37,7 @@ class KoXmlWriter;
  * This abstraction is done so that shapes can get access to any possible type of data center.
  * The KoShapeBasedDocumentBase has a method that returns a map of data centers
  */
-class FLAKE_EXPORT KoDataCenterBase
+class KRITAFLAKE_EXPORT KoDataCenterBase
 {
 public:
     KoDataCenterBase();

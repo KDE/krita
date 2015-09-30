@@ -20,11 +20,11 @@
 #ifndef _KO_COLOR_CONVERSION_TRANSFORMATION_ABSTRACT_FACTORY_H_
 #define _KO_COLOR_CONVERSION_TRANSFORMATION_ABSTRACT_FACTORY_H_
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 #include <KoColorConversionTransformation.h>
 
-class PIGMENTCMS_EXPORT KoColorConversionTransformationAbstractFactory
+class KRITAPIGMENT_EXPORT KoColorConversionTransformationAbstractFactory
 {
 public:
     KoColorConversionTransformationAbstractFactory() {}

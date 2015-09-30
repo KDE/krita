@@ -49,7 +49,7 @@ add_library(karbon_tools MODULE ${karbon_tools_PART_SRCS})
 
 kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
 
-target_link_libraries(karbon_tools kowidgets)
+target_link_libraries(karbon_tools kritawidgets)
 
 install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

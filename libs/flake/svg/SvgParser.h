@@ -22,7 +22,7 @@
 #ifndef SVGPARSER_H
 #define SVGPARSER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
@@ -38,7 +38,7 @@ class KoShape;
 class KoShapeGroup;
 class KoDocumentResourceManager;
 
-class FLAKE_EXPORT SvgParser
+class KRITAFLAKE_EXPORT SvgParser
 {
 public:
     explicit SvgParser(KoDocumentResourceManager *documentResourceManager);

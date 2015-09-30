@@ -25,7 +25,7 @@
 
 #include "KoShapeAnchor.h"
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoAnchorTextRangePrivate;
 class QTextCursor;
@@ -50,7 +50,7 @@ class QTextCursor;
  * <li> Use anchor->loadOdf() to load additional attributes like the "text:anchor-type"
  * <li> if type is char or paragraph create KoAnchorTextRange *anchorRange = new KoAnchorTextRange(anchor);
  */
-class KOTEXT_EXPORT KoAnchorTextRange : public KoTextRange, public KoShapeAnchor::TextLocation
+class KRITATEXT_EXPORT KoAnchorTextRange : public KoTextRange, public KoShapeAnchor::TextLocation
 {
     Q_OBJECT
 public:

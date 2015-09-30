@@ -21,7 +21,7 @@
 #ifndef KOSHAPETRANSFORMCOMMAND_H
 #define KOSHAPETRANSFORMCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 
 class KoShape;
@@ -30,7 +30,7 @@ class QTransform;
 /**
  * A command to transform a selection of shapes with the same transformation.
  */
-class FLAKE_EXPORT KoShapeTransformCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeTransformCommand : public KUndo2Command
 {
 public:
 

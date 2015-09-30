@@ -20,7 +20,7 @@
 #ifndef KOGROUPBUTTON_H
 #define KOGROUPBUTTON_H
 
-#include "kowidgetutils_export.h"
+#include "kritawidgetutils_export.h"
 
 // Qt
 #include <QToolButton>
@@ -32,7 +32,7 @@
  * 
  * For groupping layout can be used. For exclusive checkable behaviour assign QButtonGroup on the buttons.
  */
-class KOWIDGETUTILS_EXPORT KoGroupButton : public QToolButton
+class KRITAWIDGETUTILS_EXPORT KoGroupButton : public QToolButton
 {
     Q_OBJECT
     Q_ENUMS( GroupPosition )

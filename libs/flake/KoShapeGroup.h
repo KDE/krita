@@ -24,7 +24,7 @@
 
 #include <QList>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
@@ -42,7 +42,7 @@ class KoShapeGroupPrivate;
  * <p>Note that while this object is also a shape, it is not actually visible and the user
  * can't interact with it.
  */
-class FLAKE_EXPORT KoShapeGroup : public KoShapeContainer
+class KRITAFLAKE_EXPORT KoShapeGroup : public KoShapeContainer
 {
 public:
     /// Constructor

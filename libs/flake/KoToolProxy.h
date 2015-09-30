@@ -21,7 +21,7 @@
 #ifndef _KO_TOOL_PROXY_H_
 #define _KO_TOOL_PROXY_H_
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 #include <QHash>
@@ -55,7 +55,7 @@ class QPointF;
  * which will transparantly be routed to the active tool.  Without the application
  * having to bother about which tool is active.
  */
-class FLAKE_EXPORT KoToolProxy : public QObject
+class KRITAFLAKE_EXPORT KoToolProxy : public QObject
 {
     Q_OBJECT
 public:

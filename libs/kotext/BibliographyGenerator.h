@@ -20,11 +20,11 @@
 #define BIBLIOGRAPHYGENERATOR_H
 
 #include <KoBibliographyInfo.h>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QTextBlock>
 
-class KOTEXT_EXPORT BibliographyGenerator : public QObject, public BibliographyGeneratorInterface
+class KRITATEXT_EXPORT BibliographyGenerator : public QObject, public BibliographyGeneratorInterface
 {
     Q_OBJECT
 public:

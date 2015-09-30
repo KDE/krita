@@ -23,7 +23,7 @@
 #include <KoGenericRegistry.h>
 #include <KoInlineObjectFactoryBase.h>
 #include <KoXmlReaderForward.h>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 #include <QList>
 
 class KoCanvasBase;
@@ -37,7 +37,7 @@ class KoShapeLoadingContext;
  * @see KoInlineObject
  * @see KoVariable
  */
-class KOTEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineObjectFactoryBase*>
+class KRITATEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineObjectFactoryBase*>
 {
 public:
     KoInlineObjectRegistry();

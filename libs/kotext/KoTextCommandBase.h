@@ -22,9 +22,9 @@
 
 #include <kundo2command.h>
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
-class KOTEXT_EXPORT KoUndoableTool {
+class KRITATEXT_EXPORT KoUndoableTool {
 public:
     virtual ~KoUndoableTool(){}
     virtual void setAddUndoCommandAllowed(bool allowed) = 0;
@@ -52,7 +52,7 @@ void MyCommand::undo() {
 @endcode
  * @see TextTool::addCommand()
  */
-class KOTEXT_EXPORT KoTextCommandBase : public KUndo2Command
+class KRITATEXT_EXPORT KoTextCommandBase : public KUndo2Command
 {
 public:
 
@@ -73,7 +73,7 @@ public:
 
 protected:
 
-    class KOTEXT_EXPORT UndoRedoFinalizer
+    class KRITATEXT_EXPORT UndoRedoFinalizer
     {
     public:
         explicit UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}

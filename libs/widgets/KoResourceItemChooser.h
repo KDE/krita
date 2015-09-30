@@ -28,7 +28,7 @@
 
 #include <QWidget>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class QModelIndex;
 class QAbstractProxyModel;
@@ -43,7 +43,7 @@ class KoResource;
  * A widget that contains a KoResourceChooser as well
  * as an import/export button
  */
-class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
+class KRITAWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
     Q_OBJECT
 public:

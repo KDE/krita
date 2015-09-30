@@ -20,7 +20,7 @@
 #ifndef KOFIND_H
 #define KOFIND_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 
@@ -33,7 +33,7 @@ class KoFindPrivate;
  * This controller class allows you to get the relevant find actions
  * added to your action collection and make them act similarly for all Calligra apps.
  */
-class KOTEXT_EXPORT KoFind : public QObject
+class KRITATEXT_EXPORT KoFind : public QObject
 {
     Q_OBJECT
 public:

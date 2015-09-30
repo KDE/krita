@@ -20,7 +20,7 @@
 #ifndef KOPARAMETERCHANGESTRATEGY_H
 #define KOPARAMETERCHANGESTRATEGY_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include "KoInteractionStrategy.h"
 #include <QPointF>
 
@@ -28,7 +28,7 @@ class KoParameterShape;
 class KoParameterChangeStrategyPrivate;
 
 /// Strategy for changing control points of parametric shapes
-class FLAKE_EXPORT KoParameterChangeStrategy : public KoInteractionStrategy
+class KRITAFLAKE_EXPORT KoParameterChangeStrategy : public KoInteractionStrategy
 {
 public:
     /**

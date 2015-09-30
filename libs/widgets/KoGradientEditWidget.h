@@ -22,7 +22,7 @@
 #ifndef KO_GRADIENT_EDIT_WIDGET_H
 #define KO_GRADIENT_EDIT_WIDGET_H
 
-#include <kowidgets_export.h>
+#include <kritawidgets_export.h>
 #include <KoCheckerBoardPainter.h>
 #include <QWidget>
 
@@ -39,7 +39,7 @@ class QPushButton;
  * It has one tab to edit a selected gradients type, spread method and color stops.
  * Another tab contains a list with predefined gradients to choose from.
  */
-class KOWIDGETS_EXPORT KoGradientEditWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoGradientEditWidget : public QWidget
 {
     Q_OBJECT
 

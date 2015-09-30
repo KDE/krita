@@ -5,17 +5,17 @@ configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversi
 configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
 
 
-set(koversion_LIB_SRCS
+set(kritaversion_LIB_SRCS
     calligraversion.cpp
     CalligraVersionWrapper.cpp
 )
 
-add_library(koversion SHARED ${koversion_LIB_SRCS})
-target_link_libraries(koversion Qt5::Core)
-generate_export_header(koversion BASE_NAME koversion)
+add_library(kritaversion SHARED ${kritaversion_LIB_SRCS})
+target_link_libraries(kritaversion Qt5::Core)
+generate_export_header(kritaversion BASE_NAME kritaversion)
 
-set_target_properties(koversion PROPERTIES
+set_target_properties(kritaversion PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS koversion ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kritaversion ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

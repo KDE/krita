@@ -26,13 +26,13 @@ set(vectorimage_LIB_SRCS
     VectorImageDebug.cpp
 )
 
-add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
-generate_export_header(kovectorimage BASE_NAME kovectorimage)
+add_library(kritavectorimage SHARED ${vectorimage_LIB_SRCS})
+generate_export_header(kritavectorimage BASE_NAME kritavectorimage)
 
-target_link_libraries(kovectorimage  KF5::I18n Qt5::Gui Qt5::PrintSupport)
-target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES )
+target_link_libraries(kritavectorimage  KF5::I18n Qt5::Gui Qt5::PrintSupport)
+target_link_libraries(kritavectorimage LINK_INTERFACE_LIBRARIES )
 
-set_target_properties(kovectorimage PROPERTIES
+set_target_properties(kritavectorimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kovectorimage ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kritavectorimage ${INSTALL_TARGETS_DEFAULT_ARGS} )

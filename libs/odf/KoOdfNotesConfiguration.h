@@ -23,7 +23,7 @@
 #include <QObject>
 
 #include "KoXmlReader.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoXmlWriter;
 class KoOdfNumberDefinition;
@@ -51,7 +51,7 @@ class KoOdfNumberDefinition;
  *
  * • Footnote continuation notice (forward and backward)
  */
-class KOODF_EXPORT KoOdfNotesConfiguration : public QObject
+class KRITAODF_EXPORT KoOdfNotesConfiguration : public QObject
 {
     Q_OBJECT
 public:

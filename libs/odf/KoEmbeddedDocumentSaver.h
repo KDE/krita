@@ -22,7 +22,7 @@
 #define KOEMBEDDEDDOCUMENTSAVER_H
 
 #include "KoDocumentBase.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <QString>
 
@@ -33,7 +33,7 @@ class KoXmlWriter;
  *
  * @see KoEmbeddedFileSaver
  */
-class KOODF_EXPORT KoEmbeddedDocumentSaver
+class KRITAODF_EXPORT KoEmbeddedDocumentSaver
 {
 public:
     KoEmbeddedDocumentSaver();

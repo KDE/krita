@@ -21,7 +21,7 @@
 #define KOSNAPDATA_H
 
 #include <KoPathSegment.h>
-#include <flake_export.h>
+#include <kritaflake_export.h>
 
 /**
  * This class is used to provide additional data to the snap guide.
@@ -34,7 +34,7 @@
  * So the shape can put that data in form of points or segments into
  * that class which the snap guide can retrieve and use accordingly.
  */
-class FLAKE_EXPORT KoSnapData
+class KRITAFLAKE_EXPORT KoSnapData
 {
 public:
     KoSnapData();

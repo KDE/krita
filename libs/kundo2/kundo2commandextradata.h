@@ -19,10 +19,10 @@
 #ifndef __KUNDO2COMMANDEXTRADATA_H
 #define __KUNDO2COMMANDEXTRADATA_H
 
-#include "kundo2_export.h"
+#include "kritaundo2_export.h"
 
 
-class KUNDO2_EXPORT KUndo2CommandExtraData
+class KRITAUNDO2_EXPORT KUndo2CommandExtraData
 {
 public:
     virtual ~KUndo2CommandExtraData();

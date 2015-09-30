@@ -22,7 +22,7 @@
 
 #include <QList>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoCanvasObserverBase;
 
@@ -30,7 +30,7 @@ class KoCanvasObserverBase;
  * KoCanvasSupervisor is an abstract class that can return a
  * list of canvas observers, such as dock widgets.
  */
-class FLAKE_EXPORT KoCanvasSupervisor
+class KRITAFLAKE_EXPORT KoCanvasSupervisor
 {
 public:
     KoCanvasSupervisor();

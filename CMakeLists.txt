@@ -541,9 +541,6 @@ include(MacroCalligraAddTest)
 #####################
 ####################
 
-# WARNING: make sure that QT_INCLUDES is the first directory to be added to include_directory before
-#          any other include directory
-
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
@@ -603,7 +600,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
                    ${CMAKE_SOURCE_DIR}/libs/kotext/styles
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
-                   ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
 
@@ -612,7 +608,7 @@ set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout
                    ${CMAKE_BINARY_DIR}/libs/textlayout)
 
-# Widgets depends on kotext and flake
+# Widgets depends on kritatext and flake
 set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_BINARY_DIR}/libs/widgetutils
@@ -622,6 +618,7 @@ set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
 # BasicFlakes depends on flake, widgets
 set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
+                   ${CMAKE_BINARY_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
  ###################################################

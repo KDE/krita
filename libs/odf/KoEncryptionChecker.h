@@ -19,12 +19,12 @@
 #ifndef KO_ENCRYPTION_CHECKER
 #define KO_ENCRYPTION_CHECKER
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 namespace KoEncryptionChecker
 {
 
-KOODF_EXPORT bool isEncryptionSupported();
+KRITAODF_EXPORT bool isEncryptionSupported();
 
 }
 

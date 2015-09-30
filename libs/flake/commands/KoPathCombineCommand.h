@@ -24,12 +24,12 @@
 #include <kundo2command.h>
 #include <QList>
 #include "KoPathShape.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for combining two or more paths into one
-class FLAKE_EXPORT KoPathCombineCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathCombineCommand : public KUndo2Command
 {
 public:
     /**

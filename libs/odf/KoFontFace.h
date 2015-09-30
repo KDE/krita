@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QSharedData>
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 class KoXmlWriter;
 class KoFontFacePrivate;
@@ -35,7 +35,7 @@ class KoFontFacePrivate;
  * @todo add more parameters.
  * @todo add class KoFontFaceDeclarations instead of adding methods to KoGenStyle?
  */
-class KOODF_EXPORT KoFontFace
+class KRITAODF_EXPORT KoFontFace
 {
 public:
     /**

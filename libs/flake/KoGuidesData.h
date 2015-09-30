@@ -21,7 +21,7 @@
 #ifndef KOGUIDESDATA_H
 #define KOGUIDESDATA_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QList>
 #include <Qt>
 #include "KoXmlReaderForward.h"
@@ -35,7 +35,7 @@ class KoXmlWriter;
 /**
  * XXX
  */
-class FLAKE_EXPORT KoGuidesData
+class KRITAFLAKE_EXPORT KoGuidesData
 {
 public:
     KoGuidesData();

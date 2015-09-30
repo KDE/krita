@@ -26,7 +26,7 @@
 
 #include <KoXmlReader.h>
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
 
@@ -36,7 +36,7 @@ class KoOdfBibliographyConfiguration;
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
-class KOODF_EXPORT KoOdfStylesReader
+class KRITAODF_EXPORT KoOdfStylesReader
 {
 public:
     /// constructor

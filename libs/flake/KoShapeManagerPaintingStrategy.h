@@ -21,7 +21,7 @@
 #ifndef KOSHAPEMANAGERPAINTINGSTRATEGY_H
 #define KOSHAPEMANAGERPAINTINGSTRATEGY_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeManager;
 class KoShape;
@@ -37,7 +37,7 @@ class QRectF;
  *
  * This class implements the default strategy which is normally used.
  */
-class FLAKE_EXPORT KoShapeManagerPaintingStrategy
+class KRITAFLAKE_EXPORT KoShapeManagerPaintingStrategy
 {
 public:
     explicit KoShapeManagerPaintingStrategy(KoShapeManager *shapeManager);

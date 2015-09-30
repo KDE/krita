@@ -21,14 +21,14 @@
 #ifndef KOPAGEWIDGETITEM_H
 #define KOPAGEWIDGETITEM_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class QWidget;
 class QString;
 
 // This class can be implemented when we want to extend the
 // dialog with new, specific pages.
-class KOWIDGETS_EXPORT KoPageWidgetItem
+class KRITAWIDGETS_EXPORT KoPageWidgetItem
 {
 public:
     virtual ~KoPageWidgetItem() {}

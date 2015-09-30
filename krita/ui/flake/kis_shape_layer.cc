@@ -228,7 +228,12 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     setShapeId(KIS_SHAPE_LAYER_ID);
 
     m_d->converter = new KisImageViewConverter(image());
+
+    KIS_ASSERT_RECOVER_NOOP(this->image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(this->image()));
+    m_d->paintDevice->setParentNode(this);
+
     m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->controller = controller;

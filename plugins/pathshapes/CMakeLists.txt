@@ -40,7 +40,7 @@ ki18n_wrap_ui(pathshapes_PART_SRCS
     spiral/SpiralShapeConfigWidget.ui
 )
 add_library(krita_shape_paths MODULE ${pathshapes_PART_SRCS})
-kcoreaddons_desktop_to_json(krita_shape_paths krita_shape_paths.desktop)
+kcoreaddons_desktop_to_json(krita_shape_paths calligra_shape_paths.desktop)
 
 target_link_libraries(krita_shape_paths kritaflake kritawidgets KF5::IconThemes)
 

@@ -20,7 +20,7 @@ set ( VectorShape_SRCS
 #)
 
 add_library(krita_shape_vector MODULE ${VectorShape_SRCS})
-kcoreaddons_desktop_to_json(krita_shape_vector krita_shape_vector.desktop)
+kcoreaddons_desktop_to_json(krita_shape_vector calligra_shape_vector.desktop)
 
 target_link_libraries(krita_shape_vector kritaflake kritavectorimage KF5::I18n KF5::KDELibs4Support Qt5::Svg)
 

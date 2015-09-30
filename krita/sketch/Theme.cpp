@@ -104,7 +104,8 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        d->basePath = QUrl(KoResourcePaths::findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
+        const QString themeQmlPath = KoResourcePaths::findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id));
+        d->basePath = QFileInfo(themeQmlPath).dir().absolutePath();
         emit idChanged();
     }
 }

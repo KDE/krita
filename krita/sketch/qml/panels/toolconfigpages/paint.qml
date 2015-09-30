@@ -121,7 +121,7 @@ Column {
         placeholder: "Distance";
         min: 3; max: 1000; decimals: 1;
         useExponentialValue: true;
-        value: toolManager.currentTool.smoothnessQuality;
+        value: toolManager.currentTool ? toolManager.currentTool.smoothnessQuality : 0;  // QT5TODO: check which default value makes sense
         onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
     }
 
@@ -132,7 +132,7 @@ Column {
         placeholder: "Stroke Ending"
         useExponentialValue: true;
         min: 0; max: 1; decimals: 2;
-        value: toolManager.currentTool.smoothnessFactor;
+        value: toolManager.currentTool ? toolManager.currentTool.smoothnessFactor : 0;  // QT5TODO: check which default value makes sense
         onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
     }
 
@@ -170,7 +170,7 @@ Column {
         placeholder: "Delay Distance"
         useExponentialValue: true;
         min: 0; max: 500; decimals: 0;
-        value: toolManager.currentTool.delayDistance;
+        value: toolManager.currentTool ? toolManager.currentTool.delayDistance : 0; // QT5TODO: check which default value makes sense
         onValueChanged: if (toolManager.currentTool && toolManager.currentTool.delayDistance !== undefined && toolManager.currentTool.delayDistance !== value) toolManager.currentTool.delayDistance = value;
     }
 

@@ -21,7 +21,6 @@
  */
 
 #include "TemplatesModel.h"
-#include <kis_factory2.h>
 #include <KisTemplateTree.h>
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
@@ -157,7 +156,7 @@ void TemplatesModel::toggleGroup(const QString& name)
 
 void TemplatesModel::populate()
 {
-    KisTemplateTree templateTree(KisPart::instance()->templatesResourcePath(), KisFactory::componentData(), true);
+    KisTemplateTree templateTree(KisPart::instance()->templatesResourcePath(), true);
     foreach (KisTemplateGroup *group, templateTree.groups()) {
         if (group->isHidden()) {
             continue;

@@ -28,17 +28,20 @@
 #include <QMessageBox>
 
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 
+#include "KoGlobal.h"
 #include <KoResourcePaths.h>
+
 #include <kiconloader.h>
 
 #include "MainWindow.h"
 
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
-#include "SketchInputContext.h"
+// QT5TODO
+// #include "SketchInputContext.h"
 
 #include "SketchApplication.h"
 
@@ -65,12 +68,12 @@ int main( int argc, char** argv )
     version = calligraVersion;
 #endif
 
-    KAboutData aboutData("kritasketch",
+    K4AboutData aboutData("kritasketch",
                          "krita",
                          ki18n("Krita Sketch"),
                          "0.1",
                          ki18n("Krita Sketch: Painting on the Go for Artists"),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          ki18n("(c) 1999-%1 The Krita team.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
                          "http://www.krita.org",
@@ -98,6 +101,18 @@ int main( int argc, char** argv )
     SketchApplication app;
     app.setApplicationName("kritasketch");
     KIconLoader::global()->addAppDir("krita");
+
+    // Initialize all Calligra directories etc.
+    KoGlobal::initialize();
+
+    // for cursors
+    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
+
+    // for images in the paintop box
+    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
+
+    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
+
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
@@ -133,10 +148,11 @@ int main( int argc, char** argv )
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
-    app.setEventFilter(&KisTabletSupportWin::eventFilter);
+    app.installNativeEventFilter(new KisTabletSupportWin());
 #elif defined HAVE_X11
     KisTabletSupportX11::init();
-    app.setEventFilter(&KisTabletSupportX11::eventFilter);
+    // TODO: who owns the filter object?
+    app.installNativeEventFilter(new KisTabletSupportX11());
 #endif
 
 #if defined HAVE_X11
@@ -147,9 +163,10 @@ int main( int argc, char** argv )
 
     MainWindow window(fileNames);
 
-    if (args->isSet("vkb")) {
-        app.setInputContext(new SketchInputContext(&app));
-    }
+// QT5TODO
+//     if (args->isSet("vkb")) {
+//         app.setInputContext(new SketchInputContext(&app));
+//     }
 
     if (args->isSet("windowed")) {
         window.show();

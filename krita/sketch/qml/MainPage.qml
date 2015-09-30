@@ -293,7 +293,7 @@ Page {
         Krita.Window.allowClose = false;
         loadingDialog.show("Please wait...");
 
-        if(Settings.currentFile.indexOf("temp") == -1) {
+        if(Settings.currentFile.indexOf("temp://") !== 0) {
             sketchView.file = Settings.currentFile;
         }
     }

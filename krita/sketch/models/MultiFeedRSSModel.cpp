@@ -155,8 +155,9 @@ MultiFeedRssModel::~MultiFeedRssModel()
 
 void MultiFeedRssModel::addFeed(const QString& feed)
 {
+    const QUrl feedUrl(feed);
     QMetaObject::invokeMethod(m_networkAccessManager, "getUrl",
-                              Qt::QueuedConnection, Q_ARG(QUrl, feed));
+                              Qt::QueuedConnection, Q_ARG(QUrl, feedUrl));
 }
 
 bool sortForPubDate(const Internal::RssItem& item1, const Internal::RssItem& item2)

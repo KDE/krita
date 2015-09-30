@@ -19,7 +19,7 @@
 
 #include <opengl/kis_opengl.h>
 #include <QWidget>
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QGLFramebufferObject>
 #include <QResizeEvent>
 #include <QApplication>
@@ -42,7 +42,7 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    setViewport(new QGLWidget(this, KisOpenGL::sharedContextWidget()));
+    setViewport(new QOpenGLWidget(this));
 
     setAttribute(Qt::WA_AcceptTouchEvents);
     setAttribute(Qt::WA_OpaquePaintEvent);
@@ -62,7 +62,7 @@ SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    setViewport(new QGLWidget(this, KisOpenGL::sharedContextWidget()));
+    setViewport(new QOpenGLWidget(this));
 
     setAttribute(Qt::WA_AcceptTouchEvents);
     setAttribute(Qt::WA_OpaquePaintEvent);

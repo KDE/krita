@@ -28,7 +28,6 @@
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-#include <KoResourcePaths.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
 #include <kconfig.h>
@@ -51,7 +50,6 @@
 #include "KisDocumentEntry.h"
 #include "KisDocument.h"
 #include "KisMainWindow.h"
-#include "kis_factory2.h"
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 

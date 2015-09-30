@@ -2,15 +2,6 @@ project( textPlugin)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
 
-# only build the textdocument inspector in non-release builds
-if(NOT RELEASE_BUILD)
-    set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
-    add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
-else()
-    set(BUILD_TEXTDOCUMENT_INSPECTOR FALSE)
-endif()
-
-
 add_subdirectory( pics )
 #add_subdirectory( tests )
 
@@ -120,17 +111,6 @@ set ( textshape_SRCS
     commands/AutoResizeCommand.cpp
 )
 
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    set ( textshape_SRCS
-        ${textshape_SRCS}
-        TextDocumentStructureModel.cpp
-        TextDocumentInspectionDocker.cpp
-        TextDocumentInspectionDockerFactory.cpp
-        TextDocumentInspectionPlugin.cpp
-    )
-endif()
-
-
 ki18n_wrap_ui(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
@@ -192,9 +172,3 @@ install(TARGETS krita_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 #ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    # workaround: to avoid translations the real desktop file is only generated
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
-
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-endif()

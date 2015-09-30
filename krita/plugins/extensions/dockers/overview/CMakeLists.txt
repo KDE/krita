@@ -6,9 +6,3 @@ kcoreaddons_desktop_to_json(kritaoverviewdocker krita_overviewdocker.desktop)
 target_link_libraries(kritaoverviewdocker kritaui)
 
 install(TARGETS kritaoverviewdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  krita_overviewdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

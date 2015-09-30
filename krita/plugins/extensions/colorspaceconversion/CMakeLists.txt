@@ -16,5 +16,3 @@ install(TARGETS kritacolorspaceconversion  DESTINATION ${CALLIGRA_PLUGIN_INSTALL
 ########### install files ###############
 
 install( FILES  colorspaceconversion.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritacolorspaceconversion.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

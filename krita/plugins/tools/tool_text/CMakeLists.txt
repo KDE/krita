@@ -16,10 +16,3 @@ kcoreaddons_desktop_to_json(kritatooltext kritatooltext.desktop)
 target_link_libraries(kritatooltext kritaui)
 
 install(TARGETS kritatooltext  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritatooltext.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-

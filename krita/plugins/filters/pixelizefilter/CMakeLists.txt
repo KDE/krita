@@ -9,10 +9,3 @@ kcoreaddons_desktop_to_json(kritapixelizefilter kritapixelizefilter.desktop)
 target_link_libraries(kritapixelizefilter kritaui)
 
 install(TARGETS kritapixelizefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritapixelizefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-

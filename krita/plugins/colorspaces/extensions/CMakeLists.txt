@@ -17,7 +17,3 @@ kcoreaddons_desktop_to_json(krita_colorspaces_extensions krita_colorspaces_exten
 target_link_libraries(krita_colorspaces_extensions pigmentcms kritaglobal ${OPENEXR_LIBRARIES} KF5::I18n )
 
 install( TARGETS krita_colorspaces_extensions DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
-
-########### install files ###############
-
-install( FILES krita_colorspaces_extensions_plugin.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

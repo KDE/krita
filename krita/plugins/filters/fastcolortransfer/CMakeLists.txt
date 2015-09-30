@@ -17,8 +17,3 @@ kcoreaddons_desktop_to_json(kritafastcolortransferfilter kritafastcolortransfer.
 target_link_libraries(kritafastcolortransferfilter kritaui)
 
 install(TARGETS kritafastcolortransferfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritafastcolortransfer.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

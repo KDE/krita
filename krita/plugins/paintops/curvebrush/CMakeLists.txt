@@ -17,9 +17,4 @@ kcoreaddons_desktop_to_json(kritacurvepaintop kritacurvepaintop.desktop)
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 
 install(TARGETS kritacurvepaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritacurvepaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  krita-curve.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)

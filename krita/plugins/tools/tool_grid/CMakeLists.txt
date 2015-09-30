@@ -15,10 +15,6 @@ install(TARGETS kritatoolgrid  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-
-install( FILES  kritatoolgrid.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
 install( FILES
     KisToolGrid.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

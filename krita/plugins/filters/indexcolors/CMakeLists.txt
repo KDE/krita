@@ -7,4 +7,3 @@ kcoreaddons_desktop_to_json(kritaindexcolors kritaindexcolors.desktop)
 target_link_libraries(kritaindexcolors kritaui)
 
 install(TARGETS kritaindexcolors          DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install(FILES   kritaindexcolors.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

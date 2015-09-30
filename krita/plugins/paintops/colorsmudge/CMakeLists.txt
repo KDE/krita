@@ -14,9 +14,5 @@ kcoreaddons_desktop_to_json(kritacolorsmudgepaintop kritacolorsmudgepaintop.desk
 target_link_libraries(kritacolorsmudgepaintop kritalibpaintop)
 
 install(TARGETS kritacolorsmudgepaintop DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES  kritacolorsmudgepaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  krita-colorsmudge.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

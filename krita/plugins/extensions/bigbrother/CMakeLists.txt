@@ -19,5 +19,3 @@ install(TARGETS kritabigbrother  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  bigbrother.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritabigbrother.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

@@ -15,9 +15,4 @@ kcoreaddons_desktop_to_json(kritadeformpaintop kritadeformpaintop.desktop)
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 
 install(TARGETS kritadeformpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritadeformpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  krita-deform.png DESTINATION ${DATA_INSTALL_DIR}/krita/images )

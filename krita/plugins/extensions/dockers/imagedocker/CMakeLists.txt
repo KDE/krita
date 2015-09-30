@@ -14,4 +14,3 @@ kcoreaddons_desktop_to_json(kritaimagedocker kritaimagedocker.desktop)
 target_link_libraries(kritaimagedocker kritaui)
 
 install(TARGETS kritaimagedocker DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install(FILES kritaimagedocker.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

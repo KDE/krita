@@ -15,10 +15,5 @@ kcoreaddons_desktop_to_json(kritachalkpaintop kritachalkpaintop.desktop)
 target_link_libraries(kritachalkpaintop kritalibpaintop)
 
 install(TARGETS kritachalkpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritachalkpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
     krita-chalk.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)

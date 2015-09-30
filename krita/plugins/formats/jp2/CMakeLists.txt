@@ -38,5 +38,4 @@ install(TARGETS kritajp2export  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_jp2_import.desktop krita_jp2_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_jp2.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

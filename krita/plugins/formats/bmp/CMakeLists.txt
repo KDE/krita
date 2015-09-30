@@ -11,7 +11,6 @@ target_link_libraries(kritabmpexport kritaui)
 
 install(TARGETS kritabmpexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  krita_bmp_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 set(kritabmpimport_PART_SRCS
     kis_bmp_import.cpp
     )
@@ -25,5 +24,4 @@ target_link_libraries(kritabmpimport kritaui)
 
 install(TARGETS kritabmpimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  krita_bmp_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_bmp.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

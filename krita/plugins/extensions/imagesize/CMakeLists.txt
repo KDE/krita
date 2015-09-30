@@ -25,4 +25,3 @@ install(TARGETS kritaimagesize  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  imagesize.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritaimagesize.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

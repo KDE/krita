@@ -30,7 +30,6 @@ install( FILES  tool_rectangular_selection_cursor.png
                 tool_similar_selection_cursor.png
                 
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritaselectiontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
 install( FILES

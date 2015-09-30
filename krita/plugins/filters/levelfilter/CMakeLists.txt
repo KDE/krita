@@ -14,8 +14,3 @@ kcoreaddons_desktop_to_json(kritalevelfilter kritalevelfilter.desktop)
 target_link_libraries(kritalevelfilter kritaui)
 
 install(TARGETS kritalevelfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritalevelfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -20,7 +20,7 @@
 #ifndef KO_TEXT_RDF_CORE_H
 #define KO_TEXT_RDF_CORE_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QSharedPointer>
 
@@ -77,7 +77,7 @@ void dumpModel(const QString &message, QSharedPointer<Soprano::Model> model);
  *
  * @see saveList()
  */
-QList<Soprano::Statement> KOTEXT_EXPORT loadList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject);
+QList<Soprano::Statement> KRITATEXT_EXPORT loadList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject);
 
 /**
  * Save an Rdf List of data nodes into the model. Rdf defines a
@@ -113,7 +113,7 @@ QList<Soprano::Statement> KOTEXT_EXPORT loadList(QSharedPointer<Soprano::Model> 
  * bnodeZ          22-rdf-syntax-ns#rest  nil
  *
  */
-void KOTEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject,
+void KRITATEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject,
         QList<Soprano::Node> &dataBNodeList, Soprano::Node context);
 
 /**
@@ -124,7 +124,7 @@ void KOTEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node 
  * because you don't have to ensure that a statement is added only once
  * to the remove list.
  */
-void KOTEXT_EXPORT removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> model,
+void KRITATEXT_EXPORT removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> model,
                                                 const QList<Soprano::Statement> &removeList);
 
 /**
@@ -133,16 +133,16 @@ void KOTEXT_EXPORT removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> m
  * returned. This is mainly useful when you *know* there is only zero
  * or one object.
  */
-Soprano::Node KOTEXT_EXPORT getObject(QSharedPointer<Soprano::Model> model, Soprano::Node s, Soprano::Node p);
+Soprano::Node KRITATEXT_EXPORT getObject(QSharedPointer<Soprano::Model> model, Soprano::Node s, Soprano::Node p);
 
-QString KOTEXT_EXPORT getProperty(QSharedPointer<Soprano::Model> m,
+QString KRITATEXT_EXPORT getProperty(QSharedPointer<Soprano::Model> m,
                                   Soprano::Node subj,
                                   Soprano::Node pred,
                                   const QString &defval);
-QString KOTEXT_EXPORT optionalBindingAsString(Soprano::QueryResultIterator& it,
+QString KRITATEXT_EXPORT optionalBindingAsString(Soprano::QueryResultIterator& it,
                                               const QString &bindingName,
                                               const QString &def = QString());
-QByteArray KOTEXT_EXPORT fileToByteArray(const QString &fileName);
+QByteArray KRITATEXT_EXPORT fileToByteArray(const QString &fileName);
 
 }
 #endif

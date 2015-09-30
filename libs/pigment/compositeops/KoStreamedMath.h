@@ -259,11 +259,25 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     typename Compositor::OptionalParams optionalParams(params);
 
     if (!params.srcRowStride) {
-        quint32 *buf = Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize);
-        *((Vc::uint_v*)buf) = Vc::uint_v(*((const quint32*)params.srcRowStart));
-        srcRowStart = reinterpret_cast<quint8*>(buf);
-        srcLinearInc = 0;
-        srcVectorInc = 0;
+        if (pixelSize == 4) {
+            quint32 *buf = Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize);
+            *((Vc::uint_v*)buf) = Vc::uint_v(*((const quint32*)params.srcRowStart));
+            srcRowStart = reinterpret_cast<quint8*>(buf);
+            srcLinearInc = 0;
+            srcVectorInc = 0;
+        } else {
+            quint8 *buf = Vc::malloc<quint8, Vc::AlignOnVector>(vectorInc);
+            quint8 *ptr = buf;
+
+            for (int i = 0; i < vectorSize; i++) {
+                memcpy(ptr, params.srcRowStart, pixelSize);
+                ptr += pixelSize;
+            }
+
+            srcRowStart = buf;
+            srcLinearInc = 0;
+            srcVectorInc = 0;
+        }
     }
 #if BLOCKDEBUG
     int totalBlockAlign = 0;
@@ -279,7 +293,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
         const quint8 *src  = srcRowStart;
         quint8       *dst  = dstRowStart;
 
-        const int pixelsAlignmentMask = vectorInc - 1;
+        const int pixelsAlignmentMask = vectorSize * sizeof(float) - 1;
         uintptr_t srcPtrValue = reinterpret_cast<uintptr_t>(src);
         uintptr_t dstPtrValue = reinterpret_cast<uintptr_t>(dst);
         uintptr_t srcAlignment = srcPtrValue & pixelsAlignmentMask;
@@ -303,7 +317,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
             *vectorBlock = params.cols / vectorSize;
             blockRest = params.cols % vectorSize;
         } else if (params.cols > 2 * vectorSize) {
-            blockAlign = (vectorInc - dstAlignment) / 4;
+            blockAlign = (vectorInc - dstAlignment) / pixelSize;
             const int restCols = params.cols - blockAlign;
             if (restCols > 0) {
                 *vectorBlock = restCols / vectorSize;
@@ -372,7 +386,11 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     }
 
 #if BLOCKDEBUG
-    qDebug() << "I" << params.rows << totalBlockAlign << totalBlockAlignedVector << totalBlockUnalignedVector << totalBlockRest; // << srcAlignment << dstAlignment;
+    qDebug() << "I" << "rows:" << params.rows
+             << "\tpad(S):" << totalBlockAlign
+             << "\tbav(V):" << totalBlockAlignedVector
+             << "\tbuv(V):" << totalBlockUnalignedVector
+             << "\tres(S)" << totalBlockRest; // << srcAlignment << dstAlignment;
 #endif
 
     if (!params.srcRowStride) {

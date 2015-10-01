@@ -101,12 +101,12 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
         if (!path.isEmpty()) {
             QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
 
-            QUrl url(path);
+            QUrl url = QUrl::fromLocalFile(path);
 
             if (name.isEmpty())
                 name = url.fileName();
 
-            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
+            if (QFile::exists(url.toLocalFile())) {
                 KFileItem fileItem(url);
                 fileList.prepend(fileItem);
                 const QIcon icon = QIcon::fromTheme(fileItem.iconName());

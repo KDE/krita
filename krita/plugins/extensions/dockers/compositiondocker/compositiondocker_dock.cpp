@@ -222,7 +222,7 @@ void CompositionDockerDock::exportClicked()
         d->setOutputMimeType("image/png");
         d->setSaveInBatchMode(true);
 
-        d->exportDocument(QUrl(path + composition->name() + ".png"));
+        d->exportDocument(QUrl::fromLocalFile(path + composition->name() + ".png"));
 
         delete d;
 

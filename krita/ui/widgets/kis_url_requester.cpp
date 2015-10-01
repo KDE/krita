@@ -62,7 +62,7 @@ QString KisUrlRequester::fileName() const
 
 QUrl KisUrlRequester::url() const
 {
-    return QUrl(fileName());
+    return QUrl::fromLocalFile(fileName());
 }
 
 void KisUrlRequester::setUrl(const QUrl &urlObj)

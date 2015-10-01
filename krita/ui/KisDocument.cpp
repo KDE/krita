@@ -2470,7 +2470,7 @@ bool KisDocument::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
+        setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("comments", description);
 

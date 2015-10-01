@@ -703,6 +703,11 @@ bool KisMainWindow::openDocument(const QUrl &url)
 
 bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
 {
+    if (!url.isLocalFile()) {
+        qDebug() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
+        return false;
+    }
+
     if (!newdoc) {
         newdoc = KisPart::instance()->createDocument();
     }
@@ -1194,10 +1199,8 @@ void KisMainWindow::slotFileOpen()
     }
 }
 
-void KisMainWindow::slotFileOpenRecent(const QUrl & url)
+void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 {
-    // Create a copy, because the original QUrl in the map of recent files in
-    // KRecentFilesAction may get deleted.
     (void) openDocument(QUrl(url));
 }
 
@@ -1380,7 +1383,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
             defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
-        QUrl startUrl = QUrl(defaultDir);
+        QUrl startUrl = QUrl::fromLocalFile(defaultDir);
         KisDocument* pDoc = d->activeView->document();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {

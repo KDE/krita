@@ -522,7 +522,7 @@ void KisView::dropEvent(QDropEvent *event)
                 foreach(const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
-                        d->viewManager->imageManager()->importImage(QUrl(url));
+                        d->viewManager->imageManager()->importImage(url);
                         activateWindow();
                     }
                     else {

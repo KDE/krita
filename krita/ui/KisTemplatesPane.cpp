@@ -140,7 +140,7 @@ void KisTemplatesPane::openFile(const QModelIndex& index)
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
         cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
-        emit openUrl(QUrl(item->data(Qt::UserRole + 1).toString()));
+        emit openUrl(QUrl::fromLocalFile(item->data(Qt::UserRole + 1).toString()));
     }
 }
 

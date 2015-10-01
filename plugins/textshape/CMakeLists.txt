@@ -170,5 +170,5 @@ install(TARGETS krita_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+#ecm_install_icons( ${DATA_INSTALL_DIR}/krita/icons )
 

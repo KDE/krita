@@ -1,4 +1,4 @@
-install( FILES cursor_shear.png cursor_rotate.png cursor_connect.png DESTINATION ${DATA_INSTALL_DIR}/calligra/icons)
+install( FILES cursor_shear.png cursor_rotate.png cursor_connect.png DESTINATION ${DATA_INSTALL_DIR}/krita/icons)
 
 ecm_install_icons( ICONS
     16-actions-escape-direction-all.png
@@ -8,6 +8,6 @@ ecm_install_icons( ICONS
     16-actions-escape-direction-right.png
     16-actions-escape-direction-up.png
     16-actions-escape-direction-vertical.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${DATA_INSTALL_DIR}/krita/icons
     THEME hicolor
 )

@@ -21,7 +21,7 @@ ecm_install_icons( ICONS
     22-actions-pathshape.png
     sc-actions-snap-boundingbox.svg
     sc-actions-snap-extension.svg
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${DATA_INSTALL_DIR}/krita/icons
     THEME oxygen
 )
 
@@ -29,6 +29,6 @@ install( FILES
     zoom_in_cursor.png
     zoom_out_cursor.png
     questionmark.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${DATA_INSTALL_DIR}/krita/icons
 )
 

@@ -36,8 +36,8 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         m_temporary(false), m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
-    inPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/zoom_in_cursor.png"));
-    outPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/zoom_out_cursor.png"));
+    inPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/icons/zoom_in_cursor.png"));
+    outPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/icons/zoom_out_cursor.png"));
     m_inCursor = QCursor(inPixmap, 4, 4);
     m_outCursor = QCursor(outPixmap, 4, 4);
 }

@@ -16,4 +16,4 @@ install( FILES
     light_docker_collapse_b.png
     light_docker_float.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/pics)
+    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)

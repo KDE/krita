@@ -146,9 +146,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     QString version = CalligraVersionWrapper::versionString(true);
     setApplicationVersion(version);
 
-    // Tell the iconloader about share/apps/calligra/icons
-    KIconLoader::global()->addAppDir("calligra");
-
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 

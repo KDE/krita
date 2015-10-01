@@ -75,7 +75,7 @@ void KoMarkerCollection::loadDefaultMarkers()
     KoOdfLoadingContext odfContext(markerReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
     KoXmlDocument doc;
-    QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/styles/markers.xml");
+    QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/styles/markers.xml");
 
     if (!filePath.isEmpty()) {
         QFile file(filePath);

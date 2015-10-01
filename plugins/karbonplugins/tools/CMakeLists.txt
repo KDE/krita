@@ -58,6 +58,6 @@ ecm_install_icons( ICONS
     22-actions-pattern.png
     32-actions-tool_imageeffects.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${DATA_INSTALL_DIR}/krita/icons
     THEME hicolor
 )

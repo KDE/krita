@@ -24,7 +24,6 @@
 
 #include <QFileDialog>
 #include <QString>
-#include <QUrl>
 #include <QStringList>
 #include <QList>
 

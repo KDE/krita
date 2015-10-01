@@ -1175,6 +1175,10 @@ bool KisDocument::importDocument(const QUrl &_url)
 
 bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 {
+    if (!_url.isLocalFile()) {
+        qDebug() << "not a local file" << _url;
+        return false;
+    }
     dbgUI << "url=" << _url.url();
     d->lastErrorMessage.clear();
 

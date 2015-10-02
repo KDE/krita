@@ -46,7 +46,7 @@ void TestStyleManager::initTestCase()
     qRegisterMetaType<const KoCharacterStyle *>("const KoCharacterStyle *");
     qRegisterMetaType<KoParagraphStyle *>("KoParagraphStyle *");
     qRegisterMetaType<const KoParagraphStyle *>("const KoParagraphStyle *");
-    qRegisterMetaType<KoParagraphStyle *>("KoListStyle *");
+    qRegisterMetaType<KoListStyle *>("KoListStyle *");
     qRegisterMetaType<KoTableStyle *>("KoTableStyle *");
     qRegisterMetaType<KoTableColumnStyle *>("KoTableColumnStyle *");
     qRegisterMetaType<KoTableRowStyle *>("KoTableRowStyle *");

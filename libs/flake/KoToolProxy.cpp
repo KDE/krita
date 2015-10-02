@@ -41,7 +41,6 @@
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QUrl>
-#include <kmessagebox.h>
 
 #include <QTimer>
 #include <QApplication>

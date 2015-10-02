@@ -81,7 +81,6 @@
 #include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <ksharedconfig.h>
-#include <kmessagebox.h>
 
 #include <QDesktopServices>
 #include <QMenu>

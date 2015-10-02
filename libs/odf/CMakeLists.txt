@@ -1,5 +1,4 @@
 add_subdirectory( tests )
-add_subdirectory( writeodf )
 
 include_directories( ${KOODF_INCLUDES} )
 
@@ -37,13 +36,11 @@ set(kritaodf_LIB_SRCS
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoElementReference.cpp
-    writeodf/helpers.cpp
 
     OdfDebug.cpp
 )
 
 add_library(kritaodf SHARED ${kritaodf_LIB_SRCS})
-add_dependencies(kritaodf writeodf.h-target)
 generate_export_header(kritaodf BASE_NAME kritaodf)
 
 target_link_libraries(kritaodf kritaversion kritastore KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)

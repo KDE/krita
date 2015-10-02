@@ -682,7 +682,6 @@ add_subdirectory(3rdparty)
 add_subdirectory(interfaces)
 add_subdirectory(pics)
 add_subdirectory(plugins)
-add_subdirectory(devtools)
 
 macro_display_feature_log()
 

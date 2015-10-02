@@ -208,7 +208,6 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         WidgetsAddons 
         XmlGui 
         KDELibs4Support
-        GlobalAccel
     OPTIONAL_COMPONENTS
 )
 

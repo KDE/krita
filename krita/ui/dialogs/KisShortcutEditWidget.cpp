@@ -31,7 +31,7 @@
 #include <QLabel>
 
 #include <klocalizedstring.h>
-#include <kglobalaccel.h>
+//#include <kglobalaccel.h>
 
 #include "kkeysequencewidget.h"
 
@@ -85,14 +85,14 @@ ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &de
             this, SLOT(setCustom(QKeySequence)));
     connect(m_customEditor, SIGNAL(stealShortcut(QKeySequence,QAction*)),
             this, SIGNAL(stealShortcut(QKeySequence,QAction*)));
-    connect(KGlobalAccel::self(), &KGlobalAccel::globalShortcutChanged,
-        [this](QAction *action, const QKeySequence &seq) {
-            if (action != m_action) {
-                return;
-            }
-            setKeySequence(seq);
-        }
-    );
+//    connect(Kcel::self(), &KGlobalAccel::globalShortcutChanged,
+//        [this](QAction *action, const QKeySequence &seq) {
+//            if (action != m_action) {
+//                return;
+//            }
+//            setKeySequence(seq);
+//        }
+//    );
 }
 
 KKeySequenceWidget::ShortcutTypes ShortcutEditWidget::checkForConflictsAgainst() const

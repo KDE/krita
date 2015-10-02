@@ -32,11 +32,8 @@
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <writeodf/writeodfnumber.h>
 
 #include <math.h>
-
-using namespace writeodf;
 
 namespace KoOdfNumberStyles
 {
@@ -651,13 +648,15 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const NumericStyleFormat &fo
     return styleName;
 }
 
-void addTextNumber(QString& text, KoXmlWriter &elementWriter)
-{
-    if (!text.isEmpty()) {
-        number_text(&elementWriter).addTextNode(text);
-        text.clear();
+#define addTextNumber( text, elementWriter ) { \
+        if ( !text.isEmpty() ) \
+        { \
+            elementWriter.startElement( "number:text" ); \
+            elementWriter.addTextNode( text ); \
+            elementWriter.endElement(); \
+            text.clear(); \
+        } \
     }
-}
 
 void parseOdfTimelocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
@@ -678,13 +677,17 @@ bool saveOdflocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStrin
         //hour in 24h
         addTextNumber(text, elementWriter);
 
-        number_hours(&elementWriter).set_number_style("long");
+        elementWriter.startElement("number:hours");
+        elementWriter.addAttribute("number:style", "long");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%k")) { //h
         addTextNumber(text, elementWriter);
 
-        number_hours(&elementWriter).set_number_style("short");
+        elementWriter.startElement("number:hours");
+        elementWriter.addAttribute("number:style", "short");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%I")) { // ?????
@@ -696,21 +699,26 @@ bool saveOdflocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStrin
     } else if (format.startsWith("%M")) { // mm
         addTextNumber(text, elementWriter);
 
-        number_minutes(&elementWriter).set_number_style("long");
+        elementWriter.startElement("number:minutes");
+        elementWriter.addAttribute("number:style", "long");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
 
     } else if (format.startsWith("%S")) {  //ss
         addTextNumber(text, elementWriter);
 
-        number_seconds(&elementWriter).set_number_style("long");
+        elementWriter.startElement("number:seconds");
+        elementWriter.addAttribute("number:style", "long");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%p")) {
         //TODO am or pm
         addTextNumber(text, elementWriter);
 
-        number_am_pm(&elementWriter).end();
+        elementWriter.startElement("number:am-pm");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     }
@@ -730,43 +738,56 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
     } else if (format.startsWith("hh")) {
         addTextNumber(text, elementWriter);
 
-        number_hours(&elementWriter).set_number_style("long");
+        elementWriter.startElement("number:hours");
+        elementWriter.addAttribute("number:style", "long");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('h')) {
         addTextNumber(text, elementWriter);
 
-        number_hours(&elementWriter).set_number_style("short");
+        elementWriter.startElement("number:hours");
+        elementWriter.addAttribute("number:style", "short");
+        elementWriter.endElement();
         format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("mm")) {
         addTextNumber(text, elementWriter);
 
-        number_minutes(&elementWriter).set_number_style("long");
+        elementWriter.startElement("number:minutes");
+        elementWriter.addAttribute("number:style", "long");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('m')) {
         addTextNumber(text, elementWriter);
 
-        number_minutes(&elementWriter).set_number_style("short");
+        elementWriter.startElement("number:minutes");
+        elementWriter.addAttribute("number:style", "short");
+        elementWriter.endElement();
         format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("ss")) {
         addTextNumber(text, elementWriter);
 
-        number_seconds(&elementWriter).set_number_style("long");
+        elementWriter.startElement("number:seconds");
+        elementWriter.addAttribute("number:style", "long");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('s')) {
         addTextNumber(text, elementWriter);
 
-        number_seconds(&elementWriter).set_number_style("short");
+        elementWriter.startElement("number:seconds");
+        elementWriter.addAttribute("number:style", "short");
+        elementWriter.endElement();
         format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("ap")) {
         addTextNumber(text, elementWriter);
 
-        number_am_pm(&elementWriter).end();
+        elementWriter.startElement("number:am-pm");
+        elementWriter.endElement();
         format.remove(0, 2);
         changed = true;
     }
@@ -815,64 +836,72 @@ void parseOdfDatelocale(KoXmlWriter &elementWriter, QString &format, QString &te
     do {
         if (format.startsWith("%Y")) {
             addTextNumber(text, elementWriter);
-
-            number_year(&elementWriter).set_number_style("long");
+            elementWriter.startElement("number:year");
+            elementWriter.addAttribute("number:style", "long");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%y")) {
 
             addTextNumber(text, elementWriter);
 
-            number_year(&elementWriter).set_number_style("short");
+            elementWriter.startElement("number:year");
+            elementWriter.addAttribute("number:style", "short");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%n")) {
             addTextNumber(text, elementWriter);
-
-            number_month month(&elementWriter);
-            month.set_number_style("short");
-            month.set_number_textual("false");
+            elementWriter.startElement("number:month");
+            elementWriter.addAttribute("number:style", "short");
+            elementWriter.addAttribute("number:textual", "false");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%m")) {
             addTextNumber(text, elementWriter);
-
-            number_month month(&elementWriter);
-            month.set_number_style("long");
-            month.set_number_textual("false");  //not necessary remove it
+            elementWriter.startElement("number:month");
+            elementWriter.addAttribute("number:style", "long");
+            elementWriter.addAttribute("number:textual", "false");  //not necessary remove it
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%e")) {
             addTextNumber(text, elementWriter);
 
-            number_day(&elementWriter).set_number_style("short");
+            elementWriter.startElement("number:day");
+            elementWriter.addAttribute("number:style", "short");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%d")) {
             addTextNumber(text, elementWriter);
 
-            number_day(&elementWriter).set_number_style("long");
+            elementWriter.startElement("number:day");
+            elementWriter.addAttribute("number:style", "long");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%b")) {
             addTextNumber(text, elementWriter);
-
-            number_month month(&elementWriter);
-            month.set_number_style("short");
-            month.set_number_textual("true");
+            elementWriter.startElement("number:month");
+            elementWriter.addAttribute("number:style", "short");
+            elementWriter.addAttribute("number:textual", "true");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%B")) {
             addTextNumber(text, elementWriter);
-
-            number_month month(&elementWriter);
-            month.set_number_style("long");
-            month.set_number_textual("true");
+            elementWriter.startElement("number:month");
+            elementWriter.addAttribute("number:style", "long");
+            elementWriter.addAttribute("number:textual", "true");
             elementWriter.endElement();
             format.remove(0, 2);
         } else if (format.startsWith("%a")) {
             addTextNumber(text, elementWriter);
-
-            number_day_of_week(&elementWriter).set_number_style("short");
+            elementWriter.startElement("number:day-of-week");
+            elementWriter.addAttribute("number:style", "short");
+            elementWriter.endElement();
 
             format.remove(0, 2);
         } else if (format.startsWith("%A")) {
             addTextNumber(text, elementWriter);
-
-            number_day_of_week(&elementWriter).set_number_style("long");
+            elementWriter.startElement("number:day-of-week");
+            elementWriter.addAttribute("number:style", "long");
+            elementWriter.endElement();
             format.remove(0, 2);
         } else {
             if (!saveOdflocaleTimeFormat(elementWriter, format, text)) {
@@ -911,85 +940,99 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool l
             //TODO implement loading ! What is it ?
             else if (format.startsWith("MMMMM")) {        // MMMMM is extra-short month name (only 1st character)
                 addTextNumber(text, elementWriter);
-
-                number_month month(&elementWriter);
-                month.set_number_textual("true");
-                month.set_calligra_number_length("extra-short");
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:textual", "true");
+                elementWriter.addAttribute("calligra:number-length", "extra-short");
+                elementWriter.endElement();
                 format.remove(0, 5);
             } else if (format.startsWith("MMMM")) {
                 addTextNumber(text, elementWriter);
-
-                number_month month(&elementWriter);
-                month.set_number_style("long");
-                month.set_number_textual("true");
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:style", "long");
+                elementWriter.addAttribute("number:textual", "true");
+                elementWriter.endElement();
                 format.remove(0, 4);
             } else if (format.startsWith("MMM")) {
                 addTextNumber(text, elementWriter);
-
-                number_month month(&elementWriter);
-                month.set_number_style("short");
-                month.set_number_textual("true");
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.addAttribute("number:textual", "true");
+                elementWriter.endElement();
                 format.remove(0, 3);
             } else if (format.startsWith("MM")) {
                 addTextNumber(text, elementWriter);
-
-                number_month month(&elementWriter);
-                month.set_number_style("long");
-                month.set_number_textual("false"); //not necessary remove it
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:style", "long");
+                elementWriter.addAttribute("number:textual", "false");  //not necessary remove it
+                elementWriter.endElement();
                 format.remove(0, 2);
             } else if (format.startsWith('M')) {
                 addTextNumber(text, elementWriter);
-
-                number_month month(&elementWriter);
-                month.set_number_style("short");
-                month.set_number_textual("false");
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.addAttribute("number:textual", "false");
+                elementWriter.endElement();
                 format.remove(0, 1);
             } else if (format.startsWith("PPPP")) {
                 addTextNumber(text, elementWriter);
                 //<number:month number:possessive-form="true" number:textual="true" number:style="long"/>
-
-                number_month month(&elementWriter);
-                month.set_number_style("short");
-                month.set_number_textual("false");
-                month.set_number_possessive_form("true");
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.addAttribute("number:textual", "false");
+                elementWriter.addAttribute("number:possessive-form", "true");
+                elementWriter.endElement();
                 format.remove(0, 4);
             } else if (format.startsWith("PPP")) {
                 addTextNumber(text, elementWriter);
                 //<number:month number:possessive-form="true" number:textual="true" number:style="short"/>
-                number_month month(&elementWriter);
-                month.set_number_possessive_form("true");
-                month.set_number_style("short");
-                month.set_number_textual("false");
+                elementWriter.startElement("number:month");
+                elementWriter.addAttribute("number:possessive-form", "true");
+
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.addAttribute("number:textual", "false");
+                elementWriter.endElement();
                 format.remove(0, 3);
             } else if (format.startsWith("dddd")) {
                 addTextNumber(text, elementWriter);
 
-                number_day_of_week(&elementWriter).set_number_style("long");
+                elementWriter.startElement("number:day-of-week");
+                elementWriter.addAttribute("number:style", "long");
+                elementWriter.endElement();
                 format.remove(0, 4);
             } else if (format.startsWith("ddd")) {
                 addTextNumber(text, elementWriter);
 
-                number_day_of_week(&elementWriter).set_number_style("short");
+                elementWriter.startElement("number:day-of-week");
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.endElement();
                 format.remove(0, 3);
             } else if (format.startsWith("dd")) {
                 addTextNumber(text, elementWriter);
 
-                number_day(&elementWriter).set_number_style("long");
+                elementWriter.startElement("number:day");
+                elementWriter.addAttribute("number:style", "long");
+                elementWriter.endElement();
                 format.remove(0, 2);
             } else if (format.startsWith('d')) {
                 addTextNumber(text, elementWriter);
 
-                number_day(&elementWriter).set_number_style("short");
+                elementWriter.startElement("number:day");
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.endElement();
                 format.remove(0, 1);
             } else if (format.startsWith("yyyy")) {
                 addTextNumber(text, elementWriter);
 
-                number_year(&elementWriter).set_number_style("long");
+                elementWriter.startElement("number:year");
+                elementWriter.addAttribute("number:style", "long");
+                elementWriter.endElement();
                 format.remove(0, 4);
             } else if (format.startsWith("yy")) {
                 addTextNumber(text, elementWriter);
 
-                number_year(&elementWriter).set_number_style("short");
+                elementWriter.startElement("number:year");
+                elementWriter.addAttribute("number:style", "short");
+                elementWriter.endElement();
                 format.remove(0, 2);
             } else {
                 if (!saveOdfTimeFormat(elementWriter, format, text, antislash)) {
@@ -1053,14 +1096,13 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
     text = _prefix;
     addTextNumber(text, elementWriter);
 
-    number_fraction fraction(&elementWriter);
-    fraction.set_number_min_integer_digits(integer);
-    fraction.set_number_min_numerator_digits(numerator);
-    fraction.set_number_min_denominator_digits(denominator);
-    if (denominatorValue != 0) {
-        fraction.set_number_denominator_value(denominatorValue);
-    }
-    fraction.end();
+    elementWriter.startElement("number:fraction");
+    elementWriter.addAttribute("number:min-integer-digits", integer);
+    elementWriter.addAttribute("number:min-numerator-digits", numerator);
+    elementWriter.addAttribute("number:min-denominator-digits", denominator);
+    if (denominatorValue != 0)
+        elementWriter.addAttribute("number:denominator-value", denominatorValue);
+    elementWriter.endElement();
 
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
@@ -1100,16 +1142,14 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
     } while (format.length() > 0);
     text = _prefix ;
     addTextNumber(text, elementWriter);
-    number_number number(&elementWriter);
-    //debugOdf << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
-    if (!beforeSeparator) {
-        number.set_number_decimal_places(decimalplaces);
-    }
-    number.set_number_min_integer_digits(integerdigits);
-    if (thousandsSep) {
-        number.set_number_grouping(true);
-    }
-    number.end();
+    elementWriter.startElement("number:number");
+    //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
+    if (!beforeSeparator)
+        elementWriter.addAttribute("number:decimal-places", decimalplaces);
+    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
+    if (thousandsSep)
+        elementWriter.addAttribute("number:grouping", true);
+    elementWriter.endElement();
 
     text = _suffix ;
     addTextNumber(text, elementWriter);
@@ -1131,7 +1171,8 @@ QString saveOdfBooleanStyle(KoGenStyles &mainStyles, const QString &format, cons
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QString text = prefix;
     addTextNumber(text, elementWriter);
-    number_boolean(&elementWriter).end();
+    elementWriter.startElement("number:boolean");
+    elementWriter.endElement();
     text = suffix;
     addTextNumber(text, elementWriter);
 
@@ -1172,15 +1213,13 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
     } while (format.length() > 0);
     text = _prefix ;
     addTextNumber(text, elementWriter);
-    number_number number(&elementWriter);
-    if (!beforeSeparator) {
-        number.set_number_decimal_places(decimalplaces);
-    }
-    number.set_number_min_integer_digits(integerdigits);
-    number.end();
+    elementWriter.startElement("number:number");
+    if (!beforeSeparator)
+        elementWriter.addAttribute("number:decimal-places", decimalplaces);
+    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
+    elementWriter.endElement();
 
-    QString percent(QChar('%'));
-    addTextNumber(percent, elementWriter);
+    addTextNumber(QString("%"), elementWriter);
 
     text = _suffix ;
     addTextNumber(text, elementWriter);
@@ -1245,17 +1284,15 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    number_scientific_number number(&elementWriter);
-    //debugOdf << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
-    if (!beforeSeparator) {
-        number.set_number_decimal_places(decimalplace);
-    }
-    number.set_number_min_integer_digits(integerdigits);
-    number.set_number_min_exponent_digits(exponentdigits);
-    if (thousandsSep) {
-        number.set_number_grouping(true);
-    }
-    number.end();
+    elementWriter.startElement("number:scientific-number");
+    //kDebug(30003) << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
+    if (!beforeSeparator)
+        elementWriter.addAttribute("number:decimal-places", decimalplace);
+    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
+    elementWriter.addAttribute("number:min-exponent-digits", exponentdigits);
+    if (thousandsSep)
+        elementWriter.addAttribute("number:grouping", true);
+    elementWriter.endElement();
 
     text = _suffix;
     addTextNumber(text, elementWriter);
@@ -1303,22 +1340,21 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    number_number number(&elementWriter);
-    //debugOdf << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
-    if (!beforeSeparator) {
-        number.set_number_decimal_places(decimalplaces);
-    }
-    number.set_number_min_integer_digits(integerdigits);
-    number.end();
+    elementWriter.startElement("number:number");
+    //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
+    if (!beforeSeparator)
+        elementWriter.addAttribute("number:decimal-places", decimalplaces);
+    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
+    elementWriter.endElement();
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
-    number_currency_symbol sym(&elementWriter);
-    //debugOdf << " currency-symbol:" << symbol;
-    sym.addTextNode(symbol.toUtf8());
-    sym.end();
+    elementWriter.startElement("number:currency-symbol");
+    //kDebug(30003) << " currency-symbol:" << symbol;
+    elementWriter.addTextNode(symbol.toUtf8());
+    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -1342,7 +1378,8 @@ QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const 
     QString text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    number_text_content(&elementWriter).end();
+    elementWriter.startElement("number:text-content");
+    elementWriter.endElement();
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);

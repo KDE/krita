@@ -24,10 +24,10 @@
 
 #include <QToolButton>
 #include <QGridLayout>
+#include <QUrl>
+
 #include <klocalizedstring.h>
-#include <kurl.h>
 #include <kfiledialog.h>
-#include <KIO/Job>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -61,7 +61,7 @@ void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
 void VectorTool::deactivate()
 {
-  m_shape = 0;
+    m_shape = 0;
 }
 
 QWidget * VectorTool::createOptionWidget()
@@ -84,13 +84,20 @@ void VectorTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml"));
-    if (!url.isEmpty()) {
-        // TODO move this to an action in the libs, with a nice dialog or something.
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+    QString fn = KFileDialog::getOpenFileName(QUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml"));
+    if (!fn.isEmpty()) {
+        QFile f(fn);
+        if (f.exists()) {
+            f.open(QFile::ReadOnly);
+            QByteArray ba = f.readAll();
+            f.close();
+            if (!ba.isEmpty()) {
+                const VectorShape::VectorType vectorType = VectorShape::vectorType(ba);
+                ChangeVectorDataCommand *cmd = new ChangeVectorDataCommand(m_shape, qCompress(ba), vectorType);
+                canvas()->addCommand(cmd);
+            }
+        }
     }
-
 }
 
 void VectorTool::mouseDoubleClickEvent( KoPointerEvent *event )
@@ -102,17 +109,3 @@ void VectorTool::mouseDoubleClickEvent( KoPointerEvent *event )
     changeUrlPressed();
 }
 
-void VectorTool::setImageData(KJob *job)
-{
-    if (m_shape == 0) {
-        return;
-    }
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
-    Q_ASSERT(transferJob);
-
-    const QByteArray newData = transferJob->data();
-    const VectorShape::VectorType vectorType = VectorShape::vectorType(newData);
-    ChangeVectorDataCommand *cmd = new ChangeVectorDataCommand(m_shape, qCompress(newData), vectorType);
-
-    canvas()->addCommand(cmd);
-}

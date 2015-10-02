@@ -26,7 +26,6 @@
 
 class VectorShape;
 class KFileWidget;
-class KJob;
 
 class VectorShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -47,19 +46,6 @@ public:
 private:
     VectorShape *m_shape;
     KFileWidget *m_fileWidget;
-};
-
-class LoadWaiter : public QObject
-{
-    Q_OBJECT
-public:
-    explicit LoadWaiter(VectorShape *shape) : m_vectorShape(shape) { }
-
-public Q_SLOTS:
-    void setImageData(KJob *job);
-
-private:
-    VectorShape *m_vectorShape;
 };
 
 #endif //VECTORSHAPECONFIGWIDGET_H

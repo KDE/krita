@@ -24,25 +24,9 @@
 // KDE
 #include <kdebug.h>
 #include <kfilewidget.h>
-#include <kurl.h>
-#include <KIO/Job>
 // Qt
 #include <QVBoxLayout>
-
-void LoadWaiter::setImageData(KJob *job)
-{
-    if (m_vectorShape) {
-        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
-        Q_ASSERT(transferJob);
-
-        const QByteArray contents = transferJob->data();
-        const VectorShape::VectorType vectorType = VectorShape::vectorType(contents);
-
-        m_vectorShape->setCompressedContents(qCompress(contents), vectorType);
-    }
-
-    deleteLater();
-}
+#include <QUrl>
 
 // ---------------------------------------------------- //
 
@@ -63,7 +47,7 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
+    m_fileWidget = new KFileWidget(QUrl("kfiledialog:///OpenDialog"), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     const QStringList mimetypes = QStringList()
         << QLatin1String("image/x-wmf")
@@ -81,11 +65,18 @@ void VectorShapeConfigWidget::save()
     if (!m_shape)
         return;
     m_fileWidget->accept();
-    KUrl url = m_fileWidget->selectedUrl();
-    if (!url.isEmpty()) {
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        LoadWaiter *waiter = new LoadWaiter(m_shape);
-        connect(job, SIGNAL(result(KJob*)), waiter, SLOT(setImageData(KJob*)));
+    QString fn = m_fileWidget->selectedFile();
+    if (!fn.isEmpty()) {
+        QFile f(fn);
+        if (f.exists()) {
+            f.open(QFile::ReadOnly);
+            QByteArray ba = f.readAll();
+            f.close();
+            if (!ba.isEmpty()) {
+                const VectorShape::VectorType vectorType = VectorShape::vectorType(ba);
+                m_shape->setCompressedContents(qCompress(ba), vectorType);
+            }
+        }
     }
 }
 

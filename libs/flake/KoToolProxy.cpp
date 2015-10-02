@@ -560,29 +560,17 @@ bool KoToolProxy::paste()
         if (!image.isNull()) {
             imageList << image;
         }
-        /// QT5TODO
-        /* else if (data->hasUrls()) {
+        // QT5TODO: figure out how to download data synchronously, which is deprecated in frameworks.
+        else if (data->hasUrls()) {
             QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
             foreach (const QUrl &url, urls) {
                 QImage image;
-                // make sure we download the files before inserting them
-                if (!url.isLocalFile()) {
-                    QString tmpFile;
-                    if (KIO::NetAccess::download(url, tmpFile, canvas->canvasWidget())) {
-                        image.load(tmpFile);
-                        KIO::NetAccess::removeTempFile(tmpFile);
-                    } else {
-                        KMessageBox::error(canvas->canvasWidget(), KIO::NetAccess::lastErrorString());
-                    }
-                }
-                else {
-                    image.load(url.toLocalFile());
-                }
+                image.load(url.toLocalFile());
                 if (!image.isNull()) {
                     imageList << image;
                 }
             }
-        }*/
+        }
 
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
         QWidget *canvasWidget = canvas->canvasWidget();

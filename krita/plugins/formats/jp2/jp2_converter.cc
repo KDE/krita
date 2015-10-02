@@ -45,7 +45,6 @@
 jp2Converter::jp2Converter(KisDocument *doc)
 {
     m_doc = doc;
-    m_job = 0;
     m_stop = false;
 }
 

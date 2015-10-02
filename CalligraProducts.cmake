@@ -60,13 +60,12 @@
 # See APP_CONVERTER, FILEMANAGER_*
 
 # building tools
-calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 
 # calligra libs
-calligra_define_product(LIB_CALLIGRA "Calligra core libs"  REQUIRES BUILDTOOL_RNG2CPP)
+calligra_define_product(LIB_CALLIGRA "Calligra core libs"  REQUIRES )
 
 # features
 

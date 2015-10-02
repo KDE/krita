@@ -310,7 +310,6 @@ set(kritaui_LIB_SRCS
     KisOpenPane.cpp
     KisPart.cpp
     KisPrintJob.cpp
-    KisRecentDocumentsPane.cpp
     KisStartupDialog.cpp
     KisTemplate.cpp
     KisTemplateCreateDia.cpp

@@ -84,7 +84,6 @@ Q_SIGNALS:
     void cancelButton();
 
 protected:
-    void initRecentDocs();
     /**
      * Populate the list with all templates the user can choose.
      * @param templatesResourcePath the template-type (group) that should be selected on creation.

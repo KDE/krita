@@ -45,8 +45,6 @@ set(kritaflake_SRCS
     KoMarker.cpp
     KoMarkerCollection.cpp
     KoMarkerSharedLoadingData.cpp
-    #KoUnavailData.cpp
-    #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
     KoCanvasControllerWidget.cpp

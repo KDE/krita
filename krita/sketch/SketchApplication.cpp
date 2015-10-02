@@ -20,46 +20,10 @@
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
-#include <KoDpi.h>
-#include "KoGlobal.h"
-
-#include <kcrash.h>
-#include <klocalizedstring.h>
-#include <kcmdlineargs.h>
-#include <kdesktopfile.h>
-#include <QMessageBox>
-#include <kiconloader.h>
-#include <kis_debug.h>
-#include <kconfig.h>
-
-#include <kconfiggroup.h>
-#include <krecentdirs.h>
-
-#include <QFile>
-#include <QWidget>
-#include <QSysInfo>
-#include <QStringList>
-#include <QDesktopServices>
-#include <QProcessEnvironment>
-#include <QDir>
-#include <QDesktopWidget>
-
-#include <stdlib.h>
-
-#include "KisPrintJob.h"
-#include "KisDocumentEntry.h"
-#include "KisDocument.h"
-#include "KisMainWindow.h"
-#include "KisAutoSaveRecoveryDialog.h"
-#include "KisPart.h"
-
 #include "flake/kis_shape_selection.h"
-#include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
-#include <generator/kis_generator.h>
 #include <kis_paintop_registry.h>
-#include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
 
 

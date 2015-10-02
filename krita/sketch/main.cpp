@@ -17,17 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QApplication>
-#include <QFontDatabase>
 #include <QFile>
 #include <QStringList>
-#include <QString>
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QMessageBox>
 
-#include <kapplication.h>
 #include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 
@@ -38,8 +34,6 @@
 
 #include "MainWindow.h"
 
-#include "DocumentListModel.h"
-#include "KisSketchView.h"
 // QT5TODO
 // #include "SketchInputContext.h"
 

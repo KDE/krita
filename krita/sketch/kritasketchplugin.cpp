@@ -51,16 +51,12 @@
 #include "Settings.h"
 #include "SimpleTouchArea.h"
 #include "ToolManager.h"
-#include "ImageBuilder.h"
 #include "KritaNamespace.h"
 #include "PanelConfiguration.h"
 #include "DocumentManager.h"
-#include "KisDocument.h"
-#include "KisViewManager.h"
 #include "kis_clipboard.h"
 
 #include <QDeclarativeEngine>
-#include <QDeclarativeContext>
 
 void KritaSketchPlugin::registerTypes(const char* uri)
 {

@@ -21,7 +21,6 @@
 #define CONSTANTS_H
 
 #include <QObject>
-#include <QColor>
 
 class Constants : public QObject
 {

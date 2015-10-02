@@ -18,10 +18,6 @@
  */
 #include "DocumentListModel.h"
 
-#include <QDesktopServices>
-#include <QDirIterator>
-#include <QRunnable>
-#include <QThreadPool>
 #include <QTimer>
 #include <QLocale>
 

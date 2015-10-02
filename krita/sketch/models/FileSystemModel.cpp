@@ -18,11 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "FileSystemModel.h"
-#include <kdirlister.h>
-#include <kdirmodel.h>
+
+#include <kfileitem.h>
+
 
 class FileSystemModel::Private
 {

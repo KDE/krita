@@ -24,7 +24,7 @@
 
 #include "kis_cubic_curve.h"
 
-#include <qdeclarativeitem.h>
+#include <QDeclarativeItem>
 
 class CurveEditorItem : public QDeclarativeItem
 {

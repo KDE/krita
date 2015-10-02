@@ -22,7 +22,6 @@
 #include <QOpenGLWidget>
 #include <QGLFramebufferObject>
 #include <QResizeEvent>
-#include <QApplication>
 #include <QGraphicsItem>
 
 #include "kis_coordinates_converter.h"

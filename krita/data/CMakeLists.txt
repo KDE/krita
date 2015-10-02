@@ -18,15 +18,6 @@ add_subdirectory( palettes )
 ########### install files ###############
 
 install( FILES
-    kritarc
-    kritapresets.knsrc
-    kritabrushes.knsrc
-    kritapatterns.knsrc
-    kritagradients.knsrc
-    kritaiccprofiles.knsrc
-    DESTINATION ${CONFIG_INSTALL_DIR} )
-
-install( FILES
     krita.xml
     DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

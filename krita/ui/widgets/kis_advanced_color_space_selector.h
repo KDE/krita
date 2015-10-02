@@ -54,9 +54,6 @@ private Q_SLOTS:
     QString nameWhitePoint(QVector <double> whitePoint);
     void colorSpaceChanged();
     void installProfile();
-    void uploadProfile();
-    void downloadProfile();
-    void buttonUpdate();
 private:
     struct Private;
     Private * const d;

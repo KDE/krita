@@ -105,20 +105,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="bnDownloadProfile">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="bnUploadProfile">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
      </layout>

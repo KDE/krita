@@ -59,9 +59,6 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
-    QString knsrcFile = "kritagradients.knsrc";
-    m_itemChooser->setKnsrcFile(knsrcFile);
-    m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);

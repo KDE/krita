@@ -455,11 +455,7 @@ if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
 
-if(GHNS)
-    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
-else()
-    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
-endif ()
+target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})

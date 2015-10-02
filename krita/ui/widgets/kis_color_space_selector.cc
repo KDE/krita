@@ -34,11 +34,6 @@
 #include <KoConfig.h>
 #include <kis_icon_utils.h>
 
-#ifdef GHNS
-#include <knewstuff3/downloaddialog.h>
-#include <knewstuff3/uploaddialog.h>
-#endif
-
 #include <QDesktopServices>
 
 #include <KoResourcePaths.h>
@@ -66,21 +61,6 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon(KisIconUtils::loadIcon("download"));
-    d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
-    d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
-    d->colorSpaceSelector->bnDownloadProfile->hide();
-
-    d->colorSpaceSelector->bnUploadProfile->setIcon(KisIconUtils::loadIcon("arrow-up"));
-    d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
-    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
-    d->colorSpaceSelector->bnUploadProfile->hide();
-
-#ifdef GHNS
-    d->colorSpaceSelector->bnUploadProfile->show();
-    d->colorSpaceSelector->bnDownloadProfile->show();
-#endif
-
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
             this, SLOT(fillCmbDepths(const KoID &)));
     connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
@@ -89,15 +69,9 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
             this, SLOT(fillCmbProfiles()));
     connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
             this, SLOT(colorSpaceChanged()));
-    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(buttonUpdate()));
+    connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), 
+            this, SLOT(installProfile()));
 
-
-    connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
-    connect(d->colorSpaceSelector->bnDownloadProfile, SIGNAL(clicked()), this, SLOT(downloadProfile()));
-    connect(d->colorSpaceSelector->bnUploadProfile, SIGNAL(clicked()), this, SLOT(uploadProfile()));
-
-    d->knsrcFile = "kritaiccprofiles.knsrc";
     d->defaultsuffix = " "+i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)");
 
     connect(d->colorSpaceSelector->bnAdvanced, SIGNAL(clicked()), this,  SLOT(slotOpenAdvancedSelector()));
@@ -227,53 +201,6 @@ void KisColorSpaceSelector::installProfile()
 
     fillCmbProfiles();
 }
-
-void KisColorSpaceSelector::downloadProfile()
-{
-#ifdef GHNS
-    KNS3::DownloadDialog dialog( "kritaiccprofiles.knsrc", this);
-    dialog.exec();
-    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
-    Q_ASSERT(iccEngine);
-    foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-        foreach(const QString &file, e.installedFiles()) {
-            QFileInfo fi(file);
-            iccEngine->addProfile( fi.absolutePath()+'/'+fi.fileName());
-        }
-        foreach(const QString &file, e.uninstalledFiles()) {
-            QFileInfo fi(file);
-            iccEngine->removeProfile( fi.absolutePath()+'/'+fi.fileName());
-        }
-    }
-    fillCmbProfiles();
-#endif
-}
-
-void KisColorSpaceSelector::uploadProfile()
-{
-#ifdef GHNS
-    KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
-    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
-    if(!profile)  return;
-    dialog.setUploadFile(QUrl::fromLocalFile(profile->fileName()));
-    dialog.setUploadName(profile->name());
-    dialog.exec();
-#endif
-}
-
-void KisColorSpaceSelector::buttonUpdate()
-{
-   const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
-   if(!profile)  return;
-
-   QFileInfo fileInfo(profile->fileName());
-   if(fileInfo.isWritable()) {
-       d->colorSpaceSelector->bnUploadProfile->setEnabled( true );
-       return;
-   }
-   d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
-}
-
 
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {

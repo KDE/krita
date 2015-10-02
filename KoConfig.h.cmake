@@ -28,9 +28,6 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
-/* Defines if you Get Hot New Stuff support */
-#cmakedefine GHNS 1
-
 /* Defines if the krita crash handler is built */
 #cmakedefine USE_BREAKPAD 1
 

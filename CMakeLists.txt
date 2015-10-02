@@ -118,7 +118,6 @@ option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
 if (WIN32)
     option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
 endif ()
-option(GHNS "support Get Hot New Stuff" OFF)
 
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
@@ -229,18 +228,6 @@ include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 include (ECMInstallIcons)
-
-if (GHNS)
-    find_package(Attica)
-    find_package(NewStuff)
-    macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
-
-    if (NOT LIBATTICA_FOUND)
-        set(GHNS FALSE)
-    else ()
-        message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
-    endif ()
-endif ()
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 

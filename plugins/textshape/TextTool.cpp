@@ -77,13 +77,13 @@
 #include <KoIcon.h>
 
 #include <QDebug>
-#include <krun.h>
 #include <kstandardshortcut.h>
 #include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <ksharedconfig.h>
 #include <kmessagebox.h>
 
+#include <QDesktopServices>
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
@@ -2878,25 +2878,11 @@ void TextTool::setShrinkToFit(bool enabled)
 
 void TextTool::runUrl(KoPointerEvent *event, QString &url)
 {
-    QUrl _url = QUrl::fromLocalFile(url);
-    if (_url.isLocalFile()) {
-        QMimeDatabase db;
-        QString type = db.mimeTypeForUrl(_url).name();
-
-        if (KRun::isExecutableFile(_url, type)) {
-            QString question = i18n("This link points to the program or script '%1'.\n"
-                                    "Malicious programs can harm your computer. "
-                                    "Are you sure that you want to run this program?", url);
-            // this will also start local programs, so adding a "don't warn again"
-            // checkbox will probably be too dangerous
-            int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
-            if (choice != KMessageBox::Yes)
-                return;
-        }
+    QUrl _url = QUrl::fromUserInput(url);
+    if (!_url.isLocalFile()) {
+        QDesktopServices::openUrl(_url);
     }
-
     event->accept();
-    new KRun(_url, 0);
 }
 
 void TextTool::debugTextDocument()

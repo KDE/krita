@@ -110,7 +110,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
-target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::ConfigWidgets KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
+target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::KIOCore KF5::KIOWidgets KF5::KIOFileWidgets KF5::ConfigWidgets KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
 
 if(GHNS)
     target_link_libraries(kritawidgets KF5::NewStuff)

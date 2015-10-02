@@ -198,41 +198,24 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         Config 
         ConfigWidgets 
         CoreAddons
-        Emoticons 
-        GlobalAccel
         GuiAddons 
         I18n 
         IconThemes 
         ItemModels 
         ItemViews
-        KDELibs4Support
-        KIO 
-        Kross 
-        Parts 
-        Sonnet
         TextEditor 
         TextWidgets 
-        ThreadWeaver
-        Wallet 
         WidgetsAddons 
-        WindowSystem
         XmlGui 
+        KDELibs4Support
+        GlobalAccel
     OPTIONAL_COMPONENTS
-        NotifyConfig
-        Activities
-        KHtml
 )
-if(KF5_Activities_FOUND)
-    set(HAVE_KACTIVITIES TRUE)
-endif()
 
 find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick X11Extras)
+find_package(Qt5 5.3.0 COMPONENTS UiTools Qml Quick X11Extras)
 
-set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
-set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
-set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)

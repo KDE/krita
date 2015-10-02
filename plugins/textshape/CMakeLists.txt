@@ -158,7 +158,7 @@ add_library(krita_shape_text MODULE ${textshape_SRCS})
 
 kcoreaddons_desktop_to_json(krita_shape_text calligra_shape_text.desktop)
 
-target_link_libraries(krita_shape_text kritatext kritatextlayout kritawidgets KF5::ItemViews KF5::WidgetsAddons
+target_link_libraries(krita_shape_text kritatext kritatextlayout kritawidgets Qt5::Network KF5::Completion KF5::ItemViews KF5::WidgetsAddons
 )
 
 if( SHOULD_BUILD_FEATURE_RDF )

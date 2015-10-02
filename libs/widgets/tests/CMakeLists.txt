@@ -24,10 +24,4 @@ set(KoResourceTaggingTest_SRCS KoResourceTaggingTest.cpp )
 kde4_add_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
 target_link_libraries(KoResourceTaggingTest  kritawidgets Qt5::Test)
 
-########### next target ###############
-
-set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
-kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
-target_link_libraries(KoProgressUpdaterTest kritawidgets KF5::ThreadWeaver Qt5::Test)
-
 ########### end ###############

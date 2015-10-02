@@ -33,7 +33,6 @@
 #include <QUrl>
 
 #include <kcharselect.h>
-#include <KIO/Job>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
         : QWidget(parent),
@@ -357,24 +356,22 @@ void ParagraphBulletsNumbers::setImageCollection(KoImageCollection *imageCollect
 
 void ParagraphBulletsNumbers::selectListImage()
 {
+    if (!m_imageCollection) return;
+
     KoFileDialog dlg(0, KoFileDialog::OpenFile, "bullets");
     dlg.setCaption(i18n("Select a list image"));
-    QUrl url = QUrl::fromLocalFile(dlg.filename());
-    if (!url.isEmpty()) {
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+    if (!dlg.filename().isEmpty()) {
+        QFile f(dlg.filename());
+        if (f.exists()) {
+            f.open(QIODevice::ReadOnly);
+            QByteArray ba = f.readAll();
+            f.close();
+            if (m_imageCollection) {
+                m_data = m_imageCollection->createImageData(ba);
+            }
+            emit recalcPreview();
+        }
     }
-}
-
-void ParagraphBulletsNumbers::setImageData(KJob *job)
-{
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
-    Q_ASSERT(transferJob);
-
-    if (m_imageCollection) {
-        m_data = m_imageCollection->createImageData(transferJob->data());
-    }
-    emit recalcPreview();
 }
 
 void ParagraphBulletsNumbers::setFontSize(const KoCharacterStyle *style)

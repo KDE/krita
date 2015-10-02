@@ -32,9 +32,6 @@
 #include <QUrl>
 #include <StoreDebug.h>
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
-
 #define DefaultFormat KoStore::Zip
 
 static KoStore::Backend determineBackend(QIODevice *dev)

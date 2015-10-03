@@ -45,8 +45,8 @@ QIcon loadIcon(const QString &name)
 
     QStringList names = QStringList() << ":/pics/" + realName + ".svg"
                                       << ":/pics/" + realName + ".png"
-                                      << ":/pics/layerbox" + realName + ".svg"
-                                      << ":/pics/layerbox" + realName + ".png"
+                                      << ":/pics/layerbox/" + realName + ".svg"
+                                      << ":/pics/layerbox/" + realName + ".png"
                                       << ":/pics/misc-" + QLatin1String(prefix) + '/' + realName + ".svg"
                                       << ":/pics/misc-" + QLatin1String(prefix) + '/' + realName + ".png"
                                       << ":/pics/tools/16/" + realName + ".svg"

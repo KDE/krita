@@ -27,7 +27,7 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * 
 {
     widget.setupUi(this);
 
-    widget.orthogonalSnapGuide->setIcon(koIcon("snap-orto"));
+    widget.orthogonalSnapGuide->setIcon(koIcon("snap-orthogonal"));
     widget.nodeSnapGuide->setIcon(koIcon("snap-node"));
     widget.extensionSnapGuide->setIcon(koIcon("snap-extension"));
     widget.intersectionSnapGuide->setIcon(koIcon("snap-intersection"));

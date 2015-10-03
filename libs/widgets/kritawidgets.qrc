@@ -1,0 +1,20 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>pics/dark_docker_close.png</file>
+        <file>pics/dark_docker_collapse_a.png</file>
+        <file>pics/dark_docker_collapse_b.png</file>
+        <file>pics/dark_docker_float.png</file>
+        <file>pics/dark_docker_lock_a.png</file>
+        <file>pics/dark_docker_lock_b.png</file>
+        <file>pics/light_docker_close.png</file>
+        <file>pics/light_docker_collapse_a.png</file>
+        <file>pics/light_docker_collapse_b.png</file>
+        <file>pics/light_docker_float.png</file>
+        <file>pics/light_docker_lock_a.png</file>
+        <file>pics/light_docker_lock_b.png</file>
+        <file>pics/zoom-draw.png</file>
+        <file>pics/zoom-pixels.png</file>
+        <file>pics/zoom-select.png</file>
+    </qresource>
+</RCC>

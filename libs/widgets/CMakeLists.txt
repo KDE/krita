@@ -1,5 +1,4 @@
 add_subdirectory( tests )
-add_subdirectory( pics )
 
 include_directories(${KOWIDGETS_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
@@ -80,10 +79,6 @@ set(kritawidgets_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
-    KoModeBox.cpp
-    KoModeBoxDocker.cpp
-    KoModeBoxFactory.cpp
-
     KoDocumentInfoDlg.cpp
     KoGlobal.cpp
     KoTableView.cpp
@@ -105,6 +100,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     wdg_url_requester.ui
 )
 
+qt5_add_resources(kritawidgets_LIB_SRCS kritawidgets.qrc)
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)

@@ -331,8 +331,7 @@ void KarbonFilterEffectsTool::editFilter()
     QVBoxLayout *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
-    dlg->connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    dlg->connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox->button(QDialogButtonBox::Close), &QPushButton::clicked, dlg, &QDialog::close);
 
     FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
     editor->editShape(d->currentShape, canvas());

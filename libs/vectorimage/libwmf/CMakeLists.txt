@@ -1,22 +1,4 @@
-
-
 include_directories( ${KOWIDGETS_INCLUDES} )
-
-
-########### next target ###############
-
-#set(kwmf_LIB_SRCS kwmf.cc qwmf.cc )
-#
-#
-#add_library(kwmf SHARED ${kwmf_LIB_SRCS})
-#
-#target_link_libraries(kwmf   Qt5::Gui)
-#
-#set_target_properties(kwmf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-#install(TARGETS kwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-########### next target ###############
 
 set(libwmf_LIB_SRCS 
    WmfStack.cpp

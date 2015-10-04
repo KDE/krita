@@ -248,7 +248,9 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
   -DQT_USE_FAST_CONCATENATION
   -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
+
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,

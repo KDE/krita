@@ -142,7 +142,6 @@ target_link_libraries(kritasketch
     Qt5::Declarative
     Qt5::Gui
     Qt5::Core
-    KF5::KDELibs4Support
     kritaui
     kritasketchlib
 )

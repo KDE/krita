@@ -16,7 +16,7 @@ include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_
 macro_add_unittest_definitions()
 
 set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
-kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
+ki18n_wrap_ui(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
 target_link_libraries(KisRandomGeneratorDemo  kritaimage )
 

@@ -76,7 +76,7 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                       "${CMAKE_SOURCE_DIR}/cmake/modules")
-LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/transitional")
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")
 
 message("Module path:" ${CMAKE_MODULE_PATH})
 
@@ -189,6 +189,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
+include(KDE4Macros)
 
 find_package(KF5 5.7.0 REQUIRED COMPONENTS 
         Archive 
@@ -203,7 +204,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         ItemViews
         WidgetsAddons 
         XmlGui 
-        KDELibs4Support
+        KIO
     OPTIONAL_COMPONENTS
 )
 

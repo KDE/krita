@@ -152,7 +152,7 @@ if(WIN32 AND USE_BREAKPAD)
 endif()
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-apps-calligrakrita.png")
-kde4_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
+ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 
 qt5_add_resources(krita_SRCS krita.qrc)
 

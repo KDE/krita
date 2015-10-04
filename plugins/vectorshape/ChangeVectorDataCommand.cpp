@@ -22,7 +22,6 @@
 #include <math.h>
 #include <klocalizedstring.h>
 #include <KoImageData.h>
-#include <kdebug.h>
 
 #include "VectorShape.h"
 

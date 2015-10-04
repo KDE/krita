@@ -22,7 +22,6 @@
 
 #include "VectorShape.h"
 // KDE
-#include <kdebug.h>
 #include <kfilewidget.h>
 // Qt
 #include <QVBoxLayout>

@@ -18,12 +18,12 @@
 
 #include "kis_layer_style_filter_environment_test.h"
 
-#include <qtest_kde.h>
-
 #include "layerstyles/kis_layer_style_filter_environment.h"
 #include "kis_pixel_selection.h"
 #include "testutil.h"
 
+
+#include <QTest>
 
 void KisLayerStyleFilterEnvironmentTest::testRandomSelectionCaching()
 {
@@ -58,4 +58,4 @@ void KisLayerStyleFilterEnvironmentTest::benchmarkRandomSelectionGeneration()
     }
 }
 
-QTEST_KDEMAIN(KisLayerStyleFilterEnvironmentTest, GUI)
+QTEST_MAIN(KisLayerStyleFilterEnvironmentTest)

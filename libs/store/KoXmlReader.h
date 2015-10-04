@@ -453,7 +453,7 @@ KRITASTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
  * QDomElement e;
  * forEachElement( e, parent )
  * {
- *     kDebug() << e.localName() << " element found.";
+ *     qDebug() << e.localName() << " element found.";
  *     ...
  * }
  */

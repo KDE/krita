@@ -24,11 +24,11 @@
 
 #include <QToolButton>
 #include <QGridLayout>
-#include <QUrl>
+#include <QDesktopServices>
 
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 
+#include <KoFileDialog.h>
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoImageCollection.h>
@@ -84,7 +84,11 @@ void VectorTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    QString fn = KFileDialog::getOpenFileName(QUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml"));
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select a Vector Image"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(QString("image/x-emf,image/x-wmf,image/x-svm,image/svg+xml").split(','));
+    QString fn = dialog.filename();
     if (!fn.isEmpty()) {
         QFile f(fn);
         if (f.exists()) {

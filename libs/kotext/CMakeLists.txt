@@ -54,11 +54,6 @@ set(kritatext_LIB_SRCS
     KoInlineNote.cpp
     KoInlineCite.cpp
     KoTextSoftPageBreak.cpp
-    FindDirection_p.cpp
-    KoFindStrategy.cpp
-    KoReplaceStrategy.cpp
-    KoFind_p.cpp
-    KoFind.cpp
     KoTextDebug.cpp
     KoTextPage.cpp
     KoPageProvider.cpp
@@ -131,8 +126,8 @@ set(kritatext_LIB_SRCS
 add_library(kritatext SHARED ${kritatext_LIB_SRCS})
 generate_export_header(kritatext BASE_NAME kritatext)
 
-target_link_libraries(kritatext kritaflake Qt5::Gui KF5::TextWidgets KF5::XmlGui KF5::WindowSystem)
-target_link_libraries(kritatext LINK_INTERFACE_LIBRARIES kritaflake Qt5::Gui KF5::TextWidgets)
+target_link_libraries(kritatext kritaflake Qt5::Gui KF5::XmlGui KF5::WindowSystem)
+target_link_libraries(kritatext LINK_INTERFACE_LIBRARIES kritaflake Qt5::Gui )
 
 set_target_properties(kritatext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

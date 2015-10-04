@@ -126,7 +126,7 @@ set(kritatext_LIB_SRCS
 add_library(kritatext SHARED ${kritatext_LIB_SRCS})
 generate_export_header(kritatext BASE_NAME kritatext)
 
-target_link_libraries(kritatext kritaflake Qt5::Gui KF5::XmlGui KF5::WindowSystem)
+target_link_libraries(kritatext kritaflake Qt5::Gui KF5::XmlGui )
 target_link_libraries(kritatext LINK_INTERFACE_LIBRARIES kritaflake Qt5::Gui )
 
 set_target_properties(kritatext PROPERTIES

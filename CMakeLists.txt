@@ -202,7 +202,6 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         IconThemes 
         ItemModels 
         ItemViews
-        TextEditor 
         TextWidgets 
         WidgetsAddons 
         XmlGui 

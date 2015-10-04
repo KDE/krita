@@ -192,7 +192,6 @@ include(FeatureSummary)
 
 find_package(KF5 5.7.0 REQUIRED COMPONENTS 
         Archive 
-        Codecs 
         Completion
         Config 
         ConfigWidgets 

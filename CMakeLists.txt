@@ -195,7 +195,6 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         Archive 
         Completion
         Config 
-        ConfigWidgets 
         CoreAddons
         GuiAddons 
         I18n 
@@ -551,6 +550,7 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${PIGMENT_INCLUDES}
                    ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils/config
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_SOURCE_DIR}/libs/flake/svg

@@ -10,7 +10,7 @@ set(kritaglobal_LIB_SRCS
   kis_icon_utils.cpp
 )
 
-kde4_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
+add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
 generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
 target_link_libraries(kritaglobal kritawidgets KF5::IconThemes Qt5::Concurrent Qt5::Core Qt5::Gui)

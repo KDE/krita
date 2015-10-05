@@ -85,8 +85,6 @@ set(kritawidgets_LIB_SRCS
     KoModeBoxFactory.cpp
 
     KoDocumentInfoDlg.cpp
-    KoDocumentInfoPropsPage.cpp
-
     KoGlobal.cpp
     KoTableView.cpp
     
@@ -110,7 +108,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
-target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::KIOCore KF5::KIOWidgets KF5::KIOFileWidgets KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::IconThemes KF5::Completion)
+target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::IconThemes KF5::Completion)
 
 if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})

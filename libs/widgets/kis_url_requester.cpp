@@ -21,10 +21,7 @@
 
 #include <QDesktopServices>
 
-#include <KisImportExportManager.h>
-#include "kis_icon_utils.h"
-
-#include "kis_debug.h"
+#include "KoIconUtils.h"
 
 KisUrlRequester::KisUrlRequester(QWidget *parent)
     : QWidget(parent)
@@ -33,7 +30,7 @@ KisUrlRequester::KisUrlRequester(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    m_ui->btnSelectFile->setIcon(KisIconUtils::loadIcon("folder"));
+    m_ui->btnSelectFile->setIcon(KoIconUtils::themedIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
     connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
@@ -115,14 +112,9 @@ void KisUrlRequester::slotSelectFile()
 
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
 
-    if (m_mime_filter_list.isEmpty())
-    {
-        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
-    }
-    else
-    {
-        dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
-    }
+    Q_ASSERT(!m_mime_filter_list.isEmpty());
+//        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
 
     if (!m_nameFilter.isEmpty())
     {

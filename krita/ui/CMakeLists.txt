@@ -331,7 +331,6 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
-    widgets/kis_url_requester.cpp
     kis_md5_generator.cpp
     KisApplicationArguments.cpp
 )
@@ -437,7 +436,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
-    forms/wdg_url_requester.ui
 )
 
 

@@ -19,7 +19,7 @@
 #ifndef KIS_URL_REQUESTER_H
 #define KIS_URL_REQUESTER_H
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
 #include <QWidget>
 #include <QString>
@@ -39,7 +39,7 @@ namespace Ui {
  * Signals are fired when the user changes the text
  * or selects a new file via the button/file chooser.
  */
-class KRITAUI_EXPORT KisUrlRequester : public QWidget
+class KRITAWIDGETS_EXPORT KisUrlRequester : public QWidget
 {
     Q_OBJECT
 

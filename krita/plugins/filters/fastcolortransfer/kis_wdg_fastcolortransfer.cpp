@@ -33,13 +33,15 @@
 #include <kis_paint_device.h>
 #include <kundo2command.h>
 #include <KoColorSpaceRegistry.h>
-
+#include <KisImportExportManager.h>
+#include <kis_url_requester.h>
 #include "ui_wdgfastcolortransfer.h"
 
 KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
+    m_widget->fileNameURLRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
     connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigurationItemChanged()));
 }
 

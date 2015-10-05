@@ -71,7 +71,7 @@
   <customwidget>
    <class>KisUrlRequester</class>
    <extends>QWidget</extends>
-   <header location="global">widgets/kis_url_requester.h</header>
+   <header location="global">kis_url_requester.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

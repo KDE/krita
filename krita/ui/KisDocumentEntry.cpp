@@ -23,7 +23,6 @@
 #include "KisPart.h"
 #include "KisDocument.h"
 
-#include <kservicetype.h>
 #include <kis_debug.h>
 #include <KoJsonTrader.h>
 
@@ -101,15 +100,7 @@ KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString & mimetype)
         vec = query(mimetype);
 
         if (vec.isEmpty()) {
-            // Still no match. Either the mimetype itself is unknown, or we have no service for it.
-            // Help the user debugging stuff by providing some more diagnostics
-            if (!KServiceType::serviceType(mimetype)) {
-                errUI << "Unknown Calligra MimeType " << mimetype << "." << endl;
-                errUI << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
-            } else {
-                errUI << "Found no Calligra part able to handle " << mimetype << "!" << endl;
-                errUI << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
-            }
+            errUI << "Could not find a plugin to load" << mimetype;
             return KisDocumentEntry();
         }
     }

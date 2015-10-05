@@ -729,8 +729,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
     KisPart::instance()->addDocument(newdoc);
     updateReloadFileAction(newdoc);
 
-    KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
-    if (!file.isWritable()) {
+    if (!QFileInfo(url.toLocalFile()).isWritable()) {
         setReadWrite(false);
     }
     return true;

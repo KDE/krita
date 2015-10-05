@@ -51,14 +51,11 @@
 #include <KoXmlWriter.h>
 
 
-#include <kfileitem.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kfileitem.h>
-#include <kfileitem.h>
 #include <kdirnotify.h>
 #include <QTemporaryFile>
 #include <kbackup.h>
@@ -1230,8 +1227,8 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
-            KFileItem file(url, mimeType(), KFileItem::Unknown);
-            setReadWrite(file.isWritable());
+            QFileInfo fi(url.toLocalFile());
+            setReadWrite(fi.isWritable());
         }
     }
     return ret;

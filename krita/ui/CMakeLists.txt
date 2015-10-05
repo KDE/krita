@@ -444,7 +444,9 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews)
+target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
+                      kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
+)
 
 if (HAVE_KIO)
     target_link_libraries(kritaui KF5::KIOCore)
@@ -458,7 +460,6 @@ if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
 
-target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})

@@ -2,7 +2,7 @@ project(vectorshape)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_vector\")
 
-include_directories(${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
+include_directories(${KOWIDGETS_INCLUDES} ${VECTORIMAGE_INCLUDES})
 
 set ( VectorShape_SRCS
     VectorShapePlugin.cpp
@@ -22,7 +22,7 @@ set ( VectorShape_SRCS
 add_library(krita_shape_vector MODULE ${VectorShape_SRCS})
 kcoreaddons_desktop_to_json(krita_shape_vector calligra_shape_vector.desktop)
 
-target_link_libraries(krita_shape_vector kritaflake kritavectorimage KF5::I18n Qt5::Svg KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets)
+target_link_libraries(krita_shape_vector kritaflake kritawidgets kritavectorimage KF5::I18n Qt5::Svg)
 
 install(TARGETS krita_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

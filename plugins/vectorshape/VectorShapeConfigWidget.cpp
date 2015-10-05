@@ -21,12 +21,14 @@
 #include "VectorShapeConfigWidget.h"
 
 #include "VectorShape.h"
-// KDE
-#include <kfilewidget.h>
 // Qt
 #include <QVBoxLayout>
 #include <QUrl>
+#include <QPushButton>
 
+#include <klocalizedstring.h>
+
+#include <kis_url_requester.h>
 // ---------------------------------------------------- //
 
 VectorShapeConfigWidget::VectorShapeConfigWidget()
@@ -46,25 +48,27 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_fileWidget = new KFileWidget(QUrl("kfiledialog:///OpenDialog"), this);
-    m_fileWidget->setOperationMode(KFileWidget::Opening);
+    m_fileWidget = new KisUrlRequester(this);
+    m_fileWidget->setMode(KoFileDialog::OpenFile);
     const QStringList mimetypes = QStringList()
         << QLatin1String("image/x-wmf")
         << QLatin1String("image/x-emf")
         << QLatin1String("image/x-svm")
         << QLatin1String("image/svg+xml");
-    m_fileWidget->setMimeFilter(mimetypes);
+    m_fileWidget->setMimeTypeFilters(mimetypes);
     layout->addWidget(m_fileWidget);
     setLayout(layout);
-    connect(m_fileWidget, SIGNAL(accepted()), this, SIGNAL(accept()));
+    QPushButton *bn = new QPushButton(this);
+    bn->setText(i18n("Replace Image"));
+    layout->addWidget(bn);
+    connect(bn, SIGNAL(clicked()), this, SIGNAL(accept()));
 }
 
 void VectorShapeConfigWidget::save()
 {
     if (!m_shape)
         return;
-    m_fileWidget->accept();
-    QString fn = m_fileWidget->selectedFile();
+    QString fn = m_fileWidget->url().toLocalFile();
     if (!fn.isEmpty()) {
         QFile f(fn);
         if (f.exists()) {

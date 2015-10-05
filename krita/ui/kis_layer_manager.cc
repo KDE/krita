@@ -31,8 +31,6 @@
 #include <klocalizedstring.h>
 #include <QMessageBox>
 #include <QUrl>
-#include <kdiroperator.h>
-#include <kurlcombobox.h>
 
 #include <kis_url_requester.h>
 #include <kis_icon_utils.h>

@@ -208,9 +208,23 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
 )
 
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
-                                           Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Qml Quick X11Extras)
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS 
+        Core 
+        Gui 
+        Widgets 
+        Xml 
+        Network 
+        PrintSupport
+        Script 
+        Svg 
+        Test 
+        Concurrent
+    OPTIONAL_COMPONENTS
+        UiTools
+        Qml
+        Quick
+        X11Extras
+)
 
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 

@@ -58,7 +58,6 @@
 #include <kactionmenu.h>
 #include <kis_debug.h>
 #include <kedittoolbar.h>
-#include <kfileitem.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 

@@ -53,7 +53,6 @@
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kservice.h>
 #include <KoResourcePaths.h>
 #include <kselectaction.h>
 #include <kxmlguifactory.h>

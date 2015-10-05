@@ -25,7 +25,7 @@
 #include <QTransform>
 #include <QList>
 
-
+#include <klocalizedstring.h>
 
 #include <KoPageLayout.h>
 #include "KoGridData.h"
@@ -33,9 +33,6 @@
 #include <KoXmlReader.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
-
-#include <klocalizedstring.h>
-
 
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
@@ -829,12 +826,6 @@ private:
 
     class Private;
     Private *const d;
-
-    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
-    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
-    Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
-    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
-
 };
 
 Q_DECLARE_METATYPE(KisDocument*)

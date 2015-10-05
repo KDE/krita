@@ -30,12 +30,11 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <QMessageBox>
-#include <kfilewidget.h>
 #include <QUrl>
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
 
-
+#include <kis_url_requester.h>
 #include <kis_icon_utils.h>
 #include <KisImportExportManager.h>
 #include <KisDocument.h>
@@ -69,6 +68,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
+#include "KisImportExportManager.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -889,11 +889,11 @@ void KisLayerManager::saveGroupLayers()
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);
 
-    KFileWidget *fd = new KFileWidget(QUrl::fromLocalFile(m_view->document()->url().path()), page);
-    fd->setUrl(m_view->document()->url());
-    fd->setMimeFilter(listMimeFilter);
-    fd->setOperationMode(KFileWidget::Saving);
-    layout->addWidget(fd);
+    KisUrlRequester *urlRequester = new KisUrlRequester(page);
+    urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    urlRequester->setMimeTypeFilters(listMimeFilter);
+    urlRequester->setUrl(m_view->document()->url());
+    layout->addWidget(urlRequester);
 
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
     chkInvisible->setChecked(false);
@@ -904,22 +904,16 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
+    // selectedUrl()( does not return the expuected result. So, build up the QUrl the more complicated way
     //return m_fileWidget->selectedUrl();
-    QUrl url = fd->dirOperator()->url();
-    QString path = fd->locationEdit()->currentText();
-    QFileInfo f(path);
-    QString extension = f.completeSuffix();
+    QUrl url = urlRequester->url();
+    QFileInfo f(url.toLocalFile());
+
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(urlRequester->url());
+    QString mimefilter = mime.name();
+    QString extension = db.suffixForFileName(urlRequester->url().toLocalFile());
     QString basename = f.baseName();
-
-    QString mimefilter = fd->currentMimeFilter();
-
-    if (mimefilter.isEmpty()) {
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForUrl(url);
-        mimefilter = mime.name();
-        extension = db.suffixForFileName(path);
-    }
 
     if (url.isEmpty())
         return;

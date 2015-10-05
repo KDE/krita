@@ -22,8 +22,6 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kio/netaccess.h>
-
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
@@ -81,11 +79,6 @@ KisImportExportFilter::ConversionStatus KisOiioImport::convert(const QByteArray&
 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
-
-        if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
 
         QString localFile = url.toLocalFile();
 

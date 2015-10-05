@@ -203,9 +203,10 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         ItemViews
         WidgetsAddons 
         XmlGui 
-        KIO
     OPTIONAL_COMPONENTS
+        KIO
 )
+
 
 find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test Concurrent)
@@ -220,13 +221,14 @@ if (USEOPENGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
 
-
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 include (ECMInstallIcons)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
+
+macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
 
 find_package(X11)
 if(X11_FOUND)

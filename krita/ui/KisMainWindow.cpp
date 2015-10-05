@@ -22,6 +22,8 @@
 
 #include "KisMainWindow.h"
 
+#include <KoConfig.h>
+
 // qt includes
 #include <QApplication>
 #include <QByteArray>
@@ -51,30 +53,28 @@
 #include <QMenu>
 #include <QMenuBar>
 
-#include <krecentdirs.h>
 #include <kactioncollection.h>
 #include <QAction>
 #include <kactionmenu.h>
 #include <kis_debug.h>
-#include <kdiroperator.h>
 #include <kedittoolbar.h>
 #include <kfileitem.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 
+#ifdef HAVE_KIO
 #include <krecentdocument.h>
+#endif
 #include <krecentfilesaction.h>
 #include <KoResourcePaths.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
-#include <kurlcombobox.h>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 
-#include <KoConfig.h>
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
@@ -607,13 +607,17 @@ void KisMainWindow::addRecentURL(const QUrl &url)
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
+#ifdef HAVE_KIO
             if (ok) {
                 KRecentDocument::add(path);
-                KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
             }
-        } else {
+#endif
+        }
+#ifdef HAVE_KIO
+        else {
             KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
         }
+#endif
         if (ok) {
             d->recentFiles->addUrl(url);
         }

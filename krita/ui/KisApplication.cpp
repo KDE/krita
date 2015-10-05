@@ -47,7 +47,6 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <krecentdirs.h>
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>

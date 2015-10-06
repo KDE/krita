@@ -29,8 +29,6 @@ tablet.png
 tool_screenshot.png
 transparency-locked.png
 transparency-unlocked.png
-passthrough-enabled.png
-passthrough-disabled.png
 layer-style-enabled.png
 layer-style-disabled.png
 unlinked.png
@@ -76,6 +74,8 @@ dark_transparency-enabled.png
 dark_transparency-disabled.png
 dark_novisible.svg
 dark_visible.svg
+dark_passthrough-enabled.png
+dark_passthrough-disabled.png
 
 light_transparency-enabled.png
 light_transparency-disabled.png
@@ -87,6 +87,8 @@ light_selection-mode_mask.png
 light_trim-to-image.png
 light_novisible.svg
 light_visible.svg
+light_passthrough-enabled.png
+light_passthrough-disabled.png
 
 layerbox/dark_addlayer.png
 layerbox/dark_addtofolder.png

@@ -283,7 +283,6 @@ void KisGroupLayer::setPassThroughMode(bool value)
 KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Pass Through"), KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled"), passThroughMode());
     return l;
 }

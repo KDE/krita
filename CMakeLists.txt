@@ -226,6 +226,8 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         UiTools
         Qml
         Quick
+        X11Extras
+        DBus
 )
 
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})

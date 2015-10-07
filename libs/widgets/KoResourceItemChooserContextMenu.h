@@ -57,7 +57,7 @@ class KoLineEditAction : public QWidgetAction
 public:
     explicit KoLineEditAction(QObject* parent);
     virtual ~KoLineEditAction();
-    void setIcon(QIcon icon);
+    void setIcon(const QIcon &icon);
     void closeParentOnTrigger(bool closeParent);
     bool closeParentOnTrigger();
     void setPlaceholderText(const QString& clickMessage);

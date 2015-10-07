@@ -52,7 +52,7 @@ KoLineEditAction::~KoLineEditAction()
 
 }
 
-void KoLineEditAction::setIcon(QIcon icon)
+void KoLineEditAction::setIcon(const QIcon &icon)
 {
     QPixmap pixmap = QPixmap(icon.pixmap(16,16));
     m_label->setPixmap(pixmap);

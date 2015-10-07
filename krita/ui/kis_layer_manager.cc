@@ -558,27 +558,27 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 }
 
-void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer)
+void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, bool updateImage)
 {
     KisNodeSP parent;
     KisNodeSP above;
     adjustLayerPosition(layer, activeNode, parent, above);
 
-    m_commandsAdapter->addNode(layer, parent, above);
+    m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
 }
 
 void KisLayerManager::addLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     addLayerCommon(activeNode,
-                   new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace()));
+                   new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace()), false);
 }
 
 void KisLayerManager::addGroupLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     addLayerCommon(activeNode,
-                   new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
+                   new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8), false);
 }
 
 void KisLayerManager::addCloneLayer(KisNodeSP activeNode)
@@ -596,7 +596,7 @@ void KisLayerManager::addShapeLayer(KisNodeSP activeNode)
     KisImageWSP image = m_view->image();
     KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
 
-    addLayerCommon(activeNode, layer);
+    addLayerCommon(activeNode, layer, false);
 }
 
 void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)

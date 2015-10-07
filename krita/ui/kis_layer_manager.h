@@ -117,7 +117,7 @@ private Q_SLOTS:
 
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
-    void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer);
+    void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, bool updateImage = true);
 
 private:
 

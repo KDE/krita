@@ -43,8 +43,8 @@ public:
     void beginMacro(const KUndo2MagicString& macroName);
     void addExtraCommand(KUndo2Command *command);
     void endMacro();
-    void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void addNode(KisNodeSP node, KisNodeSP parent, quint32 index);
+    void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates = true, bool doUndoUpdates = true);
+    void addNode(KisNodeSP node, KisNodeSP parent, quint32 index, bool doRedoUpdates = true, bool doUndoUpdates = true);
     void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void moveNode(KisNodeSP node, KisNodeSP parent, quint32 indexaboveThis);
     void removeNode(KisNodeSP node);

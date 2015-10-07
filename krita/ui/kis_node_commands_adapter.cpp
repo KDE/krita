@@ -60,16 +60,16 @@ void KisNodeCommandsAdapter::endMacro()
     m_view->image()->undoAdapter()->endMacro();
 }
 
-void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates, bool doUndoUpdates)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
-    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, aboveThis));
+    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, aboveThis, doRedoUpdates, doUndoUpdates));
 }
 
-void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, quint32 index)
+void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, quint32 index, bool doRedoUpdates, bool doUndoUpdates)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
-    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, index));
+    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, index, doRedoUpdates, doUndoUpdates));
 }
 
 void KisNodeCommandsAdapter::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)

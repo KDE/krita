@@ -37,7 +37,7 @@ qt5_add_dbus_interface(kritacolord_SRCS ${COLORD_SENSOR_INTERFACE_XML} CdSensorI
 
 
 add_library(kritacolord SHARED ${kritacolord_SRCS})
-target_link_libraries(kritacolord kritaglobal Qt5::Concurrent Qt5::Core Qt5::Gui)
+target_link_libraries(kritacolord kritaglobal Qt5::DBus Qt5::Concurrent Qt5::Core Qt5::Gui)
 generate_export_header(kritacolord BASE_NAME kritacolord)
 
 install(TARGETS kritacolord DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})

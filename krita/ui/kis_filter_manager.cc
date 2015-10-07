@@ -120,7 +120,7 @@ void KisFilterManager::insertFilter(const QString & filterName)
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterName);
     Q_ASSERT(filter);
 
-    if (d->filters2Action.keys().contains(filter.data())) {
+    if (d->filters2Action.contains(filter.data())) {
         warnKrita << "Filter" << filterName << " has already been inserted";
         return;
     }

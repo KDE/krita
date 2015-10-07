@@ -214,7 +214,7 @@ AbrTipDynamicsProperties::AbrTipDynamicsProperties()
 void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const QString& type, const QString& value)
 {
     if (type == ABR_OBJECT) {
-        if (!m_groups.keys().contains(attributeName)) {
+        if (!m_groups.contains(attributeName)) {
             dbgKrita << "Unknown " << type << " in Tip dynamics called " << attributeName << " : " << value;
         }
         else {

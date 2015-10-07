@@ -92,7 +92,7 @@ bool Store::isEmpty() const
 
 bool Store::containsEntry(const QString & entryKey) const
 {
-    return d->entries.keys().contains(entryKey);
+    return d->entries.contains(entryKey);
 }
 
 bool Store::containsEntry(const QString & uri, const QString & entryName) const

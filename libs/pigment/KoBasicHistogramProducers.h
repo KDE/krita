@@ -157,7 +157,7 @@ public:
     virtual ~KoBasicHistogramProducerFactory() {}
 
     virtual KoHistogramProducer *generate() {
-        KoHistogramProducer *producer;
+        KoHistogramProducer *producer = 0;
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0);
         if (cs) {
             producer = new T(KoID(id(), name()), cs);

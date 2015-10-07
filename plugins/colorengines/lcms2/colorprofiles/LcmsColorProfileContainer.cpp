@@ -186,7 +186,7 @@ bool LcmsColorProfileContainer::init()
         }
         //This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.
         if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
-            cmsCIEXYZTRIPLE tempColorants = { -1 };
+            cmsCIEXYZTRIPLE tempColorants;
             tempColorants.Red = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigRedColorantTag));
             tempColorants.Green = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigGreenColorantTag));
             tempColorants.Blue = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigBlueColorantTag));

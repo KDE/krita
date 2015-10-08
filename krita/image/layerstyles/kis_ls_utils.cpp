@@ -586,18 +586,6 @@ namespace KisLsUtils
         //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("6_device_shadow.png");
     }
 
-    void applyFinalSelection(const QString &projectionId,
-                             KisSelectionSP baseSelection,
-                             KisPaintDeviceSP srcDevice,
-                             KisPaintDeviceSP dstDevice,
-                             const QRect &srcRect,
-                             const QRect &dstRect,
-                             const psd_layer_effects_context *context,
-                             const psd_layer_effects_shadow_base *config,
-                             const KisLayerStyleFilterEnvironment *env)
-    {
-    }
-
     bool checkEffectEnabled(const psd_layer_effects_shadow_base *config, KisMultipleProjection *dst)
     {
         bool result = config->effectEnabled();

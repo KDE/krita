@@ -65,7 +65,7 @@ QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNode
     Q_UNUSED(filthyNode);
 
     if (!m_d->sourceLayer || !m_d->filter) {
-        warnKrita() << "KisLayerStyleFilterProjectionPlane::recalculate(): [BUG] is not initialized";
+        warnKrita << "KisLayerStyleFilterProjectionPlane::recalculate(): [BUG] is not initialized";
         return QRect();
     }
 

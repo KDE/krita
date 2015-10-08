@@ -18,6 +18,7 @@
  */
 
 
+#include <KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_auto_brush_widget.h"
 
 #include <math.h>

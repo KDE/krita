@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 set(KRITA_ANIMATIONDOCKER_PART_SRCS
     animation_dockers.cpp
     animation_docker.cpp
@@ -6,6 +8,16 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     timeline_docker.cpp
     keyframe_channel_delegate.cpp
     kis_onion_skin_dialog.cpp
+
+    frames_item_delegate.cpp
+    frames_table_view.cpp
+
+    timeline_layers_header.cpp
+    timeline_ruler_header.cpp
+
+    timeline_frames_model_base.cpp
+    timeline_frames_model.cpp
+    timeline_frames_model_testing.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS

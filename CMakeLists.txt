@@ -4,6 +4,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
+set(MIN_QT_VERSION 5.3.0)
+set(MIN_FRAMEWORKS_VERSION 5.7.0)
+
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy CMP0017 was introduced in version 2.8.4
 if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.3)
@@ -191,7 +194,7 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 include(KDE4Macros)
 
-find_package(KF5 5.7.0 REQUIRED COMPONENTS 
+find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         Archive 
         Completion
         Config 
@@ -208,7 +211,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
 )
 
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS 
+find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         Core 
         Gui 
         Widgets 
@@ -231,7 +234,7 @@ set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
-    find_package(Qt5 5.3.0 REQUIRED OpenGL)
+    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
 
@@ -246,7 +249,7 @@ macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
 
 find_package(X11)
 if(X11_FOUND)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                  X11Extras
     )
     set(HAVE_X11 TRUE)

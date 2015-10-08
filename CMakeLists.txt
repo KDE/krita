@@ -226,7 +226,6 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         UiTools
         Qml
         Quick
-        X11Extras
 )
 
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
@@ -236,6 +235,9 @@ set(QT_QTTEST_LIBRARY Qt5::Test)
 if (USEOPENGL)
     find_package(Qt5 ${MIN_QT_VERSION} REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
+    if (NOT WIN32)
+        find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
+    endif()
 endif ()
 
 include (MacroLibrary)

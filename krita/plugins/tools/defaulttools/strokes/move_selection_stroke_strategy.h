@@ -21,13 +21,13 @@
 
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
-#include "../kritadefaulttools_export.h"
+#include "kritadefaulttools_export.h"
 
 class KisPostExecutionUndoAdapter;
 class KisUpdatesFacade;
 
 
-class KRITADEFAULTTOOLS_TEST_EXPORT MoveSelectionStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITADEFAULTTOOLS_EXPORT MoveSelectionStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
     MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,

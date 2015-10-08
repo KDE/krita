@@ -18,10 +18,11 @@
 
 #include "move_selection_stroke_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 
+#include "kis_image.h"
 #include "strokes/move_selection_stroke_strategy.h"
 #include "stroke_testing_utils.h"
 #include "kis_selection.h"
@@ -126,4 +127,4 @@ void MoveSelectionStrokeTest::test()
 
 }
 
-QTEST_KDEMAIN(MoveSelectionStrokeTest, GUI)
+QTEST_MAIN(MoveSelectionStrokeTest)

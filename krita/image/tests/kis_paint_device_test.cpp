@@ -1996,4 +1996,4 @@ void KisPaintDeviceTest::testCompositionAssociativity()
     }
 }
 
-QTEST_MAIN(KisPaintDeviceTest, GUI)
+QTEST_MAIN(KisPaintDeviceTest)

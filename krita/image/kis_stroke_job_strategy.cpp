@@ -18,6 +18,9 @@
 
 #include "kis_stroke_job_strategy.h"
 
+#include <QtGlobal>
+
+
 KisStrokeJobData::KisStrokeJobData(Sequentiality sequentiality,
                                    Exclusivity exclusivity)
     : m_sequentiality(sequentiality),

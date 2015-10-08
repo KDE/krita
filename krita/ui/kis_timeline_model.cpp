@@ -17,11 +17,14 @@
  */
 
 #include "kis_timeline_model.h"
+
+#include "kis_global.h"
 #include "kis_model_index_converter_animated_layers.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_keyframe_channel.h"
 #include "kis_dummies_facade_base.h"
 #include "kundo2command.h"
+#include "kis_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_image_animation_interface.h"
 #include "kis_node.h"

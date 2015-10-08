@@ -18,6 +18,8 @@
 
 #include "chalk_brush.h"
 
+#include "kis_global.h"
+
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>

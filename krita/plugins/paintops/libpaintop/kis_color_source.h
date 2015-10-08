@@ -29,6 +29,7 @@
 
 class KoAbstractGradient;
 class KoColorTransformation;
+class KisPaintInformation;
 
 /**
  * A color source allow to abstract how a brush is colorized,

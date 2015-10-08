@@ -26,6 +26,8 @@ class KRITAIMAGE_EXPORT KisOnionSkinCompositor : QObject
     Q_OBJECT
 
 public:
+    KisOnionSkinCompositor();
+    ~KisOnionSkinCompositor();
     static KisOnionSkinCompositor *instance();
 
     void composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect &rect);
@@ -36,9 +38,6 @@ public Q_SLOTS:
     void configChanged();
 
 private:
-    KisOnionSkinCompositor();
-    ~KisOnionSkinCompositor();
-
     struct Private;
     QScopedPointer<Private> m_d;
 

@@ -20,6 +20,8 @@
 #include "kis_node.h"
 #include "kundo2command.h"
 
+#include "kis_global.h"
+
 
 struct KisScalarKeyframeChannel::Private
 {

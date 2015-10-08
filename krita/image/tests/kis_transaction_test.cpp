@@ -286,6 +286,6 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
     QCOMPARE(dev->exactBounds(), QRect(10,10,20,20));
 }
 
-QTEST_MAIN(KisTransactionTest, GUI)
+QTEST_MAIN(KisTransactionTest)
 
 

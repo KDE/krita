@@ -25,6 +25,7 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
+#include "kis_default_bounds.h"
 #include "kis_paint_device.h"
 #include "kis_merge_walker.h"
 #include "kis_image.h"

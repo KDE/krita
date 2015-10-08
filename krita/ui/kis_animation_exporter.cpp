@@ -24,7 +24,6 @@
 #include "KoFileDialog.h"
 #include "KisDocument.h"
 #include "kis_image.h"
-#include "kmimetype.h"
 #include "KisImportExportManager.h"
 #include "kis_image_animation_interface.h"
 #include "KisPart.h"

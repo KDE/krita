@@ -20,9 +20,7 @@
 
 #include <QLabel>
 
-#include <klocale.h>
 #include <kis_paintop_option.h>
-#include <klocalizedstring.h>
 
 #include "kis_paintop_lod_limitations.h"
 

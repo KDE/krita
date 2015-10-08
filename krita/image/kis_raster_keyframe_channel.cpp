@@ -19,6 +19,7 @@
 #include "kis_node.h"
 #include "kis_dom_utils.h"
 
+#include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_time_range.h"

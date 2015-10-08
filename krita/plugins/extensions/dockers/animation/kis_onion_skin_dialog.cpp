@@ -22,7 +22,6 @@
 #include <QSlider>
 #include <QFrame>
 #include <QGridLayout>
-#include "klocale.h"
 
 #include "kis_image_config.h"
 #include "kis_onion_skin_compositor.h"

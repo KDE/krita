@@ -24,6 +24,7 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 
+#include "kis_random_source.h"
 #include "kis_color_option.h"
 #include "kis_spray_shape_option.h"
 #include "kis_spray_shape_dynamics.h"

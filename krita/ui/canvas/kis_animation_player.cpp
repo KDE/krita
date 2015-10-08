@@ -20,6 +20,8 @@
 
 #include <QTimer>
 
+#include "kis_global.h"
+
 #include "kis_image.h"
 #include "kis_canvas2.h"
 #include "kis_animation_frame_cache.h"

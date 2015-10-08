@@ -18,9 +18,10 @@
 
 #include "animation_docker.h"
 
+#include "kis_global.h"
+
 #include "kis_canvas2.h"
 #include "kis_image.h"
-#include <klocale.h>
 #include <kis_icon_utils.h>
 #include "KisViewManager.h"
 #include "kis_action_manager.h"

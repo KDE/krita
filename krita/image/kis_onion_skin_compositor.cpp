@@ -18,8 +18,6 @@
 
 #include "kis_onion_skin_compositor.h"
 
-#include <kglobal.h>
-
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "KoColor.h"
@@ -29,6 +27,8 @@
 #include "kis_image_config.h"
 #include "kis_config_notifier.h"
 #include "kis_raster_keyframe_channel.h"
+
+Q_GLOBAL_STATIC(KisOnionSkinCompositor, s_instance);
 
 
 struct KisOnionSkinCompositor::Private
@@ -95,7 +95,6 @@ struct KisOnionSkinCompositor::Private
 
 KisOnionSkinCompositor *KisOnionSkinCompositor::instance()
 {
-    K_GLOBAL_STATIC(KisOnionSkinCompositor, s_instance);
     return s_instance;
 }
 

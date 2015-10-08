@@ -20,7 +20,6 @@
 
 #include "kis_canvas2.h"
 #include "kis_image.h"
-#include <klocale.h>
 #include <KoIcon.h>
 #include "KisViewManager.h"
 #include "kis_paint_layer.h"

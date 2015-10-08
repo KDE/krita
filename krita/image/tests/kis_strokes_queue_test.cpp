@@ -448,4 +448,4 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     context.clear();
 }
 
-QTEST_MAIN(KisStrokesQueueTest, NoGUI)
+QTEST_MAIN(KisStrokesQueueTest)

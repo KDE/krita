@@ -19,7 +19,6 @@
 #ifndef KIS_ANIMATION_EXPORTER_H
 #define KIS_ANIMATION_EXPORTER_H
 
-#include "kurl.h"
 #include "kis_types.h"
 #include "kritaui_export.h"
 

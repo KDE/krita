@@ -75,6 +75,7 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
+#include "kis_default_bounds.h"
 #include <kis_paint_device.h>
 #include "kis_shape_layer_canvas.h"
 #include "kis_image_view_converter.h"

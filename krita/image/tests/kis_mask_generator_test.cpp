@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_mask_generator_test.h"
 
 #include <QTest>

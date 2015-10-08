@@ -26,6 +26,7 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_painter.h"
+#include "kis_image.h"
 
 #include "krita_utils.h"
 

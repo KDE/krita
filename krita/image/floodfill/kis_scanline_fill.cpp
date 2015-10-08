@@ -24,6 +24,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include "kis_image.h"
 #include "kis_fill_interval_map.h"
 #include "kis_pixel_selection.h"
 #include "kis_random_accessor_ng.h"

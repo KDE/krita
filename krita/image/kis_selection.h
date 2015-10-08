@@ -23,6 +23,7 @@
 #include "kis_types.h"
 #include "kritaimage_export.h"
 #include "kis_default_bounds.h"
+#include "kis_image.h"
 
 enum SelectionMode {
     PIXEL_SELECTION,

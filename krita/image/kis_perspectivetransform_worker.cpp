@@ -39,6 +39,7 @@
 #include "krita_utils.h"
 #include "kis_progress_update_helper.h"
 #include "kis_painter.h"
+#include "kis_image.h"
 
 
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)

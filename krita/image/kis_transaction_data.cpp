@@ -21,6 +21,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
+#include "kis_image.h"
 
 #include <config-tiles.h> // For the next define
 
